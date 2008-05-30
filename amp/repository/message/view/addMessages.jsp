@@ -153,43 +153,45 @@
 																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#ffffff">																				
 																				<tr>
 																					<td align="right"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-																					<td align="left" width="90%"><html:text property="messageName" /></td>
+																					<td align="left" width="90%"><html:text property="messageName" style="width:672px;"/></td>
 																				</tr>
-																				<c:if test="${not empty messageForm.forwardedMsg}">
-																			    	<tr>
-																			    		<td align="right">forwarded Message:</td>
-																			    		<td >
-																			    			<table width="75%" align="center" border="0" style="border:1px solid; border-color: #484846;">
-																								<tr>
-																									<td width="10%"><digi:trn key="message:from">From</digi:trn></td>
-																									<td>&nbsp;${messageForm.forwardedMsg.from}</td>
-																								</tr>
-																								<tr>
-																									<td><digi:trn key="message:receiver">Received</digi:trn></td>
-																									<td>&nbsp;${messageForm.forwardedMsg.creationDate}</td>
-																								</tr>
-																								<tr>
-																									<td><digi:trn key="message:subject">Subject</digi:trn> </td>
-																									<td>${messageForm.forwardedMsg.name}																						
-																									</td>
-																								</tr>
-																								<tr>
-																									<td>To:</td>
-																									<td>
-																										<c:forEach var="receiver" items="${messageForm.forwardedMsg.receivers}"> ${receiver} ,&nbsp;</c:forEach>
-																									</td>
-																								</tr>
-																								<tr>
-																									<td><digi:trn key="message:msgDetails">Message Details</digi:trn> </td>
-																									<td>&nbsp;${messageForm.forwardedMsg.description}</td>
-																								</tr>
-																							</table>
-																			    		</td>																        	
-													                            	</tr>
-													                            </c:if>	
+																				<!-- 
+																					<c:if test="${not empty messageForm.forwardedMsg}">
+																				    	<tr>
+																				    		<td align="right">forwarded Message:</td>
+																				    		<td >
+																				    			<table width="75%" align="center" border="0" style="border:1px solid; border-color: #484846;">
+																									<tr>
+																										<td width="10%"><digi:trn key="message:from">From</digi:trn></td>
+																										<td>&nbsp;${messageForm.forwardedMsg.from}</td>
+																									</tr>
+																									<tr>
+																										<td><digi:trn key="message:receiver">Received</digi:trn></td>
+																										<td>&nbsp;${messageForm.forwardedMsg.creationDate}</td>
+																									</tr>
+																									<tr>
+																										<td><digi:trn key="message:subject">Subject</digi:trn> </td>
+																										<td>${messageForm.forwardedMsg.name}																						
+																										</td>
+																									</tr>
+																									<tr>
+																										<td>To:</td>
+																										<td>
+																											<c:forEach var="receiver" items="${messageForm.forwardedMsg.receivers}"> ${receiver} ,&nbsp;</c:forEach>
+																										</td>
+																									</tr>
+																									<tr>
+																										<td><digi:trn key="message:msgDetails">Message Details</digi:trn> </td>
+																										<td>&nbsp;${messageForm.forwardedMsg.description}</td>
+																									</tr>
+																								</table>
+																				    		</td>																        	
+														                            	</tr>
+														                            </c:if>	
+																				 -->																				
 																				<tr>
 																					<td align="right"><digi:trn key="messages:description">description</digi:trn></td>
-																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="2" cols="60"/></td>
+																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="2" cols="93"/></td>
 																				</tr>																				
 																				<tr>
 																					<td align="right"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
@@ -214,7 +216,7 @@
 																				<tr>
 																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
-																                        <table border="0" style="border:1px solid; border-color: #484846;">
+																                        <table border="0" >
 																                            <tr>
 																                                <td valign="top">
 																                                    <table border="0" width="100%">																                                        
@@ -240,7 +242,9 @@
 																                                    </table>
 																                                </td>
 																                                <td>
-																                                  <input type="button" onclick="addUserOrTeam();" style="font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+																                                  <input type="button" onclick="addUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+																                                  <br><br>
+																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
 																                                    <table border="0" width="100%" cellpadding="0">																                                       
@@ -254,10 +258,7 @@
 																	                                                              	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
 																	                                                              </c:if>                
 																                                                            </html:select>
-																                                                        </td>
-																                                                        <td valign="top">
-																                                                            <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUserOrTeam()" value="<digi:trn key="message:rmbtn">Remove</digi:trn>" >
-																                                                        </td>
+																                                                        </td>																                                                        
 																                                                    </tr>
 																                                                </table>
 																                                            </td>
@@ -308,8 +309,7 @@
 																				</tr>
 																			</table>
 																		</td>
-																	</tr>
-																							
+																	</tr>																							
 																	<tr>
 																		<td/>
 																	</tr>

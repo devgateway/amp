@@ -122,9 +122,6 @@ public class AdvancedReport extends Action {
 			formBean.setCanMakePublic(false);
 		}
 
-		
-		
-		String perspective = "DN";
 		Long All=new Long(0);
 		
 		//set maxStep
@@ -150,19 +147,7 @@ public class AdvancedReport extends Action {
 								formBean.setMaxStep(new Integer(4));
 						}
 		}
-		//
 		
-		if(formBean.getPerspective() == null)
-		{
-			perspective = teamMember.getAppSettings().getPerspective();
-		}
-		else
-			perspective = formBean.getPerspectiveFilter();
-		if(perspective.equals("Donor"))
-			perspective="DN";
-		if(perspective.equals("MOFED"))
-			perspective="MA";
-		formBean.setPerspectiveFilter(perspective);
 		
 		try
 		{
@@ -475,11 +460,6 @@ public class AdvancedReport extends Action {
 				{
 					if(request.getParameter("view").equals("reset"))
 					{
-						perspective =teamMember.getAppSettings().getPerspective();
-						if(perspective.equals("Donor"))
-							perspective="DN";
-						if(perspective.equals("MOFED"))
-							perspective="MA";
 						fiscalCalId=teamMember.getAppSettings().getFisCalId().intValue();
 					}
 				}

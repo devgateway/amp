@@ -133,8 +133,6 @@ public class AdvancedReportForm extends ActionForm
 	public void setMultiReport(Collection multiReport) {
 		this.multiReport = multiReport;
 	}
-	private String perspective ;
-	private String perspectiveFilter ;
 	private int fiscalCalId;
 	private String region ;
 	private int modality;
@@ -548,20 +546,6 @@ private int yrDiff;
 	 */
 	public void setCurrency(String string) {
 		currency = string;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getPerspective() {
-		return perspective;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspective(String string) {
-		perspective = string;
 	}
 
 	/**
@@ -1110,20 +1094,6 @@ private int yrDiff;
 	public void setReportName(String s)	
 	{
 		reportName=s;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getPerspectiveFilter() {
-		return perspectiveFilter;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspectiveFilter(String string) {
-		perspectiveFilter = string;
 	}
 
 	/**

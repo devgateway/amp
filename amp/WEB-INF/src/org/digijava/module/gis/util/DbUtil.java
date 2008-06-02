@@ -1,16 +1,17 @@
 package org.digijava.module.gis.util;
 
+import java.util.Iterator;
+
+import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.gis.dbentity.GisMap;
-import org.digijava.module.forum.dbentity.ForumUserSettings;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Hibernate;
-import java.util.Iterator;
 
 /**
  * <p>Title: </p>
@@ -21,7 +22,7 @@ import java.util.Iterator;
  *
  * <p>Company: </p>
  *
- * @author not attributable
+ * @author George Kvizhinadze
  * @version 1.0
  */
 public class DbUtil {

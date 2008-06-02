@@ -2,23 +2,51 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 
 <struts-config>
-  <form-beans>
-    <form-bean name="gisDashboardForm" type="org.digijava.module.gis.form.GisDashboardForm" />
-    <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
-  </form-beans>
-  <action-mappings>
-    <action name="gisDashboardForm" path="/gis/showGisDashboard" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=gis_dashboard" />
-    </action>
-    <action name="gisDashboardForm" path="/gis/index" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=gis_dashboard" />
-    </action>
-    <action name="gisMapLoaderForm" path="/gis/mapLoader" scope="request" type="org.digijava.module.gis.action.MapLoader" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
-    </action>
-    <action name="gisMapLoaderForm" path="/gis/gisService" scope="request" type="org.digijava.module.gis.action.GisService" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
-    </action>
-  </action-mappings>
+	<form-beans>
+		<form-bean name="gisDashboardForm" type="org.digijava.module.gis.form.GisDashboardForm" />
+		<form-bean name="gisTableWidgetCreationForm" type="org.digijava.module.gis.form.TableWidgetCreationForm" />
+		<form-bean name="gisTableWidgetTeaserForm" type="org.digijava.module.gis.form.TableWidgetTeaserForm" />
+		<form-bean name="gisTableWidgetDataForm" type="org.digijava.module.gis.form.AdminTableWidgetDataForm" />
+	    <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
+	</form-beans>
+	
+	<global-forwards>
+		<forward name="listTableWidgets" path="/gis/adminTableWidgets.do" redirect="true"/>
+	</global-forwards>	
+	
+	<action-mappings>
+		<action name="gisDashboardForm" path="/gis/showGisDashboard" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=gisDashboardLayout"/>
+			<forward name="forwardOld" path="/showLayout.do?layout=gis_dashboard"/>
+		</action>
+		<action name="gisTableWidgetCreationForm" path="/gis/adminTableWidgets" parameter="actType" type="org.digijava.module.gis.action.AdminTableWidgets" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=gis_tableWidgetAdmin"/>
+			<forward name="showAdd" path="/showLayout.do?layout=add_tableWidget"/>
+			<forward name="showEdit" path="/showLayout.do?layout=edit_tableWidget"/>
+			<forward name="showAddColumnPopup" path="/showLayout.do?layout=popup_addWidgetColumn"/>
+			<forward name="returnToEdit" path="/gis/adminTableWidgets.do?actType=edit" redirect="true"/>
+		</action>
+	    <action name="gisDashboardForm" path="/gis/index" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
+    	  <forward name="forward" path="/showLayout.do?layout=gis_dashboard" />
+    	</action>
+	    <action name="gisMapLoaderForm" path="/gis/mapLoader" scope="request" type="org.digijava.module.gis.action.MapLoader" validate="false">
+    	  <forward name="forward" path="/showLayout.do?layout=mapLoader" />
+	    </action>
+    	<action name="gisMapLoaderForm" path="/gis/gisService" scope="request" type="org.digijava.module.gis.action.GisService" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
+    	</action>
+    	<action name="gisTableWidgetTeaserForm" path="/gis/widgetTest" scope="request" type="org.digijava.module.gis.action.TestWidget" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=widgetTestPage" />
+    	</action>
+    	<action name="gisTableWidgetDataForm" path="/gis/tableWidgetData" scope="request" parameter="actType" type="org.digijava.module.gis.action.AdminTableWidgetData" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
+    	</action>
+    	<action name="gisTableWidgetTeaserForm" path="/gis/previewTable" scope="request" type="org.digijava.module.gis.action.PreviewTableWidget" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
+    	</action>
+		
+		<!-- Teasers below this -->
+		<action name="gisTableWidgetTeaserForm" path="/gis/tableWidgetTeaser" type="org.digijava.module.gis.action.TableWidgetTeaser"/>
+		<action name="gisDashboardForm" path="/gis/dashboardMapTeaser" type="org.digijava.module.gis.action.DashboardMapTeaser"/>
+	</action-mappings>
 </struts-config>
-

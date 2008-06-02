@@ -18,7 +18,11 @@ import org.digijava.module.gis.dbentity.GisMapShape;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.ecs.xml.XML;
 
-
+/**
+ * 
+ * @author George Kvizhinadze
+ *
+ */
 public class GisUtil {
 
     private static Map loadedMaps = null;

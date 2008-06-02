@@ -5,7 +5,7 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 	
-    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-drc.local:8080/login</logon-site>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://amp.mofed.gov:8080/login</logon-site>
 
 <!-- 
 

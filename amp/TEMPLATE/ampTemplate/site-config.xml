@@ -1,6 +1,21 @@
 <?xml version="1.0"?>
 <site-config>
 	<site-layout>
+		<layout name="gisDashboardLayout" file="gisDashboardlayout.jsp">
+			<put name="title">GIS</put>
+			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
+			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
+			<put-item name="tableWidget1" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget2" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget3" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget4" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget5" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget6" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body" module="gis" page="gisDashboard"/>
+		</layout>
 		<layout name="helpLayout" file="helpLayout.jsp">
 			<put name="title">Help</put>
 			<put-item name="headerTop" file="headerTop.jsp"/>
@@ -442,6 +457,10 @@
             </module>
             <module name="message">
             	<page>viewSelectedMessage</page>
+            </module>
+            <module name="gis">
+            	<page>popup_addWidgetColumn</page>
+            	<page>preview_tableWidget</page>
             </module>
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>

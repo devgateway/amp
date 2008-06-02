@@ -9,7 +9,7 @@ package org.digijava.module.gis.util;
  *
  * <p>Company: </p>
  *
- * @author not attributable
+ * @author George Kvizhinadze
  * @version 1.0
  */
 public class CoordinateRect {

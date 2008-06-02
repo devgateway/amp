@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.gis.dbentity.AmpDaValue" table="AMP_DA_VALUE">
+		<cache usage="read-write"/>
+		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">AMP_DA_VALUE_seq</param>
+			</generator>
+		</id>
+
+        <property name="pk" column="row_pk" type="java.lang.Long"/>
+		<property name="value" column="table_code" type="java.lang.String"/>
+		
+		<many-to-one name="column" column="column_id" class="org.digijava.module.gis.dbentity.AmpDaColumn" cascade="none"/>		
+
+	</class>
+</hibernate-mapping>

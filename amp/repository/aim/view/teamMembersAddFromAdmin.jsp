@@ -121,16 +121,6 @@
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<digi:link href="/roles.do" title="Click here to view Roles" >
-												<digi:trn key="aim:roles">
-												Roles
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
 										
 										<tr>
 											<td>

@@ -1652,7 +1652,7 @@ function commentWin(val) {
 																			<i>
 																				<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>
 																			</i>:
-																			<c:out value="${activity.createdBy.ampTeam.accessType}" />
+																			<c:out value="${activity.createdBy.ampTeam.name}" /> - <c:out value="${activity.createdBy.ampTeam.accessType}" />
 																			<br/>
 																			<i>
 																				<digi:trn key="aim:computation">Computation</digi:trn>

@@ -2317,7 +2317,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>										</td>
 										<td width="69%" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.createdBy.ampTeam.accessType}"/>
+											<c:out value="${aimEditActivityForm.createdBy.ampTeam.name}"/> - <c:out value="${aimEditActivityForm.createdBy.ampTeam.accessType}"/>
 										</td>
 									</tr>
 									<tr>

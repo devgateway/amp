@@ -2,6 +2,8 @@ package org.dgfoundation.amp.utils;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -13,7 +15,7 @@ import java.util.Map;
 public class AmpCollectionUtils {
 
 	/**
-	 * Interface that know how to resolve key of type K from element of Tye E.
+	 * Interface that know how to resolve key of type K from element of type E.
 	 * Used in createMap() method.
 	 *
 	 * @param <K> Key type
@@ -40,5 +42,65 @@ public class AmpCollectionUtils {
 		}
 		return result;
 	}
+	
+	/**
+	 * Return new collection based on comparing elements in two other collections.
+	 * sesCol is used to iterate all elements and dbCol to check for IDs in.
+	 * If same ID exists in both, dbCol element will go in result collection.
+	 * If ID is only in dbCol then it will NOT go in result collection.
+	 * If ID is only in sesCol then it will go in result collection. 
+	 * Please note that this method returns new collection object and if used with Hibernate in some cases
+	 * may result in error which says that collection cannot be dereferenced.
+	 * @param <E> Element type
+	 * @param <K> Element ID type.
+	 * @param sesCol main collection to iterate for elements. Usually this is one from session or form. 
+	 * @param dbCol collection which is used as reference to compare changes. usually this one is old state in db.
+	 * @param keyResolver class which implements {@link KeyResolver} and knows how to resolve ID property of type K from E.
+	 * @return
+	 */
+	public static <E,K> Collection<E> joinInNew(Collection<E> sesCol,Collection<E> dbCol, KeyResolver<K, E> keyResolver) {
+		Map<K,E> oldEmap = createMap(dbCol, keyResolver);
+		Collection<E> result = new LinkedList<E>();
+		for (E newE : sesCol) {
+			E oldE = oldEmap.get(keyResolver.resolveKey(newE));
+			if (oldE == null){
+				result.add(newE);
+			}else{
+				result.add(oldE);
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Joins two collection using rules rules of synchronization of session and db collections.
+	 * Result is same mainCol object but updated according refCol with following rules :
+	 * if E is in both collection then it is left unchanged in mainCol.
+	 * if E is only in mainCol then it is removed from it - from result.
+	 * if E is only in refCol then it is added to resulting mainCol.
+	 * E is element specified (and compared) by K type property which usually is ID of entity bean.
+	 * @param <E> type of elements in collections
+	 * @param <K> type of PK of entity bean or type of some property that is used to compare elements.
+	 * @param mainCol collection that would be updated according to refCol. usually this is collection of Hibernate beans.
+	 * @param refCol collection of reference. usually this is new state from form or session.
+	 * @param keyResolver
+	 * @return
+	 */
+	public static <E, K> Collection<E> join(Collection<E> mainCol, Collection<E> refCol, KeyResolver<K, E> keyResolver){
+		Map<K, E> mapEref = createMap(refCol, keyResolver);
+		Iterator<E> iterEmain = mainCol.iterator();
+		while (iterEmain.hasNext()) {
+			E mainE = (E) iterEmain.next();
+			E refE = mapEref.get(keyResolver.resolveKey(mainE));
+			if (refE == null){
+				iterEmain.remove();
+			}else{
+				mapEref.remove(keyResolver.resolveKey(mainE));
+			}
+		}
+		mainCol.addAll(mapEref.values());
+		return mainCol;
+	}
+	
 	
 }

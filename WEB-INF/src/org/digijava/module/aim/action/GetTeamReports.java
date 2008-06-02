@@ -71,23 +71,20 @@ public class GetTeamReports extends Action {
 
 		if (id != null) {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
-                        Double totalPages=null;
-                        Collection col =null;
-                        if(defReportsPerPage!=0){
-                          int curPage=raForm.getCurrentPage()-1;
-                          col= TeamUtil.getTeamReportsCollection(id,curPage*defReportsPerPage,defReportsPerPage);
-                          int size=TeamUtil.getTeamReportsCollectionSize(id);
-                          totalPages=Math.ceil(1.0*size/defReportsPerPage);
+            Double totalPages=null;
+            Collection col =null;
+            if(defReportsPerPage!=0){
+                int curPage=raForm.getCurrentPage()-1;
+                col= TeamUtil.getTeamReportsCollection(id,curPage*defReportsPerPage,defReportsPerPage);
+                int size=TeamUtil.getTeamReportsCollectionSize(id);
+                totalPages=Math.ceil(1.0*size/defReportsPerPage);
+             }
+             else{
+                col= TeamUtil.getTeamReportsCollection(id);
+                totalPages=new Double(FIRST_PAGE);
+              }
 
-                        }
-                        else{
-                           col= TeamUtil.getTeamReportsCollection(id);
-                           totalPages=new Double(FIRST_PAGE);
-                        }
-
-
-
-                        raForm.setTotalPages(totalPages.intValue());
+            raForm.setTotalPages(totalPages.intValue());
 			raForm.setReports(col);
 			raForm.setTeamId(id);
 			raForm.setTeamName(ampTeam.getName());

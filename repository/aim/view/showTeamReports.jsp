@@ -97,6 +97,8 @@ function confirmFunc() {
 											<td bgColor=#ffffff class=box-border>
 												<table border=0 cellPadding=3 cellSpacing=3 class=box-border width="100%" >
 													<tr bgColor=#dddddb>
+														<td>
+														</td>
 														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:publicTeamReportsList">
@@ -190,13 +192,15 @@ function confirmFunc() {
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
 															</c:set>
-
+															</td>		
+															<td>
 															<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
 															<b>
-															<bean:write name="report" property="name"/>
+																<p style="max-width: 400px;white-space: normal">
+																	<bean:write name="report" property="name"/>
+																</p>	
 															</b>
 															</digi:link>
-
 															</p>
 															<logic:present name="report" property="reportDescription" >
 																<p style="max-width: 400px;white-space: normal">

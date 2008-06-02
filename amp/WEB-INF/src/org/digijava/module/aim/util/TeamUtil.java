@@ -1707,7 +1707,7 @@ public class TeamUtil {
             session = PersistenceManager.getSession();
             String queryString = "select tr from "
                 + AmpTeamReports.class.getName()
-                + " tr where (tr.team=:teamId) order by tr.report";
+                + " tr where (tr.team=:teamId) group by tr.report order by tr.report ";
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -1763,7 +1763,7 @@ public class TeamUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select new "+ReportsCollection.class.getName()+"(r, tr.teamView) from "
                 + AmpTeamReports.class.getName()
-                + " tr inner join tr.report r where (tr.team=:teamId) order by tr.report limit "+currentPage+", "+recordPerPage;
+                + " tr inner join tr.report r where (tr.team=:teamId) group by tr.report order by tr.report limit "+currentPage+", "+recordPerPage ;
             Query qry = session.createQuery(queryString);
             qry.setLong("teamId", teamId);
 

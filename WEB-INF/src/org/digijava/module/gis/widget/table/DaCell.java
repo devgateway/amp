@@ -34,7 +34,6 @@ public class DaCell implements HtmlGenerator {
 		this.isHeader = true;
 	}
 	
-	@Override
 	public String generateHtml() {
 		String result="<TD>";
 		

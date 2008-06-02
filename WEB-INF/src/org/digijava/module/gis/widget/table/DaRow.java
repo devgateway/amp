@@ -31,7 +31,6 @@ public class DaRow implements HtmlGenerator{
 		}
 	}
 
-	@Override
 	public String generateHtml() {
 		String result="<TR>";
 		

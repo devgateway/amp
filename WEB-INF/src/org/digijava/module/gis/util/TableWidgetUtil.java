@@ -263,20 +263,17 @@ public class TableWidgetUtil {
 	
 	//=======COLUMNS====================
 	public static class TableWidgetKeyResolver implements KeyResolver<Long, AmpDaTable>{
-		@Override
 		public Long resolveKey(AmpDaTable element) {
 			return element.getId();
 		}
 	}
 	public static class TableWidgetColumnKeyResolver implements KeyResolver<Long, AmpDaColumn>{
-		@Override
 		public Long resolveKey(AmpDaColumn element) {
 			return element.getId();
 		}
 	}
 	public static class ColumnOrderNoComparator implements Comparator<AmpDaColumn>{
 
-		@Override
 		public int compare(AmpDaColumn col1, AmpDaColumn col2) {
 			return col1.getOrderNo().compareTo(col2.getOrderNo());
 		}
@@ -284,7 +281,6 @@ public class TableWidgetUtil {
 	}
 	
 	public static class WidgetPlaceKeyResolver implements KeyResolver<Long, AmpDaWidgetPlace>{
-		@Override
 		public Long resolveKey(AmpDaWidgetPlace element) {
 			return element.getId();
 		}
@@ -294,17 +290,14 @@ public class TableWidgetUtil {
 	//not used yet. will reimplement in AmpCollectionUtils with java generics.
 	public static class ColumnSynzchronizer implements CollectionSynchronizer{
 
-		@Override
 		public boolean removeEvent(Object arg0) {
 			return false;
 		}
 
-		@Override
 		public boolean synchronizeEvent(Object arg0, Object arg1) {
 			return false;
 		}
 
-		@Override
 		public int compare(Object arg0, Object arg1) {
 			return 0;
 		}

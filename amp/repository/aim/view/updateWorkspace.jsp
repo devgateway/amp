@@ -670,11 +670,6 @@ function cancel()
 															<table>
 																<tr>
 																	<td>
-																		<html:checkbox property="addActivity" value="true">Add Activity</html:checkbox>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
 																		<html:checkbox property="computation"  value="true" onchange="computationChange()">Computation</html:checkbox>
 																	</td>
 																</tr>
@@ -686,7 +681,14 @@ function cancel()
 													<tr style="background: #f4f4f2">
 														<td colspan="4">
 															<div id="computation_addon" style="display: none;">
-																
+																<table>
+																	<tr>
+																		<td>
+																			<html:checkbox property="addActivity" value="true">Add Activity</html:checkbox>
+																		</td>
+																	</tr>
+																	
+																</table>
 																<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																	<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 																	<table>

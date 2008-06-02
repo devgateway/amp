@@ -129,7 +129,7 @@
 												<digi:trn key="aim:ipaBudget"> IPA Budget</digi:trn>:
 												</td>
 												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
-													??????????????????
+													&nbsp;
 												</td>
 											</tr>
 											<tr valign="top">

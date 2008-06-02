@@ -77,7 +77,11 @@ public class UpdateWorkspace extends Action {
             		uwForm.setAddActivity(null);
             	}
             if( "Team".compareTo(uwForm.getWorkspaceType()) == 0 )
-            	uwForm.setChildWorkspaces(new ArrayList());
+            	{
+            		uwForm.setChildWorkspaces(new ArrayList());
+            		if(uwForm.getComputation()==null || uwForm.getComputation()==false) 
+            			uwForm.setAddActivity(true);
+            	}
             
             AmpTeam newTeam = null;
             newTeam = null;

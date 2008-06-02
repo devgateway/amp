@@ -119,7 +119,27 @@ function chekingWorkspaceTypeAndCatValue(action){
 	return true;
 }
 
+function update1(action, tid){
+
+	if (action == "editreset"){
+		<digi:context name="update" property="context/module/moduleinstance/getWorkspace.do" />
+		//document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
+		//document.aimUpdateWorkspaceForm.target = "_self";
+		//document.aimUpdateWorkspaceForm.submit();
+		window.location="<%=update%>~dest=admin~event=edit~tId="+tid;
+	}
+	return true;
+}
+
 function update(action) {
+	if (action == "reset"){
+		<digi:context name="update" property="context/module/moduleinstance/createWorkspace.do" />
+		document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
+		document.aimUpdateWorkspaceForm.target = "_self";
+		//document.aimUpdateWorkspaceForm.submit();
+		window.location="<%=update%>?dest=admin&event="+action;
+	}
+	
 	//alert("comput: "+document.aimUpdateWorkspaceForm.computation.value);
 	//alert("addact: "+document.aimUpdateWorkspaceForm.addActivity.checked);
 	//alert("orgs: "+document.aimUpdateWorkspaceForm.organizations.value);
@@ -221,8 +241,8 @@ function workspaceChangeType(){
 	}
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
-		document.aimUpdateWorkspaceForm.addActivity.checked = false;
-		document.aimUpdateWorkspaceForm.computation.checked = false;
+		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
+		//document.aimUpdateWorkspaceForm.computation.checked = false;
 			$("div[@id^='team_']").hide();
 			$("div[@id^='management_']").show('fast');
 			$("div[@id^='computation_']").hide()
@@ -738,7 +758,12 @@ function cancel()
 																				Reset
 																			</digi:trn>
 																		</c:set>
-																		<input type="button" value="${translation}" class="dr-menu" onclick="update('reset')"/>
+																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
+																			<input type="button" value="${translation}" class="dr-menu" onclick="update1('editreset',${aimUpdateWorkspaceForm.teamId})"/>
+																		</c:if>
+																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
+																			<input type="button" value="${translation}" class="dr-menu" onclick="update('reset')"/>
+																		</c:if>
 																	</td>
 																	<td>
 																		<c:set var="translation">
@@ -796,16 +821,7 @@ function cancel()
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<digi:link href="/roles.do">
-												<digi:trn key="aim:roles">
-												Roles
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+										
 										
 										<tr>
 											<td>

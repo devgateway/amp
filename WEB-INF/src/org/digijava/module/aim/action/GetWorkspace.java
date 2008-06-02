@@ -60,6 +60,16 @@ public class GetWorkspace extends Action {
 		
 		String dest = request.getParameter("dest");
 		String id	= request.getParameter("tId");
+		String action = request.getParameter("event");
+		
+		if(action!=null && "reset".compareTo(action)==0)
+		{
+			uwForm.setReset(true);
+            uwForm.reset(mapping, request);
+            uwForm.setActionEvent("add");
+            uwForm.setAddFlag(true);
+            return mapping.findForward("showAddWorkspace");
+		}
 		logger.debug("dest = " + dest);
 		logger.debug("id = " + id);
 		Long teamId = new Long(0);

@@ -3,6 +3,7 @@
  */
 package org.digijava.module.contentrepository.helper;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -58,8 +59,11 @@ public class TemporaryDocumentData extends DocumentData {
 		if ( dmForm.getFileData() != null ) {
 			FormFile formFile	= dmForm.getFileData();
 			if ( DocumentManagerUtil.checkFileSize(formFile, errors) ) {
-			
-				this.setName( formFile.getFileName() );
+				try {
+					this.setName( new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8"));
+				} catch (UnsupportedEncodingException e) {
+				
+				}
 				this.setTrueUploadedFileSize( formFile.getFileSize() );
 				this.setFileSize( DocumentManagerUtil.bytesToMega(trueUploadedFileSize) );
 				this.setContentType( formFile.getContentType() );

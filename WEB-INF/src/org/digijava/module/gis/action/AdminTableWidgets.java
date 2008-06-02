@@ -63,6 +63,7 @@ public class AdminTableWidgets extends DispatchAction {
 		tableForm.setHtmlStyle(null);
 		tableForm.setWidth("100%");
 		tableForm.setColumns(null);
+		setPlaces(tableForm);
 		
 		try {
 			startEditing(new AmpDaTable(), request);
@@ -137,8 +138,11 @@ public class AdminTableWidgets extends DispatchAction {
 		logger.debug("staring widget edit");
 		//start of edit: load from db, update form and save in session
 		AmpDaTable widget = getWidgetFromSession(request);
-		widgetToForm(wForm, widget);
-		setPlaces(wForm);
+		if (widget!=null){
+			formToWidget(wForm,widget);
+		}
+		//widgetToForm(wForm, widget);
+		//setPlaces(wForm);
 		return mapping.findForward("showEdit");
 	}
 
@@ -424,7 +428,7 @@ public class AdminTableWidgets extends DispatchAction {
 		column.setId(form.getColId());
 		column.setName(form.getColName());
 		column.setCode(form.getColCode());
-		column.setCssClass(form.getColCode());
+		column.setCssClass(form.getCssClass());
 		column.setHtmlStyle(form.getColHtmlStyle());
 		column.setPattern(form.getColPattern());
 		column.setWidth(form.getColWidth());

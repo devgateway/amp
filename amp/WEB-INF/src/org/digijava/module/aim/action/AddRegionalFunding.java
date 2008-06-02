@@ -54,13 +54,6 @@ public class AddRegionalFunding extends Action {
 		if (action != null && action.equalsIgnoreCase("show")) {
 			logger.debug("Forarding to forward");
 			eaForm.setFundingRegionId(new Long(-1));
-			if (tm.getAppSettings().getPerspective()
-					.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-				request.setAttribute("defPerspective",Constants.DONOR);
-			} else if (tm.getAppSettings().getPerspective().
-					equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
-				request.setAttribute("defPerspective",Constants.MOFED);
-			}
 			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			request.setAttribute("defCurrency",defCurr);
@@ -76,14 +69,6 @@ public class AddRegionalFunding extends Action {
 					eaForm.setFundingRegionId(rd.getRegionId());
 					break;
 				}
-			}
-			
-			if (tm.getAppSettings().getPerspective()
-					.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-				request.setAttribute("defPerspective",Constants.DONOR);
-			} else if (tm.getAppSettings().getPerspective().
-					equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
-				request.setAttribute("defPerspective",Constants.MOFED);
 			}
 			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
@@ -110,8 +95,6 @@ public class AddRegionalFunding extends Action {
 			Map comm = new HashMap();
 			Map disb = new HashMap();
 			Map exp = new HashMap();
-			
-			boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
 			
 			while (paramNames.hasMoreElements()) {
 				param = (String) paramNames.nextElement();

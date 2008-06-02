@@ -89,9 +89,6 @@ public class ViewFinancingBreakdown extends TilesAction {
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
 
-			String perspective = CommonWorker.getPerspective(apps.getPerspective());
-			fp.setPerspective(perspective);
-
 			if (fp.getFromYear() == 0 || fp.getToYear() == 0) {
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);

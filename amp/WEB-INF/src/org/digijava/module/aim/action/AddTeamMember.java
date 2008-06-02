@@ -148,8 +148,6 @@ public class AddTeamMember extends Action {
 			newAppSettings.setFiscalCalendar(ampAppSettings
 					.getFiscalCalendar());
 			newAppSettings.setLanguage(ampAppSettings.getLanguage());
-			newAppSettings.setDefaultPerspective(ampAppSettings
-					.getDefaultPerspective());
 			newAppSettings.setUseDefault(new Boolean(true));
 			Site site = RequestUtils.getSite(request);
 			try{

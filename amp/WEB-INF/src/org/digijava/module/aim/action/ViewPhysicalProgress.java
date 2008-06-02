@@ -36,18 +36,10 @@ public class ViewPhysicalProgress extends TilesAction {
 			formBean.setValidLogin(false);
 		} else {
 		    formBean.setValidLogin(true);
-                    String perspective = null;
                     if (teamMember.getAppSettings() != null) {
                       ApplicationSettings appSettings = teamMember.
                           getAppSettings();
-                      if (appSettings.getPerspective() != null) {
-                        perspective = appSettings.getPerspective();
-                      }
-                      else {
-                        perspective = "MOFED";
-                      }
                     }
-                    formBean.setPerspective(perspective);
 
 		    String compId = request.getParameter("compId");
 		    if (compId != null) {

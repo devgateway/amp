@@ -884,7 +884,7 @@ public class DbUtil {
      * @return
      */
     public static DecimalWraper getTotalDonorFunding(Long ampFundingId,
-           Integer transactionType, Integer adjustmentType, String perspective,String currcode) {
+           Integer transactionType, Integer adjustmentType, String currcode) {
     	   Session session = null;
            Query q = null;
            List list = null;
@@ -898,12 +898,10 @@ public class DbUtil {
                queryString = "select from "
                    + AmpFundingDetail.class.getName()
                    + " f where (f.ampFundingId=:ampFundingId) "
-                   + " and (f.orgRoleCode=:perspective) "
                    + " and (f.transactionType=:transactionType) "
                    + " and (f.adjustmentType=:adjustmentType)";
                q = session.createQuery(queryString);
                q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-               q.setParameter("perspective", perspective, Hibernate.STRING);
                q.setParameter("transactionType", transactionType,
                               Hibernate.INTEGER);
                q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
@@ -1274,9 +1272,9 @@ public class DbUtil {
      * @return Collection
      */
     public static Collection getQuarterlyData(Long ampFundingId,
-                                              String perspective, int transactionType, int adjustmentType) {
+                                              int transactionType, int adjustmentType) {
         logger.debug("getQuarterlyData with ampFundingId " + ampFundingId
-                     + " perspective " + perspective + " transactionType "
+                     + " transactionType "
                      + transactionType + " adjustmentType " + adjustmentType);
 
         Session session = null;
@@ -1296,12 +1294,10 @@ public class DbUtil {
                 + "f.transactionDate,f.ampCurrencyId, f.fixedExchangeRate from "
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
-                + " and (f.orgRoleCode=:perspective) "
                 + " and (f.transactionType=:trsType) "
                 + " and (f.adjustmentType=:adjType) order by f.transactionDate ";
             q = session.createQuery(queryString);
             q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("trsType", trsType, Hibernate.INTEGER);
             q.setParameter("adjType", adjType, Hibernate.INTEGER);
             c = q.list();
@@ -3005,7 +3001,7 @@ public class DbUtil {
      */
     public static DecimalWraper getAmpFundingAmount(Long ampActivityId,
                                              Integer transactionType, Integer adjustmentType,
-                                             String perspective, String ampCurrencyCode) {
+                                             String ampCurrencyCode) {
         Session session = null;
         Query q = null;
         Iterator iter = null;
@@ -3030,17 +3026,15 @@ public class DbUtil {
                         + "'";
             }
             logger.debug(" transactionType " + transactionType
-                         + " adjustmentType " + adjustmentType + "perspective"
-                         + perspective + "ampCurrencyCode" + ampCurrencyCode);
+                         + " adjustmentType " + adjustmentType 
+                         + " ampCurrencyCode" + ampCurrencyCode);
             queryString = queryString = "select fd from "
                 + AmpFundingDetail.class.getName()
                 + " fd where (fd.transactionType=:transactionType) "
                 + " and (fd.adjustmentType=:adjustmentType) "
-                + " and (fd.orgRoleCode=:perspective) "
                 + " and (fd.ampFundingId in(" + inClause + "))";
             logger.debug("queryString :" + queryString);
             q = session.createQuery(queryString);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("transactionType", transactionType,
                            Hibernate.INTEGER);
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
@@ -3104,8 +3098,7 @@ public class DbUtil {
             logger.debug("Amount: " + amount);
 
         } catch (Exception ex) {
-            logger.debug("Unable to get sum of funds from database"
-                         + ex.getMessage());
+            logger.error("Unable to get sum of funds from database", ex);
         }
 
         return amount;
@@ -5354,7 +5347,7 @@ public class DbUtil {
 
     public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup,
         AmpCategoryValue statusCM, int startYear, int closeYear, String currency, String termAssist, AmpCategoryValue financingInstr,
-        String perspective, String sector, String calendar) {
+        String sector, String calendar) {
 
         Session session = null;
         ArrayList responses = new ArrayList();
@@ -5581,7 +5574,7 @@ public class DbUtil {
                                                 while (itr4.hasNext()) {
                                                     AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
                                                     // Filtering by perspective here
-                                                    if (perspective.equalsIgnoreCase(fundtl.getPerspectiveId().getCode())) {
+                                                    //if (perspective.equalsIgnoreCase(fundtl.getPerspectiveId().getCode())) {
                                                         /*
                                                                       date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
                                                                       convYr = DateConversion.getYear(date);
@@ -5622,7 +5615,7 @@ public class DbUtil {
                                                             sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
                                                                 fromExchangeRate, toExchangeRate);
                                                         }
-                                                    }
+                                                    //}
                                                 }
                                             }
                                         }

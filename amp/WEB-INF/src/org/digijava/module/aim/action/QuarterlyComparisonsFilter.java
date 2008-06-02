@@ -90,24 +90,20 @@ public class QuarterlyComparisonsFilter extends Action	{
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 
-			if ( fp.getPerspective().equals("DI") )	{
-				Collection c = QuarterlyDiscrepancyAllWorker.getDiscrepancy(fp);
-				formBean.setQuarterlyDiscrepanciesAll(c);
+
+			Collection c = QuarterlyComparisonsWorker.getQuarterlyComparisons(fp);
+			if ( c.size() != 0 )
+				formBean.setQuarterlyComparisons(c) ;
+                             Collection colYearly = YearlyComparisonsWorker.getYearlyComparisons(fp);
+			if ( colYearly.size() > 0 )	{
+				AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(colYearly);
+				formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
+				formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
+				formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
+				formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
+                                    formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
 			}
-			else	{
-				Collection c = QuarterlyComparisonsWorker.getQuarterlyComparisons(fp);
-				if ( c.size() != 0 )
-					formBean.setQuarterlyComparisons(c) ;
-                                 Collection colYearly = YearlyComparisonsWorker.getYearlyComparisons(fp);
-				if ( colYearly.size() > 0 )	{
-					AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(colYearly);
-					formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
-					formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
-					formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
-					formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
-                                        formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
-				}
-			}
+			
 		}
 		return null;
 	}

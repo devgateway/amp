@@ -341,11 +341,6 @@ public class TeamUtil {
                 ampAppSettings.setCurrency(curr);
                 ampAppSettings.setFiscalCalendar(fiscal);
                 ampAppSettings.setLanguage("English");
-                if(Constants.DEF_MFD_PERSPECTIVE.equalsIgnoreCase(team.getTeamCategory()) || 
-                		Constants.DEF_GOV_PERSPECTIVE.equalsIgnoreCase(team.getTeamCategory()))
-                    ampAppSettings.setDefaultPerspective(Constants.DEF_MFD_PERSPECTIVE);
-                else if(Constants.DEF_DNR_PERSPECTIVE.equalsIgnoreCase(team.getTeamCategory()))
-                    ampAppSettings.setDefaultPerspective(Constants.DEF_DNR_PERSPECTIVE);
                 session.save(ampAppSettings);
 
                 // update all child workspaces parent team

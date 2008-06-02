@@ -8,7 +8,6 @@ public class ApplicationSettings {
 		  private Long appSettingsId;
 		  private int defRecsPerPage;
 		  private String language;
-		  private String perspective;
 		  private Long currencyId;
 		  private Long fisCalId;
 		  private Integer reportStartYear;
@@ -38,14 +37,6 @@ public class ApplicationSettings {
 
 		  public void setLanguage(String language) {
 					 this.language = language;
-		  }
-
-		  public String getPerspective() {
-					 return this.perspective;
-		  }
-
-		  public void setPerspective(String perspective) {
-					 this.perspective = perspective;
 		  }
 
 		  public Long getCurrencyId() {

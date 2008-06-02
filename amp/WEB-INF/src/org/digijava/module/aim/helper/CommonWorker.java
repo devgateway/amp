@@ -8,6 +8,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 public  class CommonWorker	{
 
+	@Deprecated
 	public static String getPerspective(String perspectiveName)	{
 		String code = null;
 		if ( perspectiveName.equalsIgnoreCase("Donor") )

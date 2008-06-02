@@ -70,8 +70,6 @@ public class UpdateAppSettings extends Action {
 			uForm.setUpdated(false);
 		}
 
-		uForm.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
-
 		if (uForm.getType() == null
 				|| uForm.getType().trim().equals("")) {
 			String path = mapping.getPath();
@@ -123,7 +121,6 @@ public class UpdateAppSettings extends Action {
                                 uForm.setReportStartYear(reportStartYear);
                                 uForm.setReportEndYear(reportEndYear);                                
 				uForm.setLanguage(ampAppSettings.getLanguage());
-				uForm.setDefPerspective(ampAppSettings.getDefaultPerspective());
 				uForm.setCurrencyId(ampAppSettings.getCurrency()
 						.getAmpCurrencyId());
 				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar()
@@ -195,7 +192,6 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setFiscalCalendar(DbUtil
 						.getAmpFiscalCalendar(uForm.getFisCalendarId()));
 				ampAppSettings.setLanguage(uForm.getLanguage());
-				ampAppSettings.setDefaultPerspective(FeaturesUtil.isPerspectiveEnabled() ? uForm.getDefPerspective() : Constants.DEF_MFD_PERSPECTIVE);
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
 
 				AmpReports ampReport			= DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
@@ -320,7 +316,6 @@ public class UpdateAppSettings extends Action {
 		oldSettings.setCurrency(newSettings.getCurrency());
 		oldSettings.setFiscalCalendar(newSettings.getFiscalCalendar());
 		oldSettings.setLanguage(newSettings.getLanguage());
-		oldSettings.setDefaultPerspective(newSettings.getDefaultPerspective());
 		oldSettings.setTeam(newSettings.getTeam());
 		oldSettings.setMember(ampMember);
 		oldSettings.setReportStartYear(newSettings.getReportStartYear());
@@ -347,7 +342,6 @@ public class UpdateAppSettings extends Action {
 		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
 				.getAmpFiscalCalId());
 		appSettings.setLanguage(ampAppSettings.getLanguage());
-		appSettings.setPerspective(ampAppSettings.getDefaultPerspective());
 
 		appSettings.setDefaultAmpReport( ampAppSettings.getDefaultTeamReport() );
 		return appSettings;

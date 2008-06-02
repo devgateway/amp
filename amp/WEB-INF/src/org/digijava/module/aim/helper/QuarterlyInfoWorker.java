@@ -126,8 +126,7 @@ public class QuarterlyInfoWorker {
 		//logger.debug("In get Quarterly frm curr = " + fromCurrency);
 		//logger.debug("In get Quarterly target curr = " + targetCurrency);
 
-		c = DbUtil.getQuarterlyData(fp.getAmpFundingId(), fp.getPerspective(),
-				fp.getTransactionType(), Constants.PLANNED);
+		c = DbUtil.getQuarterlyData(fp.getAmpFundingId(), fp.getTransactionType(), Constants.PLANNED);
 		if (c.size() > 0) {
 			iter = c.iterator();
 			while (iter.hasNext()) {
@@ -169,7 +168,7 @@ public class QuarterlyInfoWorker {
 			}
 		}
 
-		c1 = DbUtil.getQuarterlyData(fp.getAmpFundingId(), fp.getPerspective(),
+		c1 = DbUtil.getQuarterlyData(fp.getAmpFundingId(),
 				fp.getTransactionType(), Constants.ACTUAL);
 		
 		if (arrayList.size() > 0 || c1.size() > 0) {
@@ -519,7 +518,7 @@ public class QuarterlyInfoWorker {
 	 * 
 	 */
 	public static TotalsQuarterly getTotalsQuarterly(Long ampFundingId,
-		String perspective, String currCode, boolean isDebug) {
+		String currCode, boolean isDebug) {
 		// if (logger.isDebugEnabled())
 		// logger.debug("getTotalsQuarterly() with ampFundingId : "
 		// + ampFundingId + ", perspective : " + perspective);
@@ -528,7 +527,7 @@ public class QuarterlyInfoWorker {
 		// Total actual commitment
 		
 		DecimalWraper totCommitment = DbUtil.getTotalDonorFunding(ampFundingId,
-				new Integer(Constants.COMMITMENT), adjType, perspective,currCode);
+				new Integer(Constants.COMMITMENT), adjType,currCode);
 		String strTotCommitment = "";
 		if (!isDebug) {
 			strTotCommitment =totCommitment.toString();
@@ -539,7 +538,7 @@ public class QuarterlyInfoWorker {
 		}
 		String strTotDisbursement = "";
 		DecimalWraper totDisbursement = DbUtil.getTotalDonorFunding(ampFundingId,
-				new Integer(Constants.DISBURSEMENT), adjType, perspective,currCode);
+				new Integer(Constants.DISBURSEMENT), adjType,currCode);
 		if (!isDebug) {
 			strTotDisbursement = totDisbursement.toString();
 		} else {
@@ -548,7 +547,7 @@ public class QuarterlyInfoWorker {
 		tq.setTotalDisbursed(strTotDisbursement);
 		
 		DecimalWraper totExpended = DbUtil.getTotalDonorFunding(ampFundingId,
-				new Integer(Constants.EXPENDITURE), adjType, perspective,currCode);
+				new Integer(Constants.EXPENDITURE), adjType,currCode);
 		if (!isDebug) {
 			tq.setTotalExpended(totExpended.toString());
 		} else {

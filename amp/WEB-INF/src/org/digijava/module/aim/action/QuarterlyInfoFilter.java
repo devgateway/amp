@@ -105,7 +105,7 @@ public class QuarterlyInfoFilter extends TilesAction	{
 			Collection c = QuarterlyInfoWorker.getQuarterlyInfo(fp);
 			if ( c.size() != 0 )	{
 				formBean.setQuarterlyInfo(c);
-				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
+				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getCurrencyCode(),false);
 				formBean.setTotalCommitted(tq.getTotalCommitted());
 				formBean.setTotalDisbursed(tq.getTotalDisbursed());
                                     formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());

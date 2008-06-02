@@ -4,7 +4,6 @@ public class FilterParams {
 	
 	private Long ampFundingId;
   	private int transactionType;
-  	private String perspective;
   	private String currencyCode;
   	private Long fiscalCalId;
   	private int fromYear;
@@ -38,12 +37,6 @@ public class FilterParams {
 		return fromYear;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getPerspective() {
-		return perspective;
-	}
 
 	/**
 	 * @return
@@ -88,13 +81,6 @@ public class FilterParams {
 	}
 
 	/**
-	 * @param string
-	 */
-	public void setPerspective(String string) {
-		perspective = string;
-	}
-
-	/**
 	 * @param i
 	 */
 	public void setToYear(int i) {
@@ -114,7 +100,6 @@ public class FilterParams {
 		setCurrencyCode(fp.getCurrencyCode());
 		setFiscalCalId(fp.getFiscalCalId());
 		setFromYear(fp.getFromYear());
-		setPerspective(fp.getPerspective());
 		setToYear(fp.getToYear());
 		setTransactionType(fp.getTransactionType());
 		return true;

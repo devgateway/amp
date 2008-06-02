@@ -94,28 +94,24 @@ public class YearlyInfoFilter extends TilesAction {
 			formBean.setDisbursementTabColor(tc.getDisbursementTabColor());
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
 
-			if ( fp.getPerspective().equals(Constants.DISCREPANCY) )	{
-				Collection discrepancies = YearlyDiscrepancyWorker.getYearlyDiscrepancy(fp);
-				formBean.setDiscrepancies(discrepancies);
-			}
-			else	{
-				Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
-				if ( yearlyInfo.size() != 0 )	{
-					formBean.setYearlyInfo(yearlyInfo);
 
-					TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
-					formBean.setTotalCommitted(tq.getTotalCommitted());
-					formBean.setTotalDisbursed(tq.getTotalDisbursed());
-                                        formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
-					formBean.setTotalUnExpended(tq.getTotalUnExpended());
-					formBean.setTotalRemaining(tq.getTotalRemaining());
+			Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
+			if ( yearlyInfo.size() != 0 )	{
+				formBean.setYearlyInfo(yearlyInfo);
 
-					String strTotalPlanned = YearlyInfoWorker.getTotalYearly(yearlyInfo,Constants.PLANNED);
-					formBean.setTotalPlanned(strTotalPlanned);
-					String strTotalActual = YearlyInfoWorker.getTotalYearly(yearlyInfo,Constants.ACTUAL);
-					formBean.setTotalActual(strTotalActual);
-				}
+				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getCurrencyCode(),false);
+				formBean.setTotalCommitted(tq.getTotalCommitted());
+				formBean.setTotalDisbursed(tq.getTotalDisbursed());
+                                    formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
+				formBean.setTotalUnExpended(tq.getTotalUnExpended());
+				formBean.setTotalRemaining(tq.getTotalRemaining());
+
+				String strTotalPlanned = YearlyInfoWorker.getTotalYearly(yearlyInfo,Constants.PLANNED);
+				formBean.setTotalPlanned(strTotalPlanned);
+				String strTotalActual = YearlyInfoWorker.getTotalYearly(yearlyInfo,Constants.ACTUAL);
+				formBean.setTotalActual(strTotalActual);
 			}
+
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setFiscalYears(new ArrayList());

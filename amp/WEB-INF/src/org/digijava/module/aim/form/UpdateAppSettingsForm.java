@@ -12,8 +12,6 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private String language = null;
 
-	private String defPerspective = null;
-
 	private Long currencyId = null;
 
 	private Long fisCalendarId = null;
@@ -49,7 +47,6 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private Collection reports;
 
-	private boolean perspectiveEnabled;
         private int defReportsPerPage;
 
   public Collection getReports() {
@@ -132,14 +129,6 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.language = language;
 	}
 
-	public String getDefPerspective() {
-		return this.defPerspective;
-	}
-
-	public void setDefPerspective(String defPerspective) {
-		this.defPerspective = defPerspective;
-	}
-
 	public Long getCurrencyId() {
 		return this.currencyId;
 	}
@@ -200,17 +189,10 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.defaultReportForTeamId = defaultReportForTeamId;
 	}
 
-	public void setPerspectiveEnabled(boolean perspectiveEnabled) {
-		this.perspectiveEnabled = perspectiveEnabled;
-	}
-
         public void setDefReportsPerPage(int defReportsPerPage) {
           this.defReportsPerPage = defReportsPerPage;
         }
 
-  public boolean isPerspectiveEnabled() {
-		return perspectiveEnabled;
-	}
 
         public int getDefReportsPerPage() {
           return defReportsPerPage;

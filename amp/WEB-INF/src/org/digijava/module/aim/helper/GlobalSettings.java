@@ -25,23 +25,14 @@ import org.dgfoundation.amp.ar.AmpARFilter;
  * @author Mauricio Coria - coriamauricio@gmail.com
  */
 public class GlobalSettings {
-	private Boolean perspectiveEnabled;
 	private Boolean showComponentFundingByYear;
 
 	private static final GlobalSettings INSTANCE = new GlobalSettings();
 	
+	private GlobalSettings(){}
+	
 	public static GlobalSettings getInstance(){
 		return INSTANCE;
-	}
-	
-	private GlobalSettings(){}
-
-	public void setPerspectiveEnabled(Boolean isPerspectiveEnabled) {
-		this.perspectiveEnabled = isPerspectiveEnabled;
-	}
-
-	public Boolean getPerspectiveEnabled() {
-		return perspectiveEnabled;
 	}
 
 	public void setShowComponentFundingByYear(Boolean showComponentFundingByYear) {

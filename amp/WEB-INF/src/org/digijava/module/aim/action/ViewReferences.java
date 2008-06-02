@@ -117,22 +117,7 @@ public class ViewReferences extends TilesAction {
         	formBean.setAllReferenceDocNameIds(refdocIds);
         	//set all comments, some are empty
 //        	eaForm.setRefDocComments(refdocComments);
-        	String perspective =null;
         	formBean.setReferenceDocs(refDocs);
-                if (teamMember.getAppSettings() != null) {
-                    ApplicationSettings appSettings = teamMember.
-                        getAppSettings();
-                    if (appSettings.getPerspective() != null) {
-                      perspective = appSettings.getPerspective();
-                    }
-                    else {
-                      perspective = "MOFED";
-                    }
-                  }
-                  formBean.setPerspective(perspective);
-
-
-
 
 
 		}

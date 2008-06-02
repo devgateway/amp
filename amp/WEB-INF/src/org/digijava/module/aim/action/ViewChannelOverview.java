@@ -181,33 +181,21 @@ public class ViewChannelOverview extends TilesAction {
 		 	}
 		 	// end
 
-			String perspective = null;
 			String currCode = null;
 
 			if (teamMember.getAppSettings() != null) {
 				ApplicationSettings appSettings = teamMember.getAppSettings();
-				if (appSettings.getPerspective() != null) {
-					perspective = appSettings.getPerspective();
-				} else {
-					perspective = "MOFED";
-				}
 				if (appSettings.getCurrencyId() != null) {
 					currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 				} else {
 					currCode = Constants.DEFAULT_CURRENCY;
 				}
-				formBean.setPerspective(perspective);
 				formBean.setWrite(teamMember.getWrite());
 				formBean.setDelete(teamMember.getDelete());
 				formBean.setCurrCode(currCode);
-				if (perspective.equalsIgnoreCase("MOFED")) {
-					perspective = Constants.MOFED;
-				} else {
-					perspective = Constants.DONOR;
-				}
 
     			// call the logic instance to perform the caculations, so it will depend of each implementancion how we will calculate the total inlcuding or not planned 
-    			DecimalWraper total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(activity.getActivityId(), currCode, perspective);
+    			DecimalWraper total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(activity.getActivityId(), currCode);
             		if (!debug) {
             		    formBean.setGrandTotal(total.toString());
             		} else {

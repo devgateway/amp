@@ -75,7 +75,6 @@ public class ParisIndicatorReport extends Action {
                 ApplicationSettings apps = null;
                 if (null != tm) {
                     apps = tm.getAppSettings();
-                    svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
                     if (null != apps.getFisCalId())
                         svForm.setCalendar(apps.getFisCalId().toString());
                     else
@@ -187,7 +186,7 @@ public class ParisIndicatorReport extends Action {
                 Collection spCol = DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(), svForm.getDonor(),
                     svForm.getOrgGroup(), status, svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(),
                     svForm.getCurrency(), svForm.getTermAssist(), financingInstrument,
-                    svForm.getPerspective(), svForm.getSector(), svForm.getCalendar());
+                    svForm.getSector(), svForm.getCalendar());
 
                 svForm.setDonorsColl(spCol);
 

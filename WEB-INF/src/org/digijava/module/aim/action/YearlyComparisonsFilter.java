@@ -79,15 +79,11 @@ public class YearlyComparisonsFilter extends TilesAction	{
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-			if ( fp.getPerspective().equals("DI") )	{
-				Collection c  = YearlyDiscrepancyAllWorker.getDiscrepancy(fp);
-				formBean.setYearlyDiscrepanciesAll(c);
-			}
-			else	{
-				Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;
-				if ( c.size() != 0 )
-					formBean.setYearlyComparisons(c);
-			}
+
+			Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp) ;
+			if ( c.size() != 0 )
+				formBean.setYearlyComparisons(c);
+			
 		}
 		return null;
 	}

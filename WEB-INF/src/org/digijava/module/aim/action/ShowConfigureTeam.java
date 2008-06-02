@@ -68,19 +68,6 @@ public class ShowConfigureTeam extends Action {
 
 		Collection teamPageFilters = DbUtil.getTeamPageFilters(tm.getTeamId(),
 				pageId);
-
-		if (!FeaturesUtil.isPerspectiveEnabled()) {
-			AmpFilters perspectiveFilter = null;
-			for (Iterator iter = col.iterator(); iter.hasNext();) {
-				AmpFilters element = (AmpFilters) iter.next();
-				if (element.getAmpFilterId().equals(Constants.PERSPECTIVE)) {
-					perspectiveFilter = element;
-					break;
-				}
-			}
-			if (perspectiveFilter != null)
-				col.remove(perspectiveFilter);
-		}
 		
 		int index = 0;
 		Iterator iterator = col.iterator();

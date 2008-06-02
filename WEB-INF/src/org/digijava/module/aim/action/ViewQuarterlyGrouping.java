@@ -73,10 +73,6 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
 
-			if ( fp.getPerspective() == null )	{
-				String perspective = CommonWorker.getPerspective(apps.getPerspective());
-				fp.setPerspective(perspective);
-			}
 
 			if ( fp.getFromYear()==0 || fp.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
@@ -153,7 +149,7 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 
 				formBean.setQuarterlyInfo(arrList);
 
-				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
+				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getCurrencyCode(),false);
 				formBean.setTotalCommitted(tq.getTotalCommitted());
 				formBean.setTotalDisbursed(tq.getTotalDisbursed());
 				formBean.setTotalUnExpended(tq.getTotalUnExpended());

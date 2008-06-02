@@ -73,14 +73,6 @@ public class FeaturesUtil {
     return false;
   }
 
-  public static boolean isPerspectiveEnabled() {
-    String perspectiveStr = FeaturesUtil
-        .getGlobalSettingValue(Constants.GLOBAL_PERSPECTIVE);
-    if (perspectiveStr != null && "On".equals(perspectiveStr))
-      return true;
-    return false;
-  }
-
   public static Collection getAMPFeatures() {
     Session session = null;
     Collection col = new ArrayList();

@@ -274,9 +274,6 @@ public class Login extends Action {
 
 					appSettings.setLanguage(langCode);
 
-					appSettings.setPerspective(ampAppSettings
-							.getDefaultPerspective());
-
 					tm.setMemberId(member.getAmpTeamMemId());
 					tm.setMemberName(member.getUser().getName());
 					tm.setRoleId(member.getAmpMemberRole()

@@ -36,10 +36,10 @@ public class DefaultDonorFundingCalculator implements DonorFundingCalculator {
 	/**
 	 * return defatul TotalCommtiments calculation, it is the sum of all actual
 	 */
-	public DecimalWraper getTotalCommtiments(Long activityId, String currCode, String perspective) {
+	public DecimalWraper getTotalCommtiments(Long activityId, String currCode) {
 
 	DecimalWraper actual = DbUtil.getAmpFundingAmount(activityId, org.digijava.module.aim.helper.Constants.COMMITMENT,
-	        org.digijava.module.aim.helper.Constants.ACTUAL, perspective,currCode);
+	        org.digijava.module.aim.helper.Constants.ACTUAL,currCode);
 	actual.setCalculations("Total = sum of Planned (" + actual.getCalculations() + ") " + actual.toString());
 
 	return actual;

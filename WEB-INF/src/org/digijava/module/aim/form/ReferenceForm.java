@@ -12,16 +12,8 @@ public class ReferenceForm extends MainProjectDetailsForm
 	private List referenceDocs;
 	private boolean validLogin;
 	private Long[] allReferenceDocNameIds;
-	private String perspective;
 	
 	
-	
-	public String getPerspective() {
-		return perspective;
-	}
-	public void setPerspective(String perspective) {
-		this.perspective = perspective;
-	}
 	public Long[] getAllReferenceDocNameIds() {
 		return allReferenceDocNameIds;
 	}

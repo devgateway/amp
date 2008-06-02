@@ -109,7 +109,6 @@ public class SelectTeam extends Action {
             appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
                     .getAmpFiscalCalId());
             appSettings.setLanguage(ampAppSettings.getLanguage());
-            appSettings.setPerspective(ampAppSettings.getDefaultPerspective());
             appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
 
 

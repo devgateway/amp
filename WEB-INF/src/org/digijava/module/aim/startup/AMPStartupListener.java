@@ -93,7 +93,6 @@ public class AMPStartupListener extends HttpServlet
         	ampContext.setAttribute("ampColumnsOrder",ampColumns);
         	
         	GlobalSettings globalSettings = GlobalSettings.getInstance();
-        	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
         	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
         	FeaturesUtil.switchLogicInstance();
         	

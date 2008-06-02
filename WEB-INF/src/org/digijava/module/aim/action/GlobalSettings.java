@@ -105,7 +105,6 @@ public class GlobalSettings extends Action {
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
-	    	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
 	    	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
 	    	FeaturesUtil.switchLogicInstance();	    	
 	     	

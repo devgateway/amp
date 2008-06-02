@@ -142,22 +142,8 @@ function commentWin(val) {
 											name="urlChannelOverview" styleClass="comment"
 											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-										</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal
-											name="globalSettings" scope="application"
-											property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
-										<c:set var="perspectiveNameLocal"
-												value="${aimChannelOverviewForm.perspective}" />
-
-
-											<logic:notEmpty name="aimChannelOverviewForm"
-												property="perspective">
-												<digi:trn key="aim:${perspectiveNameLocal}">
-                                                    ${aimChannelOverviewForm.perspective}
-                                                </digi:trn>
-											</logic:notEmpty>
-										&nbsp;
-										<digi:trn key="aim:perspective">Perspective</digi:trn>
-										</logic:equal> </SPAN></TD>
+										</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn>										
+										</SPAN></TD>
 										<TD align="right">
 										<table>
 											<tr>

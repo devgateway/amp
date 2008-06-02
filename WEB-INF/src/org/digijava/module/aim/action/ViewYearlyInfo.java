@@ -81,11 +81,6 @@ public class ViewYearlyInfo extends TilesAction {
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
 
-			if (fp.getPerspective() == null) {
-				String perspective = CommonWorker.getPerspective(apps
-						.getPerspective());
-				fp.setPerspective(perspective);
-			}
 
 			if (fp.getFromYear() == 0 || fp.getToYear() == 0) {
 				int year = new GregorianCalendar().get(Calendar.YEAR);
@@ -97,39 +92,34 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
 			session.setAttribute("filterParams", fp);
-			if (fp.getPerspective().equals(Constants.DISCREPANCY)) {
-				Collection discrepancies = YearlyDiscrepancyWorker
-						.getYearlyDiscrepancy(fp);
-				formBean.setDiscrepancies(discrepancies);
-			} else {
-				Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
-				if (yearlyInfo.size() != 0) {
-					TotalsQuarterly tq=null;
-					formBean.setYearlyInfo(yearlyInfo);
-					if (debug){
-						tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),
-									Constants.MOFED,fp.getCurrencyCode(),true);
-					}
-					else
-					{
-						tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),
-									Constants.MOFED,fp.getCurrencyCode(),false);
-					}
-					formBean.setTotalCommitted(tq.getTotalCommitted());
-					formBean.setTotalDisbursed(tq.getTotalDisbursed());
-                    formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
-					formBean.setTotalUnExpended(tq.getTotalUnExpended());
-					formBean.setTotalExpended(tq.getTotalExpended());
-					formBean.setTotalRemaining(tq.getTotalRemaining());
-					formBean.setCurrCode(tq.getCurrencyCode());
 
-					String strTotalPlanned = YearlyInfoWorker.getTotalYearly(
-							yearlyInfo, Constants.PLANNED);
-					formBean.setTotalPlanned(strTotalPlanned);
-					String strTotalActual = YearlyInfoWorker.getTotalYearly(
-							yearlyInfo, Constants.ACTUAL);
-					formBean.setTotalActual(strTotalActual);
+			Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
+			if (yearlyInfo.size() != 0) {
+				TotalsQuarterly tq=null;
+				formBean.setYearlyInfo(yearlyInfo);
+				if (debug){
+					tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),
+								fp.getCurrencyCode(),true);
 				}
+				else
+				{
+					tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),
+								fp.getCurrencyCode(),false);
+				}
+				formBean.setTotalCommitted(tq.getTotalCommitted());
+				formBean.setTotalDisbursed(tq.getTotalDisbursed());
+                formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
+				formBean.setTotalUnExpended(tq.getTotalUnExpended());
+				formBean.setTotalExpended(tq.getTotalExpended());
+				formBean.setTotalRemaining(tq.getTotalRemaining());
+				formBean.setCurrCode(tq.getCurrencyCode());
+
+				String strTotalPlanned = YearlyInfoWorker.getTotalYearly(
+						yearlyInfo, Constants.PLANNED);
+				formBean.setTotalPlanned(strTotalPlanned);
+				String strTotalActual = YearlyInfoWorker.getTotalYearly(
+						yearlyInfo, Constants.ACTUAL);
+				formBean.setTotalActual(strTotalActual);
 			}
 
 			TabColors tc = PresentationUtil.setTabColors(fp

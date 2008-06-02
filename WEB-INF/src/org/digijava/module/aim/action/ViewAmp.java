@@ -267,10 +267,6 @@ public class ViewAmp
 
             appSettings.setLanguage(langCode);
 
-            appSettings.setPerspective(FeaturesUtil.isPerspectiveEnabled()
-            							? ampAppSettings.getDefaultPerspective()
-            							: Constants.DEF_MFD_PERSPECTIVE);
-
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());

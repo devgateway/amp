@@ -73,19 +73,6 @@ public class ViewKnowledge extends TilesAction {
                         currentSite, activity));
                 }
 			}
-                        String perspective = null;
-                 if (teamMember.getAppSettings() != null) {
-                   ApplicationSettings appSettings = teamMember.
-                       getAppSettings();
-                   if (appSettings.getPerspective() != null) {
-                     perspective = appSettings.getPerspective();
-                   }
-                   else {
-                     perspective = "MOFED";
-                   }
-                 }
-                 formBean.setPerspective(perspective);
-
 
 		}
 

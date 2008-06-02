@@ -215,7 +215,6 @@ public class GetActivityDetails extends Action {
 
 		Collection ampFundings = null;
 		String currCode = null;
-		String perspective = null;
 		Long fiscalCalId = null;
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		if (teamMember == null) 
@@ -239,19 +238,10 @@ public class GetActivityDetails extends Action {
 		    //AMP-2212
 			fiscalCalId = DbUtil.getGregorianCalendar().getAmpFiscalCalId();
 		}
-		if (appSettings.getPerspective() != null) {
-			perspective = appSettings.getPerspective();
-		} else {
-			perspective = "Donor";
-		}
 		if (ampFundings != null) {
 			FilterParams fp = new FilterParams();
 			fp.setCurrencyCode(currCode);
 			fp.setFiscalCalId(fiscalCalId);
-			if (perspective.equalsIgnoreCase("Donor"))
-				fp.setPerspective(Constants.DONOR);
-			if (perspective.equalsIgnoreCase("MOFED"))
-				fp.setPerspective(Constants.MOFED);
 			fp.setFromYear(1934);
 			fp.setToYear(2014);
 			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(

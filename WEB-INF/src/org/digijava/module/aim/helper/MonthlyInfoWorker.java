@@ -29,7 +29,6 @@ public class MonthlyInfoWorker {
         Session session = null;
         Query q = null;
         int trsType = -1;
-        String perspective = fp.getPerspective();
         Long ampFundingId = fp.getAmpFundingId();
         int fromYear = fp.getFromYear();
         int toYear = fp.getToYear();
@@ -37,7 +36,7 @@ public class MonthlyInfoWorker {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select month(f.transactionDate), year(f.transactionDate) from " + AmpFundingDetail.class.getName() +
-                    " f where (f.ampFundingId=:ampFundingId) " + " and (f.orgRoleCode=:perspective)  and " +
+                    " f where (f.ampFundingId=:ampFundingId) " + "  and " +
                     " year(f.transactionDate)>=:fromYear and year(f.transactionDate)<=:toYear ";
             if (useType) {
                 trsType = fp.getTransactionType();
@@ -50,7 +49,6 @@ public class MonthlyInfoWorker {
                 q.setInteger("trsType", trsType);
             }
             q.setLong("ampFundingId", ampFundingId);
-            q.setString("perspective", perspective);
             q.setInteger("fromYear", fromYear);
             q.setInteger("toYear", toYear);
             monthYears = q.list();
@@ -74,7 +72,6 @@ public class MonthlyInfoWorker {
 
 
         List monthlyData = new ArrayList();
-        String perspective = fp.getPerspective();
         Long ampFundingId = fp.getAmpFundingId();
         String currCode = fp.getCurrencyCode();
 
@@ -99,26 +96,26 @@ public class MonthlyInfoWorker {
                     comparison.setFiscalYear(year);
                     comparison.setMonth(dfs.getMonths()[month - 1]);
 
-                    List monthPlannedComm = getMonthlyData(ampFundingId, perspective, Constants.COMMITMENT, Constants.PLANNED, month, year);
-                    List monthActualComm = getMonthlyData(ampFundingId, perspective, Constants.COMMITMENT, Constants.ACTUAL, month, year);
+                    List monthPlannedComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.PLANNED, month, year);
+                    List monthActualComm = getMonthlyData(ampFundingId, Constants.COMMITMENT, Constants.ACTUAL, month, year);
                     comparison.setActualCommitment(getSumAmounts(monthActualComm, currCode));
                     comparison.setPlannedCommitment(getSumAmounts(monthPlannedComm, currCode));
 
 
-                    List monthPlannedDisb = getMonthlyData(ampFundingId, perspective, Constants.DISBURSEMENT, Constants.PLANNED, month, year);
-                    List monthActualDisb = getMonthlyData(ampFundingId, perspective, Constants.DISBURSEMENT, Constants.ACTUAL, month, year);
+                    List monthPlannedDisb = getMonthlyData(ampFundingId, Constants.DISBURSEMENT, Constants.PLANNED, month, year);
+                    List monthActualDisb = getMonthlyData(ampFundingId, Constants.DISBURSEMENT, Constants.ACTUAL, month, year);
                     comparison.setActualDisbursement(getSumAmounts(monthActualDisb, currCode));
                     comparison.setPlannedDisbursement(getSumAmounts(monthPlannedDisb, currCode));
 
 
 
-                    List monthActualDisbOrder = getMonthlyData(ampFundingId, perspective, Constants.DISBURSEMENT_ORDER, Constants.ACTUAL, month, year);
+                    List monthActualDisbOrder = getMonthlyData(ampFundingId, Constants.DISBURSEMENT_ORDER, Constants.ACTUAL, month, year);
                     comparison.setDisbOrders(getSumAmounts(monthActualDisbOrder, currCode));
 
 
 
-                    List monthPlannedExp = getMonthlyData(ampFundingId, perspective, Constants.EXPENDITURE, Constants.PLANNED, month, year);
-                    List monthActualExp = getMonthlyData(ampFundingId, perspective, Constants.EXPENDITURE, Constants.ACTUAL, month, year);
+                    List monthPlannedExp = getMonthlyData(ampFundingId, Constants.EXPENDITURE, Constants.PLANNED, month, year);
+                    List monthActualExp = getMonthlyData(ampFundingId, Constants.EXPENDITURE, Constants.ACTUAL, month, year);
                     comparison.setActualExpenditure(getSumAmounts(monthActualExp, currCode));
                     comparison.setPlannedExpenditure(getSumAmounts(monthPlannedExp, currCode));
 
@@ -167,7 +164,6 @@ public class MonthlyInfoWorker {
 
     public static List getMonthlyData(FilterParams fp) throws DgException {
 
-        String perspective = fp.getPerspective();
         Long ampFundingId = fp.getAmpFundingId();
         String currCode = fp.getCurrencyCode();
         int transactionType = fp.getTransactionType();
@@ -190,9 +186,9 @@ public class MonthlyInfoWorker {
                     Object[] dates = (Object[]) iter.next();
                     Integer month = (Integer) dates[0];
                     Integer year = (Integer) dates[1];
-                    List monthPlanned = getMonthlyData(ampFundingId, perspective, transactionType, Constants.PLANNED, month, year);
+                    List monthPlanned = getMonthlyData(ampFundingId, transactionType, Constants.PLANNED, month, year);
                     plannedSum = getSumAmounts(monthPlanned, currCode);
-                    List monthActual = getMonthlyData(ampFundingId, perspective, transactionType, Constants.ACTUAL, month, year);
+                    List monthActual = getMonthlyData(ampFundingId, transactionType, Constants.ACTUAL, month, year);
                     actualSum = getSumAmounts(monthActual, currCode);
                     MonthlyInfo info = new MonthlyInfo();
                     info.setActualAmount(actualSum);
@@ -237,8 +233,7 @@ public class MonthlyInfoWorker {
      * @param year           
      * @return List
      */
-    public static List getMonthlyData(Long ampFundingId,
-            String perspective, int transactionType, int adjustmentType, int month, int year) throws DgException {
+    public static List getMonthlyData(Long ampFundingId, int transactionType, int adjustmentType, int month, int year) throws DgException {
 
         Session session = null;
         Query q = null;
@@ -253,11 +248,10 @@ public class MonthlyInfoWorker {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from " + AmpFundingDetail.class.getName() + " f where (f.ampFundingId=:ampFundingId) " + " and (f.orgRoleCode=:perspective) " + " and (f.transactionType=:trsType) " + " and (f.adjustmentType=:adjType) and month(f.transactionDate)=:month and year(f.transactionDate)=:year ";
+            String queryString = "select f from " + AmpFundingDetail.class.getName() + " f where (f.ampFundingId=:ampFundingId) " + " and (f.transactionType=:trsType) " + " and (f.adjustmentType=:adjType) and month(f.transactionDate)=:month and year(f.transactionDate)=:year ";
 
             q = session.createQuery(queryString);
             q.setLong("ampFundingId", ampFundingId);
-            q.setString("perspective", perspective);
             q.setInteger("trsType", transactionType);
             q.setInteger("adjType", adjustmentType);
             q.setInteger("month", month);

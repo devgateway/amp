@@ -49,11 +49,11 @@ public class BoliviaDonorFundingCalculator implements DonorFundingCalculator {
 	/**
 	 * Return the total commitment for the specified activity
 	 */
-	public DecimalWraper getTotalCommtiments(Long activityId, String currCode, String perspective) {
+	public DecimalWraper getTotalCommtiments(Long activityId, String currCode) {
 
-		DecimalWraper actual = DbUtil.getAmpFundingAmount(activityId, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL, perspective, currCode);
+		DecimalWraper actual = DbUtil.getAmpFundingAmount(activityId, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL, currCode);
 
-		DecimalWraper planned = DbUtil.getAmpFundingAmount(activityId, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED, perspective, currCode);
+		DecimalWraper planned = DbUtil.getAmpFundingAmount(activityId, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED, currCode);
 
 		DecimalWraper total = new DecimalWraper();
 		total.setValue(actual.getValue().add(planned.getValue()));

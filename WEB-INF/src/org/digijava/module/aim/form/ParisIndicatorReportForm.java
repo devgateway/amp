@@ -34,7 +34,6 @@ public class ParisIndicatorReportForm extends ActionForm {
     private Integer startYear = null;
     private Integer closeYear = null;
     private String currency = null;
-    private String perspective = null;
     private String orgGroup = null;
 
     private Long status = null;
@@ -62,7 +61,6 @@ public class ParisIndicatorReportForm extends ActionForm {
             startYear = null;
             closeYear = null;
             currency = Constants.DEFAULT_CURRENCY;
-            perspective = "MA";
             orgGroup = "all";
             status = new Long(0);
             termAssist = "all";
@@ -337,14 +335,6 @@ public class ParisIndicatorReportForm extends ActionForm {
      */
     public void setNumColsCalculated(String numColsCalculated) {
         this.numColsCalculated = numColsCalculated;
-    }
-
-    public String getPerspective() {
-        return perspective;
-    }
-
-    public void setPerspective(String perspective) {
-        this.perspective = perspective;
     }
 
     public String getOrgGroup() {

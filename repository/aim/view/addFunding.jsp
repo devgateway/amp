@@ -482,14 +482,6 @@
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
 								</field:display>
-								<field:display name="Date Commitment" feature="Funding Organizations">
-								<td align="center" valign="middle" colspan="2">
-									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
-										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
-									</logic:equal>
-								</td>
-								</field:display>
 							</tr>
 
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
@@ -832,14 +824,6 @@
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
                                 </field:display>
-								<field:display name="Perspective Disbursement" feature="Disbursement">
-								<td align="center" valign="middle" >
-									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
-										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
-									</logic:equal>
-								</td>
-                                </field:display>
                                 <feature:display module="Funding" name="Disbursement Orders">
                                 <td align="center" valign="middle" >
 	                                <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
@@ -1031,14 +1015,6 @@
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
-								</td>
-								</field:display>
-								<field:display name="Perspective Expenditure" feature="Funding Organizations">
-								<td align="center" valign="middle" colspan="2">
-									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
-										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
-									</logic:equal>
 								</td>
 								</field:display>
 							</tr>

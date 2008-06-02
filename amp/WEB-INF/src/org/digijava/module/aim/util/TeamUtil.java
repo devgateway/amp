@@ -2182,7 +2182,7 @@ public class TeamUtil {
                 ampTeam = (AmpTeam) list.removeFirst();
                 //if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
                 if(ampTeam.getAccessType().equals("Team") || 
-                							(ampTeam.getComputation()!=null && ampTeam.getComputation()==true) )
+                			(ampTeam.getComputation()!=null && ampTeam.getComputation()==true) )
                     teams.add(ampTeam);
                 else {
                     queryString = "select t from " + AmpTeam.class.getName()

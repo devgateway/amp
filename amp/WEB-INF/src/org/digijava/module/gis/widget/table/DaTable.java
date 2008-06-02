@@ -47,7 +47,6 @@ public class DaTable implements HtmlGenerator{
 		}
 	}
 	
-	@Override
 	public String generateHtml() {
 		String result = "<TABLE";
 		if (this.cssClass!=null){

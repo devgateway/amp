@@ -21,7 +21,6 @@ public class PhysicalProgressForm extends ActionForm
 	private String yyyy;
 	private Long ampActivityId;
 	private boolean validLogin;
-	private String perspective;
 	private String compRepDate;
 	private String ppRepDate;
 	private String amount;
@@ -64,11 +63,6 @@ public class PhysicalProgressForm extends ActionForm
 	public String getYyyy() 
 	{
 		return yyyy;
-	}
-
-	public String getPerspective() 
-	{
-		return perspective;
 	}
 
 	public void setPid(Long pid) 
@@ -163,11 +157,6 @@ public class PhysicalProgressForm extends ActionForm
 	public void setValidLogin(boolean bool) 
 	{
 		this.validLogin = bool ;
-	}
-
-	public void setPerspective(String perspective) 
-	{
-		this.perspective = perspective ;
 	}
 
 	/**

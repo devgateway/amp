@@ -495,7 +495,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.setStep("1");
       }
       eaForm.setReset(false);
-      eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
       if (activityId != null) {
     	  /* Clearing Tanzania Adds */
@@ -1476,8 +1475,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				}
 		}
 
-      // load all the perspectives
-      eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
       //load the possible projection values
       eaForm.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));

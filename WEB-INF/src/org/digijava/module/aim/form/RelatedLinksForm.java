@@ -36,7 +36,6 @@ extends ActionForm {
 	private boolean valuesSet;
 	private int pageId;
 	private String fileName;
-	private String perspective;
 	private boolean validLogin;
 	private String[] deleteLinks;
 	
@@ -313,19 +312,11 @@ extends ActionForm {
 		return validLogin;
 	}
 
-	public String getPerspective() 
-	{
-		return perspective;
-	}
-
 	public void setValidLogin(boolean bool) 
 	{
 		this.validLogin = bool ;
 	}
-	public void setPerspective(String perspective) 
-	{
-		this.perspective = perspective ;
-	}
+
 	public String[] getDeleteLinks() {
 		return deleteLinks;
 	}

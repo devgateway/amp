@@ -19,7 +19,6 @@ public class KnowledgeForm extends ActionForm
 	private String display;
 	private String ndisplay;
 	private boolean validLogin;
-	private String perspective;
 
 	public Long getId()
 	{
@@ -69,11 +68,6 @@ public class KnowledgeForm extends ActionForm
 	public boolean getValidLogin()
 	{
 		return validLogin;
-	}
-
-	public String getPerspective()
-	{
-		return perspective;
 	}
 
 	public void setDescription(String description)
@@ -159,11 +153,6 @@ public class KnowledgeForm extends ActionForm
 	public void setNdisplay(String ndisplay)
 	{
 		this.ndisplay = ndisplay;
-	}
-
-	public void setPerspective(String perspective)
-	{
-		this.perspective = perspective ;
 	}
 
     public void setManagedDocuments(Collection managedDocuments) {

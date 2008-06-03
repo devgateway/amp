@@ -26,9 +26,9 @@ public class ReportQuarterWorker
 	}
 	public static double getAmount1(int yr, int qtr, Long ampFundingId,
 	Integer transactionType,
-	Integer adjustmentType, String perspective )
+	Integer adjustmentType)
 	{
-		Collection ampFundings = DbUtil.getDonorFund1(ampFundingId, transactionType, adjustmentType, perspective);
+		Collection ampFundings = DbUtil.getDonorFund1(ampFundingId, transactionType, adjustmentType);
 		double amt = 0.0;
 		if(ampFundings.size() != 0){
 			Iterator iterfunding = ampFundings.iterator();
@@ -65,11 +65,11 @@ public class ReportQuarterWorker
 	}
 	public static double getAmountbyYr(int yr, Long ampFundingId,
 		Integer transactionType,
-		Integer adjustmentType, String perspective )
+		Integer adjustmentType )
 	{
 	//	logger.info("getAmount1() with year = "+yr ) ;
 		double amt = 0.0;
-		Collection ampFundings = DbUtil.getDonorFund1(ampFundingId, transactionType, adjustmentType, perspective);
+		Collection ampFundings = DbUtil.getDonorFund1(ampFundingId, transactionType, adjustmentType);
 	//	logger.info("Funding Size: " + ampFundings.size());
 		if(ampFundings.size() != 0){
 	//		logger.info("inside if");

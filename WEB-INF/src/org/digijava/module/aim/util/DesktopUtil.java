@@ -181,7 +181,6 @@ public class DesktopUtil {
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
 										comm.setAmount(fd.getTransactionAmount().doubleValue());
 										comm.setCurrencyCode(fd.getAmpCurrencyId().getCurrencyCode());
-										comm.setPerspectiveId(fd.getPerspectiveId().getAmpPerspectiveId());
 										comm.setTransactionDate(fd.getTransactionDate());
 										project.getCommitmentList().add(comm);
 									}
@@ -291,7 +290,6 @@ public class DesktopUtil {
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
 										comm.setAmount(fd.getTransactionAmount().doubleValue());
 										comm.setCurrencyCode(fd.getAmpCurrencyId().getCurrencyCode());
-										comm.setPerspectiveId(fd.getPerspectiveId().getAmpPerspectiveId());
 										comm.setTransactionDate(fd.getTransactionDate());
 										project.getCommitmentList().add(comm);
 									}

@@ -33,8 +33,6 @@ public class AmpApplicationSettings implements Serializable {
 								 * settings
 								 */
 
-	private AmpPerspective perspectiveId;
-
 	private AmpReports defaultTeamReport;
         private Integer defaultReportsPerPage;
 
@@ -110,24 +108,9 @@ public class AmpApplicationSettings implements Serializable {
 		this.useDefault = useDefault;
 	}
 
-	/**
-	 * @return Returns the perspectiveId.
-	 */
-	public AmpPerspective getPerspectiveId() {
-		return perspectiveId;
-	}
-
         public Integer getDefaultReportsPerPage() {
           return defaultReportsPerPage;
         }
-
-  /**
-	 * @param perspectiveId
-	 *            The perspectiveId to set.
-	 */
-	public void setPerspectiveId(AmpPerspective perspectiveId) {
-		this.perspectiveId = perspectiveId;
-	}
 
         public void setDefaultReportsPerPage(Integer  defaultReportsPerPage) {
           this.defaultReportsPerPage = defaultReportsPerPage;

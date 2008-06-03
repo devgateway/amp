@@ -23,8 +23,6 @@ public class AmpFundingDetail implements Serializable
 	private AmpFunding  ampFundingId;
 	private Double fixedExchangeRate;
 
-
-	private AmpPerspective perspectiveId;
 	private String expCategory;
         private String disbOrderId;
         private IPAContract contract;
@@ -262,18 +260,6 @@ public class AmpFundingDetail implements Serializable
 	 */
 	public void setExpCategory(String expCategory) {
 		this.expCategory = expCategory;
-	}
-	/**
-	 * @return Returns the perspectiveId.
-	 */
-	public AmpPerspective getPerspectiveId() {
-		return perspectiveId;
-	}
-	/**
-	 * @param perspectiveId The perspectiveId to set.
-	 */
-	public void setPerspectiveId(AmpPerspective perspectiveId) {
-		this.perspectiveId = perspectiveId;
 	}
 
 	public Double getFixedExchangeRate() {

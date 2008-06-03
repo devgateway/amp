@@ -63,7 +63,6 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportCache;
@@ -335,29 +334,6 @@ public class DbUtil {
 		}
 		return report;
 	}
-
-
-    public static AmpPerspective getPerspectiveByCode(String code) {
-        Session session = null;
-        List perspectives = new ArrayList();
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from "
-                + AmpPerspective.class.getName()
-                + " f where (f.code=:perspCode)";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("perspCode", code, Hibernate.STRING);
-            perspectives = qry.list();
-            if (perspectives != null && perspectives.size() > 0)
-                return (AmpPerspective) perspectives.get(0);
-
-        } catch (Exception ex) {
-            logger.error("Unable to get perspectives by code :" + ex);
-            ex.printStackTrace();
-        }
-        return null;
-    }
 
     public static Collection getFundingDetails(Long fundId) {
         Session session = null;
@@ -4685,40 +4661,6 @@ public class DbUtil {
         return comment;
     }
 
-    @Deprecated
-    public static ArrayList getAmpPerspective() {
-        Session session = null;
-        Query q = null;
-        AmpPerspective ampPerspective = null;
-        ArrayList perspective = new ArrayList();
-        String queryString = null;
-        Iterator iter = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            queryString = " select p from " + AmpPerspective.class.getName()
-                + " p order by p.name";
-            q = session.createQuery(queryString);
-            iter = q.list().iterator();
-            while (iter.hasNext()) {
-                ampPerspective = (AmpPerspective) iter.next();
-                perspective.add(ampPerspective);
-            }
-
-        } catch (Exception ex) {
-            logger.error("Unable to get Amp status   from database "
-                         + ex.getMessage());
-        }
-//			finally {
-//			try {
-//				session.close();
-//			} catch (HibernateException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-        return perspective;
-    }
-
     public static int getAmpMaxToYear(Long ampTeamId) {
         Session session = null;
         Query q = null;
@@ -4780,29 +4722,6 @@ public class DbUtil {
                          + ex.getMessage());
         }
         return group;
-    }
-
-    public static AmpPerspective getPerspective(String code) {
-        Session session = null;
-        AmpPerspective persp = null;
-        logger.debug("In getPerspective()" + code);
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String qryStr = "select p from " + AmpPerspective.class.getName() + " p " +
-                "where (p.code=:code)";
-            Query qry = session.createQuery(qryStr);
-            qry.setParameter("code", code, Hibernate.STRING);
-            Iterator itr = qry.list().iterator();
-            if (itr.hasNext()) {
-                persp = (AmpPerspective) itr.next();
-                logger.debug("Got the perspective " + persp.getName());
-            }
-        } catch (Exception ex) {
-            logger.error("Unable to get AmpPerspective "
-                         + ex.getMessage());
-            ex.printStackTrace(System.out);
-        }
-        return persp;
     }
 
     public static ArrayList getApprovedActivities(String inClause) {

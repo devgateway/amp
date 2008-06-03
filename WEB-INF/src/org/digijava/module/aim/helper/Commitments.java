@@ -7,7 +7,6 @@ public class Commitments {
 	private double amount;
 	private Long donorId;
 	private String currencyCode;
-	private Long perspectiveId;
 	private Date transactionDate;
 	
 	/**
@@ -33,18 +32,6 @@ public class Commitments {
 	 */
 	public void setDonorId(Long donorId) {
 		this.donorId = donorId;
-	}
-	/**
-	 * @return Returns the perspectiveId.
-	 */
-	public Long getPerspectiveId() {
-		return perspectiveId;
-	}
-	/**
-	 * @param perspectiveId The perspectiveId to set.
-	 */
-	public void setPerspectiveId(Long perspectiveId) {
-		this.perspectiveId = perspectiveId;
 	}
 	/**
 	 * @return Returns the transactionDate.

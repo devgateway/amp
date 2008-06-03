@@ -20,7 +20,6 @@ public class AmpComponentFunding{
 	private AmpCurrency currency;
 	private String expenditureCategory;
 	private AmpComponent component;
-	private AmpPerspective perspective;
 	private Float exchangeRate;
 	
 	/**
@@ -94,18 +93,6 @@ public class AmpComponentFunding{
 	 */
 	public void setExpenditureCategory(String expenditureCategory) {
 		this.expenditureCategory = expenditureCategory;
-	}
-	/**
-	 * @return Returns the perspective.
-	 */
-	public AmpPerspective getPerspective() {
-		return perspective;
-	}
-	/**
-	 * @param perspective The perspective to set.
-	 */
-	public void setPerspective(AmpPerspective perspective) {
-		this.perspective = perspective;
 	}
 	/**
 	 * @return Returns the reportingDate.

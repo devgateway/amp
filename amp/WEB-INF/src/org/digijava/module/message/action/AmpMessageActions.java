@@ -252,6 +252,47 @@ public class AmpMessageActions extends DispatchAction {
     	return null;
     }
     
+    /*
+     * used to check for new messages from desktop 
+     */
+    public ActionForward checkForNewMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	AmpMessageForm messagesForm=(AmpMessageForm)form;
+    	
+    	HttpSession session = request.getSession();
+    	TeamMember teamMember = new TeamMember();        	  
+    	 // Get the current member who has logged in from the session
+    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	
+    	//separate message types: used on myMessages page on desktop
+		int alertType=0;
+		int msgType=0;
+		int approvalType=0;
+		int calEventType=0;
+		msgType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(UserMessage.class, teamMember.getMemberId());
+		alertType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(AmpAlert.class, teamMember.getMemberId());
+		approvalType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(Approval.class, teamMember.getMemberId());
+		calEventType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(CalendarEvent.class, teamMember.getMemberId());
+		
+		//creating xml that will be returned   		
+		
+		response.setContentType("text/xml");
+		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+		PrintWriter out = new PrintWriter(outputStream, true);
+		String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+		xml += "<" + ROOT_TAG +">";
+		xml+="<"+"amount messages=\""+msgType+"\" ";
+		xml+="alerts=\""+alertType+"\" ";
+		xml+="approvals=\""+approvalType+"\" ";
+		xml+="calEvents=\""+calEventType+"\" ";
+		xml+="/>";
+		xml+="</"+ROOT_TAG+">";
+		out.println(xml);
+		out.close();
+		// return xml			
+		outputStream.close();
+    	return null;
+    }
+    
     
     /**
      * used when user clicks on forward link 
@@ -273,20 +314,8 @@ public class AmpMessageActions extends DispatchAction {
     */
     public ActionForward removeSelectedMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {    	
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
-    	//remove from form
-//    	AmpMessageState state=AmpMessageUtil.getMessageState(messagesForm.getMsgStateId());
-//    	messagesForm.getPagedMessagesForTm().remove(state);
     	//remove from db
-    	AmpMessageUtil.removeMessageState(messagesForm.getMsgStateId());
-//    	//creating xml that will be returned    	
-//    	response.setContentType("text/xml");
-//		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
-//		PrintWriter out = new PrintWriter(outputStream, true);
-//		String xml = messages2XML(messagesForm.getPagedMessagesForTm());
-//		out.println(xml);
-//		out.close();
-//		// return xml			
-//		outputStream.close();    	
+    	AmpMessageUtil.removeMessageState(messagesForm.getMsgStateId());	
     	return viewAllMessages(mapping, messagesForm, request, response);
     }    
  
@@ -409,14 +438,21 @@ public class AmpMessageActions extends DispatchAction {
 				statesMemberIds.add(mId.getMemberId());
 			}    			    			
     	}	
-		if(messageReceivers!=null && messageReceivers.length>0){			
+		if(messageReceivers!=null && messageReceivers.length>0){
+			Address [] addresses=new Address [messageReceivers.length];
+			int addressIndex=0;
 			for (String receiver : messageReceivers) {				
 				if(receiver.startsWith("t")){//<--this means that receiver is team
 					List<TeamMember> teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(new Long(receiver.substring(2)));
 					if(teamMembers!=null && teamMembers.size()>0){
 						for (TeamMember tm : teamMembers) {
 							if(! statesMemberIds.contains(tm.getMemberId())){
-								createMessageState(message,tm.getMemberId(),teamMember.getMemberName());								
+								createMessageState(message,tm.getMemberId(),teamMember.getMemberName());
+								if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
+									//creating internet address where the mail will be sent
+									addresses[addressIndex]=new InternetAddress(tm.getEmail());
+									addressIndex++;									
+								}
 							}
 						}
 					}
@@ -424,15 +460,30 @@ public class AmpMessageActions extends DispatchAction {
 				}else {//<--receiver is team member
 					if(! statesMemberIds.contains(new Long(receiver.substring(2)))){
 						Long memId=new Long(receiver.substring(2));
-						createMessageState(message,memId,teamMember.getMemberName());						
+						createMessageState(message,memId,teamMember.getMemberName());
+						if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
+							//creating internet address where the mail will be sent
+							addresses[addressIndex]=new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail());
+							addressIndex++;							
+						}
 					}
 				}				
-			}	
+			}
+			
+			if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
+				if(request.getParameter("toDo")!=null && !request.getParameter("toDo").equals("draft")){
+		    		DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(), message.getDescription());
+		    	}
+			}
 			
 		}
 		
     	//cleaning form values
     	setDefaultValues(messageForm);
+//    	if(request.getParameter("toDo").equals("draft")){
+//    		return mapping.findForward("showAllMessages");
+//		}
+    	
 		return mapping.findForward("viewMyDesktop");	
 		
 		

@@ -134,8 +134,7 @@ tr.my-border-style td {
 		return result;
 	}
 	
-	function makeRead (status, statusText, responseText, responseXML){
-		activityXML=responseXML;
+	function makeRead (status, statusText, responseText, responseXML){		
 		var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
 		var stateId=root.getAttribute('id');
 		var isRead=root.getAttribute('read');

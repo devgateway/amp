@@ -238,6 +238,27 @@ public class AmpMessageUtil {
 		}
 		return returnValue;
 	}	
+	
+	public static <E extends AmpMessage> int getUnreadMessagesAmountPerMsgType(Class<E> clazz,Long tmId) throws Exception{
+		int retValue=0;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.read="+false+" order by msg.creationDate desc";
+			query=session.createQuery(queryString);			 				
+			query.setParameter("tmId", tmId);			
+			retValue=((Integer)query.uniqueResult()).intValue();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);
+			
+		}
+		return retValue;
+	}
 	/**
 	 * loads all messages that were sent,received or saved by team member
 	 * @param teamMemberId

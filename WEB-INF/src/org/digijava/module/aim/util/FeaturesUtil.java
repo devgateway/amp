@@ -2698,9 +2698,9 @@ public class FeaturesUtil {
     };
 
 	public static Boolean isShowComponentFundingByYear() {
-	    String perspectiveStr = FeaturesUtil
+	    String componentFundingByYearStr = FeaturesUtil
 				.getGlobalSettingValue(Constants.GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR);
-		if (perspectiveStr != null && "On".equals(perspectiveStr))
+		if (componentFundingByYearStr != null && "On".equals(componentFundingByYearStr))
 			return true;
 		return false;
 	}

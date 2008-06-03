@@ -7,18 +7,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public  class CommonWorker	{
-
-	@Deprecated
-	public static String getPerspective(String perspectiveName)	{
-		String code = null;
-		if ( perspectiveName.equalsIgnoreCase("Donor") )
-			code = "DN";
-		else if ( perspectiveName.equalsIgnoreCase("MOFED")	)
-			code = "MA";
-		else if ( perspectiveName.equalsIgnoreCase("Implementing Agency")	)
-			code = "IA";
-		return code;
-	}
 	
 	public static FinancialFilters getFilters(Long teamId,
 								  			  String pageCode)	{

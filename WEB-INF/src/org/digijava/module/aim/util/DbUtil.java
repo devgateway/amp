@@ -855,7 +855,6 @@ public class DbUtil {
      * @param ampFundingId
      * @param transactionType
      * @param adjustmentType
-     * @param perspective
      * @param currcode
      * @return
      */
@@ -906,11 +905,11 @@ public class DbUtil {
     }
 
     public static double getTotalDonorFund(Long ampFundingId,
-                                           Integer transactionType, Integer adjustmentType, String perspective) {
+                                           Integer transactionType, Integer adjustmentType) {
 
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
                      + " transactionType " + transactionType + " adjustmentType "
-                     + adjustmentType + " perspective " + perspective);
+                     + adjustmentType);
 
         Session session = null;
         Query q = null;
@@ -925,12 +924,10 @@ public class DbUtil {
             queryString = "select sum(f.transactionAmount) from "
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
-                + " and (f.orgRoleCode=:perspective) "
                 + " and (f.transactionType=:transactionType) "
                 + " and (f.adjustmentType=:adjustmentType) group by f.ampFundingId";
             q = session.createQuery(queryString);
             q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("transactionType", transactionType,
                            Hibernate.INTEGER);
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
@@ -1239,8 +1236,6 @@ public class DbUtil {
      * @author jose Returns a collection of records from amp_funding_detail
      *              based on below
      * @param ampFundingId
-     * @param perspective
-     *                 orgRoleCode 'MA',DN','IA'
      * @param transactionType
      *                 commitment=0,disbursement=1,expenditure=2
      * @param adjustmentType
@@ -2917,7 +2912,7 @@ public class DbUtil {
     }
 
     public static Collection getDonorFund1(Long ampFundingId,
-                                           Integer transactionType, Integer adjustmentType, String perspective) {
+                                           Integer transactionType, Integer adjustmentType) {
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
                      + " transactionType " + transactionType + " adjustmentType "
                      + adjustmentType);
@@ -2934,12 +2929,10 @@ public class DbUtil {
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
                 + " and (f.transactionType=:transactionType) "
-                + " and (f.adjustmentType=:adjustmentType) "
-                + " and (f.orgRoleCode=:perspective) ";
+                + " and (f.adjustmentType=:adjustmentType) ";
 
             q = session.createQuery(queryString);
             q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("transactionType", transactionType,
                            Hibernate.INTEGER);
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
@@ -2971,7 +2964,6 @@ public class DbUtil {
      * @param ampActivityId
      * @param transactionType
      * @param adjustmentType
-     * @param perspective
      * @param ampCurrencyCode
      * @return
      */
@@ -3331,10 +3323,10 @@ public class DbUtil {
     }
 
     public static double getDonorFund(Long ampFundingId,
-                                      Integer transactionType, Integer adjustmentType, String perspective) {
+                                      Integer transactionType, Integer adjustmentType) {
         logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
                      + " transactionType " + transactionType + " adjustmentType "
-                     + adjustmentType + " perspective " + perspective);
+                     + adjustmentType);
         Session session = null;
         Query q = null;
         List list = null;
@@ -3347,13 +3339,11 @@ public class DbUtil {
 
             queryString = "select f from " + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
-                + " and (f.orgRoleCode=:perspective) "
                 + " and (f.transactionType=:transactionType) "
                 + " and (f.adjustmentType=:adjustmentType) ";
 
             q = session.createQuery(queryString);
             q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("transactionType", transactionType,
                            Hibernate.INTEGER);
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
@@ -3390,7 +3380,7 @@ public class DbUtil {
 
     public static double getDonorFundbyFiscalYear(Long ampFundingId,
                                                   Integer transactionType, Integer adjustmentType,
-                                                  String perspective, Integer fiscalYear) {
+                                                  Integer fiscalYear) {
         Session session = null;
         Query q = null;
         List list = null;
@@ -3403,14 +3393,12 @@ public class DbUtil {
 
             queryString = "select f from " + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
-                + " and (f.orgRoleCode=:perspective) "
                 + " and (f.transactionType=:transactionType) "
                 + " and (f.adjustmentType=:adjustmentType) "
                 + " and (f.fiscalYear=:fiscalYear) ";
 
             q = session.createQuery(queryString);
             q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("transactionType", transactionType,
                            Hibernate.INTEGER);
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
@@ -3451,7 +3439,7 @@ public class DbUtil {
 
     public static double getDonorFundbyFiscalYear(Long ampFundingId,
                                                   Integer transactionType, Integer adjustmentType,
-                                                  String perspective, Integer fiscalYear, Integer fiscalQuarter) {
+                                                  Integer fiscalYear, Integer fiscalQuarter) {
         /*
          * logger.debug("getTotalDonorFundbyFiscalYear() with ampFundingId " +
          * ampFundingId + " transactionType " + transactionType + "
@@ -3470,14 +3458,12 @@ public class DbUtil {
 
             queryString = "select f from " + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
-                + " and (f.orgRoleCode=:perspective) "
                 + " and (f.transactionType=:transactionType) "
                 + " and (f.adjustmentType=:adjustmentType) "
                 + " and (f.fiscalYear=:fiscalYear) "
                 + " and (f.fiscalQuarter=:fiscalQuarter) ";
             q = session.createQuery(queryString);
             q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
-            q.setParameter("perspective", perspective, Hibernate.STRING);
             q.setParameter("transactionType", transactionType,
                            Hibernate.INTEGER);
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);

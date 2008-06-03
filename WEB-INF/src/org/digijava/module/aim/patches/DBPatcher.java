@@ -87,16 +87,7 @@ public class DBPatcher {
 				 stmt.executeUpdate(qryStr);
 			 } catch (SQLException sqle) {
 				 logger.info("FundingDetails Tables already altered");
-			 }			 
-			 
-			 try {
-				 qryStr = "UPDATE AMP_FUNDING_DETAIL " +
-				 		"SET PERSPECTIVE_ID=2 " +
-				 		"WHERE PERSPECTIVE_ID IS NULL";
-				 stmt.executeUpdate(qryStr);
-			 } catch (SQLException sqle) {
-				 logger.info("Perspective not updated :" + sqle.getMessage());
-			 }			 
+			 }			 			 
 			 
 			 try {
 				 qryStr = "SELECT COUNT(*) FROM AMP_FEATURE WHERE NAME LIKE 'Documents'";

@@ -137,7 +137,6 @@
 															</html:select>
 														</td>
 													</tr>
-													<logic:equal name="aimUpdateAppSettingsForm" property="perspectiveEnabled" value="true">
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defPerspective">

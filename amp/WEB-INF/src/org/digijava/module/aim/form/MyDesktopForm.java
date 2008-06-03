@@ -10,7 +10,6 @@ public class MyDesktopForm extends ActionForm
 	private Collection status;
 	private Collection region;
 	private Collection currency;
-	private Collection perspectives;
 	private String fiscalYear;
 	private Long ampStatusId;
 	private Long ampSectorId;
@@ -23,7 +22,6 @@ public class MyDesktopForm extends ActionForm
 	private Collection pages;
 	private String searchCriteria;
 	private Long ampCalType;
-	private String perspective;
 	private Integer page;
 	private Long ampFromYear;
 	private Long ampToYear;
@@ -33,7 +31,6 @@ public class MyDesktopForm extends ActionForm
 	private Collection fiscalYears;
 	private String grandTotalFlag;
 	private String filterFlag;
-	private String perspectiveFlag;
 	private Collection ampTeamMembers;
 	private Collection documents;
 	private boolean moreDocuments;
@@ -89,11 +86,6 @@ public class MyDesktopForm extends ActionForm
 	public Collection getCurrency()
 	{
 		return currency;
-	}
-
-	public Collection getPerspectives()
-	{
-		return perspectives;
 	}
 
 	public String getFiscalYear()
@@ -164,16 +156,6 @@ public class MyDesktopForm extends ActionForm
 	public String getAmpCurrencyCode()
 	{
 		return ampCurrencyCode;
-	}
-
-	public String getPerspective()
-	{
-		return perspective;
-	}
-
-	public String getPerspectiveFlag()
-	{
-		return perspectiveFlag;
 	}
 
 	public Integer getPage()
@@ -257,11 +239,6 @@ public class MyDesktopForm extends ActionForm
 		currency=c;
 	}
 
-	public void setPerspectives(Collection c)
-	{
-		perspectives=c;
-	}
-
 	public void setAmpStatusId(Long ampStatusId)
 	{
 		this.ampStatusId=ampStatusId;
@@ -275,16 +252,6 @@ public class MyDesktopForm extends ActionForm
 	public void setAmpCurrencyCode(String ampCurrencyCode)
 	{
 		this.ampCurrencyCode=ampCurrencyCode;
-	}
-
-	public void setPerspective(String perspective)
-	{
-		this.perspective=perspective;
-	}
-
-	public void setPerspectiveFlag(String perspectiveFlag)
-	{
-		this.perspectiveFlag=perspectiveFlag;
 	}
 
 	public void setAmpOrgId(Long ampOrgId)

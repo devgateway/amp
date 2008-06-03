@@ -7,7 +7,6 @@ public class ChannelOverviewObjectiveForm extends MainProjectDetailsForm
 {
 	private String name ;
 	private String objective ;
-	private String perspective ;
 	private boolean validLogin;
 
 	public String getName() 
@@ -25,11 +24,6 @@ public class ChannelOverviewObjectiveForm extends MainProjectDetailsForm
 		return validLogin;
 	}
 
-	public String getPerspective() 
-	{
-		return perspective;
-	}
-
 	public void setObjective(String objective) 
 	{
 		this.objective = objective ;
@@ -45,8 +39,4 @@ public class ChannelOverviewObjectiveForm extends MainProjectDetailsForm
 		this.validLogin = bool ;
 	}
 
-	public void setPerspective(String perspective) 
-	{
-		this.perspective = perspective ;
-	}
 }

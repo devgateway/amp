@@ -7,7 +7,6 @@ public class MulitlateralbyDonorForm extends ActionForm
 	private Collection multiReport;
 	private Collection sector;
 	private String currency;
-	private String perspective;
 	private int fiscalCalId;
 	private int pageNum;
 	private int yearSet;
@@ -36,7 +35,6 @@ public class MulitlateralbyDonorForm extends ActionForm
 	private Collection modalityColl;
 	private Long ampModalityId;
 	private Collection currencyColl;
-	private String perspectiveFilter;
 	private Long ampCurrencyId;
 	private String ampCurrencyCode;
 	private Long ampFromYear;
@@ -100,34 +98,6 @@ public class MulitlateralbyDonorForm extends ActionForm
 	 */
 	public void setCurrency(String string) {
 		currency = string;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getPerspective() {
-		return perspective;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspective(String string) {
-		perspective = string;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getPerspectiveFilter() {
-		return perspectiveFilter;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspectiveFilter(String string) {
-		perspectiveFilter = string;
 	}
 
 	/**

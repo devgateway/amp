@@ -14,8 +14,6 @@ public class CommitmentbyDonorForm extends ActionForm
 	private int forcastYear2 ;
 	private int forcastYear3 ;
 	private String currency ;
-	private String perspective ;
-	private String perspectiveFilter ;
 	private int fiscalCalId;
 	private String region ;
 	private int modality;
@@ -94,7 +92,6 @@ public class CommitmentbyDonorForm extends ActionForm
 	private String filterFlag;
 	private String adjustmentFlag;
 	private boolean calendarFlag;
-	private boolean perspectiveFlag;
 	private boolean yearFlag;
 	private String goFlag;
 // for reports	
@@ -283,19 +280,6 @@ private int yrDiff;
 		currency = string;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getPerspective() {
-		return perspective;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspective(String string) {
-		perspective = string;
-	}
 
 	/**
 	 * @return
@@ -720,15 +704,11 @@ private int yrDiff;
 	public void setCalendarFlag(boolean b) {
 		calendarFlag = b;
 	}
-	public boolean isPerspectiveFlag() {
-		return perspectiveFlag;
-	}
+
 	public boolean isYearFlag() {
 		return yearFlag;
 	}
-	public void setPerspectiveFlag(boolean b) {
-		perspectiveFlag = b;
-	}
+
 	public void setYearFlag(boolean b) {
 		yearFlag = b;
 	}
@@ -843,20 +823,6 @@ private int yrDiff;
 	public void setReportName(String s)	
 	{
 		reportName=s;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getPerspectiveFilter() {
-		return perspectiveFilter;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspectiveFilter(String string) {
-		perspectiveFilter = string;
 	}
 
 	/**

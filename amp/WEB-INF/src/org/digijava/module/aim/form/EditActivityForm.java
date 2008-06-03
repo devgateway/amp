@@ -69,7 +69,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String updatedDate;
 	private AmpTeamMember updatedBy;
 	private AmpTeamMember createdBy;
-	private Collection perspectives;
 	private Boolean budget=true;
 	private String budgetCheckbox;
 	private double regionTotalDisb;
@@ -854,7 +853,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			issues = null;
 			editKey = "";
 			regionalFundings = null;
-			perspectives = null;
 			totalCommitments = "";
 			totalDisbursements = "";
 			totalExpenditures = "";
@@ -3272,20 +3270,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setFundingRegions(Collection fundingRegions) {
 		this.fundingRegions = fundingRegions;
-	}
-
-	/**
-	 * @return Returns the perspectives.
-	 */
-	public Collection getPerspectives() {
-		return perspectives;
-	}
-
-	/**
-	 * @param perspectives The perspectives to set.
-	 */
-	public void setPerspectives(Collection perspectives) {
-		this.perspectives = perspectives;
 	}
 
 	/**

@@ -1015,8 +1015,6 @@ public class AddAmpActivity extends Action {
 
         eaForm.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
-        // load all the perspectives
-        eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
         eaForm.setFundingRegionId(new Long( -1));
         return mapping.findForward("addActivityStep1");

@@ -39,7 +39,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private boolean delete ;
 	private boolean validLogin;
 	private Collection assistance ;
-	private String perspective;
 	private Integer pageNo;
 	private String currCode;
 	private Collection modal;
@@ -205,11 +204,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	public Collection getAssistance()
 	{
 		return assistance;
-	}
-
-	public String getPerspective()
-	{
-		return perspective;
 	}
 
 	public void setId(Long id)
@@ -415,11 +409,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	public void setAssistance(Collection c)
 	{
 		assistance = c ;
-	}
-
-	public void setPerspective(String perspective)
-	{
-		this.perspective = perspective ;
 	}
 
 	/**

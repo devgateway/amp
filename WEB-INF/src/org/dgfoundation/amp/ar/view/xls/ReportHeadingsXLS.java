@@ -85,7 +85,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						
 						//if (rowId.value == 8){
 						if (rowId.value < 10 && cellValue.length() > 0){
-							//aici setam lungimea unui cell
+							//here we set the cell width
 							if (sheet.getColumnWidth((short)colId.value)<cellValue.length()*256){
 								short val;
 								if ((short)((cellValue.length())*256) < 2560)
@@ -98,11 +98,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 									else
 										val *=3;
 								}
-								System.out.println("R[" + String.valueOf(rowId.value)+"] C[" + String.valueOf(colId.value) + "] from: " + String.valueOf(sheet.getColumnWidth((short)colId.value)) + " to: " + String.valueOf(val) + " content:" + cellValue);
 								sheet.setColumnWidth((short)colId.value, val);
-							}
-							else{
-								System.out.println("---R[" + String.valueOf(rowId.value)+"] C[" + String.valueOf(colId.value) + "] from: " + String.valueOf(sheet.getColumnWidth((short)colId.value)) + " to: " + String.valueOf(cellValue.length()*256) + " content:" + cellValue);
 							}
 
 							

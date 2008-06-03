@@ -19,8 +19,7 @@
 		<li>
 			
 			<logic:present name="ampTeam" property="accessType">
-				<bean:define id="workspaceType" name="ampTeam" property="type" type="org.digijava.module.aim.dbentity.AmpCategoryValue" />
-				<bean:write name="workspaceType" property="value"/>
+				<bean:write name="ampTeam" property="accessType"/>
 			</logic:present>
 			<logic:notPresent name="ampTeam" property="accessType">
 				<digi:trn key="aim:noWorkspaceType">No workspace type defined</digi:trn>

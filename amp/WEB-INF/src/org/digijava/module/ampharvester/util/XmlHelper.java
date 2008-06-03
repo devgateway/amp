@@ -3,21 +3,21 @@ package org.digijava.module.ampharvester.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.ampharvester.jaxb10.FundingDetailType;
 import org.digijava.module.ampharvester.jaxb10.LocationType;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import org.digijava.module.aim.helper.Constants;
 
 public class XmlHelper {
   public static final String siteId = "amp";
@@ -73,11 +73,7 @@ public class XmlHelper {
       throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_CURRENCY, fdt.getCurrencyCode());
     }
     retValue.setCurrency(ampCurrency);
-    AmpPerspective ampPerspective = DbUtil.getAmpPerspective(fdt.getPerspectiveType(), session); /** @todo will be change from ID to CODE */
-    if (ampPerspective == null) {
-      throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_PERSPECTIVE, Integer.toString(fdt.getPerspectiveType()));
-    }
-    retValue.setPerspective(ampPerspective);
+
     return retValue;
   }
 
@@ -92,11 +88,6 @@ public class XmlHelper {
       throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_CURRENCY, fdt.getCurrencyCode());
     }
     retValue.setAmpCurrencyId(ampCurrency);
-    AmpPerspective ampPerspective = DbUtil.getAmpPerspective(fdt.getPerspectiveType(), session); /** @todo will be change from ID to CODE */
-    if (ampPerspective == null) {
-      throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_PERSPECTIVE, Integer.toString(fdt.getPerspectiveType()));
-    }
-    retValue.setPerspectiveId(ampPerspective);
     retValue.setTransactionType(type);
     retValue.setAmpFundingId(ampFunding);
     return retValue;
@@ -113,11 +104,6 @@ public class XmlHelper {
       throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_CURRENCY, fdt.getCurrencyCode());
     }
     retValue.setCurrency(ampCurrency);
-    AmpPerspective ampPerspective = DbUtil.getAmpPerspective(fdt.getPerspectiveType(), session); /** @todo will be change from ID to CODE */
-    if (ampPerspective == null) {
-      throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_PERSPECTIVE, Integer.toString(fdt.getPerspectiveType()));
-    }
-    retValue.setPerspective(ampPerspective);
     retValue.setTransactionType(type);
     return retValue;
   }

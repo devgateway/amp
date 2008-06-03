@@ -28,7 +28,6 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpExternalMapping;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -185,8 +184,6 @@ public class FreeBalanceHarvester {
 				
 				AmpCurrency curr=(AmpCurrency) session.load(AmpCurrency.class,new Long(21));
 				
-				AmpPerspective ap=(AmpPerspective) session.load(AmpPerspective.class,new Long(2));
-				
 				AmpTermsAssist ata=(AmpTermsAssist) session.load(AmpTermsAssist.class,new Long(1));
 				
 				//AmpModality am= (AmpModality) session.load(AmpModality.class,new Long(3));
@@ -316,7 +313,6 @@ public class FreeBalanceHarvester {
 					acf.setReportingOrganization(o);
 					if(!date.trim().equals(""))
 						acf.setTransactionDate(DateTimeUtil.parseDate(date));
-					acf.setPerspective(ap);
 					
 					acf.setTransactionAmount(new Double(n.doubleValue()));
 					//ac.getComponentFundings().add(acf);

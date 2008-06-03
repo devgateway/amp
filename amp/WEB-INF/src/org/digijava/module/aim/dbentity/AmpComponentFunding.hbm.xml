@@ -20,7 +20,6 @@
 		<many-to-one name="activity" column="activity_id" class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"/>
 		<many-to-one name="reportingOrganization" column="rep_organization_id" 
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>		
-		<many-to-one name="perspective" column="perspective_id" class="org.digijava.module.aim.dbentity.AmpPerspective" cascade="none"/>
 		<many-to-one name="currency" column="currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
 		<many-to-one name="component" column="amp_component_id" class="org.digijava.module.aim.dbentity.AmpComponent"/>
 	</class>

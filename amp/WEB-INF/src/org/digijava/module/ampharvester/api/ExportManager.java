@@ -248,10 +248,6 @@ public class ExportManager {
               throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.Currency ");
             }
             fdt.setCurrencyCode(ampRegionalFunding.getCurrency().getCurrencyCode());
-            if (ampRegionalFunding.getPerspective() == null ){
-              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.Perspective ");
-            }
-            fdt.setPerspectiveType(ampRegionalFunding.getPerspective().getAmpPerspectiveId().intValue());
 
             // copy from org.digijava.module.aim.action.EditActivity[915]
             if (ampRegionalFunding.getTransactionType() != null){
@@ -365,10 +361,6 @@ public class ExportManager {
           throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.Currency");
         }
         fdt.setCurrencyCode(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
-        if (ampFundingDetail.getPerspectiveId() == null){
-          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.PerspectiveId");
-        }
-        fdt.setPerspectiveType(ampFundingDetail.getPerspectiveId().getAmpPerspectiveId().intValue());
 
         // copy from org.digijava.module.aim.action.EditActivity[915]
         if (ampFundingDetail.getTransactionType() != null){
@@ -427,10 +419,6 @@ public class ExportManager {
             throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.Currency");
           }
           fdt.setCurrencyCode(ampComponentFunding.getCurrency().getCurrencyCode());
-          if (ampComponentFunding.getPerspective() == null){
-            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.Perspective");
-          }
-          fdt.setPerspectiveType(ampComponentFunding.getPerspective().getAmpPerspectiveId().intValue());
 
           // copy from org.digijava.module.aim.action.EditActivity[915]
           if (ampComponentFunding.getTransactionType() != null){

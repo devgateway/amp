@@ -28,7 +28,6 @@
 
 
 		<many-to-one name="reportingOrgId" column="reporting_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
-		<many-to-one name="perspectiveId" column="perspective_id" class="org.digijava.module.aim.dbentity.AmpPerspective" cascade="none"/>
 
 		<!--<many-to-one name="ampFundingId" column="AMP_FUNDING_ID" class="org.digijava.module.aim.dbentity.AmpFunding" cascade="none"/>-->
 

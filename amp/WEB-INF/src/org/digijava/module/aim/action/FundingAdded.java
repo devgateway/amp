@@ -3,7 +3,6 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -35,7 +33,6 @@ import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public class FundingAdded extends Action {
 

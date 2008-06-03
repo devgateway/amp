@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.AmpProject;

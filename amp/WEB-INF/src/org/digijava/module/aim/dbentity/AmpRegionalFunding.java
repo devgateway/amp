@@ -20,7 +20,6 @@ public class AmpRegionalFunding {
 	private AmpCurrency currency;
 	private String expenditureCategory;
 	private AmpRegion region;
-	private AmpPerspective perspective;
 	/**
 	 * @return Returns the activity.
 	 */
@@ -80,18 +79,6 @@ public class AmpRegionalFunding {
 	 */
 	public void setExpenditureCategory(String expenditureCategory) {
 		this.expenditureCategory = expenditureCategory;
-	}
-	/**
-	 * @return Returns the perspective.
-	 */
-	public AmpPerspective getPerspective() {
-		return perspective;
-	}
-	/**
-	 * @param perspective The perspective to set.
-	 */
-	public void setPerspective(AmpPerspective perspective) {
-		this.perspective = perspective;
 	}
 	/**
 	 * @return Returns the region.

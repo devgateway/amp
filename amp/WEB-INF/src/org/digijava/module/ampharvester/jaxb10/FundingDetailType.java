@@ -91,16 +91,5 @@ public interface FundingDetailType {
      */
     void setCurrencyCode(java.lang.String value);
 
-    /**
-     * Gets the value of the perspectiveType property.
-     * 
-     */
-    int getPerspectiveType();
-
-    /**
-     * Sets the value of the perspectiveType property.
-     * 
-     */
-    void setPerspectiveType(int value);
 
 }

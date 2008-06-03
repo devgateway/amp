@@ -18,7 +18,6 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -352,15 +351,6 @@ public class DbUtil {
     param.put("sCode", code);
 
     return (AmpRole)loadObject(oql, session, param);
-  }
-
-  public static AmpPerspective getAmpPerspective(int id, Session session) throws DgException, HibernateException {
-    String oql = " from " + AmpPerspective.class.getName() + " as obj " +
-        " where obj.ampPerspectiveId = :iId ";
-    Map<String, Object> param = new HashMap();
-    param.put("iId", id);
-
-    return (AmpPerspective)loadObject(oql, session, param);
   }
 
   public static AmpComponentFunding getAmpComponentFunding(long id, Session session) throws DgException, HibernateException {

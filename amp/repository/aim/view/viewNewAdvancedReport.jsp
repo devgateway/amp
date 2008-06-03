@@ -9,6 +9,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <div id="mySorter" style="display: none">
+
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
         <!--
 		<a href='#' onclick='hideSorter();return false'>
@@ -18,11 +19,15 @@
 		</a>
 		 -->
 	</div>
+<%
+Integer counter = (Integer)session.getAttribute("progressValue");
+counter++;
+session.setAttribute("progresse Value", counter);
+%>
 
 <div id="myFilterWrapper" style="display: none;" >
 	<div id="myFilter" style="display: none;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
-	 
 	</div>
 	<div id="myRange" style="display: none">
 	          <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
@@ -34,6 +39,10 @@
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
+<%
+counter++;
+session.setAttribute("progressValue", counter);
+%>
 
 
 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
@@ -70,6 +79,7 @@
 	function unload() {}
 </script>
 	</logic:equal>
+
 
 <logic:notEqual name="widget" scope="request" value="true">
 
@@ -146,7 +156,7 @@
 		<bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
 		<bean:define id="listableStyle" value="list" toScope="request"/>
 		<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-			<jsp:include page="${listable.jspFile}"/>
+			<jsp:include page="${listable.jspFile}" flush="true"/>
 		</logic:present>
 	</td>
 	</tr>
@@ -172,7 +182,7 @@
 			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
-				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
+				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
 			</table>
 		</logic:notEqual>
 		
@@ -258,6 +268,7 @@
 
 </table>
 </div>
+
 <%
 	session.setAttribute("progressTotalRows", null);
 	session.setAttribute("progressValue", -1);

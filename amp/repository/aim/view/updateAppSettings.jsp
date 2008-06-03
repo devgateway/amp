@@ -5,6 +5,13 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -26,13 +33,14 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
-					<td height=33><span class=crumb>
+					<td height=33>
+                    <span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
@@ -52,16 +60,18 @@
 						<digi:trn key="aim:customizeTeamSettings">
 						Customize Team Settings
 						</digi:trn>
+                    </span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
+					<td height=16 vAlign=center width=571>
+                    	<span class=subtitle-blue><digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=571 vAlign="top">
+					<td noWrap vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
-						valign="top" align="left">
+						valign="top" border=0 align="left">
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="0" scope="request"/>
@@ -69,57 +79,40 @@
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
-							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td><digi:errors/>
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
+							<tr>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="97%">
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table cellPadding=0 cellSpacing=0 width=100%>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title align="center" height="20">
-															<digi:trn key="aim:defaultAppSettings">
-															Default Application Settings for
-															</digi:trn>
-															<bean:write name="aimUpdateAppSettingsForm"
-															 property="teamName" />
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
+                                <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr>
-											<td bgColor=#ffffff class=box-border>
-												<table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#dddddd">
+											<td bgColor=#ffffff>
+												<table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#f4f4f2">
 													<logic:equal name="aimUpdateAppSettingsForm" property="updated" value="true">
 													<tr>
 														<td colspan="2" align="center">
-															<font color="blue"><b>
+															<b>
+                                                            <font color="blue">
 															<digi:trn key="aim:updateToAMPComplete">
 																Update to AMP Complete
 															</digi:trn>
-															</font></b>
+															</font>
+                                                            </b>
 														</td>
 													</tr>
 													</logic:equal>
+                                                    <tr>
+                                                        <td bgcolor="#f4f4f2" colspan="2"><digi:errors/>
+                                                        </td>
+                                                    </tr>
 													<tr>
-														<td bgcolor="#f4f4f2" align="right" width="50%">
+														<td bgcolor="#f4f4f2" align="right" width="30%">
 															<digi:trn key="aim:numberactivitiesprojectsperpage">
 															Number of activities/projects per page</digi:trn>
 														</td>
-														<td align="left" width="50%" bgcolor="#f4f4f2">
+														<td align="left" width="70%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text"/>
 														</td>
 													</tr>
-
-                                                                                                        <tr>
+													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
 															<digi:trn key="aim:numberreportsperpage">
 															Number of reports per page</digi:trn>
@@ -223,25 +216,19 @@
 															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="reports" value="ampReportId" label="name" />
 															</html:select>
-															&nbsp;
-															<a style="cursor:pointer;color:#006699" onClick="showMyPanel()"><digi:trn key="aim:defaultTeamReportDetailsMessage">Click here for details</digi:trn></a>
+															<br />
+															<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn key="aim:defaultTeamReportDetailsAlertMessage">Please select a default report</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamReportDetailsMessage">Click here for details</digi:trn></a>
 														</td>
 													</tr>
 													<tr>
-														<td colspan="2" align="center" bgcolor="#ffffff">
+														<td colspan="2" align="center" bgcolor="#f4f4f2" >
 															<table cellspacing="10">
 																<tr>
-																	<td align="right">
+																	<td align="right" colspan="2">
                                                                       <c:set var="caption">
                                                                         <digi:trn key="aim:btnSave">Save</digi:trn>
                                                                       </c:set>
                                                                       <html:submit value="${caption}" property="save" styleClass="dr-menu"/>
-																	</td>
-																	<td align="left">
-								                                       <c:set var="caption">
-                                                                        <digi:trn key="aim:btnCancel">Cancel</digi:trn>
-                                                                      </c:set>
-                                                                      <html:reset value="${caption}" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
 																	</td>
 																</tr>
 															</table>
@@ -251,6 +238,7 @@
 											</td>
 										</tr>
 									</table>
+                                </div>
 								</td>
 							</tr>
 							<tr><td bgColor=#f4f4f2>&nbsp;

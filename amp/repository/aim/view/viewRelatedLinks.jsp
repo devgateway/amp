@@ -5,6 +5,68 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -25,10 +87,10 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td  width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -76,56 +138,36 @@
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+                                    <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+	                                    <div align="center">
+											<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 										<tr><td>
 											<digi:errors />
 										</td></tr>
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=167>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title width=150>
-															<c:choose>
-																<c:when test="${subtabId == 0 }">
-																	<digi:trn key="aim:relatedDocumentsList">
-																	Related Documents List
-																	</digi:trn>
-																</c:when>
-																<c:otherwise>
-																	<digi:trn key="aim:relatedLinksList">
-																	Related Links List
-																	</digi:trn>
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-
 										<tr>
-											<td bgColor=#ffffff class="box-border" valign="top">
+											<td bgColor=#ffffff valign="top">
 
 											<table width="100%" cellPadding=0 cellSpacing=4 vAlign="top" align="left">
 											<tr><td bgColor=#ffffff valign="top">
 												<c:if test="${subtabId == 0 }">
-													<table border=0 cellPadding=4 cellSpacing=1 class="box-border-nopadding" width="100%">
-														<tr bgColor=#dddddb>
-															<td valign="center" align="center" width="50%">
+													<table border=0 cellPadding=4 cellSpacing=0 width="100%" id="dataTable">
+														<tr>
+															<td  bgColor=#999999 valign="center" align="center" width="30%" style="color:black;">
 																<b>
-																<digi:trn key="aim:documents">
-																Documents
+																<digi:trn key="aim:doctitle">
+																Title
 																</digi:trn>
 																</b>
 															</td>
-															<td bgColor=#dddddb align="center">
+															<td  bgColor=#999999 valign="center" align="center" width="30%" style="color:black;">
+																<b>
+																<digi:trn key="fm:documentfilename">
+																Filename
+																</digi:trn>
+																</b>
+															</td>
+															<td  bgColor=#999999 align="center" width="40%" style="color:black;">
 																<b>
 																<digi:trn key="aim:activityName">
 																	Activity
@@ -133,19 +175,6 @@
 																</b>
 															</td>
 														</tr>
-	
-														<%--
-														<logic:empty name="aimRelatedLinksForm" property="relatedLinks">
-														<tr bgColor=#f4f4f2>
-															<td colspan=2>
-																<digi:trn key="aim:noDocsPresent">
-																No documents present
-																</digi:trn>
-															</td>
-														</tr>
-														</logic:empty>
-														--%>
-	
 														<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
 														<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx"
 														type="org.digijava.module.aim.helper.Documents">
@@ -153,7 +182,7 @@
 	
 														<c:if test="${relatedLink.isFile == true}">
 														<tr>
-															<td bgColor=#f4f4f2 width="50%">
+															<td width="30%" valign="top">
 	
 																<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
 	                                                                                                                        <jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -170,10 +199,12 @@
 																</c:set>
 																<digi:link href="/getDocumentDetails.do" name="docParams" title="${translation}" >
 																<bean:write name="relatedLink" property="title" /></digi:link>
-																&nbsp; :
+                                                             </td>
+                                                             <td width="30%">
 																<c:if test="${relatedLink.isFile == true}">
 																<logic:notEmpty name="relatedLink" property="fileName">
 																<bean:define name="relatedLink" property="fileName" id="fileName"/>
+<!--
 														    	<%
 																	int index2;
 																	String extension = "";
@@ -185,7 +216,7 @@
 																	}
 															    %>
 														    	<digi:img skipBody="true" src="<%=extension%>" border="0"
-																 align="absmiddle"/>
+																 align="absmiddle"/>-->
 																</logic:notEmpty>
 																<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
 																	<i><bean:write name="relatedLink" property="fileName" /></i></a>
@@ -196,7 +227,7 @@
 																	<i><bean:write name="relatedLink" property="url" /></i></a>
 																</c:if>
 															</td>
-															<td bgColor=#f4f4f2>
+															<td width="40%">
 																	<bean:write name="relatedLink" property="activityName" />
 															</td>
 														</tr>
@@ -209,17 +240,23 @@
 											</td></tr>
 											<tr><td bgColor=#ffffff valign="top">
 												<c:if test="${subtabId == 1 }">
-
-													<table border=0 cellPadding=4 cellSpacing=1 class=box-border-nopadding width="100%">
-														<tr bgColor=#dddddb>
-															<td valign="center" align="center" width="50%">
+													<table border=0 cellPadding=4 cellSpacing=0 width="100%" id="dataTable" >
+														<tr>
+															<td bgColor=#999999 valign="center" align="center" width="30%" style="color:black">
+																<b>
+																<digi:trn key="aim:doctitle">
+																Title
+																</digi:trn>
+																</b>
+															</td>
+															<td bgColor=#999999 valign="center" align="center" width="30%" style="color:black">
 																<b>
 																<digi:trn key="aim:links">
 																Links
 																</digi:trn>
 																</b>
 															</td>
-															<td bgColor=#dddddb align="center">
+															<td bgColor=#999999 align="center" width="30%" style="color:black">
 																<b>
 																<digi:trn key="aim:activityName">
 																	Activity
@@ -227,26 +264,13 @@
 																</b>
 															</td>
 														</tr>
-	
-														<%--
-														<logic:empty name="aimRelatedLinksForm" property="relatedLinks">
-														<tr bgColor=#f4f4f2>
-															<td colspan=2>
-																<digi:trn key="aim:noLinksPresent">
-																No links present
-																</digi:trn>
-															</td>
-														</tr>
-														</logic:empty>
-														--%>
-	
 														<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
 														<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx"
 														type="org.digijava.module.aim.helper.Documents">
 	
 														<c:if test="${relatedLink.isFile == false}">
 														<tr>
-															<td bgColor=#f4f4f2 width="50%">
+															<td>
 	
 																<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
 	                                                                                                                        <jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
@@ -262,31 +286,14 @@
 																</c:set>
 																<digi:link href="/getDocumentDetails.do" name="docPars" title="${translation}" >
 																<bean:write name="relatedLink" property="title" /></digi:link>
-																&nbsp; :
-																<c:if test="${relatedLink.isFile == true}">
-																<bean:define name="relatedLink" property="fileName" id="fileName"/>
-														    	<%
-																	int index2;
-																	String extension = "";
-																	index2 = ((String)fileName).lastIndexOf(".");
-																	if( index2 >= 0 ) {
-																	   extension = "module/cms/images/extensions/" +
-																		((String)fileName).substring(
-																					index2 + 1,((String)fileName).length()) + ".gif";
-																	}
-															    %>
-															    	<digi:img skipBody="true" src="<%=extension%>" border="0"
-																	 align="absmiddle"/>
-																	<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
-																	<i><bean:write name="relatedLink" property="fileName" /></i></a>
-																</c:if>
+															</td>
+															<td>
 																<c:if test="${relatedLink.isFile == false}">
-																	<digi:img src="module/aim/images/web-page.gif"/>
 																	<a target="_blank" href="<bean:write name="relatedLink" property="url" />">
 																	<i><bean:write name="relatedLink" property="url" /></i></a>
 																</c:if>
 															</td>
-															<td bgColor=#f4f4f2>
+															<td>
 																	<bean:write name="relatedLink" property="activityName" />
 															</td>
 														</tr>
@@ -300,16 +307,16 @@
 
 												<tr>
 
-													<td>
+													<td>&nbsp;
 
-														&nbsp;
+														
 
 													</td>
 
 												</tr>
 												<tr>
 
-													<td align="right">
+													<td align="center">
 
 														<html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
 
@@ -321,45 +328,13 @@
 											</td>
 										</tr>
 
-										<%--
-										<logic:notEmpty name="aimRelatedLinksForm" property="pages">
-											<tr>
-												<td>
-													<digi:trn key="aim:relLinksPages">
-														Pages
-													</digi:trn> :
-													<logic:iterate name="aimRelatedLinksForm" property="pages" id="pages"
-													type="java.lang.Integer">
-														<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-														<c:set target="${urlParams1}" property="page">
-															<%=pages%>
-														</c:set>
-														<c:set target="${urlParams1}" property="reset" value="false" />
-
-														<c:if test="${aimRelatedLinksForm.currentPage == pages}">
-															<%=pages%>
-														</c:if>
-														<c:if test="${aimRelatedLinksForm.currentPage != pages}">
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewPages">Click here to view Pages</digi:trn>
-															</c:set>
-															<digi:link href="/relatedLinksList.do" name="urlParams1" title="${translation}" >
-																<%=pages%>
-															</digi:link>
-														</c:if>
-
-														|&nbsp;
-													</logic:iterate>
-												</td>
-											</tr>
-										</logic:notEmpty>
-
-										--%>
 									</table>
+	                                    </div>
+                                    </div>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>
@@ -374,4 +349,9 @@
 </digi:form>
 
 
+
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 

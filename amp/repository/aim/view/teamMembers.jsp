@@ -5,7 +5,69 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
+<style>
 
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>			
@@ -64,14 +126,14 @@ function addTeamMember(id) {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
-					<td height=33><span class=crumb>
+					<td height=33>
+                    	<span class=crumb>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
@@ -108,39 +170,12 @@ function addTeamMember(id) {
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=132>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title width=115>&nbsp;
-															<digi:trn key="aim:workspaceMembers">
-															Workspace Members 
-															</digi:trn>
-														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
+                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%">	
 										<tr>
-											<td bgColor=#ffffff class=box-border valign="top">
-												<table border=0 cellPadding=3 cellSpacing=1 class=box-border width="100%">
-													<tr bgColor=#dddddb>
-														<td bgColor=#dddddb align="center">
-															<b>
-															<digi:trn key="aim:membersForTheTeam">
-																Members for the team -  
-															</digi:trn>
-															<c:out value="${aimTeamMemberForm.teamName}"/></b>
-														</td>
-													</tr>
+											<td valign="top" align="center">
+												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 													<tr>
 														<td>
@@ -163,13 +198,25 @@ function addTeamMember(id) {
 
 													<tr>
 														<td>
-															<table width="100%" cellPadding=3 cellSpacing=1 vAlign="top" align="left" 
+															<table width="100%" cellPadding=3 cellSpacing=0 vAlign="top" align="left" 
 															bgcolor="#dddddd">
 																<tr>	
 																	<td bgcolor="#f4f4f2" width="100">
 																		<b>
+                                                                            <digi:trn key="aim:teamname">
+                                                                                Team Name  
+                                                                            </digi:trn>
+                                                                        </b>
+																	</td>
+																	<td bgcolor="#f4f4f2" width="100">
+																		<c:out value="${aimTeamMemberForm.teamName}"/>
+																	</td>
+																	<td bgcolor="#f4f4f2" width="100">
+																		<b>
 																		<digi:trn key="aim:workspaceManager">
-																		Workspace Manager</digi:trn></b>
+																			Workspace Manager
+                                                                        </digi:trn>
+                                                                        </b>
 																	</td>
 																	<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}">
 																		<c:if test="${mem.teamHead == true}">
@@ -197,16 +244,16 @@ function addTeamMember(id) {
 													</tr>
 
 													<tr>
-														<td>
-															<table width="100%" cellPadding=3 cellSpacing=1 vAlign="top" align="left"
-															bgcolor="#dddddd">
+														<td align="center">
+															<table width="98%" cellPadding=3 cellSpacing=0 vAlign="top" 
+															 id="dataTable">
 																<tr>
-																	<td colspan="2" bgcolor="#dddddd">
+																	<td colspan="2" bgcolor="#999999" style="color:black">
 																	<b>
 																	<digi:trn key="aim:teamMemberName">
 																		Name</digi:trn></b>
 																	</td>
-																	<td bgcolor="#dddddd">
+																	<td bgcolor="#999999" style="color:black">
 																	<b>
 																	<digi:trn key="aim:userId">
 																		User Id</digi:trn></b>
@@ -215,12 +262,12 @@ function addTeamMember(id) {
 																<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}">
 																<c:if test="${mem.teamHead == false}">
 																<tr>
-																	<td width="3" bgcolor="#f4f4f2">
+																	<td width="3">
 																		<html:multibox property="selMembers" >
 																			<c:out value="${mem.memberId}"/>
 																		</html:multibox>																
 																	</td>
-																	<td width="50%" bgcolor="#f4f4f2">
+																	<td width="50%">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
 																			<c:out value="${mem.memberId}"/>
@@ -233,7 +280,7 @@ function addTeamMember(id) {
 																			<c:out value="${mem.memberName}"/>
 																		</digi:link>
 																	</td>
-																	<td bgcolor="#f4f4f2">
+																	<td>
 																		<c:out value="${mem.email}"/>
 																	</td>																	
 																</tr>
@@ -265,11 +312,9 @@ function addTeamMember(id) {
 											</td>
 										</tr>
 									</table>
+                                    </div>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
 						</table>			
 					</td>
 				</tr>
@@ -282,4 +327,10 @@ function addTeamMember(id) {
 </digi:form>
 
 
+
+
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 

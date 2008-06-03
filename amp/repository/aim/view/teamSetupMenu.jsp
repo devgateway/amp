@@ -21,26 +21,12 @@
 
 <style type="text/css">
 
-#main {
-	clear:both;
-	text-align: left;
-	border: 1px solid #666;
-	background: #ebebeb;
-	width: 100%;
-	height:27px;
-}
-
-html>body #main {
-	height:25px;
-}
-
 
 #tabs {
-	font-family: tahoma,verdana,sans-serif;
+	font-family: Arial,Helvetica,sans-serif;
 	font-size: 8pt;
 	clear: both;
 	text-align: center;
-	font-weight: bold;
 }
 
 #tabs ul {
@@ -73,7 +59,7 @@ html>body #main {
 
 #tabs ul li a div { 
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
-	padding: 6px 10px 6px 10px;
+	padding: 4px 10px 4px 10px;
 }
 
 #tabs ul li span a { 
@@ -89,7 +75,7 @@ html>body #main {
 
 #tabs ul li span a div { 
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
-	padding: 6px 10px 6px 10px;
+	padding: 4px 10px 4px 10px;
 }
 
 #tabs a:hover {
@@ -109,7 +95,7 @@ html>body #main {
 	margin: 0 2px 0 0;
 	float: left;
 	background: #FFF3B3;
-	padding: 6px 10px 6px 10px;
+	padding: 4px 10px 4px 10px;
 	text-decoration: none;
 	color: #333;
 }
@@ -135,7 +121,7 @@ html>body #main {
 
 #subtabs li {
 	float: left;
-	padding: 6px 4px 0px 0px;
+	padding: 0px 4px 0px 4px;
 }
 
 #subtabs a, #subtabs span { 
@@ -143,40 +129,48 @@ html>body #main {
 }
 
 #subtabs a {
-	color:#000;
 }
 
 #subtabs ul li span {
-	position: relative;
-	top: 0;
-	margin: 0 0px 0 0;
-	background: #222e5d;
-	padding: 6px 4px 6px 10px;
 	text-decoration: none;
-	color: #fff;
 }
 
 #subtabs ul li div span {
-	position: relative;
-	top: 0;
-	margin: 0 0px 0 0;
-	background: #ebebeb;
-	padding: 6px 4px 6px 10px;
 	text-decoration: none;
-	color: #fff;
 }
 
 #subtabs {
-	clear: both;
 	text-align: center;
-	font-family: tahoma,verdana,sans-serif;
+	font-family:Arial,Helvetica,sans-serif;
 	font-size: 8pt;
-	font-weight: bold;
+	padding: 2px 4px 2px 4px;
+	background-color:#CCDBFF;
+}
 
+#main {
+	clear:both;
+	text-align: left;
+	border-top: 2px solid #222E5D;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	padding: 2px 4px 2px 4px;
+}
+html>body #main {
+	width:742px;
+}
+
+#mainEmpty {
+	border-top: 2px solid #222E5D;
+	width: 750px;
+	clear:both;
+}
+html>body #mainEmpty {
+	clear:both;
+	width:752px;
 }
 
 </style>
-<div style="width:751">
+<div style="width:750">
 				<DIV id="tabs">
 					<UL>
 						<c:if test="${selectedTab  == '0'}">
@@ -320,6 +314,9 @@ html>body #main {
 
 
 
+				<logic:notPresent  name="selectedSubTab">
+                    <div id="mainEmpty" />
+                </logic:notPresent>
 				<logic:present  name="selectedSubTab">
 				<div id="main">
 				<DIV id="subtabs">
@@ -327,9 +324,9 @@ html>body #main {
 					<c:if test="${selectedTab  == '4'}">
 						<c:if test="${selectedSubTab  == '0'}">
 						   	<LI>
-									<span>
+                                <span>
 									<digi:trn key="aim:workspaceDocuments">Documents</digi:trn>								
-									</span>
+                                </span>
 							</LI>
 						</c:if>
 						<c:if test="${selectedSubTab != '0'}">
@@ -368,11 +365,12 @@ html>body #main {
 					<c:if test="${selectedTab  == '2'}">
 						<c:if test="${selectedSubTab  == '0'}">
 						   	<LI>
-									<span>
-									<digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>								
-									</span>
+                                <span>
+                                <digi:trn key="aim:workspaceActivitiesMember">Member</digi:trn>								
+                                </span>
 							</LI>
 						</c:if>
+                        
 						<c:if test="${selectedSubTab != '0'}">
 							<LI>
 								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesMember">Click here to view member activities</digi:trn>'>
@@ -402,6 +400,68 @@ html>body #main {
 								</div>	
 							</LI>
 						</c:if>					
+                        <c:if test="${aimTeamActivitiesForm.donorFlag == false}">
+                            <c:if test="${selectedSubTab  == '2'}">
+                                <LI>
+                                        <span>
+                                            <digi:trn key="aim:unassignedactivities">
+                                                Unassigned Activities
+                                            </digi:trn>
+                                        </span>
+                                </LI>
+                            </c:if>
+                            <c:if test="${selectedSubTab != '2'}">
+                                <LI>
+                                    <div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
+                                        <span>
+                                        <digi:link href="/updateTeamActivity.do" name="urlParams">
+                                            <digi:trn key="aim:unassignedactivities">
+                                                Unassigned Activities
+                                            </digi:trn>
+                                        </digi:link>							
+                                        </span>
+                                    </div>	
+                                </LI>
+                            </c:if>					
+                            </c:if>					
+					</c:if>
+					<c:if test="${selectedTab  == '3'}">
+						<c:if test="${selectedSubTab  == '0'}">
+						   	<LI>
+									<span>
+									<digi:trn key="aim:assignedreports">Assigned</digi:trn>								
+									</span>
+							</LI>
+						</c:if>
+						<c:if test="${selectedSubTab != '0'}">
+							<LI>
+								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
+									<span>
+									<digi:link href="/teamReportList.do" name="urlParams">
+										<digi:trn key="aim:assignedreports">Assigned</digi:trn>
+									</digi:link>							
+									</span>
+								</div>	
+							</LI>
+						</c:if>					
+						<c:if test="${selectedSubTab  == '1'}">
+						   	<LI>
+                                <span>
+                                <digi:trn key="aim:unassignedreports">Unassigned</digi:trn>								
+                                </span>
+							</LI>
+						</c:if>
+						<c:if test="${selectedSubTab != '1'}">
+							<LI>
+								<div title='<digi:trn key="aim:listofunassignedreports">List of unassigned reports</digi:trn>'>
+									<span>
+									<a href="javascript:listReports()">
+										<digi:trn key="aim:unassignedreports">Unassigned</digi:trn>
+									</a>							
+									</span>
+								</div>	
+							</LI>
+						</c:if>
 					</c:if>
 					<c:if test="${selectedTab  == '0'}">
 						<c:if test="${selectedSubTab  == '0'}">

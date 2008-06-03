@@ -5,6 +5,71 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	if(tableElement)
+	{
+		rows = tableElement.getElementsByTagName('tr');
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			if(i%2 == 0)
+				rows[i].className = classEven;
+			else
+				rows[i].className = classOdd;
+		}
+		rows = null;
+	}
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <script type="text/javascript">
 	function checkall() {
@@ -85,10 +150,10 @@ function checkSelActivities() {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -125,56 +190,41 @@ function checkSelActivities() {
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class="box-border-nopadding" width="100%">
-							<tr bgColor=#3754a1>
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+							<tr>
 								<td vAlign="top" width="100%">
+									<c:set var="selectedTab" value="2" scope="request"/>
+									<c:set var="selectedSubTab" value="2" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=177>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title width=160>&nbsp;
-															<digi:trn key="aim:activityListManager">
-															Activity List Manager
-															</digi:trn>
-														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
+                                <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+                                <div align="center">
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
 										<tr>
-											<td bgColor=#ffffff class=box-border valign="top">
-												<table border=0 cellPadding=0 cellSpacing=1 class=box-border-nopadding width="100%">
+											<td bgColor=#ffffff valign="top">
+												<table border=0 cellPadding=0 cellSpacing=0 width="100%">
 													<tr>
 														<td align="left" width="100%" valign="center">
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#ffffff">
-																<tr><td width=3 bgcolor="#dddddd">
+																<tr><td width=3 bgcolor="#999999">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td width="20%" bgcolor="#dddddd">
+																<td width="20%" bgcolor="#999999" style="color:black">
 																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 																</td>
-																<td valign="center" align="center" bgcolor="#dddddd">
-																	<a href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
+																<td valign="center" align="center" bgcolor="#999999">
+																	<a  style="color:black" href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 																		<b><digi:trn key="aim:unassignedActivityList">
 																		List of unassigned activities
 																	</digi:trn></b>
 																	</a>																
 																</td>
-																<td bgColor=#dddddb align="center" width="20%" bgcolor="#dddddd">
-																	<a href="javascript:sortMe('donor')" title="Click here to sort by Donors">
+																<td bgColor="#999999" align="center" width="20%">
+																	<a  style="color:black" href="javascript:sortMe('donor')" title="Click here to sort by Donors">
 																		<b><digi:trn key="aim:donors">
 																			Donors
 																		</digi:trn></b>
@@ -196,19 +246,18 @@ function checkSelActivities() {
 													<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
 													<tr>
 														<td align="left" width="100%" valign="center">
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
-															bgcolor="#dddddd">													
+															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left" id="dataTable">													
 																<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities" 
 																type="org.digijava.module.aim.helper.Activity">
-																<tr><td width=3 bgcolor="#f4f4f2">
+																<tr><td width=3>
 																	<html:multibox property="selActivities" >
 																		<bean:write name="activities" property="activityId" />
 																	</html:multibox>
 																</td>
-																<td width="20%" bgcolor="#f4f4f2">
+																<td width="20%">
 																	<bean:write name="activities" property="ampId" />
 																</td>
-																<td bgcolor="#f4f4f2">
+																<td>
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams}" property="activityId">
 																		<bean:write name="activities" property="activityId" />
@@ -223,7 +272,7 @@ function checkSelActivities() {
 																		<bean:write name="activities" property="name" />
 																	</digi:link>
 																</td>
-																<td align="left" width="20%" bgcolor="#f4f4f2">
+																<td align="left" width="20%">
 																	<bean:write name="activities" property="donors" />
 																</td></tr>
 																</logic:iterate>
@@ -279,10 +328,12 @@ function checkSelActivities() {
 											</tr>
 										</logic:notEmpty>	
 									</table>
+                                </div>
+                                </div>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>							
 						</table>			
 					</td>
@@ -296,5 +347,9 @@ function checkSelActivities() {
 
 </digi:form>
 
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 
 

@@ -30,7 +30,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private Long countryIso = null;
     private Long assistanceType = null;
     private String createdDate;
-    private Collection perspectives;
 
     private Long program;
     private Collection programCollection;
@@ -437,7 +436,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
             issues = null;
             editKey = "";
             regionalFundings = null;
-            perspectives = null;
             totalCommitments = 0;
             totalDisbursements = 0;
             totalExpenditures = 0;
@@ -2977,20 +2975,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
      */
     public void setFundingRegions(Collection fundingRegions) {
         this.fundingRegions = fundingRegions;
-    }
-
-    /**
-     * @return Returns the perspectives.
-     */
-    public Collection getPerspectives() {
-        return perspectives;
-    }
-
-    /**
-     * @param perspectives The perspectives to set.
-     */
-    public void setPerspectives(Collection perspectives) {
-        this.perspectives = perspectives;
     }
 
     /**

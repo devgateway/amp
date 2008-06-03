@@ -8,10 +8,20 @@
 
 <script language="JavaScript">
     var continueExecution = true;
+	
+	function setRenderingComplete()
+	{
+    	var statusDiv = document.getElementById("statusValue");
+		if(statusDiv.innerText != undefined)
+			statusDiv.innerText = "(100%) Rendering page. Please wait...";
+		else
+			statusDiv.textContent = "(100%) Rendering page. Please wait...";	
+			
+	}
     function checkstatus(){
 
     	var statusDiv = document.getElementById("statusValue");
-    	var offsetByServerSide = 44;
+    	var offsetByServerSide = 50;
     	var xmlhttp; 
 
     	if(window.ActiveXObject)
@@ -49,7 +59,7 @@
 			    	}
 				}catch(e){}
 				if(continueExecution)
-		    		setTimeout("checkstatus()", 1000);
+		    		setTimeout("checkstatus()", 250);
 		   }
 		}
 		xmlhttp.send(null);

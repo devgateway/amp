@@ -1176,9 +1176,16 @@
     ${fn:replace(message,quote,escapedQuote)}
     </c:set>
 
+    <c:set var="description">
+    ${theme.description}
+    </c:set>
+    <c:set var="escapedDescription">
+    ${fn:replace(description,quote,escapedQuote)}
+    </c:set>
+
 		addProgramInformation(	'${theme.ampThemeId}',
 								 '${escapedName}',
-								'${theme.description}',
+								'${escapedDescription}',
 								'${theme.leadAgency}',
 								'${theme.themeCode}',
 								'${theme.typeCategoryValue.value}',

@@ -141,7 +141,7 @@ function setHoveredTable(tableId, hasHeaders) {
 								<td valign="top">
                                     <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
 	                                    <div align="center">
-											<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+											<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%" border=0>
 										<tr><td>
 											<digi:errors />
 										</td></tr>

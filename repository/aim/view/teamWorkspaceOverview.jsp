@@ -162,8 +162,8 @@ function updateChild(action) {
                                 <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
                                 	<table align=center cellPadding=0 cellSpacing=0 width="90%">
 										<tr>
-											<td>
-												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
+											<td style="padding-left:10px">
+												<table border=0 cellPadding=3 cellSpacing=0 width="500">
 													<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
 													<tr>
 														<td colspan="2" align="center">

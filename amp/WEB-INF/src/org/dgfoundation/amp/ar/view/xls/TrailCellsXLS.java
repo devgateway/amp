@@ -88,7 +88,10 @@ public class TrailCellsXLS extends XLSExporter {
 			int pos = modified.indexOf(':'); 
 			if (pos >= 0)
 				modified = modified.substring(pos + 1);
-			cell.setCellValue(modified+" ("+grd.getTotalUniqueRows()+")");
+			if (grd.getReportMetadata().isHideActivities())
+				cell.setCellValue(modified);
+			else
+				cell.setCellValue(modified+" ("+grd.getTotalUniqueRows()+")");
 			
 			makeColSpan(grd.getSourceColsCount().intValue());
 			//colId.inc();

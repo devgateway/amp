@@ -55,18 +55,8 @@ public class GroupReportDataXLS extends XLSExporter {
 	 */
 	public void generate() {
 		GroupReportData grd = (GroupReportData) item;
+	
 		
-//		trail cells:
-		rowId.inc();
-		colId.reset();
-
-		
-		
-		TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
-		trails2.generate();
-		
-		rowId.inc();
-		colId.reset();
 		//show Headings:		
 		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
 		headings.generate();
@@ -90,6 +80,10 @@ public class GroupReportDataXLS extends XLSExporter {
 		//HSSFCell cell=this.getRegularCell(row);
 		//cell.setCellValue("xx");
 		//makeColSpan(grd.getTotalDepth());
+
+		//		trail cells:
+		TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
+		trails2.generate();
 		
 	}
 

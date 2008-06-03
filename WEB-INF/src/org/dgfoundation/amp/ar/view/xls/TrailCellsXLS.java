@@ -59,9 +59,11 @@ public class TrailCellsXLS extends XLSExporter {
 		// generate totals:
 		ReportData grd = (ReportData) item;
 
-		row=sheet.createRow(rowId.shortValue());
-		
+	
 		if (grd.getParent() != null) {
+//			rowId.inc();
+//			colId.reset();
+			row=sheet.createRow(rowId.shortValue());
 			HSSFCell cell = this.getCell(this.getHighlightedStyle(false));
 			
 //			introducing the translaton issues
@@ -101,8 +103,10 @@ public class TrailCellsXLS extends XLSExporter {
 				element.invokeExporter(this);
 			}
 
+			colId.reset();
+			rowId.inc();
+			colId.reset();
 		}
-		colId.reset();
 
 	}
 

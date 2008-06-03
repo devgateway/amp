@@ -62,7 +62,11 @@ public class ReportHeadingsXLS extends XLSExporter {
 		
 		// column headings:
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
-			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+
+		rowId.inc();
+		colId.reset();
+		
+		columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
 //			if (rowId.value == 8){

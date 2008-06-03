@@ -138,8 +138,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
 		trails.generate();
 	
-		rowId.inc();
-		colId.reset();
+		
 
 
 	}

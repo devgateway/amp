@@ -54,12 +54,12 @@
 		</li>
 		
 		<li><digi:trn key="aim:computation">Computation</digi:trn> : 
-			<logic:present name="ampTeam" property="computation">
+			<logic:equal name="ampTeam" property="computation" value="true">
 				<digi:trn key="aim:yes">Yes</digi:trn>
-			</logic:present>
-			<logic:notPresent name="ampTeam" property="computation">
+			</logic:equal>
+			<logic:equal name="ampTeam" property="computation" value="false">
 				<digi:trn key="aim:no">No</digi:trn>
-			</logic:notPresent>
+			</logic:equal>/
 		</li>
 	</ul>
 </div>

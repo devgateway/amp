@@ -89,7 +89,7 @@ public class NodeWrapper {
 					contentType				= formFile.getContentType();
 					int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
 					
-					newNode.setProperty( CrConstants.PROPERTY_NAME, formFile.getFileName() );
+					newNode.setProperty( CrConstants.PROPERTY_NAME, new String(formFile.getFileName().getBytes("iso-8859-1"), "UTF8"));
 					newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize );
 				}
 			}

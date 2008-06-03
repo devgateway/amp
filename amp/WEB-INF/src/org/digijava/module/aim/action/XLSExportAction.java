@@ -165,6 +165,7 @@ public class XLSExportAction extends Action {
 			
 			row=sheet.createRow(rowId.shortValue()); 		 
 			cell=row.createCell(colId.shortValue());
+			translatedReportDescription = translatedReportDescription.replaceAll("\n", " ");
 			cell.setCellValue(translatedReportDescription+" "+r.getReportDescription());
 			grdx.makeColSpan(rd.getTotalDepth());
 			rowId.inc();

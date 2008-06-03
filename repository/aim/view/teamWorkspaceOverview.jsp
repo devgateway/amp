@@ -6,7 +6,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
@@ -104,10 +110,10 @@ function updateChild(action) {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780 border="0">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
@@ -134,9 +140,8 @@ function updateChild(action) {
 					</td>
 				</tr>
 				<tr>
-					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
-						valign="top" align="left">
+					<td noWrap vAlign="top">
+						<table cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left">
 							<tr>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="0" scope="request"/>
@@ -152,38 +157,13 @@ function updateChild(action) {
 									<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 								</td>
 							</tr>
-							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
+							<tr>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=117>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title width=100>
-															<digi:trn key="aim:teamSettings">
-															Team Settings
-															</digi:trn>
-														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
+                                <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+                                	<table align=center cellPadding=0 cellSpacing=0 width="90%">
 										<tr>
-											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=3 cellSpacing=3 class=box-border-nopadding width="100%">
-													<tr bgColor=#dddddb>
-														<td bgColor=#dddddb colspan="2" align="center"><b>
-															<digi:trn key="aim:teamGeneralSettings">
-															General Settings
-															</digi:trn></b>
-														</td>
-													</tr>
+											<td>
+												<table border=0 cellPadding=3 cellSpacing=0 width="100%">
 													<logic:equal name="aimUpdateWorkspaceForm" property="updateFlag" value="true">
 													<tr>
 														<td colspan="2" align="center">
@@ -202,8 +182,8 @@ function updateChild(action) {
 
 													<c:if test="${subtabId == 0 }">
 													
-														<tr bgcolor="#f4f4f2">
-															<td align="right" width="30%">
+														<tr>
+															<td align="right" width="50%">
 																<digi:trn key="aim:teamName">
 																Team Name
 																</digi:trn>
@@ -212,19 +192,19 @@ function updateChild(action) {
 																<html:text property="teamName" size="50" styleClass="inp-text" />
 															</td>
 														</tr>
-														<tr bgcolor="#f4f4f2">
-															<td align="right" width="30%">
+														<tr>
+															<td align="right" width="50%" valign="top">
 																<digi:trn key="aim:teamDescription">
 																Team Description
 																</digi:trn>
 															</td>
-															<td align="left">
+															<td align="left" >
 																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
 															</td>
 														</tr>
 														<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
-														<tr bgcolor="#f4f4f2">
-															<td align="right" width="30%">
+														<tr>
+															<td align="right" width="50%">
 																<digi:trn key="aim:relatedTeam">
 																Related Team
 																</digi:trn>
@@ -235,16 +215,16 @@ function updateChild(action) {
 														</tr>
 														</logic:notEmpty>
 	
-														<tr bgcolor="#f4f4f2">
-															<td align="right" width="30%">
+														<tr>
+															<td align="right" width="50%">
 																<digi:trn key="aim:teamType">Team Type</digi:trn>
 															</td>
 															<td align="left">
 																<category:showoptions name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 															</td>
 														</tr>
-														<tr bgcolor="#f4f4f2">
-															<td align="right" width="30%">
+														<tr>
+															<td align="right" width="50%">
 																<digi:trn key="aim:teamCategory">Team Category</digi:trn>
 															</td>
 															<td align="left">
@@ -260,7 +240,7 @@ function updateChild(action) {
 																	</html:select>
 															</td>
 														</tr>
-														<tr bgcolor="#f4f4f2">
+														<tr>
 															<td align="right">
 																<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 															</td>
@@ -275,7 +255,7 @@ function updateChild(action) {
 														</tr>
 														<tr>
 															<c:set var="translation">
-																<digi:trn key="btn:teamWorkspaceUpdate">Update</digi:trn>
+																<digi:trn key="aim:btnSave">Save</digi:trn>
 															</c:set>
 															<td colspan="2" align="center">
 																<input type="button" class="dr-menu" value=" ${translation} " onclick="update('edit')"/>
@@ -286,11 +266,11 @@ function updateChild(action) {
 
 														<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
 														<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
-														<tr bgcolor="#f4f4f2">
-															<td align="right" width="150" bgcolor="#f4f4f2">
+														<tr>
+															<td align="right" width="150">
 																<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>
 															</td>
-															<td align="left" bgcolor="#f4f4f2">
+															<td align="left">
 																<c:set var="translation">
 																	<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
 																</c:set>
@@ -299,7 +279,7 @@ function updateChild(action) {
 														</tr>
 														<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
 														<tr>
-															<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<td colspan="2" align="center">
 																<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
 																class="box-border-nopadding">
 																<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
@@ -322,7 +302,7 @@ function updateChild(action) {
 														</c:if>
 														<c:if test="${empty aimUpdateWorkspaceForm.childWorkspaces}">
 														<tr>
-															<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<td colspan="2" align="center">
 																<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
 																class="box-border-nopadding">
 																<tr>
@@ -344,16 +324,13 @@ function updateChild(action) {
 															</td>																	
 														</tr>
 													</c:if>
-
 												</table>
 											</td>
 										</tr>
 									</table>
-								</td>
+                                </div>
+                                </td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
 						</table>
 					</td>
 				</tr>

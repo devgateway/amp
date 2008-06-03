@@ -5,6 +5,69 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
+
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -67,10 +130,10 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -110,46 +173,31 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
+									<c:set var="selectedTab" value="3" scope="request"/>
+									<c:set var="selectedSubTab" value="1" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=167>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title width=150>
-															<digi:trn key="aim:reportListUnassignedReports">
-																List of unassigned reports
-															</digi:trn>
-														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
+                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+									<div align="center">
 
-											<td bgColor=#ffffff class=box-border valign="top">
-												<table border=0 cellPadding=0 cellSpacing=1 class=box-border-nopadding width="100%">
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+										<tr>
+											<td bgColor=#ffffff valign="top">
+												<table border=0 cellPadding=0 cellSpacing=0 width="100%">
 													<tr>
 														<td align="left" width="100%" valign="center">
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#ffffff">
-																<tr><td width=3 bgcolor="#dddddd">
+																<tr><td width=3 bgcolor="#999999">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td valign="center" align="center" bgcolor="#dddddd">
+																<td valign="center" align="center" bgcolor="#999999" style="color:black">
 																	<b><digi:trn key="aim:reportListUnassignedReports">
 																		List of unassigned reports
 																	</digi:trn></b>
@@ -175,18 +223,18 @@
 													<logic:notEmpty name="aimTeamReportsForm" property="reports">
 													<tr>
 														<td>
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
-															bgcolor="#dddddd">
+															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
+															bgcolor="#dddddd" id="dataTable">
 
 															<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" 
 															type="org.digijava.module.aim.dbentity.AmpReports">
 															<tr>
-																<td width="3%" bgcolor="#f4f4f2">
+																<td width="3%">
 																	<html:multibox property="selReports" >
 																		<bean:write name="reports" property="ampReportId" />
 																	</html:multibox>
 																</td>
-																<td width="73%" bgcolor="#f4f4f2">
+																<td width="73%">
 																	<bean:write name="reports" property="name" />
 																</td>
 															</tr>
@@ -196,6 +244,7 @@
 													</tr>
 													<tr>
 														<td align="center" bgcolor=#ffffff>
+                                                        <br />
 															<table cellspacing="5">
 																<tr>
 																	<td>
@@ -213,6 +262,8 @@
 											</td>
 										</tr>
 									</table>
+                                    </div>
+                                    </div>
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -231,4 +282,12 @@
 </digi:form>
 
 
+
+
+
+
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 

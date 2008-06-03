@@ -13,6 +13,13 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 
@@ -40,13 +47,13 @@
 
 <tr><td>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 
 	<tr>
 
-		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left vAlign=top width=750>
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 
@@ -128,61 +135,28 @@
 
 							</tr>
 
-							<tr bgColor=#f4f4f2>
-
-								<td>&nbsp;
-
-								</td>
-
-							</tr>
 
 							<tr bgColor=#f4f4f2>
 
 								<td valign="top">
-
+                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+									<div align="center">
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
-
-										<tr bgColor=#f4f4f2>
-
-											<td bgColor=#f4f4f2>
-
-												<table border="0" cellPadding=0 cellSpacing=0 width=167>
-
-													<tr bgColor=#f4f4f2>
-
-														<td bgColor=#c9c9c7 class=box-title width=150>
-
-															<digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
-
-														</td>
-
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-
-														</td>
-
-													</tr>
-
-												</table>
-
-											</td>
-
-										</tr>
-
 										<tr>
 
-											<td bgColor=#ffffff class=box-border>
+											<td bgColor=#ffffff >
 
-												<table border=0 cellPadding=3 cellSpacing=3 class=box-border-nopadding width="100%">
+												<table border=0 cellPadding=3 cellSpacing=0  width="100%">
 
 													<tr bgColor=#dddddb>
 
-														<td bgColor=#dddddb colspan="2" align="center">
+														<td bgColor=#999999 colspan="2" align="center" style="color:black">
 
 															<b><digi:trn key="aim:donorTeam">Donor Team</digi:trn></b>
 
 														</td>
 
-														<td bgColor=#dddddb colspan="2" align="center">
+														<td bgColor=#999999 colspan="2" align="center" style="color:black">
 
 															<b><digi:trn key="aim:donorTeamLeader">Team Leader</digi:trn></b>
 
@@ -239,14 +213,15 @@
 										</tr>
 
 									</table>
-
+									</div>
+                                    </div>
 								</td>
 
 							</tr>
 
-							<tr><td bgColor=#f4f4f2>
+							<tr><td bgColor=#f4f4f2>&nbsp;
 
-								&nbsp;
+								
 
 							</td></tr>
 

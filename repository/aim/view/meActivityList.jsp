@@ -12,6 +12,68 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
@@ -56,11 +118,11 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 
 	<tr>
 
-		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td width=14>&nbsp;</td>
 
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 
@@ -70,7 +132,8 @@
 
 				<tr>
 
-					<td height=33><span class=crumb>
+					<td height=33>
+                    <span class=crumb>
 
 						<c:set var="translation">
 
@@ -101,6 +164,7 @@
 						&nbsp;&gt;&nbsp;						
 
 						<digi:trn key="aim:activityList">Activity List</digi:trn>
+                      </span>
 
 					</td>
 
@@ -134,15 +198,10 @@
 
 							<tr bgColor=#f4f4f2>
 
-								<td>&nbsp;
-
-								</td>
-
-							</tr>
-
-							<tr bgColor=#f4f4f2>
-
 								<td valign="top">
+
+                                	<div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+									<div align="center">
 
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
 
@@ -151,52 +210,51 @@
 											<digi:errors />
 
 										</td></tr>
+										<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 
-										<tr bgColor=#f4f4f2>
+										<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
 
-											<td bgColor=#f4f4f2>
+											<tr>
 
-												<table border="0" cellPadding=0 cellSpacing=0 width=237>
+												<td height="20">
 
-													<tr bgColor=#f4f4f2>
+														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
+													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
+														<% if (currPage.equals(pages)) { %>
+																<%=pages%>
+														<%	} else { %>
+															<c:set var="translation">
+																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+															</c:set>
+															<c:set target="${urlParams1}" property="page">
+																<%=pages%>
+															</c:set>
+															<digi:link href="/getTeamActivities.do" name="urlParams1">
+																<%=pages%>
+                                                            </digi:link>
+														<% } %>
+														|
+														</logic:iterate>
+												</td>
 
-														<td bgColor=#c9c9c7 class=box-title width=220>
+											</tr>
 
-															<digi:trn key="aim:monitoringAndEvaluation">
-
-																Monitoring & Evaluation	
-
-															</digi:trn>
-
-														</td>
-
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-
-														</td>
-
-													</tr>
-
-												</table>
-
-											</td>
-
-										</tr>
-
+										</logic:notEmpty>											
 										<tr>
 
-											<td bgColor=#ffffff class=box-border valign="top">
+											<td bgColor=#ffffff valign="top">
 
-												<table border=0 cellPadding=0 cellSpacing=1 class=box-border-nopadding width="100%">
+												<table border=0 cellPadding=0 cellSpacing=0 width="100%">
 
 													<tr>
 
 														<td align="left" width="100%" valign="center">
 
-															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
 
 															bgcolor="#ffffff">
 
-																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
+																<tr><td valign="center" align="center" bgcolor="#999999" height="20" style="color:black">
 
 																	<b><digi:trn key="aim:activityList">Activity List</digi:trn></b>
 
@@ -244,7 +302,7 @@
 
 														<td align="left" width="100%" valign="center">
 
-															<table width="100%" cellSpacing=1 cellPadding=6 vAlign="top" align="left" bgcolor="#f4f4f2">
+															<table width="100%" cellSpacing=0 cellPadding=6 vAlign="top" align="left" bgcolor="#f4f4f2" id="dataTable">
 
 															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities" 
 
@@ -292,54 +350,29 @@
 
 										</tr>
 
-										<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-
 										<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
 
 											<tr>
 
 												<td>
 
-													<digi:trn key="aim:pages">
-
-														Pages :
-
-													</digi:trn>
-
 														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
-
 													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
-
-														
-
 														<% if (currPage.equals(pages)) { %>
-
 																<%=pages%>
-
 														<%	} else { %>
-
 															<c:set var="translation">
-
 																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-
 															</c:set>
-
 															<c:set target="${urlParams1}" property="page">
-
 																<%=pages%>
-
 															</c:set>
-
 															<digi:link href="/getTeamActivities.do" name="urlParams1">
-
-															<%=pages%></digi:link>
-
+																<%=pages%>
+                                                            </digi:link>
 														<% } %>
-
-														|&nbsp; 
-
-													</logic:iterate>
-
+														|
+														</logic:iterate>
 												</td>
 
 											</tr>
@@ -348,13 +381,15 @@
 
 									</table>
 
+									</div>
+                                    </div>
 								</td>
 
 							</tr>
 
-							<tr><td bgColor=#f4f4f2>
+							<tr><td bgColor=#f4f4f2>&nbsp;
 
-								&nbsp;
+								
 
 							</td></tr>
 
@@ -378,4 +413,12 @@
 
 
 
+
+
+
+
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 

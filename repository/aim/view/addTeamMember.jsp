@@ -87,14 +87,14 @@ function clearForms()
 </td></tr>
 <tr><td>
 </c:if>
-<table width="100%" cellSpacing=1 cellPadding=4 align="center" bgcolor="#aaaaaa" onload="load()">
+<table width="100%" cellSpacing=1 cellPadding=4 align="center" onload="load()">
 	<tr>
 		<td align="center" colspan="2" bgcolor="#eeeeee"><b>
 			<digi:trn key="aim:addTeamMembersFor">Add Members for</digi:trn>
 			<bean:write name="aimTeamMemberForm" property="teamName" /></b>
 		</td>
 	</tr>
-	<tr bgcolor="#ffffff">
+	<tr>
 		<td align="right" valign="top" width="50%">
 			<FONT color="red">*</FONT>
 			<digi:trn key="aim:userId">User Id</digi:trn>&nbsp;
@@ -109,7 +109,7 @@ function clearForms()
 			</html:select>
 		</td>
 	</tr>
-	<tr bgcolor="#ffffff">
+	<tr>
 		<td align="right" width="50%">
 			<FONT color="red">*</FONT>		
 			<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;
@@ -123,7 +123,7 @@ function clearForms()
 		</td>
 	</tr>
 	
-	<tr bgcolor="#ffffff">
+	<tr>
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
@@ -142,7 +142,7 @@ function clearForms()
 			</table>
 		</td>
 	</tr>	
-	<tr bgcolor="#ffffff">
+	<tr>
 		<td colspan="2" align="left">
 			<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
 			</B></FONT> are required.</digi:trn>			

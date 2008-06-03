@@ -137,20 +137,6 @@
 															</html:select>
 														</td>
 													</tr>
-													<logic:equal name="aimUpdateAppSettingsForm" property="perspectiveEnabled" value="true">
-													<tr>
-														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defPerspective">
-															Perspective</digi:trn>
-														</td>
-														<td align="left" width="50%" bgcolor="#f4f4f2">
-															<html:select property="defPerspective" styleClass="inp-text">
-																<html:option value="MOFED"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
-																<html:option value="Donor">Donor</html:option>
-															</html:select>
-														</td>
-													</tr>
-													</logic:equal>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defCurrency">

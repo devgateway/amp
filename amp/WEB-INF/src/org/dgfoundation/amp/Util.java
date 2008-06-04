@@ -243,6 +243,8 @@ public final class Util {
 		return ret;
 	}
 
+	
+	
 	/**
 	 * Returns comma separated view string representation of the collection
 	 * items
@@ -252,7 +254,7 @@ public final class Util {
 	 * @return the comma separated string
 	 * @author mihai 06.05.2007
 	 */
-	public static String toCSString(Collection col, boolean identifiable) {
+	public static String toCSString(Collection col) {
 		String ret = "";
 		if (col == null || col.size() == 0)
 			return ret;
@@ -262,7 +264,7 @@ public final class Util {
 			if (element == null)
 				continue;			
 			Object item=element;
-			if(identifiable) item=((Identifiable)element).getIdentifier();
+			if(element instanceof Identifiable) item=((Identifiable)element).getIdentifier();
 			
 			if (item instanceof String)
 				ret += "'" + (String) item + "'"; else

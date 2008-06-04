@@ -197,6 +197,9 @@
 			org.digijava.module.aim.dbentity.AmpColumns
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpColumnsFilters
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpColumnsOrder
 		</hibernate-class>
 		<hibernate-class>

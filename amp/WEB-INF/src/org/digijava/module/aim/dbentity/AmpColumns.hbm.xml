@@ -14,5 +14,10 @@
 		<property column="extractorView" name="extractorView" type="java.lang.String"/>
 		<property column="relatedContentPersisterClass" name="relatedContentPersisterClass" type="java.lang.String"/>		
 
+		<set name="filters" cascade="all-delete-orphan">
+			<key column="column_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpColumnsFilters" />
+		</set>
+
 	</class>
 </hibernate-mapping>

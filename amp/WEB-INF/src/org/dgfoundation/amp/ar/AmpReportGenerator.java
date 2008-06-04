@@ -183,11 +183,17 @@ public class AmpReportGenerator extends ReportGenerator {
 				// create an instance of the column worker
 
 				ColumnWorker ce = null;
+				
+				//get the column bound condition:
+				String columnFilterSQLClause = ColumnFilterGenerator.generateColumnFilterSQLClause(filter, col, true);
+			
+				if(columnFilterSQLClause.length()>0) logger.info("Column "+col.getColumnName()+" SQL Clause: "+columnFilterSQLClause);
+				
 				if (extractorView != null) {
 
 					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							filter.getGeneratedFilterQuery(), extractorView,
+							filter.getGeneratedFilterQuery()+columnFilterSQLClause, extractorView,
 							columnName, this });
 				} else {
 					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3);
@@ -195,7 +201,9 @@ public class AmpReportGenerator extends ReportGenerator {
 							columnName, rawColumns, this });
 				}
 
+				
 				Column column = ce.populateCellColumn();
+				
 				
 				if(relatedContentPersisterClass!=null) {
         				column.setRelatedContentPersisterClass(Class.forName(relatedContentPersisterClass));

@@ -113,7 +113,7 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("Background:",subSectionFont,1));
 		document.add(newParagraph("1.1 CRIS Number: "+act.getAmpId(),regularFont,1));
 		document.add(newParagraph("1.2 Title: "+act.getName(),regularFont,1));
-		document.add(newParagraph("1.3 Sector: "+Util.toCSString(act.getSectors(),false),regularFont,1));
+		document.add(newParagraph("1.3 Sector: "+Util.toCSString(act.getSectors()),regularFont,1));
 		document.add(newParagraph("1.4 Location: ",regularFont,1));
 		Iterator i=act.getLocations().iterator();
 		while (i.hasNext()) {
@@ -123,8 +123,8 @@ public class ProjectFicheExport extends Action {
 		
 		document.add(newParagraph("Implementing arrangements:",subSectionFont,1));
 		document.add(newParagraph("1.5 Contracting Authority (EC)",regularFont,1));
-		document.add(newParagraph("1.6 Implementing Agency: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"IA"),false),regularFont,1));
-		document.add(newParagraph("1.7 Beneficiary: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"BA"),false),regularFont,1));
+		document.add(newParagraph("1.6 Implementing Agency: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"IA")),regularFont,1));
+		document.add(newParagraph("1.7 Beneficiary: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"BA")),regularFont,1));
 		
 		document.add(newParagraph("Costs:",subSectionFont,1));
 		document.add(newParagraph("1.8 Overall Cost: "+CurrencyUtil.df.format(EUActivityUtil.getTotalCostConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()),regularFont,1));
@@ -141,7 +141,7 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("2.2 Project Purpose: "+Util.getEditorBody(site,act.getPurpose(),navigationLanguage),regularFont,1));
 		document.add(newParagraph("2.3 Link with AP/NPAA/EP/SAA: ",regularFont,1));
 		document.add(newParagraph("2.4 Link with MIPD: ",regularFont,1));
-		document.add(newParagraph("2.5 Link with National Development Plan (where applicable): "+Util.toCSString(act.getActivityPrograms(),false),regularFont,1));
+		document.add(newParagraph("2.5 Link with National Development Plan (where applicable): "+Util.toCSString(act.getActivityPrograms()),regularFont,1));
 		document.add(newParagraph("2.6 Link with national/ sectoral investment plans (where applicable): ",regularFont,1));
 		
 

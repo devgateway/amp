@@ -286,23 +286,23 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
 						: "");
 		String TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("
-				+ Util.toCSString(ampTeams, true)
+				+ Util.toCSString(ampTeams)
 				+ ") "
 				+ "OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-				+ Util.toCSString(ampTeams, true) + ") )";
+				+ Util.toCSString(ampTeams) + ") )";
 
 		// computed workspace filter -- append it to the team filter so normal
 		// team activities are also possible
 		if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
 			TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ("
-					+ Util.toCSString(teamAssignedOrgs, true) + ") )";
+					+ Util.toCSString(teamAssignedOrgs) + ") )";
 			TEAM_FILTER += "OR amp_activity_id IN (SELECT distinct(amp_activity_id) FROM amp_funding WHERE amp_donor_org_id IN ("
-					+ Util.toCSString(teamAssignedOrgs, true) + "))";
+					+ Util.toCSString(teamAssignedOrgs) + "))";
 
 		}
 
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
-				+ Util.toCSString(statuses, true) + ")";
+				+ Util.toCSString(statuses) + ")";
 
 		// String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE
 		// amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
@@ -316,22 +316,22 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
 				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
 				+ "AND c.name='Primary' AND aas.amp_sector_id in ("
-				+ Util.toCSString(sectors, true) + ")";
+				+ Util.toCSString(sectors) + ")";
 
 		String NATIONAL_PLAN_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
 				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='National Plan Objective' AND "
 				+ " aap.amp_program_id in ("
-				+ Util.toCSString(nationalPlanningObjectives, true) + ")";
+				+ Util.toCSString(nationalPlanningObjectives) + ")";
 
 		String PRIMARY_PROGRAM_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
 				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Primary Program' AND "
 				+ " aap.amp_program_id in ("
-				+ Util.toCSString(primaryPrograms, true) + ")";
+				+ Util.toCSString(primaryPrograms) + ")";
 
 		String SECONDARY_PROGRAM_FILTER = "SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id "
 				+ "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Secondary Program' AND "
 				+ " aap.amp_program_id in ("
-				+ Util.toCSString(secondaryPrograms, true) + ")";
+				+ Util.toCSString(secondaryPrograms) + ")";
 
 		// String SECONDARY_PARENT_SECTOR_FILTER=
 		// "SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id
@@ -344,12 +344,12 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String SECONDARY_SECTOR_FILTER = "SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c "
 				+ "WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id "
 				+ "AND c.name='Secondary' AND aas.amp_sector_id in ("
-				+ Util.toCSString(secondarySectors, true) + ")";
+				+ Util.toCSString(secondarySectors) + ")";
 
 		String REGION_FILTER = "SELECT amp_activity_id FROM v_regions WHERE name IN ("
-				+ Util.toCSString(regions, true) + ")";
+				+ Util.toCSString(regions) + ")";
 		String FINANCING_INSTR_FILTER = "SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("
-				+ Util.toCSString(financingInstruments, true) + ")";
+				+ Util.toCSString(financingInstruments) + ")";
 		String LINE_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="
 				+ lineMinRank;
 		String PLAN_MIN_RANK_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="
@@ -360,31 +360,31 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				+ Constants.APPROVED_STATUS + "'";
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
-				+ Util.toCSString(typeOfAssistance, true) + ")";
+				+ Util.toCSString(typeOfAssistance) + ")";
 
 		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
 				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
 				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
 				+ "AND typ.amp_org_type_id =  og.org_type_id AND og.amp_org_id = aor.organisation "
 				+ "AND typ.amp_org_type_id IN ("
-				+ Util.toCSString(donorTypes, true) + ")";
+				+ Util.toCSString(donorTypes) + ")";
 
 		String DONOR_GROUP_FILTER = "SELECT aa.amp_activity_id "
 				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_group grp, amp_organisation og  "
 				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
 				+ "AND grp.amp_org_grp_id =  og.org_grp_id AND og.amp_org_id = aor.organisation "
 				+ "AND grp.amp_org_grp_id IN ("
-				+ Util.toCSString(donorGroups, true) + ")";
+				+ Util.toCSString(donorGroups) + ")";
 
 		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "
 				+ "WHERE v.amp_org_id IN ("
-				+ Util.toCSString(executingAgency, true) + ")";
+				+ Util.toCSString(executingAgency) + ")";
 		String BENEFICIARY_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_beneficiary_agency v  "
 				+ "WHERE v.amp_org_id IN ("
-				+ Util.toCSString(beneficiaryAgency, true) + ")";
+				+ Util.toCSString(beneficiaryAgency) + ")";
 		String IMPLEMENTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_implementing_agency v  "
 				+ "WHERE v.amp_org_id IN ("
-				+ Util.toCSString(implementingAgency, true) + ")";
+				+ Util.toCSString(implementingAgency) + ")";
 
 		/*
 		 * if(fromYear!=null) { AmpARFilterHelper filterHelper =
@@ -540,7 +540,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			}
 
 		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
-				+ Util.toCSString(risks, true) + ")";
+				+ Util.toCSString(risks) + ")";
 		http: // pitzipoanca.org
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
@@ -816,7 +816,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				ret.append("<b>").append(propertyDescriptors[i].getName())
 						.append(": ").append("</b>");
 				if (object instanceof Collection)
-					ret.append(Util.toCSString((Collection) object, false));
+					ret.append(Util.toCSString((Collection) object));
 
 				else
 					ret.append(object);

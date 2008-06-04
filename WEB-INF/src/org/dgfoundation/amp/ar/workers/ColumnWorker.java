@@ -34,10 +34,11 @@ import com.sun.rowset.CachedRowSetImpl;
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 9, 2006 
- */
+ */   
 public abstract class ColumnWorker {
     
     	public static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    	
     
 	protected String viewName;
 	
@@ -46,6 +47,8 @@ public abstract class ColumnWorker {
 	protected String sourceName;
 
 	protected String condition;
+	
+	protected String internalCondition;
 	
 	protected GroupColumn sourceGroup;
 
@@ -63,6 +66,7 @@ public abstract class ColumnWorker {
 
 	protected static Logger logger = Logger.getLogger(ColumnWorker.class);
 
+	
 	public ColumnWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
 		this.condition = condition;
 		this.columnName=columnName;
@@ -88,7 +92,7 @@ public abstract class ColumnWorker {
 	}
 	
 	/**
-	 * Returns the column intance to be used by the ColumnWorker. By default, this is the regular CellColumn. Override
+	 * Returns the column instance to be used by the ColumnWorker. By default, this is the regular CellColumn. Override
 	 * this in subclasses if u need a different Column instance.
 	 * @param initialCapacity TODO
 	 * @return the new instantiated column instance. The column name is taken from the ColumnWorker's columnName property.
@@ -126,6 +130,8 @@ public abstract class ColumnWorker {
 			logger.error(e);
 			e.printStackTrace();
 		}
+		
+		
 
 		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ( "
 				+ condition + " )";
@@ -318,6 +324,7 @@ public abstract class ColumnWorker {
 	 * @return
 	 */
 	public abstract Cell newCellInstance();
-	
+
+
 
 }

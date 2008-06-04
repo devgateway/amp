@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>">
 <style>
 <!--
 tr.my-border-style td {
@@ -175,9 +176,12 @@ tr.my-border-style td {
 			messages=root.childNodes;
 			if((messages==null || messages.length==0) && firstEntry==0){
 				var newTR=document.createElement('TR');
-				newTR.innerHTML='<td colspan="4">'+noMsgs+'</td>';
+                                var newTD=document.createElement('TD');
+                                newTD.innerText=noMsgs;
+                                newTD.colspan=4;
+				newTR.appendChild(newTD)
                                 var tableBody= tbl.getElementsByTagName("tbody");
-                                tableBody[0].appendChild(myTR);
+                                tableBody[0].appendChild(newTR);
 				firstEntry++;
 				return;
 			}else{
@@ -350,55 +354,106 @@ tr.my-border-style td {
 		<TR>
 			<TD class=r-dotted-lg-buttom vAlign=top>
 				<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
-	        		<TR><TD>
-	              	<TABLE border=0 cellPadding=0 cellSpacing=0 >
-	              		<TR bgColor=#f4f4f2>
-	                 		<TD bgColor=#c9c9c7 class=box-title	title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
-								<c:if test="${messageForm.tabIndex==1}">
-									<digi:trn key="message:Messages">Messages</digi:trn>							
-								</c:if> 
-								<c:if test="${messageForm.tabIndex!=1}">
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&page=1">
-	                 					<digi:trn key="message:Messages">Messages</digi:trn>
-	                 				</a>
-								</c:if>							
-							</TD>
-	                    	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
-	                    	<TD bgColor=#c9c9c7 class=box-title	title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-								<c:if test="${messageForm.tabIndex==2}">
-									<digi:trn key="message:Alerts">Alerts</digi:trn>							
-								</c:if>
-								<c:if test="${messageForm.tabIndex!=2}">
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&page=1">
-										<digi:trn key="message:Alerts">Alerts</digi:trn>
-									</a>							
-								</c:if>
-							</TD>
-	                    	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
-	                    	<TD bgColor=#c9c9c7 class=box-title	title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
-								<c:if test="${messageForm.tabIndex==3}">
-									<digi:trn key="message:approvals">Approvals</digi:trn>
-								</c:if>
-								<c:if test="${messageForm.tabIndex!=3}">
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&page=1">
-										<digi:trn key="message:approvals">Approvals</digi:trn>
-									</a>
-								</c:if>
-							</TD>
-	                    	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
-	                    	<TD bgColor=#c9c9c7 class=box-title	title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
-								<c:if test="${messageForm.tabIndex==4}">
-									<digi:trn key="message:ebents">Calendar Events</digi:trn>
-								</c:if>
-								<c:if test="${messageForm.tabIndex!=4}">
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&page=1">
-										<digi:trn key="message:ebents">Calendar Events</digi:trn>
-									</a>
-								</c:if>							
-							</TD>
-	                    	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
-							</TR>
-						</TABLE>
+	        		<TR><TD STYLE="width:750">
+                                   
+                                        <DIV id="tabs">
+                                            <UL>
+                                                
+                                                <c:if test="${messageForm.tabIndex==1}">
+                                                    <LI>
+                                                        <a name="node">
+                                                        <div>
+                                                            <digi:trn key="message:Messages">Messages</digi:trn>
+                                                        </div>
+                                                        </a>
+                                                    </LI>
+                                                </c:if> 
+                                                    
+                                                    
+                                                <c:if test="${messageForm.tabIndex!=1}">
+                                                    <LI>
+                                                        <span>
+                                                           
+                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&page=1">
+                                                             <div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
+                                                                <digi:trn key="message:Messages">Messages</digi:trn>
+                                                            </div>
+                                                            </a>
+                                                        </span>
+                                                    </LI>
+                                                </c:if>							
+                                                    
+                                                    
+                                                    
+                                                <c:if test="${messageForm.tabIndex==2}">
+                                                    <LI>
+                                                        <a name="node">
+                                                            <div>
+                                                                <digi:trn key="message:Alerts">Alerts</digi:trn>
+                                                            </div>
+                                                        </a>
+                                                    </LI>
+                                                </c:if>
+                                                <c:if test="${messageForm.tabIndex!=2}">
+                                                    <LI>
+                                                        <span>
+                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&page=1">
+                                                            <div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
+                                                                <digi:trn key="message:Alerts">Alerts</digi:trn>
+                                                                </div>
+                                                            </a>	
+                                                        </span>
+                                                    </LI>
+                                                </c:if>
+                                                    
+                                                    
+                                                    
+                                                <c:if test="${messageForm.tabIndex==3}">
+                                                    <LI>
+                                                        <a name="node"	>
+                                                            <div>
+                                                            <digi:trn key="message:approvals">Approvals</digi:trn>
+                                                        </div>
+                                                        </a>
+                                                    </LI>
+                                                </c:if>
+                                                <c:if test="${messageForm.tabIndex!=3}">
+                                                    <LI>
+                                                        <span>
+                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&page=1">
+                                                            <div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
+                                                                <digi:trn key="message:approvals">Approvals</digi:trn>
+                                                            </div>
+                                                            </a>
+                                                        </span>
+                                                    </LI>
+                                                </c:if>
+                                                    
+                                                    
+                                                    
+                                                <c:if test="${messageForm.tabIndex==4}">
+                                                    <LI>
+                                                        <a name="node">
+                                                            <div>
+                                                            <digi:trn key="message:ebents">Calendar Events</digi:trn>
+                                                        </div>
+                                                        </a>
+                                                    </LI>
+                                                </c:if>
+                                                <c:if test="${messageForm.tabIndex!=4}">
+                                                    <LI>
+                                                        <span>
+                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&page=1">
+                                                             <div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
+                                                                <digi:trn key="message:ebents">Calendar Events</digi:trn>
+                                                            </div>
+                                                            </a>
+                                                        </span>
+                                                    </LI>
+                                                </c:if>	
+                                            </UL>						
+                                        </DIV>
+                                        
 					</TD></TR>
 					<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
 						<TR >

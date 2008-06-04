@@ -472,28 +472,13 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 
       logger.debug("step [before IF] : " + eaForm.getStep());
-      if (eaForm.isDonorFlag()) {
-        eaForm.setStep("3");
-        if (tm != null)
-          eaForm.setFundDonor(TeamMemberUtil.getFundOrgOfUser(tm.
-              getMemberId()));
-        logger.debug("step [inside IF] : " + eaForm.getStep());
-        // Clearing aid-harmonisation-survey properties
-        if (null != eaForm.getSurveyFlag() &&
-            eaForm.getSurveyFlag().booleanValue()) {
-          eaForm.setSurvey(null);
-          eaForm.setIndicators(null);
-          eaForm.setAmpSurveyId(null);
-          eaForm.setSurveyFlag(Boolean.FALSE);
-        }
+
+      if (step != null) {
+    	  eaForm.setStep(step);
+      }	else{
+    	  eaForm.setStep("1");
       }
-      else {
-        if (step != null) {
-          eaForm.setStep(step);
-        }
-        else
-          eaForm.setStep("1");
-      }
+
       eaForm.setReset(false);
 
       if (activityId != null) {

@@ -37,10 +37,6 @@ public class AddMTEFProjection extends Action{
 		event = formBean.getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
-		String perspCode = null;
-		if (formBean.isDonorFlag()) perspCode = Constants.DONOR;
-		else perspCode = Constants.MOFED;
-		
 		formBean.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		
 		/*String currCode = Constants.DEFAULT_CURRENCY;

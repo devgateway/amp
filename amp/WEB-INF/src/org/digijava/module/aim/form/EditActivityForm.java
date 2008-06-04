@@ -489,7 +489,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	
 	private String currCode;
 
-	private boolean donorFlag;
 	private Long fundDonor;
 
 	private Collection indicatorsME;
@@ -688,7 +687,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalCommitments = "";
 		totalDisbursements = "";
 		totalExpenditures = "";
-		donorFlag = false;
 		keyword=null;
 		//selectedOrganizationsList=null;
 		//selectedOrganisationFromPages= new Integer(-1);
@@ -707,7 +705,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			conditionality=null;
 			projectManagement=null;
 			contractDetails=null;
-			donorFlag = false;
 			fundDonor = null;
 			createdDate = null;
 			activityId = null;
@@ -3309,13 +3306,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setShowInHomePage(boolean showInHomePage) {
 		this.showInHomePage = showInHomePage;
-	}
-
-	/**
-	 * @return Returns the donorFlag.
-	 */
-	public boolean isDonorFlag() {
-		return donorFlag;
 	}
 
 	/**

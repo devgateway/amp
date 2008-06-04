@@ -34,10 +34,6 @@ public class EditSurvey extends Action {
 
         TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 
-        if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE) && !tm.getTeamType().equalsIgnoreCase("GOVERNMENT")) {
-            return mapping.findForward("viewMyDesktop");
-        }
-
         EditActivityForm svForm = (EditActivityForm) form;
 
         final int NUM_RECORDS = 5;

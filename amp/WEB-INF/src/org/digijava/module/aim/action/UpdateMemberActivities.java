@@ -81,13 +81,21 @@ public class UpdateMemberActivities extends Action {
 		} else {
 			/* show all unassigned activities */
 			Collection col = null;
+			
+			/*
+			 * AMP-3476
+			 * 
 			if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 				col = TeamMemberUtil.getUnassignedDonorMemberActivities(id,
 						taForm.getMemberId());
 			} else {
 				col = TeamMemberUtil.getUnassignedMemberActivities(id,
 						taForm.getMemberId());
-			}
+			}*/
+			
+			// AMP-3476
+			col = TeamMemberUtil.getUnassignedMemberActivities(id,
+					taForm.getMemberId());
 			
 			
 			Comparator acronymComp = new Comparator() {

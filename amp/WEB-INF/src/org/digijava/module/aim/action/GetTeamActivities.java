@@ -104,17 +104,14 @@ public class GetTeamActivities
                         if(ampTeam.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             col = TeamUtil.getManagementTeamActivities(id);
                             taForm.setDonorFlag(true);
-                        } else if(ampTeam.getTeamCategory() != null && ampTeam.getTeamCategory().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+                        } else if(ampTeam.getTeamCategory() != null) {
                             col = TeamUtil.getDonorTeamActivities(id);
                             taForm.setDonorFlag(true);
                         } else {
                             col = TeamUtil.getAllTeamActivities(id);
                             taForm.setDonorFlag(false);
                         }
-                    } else if(tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-                        col = TeamUtil.getDonorTeamActivities(id);
-                        taForm.setDonorFlag(true);
-                    } else {
+                    }else {
                         col = TeamUtil.getAllTeamActivities(id);
                         taForm.setDonorFlag(false);
                     }

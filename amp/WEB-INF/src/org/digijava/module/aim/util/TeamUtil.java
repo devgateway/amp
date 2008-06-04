@@ -1201,7 +1201,7 @@ public class TeamUtil {
                     AmpRole role = orgRole.getRole();
                     if(role != null){
                       String roleCode = role.getRoleCode();
-                      if (roleCode != null && roleCode.equals(Constants.DONOR)) {
+                      if (roleCode != null && roleCode.equals(Constants.FUNDING_AGENCY)) {
                         if (donors.trim().length() > 0) {
                           donors += ", ";
                         }
@@ -1271,7 +1271,7 @@ public class TeamUtil {
                         if(role != null){
                           String roleCode = role.getRoleCode();
                           if (roleCode!=null&&roleCode.equals(
-                              Constants.DONOR)) {
+                              Constants.FUNDING_AGENCY)) {
                             if (donors.trim().length() > 0) {
                               donors += ", ";
                             }
@@ -1579,7 +1579,7 @@ public class TeamUtil {
                     while(orgItr.hasNext()) {
                         AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
                         if(orgRole.getRole().getRoleCode().equals(
-                            Constants.DONOR)) {
+                            Constants.FUNDING_AGENCY)) {
                             if(donors.trim().length() > 0) {
                                 donors += ", ";
                             }
@@ -1662,7 +1662,7 @@ public class TeamUtil {
                   AmpRole ampRole = orgRole.getRole();
                   if (ampRole != null) {
                     String roleCode = ampRole.getRoleCode();
-                    if (roleCode != null && roleCode.equals(Constants.DONOR)) {
+                    if (roleCode != null && roleCode.equals(Constants.FUNDING_AGENCY)) {
                       if (donors.trim().length() > 0) {
                         donors += ", ";
                       }

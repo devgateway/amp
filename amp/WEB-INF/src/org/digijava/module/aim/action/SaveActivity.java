@@ -223,108 +223,6 @@ public class SaveActivity extends Action {
 				return mapping.findForward("index");
 			}
 
-			if (eaForm.isDonorFlag()) {
-				// Donor edit
-
-				// set funding and funding details
-				Set fundings = new HashSet();
-				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) {
-					Iterator<FundingOrganization> itr1 = eaForm.getFundingOrganizations().iterator();
-					while (itr1.hasNext()) {
-						FundingOrganization fOrg = (FundingOrganization) itr1
-								.next();
-                            if (fOrg.getAmpOrgId()!=null &&
-								eaForm.getFundDonor()!=null &&
-                                fOrg.getAmpOrgId().longValue() == eaForm.getFundDonor().longValue()) {
-							// add fundings
-							if (fOrg.getFundings() != null && fOrg.getFundings().size()>0) {
-								Iterator<Funding> itr2 = fOrg.getFundings().iterator();
-								while (itr2.hasNext()) {
-									Funding fund = (Funding) itr2.next();
-									AmpFunding ampFunding = new AmpFunding();
-									ampFunding.setAmpFundingId(new Long(fund
-											.getFundingId()));
-
-
-									ampFunding.setActive(fOrg.getFundingActive());
-									ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
-									ampFunding.setDelegatedPartner(fOrg.getDelegatedPartner());
-
-									// add funding details for each funding
-									Set fundDeatils = new HashSet();
-									if (fund.getFundingDetails() != null && fund.getFundingDetails().size()>0) {
-										Iterator itr3 = fund
-												.getFundingDetails().iterator();
-										while (itr3.hasNext()) {
-											FundingDetail fundDet = (FundingDetail) itr3
-													.next();
-											AmpFundingDetail ampFundDet = new AmpFundingDetail();
-											ampFundDet
-													.setTransactionType(new Integer(
-															fundDet
-																	.getTransactionType()));
-											ampFundDet
-													.setAdjustmentType(new Integer(
-															fundDet
-																	.getAdjustmentType()));
-											ampFundDet
-													.setTransactionDate(DateConversion
-															.getDate(fundDet
-																	.getTransactionDate()));
-                                                                                        ampFundDet.setContract(fundDet.getContract());
-
-
-											boolean useFixedRate = false;
-											if (fundDet.getTransactionType() == Constants.COMMITMENT) {
-												if (fundDet.isUseFixedRate() &&
-														fundDet.getFixedExchangeRate().doubleValue() > 0
-														&& fundDet.getFixedExchangeRate().doubleValue() != 1d) {
-													useFixedRate = true;
-												}
-											}
-
-											if (!useFixedRate) {
-												Double transAmt = new Double(FormatHelper.parseDouble(fundDet.getTransactionAmount()));
-												ampFundDet.setTransactionAmount(transAmt);
-												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-												ampFundDet.setFixedExchangeRate(null);
-											} else {
-												// Use the fixed exchange rate
-												double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
-
-												Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
-//												double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
-
-//												double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
-//												amt *= fundDet.getFixedExchangeRate();
-//												ampFundDet.setTransactionAmount(new Double(amt));
-												ampFundDet.setTransactionAmount(new Double(transAmt));
-												ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-//												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
-											}
-											ampFundDet.setAmpFundingId(ampFunding);
-
-											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
-												ampFundDet.setExpCategory(
-														fundDet.getClassification());
-											}
-											fundDeatils.add(ampFundDet);
-										}
-									}
-									ampFunding.setFundingDetails(fundDeatils);
-
-									this.saveMTEFProjections(fund, ampFunding);
-
-									fundings.add(ampFunding);
-								}
-							}
-						}
-					}
-				}
-				ActivityUtil.saveDonorFundingInfo(eaForm.getActivityId(),
-						fundings);
-			} else {
 				// MOFED add/edit
 
 				String toDelete = request.getParameter("delete");
@@ -905,7 +803,7 @@ public class SaveActivity extends Action {
 
 				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) { // funding
 																// organizations
-					AmpRole role = DbUtil.getAmpRole(Constants.DONOR);
+					AmpRole role = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
 					Iterator itr = eaForm.getFundingOrganizations().iterator();
 					while (itr.hasNext()) {
 						FundingOrganization fOrg = (FundingOrganization) itr
@@ -1576,7 +1474,7 @@ public class SaveActivity extends Action {
 					//for logging the activity
 					AuditLoggerUtil.logObject(session, request,activity,"add");
 				}
-			}
+			
 			//If we're adding an activity, create system/admin message
 			if(!eaForm.isEditAct()) {
 				AmpMessageWorker.createAmpMessageForActivityCreation(actId, tm.getTeamId());

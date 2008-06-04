@@ -78,7 +78,7 @@ function projectFiche(id)
 									name="urlCostsBreakdown" styleClass="comment"
 									title="${translation}">
 									<digi:trn key="aim:projectCosting">Project Costing</digi:trn>
-                                                                 </digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;<digi:trn key="aim:costingPerspective">Costing Perspective</digi:trn></logic:equal></SPAN>
+                                                                 </digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn></SPAN>
 								</TD>
 								<TD align="right">
 

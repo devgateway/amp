@@ -80,11 +80,7 @@ function projectFiche(id)
 													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
-													<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
-
-													<bean:define id="perspectiveNameTrimedLocal" name="aimRegionalFundingForm" property="perspectiveNameLocaly" type="java.lang.String"/>
-													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
-														<bean:write name="aimRegionalFundingForm" property="perspective"/></digi:trn> <digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal>
+													<digi:trn key="aim:actOverview">Overview</digi:trn>
 												</SPAN>
 											</TD>
 											<TD align="right">

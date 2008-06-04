@@ -2,9 +2,11 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
+import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletRequest;
+import org.digijava.module.aim.helper.PossibleValue;
 
 /**
  * 
@@ -25,10 +27,19 @@ public class CategoryManagerForm extends ActionForm {
 	private Integer numOfPossibleValues	= null;
 	private boolean isMultiselect	= false;
 	private boolean isOrdered		= false;
+        private List<PossibleValue> possibleVals;
 	/**
 	 * End - The properties below are used for adding a new category
 	 */
 	private Long editedCategoryId	= null;
+        
+        public List<PossibleValue> getPossibleVals() {
+            return possibleVals;
+        }
+
+        public void setPossibleVals(List<PossibleValue> possibleVals) {
+            this.possibleVals = possibleVals;
+        }
 	
 	public Integer getNumOfPossibleValues() {
 		return numOfPossibleValues;

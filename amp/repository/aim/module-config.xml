@@ -335,6 +335,10 @@
         <hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpClassificationConfiguration
 	</hibernate-class>
+        
+         <hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpCategoryValueLocations
+	</hibernate-class>
 
 	</hibernate-classes>
         <!-- highlights classes End-->

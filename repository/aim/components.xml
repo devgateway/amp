@@ -172,9 +172,11 @@
         <page name="addActivityStep13" title=" - Add Activity -IPA Contracting" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
+        <page name="newLocationManager" title=" - Region Manager" />
 <!--	<page name="locationManager" title=" - Location Manager" />
 	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Region Manager" /> -->
 	<page name="addLocation" title=" - Region Manager" />
+        <page page="addNewRegion" name="addNewLocation" title=" - Region Manager" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
 	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />

@@ -25,6 +25,7 @@
     <form-bean name="aimQuickLinkForm" type="org.digijava.module.aim.form.QuickLinkForm" />
     <form-bean name="aimMyDesktopForm" type="org.digijava.module.aim.form.MyDesktopForm" />
     <form-bean name="aimAddLocationForm" type="org.digijava.module.aim.form.AddLocationForm" />
+    <form-bean name="aimNewAddLocationForm" type="org.digijava.module.aim.form.NewAddLocationForm" />
     <form-bean name="aimFiscalCalendarForm" type="org.digijava.module.aim.form.FiscalCalendarForm" />
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
     <form-bean name="aimOrgManagerForm" type="org.digijava.module.aim.form.OrgManagerForm" />
@@ -482,6 +483,17 @@
     <action name="aimAddLocationForm" path="/aim/locationManager" scope="session" type="org.digijava.module.aim.action.LocationManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=locationManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+      <action name="aimNewAddLocationForm" path="/aim/newLocationManager" scope="session" type="org.digijava.module.aim.action.NewLocationManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=newLocationManager" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+     <action name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="false">
+      <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />
+    </action>
+    <action input="/showLayout.do?layout=addNewLocation" name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="true">
+      <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />
+      <forward name="added" path="/aim/newLocationManager.do" redirect="true" />
     </action>
     <action name="aimFiscalCalendarForm" path="/aim/fiscalCalendarManager" scope="request" type="org.digijava.module.aim.action.FiscalCalendarManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=fiscalCalendarManager" />
@@ -1481,7 +1493,7 @@
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>
-    <action name="aimCategoryManagerForm" path="/aim/categoryManager" scope="request" type="org.digijava.module.aim.action.CategoryManager" validate="false">
+    <action name="aimCategoryManagerForm" path="/aim/categoryManager" scope="session" type="org.digijava.module.aim.action.CategoryManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewCategoryManager" />
       <forward name="createOrEditCategory" path="/showLayout.do?layout=createOrEditCategory" />
     </action>

@@ -8,7 +8,7 @@
 <%@ page import="java.util.List"%>
 
 <digi:instance property="aimCategoryManagerForm" />
-<bean:define id="myForm" name="aimCategoryManagerForm" toScope="page" type="org.digijava.module.aim.form.CategoryManagerForm" />
+<bean:define id="myForm" name="aimCategoryManagerForm" toScope="session" type="org.digijava.module.aim.form.CategoryManagerForm" />
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" /> 
@@ -25,71 +25,70 @@
 	<digi:trn key="aim:categoryManagerMoreThan2Values">Category must have at least two possible values</digi:trn>
 </c:set>
 
+<c:set var="translation4">
+	<digi:trn key="aim:CategoryOnlyOneCountryValue">Category must have one country value</digi:trn>
+</c:set>
+
+<c:set var="translation5">
+	<digi:trn key="aim:CategoryOnlyOneRegionValue">Category must have one region value</digi:trn>
+</c:set>
 <script type="text/javascript">
-	var numOfAdditionalFields 	= 0;
-	var numOfPossibleValues		= <bean:write name="myForm" property="numOfPossibleValues"/>;
-	if (numOfPossibleValues == 0)
-		numOfPossibleValues = 3;
 	
-	function addNewValueField() {
-		var divValues		= document.getElementById('possibleValuesDiv');
-		var newInput		= document.createElement('input');
-		newInput.setAttribute('type','text');
-		newInput.setAttribute('value','');
-		newInput.setAttribute('name','possibleValues');
-		newInput.setAttribute('id','additionalField' + numOfAdditionalFields);
-		divValues.appendChild(newInput);
-		divValues.appendChild(document.createElement('br'));
-		divValues.appendChild(document.createElement('br'));
+	
+        
+      
+        function addNewValue() {
+          
+ 	document.forms[0].action="/categoryManager.do?addValue";
+ 	document.forms[0].submit();
 		
-		numOfAdditionalFields ++;
+		
 	}
-	function doSubmit() {
-		if (document.forms[0].categoryName.value.length == 0) {
-			alert ("${translation1}");
-			return;
-		}
-		if (document.forms[0].keyName.value.length == 0) {
-			alert ("${translation2}");
-			return;
-		} 
-		document.forms[1].categoryName.value	= document.forms[0].categoryName.value;
-		document.forms[1].keyName.value			= document.forms[0].keyName.value;
-		document.forms[1].description.value		= document.forms[0].description.value;
-		if (document.forms[0].isMultiselect.checked)
-			document.forms[1].isMultiselect.value	= "on";
-		else
-			document.forms[1].isMultiselect.value	= "off";
-		if (document.forms[0].isOrdered.checked)
-			document.forms[1].isOrdered.value	= "on";
-		else
-			document.forms[1].isOrdered.value	= "off";
-		numOfItemsCopied	= 0;
-		var numOfNotEmptyFields	= 0;
-		for (i=0; i<numOfPossibleValues; i++) {
-			var value	= "";
-			var field	= document.forms[0].possibleValues[i];
-			if (!field.disabled) {
-				value	= field.value;
+	
+    function doSubmit() {
+        if (document.forms[0].categoryName.value.length == 0) {
+            alert ("${translation1}");
+            return false;
+        }
+        if (document.forms[0].keyName.value.length == 0) {
+            alert ("${translation2}");
+            return false;
+        } 
+       var fieldTypes=document.aimCategoryManagerForm.getElementsByTagName("select");
+        var countryNum=0;
+        var regionNum=0;
+	if(fieldTypes!=null&&fieldTypes.length>0){
+		for (var i=0;i<fieldTypes.length;i++){
+			
+			if (fieldTypes[i].selectedIndex==1){
+				countryNum++;
+                                if(countryNum>1){
+                                    alert("${translation4}");
+                                    return false;
+                                }
 			}
-			document.forms[1].possibleValues[i].value	= value;
-			if (document.forms[1].possibleValues[i].value.length > 0)
-				 numOfNotEmptyFields++;
-			numOfItemsCopied ++;
+                        if (fieldTypes[i].selectedIndex==2){
+				regionNum++;
+                                if(regionNum>1){
+                                    alert("${translation5}");
+                                    return false;
+                                }
+			}
 		}
-		for (i=0; i<numOfAdditionalFields; i++){
-			document.forms[1].possibleValues[i+numOfItemsCopied].value	= document.getElementById('additionalField'+i).value;
-			if (document.forms[1].possibleValues[i+numOfItemsCopied].value.length > 0)
-				 numOfNotEmptyFields++;
-		}
-		if (numOfNotEmptyFields < 2) {
-			alert("${translation3}");
-			return;
-		}
-		document.forms[1].submit();
+                if(countryNum==0){
+                    alert("${translation4}");
+                    return false;
+                }
 	}
-	function deleteField(id, deleteId, undoId) {
+	
+	
+        
+        document.forms[0].submit();
+    }
+	function deleteField(id, deleteId, undoId,disabeledId) {
 		field						= document.getElementById(id) ;
+                disabled=document.getElementById(disabeledId) ;
+                disabled.value=true;
 		field.style.textDecoration	= "line-through";
 		field.disabled				= true;
 		
@@ -99,10 +98,12 @@
 		undo						= document.getElementById(undoId) ;
 		undo.style.display			= "inline";
 	}
-	function undeleteField(id, deleteId, undoId) {
+	function undeleteField(id, deleteId, undoId,disabeledId) {
 		field						= document.getElementById(id) ;
 		field.style.textDecoration	= "none";
 		field.disabled				= false;
+                disabled=document.getElementById(disabeledId) ;
+                disabled.value=false;
 		
 		del							= document.getElementById(deleteId) ;
 		del.style.display			= "inline";
@@ -209,39 +210,56 @@
 							Please enter possible <strong>values</strong>:
 					</digi:trn>
 					<br />
-					<% 
-						int max	= myForm.getNumOfPossibleValues().intValue();
-						if (max == 0)
-							max	= 3;
-						for (int i=0; i<max; i++) { 
-							String value	= "";
-							String deleteId	= "delete" + i;
-							String undoId	= "undo" + i;
-							String fieldId	= "field" + i;
-							if (myForm.getNumOfPossibleValues().intValue() > 0) 
-								value	= myForm.getPossibleValues()[i];
-					%>
-						<input type="text" name="possibleValues" value="<%=value %>" style="text-decoration:none" id="<%= fieldId %>" />
-						&nbsp; 
-						<span id="<%= deleteId %>" style="display:inline">
-						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('<%= fieldId %>', '<%= deleteId %>','<%= undoId %>')">
+                                         
+                                              <table>
+                                              <c:forEach var="possibleVals" items="${myForm.possibleVals}" varStatus="index">
+                                                  <tr>
+                                                      <td>
+                                                          <html:text name="possibleVals" property="value"  style="text-decoration:none" indexed="true" styleId="field${index.count}"/>
+                                                          <html:hidden name="possibleVals" property="disable"  indexed="true" styleId="disabled${index.count}"/>
+                                              </td>
+                                             
+                                               <c:if test="${myForm.keyName=='implementation_location'}">
+                                               <td>
+                                                   &nbsp;
+                                              </td>
+                                              <td>
+                                                  <digi:trn key="aim:CategoryManagerValueType">
+                                                       Value Type:
+                                                  </digi:trn>
+				
+                                                        <html:select name="possibleVals" property="fieldType" indexed="true">
+                                                            <html:option value="0"><digi:trn key="aim:CategoryManagerNone">None</digi:trn></html:option>
+                                                            <html:option value="1"><digi:trn key="aim:CategoryManagerCountry">Country</digi:trn></html:option>
+                                                            <html:option value="2"><digi:trn key="aim:CategoryManagerRegion">Region</digi:trn></html:option>
+                                                        </html:select>
+                                                </td> 
+                                                </c:if>
+                                                <td>
+                                                    <span id="delete${index.count}" style="display:inline">
+						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')">
 							<digi:trn key="aim:categoryManagerValueDelete">
 								Delete
 							</digi:trn>
 						</a>]
 						</span>
-						<span id="<%= undoId %>" style="display:none">
-						[<a style="cursor:pointer; text-decoration:underline; color:blue"  onclick="return undeleteField('<%= fieldId %>', '<%= deleteId %>', '<%= undoId %>')">
+						<span id="undo${index.count}" style="display:none">
+						[<a style="cursor:pointer; text-decoration:underline; color:blue"  onclick="return undeleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')">
 							<digi:trn key="aim:categoryManagerValueUndelete">
 								Undelete
 							</digi:trn>
 						</a>]
 						</span>
-						 <br /><br />
-					<%	} %>
+						
+                                                </td>
+                                                </tr>
+						</c:forEach>
+                                            </table>
+						
+                                                
  
 					</div>
-					<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return addNewValueField()">
+					<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return addNewValue()">
 						<digi:trn key="aim:categoryManagerAddAnotherValueField">
 							Add Another Field
 						</digi:trn>
@@ -259,27 +277,6 @@
 				</tr>
 </table>
 
-<div id="hiddenDiv" style="visibility:hidden"> 
-	<form action="/aim/categoryManager.do" method="post" id="hiddenForm">
-		<logic:notEmpty name="myForm" property="editedCategoryId">
-			<html:hidden property="editedCategoryId" />
-		</logic:notEmpty>
-		<input type="hidden" name="addNewCategory" value="yes" /> 
-		<input type="hidden" name="categoryName" />
-		<input type="hidden" name="keyName" />
-		<input type="hidden" name="description" />
-		<input type="hidden" name="isMultiselect" />
-		<input type="hidden" name="isOrdered" />
-		<% 
-		for (int j=0; j<100; j++) {
-				String hiddenInput	= "hiddenInput"+j;
-		%>
-		<input type="hidden" name="possibleValues" id="<%= hiddenInput %>">
-		<%
-		}
-		%>
-	</form>
-</div>
 
 
 

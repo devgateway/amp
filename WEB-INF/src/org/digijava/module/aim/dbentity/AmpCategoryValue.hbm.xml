@@ -13,7 +13,8 @@
 		
 		<many-to-one name="ampCategoryClass" column="amp_category_class_id" class="org.digijava.module.aim.dbentity.AmpCategoryClass" cascade="none"/>
 		<property name="index" column="index_column" type="int" update="true" insert="true" />
-		
+                <property name="fieldType" column="field_type" type="long"  />
+                
 		<set name="activities" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="true" cascade="none" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_categoryvalue_id" />

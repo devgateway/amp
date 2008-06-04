@@ -53,5 +53,9 @@ public class CategoryConstants {
         
         public static final String IPA_TYPE_NAME="IPA Type";
 	public static final String IPA_TYPE_KEY="ipa_type";
+        
+        public static final long NONE_TYPE=0;
+        public static final long COUNTRY_TYPE=1;
+        public static final long REGION_TYPE=2;
 }
 

@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.util.Identifiable;
 /**
  * Represents one of the possible values for a certain category
@@ -14,8 +15,30 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable 
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
 	private int index;
-	
-	private Set activities;
+        private Set activities;
+        private long fieldType;
+
+        public long getFieldType() {
+            return fieldType;
+        }
+
+        public void setFieldType(long fieldType) {
+            this.fieldType = fieldType;
+        }
+        
+        /*use for only category with category key "implementation_location" 
+         to show which field is used for country  */
+        
+       public boolean isCountry() {
+        boolean isCoutry = false;
+        if (fieldType == CategoryConstants.COUNTRY_TYPE) {
+            isCoutry = true;
+        }
+        return isCoutry;
+
+    }
+
+        
 	
 	public Set getActivities() {
 		return activities;

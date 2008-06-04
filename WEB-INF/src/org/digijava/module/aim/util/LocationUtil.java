@@ -1,13 +1,6 @@
 package org.digijava.module.aim.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARVRegions;
@@ -26,6 +19,7 @@ import java.sql.*;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
@@ -490,7 +484,7 @@ public class LocationUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select reg  from " +AmpRegion.class.getName()
-                                +" reg  inner join reg.country country where country.iso=:iso";
+                                +" reg  inner join reg.country country where country.iso=:iso order by reg.ampRegionId";
                        
 			q=session.createQuery(queryString);
                         q.setString("iso",  FeaturesUtil.getDefaultCountryIso());
@@ -692,6 +686,99 @@ public class LocationUtil {
 		} 
 		return col;
 	}
+         /**
+         * Returns list of locations using their ids
+         * @param ids consists  selected locations id separted by comma
+         * @return List of AmpCategoryValueLocations beans
+         * @throws DgException if anything goes wrong
+         */
+
+        public static List<AmpCategoryValueLocations> getAllLocations(String ids) throws DgException{
+		Session session = null;
+		 List<AmpCategoryValueLocations> col = null;
+
+		try {
+                    
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
+                        " vl where vl.parentLocation  is null " ;
+                        
+                         if(ids!=null&&ids.length()>0){
+                            String id=ids.substring(0, ids.length()-1);
+                            queryString+="  or vl.parentLocation  in ("+id+")";
+                        }
+
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.error("Unable to get locations from database "
+					+ e.getMessage());
+                        throw new DgException(e);
+		} 
+		return col;
+	}
+        
+         /**
+         * Returns location using its id
+         * @param id of location
+         * @return AmpCategoryValueLocations bean
+         * @throws DgException if anything goes wrong
+         */
+        
+         public static AmpCategoryValueLocations getAmpCategoryValueLocationById(Long id) throws DgException {
+		Session session = null;
+		 AmpCategoryValueLocations loc= null;
+
+		try {
+                    
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = " from " + AmpCategoryValueLocations.class.getName()+
+                        " vl where vl.id=:id" ;
+			Query qry = session.createQuery(queryString);
+                        qry.setLong("id", id);
+			loc = (AmpCategoryValueLocations)qry.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Unable to get location from database "
+					+ e.getMessage());
+                         throw new DgException(e);
+		} 
+		return loc;
+	}
+         
+         
+         /**
+         * Saves location into the database
+         * @param AmpCategoryValueLocations bean
+         */
+         
+       public static void saveLocation(AmpCategoryValueLocations loc) throws DgException{
+        Session session = null;
+        Transaction tx = null;
+
+
+        try {
+
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            session.saveOrUpdate(loc);
+            tx.commit();
+        } catch (Exception e) {
+
+            if (tx != null) {
+                try {
+                    tx.rollback();
+
+                } catch (HibernateException ex) {
+                     logger.error("Unable to rollback transaction  "
+					+ e.getMessage());
+                }
+            }
+            logger.error("Unable to save location into the database "
+					+ e.getMessage());
+             throw new DgException(e);
+        }
+
+    }
 	public static ArrayList getAmpLocationsForDefaultCountry() {
 		Session session = null;
 		Query q = null;

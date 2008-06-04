@@ -7,29 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-
-<html:javascript formName="aimUpdateWorkspaceForm"/>
-
-
-<digi:instance property="aimUpdateWorkspaceForm" />
-<digi:context name="digiContext" property="context" />
-
-<digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm"
-type="org.digijava.module.aim.form.UpdateWorkspaceForm"
-onsubmit="return validateAimUpdateWorkspaceForm(this);">
-
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
-
-function toggleGroup(group_id){
-	var strId='#'+group_id;
-	$(strId+'_minus').toggle();
-	$(strId+'_plus').toggle();
-	$(strId+'_dots').toggle();
-	$('#act_'+group_id).toggle('fast');
-}
-
 function addChildWorkspaces() {
 		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
 			if (document.aimUpdateWorkspaceForm.category.value == "-1") {
@@ -104,7 +84,6 @@ function chekingWorkspaceTypeAndCatValue(action){
 		var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
 		var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 		var msg='';
-		/*
 		if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
 			msg+="<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>";
 			alert(msg);
@@ -114,36 +93,12 @@ function chekingWorkspaceTypeAndCatValue(action){
 			alert(msg);
 			return false;
 		} else return true;
-		*/
-	}
-	return true;
-}
-
-function update1(action, tid){
-
-	if (action == "editreset"){
-		<digi:context name="update" property="context/module/moduleinstance/getWorkspace.do" />
-		//document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
-		//document.aimUpdateWorkspaceForm.target = "_self";
-		//document.aimUpdateWorkspaceForm.submit();
-		window.location="<%=update%>~dest=admin~event=edit~tId="+tid;
 	}
 	return true;
 }
 
 function update(action) {
-	if (action == "reset"){
-		<digi:context name="update" property="context/module/moduleinstance/createWorkspace.do" />
-		document.aimUpdateWorkspaceForm.action = "<%=update%>~dest=admin&event="+action;
-		document.aimUpdateWorkspaceForm.target = "_self";
-		//document.aimUpdateWorkspaceForm.submit();
-		window.location="<%=update%>?dest=admin&event="+action;
-	}
-	
-	//alert("comput: "+document.aimUpdateWorkspaceForm.computation.value);
-	//alert("addact: "+document.aimUpdateWorkspaceForm.addActivity.checked);
-	//alert("orgs: "+document.aimUpdateWorkspaceForm.organizations.value);
-	if(chekingWorkspaceTypeAndCatValue(action)==true){	
+	if(chekingWorkspaceTypeAndCatValue(action)==true){		
 		var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
 		var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 		if (event == "edit" && relFlag == "noedit") {
@@ -154,7 +109,6 @@ function update(action) {
 				return false;
 			}
 			else {
-			
 				document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
 				document.aimUpdateWorkspaceForm.addFlag.value = false;
 				<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
@@ -230,34 +184,7 @@ function update(action) {
 	}	
 }
   
-function workspaceChangeType(){
-	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
-		$("div[@id^='management_']").hide();
-		$("div[@id^='team_']").show('fast');
-		//document.aimUpdateWorkspaceForm.addActivity.checked = true;
-		if(document.aimUpdateWorkspaceForm.computation.checked == true)
-			$("div[@id^='computation_']").show('fast');
-		else $("div[@id^='computation_']").hide();
-	}
-
-	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
-		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
-		//document.aimUpdateWorkspaceForm.computation.checked = false;
-			$("div[@id^='team_']").hide();
-			$("div[@id^='management_']").show('fast');
-			$("div[@id^='computation_']").hide()
-	}
-
-}
- 
-function   computationChange(){
-	if(document.aimUpdateWorkspaceForm.computation.checked == true)
-		$("div[@id^='computation_']").show('fast');
-	else $("div[@id^='computation_']").hide();
-}
-  
 function relTeam() { 
-	
 	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
 	var index3  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
@@ -301,15 +228,19 @@ function cancel()
 -->
 </script>
 
+<html:javascript formName="aimUpdateWorkspaceForm"/>
 
+<digi:instance property="aimUpdateWorkspaceForm" />
+<digi:context name="digiContext" property="context" />
 
+<digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm"
+type="org.digijava.module.aim.form.UpdateWorkspaceForm"
+onsubmit="return validateAimUpdateWorkspaceForm(this);">
 
 <html:hidden property="teamId" />
 <html:hidden property="actionEvent" />
 <html:hidden property="id" />
 <html:hidden property="mainAction" />
-
-<html:hidden property="stepInWizard" value="1" />
 
 <html:hidden property="relatedTeamFlag" />
 <html:hidden property="addFlag" />
@@ -472,47 +403,7 @@ function cancel()
 													
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
-															<font color="red"><b>*</b></font>
-															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
-														</td>
-														<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-														<td align="left" bgcolor="#f4f4f2">
-															<html:select property="workspaceType" styleClass="inp-text" onchange="workspaceChangeType()">
-																<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
-																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
-																<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
-															</html:select>
-														</td>
-														</c:if>
-														<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
-														<td align="left" bgcolor="#f4f4f2">
-															<c:choose>
-																<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																	<c:choose>
-																		<c:when test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'noedit'}">
-																			<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceType" /></b>
-																		</c:when>
-																		<c:otherwise>
-																			<html:select property="workspaceType" styleClass="inp-text" onchange="workspaceChangeType()" >
-																				<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
-																				<html:option value="Management" ><digi:trn key="aim:management">Management</digi:trn></html:option>
-																				<html:option value="Team" ><digi:trn key="aim:team">Team</digi:trn></html:option>
-																			</html:select>
-																		</c:otherwise>
-																	</c:choose>
-																</c:when>
-																<c:otherwise>
-																	<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceType" /></b>
-																</c:otherwise>
-															</c:choose>
-														</td>
-														</c:if>
-													</tr>
-													
-													
-													<tr>
-														<td align="right" bgcolor="#f4f4f2">
-															<digi:trn key="aim:description">Description</digi:trn>
+															<digi:trn key="aim:description">Descriptions</digi:trn>
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
@@ -529,6 +420,50 @@ function cancel()
 															</logic:equal>
 														</td>
 													</tr>
+													<tr>
+														<td align="right" bgcolor="#f4f4f2">
+															<font color="red"><b>*</b></font>
+															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
+														</td>
+														<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
+														<td align="left" bgcolor="#f4f4f2">
+															<html:select property="workspaceType" styleClass="inp-text" onchange="relTeam()">
+																<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
+																<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
+																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
+																<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
+																<html:option value="Computed"><digi:trn key="aim:computedWorkspaceType">Computed</digi:trn></html:option>
+															</html:select>
+														</td>
+														</c:if>
+														<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
+														<td align="left" bgcolor="#f4f4f2">
+															<c:choose>
+																<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
+																	<c:choose>
+																		<c:when test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'noedit'}">
+																			<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceType" /></b>
+																		</c:when>
+																		<c:otherwise>
+																			<html:select property="workspaceType" styleClass="inp-text" onchange="relTeam()" >
+																				<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
+																				<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
+																				<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
+																				<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
+																				<html:option value="Computed"><digi:trn key="aim:computedWorkspaceType">Computed</digi:trn></html:option>
+																			</html:select>
+																		</c:otherwise>
+																	</c:choose>
+																</c:when>
+																<c:otherwise>
+																	<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceType" /></b>
+																</c:otherwise>
+															</c:choose>
+														</td>
+														</c:if>
+													</tr>
+													
+													
 													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
@@ -563,7 +498,6 @@ function cancel()
 															</tr>
 														</c:if>
 													</c:if>
-													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.category == 'DONOR' && aimUpdateWorkspaceForm.workspaceType == 'Donor'}">
 															<tr id="relTeamRow">
@@ -613,127 +547,90 @@ function cancel()
 													</c:if>
 													
 													
-															
-											
-													
-													<tr style="background: #f4f4f2">
-														<td colspan="4">
-															<div id="management_workspace" style="display: none;">
-																	<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																		<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
-																			<table>
-																			<tr>
-																				<td align="right" width="150" bgcolor="#f4f4f2">
-																					<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>
-																				</td>
-																				<td align="left" bgcolor="#f4f4f2">
-																					<c:set var="translation">
-																						<digi:trn key="btn:createWorkspaceAdd">
-																							Add
-																						</digi:trn>
-																					</c:set>
-																					<input type="button" value="${translation}" class="dr-menu" onclick="addChildWorkspaces()">
-																				</td>
-																			</tr>
-																			</table>
-																		</c:if>
-																	</c:if>
-																	<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
-																	
-																			<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
-																			class="box-border-nopadding">
-																			<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
-																				<tr>
-																					<td align="left">&nbsp;
-																						<c:out value="${workspaces.name}"/>
-																					</td>
-																					<td align="right" width="10">
-																						<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																						<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																					 	<digi:img src="module/cms/images/deleteIcon.gif"
-																						border="0" alt="Remove this child workspace"/></a>&nbsp;
-																						</c:if>
-																					</td>
-																				</tr>
-																			</c:forEach>
-																			</table>
-																		
-																	</c:if>
-															</div>
-														</td>
-													</tr>
-													
-													
-													<tr style="background: #f4f4f2">
-														<td colspan="4">
-															<div id="team_workspace" style="display: none;">
-															<table>
+													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
+															<tr>
+																<td align="right" width="150" bgcolor="#f4f4f2">
+																	<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
+																</td>
+																<td align="left" bgcolor="#f4f4f2">
+																	<c:set var="translation">
+																		<digi:trn key="btn:createWorkspaceAdd">
+																			Add
+																		</digi:trn>
+																	</c:set>
+																	<input type="button" value="${translation}" class="dr-menu" onclick="addChildOrgs()">
+																</td>
+															</tr>
+														</c:if>
+													</c:if>
+													<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
+													<tr>
+														<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+															class="box-border-nopadding">
+															<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
 																<tr>
-																	<td>
-																		<html:checkbox property="computation"  value="true" onchange="computationChange()">Computation</html:checkbox>
+																	<td align="left">&nbsp;
+																		<c:out value="${org.name}"/>
+																	</td>
+																	<td align="right" width="10">
+																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																		<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif"
+																		border="0" alt="Remove this linked org"/></a>&nbsp;
+																		</c:if>
 																	</td>
 																</tr>
+															</c:forEach>
 															</table>
-															</div>
 														</td>
 													</tr>
+													</c:if>
 													
-													<tr style="background: #f4f4f2">
-														<td colspan="4">
-															<div id="computation_addon" style="display: none;">
-																<table>
-																	<tr>
-																		<td>
-																			<html:checkbox property="addActivity" value="true">Add Activity</html:checkbox>
-																		</td>
-																	</tr>
-																	
-																</table>
-																<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																	<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
-																	<table>
-																		<tr>
-																			<td align="right" width="150" bgcolor="#f4f4f2">
-																				<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
-																			</td>
-																			<td align="left" bgcolor="#f4f4f2">
-																				<c:set var="translation">
-																					<digi:trn key="btn:createWorkspaceAdd">
-																						Add
-																					</digi:trn>
-																				</c:set>
-																				<input type="button" value="${translation}" class="dr-menu" onclick="addChildOrgs()">
-																			</td>
-																		</tr>
-																		</table>
-																	</c:if>
-																</c:if>
-																<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
-																
-																		<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
-																		class="box-border-nopadding">
-																		<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
-																			<tr>
-																				<td align="left">&nbsp;
-																					<c:out value="${org.name}"/>
-																				</td>
-																				<td align="right" width="10">
-																					<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																					<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
-																				 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Remove this linked org"/></a>&nbsp;
-																					</c:if>
-																				</td>
-																			</tr>
-																		</c:forEach>
-																		</table>
-																	</c:if>
-																
-															</div>
+													
+													
+													
+													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
+															<tr>
+																<td align="right" width="150" bgcolor="#f4f4f2">
+																	<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>
+																</td>
+																<td align="left" bgcolor="#f4f4f2">
+																	<c:set var="translation">
+																		<digi:trn key="btn:createWorkspaceAdd">
+																			Add
+																		</digi:trn>
+																	</c:set>
+																	<input type="button" value="${translation}" class="dr-menu" onclick="addChildWorkspaces()">
+																</td>
+															</tr>
+														</c:if>
+													</c:if>
+													<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
+													<tr>
+														<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+															class="box-border-nopadding">
+															<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
+																<tr>
+																	<td align="left">&nbsp;
+																		<c:out value="${workspaces.name}"/>
+																	</td>
+																	<td align="right" width="10">
+																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																		<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif"
+																		border="0" alt="Remove this child workspace"/></a>&nbsp;
+																		</c:if>
+																	</td>
+																</tr>
+															</c:forEach>
+															</table>
 														</td>
 													</tr>
-													
-													
-													
+													</c:if>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
@@ -760,12 +657,7 @@ function cancel()
 																				Reset
 																			</digi:trn>
 																		</c:set>
-																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<input type="button" value="${translation}" class="dr-menu" onclick="update1('editreset',${aimUpdateWorkspaceForm.teamId})"/>
-																		</c:if>
-																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-																			<input type="button" value="${translation}" class="dr-menu" onclick="update('reset')"/>
-																		</c:if>
+																		<input type="button" value="${translation}" class="dr-menu" onclick="update('reset')"/>
 																	</td>
 																	<td>
 																		<c:set var="translation">
@@ -823,8 +715,26 @@ function cancel()
 												</digi:link>
 											</td>
 										</tr>
-										
-										
+										<tr>
+											<td>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:link href="/roles.do">
+												<digi:trn key="aim:roles">
+												Roles
+												</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<digi:link href="/updateRole.do">
+												<digi:trn key="aim:addRole">
+												Add Roles
+												</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
@@ -850,7 +760,3 @@ function cancel()
 </td></tr>
 </table>
 </digi:form>
-<script language="JavaScript">
-	workspaceChangeType();
-	computationChange();
-</script>

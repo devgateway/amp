@@ -463,8 +463,8 @@ function selectOrganisation1() {
 		<td>
 		<tr><td colspan="2" align="center">
                          <field:display name="Contracting Add Disbursement" feature="Contracting">
-				<html:submit styleClass="buton" property="addFields"><digi:trn key="aim:IPA:popup:addDisbursement">Add Disbursement</digi:trn></html:submit>&nbsp;&nbsp;</field:display>
-				<field:display name="Delete Selected" feature="Contracting"><html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:IPA:popup:deleteSelected">Delete Selected</digi:trn></html:submit></field:display>				
+				<html:submit styleClass="dr-menu" property="addFields"><digi:trn key="aim:IPA:popup:addDisbursement">Add Disbursement</digi:trn></html:submit>&nbsp;&nbsp;</field:display>
+				<field:display name="Delete Selected" feature="Contracting"><html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:IPA:popup:deleteSelected">Delete Selected</digi:trn></html:submit></field:display>				
 		</td></tr>
 	
 	
@@ -474,12 +474,12 @@ function selectOrganisation1() {
 	<tr>
 		<td colspan="2" align="center">
                      <field:display name="Contracting Save Button" feature="Contracting">
-                         <html:submit styleClass="buton" property="save" onclick="return validate()"><digi:trn key="aim:addEditActivityOK">OK</digi:trn></html:submit>
+                         <html:submit styleClass="dr-menu" property="save" onclick="return validate()"><digi:trn key="aim:addEditActivityOK">OK</digi:trn></html:submit>
                  </field:display>
 		
 		&nbsp;&nbsp;
                   <field:display name="Contracting Cancel Saving" feature="Contracting">
-		<html:button styleClass="buton" property="cancel" onclick="window.close();">
+		<html:button styleClass="dr-menu" property="cancel" onclick="window.close();">
 		<digi:trn key="aim:addEditActivityCancel">Cancel</digi:trn>
 		</html:button>
                   </field:display>

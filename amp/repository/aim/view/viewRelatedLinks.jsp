@@ -318,7 +318,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 													<td align="center">
 
-														<html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
+														<html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
 
 													</td>
 

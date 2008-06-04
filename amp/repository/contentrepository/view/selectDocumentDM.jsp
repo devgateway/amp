@@ -42,7 +42,7 @@
 
 <br />
 <div id="otherDocumentsDiv">&nbsp;</div>
-<html:button  styleClass="buton" property="submitButton" onclick="saveSelectedDocuments()" >
+<html:button  styleClass="dr-menu" property="submitButton" onclick="saveSelectedDocuments()" >
 	<digi:trn key="btn:submitDocumentsFromRepository">Submit this</digi:trn>
 </html:button>
 <br /><br />

@@ -149,7 +149,7 @@ function sortSubmit(value){
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <input type="button" value="${trnGoBtn}" class="buton" onclick="submit()"/>
+                                          <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="submit()"/>
 										</td>
 									</tr>
 								</table>
@@ -168,7 +168,7 @@ function sortSubmit(value){
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:trnViewBtn"> View </digi:trn>
                                           </c:set>
-                                          <input type="button" value="${trnViewBtn}" class="buton" onclick="submit()"/>
+                                          <input type="button" value="${trnViewBtn}" class="dr-menu" onclick="submit()"/>
 										</td>
 									</tr>
 								</table>

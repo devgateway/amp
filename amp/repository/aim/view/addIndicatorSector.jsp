@@ -24,7 +24,7 @@
                                                   <c:if test="${empty aimNewIndicatorForm.activitySectors}">
                                                     <tr>
                                                       <td bgcolor="#ECF3FD">
-                                                        <input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                        <input type="button" class="dr-menu" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -72,11 +72,11 @@
                                                                 <tr>
                                                                   <logic:notEmpty name="MS" scope="application">
                                                                     <td>
-                                                                      <input type="button" value="<digi:trn key="admin:addsector">Add Sectors</digi:trn>" class="buton"  onclick="addSectors();">
+                                                                      <input type="button" value="<digi:trn key="admin:addsector">Add Sectors</digi:trn>" class="dr-menu"  onclick="addSectors();">
                                                                     </td>
                                                                   </logic:notEmpty>
                                                                   <td >
-																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+																	<input type="button" class="dr-menu" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
                                                                 </tr>
                                                               </table>

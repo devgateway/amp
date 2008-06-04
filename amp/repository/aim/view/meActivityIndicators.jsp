@@ -680,7 +680,7 @@
 
 																				<td colspan="4">
 
-																					<input type="submit" value="Save Values" class="buton"
+																					<input type="submit" value="Save Values" class="dr-menu"
 
 																					onclick="return validate()">
 
@@ -721,7 +721,7 @@
 																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
 
 																	
-																	<input class="buton" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator</digi:trn>"
+																	<input class="dr-menu" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator</digi:trn>"
 
 																	property="activityId"
 

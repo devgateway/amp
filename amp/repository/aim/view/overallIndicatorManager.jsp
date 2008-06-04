@@ -232,14 +232,14 @@
 																						<c:if test="${aimAllIndicatorForm.programId!=prgIndicators.programId or aimAllIndicatorForm.indicatorFlag==false}">
 																						
 																				<td align="right">
-																					<input class="buton" type="button"	name="showIndicator" value="<digi:trn key="aim:shoindicator">Show Indicators</digi:trn>" 
+																					<input class="dr-menu" type="button"	name="showIndicator" value="<digi:trn key="aim:shoindicator">Show Indicators</digi:trn>" 
 																							onclick="showIndicators('<bean:write name="prgIndicators" property="programId"/>')" />
 																				</td>
 																						</c:if>
 																						<c:if test="${aimAllIndicatorForm.programId==prgIndicators.programId and aimAllIndicatorForm.indicatorFlag==true}">
 																						
 																				<td align="right">
-																					<input class="buton" type="button"	name="hideIndicator" value="<digi:trn key="aim:hideind">Hide Indicators</digi:trn>" onclick="hideIndicators()"/>
+																					<input class="dr-menu" type="button"	name="hideIndicator" value="<digi:trn key="aim:hideind">Hide Indicators</digi:trn>" onclick="hideIndicators()"/>
 																				</td>
 																						</c:if>
 																			</tr>
@@ -266,7 +266,7 @@
 																													property="code" />
 																								</td>
 																								<td align="center" width="60">
-																									<input class="buton" type="button"
+																									<input class="dr-menu" type="button"
 																											name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																													onclick="assignIndicatorTo('<bean:write name="ampPrgIndicator" property="indicatorId"/>')" />
 																								</td>
@@ -353,7 +353,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -436,7 +436,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -519,7 +519,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -602,7 +602,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -685,7 +685,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -768,7 +768,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -851,7 +851,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -934,7 +934,7 @@
 																															<bean:write name="indi" property="indicatorId" />
 																														</c:set>
 																												<td align="center" width="105">
-																													<input class="buton" type="button"
+																													<input class="dr-menu" type="button"
 																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
@@ -1063,7 +1063,7 @@
 																								property="code" />
 																						</td>
 																						<td width="40">
-																							<input class="buton" type="button"
+																							<input class="dr-menu" type="button"
 																								name="editIndicator" value="<digi:trn key="aim:edit">Edit</digi:trn>"
 																								onclick="editProjIndicator('<bean:write name="allMEIndicators" property="ampMEIndId"/>')">
 																						</td>

@@ -29,7 +29,7 @@
 						<tr>							
 					 		<td  align="center">
 					 			<c:set var="trn"><digi:trn key="aim:btn:close">Close</digi:trn> </c:set>
-					 			<input type="button" class="buton" value="${trn}" onclick="closeWindow()"/>
+					 			<input type="button" class="dr-menu" value="${trn}" onclick="closeWindow()"/>
 					 		</td>					 		
 						</tr>
 					 

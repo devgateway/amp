@@ -28,7 +28,7 @@
 										<tr>
 											<td>
 												<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>
-												<html:button  styleClass="buton" property="submitButton" onclick="addDocumentsDM(&apos;${documentsType}&apos;)">
+												<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocumentsDM(&apos;${documentsType}&apos;)">
 														<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
 												</html:button>
 											</td>
@@ -45,7 +45,7 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<html:button  styleClass="buton" property="submitButton" onclick="addDocuments()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocuments()">
 																<digi:trn key="btn:addDocuments">Add Documents</digi:trn>
 														</html:button>
 

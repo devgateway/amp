@@ -313,14 +313,14 @@ function collapseAll() {
 									<tr>
 										<td>
 											<c:set var="tran"><digi:trn key="aim:previe:expandAll">Expand all</digi:trn> </c:set>
-											<input type="button" class="buton" onclick="javascript:expandAll()" value="${tran}"/>
+											<input type="button" class="dr-menu" onclick="javascript:expandAll()" value="${tran}"/>
 										</td>
 										<td>
 										<c:set var="tran"><digi:trn key="aim:previe:collapseAll">Collapse all</digi:trn> </c:set>
-										<input type="button" class="buton" onclick="javascript:collapseAll()" value="${tran}"/>
+										<input type="button" class="dr-menu" onclick="javascript:collapseAll()" value="${tran}"/>
 										</td>
 										<td height=16 vAlign=bottom align="right">
-												<input type="button" class="buton" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
+												<input type="button" class="dr-menu" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
 										</td>
 									</tr>
 								</table>
@@ -2350,7 +2350,7 @@ function collapseAll() {
 											 Activity updated on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.updatedDate}"/>
-											<html:button  styleClass="buton" property="submitButton" onclick="viewChanges()">
+											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewChanges()">
 												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
 											</html:button>										</td>
 									</tr>

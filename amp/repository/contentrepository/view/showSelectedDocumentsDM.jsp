@@ -38,7 +38,7 @@
 		<logic:notEmpty name="showRemoveButton" >
 			<logic:equal name="showRemoveButton" value="true">
 		&nbsp;&nbsp;&nbsp;&nbsp;
-			<html:button  styleClass="buton" property="submitButton" onclick="removeSelectedDocuments()">
+			<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelectedDocuments()">
 				<digi:trn key="btn:remove">Remove</digi:trn>
 			</html:button>
 			</logic:equal>

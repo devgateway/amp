@@ -59,12 +59,12 @@
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addManagedDocuments()">
 																	<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn>
 																</html:button>
 															</td>
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelManagedDocuments()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelManagedDocuments()">
 																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn>
 																</html:button>
 															</td>
@@ -78,7 +78,7 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addManagedDocuments()">
 																	<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn>
 														</html:button>
 													</td>

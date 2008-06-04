@@ -119,7 +119,7 @@
                                                                             &nbsp;
                                                                         </td>
                                                                         <td >&nbsp;&nbsp;
-                                                                        <html:submit  styleClass="buton" property="event" onclick="saveClicked()">
+                                                                        <html:submit  styleClass="dr-menu" property="event" onclick="saveClicked()">
                                                                             <digi:trn key="aim:SectorClassificationsConfiguration:Save">Save</digi:trn>
                                                                         </html:submit>
                                                                         <td>

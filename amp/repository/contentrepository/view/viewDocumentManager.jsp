@@ -353,7 +353,7 @@ div.fakefile2 input{
 					</div>
 					<br />
 				</logic:notEmpty>
-				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
+				<button type="button" class="dr-menu" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 	               <digi:trn key="contentrepository:addResource">
 	 	    	       Add Resource ...    				</digi:trn>            
                 </button>				</td>
@@ -513,7 +513,7 @@ div.fakefile2 input{
 					<br />
 				</logic:notEmpty>
 				<c:if test="${isTeamLeader}">
-					<button class="buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
+					<button class="dr-menu" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
                             	<digi:trn key="contentrepository:addResource">
 	 	    	       				Add Resource ...    							</digi:trn>            
 					</button>
@@ -526,7 +526,7 @@ div.fakefile2 input{
 			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 		</c:set>
 		<div id="otherDocumentsDiv"></div>
-		  <a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />
+		ï¿½ï¿½<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />
 			<digi:trn key="contentrepository:newWindow">New window</digi:trn>
 			</a>		
             <br />
@@ -627,10 +627,10 @@ div.fakefile2 input{
 			</tr>
 			<tr>
 				<td align="right">
-					<html:submit styleClass="buton" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
+					<html:submit styleClass="dr-menu" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 				</td>
 				<td align="left">
-					&nbsp;<button class="buton" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
+					&nbsp;<button class="dr-menu" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
 				</td>
 			</tr>
 		</table>

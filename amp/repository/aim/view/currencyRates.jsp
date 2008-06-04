@@ -309,7 +309,7 @@ function fnSubmit() {
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="buton"/>
+                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="dr-menu"/>
 										</td>
 									</tr>
 								</table>
@@ -327,7 +327,7 @@ function fnSubmit() {
                                           <c:set var="trnViewBtn">
                                             <digi:trn key="aim:viewBtn"> View </digi:trn>
                                           </c:set>
-                                          <html:submit value="${trnViewBtn}" styleClass="buton"/>
+                                          <html:submit value="${trnViewBtn}" styleClass="dr-menu"/>
 										</td>
 									</tr>
 								</table>
@@ -435,7 +435,7 @@ function fnSubmit() {
                                 <c:set var="trnDelBtn">
                                   <digi:trn key="aim:deleteSelectedRates">Delete Selected Rates</digi:trn>
                                 </c:set>
-                                <input type="button" value="${trnDelBtn}" class="buton" onclick="deleteRates()">
+                                <input type="button" value="${trnDelBtn}" class="dr-menu" onclick="deleteRates()">
                               </td>
                             </tr>
 							<c:if test="${!empty aimCurrencyRateForm.pages}">
@@ -522,7 +522,7 @@ function fnSubmit() {
 														<input type="file" name="file" size="50" class="dr-menu">
 													</td>
 													<td align="left">
-														<input type="button" value="Load" class="buton" onclick="selectFile()">
+														<input type="button" value="Load" class="dr-menu" onclick="selectFile()">
 													</td>
 												</tr>
 											</table>

@@ -45,14 +45,14 @@
 														<tr>
 															<td>
 																<field:display name="Sector Group Add Organizations Button" feature="Sector Group">
-																<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(8)">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(8)">
 																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 																</html:button>
 																</field:display>
 															</td>
 															<td>
 																<field:display name="Sector Group Remove Organizations Button" feature="Sector Group">															
-																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelOrgs(8)">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs(8)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
 																</field:display>
@@ -68,7 +68,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Sector Group Add Organizations Button" feature="Sector Group">
-														<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(8)">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(8)">
 																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 														</html:button>
 													</field:display>

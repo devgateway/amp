@@ -428,7 +428,7 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input class="buton" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>"
+									<input class="dr-menu" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>"
 								   onclick="addMTEFProjection()">
 								</td>
 							</tr>
@@ -596,12 +596,12 @@
 							<tr>
 								<%--
 								<td>
-									<input class="buton" type="button" name="xx1" value="Delete Commitments"
+									<input class="dr-menu" type="button" name="xx1" value="Delete Commitments"
 									onclick="this.form.event.value='delCommitments';addFundingDetail();">
 								</td> --%>
 								<field:display name="Add Commitment Button" feature="Funding Organizations">
 								<td>
-									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>"
+									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>"
 								   onclick="addFundingDetail(0)">
 								</td>
 								</field:display>
@@ -764,7 +764,7 @@
 
 								<td>
                                    <field:display name="Add Disbursement Order Button" feature="Disbursement Orders">
-									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>"
+									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>"
 								   onclick="addFundingDetail(4)">
                                    </field:display>
 								</td>
@@ -957,12 +957,12 @@
 							<tr>
 								<%--
 								<td>
-									<input class="buton" type="button" name="xx1" value="Delete Disbursements"
+									<input class="dr-menu" type="button" name="xx1" value="Delete Disbursements"
 								   onclick="this.form.event.value='delDisbursements';addFundingDetail();">
 								</td>--%>
 								<field:display name="Add Disbursement Button" feature="Funding Organizations">
 								<td>
-									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>"
+									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>"
 								   onclick="addFundingDetail(1)">
 								</td>
 								</field:display>
@@ -1101,7 +1101,7 @@
 							<tr>
 								<td>
 								<field:display name="Add Expenditure Button" feature="Expenditures">
-									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>"
+									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>"
 				   				onclick="addFundingDetail(2)">
 				   				</field:display>
 								</td>

@@ -632,7 +632,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                          <tr><td>
                                                               <field:display name="Add IPA Contract" feature="Contracting">
                                                          		<c:set var="trn"> <digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn></c:set>
-                                                                 <input type="button" value="${trn}" class="buton" onclick="addIPAContract()"/>
+                                                                 <input type="button" value="${trn}" class="dr-menu" onclick="addIPAContract()"/>
                                                              </field:display>
                                                          </td></tr>
 						</table>

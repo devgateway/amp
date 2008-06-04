@@ -187,7 +187,7 @@
                                                             <c:if test="${config.multisector||sectorAdded==false}">
                                                                 <field:display name="Add Sectors Button" feature="Sectors">
                                                                     <html:hidden name="aimEditActivityForm" property="editAct"/>
-                                                                    <html:button styleClass="buton"
+                                                                    <html:button styleClass="dr-menu"
                                                                                  property="submitButton" onclick="addSectors(${aimEditActivityForm.editAct},${config.id});">
                                                                         <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
                                                                     </html:button>
@@ -199,7 +199,7 @@
                                                         
                                                         <td>
                                                             <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
-                                                                <html:button styleClass="buton"
+                                                                <html:button styleClass="dr-menu"
                                                                              property="submitButton" onclick="return removeSelSectors(${config.id})">
                                                                     <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
                                                                 </html:button>

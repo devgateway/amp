@@ -455,7 +455,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             	<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
                                                             </c:set>
                                                            <field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost">
-                                                            <input type="button" value="${translation}" class="buton" onclick="addPropFunding()">
+                                                            <input type="button" value="${translation}" class="dr-menu" onclick="addPropFunding()">
                                                            </field:display>
                                                           </c:if>
 
@@ -464,13 +464,13 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             	<digi:trn key="btn:editFundings">Edit Funding</digi:trn>
                                                             </c:set>
                                                             <field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost">
-                                                            <input type="Button" value="${translation}" class="buton" onclick="addPropFunding()">
+                                                            <input type="Button" value="${translation}" class="dr-menu" onclick="addPropFunding()">
                                                             </field:display>
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:removeFundings">Remove Funding</digi:trn>
                                                             </c:set>
                                                             <field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost">
-	                                                            <input type="Button" value="${translation}" class="buton" onclick="delPropFunding()">
+	                                                            <input type="Button" value="${translation}" class="dr-menu" onclick="delPropFunding()">
 	                                                        </field:display>
                                                           </c:if>
                                                         </td>
@@ -521,7 +521,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
-																<html:button  styleClass="buton" property="submitButton" onclick="changeOrganisation(${fundingOrganization.ampOrgId})">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="changeOrganisation(${fundingOrganization.ampOrgId})">
 																		<digi:trn key="btn:changeOrganizations">Change Organizations</digi:trn>
 																</html:button>
                                                             </td>
@@ -927,7 +927,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<c:if test="${aimEditActivityForm.donorFlag == false}">
 																<tr>
 																	<td>
-																	<input type="button" class="buton" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
+																	<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
 																	</td>
 																</tr>
 																</c:if>
@@ -940,12 +940,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																			<tr>
 																				<td>
 
-																				   <html:button  styleClass="buton" property="submitButton" onclick="selectOrganisation()">
+																				   <html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
 																						<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 																					</html:button>
 																				</td>
 																				<td>
-																				   <html:button  styleClass="buton" property="submitButton" onclick="return removeSelOrganisations()">
+																				   <html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrganisations()">
 																						<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>
 																				   </html:button>
 																				</td>
@@ -959,7 +959,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<c:if test="${aimEditActivityForm.donorFlag == false}">
 																<tr>
 																	<td>
-																		<html:button  styleClass="buton" property="submitButton" onclick="selectOrganisation()">
+																		<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
 																				<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 																		</html:button>
 																	</td>

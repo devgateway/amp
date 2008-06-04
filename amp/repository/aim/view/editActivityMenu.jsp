@@ -746,7 +746,7 @@ function fnGetSurvey() {
 					<field:display name="Logframe Preview Button" feature="Logframe" >
 						<tr>
 							<td align="center">
-								<html:button  styleClass="buton" property="logframe" onclick="previewLogFrameClicked()">
+								<html:button  styleClass="dr-menu" property="logframe" onclick="previewLogFrameClicked()">
 									<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>
 								</html:button>
 							</td>
@@ -757,7 +757,7 @@ function fnGetSurvey() {
 					<field:display feature="Preview Activity" name="Preview Button">
 						<tr>
 							<td align="center">
-								<html:button  styleClass="buton" property="logframe" onclick="previewClicked()">
+								<html:button  styleClass="dr-menu" property="logframe" onclick="previewClicked()">
 									<digi:trn key="aim:preview">Preview</digi:trn>
 								</html:button>
 							</td>
@@ -766,14 +766,14 @@ function fnGetSurvey() {
 				</feature:display>			
 				<tr>
 					<td align="center">
-						<html:button  styleClass="buton" property="submitButton" onclick="saveClicked()">
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveClicked()">
 							<digi:trn key="aim:save">Save</digi:trn>
 						</html:button>
 					</td>
 				</tr>
 				<tr>
 					<td align="center">
-						<html:button  styleClass="buton" property="submitButton" onclick="saveAsDraftClicked()">
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
 							<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>
 						</html:button>
 					</td>

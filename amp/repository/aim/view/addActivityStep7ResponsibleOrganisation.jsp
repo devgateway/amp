@@ -47,14 +47,14 @@
 														<tr>
 															<td>
 																<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation">
-																<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(9)">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(9)">
 																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 																</html:button>
 																</field:display>
 															</td>
 															<td>
 																<field:display name="Responsible Organisation Remove Organizations Button" feature="Responsible Organisation">
-																<html:button  styleClass="buton" property="submitButton" onclick="removeSelOrgs(9)">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(9)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
 																</field:display>
@@ -72,7 +72,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 														<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation">
-														<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(9)">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(9)">
 																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 														</html:button>
 														</field:display>

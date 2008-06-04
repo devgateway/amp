@@ -604,6 +604,7 @@ A.sub-nav2:hover
 }
 .dr-menu 
 {
+	TEXT-DECORATION: none;
 	FONT-SIZE: 11px; 
 	COLOR: #313131
 }

@@ -75,7 +75,7 @@
 </td>
 </tr>
 <tr><td align="center">
-		<input type="button" class="buton" value="Close" onclick="window.close()"/>&nbsp;&nbsp;
-		<input type="button" class="buton" value="Print" onclick="window.print()"/>		
+		<input type="button" class="dr-menu" value="Close" onclick="window.close()"/>&nbsp;&nbsp;
+		<input type="button" class="dr-menu" value="Print" onclick="window.print()"/>		
 </td></tr>
 </table>

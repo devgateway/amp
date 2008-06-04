@@ -174,13 +174,13 @@ a.itr:hover {
                                     <c:set var="trngo">
                     					  <digi:trn key="aim:searchindbykey">Go</digi:trn>
                     				 </c:set>
-                                      <input type="submit" value="${trngo}" class="buton"/>
+                                      <input type="submit" value="${trngo}" class="dr-menu"/>
                                     </td>
                                     <td>
                                      <c:set var="trnviewall">
                     					  <digi:trn key="aim:viewallind">View All</digi:trn>
                     				 </c:set>
-                                      <input type="submit" value="${trnviewall}" onclick="viewall();" class="buton" />
+                                      <input type="submit" value="${trnviewall}" onclick="viewall();" class="dr-menu" />
                                     </td>
                                   </tr>
                                   <tr>

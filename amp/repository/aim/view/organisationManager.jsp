@@ -120,13 +120,13 @@
                     <c:set var="trnResetBtn">
                       <digi:trn key="aim:btnReset"> Reset </digi:trn>
                     </c:set>
-                    <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch()">
+                    <input type="button" value="${trnResetBtn}" class="dr-menu" onclick="return resetSearch()">
 					</td>
 					<td width="300">					
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
-                    <input type="button" value="${trnGoBtn}" class="buton" onclick="return searchOrganization()">
+                    <input type="button" value="${trnGoBtn}" class="dr-menu" onclick="return searchOrganization()">
 					</td>
 				</tr>
 				<tr>

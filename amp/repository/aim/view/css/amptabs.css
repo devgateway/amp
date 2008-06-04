@@ -1,0 +1,155 @@
+
+#main {
+	clear:both;
+	text-align: left;
+	border: 1px solid #666;
+	background: #ebebeb;
+	width: 100%;
+	height:27px;
+}
+
+html>body #main {
+	height:25px;
+}
+
+
+#tabs {
+	font-family: tahoma,verdana,sans-serif;
+	font-size: 8pt;
+	clear: both;
+	text-align: center;
+	font-weight: bold;
+}
+
+#tabs ul {
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#tabs li { 
+	 float: left;
+}
+
+
+
+#tabs a, #tabs span { 
+	font-size: 8pt;
+}
+
+#tabs ul li a { 
+	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	float:left;
+	margin:0pt 0px 0pt 0pt;
+	position:relative;
+	text-decoration:none;
+	top:0pt;
+
+}
+
+#tabs ul li a div { 
+	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
+	padding: 6px 10px 6px 10px;
+}
+
+#tabs ul li span a { 
+	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	float:left;
+	margin:0pt 0px 0pt 0pt;
+	position:relative;
+	text-decoration:none;
+	top:0pt;
+
+}
+
+#tabs ul li span a div { 
+	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
+	padding: 6px 10px 6px 10px;
+}
+
+#tabs a:hover {
+    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+}
+
+#tabs a:hover span {
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+}
+#tabs a:hover div {
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+}
+
+#tabs a.active {
+	position: relative;
+	top: 0;
+	margin: 0 2px 0 0;
+	float: left;
+	background: #FFF3B3;
+	padding: 6px 10px 6px 10px;
+	text-decoration: none;
+	color: #333;
+}
+
+#tabs a.active:hover {
+	position: relative;
+	top: 0;
+	margin: 0 2px 0 0;
+	float: left;
+	background: #FFF3B3;
+	padding: 6px 10px 6px 10px;
+	text-decoration: none;
+	color: #333;
+}
+
+
+#subtabs ul {
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#subtabs li {
+	float: left;
+	padding: 6px 4px 0px 0px;
+}
+
+#subtabs a, #subtabs span { 
+	font-size: 8pt; 
+}
+
+#subtabs a {
+	color:#000;
+}
+
+#subtabs ul li span {
+	position: relative;
+	top: 0;
+	margin: 0 0px 0 0;
+	background: #222e5d;
+	padding: 6px 4px 6px 10px;
+	text-decoration: none;
+	color: #fff;
+}
+
+#subtabs ul li div span {
+	position: relative;
+	top: 0;
+	margin: 0 0px 0 0;
+	background: #ebebeb;
+	padding: 6px 4px 6px 10px;
+	text-decoration: none;
+	color: #fff;
+}
+
+#subtabs {
+	clear: both;
+	text-align: center;
+	font-family: tahoma,verdana,sans-serif;
+	font-size: 8pt;
+	font-weight: bold;
+
+}
+

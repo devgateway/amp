@@ -541,7 +541,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
 				+ Util.toCSString(risks) + ")";
-		http: // pitzipoanca.org
+
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
 		if (ampTeams != null && ampTeams.size() > 0)

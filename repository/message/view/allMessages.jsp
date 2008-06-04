@@ -177,7 +177,7 @@ tr.my-border-style td {
 			if((messages==null || messages.length==0) && firstEntry==0){
 				var newTR=document.createElement('TR');
                                 var newTD=document.createElement('TD');
-                                newTD.innerText=noMsgs;
+                                newTD.innerHTML=noMsgs;
                                 newTD.colspan=4;
 				newTR.appendChild(newTD)
                                 var tableBody= tbl.getElementsByTagName("tbody");

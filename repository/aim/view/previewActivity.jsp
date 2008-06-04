@@ -238,10 +238,6 @@ function collapseAll() {
                                                                      
                                                                      
                                                                     
-                                                                       <c:if test="${aimEditActivityForm.donorFlag}">
-                                                                            <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
-                                                                        </c:if>
-                                                                        <c:if test="${!aimEditActivityForm.donorFlag}">
                                                                          <c:if test="${index.first}">
                                                                             
                                                                              <digi:link href=" ${link}" styleClass="comment" title="${trans}">
@@ -267,7 +263,7 @@ function collapseAll() {
                                                                              </digi:link>
                                                                              &nbsp;&gt;&nbsp;
                                                                          </c:if>
-                                                                         </c:if>
+                                                                         
                                                                      
                                                                  </c:forEach>
                                                                  
@@ -2397,14 +2393,8 @@ function collapseAll() {
 									<tr><td bgColor="#ffffff" align="center" colspan="2">
 										<table cellPadding=3>
 											<tr>
-												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
 													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>												</td>
-												</c:if>
-												<c:if test="${aimEditActivityForm.donorFlag == false}">
-												<td>
-													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>												</td>
-												</c:if>
 												<td>
 													<input type="button" class="dr-menu" onclick="disable()" value='<digi:trn key="btn:saveActivity">Save Activity</digi:trn>' name="submitButton"/>												</td>
 											</tr>

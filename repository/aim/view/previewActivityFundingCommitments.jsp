@@ -30,8 +30,6 @@
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
-				<c:if test="${aimEditActivityForm.donorFlag == false}">
-
 						<tr bgcolor="#ffffff">
 							<td height="18" width="40%" align="right" bgcolor="#ffffff"><field:display
 								name="Adjustment Type Commitment"
@@ -61,8 +59,6 @@
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display> &nbsp;</td>
 						</tr>
-
-				</c:if>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>
@@ -95,7 +91,6 @@
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
-				<c:if test="${aimEditActivityForm.donorFlag == false}">
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Commitment"
@@ -124,7 +119,6 @@
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display> &nbsp;</td>
 						</tr>
-				</c:if>
 			</logic:equal>
 		</logic:equal>
 	</logic:iterate>

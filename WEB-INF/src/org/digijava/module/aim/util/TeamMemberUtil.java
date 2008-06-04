@@ -470,7 +470,7 @@ public class TeamMemberUtil {
 				while (orgItr.hasNext()) {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
 					if(orgRole.getRole()!=null){
-						if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+						if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
 							if (donors.trim().length() > 0)
 								donors += ", ";
 							donors += orgRole.getOrganisation().getName();
@@ -1109,7 +1109,7 @@ public class TeamMemberUtil {
 
 				while (orgItr.hasNext()) {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+					if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
 						if (donors.trim().length() > 0)
 							donors += ", ";
 						donors += orgRole.getOrganisation().getName();
@@ -1168,7 +1168,7 @@ public class TeamMemberUtil {
 
 				while (orgItr.hasNext()) {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+					if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
 						if (donors.trim().length() > 0)
 							donors += ", ";
 						donors += orgRole.getOrganisation().getName();

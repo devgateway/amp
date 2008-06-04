@@ -329,6 +329,7 @@ public class DesktopUtil {
 				// Load activities for the team leader
 				AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
 
+				/*	AMP-3476
 				if (team.getTeamCategory() != null && team.getTeamCategory().
 						equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 					// Donor team
@@ -359,6 +360,7 @@ public class DesktopUtil {
 						}
 					}
 				} else {
+				*/
 					// Mofed team
 					
 					Collection temp = new ArrayList();
@@ -370,7 +372,7 @@ public class DesktopUtil {
 						temp.add(teamId);
 						projects = getActivities(temp,true,memberId);
 					}
-				}
+				//}
 			} else {
 				// Load the activities for the team member
 				AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);

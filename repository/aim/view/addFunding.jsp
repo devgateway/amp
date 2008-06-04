@@ -246,12 +246,9 @@
 									<c:set var="translation">
 										<digi:trn key="aim:addActivityTypeOfAssistenceFirstLine">Please select from below</digi:trn>
 									</c:set>
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-				                		<category:showoptions firstLine="${translation}" outerdisabled="true" name="aimEditActivityForm" property="assistanceType" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
-									</c:if>
-									<c:if test="${aimEditActivityForm.donorFlag == false}">
+
 										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
-									</c:if>
+
 								</td>
 							</tr>
 							<tr>
@@ -263,16 +260,13 @@
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-										<html:text property="orgFundingId" size="10" disabled="true"/>
-									</c:if>
-									<c:if test="${aimEditActivityForm.donorFlag == false}">
+
 										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation.
 										This item may be useful when one project has two or more different financial instruments.
 										If the project has a unique financial operation, the ID can be the same as the project ID
 										</digi:trn>">
 			   	             	<html:text property="orgFundingId" size="10"/>  </a>
-									</c:if>
+
 								</td>
 							</tr>
 							<tr>
@@ -287,14 +281,10 @@
 											value="ampModalityId" label="name" />
 										</html:select>
 									--%>
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-										<category:showoptions firstLine="${translation}" outerdisabled="${aimEditActivityForm.donorFlag}" name="aimEditActivityForm" property="modality"
-										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
-									</c:if>
-									<c:if test="${aimEditActivityForm.donorFlag == false}">
+
 										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="modality"
 										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
-									</c:if>
+
 								</td>
 							</tr>
 

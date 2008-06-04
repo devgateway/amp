@@ -39,9 +39,6 @@ public class AddFundingDetail extends Action {
 		event = formBean.getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 
-		String perspCode = null;
-		if (formBean.isDonorFlag()) perspCode = Constants.DONOR;
-		else perspCode = Constants.MOFED;
 
 		String currCode = Constants.DEFAULT_CURRENCY;
 		if (teamMember.getAppSettings() != null) {
@@ -58,7 +55,7 @@ public class AddFundingDetail extends Action {
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
 			if (formBean.getFundingDetails() == null) {
 				fundingDetails = new ArrayList();
-				fd = getFundingDetail(perspCode,currCode);
+				fd = getFundingDetail(currCode);
 				fundingDetails.add(fd);
 			} else {
 				fundingDetails = new ArrayList(formBean.getFundingDetails());
@@ -77,7 +74,7 @@ public class AddFundingDetail extends Action {
                                         }
 					fundingDetails.remove(temp);
 				} else {
-					fd = getFundingDetail(perspCode,currCode);
+					fd = getFundingDetail(currCode);
 					fundingDetails.add(fd);
 				}
 			}
@@ -116,7 +113,7 @@ public class AddFundingDetail extends Action {
 		return mapping.findForward("forward");
 	}
 
-	private FundingDetail getFundingDetail(String perspCode,String currCode) {
+	private FundingDetail getFundingDetail(String currCode) {
 		FundingDetail fundingDetail = new FundingDetail();
 
 		if (event.equalsIgnoreCase("addCommitments")) {

@@ -681,9 +681,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
-                                                                              <logic:iterate name="funding" property="fundingDetails" id="fundingDetail"                                                                              type="org.digijava.module.aim.helper.FundingDetail">
+                                                                              <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                                                                                 <logic:equal name="fundingDetail" property="transactionType" value="0">
-                                                                                  <c:if test="${aimEditActivityForm.donorFlag == false}">
+
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
                                                                                         <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
@@ -711,7 +711,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                         <td>
                                                                                         </td>
                                                                                       </tr>
-                                                                                  </c:if>
+
 
                                                                                 </logic:equal>
                                                                               </logic:iterate>
@@ -792,7 +792,6 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                               <c:if test="${!empty funding.fundingDetails}">
 	                                                                              <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		                                                                              <logic:equal name="fundingDetail" property="transactionType" value="1">		
-																								<c:if test="${aimEditActivityForm.donorFlag == false}">
 																									<tr bgcolor="#ffffff">
 																										<td width="50">
 																											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
@@ -826,7 +825,6 @@ ${fn:replace(message,quote,escapedQuote)}
 				                                                                                    		</field:display>
 																										</td>																							
 																									</tr>
-																								</c:if>
 																						</logic:equal>
 																					</logic:iterate>
                                                                                  </c:if>
@@ -846,7 +844,6 @@ ${fn:replace(message,quote,escapedQuote)}
 																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 																						<logic:equal name="fundingDetail" property="transactionType" value="2">																						
 
-																							<c:if test="${aimEditActivityForm.donorFlag == false}">
 																								<tr bgcolor="#ffffff">
 																									<td width="50">
 																									<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
@@ -878,8 +875,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																											<bean:write name="fundingDetail" property="classification"/>
 																										</field:display>
 																									</td>
-																								</tr>
-																							</c:if>																						
+																								</tr>																						
 																						</logic:equal>
 																						</logic:iterate>
                                                                                         </c:if>
@@ -889,7 +885,6 @@ ${fn:replace(message,quote,escapedQuote)}
 																		</table>
 
 																	</td></tr>
-																	<c:if test="${aimEditActivityForm.donorFlag == false}">
 																	<tr><td>
 																		<table border="0" cellpadding="8"
 																		bgcolor="#ffffff" cellspacing="1">
@@ -911,7 +906,6 @@ ${fn:replace(message,quote,escapedQuote)}
 																		</tr>
 																		</table>
 																	</td></tr>
-																	</c:if>
 
 																	<tr><td bgcolor="#ffffff">
 																		<FONT color=blue>*
@@ -924,16 +918,16 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</td></tr>
 																	</logic:iterate>
 																	</logic:notEmpty>
-																<c:if test="${aimEditActivityForm.donorFlag == false}">
+
 																<tr>
 																	<td>
 																	<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
 																	</td>
 																</tr>
-																</c:if>
+
 																</logic:iterate>
 																<tr><td>&nbsp;</td></tr>
-																<c:if test="${aimEditActivityForm.donorFlag == false}">
+
 																<tr>
 																	<td>
 																		<table cellSpacing=2 cellPadding=2>
@@ -953,10 +947,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																		</table>
 																	</td>
 																</tr>
-																</c:if>
+
 																</logic:notEmpty>
 																<logic:empty name="aimEditActivityForm" property="fundingOrganizations">
-																<c:if test="${aimEditActivityForm.donorFlag == false}">
+
 																<tr>
 																	<td>
 																		<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
@@ -964,7 +958,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																		</html:button>
 																	</td>
 																</tr>
-																</c:if>
+
 																</logic:empty>
 															</table>
 															</feature:display>
@@ -979,15 +973,6 @@ ${fn:replace(message,quote,escapedQuote)}
                                               <td bgColor=#f4f4f2 align="center">
                                                 <table cellPadding=3>
                                                   <tr>
-                                                    <c:if test="${aimEditActivityForm.donorFlag == true}">
-                                                      <td>
-
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
-															<digi:trn key="btn:preview">Preview</digi:trn>
-													</html:button>
-                                                      </td>
-                                                    </c:if>
-                                                    <c:if test="${aimEditActivityForm.donorFlag == false}">
                                                       <td>
 													<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(2)">
 															<< <digi:trn key="btn:back">Back</digi:trn>
@@ -1000,7 +985,6 @@ ${fn:replace(message,quote,escapedQuote)}
 													</html:submit>
 
                                                       </td>
-                                                    </c:if>
                                                     <td>
 													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
 														<digi:trn key="btn:reset">Reset</digi:trn>
@@ -1032,12 +1016,9 @@ ${fn:replace(message,quote,escapedQuote)}
 </td>
 						<td width="25%" vAlign="top" align="right">
 						  <!-- edit activity form menu -->
-						  <c:if test="${aimEditActivityForm.donorFlag == false}">
+
 						    <jsp:include page="editActivityMenu.jsp" flush="true" />
-						  </c:if>
-						  <c:if test="${aimEditActivityForm.donorFlag == true}">
-						    <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-						  </c:if>
+
 						  <!-- end of activity form menu -->
 						</td></tr>
                     </table>

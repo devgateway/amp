@@ -375,9 +375,9 @@
 		<table width="98%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff" >
 			<tr>
 				<td width="75%" align="center">
-					<html:button styleClass="buton" value="Close" onclick="return window.close()" property="closeButton"/>
+					<html:button styleClass="dr-menu" value="Close" onclick="return window.close()" property="closeButton"/>
 						&nbsp;&nbsp;&nbsp;
-					<html:button styleClass="buton" value="Print" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
+					<html:button styleClass="dr-menu" value="Print" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
 				</td>
 				<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
 					<digi:trn key="aim:preconditions">Preconditions</digi:trn>

@@ -303,7 +303,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	&nbsp;
 																	</td></tr>
 																	<tr><td>
-															<input type="button" value="Add Activity" class="buton" onclick="addEUActivity()"/>
+															<input type="button" value="Add Activity" class="dr-menu" onclick="addEUActivity()"/>
 
 																	</td></tr>
 

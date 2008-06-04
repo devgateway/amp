@@ -710,7 +710,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<input type="button" class="buton" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>"
+																<input type="button" class="dr-menu" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>"
 																onclick="setValues('${indicator.indicatorId}')">
 															</td>
 															<td>&nbsp;</td>

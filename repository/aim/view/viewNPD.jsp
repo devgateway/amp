@@ -1252,7 +1252,7 @@
 									<table>
 										<tr>
 											<td nowrap="nowrap">
-												<!-- input class="buton" type="button" onclick="openOptionsWindow()" name="addOrgs" value="Add Organization"/ -->
+												<!-- input class="dr-menu" type="button" onclick="openOptionsWindow()" name="addOrgs" value="Add Organization"/ -->
 												<a href="JavaScript:openOptionsWindow();">
 													<digi:trn key="aim:NPD:changeOptionsLink">Change Options</digi:trn>
 												</a>

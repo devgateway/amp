@@ -600,10 +600,10 @@
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<html:submit styleClass="buton"
+			<html:submit styleClass="dr-menu"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>
-			</html:submit>&nbsp; <html:button onclick="resetFilter();" styleClass="buton"
+			</html:submit>&nbsp; <html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 			</html:button> </td>

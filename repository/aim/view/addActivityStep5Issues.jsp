@@ -162,14 +162,14 @@
 														<tr>
 															<field:display name="Add Issues Button" feature="Issues">
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
 																		<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 																</html:button>
 															</td>
 															</field:display>
 															<field:display name="Remove Issues Button" feature="Issues">
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="removeIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeIssues()">
 																		<digi:trn key="btn:removeIssues">Remove Issues</digi:trn>
 																</html:button>
 															</td>
@@ -183,7 +183,7 @@
 											<field:display name="Add Issues Button" feature="Issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
-													<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
 															<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 													</html:button>
 

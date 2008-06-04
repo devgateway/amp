@@ -79,7 +79,7 @@
 								</logic:notEmpty>
 										<tr>
 											<td colspan="3" width="100%" align="center" height="20">
-												<input type="button" value="Close"  class="buton" onclick="window.close()">
+												<input type="button" value="Close"  class="dr-menu" onclick="window.close()">
 											</td>
 										</tr>
 									</table>

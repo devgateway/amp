@@ -304,7 +304,7 @@
 																</a>
 															</td>
 															<td>&nbsp;
-																<input type="button" class="buton" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('fdd')">
+																<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('fdd')">
 															</td>
 														</tr>
 													</table>
@@ -367,7 +367,7 @@
 																</a>
 															</td>
 															<td>&nbsp;
-																<input type="button" class="buton" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('ccd')">
+																<input type="button" class="dr-menu" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('ccd')">
 															</td>
 														</tr>
 													</table>

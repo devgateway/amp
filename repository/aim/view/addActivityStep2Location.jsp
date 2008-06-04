@@ -123,7 +123,7 @@
                                                   <field:display name="Add Location" feature="Location">
                                                     <tr>
                                                     <td bgcolor="#ffffff"><html:button
-														styleClass="buton" property="submitButton"
+														styleClass="dr-menu" property="submitButton"
 														onclick="selectLocation()">
 														<digi:trn key="btn:addLocation">Add Location</digi:trn>
 													</html:button></td>
@@ -175,7 +175,7 @@
                                                                 <tr>
                                                                 <field:display name="Add Location" feature="Location">
                                                                   <td>
-                                                                    <html:button styleClass="buton"
+                                                                    <html:button styleClass="dr-menu"
 																		property="submitButton"
 																		onclick="selectLocation()">
 																		<digi:trn key="btn:addLocation">Add Location</digi:trn>
@@ -184,7 +184,7 @@
                                                                   </field:display>
 																<field:display  name="Remove Location" feature="Location">
                                                                   <td>
-                                                                    <html:button styleClass="buton"
+                                                                    <html:button styleClass="dr-menu"
 																		property="submitButton"
 																		onclick="return removeSelLocations()">
 																		<digi:trn key="btn:removeLocation">Remove Location</digi:trn>

@@ -85,7 +85,7 @@
                                                     <tr>
                                                       <td bgcolor="#ffffff">
                                                   
-                                                        	<input type="button" class="buton" onclick="addComponente();" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' />
+                                                        	<input type="button" class="dr-menu" onclick="addComponente();" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' />
 
                                                       </td>
                                                     </tr>
@@ -145,13 +145,13 @@
 																<logic:equal name="aimEditActivityForm" property="multiSectorSelecting" value="On">
 																	<field:display name="Add Sectors Button" feature="Sectors">
     		                                                            <td>
-            		                                                       <input type="button" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' class="buton"  onclick="addComponente();">
+            		                                                       <input type="button" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' class="dr-menu"  onclick="addComponente();">
                     	                                                </td>
                                                                     </field:display>                                                          
 																</logic:equal>      
 																    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
                                                                   <td>
-																	<input type="button" class="buton" onclick="return removeSelComponentes()" value='<digi:trn key="btn:removeComponente">Remove Componente</digi:trn>' />
+																	<input type="button" class="dr-menu" onclick="return removeSelComponentes()" value='<digi:trn key="btn:removeComponente">Remove Componente</digi:trn>' />
                                                                   </td>
 	                                                                  </field:display>
 

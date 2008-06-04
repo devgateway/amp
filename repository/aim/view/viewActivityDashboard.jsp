@@ -274,12 +274,12 @@ method="post">
 								<div align="center">
                                                                      <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard">
 
-							<html:button  styleClass="buton" property="submitButton" 	onclick="javascript:showPrinterFriendly(${actId},'P')">
+							<html:button  styleClass="dr-menu" property="submitButton" 	onclick="javascript:showPrinterFriendly(${actId},'P')">
 								<digi:trn key="btn:printerFriendly">Printer Friendly</digi:trn>
 							</html:button>
                                                          </field:display>
                                                          <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard">
-							<html:button  styleClass="buton" property="submitButton" onclick="javascript:actPerfWithoutBaseline(${actId},'P')">
+							<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:actPerfWithoutBaseline(${actId},'P')">
 								<digi:trn key="btn:withoutBaseline">Without Baseline</digi:trn>
 							</html:button>
                                                          </field:display>

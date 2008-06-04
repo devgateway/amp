@@ -94,13 +94,13 @@
 			<td height="40" colspan="6" align="center"><html:hidden
 				property="ampReportId" /> 
 				
-			<html:submit styleClass="buton"  property="applyFormat">
+			<html:submit styleClass="dr-menu"  property="applyFormat">
 				<digi:trn key="rep:filer:ApplyFormat">Apply Format</digi:trn>
 			</html:submit>&nbsp; 
 			
 				<input type="hidden" name="apply" value="true">
 				<html:hidden property="resetFormat" value="false"/>
-				<html:button styleClass="buton" onclick="resetFormat.value=true;submit()" property="applyFormat">
+				<html:button styleClass="dr-menu" onclick="resetFormat.value=true;submit()" property="applyFormat">
 				<digi:trn key="rep:filer:ResetFormat">Reset</digi:trn>
 			</html:button></td>
 		</tr>

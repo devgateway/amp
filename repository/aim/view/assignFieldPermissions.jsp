@@ -83,8 +83,8 @@
 		</tr>			
 		<tr>
 			<td align="center" colspan="3">
-			<html:submit styleClass="buton" property="save"><digi:trn key="aim:gateperm:save">Save</digi:trn></html:submit>&nbsp;&nbsp;
-			<html:button property="cancel" styleClass="buton" onclick="javascript:window.close()"><digi:trn key="aim:gateperm:cancel">Cancel</digi:trn></html:button>
+			<html:submit styleClass="dr-menu" property="save"><digi:trn key="aim:gateperm:save">Save</digi:trn></html:submit>&nbsp;&nbsp;
+			<html:button property="cancel" styleClass="dr-menu" onclick="javascript:window.close()"><digi:trn key="aim:gateperm:cancel">Cancel</digi:trn></html:button>
 			</td>			
 		</tr>			
 	</table>

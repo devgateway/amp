@@ -122,7 +122,7 @@
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">
-						<html:submit styleClass="buton"	property="apply">
+						<html:submit styleClass="dr-menu"	property="apply">
 							<digi:trn key="btn:delete">Delete</digi:trn>
 						</html:submit>						
 					</td>

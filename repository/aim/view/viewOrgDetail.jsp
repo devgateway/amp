@@ -196,7 +196,7 @@
 																						&nbsp;
 																					</td>
 																					<td width="8%" align="left">
-																						<input type="button" value="Close" class="buton" onclick="window.close()">
+																						<input type="button" value="Close" class="dr-menu" onclick="window.close()">
 																					</td>
 																					<td width="45%" align="left">
 																						&nbsp;

@@ -456,8 +456,8 @@ function closeWindow() 
 				</logic:empty>
 				<tr>
 				<td align="center" colspan="6" bgcolor="white">
-				<input type="button" class="buton" onclick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
-				<input class="buton" type="button" name="addValBtn" value="<digi:trn key="aim:assignnewindicator">Assign New Indicator</digi:trn>" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
+				<input type="button" class="dr-menu" onclick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
+				<input class="dr-menu" type="button" name="addValBtn" value="<digi:trn key="aim:assignnewindicator">Assign New Indicator</digi:trn>" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
 				</td>
 				</tr>
 		</table>

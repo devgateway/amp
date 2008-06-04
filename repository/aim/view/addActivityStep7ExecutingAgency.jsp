@@ -46,14 +46,14 @@
 														<tr>
 															<td>
 																<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency">
-																<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(1)">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(1)">
 																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 																</html:button>
 																</field:display>
 															</td>
 															<td>
 																<field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency">
-																<html:button  styleClass="buton" property="submitButton" onclick="removeSelOrgs(1)">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(1)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
 																</field:display>
@@ -70,7 +70,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 														<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency">
-														<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(1)">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(1)">
 																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 														</html:button>
 														</field:display>

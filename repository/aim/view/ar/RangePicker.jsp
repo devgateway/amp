@@ -63,10 +63,10 @@
 		<tr>
 			<td height="40" colspan="5" align="center"><html:hidden
 				property="ampReportId" /> 
-			<html:submit styleClass="buton" onclick="return checkRangeValues()"
+			<html:submit styleClass="dr-menu" onclick="return checkRangeValues()"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyRanges">Apply Ranges</digi:trn>
-			</html:submit>&nbsp; <html:button onclick="rangeReset();" styleClass="buton"
+			</html:submit>&nbsp; <html:button onclick="rangeReset();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetRanges">Reset</digi:trn>
 			</html:button></td>

@@ -189,8 +189,8 @@ function selectOrganisation1() {
 						</logic:iterate>			
 		</table>
 		<tr><td colspan="2" align="center">
-				<html:submit styleClass="buton" property="addFields"><digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn></html:submit>&nbsp;&nbsp;
-				<html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
+				<html:submit styleClass="dr-menu" property="addFields"><digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn></html:submit>&nbsp;&nbsp;
+				<html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
 		</td></tr>
 	
 	
@@ -228,12 +228,12 @@ function selectOrganisation1() {
 
 	<tr>
 		<td colspan="2" align="center">
-		<html:submit styleClass="buton" property="save">
+		<html:submit styleClass="dr-menu" property="save">
 		 <digi:trn key="aim:addEditActivitySave">Save</digi:trn>
 		</html:submit>
 		
 		&nbsp;&nbsp;
-		<html:button styleClass="buton" property="cancel" onclick="window.close();">
+		<html:button styleClass="dr-menu" property="cancel" onclick="window.close();">
 		<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
 
 		</html:button>

@@ -339,13 +339,13 @@
 												<table cellSpacing=2 cellPadding=2>
 													<tr><td>
 														<field:display name="Add Components Button" feature="Components">
-														<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
 															<digi:trn key="btn:addComponents">Add Components</digi:trn>
 														</html:button>
 														</field:display>
 														 &nbsp;&nbsp;&nbsp;
 														 <field:display name="Remove Components Button" feature="Components">
-														<html:button  styleClass="buton" property="submitButton" onclick="removeSelComponents()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelComponents()">
 															<digi:trn key="btn:removeComponents">Remove Components</digi:trn>
 														</html:button>
 														</field:display>
@@ -359,7 +359,7 @@
 									<field:display name="Add Components Button" feature="Components">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 											<tr><td>
-												<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
+												<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
 														<digi:trn key="btn:addComponents">Add Components</digi:trn>
 												</html:button>
 											</td></tr>

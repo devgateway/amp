@@ -133,7 +133,7 @@
 													<tr bgColor=#dddddb>
 														<%-- Add Indicator Button --%>
 														<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
-															<input class="buton" type="button" name="addIndicator" value="Add a New Indicator"
+															<input class="dr-menu" type="button" name="addIndicator" value="Add a New Indicator"
 															onclick="addingIndicators()">
 														</td>
 													</tr>

@@ -24,7 +24,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 
-														<html:button  styleClass="buton" property="submitButton" onclick="addLinks()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addLinks()">
 															<digi:trn key="btn:addWebResources">Add Web Resources</digi:trn>
 														</html:button>
 

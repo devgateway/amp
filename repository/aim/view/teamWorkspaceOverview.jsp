@@ -274,7 +274,7 @@ function updateChild(action) {
 																<c:set var="translation">
 																	<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
 																</c:set>
-																<input type="button" value="${translation}" class="buton" onclick="addChildWorkspaces()">
+																<input type="button" value="${translation}" class="dr-menu" onclick="addChildWorkspaces()">
 															</td>
 														</tr>
 														<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">

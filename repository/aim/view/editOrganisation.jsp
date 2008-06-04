@@ -647,7 +647,7 @@ function loadPage()
 																				<c:if test="${empty aimAddOrgForm.sectors}">
 																					<tr>
 																						<td bgcolor="#ffffff"><input type="button"
-																							class="buton" onclick="addSectors();"
+																							class="dr-menu" onclick="addSectors();"
 																							value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
 																						</td>
 																					</tr>
@@ -701,13 +701,13 @@ function loadPage()
 																										<c:if test="<%=i<5 %>">
 																											<field:display name="Add Sectors Button"
 																												feature="Sectors">
-																												<td><input type="button" class="buton"
+																												<td><input type="button" class="dr-menu"
 																													onclick="addSectors();"
 																													value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
 																												</td>
 																											</field:display>
 																										</c:if>
-																										<td><input type="button" class="buton"
+																										<td><input type="button" class="dr-menu"
 																											onclick="return removeSelSectors()"
 																											value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
 																										</td>
@@ -807,7 +807,7 @@ function loadPage()
 																		</tr>
 																		<tr valign="baseline">
 																			<td colspan="1" width="10px"><input
-																				type="button" class="buton" onclick="addPledge();"
+																				type="button" class="dr-menu" onclick="addPledge();"
 																				value='<digi:trn key="btn:addPledge">Add Pledge</digi:trn>' />
 																			</td>
 																			<td colspan="5" align="right"><FONT color=blue>*
@@ -892,7 +892,7 @@ function loadPage()
 																	<td colspan="3" align="center"><c:set
 																		var="showTheFollowingDocuments" value="PUBLIC" /> <c:set
 																		var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
-																	<html:button styleClass="buton" property="submitButton"
+																	<html:button styleClass="dr-menu" property="submitButton"
 																		onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
 																		<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
 																	</html:button> <br />

@@ -153,10 +153,10 @@
 												<br>
 												<html:textarea name="aimEditActivityForm" property="commentText" styleId="commentText" cols="60" rows="3" />
 												<br>
-													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="buton" onClick="check()">
-													<input type="reset"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="buton">
-													<input type="button"  value="<digi:trn key='btn:back'>Back</digi:trn>"  class="buton" onclick="history.back(-1)">
-												<!--	<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>"  class="buton" onclick="window.close()"> -->
+													<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>"   class="dr-menu" onClick="check()">
+													<input type="reset"  value="<digi:trn key='btn:clear'>Clear</digi:trn>"  class="dr-menu">
+													<input type="button"  value="<digi:trn key='btn:back'>Back</digi:trn>"  class="dr-menu" onclick="history.back(-1)">
+												<!--	<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>"  class="dr-menu" onclick="window.close()"> -->
 											</td>
 										</tr>
 									</table>

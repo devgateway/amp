@@ -150,7 +150,7 @@ function banUser(txt) {
 	                Show
 	                </digi:trn>
 	              </c:set>
-	              <input type="submit" value="${translation}"  class="buton" style="font-family:verdana;font-size:11px;" />
+	              <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
             </td>
           </tr>
           <tr>

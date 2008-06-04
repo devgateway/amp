@@ -290,7 +290,7 @@ function unload() {
                 <c:if test="${aimNewAddLocationForm.event == 'edit'}">
                     
                     <digi:trn key="aim:AmpEditALocation">Edit</digi:trn>
-                    <c:out value="parentCatValName"/>
+                    <c:out value="${aimNewAddLocationForm.parentCatValName}"/>
                     
                 </c:if>
                 

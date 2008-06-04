@@ -176,7 +176,8 @@ tr.my-border-style td {
 			if((messages==null || messages.length==0) && firstEntry==0){
 				var newTR=document.createElement('TR');
 				newTR.innerHTML='<td colspan="4">'+noMsgs+'</td>';
-				tbl.appendChild(newTR);
+                                var tableBody= tbl.getElementsByTagName("tbody");
+                                tableBody[0].appendChild(myTR);
 				firstEntry++;
 				return;
 			}else{
@@ -217,8 +218,10 @@ tr.my-border-style td {
 						}
 						msgTr.height='20px';
 							
-						var myTR=createTableRow(tbl,msgTr,messages[i]);													
-						tbl.appendChild(myTR);	
+						var myTR=createTableRow(tbl,msgTr,messages[i]);
+                                                var tablBody= tbl.getElementsByTagName("tbody");
+                                                tablBody[0].appendChild(myTR);
+                        
 						myTR.className = 'my-border-style';													
 					}//end of for loop
 				}			
@@ -263,6 +266,8 @@ tr.my-border-style td {
 		descDiv.style.display='none';
 		//creating table inside hidden div
 			var divTable=document.createElement('TABLE');
+                        var divTblBody=document.createElement('TBODY');
+                        divTable.appendChild(divTblBody);
 			divTable.width='100%';
 				var fromTR=document.createElement('TR');
 					var fromTD1=document.createElement('TD');
@@ -273,7 +278,7 @@ tr.my-border-style td {
 					var msgSender=message.getAttribute('from');
 					fromTD2.innerHTML=msgSender;
 				fromTR.appendChild(fromTD2);
-			divTable.appendChild(fromTR);
+			divTblBody.appendChild(fromTR);
 				var receivedTR=document.createElement('TR');
 					var receivedTD1=document.createElement('TD');
 					receivedTD1.innerHTML='<strong>'+received+'</strong>';							
@@ -284,7 +289,7 @@ tr.my-border-style td {
 					var received=message.getAttribute('received');
 					receivedTD2.innerHTML=received;
 				receivedTR.appendChild(receivedTD2);
-			divTable.appendChild(receivedTR);						
+			divTblBody.appendChild(receivedTR);						
 				var priorityTR=document.createElement('TR');
 					var priorityTD1=document.createElement('TD');
 					priorityTD1.innerHTML='&nbsp;'+prLevel;
@@ -298,7 +303,7 @@ tr.my-border-style td {
 					else if(priority==3){priorityTD2.innerHTML='Critical';}
 					else if(priority==-1){priorityTD2.innerHTML='None';}
 				priorityTR.appendChild(priorityTD2);
-			divTable.appendChild(priorityTR);	
+			divTblBody.appendChild(priorityTR);	
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
 					detailsTD1.innerHTML='&nbsp;'+description;
@@ -309,7 +314,7 @@ tr.my-border-style td {
 					var description=message.getAttribute('msgDetails');
 					detailsTD2.innerHTML=description;
 				detailsTR.appendChild(detailsTD2);
-			divTable.appendChild(detailsTR);
+			divTblBody.appendChild(detailsTR);
 		descDiv.appendChild(divTable);	
 		nameTD.appendChild(descDiv);
 		msgTr.appendChild(nameTD);				

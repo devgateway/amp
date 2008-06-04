@@ -55,41 +55,44 @@
 			while (tbl.childNodes.length>0){
 				tbl.removeChild(tbl.childNodes[0]);
 			}
-		}		
+		}
+                        var body=document.createElement('TBODY');		
 			var tr1=document.createElement('TR');
 				var td1=document.createElement('TD');
 				td1.title=clickToViewMsg;
 				td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
 								'<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+msgsAmount+'New Messages</a>';
 			tr1.appendChild(td1);
-		tbl.appendChild(tr1);		
+                        body.appendChild(tr1);
+				
 			var tr1=document.createElement('TR');
 				var td1=document.createElement('TD');
 				td1.title=clickToViewMsg;
 				td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
 								'<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">'+alertsAmount+'New Alerts</a>';
 			tr1.appendChild(td1);
-		tbl.appendChild(tr1);	
+		body.appendChild(tr1);	
 			var tr1=document.createElement('TR');
 				var td1=document.createElement('TD');
 				td1.title=clickToViewMsg;
 				td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
 								'<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+'New Approvals</a>';
 			tr1.appendChild(td1);
-		tbl.appendChild(tr1);	
+		body.appendChild(tr1);
 			var tr1=document.createElement('TR');
 				var td1=document.createElement('TD');
 				td1.title=clickToViewMsg;
 				td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
 								'<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+'New Calendar Events</a>';
 			tr1.appendChild(td1);
-		tbl.appendChild(tr1);
+		body.appendChild(tr1);
 			var tr1=document.createElement('TR');
 				var td1=document.createElement('TD');
 				td1.title=moreMsgs;
 				td1.innerHTML='<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">...more</a>';
 			tr1.appendChild(td1);
-		tbl.appendChild(tr1);				
+                        body.appendChild(tr1);
+		tbl.appendChild(body);				
 		
 	}
 	

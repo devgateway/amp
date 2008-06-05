@@ -24,6 +24,34 @@ public class ColumnFilterGenerator {
 			.getLogger(ColumnFilterGenerator.class);
 
 	/**
+	 * Attaches hard coded filters for hard coded columns. The FUNDING columns
+	 * are hard coded, because they do not appear in amp_columns table,
+	 * therefore they cannot have persisted AmpColumnsFilters, thus the objects
+	 * will be created manually
+	 * 
+	 * @param c
+	 *            the object to which the hard coded filters will be attached
+	 */
+	public static void attachHardcodedFilters(AmpColumns c) {
+		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView())) {
+			// TODO: example here of how to add hardcoded filters for hardcoded
+			// FUNDING columns
+			// AmpColumnsFilters acf=new
+			// AmpColumnsFilters(c,"donorGroups","donor_group_id");
+			// c.getFilters().add(acf);
+		}
+		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
+			//TODO: add filters here
+		}
+		if (ArConstants.VIEW_COMPONENT_FUNDING.equals(c.getExtractorView())) {
+			//TODO: add filters here			
+		}
+		if (ArConstants.VIEW_REGIONAL_FUNDING.equals(c.getExtractorView())) {
+			//TODO: add filters here
+		}
+	}
+
+	/**
 	 * Helper method to create the sql clause for only one property of the
 	 * filter bean.
 	 * 
@@ -77,7 +105,8 @@ public class ColumnFilterGenerator {
 				try {
 					Object property = PropertyUtils.getSimpleProperty(f, cf
 							.getBeanFieldName());
-					if(property==null) continue;
+					if (property == null)
+						continue;
 					sb.append((exclusive ? " AND " : " OR ")
 							+ generatePropertyFilterSQLClause(property, cf
 									.getViewFieldName()));

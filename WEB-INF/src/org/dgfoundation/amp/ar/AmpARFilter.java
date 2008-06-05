@@ -32,7 +32,6 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;

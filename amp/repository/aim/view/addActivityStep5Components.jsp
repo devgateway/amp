@@ -114,9 +114,6 @@
 																					<field:display name="Components Total Amount Commitments" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
 																					<field:display name="Components Currency Commitments" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																					<field:display name="Components Date Commitments" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
-																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Components Perspective Commitments" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
-																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="commitments"
 																				id="commitment"
@@ -135,13 +132,6 @@
 																						<td>
 																							<c:out value="${commitment.transactionDate}"/>
 																						</td></field:display>
-																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																							<field:display name="Components Perspective Commitments" feature="Components">
-																								<td>
-																									
-																								</td>
-																							</field:display>
-																						</logic:equal>
 																					</tr>
 																				</logic:iterate>	<!-- L2 END-->
 																			</table>
@@ -165,9 +155,6 @@
 																					<field:display name="Components Total Amount Disbursements" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
 																					<field:display name="Components Currency Disbursements" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																					<field:display name="Components Date Disbursements" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
-																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Components Perspective Disbursements" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
-																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="disbursements"
 																				id="disbursement"
@@ -188,11 +175,6 @@
 																						<td>
 																							<c:out value="${disbursement.transactionDate}"/>
 																						</td></field:display>
-																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																							<field:display name="Components Perspective Disbursements" feature="Components">
-																							<td>
-																							</td></field:display>
-																						</logic:equal>
 																					</tr>
 																				</logic:iterate>
 																				<!-- L3 END-->
@@ -213,9 +195,6 @@
 																					<field:display name="Components Total Amount Expenditures" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
 																					<field:display name="Components Currency Expenditures" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																					<field:display name="Components Date Expenditures" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
-																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Components Perspective Expenditures" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
-																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="expenditures"
 																				id="expenditure"
@@ -238,11 +217,6 @@
 																					<td>
 																						<c:out value="${expenditure.transactionDate}"/>
 																					</td></field:display>
-																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Components Perspective Expenditures" feature="Components">
-																						<td>
-																						</td></field:display>
-																					</logic:equal>
 																				</tr>
 																			</logic:iterate>
 																			<!-- L4 END-->

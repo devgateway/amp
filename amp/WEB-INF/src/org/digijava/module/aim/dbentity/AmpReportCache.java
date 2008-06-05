@@ -31,7 +31,6 @@ public class AmpReportCache {
 		  private Date plannedCompletionDate;
 		  private Integer fiscalYear;
 		  private Integer fiscalQuarter;
-		  private String perspective;
 		  private Date transactionDate;
 		  private Long ampLevelId;
 		  private String levelName;
@@ -154,10 +153,6 @@ public class AmpReportCache {
 
 		public String getOrgType() {
 					 return orgType;
-		  }
-
-		  public String getPerspective() {
-					 return perspective;
 		  }
 
 		  public Long getAmpLevelId() {
@@ -303,10 +298,6 @@ public class AmpReportCache {
 
 		public void setOrgType(String orgType) {
 					 this.orgType = orgType;
-		  }
-
-		public void setPerspective(String perspective) {
-					 this.perspective = perspective;
 		  }
 
 		  public void setAmpLevelId(Long ampLevelId) {

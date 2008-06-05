@@ -33,7 +33,6 @@
 		<property name="plannedCompletionDate" column="planned_completion_date" type="java.util.Date" />
 		<property name="fiscalYear" column="fiscal_year"  type="java.lang.Integer"/>
 		<property name="fiscalQuarter" column="fiscal_quarter"  type="java.lang.Integer"/>
-		<property name="perspective" column="perspective"  type="java.lang.String"/>
 		<property name="ampTeamId" column="amp_team_id" type="java.lang.Long"/>
 		<property name="transactionDate" column="transaction_date" type="java.util.Date"/>
 		<property name="ampLevelId" column="amp_level_id" type="java.lang.Long"/>

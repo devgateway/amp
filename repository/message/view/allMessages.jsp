@@ -203,10 +203,10 @@ tr.my-border-style td {
 					firstEntry++;
 					return;
 				}else{
-					var tblBody=tbl.getElementsByTagName('tbody')[0];
-					while (tblBody.childNodes.length>0){
-						tblBody.removeChild(tblBody.childNodes[0]);
-					}
+					//var tblBody=tbl.getElementsByTagName('tbody')[0];
+					//while (tblBody.childNodes.length>0){
+					//	tblBody.removeChild(tblBody.childNodes[0]);
+					//}
 					if(myArray!=null && myArray.length>0){
 						var whereToInsertRow=1;						
 							for(var i=0;i<messages.length;i++){

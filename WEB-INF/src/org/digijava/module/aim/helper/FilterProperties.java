@@ -30,8 +30,6 @@ public class FilterProperties
 	private Long sectorId;
 	private String sectorName;
 
-	private String perspective;
-
 	private int fromYear;
 	private int toYear;
 	
@@ -86,19 +84,6 @@ public class FilterProperties
 	 */
 	public void setToYear(int toYear) {
 		this.toYear = toYear;
-	}
-	
-	/**
-	 * @return Returns the perspective.
-	 */
-	public String getPerspective() {
-		return perspective;
-	}
-	/**
-	 * @param perspective The perspective to set.
-	 */
-	public void setPerspective(String perspective) {
-		this.perspective = perspective;
 	}
 	/**
 	 * @return Returns the ampTeamId.

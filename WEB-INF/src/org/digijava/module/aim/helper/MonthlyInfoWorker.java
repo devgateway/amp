@@ -223,8 +223,6 @@ public class MonthlyInfoWorker {
      * Returns a collection of records from amp_funding_detail
      * based on below  
      * @param ampFundingId
-     * @param perspective
-     *                 orgRoleCode 'MA',DN','IA'
      * @param transactionType
      *                 commitment=0,disbursement=1,expenditure=2
      * @param adjustmentType

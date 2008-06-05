@@ -356,8 +356,10 @@ public class LuceneUtil {
 		if (componentcodes != null && componentcodes.size()>0){
 				
         		for (String value : componentcodes) {
+        			if (value!=null){
         			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.TOKENIZED));
         			all = all.concat(" " + value);
+        			}
         			i++;
         		}
 			

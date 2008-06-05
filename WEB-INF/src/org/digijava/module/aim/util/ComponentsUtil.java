@@ -36,6 +36,67 @@ public class ComponentsUtil {
         return col;
     }
 
+    
+
+    public static Collection<AmpComponent> getAmpComponentsByType(Long id) {
+        logger.debug(" starting to get all the components....");
+        Collection col = null;	
+        String queryString = null;
+        Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select distinct co from " + AmpComponent.class.getName() + " co where co.type.type_id=:id";
+            qry = session.createQuery(queryString);
+            qry.setLong("id", id);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get Components  from database " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return col;
+    }
+
+  
+    @SuppressWarnings("unchecked")
+	public static Collection<AmpComponentType> getAmpComponentTypes() {
+        Collection<AmpComponentType> col = null;
+        String queryString = null;
+        Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select co from " + AmpComponentType.class.getName() + " co ";
+            qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get AmpComponentType  from database " + ex.getMessage());
+        }
+        return col;
+    }
+    
+    public static AmpComponentType getComponentTypeById(Long id) {
+        Collection col = null;
+        String queryString = null;
+        Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select co from " + AmpComponentType.class.getName() + " co where co.type_id=:id";
+            qry = session.createQuery(queryString);
+            qry.setParameter("id", id, Hibernate.LONG);
+
+            col = qry.list();
+            if (col.size() > 0){
+            	return new ArrayList<AmpComponentType>(col).get(0);
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get Component for editing from database " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return null;
+    }
+    
     public static Collection getComponentForEditing(Long id) {
         Collection col = null;
         String queryString = null;
@@ -54,17 +115,86 @@ public class ComponentsUtil {
         }
         return col;
     }
+    
+    
 
     /*
      * update component details
      */
-    public static void updateComponents(AmpComponent ampComp) {
-        DbUtil.update(ampComp);
+    public static void updateComponentType(AmpComponentType type) {
+        DbUtil.update(type);
     }
 
     /*
      * add a new Component
      */
+    public static void addNewComponentType(AmpComponentType type) {
+        DbUtil.add(type);
+
+    }
+    
+    /*
+     * delete a Component
+     */
+    public static void deleteComponentType(Long compId) {
+
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+
+			// Now delete AmpComponent
+			AmpComponentType type = (AmpComponentType) session.load(AmpComponentType.class, compId);
+			session.delete(type);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Exception from deleteComponentType() : " + e);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception trbf) {
+					logger.error("Transaction roll back failed ");
+				}
+			}
+			e.printStackTrace();
+		}
+	}
+    
+    
+    /*
+	 * update component details
+	 */
+    public static void updateComponents(AmpComponent ampComp) {
+		Session session = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+			AmpComponent oldCompo=(AmpComponent) session.load(AmpComponent.class,ampComp.getAmpComponentId());
+
+			oldCompo.setCode(ampComp.getCode());
+			oldCompo.setDescription(ampComp.getDescription());
+			oldCompo.setTitle(ampComp.getTitle());
+			oldCompo.setType(ampComp.getType());
+			session.update(oldCompo);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Exception from deleteComponentType() : " + e);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception trbf) {
+					logger.error("Transaction roll back failed ");
+				}
+			}
+			e.printStackTrace();
+		}
+    }
+
+    /*
+	 * add a new Component
+	 */
     public static void addNewComponent(AmpComponent ampComp) {
         DbUtil.add(ampComp);
 

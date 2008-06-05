@@ -163,6 +163,9 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpWoreda
  		</hibernate-class>
+ 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpComponentType
+		</hibernate-class>
   		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpComponent
 		</hibernate-class>

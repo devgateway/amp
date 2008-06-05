@@ -1691,6 +1691,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			Components<FundingDetail> tempComp = new Components<FundingDetail>();
 			tempComp.setTitle(temp.getTitle());
 			tempComp.setComponentId(temp.getAmpComponentId());
+			tempComp.setType_Id((temp.getType()!=null)?temp.getType().getType_id():null);
 			if (temp.getDescription() == null) {
 				tempComp.setDescription(" ");
 			} else {

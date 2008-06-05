@@ -22,7 +22,9 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	private String description;
 
 	private String code;
-	private String type;
+	//private String type;
+	private AmpComponentType type;
+	
 	private Set activities;
 	private String Url;
 	
@@ -56,12 +58,14 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getType() {
+	
+	public AmpComponentType getType() {
 		return type;
 	}
-	public void setType(String type) {
+	public void setType(AmpComponentType type) {
 		this.type = type;
 	}
+	
 	public void setUrl(String url) {
 		Url = url;
 	}
@@ -71,6 +75,7 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	/**
 	 * A simple string comparison to sort components by title
 	 */
+	
 	public int compareTo(AmpComponent o) {
 		try {
 			if (this.title.compareToIgnoreCase(o.title) > 0) {
@@ -85,4 +90,18 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 		return -1;
 	}	
 	
+	@Override
+	public boolean equals(Object obj) {
+		AmpComponent target=(AmpComponent) obj;
+		if (target!=null && this.ampComponentId!=null){
+			return (target.getAmpComponentId().doubleValue()==this.getAmpComponentId().doubleValue());
+		}
+		return false;
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.ampComponentId.hashCode();
+	}
 }

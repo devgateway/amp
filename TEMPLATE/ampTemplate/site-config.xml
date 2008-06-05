@@ -493,6 +493,7 @@
 				<page>aim_addCompPopupLayout</page>
 				<page>aim_addComponents</page>
 				<page>aim_editComponents</page>
+				<page>aim_addComponentType</page>
 				<page>aim_addComponentIndicator</page>
 				<page>aim_reviseCloseDate</page>
 				<page>aim_addIssue</page>

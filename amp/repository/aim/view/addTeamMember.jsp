@@ -87,7 +87,7 @@ function clearForms()
 </td></tr>
 <tr><td>
 </c:if>
-<table width="100%" cellSpacing=1 cellPadding=4 align="center" onload="load()">
+<table cellSpacing=1 cellPadding=4 align="center" onload="load()">
 	<tr>
 		<td align="center" colspan="2" bgcolor="#eeeeee"><b>
 			<digi:trn key="aim:addTeamMembersFor">Add Members for</digi:trn>
@@ -143,7 +143,7 @@ function clearForms()
 		</td>
 	</tr>	
 	<tr>
-		<td colspan="2" align="left">
+		<td colspan="2" align="center">
 			<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
 			</B></FONT> are required.</digi:trn>			
 		</td>

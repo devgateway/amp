@@ -11,6 +11,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
@@ -164,13 +171,13 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 
 	<tr>
 
-		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left vAlign=top width=750>
 
 
 
@@ -226,11 +233,12 @@
 
 					<td noWrap width=571 vAlign="top">
 
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 
-							<tr bgColor=#3754a1>
+							<tr>
 
 								<td vAlign="top" width="100%">
+									<c:set var="selectedTab" value="6" scope="request"/>
 
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 
@@ -240,15 +248,10 @@
 
 							<tr bgColor=#f4f4f2>
 
-								<td>&nbsp;
-
-								</td>
-
-							</tr>
-
-							<tr bgColor=#f4f4f2>
-
 								<td valign="top">
+                                    <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+	                                    <div align="center">
+                                	
 
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">
 
@@ -258,41 +261,59 @@
 
 										</td></tr>
 
-										<tr bgColor=#f4f4f2>
+										<tr>
 
-											<td bgColor=#f4f4f2>
+											<td bgColor=#ffffff valign="top">
 
-												<table border="0" cellPadding=0 cellSpacing=0 width=237>
+												<table border=0 cellPadding=0 cellSpacing=0  width="100%">
 
-													<tr bgColor=#f4f4f2>
+													<tr>
 
-														<td bgColor=#c9c9c7 class=box-title width=220>
+														<td align="left" width="100%" valign="center">
 
-															<digi:trn key="aim:monitoringAndEvaluation">
-
-																Monitoring & Evaluation
+															<digi:trn key="aim:mandatoryFields">The fields marked <font color="red">*</font> are mandatory
 
 															</digi:trn>
 
 														</td>
 
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-
-														</td>
-
 													</tr>
-
-												</table>
-
-											</td>
-
-										</tr>
-
-										<tr>
-
-											<td bgColor=#ffffff class=box-border valign="top">
-
-												<table border=0 cellPadding=0 cellSpacing=1 class=box-border-nopadding width="100%">
+                                                    <tr><td>
+                                                
+                                                        <table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
+                                                
+                                                            <tr bgcolor="#ffffff">
+                                                
+                                                                <td width="9">
+                                                
+                                                                    <img src= "../ampTemplate/images/bullet_red.gif" border=0>
+                                                
+                                                                </td>
+                                                
+                                                                <td width="100">
+                                                
+                                                                    <digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
+                                                
+                                                                </td>
+                                                
+                                                                <td width="9">
+                                                
+                                                                    <img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+                                                
+                                                                </td>
+                                                
+                                                                <td>
+                                                
+                                                                    <digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
+                                                
+                                                                </td>
+                                                
+                                                            </tr>
+                                                
+                                                        </table>
+                                                	<br />
+                                                    </td>
+                                                    </tr>
 
 													<tr>
 
@@ -302,7 +323,7 @@
 
 															bgcolor="#ffffff">
 
-																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
+																<tr><td valign="center" align="center" bgcolor="#999999" height="20" style="color:black;">
 
 																	<b><digi:trn key="aim:meIndicators">Indicators</digi:trn></b>
 
@@ -564,9 +585,9 @@
 
 																				</td>
 
-																				<td align="left" vAlign="center">
+																				<td align="left" vAlign="center">&nbsp;
 
-																					&nbsp;
+																					
 
 																				</td>
 
@@ -735,18 +756,6 @@
 
 													</tr>
 
-													<tr>
-
-														<td align="left" width="100%" valign="center">
-
-															<digi:trn key="aim:mandatoryFields">The fields marked <font color="red">*</font> are mandatory
-
-															</digi:trn>
-
-														</td>
-
-													</tr>
-
 												</table>
 
 											</td>
@@ -755,13 +764,15 @@
 
 									</table>
 
+	                                    </div>
+                                    </div>
 								</td>
 
 							</tr>
 
-							<tr><td bgColor=#f4f4f2>
+							<tr><td bgColor=#f4f4f2>&nbsp;
 
-								&nbsp;
+								
 
 							</td></tr>
 
@@ -771,41 +782,6 @@
 
 				</tr>
 
-	<tr><td>
-
-		<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
-
-			<tr bgcolor="#ffffff">
-
-				<td width="9">
-
-					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
-
-				</td>
-
-				<td width="100">
-
-					<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
-
-				</td>
-
-				<td width="9">
-
-					<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
-
-				</td>
-
-				<td>
-
-					<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
-
-				</td>
-
-			</tr>
-
-		</table>
-
-	</td></tr>
 
 			</table>
 

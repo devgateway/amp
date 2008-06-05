@@ -244,7 +244,11 @@ function setHoveredTable(tableId, hasHeaders) {
 													</tr>
 													<tr>
 														<td align="center" bgcolor=#ffffff>
-                                                        <br />
+                                                          <a style="cursor:pointer;" onclick="window.scrollTo(0,0); return false"><digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span></a>
+														</td>
+													</tr>
+													<tr>
+														<td align="center" bgcolor=#ffffff>
 															<table cellspacing="5">
 																<tr>
 																	<td>

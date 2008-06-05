@@ -347,40 +347,41 @@ function setHoveredTable(tableId, hasHeaders) {
 												</table>
 
 											</td>
-
 										</tr>
+                                        <tr>
+	                                        <td>
+                                        		<table style="float:left;" >
 
-										<logic:notEmpty name="aimTeamActivitiesForm" property="pages">
-
-											<tr>
-
-												<td>
-
-														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
-													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
-														<% if (currPage.equals(pages)) { %>
-																<%=pages%>
-														<%	} else { %>
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-															</c:set>
-															<c:set target="${urlParams1}" property="page">
-																<%=pages%>
-															</c:set>
-															<digi:link href="/getTeamActivities.do" name="urlParams1">
-																<%=pages%>
-                                                            </digi:link>
-														<% } %>
-														|
-														</logic:iterate>
-												</td>
-
-											</tr>
-
-										</logic:notEmpty>											
-
-									</table>
-
+                                                    <logic:notEmpty name="aimTeamActivitiesForm" property="pages">
+                                                        <tr>
+                                                            <td>
+                                                                    <logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
+                                                                    <bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
+                                                                    <% if (currPage.equals(pages)) { %>
+                                                                            <%=pages%>
+                                                                    <%	} else { %>
+                                                                        <c:set var="translation">
+                                                                            <digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+                                                                        </c:set>
+                                                                        <c:set target="${urlParams1}" property="page">
+                                                                            <%=pages%>
+                                                                        </c:set>
+                                                                        <digi:link href="/getTeamActivities.do" name="urlParams1">
+                                                                            <%=pages%>
+                                                                        </digi:link>
+                                                                    <% } %>
+                                                                    |
+                                                                    </logic:iterate>
+                                                            </td>
+                                                        </tr>
+                                                    </logic:notEmpty>											
+												</table>
+												<a style="float:right;cursor:pointer;" onclick="window.scrollTo(0,0); return false">
+                                                <digi:trn key="aim:backtotop">Back to Top</digi:trn> <span style="font-size: 10pt; font-family: Tahoma;">&uarr;</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
 									</div>
                                     </div>
 								</td>

@@ -19,6 +19,8 @@ tr.my-border-style td {
 <digi:instance property="messageForm"/>
 <digi:form action="/messageActions.do">
 <html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
+<html:hidden name="messageForm" property="tabIndex"/>
+<html:hidden name="messageForm" property="childTab"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -194,12 +196,17 @@ tr.my-border-style td {
                                 var newTD=document.createElement('TD');
                                 newTD.innerHTML=noMsgs;
                                 newTD.colspan=4;
-				newTR.appendChild(newTD)
-                                var tableBody= tbl.getElementsByTagName("tbody");
-                                tableBody[0].appendChild(newTR);
+					newTR.appendChild(newTD);
+					newTR.id="noMsg";
+                    var tableBody= tbl.getElementsByTagName("tbody");
+                    tableBody[0].appendChild(newTR);
 					firstEntry++;
 					return;
 				}else{
+					var tblBody=tbl.getElementsByTagName('tbody')[0];
+					while (tblBody.childNodes.length>0){
+						tblBody.removeChild(tblBody.childNodes[0]);
+					}
 					if(myArray!=null && myArray.length>0){
 						var whereToInsertRow=1;						
 							for(var i=0;i<messages.length;i++){

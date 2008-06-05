@@ -84,8 +84,8 @@ function selectProgram(){
     </c:if>
     <c:if test="${empty aimNewIndicatorForm.programsCol}">
       <tr align="center">
-        <td>
-        No programs
+        <td>  
+        <digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn>
         </td>
       </tr>
     </c:if>

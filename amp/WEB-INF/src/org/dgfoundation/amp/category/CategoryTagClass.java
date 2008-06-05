@@ -16,6 +16,10 @@ import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
@@ -189,8 +193,24 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				firstLineSelectedProperty	= "selected='selected'";
 		
 		if ( !isMultiselect ) {
-			if ( fLine == null )
-				fLine	= "Please select from below";
+			if ( fLine == null ) {
+				 String pleaseSelectBelow = "aim:pleaseSelectBelow";
+				 Site site = RequestUtils.getSite(request);
+				 //
+				 //requirements for translation purposes
+				 TranslatorWorker translator = TranslatorWorker.getInstance();
+				 String siteId = site.getSiteId();
+				 String locale = RequestUtils.getNavigationLanguage(request).getCode();
+				 String translatedText = null;
+				 try {
+						logger.info("siteID : "+siteId);
+						logger.info("locale : "+locale);
+						translatedText = TranslatorWorker.translate(pleaseSelectBelow, locale, siteId);
+					 } catch (WorkerException e) {
+						e.printStackTrace();
+					 }
+				fLine	= translatedText;
+			}
 			out.println("<option value='0' "+firstLineSelectedProperty+" >"+fLine+"</option>");
 		}
 		else {

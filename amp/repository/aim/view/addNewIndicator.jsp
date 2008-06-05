@@ -13,10 +13,13 @@
 
 function validate(field) {
 //    alert(field);
+	<c:set var="translation">
+		<digi:trn key="admin:chooseSectorToRemove">Please choose a sector to remove</digi:trn>
+	</c:set>
 	if (field == 2) { // validate sector
 		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
 			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {
-				alert("Please choose a sector to remove");
+				alert("${translation}");
 				return false;
 			}
 		} else {
@@ -30,7 +33,7 @@ function validate(field) {
 			}
 
 			if (flag == 0) {
-				alert("Please choose a sector to remove");
+				alert("${translation}");
 				return false;
 			}
 		}
@@ -40,14 +43,20 @@ function validate(field) {
 
 
 function addNewIndicator(){
-	
+		
  if(document.getElementById("txtName").value==""){
-    alert("Please enter name");
+    <c:set var="translation">
+		<digi:trn key="admin:enterName">Please enter name</digi:trn>
+	</c:set>
+	alert("${translation}");
     return false;
   }
 
   if(document.getElementById("txtCode").value==""){
-    alert("Please enter code");
+    <c:set var="translation">
+		<digi:trn key="admin:enterCode">Please enter code</digi:trn>
+	</c:set>
+	alert("${translation}");
     return false;
   }
 <%-- 
@@ -72,8 +81,11 @@ function addNewIndicator(){
 		var Sector;
 		
 		if(!length){
-			alert("Please add Sectors");
-			 return false;
+			<c:set var="translation">
+				<digi:trn key="admin:addSector">Please add Sectors</digi:trn>
+			</c:set>
+			alert("${translation}");
+			return false;
 		}else{
 			for(i = 0; i<length; i++){
 				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
@@ -130,7 +142,10 @@ function closeWindow() {
 		window.close();
 	}
 	function removeActivity(id) {
-	var temp = confirm("Do you want to delete this Activity?");
+	<c:set var="translation">
+		<digi:trn key="admin:deleteThisActivity">Do you want to delete this Activity?</digi:trn>
+	</c:set>
+	var temp = confirm("${translation}");
 	if(temp == false)
 	{
 			return false;

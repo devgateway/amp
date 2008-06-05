@@ -79,8 +79,11 @@ a.itr:hover {
 	  openURLinWindow("<%= viewEditIndicator %>?id="+id,500, 300);
 	}
 	
-	function deletePrgIndicator(){
-					return confirm("Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.");
+	function deletePrgIndicator(){  
+		<c:set var="translation"> 
+			<digi:trn key="aim:doYouWantToDelIndicatorCheckProgramFirst">Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.</digi:trn>
+		</c:set>
+					return confirm("${translation}");
 			}
 			
 	

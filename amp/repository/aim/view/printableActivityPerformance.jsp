@@ -42,11 +42,11 @@
 	<tr>
 		<td width="50%" align="right">
 			<a href="javascript:window.close()">
-			Close this Window</a> |
+			<digi:trn key="um:closeThisWindow">Close this window</digi:trn></a> |
 		</td>
 		<td width="50%" align="left">
 			<a href="javascript:window.print()">
-			Print</a>
+			<digi:trn key="aim:print">Print</digi:trn></a>
 		</td>
 	</tr>	
 	

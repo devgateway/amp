@@ -37,11 +37,11 @@ function validate() {
 
 function cancel()
 {
-	// alert("aaa");
-	//alert(document.aimTeamMemberForm.email.value);
-//	document.aimTeamMemberForm.email.value="";
-	//alert(document.aimTeamMemberForm.email.value)
-	document.aimTeamMemberForm.action = "/aim/teamMembers.do";
+	if(document.aimTeamMemberForm.fromPage == 1)
+		document.aimTeamMemberForm.action = "/aim/teamMembers.do";
+	else
+		document.aimTeamMemberForm.action = "/aim/teamMemberList.do";
+	
 	document.aimTeamMemberForm.target = "_self";
 	document.aimTeamMemberForm.submit();
 	return true;
@@ -87,19 +87,21 @@ function clearForms()
 </td></tr>
 <tr><td>
 </c:if>
-<table cellSpacing=1 cellPadding=4 align="center" onload="load()">
+<table cellSpacing=1 cellPadding=4 align="center" onload="load()" border="0" width="100%">
+<c:if test="${aimTeamMemberForm.fromPage == 1}">
 	<tr>
 		<td align="center" colspan="2" bgcolor="#eeeeee"><b>
 			<digi:trn key="aim:addTeamMembersFor">Add Members for</digi:trn>
 			<bean:write name="aimTeamMemberForm" property="teamName" /></b>
 		</td>
 	</tr>
+</c:if>
 	<tr>
-		<td align="right" valign="top" width="50%">
+		<td align="right" valign="top" width="30%">
 			<FONT color="red">*</FONT>
 			<digi:trn key="aim:userId">User Id</digi:trn>&nbsp;
 		</td>
-		<td align="left">
+		<td align="left" width="70%">
 			<html:select property="email" >
 			<c:forEach items="${aimTeamMemberForm.allUser}" var="members">
 				<html:option value="${members.email}">
@@ -110,11 +112,11 @@ function clearForms()
 		</td>
 	</tr>
 	<tr>
-		<td align="right" width="50%">
+		<td align="right">
 			<FONT color="red">*</FONT>		
 			<digi:trn key="aim:memberRole">Role</digi:trn>&nbsp;
 		</td>
-		<td align="left" width="50%">
+		<td align="left">
 			<html:select property="role" styleClass="inp-text">
 				<%@include file="teamMemberRolesDropDown.jsp" %>
 				<%--<html:optionsCollection name="aimTeamMemberForm" property="ampRoles"
@@ -124,7 +126,7 @@ function clearForms()
 	</tr>
 	
 	<tr>
-		<td colspan="2" width="60%">
+		<td colspan="2">
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">

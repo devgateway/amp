@@ -92,21 +92,14 @@
 									</c:set>
 										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
 										<tr>
-											<td bgColor=#ffffff valign="top">
-												<table border=0 cellPadding=3 cellSpacing=1 width="100%">
-													<tr bgColor=#dddddb>
-														<td bgColor=#dddddb align="center"><b>
-															<digi:trn key="aim:memberDetails">
-															Member Details
-															</digi:trn></b>
-														</td>
-													</tr>
+											<td valign="top" align="left">
+												<table border=0 cellPadding=3 cellSpacing=0 width="35%">
 													<tr>
 														<td bgcolor="#f4f4f2">
-															<table width="100%" border="0" cellspacing="1" cellPadding="3" >
+															<table width="100%" border="0" cellspacing="0" cellPadding="3" >
 																<tr>
 																	<td align="right" width="50%" bgcolor="#f4f4f2">
-																		<b><digi:trn key="aim:memberName">Name</digi:trn></b>
+																		<digi:trn key="aim:memberName">Name</digi:trn>
 																	</td>
 																	<td align="left" width="50%" bgcolor="#f4f4f2">
 																		<bean:write name="aimTeamMemberForm" property="name" />
@@ -114,7 +107,7 @@
 																</tr>
 																<tr>
 																	<td align="right" width="50%" bgcolor="#f4f4f2">
-																		<b><digi:trn key="aim:memberRole">Role</digi:trn></b>
+																		<digi:trn key="aim:memberRole">Role</digi:trn>
 																	</td>
 																	<td align="left" width="50%" bgcolor="#f4f4f2">
 																		<html:select property="role">
@@ -124,8 +117,10 @@
 																		</html:select>
 																	</td>
 																</tr>
-																<tr>	
-																	<td align="center" colspan="2" bgcolor="#f4f4f2" cellPadding="1">
+																<tr>
+                                                                	<td>&nbsp;
+                                                                  	</td>
+																	<td  bgcolor="#f4f4f2" cellPadding="1">
 																		<table cellspacing="5">
 																			<tr bgcolor="#f4f4f2">
 																				<td>

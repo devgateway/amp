@@ -757,9 +757,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
               indConn.setValues(new HashSet<AmpIndicatorValue>());
           }else{
         	  if (indConn.getValues()!=null && indConn.getValues().size()>0){
-        		  for (AmpIndicatorValue value : indConn.getValues()) {
+        		 /* for (AmpIndicatorValue value : indConn.getValues()) {
 					session.delete(value);
-				}
+				}*/
         		  indConn.getValues().clear();
         	  }
           }

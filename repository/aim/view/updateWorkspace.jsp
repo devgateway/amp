@@ -32,11 +32,6 @@ function toggleGroup(group_id){
 
 function addChildWorkspaces() {
 		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
-			if (document.aimUpdateWorkspaceForm.category.value == "-1") {
-				alert("<digi:trn key="aim:teamcategoryrequired">Team category is required</digi:trn>");
-				document.aimUpdateWorkspaceForm.category.focus();
-				return false;
-			}
 			openNewWindow(650, 380);
 			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
 			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin";
@@ -99,9 +94,7 @@ function removeChildWorkspace(id) {
 
 function chekingWorkspaceTypeAndCatValue(action){
 	if(action!="reset") {
-		var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 		var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
-		var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
 		var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 		var msg='';
 		/*
@@ -171,11 +164,9 @@ function update(action) {
 		    if (action != "reset"){
 			if (event == "add" || event == "edit") {
 				if (relFlag == "set") {
-					var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 					var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
 					var index3  = document.aimUpdateWorkspaceForm.relatedTeam.selectedIndex;
 					var index4  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
-					var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
 					var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 					var val3    = document.aimUpdateWorkspaceForm.relatedTeam.options[index3].value;
 					var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
@@ -258,10 +249,8 @@ function   computationChange(){
   
 function relTeam() { 
 	
-	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
 	var index3  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
-	var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
 	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 	var val3    = document.aimUpdateWorkspaceForm.typeId.options[index3].value;
 	var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
@@ -422,44 +411,6 @@ function cancel()
 															</logic:equal>
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																<html:text property="teamName" size="50" styleClass="inp-text" />
-															</logic:equal>
-														</td>
-													</tr>
-													<tr>
-														<td align="right" bgcolor="#f4f4f2">
-															<font color="red"><b>*</b></font>
-															<digi:trn key="aim:teamCategory">Team Category</digi:trn>
-														</td>
-														<td align="left" bgcolor="#f4f4f2">
-															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'delete'}">
-																<b><bean:write name="aimUpdateWorkspaceForm" property="category" /></b>
-															</c:if>
-															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'view'}">
-																<b><bean:write name="aimUpdateWorkspaceForm" property="category" /></b>
-															</c:if>
-															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																<c:choose>
-																	<c:when test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'noedit'}">
-																		<b><bean:write name="aimUpdateWorkspaceForm" property="category" /></b>
-																	</c:when>
-																	<c:otherwise>
-																		<html:select property="category" styleClass="inp-text" onchange="relTeam()">
-																			<html:option value="-1">-- <digi:trn key="aim:createWorkspaceSelectCategFirstLine">Select Category</digi:trn> --</html:option>
-																		</html:select>
-																	</c:otherwise>
-																</c:choose>
-															</c:if>
-															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
-																<html:select property="category" styleClass="inp-text" onchange="relTeam()">
-																	<html:option value="-1">--
-																		<digi:trn key="aim:createWorkspaceSelectCategFirstLine">
-																			Select Category
-																		</digi:trn>
-																		--
-																	</html:option>
-																	<html:option value="GOVERNMENT"><digi:trn key="aim:GOVERNMENT">Government</digi:trn></html:option>
-																	<html:option value="DONOR"><digi:trn key="aim:DONOR">Donor</digi:trn></html:option>
-																</html:select>
 															</logic:equal>
 														</td>
 													</tr>

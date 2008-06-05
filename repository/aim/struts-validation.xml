@@ -147,9 +147,6 @@
 			<field property="description" depends="required">
                     <arg0 key="display.aim.description"/>
             </field> -->
-            <field property="category" depends="required">
-                    <arg0 key="display.aim.category"/>
-            </field>
             <field property="workspaceType" depends="required">
                     <arg0 key="display.aim.workspaceType"/>
             </field>

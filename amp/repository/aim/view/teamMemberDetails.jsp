@@ -157,11 +157,11 @@
 																		<table width="100%" cellspacing="5">
 																			<tr>
 																				<td width="50%" align="right">
-																					<c:set var="translation"><digi:trn key="aim:teamWorkspaceSetup:members:save">Save</digi:trn> </c:set>
+																					<c:set var="translation"><digi:trn key="btn:save">Save</digi:trn> </c:set>
 																					<html:submit value="${translation}" styleClass="dr-menu"/>
 																				</td>	
 																				<td width="50%" align="left">	
-																					<c:set var="translation"><digi:trn key="aim:teamWorkspaceSetup:members:cancel">Cancel</digi:trn> </c:set>
+																					<c:set var="translation"><digi:trn key="btn:cancel">Cancel</digi:trn> </c:set>
 																					<html:reset value="${translation}" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
 																				</td>
 																			</tr>

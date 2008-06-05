@@ -90,6 +90,9 @@ public class TrailCellsXLS extends XLSExporter {
 			int pos = modified.indexOf(':'); 
 			if (pos >= 0)
 				modified = modified.substring(pos + 1);
+			
+			if (grd.getParent().getParent() == null)
+				modified = "TOTAL";
 			if (grd.getReportMetadata().isHideActivities())
 				cell.setCellValue(modified);
 			else

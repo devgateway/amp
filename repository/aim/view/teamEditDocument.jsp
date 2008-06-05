@@ -6,6 +6,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<style>
+.contentbox_border{
+	border: 	1px solid #666666;
+	width: 		750px;
+	background-color: #f4f4f2;
+}
+</style>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -39,10 +46,10 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </td></tr>
 <tr><td width="100%" valign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -82,51 +89,32 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-							<tr bgColor=#3754a1>
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
+							<tr>
 								<td vAlign="top" width="100%">
+									<c:set var="selectedTab" value="4" scope="request"/>
+                                    <c:set var="selectedSubTab" value="-1" scope="request"/>
+                                
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
 								<td valign="top">
+                                    <div class="contentbox_border" style="border-top:0px;padding: 20px 0px 20px 0px;">
+	                                    <div align="left">
+                                
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr><td>
 											<digi:errors />
 										</td></tr>
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width=167>
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title width=150>
-															<digi:trn key="aim:relatedLinksList">
-																Related Links List
-															</digi:trn>
-														</td>
-														<td background="module/aim/images/corner-r.gif" height="17" width=17>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
 										<tr>
-											<td bgColor=#ffffff class=box-border valign="top">
+											<td valign="top">
 
 											<!-- Edit Document form -->
 
-<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff"
-class="box-border-nopadding">
+<table width="80%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
 	<tr>
-		<td bgcolor="#dddddd" align="center">
-			<b><digi:trn key="aim:editDocument">Edit Document</digi:trn></b>
-		</td>
-	</td>
-	<tr>
-		<td bgcolor="#ffffff" vAlign="top" align="center">
+		<td vAlign="top" align="center">
 			<table width="100%%" cellSpacing="1" cellPadding="5" vAlign="top" align="center">
 				<tr>
 					<td width="20%" align="right" bgcolor="#f4f4f4">
@@ -165,8 +153,8 @@ class="box-border-nopadding">
 					</td>
 				</tr>
 				<tr>
-					<td width="20%" align="right" bgcolor="#f4f4f4">
-						&nbsp;
+					<td width="20%" align="right" bgcolor="#f4f4f4">&nbsp;
+						
 					</td>
 					<td width="80%" align="left" bgcolor="#f4f4f4">
 						<c:if test="${!empty aimRelatedLinksForm.fileName}">
@@ -194,7 +182,7 @@ class="box-border-nopadding">
 				<tr>
 					<td><input type="button" value="  Save  " class="dr-menu"
 					onclick="editDocument()"></td>
-					<td><input type="reset" value="Cancel" class="dr-menu"></td>
+					<td><input type="button" onclick="history.go(-1)" value="Cancel" class="dr-menu"></td>
 					<td></td>
 				</tr>
 			</table>
@@ -207,10 +195,14 @@ class="box-border-nopadding">
 											</td>
 										</tr>
 									</table>
+                                    
+	                                    </div>
+                                    </div>
+
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

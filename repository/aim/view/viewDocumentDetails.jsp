@@ -47,15 +47,10 @@
 <html:hidden property="pageId" />
 <html:hidden property="valuesSet" value="false"/>
 
-<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff"
-class="box-border-nopadding">
+<table width="60%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
+
 	<tr>
-		<td bgcolor="#dddddd" align="center">
-			<b><digi:trn key="aim:documentDetails">Document Details</digi:trn></b>
-		</td>
-	</td>
-	<tr>
-		<td bgcolor="#ffffff" vAlign="top" align="center">
+		<td vAlign="top" align="center">
 			<table width="100%%" cellSpacing="1" cellPadding="5" vAlign="top" align="center">
 				<tr>
 					<td width="20%" align="right" bgcolor="#f4f4f4">

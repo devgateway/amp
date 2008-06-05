@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
@@ -66,6 +67,14 @@ function setHoveredTable(tableId, hasHeaders) {
 
 
 }
+</script>
+
+<script language="javascript">
+    function confirmDelete() {
+      var flag = confirm('<digi:trn key="aim:areyousureremove">Are you sure you want to remove?</digi:trn>');
+      return flag;
+    }
+
 </script>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
@@ -153,21 +162,21 @@ function setHoveredTable(tableId, hasHeaders) {
 												<c:if test="${subtabId == 0 }">
 													<table border=0 cellPadding=4 cellSpacing=0 width="100%" id="dataTable">
 														<tr>
-															<td  bgColor=#999999 valign="center" align="center" width="30%" style="color:black;">
+															<td  bgColor=#999999 valign="center" align="center" width="35%" style="color:black;">
 																<b>
 																<digi:trn key="aim:doctitle">
 																Title
 																</digi:trn>
 																</b>
 															</td>
-															<td  bgColor=#999999 valign="center" align="center" width="30%" style="color:black;">
+															<td  bgColor=#999999 valign="center" align="center" width="35%" style="color:black;">
 																<b>
 																<digi:trn key="fm:documentfilename">
 																Filename
 																</digi:trn>
 																</b>
 															</td>
-															<td  bgColor=#999999 align="center" width="40%" style="color:black;">
+															<td  bgColor=#999999 align="center" width="30%" style="color:black;">
 																<b>
 																<digi:trn key="aim:activityName">
 																	Activity
@@ -182,11 +191,9 @@ function setHoveredTable(tableId, hasHeaders) {
 	
 														<c:if test="${relatedLink.isFile == true}">
 														<tr>
-															<td width="30%" valign="top">
-	
-																<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
-	                                                                                                                        <jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
-	
+															<td>
+																<input style="vertical-align:middle;" type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
+                                                                <jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${docParams}" property="docId">
 																	<c:out value="${relatedLink.docId}"/>
 																</c:set>
@@ -194,41 +201,42 @@ function setHoveredTable(tableId, hasHeaders) {
 																	<c:out value="${relatedLink.activityId}"/>
 																</c:set>
 																<c:set target="${docParams}" property="pageId" value="1"/>
-																<c:set var="translation">
-																	<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
-																</c:set>
-																<digi:link href="/getDocumentDetails.do" name="docParams" title="${translation}" >
-																<bean:write name="relatedLink" property="title" /></digi:link>
+
+                                                                <c:if test="${fn:length(relatedLink.title) > 30}" >
+                                                                    <digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" >
+                                                                        <c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
+                                                                    </digi:link>
+                                                                </c:if>
+                                                                <c:if test="${fn:length(relatedLink.title) <= 30}" >
+                                                                    <digi:link href="/getDocumentDetails.do" name="docParams" title="${relatedLink.title}" >
+                                                                        <bean:write name="relatedLink" property="title" />
+                                                                    </digi:link>
+                                                                </c:if>
                                                              </td>
-                                                             <td width="30%">
+                                                             <td>
 																<c:if test="${relatedLink.isFile == true}">
-																<logic:notEmpty name="relatedLink" property="fileName">
-																<bean:define name="relatedLink" property="fileName" id="fileName"/>
-<!--
-														    	<%
-																	int index2;
-																	String extension = "";
-																	index2 = ((String)fileName).lastIndexOf(".");
-																	if( index2 >= 0 ) {
-																	   extension = "module/cms/images/extensions/" +
-																		((String)fileName).substring(
-																					index2 + 1,((String)fileName).length()) + ".gif";
-																	}
-															    %>
-														    	<digi:img skipBody="true" src="<%=extension%>" border="0"
-																 align="absmiddle"/>-->
-																</logic:notEmpty>
-																<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
-																	<i><bean:write name="relatedLink" property="fileName" /></i></a>
-																</c:if>
-																<c:if test="${relatedLink.isFile == false}">
-																	<digi:img src="module/aim/images/web-page.gif"/>
-																	<a target="_blank" href="<bean:write name="relatedLink" property="url" />">
-																	<i><bean:write name="relatedLink" property="url" /></i></a>
-																</c:if>
+                                                                    <logic:notEmpty name="relatedLink" property="fileName">
+                                                                        <bean:define name="relatedLink" property="fileName" id="fileName"/>
+                                                                    </logic:notEmpty>
+                                                                    <a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />" title="<c:out value='${relatedLink.fileName}' />">
+                                                                        <i>
+                                                                            <c:if test="${fn:length(relatedLink.fileName) > 30}" >
+                                                                                <c:out value="${fn:substring(relatedLink.fileName, 0, 30)}" />...
+                                                                            </c:if>
+                                                                            <c:if test="${fn:length(relatedLink.fileName) <= 30}" >
+                                                                                <c:out value="${relatedLink.fileName}" />
+                                                                            </c:if>
+                                                                        </i>
+                                                                    </a>
+                                                                </c:if>
 															</td>
-															<td width="40%">
-																	<bean:write name="relatedLink" property="activityName" />
+															<td title="<c:out value="${relatedLink.activityName}" />">
+                                                                <c:if test="${fn:length(relatedLink.activityName) > 30}" >
+                                                                    <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+                                                                </c:if>
+                                                                <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
+                                                                    <c:out value="${relatedLink.activityName}" />
+                                                                </c:if>
 															</td>
 														</tr>
 														</c:if>
@@ -269,34 +277,43 @@ function setHoveredTable(tableId, hasHeaders) {
 														type="org.digijava.module.aim.helper.Documents">
 	
 														<c:if test="${relatedLink.isFile == false}">
-														<tr>
-															<td>
-	
-																<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
-	                                                                                                                        <jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
-																<c:set target="${docPars}" property="docId">
-																	<c:out value="${relatedLink.docId}"/>
-																</c:set>
-																<c:set target="${docPars}" property="actId">
-																	<c:out value="${relatedLink.activityId}"/>
-																</c:set>
-																<c:set target="${docPars}" property="pageId" value="1"/>
-																<c:set var="translation">
-																	<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
-																</c:set>
-																<digi:link href="/getDocumentDetails.do" name="docPars" title="${translation}" >
-																<bean:write name="relatedLink" property="title" /></digi:link>
-															</td>
-															<td>
-																<c:if test="${relatedLink.isFile == false}">
-																	<a target="_blank" href="<bean:write name="relatedLink" property="url" />">
-																	<i><bean:write name="relatedLink" property="url" /></i></a>
-																</c:if>
-															</td>
-															<td>
-																	<bean:write name="relatedLink" property="activityName" />
-															</td>
-														</tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <input style="vertical-align:middle;" type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
+                                                                    <jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
+                                                                    <c:set target="${docPars}" property="docId">
+                                                                        <c:out value="${relatedLink.docId}"/>
+                                                                    </c:set>
+                                                                    <c:set target="${docPars}" property="actId">
+                                                                        <c:out value="${relatedLink.activityId}"/>
+                                                                    </c:set>
+                                                                    <c:set target="${docPars}" property="pageId" value="1"/>
+                                                                    <c:if test="${fn:length(relatedLink.title) > 30}" >
+                                                                        <digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" >
+                                                                            <c:out value="${fn:substring(relatedLink.title, 0, 30)}" />...
+                                                                        </digi:link>
+                                                                    </c:if>
+                                                                    <c:if test="${fn:length(relatedLink.title) <= 30}" >
+                                                                        <digi:link href="/getDocumentDetails.do" name="docPars" title="${relatedLink.title}" >
+                                                                            <bean:write name="relatedLink" property="title" />
+                                                                        </digi:link>
+                                                                    </c:if>
+                                                                </td>
+                                                                <td>
+                                                                    <c:if test="${relatedLink.isFile == false}">
+                                                                        <a target="_blank" href="<bean:write name="relatedLink" property="url" />">
+                                                                        <i><bean:write name="relatedLink" property="url" /></i></a>
+                                                                    </c:if>
+                                                                </td>
+                                                                <td title="<c:out value="${relatedLink.activityName}" />">
+                                                                    <c:if test="${fn:length(relatedLink.activityName) > 30}" >
+                                                                        <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+                                                                    </c:if>
+                                                                    <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
+                                                                        <c:out value="${relatedLink.activityName}" />
+                                                                    </c:if>
+                                                                </td>
+                                                            </tr>
 														</c:if>
 														</logic:iterate>
 														</logic:notEmpty>
@@ -318,7 +335,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 													<td align="center">
 
-														<html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
+														<html:submit onclick="return confirmDelete();" styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
 
 													</td>
 

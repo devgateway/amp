@@ -262,7 +262,7 @@ html>body #mainEmpty {
 							<LI>
 						   		<a name="node">
 						   		<div>
-								<digi:trn key="aim:contentRepository">Content Repository</digi:trn>	
+								<digi:trn key="fm:documentsmanagement">Resources</digi:trn>	
 								</div>
 								</a>
 							</LI>
@@ -273,8 +273,8 @@ html>body #mainEmpty {
 							<span>
 								<bean:define id="subtabLink" value="0" />
 								<digi:link href="/relatedLinksList.do" paramId="subtab" paramProperty="subtabLink" >	
-								<div title='<digi:trn key="aim:clickToViewContentRepository">Click here to view Content Repository</digi:trn>'>	
-									<digi:trn key="aim:contentRepository">Content Repository</digi:trn>	
+								<div title='<digi:trn key="aim:clickToViewResources">Click here to view resources</digi:trn>'>	
+									<digi:trn key="fm:documentsmanagement">Resources</digi:trn>	
 								</div>
 								</digi:link>	
 							</span>

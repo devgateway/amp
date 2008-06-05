@@ -34,8 +34,14 @@ tr.my-border-style td {
 	var editBtn='<digi:trn key="message:Edit">Edit</digi:trn>';
 	var fwdBtn='<digi:trn key="message:Forward">Forward</digi:trn>';
 	var deleteBtn='<digi:trn key="message:delete">Delete</digi:trn>';
+	var pagesTrn='<digi:trn key="message:pages">Pages</digi:trn>';
+	var firstPage='<digi:trn key="message:firstPage">click here to go to first page</digi:trn>';
+	var prevPage='<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>';
+	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
+	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
+	var currentPage=1;
 	
 	//used to hold already rendered messages
 	var myArray=new Array();
@@ -49,7 +55,7 @@ tr.my-border-style td {
 
 
 	 function checkForNewMessages(){
-		var url=addActionToURL('messageActions.do?actionType=viewAllMessages');			
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage);			
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);
@@ -71,7 +77,7 @@ tr.my-border-style td {
 				var img=document.getElementById(msgId+'_plus');
 				var imgTD=img.parentNode;
 				var msgTR=imgTD.parentNode;
-				tbl.removeChild(msgTR);
+				tbl.tBodies[0].removeChild(msgTR);
 				//removing record from db
 				var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
@@ -100,11 +106,19 @@ tr.my-border-style td {
 	
 	
 	function goToPage(page){	
-		 <digi:context name="searchMsg" property="context/module/moduleinstance/messageActions.do"/>
-		 url = "<%= searchMsg %>?actionType=viewAllMessages&page="+page;
-		 document.forms[0].action =url;
-		 document.forms[0].submit();		 
-		 return true;
+		if(myArray!=null && myArray.length>0){
+			myArray.splice(0,myArray.length);
+		}
+		//creating table
+		var tbl=document.getElementById('msgsList');
+		var tblBody=tbl.getElementsByTagName('tbody')[0];	
+		if(tblBody.childNodes!=null && tblBody.childNodes.length>0){
+			while (tblBody.childNodes.length>0){
+				tblBody.removeChild(tblBody.childNodes[0]);
+			}
+		}				
+		currentPage=page;
+		getMessages();		
 	}
 	
 	function toggleGroup(group_id){
@@ -154,15 +168,14 @@ tr.my-border-style td {
 	}
 	
 	function getMessages(){
-		var url=addActionToURL('messageActions.do?actionType=viewAllMessages');			
+		var url=addActionToURL('messageActions.do?actionType=viewAllMessages&page='+currentPage);			
 		var async=new Asynchronous();
 		async.complete=buildMessagesList;
 		async.call(url);
 	}
 	
 	
-	function buildMessagesList (status, statusText, responseText, responseXML){
-		//alert('aaa');
+	function buildMessagesList (status, statusText, responseText, responseXML){		
 		msgsXml=responseXML;		
 		var tbl=document.getElementById('msgsList');
 		tbl.border='0';
@@ -170,69 +183,129 @@ tr.my-border-style td {
 		tbl.cellSpacing="1";
 		tbl.width="100%";
 		
-		
-		var root=responseXML.getElementsByTagName('Messaging')[0];
-		if(root!=null){
-			messages=root.childNodes;
-			if((messages==null || messages.length==0) && firstEntry==0){
-				var newTR=document.createElement('TR');
+		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
+		if(mainTag!=null){
+			//messages start	
+			var root=mainTag.getElementsByTagName('MessagesList')[0];
+			if(root!=null){
+				messages=root.childNodes;
+				if((messages==null || messages.length==0) && firstEntry==0){
+					var newTR=document.createElement('TR');
                                 var newTD=document.createElement('TD');
                                 newTD.innerHTML=noMsgs;
                                 newTD.colspan=4;
 				newTR.appendChild(newTD)
                                 var tableBody= tbl.getElementsByTagName("tbody");
                                 tableBody[0].appendChild(newTR);
-				firstEntry++;
-				return;
-			}else{
-				if(myArray!=null && myArray.length>0){
-					var whereToInsertRow=1;
-					//if(messages.length>myArray.length){
-						for(var i=0;i<messages.length;i++){
-						var msgId=messages[i].getAttribute('id');
-						for(var j=0;j<myArray.length;j++){
-							if(msgId==myArray[j]){
-								break;
-							}else{
-								if(j==myArray.length-1){									
-									tbl.tBodies[0].insertRow(whereToInsertRow);
-									var msgTR=tbl.rows[whereToInsertRow];
-									msgTR.className = 'my-border-style';									
-									msgTR.style.backgroundColor='#ffffff';
-									createTableRow(tbl,msgTR,messages[i]);
-									myArray[myArray.length]=msgId;
-									whereToInsertRow++;
-								}							
+					firstEntry++;
+					return;
+				}else{
+					if(myArray!=null && myArray.length>0){
+						var whereToInsertRow=1;						
+							for(var i=0;i<messages.length;i++){
+							var msgId=messages[i].getAttribute('id');
+							for(var j=0;j<myArray.length;j++){
+								if(msgId==myArray[j]){
+									break;
+								}else{
+									if(j==myArray.length-1){									
+										tbl.tBodies[0].insertRow(whereToInsertRow);
+										var msgTR=tbl.rows[whereToInsertRow];
+										msgTR.className = 'my-border-style';									
+										msgTR.style.backgroundColor='#ffffff';
+										createTableRow(tbl,msgTR,messages[i]);
+										myArray[myArray.length]=msgId;
+										whereToInsertRow++;
+									}							
+								}
 							}
-						}
-					//}	
-					}		
-				}else {
-					for(var i=0;i<messages.length;i++){				
-						var msgId=messages[i].getAttribute('id');
-						myArray[i]=msgId;
-						
-						//creating tr
-						var msgTr=document.createElement('TR');	
-						var isMsgRead=messages[i].getAttribute('read');					
-						if(isMsgRead=='false'){
-							msgTr.style.backgroundColor='#ffffff';							
-						}else{
-							msgTr.style.backgroundColor='#eeeeee';							
-						}
-						msgTr.height='20px';
+						}		
+					}else {
+						for(var i=0;i<messages.length;i++){				
+							var msgId=messages[i].getAttribute('id');
+							myArray[i]=msgId;
 							
-						var myTR=createTableRow(tbl,msgTr,messages[i]);
+							//creating tr
+							var msgTr=document.createElement('TR');	
+							var isMsgRead=messages[i].getAttribute('read');					
+							if(isMsgRead=='false'){
+								msgTr.style.backgroundColor='#ffffff';							
+							}else{
+								msgTr.style.backgroundColor='#eeeeee';							
+							}
+							msgTr.height='20px';
+								
+							var myTR=createTableRow(tbl,msgTr,messages[i]);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");
                                                 tablBody[0].appendChild(myTR);
                         
-						myTR.className = 'my-border-style';													
-					}//end of for loop
-				}			
-			}
-		}			
+							myTR.className = 'my-border-style';													
+						}//end of for loop
+					}			
+				}
+			}//messages end
 			
+			//pagination start
+			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
+			if(paginationTag!=null){
+				var paginationParams=paginationTag.childNodes[0];
+				var doMsgsExist=paginationParams.getAttribute('messagesExist');	
+				if(doMsgsExist=='true'){
+					var page=paginationParams.getAttribute('page');
+					var allPages=paginationParams.getAttribute('allPages');
+					var lastPage=paginationParams.getAttribute('lastPage');
+					setupPagionation(paginationTag,parseInt(page),parseInt(allPages));
+				}				
+			}
+			//pagination end
 	}	
+	
+	function setupPagionation (paginationTag,page,allPages){
+		currentPage=page;
+		var paginationTR=document.getElementById('paginationPlace');
+		while(paginationTR.firstChild != null){
+			paginationTR.removeChild(paginationTR.firstChild);
+		}
+		var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
+			var paginationParams=paginationTag.childNodes[0];
+			if(paginationParams!=null){
+				var paginationTD=document.createElement('TD');
+				var paginationTDContent=pagesTrn+':';
+					if(currentPage>1){
+						var prPage=currentPage-1;
+						paginationTDContent+=':<a href="javascript:goToPage(1)" title="'+firstPage+'">&lt;&lt; </a> ';
+						paginationTDContent+='<a href="javascript:goToPage('+prPage+')" title="'+prevPage+'" > &lt; </a>';								
+					}
+					paginationTDContent+='&nbsp';
+					if(allPages!=null){
+						var fromIndex=1;
+						if((currentPage-2)<1){
+							fromIndex=1;
+						}else{
+							fromIndex=currentPage-2;
+						}
+						var toIndex;
+						if(currentPage+2>allPages){
+							toIndex=lastPage;
+						}else{
+							toIndex=currentPage+2;
+						}
+						for(var i=fromIndex;i<=toIndex;i++){
+							if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>';}
+							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>'; }
+						}
+					}
+					if(page<lastPage){
+						var nextPg=page+1;									
+						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
+						paginationTDContent+='<a href="javascript:goToPage('+lastPage+')" title="'+lastPg+'">&gt;&gt;</a>';
+					}	
+					paginationTDContent+='&nbsp;'+page+'of'+lastPage;
+				paginationTD.innerHTML=	paginationTDContent;						
+				paginationTR.appendChild(paginationTD);						
+			}
+		}				
+	}
 	
 	//creates table rows with message information
 	function createTableRow(tbl,msgTr,message){
@@ -359,98 +432,96 @@ tr.my-border-style td {
                                         <DIV id="tabs">
                                             <UL>
                                                 
-                                                <c:if test="${messageForm.tabIndex==1}">
+								<c:if test="${messageForm.tabIndex==1}">
                                                     <LI>
                                                         <a name="node">
                                                         <div>
-                                                            <digi:trn key="message:Messages">Messages</digi:trn>
+									<digi:trn key="message:Messages">Messages</digi:trn>							
                                                         </div>
                                                         </a>
                                                     </LI>
-                                                </c:if> 
-                                                    
-                                                    
-                                                <c:if test="${messageForm.tabIndex!=1}">
+								</c:if> 
+								<c:if test="${messageForm.tabIndex!=1}">
                                                     <LI>
                                                         <span>
                                                            
-                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&page=1">
                                                              <div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
-                                                                <digi:trn key="message:Messages">Messages</digi:trn>
+	                 					<digi:trn key="message:Messages">Messages</digi:trn>
                                                             </div>
-                                                            </a>
+	                 				</a>
                                                         </span>
                                                     </LI>
-                                                </c:if>							
+								</c:if>							
                                                     
                                                     
                                                     
-                                                <c:if test="${messageForm.tabIndex==2}">
+								<c:if test="${messageForm.tabIndex==2}">
                                                     <LI>
                                                         <a name="node">
                                                             <div>
-                                                                <digi:trn key="message:Alerts">Alerts</digi:trn>
+									<digi:trn key="message:Alerts">Alerts</digi:trn>							
                                                             </div>
                                                         </a>
                                                     </LI>
-                                                </c:if>
-                                                <c:if test="${messageForm.tabIndex!=2}">
+								</c:if>
+								<c:if test="${messageForm.tabIndex!=2}">
                                                     <LI>
                                                         <span>
-                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&page=1">
                                                             <div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-                                                                <digi:trn key="message:Alerts">Alerts</digi:trn>
+										<digi:trn key="message:Alerts">Alerts</digi:trn>
                                                                 </div>
-                                                            </a>	
+									</a>							
                                                         </span>
                                                     </LI>
-                                                </c:if>
+								</c:if>
                                                     
                                                     
                                                     
-                                                <c:if test="${messageForm.tabIndex==3}">
+								<c:if test="${messageForm.tabIndex==3}">
                                                     <LI>
                                                         <a name="node"	>
                                                             <div>
-                                                            <digi:trn key="message:approvals">Approvals</digi:trn>
+									<digi:trn key="message:approvals">Approvals</digi:trn>
                                                         </div>
                                                         </a>
                                                     </LI>
-                                                </c:if>
-                                                <c:if test="${messageForm.tabIndex!=3}">
+								</c:if>
+								<c:if test="${messageForm.tabIndex!=3}">
                                                     <LI>
                                                         <span>
-                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&page=1">
                                                             <div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
-                                                                <digi:trn key="message:approvals">Approvals</digi:trn>
+										<digi:trn key="message:approvals">Approvals</digi:trn>
                                                             </div>
-                                                            </a>
+									</a>
                                                         </span>
                                                     </LI>
-                                                </c:if>
+								</c:if>
                                                     
                                                     
                                                     
-                                                <c:if test="${messageForm.tabIndex==4}">
+								<c:if test="${messageForm.tabIndex==4}">
                                                     <LI>
                                                         <a name="node">
                                                             <div>
-                                                            <digi:trn key="message:ebents">Calendar Events</digi:trn>
+									<digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                         </div>
                                                         </a>
                                                     </LI>
-                                                </c:if>
-                                                <c:if test="${messageForm.tabIndex!=4}">
+								</c:if>
+								<c:if test="${messageForm.tabIndex!=4}">
                                                     <LI>
                                                         <span>
-                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&page=1">
                                                              <div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
-                                                                <digi:trn key="message:ebents">Calendar Events</digi:trn>
+										<digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                             </div>
-                                                            </a>
+									</a>
                                                         </span>
                                                     </LI>
-                                                </c:if>	
+								</c:if>							
                                             </UL>						
                                         </DIV>
                                         
@@ -505,7 +576,13 @@ tr.my-border-style td {
 									<TR><TD colspan="4"></TD></TR>			
 								</TABLE>
 							</TD>
-						</TR><!-- 
+						</TR>
+							<TD bgColor="#ffffff"  align="left" >
+								<TABLE >
+									<TR id="paginationPlace"><TD colspan="4"></TD></TR>			
+								</TABLE>
+							</TD>
+						<!-- 
 								<logic:notEmpty name="messageForm" property="pagedMessagesForTm">
 							<TR><TD> 
 								<digi:trn key="message:pages">Pages</digi:trn>:

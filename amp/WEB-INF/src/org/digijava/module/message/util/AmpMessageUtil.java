@@ -1,6 +1,5 @@
 package org.digijava.module.message.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.hibernate.Query;
@@ -13,6 +12,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.message.helper.MessageConstants;
 
 public class AmpMessageUtil {
 	private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
@@ -53,32 +53,6 @@ public class AmpMessageUtil {
 			throw new AimException("update failed",ex);
 		}
 	}
-	
-	
-	/**
-	 * loads all messages which were went to team member(==inbox messages)
-	 * @param teamMemberId
-	 * @return
-	 * @throws AimException
-	 */
-	public static List<AmpMessage> getAllIncomingMessagesForCurrentUser(Long teamMemberId) throws AimException{		
-		List<AmpMessage> returnValue=null;		
-		try {
-			List<AmpMessageState> st=loadReceivedAndSavedMsgStatesForTm(teamMemberId,false);			
-			if(st!=null && st.size()>0){
-				returnValue=new ArrayList<AmpMessage>();
-				for (AmpMessageState ampMsgState : st) {
-					returnValue.add(ampMsgState.getMessage());
-				}
-			}
-		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
-			throw new AimException("Unable to Load Messages", ex);			
-		}
-		return returnValue;
-	}
-	
 	
 	public static AmpMessage getMessage(Long messageId) throws AimException{
 		Session session=null;
@@ -170,8 +144,7 @@ public class AmpMessageUtil {
 			}
 			throw new AimException("delete failed",ex);
 		}
-	}
-	
+	}	
 	
 	
 	public static void saveOrUpdateMessageState(AmpMessageState messageState) throws AimException {
@@ -213,31 +186,6 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	/**
-	 * loads all {@link AmpMessageState} for the given team member
-	 * @param teamMembetId
-	 * @return
-	 */
-	public static List<AmpMessageState> loadReceivedAndSavedMsgStatesForTm(Long teamMemberId,boolean isDaft) throws Exception{
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		List<AmpMessageState> returnValue=null;		
-		try {
-			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state inner join state.message as msg where ("+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+isDaft +" )";
-			query=session.createQuery(queryString);
-			query.setParameter("tmId", teamMemberId);
-			returnValue=query.list();			
-		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
-			throw new AimException("Unable to Load Messages", ex);
-			
-		}
-		return returnValue;
-	}	
 	
 	public static <E extends AmpMessage> int getUnreadMessagesAmountPerMsgType(Class<E> clazz,Long tmId) throws Exception{
 		int retValue=0;
@@ -259,65 +207,84 @@ public class AmpMessageUtil {
 		}
 		return retValue;
 	}
-	/**
-	 * loads all messages that were sent,received or saved by team member
-	 * @param teamMemberId
-	 * @return
-	 * @throws Exception
-	 */
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllMessagesStates(Class<E> clazz,Long teamMemberId,AmpMessageSettings setting) throws Exception{		
-		List<AmpMessageState> returnValue=new ArrayList<AmpMessageState>();
-		if(setting==null || setting.getMsgStoragePerMsgType()==null){
-			returnValue.addAll(loadAllInboxMessagesStates(clazz,teamMemberId,-1));
-			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,-1,true));
-			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,-1,false));
-		}else{
-			returnValue.addAll(loadAllInboxMessagesStates(clazz,teamMemberId,setting.getMsgStoragePerMsgType().intValue()));
-			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,setting.getMsgStoragePerMsgType().intValue(),true));
-			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,setting.getMsgStoragePerMsgType().intValue(),false));
-		}
-		return returnValue;
-	}	
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage) throws Exception{
+	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId) throws Exception {
+		int retValue=0;
 		Session session=null;
 		String queryString =null;
 		Query query=null;
-		List<AmpMessageState> returnValue=null;		
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" order by msg.creationDate desc";
-			if(maxStorage!=-1){
-				query=session.createQuery(queryString).setMaxResults(maxStorage);
-			}else{
-				query=session.createQuery(queryString);
-			}			 				
-			query.setParameter("tmId", teamMemberId);			
-			returnValue=query.list();			
-		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
+			query=session.createQuery(queryString);			 				
+			query.setParameter("tmId", tmId);			
+			retValue=((Integer)query.uniqueResult()).intValue();			
+		}catch(Exception ex) {			
 			ex.printStackTrace();
 			throw new AimException("Unable to Load Messages", ex);
 			
 		}
-		return returnValue;
+		return retValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft) throws Exception{
+	public static <E extends AmpMessage> int getSentOrDraftMessagesCount(Class<E> clazz,Long tmId,Boolean draft) throws Exception {
+		int retValue=0;
 		Session session=null;
 		String queryString =null;
 		Query query=null;
-		List<AmpMessageState> returnValue=null;		
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" order by msg.creationDate desc";
-			if(maxStorage!=-1){
-				query=session.createQuery(queryString).setMaxResults(maxStorage);
+			query=session.createQuery(queryString);			 				
+			query.setParameter("tmId", tmId);			
+			retValue=((Integer)query.uniqueResult()).intValue();			
+		}catch(Exception ex) {			
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);
+			
+		}
+		return retValue;
+	}
+	
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,int page) throws Exception{
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<AmpMessageState> returnValue=null;	
+		int messagesAmount=0;
+		try {
+			messagesAmount=getInboxMessagesCount(clazz,teamMemberId);
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false;
+//			if(maxStorage!=-1){
+//				query=session.createQuery(queryString).setMaxResults(maxStorage);
+//			}else{
+//				query=session.createQuery(queryString);
+//			}	
+			query=session.createQuery(queryString);
+			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;
+			int toIndex=0;
+			if(fromIndex<0){
+				fromIndex=0;
+				toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
+				if(fromIndex+MessageConstants.MESSAGES_PER_PAGE> messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE){
+					toIndex=messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
+				}else{
+					toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
+				}
+				if(toIndex>messagesAmount){
+					toIndex=messagesAmount;
+				}
+				query.setFirstResult(fromIndex);
+				query.setMaxResults(toIndex);
 			}else{
-				query=session.createQuery(queryString);
-			}		
+				toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
+				query.setFirstResult(fromIndex);
+				query.setMaxResults(toIndex);
+			}
 			query.setParameter("tmId", teamMemberId);			
 			returnValue=query.list();			
 		}catch(Exception ex) {
@@ -329,20 +296,38 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,int page) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
-		List<AmpMessageState> returnValue=null;		
+		List<AmpMessageState> returnValue=null;	
+		int messagesAmount=0;
 		try {
+			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+true+"order by msg.creationDate desc";
-			if(maxStorage!=-1){
-				query=session.createQuery(queryString).setMaxResults(maxStorage);
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" ";
+			query=session.createQuery(queryString);
+			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;
+			int toIndex=0;
+			if(fromIndex<0){
+				fromIndex=0;
+				toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
+				if(fromIndex+MessageConstants.MESSAGES_PER_PAGE> messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE){
+					toIndex=messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
+				}else{
+					toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
+				}
+				if(toIndex>messagesAmount){
+					toIndex=messagesAmount;
+				}
+				query.setFirstResult(fromIndex);
+				query.setMaxResults(toIndex);
 			}else{
-				query=session.createQuery(queryString);
-			}		
+				toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
+				query.setFirstResult(fromIndex);
+				query.setMaxResults(toIndex);
+			}
 			query.setParameter("tmId", teamMemberId);			
 			returnValue=query.list();			
 		}catch(Exception ex) {
@@ -353,6 +338,7 @@ public class AmpMessageUtil {
 		}
 		return returnValue;
 	}
+
 	
 	//***************************************************Message Settings***********************************************
 	

@@ -241,10 +241,18 @@
 	<page name="editLevelEnough" title=" : Edit Level 3Sector "/>
 
 	<!-- for Components Manager -->
+	<page name="viewComponentTypes" title=": - AMP Component Types"/>
+	
+	<page page="addComponentType" title=" - Add Component Types"/>
+	<page page="addComponentType" name="aim_addComponentType" title=" - Add Component Types"/>
+	
+	
 	<page name="viewComponents" title=": - AMP Components"/>
+	
 	<page name="editComponents" title=": - Editing AMP Components"/>
 	<page name="addComponents" title=": - Adding AMP Components"/>
 	<page page="addComponents" name="aim_addComponents" title="AMP - Add Component"/>
+	
 	<page name="componentIndicatorManager" title=" - Component Indicator Manager" />
 	<page page="addComponentIndicator" name="aim_addComponentIndicator" title="AMP - Add Component Indicator"/>
 	<page page="editComponents" name="aim_editComponents" title="AMP - Edit Component"/>

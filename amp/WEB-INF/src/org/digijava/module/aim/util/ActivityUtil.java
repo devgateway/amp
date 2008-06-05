@@ -1977,6 +1977,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           Components<FundingDetail> components = new Components<FundingDetail>();
           components.setComponentId(ampComp.getAmpComponentId());
           components.setDescription(ampComp.getDescription());
+          components.setType_Id((ampComp.getType()!=null)?ampComp.getType().getType_id():null);
           components.setTitle(ampComp.getTitle());
           components.setCommitments(new ArrayList());
           components.setDisbursements(new ArrayList());

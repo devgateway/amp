@@ -25,6 +25,7 @@ public class Components<T> implements Comparable , Serializable{
 	private Collection<PhysicalProgress> phyProgress;
 	private String code;
 	private String url;
+	private Long  type_Id;
 	
 	private SortedMap<Integer,Map<String,Double>> financeByYearInfo;
 	
@@ -202,5 +203,15 @@ public class Components<T> implements Comparable , Serializable{
 	public SortedMap<Integer,Map<String,Double>> getFinanceByYearInfo() {
 		return financeByYearInfo;
 	}
+
+	public Long getType_Id() {
+		return type_Id;
+	}
+
+	public void setType_Id(Long type_Id) {
+		this.type_Id = type_Id;
+	}
+
+
 
 }

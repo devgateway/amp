@@ -112,7 +112,9 @@
     <form-bean name="aimProposedProjCostForm" type="org.digijava.module.aim.form.ProposedProjCost" />
     <form-bean name="aimComponentsForm" type="org.digijava.module.aim.form.ComponentsForm" />
     <form-bean name="aimUpdateComponentsForm" type="org.digijava.module.aim.form.UpdateComponentsForm" />
-    <!--<form-bean name="aimProgramTypeForm" type="org.digijava.module.aim.form.ProgramTypeForm" /> -->
+    <form-bean name="aimComponentsTypeForm" type="org.digijava.module.aim.form.ComponentTypeForm" />
+    <form-bean name="aimUpdateComponentTypeForm" type="org.digijava.module.aim.form.UpdateComponentTypeForm" />
+     <!--<form-bean name="aimProgramTypeForm" type="org.digijava.module.aim.form.ProgramTypeForm" /> -->
     <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">
       <form-property name="indicatorList" type="java.util.Collection" />
       <form-property name="activityList" type="java.util.Collection" />
@@ -1513,8 +1515,16 @@
       <forward name="saved" path="/aim/getComponents.do" redirect="true" />
       <forward name="forward" path="/showLayout.do?layout=aim_addComponents" />
       <forward name="delete" path="/aim/getComponents.do" redirect="true" />
-	  <forward name="editComponent" path="/showLayout.do?layout=aim_editComponents" />
-  	</action>
+	<forward name="editComponent" path="/showLayout.do?layout=aim_editComponents" />
+     </action>
+     
+  	<action name="aimComponentsTypeForm" path="/aim/updateComponentType" scope="session" type="org.digijava.module.aim.action.UpdateComponentType" validate="false">
+      <forward name="add" path="/showLayout.do?layout=aim_addComponentType" />
+      <forward name="afterSave" path="/showLayout.do?layout=aim_addComponentType" />
+      <forward name="edit" path="/showLayout.do?layout=aim_addComponentType" />
+      <forward name="default" path="/showLayout.do?layout=viewComponentTypes" />
+    </action>
+     
   	<action name="aimComponentsForm" path="/aim/componentIndicatorManager" scope="session" type="org.digijava.module.aim.action.ComponentIndicatorManager">
 		<forward name="forward" path="/showLayout.do?layout=componentIndicatorManager"/>
 	</action>

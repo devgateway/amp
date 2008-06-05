@@ -335,6 +335,15 @@
                       <td class="f-names">
                         <table cellPadding=0 cellSpacing=0 width="70%">
                           <tr>
+                            <td class=f-names noWrap><digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:clickToViewcomponentsTypeManager">Click here to view Components Types Manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/updateComponentType.do" title="${translation}" >
+                                <digi:trn key="aim:componentsTypesManager">Components Types Manager</digi:trn>
+                              </digi:link>         </td>
+                          </tr>
+                          <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">

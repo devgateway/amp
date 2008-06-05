@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -451,6 +452,12 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String docComment;
 
 	// FOR ADD COMPONENTS
+	
+	private ArrayList<AmpComponentType> allCompsType;
+	
+	private Long selectedType;
+	private String newCompoenentName;
+	
 	private Collection allComps;
 	private boolean componentReset;
 	private String componentTitle;
@@ -5333,8 +5340,32 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public Long getPrevOrg() {
 		return prevOrg;
 	}
-	   
+
+	public ArrayList<AmpComponentType> getAllCompsType() {
+		return allCompsType;
+	}
+
+	public void setAllCompsType(ArrayList<AmpComponentType> allCompsType) {
+		this.allCompsType = allCompsType;
+	}
+
+	public Long getSelectedType() {
+		return selectedType;
+	}
+
+	public void setSelectedType(Long selectedType) {
+		this.selectedType = selectedType;
+	}
+
+	public String getNewCompoenentName() {
+		return newCompoenentName;
+	}
+
+	public void setNewCompoenentName(String newCompoenentName) {
+		this.newCompoenentName = newCompoenentName;
+	}
+	  //Dumies
+	public String getPerspectives(){
+		return null;
+	}
 }
-
-
-

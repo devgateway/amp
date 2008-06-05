@@ -107,7 +107,9 @@
 														<tr>
 															<td width="30%" align="right"><digi:trn
 																key="aim:compType">Component Type</digi:trn></td>
-															<td width="30%"><html:text property="compType" size="10" />
+															<td width="30%"><html:select property="compType">
+                                          	  <html:optionsCollection property="typeList" label="name" value="type_id"/>
+                                            </html:select>
 															</td>
 														</tr>
 														<tr>

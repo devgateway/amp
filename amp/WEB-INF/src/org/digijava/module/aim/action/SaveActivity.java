@@ -1739,7 +1739,9 @@ public class SaveActivity extends Action {
 					tempComp.setPhyProgress(phyProgess);
 				}
                                 tempComp.setComponentId(comp.getComponentId());
-				tempComps.add(tempComp);
+                                tempComp.setType_Id(comp.getType_Id());
+                    			
+                                tempComps.add(tempComp);
 			}
 		}
 	}

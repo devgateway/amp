@@ -69,7 +69,7 @@ function closeWindow()
   window.close();
 }
 </script>
-<body onload="myOnload()">
+<body onLoad="myOnload()">
 <digi:instance property="aimUpdateComponentsForm" />
 <digi:form action="/updateComponents.do" method="post">
   <html:hidden styleId="check" property="check"/>
@@ -94,8 +94,8 @@ function closeWindow()
                   <td noWrap width=600 vAlign="top">
                     <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
                       <tr bgColor=#f4f4f2>
-                        <td vAlign="top" width="100%">
-                        &nbsp;
+                        <td vAlign="top" width="100%">&nbsp;
+                        
                         </td>
                       </tr>
                       <tr bgColor=#f4f4f2>
@@ -136,7 +136,10 @@ function closeWindow()
                                             <digi:trn key="aim:compType">Component Type</digi:trn>
                                           </td>
                                           <td width="30%">
-                                            <html:text property="compType" size="10" />
+                                            <html:select property="compType">
+                                          	  <html:optionsCollection property="typeList" label="name" value="type_id"/>
+                                            </html:select>
+                                            
                                           </td>
                                         </tr>
                                         <tr>
@@ -162,7 +165,7 @@ function closeWindow()
                                         <tr>
                                           <td bgColor=#dddddb height="25" align="center" colspan="2">
 
-                                            <input class="dr-menu" id="addBtn" type="button" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
+                                            <input class="dr-menu" id="addBtn" type="button" value='<digi:trn key="btn:save">Save</digi:trn>' onClick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
                                             <html:reset  styleClass="dr-menu" property="submitButton" >
                                               <digi:trn key="btn:cancel">Cancel</digi:trn> &nbsp;&nbsp;
                                             </html:reset>
@@ -185,8 +188,8 @@ function closeWindow()
                   </td>
                 </tr>
                 <tr>
-                  <td bgColor=#f4f4f2>
-                  &nbsp;
+                  <td bgColor=#f4f4f2>&nbsp;
+                  
                   </td>
                 </tr>
                     </table>

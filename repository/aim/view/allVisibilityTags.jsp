@@ -394,6 +394,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Program Outputs" feature="Admin NPD"></field:display>
 <field:display name="Program Target Groups" feature="Admin NPD"></field:display>
 <field:display name="Program Type" feature="Admin NPD"></field:display>
+<field:display name="Internal Financing" feature="Admin NPD"></field:display>
+<field:display name="External Financing" feature="Admin NPD"></field:display>
+<field:display name="Total Financing Required" feature="Admin NPD"></field:display>
 <field:display name="Project Code" feature="Budget"></field:display>
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display>
 <field:display name="Project Id" feature="Identification"></field:display>

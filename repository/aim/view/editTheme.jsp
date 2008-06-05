@@ -120,6 +120,42 @@
 				</td>
 				</tr>
 				</field:display>
+				<field:display name="Internal Financing" feature="Admin NPD">
+				<tr bgColor=#ffffff>
+					<td height="20" align="center">
+						<digi:trn key="aim:Internal">
+							Internal Financing
+						</digi:trn>
+			    </td>
+					<td align="left">
+						<html:text property="programInernalFinancing" size="20"/>
+					</td>
+				</tr>
+				</field:display>
+				<field:display name="External Financing" feature="Admin NPD">
+				<tr bgColor=#ffffff>
+					<td height="20" align="center">
+						<digi:trn key="aim:External">
+							External Financing
+						</digi:trn>
+			    </td>
+					<td align="left">
+								<html:text property="programExternalFinancing" size="20"/>
+					</td>
+				</tr>
+				</field:display>
+				<field:display name="Total Financing Required" feature="Admin NPD">
+				<tr bgColor=#ffffff>
+					<td height="20" align="center">
+						<digi:trn key="aim:TotasFinance">
+							Total Financing Required
+						</digi:trn>
+			    </td>
+					<td align="left">
+							<html:text property="programTotalFinancing" size="20"/>
+					</td>
+				</tr>				
+				</field:display>
 				<field:display name="Program Lead Agency" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">

@@ -23,6 +23,7 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Html2TextCallback;
 
 import com.lowagie.text.Paragraph;
@@ -76,6 +77,11 @@ public class TextCellXLS extends XLSExporter {
 	public void generate() {
 		TextCell c=(TextCell) item;
 		HSSFCell cell=this.getRegularCell();
+		String indent = "";
+		if (colId.value == 0)
+			for (int k = 0; k < ((ReportData)c.getColumn().getParent()).getLevelDepth(); k++)
+				indent = indent + Constants.excelIndexString;
+		
 		if(c.getColumn().getName().compareTo("Status")==0)
 		{
 			String actualStatus=c.toString();
@@ -106,7 +112,7 @@ public class TextCellXLS extends XLSExporter {
 				translatedStatus=actualStatus;
 			finalStatus+=translatedStatus;
 
-			cell.setCellValue( finalStatus);
+			cell.setCellValue(indent + finalStatus);
 		}
 		else
 			if (columnNeedsHTMLStripping(c.getColumn().getName())){
@@ -114,14 +120,14 @@ public class TextCellXLS extends XLSExporter {
 				Html2TextCallback h2t = new Html2TextCallback();
 				try {
 					h2t.parse(sr);
-					cell.setCellValue(h2t.getText());
+					cell.setCellValue(indent + h2t.getText());
 				} catch (IOException e) {
 					e.printStackTrace();
-					cell.setCellValue(c.toString());
+					cell.setCellValue(indent + c.toString());
 				}
 			}
 		else 
-			cell.setCellValue(c.toString());
+			cell.setCellValue(indent + c.toString());
 		
 		colId.inc();
 	}

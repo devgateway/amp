@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -59,8 +60,13 @@ public class TrailCellsXLS extends XLSExporter {
 		// generate totals:
 		ReportData grd = (ReportData) item;
 
+
 	
 		if (grd.getParent() != null) {
+			String indent = "";
+			if (colId.value == 0)
+				for (int k = 0; k < ((ReportData)grd.getParent()).getLevelDepth(); k++)
+					indent = indent + Constants.excelIndexString;
 //			rowId.inc();
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
@@ -94,9 +100,9 @@ public class TrailCellsXLS extends XLSExporter {
 			if (grd.getParent().getParent() == null)
 				modified = "TOTAL";
 			if (grd.getReportMetadata().isHideActivities())
-				cell.setCellValue(modified);
+				cell.setCellValue(indent + modified);
 			else
-				cell.setCellValue(modified+" ("+grd.getTotalUniqueRows()+")");
+				cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
 			
 			makeColSpan(grd.getSourceColsCount().intValue());
 			//colId.inc();

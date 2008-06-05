@@ -445,7 +445,7 @@ tr.my-border-style td {
                                                     <LI>
                                                         <span>
                                                            
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
                                                              <div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
 	                 					<digi:trn key="message:Messages">Messages</digi:trn>
                                                             </div>
@@ -468,7 +468,7 @@ tr.my-border-style td {
 								<c:if test="${messageForm.tabIndex!=2}">
                                                     <LI>
                                                         <span>
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
                                                             <div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
 										<digi:trn key="message:Alerts">Alerts</digi:trn>
                                                                 </div>
@@ -491,7 +491,7 @@ tr.my-border-style td {
 								<c:if test="${messageForm.tabIndex!=3}">
                                                     <LI>
                                                         <span>
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
                                                             <div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
 										<digi:trn key="message:approvals">Approvals</digi:trn>
                                                             </div>
@@ -514,7 +514,7 @@ tr.my-border-style td {
 								<c:if test="${messageForm.tabIndex!=4}">
                                                     <LI>
                                                         <span>
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4&page=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
                                                              <div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
 										<digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                             </div>
@@ -537,7 +537,7 @@ tr.my-border-style td {
 												<digi:trn key="message:inbox">Inbox</digi:trn>
 											</c:if>
 											<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}&page=1">
+												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}">
 													<digi:trn key="message:inbox">Inbox</digi:trn>
 												</a>
 											</c:if>
@@ -548,7 +548,7 @@ tr.my-border-style td {
 												<digi:trn key="message:sent">Sent</digi:trn>
 											</c:if>
 											<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}&page=1">
+												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}">
 													<digi:trn key="message:sent">Sent</digi:trn>
 												</a>
 											</c:if>
@@ -559,7 +559,7 @@ tr.my-border-style td {
 												<digi:trn key="message:draft">Draft</digi:trn>
 											</c:if>
 											<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}&page=1">
+												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}">
 													<digi:trn key="message:draft">Draft</digi:trn>
 												</a>
 											</c:if>

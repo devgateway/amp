@@ -142,12 +142,15 @@ function doFilter() {
 		clearTree(targetDiv);
 		var programList=progListRoot.childNodes;
 	
+		<c:set var="translation">
+			<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn>
+		</c:set>  
 		if (programList==null){
-			targetDiv.innerHTML="<i>No Programs</i>";
-			return;
+			targetDiv.innerHTML="<i>${translation}</i>";
+			return;  
 		}else{
 			if(programList.length==0){
-				targetDiv.innerHTML="<i>No Programs</i>";
+				targetDiv.innerHTML="<i>${translation}</i>";
 				return;
 			}
 		}
@@ -225,7 +228,10 @@ function doFilter() {
 	
 	function getIndicatorsHTML(){
 		var indics=document.getElementsByName('indicators');
-		var result='No Indicators';
+		<c:set var="translation">
+			<digi:trn key="aim:noindicator">No Indicators</digi:trn>
+		</c:set>		
+		var result="${translation}";
 		if (indIdArr.length>0){
 			result='<table border="0" cellpadding="0" cellspacing="0">';
 			for(var i=0;i<indIdArr.length;i++){

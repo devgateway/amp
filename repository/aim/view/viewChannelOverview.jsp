@@ -64,9 +64,12 @@ function login()
 
 function fnDeleteProject()
 {
-	var name=confirm("Are you sure you want to delete the record")
+<c:set var="translation">
+	<digi:trn key="aim:deleteRecord">Are you sure you want to delete the record</digi:trn>
+</c:set>
+	var name=confirm("${translation}")
 	if (name==true)
-	{
+	{ 
 		<digi:context name="addUrl" property="context/module/moduleinstance/deleteAmpActivity.do" />
 	    document.aimChannelOverviewForm.action = "<%=addUrl%>";
 		document.aimChannelOverviewForm.submit();
@@ -541,7 +544,32 @@ function commentWin(val) {
 																					<ul>
 																						<c:forEach var="actSect" items="${activity.sectors}">
 						                                                            		<c:if test="${actSect.configId==config.id}">
-																								<li>																									<field:display name="Sector Scheme Name" feature="Sectors">																										<c:out value="${actSect.sectorScheme}" />																										<br/>&nbsp;																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>																									</field:display>																									<c:out value="${actSect.sectorName}" />																																															<c:if test="${!empty actSect.subsectorLevel1Name}">																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG																											src="../ampTemplate/images/link_out_bot.gif"/>																										<c:out value="${actSect.subsectorLevel1Name}" />																																																			<c:if test="${!empty actSect.subsectorLevel2Name}">																											 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG																												src="../ampTemplate/images/link_out_bot.gif"/>																											<c:out value="${actSect.subsectorLevel2Name}" />																											&nbsp;																										</c:if>																									</c:if>				                                                                                    <logic:present name="actSect"																										property="sectorPercentage">																										<c:if test="${actSect.sectorPercentage!=0}">																											(<c:out value="${actSect.sectorPercentage}" />%)																										</c:if>																									</logic:present>
+																								<li>
+																									<field:display name="Sector Scheme Name" feature="Sectors">
+																										<c:out value="${actSect.sectorScheme}" />
+																										<br/>&nbsp;
+																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
+																									</field:display>
+																									<c:out value="${actSect.sectorName}" />
+																						
+																									<c:if test="${!empty actSect.subsectorLevel1Name}">
+																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																											src="../ampTemplate/images/link_out_bot.gif"/>
+																										<c:out value="${actSect.subsectorLevel1Name}" />
+																									
+																										<c:if test="${!empty actSect.subsectorLevel2Name}">
+																											 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																												src="../ampTemplate/images/link_out_bot.gif"/>
+																											<c:out value="${actSect.subsectorLevel2Name}" />
+																											&nbsp;
+																										</c:if>
+																									</c:if>
+				                                                                                    <logic:present name="actSect"
+																										property="sectorPercentage">
+																										<c:if test="${actSect.sectorPercentage!=0}">
+																											(<c:out value="${actSect.sectorPercentage}" />%)
+																										</c:if>
+																									</logic:present>
 																								</li>
 																								</c:if>
 																						</c:forEach>

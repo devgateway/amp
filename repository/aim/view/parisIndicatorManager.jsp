@@ -37,8 +37,11 @@
 		}
 		function deleteIndicator()
 		{
-			return confirm("Do you want to delete the Indicator?");
-		}
+			<c:set var="translation">
+				<digi:trn key="aim:deleteIndicator">Do you want to delete the Indicator?</digi:trn>
+			</c:set> 
+			return confirm("${translation}"); 
+		} 
 
 	-->
 

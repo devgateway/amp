@@ -29,6 +29,9 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
@@ -1765,7 +1768,7 @@ public class ProgramUtil {
                                         getDefaultHierarchy());
                                     session.update(oldSetting);
 
-                            }
+                            } 
                             tx.commit();
 
                     }
@@ -1794,9 +1797,23 @@ public class ProgramUtil {
     
 	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
+		 String noProgPresent = "aim:noProgramsPresent";
+		 Site site = RequestUtils.getSite(request);
+		 //
+		 //requirements for translation purposes
+		 TranslatorWorker translator = TranslatorWorker.getInstance();
+		 String siteId = site.getSiteId();
+		 String locale = RequestUtils.getNavigationLanguage(request).getCode();
+		 String translatedText = null;
+		 try {
+			logger.info("siteID : "+siteId);
+			logger.info("locale : "+locale);
+			translatedText = TranslatorWorker.translate(noProgPresent, locale, siteId);
+		 } catch (WorkerException e) {
+			e.printStackTrace();
+		 }
 		 if (themes == null || themes.size() == 0)
-			return "<center><b>No Programs</b></<center>";
-		 //Site site = RequestUtils.getSite(request);
+			return "<center><b>"+translatedText+"</b></<center>";		
 		 String retVal;
 		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"1\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();

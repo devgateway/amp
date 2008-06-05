@@ -444,9 +444,12 @@
 		clearTree(targetDiv);
 		var programList=progListRoot.childNodes;
 
+		<c:set var="translation">
+			<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn>
+		</c:set> 
 		if (programList==null || programList.length==0){
-			targetDiv.innerHTML="<i>No Programs</i>";
-			return;
+			targetDiv.innerHTML="<i>${translation}</i>";
+			return;  
 		}
 
 		//store XML of tree;
@@ -545,7 +548,10 @@
 
 	function getIndicatorsHTML(prog){
 		var indics=getAllIndicatorsOf(prog,false);
-		var result='No Indicators';
+		<c:set var="translation">
+			<digi:trn key="aim:noindicator">No Indicators</digi:trn>
+		</c:set>		
+		var result="${translation}";
 		if (indics.length>0){
 			result='<table border="0" cellpadding="0" cellspacing="0">';
 			for(var i=0;i<indics.length;i++){

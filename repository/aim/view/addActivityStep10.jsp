@@ -21,6 +21,15 @@
 <script language="JavaScript">
 <!--
 
+	var invalidBaseValue="<digi:trn key='aim:invalidBaseValue'>Invalid Base value or Base value not entered</digi:trn>";
+	var baseValueDateNotEntered="<digi:trn key='aim:baseValueDateNotEntered'>Base value date not entered</digi:trn>";
+	var targetValueNotEntered="<digi:trn key='aim:targetValueNotEntered'>Target value not entered</digi:trn>";
+	var targetValueDateNotEntered="<digi:trn key='aim:targetValueDateNotEntered'>Target value date not entered</digi:trn>";
+	var invalidRevisedTargetValue="<digi:trn key='aim:invalidRevisedTargetValue'>Invalid Revised target value or Revised target value not entered</digi:trn>";
+	var revisedTargetValueDateNotEntered="<digi:trn key='aim:revisedTargetValueDateNotEntered'>Revised target value date not entered</digi:trn>";
+	var deleteThisIndicator="<digi:trn key='aim:deleteThisIndicator'>Are you sure you want to delete this Indicator?</digi:trn>";
+
+
 	function validateForm() {
 		return true;
 	}
@@ -37,22 +46,22 @@
 	function validateEntryByLeader() {
 
 		if (isEmpty(document.aimEditActivityForm.baseVal.value) == true) {
-			alert("Invalid Base value or Base value not entered");
+			alert(invalidBaseValue);
 			document.aimEditActivityForm.baseVal.focus();
 			return false;
 		}
 		if (isEmpty(document.aimEditActivityForm.baseValDate.value) == true) {
-			alert("Base value date not entered");
+			alert(baseValueDateNotEntered);
 			document.aimEditActivityForm.baseValDate.focus();
 			return false;
 		}
 		if (isEmpty(document.aimEditActivityForm.targetVal.value) == true) {
-			alert("Target value not entered");
+			alert(targetValueNotEntered);
 			document.aimEditActivityForm.targetVal.focus();
 			return false;
 		}
 		if (isEmpty(document.aimEditActivityForm.targetValDate.value) == true) {
-			alert("Target value date not entered");
+			alert(targetValueDateNotEntered);
 			document.aimEditActivityForm.targetValDate.focus();
 			return false;
 		}
@@ -60,13 +69,13 @@
 		if (document.aimEditActivityForm.revTargetValDate != null) {
 
 			if (isEmpty(document.aimEditActivityForm.revTargetVal.value) == true) {
-				alert("Invalid Revised target value or Revised target value not entered");
+				alert(invalidRevisedTargetValue);
 				document.aimEditActivityForm.currentVal.focus();
 				return false;
 			}
 
 			if (isEmpty(document.aimEditActivityForm.revTargetValDate.value) == true) {
-				alert("Revised target value date not entered");
+				alert(revisedTargetValueDateNotEntered);
 				document.aimEditActivityForm.revTargetValDate.focus();
 				return false;
 			}
@@ -93,28 +102,28 @@
 
         txt=document.getElementById("txtBaseValue");
 		if (txt!=null && !containsValidNumericValue(txt)) {
-			alert("Invalid Base value or Base value not entered");
+			alert(invalidBaseValue);
 			txt.focus();
 			return false;
 		}
 
         txt=document.getElementById("txtBaseValDate");
 		if (txt!=null && isEmpty(txt.value)) {
-			alert("Base value date not entered");
+			alert(baseValueDateNotEntered);
 			txt.focus();
 			return false;
 		}
 
         txt=document.getElementById("txtRevTargetVal");
 		if (txt!=null && !containsValidNumericValue(txt)) {
-			alert("Invalid Target value or Target value not entered");
+			alert(targetValueNotEntered);
 			txt.focus();
 			return false;
 		}
 
         txt=document.getElementById("txtRevisedTargetValDate");
 		if (txt!=null && isEmpty(txt.value)) {
-			alert("Target value date not entered");
+			alert(targetValueDateNotEntered);
 			txt.focus();
 			return false;
 		}
@@ -147,7 +156,7 @@
 
 	function deleteIndicator()
 		{
-			return confirm("Are you sure you want to delete this Indicator?");
+			return confirm(deleteThisIndicator);
 		}
 
 
@@ -442,7 +451,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<field:display name="Logframe Category" feature="Activity">
 															<tr>
 																<td >
-																	Logframe Category
+																	<digi:trn key="aim:logframeCategory">Logframe Category</digi:trn>
 																</td>
 																<td>
 																	<category:showoptions name="aimEditActivityForm" property="logframeCategory" keyName="logframe" styleClass="inp-text" />

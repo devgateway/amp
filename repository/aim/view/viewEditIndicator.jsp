@@ -30,7 +30,10 @@
 --%>
 
 function removeActivity(id) {
-	var temp = confirm("Do you want to delete this Activity?");
+	<c:set var="translation">
+		<digi:trn key="admin:deleteThisActivity">Do you want to delete this Activity?</digi:trn>
+	</c:set>
+	var temp = confirm("${translation}");
 	if(temp == false)
 	{
 			return false;
@@ -48,12 +51,19 @@ function removeActivity(id) {
 
 function saveIndicator(){
 
-  if(document.getElementById("txtName").value==""){
-    alert("Please enter name");
+ if(document.getElementById("txtName").value==""){
+    <c:set var="translation">
+		<digi:trn key="admin:enterName">Please enter name</digi:trn>
+	</c:set>
+	alert("${translation}");
     return false;
   }
+
   if(document.getElementById("txtCode").value==""){
-    alert("Please enter code");
+    <c:set var="translation">
+		<digi:trn key="admin:enterCode">Please enter code</digi:trn>
+	</c:set>
+	alert("${translation}");
     return false;
   }
  
@@ -74,8 +84,11 @@ function saveIndicator(){
 		var Sector;
 		
 		if(!length){
-			alert("Please add Sectors");
-			 return false;
+			<c:set var="translation">
+				<digi:trn key="admin:addSector">Please add Sectors</digi:trn>
+			</c:set>
+			alert("${translation}");
+			return false;
 		}else{
 			for(i = 0; i<length; i++){
 				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
@@ -132,11 +145,13 @@ function radiosStatus(type){
 
 
 function validate(field) {
-
+	<c:set var="translation">
+		<digi:trn key="admin:chooseSectorToRemove">Please choose a sector to remove</digi:trn>
+	</c:set>
 	if (field == 2){  // validate sector
 		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
 			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {
-				alert("Please choose a sector to remove");
+				alert("${translation}");
 				return false;
 			}
 		} else {
@@ -150,7 +165,7 @@ function validate(field) {
 			}
 
 			if (flag == 0) {
-				alert("Please choose a sector to remove");
+				alert("${translation}");
 				return false;
 			}
 		}
@@ -190,7 +205,7 @@ function closeWindow() {
   <table width="100%" align="center" border="0" class=box-border-nopadding>
     <tr bgcolor="#006699" class=r-dotted-lg >
       <td colspan="1" align="center" class="textalb">
-      <b>View/Edit Indicator</b>
+      <b><digi:trn key="aim:vieweditindicator">View/Edit Indicator</digi:trn></b>
       </td>
     </tr>
     <tr align="center" bgcolor="#ECF3FD">
@@ -198,7 +213,7 @@ function closeWindow() {
         <table border="0">
           <tr id="trName">
             <td>
-            Indicator name:
+            <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
             </td>
             <td>
               <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
@@ -206,7 +221,9 @@ function closeWindow() {
           </tr>
           <tr id="trDescription">
             <td valign="top">
+            <digi:trn key="admin:decription">
             Description:
+            </digi:trn>
             </td>
             <td>
               <html:textarea property="description" styleId="txtDescription" style="font-family:verdana;font-size:11px;width:200px;"></html:textarea>
@@ -214,7 +231,9 @@ function closeWindow() {
           </tr>
           <tr>
             <td>
-            Indicator code:
+            <digi:trn key="admin:indicatorcode">
+            	Indicator code:
+            	</digi:trn>
             </td>
             <td>
                <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>
@@ -233,14 +252,18 @@ function closeWindow() {
           <tr id="trCategory">
           </tr>
           <tr>
-            <td>Sectors:</td>
+            <td><digi:trn key="admin:sectors">
+          	Sectors
+          </digi:trn></td>
              <td>
               <jsp:include page="addIndicatorSector.jsp"/>
             </td>
           </tr>  
           <tr id="trCreationDate">
             <td>
+            <digi:trn key="admin:creationdate">
             Creation date:
+            </digi:trn>
             </td>
             <td>
                <html:text property="date" styleId="date" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>

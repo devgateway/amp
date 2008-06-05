@@ -165,11 +165,15 @@
 </table>
 <table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
 	<tr>
-		<td align="right">
-			<input type="button" value="Ok" class="dr-dialogmenu" onclick="doChanges();">
+		<td align="right">		
+			<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="doChanges();">
+				<digi:trn key="aim:ok">OK</digi:trn>
+			</html:button>
 		</td>
 		<td align="left">
-			<input type="button" value="Close" class="dr-dialogmenu" onclick="window.close();">
+			<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="window.close();">
+				<digi:trn key="aim:close">Close</digi:trn>
+			</html:button>
 		</td>
 	</tr>
 </table>

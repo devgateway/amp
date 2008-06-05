@@ -17,7 +17,7 @@
 		</tr>
 		<tr bgcolor="lightgrey">
 			<td align="center" valign="center" height="7%" width="100%">
-			    <a href="javascript:window.close()" class="navtop4">Close this window</a>
+			    <a href="javascript:window.close()" class="navtop4"><digi:trn key="um:closeThisWindow">Close this window</digi:trn></a>
 			</td>
 		</tr>
 	</table>

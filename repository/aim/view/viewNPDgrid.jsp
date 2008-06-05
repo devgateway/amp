@@ -71,9 +71,13 @@
 									<td valign="top">
 										<table cellPadding="5" cellSpacing="5" width="100%">
 										<td align="left">
-											<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">Export to Excel &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
+											<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">
+											<digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>
+											 &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
 														&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-											<digi:link styleId="printWin" href="#" onclick="window.print(); return false;">Print &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
+										 	<digi:link styleId="printWin" href="#" onclick="window.print(); return false;">
+											<digi:trn key="aim:print">Print</digi:trn>
+											&nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
 										   </td>
 									            <tr>
 												<td align="left" vAlign="top">
@@ -171,7 +175,9 @@
 <table width="100%">
 	<tr>
 		<td align="center">
-			<input type="button" value="Close" onclick="window.close()">
+		<html:button styleClass="dr-dialogmenu" property="submitButton" onclick="window.close();">
+				<digi:trn key="aim:close">Close</digi:trn>
+			</html:button>
 		</td>
 	</tr>
 

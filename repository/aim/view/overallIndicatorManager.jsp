@@ -37,12 +37,18 @@
 			document.aimAllIndicatorForm.submit();
 		}
 		function deletePrgIndicator()
-	  	{
-			return confirm("Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.");
+	  	{  
+			<c:set var="translation"> 
+				<digi:trn key="aim:doYouWantToDelIndicatorCheckProgramFirst">Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.</digi:trn>
+			</c:set>
+			return confirm("${translation}");
 		}
 		function deleteProjIndicator()
 	  	{
-			return confirm("Do you want to delete the Indicator ? Please check whether the indicator is being used by some Activity.");
+			<c:set var="translation">
+				<digi:trn key="aim:doYouWantToDelIndicatorCheckActivityFirst">Do you want to delete the Indicator?</digi:trn>
+			</c:set>
+			return confirm("${translation}");
 		}
 		function load(){}
 		function unload(){}

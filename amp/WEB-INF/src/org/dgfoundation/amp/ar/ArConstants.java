@@ -109,8 +109,11 @@ public final class ArConstants {
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	
-	
-	public static final String VIEW_PROPOSED_COST="v_proposed_cost";
+	public static final String VIEW_PROPOSED_COST="v_proposed_cost";	
+	public static final String VIEW_DONOR_FUNDING="v_donor_funding";
+	public static final String VIEW_COMPONENT_FUNDING="v_component_funding";
+	public static final String VIEW_REGIONAL_FUNDING="v_regional_funding";
+	public static final String VIEW_CONTRIBUTION_FUNDING="v_contribution_funding";
 	
 	//reportsFilter
 	

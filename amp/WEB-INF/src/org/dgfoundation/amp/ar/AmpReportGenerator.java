@@ -234,14 +234,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		ac.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
 		ac.setColumnName(ArConstants.COLUMN_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.DONOR_TYPE)
-			ac.setExtractorView("v_donor_funding");
+			ac.setExtractorView(ArConstants.VIEW_DONOR_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.COMPONENT_TYPE)
-			ac.setExtractorView("v_component_funding");
+			ac.setExtractorView(ArConstants.VIEW_COMPONENT_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.REGIONAL_TYPE)
-			ac.setExtractorView("v_regional_funding");
+			ac.setExtractorView(ArConstants.VIEW_REGIONAL_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.CONTRIBUTION_TYPE)
-			ac.setExtractorView("v_contribution_funding");		
+			ac.setExtractorView(ArConstants.VIEW_CONTRIBUTION_FUNDING);		
 
+		ColumnFilterGenerator.attachHardcodedFilters(ac);
+		
 		reportMetadata.getOrderedColumns().add(arc);
 
 		// ugly but useful :) get cummulative columns right before funding:

@@ -12,6 +12,13 @@ public class AmpColumnsFilters {
 	private AmpColumns column;
 	private String beanFieldName;
 	private String viewFieldName;
+	
+	public AmpColumnsFilters(AmpColumns column, String beanFieldName, String viewFieldName) {
+		this.column=column;
+		this.beanFieldName=beanFieldName;
+		this.viewFieldName=viewFieldName;
+	}
+	
 	public Long getId() {
 		return id;
 	}

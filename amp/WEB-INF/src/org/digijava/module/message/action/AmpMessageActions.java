@@ -536,12 +536,12 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setMsgStateId(null);
 		 form.setReceivers(null);
 		 form.setSender(null);
-		 form.setTabIndex(1);
+		 //form.setTabIndex(1);
 		 form.setMsgType(0);
 		 form.setAlertType(0);
 		 form.setCalendarEventType(0);
 		 form.setApprovalType(0);
-		 form.setChildTab("inbox");
+		 //form.setChildTab("inbox");
 		 form.setSetAsAlert(0);
 		 form.setForwardedMsg(null);
 		 form.setPage(null);

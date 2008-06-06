@@ -64,7 +64,8 @@ public final class AdvancedReportUtil {
 			
 			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			
-			
+			//amp-3304
+			/*
 			if(teamLead == true&&(ampReports.getOwnerId()==null||(ampReports.getOwnerId().getAmpTeam().getTeamLead()!=null && 
 					ampReports.getOwnerId().getAmpTeamMemId().equals(ampReports.getOwnerId().getAmpTeam().getTeamLead().getAmpTeamMemId())))
 					)
@@ -83,6 +84,7 @@ public final class AdvancedReportUtil {
 					session.save(ampTeamReports);
 				}
 			}
+			*/
 //			else
 //			{
 				//logger.info(teamMember.getMemberName() + " is Team Memeber ");

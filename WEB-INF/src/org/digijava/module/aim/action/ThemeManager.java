@@ -117,7 +117,6 @@ public class ThemeManager extends Action {
 		Collection themes = new ArrayList();
 		Collection Subthemes = new LinkedList();
 		Subthemes  = new ArrayList();
-		ThemeForm themeForm = (ThemeForm) form;
 		String event = request.getParameter("event");
 		
 		if (event != null && event.equals("delete"))

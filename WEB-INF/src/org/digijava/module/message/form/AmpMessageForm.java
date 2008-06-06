@@ -35,6 +35,7 @@ public class AmpMessageForm extends ActionForm {
 	private MessageHelper forwardedMsg;
 	
 	private int setAsAlert;
+	private boolean deleteActionWasCalled;
 	
 	private String [] allPages;
 	private String page;
@@ -414,5 +415,13 @@ public class AmpMessageForm extends ActionForm {
 
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+
+	public boolean isDeleteActionWasCalled() {
+		return deleteActionWasCalled;
+	}
+
+	public void setDeleteActionWasCalled(boolean deleteActionWasCalled) {
+		this.deleteActionWasCalled = deleteActionWasCalled;
 	}
 }

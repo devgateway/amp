@@ -217,12 +217,13 @@ tr.my-border-style td {
 								}else{
 									if(j==myArray.length-1){									
 										tbl.tBodies[0].insertRow(whereToInsertRow);
-										var msgTR=tbl.rows[whereToInsertRow];
+										var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
 										msgTR.className = 'my-border-style';									
 										msgTR.style.backgroundColor='#ffffff';
 										createTableRow(tbl,msgTR,messages[i]);
 										myArray[myArray.length]=msgId;
-										whereToInsertRow++;
+										whereToInsertRow++;										
+										tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
 									}							
 								}
 							}

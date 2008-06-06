@@ -1,10 +1,14 @@
 package org.digijava.module.gis.widget.table;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
-import org.digijava.module.gis.dbentity.AmpDaColumn;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.gis.dbentity.AmpDaTable;
+import org.digijava.module.gis.dbentity.AmpDaValue;
+import org.digijava.module.gis.util.TableWidgetUtil;
 
 /**
  * Html table bean.
@@ -43,6 +47,15 @@ public class DaTable implements HtmlGenerator{
 			if (null != entity.getColumns() && entity.getColumns().size() > 1){
 				headerRows = new HashSet<DaRow>();
 				headerRows.add(new DaRow(entity.getColumns()));
+			}
+			try {
+				List<AmpDaValue> values = TableWidgetUtil.getTableData(this.id);
+				List<DaRow> rows = TableWidgetUtil.dataToHelpers(values);
+				Collections.sort(rows,new TableWidgetUtil.RowPkComparator());
+				this.setDataRows(rows);
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

@@ -1,8 +1,12 @@
 package org.digijava.module.gis.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +23,8 @@ import org.digijava.module.gis.dbentity.AmpDaColumn;
 import org.digijava.module.gis.dbentity.AmpDaTable;
 import org.digijava.module.gis.dbentity.AmpDaValue;
 import org.digijava.module.gis.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.gis.widget.table.DaCell;
+import org.digijava.module.gis.widget.table.DaRow;
 import org.digijava.module.gis.widget.table.DaTable;
 
 /**
@@ -179,8 +185,11 @@ public class TableWidgetUtil {
 	}
 
 	//=======Data=======================
-	public static void getTableData(Long tableId)throws DgException{
+	
+	@SuppressWarnings("unchecked")
+	public static List<AmpDaValue> getTableData(Long tableId)throws DgException{
 		Session session = PersistenceManager.getRequestDBSession();
+		List<AmpDaValue> results=null;
 		String oql="select v from ";
 		oql += AmpDaValue.class.getName()+" as v, ";
 		oql += AmpDaColumn.class.getName()+ " as c, ";
@@ -191,14 +200,34 @@ public class TableWidgetUtil {
 		try {
 			Query query=session.createQuery(oql);
 			query.setLong("tableId", tableId);
+			results = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DgException("Error loading table data for id=",e);
 		}
-		
+		return results;
 	}
 	
-	
+	public static List<DaRow> dataToHelpers(Collection<AmpDaValue> data)throws DgException{
+		List<DaRow> rows=null;
+		Map<Long, DaRow> rowsByPk=new HashMap<Long, DaRow>();
+		for (AmpDaValue value : data) {
+			DaRow row=rowsByPk.get(value.getPk());
+			if (null == row){
+				row = new DaRow();
+				rowsByPk.put(value.getPk(), row);
+				row.setPk(value.getPk().toString());
+				row.setCells(new ArrayList<DaCell>(10));
+			}
+			DaCell cell = new DaCell(value);
+			row.getCells().add(cell);
+		}
+		rows = new ArrayList<DaRow>(rowsByPk.values());
+		for (DaRow daRow : rows) {
+			Collections.sort(daRow.getCells(),new CellOrderNoComparator());
+		}
+		return rows;
+	}
 	//=======PLACES=====================
 	public static AmpDaWidgetPlace getPlace(String code) throws DgException{
 		AmpDaWidgetPlace result=null;
@@ -262,6 +291,9 @@ public class TableWidgetUtil {
 	
 	
 	//=======COLUMNS====================
+	
+	
+	//=======key resolvers==============
 	public static class TableWidgetKeyResolver implements KeyResolver<Long, AmpDaTable>{
 		public Long resolveKey(AmpDaTable element) {
 			return element.getId();
@@ -272,13 +304,6 @@ public class TableWidgetUtil {
 			return element.getId();
 		}
 	}
-	public static class ColumnOrderNoComparator implements Comparator<AmpDaColumn>{
-
-		public int compare(AmpDaColumn col1, AmpDaColumn col2) {
-			return col1.getOrderNo().compareTo(col2.getOrderNo());
-		}
-		
-	}
 	
 	public static class WidgetPlaceKeyResolver implements KeyResolver<Long, AmpDaWidgetPlace>{
 		public Long resolveKey(AmpDaWidgetPlace element) {
@@ -286,6 +311,35 @@ public class TableWidgetUtil {
 		}
 		
 	}
+	
+	//========comparators=============
+	/**
+	 * Compares {@link AmpDaColumn} with its orderNo field.
+	 *
+	 */
+	public static class ColumnOrderNoComparator implements Comparator<AmpDaColumn>{
+
+		public int compare(AmpDaColumn col1, AmpDaColumn col2) {
+			return col1.getOrderNo().compareTo(col2.getOrderNo());
+		}
+	}
+	
+	public static class RowPkComparator implements Comparator<DaRow>{
+		public int compare(DaRow r1, DaRow r2) {
+			return r1.getPk().compareTo(r2.getPk());
+		}
+	}
+	
+	/**
+	 * Compares DaCell helpers by its column order number.
+	 *
+	 */
+	public static class CellOrderNoComparator implements Comparator<DaCell>{
+		public int compare(DaCell c1, DaCell c2) {
+			return c1.getColumnOrderNo().compareTo(c2.getColumnOrderNo());
+		}
+	}
+	
 	
 	//not used yet. will reimplement in AmpCollectionUtils with java generics.
 	public static class ColumnSynzchronizer implements CollectionSynchronizer{

@@ -12,14 +12,18 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 <!--
-	function addColumn(myForm,id){
-		openURLinWindow('${contextPath}/gis/adminTableWidgets.do?actType=showColumnPopup');
-		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=edit" />
-		myForm.action="<%=justSubmit%>&id="+id;  
+	function addRow(myForm,indx){
+		<digi:context name="justSubmit" property="context/module/moduleinstance/tableWidgetData.do?actType=addRow" />
+		myForm.action="<%=justSubmit%>&rowIndex="+indx;  
+		myForm.submit();
+	}
+	function removeRow(myForm,indx){
+		<digi:context name="justSubmit" property="context/module/moduleinstance/tableWidgetData.do?actType=removeRow" />
+		myForm.action="<%=justSubmit%>&rowIndex="+indx;  
 		myForm.submit();
 	}
 	function cancelEdit(myForm){
-		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=cancelEdit" />
+		<digi:context name="justSubmit" property="context/module/moduleinstance/tableWidgetData.do?actType=cancelEdit" />
 		myForm.action="<%=justSubmit%>";  
 		myForm.submit();
 	}
@@ -56,7 +60,49 @@
 	</tr>
 	<tr>
 		<td>
-			REST !
+			<table width="100%">
+				<tr bgColor="#d7eafd">
+					<c:forEach var="col" items="${dform.columns}" varStatus="cvarstat">
+						<td>
+							<strong>
+								${col.name}
+							</strong>
+						</td>
+					</c:forEach>
+					<td>
+						<strong>
+							Operations
+						</strong>
+					</td>
+				</tr>
+				<c:forEach var="row" items="${dform.matrix}" varStatus="rvarstat">
+					<tr>
+						<c:forEach var="cell" items="${row}" varStatus="cvarstat">
+							<td>
+								<html:text name="dform" property="cell[${rvarstat.index}][${cvarstat.index}]" value="${cell}"/>
+							</td>
+						</c:forEach>
+						<td>
+							<input type="button" value="Add" onclick="addRow(this.form,${rvarstat.index})">
+							<input type="button" value="Remove" onclick="removeRow(this.form,${rvarstat.index})">
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</td>
+	</tr>
+	<tr align="right">
+		<td>
+			<table>
+				<tr>
+					<td>
+						<input type="button" value="Cancel" title="Cancel and return to list" onclick="cancelEdit(this.form)">
+					</td>
+					<td>
+						<html:submit title="Submit all moidications" value="Save"/>
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 </table>

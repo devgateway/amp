@@ -17,7 +17,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
  * <p>
  * <code>
  * globalSettings = (GlobalSettings)getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
- * globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
+ * globalSettings.setXX(FeaturesUtil.isXXEnabled());
  * </code> 
  * <p>
  * The name of the bean is Constants.GLOBAL_SETTINGS.

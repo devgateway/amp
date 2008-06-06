@@ -276,12 +276,6 @@
 									<b><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></b></a>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-									<%-- 	<html:select property="modality" styleClass="inp-text" disabled="${aimEditActivityForm.donorFlag}">
-											<html:optionsCollection name="aimEditActivityForm" property="modalityCollection"
-											value="ampModalityId" label="name" />
-										</html:select>
-									--%>
-
 										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="modality"
 										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 
@@ -478,7 +472,6 @@
 							<c:set var="index" value="-1"/>
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==0}">
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									 	<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
@@ -487,7 +480,6 @@
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
                                                 </c:if>
-											</c:if>
 
 											<c:if test="${aimEditActivityForm.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
@@ -829,8 +821,6 @@
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==1}">
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<%-- <c:if test="${fundingDetail.perspectiveCode=='MA'}"> --%>
 										<tr>
 											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 											<td valign="bottom">
@@ -933,8 +923,6 @@
 												</a>
 											</td>
 										</tr>
-									<%-- </c:if> --%>
-								</c:if>
 							</c:if>
 						 	</c:forEach>
 						 	</c:if>
@@ -1011,8 +999,6 @@
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==2}">
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<%--  <c:if test="${fundingDetail.perspectiveCode=='MA'}"> --%>
 
 									 	<tr bgcolor="#ffffff">
 														<td valign="bottom">
@@ -1075,9 +1061,6 @@
 													<tr>
 														<td colspan="6" bgcolor="#dddddd"></td>
 													</tr>
-
-									<%--  </c:if> --%>
-								</c:if>
 
 							</c:if>
 						 	</c:forEach>

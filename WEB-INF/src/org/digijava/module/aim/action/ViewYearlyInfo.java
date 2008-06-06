@@ -129,7 +129,6 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			logger.info("Loading perspectives") ;
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		}

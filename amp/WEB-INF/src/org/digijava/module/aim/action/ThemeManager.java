@@ -48,6 +48,11 @@ public class ThemeManager extends Action {
 				return mapping.findForward("index");
 			}
 		}
+		ThemeForm themeForm = (ThemeForm) form;
+		
+		themeForm.setProgramExternalFinancing((float)0.0);
+		themeForm.setProgramInernalFinancing((float)0.0);
+		themeForm.setProgramTotalFinancing((float)0.0);
 		//added for the indicator
 		
 		String viewPreference = request.getParameter("view");
@@ -56,7 +61,7 @@ public class ThemeManager extends Action {
 		{
 			if(viewPreference.equals("multiprogram"))
 			{
-				ThemeForm themeForm = (ThemeForm) form;
+				
 				if(flag != null){
 					themeForm.setFlag("error");
 				}

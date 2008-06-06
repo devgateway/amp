@@ -1,6 +1,7 @@
 package org.digijava.module.gis.widget.table;
 
 import org.digijava.module.gis.dbentity.AmpDaColumn;
+import org.digijava.module.gis.dbentity.AmpDaValue;
 
 /**
  * Html table cell.
@@ -10,6 +11,8 @@ import org.digijava.module.gis.dbentity.AmpDaColumn;
 public class DaCell implements HtmlGenerator {
 
 	private Long id;
+	private Long columnId;
+	private Integer columnOrderNo;
 	private String value;
 	private String cssClass;
 	private String htmlStyle;
@@ -31,7 +34,21 @@ public class DaCell implements HtmlGenerator {
 		this.value = col.getName();
 		this.cssClass = col.getCssClass();
 		this.htmlStyle = col.getHtmlStyle();
+		this.columnId = col.getId();
+		this.columnOrderNo = col.getOrderNo();
 		this.isHeader = true;
+	}
+
+	/**
+	 * Constructs data cell.
+	 * @param cell
+	 */
+	public DaCell(AmpDaValue cell){
+		this.value = cell.getValue();
+		this.id = cell.getId();
+		this.columnId = cell.getColumn().getId();
+		this.columnOrderNo = cell.getColumn().getOrderNo();
+		this.isHeader = false;
 	}
 	
 	public String generateHtml() {
@@ -93,6 +110,22 @@ public class DaCell implements HtmlGenerator {
 
 	public void setHeader(boolean isHeader) {
 		this.isHeader = isHeader;
+	}
+
+	public Long getColumnId() {
+		return columnId;
+	}
+
+	public void setColumnId(Long columnId) {
+		this.columnId = columnId;
+	}
+
+	public Integer getColumnOrderNo() {
+		return columnOrderNo;
+	}
+
+	public void setColumnOrderNo(Integer columnOrderNo) {
+		this.columnOrderNo = columnOrderNo;
 	}
 
 }

@@ -70,7 +70,7 @@
 						 	${widgetTable.code}
 						</td>
 						<td>
-							<digi:link href="/adminTableData.do">Edit data</digi:link>
+							<html:link href="/gis/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">Edit data</html:link>
 						</td>
 						<td nowrap="nowrap">
 						 	<digi:link href="/adminTableWidgets.do~actType=startEdit~id=${widgetTable.id}">Edit</digi:link>

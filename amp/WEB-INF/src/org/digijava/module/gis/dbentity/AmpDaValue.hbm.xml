@@ -10,7 +10,7 @@
 		</id>
 
         <property name="pk" column="row_pk" type="java.lang.Long"/>
-		<property name="value" column="table_code" type="java.lang.String"/>
+		<property name="value" column="cell_value" type="java.lang.String"/>
 		
 		<many-to-one name="column" column="column_id" class="org.digijava.module.gis.dbentity.AmpDaColumn" cascade="none"/>		
 

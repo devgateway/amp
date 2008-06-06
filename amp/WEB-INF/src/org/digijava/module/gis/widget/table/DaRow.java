@@ -2,6 +2,7 @@ package org.digijava.module.gis.widget.table;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.digijava.module.gis.dbentity.AmpDaColumn;
 
@@ -15,7 +16,7 @@ public class DaRow implements HtmlGenerator{
 	private Long id;
 	private String pk;
 	private String cssClass;
-	private Collection<DaCell> cells;
+	private List<DaCell> cells;
 	private boolean isHeader;
 	
 	public DaRow(){
@@ -70,11 +71,11 @@ public class DaRow implements HtmlGenerator{
 		this.cssClass = cssClass;
 	}
 
-	public Collection<DaCell> getCells() {
+	public List<DaCell> getCells() {
 		return cells;
 	}
 
-	public void setCells(Collection<DaCell> cells) {
+	public void setCells(List<DaCell> cells) {
 		this.cells = cells;
 	}
 

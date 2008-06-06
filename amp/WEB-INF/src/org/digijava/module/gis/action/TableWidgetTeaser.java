@@ -1,7 +1,5 @@
 package org.digijava.module.gis.action;
 
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

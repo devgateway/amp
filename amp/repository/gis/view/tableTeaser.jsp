@@ -35,6 +35,15 @@
 					</td>
 				</c:forEach>
 			</tr>
+			<c:forEach var="trow" items="${tform.table.dataRows}" varStatus="dstat">
+				<tr>
+					<c:forEach var="tcell" items="${trow.cells}" varStatus="cstat">
+						<td>
+							${tcell.value}
+						</td>
+					</c:forEach>
+				</tr>
+			</c:forEach>
 		</c:forEach>
 	</table>
 </c:if>

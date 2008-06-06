@@ -221,6 +221,9 @@ public class AmpMessageActions extends DispatchAction {
 		out.close();
 		// return xml			
 		outputStream.close();
+		if(messageForm.isDeleteActionWasCalled()){
+			messageForm.setDeleteActionWasCalled(false);
+		}
     	return null;
     }
         
@@ -332,6 +335,7 @@ public class AmpMessageActions extends DispatchAction {
     */
     public ActionForward removeSelectedMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {    	
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
+    	messagesForm.setDeleteActionWasCalled(true);
     	//remove from db
     	AmpMessageUtil.removeMessageState(messagesForm.getMsgStateId());	
     	return viewAllMessages(mapping, messagesForm, request, response);
@@ -548,6 +552,7 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setAllPages(null);
 		 form.setPagedMessagesForTm(null);
 		 form.setLastPage(null);
+		 form.setDeleteActionWasCalled(false);
 	 }
 	 
 	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long stateId) throws Exception{	 
@@ -608,9 +613,10 @@ public class AmpMessageActions extends DispatchAction {
 		    	result+="<"+"pagination messagesExist=\""+messagesExist+"\"";
 		    	result+=" page=\""+form.getPage()+"\"";
 		    	result+=" allPages=\""+form.getAllPages().length+"\"";
-		    	result+=" pagesToShow=\""+form.getPagesToShow()+"\"";
+		    //	result+=" pagesToShow=\""+form.getPagesToShow()+"\"";
 		    	result+=" lastPage=\""+form.getLastPage()+"\"";
-		    	result+=" offset=\""+form.getOffset()+"\"";
+		    	result+=" deleteWasCalled=\""+form.isDeleteActionWasCalled()+"\"";
+		    //	result+=" offset=\""+form.getOffset()+"\"";
 		    	result+="/>";
 		    	result+="</" + PAGINATION_TAG +">";
 	    	result+="</"+ROOT_TAG +">";

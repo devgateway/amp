@@ -84,7 +84,8 @@ tr.my-border-style td {
 				var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
 				url+='~editingMessage=false';
-				url+='~msgStateId='+msgId;		
+				url+='~msgStateId='+msgId;
+				url+='~page='+currentPage;			
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
 				async.call(url);		
@@ -184,9 +185,10 @@ tr.my-border-style td {
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
-		
-		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
+				
+		var mainTag=responseXML.getElementsByTagName('Messaging')[0];		
 		if(mainTag!=null){
+			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
 			//messages start	
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
@@ -215,15 +217,29 @@ tr.my-border-style td {
 								if(msgId==myArray[j]){
 									break;
 								}else{
-									if(j==myArray.length-1){									
-										tbl.tBodies[0].insertRow(whereToInsertRow);
-										var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
-										msgTR.className = 'my-border-style';									
-										msgTR.style.backgroundColor='#ffffff';
-										createTableRow(tbl,msgTR,messages[i]);
-										myArray[myArray.length]=msgId;
-										whereToInsertRow++;										
-										tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
+									if(j==myArray.length-1){
+										if(paginationTag!=null){
+											var pagParams=paginationTag.childNodes[0];
+											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
+											if(wasDelteActionCalled=='true'){
+												var msgTR=document.createElement('TR');												
+												msgTR.className = 'my-border-style';									
+												msgTR.style.backgroundColor='#eeeeee';
+												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i]));
+												myArray[myArray.length]=msgId;										
+											}else{
+												tbl.tBodies[0].insertRow(whereToInsertRow);
+												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
+												msgTR.className = 'my-border-style';									
+												msgTR.style.backgroundColor='#ffffff';
+												createTableRow(tbl,msgTR,messages[i]);
+												myArray[myArray.length]=msgId;
+												whereToInsertRow++;										
+												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
+											}
+										}										
+																			
+										
 									}							
 								}
 							}
@@ -250,22 +266,22 @@ tr.my-border-style td {
 							myTR.className = 'my-border-style';													
 						}//end of for loop
 					}			
-				}
-			}//messages end
+				}//messages end
+				
+				//pagination start
 			
-			//pagination start
-			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
-			if(paginationTag!=null){
-				var paginationParams=paginationTag.childNodes[0];
-				var doMsgsExist=paginationParams.getAttribute('messagesExist');	
-				if(doMsgsExist=='true'){
-					var page=paginationParams.getAttribute('page');
-					var allPages=paginationParams.getAttribute('allPages');
-					var lastPage=paginationParams.getAttribute('lastPage');
-					setupPagionation(paginationTag,parseInt(page),parseInt(allPages));
-				}				
+				if(paginationTag!=null){
+					var paginationParams=paginationTag.childNodes[0];
+					var doMsgsExist=paginationParams.getAttribute('messagesExist');	
+					if(doMsgsExist=='true'){
+						var page=paginationParams.getAttribute('page');
+						var allPages=paginationParams.getAttribute('allPages');
+						var lastPage=paginationParams.getAttribute('lastPage');
+						setupPagionation(paginationTag,parseInt(page),parseInt(allPages));
+					}				
+				}
+				//pagination end
 			}
-			//pagination end
 	}	
 	
 	function setupPagionation (paginationTag,page,allPages){

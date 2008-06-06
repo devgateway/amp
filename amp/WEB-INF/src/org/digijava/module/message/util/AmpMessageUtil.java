@@ -265,26 +265,18 @@ public class AmpMessageUtil {
 //				query=session.createQuery(queryString);
 //			}	
 			query=session.createQuery(queryString);
-			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;
-			int toIndex=0;
+			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
-				fromIndex=0;
-				toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
-				if(fromIndex+MessageConstants.MESSAGES_PER_PAGE> messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE){
-					toIndex=messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
-				}else{
-					toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
-				}
-				if(toIndex>messagesAmount){
-					toIndex=messagesAmount;
-				}
-				query.setFirstResult(fromIndex);
-				query.setMaxResults(toIndex);
+				fromIndex=0;				
+			}	
+			int toIndex;
+			if(messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE< MessageConstants.MESSAGES_PER_PAGE){
+				toIndex=messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
 			}else{
-				toIndex=fromIndex+MessageConstants.MESSAGES_PER_PAGE;
-				query.setFirstResult(fromIndex);
-				query.setMaxResults(toIndex);
+				toIndex=MessageConstants.MESSAGES_PER_PAGE;
 			}
+			query.setFirstResult(fromIndex);
+			query.setMaxResults(toIndex);
 			query.setParameter("tmId", teamMemberId);			
 			returnValue=query.list();			
 		}catch(Exception ex) {

@@ -463,6 +463,7 @@
             	<page>preview_tableWidget</page>
             </module>
 			<module name="aim">
+				<page>aim_saveMessage</page>
 				<page>aim_showDocumentsInPopup</page>
 				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>

@@ -106,6 +106,9 @@
     <form-bean name="aimDonorDataImportForm" type="org.digijava.module.aim.form.DonorDataImportForm" />
     <form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
+    
+    <!-- The ReportWizardForm is used by the DHTML report wizard -->
+    <form-bean name="aimReportWizardForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" />
     <form-bean name="aimSectorSchemeForm" type="org.digijava.module.aim.form.SectorSchemeForm" />
     <form-bean name="aimFlagUploaderForm" type="org.digijava.module.aim.form.FlagUploaderForm" />
     <form-bean name="aimTranslatorManagerForm" type="org.digijava.module.aim.form.TranslatorManagerForm" />
@@ -1437,8 +1440,12 @@
     </action>
     <action name="aimAdvancedReportForm" path="/aim/advancedReportPieChart" scope="session" type="org.digijava.module.aim.action.AdvancedReportPieChart" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/advancedReportBarChart" scope="session" type="org.digijava.module.aim.action.AdvancedReportBarChart" validate="false" />
+    <action name="aimReportWizardForm" path="/aim/reportWizard" scope="session" type="org.digijava.module.aim.action.reportwizard.ReportWizardAction">
+    	 <forward name="show" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
+    	 <forward name="save" path="/showLayout.do?layout=aim_saveMessage" />
+    </action>
     <action name="aimAdvancedReportForm" parameter="/aim/advancedReportManager" path="/aim/advancedReportManager" scope="session" type="org.digijava.module.aim.action.AdvancedReport">
-      <forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />
+      <forward name="forward" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
       <forward name="SelectCols" path="/showLayout.do?layout=AdvancedReportManagerStep1" />
       <forward name="GenerateReport" path="/showLayout.do?layout=AdvancedReportManagerStep2" />
       <forward name="ReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />

@@ -340,6 +340,8 @@
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
 
 	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
+	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlReportWizard" title=" - Report Wizard" />
+	<page page="reportWizard/saveMessage" name="aim_saveMessage" />
 
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
 	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />

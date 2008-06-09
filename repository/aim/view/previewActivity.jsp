@@ -1254,10 +1254,6 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Perspective Commitments" feature="Components">
-																							<td bgcolor="#ffffff">
-																																															</td>
-																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1294,10 +1290,6 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Perspective Disbursements" feature="Components">
-																							<td bgcolor="#ffffff">
-																																																</td>
-																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1333,10 +1325,6 @@ function collapseAll() {
 																							<field:display name="Components Date Expenditures" feature="Components">
 																							<td width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
-																							</field:display>
-																							<field:display name="Components Perspective Expenditures" feature="Components">
-																							<td>
-																																															</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>

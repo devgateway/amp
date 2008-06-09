@@ -50,9 +50,6 @@ public class ThemeManager extends Action {
 		}
 		ThemeForm themeForm = (ThemeForm) form;
 		
-		themeForm.setProgramExternalFinancing((float)0.0);
-		themeForm.setProgramInernalFinancing((float)0.0);
-		themeForm.setProgramTotalFinancing((float)0.0);
 		//added for the indicator
 		
 		String viewPreference = request.getParameter("view");

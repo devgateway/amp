@@ -1574,6 +1574,10 @@ public class ProgramUtil {
 				tempAmpTheme.setBeneficiaries( editPrg.getBeneficiaries() );
 				tempAmpTheme.setEnvironmentConsiderations( editPrg.getEnvironmentConsiderations() );
 
+				tempAmpTheme.setExternalFinancing(editPrg.getExternalFinancing());
+				tempAmpTheme.setInternalFinancing(editPrg.getInternalFinancing());
+				tempAmpTheme.setTotalFinancing(editPrg.getTotalFinancing());
+				
 				tx = session.beginTransaction();
 				session.update(tempAmpTheme);
 				tx.commit();

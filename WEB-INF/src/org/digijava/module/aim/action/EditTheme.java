@@ -67,6 +67,22 @@ public class EditTheme extends Action {
 				themeForm.setProgramBeneficiaries( ampTheme.getBeneficiaries() );
 				themeForm.setProgramEnvironmentConsiderations( ampTheme.getEnvironmentConsiderations() );
 				
+				if (ampTheme.getExternalFinancing() == null) {
+					themeForm.setProgramExternalFinancing(Double.valueOf(0));
+				} else {
+					themeForm.setProgramExternalFinancing(ampTheme.getExternalFinancing());
+				}
+				if (ampTheme.getInternalFinancing() == null) {
+					themeForm.setProgramInernalFinancing(Double.valueOf(0));
+				} else {
+					themeForm.setProgramInernalFinancing(ampTheme.getInternalFinancing());
+				}
+				if (ampTheme.getTotalFinancing() == null) {
+					themeForm.setProgramTotalFinancing(Double.valueOf(0));
+				} else {
+					themeForm.setProgramTotalFinancing(ampTheme.getTotalFinancing());
+				}
+				
 				return mapping.findForward("editProgram");				
 			}
 			if(event.equals("editSub"))
@@ -94,6 +110,22 @@ public class EditTheme extends Action {
 				themeForm.setProgramBeneficiaries( ampTheme.getBeneficiaries() );
 				themeForm.setProgramEnvironmentConsiderations( ampTheme.getEnvironmentConsiderations() );
 				
+				if (ampTheme.getExternalFinancing() == null) {
+					themeForm.setProgramExternalFinancing(Double.valueOf(0));
+				} else {
+					themeForm.setProgramExternalFinancing(ampTheme.getExternalFinancing());
+				}
+				if (ampTheme.getInternalFinancing() == null) {
+					themeForm.setProgramInernalFinancing(Double.valueOf(0));
+				} else {
+					themeForm.setProgramInernalFinancing(ampTheme.getInternalFinancing());
+				}
+				if (ampTheme.getTotalFinancing() == null) {
+					themeForm.setProgramTotalFinancing(Double.valueOf(0));
+				} else {
+					themeForm.setProgramTotalFinancing(ampTheme.getTotalFinancing());
+				}
+				
 				return mapping.findForward("editProgram");
 			}
 			if (event.equals("update"))
@@ -118,6 +150,10 @@ public class EditTheme extends Action {
 					editPrg.setBeneficiaries( themeForm.getProgramBeneficiaries() );
 					editPrg.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
 					
+					editPrg.setExternalFinancing(themeForm.getProgramExternalFinancing());
+					editPrg.setInternalFinancing(themeForm.getProgramInernalFinancing());
+					editPrg.setTotalFinancing(themeForm.getProgramTotalFinancing());
+
 					ProgramUtil.updateTheme(editPrg);
 					themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(baseid));
 					return mapping.findForward("subPrgEdit");
@@ -138,6 +174,10 @@ public class EditTheme extends Action {
 					editPrg.setBeneficiaries( themeForm.getProgramBeneficiaries() );
 					editPrg.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
 					
+					editPrg.setExternalFinancing(themeForm.getProgramExternalFinancing());
+					editPrg.setInternalFinancing(themeForm.getProgramInernalFinancing());
+					editPrg.setTotalFinancing(themeForm.getProgramTotalFinancing());
+
 					ProgramUtil.updateTheme(editPrg);
 					return mapping.findForward("forward");
 				}

@@ -68,9 +68,9 @@ public class ThemeForm extends ActionForm {
 		  private String programOutputs;
 		  private String programBeneficiaries;
 		  private String programEnvironmentConsiderations;
-		  private Float programExternalFinancing;
-		  private Float programInernalFinancing;
-		  private Float programTotalFinancing;
+		  private Double programExternalFinancing;
+		  private Double programInernalFinancing;
+		  private Double programTotalFinancing;
 		  
 		 
 		  private boolean reset;
@@ -665,27 +665,27 @@ public class ThemeForm extends ActionForm {
 		this.encodeName = encodeName;
 	}
 
-	public Float getProgramExternalFinancing() {
+	public Double getProgramExternalFinancing() {
 		return programExternalFinancing;
 	}
 
-	public void setProgramExternalFinancing(Float programExternalFinancing) {
+	public void setProgramExternalFinancing(Double programExternalFinancing) {
 		this.programExternalFinancing = programExternalFinancing;
 	}
 
-	public Float getProgramInernalFinancing() {
+	public Double getProgramInernalFinancing() {
 		return programInernalFinancing;
 	}
 
-	public void setProgramInernalFinancing(Float programInernalFinancing) {
+	public void setProgramInernalFinancing(Double programInernalFinancing) {
 		this.programInernalFinancing = programInernalFinancing;
 	}
 
-	public Float getProgramTotalFinancing() {
+	public Double getProgramTotalFinancing() {
 		return programTotalFinancing;
 	}
 
-	public void setProgramTotalFinancing(Float programTotalFinancing) {
+	public void setProgramTotalFinancing(Double programTotalFinancing) {
 		this.programTotalFinancing = programTotalFinancing;
 	}
 

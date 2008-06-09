@@ -37,9 +37,9 @@ public class AddNewTheme extends Action
 		HttpSession session = request.getSession();
 		themes = ProgramUtil.getParentThemes();
 		themeForm.setThemes(themes);
-		themeForm.setProgramExternalFinancing((float)0.0);
-		themeForm.setProgramInernalFinancing((float)0.0);
-		themeForm.setProgramTotalFinancing((float)0.0);
+		themeForm.setProgramExternalFinancing(Double.valueOf(0));
+		themeForm.setProgramInernalFinancing(Double.valueOf(0));
+		themeForm.setProgramTotalFinancing(Double.valueOf(0));
 		//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 		return mapping.findForward("forward");
 	}

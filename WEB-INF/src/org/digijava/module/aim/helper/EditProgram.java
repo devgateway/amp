@@ -30,6 +30,10 @@ public class EditProgram
 	private String beneficiaries;
 	private String environmentConsiderations;
 	
+	private Double externalFinancing;
+	private Double internalFinancing;
+	private Double totalFinancing;
+
 	/**
 	 * @return Returns the activityId.
 	 */
@@ -208,6 +212,42 @@ public class EditProgram
 	}
 	public String getEnvironmentConsiderations () {
 		return this.environmentConsiderations;
+	}
+	/**
+	 * @return the externalFinancing
+	 */
+	public Double getExternalFinancing() {
+		return externalFinancing;
+	}
+	/**
+	 * @param externalFinancing the externalFinancing to set
+	 */
+	public void setExternalFinancing(Double externalFinancing) {
+		this.externalFinancing = externalFinancing;
+	}
+	/**
+	 * @return the internalFinancing
+	 */
+	public Double getInternalFinancing() {
+		return internalFinancing;
+	}
+	/**
+	 * @param internalFinancing the internalFinancing to set
+	 */
+	public void setInternalFinancing(Double internalFinancing) {
+		this.internalFinancing = internalFinancing;
+	}
+	/**
+	 * @return the totalFinancing
+	 */
+	public Double getTotalFinancing() {
+		return totalFinancing;
+	}
+	/**
+	 * @param totalFinancing the totalFinancing to set
+	 */
+	public void setTotalFinancing(Double totalFinancing) {
+		this.totalFinancing = totalFinancing;
 	}
 	
 }

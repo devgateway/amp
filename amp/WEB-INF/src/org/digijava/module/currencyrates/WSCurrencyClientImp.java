@@ -2,6 +2,7 @@ package org.digijava.module.currencyrates;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
@@ -27,7 +28,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 		}
 	}
 
-	public HashMap<String, Double> getCRatesBasedDollar(String[] currencyCode) {
+	public HashMap<String, Double> getCRatesBasedUSD(String[] currencyCode) {
 		HashMap<String, Double> values=null;
 		try {
 			values = getCurrencyRates(currencyCode, "USD");
@@ -69,7 +70,7 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 		return values;
 	}
 
-	public double getCurrencyRate(String codeCurrency) {
+	public Double getCurrencyRateBasedUSD(String codeCurrency) {
 		double rate;
 		try {
 			Currency c = Currency.fromString(codeCurrency);
@@ -82,5 +83,10 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 			e.printStackTrace();
 		}
 		return rate;
+	}
+
+	public List getSupportedCurrencies() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -142,25 +142,30 @@ function saveAllSettings(){
     <td class=r-dotted-lg width=14>&nbsp;</td>
     <td align=left class=r-dotted-lg vAlign=top width=750>
       <table cellPadding=5 cellSpacing=0 width="100%" border=0>
-        <tr>
-          <!-- Start Navigation -->
-          <td height=33>
-          
-          <span class=crumb>
-            <c:set var="clickToViewAdmin">
-              <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-            </c:set>
-            <digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
-              <digi:trn key="aim:AmpAdminHome">
-              Admin Home
-              </digi:trn>
-            </digi:link>&nbsp;&gt;&nbsp;
-            <digi:trn key="aim:globalSettingsManager">
-            Global Settings Manager
-            </digi:trn>
-          </span>
+        <tr><td height=33>
+          <table cellPadding=5 cellSpacing=0 width="100%">
+            <tr>
+            <td>  
+              <span class=crumb>
+                <c:set var="clickToViewAdmin">
+                  <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+                </c:set>
+                <digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
+                  <digi:trn key="aim:AmpAdminHome">
+                  Admin Home
+                  </digi:trn>
+                </digi:link>&nbsp;&gt;&nbsp;
+                <digi:trn key="aim:globalSettingsManager">
+                Global Settings Manager
+                </digi:trn>
+              </span>
+            </td>
+            <td>
+            <div class="crumb" align="right" id="clock"></div>
+            </td>
+            </tr>
+          </table>
           </td>
-          <!-- End navigation -->
         </tr>
         <tr>
           <td height=16 vAlign=center width=571>
@@ -527,3 +532,8 @@ function saveAllSettings(){
 </td>
 </tr>
 </table>
+<SCRIPT language="JavaScript">
+<!--
+startclock();
+//-->
+</SCRIPT>

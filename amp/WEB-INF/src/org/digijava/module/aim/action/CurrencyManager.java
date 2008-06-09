@@ -55,18 +55,18 @@ public class CurrencyManager extends Action {
 			String sortingValue = request.getParameter("sortingValue");
 			if (sortingValue == null) {
 				if ((crForm.getAllCurrencies() == null)	|| ((reload != null) && (reload.compareTo("true") == 0))) {
-					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
 				}else{
-                    crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+                    crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
                 }
 			} else if (sortingValue.equalsIgnoreCase("-1")) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
 			} else if (sortingValue.equalsIgnoreCase("1")) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
 			} else if (sortingValue.equalsIgnoreCase("2")) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(2));
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_NAME));
 			} else if (sortingValue.equalsIgnoreCase("3")) {
-				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(3));
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME));
 			}
 
             Collection currencies =crForm.getAllCurrencies();

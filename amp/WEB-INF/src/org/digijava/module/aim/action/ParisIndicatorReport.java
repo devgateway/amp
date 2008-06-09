@@ -110,7 +110,7 @@ public class ParisIndicatorReport extends Action {
                     svForm.getYearColl().add(new Integer(startYear++));
             }
             if (null == svForm.getCurrencyColl() || svForm.getCurrencyColl().size() < 1)
-                svForm.setCurrencyColl(CurrencyUtil.getAllCurrencies(1));
+                svForm.setCurrencyColl(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
             if (null == svForm.getOrgGroupColl() || svForm.getOrgGroupColl().size() < 1)
                 svForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
             if (null == svForm.getStatusColl() || svForm.getStatusColl().size() < 1)

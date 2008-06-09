@@ -144,7 +144,7 @@ public class UpdateAppSettings extends Action {
 			}
 
 			uForm.setReports( reports );
-			uForm.setCurrencies(CurrencyUtil.getAllCurrencies(1));
+			uForm.setCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));
 			uForm.setFisCalendars(DbUtil.getAllFisCalenders());
 
 			// set Navigation languages

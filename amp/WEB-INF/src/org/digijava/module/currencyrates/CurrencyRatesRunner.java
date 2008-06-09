@@ -21,10 +21,10 @@ public class CurrencyRatesRunner {
 	private Scheduler scheduler;
 	private JobDetail jobDetail;
 	private SimpleTrigger simpleTrigger;
-	private final String jobName="jobDetail-s1";
-	private final String jobGroupName="jobDetailGroup-s1";
-	private final String trgName="simpleTrigger";
-	private final String trgGroupName="triggerGroup-s1";
+	private final String jobName = "jobDetail-s1";
+	private final String jobGroupName = "jobDetailGroup-s1";
+	private final String trgName = "simpleTrigger";
+	private final String trgGroupName = "triggerGroup-s1";
 	private int hour_update;
 	private int min_update;
 	private int hour_delay;
@@ -34,24 +34,24 @@ public class CurrencyRatesRunner {
 	private final static int fFOUR_AM = 4;
 	private final static int fZERO_MINUTES = 0;
 	private Class classJob;
-	
-	public CurrencyRatesRunner(int hour_init, int min_init, int hour_delay, 
-				int min_delay) {
-			this.hour_update = hour_init;
-			this.min_update = min_init;
-			this.hour_delay = hour_delay;
-			this.min_delay = min_delay;
-			this.classJob = CurrencyRatesQuartzJob.class;
+
+	public CurrencyRatesRunner(int hour_init, int min_init, int hour_delay,
+			int min_delay) {
+		this.hour_update = hour_init;
+		this.min_update = min_init;
+		this.hour_delay = hour_delay;
+		this.min_delay = min_delay;
+		this.classJob = CurrencyRatesQuartzJob.class;
 	}
-	
-	public void restart(int hour, int min, int hour_repeat, int min_repeat){
+
+	public void restart(int hour, int min, int hour_repeat, int min_repeat) {
 		this.hour_update = hour;
 		this.min_update = min;
 		this.hour_delay = hour_repeat;
-		this.min_delay = min_repeat;		
-		
-		simpleTrigger = new SimpleTrigger(trgName, trgGroupName, jobName, jobGroupName, initDate(), 
-				null, // end never
+		this.min_delay = min_repeat;
+
+		simpleTrigger = new SimpleTrigger(trgName, trgGroupName, jobName,
+				jobGroupName, initDate(), null, // end never
 				SimpleTrigger.REPEAT_INDEFINITELY, getDelay());
 		try {
 			scheduler.rescheduleJob(trgName, trgGroupName, simpleTrigger);
@@ -59,34 +59,31 @@ public class CurrencyRatesRunner {
 			e.printStackTrace();
 		}
 	}
-	public void stop(){
+
+	public void stop() {
 		try {
 			scheduler.shutdown(false);
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
 	}
-    public void launch()
-    {
-        schedulerFactory = new StdSchedulerFactory();
-        try {
+
+	public void launch() {
+		schedulerFactory = new StdSchedulerFactory();
+		try {
 			scheduler = schedulerFactory.getScheduler();
-		} catch (SchedulerException e) {
-			e.printStackTrace();
-		}
-        jobDetail = new JobDetail(jobName, jobGroupName, classJob);
-        simpleTrigger = new SimpleTrigger(trgName, trgGroupName);
-        simpleTrigger.setStartTime(this.initDate()); 
-        simpleTrigger.setRepeatInterval(this.getDelay());        
-        simpleTrigger.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
-        
-        try {
+			jobDetail = new JobDetail(jobName, jobGroupName, classJob);
+			simpleTrigger = new SimpleTrigger(trgName, trgGroupName);
+			simpleTrigger.setStartTime(this.initDate());
+			simpleTrigger.setRepeatInterval(this.getDelay());
+			simpleTrigger.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
 			scheduler.scheduleJob(jobDetail, simpleTrigger);
 			scheduler.start();
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
-    }
+	}
+
 	private long getDelay() {
 		if (hour_delay < 0 || hour_delay > 24 || min_delay < 0
 				|| min_delay > 60 || (hour_delay <= 0 && min_delay <= 0)) {
@@ -152,22 +149,20 @@ public class CurrencyRatesRunner {
 	public int getMin_update() {
 		return min_update;
 	}
-  
-    public static void main (String args[]) 
-    {
-        try {
-            CurrencyRatesRunner qRunner = new CurrencyRatesRunner(18,47,0,1);
-            qRunner.launch();
-            Thread.sleep(5000);
-            qRunner.restart(18, 55, 0, 1);
-            Thread.sleep(15000);
-            qRunner.stop();
-            Thread.sleep(5000);
-            qRunner.launch();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-    
+
+	public static void main(String args[]) {
+		try {
+			CurrencyRatesRunner qRunner = new CurrencyRatesRunner(18, 47, 0, 1);
+			qRunner.launch();
+			Thread.sleep(5000);
+			qRunner.restart(18, 55, 0, 1);
+			Thread.sleep(15000);
+			qRunner.stop();
+			Thread.sleep(5000);
+			qRunner.launch();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

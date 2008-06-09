@@ -5,6 +5,8 @@
 package org.digijava.module.aim.action;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -28,16 +30,17 @@ import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.currencyrates.CurrencyRatesService;
+import org.digijava.module.currencyrates.DailyCurrencyRateSingleton;
 
 public class ShowCurrencyRates extends Action {
-
+	
 	private static final long SEVEN_DAYS = 604800000; // in miliseconds
 	// 7 * 24 * 60 * 60 * 1000
 	
 	private static final int ABSOLUTELY_ALL_ACTIVE_RATES = -1;	
 
 	private static Logger logger = Logger.getLogger(ShowCurrencyRates.class);
-
 
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -176,6 +179,8 @@ public class ShowCurrencyRates extends Action {
 			logger.error("Exception " + e);
 			e.printStackTrace(System.out);
 		}
+		String lastUpdate = CurrencyRatesService.getStringLastTimeUpdate(CurrencyUtil.RATE_FROM_WEB_SERVICE);
+		crForm.setLastRateUpdate(lastUpdate);
 		return mapping.findForward("forward");
 	}
 	private List<LabelValueBean>  getTimePeriods(){

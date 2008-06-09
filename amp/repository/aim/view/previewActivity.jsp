@@ -1104,8 +1104,7 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																							<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
-																								<c:out value="${fd.perspectiveName}"/></digi:trn>																																															
+																																																																						
 																							</td>
 																						</tr>
 																					</c:forEach>
@@ -1140,9 +1139,7 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
-																								<c:out value="${fd.perspectiveName}"/>
-																								</digi:trn>
+																								
 																								</td>
 																						</tr>
 																					</c:forEach>
@@ -1177,9 +1174,7 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
-																								<c:out value="${fd.perspectiveName}"/>
-																								</digi:trn>
+																								
 																							</td>
 																						</tr>
 																					</c:forEach>
@@ -1261,9 +1256,7 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Perspective Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
-																							<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</digi:trn>																								</td>
+																																															</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1303,9 +1296,7 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Perspective Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</digi:trn>																								</td>
+																																																</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1345,9 +1336,7 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Perspective Expenditures" feature="Components">
 																							<td>
-																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</digi:trn>																							</td>
+																																															</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>

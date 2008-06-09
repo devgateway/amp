@@ -893,9 +893,7 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:commitments:${fd.perspectiveNameTrimmed}">
-																										<c:out value="${fd.perspectiveName}"/>	
-																							</digi:trn>
+																								
 																																														</td>
 																						</tr>
 																					</c:forEach>
@@ -927,9 +925,7 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:disbursements:${fd.perspectiveNameTrimmed}">
-																										<c:out value="${fd.perspectiveName}"/>	
-																							</digi:trn>																						</td>
+																																														</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -961,9 +957,7 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																									<digi:trn key="aim:expenditures:${fd.perspectiveNameTrimmed}">
-																										<c:out value="${fd.perspectiveName}"/>	
-																									</digi:trn>
+																									
 																							</td>																							</td>
 																						</tr>
 																					</c:forEach>

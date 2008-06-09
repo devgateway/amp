@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.gis.dbentity.AmpDaColumn;
+import org.digijava.module.gis.widget.table.DaRow;
 
 /**
  * Widget Data administration form.
@@ -15,8 +16,8 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	
 	private Long widgetId;
-	private String[][] matrix;
 	private List<AmpDaColumn> columns;
+	private List<DaRow> rows;
 	private Integer rowIndex;
 
 	private String tableName;
@@ -37,14 +38,6 @@ public class AdminTableWidgetDataForm extends ActionForm {
 		this.widgetId = widgetId;
 	}
 
-	public String[][] getMatrix() {
-		return matrix;
-	}
-
-	public void setMatrix(String[][] matrix) {
-		this.matrix = matrix;
-	}
-
 	public List<AmpDaColumn> getColumns() {
 		return columns;
 	}
@@ -61,17 +54,32 @@ public class AdminTableWidgetDataForm extends ActionForm {
 		this.rowIndex = rowIndex;
 	}
 
-	public String[] getMatrix(int index){
-		return this.matrix[index];
+	public List<DaRow> getRows() {
+		return rows;
 	}
-	public String getMatrix(int index1,int index2){
-		return this.matrix[index1][index2];
+
+	public void setRows(List<DaRow> rows) {
+		this.rows = rows;
 	}
-	public void setMatrix(String[] value,int index){
-		this.matrix[index]=value;
+	
+	public DaRow getRows(int index) {
+		System.out.println("getRows(int index)");
+		if (this.rows==null) System.out.println("Ooo, rows is NULL !!!");
+		return (rows==null)?null:rows.get(index);
 	}
-	public void setMatrix(String value,int index1,int index2){
-		this.matrix[index1][index2]=value;
+	
+	//This 3 methods are required for old struts to submit directly in these beans, please note differences in names====
+	public List getRow() {
+		return rows;
+	}
+
+	public void setRow(List rows) {
+		this.rows = rows;
+	}
+	public DaRow getRow(int index) {
+		System.out.println("getRows(int index)");
+		if (this.rows==null) System.out.println("Ooo, rows is NULL !!!");
+		return (rows==null)?null:rows.get(index);
 	}
 
 }

@@ -50,11 +50,10 @@ public class DaTable implements HtmlGenerator{
 			}
 			try {
 				List<AmpDaValue> values = TableWidgetUtil.getTableData(this.id);
-				List<DaRow> rows = TableWidgetUtil.dataToHelpers(values);
+				List<DaRow> rows = TableWidgetUtil.valuesToRows(values);
 				Collections.sort(rows,new TableWidgetUtil.RowPkComparator());
 				this.setDataRows(rows);
 			} catch (DgException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

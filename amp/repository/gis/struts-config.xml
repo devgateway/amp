@@ -38,7 +38,7 @@
     	<action name="gisTableWidgetTeaserForm" path="/gis/widgetTest" scope="request" type="org.digijava.module.gis.action.TestWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widgetTestPage" />
     	</action>
-    	<action name="gisTableWidgetDataForm" path="/gis/tableWidgetData" scope="request" parameter="actType" type="org.digijava.module.gis.action.AdminTableWidgetData" validate="false">
+    	<action name="gisTableWidgetDataForm" path="/gis/tableWidgetData" scope="session" parameter="actType" type="org.digijava.module.gis.action.AdminTableWidgetData" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
     	</action>
     	<action name="gisTableWidgetTeaserForm" path="/gis/previewTable" scope="request" type="org.digijava.module.gis.action.PreviewTableWidget" validate="false">

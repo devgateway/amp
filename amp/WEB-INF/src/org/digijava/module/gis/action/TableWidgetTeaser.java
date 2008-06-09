@@ -40,6 +40,7 @@ public class TableWidgetTeaser extends TilesAction {
 
 		//setting null if no widget assigned.
 		tForm.setTable(table);
+		tForm.setPlaceName(place.getName());
 		
 		return null;
 	}

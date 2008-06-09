@@ -93,41 +93,8 @@
 																				</tr>
 																				<tr><td></td></tr>	
 																				<tr>																					
-																					<td align="center" colspan="4"><textarea rows="3" cols="45" readonly="readonly">${messageForm.description}</textarea></td>																					
+																					<td align="center" colspan="4"><textarea cols="60" rows="20" id="messageDescription" readonly="readonly">${messageForm.description}</textarea></td>																					
 																				</tr>
-																				<c:if test="${not empty messageForm.forwardedMsg}">
-																			    	<tr>
-																			    		<td></td>																			    		
-																			    		<td >
-																			    			<table width="85%" align="center" border="0" style="border:1px solid; border-color: #484846;">
-																								<tr><td align="center" nowrap="nowrap"><font color="red">**********forwarded Message:*********</font></td></tr>
-																								<tr>
-																									<td width="10%"><digi:trn key="message:from">From</digi:trn></td>
-																									<td>&nbsp;${messageForm.forwardedMsg.from}</td>
-																								</tr>
-																								<tr>
-																									<td><digi:trn key="message:receiver">Received</digi:trn></td>
-																									<td>&nbsp;${messageForm.forwardedMsg.creationDate}</td>
-																								</tr>
-																								<tr>
-																									<td><digi:trn key="message:subject">Subject</digi:trn> </td>
-																									<td>${messageForm.forwardedMsg.name}																						
-																									</td>
-																								</tr>
-																								<tr>
-																									<td>To:</td>
-																									<td>
-																										<c:forEach var="receiver" items="${messageForm.forwardedMsg.receivers}"> ${receiver} ,&nbsp;</c:forEach>
-																									</td>
-																								</tr>
-																								<tr>
-																									<td><digi:trn key="message:msgDetails">Message Details</digi:trn> </td>
-																									<td>&nbsp;${messageForm.forwardedMsg.description}</td>
-																								</tr>
-																							</table>
-																			    		</td>																        	
-													                            	</tr>
-													                            </c:if>																																							
 																				<tr>
 																					<td colspan="4" align="center">
 																						<!-- <c:if test="${messageForm.className=='m'}">

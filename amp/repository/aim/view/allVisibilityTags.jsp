@@ -240,9 +240,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Components Grand Total Commitments" feature="Components"></field:display>
 <field:display name="Components Grand Total Disbursements" feature="Components"></field:display>
 <field:display name="Components Grand Total Expenditures" feature="Components"></field:display>
-<field:display name="Components Perspective Commitments" feature="Components"></field:display>
-<field:display name="Components Perspective Disbursements" feature="Components"></field:display>
-<field:display name="Components Perspective Expenditures" feature="Components"></field:display>
 <field:display name="Components Physical Progress" feature="Components"></field:display>
 <field:display name="Components Total Amount Commitments" feature="Components"></field:display>
 <field:display name="Components Total Amount Disbursements" feature="Components"></field:display>

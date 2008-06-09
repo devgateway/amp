@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -28,11 +26,7 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.form.AuditLoggerManagerForm;
 import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.DbUtil;
 
-import com.sun.java_cup.internal.shift_action;
-import com.sun.mail.iap.Response;
- 
 public class AuditLoggerManager extends MultiAction {
 	
 	private static Logger logger = Logger.getLogger(AuditLoggerManager.class);

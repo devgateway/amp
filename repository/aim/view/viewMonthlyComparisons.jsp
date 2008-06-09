@@ -299,7 +299,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 														<TD>
 
-						                         	<STRONG>Perspective:</STRONG>
 
 														</TD>
 

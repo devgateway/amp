@@ -66,10 +66,10 @@ tr.my-border-style td {
 	
 	function viewMessage(id,isMsg) {
             if(isMsg){
-		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,550,400);
+		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,520);
                 }
                 else{           
-                    openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,550,400);
+                    openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,600,520);
                 }
 	}
 	

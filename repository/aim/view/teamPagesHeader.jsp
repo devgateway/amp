@@ -15,42 +15,6 @@ function showUserProfile(id){
 	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
 }
 
-function startclock()
-{
-  var thetime=new Date();
-  var nhours=thetime.getHours();
-  var nmins=thetime.getMinutes();
-  var nsecn=thetime.getSeconds();
-  var AorP=" ";
-  if (nhours>=12)
-      AorP="P.M.";
-  else
-      AorP="A.M.";
-	
-  if (nhours>=13)
-      nhours-=12;
-	
-  if (nhours==0)
-     nhours=12;
-	
-  if (nhours<10)
-     nhours="0"+nhours;
-
-  if (nsecn<10)
-     nsecn="0"+nsecn;
-	
-  if (nmins<10)
-    nmins="0"+nmins;
-	
-  var myhour = nhours+":"+nmins+":"+nsecn+" "+AorP;
-  
-//  var div_x = document.getElementById('clock');
-//  div_x.innerHTML = myhour;
-  
-  setTimeout('startclock()',1000);
-  
-} 
-
 -->
 </script>
 <table cellpadding="0" cellspacing="0" width="100%" style="background-image:url(module/aim/images/bg-header-1.gif);vertical-align:top;height:37px;" border=0>

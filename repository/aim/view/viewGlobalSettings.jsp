@@ -143,39 +143,19 @@ function saveAllSettings(){
     <td align=left class=r-dotted-lg vAlign=top width=750>
       <table cellPadding=5 cellSpacing=0 width="100%" border=0>
         <tr><td height=33>
-          <table cellPadding=5 cellSpacing=0 width="100%">
-            <tr>
-            <td>  
-              <span class=crumb>
-                <c:set var="clickToViewAdmin">
-                  <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-                </c:set>
-                <digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
-                  <digi:trn key="aim:AmpAdminHome">
-                  Admin Home
-                  </digi:trn>
-                </digi:link>&nbsp;&gt;&nbsp;
-                <digi:trn key="aim:globalSettingsManager">
-                Global Settings Manager
-                </digi:trn>
-              </span>
-            </td>
-            <td>
-            <div class="crumb" align="right" id="clock">
-            <% 
-  java.util.Locale locale = request.getLocale(); 
-  java.text.DateFormat dateFormat =
-	 java.text.DateFormat.getDateTimeInstance(
-		 java.text.DateFormat.LONG,
-		 java.text.DateFormat.LONG, locale);
-%> 
-
-<%=dateFormat.format( new java.util.Date() ) %>
-</div>
-            </td>
-            </tr>
-          </table>
-          </td>
+          <span class=crumb>
+             <c:set var="clickToViewAdmin">
+                <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+             </c:set>
+             <digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
+               <digi:trn key="aim:AmpAdminHome">
+                 Admin Home
+               </digi:trn>
+             </digi:link>&nbsp;&gt;&nbsp;
+             <digi:trn key="aim:globalSettingsManager">
+              Global Settings Manager
+             </digi:trn>
+          </span></td>
         </tr>
         <tr>
           <td height=16 vAlign=center width=571>
@@ -416,6 +396,12 @@ function saveAllSettings(){
 	                                    				} 
 	                                    			%>
 	                                    		</select>
+	                                    		<br/>
+	                                    		<digi:trn key="aim:globalSettings:ServerTime">Server Time</digi:trn>:&nbsp; 
+	                                    		<% java.text.DateFormat formatter = new java.text.SimpleDateFormat("hh:mm:ss a"); 
+	                                    		   String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(new java.util.Date());
+			                                    %> 
+			                                    <%= sdate +" "+formatter.format( new java.util.Date() ) %>  
 	                                    	
 	                                    	</c:when>
 	                                    	<c:when test='${type == "t_static_range"}'>
@@ -542,8 +528,3 @@ function saveAllSettings(){
 </td>
 </tr>
 </table>
-<SCRIPT language="JavaScript">
-<!--
-startclock();
-//-->
-</SCRIPT>

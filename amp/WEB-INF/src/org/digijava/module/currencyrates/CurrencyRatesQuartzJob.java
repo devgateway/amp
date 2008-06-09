@@ -61,13 +61,14 @@ public class CurrencyRatesQuartzJob implements Job {
 
 		try {
 			HashMap<String, Double> wsCurrencyValues=null;
-			int mytries = 0;
+			int mytries = 0;			
 			while (mytries < tries && ampCurrencies!=null) {
+				logger.info("Attempt.........................." + mytries);
 				wsCurrencyValues = this.myWSCurrencyClient
 						.getCurrencyRates(ampCurrencies, baseCurrency);
 				showValues(ampCurrencies, wsCurrencyValues);
 				save(ampCurrencies, wsCurrencyValues);
-				ampCurrencies = this.getWrongCurrencies(currencies,
+				ampCurrencies = this.getWrongCurrencies(ampCurrencies,
 						wsCurrencyValues);
 				mytries++;
 			}
@@ -83,24 +84,23 @@ public class CurrencyRatesQuartzJob implements Job {
 						+ formatter.format(new Date()));
 	}
 
-	private String[] getWrongCurrencies(Collection<AmpCurrency> currencies,
+	private String[] getWrongCurrencies(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
 		String[] wrongArray = null;
-		ArrayList<AmpCurrency> wrongAList = new ArrayList<AmpCurrency>();
-		for (AmpCurrency ampCurrency : currencies) {
+		ArrayList<AmpCurrencyRate> wrongAList = new ArrayList<AmpCurrencyRate>();
+		for (int i=0; i<currencies.length; i++) {
 			AmpCurrencyRate currRate = new AmpCurrencyRate();
-			currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
-			double value = wsCurrencyValues.get(ampCurrency.getCurrencyCode()
-					.trim());
+			currRate.setToCurrencyCode(currencies[i]);
+			double value = wsCurrencyValues.get(currencies[i]);
 			if (value == WSCurrencyClient.CONNECTION_ERROR) {
-				wrongAList.add(ampCurrency);
+				wrongAList.add(currRate);
 			}
 		}
 		if (wrongAList.size() != 0) {
 			wrongArray = new String[wrongAList.size()];
 			int i = 0;
-			for (AmpCurrency ampCurrency : wrongAList) {
-				wrongArray[i++] = ampCurrency.getCurrencyCode();
+			for (AmpCurrencyRate ampCurrency : wrongAList) {
+				wrongArray[i++] = ampCurrency.getToCurrencyCode();
 			}
 		}
 		return wrongArray;

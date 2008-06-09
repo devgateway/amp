@@ -547,7 +547,3 @@ function fnSubmit() {
 </td></tr>
 </table>
 </digi:form>
-
-<script type="text/javascript">
-	initFileUploads();
-</script>

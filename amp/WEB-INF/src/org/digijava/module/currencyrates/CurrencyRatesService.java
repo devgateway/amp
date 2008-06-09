@@ -63,9 +63,8 @@ public class CurrencyRatesService extends AbstractServiceImpl {
 						mylast = last;
 					}
 					dbdate = mylast.getExchangeRateDate();
-					String ampmHour = FeaturesUtil
-							.getGlobalSettingValue("Daily Currency Rates Update Hour");
-					date = DateTimeUtil.formatDate(dbdate) + " " + ampmHour;
+
+					date = DateTimeUtil.formatDate(dbdate);
 				} else {
 					return null;
 				}

@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -22,6 +23,7 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
+import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.gis.dbentity.AmpDaColumn;
 import org.digijava.module.gis.dbentity.AmpDaTable;
 import org.digijava.module.gis.dbentity.AmpDaValue;
@@ -161,7 +163,20 @@ public class TableWidgetUtil {
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
+			List<AmpDaValue> values = getTableData(widget.getId());
+			List<AmpDaWidgetPlace> places = getWidgetPlaces(widget.getId());
 			tx=session.beginTransaction();
+			if (null != values){
+				for (AmpDaValue value : values) {
+					session.delete(value);
+				}
+			}
+			if (null != places){
+				for (AmpDaWidgetPlace place : places) {
+					place.setWidget(null);
+					session.update(widget);
+				}
+			}
 			session.delete(widget);
 			tx.commit();
 		} catch (Exception e) {
@@ -354,6 +369,22 @@ public class TableWidgetUtil {
 			throw new DgException("Cannot save or update Widget place!",e);
 		}
 		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<AmpDaWidgetPlace> getWidgetPlaces(Long id) throws DgException{
+		List<AmpDaWidgetPlace> places = null;
+		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where p.widget = :widId";
+		Session session = PersistenceManager.getRequestDBSession();
+		try {
+			Query query = session.createQuery(oql);
+			query.setLong("widId", id);
+			places = query.list();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new DgException("Cannot load widget places!",e);
+		}
+		return places;
 	}
 	
 	@SuppressWarnings("unchecked")

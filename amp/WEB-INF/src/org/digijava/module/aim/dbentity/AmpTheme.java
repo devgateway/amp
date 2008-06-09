@@ -35,6 +35,10 @@ public class AmpTheme implements Serializable, Identifiable
 	private String outputs;
 	private String beneficiaries;
 	private String environmentConsiderations;
+	private Double externalFinancing;
+	private Double internalFinancing;
+	private Double totalFinancing;
+	
 	private String programviewname;
         private Set programSettings;
 
@@ -291,5 +295,47 @@ public class AmpTheme implements Serializable, Identifiable
         public String toString() {
 		return name;
 	}
+
+		/**
+		 * @return the totalFinancing
+		 */
+		public Double getTotalFinancing() {
+			return totalFinancing;
+		}
+
+		/**
+		 * @param totalFinancing the totalFinancing to set
+		 */
+		public void setTotalFinancing(Double totalFinancing) {
+			this.totalFinancing = totalFinancing;
+		}
+
+		/**
+		 * @return the externalFinancing
+		 */
+		public Double getExternalFinancing() {
+			return externalFinancing;
+		}
+
+		/**
+		 * @param externalFinancing the externalFinancing to set
+		 */
+		public void setExternalFinancing(Double externalFinancing) {
+			this.externalFinancing = externalFinancing;
+		}
+
+		/**
+		 * @return the internalFinancing
+		 */
+		public Double getInternalFinancing() {
+			return internalFinancing;
+		}
+
+		/**
+		 * @param internalFinancing the internalFinancing to set
+		 */
+		public void setInternalFinancing(Double internalFinancing) {
+			this.internalFinancing = internalFinancing;
+		}
 
 }

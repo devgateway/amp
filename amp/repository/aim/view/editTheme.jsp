@@ -152,7 +152,7 @@
 						</digi:trn>
 			    </td>
 					<td align="left">
-							<html:text property="programTotalFinancing" size="20"/>
+							<html:text property="programTotalFinancing" size="20" />
 					</td>
 				</tr>				
 				</field:display>

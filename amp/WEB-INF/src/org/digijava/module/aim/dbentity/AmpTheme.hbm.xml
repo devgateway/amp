@@ -25,6 +25,10 @@
 		<property name="beneficiaries" column="beneficiaries" type="java.lang.String"/>
 		<property name="environmentConsiderations" column="environment_considerations" type="java.lang.String"/>
 
+		<property name="externalFinancing" column="external_financing" type="java.lang.Double"/>
+		<property name="internalFinancing" column="internal_financing" type="java.lang.Double"/>
+		<property name="totalFinancing" column="total_financing" type="java.lang.Double"/>
+		
 		<many-to-one name="typeCategoryValue" column="type_category_value_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue"
 					cascade="none" not-null="true"/>
 

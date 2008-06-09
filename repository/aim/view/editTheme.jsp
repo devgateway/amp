@@ -25,6 +25,21 @@
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
 <script language="JavaScript">
 <!--
+
+	function sum()
+	{
+		var intFin = document.aimThemeForm.programInernalFinancing.value;
+		var extFin = document.aimThemeForm.programExternalFinancing.value;
+		var totFin = 0;
+		
+		//alert("intFin" +intFin);
+		//alert("extFin" + extFin);
+		totFin = parseFloat(intFin) + parseFloat(extFin);
+		
+		//alert("totFin" + totFin);
+		document.aimThemeForm.programTotalFinancing.value = totFin;
+	}
+	
 	function validate() 
 	{
 		if (trim(document.aimThemeForm.programName.value).length == 0) 
@@ -128,7 +143,7 @@
 						</digi:trn>
 			    </td>
 					<td align="left">
-						<html:text property="programInernalFinancing" size="20"/>
+						<html:text property="programInernalFinancing" size="20" onblur="javascript:sum();"/>
 					</td>
 				</tr>
 				</field:display>
@@ -140,7 +155,7 @@
 						</digi:trn>
 			    </td>
 					<td align="left">
-								<html:text property="programExternalFinancing" size="20"/>
+								<html:text property="programExternalFinancing" size="20" onblur="javascript:sum();"/>
 					</td>
 				</tr>
 				</field:display>
@@ -152,7 +167,7 @@
 						</digi:trn>
 			    </td>
 					<td align="left">
-							<html:text property="programTotalFinancing" size="20" />
+							<html:text property="programTotalFinancing" size="20" readonly="true" />
 					</td>
 				</tr>				
 				</field:display>

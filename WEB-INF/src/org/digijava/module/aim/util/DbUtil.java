@@ -105,8 +105,24 @@ import org.digijava.module.common.util.DateTimeUtil;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
+        
+           public static String filter(String text) {
 
+		String result = null;
 
+		if (text != null) {
+
+			result = text.replaceAll(">", "&gt;");
+
+			result = result.replaceAll("<", "&lt;");
+
+			result = result.replaceAll("'", "\'");//"&acute;");
+			result = result.replaceAll("\"", "&quot;");
+		}
+
+		return result;
+
+	}
 	public static String getDescParsed(String str)
 	{
 		StringBuffer strbuff = new StringBuffer();
@@ -6544,7 +6560,7 @@ public class DbUtil {
         }
         return obResult;
 	}	
-
+        
 	/**
 	 * Compares Values by type(actual,base,target)
 	 * Used in Multi Program Manager to sort them in order: base,actual,target  of the same year

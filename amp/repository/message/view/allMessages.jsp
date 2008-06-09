@@ -30,9 +30,9 @@ tr.my-border-style td {
 
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
 	var from='<digi:trn key="message:from">From</digi:trn>';
-	var received='<digi:trn key="message:received">Received</digi:trn>';
+	var receive='<digi:trn key="message:received">Received</digi:trn>';
 	var prLevel='<digi:trn key="message:priority">priority</digi:trn>';
-	var description='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
+	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
 	var editBtn='<digi:trn key="message:Edit">Edit</digi:trn>';
 	var fwdBtn='<digi:trn key="message:Forward">Forward</digi:trn>';
 	var deleteBtn='<digi:trn key="message:delete">Delete</digi:trn>';
@@ -64,8 +64,13 @@ tr.my-border-style td {
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
 	
-	function viewMessage(id) {
+	function viewMessage(id,isMsg) {
+            if(isMsg){
 		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,550,400);
+                }
+                else{           
+                    openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,550,400);
+                }
 	}
 	
 	function deleteMessage(msgId) {
@@ -123,18 +128,39 @@ tr.my-border-style td {
 		currentPage=page;
 		getMessages();		
 	}
-	
-	function toggleGroup(group_id){
-		var strId='#'+group_id;
-		$(strId+'_minus').toggle();
-		$(strId+'_plus').toggle();		
-		$('#msg_'+group_id).toggle('fast');		
-		
-		var partialUrl=addActionToURL('messageActions.do');
+        
+        function toggleGroup(group_id,newMsgId){
+                var strId;
+                if(newMsgId!=null){
+                    strId='#'+newMsgId+'_'+group_id;
+                }
+                else{
+                    strId='#'+group_id;
+                }
+                $(strId+'_minus').toggle();
+                $(strId+'_plus').toggle();
+                
+              if(newMsgId==null){
+                  
+                $('#msg_'+group_id).toggle('fast');	
+                var partialUrl=addActionToURL('messageActions.do');
 		var url=getUrl(partialUrl,group_id);
 		var async=new Asynchronous();
 		async.complete=makeRead;
 		async.call(url);
+                
+              }
+              else{
+                  $('#msg_'+newMsgId+'_'+group_id).toggle('fast');
+                  
+              }
+              
+              	
+	}
+	
+	function toggleGroupMakeRead(group_id,newMsgId){
+		toggleGroup(group_id,newMsgId);		
+               
 	}
 	
 	
@@ -259,7 +285,7 @@ tr.my-border-style td {
 							}
 							msgTr.height='20px';
 								
-							var myTR=createTableRow(tbl,msgTr,messages[i]);													
+							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");
                                                 tablBody[0].appendChild(myTR);
                         
@@ -332,38 +358,65 @@ tr.my-border-style td {
 	}
 	
 	//creates table rows with message information
-	function createTableRow(tbl,msgTr,message){
+	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
 	
 		var msgId=message.getAttribute('id');	
+                var newMsgId=message.getAttribute('newMsgId');
 		//create image's td
 		var imgTD=document.createElement('TD');
-		imgTD.vAlign='top';				
-		imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup('+msgId+')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup('+msgId+')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>';
-		msgTr.appendChild(imgTD);
+		imgTD.vAlign='top';	
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup('+msgId+','+newMsgId+')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup('+msgId+','+newMsgId+')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>';
+                    msgTr.appendChild(imgTD);
+                
+               
 					
-				
 		//message name and description
 		var nameTD=document.createElement('TD');				
-		var msgName=message.getAttribute('name');				
-		nameTD.width='60%';
-		
+		var msgName; 
+                 if(message.childNodes!=null&&message.childNodes.length>0){
+                     msgName="FW: "+message.getAttribute('name');
+                 }
+                 else{
+                      msgName=message.getAttribute('name');
+                 }
+                if(fwdOrEditDel){
+                    nameTD.width='60%';}
+                else{
+                    nameTD.width='90%';
+                }
+                   
 		//creating visible div for message name
 		var nameDiv=document.createElement('DIV');
-		nameDiv.setAttribute("id",msgId+'_dots');		
+                var visId;
+                 if(!fwdOrEditDel){
+                    visId=newMsgId+'_'+msgId+'_dots'
+                }
+                else{
+                   visId=+msgId+'_dots' 
+                }
+                
+		nameDiv.setAttribute("id",visId);		
 		var sp=document.createElement('SPAN');
 		var isMsgRead=message.getAttribute('read');
 		if(isMsgRead=='false'){
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage('+msgId+')"; style="color:red" >'+msgName+'</A>';
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage('+msgId+','+fwdOrEditDel+')"; style="color:red" >'+msgName+'</A>';   
 		}else {
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage('+msgId+')";>'+msgName+'</A>';
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage('+msgId+','+fwdOrEditDel+')";>'+msgName+'</A>';
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
 					
 		//creating hidden div for message description.It'll become visible after user clicks on twistie
 		var descDiv=document.createElement('DIV');
-		descDiv.setAttribute("id",'msg_'+msgId);	
+                var invId;
+                if(!fwdOrEditDel){
+                    invId='msg_'+newMsgId+'_'+msgId;
+                }
+                else{
+                   invId='msg_'+msgId; 
+                }
+		descDiv.setAttribute("id",invId);	
 		descDiv.style.display='none';
 		//creating table inside hidden div
 			var divTable=document.createElement('TABLE');
@@ -382,7 +435,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(fromTR);
 				var receivedTR=document.createElement('TR');
 					var receivedTD1=document.createElement('TD');
-					receivedTD1.innerHTML='<strong>'+received+'</strong>';							
+					receivedTD1.innerHTML='<strong>'+receive+'</strong>';							
 				receivedTR.appendChild(receivedTD1);
 							
 					//getting received date
@@ -407,7 +460,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(priorityTR);	
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
-					detailsTD1.innerHTML='&nbsp;'+description;
+					detailsTD1.innerHTML='&nbsp;'+desc;
 				detailsTR.appendChild(detailsTD1);
 					
 					var detailsTD2=document.createElement('TD');
@@ -416,14 +469,36 @@ tr.my-border-style td {
 					detailsTD2.innerHTML=description;
 				detailsTR.appendChild(detailsTD2);
 			divTblBody.appendChild(detailsTR);
-		descDiv.appendChild(divTable);	
-		nameTD.appendChild(descDiv);
-		msgTr.appendChild(nameTD);				
-						
+                        
+        // create forwarded messages
+        if(message.childNodes!=null&&message.childNodes.length>0){
+            var forwardedTb=document.createElement('TABLE');
+            forwardedTb.width="100%"
+            var forwardedTbody=document.createElement('TBODY');
+            for(var i=0;i<message.childNodes.length;i++){
+                var forwardedTR=document.createElement('TR');
+                createTableRow(tbl,forwardedTR,message.childNodes[i],false);
+                forwardedTbody.appendChild(forwardedTR);
+            }
+            forwardedTb.appendChild(forwardedTbody);
+            var forwardTR=document.createElement('TR');
+            var forwardTD=document.createElement('TD');
+            forwardTD.setAttribute("colSpan","2");
+            
+            forwardTD.appendChild(forwardedTb);
+            forwardTR.appendChild(forwardTD);
+            divTblBody.appendChild(forwardTR);
+        }
+        descDiv.appendChild(divTable);	
+        nameTD.appendChild(descDiv);
+        msgTr.appendChild(nameTD);
+        
+        if(fwdOrEditDel){
 		// forward or edit link
 		fwdOrEditTD=document.createElement('TD');
 		fwdOrEditTD.width='20%';
 		fwdOrEditTD.align='right';
+                fwdOrEditTD.vAlign="top";
 		var isDraft=message.getAttribute('isDraft');
 		if(isDraft=='true'){
 			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'">'+editBtn+'</digi:link>';									
@@ -436,14 +511,16 @@ tr.my-border-style td {
 		var deleteTD=document.createElement('TD');
 		deleteTD.width='20%';
 		deleteTD.align='center';
+                deleteTD.vAlign="top";
 		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
 		deleteTD.innerHTML='<a href="javascript:deleteMessage('+msgId+')">'+deleteBtn+'</a>';
-		msgTr.appendChild(deleteTD);	
+		msgTr.appendChild(deleteTD);
+                }
 					
 		return msgTr;			
 	
 	}
-	
+        
 </script>
 
 

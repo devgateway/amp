@@ -272,17 +272,8 @@
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >
-																							<c:if test="${not empty messageForm.forwardedMsg}">
-																								<tr>
-																									<td align="center">
-																										<c:set var="trnFwdtBtn">
-																											<digi:trn key="message:btn:fwd">forward</digi:trn>
-																										</c:set> 
-																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" />
-																									</td>
-																								</tr>
-																							</c:if>
-																							<c:if test="${empty messageForm.forwardedMsg}">
+																							
+																							
 																								<tr>
 																									<td align="right" width="47%">
 																										<c:set var="trnSavetBtn">
@@ -290,12 +281,22 @@
 																										</c:set> 
 																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" />
 																									</td>
+                                                                                                                                                                                                        <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
 																											<digi:trn key="message:btn:send">send</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" />
 																									</td>
+                                                                                                                                                                                                        </c:if>
+                                                                                                                                                                                                        <c:if test="${not empty messageForm.forwardedMsg}">
+																									<td align="center">
+																										<c:set var="trnFwdtBtn">
+																											<digi:trn key="message:btn:fwd">forward</digi:trn>
+																										</c:set> 
+																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" />
+																									</td>
+                                                                                                                                                                                                        </c:if>
 																									<td align="left" width="47%">
 																										<c:set var="trnCancelBtn">
 																											<digi:trn key="message:btn:cancel">Cancel</digi:trn>
@@ -303,7 +304,7 @@
 																										<input type="button" value="${trnCancelBtn}" onclick="cancel();">																																							
 																									</td>
 																								</tr>
-																							</c:if>
+																							
 																						</table>
 																					</td>
 																				</tr>

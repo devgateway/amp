@@ -21,8 +21,10 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.mail.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
@@ -53,7 +55,7 @@ public class AmpMessageActions extends DispatchAction {
     		}else {
     			Long id=new Long(request.getParameter("msgStateId"));    			
     	    	AmpMessageState state=AmpMessageUtil.getMessageState(id);
-    	    	fillFormFields(state.getMessage(),messageForm,id);    	
+    	    	fillFormFields(state.getMessage(),messageForm,id,true);    	
     		}
 		 return loadReceiversList(mapping,form,request,response);	
 	}
@@ -232,14 +234,26 @@ public class AmpMessageActions extends DispatchAction {
      */
     public ActionForward viewSelectedMessage(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	
-    	AmpMessageForm messagesForm=(AmpMessageForm)form;
-    	Long stateId=new Long(request.getParameter("msgStateId"));
-    	AmpMessageState msgState=AmpMessageUtil.getMessageState(stateId);    
-    	msgState.setRead(true); 
-    	//changing message state to read
-    	AmpMessageUtil.saveOrUpdateMessageState(msgState);
-    	fillFormFields(msgState.getMessage(),messagesForm,stateId);    	
-    	return mapping.findForward("viewMessage");
+    	   AmpMessageForm messagesForm = (AmpMessageForm) form;
+        AmpMessage message = null;
+        boolean isMessageStateId=true;
+        Long id=null;
+        if (request.getParameter("msgStateId") != null) {
+            id = new Long(request.getParameter("msgStateId"));
+            AmpMessageState msgState = AmpMessageUtil.getMessageState(id);
+            msgState.setRead(true);
+            AmpMessageUtil.saveOrUpdateMessageState(msgState);
+            message = msgState.getMessage();
+            
+        } else {
+            id = new Long(request.getParameter("msgId"));
+            message = AmpMessageUtil.getMessage(id);
+            isMessageStateId=false;
+        }
+
+
+        fillFormFields(message, messagesForm, id,isMessageStateId);
+        return mapping.findForward("viewMessage");
     }
     
     public ActionForward makeMsgRead(ActionMapping mapping,	ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -320,6 +334,7 @@ public class AmpMessageActions extends DispatchAction {
      */
     public ActionForward forwardMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
+        setDefaultValues(messagesForm);
     	if(request.getParameter("fwd")!=null && request.getParameter("fwd").equals("fillForm")){
     		Long stateId=new Long(request.getParameter("msgStateId"));
         	AmpMessageState oldMsgsState=AmpMessageUtil.getMessageState(stateId);
@@ -555,7 +570,7 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setDeleteActionWasCalled(false);
 	 }
 	 
-	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long stateId) throws Exception{	 
+	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long id,boolean isStateId) throws Exception{	 
 		 if(message!=null){
 			 form.setMessageId(message.getId());
 			 form.setMessageName(message.getName());
@@ -566,9 +581,18 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setSenderId(message.getSenderId()); 	 
 			 form.setCreationDate(DateConversion.ConvertDateToString(message.getCreationDate()));		 
 			 form.setClassName(message.getClassName());
-			 form.setMsgStateId(stateId);
+                         if(isStateId){
+                          form.setMsgStateId(id);
+                          form.setSender(AmpMessageUtil.getMessageState(id).getSender());
+                         }
+                         else{
+                             AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(message.getSenderId());
+                             String sender = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName();
+                             form.setSender(sender);
+                         }
+			 
 			 form.setReceivers(getMessageRecipients(message.getId()));
-			 form.setSender(AmpMessageUtil.getMessageState(stateId).getSender());
+			 
 			 //is alert or not
 			 if(message.getClassName().equals("a")){
 				 form.setSetAsAlert(1);
@@ -578,7 +602,7 @@ public class AmpMessageActions extends DispatchAction {
 			 //getting forwarded message,if exists
 			 AmpMessage msg=AmpMessageUtil.getMessage(message.getForwardedMessageId());
 			 if(msg!=null){				 		        	
-				 form.setForwardedMsg(createHelperMsgFromAmpMessage(msg,stateId));
+				 form.setForwardedMsg(createHelperMsgFromAmpMessage(msg,id));
 			 }else{
 				 form.setForwardedMsg(null);
 			 }
@@ -589,25 +613,35 @@ public class AmpMessageActions extends DispatchAction {
 	 /**
 	     * Constructs XML from Messages      
 	     */
-	    private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws Exception {
-	    	String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-	    	result+="<" + ROOT_TAG +">";
-		    	result+="<" + MESSAGES_TAG +">";
-		    	if(states!=null && states.size()>0){
-		    		for (AmpMessageState state : states) {
-						result+="<"+"message name=\""+state.getMessage().getName()+"\" ";
-						result+=" id=\""+state.getId()+"\"";
-						result+=" from=\""+state.getSender()+"\"";
-						result+=" received=\""+DateConversion.ConvertDateToString(state.getMessage().getCreationDate())+"\"";
-						result+=" priority=\""+state.getMessage().getPriorityLevel()+"\"";
-						result+=" msgDetails=\""+state.getMessage().getDescription()+"\"";
-						result+=" read=\""+state.getRead()+"\"";
-						result+=" isDraft=\""+state.getMessage().getDraft()+"\"";
-						result+="/>";				
-					}		    		
-		    	}
-		    	result+="</" + MESSAGES_TAG +">";
-		    	//pagination
+	   
+            
+        private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws AimException {
+               
+        String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+        result += "<" + ROOT_TAG + ">";
+        result+="<" + MESSAGES_TAG +">";
+        if (states != null && states.size() > 0) {
+            for (AmpMessageState state : states) {
+                result += "<" + "message name=\"" + state.getMessage().getName() + "\" ";
+                result += " id=\"" + state.getId() + "\"";
+                result += " from=\"" + state.getSender() + "\"";
+                result += " received=\"" + DateConversion.ConvertDateToString(state.getMessage().getCreationDate()) + "\"";
+                result += " priority=\"" + state.getMessage().getPriorityLevel() + "\"";
+                String desc=org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getDescription());
+                result += " msgDetails=\"" +desc + "\"";
+                result += " read=\"" + state.getRead() + "\"";
+                result += " isDraft=\"" + state.getMessage().getDraft() + "\"";
+                result += ">";
+                if (state.getMessage().getForwardedMessageId() != null) {
+                    AmpMessage forwarded = AmpMessageUtil.getMessage(state.getMessage().getForwardedMessageId());
+                    result += messages2XML(forwarded,state.getMessage().getId());
+                    
+                }
+                result += "</message>";
+            }
+        }
+        result+="</" + MESSAGES_TAG +">";
+        //pagination
 		    	boolean messagesExist=(states==null||states.size()==0)?false:true;
 		    	result+="<" + PAGINATION_TAG +">";
 		    	result+="<"+"pagination messagesExist=\""+messagesExist+"\"";
@@ -619,11 +653,34 @@ public class AmpMessageActions extends DispatchAction {
 		    //	result+=" offset=\""+form.getOffset()+"\"";
 		    	result+="/>";
 		    	result+="</" + PAGINATION_TAG +">";
-	    	result+="</"+ROOT_TAG +">";
-	    	
-	    	return result;
-	    }
-	    
+        result += "</" + ROOT_TAG + ">";
+        return result;
+    }
+
+    private String messages2XML(AmpMessage forwardedMessage, Long messageId) throws AimException {
+
+        String result = "";
+        AmpTeamMember tm=TeamMemberUtil.getAmpTeamMember(forwardedMessage.getSenderId());
+        String from=tm.getUser().getFirstNames()+" "+tm.getUser().getLastName();
+        result += "<" + "forwarded name=\"" + forwardedMessage.getName() + "\" ";
+        result += " id=\"" + forwardedMessage.getId() + "\"";
+        result += " from=\"" +from + "\"";
+        result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
+        result += " priority=\"" + forwardedMessage.getPriorityLevel() + "\"";
+        String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
+        result += " msgDetails=\"" + desc + "\"";
+        result+=" read=\""+true+"\"";
+        result += " newMsgId=\"" + messageId + "\"";
+        result += "/>";
+        if (forwardedMessage.getForwardedMessageId() != null) {
+            AmpMessage forwarded = AmpMessageUtil.getMessage(forwardedMessage.getForwardedMessageId());
+            result += messages2XML(forwarded,messageId);
+        }
+        
+
+
+        return result;
+    }
 	 
 	 /**
 	  *create helper Message class from AmpMessage entity	  
@@ -661,5 +718,5 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			return members;
 	 }
-
+         
 }

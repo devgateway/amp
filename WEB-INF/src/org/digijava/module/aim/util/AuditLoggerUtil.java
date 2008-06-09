@@ -7,10 +7,13 @@ package org.digijava.module.aim.util;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +29,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Constants;
+
+import com.arjuna.ats.internal.arjuna.objectstore.jdbc.accessors.sqlserver_accessor;
 /**
  * ActivityUtil is the persister class for all activity related
  * entities
@@ -302,6 +307,263 @@ public class AuditLoggerUtil {
 		return auditTrail;
 
 	} 
-
 	
+	public static Collection getLogByPeriod(int interval) {
+		Session session = null;
+		Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
+		String qryStr = null;
+		Query qry = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select f from " + 
+				AmpAuditLogger.class.getName() 
+				+ " f where f.loggedDate > DATE_SUB(curdate(), INTERVAL " + interval + " DAY)";
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
+	
+	
+	/**
+	 * @author Diego Dimunzio
+	 * Delete all records whose date is less than the interval
+	 * @param interval
+	*/
+	public static void DeleteLogsByPeriod(String interval){
+		Session session = null;
+		String qryStr = null;
+		Transaction tx = null;
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select f from "
+				+ AmpAuditLogger.class.getName()
+				+ " f where f.loggedDate < DATE_SUB(curdate(), INTERVAL " + interval + " DAY)";
+			tx = session.beginTransaction();
+			session.delete(qryStr);
+			tx.commit();
+		
+		} catch (HibernateException e) {
+			logger.error("HibernateException", e);
+		} catch (SQLException e) {
+			logger.error("SQLException", e);
+	}
+}
+	/**
+     * This class is used for sorting by name.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerNameComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getObjectName()==null || o2.getObjectName()==null)?0:collator.compare(o1.getObjectName().toLowerCase(), o2.getObjectName().toLowerCase());
+            return result;
+        }
+    }
+	
+    /**
+     * This class is used for sorting by Object type.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerTypeComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerTypeComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerTypeComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getObjectName()==null || o2.getObjectName()==null)?0:collator.compare(o1.getObjectName().toLowerCase(), o2.getObjectName().toLowerCase());
+            return result;
+        }
+    }
+    
+    /**
+     * This class is used for sorting by Team Name.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerTeamComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerTeamComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerTeamComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getTeamName()==null || o2.getTeamName()==null)?0:collator.compare(o1.getTeamName().toLowerCase(), o2.getTeamName().toLowerCase());
+            return result;
+        }
+    }
+    
+    /**
+     * This class is used for sorting by Author Name.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerAuthorComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerAuthorComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerAuthorComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getAuthorName()==null || o2.getAuthorName()==null)?0:collator.compare(o1.getAuthorName().toLowerCase(), o2.getAuthorName().toLowerCase());
+            return result;
+        }
+    }
+    
+    /**
+     * This class is used for sorting by  Creation Date.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerCreationDateComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerCreationDateComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerCreationDateComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getLoggedDate()==null || o2.getLoggedDate()==null)?0:collator.compare(o1.getLoggedDate().toString(), o2.getLoggedDate().toString());
+            return result;
+        }
+    }
+    
+    /**
+     * This class is used for sorting by  Change Date.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerChangeDateComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerChangeDateComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerChangeDateComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getModifyDate()==null || o2.getModifyDate()==null)?0:collator.compare(o1.getModifyDate().toString(), o2.getModifyDate().toString());
+            return result;
+        }
+    }
+    
+    /**
+     * This class is used for sorting by Editor Name.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerEditorNameComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerEditorNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerEditorNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getEditorName()==null || o2.getEditorName()==null)?0:collator.compare(o1.getEditorName(), o2.getEditorName());
+            return result;
+        }
+    }
+    /**
+     * This class is used for sorting by Action.
+     * @author Diego Dimunzio
+     *
+     */
+    public static class HelperAuditloggerActionComparator implements Comparator<AmpAuditLogger> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperAuditloggerActionComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAuditloggerActionComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getAction()==null || o2.getAction()==null)?0:collator.compare(o1.getAction(), o2.getAction());
+            return result;
+        }
+    }
 } 

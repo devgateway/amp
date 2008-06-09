@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 
 import org.digijava.module.aim.util.AuditLoggerUtil;
 
-public class AmpAuditLogger implements Serializable {
+public class AmpAuditLogger implements Comparable, Serializable {
 	/**
 	 * 
 	 */
@@ -148,6 +148,32 @@ public class AmpAuditLogger implements Serializable {
 	}
 	public String getDetail() {
 		return detail;
+	}
+	
+	public String getLoggedDateAsString() {
+		return loggedDate.toString();
+	}
+	
+	
+	public int compareTo(Object obj) {
+
+		if (!(obj instanceof AmpAuditLogger))
+			throw new ClassCastException();
+		AmpAuditLogger audit = (AmpAuditLogger) obj;
+		if (this.objectName != null) {
+			if (audit.objectName != null) {
+				return (this.objectName.trim().toLowerCase()
+						.compareTo(audit.objectName.trim().toLowerCase()));
+			} else {
+				return (this.objectName.trim().toLowerCase().compareTo(""));
+			}
+		} else {
+			if (audit.objectName != null) {
+				return ("".compareTo(audit.objectName.trim().toLowerCase()));
+			} else {
+				return 0;
+			}
+		}
 	}
 
 }

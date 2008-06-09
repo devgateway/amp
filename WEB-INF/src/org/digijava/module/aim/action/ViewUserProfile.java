@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.digijava.module.aim.form.UserDetailForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.kernel.user.User;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
@@ -32,43 +34,42 @@ public class ViewUserProfile
     TeamMember teamMember = (TeamMember) httpSession.getAttribute(
         "currentMember");
     User user = null;
-
     Long memId = null;
-
+    String email = "";
+    AmpTeamMember member=null;
     if (request.getParameter("id") != null) {
       long id = Long.parseLong(request.getParameter("id"));
       memId = new Long(id);
     }
-    /*   else {
-          memId = teamMember.getMemberId();
-        }
-     */
-
-    String[] memberInformationn ;
-    AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(memId);
-    if (member == null) {
-      if (memId.equals(teamMember.getMemberId())) {
+    if (request.getParameter("email") != "") {
+        email = request.getParameter("email");
+        memId = DbUtil.getUser(email).getId();
+      }
+    
+    String[] memberInformationn = null;
+    member = TeamMemberUtil.getAmpTeamMember(memId);
+    if (member == null && request.getParameter("id") != null) {
+    if (memId.equals(teamMember.getMemberId())) {
         user = DbUtil.getUser(teamMember.getMemberId());
          memberInformationn=new String[]{teamMember.getTeamName(),teamMember.getRoleName()};
       }
-      else {
+    else {
         errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidUserId"));
         saveErrors(request,errors);
         return mapping.getInputForward();
-      }
-
+     }
     }
-    else {
-      user = member.getUser();
-      memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+    else if(memId != null){
+    	user = DbUtil.getUser(memId);
+    	memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
     }
+    
 
     formBean.setAddress(user.getAddress());
     formBean.setFirstNames(user.getFirstNames());
     formBean.setLastName(user.getLastName());
     formBean.setMailingAddress(user.getEmail());
-    formBean.setOrganizationName(user.
-                                 getOrganizationName());
+    formBean.setOrganizationName(user.getOrganizationName());
     formBean.setInfo(memberInformationn);
 
     return mapping.findForward("forward");

@@ -12,7 +12,7 @@
 	<table style="border : 1px solid silver">
 		<tr>
 			<td>
-				No Data assigned.
+				<digi:trn key="gis:widgetTeaser:noDataassignedTo">No Data assigned to:</digi:trn>&nbsp;${tform.placeName}
 			</td>
 		</tr>
 	</table>
@@ -26,11 +26,12 @@
 		<c:if test="${tform.table.cssClass != null}">
 			class="${tform.table.cssClass}" 
 		</c:if>
-		border="1">
+		style="border : 1px solid silver"
+		>
 		<c:forEach var="theader" items="${tform.table.headerRows}" varStatus="hstat">
 			<tr>
 				<c:forEach var="cell" items="${theader.cells}">
-					<td>
+					<td nowrap="nowrap" style="border : 1px solid silver">
 						<strong>${cell.value}</strong>
 					</td>
 				</c:forEach>
@@ -38,7 +39,7 @@
 			<c:forEach var="trow" items="${tform.table.dataRows}" varStatus="dstat">
 				<tr>
 					<c:forEach var="tcell" items="${trow.cells}" varStatus="cstat">
-						<td>
+						<td nowrap="nowrap" style="border : 1px solid silver">
 							${tcell.value}
 						</td>
 					</c:forEach>

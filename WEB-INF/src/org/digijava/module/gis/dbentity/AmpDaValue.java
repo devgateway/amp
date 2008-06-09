@@ -15,6 +15,13 @@ public class AmpDaValue implements Serializable {
 	private String value;
 	private AmpDaColumn column;
 	
+	public void replaceValues(AmpDaValue val){
+		this.id = val.getId();
+		this.pk = val.getPk();
+		this.value = val.getValue();
+		this.column = val.getColumn();
+	}
+	
 	public Long getId() {
 		return id;
 	}

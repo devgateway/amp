@@ -26,8 +26,8 @@ public class TestWidget extends Action {
 		table.setDataRows(new ArrayList<DaRow>(10));
 		for (int i = 0; i < 10; i++) {
 			DaRow row=new DaRow();
-			row.setId((long)i);
-			row.setPk("PK"+i);
+			row.setId(new Long(i));
+			row.setPk(new Long(i));
 			table.getDataRows().add(row);
 		}
 		

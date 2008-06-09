@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +16,9 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
@@ -208,7 +211,13 @@ public class TableWidgetUtil {
 		return results;
 	}
 	
-	public static List<DaRow> dataToHelpers(Collection<AmpDaValue> data)throws DgException{
+	/**
+	 * Converts values to helper row beans which include cells with those values.
+	 * @param data
+	 * @return
+	 * @throws DgException
+	 */
+	public static List<DaRow> valuesToRows(Collection<AmpDaValue> data)throws DgException{
 		List<DaRow> rows=null;
 		Map<Long, DaRow> rowsByPk=new HashMap<Long, DaRow>();
 		for (AmpDaValue value : data) {
@@ -216,7 +225,7 @@ public class TableWidgetUtil {
 			if (null == row){
 				row = new DaRow();
 				rowsByPk.put(value.getPk(), row);
-				row.setPk(value.getPk().toString());
+				row.setPk(value.getPk());
 				row.setCells(new ArrayList<DaCell>(10));
 			}
 			DaCell cell = new DaCell(value);
@@ -227,6 +236,88 @@ public class TableWidgetUtil {
 			Collections.sort(daRow.getCells(),new CellOrderNoComparator());
 		}
 		return rows;
+	}
+	
+	/**
+	 * Creates row with empty values according to columns.
+	 * @param columns
+	 * @return
+	 * @throws DgException
+	 */
+	public static DaRow createEmptyRow(List<AmpDaColumn> columns) throws DgException{
+		DaRow row = new DaRow();
+		row.setCells(new ArrayList<DaCell>(columns.size()));
+		for (AmpDaColumn col : columns) {
+			DaCell cell = new DaCell();
+			cell.setColumnId(col.getId());
+			cell.setColumnOrderNo(col.getOrderNo());
+			cell.setHeader(false);
+			row.getCells().add(cell);
+		}
+		Collections.sort(row.getCells(),new CellOrderNoComparator());
+		return row;
+	}
+	
+	/**
+	 * Converts row helper beans and their cells back to values beans for DB.
+	 * This will also update pk field for each value bean according their row number.
+	 * @param rows list of rows to convert
+	 * @return list of value bean created from all cells of all rows.
+	 * @throws DgException
+	 */
+	public static List<AmpDaValue> rowsToValues(List<DaRow> rows,Set<AmpDaColumn> columns) throws DgException{
+		List<AmpDaValue> resultValues = new ArrayList<AmpDaValue>(columns.size() * rows.size());
+		Map<Long,AmpDaColumn> columnMap = AmpCollectionUtils.createMap(columns, new TableWidgetUtil.TableWidgetColumnKeyResolver());
+		long pk=0;
+		for (DaRow row : rows) {
+			row.setPk(new Long(pk++));
+			List<AmpDaValue> values=row.getValues(columnMap);
+			resultValues.addAll(values);
+		}
+		return resultValues;
+	}
+
+	/**
+	 * Inserts, updates or deletes value beans depending on their ID.
+	 * If ID is null then value is inserted, if ID is negative then value is deleted 
+	 * and if ID is positive then value is updated. 
+	 * @param values
+	 * @throws DgException
+	 */
+	public static void saveTableValues(List<AmpDaValue> values)throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			for (AmpDaValue value : values) {
+				if (value.getId()!=null){
+					if(value.getId().longValue()<0){
+						value.setId(new Long( - value.getId().longValue()));
+						AmpDaValue val = (AmpDaValue)session.load(AmpDaValue.class, value.getId());
+						session.delete(val);
+					}else{
+						AmpDaValue val = (AmpDaValue)session.load(AmpDaValue.class, value.getId());
+						val.replaceValues(value);
+						session.update(val);
+					}
+				} else{
+					session.save(value);
+				}
+			}
+			tx.commit();
+		} catch (Exception e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					throw new DgException("Cannot rollback values save,update,delete operation!",e1);
+				}
+			}
+			e.printStackTrace();
+			throw new DgException("Cannot save,update,delete values!",e);
+		}
+		
 	}
 	//=======PLACES=====================
 	public static AmpDaWidgetPlace getPlace(String code) throws DgException{
@@ -312,6 +403,21 @@ public class TableWidgetUtil {
 		
 	}
 	
+	public static class AmpDaValueKeyWorker implements KeyWorker<Long, AmpDaValue>{
+		public Long resolveKey(AmpDaValue value) {
+			return value.getId();
+		}
+
+		public void markKeyForRemoval(AmpDaValue element) {
+			element.setId(new Long( - element.getId().longValue()));
+		}
+
+		public void updateKey(AmpDaValue element, Long newKey) {
+			element.setId(newKey);
+		}
+		
+	}
+	
 	//========comparators=============
 	/**
 	 * Compares {@link AmpDaColumn} with its orderNo field.
@@ -340,7 +446,6 @@ public class TableWidgetUtil {
 		}
 	}
 	
-	
 	//not used yet. will reimplement in AmpCollectionUtils with java generics.
 	public static class ColumnSynzchronizer implements CollectionSynchronizer{
 
@@ -362,6 +467,11 @@ public class TableWidgetUtil {
 		DaTable table=null;
 		table = new DaTable(widget);
 		return table;
+	}
+
+	public Long resolveKey(AmpDaValue element) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

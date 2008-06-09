@@ -10,16 +10,27 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.module.gis.dbentity.AmpDaColumn;
 import org.digijava.module.gis.dbentity.AmpDaTable;
 import org.digijava.module.gis.dbentity.AmpDaValue;
 import org.digijava.module.gis.form.AdminTableWidgetDataForm;
 import org.digijava.module.gis.util.TableWidgetUtil;
-import org.digijava.module.gis.widget.table.DaCell;
 import org.digijava.module.gis.widget.table.DaRow;
 
+/**
+ * Action for editing table widget data.
+ * No changes are done in db until {@link #save(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)} action is called.
+ * @author Irakli Kobiashvili
+ *
+ */
 public class AdminTableWidgetData extends DispatchAction {
 
+	public static final String EDITING_WIDGET_DATA = "Editin_Widget_Data";
+
+	/**
+	 * Forwards to {@link #showEdit(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
+	 */
 	protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -27,20 +38,34 @@ public class AdminTableWidgetData extends DispatchAction {
 	}
 
 
+	/**
+	 * just renders edit page.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	public ActionForward showEdit(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if ( ! isEdit(request)){
 			return startEdit(mapping, form, request, response);
 		}
-		
-		String[][] sesMatrix=getFromSession(request);
-		dForm.setMatrix(sesMatrix);
-		
 		return mapping.findForward("forward");
 	}
 	
+	/**
+	 * Start edit process.
+	 * Loads data from db and renders edit page. 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	public ActionForward startEdit(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -52,110 +77,124 @@ public class AdminTableWidgetData extends DispatchAction {
 		List<AmpDaColumn> columns = new ArrayList<AmpDaColumn>(dTable.getColumns());
 		dForm.setColumns(columns);
 		
-		List<AmpDaValue> data = TableWidgetUtil.getTableData(dForm.getWidgetId());
-		List<DaRow> rows = TableWidgetUtil.dataToHelpers(data);
+		List<AmpDaValue> values = TableWidgetUtil.getTableData(dForm.getWidgetId());
+		List<DaRow> rows = TableWidgetUtil.valuesToRows(values);
+		if(rows==null){
+			rows = new ArrayList<DaRow>(1);
+		}
+		if(rows.size()==0){
+			rows.add(TableWidgetUtil.createEmptyRow(columns));
+		}
 		
-		String[][] result=result=rowsToArray(rows);
-		editStart(request, result);
+		dForm.setRows(rows);
+		markEditStarted(request, rows);
 		
-		dForm.setMatrix(result);
 		return mapping.findForward("forward");
 	}
 	
+	/**
+	 * Cancels edit process.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	public ActionForward cancelEdit(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
-		
-		editStop(request);
 		return mapping.findForward("listTableWidgets");
 	}
 
-	public ActionForward save(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
-		
-		editStop(request);
-		return mapping.findForward("listTableWidgets");
-	}
-
+	/**
+	 * Adds new empty row at specified place.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	public ActionForward addRow(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
-		//updateSession(request, dForm.getMatrix());
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
 			int insertIndex=dForm.getRowIndex().intValue()+1;
-
-			String[][] sesMatrix = getFromSession(request);
-
-			String[][] result	= new String[sesMatrix.length+1][sesMatrix[0].length];
 			
-			System.arraycopy(sesMatrix, 0, result, 0, insertIndex);
-			System.arraycopy(sesMatrix, insertIndex, result, insertIndex+1, sesMatrix.length-insertIndex);
-			result[insertIndex]=setupEmptyColumn(sesMatrix[0].length);
-			
-			updateSession(request, result);
-			dForm.setMatrix(result);
+			List<DaRow> rows = dForm.getRows();
+			DaRow newRow = TableWidgetUtil.createEmptyRow(dForm.getColumns());
+			rows.add(insertIndex, newRow);
+			updateSession(request, rows);
 		}		
 		return mapping.findForward("forward");
 	}
 
+	/**
+	 * Removes specified row.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	public ActionForward removeRow(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
 			int removeIndex = dForm.getRowIndex().intValue();
-			String[][] sesMatrix = getFromSession(request);
+			List<DaRow> rows = dForm.getRows();
+			rows.remove(removeIndex);
+			updateSession(request, rows);
 		}	
 		
 		return mapping.findForward("forward");
 	}
 
-	private String[] setupEmptyColumn(int numOfColumns){
-		String[] result=new String[numOfColumns];
-		for (int i=0;i<numOfColumns;i++) {
-			result[i]="";
-		}
-		return result;
+	/**
+	 * Save all changes and go back to widget list.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward save(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
+		AmpDaTable widget = TableWidgetUtil.getTableWidget(dForm.getWidgetId());
+		List<DaRow> rows = dForm.getRows();
+		List<AmpDaValue> newValues = TableWidgetUtil.rowsToValues(rows,widget.getColumns());
+		List<AmpDaValue> oldValues = TableWidgetUtil.getTableData(dForm.getWidgetId());
+		AmpCollectionUtils.joinAndMarkRemoved(oldValues, newValues, new TableWidgetUtil.AmpDaValueKeyWorker());
+		TableWidgetUtil.saveTableValues(oldValues);
+		markEditStopped(request);
+		return mapping.findForward("listTableWidgets");
 	}
 	
-	private String[][] rowsToArray(List<DaRow> rows){
-		String[][] result = null;
-
-		if (null != rows){
-			int i=0;
-			for (DaRow row : rows) {
-				int j=0;
-				if (null == result){
-					result = new String[rows.size()][row.getCells().size()];
-				}
-				for (DaCell cell : row.getCells()) {
-					result[i][j++] = cell.getValue();
-				}
-				i++;
-			}
-		}
-		
-		return result;
+	/**
+	 * Not very useful after redesign this action.
+	 * @param request
+	 * @param rows
+	 */
+	private void markEditStarted(HttpServletRequest request,List<DaRow> rows){
+		updateSession(request, rows);
 	}
-	
-	public static final String EDITING_WIDGET_DATA = "Editin_Widget_Data";
-	private void editStart(HttpServletRequest request,String[][] matrix){
-		updateSession(request, matrix);
-	}
-	private void editStop(HttpServletRequest request){
+	private void markEditStopped(HttpServletRequest request){
 		request.getSession().removeAttribute(EDITING_WIDGET_DATA);
 	}
 	private boolean isEdit(HttpServletRequest request){
 		return null!=getFromSession(request);
 	}
-	private String[][] getFromSession(HttpServletRequest request){
-		return (String[][])request.getSession().getAttribute(EDITING_WIDGET_DATA);
+	private List<DaRow> getFromSession(HttpServletRequest request){
+		return (List<DaRow>)request.getSession().getAttribute(EDITING_WIDGET_DATA);
 	}
-	private void updateSession(HttpServletRequest request,String[][] matrix){
-		request.getSession().setAttribute(EDITING_WIDGET_DATA, matrix);
+	private void updateSession(HttpServletRequest request,List<DaRow> rows){
+		request.getSession().setAttribute(EDITING_WIDGET_DATA, rows);
 	}
 }

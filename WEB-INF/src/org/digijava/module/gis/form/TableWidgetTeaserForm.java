@@ -14,6 +14,15 @@ public class TableWidgetTeaserForm extends ActionForm {
 
 	private DaTable table;
 	private boolean isPreview=false;
+	private String placeName;
+
+	public String getPlaceName() {
+		return placeName;
+	}
+
+	public void setPlaceName(String placeName) {
+		this.placeName = placeName;
+	}
 
 	public boolean isPreview() {
 		return isPreview;

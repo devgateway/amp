@@ -1,5 +1,7 @@
 package org.digijava.module.gis.widget.table;
 
+import java.util.Map;
+
 import org.digijava.module.gis.dbentity.AmpDaColumn;
 import org.digijava.module.gis.dbentity.AmpDaValue;
 
@@ -13,6 +15,7 @@ public class DaCell implements HtmlGenerator {
 	private Long id;
 	private Long columnId;
 	private Integer columnOrderNo;
+	private Long rowPk;
 	private String value;
 	private String cssClass;
 	private String htmlStyle;
@@ -41,14 +44,28 @@ public class DaCell implements HtmlGenerator {
 
 	/**
 	 * Constructs data cell.
-	 * @param cell
+	 * @param value
 	 */
-	public DaCell(AmpDaValue cell){
-		this.value = cell.getValue();
-		this.id = cell.getId();
-		this.columnId = cell.getColumn().getId();
-		this.columnOrderNo = cell.getColumn().getOrderNo();
+	public DaCell(AmpDaValue value){
+		this.value = value.getValue();
+		this.id = value.getId();
+		this.columnId = value.getColumn().getId();
+		this.columnOrderNo = value.getColumn().getOrderNo();
+		this.rowPk = value.getPk();
 		this.isHeader = false;
+	}
+	
+	/**
+	 * Converts helper cell back to db Value bean
+	 * @return
+	 */
+	public AmpDaValue toValue(Map<Long,AmpDaColumn> columnsMap){
+		AmpDaValue value=new AmpDaValue();
+		value.setId(this.id);
+		value.setValue(this.value);
+		value.setColumn(columnsMap.get(this.columnId));
+		value.setPk(this.rowPk);
+		return value;
 	}
 	
 	public String generateHtml() {
@@ -126,6 +143,14 @@ public class DaCell implements HtmlGenerator {
 
 	public void setColumnOrderNo(Integer columnOrderNo) {
 		this.columnOrderNo = columnOrderNo;
+	}
+
+	public Long getRowPk() {
+		return rowPk;
+	}
+
+	public void setRowPk(Long rowPk) {
+		this.rowPk = rowPk;
 	}
 
 }

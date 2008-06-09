@@ -15,7 +15,7 @@ import java.util.Map;
 public class AmpCollectionUtils {
 
 	/**
-	 * Interface that know how to resolve key of type K from element of type E.
+	 * Interface that knows how to resolve key of type K from element of type E.
 	 * Used in createMap() method.
 	 *
 	 * @param <K> Key type
@@ -25,7 +25,11 @@ public class AmpCollectionUtils {
 	public static interface KeyResolver<K,E>{
 		K resolveKey(E element);
 	}
-	
+
+	public static interface KeyWorker<K,E> extends KeyResolver<K,E>{
+		void updateKey(E element,K newKey);
+		void markKeyForRemoval(E element);
+	}
 	
 	/**
 	 * Creates Map object from Collection.
@@ -73,16 +77,16 @@ public class AmpCollectionUtils {
 	}
 	
 	/**
-	 * Joins two collection using rules rules of synchronization of session and db collections.
+	 * Joins two collection using rules of synchronization of session and db collections.
 	 * Result is same mainCol object but updated according refCol with following rules :
-	 * if E is in both collection then it is left unchanged in mainCol.
+	 * if E is in both collection then it is moved from refCol to resulting mainCol.
 	 * if E is only in mainCol then it is removed from it - from result.
 	 * if E is only in refCol then it is added to resulting mainCol.
 	 * E is element specified (and compared) by K type property which usually is ID of entity bean.
 	 * @param <E> type of elements in collections
 	 * @param <K> type of PK of entity bean or type of some property that is used to compare elements.
-	 * @param mainCol collection that would be updated according to refCol. usually this is collection of Hibernate beans.
-	 * @param refCol collection of reference. usually this is new state from form or session.
+	 * @param mainCol collection that would be updated according to refCol. usually this is collection of db.
+	 * @param refCol collection of reference. usually this is new state from ActionForm or session.
 	 * @param keyResolver
 	 * @return
 	 */
@@ -99,8 +103,53 @@ public class AmpCollectionUtils {
 			}
 		}
 		mainCol.addAll(mapEref.values());
+
+		for (E e : refCol) {
+			K key = keyResolver.resolveKey(e);
+			if (null == key){
+				mainCol.add(e);
+			}
+		}
+		
 		return mainCol;
 	}
 	
+
+	/**
+	 * Joins two collections in mainCol marking elements that exists only in mainCol for removal.
+	 * How to mark elements is defined by {@link KeyWorker} interface implementation. 
+	 * Usually id values are set to same but negative, this let us know which should be deleted or updated or inserted.
+	 * @param <E>
+	 * @param <K>
+	 * @param mainCol
+	 * @param refCol
+	 * @param keyWorker
+	 * @return
+	 */
+	public static <E, K> Collection<E> joinAndMarkRemoved(Collection<E> mainCol, Collection<E> refCol, KeyWorker<K, E> keyWorker){
+		Map<K, E> mapEref = createMap(refCol, keyWorker);
+		Iterator<E> iterEmain = mainCol.iterator();
+		while (iterEmain.hasNext()) {
+			E mainE = (E) iterEmain.next();
+			K mainEkey = keyWorker.resolveKey(mainE);
+			E refE = mapEref.get(mainEkey);
+			if (refE == null){
+				keyWorker.markKeyForRemoval(mainE);
+			}else{
+				iterEmain.remove();
+				//mapEref.remove(mainEkey);
+			}
+		}
+		
+		mainCol.addAll(mapEref.values());
+		
+		for (E e : refCol) {
+			K key = keyWorker.resolveKey(e);
+			if (null == key){
+				mainCol.add(e);
+			}
+		}
+		return mainCol;
+	}
 	
 }

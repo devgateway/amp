@@ -75,19 +75,20 @@
 						</strong>
 					</td>
 				</tr>
-				<c:forEach var="row" items="${dform.matrix}" varStatus="rvarstat">
+				<c:forEach var="drow" items="${dform.rows}" varStatus="statRow">
 					<tr>
-						<c:forEach var="cell" items="${row}" varStatus="cvarstat">
+						<c:forEach var="dcell" items="${drow.cells}" varStatus="statCell">
 							<td>
-								<html:text name="dform" property="cell[${rvarstat.index}][${cvarstat.index}]" value="${cell}"/>
+								<html:text name="dform" property="row[${statRow.index}].cell[${statCell.index}].value"/>
 							</td>
 						</c:forEach>
 						<td>
-							<input type="button" value="Add" onclick="addRow(this.form,${rvarstat.index})">
-							<input type="button" value="Remove" onclick="removeRow(this.form,${rvarstat.index})">
+							<input type="button" value="Add" onclick="addRow(this.form,${statRow.index})">
+							<input type="button" value="Remove" onclick="removeRow(this.form,${statRow.index})">
 						</td>
 					</tr>
 				</c:forEach>
+				
 			</table>
 		</td>
 	</tr>

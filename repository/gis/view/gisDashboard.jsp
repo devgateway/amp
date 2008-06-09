@@ -16,7 +16,7 @@
 
 <table width="100%">
 	<tr>
-		<td><img onLoad="updateMap()" src = "../../gis/gisService.do?action=paintMap&canvasWidth=1000&canvasHeight=500&autoRect=true&mapCode=WORLD&hilight=TZA">
+		<td><img onLoad="updateMap()" src = "../../gis/gisService.do?action=paintMap&canvasWidth=800&canvasHeight=400&autoRect=true&mapCode=WORLD&hilight=TZA">
 		</td>
 	</tr>
 	<tr>

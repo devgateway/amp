@@ -143,12 +143,28 @@
 
 							</TD>
 							<TD width="100%" align="left" valign="top">
-								<digi:insert attribute="tableWidget1">
-									<digi:put name="widget-teaser-param">test_widget1</digi:put>
-								</digi:insert>
-								<digi:insert attribute="tableWidget2">
-									<digi:put name="widget-teaser-param">test_widget2</digi:put>
-								</digi:insert>
+								<table>
+									<tr>
+										<td>
+											<digi:insert attribute="tableWidget1">
+												<digi:put name="widget-teaser-param">test_widget1</digi:put>
+											</digi:insert>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											&nbsp;
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<digi:insert attribute="tableWidget2">
+												<digi:put name="widget-teaser-param">test_widget2</digi:put>
+											</digi:insert>
+										</td>
+									</tr>
+								</table>
+							
 							</TD>
 
 						</TR>

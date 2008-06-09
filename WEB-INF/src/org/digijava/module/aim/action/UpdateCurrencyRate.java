@@ -154,6 +154,7 @@ public class UpdateCurrencyRate extends Action {
                       }
 
                       cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
+                      cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                       if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
                     	  CurrencyUtil.saveCurrencyRate(cRate);
                       ObjectCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");

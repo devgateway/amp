@@ -35,10 +35,18 @@ import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 
 public class CurrencyUtil {
-
+    
 	private static Logger logger = Logger.getLogger(CurrencyUtil.class);
 	public static DecimalFormat df = new DecimalFormat("###,###,###,###,###") ;
-
+    
+	public static final int RATE_FROM_FILE					= 0;
+	public static final int RATE_FROM_WEB_SERVICE			= 1;
+	public static final int RATE_BY_HAND					= 2;
+	
+    public static final int ORDER_BY_CURRENCY_CODE			=-1;
+    public static final int ORDER_BY_CURRENCY_NAME			= 2;
+    public static final int ORDER_BY_CURRENCY_COUNTRY_NAME	= 3;
+    public static final int ALL_ACTIVE						= 1;
 
 
 	public static Collection getAllActiveRates() {
@@ -298,18 +306,17 @@ public class CurrencyUtil {
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
-
 		try {
 			session = PersistenceManager.getSession();
-			if (active == -1) {
+			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"order by curr.currencyCode";
 				qry = session.createQuery(qryStr);
-			}else if(active == 2){
+			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_NAME){
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 				"order by curr.currencyName";
 			qry = session.createQuery(qryStr);
-			}else if(active == 3){
+			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 				"order by curr.countryName";
 			qry = session.createQuery(qryStr);
@@ -611,6 +618,7 @@ public class CurrencyUtil {
 					currencyRate.setExchangeRate(cr.getExchangeRate());
 					currencyRate.setExchangeRateDate(exRtDate);
 					currencyRate.setToCurrencyCode(cr.getCurrencyCode());
+					currencyRate.setDataSource(CurrencyUtil.RATE_FROM_FILE);
 					logger.debug("Saving " + currencyRate.getToCurrencyCode());
 					session.save(currencyRate);
 				}
@@ -1184,6 +1192,33 @@ public class CurrencyUtil {
 
 		return col;
 	}
+	public static Collection getCurrencyRateByDataSource(Integer id) {
+		Collection col = new ArrayList();
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		try {
+			session = PersistenceManager.getSession();
+
+				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.dataSource=:id ";
+				qry = session.createQuery(qryStr);
+				qry.setParameter("id",id,Hibernate.INTEGER);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.error("Exception from getAllCurrencies()");
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+
+		return col;
+	}	
 	public static Collection getCurrencyRateValues(Long id) {
 		Collection col = new ArrayList();
 		Session session = null;

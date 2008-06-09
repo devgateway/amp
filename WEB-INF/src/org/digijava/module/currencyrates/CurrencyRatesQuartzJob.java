@@ -1,12 +1,9 @@
-/*
- * Created on Sep 21, 2006
- * 
- * This class is a simple Job which prints out execution time with its trigger's name
- */
+
 package org.digijava.module.currencyrates;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +11,9 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -25,32 +24,156 @@ import org.quartz.JobExecutionException;
  * 
  */
 public class CurrencyRatesQuartzJob implements Job {
-	private static Logger logger = Logger.getLogger(CurrencyRatesQuartzJob.class);
+	private static Logger logger = Logger
+			.getLogger(CurrencyRatesQuartzJob.class);
 	private DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 	private WSCurrencyClient myWSCurrencyClient;
-	private String baseCurrency; 
-	
+	private String baseCurrency;
+	private Date lastExcecution;
+	private static final int tries = 2;
+
 	public CurrencyRatesQuartzJob() {
-		myWSCurrencyClient = DailyCurrencyRateSingleton.getInstance().getMyWSCurrencyClient();
-		this.baseCurrency = DailyCurrencyRateSingleton.getInstance().getBaseCurrency();
+		myWSCurrencyClient = DailyCurrencyRateSingleton.getInstance()
+				.getMyWSCurrencyClient();
+		this.baseCurrency = DailyCurrencyRateSingleton.getInstance()
+				.getBaseCurrency();
 	}
-	
+
 	public void executeTest(JobExecutionContext context)
-	throws JobExecutionException {
+			throws JobExecutionException {
 		logger
-		.info("START Getting Currencies Rates from WS............................."
-				+ formatter.format(new Date()));
-		
+				.info("START Getting Currencies Rates from WS............................."
+						+ formatter.format(new Date()));
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
-		logger.info("START Getting Currencies Rates from WS............................."
+		logger
+				.info("START Getting Currencies Rates from WS............................."
 						+ formatter.format(new Date()));
 
-		Collection<AmpCurrency> currencies = CurrencyUtil.getAllCurrencies(-1);
+		Collection<AmpCurrency> currencies = CurrencyUtil
+				.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
 
+		String[] ampCurrencies = this.getCurrencies(currencies);
+
+		try {
+			HashMap<String, Double> wsCurrencyValues=null;
+			int mytries = 0;
+			while (mytries < tries && ampCurrencies!=null) {
+				wsCurrencyValues = this.myWSCurrencyClient
+						.getCurrencyRates(ampCurrencies, baseCurrency);
+				showValues(ampCurrencies, wsCurrencyValues);
+				save(ampCurrencies, wsCurrencyValues);
+				ampCurrencies = this.getWrongCurrencies(currencies,
+						wsCurrencyValues);
+				mytries++;
+			}
+			this.lastExcecution = new Date();
+			DailyCurrencyRateSingleton.getInstance().setLastExcecution(
+					this.lastExcecution);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		logger
+				.info("END Getting Currencies Rates from WS............................."
+						+ formatter.format(new Date()));
+	}
+
+	private String[] getWrongCurrencies(Collection<AmpCurrency> currencies,
+			HashMap<String, Double> wsCurrencyValues) {
+		String[] wrongArray = null;
+		ArrayList<AmpCurrency> wrongAList = new ArrayList<AmpCurrency>();
+		for (AmpCurrency ampCurrency : currencies) {
+			AmpCurrencyRate currRate = new AmpCurrencyRate();
+			currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
+			double value = wsCurrencyValues.get(ampCurrency.getCurrencyCode()
+					.trim());
+			if (value == WSCurrencyClient.CONNECTION_ERROR) {
+				wrongAList.add(ampCurrency);
+			}
+		}
+		if (wrongAList.size() != 0) {
+			wrongArray = new String[wrongAList.size()];
+			int i = 0;
+			for (AmpCurrency ampCurrency : wrongAList) {
+				wrongArray[i++] = ampCurrency.getCurrencyCode();
+			}
+		}
+		return wrongArray;
+	}
+	private void save(String[] currencies,
+			HashMap<String, Double> wsCurrencyValues) {
+		for (int i=0; i<currencies.length; i++) {
+			AmpCurrencyRate currRate = new AmpCurrencyRate();
+			//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
+			double value = wsCurrencyValues.get(currencies[i]);
+			if (value == WSCurrencyClient.INVALID_CURRENCY_CODE) {
+				logger.info(currencies[i]
+						+ " Not Supported...");
+				continue;
+			} else if (value == WSCurrencyClient.CONNECTION_ERROR) {
+				logger.info("Connection Error trying to get "
+						+ currencies[i]);
+				continue;
+			}
+			currRate.setExchangeRate(value);
+			
+			
+			Date aDate=new Date();
+			try {
+				String sDate = this.formatter.format(new Date());
+				aDate = DateTimeUtil.parseDate(sDate);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			currRate.setExchangeRateDate(aDate);
+			currRate.setToCurrencyCode(currencies[i]);
+			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
+			CurrencyUtil.saveCurrencyRate(currRate);
+		}
+	}
+ 
+	private void save(Collection<AmpCurrency> currencies,
+			HashMap<String, Double> wsCurrencyValues) {
+		for (AmpCurrency ampCurrency : currencies) {
+			AmpCurrencyRate currRate = new AmpCurrencyRate();
+			currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
+			double value = wsCurrencyValues.get(ampCurrency.getCurrencyCode()
+					.trim());
+			if (value == WSCurrencyClient.INVALID_CURRENCY_CODE) {
+				logger.info(ampCurrency.getCurrencyCode().trim()
+						+ " Not Supported...");
+				continue;
+			} else if (value == WSCurrencyClient.CONNECTION_ERROR) {
+				logger.info("Connection Error trying to get "
+						+ ampCurrency.getCurrencyCode().trim());
+				continue;
+			}
+			currRate.setExchangeRate(value);
+			
+			
+			Date aDate=new Date();
+			try {
+				String sDate = this.formatter.format(new Date());
+				aDate = DateTimeUtil.parseDate(sDate);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			currRate.setExchangeRateDate(aDate);
+			currRate.setToCurrencyCode(ampCurrency.getCurrencyCode().trim());
+			currRate.setDataSource(CurrencyUtil.RATE_FROM_WEB_SERVICE);
+			CurrencyUtil.saveCurrencyRate(currRate);
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private String[] getCurrencies(Collection<AmpCurrency> currencies) {
 		String[] curr = new String[currencies.size()];
 		int i = 0;
 		for (AmpCurrency ampCurrency : currencies) {
@@ -58,38 +181,14 @@ public class CurrencyRatesQuartzJob implements Job {
 			// logger.info("Get: " + curr[i]);
 			i++;
 		}
-		HashMap<String, Double> currencyValues=null;
-		try {
-			currencyValues = this.myWSCurrencyClient
-					.getCurrencyRates(curr, baseCurrency);
-			for (i = 0; i < curr.length; i++) {
-				logger.info(curr[i].trim() + ": "
-						+ currencyValues.get(curr[i].trim()));
-			}
-			for (AmpCurrency ampCurrency : currencies) {
-				AmpCurrencyRate currRate = new AmpCurrencyRate();
-				currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
-				double value = currencyValues.get(ampCurrency.getCurrencyCode()
-						.trim());
-				if (value == WSCurrencyClient.INVALID_CURRENCY_CODE) {					
-					logger.info(ampCurrency.getCurrencyCode().trim()
-							+ " Not Supported...");
-					continue;
-				} else if (value == WSCurrencyClient.CONNECTION_ERROR) {
-					logger.info("Connection Error trying to get "
-							+ ampCurrency.getCurrencyCode().trim());
-					continue;
-				}
-				currRate.setExchangeRate(value);
-				currRate.setExchangeRateDate(new Date());
-				currRate.setToCurrencyCode(ampCurrency.getCurrencyCode().trim());
-				CurrencyUtil.saveCurrencyRate(currRate);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		return curr;
+	}
+
+	private void showValues(String[] curr,
+			HashMap<String, Double> currencyValues) {
+		for (int i = 0; i < curr.length; i++) {
+			logger.info(curr[i].trim() + ": "
+					+ currencyValues.get(curr[i].trim()));
 		}
-		logger.info("END Getting Currencies Rates from WS............................."
-						+ formatter.format(new Date()));
 	}
 }

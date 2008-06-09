@@ -307,7 +307,7 @@ public class MainProjectDetailsForm extends ValidatorForm
 				  fp.setFromYear(getFromYear());
 			  }
 			  setYears(YearUtil.getYears());
-			  setCurrencies(CurrencyUtil.getAllCurrencies(1));		
+			  setCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));		
 	   }
 	   return errors.isEmpty() ? null : errors;
 	 }

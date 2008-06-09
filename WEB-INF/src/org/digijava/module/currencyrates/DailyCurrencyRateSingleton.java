@@ -1,6 +1,13 @@
 package org.digijava.module.currencyrates;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.dbentity.AmpCurrencyRate;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * 
@@ -18,6 +25,7 @@ public final class DailyCurrencyRateSingleton {
 
 	private WSCurrencyClient myWSCurrencyClient;
 	private String baseCurrency; 
+	private Date lastExcecution;
 
 	private DailyCurrencyRateSingleton() {
 		myWSCurrencyClient = new WSCurrencyClientImp();
@@ -85,7 +93,13 @@ public final class DailyCurrencyRateSingleton {
 	}
 
 	public static void main(String... strings) {
-		DailyCurrencyRateSingleton.getInstance().start(9, 29, "AM", 0, 1);
+		DailyCurrencyRateSingleton.getInstance().start(14, 47, "AM", 0, 10);
+		try {
+			Thread.sleep(1000*60*5);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(DailyCurrencyRateSingleton.getInstance().getLastExcecution());
 	}
 
 	public WSCurrencyClient getMyWSCurrencyClient() {
@@ -102,6 +116,14 @@ public final class DailyCurrencyRateSingleton {
 
 	public void setMyWSCurrencyClient(WSCurrencyClient myWSCurrencyClient) {
 		this.myWSCurrencyClient = myWSCurrencyClient;
+	}
+
+	public Date getLastExcecution() {
+		return lastExcecution;
+	}
+
+	public void setLastExcecution(Date lastExcecution) {
+		this.lastExcecution = lastExcecution;
 	}
 
 }

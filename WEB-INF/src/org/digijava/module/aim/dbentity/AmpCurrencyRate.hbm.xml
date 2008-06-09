@@ -14,6 +14,7 @@
 
 		<property name="exchangeRate" column="exchange_rate" type="java.lang.Double"/>
 		<property name="exchangeRateDate" column="exchange_rate_date" type="java.util.Date"/>
+		<property name="dataSource" column="data_source" type="java.lang.Integer"/>
 		
 		
 	</class>

@@ -43,6 +43,7 @@ public class CurrencyRateForm
   private Boolean clean;
   private List<LabelValueBean> timePeriods;
   private int timePeriod;
+  private String lastRateUpdate;
 
   
   /**
@@ -384,5 +385,13 @@ public int getTimePeriod() {
 
 public void setTimePeriod(int timePeriod) {
 	this.timePeriod = timePeriod;
+}
+
+public String getLastRateUpdate() {
+	return lastRateUpdate;
+}
+
+public void setLastRateUpdate(String lastRateUpdate) {
+	this.lastRateUpdate = lastRateUpdate;
 }
 }

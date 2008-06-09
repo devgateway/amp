@@ -500,6 +500,12 @@ function fnSubmit() {
                                             <digi:trn key="aim:AddNewExchangeRate">Add new exchange rate</digi:trn>
 											</a>
 										</td>
+										<td align="right">
+										<c:if test="${aimCurrencyRateForm.lastRateUpdate != null}">
+											<digi:trn key="aim:LastUpdate">Last Update: </digi:trn>
+											<c:out value="${aimCurrencyRateForm.lastRateUpdate}"/>
+										</c:if>
+										</td>
 									</tr>
 								</table>
 							</td></tr>

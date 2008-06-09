@@ -8,6 +8,7 @@ public class AmpCurrencyRate
 	private String toCurrencyCode;
 	private Double exchangeRate;
 	private Date exchangeRateDate;
+	private Integer dataSource;
 	
 	
 	/**
@@ -74,6 +75,18 @@ public void setToCurrencyCode(String s1) {
 		exchangeRateDate = d;
 	}
 
-	
+
+
+
+	public Integer getDataSource() {
+		return dataSource;
+	}
+
+
+
+
+	public void setDataSource(Integer dataSource) {
+		this.dataSource = dataSource;
+	}
 
 }	

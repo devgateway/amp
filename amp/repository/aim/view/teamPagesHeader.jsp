@@ -44,8 +44,8 @@ function startclock()
 	
   var myhour = nhours+":"+nmins+":"+nsecn+" "+AorP;
   
-  var div_x = document.getElementById('clock');
-  div_x.innerHTML = myhour;
+//  var div_x = document.getElementById('clock');
+//  div_x.innerHTML = myhour;
   
   setTimeout('startclock()',1000);
   

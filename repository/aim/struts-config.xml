@@ -1445,7 +1445,7 @@
     	 <forward name="save" path="/showLayout.do?layout=aim_saveMessage" />
     </action>
     <action name="aimAdvancedReportForm" parameter="/aim/advancedReportManager" path="/aim/advancedReportManager" scope="session" type="org.digijava.module.aim.action.AdvancedReport">
-      <forward name="forward" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
+      <forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />
       <forward name="SelectCols" path="/showLayout.do?layout=AdvancedReportManagerStep1" />
       <forward name="GenerateReport" path="/showLayout.do?layout=AdvancedReportManagerStep2" />
       <forward name="ReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />

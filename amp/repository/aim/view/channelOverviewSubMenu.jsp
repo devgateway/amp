@@ -83,14 +83,14 @@
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
-					<feature:display name="Physical Progress Tab" module="Physical Progress">
+					<field:display name="Physical Progress Tab" feature="Physical Progress">
                   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
 					
 						<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
                  	<digi:link href="/viewPhysicalProgress.do" name="urlTabs" styleClass="leftNavItem">
                  		 <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
                  	</digi:link></div>
-					</feature:display>
+					</field:display>
 					
 					</td></tr>		
 					<TR><TD bgcolor="#f7f9e3">

@@ -77,14 +77,11 @@
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
 <feature:display name="Calendar" module="Calendar"></feature:display> 
-<feature:display name="Channel Overview Tab" module="Channel Overview"></feature:display> 
+<feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Component Report" module="Reports"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
 <feature:display name="Content Repository" module="Document Management"></feature:display> 
-<feature:display name="Contracting Agency" module="Organizations"></feature:display> 
-<feature:display name="Contracting Tab" module="Contracting"></feature:display> 
-<feature:display name="Contracting" module="Contracting"></feature:display> 
-<feature:display name="Costing Tab" module="Activity Costing"></feature:display> 
+<feature:display name="Contracting Agency" module="Organizations"></feature:display>  
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
@@ -93,9 +90,8 @@
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Donor Report" module="Reports"></feature:display> 
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
-<feature:display name="Executing Agency" module="Organizations"></feature:display> 
-<feature:display name="Financial Progress Tab" module="Financial Progress"></feature:display> 
-<feature:display name="Funding Organizations Tab" module="Funding"></feature:display> 
+<feature:display name="Executing Agency" module="Organizations"></feature:display>  
+<feature:display name="Financial Progress" module="Financial Progress"></feature:display>
 <feature:display name="Funding Organizations" module="Funding"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Identification" module="Project ID and Planning"></feature:display> 
@@ -122,8 +118,7 @@
 <feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
 <feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
-<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
-<feature:display name="Physical Progress Tab" module="Physical Progress"></feature:display> 
+<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>  
 <feature:display name="Physical Progress" module="Components"></feature:display> 
 <feature:display name="Planning" module="Project ID and Planning"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
@@ -131,9 +126,7 @@
 <feature:display name="Project Coordinator" module="Contact Information"></feature:display> 
 <feature:display name="Project Fiche" module="Previews"></feature:display> 
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display> 
-<feature:display name="References Tab" module="References"></feature:display> 
 <feature:display name="References" module="References"></feature:display> 
-<feature:display name="Regional Funding Tab" module="Funding"></feature:display> 
 <feature:display name="Regional Funding" module="Funding"></feature:display> 
 <feature:display name="Regional Group" module="Organizations"></feature:display> 
 <feature:display name="Regional Report" module="Reports"></feature:display> 
@@ -242,6 +235,7 @@
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
+<field:display name="Channel Overview Tab" feature="Channel Overview"></field:display>
 <field:display name="Changed Date" feature="Planning"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Organizations"></field:display> 
 <field:display name="Comments Base Value" feature="Activity"></field:display> 
@@ -285,6 +279,7 @@
 <field:display name="Contracting Disbursements" feature="Contracting"></field:display> 
 <field:display name="Contracting Organization Text" feature="Contracting"></field:display> 
 <field:display name="Contracting Status" feature="Contracting"></field:display> 
+<field:display name="Contracting Tab" feature="Contracting"></field:display>
 <field:display name="Contracting Tab Status" feature="Contracting"></field:display> 
 <field:display name="Contribution Amount" feature="Costing"></field:display> 
 <field:display name="Contribution Currency" feature="Costing"></field:display> 
@@ -301,6 +296,7 @@
 <field:display name="Costing Progress" feature="Costing"></field:display> 
 <field:display name="Costing Total Contribution" feature="Costing"></field:display> 
 <field:display name="Costing Total Cost" feature="Costing"></field:display> 
+<field:display name="Costing Tab" feature="Costing"></field:display>
 <field:display name="Creation Date" feature="Planning"></field:display> 
 <field:display name="Creation date" feature="Admin"></field:display> 
 <field:display name="Credit/Donation" feature="Planning"></field:display> 
@@ -380,6 +376,8 @@
 <field:display name="Funding Organization Id" feature="Funding Organizations"></field:display> 
 <field:display name="Funding Organization Name" feature="Funding Organizations"></field:display> 
 <field:display name="Funding Organization" feature="Funding Organizations"></field:display> 
+<field:display name="Funding Organizations Tab" feature="Funding Organizations"></field:display>
+<field:display name="Financial Progress Tab" feature="Financial Progress"></field:display>
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 
@@ -444,7 +442,8 @@
 <field:display name="Perspective Expenditure" feature="Funding Organizations"></field:display> 
 <field:display name="Physical Progress" feature="Physical Progress"></field:display> 
 <field:display name="Physical progress description" feature="Physical Progress"></field:display> 
-<field:display name="Physical progress title" feature="Physical Progress"></field:display> 
+<field:display name="Physical progress title" feature="Physical Progress"></field:display>
+<field:display name="Physical Progress Tab" feature="Physical Progress"></field:display> 
 <field:display name="Planned Commitments" feature="Measures"></field:display> 
 <field:display name="Planned Disbursements" feature="Measures"></field:display> 
 <field:display name="Planned Expenditures" feature="Measures"></field:display> 
@@ -487,11 +486,13 @@
 <field:display name="Proposed Project Date" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Planned" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
-<field:display name="Purpose" feature="Identification"></field:display> 
+<field:display name="Purpose" feature="Identification"></field:display>
+<field:display name="References Tab" feature="References"></field:display>  
 <field:display name="Region" feature="Location"></field:display> 
 <field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display> 
-<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display> 
+<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
+<field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
 <field:display name="Regional Group Add Organizations Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Remove Organizations Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group" feature="Regional Group"></field:display> 

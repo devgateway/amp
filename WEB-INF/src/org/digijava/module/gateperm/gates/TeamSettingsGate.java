@@ -65,7 +65,7 @@ public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.Scop
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		//we get the team
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-		if(ampTeam.getComputation() && !ampTeam.getAddActivity()) return false;
+		if(ampTeam.getComputation()!=null && ampTeam.getComputation() && !ampTeam.getAddActivity()) return false;
 		
 		if(Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(ampTeam.getAccessType())) return false;
 			

@@ -132,7 +132,7 @@
 			  	<TR><TD bgcolor="#3754a1">
 				<DIV id="navlinks">
 					<UL>
-						<feature:display name="Channel Overview Tab" module="Channel Overview">
+						<field:display name="Channel Overview Tab" feature="Channel Overview">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="0">
 							   <LI class="selected">
 									:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
@@ -146,9 +146,9 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
+						</field:display>
 						
-						<feature:display name="References Tab" module="References">
+						<field:display name="References Tab" feature="References">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
 							   <LI class="selected">
 									:: <digi:trn key="aim:references">References</digi:trn>
@@ -163,10 +163,10 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
+						</field:display>
 						
 						<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
-						<feature:display name="Financial Progress Tab" module="Financial Progress">
+						<field:display name="Financial Progress Tab" feature="Financial Progress">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 							   <LI class="selected">
 									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
@@ -181,25 +181,25 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
+						</field:display >
 						
 							<feature:display name="Funding Organizations" module="Funding"></feature:display>
-							<feature:display name="Funding Organizations Tab" module="Funding">
-								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-								   <LI class="selected">
-										:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
-									</LI>
-									</logic:equal>
-									<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-			                  <c:set target="${urlTabs}" property="tabIndex" value="3"/>
-									<LI>
-									<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
-			                 	<digi:link href="/viewPhysicalProgress.do" name="urlTabs">
-			                 		:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
-			                 	</digi:link></div>
-									</LI>
-								</logic:notEqual>
-							</feature:display>
+								<field:display name="Funding Organizations Tab" feature="Funding Organizations">
+									<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+									   <LI class="selected">
+											:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
+										</LI>
+										</logic:equal>
+										<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+				                  <c:set target="${urlTabs}" property="tabIndex" value="3"/>
+										<LI>
+										<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
+				                 	<digi:link href="/viewPhysicalProgress.do" name="urlTabs">
+				                 		:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
+				                 	</digi:link></div>
+										</LI>
+									</logic:notEqual>
+								</field:display>
 							
 						<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
@@ -224,7 +224,7 @@
 				<DIV id="navlinks">
 					<UL>
 							<feature:display name="Regional Funding" module="Funding"></feature:display>
-							<feature:display name="Regional Funding Tab" module="Funding">
+							 <field:display name="Regional Funding Tab" feature="Regional Funding">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 								   <LI class="selected">
 										:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
@@ -240,7 +240,7 @@
 									</digi:link></div>
 									</LI>
 								</logic:notEqual>
-						</feature:display>
+							 </field:display>
 						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
@@ -280,8 +280,7 @@
 							</logic:notEqual>
 						</feature:display>						
 						
-						<feature:display name="Costing" module="Activity Costing"></feature:display>
-						<feature:display name="Costing Tab" module="Activity Costing">
+						<field:display name="Costing Tab" feature="Costing">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
 							   <LI class="selected">
 									:: <digi:trn key="aim:projectCosting">Costing</digi:trn>								
@@ -297,9 +296,9 @@
 										</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
-                                                 <feature:display name="Contracting Tab" module="Contracting"></feature:display>
-						<feature:display name="Contracting Tab" module="Contracting">
+						</field:display>
+						
+						<field:display name="Contracting Tab" feature="Contracting">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
 							   <LI class="selected">
 									:: <digi:trn key="aim:projectContracting"> Contracting </digi:trn>								
@@ -315,7 +314,7 @@
 										</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
+						</field:display>
 					</UL>		
 				</DIV>	
 				</TD></TR>

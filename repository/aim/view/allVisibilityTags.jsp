@@ -36,7 +36,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
@@ -93,12 +92,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display>
 <feature:display name="Budget" module="Project ID and Planning"></feature:display>
 <feature:display name="Calendar" module="Calendar"></feature:display>
-<feature:display name="Channel Overview Tab" module="Channel Overview"></feature:display>
+<feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Component Report" module="Reports"></feature:display>
 <feature:display name="Components" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>
-<feature:display name="Costing Tab" module="Activity Costing"></feature:display>
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display>
@@ -108,9 +106,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Donor Report" module="Reports"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
 <feature:display name="Executing Agency" module="Organizations"></feature:display>
-<feature:display name="Financial Progress Tab" module="Financial Progress"></feature:display>
-<feature:display name="Funding Organizations Tab" module="Funding"></feature:display>
-<feature:display name="Funding Organizations"  module="Funding"></feature:display>
+<feature:display name="Financial Progress" module="Financial Progress"></feature:display>
 <feature:display name="Funding Organizations" module="Funding"></feature:display>
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Identification" module="Project ID and Planning"></feature:display>
@@ -122,16 +118,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="My Tasks" module="Desktop Sections"></feature:display>
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display>
-<feature:display name="Physical Progress Tab" module="Physical Progress"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display>
 <feature:display name="Planning" module="Project ID and Planning"></feature:display>
 <feature:display name="Preview Activity" module="Previews"></feature:display>
 <feature:display name="Program" module="Program"></feature:display>
 <feature:display name="Project Fiche" module="Previews"></feature:display>
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display>
-<feature:display name="References Tab" module="References"></feature:display>
 <feature:display name="References" module="References"></feature:display>
-<feature:display name="Regional Funding Tab" module="Funding"></feature:display>
 <feature:display name="Regional Funding" module="Funding"></feature:display>
 <feature:display name="Regional Group" module="Organizations"></feature:display>
 <feature:display name="Regional Report" module="Reports"></feature:display>
@@ -155,6 +148,16 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display module="Funding" name="Disbursements"></feature:display>
+
+<field:display name="Channel Overview Tab" feature="Channel Overview"></field:display>
+<field:display name="Financial Progress Tab" feature="Financial Progress"></field:display>
+<field:display name="Funding Organizations Tab" feature="Funding Organizations"></field:display>
+<field:display name="Physical Progress Tab" feature="Physical Progress"></field:display>
+<field:display name="References Tab" feature="References"></field:display>
+<field:display name="Regional Funding Tab" feature="Regional Funding"></field:display>
+<field:display name="Costing Tab" feature="Costing"></field:display>
+<field:display name="Contracting Tab" feature="Contracting"></field:display>
+<field:display name="Contracting Tab Status" feature="Contracting"></field:display>
 
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
@@ -501,7 +504,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
 <field:display name="Contracting Status" feature="Contracting"></field:display>
-<field:display name="Contracting Tab Status" feature="Contracting"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
 <field:display name="Contracting IB" feature="Contracting"></field:display>
 <field:display name="Contracting INV" feature="Contracting"></field:display>

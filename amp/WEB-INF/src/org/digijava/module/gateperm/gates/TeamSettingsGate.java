@@ -65,7 +65,8 @@ public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.Scop
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 		//we get the team
 		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-		if(ampTeam.getComputation()!=null && ampTeam.getComputation() && !ampTeam.getAddActivity()) return false;
+		if( ampTeam.getComputation()!=null && ampTeam.getComputation() && 
+				(ampTeam.getAddActivity()==false || ampTeam.getAddActivity()==null) ) return false;
 		
 		if(Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(ampTeam.getAccessType())) return false;
 			
@@ -89,7 +90,7 @@ public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.Scop
 	@Override
 	public MetaInfo[] parameterInfo() {
 		// TODO Auto-generated method stub
-		return PARAM_INFO;
+		return null;//PARAM_INFO;
 	}
 	
 	

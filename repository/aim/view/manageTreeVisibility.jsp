@@ -34,7 +34,7 @@
 <script type="text/javascript">
 function openFieldPermissionsPopup(fieldId) {
 			<digi:context name="assignFieldPermissionsURL" property="context/module/moduleinstance/assignFieldPermissions.do?fieldId=" />
-			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 230);
+			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 325);
 }
 </script>
 

@@ -264,7 +264,7 @@ public class AuditLoggerManager extends MultiAction {
 			cell.setCellStyle(style);
 			
 			cell = row.createCell((short)4);
-			str = new HSSFRichTextString(ampAuditLogger.getLoggedDateAsString() );
+			str = new HSSFRichTextString(ampAuditLogger.getSloggeddate());
 			cell.setCellValue(str);
 			cell.setCellStyle(style);
 			
@@ -274,7 +274,7 @@ public class AuditLoggerManager extends MultiAction {
 			cell.setCellStyle(style);
 			
 			cell = row.createCell((short)6);
-			str = new HSSFRichTextString(ampAuditLogger.getModifyDate().toString());
+			str = new HSSFRichTextString(ampAuditLogger.getSmodifydate());
 			cell.setCellValue(str);
 			cell.setCellStyle(style);
 			

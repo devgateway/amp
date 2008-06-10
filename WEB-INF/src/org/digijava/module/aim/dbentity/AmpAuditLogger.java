@@ -8,8 +8,12 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpAuditLogger implements Comparable, Serializable {
 	/**
@@ -29,6 +33,8 @@ public class AmpAuditLogger implements Comparable, Serializable {
 	private String editorEmail;
 	private Timestamp loggedDate;
 	private Timestamp modifyDate;
+	private String sloggeddate;
+	private String smodifydate;
 	private String browser;
 	private String ip;
 	private String action;
@@ -136,10 +142,11 @@ public class AmpAuditLogger implements Comparable, Serializable {
 		this.modifyDate = modifyDate;
 	}
 	public String getObjectTypeTrimmed() {
-		int i=objectType.lastIndexOf('.');
+		int i=objectType.lastIndexOf('.')+3;
 		int j=objectType.length();
 		return objectType.substring(i+1,j);
 	}
+	
 	public void setObjectTypeTrimmed(String objectTypeTrimmed) {
 		this.objectTypeTrimmed = objectTypeTrimmed;
 	}
@@ -149,11 +156,7 @@ public class AmpAuditLogger implements Comparable, Serializable {
 	public String getDetail() {
 		return detail;
 	}
-	
-	public String getLoggedDateAsString() {
-		return loggedDate.toString();
-	}
-	
+
 	
 	public int compareTo(Object obj) {
 
@@ -174,6 +177,36 @@ public class AmpAuditLogger implements Comparable, Serializable {
 				return 0;
 			}
 		}
+	}
+	
+	public String getSloggeddate() {
+		if (this.loggedDate != null) {
+			String pattern = FeaturesUtil
+					.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+			pattern = pattern.replace('m', 'M');
+			SimpleDateFormat formater = new SimpleDateFormat(pattern);
+			sloggeddate = formater.format(this.loggedDate.getTime());
+			return sloggeddate;
+		}
+		return "";
+	
+	}
+	public void setSloggeddate(String sloggeddate) {
+		this.sloggeddate = sloggeddate;
+	}
+	public String getSmodifydate() {
+		if (this.modifyDate != null) {
+			String pattern = FeaturesUtil
+					.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+			pattern = pattern.replace('m', 'M');
+			SimpleDateFormat formater = new SimpleDateFormat(pattern);
+			this.smodifydate = formater.format(this.modifyDate.getTime());
+			return smodifydate;
+		}
+		return "";
+	}
+	public void setSmodifydate(String smodifydate) {
+		this.smodifydate = smodifydate;
 	}
 
 }

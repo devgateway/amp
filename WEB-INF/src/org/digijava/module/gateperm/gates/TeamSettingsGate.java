@@ -25,7 +25,7 @@ public class TeamSettingsGate extends Gate {
 
 public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER  };
 	
-	public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] {  };
+	public static final MetaInfo[] PARAM_INFO  = null;
 
 	 private static final String  DESCRIPTION = "activity add checkbox overrides user level permissions in computed teams;" +
 	 		" for management teams this button is never displayed;" +

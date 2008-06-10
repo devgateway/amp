@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
- 
+
 <style>
 .contentbox_border{
 	border:1px solid #666666;
@@ -329,14 +329,14 @@ function toggleSettings(){
 									</a>								  
 								</td>
 								<td width="100" align="center" title="${log.loggedDate}">
-									<bean:write name="log" property="loggedDate"/>
+									<bean:write name="log" property="sloggeddate"/>
 								</td>
 								
 								<td width="100" align="center" title="${log.editorName}">
 									<bean:write name="log" property="editorName" />								  
 								</td>
 								<td width="150" align="center" title="${log.modifyDate}">
-									  <bean:write name="log" property="modifyDate"/>								  
+									  <bean:write name="log" property="smodifydate"/>								  
 								 </td>
 									<td width="100" align="center">
 										<logic:equal value="delete" property="action" name="log">

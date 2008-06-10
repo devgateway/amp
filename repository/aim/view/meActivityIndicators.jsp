@@ -741,12 +741,12 @@
 
 																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
 
-																	
-																	<input class="dr-menu" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator</digi:trn>"
-
-																	property="activityId"
-
-																	onclick="return addIndicators()">
+<!-- the following will be uncommented further -->																	
+<!--																	<input class="dr-menu" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator</digi:trn>"-->
+<!---->
+<!--																	property="activityId"-->
+<!---->
+<!--																	onclick="return addIndicators()">-->
 
 																</td></tr>
 

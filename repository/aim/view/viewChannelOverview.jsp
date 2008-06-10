@@ -167,14 +167,18 @@ function commentWin(val) {
 													parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Edit Activity" module="Previews">
 														<field:display feature="Edit Activity" name="Edit Activity Button">
-															 <td>                                                                                  
+															 <td>              
+																				<!-- 
                                                                                <c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
-                                                                               <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
+                                                                               <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
+                                                                                 -->  
                                                                                        <input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" 
-                                                                                       class="dr-menu" onclick="fnEditProject(${activity.activityId})">      
+                                                                                       class="dr-menu" onclick="fnEditProject(${activity.activityId})">
+                                                                               <!--       
                                                                                </c:if>                                                                 
                                                                                      
-                                                                               </c:if> &nbsp;                                                                
+                                                                               </c:if>
+                                                                                --> &nbsp;                                                                
                                                                        </td>      
 														</field:display>
 													</feature:display>
@@ -550,26 +554,31 @@ function commentWin(val) {
 																										<br/>&nbsp;
 																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
 																									</field:display>
-																									<c:out value="${actSect.sectorName}" />
-																						
+																									<field:display name="Sector" feature="Sectors">
+																										<c:out value="${actSect.sectorName}" />
+																									</field:display>
 																									<c:if test="${!empty actSect.subsectorLevel1Name}">
+																										<field:display name="Sub-Sector" feature="Sectors">
 																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																											src="../ampTemplate/images/link_out_bot.gif"/>
 																										<c:out value="${actSect.subsectorLevel1Name}" />
-																									
+																										</field:display>
 																										<c:if test="${!empty actSect.subsectorLevel2Name}">
+																										<field:display name="Sub-Sub-Sector" feature="Sectors">
 																											 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																												src="../ampTemplate/images/link_out_bot.gif"/>
 																											<c:out value="${actSect.subsectorLevel2Name}" />
 																											&nbsp;
+																										</field:display>
 																										</c:if>
 																									</c:if>
-				                                                                                    <logic:present name="actSect"
-																										property="sectorPercentage">
+																									<field:display name="Sectors Percentage" feature="Sectors">
+				                                                                                    <logic:present name="actSect" property="sectorPercentage">
 																										<c:if test="${actSect.sectorPercentage!=0}">
 																											(<c:out value="${actSect.sectorPercentage}" />%)
 																										</c:if>
 																									</logic:present>
+																									</field:display>
 																								</li>
 																								</c:if>
 																						</c:forEach>

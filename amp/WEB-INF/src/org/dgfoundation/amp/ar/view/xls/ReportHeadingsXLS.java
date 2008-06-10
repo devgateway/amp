@@ -102,7 +102,10 @@ public class ReportHeadingsXLS extends XLSExporter {
 									else
 										val *=3;
 								}
-								sheet.setColumnWidth((short)colId.value, val);
+								if (colId.value == 0)
+									sheet.setColumnWidth((short)colId.value, (short)10240);
+								else
+									sheet.setColumnWidth((short)colId.value, val);
 							}
 
 							

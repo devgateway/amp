@@ -315,5 +315,5 @@ public class Constants
     public static final String LUCENE_INDEX = "luceneIndex";
     public static final String  TEAM_LEAD_ALREADY_EXISTS = "The already has a team leader. You should remove the actual team leader first";
     //Reports Export to Excel indent
-    public static final String excelIndexString = "\t\t";
+    public static final String excelIndexString = "      "; //TABS do not show in Windows
 }

@@ -120,37 +120,6 @@
 																<tr>
                                                                 	<td>&nbsp;
                                                                   	</td>
-																	<td  bgcolor="#f4f4f2" cellPadding="1">
-																		<table cellspacing="5">
-																			<tr bgcolor="#f4f4f2">
-																				<td>
-																					<html:checkbox property="readPerms">
-																						<digi:trn key="aim:readPerms">
-																							Read
-																						</digi:trn>
-																					</html:checkbox>					
-																				</td>
-																			</tr>
-																			<tr bgcolor="#f4f4f2">
-																				<td>
-																					<html:checkbox property="writePerms">
-																						<digi:trn key="aim:writePerms">
-																							Add / Update
-																						</digi:trn>	
-																					</html:checkbox>					
-																				</td>
-																			</tr>
-																			<tr bgcolor="#f4f4f2">
-																				<td>
-																					<html:checkbox property="deletePerms">
-																						<digi:trn key="aim:deletePerms">
-																							Delete
-																						</digi:trn>
-																					</html:checkbox>						
-																				</td>
-																			</tr>
-																		</table>
-																	</td>
 																</tr>
 																<tr >
 																	<td align="center" colspan="2">

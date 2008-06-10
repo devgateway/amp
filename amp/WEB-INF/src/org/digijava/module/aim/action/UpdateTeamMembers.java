@@ -104,26 +104,6 @@ public class UpdateTeamMembers extends Action {
             }
             logger.info(" this is the role.... " + role.getRole());
             ampMember.setAmpMemberRole(role);
-            if (upForm.getReadPerms() != null
-                && upForm.getReadPerms().equals("on")) {
-                ampMember.setReadPermission(new Boolean(true));
-            } else {
-                ampMember.setReadPermission(new Boolean(false));
-
-            }
-
-            if (upForm.getWritePerms() != null
-                && upForm.getWritePerms().equals("on")) {
-                ampMember.setWritePermission(new Boolean(true));
-            } else {
-                ampMember.setWritePermission(new Boolean(false));
-            }
-            if (upForm.getDeletePerms() != null
-                && upForm.getDeletePerms().equals("on")) {
-                ampMember.setDeletePermission(new Boolean(true));
-            } else {
-                ampMember.setDeletePermission(new Boolean(false));
-            }
             ampMember.setReadPermission(new Boolean(true));
             ampMember.setWritePermission(new Boolean(true));
             ampMember.setDeletePermission(new Boolean(true));

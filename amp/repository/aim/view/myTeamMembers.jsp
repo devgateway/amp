@@ -65,12 +65,13 @@
 				</logic:notEmpty>
 			</TABLE>	
 					<br/><br/>
+					<field:display name="Add Activity Button" feature="Edit Activity">
 					<c:if test="${not empty sessionScope.currentMember}">
 						<!-- 
 						<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
 						<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
-						 -->
 						 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
+						 -->
 							<c:set var="trnClickToAddNewActivit">
 								<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
 							</c:set>
@@ -93,8 +94,9 @@
 						<!--
 							</c:if>
 							</c:if>
-						-->
 					</c:if>
+						-->
+					</field:display>
 					<c:if test="${sessionScope.currentMember.teamHead == true}">
 							<br/>
 							<c:set var="trnclickToConfigureTeamPages">

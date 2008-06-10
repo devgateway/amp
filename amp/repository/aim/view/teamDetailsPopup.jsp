@@ -81,7 +81,7 @@
 	<c:set var="translation">
 		<digi:trn key="aim:clickToViewWorkspace">Click here to view Workspace</digi:trn>
 	</c:set>
-	<digi:link href="/getWorkspace.do" name="urlParams22" title="${translation}" >
+	<digi:link href="/getWorkspace.do" name="urlParams22" >
 		<bean:write name="ampTeam" property="name"/>
 	</digi:link>
 </div>

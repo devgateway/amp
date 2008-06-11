@@ -1513,25 +1513,25 @@ public class AdvancedReport extends Action {
 							if(ampMeasures.getMeasureId().compareTo(selCol[i]) == 0 )
 							{	
 							    if (str.equals("DeleteMeasure")|| str.equals("DeleteAdjustType")){
-								coll.add(ampMeasures);
+							    	coll.add(ampMeasures);
 							    }else{
 							    	AmpReportMeasures measure=new AmpReportMeasures();
 							    	measure.setMeasure(ampMeasures);
 							    	measure.setOrderId(""+coll.size() );
 							    	coll.add(measure);
-								tempMeasures = ampMeasures;
+							    	tempMeasures = ampMeasures;
 							    }
 								flag = true;
 							}
 							else
 							{
-								if(temp.contains(ampMeasures) == false){
-								    if (str.equals("DeleteMeasure")|| str.equals("DeleteAdjustType")){
-								    AmpReportMeasures measure=new AmpReportMeasures();
-								    	measure.setMeasure(ampMeasures);
-								    	temp.add(measure);
+								if( temp.contains(ampMeasures) == false && !coll.contains(ampMeasures) ){
+								    if ( i==selCol.length && (str.equals("DeleteMeasure") || str.equals("DeleteAdjustType")) ){
+								    	AmpReportMeasures measure	= new AmpReportMeasures();
+								    	measure.setMeasure( ampMeasures );
+								    	temp.add( measure );
 								    }else{
-									temp.add(ampMeasures);
+								    	temp.add( ampMeasures );
 								    }
 								}
 									

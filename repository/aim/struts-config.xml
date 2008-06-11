@@ -41,6 +41,7 @@
     <form-bean name="aimParisIndicatorReportForm" type="org.digijava.module.aim.form.ParisIndicatorReportForm" />
     <form-bean name="aimMainProjectDetailsForm" type="org.digijava.module.aim.form.MainProjectDetailsForm" />
     <form-bean name="aimChannelOverviewForm" type="org.digijava.module.aim.form.ChannelOverviewForm" />
+    <form-bean name="aimSelectActivityTabsForm" type="org.digijava.module.aim.form.SelectActivityTabsForm" />
     <form-bean name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" />
     <form-bean name="aimViewIndicatorForm" type="org.digijava.module.aim.form.ViewIndicatorForm" />
     <!--<form-bean name="aimChannelOverviewDescriptionForm" type="org.digijava.module.aim.form.ChannelOverviewDescriptionForm" />-->
@@ -329,6 +330,15 @@
     <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />
     <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyAllFilter" validate="false" />
     <action name="aimViewIndicatorForm" path="/aim/meIndicatorValues" scope="request" type="org.digijava.module.aim.action.ViewIndicatorValues" validate="false" />
+    
+    <action forward="/aim/selectActivityTabs.do" path="/aim/selectActivityTabs" />
+     
+    <!-- 
+    <action name="aimSelectActivityTabsForm" path="/aim/selectActivityTabs" scope="request" type="org.digijava.module.aim.action.ViewSelectActivityTabs" validate="false">
+    	<forward name="channelOverview" path="/aim/channelOverview"/>
+    </action>
+    -->
+     
     <action name="aimChannelOverviewForm" path="/aim/channelOverview" scope="request" type="org.digijava.module.aim.action.ViewChannelOverview" validate="false" />
     <action name="aimReferenceForm" path="/aim/reference" scope="request" type="org.digijava.module.aim.action.ViewReferences" validate="false" />
     <action name="aimChannelOverviewObjectiveForm" path="/aim/channelOverviewObjective" scope="request" type="org.digijava.module.aim.action.ViewChannelOverviewObjective" validate="false" />

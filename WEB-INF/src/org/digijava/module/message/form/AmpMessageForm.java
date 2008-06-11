@@ -24,6 +24,7 @@ public class AmpMessageForm extends ActionForm {
 	private String senderType; //activity , User e.t.c.
 	private Long senderId;
 	private String sender;
+        private String receiver;
 	private String creationDate;
 	private boolean editingMessage=false;
 	private String description;	
@@ -424,4 +425,11 @@ public class AmpMessageForm extends ActionForm {
 	public void setDeleteActionWasCalled(boolean deleteActionWasCalled) {
 		this.deleteActionWasCalled = deleteActionWasCalled;
 	}
+           public String getReceiver() {
+            return receiver;
+        }
+
+        public void setReceiver(String receiver) {
+            this.receiver = receiver;
+        }
 }

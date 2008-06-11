@@ -584,6 +584,7 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setPagedMessagesForTm(null);
 		 form.setLastPage(null);
 		 form.setDeleteActionWasCalled(false);
+                 form.setReceiver(null);
 	 }
 	 
 	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long id,boolean isStateId) throws Exception{	 
@@ -597,6 +598,7 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setSenderId(message.getSenderId()); 	 
 			 form.setCreationDate(DateConversion.ConvertDateToString(message.getCreationDate()));		 
 			 form.setClassName(message.getClassName());
+                         form.setReceiver(message.getReceivers());
                          if(isStateId){
                           form.setMsgStateId(id);
                           form.setSender(AmpMessageUtil.getMessageState(id).getSender());

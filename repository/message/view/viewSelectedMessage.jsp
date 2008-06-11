@@ -85,9 +85,15 @@
 																					<td align="left" bgcolor="#ffffff" >${messageForm.sender}</td>
 																					<td colspan="3"></td>
 																				</tr>
-																				<tr><td></td></tr>		
+                                                                                                                                                                	<tr><td colspan="5"></td></tr>	
+                                                                                                                                                                <tr>
+																					<td align="right"><b><digi:trn key="message:to">to</digi:trn></b></td>
+																					<td align="left" bgcolor="#ffffff" ><c:out value="${messageForm.receiver}"/></td>
+																					<td colspan="3"></td>
+																				</tr>
+																				<tr><td colspan="5"></td></tr>		
 																				<tr>
-																					<td align="right"><b><digi:trn key="message:received">Received</digi:trn></b></td>
+																					<td align="right"><b><digi:trn key="message:date">Date</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff">${messageForm.creationDate}</td>
 																				</tr>
 																				<tr><td></td></tr>	

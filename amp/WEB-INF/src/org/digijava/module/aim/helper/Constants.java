@@ -18,7 +18,7 @@ public class Constants
 	public static final int COMMITMENT = 0 ;
 	public static final int DISBURSEMENT = 1 ;
 	public static final int EXPENDITURE = 2 ;
-        public static final int DISBURSEMENT_ORDER = 4 ;
+    public static final int DISBURSEMENT_ORDER = 4 ;
 	public static final int MTEFPROJECTION = 3 ;
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;

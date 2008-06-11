@@ -153,7 +153,11 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
    			sessionMap.put("session", pageContext.getSession());
    			
-   			Map scope=PermissionUtil.getScope(pageContext.getSession());   				    
+   			Map scope=PermissionUtil.getScope(pageContext.getSession());   
+   			ServletRequest requestForFields = pageContext.getRequest();
+   			String dbgFM=requestForFields.getParameter("debugFM");
+   			//System.out.println("fmmmmmmmmmmm:"+dbgFM);
+   			
    			if(isFieldActive (ampTreeVisibility) ) {
    				HttpSession session		= pageContext.getSession();
    				TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
@@ -167,8 +171,11 @@ public class FieldVisibilityTag extends BodyTagSupport {
    	   			    		!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?actionMode:GatePermConst.Actions.VIEW,scope))
    	   			    return SKIP_BODY;
    				}
-
-   			   pageContext.getOut().print(bodyText);   			    
+   				String output="";
+   				if(dbgFM!=null && "true".compareTo(dbgFM)==0)
+   	   				output+=this.createDebugText2(bodyText);
+   				else output=bodyText;
+   			   pageContext.getOut().print(output);   			    
    			} else return SKIP_BODY;//the field is not active!!!
    		   }
     	   
@@ -239,4 +246,42 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	public void setFeature(String feature) {
 		this.feature = feature;
 	}
+	
+	
+	public String createDebugText(String input){
+		String s= new String("<script type=\"text/javascript\" language=\"JavaScript\">" +
+				" function HideContent(d) { " +
+				"if(d.length < 1) { return; } " +
+				"alert(document.getElementById(d).id);" +
+				"document.getElementById(d).style.display = \"none\";}" +
+				" function ShowContent(d) {" +
+				"if(d.length < 1) { return; }" +
+				"alert(document.getElementById(d).id);" +
+				"document.getElementById(d).style.display = \"block\";" +
+				"}" +
+				"</script>" +
+				" <div id=\""+this.getName()+"\">" +
+				input +
+				"<a " +
+				"href=\"javascript: ShowContent(\'"+this.getName()+"\')\">" +
+				"[show] " +
+				"</a> </div>");
+		return s;
+	}
+	
+	public String createDebugText2(String input){
+		String s= new String("<script type=\"text/javascript\" language=\"JavaScript\">" +
+				" function showInfo() { " +
+				"alert(\"field: "+this.getName()+" ; feature: "+this.getFeature()+"\");" +
+				"}" +
+				"</script>" +
+				" <div id=\""+this.getName()+"\">" +
+				input +
+				"<a " +
+				"href=\"javascript: showInfo()\">" +
+				"[show] " +
+				"</a> </div>");
+		return s;
+	}
+	
 }

@@ -23,8 +23,7 @@ public class ViewSelectActivityTabs extends Action {
 	private static Logger logger = Logger.getLogger(ViewSelectActivityTabs.class);
 
 
-	public ActionForward execute(ComponentContext context,
-			ActionMapping mapping, ActionForm form, HttpServletRequest request,
+	public ActionForward execute(ComponentContext context, ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();

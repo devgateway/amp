@@ -20,6 +20,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.aim.helper.ApplicationSettings;
 
 
@@ -33,7 +34,7 @@ public class ViewKnowledge extends TilesAction {
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session
 				.getAttribute("currentMember");
-
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		KnowledgeForm formBean = (KnowledgeForm) form;
 		if (teamMember == null) {
 			formBean.setValidLogin(false);

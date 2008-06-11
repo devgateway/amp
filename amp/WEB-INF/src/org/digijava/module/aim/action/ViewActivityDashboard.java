@@ -16,6 +16,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewActivityDashboard extends TilesAction {
 	
@@ -29,7 +30,7 @@ public class ViewActivityDashboard extends TilesAction {
 		Long actId = null;
 		
 		DynaActionForm adForm = (DynaActionForm) form;
-		
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		if (request.getParameter("ampActivityId") != null) {
 			actId = new Long(Long.parseLong(request.getParameter("ampActivityId")));
 			

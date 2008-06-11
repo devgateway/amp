@@ -30,6 +30,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewFinancingBreakdown extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewFinancingBreakdown.class);
@@ -40,6 +41,7 @@ public class ViewFinancingBreakdown extends TilesAction {
 
 		FinancingBreakdownForm formBean = (FinancingBreakdownForm) form;
 		HttpSession session = request.getSession();
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 
 		if (session.getAttribute(Constants.CURRENT_MEMBER) == null) {
 			formBean.setSessionExpired(true);

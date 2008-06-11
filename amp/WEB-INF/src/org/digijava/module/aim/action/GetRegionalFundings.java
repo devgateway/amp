@@ -27,6 +27,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * Action class for getting the regional funding details of an activity
@@ -43,7 +44,7 @@ public class GetRegionalFundings extends TilesAction {
 
 		HttpSession sesion = request.getSession();
 		TeamMember tm = (TeamMember) sesion.getAttribute("currentMember");
-
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		try {
 			RegionalFundingForm rfForm = (RegionalFundingForm) form;
 

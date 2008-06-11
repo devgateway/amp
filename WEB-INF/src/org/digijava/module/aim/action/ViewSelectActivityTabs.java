@@ -22,10 +22,10 @@ public class ViewSelectActivityTabs extends Action {
 
 	private static Logger logger = Logger.getLogger(ViewSelectActivityTabs.class);
 
-
-	public ActionForward execute(ComponentContext context, ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-
+	@Override
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	throws java.lang.Exception
+	{
 		HttpSession session = request.getSession();
 		
 		for (Enumeration enumeration = request.getAttributeNames(); enumeration.hasMoreElements();) {

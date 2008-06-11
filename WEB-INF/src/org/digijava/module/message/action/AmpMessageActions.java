@@ -21,7 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.kernel.mail.util.DbUtil;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
@@ -41,6 +41,7 @@ import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.util.AmpMessageUtil;
+import sun.misc.MessageUtils;
 
 public class AmpMessageActions extends DispatchAction {
 	
@@ -431,6 +432,9 @@ public class AmpMessageActions extends DispatchAction {
     	//This is User. (because this action happens only when user adds a message from the homepage.)
     	message.setSenderType(MessageConstants.SENDER_TYPE_USER); 
     	message.setSenderId(teamMember.getMemberId());
+        User user=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId()).getUser();
+        String senderName=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
+        message.setSenderName(senderName);
     	/**
     	 * this will be filled only when we are forwarding a message
     	 */
@@ -512,6 +516,7 @@ public class AmpMessageActions extends DispatchAction {
 		    		DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(), message.getDescription());
 		    	}
 			}
+                        AmpMessageUtil.saveOrUpdateMessage(message);
 			
 		}
 		
@@ -532,6 +537,17 @@ public class AmpMessageActions extends DispatchAction {
 		newMessageState.setMessage(message);
 		newMessageState.setSender(senderName);
 		newMessageState.setMemberId(memberId);	
+                String receivers = message.getReceivers();
+                if (receivers == null) {
+                    receivers = "";
+                } else {
+                    if (receivers.length() > 0) {
+                        receivers += ", ";
+                    }
+                }
+                User user=TeamMemberUtil.getAmpTeamMember(memberId).getUser();
+                receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
+                message.setReceivers(receivers);
 		newMessageState.setRead(false);
 		//saving current state in db
 		AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
@@ -624,7 +640,8 @@ public class AmpMessageActions extends DispatchAction {
             for (AmpMessageState state : states) {
                 result += "<" + "message name=\"" + state.getMessage().getName() + "\" ";
                 result += " id=\"" + state.getId() + "\"";
-                result += " from=\"" + state.getSender() + "\"";
+                result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(state.getSender()) + "\"";
+                result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getReceivers()) + "\"";
                 result += " received=\"" + DateConversion.ConvertDateToString(state.getMessage().getCreationDate()) + "\"";
                 result += " priority=\"" + state.getMessage().getPriorityLevel() + "\"";
                 String desc=org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getDescription());
@@ -660,12 +677,11 @@ public class AmpMessageActions extends DispatchAction {
     private String messages2XML(AmpMessage forwardedMessage, Long messageId) throws AimException {
 
         String result = "";
-        AmpTeamMember tm=TeamMemberUtil.getAmpTeamMember(forwardedMessage.getSenderId());
-        String from=tm.getUser().getFirstNames()+" "+tm.getUser().getLastName();
         result += "<" + "forwarded name=\"" + forwardedMessage.getName() + "\" ";
         result += " id=\"" + forwardedMessage.getId() + "\"";
-        result += " from=\"" +from + "\"";
+        result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
         result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
+        result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getReceivers()) + "\"";
         result += " priority=\"" + forwardedMessage.getPriorityLevel() + "\"";
         String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
         result += " msgDetails=\"" + desc + "\"";

@@ -30,6 +30,7 @@ tr.my-border-style td {
 
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
 	var from='<digi:trn key="message:from">From</digi:trn>';
+        var to='<digi:trn key="message:to">To</digi:trn>';
 	var date='<digi:trn key="message:date">date</digi:trn>';
 	var prLevel='<digi:trn key="message:priority">priority</digi:trn>';
 	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
@@ -212,7 +213,7 @@ tr.my-border-style td {
 		tbl.cellSpacing="1";
 		tbl.width="100%";
 				
-		var mainTag=responseXML.getElementsByTagName('Messaging')[0];		
+		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
 			//messages start	
@@ -430,9 +431,33 @@ tr.my-border-style td {
 					//getting sender
 					var fromTD2=document.createElement('TD');
 					var msgSender=message.getAttribute('from');
-					fromTD2.innerHTML=msgSender;
+                                        if(fromTD2.textContent==undefined){
+                                            fromTD2.innerText=msgSender;
+                                        }
+                                        else{
+                                            fromTD2.textContent=msgSender;
+                                        }
 				fromTR.appendChild(fromTD2);
 			divTblBody.appendChild(fromTR);
+                        
+                                var toTR=document.createElement('TR');
+                                var toTD1=document.createElement('TD');
+                                toTD1.innerHTML='<strong>'+to+'</strong>';
+                                toTR.appendChild(toTD1);
+                                //getting receives
+                                var toTD2=document.createElement('TD');
+                                var msgReceiver=message.getAttribute('to');
+                                if(toTD2.textContent==undefined){
+                                     toTD2.innerText=msgReceiver;
+                                }
+                                else{
+                                    toTD2.textContent=msgReceiver;
+                                }
+                                  
+                               
+                                toTR.appendChild(toTD2);
+                                divTblBody.appendChild(toTR);
+                        
 				var receivedTR=document.createElement('TR');
 					var receivedTD1=document.createElement('TD');
 					receivedTD1.innerHTML='<strong>'+date+'</strong>';							

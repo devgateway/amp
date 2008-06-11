@@ -46,8 +46,12 @@ public class MetaTextColWorker extends TextColWorker {
 		if(columnName.equals(ArConstants.COLUMN_SECTOR) || columnName.equals(ArConstants.COLUMN_SUB_SECTOR)) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
 			
-		if(columnName.equals("Executing Agency")) 
-			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
+		if(columnName.equals("Executing Agency")){ 
+			double percentage = rs.getDouble(4);
+			if(!rs.wasNull()){
+				mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,percentage));	
+			}
+		} else
 				
 		if(columnName.equals("Region") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else

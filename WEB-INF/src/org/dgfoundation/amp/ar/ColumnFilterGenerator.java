@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -33,21 +34,30 @@ public class ColumnFilterGenerator {
 	 *            the object to which the hard coded filters will be attached
 	 */
 	public static void attachHardcodedFilters(AmpColumns c) {
+		c.setFilters(new TreeSet());
 		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView())) {
 			// TODO: example here of how to add hardcoded filters for hardcoded
 			// FUNDING columns
 			// AmpColumnsFilters acf=new
 			// AmpColumnsFilters(c,"donorGroups","donor_group_id");
 			// c.getFilters().add(acf);
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","org_grp_id");
+			c.getFilters().add(acf);
 		}
 		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","amp_org_id");
+			c.getFilters().add(acf);
 		}
 		if (ArConstants.VIEW_COMPONENT_FUNDING.equals(c.getExtractorView())) {
-			//TODO: add filters here			
+			//TODO: add filters here	
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"regions","amp_component_id");
+			c.getFilters().add(acf);
 		}
 		if (ArConstants.VIEW_REGIONAL_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"regions","region_id");
+			c.getFilters().add(acf);
 		}
 	}
 

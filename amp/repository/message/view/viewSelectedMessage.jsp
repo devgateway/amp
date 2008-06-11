@@ -24,8 +24,7 @@
 //  		window.close();  					
 //	}
 	
-	function closeWindow() {
-		window.opener.location.reload();
+	function closeWindow() {	
 		window.close();	
 	}
 
@@ -93,7 +92,7 @@
 																				</tr>
 																				<tr><td></td></tr>	
 																				<tr>																					
-																					<td align="center" colspan="4"><textarea cols="60" rows="20" id="messageDescription" readonly="readonly">${messageForm.description}</textarea></td>																					
+																					<td align="center" colspan="4"><textarea cols="60" rows="10" id="messageDescription" readonly="readonly">${messageForm.description}</textarea></td>																					
 																				</tr>
 																				<tr>
 																					<td colspan="4" align="center">

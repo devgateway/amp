@@ -19,7 +19,16 @@ public abstract class AmpMessage {
 	private String senderType;	
 	private Long senderId;  //if user sends alert, then it's that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
 	private Date creationDate; //date when it was created
-	
+        
+        private String senderName;  //sender name
+
+        public String getSenderName() {
+            return senderName;
+        }
+
+        public void setSenderName(String senderName) {
+            this.senderName = senderName;
+        }
 	
 	/**
 	 * emails should be sent.
@@ -37,8 +46,23 @@ public abstract class AmpMessage {
 	 * this field holds Id of the forwarded message, if it exists 
 	 */
 	private Long forwardedMessageId;
-	
-	
+        
+        
+	/**
+	 * this field holds list of receivers
+	 */
+        private String receivers; // name and surnames of receivers separeted by comma
+
+        public String getReceivers() {
+            return receivers;
+        }
+
+        public void setReceivers(String receivers) {
+            this.receivers = receivers;
+        }
+        
+    
+
 	/**
 	 * This method is used to define whether user should be able to edit message or not.
 	 * It Message is of SystemMessage type,that user shouldn't be able to edit it.
@@ -119,6 +143,6 @@ public abstract class AmpMessage {
 	public void setForwardedMessageId(Long forwardedMessageId) {
 		this.forwardedMessageId = forwardedMessageId;
 	}
-	
-	
-}
+        
+
+        }

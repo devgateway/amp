@@ -329,7 +329,9 @@ function setHoveredTable(tableId, hasHeaders) {
 							<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />
 							<c:set target="${urlParamsNext}" property="page" value="${aimTeamAuditListForm.currentPage+1}"/>
 							<c:set target="${urlParamsNext}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
-							<c:set var="translation"> <digi:trn key="aim:nextpage">Next Page</digi:trn></c:set>
+							<c:set var="translation"> 
+								<digi:trn key="aim:nextpage">Next Page</digi:trn>
+							</c:set>
 							<digi:link  href="/teamAuditList.do" style="text-decoration=none" name="urlParamsNext" title="${translation}">
 								<digi:trn key="aim:next"><span style="font-size: 8pt; font-family: Tahoma;">Next</span></digi:trn>
 							</digi:link>
@@ -339,17 +341,17 @@ function setHoveredTable(tableId, hasHeaders) {
 							<c:set target="${urlParamsLast}" property="page" value="${aimTeamAuditListForm.pagesSize}" />
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
 						</c:if>
-						
-						<c:if test="${aimTeamAuditListForm.pagesSize < aimTeamAuditListForm.pagesToShow && aimTeamAuditListForm.pagesSize != 0}">
+						<c:if test="${aimTeamAuditListForm.pagesSize < aimTeamAuditListForm.pagesToShow}">
 							<c:set target="${urlParamsLast}" property="sortBy" value="${aimTeamAuditListForm.sortBy}" />
 							<c:set target="${urlParamsLast}" property="page" value="${aimTeamAuditListForm.pagesSize}" />
-						<c:set var="translation"> <digi:trn key="aim:lastpage">
-							<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
-						</digi:trn>
-						</c:set>
-						<digi:link href="/teamAuditList.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
-							<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
-						</digi:link>
+							<c:set var="translation"> 
+								<digi:trn key="aim:lastpage">
+									<span style="font-size: 8pt; font-family: Tahoma;">Last Page</span>
+								</digi:trn>
+							</c:set>
+							<digi:link href="/teamAuditList.do" style="text-decoration=none" name="urlParamsLast" title="${translation}">
+								<span style="font-size: 8pt; font-family: Tahoma;">&gt;&gt;</span>
+							</digi:link>
 						</c:if> 
 					</c:if>
 					<c:out value="${aimTeamAuditListForm.currentPage}"/>&nbsp; 
@@ -362,7 +364,8 @@ function setHoveredTable(tableId, hasHeaders) {
 						<a style="float: right; cursor: pointer;" onclick="window.scrollTo(0,0); return false">
 							<digi:trn key="aim:backtotop">Back to Top</digi:trn>
 					</span>
-						<span style="font-size: 10pt; font-family: Tahoma;">↑</span></a>					
+						<span style="font-size: 10pt; font-family: Tahoma;">↑</span>
+						</a>					
 					</td>
 					</div>
 				</tr>

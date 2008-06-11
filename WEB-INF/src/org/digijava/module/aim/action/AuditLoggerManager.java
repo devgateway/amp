@@ -70,10 +70,10 @@ public class AuditLoggerManager extends MultiAction {
 				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerNameComparator());
 				  Collections.reverse((List<AmpAuditLogger>)logs);
 			  }
-			  else if(vForm.getSortBy().equalsIgnoreCase("tipeasc")){
+			  else if(vForm.getSortBy().equalsIgnoreCase("typeasc")){
 				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
 				}
-			  else if(vForm.getSortBy().equalsIgnoreCase("tipedesc")){
+			  else if(vForm.getSortBy().equalsIgnoreCase("typedesc")){
 				  Collections.sort((List<AmpAuditLogger>)logs, new AuditLoggerUtil.HelperAuditloggerTypeComparator());
 				  Collections.reverse((List<AmpAuditLogger>)logs);
 			  }

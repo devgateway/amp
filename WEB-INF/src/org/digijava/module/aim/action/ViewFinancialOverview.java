@@ -26,6 +26,7 @@ import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewFinancialOverview extends TilesAction {
 	private static Logger logger = Logger
@@ -38,7 +39,7 @@ public class ViewFinancialOverview extends TilesAction {
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session
 				.getAttribute("currentMember");
-
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		FinancialOverviewForm formBean = (FinancialOverviewForm) form;
 		if (session.getAttribute("currentMember") == null) {
 			formBean.setSessionExpired(true);

@@ -28,6 +28,7 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 
 /**
@@ -45,7 +46,7 @@ public class ContractingBreakdown extends TilesAction {
 			HttpSession session = request.getSession();
 			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 			ViewContractingForm contrForm =(ViewContractingForm) form;
-
+			request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		      if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
 		          .getCurrencyId() != null) {
 		              String currCode="";

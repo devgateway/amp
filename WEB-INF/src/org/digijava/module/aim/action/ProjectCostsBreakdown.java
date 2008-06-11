@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * @author mihai
@@ -32,6 +33,7 @@ public class ProjectCostsBreakdown extends TilesAction {
 		Long activityId=new Long(request.getParameter("ampActivityId"));
 		
 		HttpSession session = request.getSession();
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		if (session.getAttribute("currentMember") == null) {
 			return mapping.findForward("index");
 		}

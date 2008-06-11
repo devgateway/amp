@@ -18,6 +18,7 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewPhysicalProgress extends TilesAction {
 
@@ -29,7 +30,7 @@ public class ViewPhysicalProgress extends TilesAction {
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session
 				.getAttribute("currentMember");
-
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		PhysicalProgressForm formBean = (PhysicalProgressForm) form;
 
 		if (teamMember == null) {

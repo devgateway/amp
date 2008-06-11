@@ -56,6 +56,7 @@ public class ViewChannelOverview extends TilesAction {
 			HttpServletResponse response) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		PermissionUtil.resetScope(session);
 		PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);

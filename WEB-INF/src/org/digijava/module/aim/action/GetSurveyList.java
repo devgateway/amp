@@ -21,6 +21,7 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.form.SurveyForm;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class GetSurveyList extends TilesAction {
 
@@ -30,7 +31,7 @@ public class GetSurveyList extends TilesAction {
                                  HttpServletRequest request, HttpServletResponse response) {
 
         SurveyForm svForm = (SurveyForm) form;
-
+        request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
         Long actId = null;
         try {
             svForm.setTabIndex(request.getParameter("tabIndex"));

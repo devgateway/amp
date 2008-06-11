@@ -335,8 +335,6 @@
     
     <action name="aimSelectActivityTabsForm" path="/aim/selectActivityTabs" scope="request" type="org.digijava.module.aim.action.ViewSelectActivityTabs" validate="false">
     	<forward name="channelOverview" path="/aim/viewChannelOverview.do" redirect="true"/>
-    	<forward name="forward" path="/showLayout.do?layout=viewRelatedLinks" />
-    	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
      
     <action name="aimChannelOverviewForm" path="/aim/channelOverview" scope="request" type="org.digijava.module.aim.action.ViewChannelOverview" validate="false" />

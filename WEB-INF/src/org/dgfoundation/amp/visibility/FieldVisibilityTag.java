@@ -154,8 +154,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			sessionMap.put("session", pageContext.getSession());
    			
    			Map scope=PermissionUtil.getScope(pageContext.getSession());   
-   			ServletRequest requestForFields = pageContext.getRequest();
-   			String dbgFM=requestForFields.getParameter("debugFM");
+   			//ServletRequest requestForFields = pageContext.getRequest();
+   			HttpSession requestForFields = pageContext.getSession();
+   			//String dbgFM=requestForFields.getParameter("debugFM");
+   			String dbgFM=(String) requestForFields.getAttribute("debugFM");
    			//System.out.println("fmmmmmmmmmmm:"+dbgFM);
    			
    			if(isFieldActive (ampTreeVisibility) ) {
@@ -271,16 +273,16 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	
 	public String createDebugText2(String input){
 		String s= new String("<script type=\"text/javascript\" language=\"JavaScript\">" +
-				" function showInfo() { " +
-				"alert(\"field: "+this.getName()+" ; feature: "+this.getFeature()+"\");" +
+				" function showInfo(d,f) { " +
+				"alert(\"field: \" + d +\" ; feature: \" + f);" +
 				"}" +
 				"</script>" +
-				" <div id=\""+this.getName()+"\">" +
+				" <span id=\""+this.getName()+"\">" +
 				input +
-				"<a " +
-				"href=\"javascript: showInfo()\">" +
-				"[show] " +
-				"</a> </div>");
+				"<a style=\"color: red;\"" +
+				" href=\"javascript: showInfo(\'"+this.getName()+"\', \'"+this.getFeature()+"\')\">" +
+				"["+this.getName()+"] " +
+				"</a> </span>&nbsp;&nbsp;");
 		return s;
 	}
 	

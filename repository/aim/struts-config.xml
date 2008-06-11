@@ -1077,6 +1077,7 @@
     </action>
     <action name="aimEditActivityForm" path="/aim/editActivity" scope="session" type="org.digijava.module.aim.action.EditActivity">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+      <forward name="forwardDebugFM" path="/aim/addActivity.do?edit=true~debugFM=true" redirect="true" />
       <forward name="forwardToPreview" path="/aim/previewActivity.do" redirect="true" />
       <forward name="accessDenyed" path="/showLayout.do?layout=editActivityDenyed" />
     </action>

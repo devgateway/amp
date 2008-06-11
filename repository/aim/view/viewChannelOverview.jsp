@@ -28,6 +28,13 @@ function fnEditProject(id)
     document.aimChannelOverviewForm.submit();
 }
 
+function fnEditProject1(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~debugFM=true~activityId=" + id + "~actId=" + id;
+	document.aimChannelOverviewForm.target = "_self";
+    document.aimChannelOverviewForm.submit();
+}
 
 function previewLogframe(id)
 {
@@ -183,6 +190,7 @@ function commentWin(val) {
 														</field:display>
 													</feature:display>
 												</module:display>
+												
 												<module:display name="Previews"
 													parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Edit Activity" module="Previews">

@@ -63,7 +63,17 @@ public class ViewChannelOverview extends TilesAction {
 		
 		ChannelOverviewForm formBean = (ChannelOverviewForm) form;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		String debugFM=request.getParameter("debugFM");
 		
+		if(debugFM!=null && "true".compareTo(debugFM)==0)
+			{
+				formBean.setDebugFM("true");
+				session.setAttribute("debugFM", "true");
+			}
+		else {
+				formBean.setDebugFM("false");
+				session.setAttribute("debugFM", "false");
+		}
 		boolean debug = (request.getParameter("debug")!=null)?true:false;
 		
 		if (teamMember == null) {

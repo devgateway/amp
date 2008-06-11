@@ -1546,7 +1546,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       eaForm.setTotalUnExpended(overallTotalUnExpended);
       eaForm.setTotalDisbOrder(overallTotalDisburOrder);
     }
-
+    String debugFM=request.getParameter("debugFM");
+    if(debugFM!=null && "true".compareTo(debugFM)==0)
+    	return mapping.findForward("forwardDebugFM");
     return mapping.findForward("forward");
   }
 

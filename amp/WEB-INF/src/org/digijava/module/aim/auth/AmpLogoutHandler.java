@@ -25,7 +25,7 @@ public class AmpLogoutHandler
 
         //save dev mode setting after logout.
         boolean wasDevMode=RequestUtils.isDevelopmentModeActive(httpServletRequest);
-        
+       // session.removeAttribute("debugFM");
         session.invalidate();
 
         //if user switched to dev mode before logout, then restore it.

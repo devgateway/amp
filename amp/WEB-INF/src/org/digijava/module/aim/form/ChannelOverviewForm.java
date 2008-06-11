@@ -52,6 +52,8 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private List secondaryPrograms;
     private List nationalPlanObjectivePrograms;
         
+    private String debugFM;
+   
     private OrgProjectId selectedOrganizations[]; //To Show organitations name in channel overview
 	private    HashMap<String,String> errors = new HashMap<String, String>();
 	private    HashMap<String,String> messages = new HashMap<String, String>();
@@ -78,7 +80,15 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		return implemLocationLevel;
 	}
     
-    /**
+    public String getDebugFM() {
+		return debugFM;
+	}
+
+	public void setDebugFM(String debugFM) {
+		this.debugFM = debugFM;
+	}
+
+	/**
      * 
      * @param implemLocationLevel
      */

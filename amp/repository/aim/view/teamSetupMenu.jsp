@@ -280,7 +280,7 @@ html>body #mainEmpty {
 							</span>
 							</LI>		
 						</c:if>
-
+							
 						<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS">
 						
 							<c:if test="${selectedTab == '6'}">
@@ -306,7 +306,28 @@ html>body #mainEmpty {
 							</c:if>
 							
 						</module:display>
-
+						
+						<c:if test="${selectedTab  == '7'}">
+						   	<LI>
+						   		<a name="node">
+								<div>
+									<digi:trn key="aim:workspaceaudittrial">Audit Trial</digi:trn>								
+								</div>
+								</a>
+							</LI>
+						</c:if>	
+						
+						<c:if test="${selectedTab != '7'}">
+							<LI>
+						   		<span>
+									<digi:link href="/teamAuditList.do">
+									<div title='<digi:trn key="aim:clickToViewWorkspaceaudit">Click here to view Audit Trial</digi:trn>'>
+										<digi:trn key="aim:aim:workspaceaudittrial">Audit Trial</digi:trn>
+									</div>	
+									</digi:link>							
+						   		</span>
+							</LI>
+						</c:if>
 
 					</UL>
 

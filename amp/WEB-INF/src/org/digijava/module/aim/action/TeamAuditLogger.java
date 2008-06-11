@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -25,39 +26,47 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.form.AuditLoggerManagerForm;
+import org.digijava.module.aim.form.TeamAuditForm;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 
-public class AuditLoggerManager extends MultiAction {
+public class TeamAuditLogger extends MultiAction {
 	
-	private static Logger logger = Logger.getLogger(AuditLoggerManager.class);
+	private static Logger logger = Logger.getLogger(TeamAuditLogger.class);
 	
 	private ServletContext ampContext = null;
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		AuditLoggerManagerForm vForm = (AuditLoggerManagerForm) form;
-
-		if (request.getParameter("clean") != null) {
-			if (vForm.getUseraction().equalsIgnoreCase("delete")) {
-				AuditLoggerUtil.DeleteLogsByPeriod(vForm.getFrecuency());
-			} else if (vForm.getUseraction().equalsIgnoreCase("export")) {
-
-				OutputStream out = response.getOutputStream();
-				try {
-					XlsMaker(vForm, request, response).write(out);
-					out.flush();
-					out.close();
-					return null;
-
-				} catch (Exception e) {
-					e.printStackTrace();
+		
+		boolean permitted = false;
+		HttpSession session = request.getSession();
+		if (session.getAttribute("ampAdmin") != null) {
+			String key = (String) session.getAttribute("ampAdmin");
+			if (key.equalsIgnoreCase("yes")) {
+				permitted = true;
+			} else {
+				if (session.getAttribute("teamLeadFlag") != null) {
+					key = (String) session.getAttribute("teamLeadFlag");
+					if (key.equalsIgnoreCase("true")) {
+						permitted = true;
+					}
 				}
-
 			}
 		}
+		if (!permitted) {
+			return mapping.findForward("index");
+		}
+		String teamname = null;
+		if (session.getAttribute("currentMember") != null) {
+			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+			teamname = tm.getTeamName();
+		}
 		
-		Collection<AmpAuditLogger> logs=AuditLoggerUtil.getLogObjects();
+		TeamAuditForm vForm = (TeamAuditForm) form;
+		
+		Collection<AmpAuditLogger> logs=AuditLoggerUtil.getTeamLogObjects(teamname);
 		
 		if (request.getParameter("sortBy")!=null){
 			vForm.setSortBy(request.getParameter("sortBy"));
@@ -152,14 +161,15 @@ public class AuditLoggerManager extends MultiAction {
 	          Integer pageNum = new Integer(i + 1);
 	          pages.add(pageNum);
 	        }
+	     }else{
+	    	 pages = new ArrayList<AmpAuditLogger>();
 	     }
 	      
 	    vForm.setPages(pages);  
 		vForm.setCurrentPage(new Integer(page));
 		vForm.setLogs(tempCol);
-		if (!pages.isEmpty()){
-			vForm.setPagesSize(pages.size());
-		}
+		vForm.setPagesSize(pages.size());
+		
 		return  modeSelect(mapping, form, request, response);
 	}
 
@@ -171,132 +181,6 @@ public class AuditLoggerManager extends MultiAction {
 //				if(request.getParameter("action").compareTo("add")==0) return modeAddTemplate(mapping, form, request, response);
 			}
 		return mapping.findForward("forward");
-	}
-	
-	private HSSFWorkbook XlsMaker( AuditLoggerManagerForm form, HttpServletRequest request, HttpServletResponse response) {
-		int interval = Integer.parseInt(form.getFrecuency());
-		Collection<AmpAuditLogger> Xlslogs=AuditLoggerUtil.getLogByPeriod(interval);
-		Collections.sort((List<AmpAuditLogger>) Xlslogs);
-		HSSFWorkbook wb = new HSSFWorkbook();
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition", "inline; filename=Audit-logger.xls");
-		HSSFSheet sheet = wb.createSheet("Audit-logger.xls");
-		
-		HSSFRow row = sheet.createRow((short)(0));
-		HSSFRichTextString str = null;
-		HSSFFont titlefont = wb.createFont();
-
-		titlefont.setFontHeightInPoints((short)10);
-		titlefont.setBoldweight(titlefont.BOLDWEIGHT_BOLD);
-		
-		HSSFFont font = wb.createFont();
-		font.setFontName("Arial");
-		font.setFontHeightInPoints((short)8);
-		font.setBoldweight(font.BOLDWEIGHT_NORMAL);
-		HSSFCellStyle style = wb.createCellStyle();
-		HSSFCellStyle tstyle = wb.createCellStyle();
-		tstyle .setFont(titlefont);
-		tstyle .setAlignment(style.ALIGN_CENTER);
-		
-	    HSSFCell cell = row.createCell((short)0);
-		str = new HSSFRichTextString("Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle );
-		
-		cell = row.createCell((short)1);
-		str = new HSSFRichTextString("Object Type");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle );
-		
-		cell = row.createCell((short)2);
-		str = new HSSFRichTextString("Team Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle );
-		
-		cell = row.createCell((short)3);
-		str = new HSSFRichTextString("Author Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)4);
-		str = new HSSFRichTextString("Creation Date");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)5);
-		str = new HSSFRichTextString("Editor Name");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)6);
-		str = new HSSFRichTextString("Change Date");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		cell = row.createCell((short)7);
-		str = new HSSFRichTextString("Action");
-		cell.setCellValue(str);
-		cell.setCellStyle(tstyle);
-		
-		style.setFont(font);
-		int i = 1;
-		for (Iterator iterator = Xlslogs.iterator(); iterator.hasNext();) {
-			AmpAuditLogger ampAuditLogger = (AmpAuditLogger) iterator.next();
-			row = sheet.createRow((short)(i));
-			
-			cell = row.createCell((short)0);
-			str = new HSSFRichTextString(ampAuditLogger.getObjectName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)1);
-			str = new HSSFRichTextString(ampAuditLogger.getObjectTypeTrimmed());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)2);
-			str = new HSSFRichTextString(ampAuditLogger.getTeamName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)3);
-			str = new HSSFRichTextString(ampAuditLogger.getAuthorName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)4);
-			str = new HSSFRichTextString(ampAuditLogger.getSloggeddate());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)5);
-			str = new HSSFRichTextString(ampAuditLogger.getEditorName());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)6);
-			str = new HSSFRichTextString(ampAuditLogger.getSmodifydate());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			
-			cell = row.createCell((short)7);
-			str = new HSSFRichTextString(ampAuditLogger.getAction());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			i++;
-		}
-		sheet.autoSizeColumn((short)0);
-		sheet.autoSizeColumn((short)1);
-		sheet.autoSizeColumn((short)2);
-		sheet.autoSizeColumn((short)3);
-		sheet.autoSizeColumn((short)4);
-		sheet.autoSizeColumn((short)5);
-		sheet.autoSizeColumn((short)6);
-		sheet.autoSizeColumn((short)7);
-		
-		return wb;
-		
-		
 	}
 	
 }

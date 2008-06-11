@@ -26,11 +26,10 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpAuditLogger;
 import org.digijava.module.aim.helper.Constants;
-
-import com.arjuna.ats.internal.arjuna.objectstore.jdbc.accessors.sqlserver_accessor;
+import org.digijava.module.aim.helper.TeamMember;
 /**
  * ActivityUtil is the persister class for all activity related
  * entities
@@ -214,7 +213,36 @@ public class AuditLoggerUtil {
 		}
 		return col;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
+	public static Collection getTeamLogObjects(String teamname) {
+		Session session = null;
+		Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
+		String qryStr = null;
+		Query qry = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select f from " 
+				+ AmpAuditLogger.class.getName() 
+				+ " f where f.teamName like '" + teamname + "'";
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
 
 	/**
 	 * @author dan
@@ -308,6 +336,11 @@ public class AuditLoggerUtil {
 
 	} 
 	
+	/**
+	 * 
+	 * @param interval
+	 * @return
+	 */
 	public static Collection getLogByPeriod(int interval) {
 		Session session = null;
 		Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
@@ -407,7 +440,7 @@ public class AuditLoggerUtil {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
             
-            int result = (o1.getObjectName()==null || o2.getObjectName()==null)?0:collator.compare(o1.getObjectName().toLowerCase(), o2.getObjectName().toLowerCase());
+            int result = (o1.getObjectTypeTrimmed()==null || o2.getObjectName()==null)?0:collator.compare(o1.getObjectTypeTrimmed().toLowerCase(), o2.getObjectTypeTrimmed().toLowerCase());
             return result;
         }
     }

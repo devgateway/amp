@@ -386,17 +386,19 @@ function toggleSettings(){
 						<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 						<c:set target="${urlParams1}" property="sortBy" value="${aimAuditLoggerManagerForm.sortBy}" />
 						<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
-						<c:if test="${aimAuditLoggerManagerForm.currentPage == pages}">
-							<font color="#FF0000"><%=pages%></font>						</c:if>
-						<c:if test="${aimAuditLoggerManagerForm.currentPage != pages}">
+						<c:if test="${aimAuditLoggerManagerForm.currentPage == pages && aimAuditLoggerManagerForm.pagesSize > 1}">
+							<font color="#FF0000"><%=pages%></font>
+							|	
+						</c:if>
+						<c:if test="${aimAuditLoggerManagerForm.currentPage != pages && aimAuditLoggerManagerForm.pagesSize > 1}">
 							<c:set var="translation">
 								<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 							</c:set>
 							<digi:link href="/auditLoggerManager.do" name="urlParams1" title="${translation}" >
 								<%=pages%>							
 							</digi:link>
-						</c:if>
 							|
+						</c:if>
 						</logic:iterate>
 						<c:if test="${aimAuditLoggerManagerForm.currentPage != aimAuditLoggerManagerForm.pagesSize}">
 							<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap" />

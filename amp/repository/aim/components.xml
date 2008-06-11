@@ -140,6 +140,7 @@
 	<page name="editReports" title=" - Edit Reports " />
 	<page name="deleteReports" title=" - Delete Reports" />
 	<page name="teamReports" title=" - Team Report List" />
+	<page name="teamAuditList" title=" - Team Audit Trial" />
 	<page name="activityManager" title=" - Activity Manager" />
 	<page name="addTeamReports" title=" - Add Reports" />
 	<page name="teamMemberReports" title=" - Member Reports" />

@@ -491,7 +491,12 @@ tr.my-border-style td {
 					var detailsTD2=document.createElement('TD');
 					//getting description
 					var description=message.getAttribute('msgDetails');
-					detailsTD2.innerHTML=description;
+                                        if(description!='null'){
+                                            detailsTD2.innerHTML=description;
+                                        }
+                                        else{
+                                            detailsTD2.innerHTML="&nbsp";
+                                        }					
 				detailsTR.appendChild(detailsTD2);
 			divTblBody.appendChild(detailsTR);
                         

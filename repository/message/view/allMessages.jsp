@@ -30,7 +30,7 @@ tr.my-border-style td {
 
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
 	var from='<digi:trn key="message:from">From</digi:trn>';
-	var receive='<digi:trn key="message:received">Received</digi:trn>';
+	var date='<digi:trn key="message:date">date</digi:trn>';
 	var prLevel='<digi:trn key="message:priority">priority</digi:trn>';
 	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
 	var editBtn='<digi:trn key="message:Edit">Edit</digi:trn>';
@@ -66,10 +66,10 @@ tr.my-border-style td {
 	
 	function viewMessage(id,isMsg) {
             if(isMsg){
-		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,520);
+		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
                 }
                 else{           
-                    openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,600,520);
+                    openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,600,430);
                 }
 	}
 	
@@ -435,7 +435,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(fromTR);
 				var receivedTR=document.createElement('TR');
 					var receivedTD1=document.createElement('TD');
-					receivedTD1.innerHTML='<strong>'+receive+'</strong>';							
+					receivedTD1.innerHTML='<strong>'+date+'</strong>';							
 				receivedTR.appendChild(receivedTD1);
 							
 					//getting received date

@@ -5,11 +5,15 @@ import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
 
-public class AuditLoggerManagerForm extends ActionForm implements Serializable{
+public class TeamAuditForm extends ActionForm implements Serializable{
 
-	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = -2614366966871314200L;
-	
+	/**
+	 * @author dan
+	 */
 	private Collection logs;
 	private String sortBy;
 	private int pagesToShow;

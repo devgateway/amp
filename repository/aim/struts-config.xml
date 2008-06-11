@@ -96,6 +96,7 @@
     <form-bean name="aimActivityForm" type="org.digijava.module.aim.form.ActivityForm" />
     <form-bean name="aimReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimTeamReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
+    <form-bean name="aimTeamAuditListForm" type="org.digijava.module.aim.form.TeamAuditForm" />
     <form-bean name="aimMemberReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimIndicatorForm" type="org.digijava.module.aim.form.IndicatorForm" />
     <form-bean name="aimAddDocumentForm" type="org.digijava.module.cms.form.CMSContentItemForm" />
@@ -841,6 +842,10 @@
     <action name="aimTeamReportsForm" path="/aim/teamReportList" scope="request" type="org.digijava.module.aim.action.GetTeamReports" validate="false">
       <forward name="forward" path="/showLayout.do?layout=teamReports" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimTeamAuditListForm" path="/aim/teamAuditList" scope="session" type="org.digijava.module.aim.action.TeamAuditLogger" validate="false">
+    	<forward name="forward" path="/showLayout.do?layout=teamAuditList" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action input="/showLayout.do?layout=teamReports" name="aimTeamReportsForm" path="/aim/updateTeamReports" scope="session" type="org.digijava.module.aim.action.UpdateTeamReports" validate="false">
       <forward name="forward" path="/aim/teamReportList.do" />

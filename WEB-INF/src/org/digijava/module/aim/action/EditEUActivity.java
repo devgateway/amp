@@ -21,12 +21,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EUActivityForm;
@@ -36,14 +34,12 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.aim.exception.*;
 
 /**
  * @author mihai
  *
  */
 public class EditEUActivity extends MultiAction {
-
 	/**
 	 *
 	 */
@@ -88,13 +84,14 @@ public class EditEUActivity extends MultiAction {
 			throws Exception {
 		EUActivityForm eaf = (EUActivityForm) form;
 		eaf.setCurrencies(CurrencyUtil.getAmpCurrency());
-		eaf.setDonors(DbUtil.getAllOrganisation());
+		//eaf.setDonors(DbUtil.getAllOrganisation());
 		eaf.setFinTypes(DbUtil.getAllAssistanceTypesFromCM());
 		eaf.setFinInstrs(DbUtil.getAllFinancingInstruments());
 
 		eaf.getContrAmountList().clear();
 		eaf.getContrCurrIdList().clear();
 		eaf.getContrDonorIdList().clear();
+		eaf.getContrDonorNameList().clear();
 		eaf.getContrFinInstrIdList().clear();
 		eaf.getContrFinTypeIdList().clear();
 
@@ -102,6 +99,8 @@ public class EditEUActivity extends MultiAction {
 			eaf.getContrAmountList().addAll(Arrays.asList(eaf.getContrAmount()));
 			eaf.getContrCurrIdList().addAll(Arrays.asList(eaf.getContrCurrId()));
 			eaf.getContrDonorIdList().addAll(Arrays.asList(eaf.getContrDonorId()));
+			eaf.getContrDonorNameList().addAll(Arrays.asList(eaf.getContrDonorName()));
+			
 			eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));
 			eaf.getContrFinTypeIdList().addAll(Arrays.asList(eaf.getContrFinTypeId()));
 		}
@@ -149,14 +148,18 @@ public class EditEUActivity extends MultiAction {
 				euaf.getContrAmountList().clear();
 				euaf.getContrCurrIdList().clear();
 				euaf.getContrDonorIdList().clear();
+				euaf.getContrDonorNameList().clear();
+
 				euaf.getContrFinInstrIdList().clear();
 				euaf.getContrFinTypeIdList().clear();
+				
 				Iterator ii=element.getContributions().iterator();
 				while (ii.hasNext()) {
 					EUActivityContribution element2 = (EUActivityContribution) ii.next();
 					euaf.getContrAmountList().add(element2.getAmount().toString());
 					euaf.getContrCurrIdList().add(element2.getAmountCurrency().getAmpCurrencyId().toString());
 					euaf.getContrDonorIdList().add(element2.getDonor().getAmpOrgId().toString());
+					euaf.getContrDonorNameList().add(element2.getDonor().getName());
 					euaf.getContrFinInstrIdList().add(element2.getFinancingInstr().getId().toString());
 					euaf.getContrFinTypeIdList().add(element2.getFinancingTypeCategVal().getId().toString());
 				}
@@ -201,8 +204,10 @@ public class EditEUActivity extends MultiAction {
 		eaf.clear();
 		eaf.setTotalCostCurrencyId(currencyId);
 		eaf.getContrCurrIdList().set(0,currencyId);
-		eaf.getContrDonorIdList().set(0,new Long(11));
+		eaf.getContrDonorIdList().set(0,new Long(-1));
+		eaf.getContrDonorNameList().set(0,"");
          
+		
 		System.out.println("DueDate:"+eaf.getDueDate());
 		return modeFinalize(mapping, form, request, response);
 	}
@@ -297,6 +302,7 @@ public class EditEUActivity extends MultiAction {
 		eaf.setContrAmount(eaf.getContrAmountList().toArray());
 		eaf.setContrCurrId(eaf.getContrCurrIdList().toArray());
 		eaf.setContrDonorId(eaf.getContrDonorIdList().toArray());
+		eaf.setContrDonorName(eaf.getContrDonorNameList().toArray());
 		eaf.setContrFinInstrId(eaf.getContrFinInstrIdList().toArray());
 		eaf.setContrFinTypeId(eaf.getContrFinTypeIdList().toArray());
 		return mapping.findForward("forward");
@@ -309,10 +315,10 @@ public class EditEUActivity extends MultiAction {
 		HttpSession session=request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		Long currencyId = tm.getAppSettings().getCurrencyId();
-
-		eaf.getContrAmountList().add(new String("Amount"));
+		eaf.getContrAmountList().add(new String(""));
 		eaf.getContrCurrIdList().add(currencyId);
-		eaf.getContrDonorIdList().add(new Long(11));
+		eaf.getContrDonorNameList().add("");
+		eaf.getContrDonorIdList().add(new Long(-1));
 		eaf.getContrFinInstrIdList().add(new String("-1"));
 		eaf.getContrFinTypeIdList().add(new String("-1"));
 
@@ -327,8 +333,11 @@ public class EditEUActivity extends MultiAction {
 			eaf.getContrAmountList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrCurrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrDonorIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
+			eaf.getContrDonorNameList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrFinInstrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrFinTypeIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
+			
+			//eaf.getContrDonorNameList().set(Long.parseLong(eaf.getDeleteContrib().), element)
 		}
 
 		for(int i=0;i<eaf.getContrAmountList().size();i++) {
@@ -338,6 +347,7 @@ public class EditEUActivity extends MultiAction {
 				eaf.getContrDonorIdList().remove(i);
 				eaf.getContrFinInstrIdList().remove(i);
 				eaf.getContrFinTypeIdList().remove(i);
+				eaf.getContrDonorNameList().remove(i);
 			}
 		}
 

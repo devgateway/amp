@@ -800,9 +800,9 @@ public class SaveActivity extends Action {
 
 				// set organizations role
 				Set orgRole = new HashSet();
-
 				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) { // funding
-																// organizations
+
+											// organizations
 					AmpRole role = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
 					Iterator itr = eaForm.getFundingOrganizations().iterator();
 					while (itr.hasNext()) {
@@ -823,11 +823,11 @@ public class SaveActivity extends Action {
 							.getAmpRole(Constants.EXECUTING_AGENCY);
 					Iterator itr = eaForm.getExecutingAgencies().iterator();
 					while (itr.hasNext()) {
-						AmpOrgRole tmpRole= (AmpOrgRole) itr.next();
+						AmpOrganisation tmp= (AmpOrganisation) itr.next();
 						AmpOrgRole ampOrgRole=new AmpOrgRole();
 						ampOrgRole.setActivity(activity);
 						ampOrgRole.setRole(role);
-						ampOrgRole.setOrganisation(tmpRole.getOrganisation());
+						ampOrgRole.setOrganisation(tmp);
 						orgRole.add(ampOrgRole);
 					}
 				}

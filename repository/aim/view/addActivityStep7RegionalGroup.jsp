@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
@@ -45,9 +45,7 @@
 														<tr>
 															<td>
 																<field:display name="Regional Group Add Organizations Button" feature="Regional Group">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(7)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
+																	<aim:addOrganizationButton form="${aimEditActivityForm}" collection="regGroups" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
@@ -68,9 +66,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Regional Group Add Organizations Button" feature="Regional Group">
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(7)">
-																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-														</html:button>
+														<aim:addOrganizationButton form="${aimEditActivityForm}" collection="regGroups" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													</field:display>
 													</td>
 												</tr>

@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -44,9 +44,7 @@
 														<tr>
 															<td>
 															<field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(6)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
+															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 															</field:display>
 															</td>
 															<td>
@@ -67,9 +65,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(6)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
+															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 													</field:display>
 													</td>
 												</tr>

@@ -27,12 +27,14 @@ public class EUActivityForm extends ActionForm implements Serializable {
 	private Object[] contrAmount;
 	private Object[] contrCurrId;
 	private Object[] contrDonorId;
+	private Object[] contrDonorName;
 	private Object[] contrFinInstrId;
 	private Object[] contrFinTypeId;
 	
 	private List contrAmountList;
 	private List contrCurrIdList;
 	private List contrDonorIdList;
+	private List contrDonorNameList;
 	private List contrFinInstrIdList;
 	private List contrFinTypeIdList;
 	
@@ -101,6 +103,7 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		assumptions=null;
 		progress=null;
 		dueDate=null;
+		
 		contrAmountList=new ArrayList();
 		contrAmountList.add(new String("Amount"));
 
@@ -115,6 +118,9 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		
 		contrFinTypeIdList=new ArrayList();
 		contrFinTypeIdList.add(new String("-1"));
+		
+		contrDonorNameList=new ArrayList();
+		contrDonorNameList.add("");
 	}
 	
 	public Collection getCurrencies() {
@@ -227,7 +233,8 @@ public class EUActivityForm extends ActionForm implements Serializable {
 		 contrDonorIdList = new ArrayList();
 		 contrFinInstrIdList = new ArrayList();
 		 contrFinTypeIdList = new ArrayList();
-		
+		 contrDonorNameList=new ArrayList();
+
 	}
 
 
@@ -311,6 +318,22 @@ public class EUActivityForm extends ActionForm implements Serializable {
 
 	public void setEditingIndexId(Integer editingIndexId) {
 		this.editingIndexId = editingIndexId;
+	}
+
+	public List getContrDonorNameList() {
+		return contrDonorNameList;
+	}
+
+	public void setContrDonorNameList(List contrDonorNameList) {
+		this.contrDonorNameList = contrDonorNameList;
+	}
+
+	public Object[] getContrDonorName() {
+		return contrDonorName;
+	}
+
+	public void setContrDonorName(Object[] contrDonorName) {
+		this.contrDonorName = contrDonorName;
 	}
 
 }

@@ -247,7 +247,9 @@ public class AmpMessageActions extends DispatchAction {
             message = msgState.getMessage();
             
         } else {
-            id = new Long(request.getParameter("msgId"));
+            // view forwarded message
+            String msgId[]=request.getParameter("msgId").split("_");
+            id = new Long(msgId[0]);
             message = AmpMessageUtil.getMessage(id);
             isMessageStateId=false;
         }

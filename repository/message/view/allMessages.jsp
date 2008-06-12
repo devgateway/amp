@@ -13,6 +13,17 @@
 tr.my-border-style td {
       border-bottom: 1px solid silver;
 }
+.trOdd {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.trEven{
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
 -->
 </style>
 
@@ -68,6 +79,7 @@ tr.my-border-style td {
 	function viewMessage(id,isMsg) {
             if(isMsg){
 		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
+                markMsgeAsRead(id);
                 }
                 else{           
                     openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,600,430);
@@ -130,37 +142,23 @@ tr.my-border-style td {
 		getMessages();		
 	}
         
-        function toggleGroup(group_id,newMsgId){
-                var strId;
-                if(newMsgId!=null){
-                    strId='#'+newMsgId+'_'+group_id;
-                }
-                else{
-                    strId='#'+group_id;
-                }
+        function toggleGroup(group_id,forwardingThread){
+                var strId='#'+group_id;
                 $(strId+'_minus').toggle();
                 $(strId+'_plus').toggle();
-                
-              if(newMsgId==null){
-                  
-                $('#msg_'+group_id).toggle('fast');	
+                $('#msg_'+group_id).toggle('fast');
+                if(!forwardingThread){
+                markMsgeAsRead(group_id);
+                }
+                     	
+	}
+	
+	function markMsgeAsRead(group_id){
                 var partialUrl=addActionToURL('messageActions.do');
 		var url=getUrl(partialUrl,group_id);
 		var async=new Asynchronous();
 		async.complete=makeRead;
-		async.call(url);
-                
-              }
-              else{
-                  $('#msg_'+newMsgId+'_'+group_id).toggle('fast');
-                  
-              }
-              
-              	
-	}
-	
-	function toggleGroupMakeRead(group_id,newMsgId){
-		toggleGroup(group_id,newMsgId);		
+		async.call(url);	
                
 	}
 	
@@ -187,13 +185,6 @@ tr.my-border-style td {
 			var myid='#'+stateId+'_unreadLink';		
 			$(myid).css("color","");		
 		}
-		
-		//changing tr's backgroung color from white. white background have only unread messages
-		var tbl=document.getElementById('msgsList');			
-		var img=document.getElementById(stateId+'_plus');
-		var imgTD=img.parentNode;
-		var msgTR=imgTD.parentNode;
-		msgTR.style.backgroundColor='#eeeeee';
 		
 	}
 	
@@ -278,19 +269,22 @@ tr.my-border-style td {
 							
 							//creating tr
 							var msgTr=document.createElement('TR');	
-							var isMsgRead=messages[i].getAttribute('read');					
-							if(isMsgRead=='false'){
-								msgTr.style.backgroundColor='#ffffff';							
-							}else{
-								msgTr.style.backgroundColor='#eeeeee';							
-							}
-							msgTr.height='20px';
+							var isMsgRead=messages[i].getAttribute('read');	
+                                                       
+                                                        if(i!=1&&i%2==0){
+                                                            msgTr.className = 'trEven'; 
+                                                          }
+                                                           else{
+                                                             msgTr.className = 'trOdd';
+                                                            }
+                                                                            
+							
 								
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");
                                                 tablBody[0].appendChild(myTR);
                         
-							myTR.className = 'my-border-style';													
+																				
 						}//end of for loop
 					}			
 				}//messages end
@@ -362,12 +356,17 @@ tr.my-border-style td {
 	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
 	
 		var msgId=message.getAttribute('id');	
-                var newMsgId=message.getAttribute('newMsgId');
+                var newMsgId=message.getAttribute('newMsgId');// id of the newest message start of hierarchy for forwarding messages
 		//create image's td
 		var imgTD=document.createElement('TD');
+                var forwardingThread=!fwdOrEditDel;
+                if(newMsgId!=null){
+                    msgId+='_'+newMsgId;
+    
+                }
 		imgTD.vAlign='top';	
-                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup('+msgId+','+newMsgId+')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup('+msgId+','+newMsgId+')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>';
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>';
                     msgTr.appendChild(imgTD);
                 
                
@@ -401,22 +400,16 @@ tr.my-border-style td {
 		var sp=document.createElement('SPAN');
 		var isMsgRead=message.getAttribute('read');
 		if(isMsgRead=='false'){
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage('+msgId+','+fwdOrEditDel+')"; style="color:red" >'+msgName+'</A>';   
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\','+fwdOrEditDel+')"; style="color:red" >'+msgName+'</A>';   
 		}else {
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage('+msgId+','+fwdOrEditDel+')";>'+msgName+'</A>';
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\','+fwdOrEditDel+')";>'+msgName+'</A>';
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
 					
 		//creating hidden div for message description.It'll become visible after user clicks on twistie
 		var descDiv=document.createElement('DIV');
-                var invId;
-                if(!fwdOrEditDel){
-                    invId='msg_'+newMsgId+'_'+msgId;
-                }
-                else{
-                   invId='msg_'+msgId; 
-                }
+                var invId='msg_'+msgId;
 		descDiv.setAttribute("id",invId);	
 		descDiv.style.display='none';
 		//creating table inside hidden div
@@ -471,7 +464,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(receivedTR);						
 				var priorityTR=document.createElement('TR');
 					var priorityTD1=document.createElement('TD');
-					priorityTD1.innerHTML='&nbsp;'+prLevel;
+					priorityTD1.innerHTML='<strong>'+'&nbsp;'+prLevel+'</strong>';
 				priorityTR.appendChild(priorityTD1);
 								
 					var priorityTD2=document.createElement('TD');
@@ -485,7 +478,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(priorityTR);	
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
-					detailsTD1.innerHTML='&nbsp;'+desc;
+					detailsTD1.innerHTML='<strong>'+'&nbsp;'+desc+'</strong>';
 				detailsTR.appendChild(detailsTD1);
 					
 					var detailsTD2=document.createElement('TD');
@@ -552,7 +545,62 @@ tr.my-border-style td {
 	}
         
 </script>
-
+<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
+<tr>
+<td width="100%">
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+</td>
+</tr>
+<tr>
+<td>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780 border="0">
+    <tr>
+   <td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
+			<table cellPadding=5 cellSpacing=0 width="100%">
+				<tr>
+					<td height=33><span class=crumb>
+						<c:set var="translation">
+							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+						</c:set>
+						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
+						<digi:trn key="aim:portfolio">
+						Portfolio
+						</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp;
+						<digi:trn key="aim:MessageModule">
+						Message Module 
+						</digi:trn>
+                                                &nbsp;&gt;&nbsp;
+                                                 <c:choose>
+                                                <c:when test="${messageForm.tabIndex==1}">
+                                                   <digi:trn key="message:Messages">Messages</digi:trn>
+                                                </c:when>
+                                                <c:when test="${messageForm.tabIndex==2}">
+                                                  <digi:trn key="message:Alerts">Alerts</digi:trn>
+                                                </c:when>
+                                                <c:when test="${messageForm.tabIndex==3}">
+                                                  <digi:trn key="message:approvals">Approvals</digi:trn>
+                                                </c:when>
+                                                <c:otherwise>
+                                                   <digi:trn key="message:ebents">Calendar Events</digi:trn>
+                                                </c:otherwise>
+                                                </c:choose>
+						
+                                                </span>
+					</td>
+				</tr>
+				<tr>
+					<td height=16 vAlign=center width=571>
+						<span class=subtitle-blue>
+							<digi:trn key="aim:MessageModule ">
+								Message Module 
+							</digi:trn>
+						</span>
+					</td>
+				</tr>
+				<tr>
+	<td noWrap vAlign="top">
 
 	<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 		<TR>
@@ -764,4 +812,12 @@ tr.my-border-style td {
 			</TD>
 		</TR>
 	</TABLE>
+    </td>
+</tr>
+</table>
+</td>
+</tr></table>
+</td>
+</tr></table>
+
 </digi:form>

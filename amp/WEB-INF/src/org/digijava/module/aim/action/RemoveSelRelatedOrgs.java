@@ -44,8 +44,8 @@ public class RemoveSelRelatedOrgs extends Action {
 				Long selOrgs[] = eaForm.getSelExAgencies();
 				if (selOrgs != null) {
 					for (int i = 0;i < selOrgs.length;i ++) {
-						AmpOrgRole org = new AmpOrgRole();
-						org.setAmpOrgRoleId(selOrgs[i]);
+						AmpOrganisation org = new AmpOrganisation();
+						org.setAmpOrgId(selOrgs[i]);
 						eaForm.getExecutingAgencies().remove(org);
 					}
 				}				

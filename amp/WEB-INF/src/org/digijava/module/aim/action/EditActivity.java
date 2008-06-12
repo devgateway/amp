@@ -1252,8 +1252,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                  }          
               if (orgRole.getRole().getRoleCode().equals(
                   Constants.EXECUTING_AGENCY)
-                  && (!eaForm.getExecutingAgencies().contains(orgRole))) {
-            	  eaForm.getExecutingAgencies().add(orgRole);
+                  && (!eaForm.getExecutingAgencies().contains(orgRole.getOrganisation()))) {
+            	  eaForm.getExecutingAgencies().add(orgRole.getOrganisation());
              }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.IMPLEMENTING_AGENCY)

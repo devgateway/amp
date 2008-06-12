@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 <digi:instance property="aimEditActivityForm" />
 
 									
@@ -25,17 +25,17 @@
 										<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="executingAgencies"
-												id="exAgency" type="org.digijava.module.aim.dbentity.AmpOrgRole">
+												id="exAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
 														<tr>
 															<td width="3">
 																<html:multibox property="selExAgencies">
-																	<bean:write name="exAgency" property="ampOrgRoleId" />
+																	<bean:write name="exAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
 															<td align="left">
-																<bean:write name="exAgency" property="organisation.name" />
+																<bean:write name="exAgency" property="name" />
 															</td>
 														</tr>
 													</table>
@@ -46,9 +46,7 @@
 														<tr>
 															<td>
 																<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(1)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
+																<aim:addOrganizationButton form="${aimEditActivityForm}" collection="executingAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
@@ -70,9 +68,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 														<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency">
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(1)">
-																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-														</html:button>
+															<aim:addOrganizationButton form="${aimEditActivityForm}" collection="executingAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														</field:display>
 													</td>
 												</tr>

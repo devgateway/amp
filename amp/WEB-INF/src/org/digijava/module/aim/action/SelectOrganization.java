@@ -9,7 +9,7 @@ import org.digijava.module.aim.util.DbUtil;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Vector;
-
+@Deprecated
 public class SelectOrganization extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,

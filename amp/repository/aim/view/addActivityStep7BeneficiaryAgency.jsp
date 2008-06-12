@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
@@ -20,6 +21,7 @@
 										&nbsp;
 									</td></tr>
 									<tr><td>
+								
 										<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="benAgencies"
@@ -33,6 +35,7 @@
 																</html:multibox>
 															</td>
 															<td align="left">
+															
 																<bean:write name="benAgency" property="name" />
 															</td>
 														</tr>
@@ -44,10 +47,8 @@
 														<tr>
 															<td>
 															<field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(5)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
-																</field:display>
+																	<aim:addOrganizationButton refreshParentDocument="true" collection="benAgencies" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+															</field:display>
 															</td>
 															<td>
 															<field:display name="Beneficiary Agency Remove Organizations Button" feature="Beneficiary Agency">
@@ -61,15 +62,13 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-
+											
 										<logic:empty name="aimEditActivityForm" property="benAgencies">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(5)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
+															<aim:addOrganizationButton refreshParentDocument="true" collection="benAgencies" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													</field:display>
 													</td>
 												</tr>

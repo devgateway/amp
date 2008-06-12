@@ -8,7 +8,7 @@
  <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
  <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
  <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
- 
+ <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
@@ -67,7 +67,7 @@ function selectOrganisation1() {
 	}
 </script>		
 
-<body onload="load()">
+<body onLoad="load()">
 <digi:instance property="aimEUActivityForm" />
 <digi:form action="/editEUActivity.do" method="post">
 
@@ -124,71 +124,88 @@ function selectOrganisation1() {
 	<tr>
 		<td>&nbsp;
 		</td>
-		<td>
-		<table>
-	
+		<td align="center">
+		<table width="100%" cellpadding="2" cellspacing="0">
+	<tr>
+	  <td height="12"></td>
+	  <td> <strong>
+	    <digi:trn key="aim:addEditActivityAmount">Amount</digi:trn>
+	    </strong></td>
+	  <td> <strong>
+	    <digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn>
+	    </strong></td>
+	  <td> <strong>
+	    <digi:trn key="aim:addEditActivityTypeOfAssistance">Type of Assistance</digi:trn>
+	    </strong></td>
+	  <field:display name="Contribution Donors" feature="Costing">
+        <td>  <strong>
+          <digi:trn key="aim:addEditActivityDonor">Donor</digi:trn>
+        </strong></td>
+	  </field:display>
+	  <td><strong>
+	    <digi:trn key="aim:addEditActivityFinancingInstrument">Financing Instrument</digi:trn>
+	    </strong></td>
+	</tr>
 						<logic:iterate name="aimEUActivityForm" property="contrCurrId" indexId="idx"
 							id="currContr" scope="page">
 							<tr>
-							<td align="right" valign="top">
+							<td align="right" valign="top" nowrap>
 							<font color="red">*</font>
-							<input type="checkbox" name="deleteContrib" value='<bean:write name="idx"/>'>
-							<field:display name="Contribution Amount" feature="Costing">
-							<input style="text-align:right" type='text' name='contrAmount' onclick="clearDefault(this)"
-									value='${aimEUActivityForm.contrAmount[idx]}'>
-							</field:display>
-							<field:display name="Contribution Currency" feature="Costing">
-							<select name="contrCurrId" style="width: 100px" class="inp-text">
-								<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-							<logic:iterate name="aimEUActivityForm" property="currencies" id="currency" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCurrency">
-								<option value='<bean:write name="currency" property="ampCurrencyId"/>' 
-								<c:if test="${ aimEUActivityForm.contrCurrId[idx] == currency.ampCurrencyId }">selected</c:if>>
-								<bean:write name="currency" property="currencyName"/>
-								</option>
-							</logic:iterate>
-							</select>
-							</field:display>
-							<field:display name="Contribution Type of Assistance" feature="Costing">
-							<select name="contrFinInstrId" class="inp-text" style="width: 100px">
-								<option value="-1"><digi:trn key="aim:addEditActivitySelectTypeOfAssistance">Select Type of Assistance</digi:trn></option>
-							<logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
-								<option value='<bean:write name="modality" property="id"/>'
-								<c:if test="${ aimEUActivityForm.contrFinInstrId[idx] == modality.id }">selected</c:if>>
-								<bean:write name="modality" property="value"/>
-								</option>
-							</logic:iterate>
-							</select>
-							</field:display>
-							<field:display name="Contribution Donors" feature="Costing">
-							<select name="contrDonorId" style="width: 100px" class="inp-text"> 
-								<option value="-1"><digi:trn key="aim:addEditActivityDonor">Donor</digi:trn></option>
-							<logic:iterate name="aimEUActivityForm" property="donors" id="donor" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-								<option value='<bean:write name="donor" property="ampOrgId"/>'
-								<c:if test="${ aimEUActivityForm.contrDonorId[idx] == donor.ampOrgId }">selected</c:if>>
-								<bean:write name="donor" property="name"/>
-								</option>
-							</logic:iterate>
-							</select>
-							</field:display>
-							<field:display name="Contribution Financing Type" feature="Costing">
-							<logic:present name="aimEUActivityForm" property="finTypes">
-							<select name="contrFinTypeId" style="width: 100px" class="inp-text">
-								<option value="-1"><digi:trn key="aim:addEditActivitySelectFinancingInstrument">Select Financing Instrument</digi:trn></option>
-							<logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
-								<option value='<bean:write name="finType" property="id"/>'
-								<c:if test="${ aimEUActivityForm.contrFinTypeId[idx] == finType.id }">selected</c:if>>
-								<bean:write name="finType" property="value"/>
-								</option>
-							</logic:iterate>
-							</select>							
-							</logic:present>
-							</field:display>
-						</td>
+							<input type="checkbox" name="deleteContrib" value='<bean:write name="idx"/>'>						    </td>
 
+							<td align="right" valign="top" nowrap><input name='contrAmount' type='text' style="text-align:right" onClick="clearDefault(this)"
+									value='${aimEUActivityForm.contrAmount[idx]}' size="4"></td>
+							<td align="right" valign="top" nowrap><select name="contrCurrId" style="width: 100px" class="inp-text">
+                              <option value="-1">
+                                <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
+                              </option>
+                              <logic:iterate name="aimEUActivityForm" property="currencies" id="currency" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCurrency"> <option value='<bean:write name="currency" property="ampCurrencyId"/>' 
+								
+                                  <c:if test="${ aimEUActivityForm.contrCurrId[idx] == currency.ampCurrencyId }">selected</c:if>
+                                >
+                                  <bean:write name="currency" property="currencyName"/>
+                                  </option>
+                              </logic:iterate>
+                            </select></td>
+							<td align="right" valign="top" nowrap><select name="contrFinInstrId" class="inp-text" style="width: 100px">
+                              <option value="-1">
+                                <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
+                              </option>
+                              <logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue"> <option value='<bean:write name="modality" property="id"/>'
+								
+                                  <c:if test="${ aimEUActivityForm.contrFinInstrId[idx] == modality.id }">selected</c:if>
+                                >
+                                  <bean:write name="modality" property="value"/>
+                                  </option>
+                              </logic:iterate>
+                            </select></td>
+							<td align="right" valign="top" nowrap><field:display name="Contribution Donors" feature="Costing">
+                              <c:set var="valueId"> contrDonorId${idx} </c:set>
+                              <c:set var="nameId"> nameContrDonorId${idx} </c:set>
+                              <input   name='contrDonorId' type="hidden" id="${valueId}" style="text-align:right" value='${aimEUActivityForm.contrDonorId[idx]}' size="4"/>
+                              <input name="contrDonorName" type='text' id="${nameId}" style="text-align:right" value='${aimEUActivityForm.contrDonorName[idx]}' size="10" style="background-color:#CCCCCC" onKeyDown="return false"/>
+                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}"><digi:trn key="aim:addEditActivitySelectDonorDots">....</digi:trn></aim:addOrganizationButton>
+                            </field:display></td>
+							<td align="right" valign="top" nowrap><field:display name="Contribution Financing Type" feature="Costing">
+                              <logic:present name="aimEUActivityForm" property="finTypes">
+                                <select name="contrFinTypeId" style="width: 100px" class="inp-text">
+                                  <option value="-1">
+                                    <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
+                                  </option>
+                                  <logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue"> <option value='<bean:write name="finType" property="id"/>'
+								
+                                      <c:if test="${ aimEUActivityForm.contrFinTypeId[idx] == finType.id }">selected</c:if>
+                                    >
+                                      <bean:write name="finType" property="value"/>
+                                      </option>
+                                  </logic:iterate>
+                                </select>
+                              </logic:present>
+                            </field:display></td>
 							</tr>
 						</logic:iterate>			
 		</table>
-		<tr><td colspan="2" align="center">
+	  <tr><td colspan="2" align="center">
 				<html:submit styleClass="dr-menu" property="addFields"><digi:trn key="aim:addEditActivityAddContribution">Add Contribution</digi:trn></html:submit>&nbsp;&nbsp;
 				<html:submit styleClass="dr-menu" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
 		</td></tr>
@@ -219,7 +236,7 @@ function selectOrganisation1() {
 		</td>
 		<td>
 			<html:text readonly="true" property="dueDate" styleClass="inp-text"/>
-				<a onclick="pickDate(this,document.aimEUActivityForm.dueDate)">
+				<a onClick="pickDate(this,document.aimEUActivityForm.dueDate)">
 				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 		</td>

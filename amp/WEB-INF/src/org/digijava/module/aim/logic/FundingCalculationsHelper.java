@@ -27,9 +27,10 @@ public class FundingCalculationsHelper {
 	DecimalWraper totActualExp = new DecimalWraper();
 	DecimalWraper totActualDisbOrder = new DecimalWraper();
 
-	DecimalWraper totalCommitments = null;
+	DecimalWraper totalCommitments =  new DecimalWraper();
 
-	DecimalWraper unDisbursementsBalance = null;
+	
+	DecimalWraper unDisbursementsBalance =  new DecimalWraper();
 
 	boolean debug;
 	public boolean isDebug() {
@@ -78,7 +79,6 @@ public class FundingCalculationsHelper {
 
 	public void doCalculations(Collection<AmpFundingDetail> details, String userCurrencyCode) {
 		Iterator<AmpFundingDetail> fundDetItr = details.iterator();
-
 		fundDetailList = new ArrayList<FundingDetail>();
 		int indexId = 0;
 		String toCurrCode = Constants.DEFAULT_CURRENCY;
@@ -174,6 +174,7 @@ public class FundingCalculationsHelper {
 		return totalCommitments;
 	}
 
+	
 	public DecimalWraper getUnDisbursementsBalance() {
 		return unDisbursementsBalance;
 	}

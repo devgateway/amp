@@ -171,18 +171,18 @@ public class OrganisationSelected extends Action {
 						for (int i = 0;i < temp.size();i ++) {
                                                    
 							AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
-                                                        AmpOrgRole role=new AmpOrgRole();
-                                                        role.setOrganisation(newOrg);
-                                                        role.setAmpOrgRoleId(newOrg.getAmpOrgId());
+                                                        //AmpOrgRole role=new AmpOrgRole();
+                                                        //role.setOrganisation(newOrg);
+                                                        //role.setAmpOrgRoleId(newOrg.getAmpOrgId());
                                                         if(eaForm.getActivityId()!=null){
-                                                        role.setActivity(ActivityUtil.getAmpActivity(eaForm.getActivityId()));
+                                                      //  role.setActivity(ActivityUtil.getAmpActivity(eaForm.getActivityId()));
                                                         }
-                                                        role.setRole( DbUtil.getAmpRole(Constants.EXECUTING_AGENCY));
+                                                       // role.setRole( DbUtil.getAmpRole(Constants.EXECUTING_AGENCY));
                                                         if(eaForm.getExecutingAgencies()==null){
                                                                             eaForm.setExecutingAgencies(new ArrayList());
                                                          }
-                                                        if(!eaForm.getExecutingAgencies().contains(role)){
-                                                            eaForm.getExecutingAgencies().add(role);
+                                                        if(!eaForm.getExecutingAgencies().contains(newOrg)){
+                                                            eaForm.getExecutingAgencies().add(newOrg);
                                                         }
                                                         
 							/*if (newOrg != null) {

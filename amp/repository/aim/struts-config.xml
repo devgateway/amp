@@ -106,7 +106,9 @@
     <form-bean name="aimSelectSectorForm" type="org.digijava.module.aim.action.SelectSectorForm" />
     <form-bean name="aimCurrencyRateForm" type="org.digijava.module.aim.form.CurrencyRateForm" />
     <form-bean name="aimDonorDataImportForm" type="org.digijava.module.aim.form.DonorDataImportForm" />
-    <form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
+        
+    <form-bean name="aimSelectActivityTabsForm" type="org.digijava.module.aim.form.SelectActivityTabsForm" />
+<form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
     
     <form-bean name="aimSelectActivityTabsForm" type="org.digijava.module.aim.form.SelectActivityTabsForm" />
@@ -148,6 +150,11 @@
 	<form-bean name="aimViewIndicatorsForm" type="org.digijava.module.aim.form.ViewIndicatorsForm" />
     <form-bean name="aimNewIndicatorForm" type="org.digijava.module.aim.form.NewIndicatorForm"/>
     <form-bean name="aimActivityProgramSettingsForm" type="org.digijava.module.aim.form.AmpActivityProgramSettingsForm"/>
+	
+	<!-- new organization Component -->
+	<form-bean name="aimSelectOrganizationForm" type="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm"/>
+	<!-- End new organization Component -->
+
 </form-beans>
 
   <global-forwards>
@@ -330,7 +337,12 @@
     <action input="/aim/viewYearlyDiscrepancyFilter" name="aimYearlyDiscrepancyForm" path="/aim/yearlyDiscrepancyFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyFilter" validate="true" />
     <action name="aimQuarterlyDiscrepancyAllForm" path="/aim/quarterlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyDiscrepancyAll" validate="false" />
     <action name="aimQuarterlyDiscrepancyAllForm" path="/aim/quarterlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyDiscrepancyAllFilter" validate="false" />
-    <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />
+    <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />   
+    <action name="aimSelectActivityTabsForm" path="/aim/selectActivityTabs" scope="request" type="org.digijava.module.aim.action.ViewSelectActivityTabs" validate="false">
+    	<forward name="channelOverview" path="/aim/viewChannelOverview.do" redirect="true"/>
+    </action>
+     
+
     <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyAllFilter" validate="false" />
     <action name="aimViewIndicatorForm" path="/aim/meIndicatorValues" scope="request" type="org.digijava.module.aim.action.ViewIndicatorValues" validate="false" />
     
@@ -847,7 +859,7 @@
     	<forward name="forward" path="/showLayout.do?layout=teamAuditList" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action input="/showLayout.do?layout=teamReports" name="aimTeamReportsForm" path="/aim/updateTeamReports" scope="session" type="org.digijava.module.aim.action.UpdateTeamReports" validate="false">
+   <action input="/showLayout.do?layout=teamReports" name="aimTeamReportsForm" path="/aim/updateTeamReports" scope="session" type="org.digijava.module.aim.action.UpdateTeamReports" validate="false">
       <forward name="forward" path="/aim/teamReportList.do" />
       <forward name="showAddReport" path="/showLayout.do?layout=addTeamReports" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -1143,10 +1155,25 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    
+    <!-- 
     <action name="aimEditActivityForm" path="/aim/selectOrganization" scope="session" type="org.digijava.module.aim.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+    </action> 
+    -->
+  	<!--new Organization component-->
+  	<action name="aimSelectOrganizationForm" path="/aim/selectOrganizationComponent" scope="session" type="org.digijava.module.aim.uicomponents.action.selectOrganizationComponent">
+      <forward name="forward" path="/showLayout.do?layout=aim_orgComponentPopUp" />
+    </action> 
+    
+  	
+    <action name="aimEditActivityForm" path="/aim/selectOrganization" scope="session" type="org.digijava.module.aim.action.SelectOrganization">
+      <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action> 
+  
+    
     <action name="aimEditActivityForm" path="/aim/searchLocation" scope="session" type="org.digijava.module.aim.action.SearchLocation" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_searchlocPopupLayout" />
       <forward name="index" path="/aim/index.do" redirect="true" />

@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <digi:instance property="aimEditActivityForm" />
 								<field:display name="Responsible Organisation" feature="Responsible Organisation">
@@ -47,9 +48,7 @@
 														<tr>
 															<td>
 																<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(9)">
-																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																</html:button>
+																<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
@@ -72,9 +71,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 														<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation">
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(9)">
-																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-														</html:button>
+														<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														</field:display>
 													</td>
 												</tr>

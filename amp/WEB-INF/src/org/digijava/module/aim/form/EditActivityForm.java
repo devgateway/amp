@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
@@ -194,34 +195,34 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private String selManagedDocs[];
 	private OrgProjectId selectedOrganizations[];
 	//private Collection selectedOrganizationsList;
-	private Collection executingAgencies;
+	private Collection<AmpOrganisation> executingAgencies;
 	private Long selExAgencies[];
-	private Collection impAgencies;
+	private Collection<AmpOrganisation> impAgencies;
 	private Long selImpAgencies[];
 	//private Collection contractors;
 	private Long selContractors[];
-	private Collection reportingOrgs;
+	private Collection<AmpOrganisation> reportingOrgs;
 	private Long selReportingOrgs[];
 
-	private Collection regGroups;
+	private Collection<AmpOrganisation> regGroups;
 	private Long selRegGroups[];
 
-	private Collection sectGroups;
+	private Collection<AmpOrganisation> sectGroups;
 	private Long selSectGroups[];
 
 
 	// Beneficiary Agency
-	private Collection benAgencies;
+	private Collection<AmpOrganisation> benAgencies;
 	private Long selBenAgencies[];
 	// /Beneficiary Agency
 
 	// Contracting Agency
-	private Collection conAgencies;
+	private Collection<AmpOrganisation> conAgencies;
 	private Long selConAgencies[];
 	// /Contracting Agency
 
 	// Responsible Organisation
-	private Collection respOrganisations;
+	private Collection<AmpOrganisation> respOrganisations;
 	private Long selRespOrganisations[];
 	// Responsible Organisation
 
@@ -2227,25 +2228,25 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the executingAgencies.
 	 */
-	public Collection getExecutingAgencies() {
+	public Collection<AmpOrganisation> getExecutingAgencies() {
 		return executingAgencies;
 	}
 	/**
 	 * @param executingAgencies The executingAgencies to set.
 	 */
-	public void setExecutingAgencies(Collection executingAgencies) {
+	public void setExecutingAgencies(Collection<AmpOrganisation> executingAgencies) {
 		this.executingAgencies = executingAgencies;
 	}
 	/**
 	 * @return Returns the impAgencies.
 	 */
-	public Collection getImpAgencies() {
+	public Collection<AmpOrganisation> getImpAgencies() {
 		return impAgencies;
 	}
 	/**
 	 * @param impAgencies The impAgencies to set.
 	 */
-	public void setImpAgencies(Collection impAgencies) {
+	public void setImpAgencies(Collection<AmpOrganisation> impAgencies) {
 		this.impAgencies = impAgencies;
 	}
 	/**
@@ -2300,13 +2301,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the reportingOrgs.
 	 */
-	public Collection getReportingOrgs() {
+	public Collection<AmpOrganisation> getReportingOrgs() {
 		return reportingOrgs;
 	}
 	/**
 	 * @param reportingOrgs The reportingOrgs to set.
 	 */
-	public void setReportingOrgs(Collection reportingOrgs) {
+	public void setReportingOrgs(Collection<AmpOrganisation> reportingOrgs) {
 		this.reportingOrgs = reportingOrgs;
 	}
 	/**
@@ -4085,11 +4086,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 
-	public Collection getBenAgencies() {
+	public Collection<AmpOrganisation> getBenAgencies() {
 		return benAgencies;
 	}
 
-	public void setBenAgencies(Collection benAgencies) {
+	public void setBenAgencies(Collection<AmpOrganisation> benAgencies) {
 		this.benAgencies = benAgencies;
 	}
 
@@ -4101,11 +4102,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.selBenAgencies = selBenAgencies;
 	}
 
-	public Collection getConAgencies() {
+	public Collection<AmpOrganisation> getConAgencies() {
 		return conAgencies;
 	}
 
-	public void setConAgencies(Collection conAgencies) {
+	public void setConAgencies(Collection<AmpOrganisation> conAgencies) {
 		this.conAgencies = conAgencies;
 	}
 
@@ -4613,19 +4614,19 @@ public class EditActivityForm extends ActionForm implements Serializable{
         this.parentSectors = parentSectors;
     }
 
-    public Collection getRegGroups() {
+    public Collection<AmpOrganisation> getRegGroups() {
         return regGroups;
     }
 
-    public void setRegGroups(Collection regGroups) {
+    public void setRegGroups(Collection<AmpOrganisation> regGroups) {
         this.regGroups = regGroups;
     }
 
-    public Collection getSectGroups() {
+    public Collection<AmpOrganisation> getSectGroups() {
         return sectGroups;
     }
 
-    public void setSectGroups(Collection sectGroups) {
+    public void setSectGroups(Collection<AmpOrganisation> sectGroups) {
         this.sectGroups = sectGroups;
     }
 
@@ -5239,14 +5240,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return the respOrganisations
 	 */
-	public Collection getRespOrganisations() {
+	public Collection<AmpOrganisation> getRespOrganisations() {
 		return respOrganisations;
 	}
 
 	/**
 	 * @param respOrganisations the respOrganisations to set
 	 */
-	public void setRespOrganisations(Collection respOrganisations) {
+	public void setRespOrganisations(Collection<AmpOrganisation> respOrganisations) {
 		this.respOrganisations = respOrganisations;
 	}
 

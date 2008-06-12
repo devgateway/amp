@@ -136,7 +136,11 @@ public class ViewNewAdvancedReport extends Action {
 			filter.setApproved(false);
 			filter.setDraft(false);
 		}
-		
+		if (tm ==null)
+		{
+			filter.setApproved(true);
+			filter.setDraft(true);
+		}
 		httpSession.setAttribute("progressValue", ++progressValue); 
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		

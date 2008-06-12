@@ -51,8 +51,8 @@ public class ColumnFilterGenerator {
 		}
 		if (ArConstants.VIEW_COMPONENT_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here	
-			AmpColumnsFilters acf = new AmpColumnsFilters(c,"regions","amp_component_id");
-			c.getFilters().add(acf);
+			//AmpColumnsFilters acf = new AmpColumnsFilters(c,"regions","amp_component_id");
+			//c.getFilters().add(acf);
 		}
 		if (ArConstants.VIEW_REGIONAL_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here

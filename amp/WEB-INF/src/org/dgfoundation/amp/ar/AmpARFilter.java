@@ -219,6 +219,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				this.setCurrency(tempSettings.getCurrency());
 
 		}
+		else {
+			this.setAmpTeams(TeamUtil.getAllRelatedTeamsByAccessType("Management"));
+		}
 
 		if (renderStartYear == null) {
 			// Check if there is value on workspace setting

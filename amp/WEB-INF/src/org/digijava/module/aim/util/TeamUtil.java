@@ -269,6 +269,37 @@ public class TeamUtil {
         return col;
     }
 
+    public static Set getAllRelatedTeamsByAccessType(String accessType) {
+        Session session = null;
+        Collection col = new ArrayList();
+        Set colSet= new TreeSet();
+        try {
+            session = PersistenceManager.getSession();
+            String query = "select team from "
+                + AmpTeam.class.getName()
+                + " team where (team.accessType=:accessType) ";
+            Query qry = session.createQuery(query);
+            qry.setParameter("accessType", accessType);
+            col = qry.list();
+
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
+        }
+        colSet.addAll(col);
+        //return col;
+        return colSet;
+    }
+    
+    
     /**
      * Creates a new team
      *

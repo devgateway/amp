@@ -1016,23 +1016,23 @@
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.commitments}">
 																						<tr>
-																							<field:display name="Components Actual/Planned Commitments" feature="Components">
+																							<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step">
 																							<td width="50" bgcolor="#ffffff">
 																								<digi:trn key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
 																									<c:out value="${fd.adjustmentTypeName}"/>	
 																								</digi:trn>
 																							</td>
 																							</field:display>
-																							<field:display name="Components Total Amount Commitments" feature="Components">
+																							<field:display name="Components Total Amount Commitments" feature="Activity - Component Step">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color="blue">*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Currency Commitments" feature="Components">
+																							<field:display name="Components Currency Commitments" feature="Activity - Component Step">
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Date Commitments" feature="Components">
+																							<field:display name="Components Date Commitments" feature="Activity - Component Step">
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
@@ -1054,23 +1054,23 @@
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.disbursements}">
 																						<tr>
-																							<field:display name="Components Actual/Planned Disbursements" feature="Components">
+																							<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step">
 																							<td width="50" bgcolor="#ffffff">
 																							<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
 																								<c:out value="${fd.adjustmentTypeName}"/>	
 																							</digi:trn>								
 																							</td>
 																							</field:display>
-																							<field:display name="Components Total Amount Disbursements" feature="Components">
+																							<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color="blue">*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Currency Disbursements" feature="Components">
+																							<field:display name="Components Currency Disbursements" feature="Activity - Component Step">
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Date Disbursements" feature="Components">
+																							<field:display name="Components Date Disbursements" feature="Activity - Component Step">
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
@@ -1092,22 +1092,22 @@
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.expenditures}">
 																						<tr bgcolor="#ffffff">
-																							<field:display name="Components Actual/Planned Expenditures" feature="Components">
+																							<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step">
 																							<td width="50">
 																								<digi:trn key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
 																									<c:out value="${fd.adjustmentTypeName}"/>	
 																								</digi:trn>																							</td>
 																							</field:display>
-																							<field:display name="Components Total Amount Expenditures" feature="Components">
+																							<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step">
 																							<td align="right">
 																								<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Currency Expenditures" feature="Components">
+																							<field:display name="Components Currency Expenditures" feature="Activity - Component Step">
 																							<td>
 																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Date Expenditures" feature="Components">
+																							<field:display name="Components Date Expenditures" feature="Activity - Component Step">
 																							<td width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
@@ -1121,7 +1121,7 @@
 															</c:if>
 															<tr><td bgcolor="#ffffff">&nbsp;</td>
 															</tr>
-															<field:display name="Components Physical Progress" feature="Components">
+															<field:display name="Components Physical Progress" feature="Activity - Component Step">
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:physicalProgressOfTheComponent">
 																Physical progress of the component</digi:trn></b>

@@ -27,7 +27,7 @@
 
 										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
 																	<tr><td>
-																		<b><field:display name="Components Grand Total Commitments" feature="Components">
+																		<b><field:display name="Components Grand Total Commitments" feature="Activity - Component Step">
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
@@ -36,7 +36,7 @@
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/></field:display>
-																		<field:display name="Components Grand Total Disbursements" feature="Components">
+																		<field:display name="Components Grand Total Disbursements" feature="Activity - Component Step">
 																				&nbsp;&nbsp;
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
@@ -46,7 +46,7 @@
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
 																		</field:display>
-																		<field:display name="Components Grand Total Expenditures" feature="Components">
+																		<field:display name="Components Grand Total Expenditures" feature="Activity - Component Step">
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
@@ -85,7 +85,7 @@
 																<digi:trn key="aim:TitleofComponent">Component Title</digi:trn></a> :
 																<b><c:out value="${selComponents.title}"/></b>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																<field:display name="Edit Components Link" feature="Components">
+																<field:display name="Edit Components Link" feature="Activity - Component Step">
 																<a href="javascript:editFunding('<bean:write name="selComponents"
 																property="componentId"/>')"><digi:trn key="aim:edit">Edit</digi:trn></a>
 																</field:display>
@@ -101,7 +101,7 @@
 																	bgcolor="#d7eafd">
 																		<logic:notEmpty name="selComponents" property="commitments">
 																		<tr><td>
-																		<b><field:display name="Grand Total Commitments" feature="Components">
+																		<b><field:display name="Grand Total Commitments" feature="Activity - Component Step">
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:commitments">Commitments</digi:trn>
 																		</field:display>
@@ -110,25 +110,25 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Components Actual/Planned Commitments" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Components Total Amount Commitments" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
-																					<field:display name="Components Currency Commitments" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
-																					<field:display name="Components Date Commitments" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
+																					<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Currency Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Components Date Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																				</tr>
 																				<logic:iterate name="selComponents" property="commitments"
 																				id="commitment"
 																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
 																					<tr bgcolor="#ffffff">
-																						<field:display name="Components Actual/Planned Commitments" feature="Components"><td>
+																						<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"><td>
 																							<digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td></field:display>
-																						<field:display name="Components Total Amount Commitments" feature="Components"><td align="right">
+																						<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
 																						</td></field:display>
-																						<field:display name="Components Currency Commitments" feature="Components"><td>
+																						<field:display name="Components Currency Commitments" feature="Activity - Component Step"><td>
 																							<c:out value="${commitment.currencyCode}"/>
 																						</td></field:display>
-																						<field:display name="Components Date Commitments" feature="Components">
+																						<field:display name="Components Date Commitments" feature="Activity - Component Step">
 																						<td>
 																							<c:out value="${commitment.transactionDate}"/>
 																						</td></field:display>
@@ -140,7 +140,7 @@
 																	<logic:notEmpty name="selComponents" property="disbursements">
 																	<tr>
 																	<td>
-																	<field:display name="Grand Total Disbursements" feature="Components">
+																	<field:display name="Grand Total Disbursements" feature="Activity - Component Step">
 																				&nbsp;&nbsp;
 																		<b>	<digi:trn key="aim:disbursements">Disbursements</digi:trn> </b>
 
@@ -151,27 +151,27 @@
 																			bgcolor="#eeeeee">
 																				<tr>
 
-																					<field:display name="Components Actual/Planned Disbursements" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Components Total Amount Disbursements" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
-																					<field:display name="Components Currency Disbursements" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
-																					<field:display name="Components Date Disbursements" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
+																					<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Currency Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Components Date Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																				</tr>
 																				<logic:iterate name="selComponents" property="disbursements"
 																				id="disbursement"
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L3 START-->
 																					<tr bgcolor="#ffffff">
-																						<field:display name="Components Actual/Planned Disbursements" feature="Components"><td>
+																						<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"><td>
 																							<digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
 																						</td></field:display>
-																						<field:display name="Components Total Amount Disbursements" feature="Components"><td align="right">
+																						<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${disbursement.transactionAmount}"/>
 																						</td></field:display>
-																						<field:display name="Components Currency Disbursements" feature="Components"><td>
+																						<field:display name="Components Currency Disbursements" feature="Activity - Component Step"><td>
 																							<c:out value="${disbursement.currencyCode}"/>
 																						</td></field:display>
-																						<field:display name="Components Date Disbursements" feature="Components">
+																						<field:display name="Components Date Disbursements" feature="Activity - Component Step">
 																						<td>
 																							<c:out value="${disbursement.transactionDate}"/>
 																						</td></field:display>
@@ -191,29 +191,29 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Components Actual/Planned Expenditures" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Components Total Amount Expenditures" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
-																					<field:display name="Components Currency Expenditures" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
-																					<field:display name="Components Date Expenditures" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
+																					<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Currency Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Components Date Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																				</tr>
 																				<logic:iterate name="selComponents" property="expenditures"
 																				id="expenditure"
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L4 START-->
 																				<tr bgcolor="#ffffff">
-																					<field:display name="Components Actual/Planned Expenditures" feature="Components"><td>
+																					<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"><td>
 																						<digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
 																					</td></field:display>
-																					<field:display name="Components Total Amount Expenditures" feature="Components">
+																					<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step">
 																					<td align="right">
 																						<FONT color=blue>*</FONT>
 																						<c:out value="${expenditure.transactionAmount}"/>
 																					</td></field:display>
-																					<field:display name="Components Currency Expenditures" feature="Components">
+																					<field:display name="Components Currency Expenditures" feature="Activity - Component Step">
 																					<td>
 																						<c:out value="${expenditure.currencyCode}"/>
 																					</td></field:display>
-																					<field:display name="Components Date Expenditures" feature="Components">
+																					<field:display name="Components Date Expenditures" feature="Activity - Component Step">
 																					<td>
 																						<c:out value="${expenditure.transactionDate}"/>
 																					</td></field:display>
@@ -312,13 +312,13 @@
 											<tr><td align="center">
 												<table cellSpacing=2 cellPadding=2>
 													<tr><td>
-														<field:display name="Add Components Button" feature="Components">
+														<field:display name="Add Components Button" feature="Activity - Component Step">
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
 															<digi:trn key="btn:addComponents">Add Components</digi:trn>
 														</html:button>
 														</field:display>
 														 &nbsp;&nbsp;&nbsp;
-														 <field:display name="Remove Components Button" feature="Components">
+														 <field:display name="Remove Components Button" feature="Activity - Component Step">
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelComponents()">
 															<digi:trn key="btn:removeComponents">Remove Components</digi:trn>
 														</html:button>
@@ -330,7 +330,7 @@
 										
 									</logic:notEmpty>
 									<logic:empty name="aimEditActivityForm" property="selectedComponents">
-									<field:display name="Add Components Button" feature="Components">
+									<field:display name="Add Components Button" feature="Activity - Component Step">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 											<tr><td>
 												<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">

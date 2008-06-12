@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.Components;
@@ -34,6 +39,7 @@ import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ShowAddComponent extends Action {
 
@@ -97,7 +103,7 @@ public class ShowAddComponent extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		eaForm.setStep("5");
-
+		
 		ArrayList<org.digijava.module.aim.dbentity.AmpComponent> ampComponents = null;
 		ArrayList<AmpComponentType> ampComponentTypes = null;
 		ampComponentTypes = new ArrayList<AmpComponentType>(ComponentsUtil.getAmpComponentTypes());
@@ -108,8 +114,35 @@ public class ShowAddComponent extends Action {
 		eaForm.setNewCompoenentName(null);
 		String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
+		
+		if(!isComponentTypeEnabled()){
+			AmpComponentType defaultComponentType = FeaturesUtil.getDefaultComponentType();
+			eaForm.setSelectedType(defaultComponentType.getType_id());
+			return switchType(mapping, form, request, response);
+		}
 
 		return mapping.findForward("forward");
+
+	}
+	
+	public boolean isComponentTypeEnabled(){
+ 	   ServletContext ampContext = getServlet().getServletContext();
+ 	   
+	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+ 	   
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+		if(currentTemplate!=null)
+			if(currentTemplate.getFeatures()!=null)
+				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+				{
+					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
+					if(feature.getName().compareTo("Admin - Component Type")==0) 
+					{
+						return true;
+					}	
+					
+				}
+		return false;
 
 	}
 

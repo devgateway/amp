@@ -24,6 +24,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -2833,5 +2834,10 @@ public class FeaturesUtil {
              return module;
             
         }
+
+		public static AmpComponentType getDefaultComponentType() {
+			String defaultComponentTypeIdStr = getGlobalSettingValue("Default Component Type");
+			return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));
+		}
 
 }

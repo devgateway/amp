@@ -303,7 +303,7 @@ function checkUncheckAll2() {
 											<field:display name="Description" feature="Identification">&nbsp;</field:display>
 												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Component Name" feature="Components">&nbsp;</field:display>
+											<field:display name="Component Name" feature="Activity - Component Step">&nbsp;</field:display>
 											<field:display name="Team" feature="Identification">&nbsp;</field:display>
 											<field:display name="Issues" feature="Issues">&nbsp;</field:display>
 											<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
@@ -316,7 +316,7 @@ function checkUncheckAll2() {
 											<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
 											<field:display name="Costing Donor" feature="Costing"></field:display>
 												<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Component description" feature="Components">&nbsp;</field:display>
+												<field:display name="Component description" feature="Activity - Component Step">&nbsp;</field:display>
 											<field:display name="Physical progress title" feature="Physical Progress">&nbsp;</field:display>
 												<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>
 											<field:display name="Indicator Name" feature="Activity"></field:display>

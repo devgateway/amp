@@ -7,10 +7,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.TabExpander;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -38,6 +40,7 @@ public class AdminTableWidgets extends DispatchAction {
 
     private static Logger logger = Logger.getLogger(AdminTableWidgets.class);
     public static final String EDITING_WIDGET = "EditingWidget";
+    public static final String EDITING_COLUMNS = "EditingColumns";
 
     /**
      * Show create table widget page.
@@ -66,12 +69,12 @@ public class AdminTableWidgets extends DispatchAction {
 		setPlaces(tableForm);
 		
 		try {
-			startEditing(new AmpDaTable(), request);
+			startEditing(new AmpDaTable(), new ArrayList<AmpDaColumn>(), request);
 		} catch (Exception e) {
 			logger.error(e);
 		}finally{
 			stopEditing(request);
-			startEditing(new AmpDaTable(), request);
+			startEditing(new AmpDaTable(), new ArrayList<AmpDaColumn>(), request);
 		}
 		
 		return mapping.findForward("showAdd");
@@ -112,10 +115,11 @@ public class AdminTableWidgets extends DispatchAction {
 		
 		AmpDaTable widget = TableWidgetUtil.getTableWidget(wForm.getId());
 		wForm = widgetToForm(wForm, widget);
+		wForm.setColumns(getWidgetColumnsSorted(widget));
 		setPlaces(wForm);
-		startEditing(widget, request);
+		startEditing(widget,wForm.getColumns(), request);
 
-		return mapping.findForward("showEdit");
+		return mapping.findForward("returnToEdit");
 	}
     
     /**
@@ -135,55 +139,17 @@ public class AdminTableWidgets extends DispatchAction {
 		if (wForm.getId()!=null && wForm.getId().longValue()==0){
 			wForm.setId(null);
 		}
-		logger.debug("staring widget edit");
-		//start of edit: load from db, update form and save in session
 		AmpDaTable widget = getWidgetFromSession(request);
-		if (widget!=null){
-			formToWidget(wForm,widget);
-		}
+		wForm = widgetToForm(wForm, widget);
+		//set columns
+		List<AmpDaColumn> columns = getClumnsFromSession(request);
+		Collections.sort(columns,new TableWidgetUtil.ColumnOrderNoComparator());
+		wForm.setColumns(columns);
 		//widgetToForm(wForm, widget);
 		//setPlaces(wForm);
 		return mapping.findForward("showEdit");
 	}
 
-	private TableWidgetCreationForm widgetToForm(TableWidgetCreationForm form,AmpDaTable widget) {
-		form.setId(widget.getId());
-		form.setName(widget.getName());
-		form.setCode(widget.getCode());
-		form.setCssClass(widget.getCssClass());
-		form.setHtmlStyle(widget.getHtmlStyle());
-		form.setWidth(widget.getWidth());
-		if (widget.getColumns() == null){
-			widget.setColumns(new HashSet<AmpDaColumn>());
-		}
-		List<AmpDaColumn> columns = new ArrayList<AmpDaColumn>(widget.getColumns());
-		Collections.sort(columns,new ColumnOrderNoComparator());
-		form.setColumns(columns);
-		form.setSelectedPlaceCode("-1");
-		//TODO temporary just setting one (first) place to form.
-		if (widget.getPlaces()!=null){
-			for (AmpDaWidgetPlace place : widget.getPlaces()) {
-				form.setSelectedPlaceCode(place.getCode());
-				break;
-			}
-		}
-		
-		return form;
-	}
-	
-	private void setPlaces(TableWidgetCreationForm form) throws DgException{
-		List<AmpDaWidgetPlace> places = TableWidgetUtil.getAllPlaces();
-		List<LabelValueBean> placesBeans = new ArrayList<LabelValueBean>();
-		if (places != null){
-			for (AmpDaWidgetPlace place : places) {
-				placesBeans.add(new LabelValueBean(place.getName(),place.getCode()));
-			}
-		}else{
-			//TODO what should go here?
-		}
-		form.setPlaces(placesBeans);
-	}
-	
 	/**
 	 * Saves widget after edit or add page.
 	 * @param mapping
@@ -208,26 +174,27 @@ public class AdminTableWidgets extends DispatchAction {
 		}
 		
 		//update db widgets simple fields from the action form.
-		dbWidget = formToWidget(wForm, dbWidget);
+		dbWidget = formToWidgetSimpleFileds(wForm, dbWidget);
 		//get session widget
 		AmpDaTable sessionWidget = getWidgetFromSession(request);
-		//get columns from both db and session widgets to join them
+		//get columns from both db and session to join them
 		Set<AmpDaColumn> dbColumns = dbWidget.getColumns();
 		if (dbColumns == null){
 			dbColumns = new  HashSet<AmpDaColumn>();
 			dbWidget.setColumns(dbColumns);
 		}
-		Set<AmpDaColumn> sessionColumns = sessionWidget.getColumns();
-		if (sessionColumns == null){
-			sessionColumns = new HashSet<AmpDaColumn>();
+		List<AmpDaColumn> sessionColumnsList = getClumnsFromSession(request);
+		if (sessionColumnsList == null){
+			sessionColumnsList = new ArrayList<AmpDaColumn>();
 		}
+		Set<AmpDaColumn> sessionColumns = new HashSet<AmpDaColumn>(sessionColumnsList);
 		//join columns to get list of columns ready to just save. 
 		AmpCollectionUtils.join(dbColumns, sessionColumns, new TableWidgetColumnKeyResolver());
 		
 		//correct new columns ID's to make hibernate persist them and not try update.
 		for (AmpDaColumn col : dbColumns) {
 			col.setWidget(dbWidget);
-			if (col.getId() < 0 ){
+			if (col.getId() <= 0 ){
 				col.setId(null);
 			}
 		}
@@ -292,10 +259,20 @@ public class AdminTableWidgets extends DispatchAction {
 
 		Collection<AmpDaTable> tables=TableWidgetUtil.getAllTableWidgets();
 		tableForm.setTables(tables);
+		tableForm.setName(TableWidgetUtil.getCurrentURL(request));
 		
 		return mapping.findForward("forward");
 	}
 	
+	/**
+	 * Not Used yet....
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	public ActionForward details(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -308,6 +285,101 @@ public class AdminTableWidgets extends DispatchAction {
 	}
 
 	/**
+	 * Move column up or forward
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward reorderUp(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
+
+		AmpDaTable widget = getWidgetFromSession(request);
+		if (widget!=null){
+			
+			formToWidgetSimpleFileds(tableForm, widget);
+			
+			List<AmpDaColumn> columns = getClumnsFromSession(request);
+			AmpDaColumn colCur=null;
+			AmpDaColumn colPrev=null;
+			if (columns!=null){
+				Iterator<AmpDaColumn> colIter = columns.iterator();
+				while(colIter.hasNext()){
+					colPrev = colCur;
+					colCur = colIter.next();
+					
+					//find column that was clicked.
+					if (colCur.getId().equals(tableForm.getColId())){
+						break;
+					}
+				}
+				if(colCur!=null && colPrev!=null){
+					//just replace order numbers and ...
+					Integer tmp = colCur.getOrderNo();
+					colCur.setOrderNo(colPrev.getOrderNo());
+					colPrev.setOrderNo(tmp);
+				}
+			}
+		}
+			
+		// ... and forward to show edit, this will order columns and will update form with session widget.
+		return mapping.findForward("returnToEdit");
+	}
+	
+	/**
+	 * Moves column down or backward
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward reorderDown(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
+
+		AmpDaTable widget = getWidgetFromSession(request);
+		if (widget!=null){
+			
+			formToWidgetSimpleFileds(tableForm, widget);
+			
+			List<AmpDaColumn> columns = getClumnsFromSession(request);
+			AmpDaColumn col1=null;
+			AmpDaColumn col2=null;
+			if (columns!=null){
+				Iterator<AmpDaColumn> colIter = columns.iterator();
+				while(col1 == null  && col2 == null && colIter.hasNext()){
+					AmpDaColumn col = colIter.next();
+					//find column that was clicked.
+					if (col.getId().equals(tableForm.getColId())){
+						col1=col;
+						//and the next one
+						col2=colIter.next();
+					}
+				}
+				if(col1!=null && col2!=null){
+					//just replace order numbers and ...
+					Integer tmp = col1.getOrderNo();
+					col1.setOrderNo(col2.getOrderNo());
+					col2.setOrderNo(tmp);
+				}
+			}
+		}
+			
+		// ... and forward to show edit, this will order columns and will update form with session widget.
+		return mapping.findForward("returnToEdit");
+	}
+	
+
+	/**
 	 * If action type is not specified
 	 */
 	@Override
@@ -316,6 +388,52 @@ public class AdminTableWidgets extends DispatchAction {
 			throws Exception {
 		//just do list
 		return list(mapping, form, request, response);
+	}
+
+	/**
+	 * Moves all simple data from widget to action form.
+	 * Note that columns are not moved by this method.
+	 * @param form
+	 * @param widget
+	 * @return
+	 */
+	private TableWidgetCreationForm widgetToForm(TableWidgetCreationForm form,AmpDaTable widget) {
+		form.setId(widget.getId());
+		form.setName(widget.getName());
+		form.setCode(widget.getCode());
+		form.setCssClass(widget.getCssClass());
+		form.setHtmlStyle(widget.getHtmlStyle());
+		form.setWidth(widget.getWidth());
+		//List<AmpDaColumn> columns = getWidgetColumnsSorted(widget);
+		//form.setColumns(columns);
+		form.setSelectedPlaceCode("-1");
+		//TODO temporary just setting one (first) place to form.
+		if (widget.getPlaces()!=null){
+			for (AmpDaWidgetPlace place : widget.getPlaces()) {
+				form.setSelectedPlaceCode(place.getCode());
+				break;
+			}
+		}
+		
+		return form;
+	}
+
+	/**
+	 * sets places label-value beans collection to form.
+	 * @param form
+	 * @throws DgException
+	 */
+	private void setPlaces(TableWidgetCreationForm form) throws DgException{
+		List<AmpDaWidgetPlace> places = TableWidgetUtil.getAllPlaces();
+		List<LabelValueBean> placesBeans = new ArrayList<LabelValueBean>();
+		if (places != null){
+			for (AmpDaWidgetPlace place : places) {
+				placesBeans.add(new LabelValueBean(place.getName(),place.getCode()));
+			}
+		}else{
+			//TODO what should go here?
+		}
+		form.setPlaces(placesBeans);
 	}
 	
 	//=========Widget Session Handling=========================
@@ -331,6 +449,20 @@ public class AdminTableWidgets extends DispatchAction {
 		if (result==null) throw new DgException("No widget in editing state");
 		return result;
 	}
+
+	/**
+	 * Retrieves columns list saved in session.
+	 * @param request
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	private List<AmpDaColumn> getClumnsFromSession(HttpServletRequest request) throws DgException{
+		HttpSession session=request.getSession();
+		List<AmpDaColumn> result=(List<AmpDaColumn>)session.getAttribute(EDITING_COLUMNS);
+		if (result==null) throw new DgException("No columns in editing state");
+		return result;
+	}
 	
 	/**
 	 * Puts widget in session.
@@ -342,6 +474,17 @@ public class AdminTableWidgets extends DispatchAction {
 		HttpSession session=request.getSession();
 		session.setAttribute(EDITING_WIDGET, widget);
 	}
+
+	/**
+	 * Save columns to session.
+	 * @param columns
+	 * @param request
+	 * @throws DgException
+	 */
+	private void saveToSession(List<AmpDaColumn> columns,HttpServletRequest request) throws DgException{
+		HttpSession session=request.getSession();
+		session.setAttribute(EDITING_COLUMNS, columns);
+	}
 	
 	/**
 	 * Saves widget in session marking it as being in edit mode.
@@ -349,9 +492,10 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @param request
 	 * @throws DgException if already in editing state. first it should be ended. 
 	 */
-	private void startEditing(AmpDaTable widget, HttpServletRequest request) throws DgException{
+	private void startEditing(AmpDaTable widget, List<AmpDaColumn> columns, HttpServletRequest request) throws DgException{
 		if (isEditing(request)) throw new DgException("some widget is already in edit state");
 		saveToSession(widget, request);
+		saveToSession(columns, request); 
 	}
 	
 	
@@ -365,6 +509,7 @@ public class AdminTableWidgets extends DispatchAction {
 		AmpDaTable old=(AmpDaTable)session.getAttribute(EDITING_WIDGET);
 		if (old==null) throw new DgException("No widget is in edit state");
 		session.removeAttribute(EDITING_WIDGET);
+		session.removeAttribute(EDITING_COLUMNS);
 	}
 	
 	/**
@@ -385,8 +530,8 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @return
 	 * @throws DgException
 	 */
-	private AmpDaTable formToWidget(TableWidgetCreationForm form) throws DgException{
-		return formToWidget(form, new AmpDaTable());
+	private AmpDaTable formToWidgetSimpleFileds(TableWidgetCreationForm form) throws DgException{
+		return formToWidgetSimpleFileds(form, new AmpDaTable());
 	}
 	
 	/**
@@ -396,7 +541,7 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @return
 	 * @throws DgException
 	 */
-	private AmpDaTable formToWidget(TableWidgetCreationForm form, AmpDaTable widget) throws DgException{
+	private AmpDaTable formToWidgetSimpleFileds(TableWidgetCreationForm form, AmpDaTable widget) throws DgException{
 		
 		widget.setName(form.getName());
 		widget.setCode(form.getCode());
@@ -435,6 +580,25 @@ public class AdminTableWidgets extends DispatchAction {
 		return column;
 	}
 	
+	/**
+	 * Retrieves widget columns set, converts to list and sorts by order no.
+	 * @param widget
+	 * @return sorted columns by order no.
+	 */
+	private List<AmpDaColumn> getWidgetColumnsSorted(AmpDaTable widget) {
+		if (widget.getColumns() == null){
+			widget.setColumns(new HashSet<AmpDaColumn>());
+		}
+		List<AmpDaColumn> columns = new ArrayList<AmpDaColumn>(widget.getColumns());
+		Collections.sort(columns,new ColumnOrderNoComparator());
+		return columns;
+	}
+	
+	/**
+	 * Dummymetod yet.
+	 * @return
+	 * @throws DgException
+	 */
 	private Collection<LabelValueBean> getColumnTypes() throws DgException{
 		
 		return null;
@@ -479,23 +643,24 @@ public class AdminTableWidgets extends DispatchAction {
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
 		//retrieve widget from session
 		AmpDaTable sessionWidget=getWidgetFromSession(request);
+		//retrieve columns from session
+		List<AmpDaColumn> columns = getClumnsFromSession(request);
 		//update session widget with new data from submitted form
-		sessionWidget=formToWidget(tableForm,sessionWidget);
+		sessionWidget=formToWidgetSimpleFileds(tableForm,sessionWidget);
 		
+		//Create new column
 		AmpDaColumn newColumn = formToColumn(tableForm);
 		newColumn.setId(-System.currentTimeMillis());
 		newColumn.setWidget(sessionWidget);
-		
-		//add new column to session widget
-		if (sessionWidget.getColumns()==null) sessionWidget.setColumns(new HashSet<AmpDaColumn>());
-		newColumn.setOrderNo(sessionWidget.getColumns().size());
+		newColumn.setOrderNo(columns.size());
+
+		//add to list
+		columns.add(newColumn);
+		//sort
+		Collections.sort(columns,new ColumnOrderNoComparator());
+		//also add new column to session widget. TODO do we need this?
 		sessionWidget.getColumns().add(newColumn);
-		//add new column to form column collection
-		if (tableForm.getColumns()==null) tableForm.setColumns(new ArrayList<AmpDaColumn>());
-		tableForm.getColumns().add(newColumn);
-		Collections.sort(tableForm.getColumns(),new ColumnOrderNoComparator());
-		//TODO no need for save? test
-		saveToSession(sessionWidget, request);
+		
 		return mapping.findForward("returnToEdit");
 	}
 
@@ -514,11 +679,13 @@ public class AdminTableWidgets extends DispatchAction {
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
 		//retrieve widget from session
 		AmpDaTable table=getWidgetFromSession(request);
-		//update session widget with new data from submitted form
-		table=formToWidget(tableForm,table);
+		//retrieve columns from session
+		List<AmpDaColumn> columns = getClumnsFromSession(request);
 		
-		Set<AmpDaColumn> sesColumns=table.getColumns();
-		Iterator<AmpDaColumn> colIter = sesColumns.iterator();
+		//update session widget with new data from submitted form
+		table=formToWidgetSimpleFileds(tableForm,table);
+		
+		Iterator<AmpDaColumn> colIter = columns.iterator();
 		while (colIter.hasNext()) {
 			AmpDaColumn col = colIter.next();
 			if (col.getId().equals(tableForm.getColId())){
@@ -527,16 +694,16 @@ public class AdminTableWidgets extends DispatchAction {
 			}
 		}
 		
-		List<AmpDaColumn> columnList = new ArrayList<AmpDaColumn>(sesColumns);
-		Collections.sort(columnList,new ColumnOrderNoComparator());
+		//sort with one missing orderNo,
+		Collections.sort(columns,new ColumnOrderNoComparator());
+		//and renumber to not have missing orderNo's
 		int c=0;
-		for (AmpDaColumn col : columnList) {
+		for (AmpDaColumn col : columns) {
 			col.setOrderNo(c++);
 		}
-		tableForm.setColumns(columnList);
 		
-		System.out.println(table.getCode());
 		return mapping.findForward("returnToEdit");
 	}
+
 	
 }

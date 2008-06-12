@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpDaColumn implements Serializable{
+public class AmpDaColumn implements Serializable, Comparable<AmpDaColumn>{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -20,6 +20,7 @@ public class AmpDaColumn implements Serializable{
 	private String pattern;
 	private Integer orderNo;
 	private AmpDaTable widget;
+	private Integer columnType;
 	
 	public AmpDaTable getWidget() {
 		return widget;
@@ -74,6 +75,15 @@ public class AmpDaColumn implements Serializable{
 	}
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
+	}
+	public int compareTo(AmpDaColumn c) {
+		return this.orderNo.compareTo(c.getOrderNo());
+	}
+	public Integer getColumnType() {
+		return columnType;
+	}
+	public void setColumnType(Integer columnType) {
+		this.columnType = columnType;
 	}
 	
 	

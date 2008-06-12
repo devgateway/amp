@@ -48,14 +48,11 @@
 		
 			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">
-					<td width="60%">
+					<td width="70%">
 						<strong>Name</strong>
 					</td>
 					<td width="30%">
 						<strong>Code</strong>
-					</td>
-					<td width="30%">
-						<strong>Data</strong>
 					</td>
 					<td>
 						<strong>Operations</strong>
@@ -64,13 +61,10 @@
 				<c:forEach var="widgetTable" items="${gisTableWidgetCreationForm.tables}" varStatus="stat">
 					<tr>
 						<td>
-						 	${widgetTable.name}
+							<html:link href="/gis/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">${widgetTable.name}</html:link>
 						</td>
 						<td nowrap="nowrap">
 						 	${widgetTable.code}
-						</td>
-						<td>
-							<html:link href="/gis/tableWidgetData.do~actType=startEdit~widgetId=${widgetTable.id}">Edit data</html:link>
 						</td>
 						<td nowrap="nowrap">
 						 	<digi:link href="/adminTableWidgets.do~actType=startEdit~id=${widgetTable.id}">Edit</digi:link>

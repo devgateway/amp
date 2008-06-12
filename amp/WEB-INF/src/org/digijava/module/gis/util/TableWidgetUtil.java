@@ -22,8 +22,11 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
-import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.gis.dbentity.AmpDaColumn;
 import org.digijava.module.gis.dbentity.AmpDaTable;
 import org.digijava.module.gis.dbentity.AmpDaValue;
@@ -402,6 +405,19 @@ public class TableWidgetUtil {
 		return result;
 	}
 	
+	public static String getCurrentURL(HttpServletRequest request) throws DgException{
+		SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
+		String scheme = "http";
+		int port = 80;
+		String contextPath = "";
+		String url1 = SiteUtils.getSiteURL(siteDomain, scheme, port, contextPath);
+		String url2 = RequestUtils.getFullModuleUrl(request);
+		String url3 = DgUtil.getCurrRootUrl(request);
+		System.out.println("URL1 is : "+url1);
+		System.out.println("URL2 is : "+url2);
+		System.out.println("URL3 is : "+url3);
+		return url3;
+	}
 	
 	//=======session====================
 

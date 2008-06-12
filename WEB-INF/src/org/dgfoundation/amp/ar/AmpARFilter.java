@@ -199,7 +199,14 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				Constants.CURRENT_MEMBER);
 
 		this.setAmpTeams(new TreeSet());
-
+		
+		String ampReportId = request.getParameter("ampReportId");
+		if (ampReportId == null) {
+			AmpReports ar = (AmpReports) request.getSession().getAttribute(
+			"reportMeta");
+			ampReportId = ar.getAmpReportId().toString();
+		}
+		
 		AmpApplicationSettings tempSettings = null;
 		if (tm != null) {
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
@@ -220,7 +227,18 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 		}
 		else {
-			this.setAmpTeams(TeamUtil.getAllRelatedTeamsByAccessType("Management"));
+			AmpReports ampReport=DbUtil.getAmpReport(Long.parseLong(ampReportId));
+			
+			//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
+			TreeSet teams=new TreeSet();
+			teams.add(ampReport.getOwnerId().getAmpTeam());
+			teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
+			this.setAmpTeams(teams);
+			//this.setAmpTeams(team);
+//			Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
+//
+//			if (teamAO != null && teamAO.size() > 0)
+//				this.setTeamAssignedOrgs(teamAO);
 		}
 
 		if (renderStartYear == null) {
@@ -266,12 +284,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if (widget != null)
 			this.setWidget(new Boolean(widget).booleanValue());
 
-		String ampReportId = request.getParameter("ampReportId");
-		if (ampReportId == null) {
-			AmpReports ar = (AmpReports) request.getSession().getAttribute(
-					"reportMeta");
-			ampReportId = ar.getAmpReportId().toString();
-		}
 
 		this.setAmpReportId(new Long(ampReportId));
 

@@ -41,7 +41,6 @@ import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.helper.MessageHelper;
 import org.digijava.module.message.util.AmpMessageUtil;
-import sun.misc.MessageUtils;
 
 public class AmpMessageActions extends DispatchAction {
 	

@@ -12,6 +12,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 <!--
+	var reallyDeleteColumn = 'Do you relally want to remove column? this will remove data in this column.';
+
 	function addColumn(myForm,id){
 		openURLinWindow('${contextPath}/gis/adminTableWidgets.do?actType=showColumnPopup');
 		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=edit" />
@@ -98,11 +100,11 @@
 		
 			<table id="columns_list" width="50%"  align="center" style="font-family:verdana;font-size:11px;border:1px solid silver;">
 				<tr bgColor="#d7eafd">
-					<td><strong>Name</strong></td>
+					<td><strong>Column Name</strong></td>
 					<td><strong>Code</strong></td>
 					<td><strong>CSS class</strong></td>
 					<td><strong>Pattern</strong></td>
-					<td><strong>Operations</strong></td>
+					<td colspan="3"><strong>Operations</strong></td>
 				</tr>
 				<c:forEach var="column" items="${wform.columns}" varStatus="varStat">
 					<tr>
@@ -119,12 +121,16 @@
 							${column.pattern}
 						</td>
 						<td nowrap="nowrap">
-							<digi:link href="/adminTableWidgets.do?actType=removeColumn&colId=${column.id}">Remove</digi:link>
-							<c:if test="${varStat.last != true}">
-								<digi:link href="/adminTableWidgets.do?actType=removeColumn&colId=${column.id}">Down</digi:link>
-							</c:if>
+							<digi:link onclick="return true==confirm(reallyDeleteColumn)" href="/adminTableWidgets.do?actType=removeColumn&colId=${column.id}">Remove</digi:link>
+						</td>
+						<td>
 							<c:if test="${varStat.first != true}">
-								<digi:link href="/adminTableWidgets.do?actType=removeColumn&colId=${column.id}">Up</digi:link>
+								<digi:link href="/adminTableWidgets.do?actType=reorderUp&colId=${column.id}">Up</digi:link>
+							</c:if>
+						</td>
+						<td>
+							<c:if test="${varStat.last != true}">
+								<digi:link href="/adminTableWidgets.do?actType=reorderDown&colId=${column.id}">Down</digi:link>
 							</c:if>
 						</td>
 					</tr>

@@ -22,6 +22,9 @@ import org.digijava.module.gis.util.GisUtil;
 import org.apache.ecs.xml.XMLDocument;
 import java.util.Iterator;
 import org.digijava.module.gis.dbentity.GisMapSegment;
+import java.util.StringTokenizer;
+import org.digijava.module.gis.util.SegmentData;
+import java.util.ArrayList;
 
 
 public class GisService extends Action {
@@ -46,7 +49,7 @@ public class GisService extends Action {
         GisUtil gisUtil = new GisUtil();
         ServletOutputStream sos = response.getOutputStream();
 
-        String action = request.getParameter("action");;
+        String action = request.getParameter("action");
 
         int canvasWidth = DEF_CANVAS_WIDTH;
         int canvasHeight = DEF_CANVAS_HEIGHT;
@@ -54,6 +57,8 @@ public class GisService extends Action {
         float mapRight = DEF_RIGHT_POS;
         float mapTop = DEF_TOP_POS;
         float mapBottom = DEF_BOTTOM_POS;
+
+
 
 
         String canvasWidthStr = request.getParameter("canvasWidth");
@@ -129,7 +134,12 @@ public class GisService extends Action {
 
             gisUtil.addDataToImage(g2d, mapDataSegments, -1, canvasWidth,
                                    canvasHeight, mapLeft, mapRight, mapTop,
-                                   mapBottom, false);
+                                   mapBottom, true);
+
+
+
+
+
 
             //Hilight segment
             String hilightSegmentCode = request.getParameter("hilight");
@@ -158,8 +168,6 @@ public class GisService extends Action {
             ImageIO.write(ri, "png", sos);
 
             graph.flush();
-
-            sos.close();
 
            // request.getSession().setAttribute("LOADED_IMAGE_MAP", imageMapDef.toString());
         } else if (action.equalsIgnoreCase(ACTION_GET_IMAGE_MAP)) {

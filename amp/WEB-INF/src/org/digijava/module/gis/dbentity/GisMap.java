@@ -19,6 +19,7 @@ public class GisMap {
     private long id;
     private String mapCode;
     private String mapName;
+    private String parentMapCode;
     private List <GisMapSegment> segments;
 
 
@@ -41,6 +42,10 @@ public class GisMap {
         return mapCode;
     }
 
+    public String getParentMapCode() {
+        return parentMapCode;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -55,6 +60,10 @@ public class GisMap {
 
     public void setMapCode(String mapCode) {
         this.mapCode = mapCode;
+    }
+
+    public void setParentMapCode(String parentMapCode) {
+        this.parentMapCode = parentMapCode;
     }
 
 

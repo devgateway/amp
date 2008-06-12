@@ -587,6 +587,7 @@ function commentWin(val) {
 																										</c:if>
 																									</logic:present>
 																									</field:display>
+
 																								</li>
 																								</c:if>
 																						</c:forEach>
@@ -676,9 +677,19 @@ function commentWin(val) {
                                                                                               <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
 																							</TD>
 																							</TR>
+																						
+																						<c:forEach varStatus="varSt" var="loc" items="${activity.locations}">
 
-																						<c:forEach var="loc" items="${activity.locations}">
-                                                                                            <c:if test="${not empty loc.region || not empty loc.zone ||not empty loc.woreda}">
+																							
+                                                                                            
+																							
+																							<c:if test="${not empty loc.region || not empty loc.zone ||not empty loc.woreda}">
+																							
+																							<c:set var="mapParam">${mapParam}${loc.region}/${loc.zone}/${loc.percent}</c:set>
+																							<c:if test="${not varSt.last}">
+																								<c:set var="mapParam">${mapParam}|</c:set>
+																							</c:if>
+																							
 																							<TR>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.region}" />
@@ -696,10 +707,15 @@ function commentWin(val) {
                                                                                                      </c:if>
 																								</TD>
 																							</TR>
-                                                                                                                                                                                         </c:if>
+                                                                                            </c:if>
 																						</c:forEach>
-                                                                                                                                                                               </c:if>
+																					 </c:if>
 																					</c:if>
+																					<tr>
+																						<td colspan="4">
+																							<img width="500" height="500" src="../../gis/getActivityMap.do?action=paintMap&mapCode=TZA&segmentData=${mapParam}">
+																						</td>
+																					</tr>
 																				</TABLE>
 																				</TD>
 																			</TR>

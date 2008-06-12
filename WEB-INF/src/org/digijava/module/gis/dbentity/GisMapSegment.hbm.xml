@@ -19,6 +19,7 @@
                 <property name="segmentType" column="SEGMENT_TYPE" type="int"/>
                 <property name="segmentName" column="SEGMENT_NAME" type="java.lang.String"/>
                 <property name="segmentCode" column="SEGMENT_CODE" type="java.lang.String"/>
+                <property name="parentSegmentCode" column="PARENT_SEGMENT_CODE" type="java.lang.String"/>
                 <property name="segmentDescription" column="SEGMENT_DESC" type="java.lang.String"/>
 	</class>
 </hibernate-mapping>

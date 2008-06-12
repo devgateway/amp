@@ -15,5 +15,7 @@
 
                 <property name="mapCode" column="CODE" type="java.lang.String"/>
 		<property name="mapName" column="NAME" type="java.lang.String"/>
+                <property name="parentMapCode" column="PARENT_CODE" type="java.lang.String"/>
+
 	</class>
 </hibernate-mapping>

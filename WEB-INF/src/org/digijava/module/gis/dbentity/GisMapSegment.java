@@ -28,6 +28,7 @@ public class GisMapSegment {
     private String segmentName;
     private String segmentCode;
     private String segmentDescription;
+    private String parentSegmentCode;
     private List <GisMapShape> shapes;
 
     public GisMapSegment() {
@@ -71,6 +72,10 @@ public class GisMapSegment {
         return segmentType;
     }
 
+    public String getParentSegmentCode() {
+        return parentSegmentCode;
+    }
+
     public void setSegmentId(long segmentId) {
         this.segmentId = segmentId;
     }
@@ -101,6 +106,10 @@ public class GisMapSegment {
 
     public void setSegmentDescription(String segmentDescription) {
         this.segmentDescription = segmentDescription;
+    }
+
+    public void setParentSegmentCode(String parentSegmentCode) {
+        this.parentSegmentCode = parentSegmentCode;
     }
 
 }

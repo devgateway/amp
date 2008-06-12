@@ -17,6 +17,10 @@ import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.dbentity.GisMapShape;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.ecs.xml.XML;
+import java.awt.font.LineMetrics;
+import java.awt.Font;
+import java.awt.font.GlyphVector;
+import org.digijava.module.gis.util.HilightData;
 
 /**
  * 
@@ -51,6 +55,26 @@ public class GisUtil {
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
                                boolean fill) {
+        List hilightList = null;
+        if (segmentNo > 0) {
+            hilightList = new ArrayList();
+            HilightData hData = new HilightData(segmentNo,
+                                                new ColorRGB(249, 237, 213));
+            hilightList.add(hData);
+        }
+        addDataToImage(g2d, mapData, hilightList,  canvasWidth, canvasHeight,
+                       mapLeftX, mapRightX, mapTopY, mapLowY, fill);
+
+
+    }
+
+
+
+    public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
+                               int canvasWidth, int canvasHeight,
+                               float mapLeftX,
+                               float mapRightX, float mapTopY, float mapLowY,
+                               boolean fill) {
 
         float scale = 1f; //Pixels per degree
 
@@ -67,104 +91,176 @@ public class GisUtil {
         int xOffset = (int) ( -mapLeftX * scale) + border;
         int yOffset = (int) ( -mapLowY * scale);
 
-        for (int segmentId = 0; segmentId < mapData.size();
-                             segmentId++) {
+        try {
 
-            GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
+            //Color paintColor = new Color(39, 39, 119);
+            Color paintColor = new Color(201, 153, 113);
+            Color fillColor = null;
 
-            if (segmentNo < 0 || segmentNo == gms.getSegmentId()) {
+            for (int segmentId = 0; segmentId < mapData.size();
+                                 segmentId++) {
 
-                /*
-                             g2d.setColor(new Color(250, 250, 250));
-                             CoordinateRect ccRect = getMapRectForSegment(gms);
-                             g2d.drawString(gms.getSegmentName(),
-                 xOffset + (ccRect.getLeft() + (ccRect.getRight()-ccRect.getLeft())/2) * scale,
-                           canvasHeight - (yOffset + (ccRect.getBottom() + (ccRect.getTop() - ccRect.getBottom()) / 2) * scale));
-                 */
+                GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
 
-
-
-                for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
-
-                    GisMapShape shape = (GisMapShape) gms.getShapes().get(shapeId);
-                    int[] xCoords = new int[shape.getShapePoints().size()];
-                    int[] yCoords = new int[shape.getShapePoints().size()];
-
-                    for (int mapPointId = 0;
-                                          mapPointId < shape.getShapePoints().size();
-                                          mapPointId++) {
-                        GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().get(
-                                mapPointId);
-
-                        int xCoord = xOffset +
-                                     (int) ((gmp.getLongatude()) *
-                                            scale);
-                        int yCoord = canvasHeight - border - (yOffset +
-                                (int) ((gmp.getLatitude()) *
-                                       scale));
-                        xCoords[mapPointId] = xCoord;
-                        yCoords[mapPointId] = yCoord;
-                    }
-
-                    if (fill) {
-                        Color gg = new Color(0, 0, 255);
-                        g2d.setColor(gg);
-
-                        g2d.fillPolygon(xCoords, yCoords,
-                                        shape.getShapePoints().size());
-
-                        g2d.setColor(new Color(255, 255, 255));
-                        g2d.drawPolygon(xCoords, yCoords,
-                                        shape.getShapePoints().size());
-
+                if (hDataList != null && hDataList.size() > 0) {
+                    ColorRGB cRGB = getColorForSegment((int)gms.getSegmentId(), hDataList);
+                    if (cRGB != null) {
+                        fillColor = new Color(cRGB.getRed(), cRGB.getGreen(),
+                                              cRGB.getBlue());
                     } else {
-                        g2d.setColor(new Color(200, 200, 200));
-                        g2d.drawPolygon(xCoords, yCoords,
-                                        shape.getShapePoints().size());
-                        g2d.setColor(new Color(200, 200, 200, 50));
-                        g2d.fillPolygon(xCoords, yCoords,
-                                        shape.getShapePoints().size());
+                        fillColor = paintColor;
                     }
+                } else if (fill && fillColor == null) {
+                    fillColor = paintColor;
                 }
-            }
-        }
 
-        //make grid
-        if (segmentNo < 0) {
-            g2d.setColor(new Color(200, 200, 200, 40));
-            for (float paralels = -90; paralels <= 90; paralels += 10) {
+
+
+                    for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
+
+                        GisMapShape shape = (GisMapShape) gms.getShapes().get(shapeId);
+                        int[] xCoords = new int[shape.getShapePoints().size()];
+                        int[] yCoords = new int[shape.getShapePoints().size()];
+
+                        for (int mapPointId = 0;
+                                              mapPointId < shape.getShapePoints().size();
+                                              mapPointId++) {
+                            GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().get(
+                                    mapPointId);
+
+                            int xCoord = xOffset +
+                                         (int) ((gmp.getLongatude()) *
+                                                scale);
+                            int yCoord = canvasHeight - border - (yOffset +
+                                    (int) ((gmp.getLatitude()) *
+                                           scale));
+                            xCoords[mapPointId] = xCoord;
+                            yCoords[mapPointId] = yCoord;
+                        }
+
+                        if (fill) {
+                            Color gg = fillColor;
+                            g2d.setColor(gg);
+
+                            g2d.fillPolygon(xCoords, yCoords,
+                                            shape.getShapePoints().size());
+
+                            g2d.setColor(new Color(0, 0, 0, 70));
+                            g2d.drawPolygon(xCoords, yCoords,
+                                            shape.getShapePoints().size());
+
+                        } else {
+                            /*
+                            g2d.setColor(new Color(39, 39, 119));
+                            g2d.fillPolygon(xCoords, yCoords,
+                                            shape.getShapePoints().size());
+*/
+
+                             g2d.setColor(new Color(0, 0, 0, 50));
+                            g2d.drawPolygon(xCoords, yCoords,
+                                            shape.getShapePoints().size());
+
+                        }
+                    }
+
+
+
+                    GlyphVector glv = g2d.getFont().createGlyphVector(g2d.getFontRenderContext(), gms.getSegmentName());
+
+
+                                 CoordinateRect ccRect = getMapRectForSegment(gms);
+
+                                 g2d.setColor(new Color(0, 0, 0));
+                                 g2d.drawString(gms.getSegmentName(),
+                                                xOffset +
+                                                (ccRect.getLeft() +
+                                                 (ccRect.getRight() - ccRect.getLeft()) / 2) * scale -
+                                                (int) (glv.getVisualBounds().getWidth() / 2) + 1,
+                                                canvasHeight -
+                                                (yOffset +
+                                                 (ccRect.getBottom() +
+                                                  (ccRect.getTop() - ccRect.getBottom()) / 2) * scale) + 1);
+
+                                 g2d.setColor(new Color(255, 255, 255));
+                                 g2d.drawString(gms.getSegmentName(),
+                                                xOffset +
+                                                (ccRect.getLeft() +
+                                                 (ccRect.getRight() - ccRect.getLeft()) / 2) * scale -
+                                                (int) (glv.getVisualBounds().getWidth() / 2),
+                                                canvasHeight -
+                                                (yOffset +
+                                                 (ccRect.getBottom() +
+                                                  (ccRect.getTop() - ccRect.getBottom()) / 2) * scale));
+
+
+
+
+
+            }
+
+            //make grid
+
+                g2d.setColor(new Color(57, 57, 128, 80));
+                for (float paralels = -90; paralels <= 90; paralels += 10) {
+                    g2d.drawLine(border,
+                                 canvasHeight - border -
+                                 (yOffset + (int) ((paralels) * scale)),
+                                 canvasWidth - border,
+                                 canvasHeight - border -
+                                 (yOffset + (int) ((paralels) * scale)));
+                }
+
+                for (float meridians = -180; meridians <= 180; meridians += 10) {
+                    g2d.drawLine(xOffset + (int) (meridians * scale),
+                                 border,
+                                 xOffset + (int) (meridians * scale),
+                                 canvasHeight - border);
+                }
+
+                g2d.setColor(new Color(130, 130, 164, 80));
+
                 g2d.drawLine(border,
-                             canvasHeight - border - (yOffset + (int) ((paralels) * scale)),
+                             canvasHeight - border - yOffset,
                              canvasWidth - border,
-                             canvasHeight - border - (yOffset + (int) ((paralels) * scale)));
-            }
+                             canvasHeight - border - yOffset);
 
-            for (float meridians = -180; meridians <= 180; meridians += 10) {
-                g2d.drawLine(xOffset + (int) (meridians * scale),
+                g2d.drawLine(xOffset,
                              border,
-                             xOffset + (int) (meridians * scale),
+                             xOffset,
                              canvasHeight - border);
-            }
 
-            g2d.setColor(new Color(200, 200, 200, 77));
 
-            g2d.drawLine(border,
-                         canvasHeight - border - yOffset,
-                         canvasWidth - border,
-                         canvasHeight - border - yOffset);
+            //make border
 
-            g2d.drawLine(xOffset,
-                         border,
-                         xOffset,
-                         canvasHeight - border);
+            g2d.setColor(new Color(0, 0, 100));
+
+            g2d.fillRect(0, 0, canvasWidth, border - 1);
+            g2d.fillRect(0, 0, border - 1, canvasHeight);
+            g2d.fillRect(canvasWidth - border + 1, 0, canvasWidth, canvasHeight);
+            g2d.fillRect(0, canvasHeight - border + 1, canvasWidth, canvasHeight);
+
+            g2d.setColor(new Color(200, 200, 200, 255));
+            g2d.drawRect(border - 3, border - 3, canvasWidth - border * 2 + 5,
+                         canvasHeight - border * 2 + 5);
+        } catch (Exception ex) {
+            String ggg = "ggg";
         }
 
-        //make border
-        g2d.setColor(new Color(200, 200, 200, 255));
-        g2d.drawRect(border - 3, border - 3, canvasWidth - border * 2 + 5, canvasHeight - border * 2 + 5);
 
     }
 
+    private ColorRGB getColorForSegment (int segmentCode, List hilightData) {
+        ColorRGB retVal = null;
+        Iterator it = hilightData.iterator();
+        while (it.hasNext()) {
+            HilightData hData = (HilightData) it.next();
+            if (hData.getSegmentId() == segmentCode) {
+                retVal = hData.getColor();
+                break;
+            }
+        }
+        return retVal;
+    }
 
     public List readMapDataFromCSV(String fileName) throws Exception {
 
@@ -395,5 +491,16 @@ public class GisUtil {
         return retVal;
     }
 
+    public List getSegmentsForParent (List mapData, String parentCode) {
+        List retVal = new ArrayList();
+        Iterator segmentIt = mapData.iterator();
+        while (segmentIt.hasNext()) {
+            GisMapSegment seg = (GisMapSegment) segmentIt.next();
+            if (seg.getParentSegmentCode().equalsIgnoreCase(parentCode)) {
+                retVal.add(seg);
+            }
+        }
+        return retVal;
+    }
 
 }

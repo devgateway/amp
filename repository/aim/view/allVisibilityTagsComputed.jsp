@@ -191,7 +191,7 @@
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Funding Organizations"></field:display> 
-<field:display name="Add Components Button" feature="Components"></field:display> 
+<field:display name="Add Components Button" feature="Activity - Component Step"></field:display> 
 <field:display name="Add Disbursement Button" feature="Funding Organizations"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 
 <field:display name="Contracting Add Disbursement" feature="Contracting"></field:display> 
@@ -242,25 +242,25 @@
 <field:display name="Comments Current Value" feature="Activity"></field:display> 
 <field:display name="Comments Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Comments Target Value" feature="Activity"></field:display> 
-<field:display name="Component Name" feature="Components"></field:display> 
-<field:display name="Component description" feature="Components"></field:display> 
+<field:display name="Component Name" feature="Activity - Component Step"></field:display> 
+<field:display name="Component description" feature="Activity - Component Step"></field:display> 
 <field:display name="Componente" feature="Planning"></field:display> 
-<field:display name="Components Actual/Planned Commitments" feature="Components"></field:display> 
-<field:display name="Components Actual/Planned Disbursements" feature="Components"></field:display> 
-<field:display name="Components Actual/Planned Expenditures" feature="Components"></field:display> 
-<field:display name="Components Currency Commitments" feature="Components"></field:display> 
-<field:display name="Components Currency Disbursements" feature="Components"></field:display> 
-<field:display name="Components Currency Expenditures" feature="Components"></field:display> 
-<field:display name="Components Date Commitments" feature="Components"></field:display> 
-<field:display name="Components Date Disbursements" feature="Components"></field:display> 
-<field:display name="Components Date Expenditures" feature="Components"></field:display> 
-<field:display name="Components Grand Total Commitments" feature="Components"></field:display> 
-<field:display name="Components Grand Total Disbursements" feature="Components"></field:display> 
-<field:display name="Components Grand Total Expenditures" feature="Components"></field:display> 
-<field:display name="Components Physical Progress" feature="Components"></field:display> 
-<field:display name="Components Total Amount Commitments" feature="Components"></field:display> 
-<field:display name="Components Total Amount Disbursements" feature="Components"></field:display> 
-<field:display name="Components Total Amount Expenditures" feature="Components"></field:display> 
+<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Currency Commitments" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Currency Disbursements" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Currency Expenditures" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Date Commitments" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Date Disbursements" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Date Expenditures" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Grand Total Commitments" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"></field:display> 
+<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step"></field:display> 
 <field:display name="Conditions for Fund Release" feature="Funding Organizations"></field:display> 
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display> 
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
@@ -357,7 +357,7 @@
 <field:display name="Donor Title" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Type" feature="Funding Organizations"></field:display> 
 <field:display name="Draft" feature="Identification"></field:display> 
-<field:display name="Edit Components Link" feature="Components"></field:display> 
+<field:display name="Edit Components Link" feature="Activity - Component Step"></field:display> 
 <field:display name="Edit Contract" feature="Contracting"></field:display> 
 <field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost"></field:display> 
 <field:display name="Edit Funding Link" feature="Regional Funding"></field:display> 
@@ -389,9 +389,9 @@
 <field:display name="Government Organization" feature="Government Contact Information"></field:display> 
 <field:display name="Government Phone Number" feature="Government Contact Information"></field:display> 
 <field:display name="Government Title" feature="Government Contact Information"></field:display> 
-<field:display name="Grand Total Commitments" feature="Components"></field:display> 
+<field:display name="Grand Total Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Grand Total Cost" feature="Costing"></field:display> 
-<field:display name="Grand Total Disbursements" feature="Components"></field:display> 
+<field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Contracting IB" feature="Contracting"></field:display> 
 <field:display name="Contracting IFIs" feature="Contracting"></field:display> 
 <field:display name="Contracting INV" feature="Contracting"></field:display> 
@@ -499,7 +499,7 @@
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Contracting Regional Amount" feature="Contracting"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
-<field:display name="Remove Components Button" feature="Components"></field:display> 
+<field:display name="Remove Components Button" feature="Activity - Component Step"></field:display> 
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display> 
 <field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display> 
 <field:display name="Remove Fundings" feature="Regional Funding"></field:display> 

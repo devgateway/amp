@@ -94,7 +94,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Calendar" module="Calendar"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Component Report" module="Reports"></feature:display>
-<feature:display name="Components" module="Components"></feature:display>
+<feature:display name="Activity - Component Step" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>
 <feature:display name="Costing" module="Activity Costing"></feature:display>
@@ -195,7 +195,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Add Actors Link" feature="Issues"></field:display>
 <field:display name="Add Commitment Button" feature="Funding Organizations"></field:display>
-<field:display name="Add Components Button" feature="Components"></field:display>
+<field:display name="Add Components Button" feature="Activity - Component Step"></field:display>
 <field:display name="Add Disbursement Button" feature="Funding Organizations"></field:display>
 <field:display name="Add Documents Button" feature="Related Documents"></field:display>
 <field:display name="Add Expenditure Button" feature="Expenditures"></field:display>
@@ -229,24 +229,24 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Comments Current Value" feature="Activity"></field:display>
 <field:display name="Comments Revised Target Value" feature="Activity"></field:display>
 <field:display name="Comments Target Value" feature="Activity"></field:display>
-<field:display name="Component Name" feature="Components"></field:display>
-<field:display name="Component description" feature="Components"></field:display>
-<field:display name="Components Actual/Planned Commitments" feature="Components"></field:display>
-<field:display name="Components Actual/Planned Disbursements" feature="Components"></field:display>
-<field:display name="Components Actual/Planned Expenditures" feature="Components"></field:display>
-<field:display name="Components Currency Commitments" feature="Components"></field:display>
-<field:display name="Components Currency Disbursements" feature="Components"></field:display>
-<field:display name="Components Currency Expenditures" feature="Components"></field:display>
-<field:display name="Components Date Commitments" feature="Components"></field:display>
-<field:display name="Components Date Disbursements" feature="Components"></field:display>
-<field:display name="Components Date Expenditures" feature="Components"></field:display>
-<field:display name="Components Grand Total Commitments" feature="Components"></field:display>
-<field:display name="Components Grand Total Disbursements" feature="Components"></field:display>
-<field:display name="Components Grand Total Expenditures" feature="Components"></field:display>
-<field:display name="Components Physical Progress" feature="Components"></field:display>
-<field:display name="Components Total Amount Commitments" feature="Components"></field:display>
-<field:display name="Components Total Amount Disbursements" feature="Components"></field:display>
-<field:display name="Components Total Amount Expenditures" feature="Components"></field:display>
+<field:display name="Component Name" feature="Activity - Component Step"></field:display>
+<field:display name="Component description" feature="Activity - Component Step"></field:display>
+<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"></field:display>
+<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"></field:display>
+<field:display name="Components Currency Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Components Currency Disbursements" feature="Activity - Component Step"></field:display>
+<field:display name="Components Currency Expenditures" feature="Activity - Component Step"></field:display>
+<field:display name="Components Date Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Components Date Disbursements" feature="Activity - Component Step"></field:display>
+<field:display name="Components Date Expenditures" feature="Activity - Component Step"></field:display>
+<field:display name="Components Grand Total Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Components Grand Total Disbursements" feature="Activity - Component Step"></field:display>
+<field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display>
+<field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display>
+<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"></field:display>
+<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step"></field:display>
 <field:display name="Conditions for Fund Release" feature="Funding Organizations"></field:display>
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display>
 <field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency"></field:display>
@@ -311,7 +311,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Donor Phone Number" feature="Donor Contact Information"></field:display>
 <field:display name="Donor Title" feature="Donor Contact Information"></field:display>
 <field:display name="Draft" feature="Identification"></field:display>
-<field:display name="Edit Components Link" feature="Components"></field:display>
+<field:display name="Edit Components Link" feature="Activity - Component Step"></field:display>
 <field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Edit Funding Link" feature="Regional Funding"></field:display>
 <field:display name="Environment" feature="Cross Cutting Issues"></field:display>
@@ -341,8 +341,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Government Organization" feature="Government Contact Information"></field:display>
 <field:display name="Government Phone Number" feature="Government Contact Information"></field:display>
 <field:display name="Government Title" feature="Government Contact Information"></field:display>
-<field:display name="Grand Total Commitments" feature="Components"></field:display>
-<field:display name="Grand Total Disbursements" feature="Components"></field:display>
+<field:display name="Grand Total Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display>
 <field:display name="Implementation Level" feature="Location"></field:display>
 <field:display name="Implementation Location" feature="Location"></field:display>
 <field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency"></field:display>
@@ -424,7 +424,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Regional Group Add Organizations Button" feature="Regional Group"></field:display>
 <field:display name="Regional Group Remove Organizations Button" feature="Regional Group"></field:display>
 <field:display name="Remove Actors Button" feature="Issues"></field:display>
-<field:display name="Remove Components Button" feature="Components"></field:display>
+<field:display name="Remove Components Button" feature="Activity - Component Step"></field:display>
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display>
 <field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Remove Fundings" feature="Regional Funding"></field:display>
@@ -606,3 +606,21 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>
+
+
+	<feature:display name="Admin - Component" module="Components"></feature:display>
+		<field:display name="Title" feature="Admin - Component"></field:display>
+		<field:display name="Code" feature="Admin - Component"></field:display>
+		<field:display name="Type" feature="Admin - Component"></field:display>
+		<field:display name="Description" feature="Admin - Component"></field:display>
+		<field:display name="Save Button" feature="Admin - Component"></field:display>
+		<field:display name="Cancel Button" feature="Admin - Component"></field:display>
+
+	<feature:display name="Admin - Component Type" module="Components"></feature:display>
+		<field:display name="Name" feature="Admin - Component Type"></field:display>
+		<field:display name="Code" feature="Admin - Component Type"></field:display>
+		<field:display name="Enable checkbox" feature="Admin - Component Type"></field:display>
+		<field:display name="Save Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Cancel Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Close Button" feature="Admin - Component Type"></field:display>
+		

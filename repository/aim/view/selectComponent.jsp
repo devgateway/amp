@@ -55,13 +55,17 @@ if (document.aimEditActivityForm.componentTitle.value!=-1){
   
   }
   
+<feature:display name="Admin - Component Type" module="Components">
   if (document.aimEditActivityForm.selectedType.value==-1){
    document.aimEditActivityForm.newCompoenentName.disabled=true;
     document.aimEditActivityForm.newCompoenentName.style.bgColor="#EEEEEE";
   }else{
+</feature:display>
    document.aimEditActivityForm.newCompoenentName.disabled=false;
    document.aimEditActivityForm.newCompoenentName.style.bgColor="#EEEEEE";
+   <feature:display name="Admin - Component Type" module="Components">
   }
+</feature:display>
   
 }
 
@@ -75,11 +79,13 @@ function addComponent(){
 		return false;
 	}
 	
+	<feature:display name="Admin - Component Type" module="Components">
 	if (document.aimEditActivityForm.selectedType.value=="-1"){
 		var msg="<digi:trn key="aim:msgErrorSelctType">You have to select the component type</digi:trn>"
 		alert(msg);
 		return false;
 	}
+	</feature:display>
   	document.aimEditActivityForm.action = "<%= addNewComponent%>";
   	document.aimEditActivityForm.submit();
 }
@@ -117,17 +123,19 @@ function addComponent(){
 							<td>&nbsp;</td>
 							<td>&nbsp;</td>
 						</tr>
-						<tr>
-							<td align="right">Component Type</td>
-							<td><html:select property="selectedType"
-								styleClass="inp-text" onchange="switchType()">
-								<html:option value="-1">
-									<digi:trn key="aim:selecType">-Select Type-</digi:trn>
-								</html:option>
-								<html:optionsCollection property="allCompsType" label="name"
-									value="type_id" />
-							</html:select></td>
-						</tr>
+						<feature:display name="Admin - Component Type" module="Components">
+							<tr>
+								<td align="right">Component Type</td>
+								<td><html:select property="selectedType"
+									styleClass="inp-text" onchange="switchType()">
+									<html:option value="-1">
+										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
+									</html:option>
+									<html:optionsCollection property="allCompsType" label="name"
+										value="type_id" />
+								</html:select></td>
+							</tr>
+						</feature:display>						
 						<tr>
 							<td align="right"><a
 								title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">

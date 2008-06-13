@@ -405,20 +405,6 @@ public class TableWidgetUtil {
 		return result;
 	}
 	
-	public static String getCurrentURL(HttpServletRequest request) throws DgException{
-		SiteDomain siteDomain = RequestUtils.getSiteDomain(request);
-		String scheme = "http";
-		int port = 80;
-		String contextPath = "";
-		String url1 = SiteUtils.getSiteURL(siteDomain, scheme, port, contextPath);
-		String url2 = RequestUtils.getFullModuleUrl(request);
-		String url3 = DgUtil.getCurrRootUrl(request);
-		System.out.println("URL1 is : "+url1);
-		System.out.println("URL2 is : "+url2);
-		System.out.println("URL3 is : "+url3);
-		return url3;
-	}
-	
 	//=======session====================
 
 	

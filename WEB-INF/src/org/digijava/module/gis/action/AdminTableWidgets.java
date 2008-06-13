@@ -259,7 +259,6 @@ public class AdminTableWidgets extends DispatchAction {
 
 		Collection<AmpDaTable> tables=TableWidgetUtil.getAllTableWidgets();
 		tableForm.setTables(tables);
-		tableForm.setName(TableWidgetUtil.getCurrentURL(request));
 		
 		return mapping.findForward("forward");
 	}

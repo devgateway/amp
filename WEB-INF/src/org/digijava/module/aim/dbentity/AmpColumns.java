@@ -17,6 +17,7 @@ public class AmpColumns  implements Serializable, Comparable
 	private String cellType;
 	private String extractorView;
 	private Set filters;
+	private String tokenExpression;
 	private String relatedContentPersisterClass;
 	
 
@@ -97,5 +98,11 @@ public class AmpColumns  implements Serializable, Comparable
 	}
 	public void setFilters(Set filters) {
 		this.filters = filters;
+	}
+	public String getTokenExpression() {
+		return tokenExpression;
+	}
+	public void setTokenExpression(String tokenExpression) {
+		this.tokenExpression = tokenExpression;
 	}
 }

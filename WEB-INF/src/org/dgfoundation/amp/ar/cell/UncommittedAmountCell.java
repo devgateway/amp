@@ -6,7 +6,7 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.exprlogic.ExampleLogicalToken;
+import org.dgfoundation.amp.exprlogic.TokenRepository;
 import org.digijava.module.aim.logic.Logic;
 
 /**
@@ -44,7 +44,7 @@ public class UncommittedAmountCell extends AmountCell {
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			ret+=ExampleLogicalToken.uncommittedLogicalToken.evaluate(element);	
+			ret+=TokenRepository.uncommittedLogicalToken.evaluate(element);	
 		}
 		return ret;
 	}

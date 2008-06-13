@@ -201,7 +201,7 @@ public class AmpReportGenerator extends ReportGenerator {
 							columnName, rawColumns, this });
 				}
 
-				
+				ce.setRelatedColumn(col);
 				Column column = ce.populateCellColumn();
 				
 				

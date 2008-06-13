@@ -6,7 +6,7 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.exprlogic.ExampleLogicalToken;
+import org.dgfoundation.amp.exprlogic.TokenRepository;
 import org.digijava.module.aim.logic.Logic;
 
 /**
@@ -33,7 +33,7 @@ public class UndisbursedAmountCell extends AmountCell {
 	}
 
 	/**
-	 * Overider of the normal behaviour of AmountCell.getAmount. This will take into consideration
+	 * Overrider of the normal behavior of AmountCell.getAmount. This will take into consideration
 	 * only undisbursed related merged cells and will also make the required calculations
 	 * @return Returns the amount.
 	 */
@@ -44,7 +44,7 @@ public class UndisbursedAmountCell extends AmountCell {
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			ret+=ExampleLogicalToken.undisbursedLogicalToken.evaluate(element);	
+			ret+=TokenRepository.undisbursedLogicalToken.evaluate(element);	
 		}
 		return ret;
 	}

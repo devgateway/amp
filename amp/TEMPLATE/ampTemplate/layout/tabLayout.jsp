@@ -78,13 +78,12 @@
 
 			<TR height="15">
 
-				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
-
-					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="top" align="top">
+				<TD width="100%" align="center" bgcolor="#376091">
+					<TABLE cellSpacing=0 cellPadding=0 width="98%">
 
 						<TBODY>
 
-						  	<TR bgColor=#5a5a58 height="15">
+						  	<TR>
 
 						   	<TD align="left" vAlign="center">
 
@@ -98,11 +97,6 @@
 
 							</td>
 
-							  	<TD width="20" align="right" vAlign="top">
-
-										<digi:insert attribute="dropdownLangSwitch" />
-
-								</TD>
 
 							</TR>
 

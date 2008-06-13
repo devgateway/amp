@@ -29,7 +29,7 @@
 
 <logic:equal name="columnNo" value="0">
 <logic:present name="currentMember" scope="session">
-<a href='/aim/selectActivityTabs.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
+<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 </logic:present>
 <logic:notPresent name="currentMember" scope="session">
 <a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">

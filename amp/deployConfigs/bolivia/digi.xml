@@ -141,6 +141,9 @@
             <description>Daily Currency Rates Service</description>
      </service>
     
+    <service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
+            <description>This service will delete the audit log</description>
+    </service>
 <!--
     <service id="jcrRespositoryService" class="org.digijava.module.dm.service.RMIDocumentManagementService">
         <description>This service provides RMI access to external JCR repository</description>

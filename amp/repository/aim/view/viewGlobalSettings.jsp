@@ -9,6 +9,9 @@
 <%@ page import="java.util.Map"%>
 
 
+<%@page import="org.digijava.module.aim.helper.GlobalSettings"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="java.util.Date"%>
 <script langauage="JavaScript"><!--
 function saveClicked() {
 
@@ -187,29 +190,35 @@ function saveAllSettings(){
                           <td bgcolor="#fefefe">
                             <b>
                               <digi:trn key="aim:systemName">
-                              Setting Name                              </digi:trn>
-                            </b>                          </td>
+                              Setting Name                              
+                              </digi:trn>
+                            </b>                          
+                           </td>
                           <td bgcolor="#fefefe">
                             <b>
                               <digi:trn key="aim:currentValue">
-                              Current Value                              </digi:trn>
-                            </b>                          </td>
+                              Current Value                              
+                              </digi:trn>
+                            </b>                          
+                           </td>
                           <td bgcolor="#fefefe">
                             <b>
                               <digi:trn key="aim:newValue">
-                              New Value                              </digi:trn>
-                            </b>                          </td>
-                          <td bgcolor="#fefefe">&nbsp;                          </td>
+                              New Value                              
+                              </digi:trn>
+                            </b>                          
+                            </td>
+                          <td bgcolor="#fefefe">&nbsp;                          
+                          </td>
 							</tr>
                            <%int g_range=0, g_year=0; %>
                           <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
                             <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
-                            type="org.digijava.module.aim.dbentity.AmpGlobalSettings	">
+                            type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
  
                             <tr>
                               <td bgcolor="#ffffff">
-
-                                <c:set var="globaLset">
+								<c:set var="globaLset">
                                   <bean:write name="globalSett" property="globalSettingsName"/>
                                 </c:set>
                                 <digi:trn key="aim:Global:${globaLset}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>
@@ -238,10 +247,10 @@ function saveAllSettings(){
                                     <digi:trn key='${fn:replace(newKey, " ", "_")}'>
                                       <%out.write(currentValue);%>
                                     </digi:trn>
-                                </b>                              </td>
+                                </b>                              
+                              </td>
 
-
-                              <digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
+								<digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
                                 <td bgcolor="#ffffff" >
                                   <html:hidden property="globalId" name="globalSett"/>
                                   <html:hidden property="globalSettingsName" name="globalSett"/>
@@ -332,7 +341,7 @@ function saveAllSettings(){
 	                                    				} 
 	                                    			%>
 	                                    		</select>
-	                                    	</c:when>
+	                                    	</c:when>	
 	                                    	<c:when test='${type == "t_daily_currency_update_hour"}'>
 	                                    		<% 
 	                                    			String hourId		= "hour" + globalSett.getGlobalId() ;
@@ -448,10 +457,9 @@ function saveAllSettings(){
 	                                    				} 
 	                                    			%>
 	                                    		</select>
-	                                    	
 	                                    	</c:when>
-
-	                                    	<c:when test='${type == "t_year_default_start" || type == "t_year_default_end"}'>
+											
+											<c:when test='${type == "t_year_default_start" || type == "t_year_default_end"}'>
 	                                    		<% 
 		                                    		String dateValues	= globalSett.getGlobalSettingsValue();
 		                                    		int default_year		= Integer.parseInt(dateValues);
@@ -472,9 +480,40 @@ function saveAllSettings(){
 	                                    				} 
 	                                    			%>
 	                                    		</select>
-	                                    	
 	                                    	</c:when>
+	                                    	<c:when test='${type == "t_audit_trial_clenaup"}'>
+	                                    	<% 
+		                                    	String peridiodvalues	= globalSett.getGlobalSettingsValue();
+		                                    	int selected		= Integer.parseInt(peridiodvalues);
+	                                    	%>
+												<select styleClass="inp-text" name="gsfValue">
+												<option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
+												<% for (int k=30; k<=90; k+=30) {
+	                                    					if ( k == selected ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=k %>
+	                                    						<digi:trn key="aim:globalSettings:Days"> 
+	                                    							Days
+	                                    						</digi:trn>
+	                                    					</option>
+	                                    						 
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=k %>
+		                                    					<digi:trn key="aim:globalSettings:Days"> 
+	                                    							Days
+	                                    						</digi:trn>
+		                                    				</option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    		%>
+												</select>
+											</c:when>
 	                                    	
+											
 	                                    	<c:when test='${type == "t_Boolean"}'>
 	                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 	                                    			<html:option value="true">true</html:option>
@@ -485,12 +524,15 @@ function saveAllSettings(){
 	                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 	                                      	</c:otherwise>
                                       	</c:choose>
-                                    </logic:empty>                                </td>
+                                    </logic:empty>                                
+                                   </td>
                                 <td bgcolor="#f4f4f2">
                                   <html:submit property="save">
                                     <digi:trn key="aim:save">
-                                    save                                    </digi:trn>
-                                  </html:submit>                                </td>
+                                    	save                                    
+                                    </digi:trn>
+                                  </html:submit>                                
+                                  </td>
                               </digi:form>
                             </tr>
                             </logic:iterate>

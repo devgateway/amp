@@ -11,17 +11,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/amp_builder.launch</value>
-				</dictionary>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
-			<triggers>full,incremental,</triggers>
-			<arguments>
-				<dictionary>
-					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/org.jboss.ide.eclipse.packaging.core.PackagingBuilder.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/amp.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>

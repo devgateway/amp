@@ -19,22 +19,31 @@
 </script>
 
 
-<table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
-<tr><td width="100%" valign="top" align="left">
-<jsp:include page="/repository/aim/view/header.jsp" flush="true" />
-</td>
-</tr>
+<table width="100%" height="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
 <form action="/j_acegi_security_check" method="post"">
 <table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=757>
 	<tr>
-		<td class=r-dotted-lg width=5>&nbsp;
-		</td>
-		<td align=left class=r-dotted-lg vAlign=top width=520><br>
+		<td align=left vAlign=top width=520><br>
 			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>
 					<td colspan="2">
+
+                    <%
+					
+					String logoutMessage = (String)session.getAttribute("showLogoutMessage");
+					if(logoutMessage != null && !logoutMessage.equals("")){
+					%>
+<div align=center class=f-names noWrap>
+                    <digi:trn key="aim:ampLogout">
+                   		You have been logged out
+                    </digi:trn>
+                   </div>
+                    <%
+						session.removeAttribute("showLogoutMessage");
+					}
+					%>
 						<digi:errors/>
 						<c:if test="${param['loginError'] != null}">
 						  <bean:message key="errors.header" />
@@ -71,8 +80,7 @@
 				</tr>
 				<tr>
 					<td width="3%">&nbsp;</td>
-					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+					<td align=right valign="top" class=f-names noWrap width="31%">
 							<digi:trn key="aim:registeredUserLogIn">
 							Registered <u>U</u>ser Log In:
 							</digi:trn>
@@ -81,7 +89,7 @@
 						<input type="text" name="j_username" size="20" class="inp-text" accesskey="u"/> &nbsp;
 						<font color="red"><br>
 						<digi:trn key="aim:userIdExample1">
-						e.g. yourname@emailaddress.com
+						yourname@emailaddress.com
 						</digi:trn>
 						</font>
 					</td>
@@ -89,7 +97,6 @@
 				<tr>
 					<td width="3%">&nbsp;</td>
 					<td align=right class=f-names noWrap width="31%">
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 						<digi:trn key="aim:password">
 						<u>P</u>assword:
 						</digi:trn>
@@ -106,20 +113,9 @@
 					</td>
 				</tr>
 
-<% String publicView=FeaturesUtil.getGlobalSettingValue("Public View"); 
-if("On".equals(publicView)) { %>
-				<tr>
-					<td>&nbsp;</td>				
-					<td>&nbsp;</td>
-					<td align="left">
-						<input type="button" style="background-color:#8FBCFF" class="dr-menu" value="<digi:trn key='aim:viewPublicPortfolio'>View Public Portfolio</digi:trn>" onclick="javascript:window.location='/aim/reportsPublicView.do'"/>
-					</td>
-				</tr>
-<% } %>
-				<tr>
-				</tr>
 		          <td>&nbsp;</td>
-                  <td colSpan=2>
+		          <td>&nbsp;</td>
+                  <td >
                     <c:set var="trn1">
                       <digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have forgot your password</digi:trn>
                     </c:set>
@@ -137,16 +133,6 @@ if("On".equals(publicView)) { %>
                       Change Password
                       </digi:trn>
                     </digi:link>
-                    <br/>
-                    <br/>
-                    <c:set var="trn3">
-                      <digi:trn key="aim:clickToRegister">Click here to register</digi:trn>
-                    </c:set>
-                    <digi:link href="/showRegisterUser.do" module="aim" title="${trn3}">
-                      <digi:trn key="aim:newUserRegister">
-                      New user register
-                      </digi:trn>
-                    </digi:link>
                   </td>
     </tr>
 				<tr>
@@ -155,27 +141,25 @@ if("On".equals(publicView)) { %>
 				</tr>
 			</table>
 		</td>
-		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top>
+		<td bgcolor="#dbe5f1" vAlign=top>
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
-		          <td class=r-dotted-lg-buttom vAlign=top><br>
+		          <td vAlign=top><br>
 		          	&nbsp;
       	     	</td>
         		</tr>
         		<tr>
-		          <td vAlign=top>&nbsp;</td>
-        		</tr>
-        		<tr>
-	          	<td class=r-dotted-lg-buttom vAlign=top>
-						<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
-						 <digi:trn key="aim:loginWarning">
-						 You are signing-in to one or more secure applications for
-	        		     official business. You have been granted the right to access these
-    	      		 	 applications and the information contained in them to facilitate
-        	   			 your official business. Your accounts and passwords are your
-						 responsibility. Do not share them with anyone.
+	          	<td vAlign=top >
+<strong>                        <digi:trn key="aim:loginWarning1">
+                        AMP is used to report and manage aid flows from donors.<br> 
+                        This site is accessible to registered users only. 
+                        </digi:trn>
+<br><br>
+						 <digi:trn key="aim:loginWarning2">
+						By attempting to log in you are confirming that you are registered and qualified to access one or more secure applications for official business.
+
 						 </digi:trn>
-						<BR><BR>
+</strong>						<BR><BR>
           		</td>
   				</tr>
         		<tr>

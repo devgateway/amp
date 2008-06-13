@@ -58,3 +58,19 @@
 
 	</logic:iterate>
 </logic:equal>
+
+<logic:equal name="style" value="settingsList">
+	<I>${listable.beanName}</I>
+	<logic:iterate id="prop" name="bean" property="propertiesMap">
+    	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
+            <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>:
+            <logic:equal name="prop" property="value.class.simpleName" value="Boolean">
+                <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+            </logic:equal>
+            <logic:notEqual name="prop" property="value.class.simpleName"
+                value="Boolean">
+                <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+            </logic:notEqual>|
+        </c:if>
+	</logic:iterate>
+</logic:equal>

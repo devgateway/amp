@@ -118,13 +118,6 @@
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 
-<tr><td width="100%" valign="top" align="left">
-
-<jsp:include page="header.jsp" flush="true" />
-
-</td>
-
-</tr>
 
 <tr><td width="100%" valign="top" align="left">
 
@@ -132,11 +125,11 @@
 
 	<tr>
 
-		<td class=r-dotted-lg width=14>&nbsp;
+		<td width=14>&nbsp;
 
 		</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=520><br>
+		<td align=left vAlign=top width=520><br>
 
 			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 
@@ -541,15 +534,14 @@
 
 		</td>
 
-		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top>
+		<td bgcolor="#dbe5f1"   vAlign=top>
 
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
 
       		 <tr>
 
-		          <td class=r-dotted-lg-buttom vAlign=top><br>
+		          <td  vAlign=top><br>
 
-						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 						<c:set var="translation">
 
@@ -581,10 +573,9 @@
 
         		<tr>
 
-	          	<td class=r-dotted-lg-buttom vAlign=top>
+	          	<td  vAlign=top>
 
-						<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
-
+<strong>
 						<digi:trn key="aim:loginWarning">
 
 						 You are signing-in to one or more secure applications for
@@ -598,7 +589,7 @@
 						 responsibility. Do not share them with anyone.
 
 						 </digi:trn		>
-
+</strong>
 						<BR><BR>
 
           		</td>
@@ -620,7 +611,7 @@
 	</tr>
 
 </table>
-
+<br /><br />
 </td></tr>
 
 </table>

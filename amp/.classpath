@@ -47,9 +47,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/optional.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/poi-2.5.1-final-20040804.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-2.5.1-final-20040804.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/proxool.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/quartz.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj.jar"/>
@@ -120,5 +117,8 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/FCKeditor-2.3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/rowset.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.0.2-FINAL-20080204.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.0.2-FINAL-20080204.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

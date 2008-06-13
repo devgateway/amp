@@ -10,10 +10,6 @@
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
-<jsp:include page="header.jsp" flush="true" />			
-</td>
-</tr>
-<tr><td width="100%" valign="top" align="left">
 <table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772 height="201">
 	<tr>
 		<td class=r-dotted-lg width=4>&nbsp;

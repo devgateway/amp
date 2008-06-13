@@ -1,8 +1,20 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<script language=javascript>
+<!--
+function showUserProfile(id){
+	<digi:context name="information" property="context/aim/default/userProfile.do" />
+	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
+}
+-->
+
+</script>
 
 
 
@@ -16,46 +28,62 @@
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
+<style>
+a.header_text:link, a.header_text, A.header_text:active, A.header_text:visited{
+	position:relative;
+	padding: 5 10 5 10px;
+	font-family: Verdana,Tahoma,Arial,sans-serif;
+	font-size: 7pt;		  
+	font-weight:normal;
+	text-align: center ;
+	text-transform:uppercase;
+	text-decoration:none;
+	color: #ffffff;
+}
 
-
-
-<table cellspacing="0" cellPadding="0" border="0" width="100%" bgcolor="#323232" vAlign="top"
-
-	height="34">
-
+a.header_text:hover {
+	color: #ffffff;
+	background-color:#222e5d;
+	position:relative;
+	padding: 5 10 5 10px;
+	font-family: Verdana,Tahoma,Arial,sans-serif;
+	font-size: 7pt;		  
+	font-weight:normal;
+	text-align: center ;
+	text-transform:uppercase;
+	text-decoration:none; 
+}
+</style>
+<table cellspacing="0" cellPadding="0" border="0" width="100%" vAlign="top" bgcolor="#27415f">
 	<tbody>
-
-   	<tr bgColor="#323232">
-
-   			<td valign="center" height="34">&nbsp;
-
-
-
-   			<digi:link href="/" module="aim" styleClass="heading" onclick="return quitRnot1('${msg}')" title="Aid Management Platform">
-
-					<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
-
-				</digi:link>
-
-			</td>
-
-			<logic:notEmpty name="defFlagExist" scope="application">
-
-				<logic:equal name="defFlagExist" scope="application" value="true">
-
-					<td valign="top" width="60">
-
-						<img src="<%=displayFlag%>" border="0" height="34" width="50">
-
-					</td>
-
-				</logic:equal>
-
-			</logic:notEmpty>
-
+   	<tr>
+        <td valign="center" height="34" width="60%">&nbsp;
+            <logic:notEmpty name="defFlagExist" scope="application">
+                <logic:equal name="defFlagExist" scope="application" value="true">
+                <img src="<%=displayFlag%>" border="1" width="30" vspace="2" hspace="2" align="absmiddle">
+                </logic:equal>
+            </logic:notEmpty>
+            <digi:link href="/" module="aim" styleClass="header_title" onclick="return quitRnot1('${msg}')" title="Aid Management Platform">
+                    <digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
+            </digi:link>
+        </td>
+		<td valign="middle" align="right" width="30%">
+          <logic:present name="currentMember" scope="session">
+              <c:set var="translation">
+                <digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
+              </c:set>
+              <div title="${translation}"'>
+                <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
+                <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
+                	<strong><digi:trn key="aim:pageshead:title:${teamMember.teamName}">${teamMember.teamName}</digi:trn></strong>
+                </a>
+                <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
+                	<digi:trn key="aim:pagesheadtitle:${teamMember.memberName}">${teamMember.memberName}</digi:trn>
+                </a>
+              </div>
+          </logic:present>        
+		</td>
    	</tr>
-
    </tbody>
 
 </table>
-

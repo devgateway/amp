@@ -40,4 +40,12 @@ public class MessageConstants {
 	 */
 	public static final int MESSAGES_PER_PAGE=4;
 	public static final int PAGES_TO_SHOW=5;
+	
+	/**
+	 * Template Alert helper fields
+	 */
+	public static final String OBJECT_NAME="name";
+	public static final String OBJECT_URL="url";
+	public static final String OBJECT_AUTHOR="created by";
+	
 }

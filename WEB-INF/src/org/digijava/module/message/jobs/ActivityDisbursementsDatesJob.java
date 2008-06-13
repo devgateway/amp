@@ -1,20 +1,28 @@
 package org.digijava.module.message.jobs;
 
-import org.quartz.StatefulJob;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import java.util.List;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.message.helper.ActivityDisbursementDateTrigger;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
 
 public class ActivityDisbursementsDatesJob implements StatefulJob {
-    public void execute(JobExecutionContext context) throws JobExecutionException{
+
+	private static Logger logger = Logger.getLogger(ActivityDisbursementsDatesJob.class);
+
+	public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
+        logger.info("Starting Activity Disbursements Dates checker quartz job at "+curDate);
         Date dateBefore2Days=AmpDateUtils.getDateBeforeDays(curDate,2);
 
         Calendar cl=Calendar.getInstance();
@@ -29,5 +37,11 @@ public class ActivityDisbursementsDatesJob implements StatefulJob {
                 }
             }
         }
+        try {
+			PersistenceManager.closeRequestDBSessionIfNeeded();
+		} catch (DgException e) {
+			e.printStackTrace();
+		}
+        logger.info("Finnished Activity Disbursements Dates checker quartz job for "+curDate);
     }
 }

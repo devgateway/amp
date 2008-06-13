@@ -74,9 +74,17 @@
 
 	<!-- Quartz test -->
 	<servlet>
-		<servlet-name>quartz</servlet-name>
-		<display-name>Quartz Initializer Servlet</display-name>
+		<description>Quartz Initializer Servlet</description>
+		<servlet-name>QuartzInitializer</servlet-name>
 		<servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
+		<init-param>
+			<param-name>shutdown-on-unload</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>start-scheduler-on-load</param-name>
+			<param-value>true</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<!-- Quartz test -->

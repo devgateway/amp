@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.GlobalSettingsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
@@ -79,6 +80,7 @@ public class GlobalSettings extends Action {
 			dailyCurrencyRatesChanges(gsForm);
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionErrors errors = new ActionErrors();
+			auditTrialCleanerChanges(gsForm);
 			refreshGlobalSettingsCache	= true;
 		}
 		
@@ -98,6 +100,7 @@ public class GlobalSettings extends Action {
 			//ActionErrors errors = new ActionErrors();
 			refreshGlobalSettingsCache	= true;
 			dailyCurrencyRatesChanges(null);
+			auditTrialCleanerChanges();
 		}
 		
 		Collection col = FeaturesUtil.getGlobalSettings();
@@ -175,7 +178,47 @@ public class GlobalSettings extends Action {
 			CurrencyRatesService.stopCurrencyRatesService();
 		}
 	}
-
+	
+	/**
+	 * 
+	 */
+	private void auditTrialCleanerChanges() {
+		Collection<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
+		boolean update = false;
+		String name;
+		String value;
+		for (Iterator iterator = col.iterator(); iterator.hasNext();) {
+			AmpGlobalSettings ampGls = (AmpGlobalSettings) iterator.next();
+			name = ampGls.getGlobalSettingsName();
+			value = ampGls.getGlobalSettingsValue();
+			if (name.equalsIgnoreCase("Automatic Audit Logger Cleanup")) {
+				if ("-1".equalsIgnoreCase(value)) {
+					AuditCleaner.getInstance().stop();
+				} else {
+					if (!AuditCleaner.getInstance().isRunning()) {
+						AuditCleaner.getInstance().start();
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param gsForm
+	 */
+	private void auditTrialCleanerChanges(GlobalSettingsForm gsForm){
+		if (gsForm.getGlobalSettingsName().compareTo("Automatic Audit Logger Cleanup") ==0){
+			if ("-1".equalsIgnoreCase(gsForm.getGsfValue())){
+				AuditCleaner.getInstance().stop();
+			}else{
+				if(!AuditCleaner.getInstance().isRunning()){
+					AuditCleaner.getInstance().start();
+				}
+			}
+		}
+	}
+	
 	/**
 	 * @param gsForm
 	 */

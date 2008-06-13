@@ -81,7 +81,10 @@
 	 <service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
             <description>Daily Currency Rates Service</description>
      </service>
-	
+	 
+	 <service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
+            <description>This service will delete the audit log</description>
+     </service>
     <!--
     <service id="urlTouchService" class="org.digijava.kernel.services.UrlTouchService">
         <description>This service gets one or many URLs and touches them asynchronously</description>

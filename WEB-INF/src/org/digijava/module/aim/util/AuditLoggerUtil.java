@@ -337,7 +337,7 @@ public class AuditLoggerUtil {
 	} 
 	
 	/**
-	 * 
+	 * @author Diego Dimunzio
 	 * @param interval
 	 * @return
 	 */

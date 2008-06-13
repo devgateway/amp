@@ -147,74 +147,33 @@
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
 						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:portfolio">
-						Portfolio
-						</digi:trn>
-						</digi:link>
-                                                &nbsp;&gt;&nbsp;
-                                               ${title}
-                                                </span>
+							<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp;
+                        ${title}
+                       </span>
 					</td>
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
-						<span class=subtitle-blue>
-							
-								${title}
-							
+						<span class=subtitle-blue>							
+								${title}						
 						</span>
 					</td>
 				</tr>
 				<tr>
 	<td noWrap vAlign="top">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0"  align="center" valign="top">
-				<tr>
-					
-						<td>
-							
-													<table width="100%" cellspacing="1" cellpadding="4"  align="left" valign="top">
+				<tr>				
+					<td>
+						<table width="100%" cellspacing="1" cellpadding="4"  align="left" valign="top">
 														<tr>
 															<td valign="top" bgcolor="#f4f4f2" align="center">
 																
 																			<table width="100%" cellspacing="1" cellpadding="5" >																				
 																				<tr>
 																					<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-																					<td align="left"><html:text property="messageName" size="50" styleClass="inp-text"/></td>
-																				</tr>
-																				<!-- 
-																					<c:if test="${not empty messageForm.forwardedMsg}">
-																				    	<tr>
-																				    		<td align="right">forwarded Message:</td>
-																				    		<td >
-																				    			<table width="75%" align="center" border="0" style="border:1px solid; border-color: #484846;">
-																									<tr>
-																										<td width="10%"><digi:trn key="message:from">From</digi:trn></td>
-																										<td>&nbsp;${messageForm.forwardedMsg.from}</td>
-																									</tr>
-																									<tr>
-																										<td><digi:trn key="message:receiver">Received</digi:trn></td>
-																										<td>&nbsp;${messageForm.forwardedMsg.creationDate}</td>
-																									</tr>
-																									<tr>
-																										<td><digi:trn key="message:subject">Subject</digi:trn> </td>
-																										<td>${messageForm.forwardedMsg.name}																						
-																										</td>
-																									</tr>
-																									<tr>
-																										<td>To:</td>
-																										<td>
-																											<c:forEach var="receiver" items="${messageForm.forwardedMsg.receivers}"> ${receiver} ,&nbsp;</c:forEach>
-																										</td>
-																									</tr>
-																									<tr>
-																										<td><digi:trn key="message:msgDetails">Message Details</digi:trn> </td>
-																										<td>&nbsp;${messageForm.forwardedMsg.description}</td>
-																									</tr>
-																								</table>
-																				    		</td>																        	
-														                            	</tr>
-														                            </c:if>	
-																				 -->																				
+																					<td align="left"><html:text property="messageName" size="53" styleClass="inp-text"/></td>
+																				</tr>																																					
 																				<tr>
 																					<td align="right"><digi:trn key="messages:description">description</digi:trn></td>
 																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="50" styleClass="inp-text"/></td>
@@ -246,22 +205,21 @@
 																                            <tr>
 																                                <td valign="top">
 																                                    
-																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:150px">
+																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
 																												<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
-                                                                                                                                                                                                                                    <c:forEach var="team" items="${messageForm.teamMapValues}">
-                                                                                                                                                                                                                                        <logic:notEmpty name="team" property="members">
-                                                                                                                                                                                                                                            <option value="t:${team.id}" style="font-weight: bold;background:#f4f4f2;font-size:12px;">${team.name}</option>
-                                                                                                                                                                                                                                            <c:forEach var="tm" items="${team.members}">
-                                                                                                                                                                                                                                                <option value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
-                                                                                                                                                                                                                                            </c:forEach>
-                                                                                                                                                                                                                                        </logic:notEmpty>											                                                		
-                                                                                                                                                                                                                                    </c:forEach>
+                                                                                                                	<c:forEach var="team" items="${messageForm.teamMapValues}">
+                                                                                                                    	<logic:notEmpty name="team" property="members">
+                                                                                                                        	<option value="t:${team.id}" style="font-weight: bold;background:#f4f4f2;font-size:12px;">${team.name}</option>
+                                                                                                                            <c:forEach var="tm" items="${team.members}">
+                                                                                                                         		<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
+                                                                                                                            </c:forEach>
+                                                                                                                        </logic:notEmpty>											                                                		
+                                                                                                                    </c:forEach>
 																                                                </logic:notEmpty>
-																                                            </select>
-																                                         
+																                                            </select>																                                         
 																                                </td>
 																                                <td>
 																                                  <input type="button" onclick="addUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
@@ -269,15 +227,11 @@
 																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
-																                                   
-																                                              															
-                                                                                                                                                                                                      <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:150px">
-																                                              					<c:if test="${!empty messageForm.receivers}">
-																	                                                              	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
-																	                                                              </c:if>                
-																                                                            </html:select>
-																                                                  
-																                                       
+																                                	<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
+																                                    	<c:if test="${!empty messageForm.receivers}">
+																	                                    	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
+																	                                    </c:if>                
+																                                    </html:select>  
 																                                </td>
 																                            </tr>
 																                        </table>

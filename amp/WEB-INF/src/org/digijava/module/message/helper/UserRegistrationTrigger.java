@@ -8,7 +8,7 @@ public class UserRegistrationTrigger extends Trigger {
 	public static final String PARAM_NAME="name";
 	public static final String PARAM_TRIGGER_SENDER="sentBy";
 	public static final String PARAM_CREATION_DATE="Creation date";
-	public static final String PARAM_URL="User profiel url";
+	public static final String PARAM_URL="User profile url";
 	
 	public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TRIGGER_SENDER,PARAM_CREATION_DATE,PARAM_URL};
 	    

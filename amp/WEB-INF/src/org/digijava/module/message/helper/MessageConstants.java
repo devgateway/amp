@@ -11,8 +11,8 @@ public class MessageConstants {
      * Add here all the other classes that extend Trigger class. Alternatively you can use a singleton for dynamic instantiation, see:
      * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
      */
-    public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,UserRegistrationTrigger.class}; 
-    public static final  String[] triggerName=new String[] {"Save Actvity","New User Registration"};
+    public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,ActivityDisbursementDateTrigger.class,UserRegistrationTrigger.class}; 
+    public static final  String[] triggerName=new String[] {"Save Actvity","Activity Disbursement Date","New User Registration"};
     
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level"; 

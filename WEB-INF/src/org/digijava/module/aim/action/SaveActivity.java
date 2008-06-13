@@ -101,6 +101,7 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.message.helper.ActivitySaveTrigger;
 import org.digijava.module.message.helper.AmpMessageWorker;
 
 /**
@@ -802,7 +803,7 @@ public class SaveActivity extends Action {
 				Set orgRole = new HashSet();
 				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) { // funding
 
-											// organizations
+																// organizations
 					AmpRole role = DbUtil.getAmpRole(Constants.FUNDING_AGENCY);
 					Iterator itr = eaForm.getFundingOrganizations().iterator();
 					while (itr.hasNext()) {
@@ -1477,7 +1478,7 @@ public class SaveActivity extends Action {
 			
 			//If we're adding an activity, create system/admin message
 			if(!eaForm.isEditAct()) {
-				AmpMessageWorker.createAmpMessageForActivityCreation(actId, tm.getTeamId());
+				ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);				
 			}
 
             if(DocumentUtil.isDMEnabled()) {

@@ -53,6 +53,7 @@ tr.my-border-style td {
 	var prevPage='<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>';
 	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
+	var objURL='<digi:trn key="message:objURL">Object URL</digi:trn>';
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -74,6 +75,10 @@ tr.my-border-style td {
 		async.complete=buildMessagesList;
 		async.call(url);
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
+	}
+	
+	function openObjectURL(url){
+		openURLinWindow(url,600,550);
 	}
 	
 	function viewMessage(id,isMsg) {
@@ -150,19 +155,18 @@ tr.my-border-style td {
                 if(!forwardingThread){
                 markMsgeAsRead(group_id);
                 }
-                     	
+                
 	}
-	
+                  
 	function markMsgeAsRead(group_id){
-                var partialUrl=addActionToURL('messageActions.do');
+        var partialUrl=addActionToURL('messageActions.do');
 		var url=getUrl(partialUrl,group_id);
 		var async=new Asynchronous();
 		async.complete=makeRead;
-		async.call(url);	
-               
-	}
-	
-	
+		async.call(url);                
+   }
+                  
+              
 	function addActionToURL(actionName){
 		var fullURL=document.URL;
 		var lastSlash=fullURL.lastIndexOf("/");
@@ -255,8 +259,7 @@ tr.my-border-style td {
 												whereToInsertRow++;										
 												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
 											}
-										}										
-																			
+										}		
 										
 									}							
 								}
@@ -269,16 +272,14 @@ tr.my-border-style td {
 							
 							//creating tr
 							var msgTr=document.createElement('TR');	
-							var isMsgRead=messages[i].getAttribute('read');	
+							var isMsgRead=messages[i].getAttribute('read');					
                                                        
                                                         if(i!=1&&i%2==0){
                                                             msgTr.className = 'trEven'; 
                                                           }
                                                            else{
                                                              msgTr.className = 'trOdd';
-                                                            }
-                                                                            
-							
+							}
 								
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");
@@ -476,11 +477,26 @@ tr.my-border-style td {
 					else if(priority==-1){priorityTD2.innerHTML='None';}
 				priorityTR.appendChild(priorityTD2);
 			divTblBody.appendChild(priorityTR);	
+				var objURLTR=document.createElement('TR');
+					var objURLTD1=document.createElement('TD');
+					objURLTD1.innerHTML='&nbsp;'+objURL;
+				objURLTR.appendChild(objURLTD1);
+					var objURLTD2=document.createElement('TD');
+					//getting URL
+					var objectURL=message.getAttribute('objURL');
+                    	if(objectURL!='null'){
+                        	objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
+                        }	
+                        else{
+                        	objURLTD2.innerHTML="&nbsp";
+                        }					
+				objURLTR.appendChild(objURLTD2);
+			divTblBody.appendChild(objURLTR);
+				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
 					detailsTD1.innerHTML='<strong>'+'&nbsp;'+desc+'</strong>';
-				detailsTR.appendChild(detailsTD1);
-					
+				detailsTR.appendChild(detailsTD1);									
 					var detailsTD2=document.createElement('TD');
 					//getting description
 					var description=message.getAttribute('msgDetails');
@@ -586,7 +602,7 @@ tr.my-border-style td {
                                                    <digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                 </c:otherwise>
                                                 </c:choose>
-						
+
                                                 </span>
 					</td>
 				</tr>

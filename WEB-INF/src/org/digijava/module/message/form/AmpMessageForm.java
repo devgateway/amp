@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
 
 public class AmpMessageForm extends ActionForm {
@@ -24,7 +25,7 @@ public class AmpMessageForm extends ActionForm {
 	private String senderType; //activity , User e.t.c.
 	private Long senderId;
 	private String sender;
-        private String receiver;
+    private String receiver;
 	private String creationDate;
 	private boolean editingMessage=false;
 	private String description;	
@@ -34,6 +35,7 @@ public class AmpMessageForm extends ActionForm {
 	private int tabIndex=0;		//which tab we are viewing(messages tab, alerts, approvals ...)
 	private String childTab; //child tab on tabIndex. used to separate received messages from sent of draft 
 	private MessageHelper forwardedMsg;
+	private String objectURL;
 	
 	private int setAsAlert;
 	private boolean deleteActionWasCalled;
@@ -77,9 +79,46 @@ public class AmpMessageForm extends ActionForm {
 	private Long emailMsgsCurrent;
 	private Long emailMsgsNew;
 	
+	private Long templateId;
+	private List<TemplateAlert> templates;
+	private List<LabelValueBean> availableTriggersList;
+	private String selectedTrigger;
+	
+
+	public List<TemplateAlert> getTemplates() {
+		return templates;
+	}
+
+	public void setTemplates(List<TemplateAlert> templates) {
+		this.templates = templates;
+	}
 
 	public Long getMsgRefreshTimeCurr() {
 		return msgRefreshTimeCurr;
+	}
+
+	public Long getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(Long templateId) {
+		this.templateId = templateId;
+	}
+
+	public List<LabelValueBean> getAvailableTriggersList() {
+		return availableTriggersList;
+	}
+
+	public void setAvailableTriggersList(List<LabelValueBean> availableTriggersList) {
+		this.availableTriggersList = availableTriggersList;
+	}
+
+	public String getSelectedTrigger() {
+		return selectedTrigger;
+	}
+
+	public void setSelectedTrigger(String selectedTrigger) {
+		this.selectedTrigger = selectedTrigger;
 	}
 
 	public void setMsgRefreshTimeCurr(Long msgRefreshTimeCurr) {
@@ -432,4 +471,12 @@ public class AmpMessageForm extends ActionForm {
         public void setReceiver(String receiver) {
             this.receiver = receiver;
         }
+
+		public String getObjectURL() {
+			return objectURL;
+		}
+
+		public void setObjectURL(String objectURL) {
+			this.objectURL = objectURL;
+		}
 }

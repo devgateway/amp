@@ -205,6 +205,17 @@
                                 </digi:link>
                               </td>
                           	</tr>
+                          	<tr>
+                          		<td class=f-names noWrap>
+                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                <c:set var="trn">
+                                  <digi:trn key="message:viewSettings">Click here to view TemplateAlerts Manager</digi:trn>
+                                </c:set>
+                               <digi:link module="message" href="/templatesManager.do?actionType=viewTemplates" title="${trn}">
+                                  <digi:trn key="message:templatesManager">TemplateAlerts Manager</digi:trn>
+                                </digi:link>
+                              </td>
+                          	</tr>
 						  <!-- hidden Lucene Debug!
 						  <feature:display name="Lucene Debug" module="Admin Home">
                           <tr>

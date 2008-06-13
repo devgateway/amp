@@ -7,19 +7,6 @@ package org.digijava.module.message.dbentity;
  *
  */
 public class UserMessage extends AmpMessage{
-	
-	private Integer userMessageType;
-	
-		
-	public Integer getUserMessageType() {
-		return userMessageType;
-	}
-
-
-	public void setUserMessageType(Integer userMessageType) {
-		this.userMessageType = userMessageType;
-	}
-
 
 	/**
 	 * This method is used to define whether user should be able to edit message or not.	

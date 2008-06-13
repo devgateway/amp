@@ -599,10 +599,15 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setSenderId(message.getSenderId()); 	 
 			 form.setCreationDate(DateConversion.ConvertDateToString(message.getCreationDate()));		 
 			 form.setClassName(message.getClassName());
+			 form.setObjectURL(message.getObjectURL());
                          form.setReceiver(message.getReceivers());
                          if(isStateId){
                           form.setMsgStateId(id);
-                          form.setSender(AmpMessageUtil.getMessageState(id).getSender());
+                          if(message.getSenderType().equalsIgnoreCase("User")){
+                        	  form.setSender(AmpMessageUtil.getMessageState(id).getSender());  
+                          } else{
+                        	  form.setSender(message.getSenderType());
+                          }
                          }
                          else{
                              AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(message.getSenderId());
@@ -631,10 +636,8 @@ public class AmpMessageActions extends DispatchAction {
 	 
 	 /**
 	     * Constructs XML from Messages      
-	     */
-	   
-            
-        private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws AimException {
+	 */     
+    private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws AimException {
                
         String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         result += "<" + ROOT_TAG + ">";
@@ -643,7 +646,11 @@ public class AmpMessageActions extends DispatchAction {
             for (AmpMessageState state : states) {
                 result += "<" + "message name=\"" + state.getMessage().getName() + "\" ";
                 result += " id=\"" + state.getId() + "\"";
-                result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(state.getSender()) + "\"";
+                if(state.getMessage().getSenderType()!=null && state.getMessage().getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
+                	result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(state.getSender()) + "\"";
+                }else{
+                	result += " from=\"" +MessageConstants.SENDER_TYPE_SYSTEM + "\"";
+                }                
                 result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getReceivers()) + "\"";
                 result += " received=\"" + DateConversion.ConvertDateToString(state.getMessage().getCreationDate()) + "\"";
                 result += " priority=\"" + state.getMessage().getPriorityLevel() + "\"";
@@ -651,6 +658,7 @@ public class AmpMessageActions extends DispatchAction {
                 result += " msgDetails=\"" +desc + "\"";
                 result += " read=\"" + state.getRead() + "\"";
                 result += " isDraft=\"" + state.getMessage().getDraft() + "\"";
+                result += " objURL=\"" + state.getMessage().getObjectURL() + "\"";
                 result += ">";
                 if (state.getMessage().getForwardedMessageId() != null) {
                     AmpMessage forwarded = AmpMessageUtil.getMessage(state.getMessage().getForwardedMessageId());
@@ -686,6 +694,7 @@ public class AmpMessageActions extends DispatchAction {
         result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
         result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getReceivers()) + "\"";
         result += " priority=\"" + forwardedMessage.getPriorityLevel() + "\"";
+        result += " objURL=\"" + forwardedMessage.getObjectURL() + "\"";
         String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
         result += " msgDetails=\"" + desc + "\"";
         result+=" read=\""+true+"\"";
@@ -707,6 +716,7 @@ public class AmpMessageActions extends DispatchAction {
 	 private MessageHelper createHelperMsgFromAmpMessage(AmpMessage msg,Long stateId) throws Exception{
 		 MessageHelper msgHelper=new MessageHelper(msg.getId(),msg.getName(),msg.getDescription());
      	 msgHelper.setFrom(AmpMessageUtil.getMessageState(stateId).getSender());
+     	 msgHelper.setObjectURL(msg.getObjectURL());
      	 if(msgHelper.getReceivers()==null){
      		msgHelper.setReceivers(new ArrayList<String>());
      		List<LabelValueBean> receivers=getMessageRecipients(msg.getId());

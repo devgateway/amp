@@ -19,18 +19,11 @@ public abstract class AmpMessage {
 	private String senderType;	
 	private Long senderId;  //if user sends alert, then it's that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
 	private Date creationDate; //date when it was created
-        
-        private String senderName;  //sender name
+    private String objectURL;
+    
+    private String senderName;  //sender name
 
-        public String getSenderName() {
-            return senderName;
-        }
-
-        public void setSenderName(String senderName) {
-            this.senderName = senderName;
-        }
-	
-	/**
+   	/**
 	 * emails should be sent.
 	 */
 	private Boolean emailable;
@@ -142,6 +135,22 @@ public abstract class AmpMessage {
 
 	public void setForwardedMessageId(Long forwardedMessageId) {
 		this.forwardedMessageId = forwardedMessageId;
+	}
+
+	public String getObjectURL() {
+		return objectURL;
+	}
+
+	public void setObjectURL(String objectURL) {
+		this.objectURL = objectURL;
+	}
+
+	public String getSenderName() {
+		return senderName;
+	}
+
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
 	}
         
 

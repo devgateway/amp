@@ -24,6 +24,8 @@ public class TeamMemberForm extends ActionForm {
 	private String permissions;
 	private Long userId;
 	private int fromPage;
+	private Long headId;
+	private Long workspaceManId;
 
 	
 	/**
@@ -247,5 +249,18 @@ public class TeamMemberForm extends ActionForm {
 	}
 	public void setallUser(Collection allMembers) {
 		this.allUser = allMembers;
+	}
+	public void setHeadId(Long headId) {
+		// TODO Auto-generated method stub
+		this.headId = headId;
+	}
+	public Long getHeadId() {
+		return headId;
+	}
+	public Long getWorkspaceManId() {
+		return workspaceManId;
+	}
+	public void setWokspaceManId(Long wmId) {
+		this.workspaceManId = wmId;
 	}
 }

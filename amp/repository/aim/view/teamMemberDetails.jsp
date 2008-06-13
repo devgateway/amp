@@ -12,6 +12,28 @@
 	background-color: #f4f4f2;
 }
 </style>
+<script language="javascript">
+  function checkRole(  ) {
+    var selectedRole = aimTeamMemberForm.role.value;
+    var wmRole = aimTeamMemberForm.workspaceManId.value;
+    var idWMMmemeber = aimTeamMemberForm.headId.value;
+    var idCurrentMember = aimTeamMemberForm.teamMemberId.value;
+  	if(selectedRole== wmRole && idWMMmemeber!="" && idWMMmemeber!=idCurrentMember ){
+  		<c:set var="translation">
+  		<digi:trn key="aim:OneManagerPerWorkspace">Only one Manager is allowed per workspace. Please choose another role or keep the existing one.</digi:trn>
+		</c:set>   			 
+		alert("${translation}");
+  		return false;
+  	}else{
+  	    var indice = aimTeamMemberForm.role.selectedIndex;
+  	    var valor = aimTeamMemberForm.role.options[indice].text
+  		<c:set var="translation">
+  		<digi:trn key="aim:AreYouSureToChangerole">Are you sure you want to change this role to</digi:trn>
+		</c:set>				 
+		return confirm("${translation} \""+valor+"\"?");
+  	}
+  }
+</script>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
@@ -27,6 +49,8 @@
 <html:hidden property="action" />
 <html:hidden property="userId" />
 <html:hidden property="name" />
+<html:hidden property="headId"/>
+<html:hidden property="workspaceManId"/>
 
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -127,7 +151,7 @@
 																			<tr>
 																				<td width="50%" align="right">
 																					<c:set var="translation"><digi:trn key="btn:save">Save</digi:trn> </c:set>
-																					<html:submit value="${translation}" styleClass="dr-menu"/>
+																					<html:submit value="${translation}" styleClass="dr-menu" onclick="return checkRole()"/>
 																				</td>	
 																				<td width="50%" align="left">	
 																					<c:set var="translation"><digi:trn key="btn:cancel">Cancel</digi:trn> </c:set>

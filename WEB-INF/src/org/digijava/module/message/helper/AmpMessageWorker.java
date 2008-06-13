@@ -25,6 +25,8 @@ public class AmpMessageWorker {
     				newAlert=processActivitySaveEvent(e,newAlert);
     			}else if(e.getTrigger().equals(UserRegistrationTrigger.class)){//<----- Registered New User
     				newAlert=proccessUserRegistrationEvent(e,newAlert);
+    			}else if(e.getTrigger().equals(ActivityDisbursementDateTrigger.class)){
+    				newAlert=processActivityDisbursementDateComingEvent(e,newAlert);
     			}
     			AmpMessageUtil.saveOrUpdateMessage(newAlert);
     			
@@ -36,10 +38,8 @@ public class AmpMessageWorker {
     					createMsgState(state,newAlert);
     				}
     			}
-			}
-    		
-    	}
-    	
+			}    		
+    	}    	
     }
     
     /**
@@ -65,6 +65,22 @@ public class AmpMessageWorker {
 		alert.setName(alert.getName()+e.getParameters().get(ActivitySaveTrigger.PARAM_NAME));
 		alert.setCreationDate((Date)e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_DATE));
 		alert.setSenderId(((AmpTeamMember)e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getAmpTeamMemId());
+		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)!=null){
+			String partialURL=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)+"/";
+			alert.setObjectURL(partialURL+e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
+		}	
+		alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+		return alert;
+	}
+	
+	
+	/**
+	 * Activity's disbursement date Event processing 
+	 */
+	private static AmpAlert processActivityDisbursementDateComingEvent(Event e, AmpAlert alert){
+		alert.setName(alert.getName()+e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
+		Calendar cal=Calendar.getInstance();
+		alert.setCreationDate(cal.getTime());
 		if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)!=null){
 			String partialURL=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)+"/";
 			alert.setObjectURL(partialURL+e.getParameters().get(ActivitySaveTrigger.PARAM_URL));

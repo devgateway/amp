@@ -854,7 +854,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	}
 
-	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId#perspective";
+	private static final String IGNORED_PROPERTIES = "class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
 
 	public Integer getLineMinRank() {
 		return lineMinRank;

@@ -9,7 +9,7 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
 * @author mihai
 * @package org.dgfoundation.amp.exprlogic
 * @since 12.05.2008
-* @see org.dgfoundation.amp.exprlogic.ExampleLogicalToken#buildUncommittedLogicalToken()
+* @see org.dgfoundation.amp.exprlogic.TokenRepository#buildUncommittedLogicalToken()
 */
 public class PresentLogicalToken extends LogicalToken {
 	protected String type;

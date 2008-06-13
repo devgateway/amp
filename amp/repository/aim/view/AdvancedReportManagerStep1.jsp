@@ -304,6 +304,8 @@ function checkUncheckAll2() {
 												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Component Name" feature="Activity - Component Step">&nbsp;</field:display>
+											<field:display name="Undisbursed Cumulative Balance" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Uncommitted Cumulative Balance" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Team" feature="Identification">&nbsp;</field:display>
 											<field:display name="Issues" feature="Issues">&nbsp;</field:display>
 											<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
@@ -332,10 +334,9 @@ function checkUncheckAll2() {
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>
 											
-											
 			                            	<field:display name="National Planning Objectives" feature="NPD Programs">&nbsp;</field:display>
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
-											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>
+											
 											
 											<field:display name="Responsible Organisation" feature="Responsible Organisation"></field:display>
 											<field:display name="Responsible Organisation Groups" feature="Responsible Organisation"></field:display>

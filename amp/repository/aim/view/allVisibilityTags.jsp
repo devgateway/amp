@@ -271,6 +271,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="Cumulative Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Cumulative Disbursement" feature="Funding Organizations"></field:display>
+<field:display name="Undisbursed Cumulative Balance" feature="Funding Organizations">&nbsp;</field:display>
+<field:display name="Uncommitted Cumulative Balance" feature="Funding Organizations">&nbsp;</field:display>
 <field:display name="Currency Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Currency Commitments" feature="Regional Funding"></field:display>
 <field:display name="Currency Disbursement" feature="Disbursement"></field:display>

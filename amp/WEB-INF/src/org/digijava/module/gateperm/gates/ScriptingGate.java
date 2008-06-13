@@ -16,7 +16,7 @@ import bsh.Interpreter;
 /**
  * ScriptingGate.java
  * Gate that receives as its single parameter a BSH (BeanShell) script. 
- * The script has one variable, the Map named scope. See http://www.beanshell.org
+ * The script has one variable, the Map named "scope". See http://www.beanshell.org
  * @author mihai
  * @package org.digijava.module.gateperm.core
  * @since 31.08.2007
@@ -60,7 +60,7 @@ public class ScriptingGate extends Gate {
 			Boolean open = (Boolean) i.eval(script);
 			return open.booleanValue();
 		} catch (EvalError e) {
-			logger.error("ScriptingGate script evaluation error: "+e);
+			logger.error("ScriptingGate BSH script evaluation error: "+e);
 			throw new RuntimeException( "EvalError Exception encountered", e);
 		}
 	

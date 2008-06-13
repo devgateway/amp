@@ -25,6 +25,7 @@ import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpColumns;
 
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -39,6 +40,7 @@ public abstract class ColumnWorker {
     
     	public static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     	
+    protected AmpColumns relatedColumn; 
     
 	protected String viewName;
 	
@@ -324,6 +326,14 @@ public abstract class ColumnWorker {
 	 * @return
 	 */
 	public abstract Cell newCellInstance();
+
+	public AmpColumns getRelatedColumn() {
+		return relatedColumn;
+	}
+
+	public void setRelatedColumn(AmpColumns relatedColumn) {
+		this.relatedColumn = relatedColumn;
+	}
 
 
 

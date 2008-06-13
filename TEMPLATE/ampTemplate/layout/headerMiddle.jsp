@@ -7,6 +7,24 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+        <!-- Dependencies --> 
+        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        
+        <!-- Source File -->
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+
+        <!-- Core + Skin CSS -->
+        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+
+        <!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 <c:set var="message">
 <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
@@ -18,175 +36,387 @@ ${fn:replace(message,quote,escapedQuote)}
 </c:set>
 
 <logic:notPresent name="currentMember">
-<% String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
-if("On".equals(publicView)) { %>
-<DIV id="menu">
-<UL>
+<% 
+String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
+if("On".equals(publicView)) { 
+%>
+<style>
+.yuiampmenuitemlabel
+{
+border-right:1px solid white;
+}
+</style>
+<div class="yuiamp-skin-amp" style="clear:both;">
+    <div id="mainmenuHeader" class="yuiampmenu">
+      <div class="bd">
+          <ul class="first-of-typeamp">
+            <li class="yuiampmenuitem">
+                <c:set var="message">
+                <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+                </c:set>
+                <digi:link styleClass="yuiampmenuitemlabel" href="/reportsPublicView.do" module="aim" onclick="return quitRnot1('${message}')">
+                <digi:trn key='aim:PublicView'>PUBLIC VIEW</digi:trn>
+                </digi:link>
+            </li>
+            <feature:display name="yuiampmenuitemlabel" module="Document Management">
+            <li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
+                <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
+            </li>
+            </feature:display>
+            <li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
+                <digi:trn key="aim:newUserRegistration">
+                New user registration
+                </digi:trn>
+	            </digi:link>
+            </li>
+            <li>
+                <a class="yuiampmenuitemlabel" href="#">
+                <digi:trn key="aim:deflanguage">Language</digi:trn>
+                </a>
+                <div id="reports2" class="yuiampmenu">
+                    <div class="bd">                    
+                        <ul>
+                        <digi:insert attribute="dropdownLangSwitch" />
+                        </ul>
+                    </div>
+                </div>                              
+            </li>
+          </ul>            
+      </div>
+  </div>
+</div> 
 
-		<LI class="noLink">
-				<c:set var="message">
-			<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-		</c:set>
-			<digi:link styleClass="head-menu-link" href="/reportsPublicView.do" module="aim" onclick="return quitRnot1('${message}')">
-					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
-			</digi:link>
-		</LI>
-
-		<LI class="noLink">
-		<c:set var="message">
-			<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-		</c:set>
-		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
-		</LI>
-		<feature:display name="Content Repository" module="Document Management">
-		<li>
-			<digi:link styleClass="head-menu-link" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
-				::: <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
-		</li>
-		</feature:display>
-
-</UL>
-</DIV>
-<% } %>
+<% } 
+else  //In case the public view aren't activated
+{
+%>
+<style>
+.yuiampmenuitemlabel
+{
+border-right:1px solid white;
+}
+</style>
+<div class="yuiamp-skin-amp" style="clear:both;">
+    <div id="mainmenuHeader" class="yuiampmenu">
+      <div class="bd">
+          <ul class="first-of-type">
+            <li class="yuiampmenuitem">
+                <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
+                <digi:trn key="aim:newUserRegistration">
+                New user registration
+                </digi:trn>
+	            </digi:link>
+            </li>
+            <li>
+                <a class="yuiampmenuitemlabel" href="#">
+                <digi:trn key="aim:deflanguage">Language</digi:trn>
+                </a>
+                <div id="reports2" class="yuiampmenu">
+                    <div class="bd">                    
+                        <ul>
+                        <digi:insert attribute="dropdownLangSwitch" />
+                        </ul>
+                    </div>
+                </div>                              
+            </li>
+          </ul>            
+      </div>
+  </div>
+</div> 
+<%
+}
+%>
 </logic:notPresent>
+<logic:present name="ampAdmin" scope="session">
+		<logic:equal name="ampAdmin" value="yes">
+        <DIV id="menu">
+            <UL>
+            <LI>
+                <div id="gen" title='<digi:trn key="aim:clickToAccessAdminTools">Click here to access admin tools</digi:trn>'>
+                    <c:set var="message">
+                        <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+                    </c:set>
+                    <digi:link styleClass="head-menu-link" href="/admin.do" module="aim" onclick="return quitRnot1('${message}')">
+                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
+                    </digi:link>
+                </div>
+            </LI>
+           </UL>
+		</logic:equal>
+</logic:present>
+
 
 <logic:present name="ampAdmin" scope="session">
-<DIV id="menu">
-	<UL>
-		<LI class="noLink">&nbsp;</LI>
-
-		<logic:equal name="ampAdmin" value="yes">
-		<LI>
-			<div id="gen" title='<digi:trn key="aim:clickToAccessAdminTools">Click here to access admin tools</digi:trn>'>
-					<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-		</c:set>
-				<digi:link styleClass="head-menu-link" href="/admin.do" module="aim" onclick="return quitRnot1('${message}')">
-					::: <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
-				</digi:link>
-			</div></LI>
-		</logic:equal>
 		<logic:equal name="ampAdmin" value="no">
-			<logic:present name="<%= org.digijava.module.aim.helper.Constants.ONLY_PREVIEW %>" scope="request">
-				<c:set var="message">
-					no
-				</c:set>
-			</logic:present>
-			<logic:notPresent name="<%= org.digijava.module.aim.helper.Constants.ONLY_PREVIEW %>" scope="request">
-				<c:set var="message">
-					<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-				</c:set>
-			</logic:notPresent>
-		<LI>
-			<div id="gen" title='<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>'>
-			<logic:notEmpty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/showDesktop.do" module="aim" onclick="return quitRnot1('${message}')">
-					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
-				</digi:link>
-			</logic:notEmpty>
-			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
-					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
-				</digi:link>
-			</logic:empty>
-			</div></LI>
+	
+<script language="JavaScript">
+	function addActivity() {
+		selectedLevelId=0; 
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
+	}
+	
+	function teamWorkspaceSetup(a) {
+		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+	}
+	function addMessage(fillTypesAndLevels) {
+		window.location.href="/message/messageActions.do?editingMessage=false&actionType="+fillTypesAndLevels;
+	}
 
-		<LI>
-			<div id="gen"  title='<digi:trn key="aim:viewPublicReports">View public team reports</digi:trn>'>
-			<logic:notEmpty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
-			</logic:notEmpty>
-			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
-			</logic:empty>
-			</div>
-		</LI>
-			<%--<feature:display name="Documents Tab" module="Document">
-		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
-		    </feature:display> --%>
-		    <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT">
-		    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
-	    	</module:display>
-			<feature:display name="Content Repository" module="Document Management">
-			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="contentrepository:contentRepositoryTitle">CONTENT REPOSITORY</digi:trn></a></LI>
-			</feature:display>
-	    <feature:display name="Calendar" module="Calendar">
-		<LI>
-			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
-			<logic:notEmpty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/showCalendarView.do" module="calendar" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
-			</logic:notEmpty>
-			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
-			</logic:empty>
-			</div>
-		</LI>
-		</feature:display>
-		
-    	<LI>
-			<div id="gen"  title='<digi:trn key="aim:viewNPD">View National Plan Dashboard</digi:trn>'>
-			<logic:notEmpty name="TID" scope="session">
-                             <c:set var="linkProf">
-                                 <feature:display name="Portfolio Dashboard" module="M & E">
-                                     /viewPortfolioDashboard.do~actId=-1~indId=-1
-                                 </feature:display>
-                                 
-                             </c:set>
-                             <c:set var="linkNPD">
-                                <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-                                    /nationalPlaningDashboard.do
-                                </module:display>
-                  
-                             </c:set>
-                            
-                                 <c:set var="link">
-                                     <c:if test="${empty linkNPD}">
-                                         ${linkProf}
-                                     </c:if>
-                                      <c:if test="${not empty linkNPD}">
-                                         ${linkNPD}
-                                     </c:if>
-                                  </c:set>
-                                 
-                           
-                            
-                             
-                          
-             <c:if test="${not empty link}">
-                   <digi:link styleClass="head-menu-link" href="${link}" module="aim" onclick="return quitRnot1('${message}')">
-                                     
-                                     ::: <digi:trn key="aim:NPD">NPD</digi:trn>
-                      </digi:link>
-             </c:if>
-             
-				
-				
-			</logic:notEmpty>
-			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:NPD">NPD</digi:trn></digi:link>
-			</logic:empty>
-			</div>
-		</LI>
-		
-		<module:display name="HELP">
-		
-		<LI>
-			<div id="gen"  title='<digi:trn key="help:viewHelpPage">View Help</digi:trn>'>
-				<digi:link styleClass="head-menu-link" href="/help.do?blankPage=true" module="help">
-					::: <digi:trn key="help:help">Help</digi:trn>
-				</digi:link>
-			</div>
-		</LI>
-		</module:display>
+	function addLink(id){
+		<digi:context name="rev" property="context/module/moduleinstance/addQuickLink.do" />
+		openURLinWindow("<%=rev%>?memId="+id,400,100);
+	}
+
+</script>
+
+             <div class="yuiamp-skin-amp" style="clear:both;">
+              <div id="mainmenuHeader" class="yuiampmenu">
+                  <div class="bd">
+                      <ul class="first-of-type">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                  My Desktop
+                              </a>
+                              <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">
+                                      <ul>
+										<li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="/showDesktop.do">
+                                            <digi:trn key="aim:ampdesktop">AMP Desktop</digi:trn>
+                                            </a>
+                                        </li>
+<c:if test="${not empty sessionScope.currentMember}">
+<c:if test="${sessionScope.currentMember.addActivity == 'true'}">
+		                                        <li class="yuiampmenuitem">
+                                                    <c:set var="trnClickToAddNewActivit">
+                                                    <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
+                                                    </c:set>
+                                                    <a class="yuiampmenuitemlabel" onclick="return addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
+												</li>
+</c:if></c:if>
+										<li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
+                                            <digi:trn key="aim:addTab">Add Tab</digi:trn>
+                                            </a>
+                                        </li>
+                                        <li class="yuiampmenuitem" style="_width:100px">
+                                        	<a class="yuiampmenuitemlabel" href="/selectTeam.do">
+                                            	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
+                                            </a>
+<!--
+                                              <div id="workspaceSubmenu" class="yuiampmenu">
+                                                  <div class="bd">                    
+                                                      <ul class="first-of-type">
+                                                        <li class="yuiampmenuitem yuiampmenuitem-checked">
+                                                            <a class="yuiampmenuitemlabel" href="#">
+                                                                Test Workspace
+                                                            </a>
+                                                        </li>
+                                                        <li class="yuiampmenuitem">
+                                                            <a  class="yuiampmenuitemlabel" href="#">
+                                                                Test Workspace
+                                                            </a>
+                                                        </li>
+                                                        <li class="yuiampmenuitem">
+                                                            <a  class="yuiampmenuitemlabel" href="#">
+                                                                Test Workspace
+                                                            </a>
+                                                        </li>
+                                                      </ul>
+                                                  </div>
+                                              </div>   
+-->                           
+                                        </li>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                  <digi:trn key="aim:reports">Reports</digi:trn>
+                              </a>
+                              <div id="reports" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
+                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+                                            </a>
+                                        </li>
+										<LI title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
+                                                <digi:trn key="aim:ReportManager">Report Manager</digi:trn>
+                                            </a>
+										</li>
+                                        <feature:display name="Paris Indicators Reports" module="Portfolio">
+                                                <li title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+                                                    <a class="yuiampmenuitemlabel" href="/parisIndicatorReport.do">
+                                                        <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
+                                                    </a>
+                                                </li>
+                                        </feature:display>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+						  <feature:display name="Content Repository" module="Document Management">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;">
+                                 <digi:trn key="aim:resources">Resources</digi:trn>
+                              </a>
+                          </li>
+                          </feature:display>
+						  <feature:display name="Calendar" module="Calendar">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel"  href="#" style="border-right:1px solid white;">
+                                 <digi:trn key="aim:calendar">Calendar</digi:trn>
+                              </a>
+                              <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new">
+                                            <digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
+                                            </a>
+                                        </li>
+                                        <li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="/calendar/showCalendarView.do">
+                                            <digi:trn key="aim:calendar">Calendar</digi:trn>
+                                            </a>
+                                        </li>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          </feature:display>
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                  <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
+                              </a>
+                              <div id="dashboards" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do">
+                                            <digi:trn key="aim:npd">NPD</digi:trn>
+                                            </a>
+                                        </li>
+                                        <li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="#">
+                                            <digi:trn key="aim:programs">Programs</digi:trn>
+                                            </a>
+                                        </li>
+                                        <li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="#">
+                                            <digi:trn key="aim:gis">GIS</digi:trn>
+                                            </a>
+                                        </li>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+						  <feature:display name="Messages" module="Messaging System">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                 <digi:trn key="fm:messages">Messages</digi:trn>
+                              </a>
+                              <div id="messages" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li class="yuiampmenuitem">
+                                        <a class="yuiampmenuitemlabel" onclick="return addMessage('fillTypesAndLevels')" href="#">
+                                        	<digi:trn key="aim:createmessage">Create Message</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li class="yuiampmenuitem">
+                                        <a class="yuiampmenuitemlabel"  href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
+                                        	<digi:trn key="aim:messagemanager">Message Manager</digi:trn>
+                                        </a>
+                                        </li>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          </feature:display>
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                 <digi:trn key="aim:tools">TOOLS</digi:trn>
+                              </a>
+                              <div id="tools" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" onclick="teamWorkspaceSetup('-1')" href="#">
+                                        <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li style="_width:200px">
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+                                        </a>
+                                          <div id="reports2" class="yuiampmenu">
+                                              <div class="bd">                    
+                                                  <ul>
+													<digi:insert attribute="dropdownLangSwitch" />
+                                                  </ul>
+                                              </div>
+                                          </div>                              
+                                        </li>
+                                        <logic:notEmpty name="currentMember" scope="session">
+                                            <digi:secure actions="TRANSLATE">
+                                                    <digi:insert attribute="transmode"/>
+                                            </digi:secure>
+                                        </logic:notEmpty>                                        
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          <module:display name="HELP">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                  <digi:trn key="help:help">HELP</digi:trn>
+                              </a>
+                              <div id="help" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
+                                        <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:tutorial">Tutorial</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:aboutamp">About AMP</digi:trn>
+                                        </a>
+                                        </li>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          </module:display>
+            
+                        </ul>            
+                  </div>
+              </div>
+            </div> 
+            
 		</logic:equal>
-
-
-	</UL>
-</DIV>
 </logic:present>
+<script language="javascript">
+//Run initialization for menu
+var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", {  });
+oMenuBar.render();
+
+</script>      

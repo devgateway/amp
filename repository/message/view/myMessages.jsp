@@ -111,32 +111,25 @@
 	});
 	
 </script>
-
-<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
-	<TR>
-		<TD class=r-dotted-lg-buttom vAlign=top>
-			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
-        		<TR><TD>
-	              	<TABLE border=0 cellPadding=0 cellSpacing=0 >
-	              		<TR bgColor=#f4f4f2>
-	                 		<TD bgColor=#c9c9c7 class=box-title
-								title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-									<digi:trn key="message:myMessages">My Messages</digi:trn>
-								</TD>
-	                    	<TD background="module/aim/images/corner-r.gif" 
-								height=17 width=17></TD>
-						</TR>
-					</TABLE>
-				</TD></TR>
-				
-				<TR><TD bgColor="#ffffff" class="box-border" align="left"> 
-					<TABLE id="msgLinks" border="0" cellPadding="1" cellSpacing="1" width="100%" >				 
+<br />	
+<div id="content"  class="yui-skin-sam" style="width:100%;"> 
+	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+                        <ul class="yui-nav">
+                          <li class="selected">
+                          <a title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
+                          <div>
+                          	<digi:trn key="message:myMessages">My Messages</digi:trn>
+                          </div>
+                          </a>
+                          </li>
+                        </ul>
+                        <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+						<TABLE id="msgLinks" border="0" cellPadding="0" cellSpacing="0" width="100%" >				 
 							
 						</TABLE>
-					</TD></TR>								
-				</TABLE>				
-			</TD>
-		</TR>
-	</TABLE>
+                        </div>
+    </div>
+</div>
+
 </digi:form>
 </module:display>

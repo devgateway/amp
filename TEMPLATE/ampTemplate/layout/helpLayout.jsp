@@ -2,10 +2,10 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
 <HTML>
 	<digi:base />
-	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 	<digi:context name="digiContext" property="context"/>
 
 	<HEAD>
@@ -14,6 +14,8 @@
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
      	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
+		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 	</HEAD>
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
@@ -24,19 +26,28 @@
 				</TD>
 			</TR>
 			<TR>
-				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
-					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#5a5a58">
+				<TD width="100%" align="center" bgcolor="#376091">
+					<TABLE cellSpacing=0 cellPadding=0 width="98%">
+
 						<TBODY>
-						  	<TR bgColor=#5a5a58 height="15">
-						   	<TD align="left" vAlign="center" height="15">
+
+						  	<TR>
+
+						   	<TD align="left" vAlign="center">
+
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							<td align="right" vAlign="top" height="15">
-									<digi:insert attribute="loginWidget" />	
-							</td>	
-							  	<TD width="20" align="right" vAlign="top" height="15">
-									<digi:insert attribute="dropdownLangSwitch" />
+							 	<TD align="right" vAlign="middle" style="padding-right:5px;">
+										<digi:insert attribute="loginWidget" />
 								</TD>
+<logic:notPresent name="isUserLogged" scope="session">
+							  	<TD width="20" align="right" vAlign="top">
+
+										<digi:insert attribute="dropdownLangSwitch" />
+
+								</TD>
+</logic:notPresent>
+
 							</TR>
 						</TBODY>
 					</TABLE>

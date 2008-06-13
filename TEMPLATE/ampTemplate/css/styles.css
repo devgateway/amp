@@ -1080,8 +1080,6 @@ A.imglink:hover
 }
 
 #menu {
- height:1.3em;
- line-height:1.3em;
  color:#ffffff;
 }
 
@@ -1154,6 +1152,6 @@ text-decoration:none;
 	cellspacing: 0px;
 	padding: 0px;
 	margin: 0px;
-	border: 1px solid #999999;
+	font-family:Arial,Helvetica,sans-serif;
 }
 

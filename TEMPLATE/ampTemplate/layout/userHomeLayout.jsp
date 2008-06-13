@@ -1,17 +1,10 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
-
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -22,9 +15,11 @@
 
 	<digi:base />
 
-	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-	
 	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+	
+    
 
 	<digi:context name="digiContext" property="context"/>
 
@@ -56,7 +51,28 @@
 		}
 
 		</script>
+            
+        <!-- Dependencies --> 
+        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        
+        <!-- Source File -->
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
 
+        <!-- Core + Skin CSS -->
+        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+
+        <!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
 
 
 	</HEAD>
@@ -71,7 +87,7 @@
 
 			<TR>
 
-				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="15">
+				<TD width="100%" vAlign="center" align="left">
 
 					<digi:insert attribute="headerTop" />
 
@@ -80,73 +96,41 @@
 			</TR>
 
 			<TR>
-
-				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
-
-					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#5a5a58">
-
+				<TD width="100%" align="center" bgcolor="#376091">
+					<TABLE cellSpacing=0 cellPadding=0 width="98%">
 						<TBODY>
-
-						  	<TR bgColor=#5a5a58 height="15">
-
-						   	<TD align="left" vAlign="center" height="15">
-
-									<digi:insert attribute="headerMiddle" />
-
-								</TD>
-							<td align="right" vAlign="top" height="15">
-									<digi:insert attribute="loginWidget" />
-							</td>
-
-							  	<TD width="20" align="right" vAlign="top" height="15">
-
-									<digi:insert attribute="dropdownLangSwitch" />
-
-								</TD>
-
+						  	<TR>
+                                <TD>
+                                    <digi:insert attribute="headerMiddle" />
+									<!-- digi:insert attribute="dropdownLangSwitch" /-->
+                                </TD>
+                                <TD align="right" valign="middle">
+                                    <digi:insert attribute="loginWidget" />
+                                </TD>
 							</TR>
-
 						</TBODY>
-
 					</TABLE>
-
 				</TD>
-
 			</TR>
-
 			<TR>
 
 				<TD width="100%" vAlign="top" align="left">
 
-					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
-
-				</TD>
-
-			</TR>
-
-			<TR>
-
-				<TD width="100%" vAlign="top" align="left">
-
-					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
+					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="left" border=0>
 
 						<TR>
-
-							<TD class=r-dotted-lg width="10">&nbsp;</td>
-
 							<TD align=center vAlign=top>
-
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 
 									<TR>
 
-										<TD vAlign="top" align="left" width="75%" class=r-dotted-lg>
+										<TD vAlign="top" align="left" width="85%">
 
 											<digi:insert attribute="body" />
 
 										</TD>
 
-										<TD vAlign="top" align="left" width="25%" class=r-dotted-lg bgcolor="#f4f4f2">
+										<TD vAlign="top" align="left" width="15%">
 
 											<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 
@@ -180,12 +164,6 @@
 													</TD></TR>
 												
 											
-												
-												<TR><TD vAlign="top" align="left">
-
-													<digi:insert attribute="myTeamMembers" />
-
-												</TD></TR>
 												</logic:present>
 
 											</TABLE>
@@ -195,8 +173,7 @@
 									</TR>
 
 								</TABLE>
-
-							</TD>
+                            </TD>
 
 						</TR>
 
@@ -206,18 +183,19 @@
 
 			</TR>
 
-			<TR>
-
-				<TD width="100%"  bgcolor="#323232">
-
-				   <digi:insert attribute="footer" />
-
-				</TD>
-
-			</TR>
 
 			</TBODY>
 
+		</TABLE>
+        
+		<table cellpadding="0" cellspacing="0" width="100%" style="clear:both;position:fixed;bottom:0px;top:auto;">
+			<TR>
+
+				<TD width="100%" bgcolor="#27415f">
+					 <digi:insert attribute="footer" />
+				</TD>
+
+			</TR>
 		</TABLE>
 
 	</BODY>

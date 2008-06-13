@@ -9,7 +9,6 @@
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
-<link rel="stylesheet" href="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.css"/>" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -34,8 +33,6 @@
 <!-- dynamic drive ajax tabs -->
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/scripts/ajaxtabs.css"/>" />
 
 
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
@@ -45,8 +42,7 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/view/css/css_dhtmlsuite/modal-message.css"/>" />
+<link rel="stylesheet" href="/repository/aim/view/css/css_dhtmlsuite/modal-message.css"/>
 
 <script type="text/javascript">
 messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
@@ -87,7 +83,7 @@ function closeMessage()
 
 <!-- virtual pagination -->
 
-<script type="text/javascript" src="virtualpaginate.js">
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/virtualpaginate.js"/>">
 
 /***********************************************
 * Virtual Pagination script- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
@@ -152,22 +148,11 @@ background-color: yellow;
 
 </style>
 
-<!-- New DTHML Filters -->
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
-<!-- For DHTML Tab View of Filters -->
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" ></script>
 
 <style type="text/css"> 
 	#tabview_container .yui-nav{
@@ -224,11 +209,11 @@ background-color: yellow;
 <!-- END - For DHTML Tab View of Filters -->
 
 <script type="text/javascript">
-		YAHOO.namespace("YAHOO.amptab");
-		YAHOO.amptab.init = function() {
-		    		var tabView = new YAHOO.widget.TabView('tabview_container');
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+		YAHOOAmp.amptab.init = function() {
+		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 		};
-		YAHOO.amptab.handleClose = function() {
+		YAHOOAmp.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
 			if (filter.parent != null)
@@ -236,7 +221,7 @@ background-color: yellow;
 			wrapper.appendChild(filter);
 		};
 	
-		var myPanel1 = new YAHOO.widget.Panel("new", {
+		var myPanel1 = new YAHOOAmp.widget.Panel("new", {
 			width:"700px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -245,7 +230,7 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
-		var myPanel2 = new YAHOO.widget.Panel("new2", {
+		var myPanel2 = new YAHOOAmp.widget.Panel("new2", {
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"shadow",
@@ -254,7 +239,7 @@ background-color: yellow;
 		    modal:true,
 		    draggable:true} );
 
-		var myPanel3 = new YAHOO.widget.Panel("new3", {
+		var myPanel3 = new YAHOOAmp.widget.Panel("new3", {
 			width:"300px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -264,7 +249,7 @@ background-color: yellow;
 		    modal:true,
 		    draggable:true} );
 		    
-		    var myPanel4 = new YAHOO.widget.Panel("new3", {
+		    var myPanel4 = new YAHOOAmp.widget.Panel("new3", {
 			width:"450px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -275,7 +260,7 @@ background-color: yellow;
 		    draggable:true}
 		     );
 	
-	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
+	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 		    
 	function initScripts() {
 	    var msg='\n<digi:trn key="rep:filter:advancedSearch">Advanced Search</digi:trn>';
@@ -303,7 +288,7 @@ background-color: yellow;
 	}
 	
 	function showFilter() {
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";
 		
@@ -328,7 +313,7 @@ background-color: yellow;
 	
 	function showFormat(){
 		initFormatPopup();
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("customFormat");
 		element.style.display = "inline";
 		myPanel4.setBody(element);
@@ -381,7 +366,7 @@ background-color: yellow;
 		myPanel2.hide();
 	}
 	function showRange(){
-		YAHOO.amptab.init();
+		YAHOOAmp.amptab.init();
 		var element = document.getElementById("myRange");
 		element.style.display = "inline";
 		

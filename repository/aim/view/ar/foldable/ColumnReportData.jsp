@@ -39,7 +39,7 @@
 		if(bckColor.equals("true")) {
 %>
 <bean:define id="bckColor" value="false" toScope="page"/>
-<tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#eeeeee', '#66CCCC', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#eeeeee', '#66CCCC', '#FFFF00');" style="<%=display%>">
+<tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#ffffff', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#ffffff', '#a5bcf2', '#FFFF00');" style="<%=display%>">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
@@ -50,7 +50,7 @@
 </tr>
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
-<tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#dddddd', '#66CCCC', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#dddddd', '#66CCCC', '#FFFF00');" style="<%=display%>">
+<tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#dbe5f1', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#dbe5f1', '#a5bcf2', '#FFFF00');" style="<%=display%>">
 		<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>

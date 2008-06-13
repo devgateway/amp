@@ -2,7 +2,9 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +61,10 @@ public class GetDesktopReports extends TilesAction {
 //				} else {
 					reports.addAll(userReports);
 //				}
-                                Integer reportsPerPage=0;
+				Integer reportsPerPage=0;
+                Collections.sort((List<AmpReports>) reports, AmpReports.UpdatedDateComparator );
+                Collections.reverse((List<AmpReports>) reports);
+                                
 				session.setAttribute(Constants.MY_REPORTS,reports);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
                                 session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);

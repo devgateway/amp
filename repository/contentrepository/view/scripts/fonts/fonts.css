@@ -26,4 +26,4 @@ pre, code {font:115% monospace;*font-size:100%;}
  * Default line-height based on font-size rather than "computed-value"
  * see: http://www.w3.org/TR/CSS21/visudet.html#line-height
  */
-body * {line-height:1.22em;}
+body * {line-height:1.5em;}

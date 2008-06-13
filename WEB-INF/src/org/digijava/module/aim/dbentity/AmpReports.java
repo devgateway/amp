@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.dbentity;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -370,5 +371,12 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		}
 		return 0;
 	}
-
+	
+	  public static Comparator UpdatedDateComparator = new Comparator() {
+		    public int compare(Object report, Object anotherReport) {
+		      Date firstDate = ((AmpReports)report).getUpdatedDate();
+		      Date secondDate = ((AmpReports)anotherReport).getUpdatedDate();
+		      return firstDate.compareTo(secondDate);
+		    }
+		  };
 }

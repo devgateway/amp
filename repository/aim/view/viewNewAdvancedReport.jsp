@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <div id="mySorter" style="display: none">
@@ -96,8 +98,9 @@ session.setAttribute("progressValue", counter);
 
 
 	<tr>
-		<td style="padding-left: 5px;padding-left: 5px; padding-top: 10px;">
 		
+<logic:notEqual name="widget" scope="request" value="true">
+		<td style="padding-left: 5px;padding-left: 5px; padding-top: 10px;">
 			<logic:notEmpty name="reportMeta" property="hierarchies">
 				<a style="cursor:pointer"
 					onClick="showSorter(); ">
@@ -114,6 +117,58 @@ session.setAttribute("progressValue", counter);
 			<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
 			</logic:notEqual>
 			| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
+</logic:notEqual>
+
+<logic:equal name="widget" scope="request" value="true">
+		<td style="padding-left:-2px;">
+
+        
+        <div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
+            <span style="cursor:pointer;float:left;">
+            <logic:notEmpty name="reportMeta" property="hierarchies">
+                <a class="settingsLink" onClick="showSorter();" href="#">
+                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+                </a> | 
+            </logic:notEmpty> 
+                <a class="settingsLink" onClick="showFilter(); " >
+                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
+                </a>
+                |<a class="settingsLink" onClick="showRange(); " >
+                <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
+                </a>
+                |<a  class="settingsLink" onClick="showFormat(); " >
+                <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
+                </a>
+            </span>
+             &nbsp;<br>
+             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <table cellpadding="0" cellspacing="0" border="0" width="80%">
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+			<strong><digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
+                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
+                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
+                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+                    <jsp:include page="${listable.jspFile}" flush="true"/>
+                </logic:present>
+             </td>
+             </tr>
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
+				<%
+                AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+                %>
+                <digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=arf.getRenderStartYear()%> |
+                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=arf.getRenderEndYear()%> |
+             </td>
+             </tr>
+             </table>
+             </div>
+             </div>
+</logic:equal>
 		
 		</td>
 	</tr>
@@ -151,16 +206,35 @@ session.setAttribute("progressValue", counter);
 
 	<tr>
 	<td width="500" style="padding-left: 5px;padding-left: 5px;">
-	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
-		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-		<bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
-		<bean:define id="listableStyle" value="list" toScope="request"/>
-		<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-			<jsp:include page="${listable.jspFile}" flush="true"/>
-		</logic:present>
 	</td>
 	</tr>
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
+			<tr>
+			 <td style="padding-left: 5px;padding-right: 5px">
+				<logic:notEqual name="viewFormat" value="print">
+				<c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
+					<logic:equal name="viewFormat" value="html">
+							<a  style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
+					</logic:equal>
+					
+					<logic:equal name="viewFormat" value="foldable">
+						<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
+					</logic:equal>
+					<c:choose>							
+						<c:when  test="${i eq report.startRow}">
+							<font color="#FF0000"><fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
+						</c:when>
+						<c:otherwise>
+							<fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/>
+						</c:otherwise>								
+					</c:choose>
+					</a>
+				|
+				</c:forEach>
+				</logic:notEqual>
+			</td>
+			</tr>
+
 		<tr>
 			<td  style="padding-left: 5px;padding-left: 5px;">
 			
@@ -209,9 +283,6 @@ session.setAttribute("progressValue", counter);
 			<tr>
 			 <td style="padding-left: 5px;padding-right: 5px">
 				<logic:notEqual name="viewFormat" value="print">
-				<digi:trn key="aim:pages">Pages :
-				
-				</digi:trn>&nbsp;
 				<c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
 					<logic:equal name="viewFormat" value="html">
 							<a  style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
@@ -246,23 +317,23 @@ session.setAttribute("progressValue", counter);
 		</tr>
 	</logic:equal>
 	<tr>
-		<td>
-			&nbsp;
+		<td>&nbsp;
+			
 		</td>
 	</tr>
 	<tr>
-		<td>
-			&nbsp;
+		<td>&nbsp;
+			
 		</td>
 	</tr>
 	<tr>
-		<td>
-			&nbsp;
+		<td>&nbsp;
+			
 		</td>
 	</tr>
 	<tr>
-		<td>
-			&nbsp;
+		<td>&nbsp;
+			
 		</td>
 	</tr>
 

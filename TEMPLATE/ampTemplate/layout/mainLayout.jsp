@@ -17,6 +17,10 @@
 	<digi:base />
 
 	<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+    <!-- Stylesheet of AMP -->
+    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+
 	<script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 	
 	<digi:context name="digiContext" property="context"/>
@@ -99,29 +103,20 @@
 
 			<TR>
 
-				<TD align="left" vAlign="top" bgcolor="#5a5a58" width="100%">
-
-					<TABLE cellSpacing=0 cellPadding=0 width="98%"
-
-					vAlign="center">
+				<TD width="100%" align="center" bgcolor="#376091">
+					<TABLE cellSpacing=0 cellPadding=0 width="98%">
 
 						<TBODY>
 
-						  	<TR bgColor=#5a5a58>
+						  	<TR>
 
 						   	<TD align="left" vAlign="center">
 
 									<digi:insert attribute="headerMiddle" />
 
 								</TD>
-							 	<TD align="right" vAlign="top">
+							 	<TD align="right" vAlign="middle" style="padding-right:5px;">
 										<digi:insert attribute="loginWidget" />
-								</TD>
-
-							  	<TD width="20" align="right" vAlign="top">
-
-										<digi:insert attribute="dropdownLangSwitch" />
-
 								</TD>
 
 							</TR>
@@ -157,9 +152,13 @@
 			</TR>
 
 			<TR>
-
-				<TD width="100%"  bgcolor="#323232">
-
+<logic:notPresent name="currentMember">
+	<!-- Do not position the footer at the bottom if the user isn't logged-->
+				<TD width="100%">
+</logic:notPresent>
+<logic:present name="currentMember">
+				<TD width="100%" style="clear:both;position:fixed;bottom:0px;top:auto;">
+</logic:present>
 				   <digi:insert attribute="footer" />
 
 				</TD>

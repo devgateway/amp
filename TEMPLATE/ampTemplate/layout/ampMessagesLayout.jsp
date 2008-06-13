@@ -16,7 +16,7 @@
      	<META HTTP-EQUIV="EXPIRES" CONTENT="0">		
 	</HEAD>
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
+		<TABLE cellSpacing=0 cellPadding=0 width="100%"  border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
 				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">

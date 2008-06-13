@@ -711,11 +711,13 @@ function commentWin(val) {
 																						</c:forEach>
 																					 </c:if>
 																					</c:if>
+																					<!--commented by Sebastian Dimunzio when working on UI issues: This code Is not showing the image and can't hidde it by FM 
 																					<tr>
 																						<td colspan="4">
 																							<img width="500" height="500" src="../../gis/getActivityMap.do?action=paintMap&mapCode=TZA&segmentData=${mapParam}">
 																						</td>
 																					</tr>
+																					 -->
 																				</TABLE>
 																				</TD>
 																			</TR>

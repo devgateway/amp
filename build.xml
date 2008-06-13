@@ -14,7 +14,7 @@
     <property name="project.distname" value="digijava"/>
     <property name="project.version" value="1.1"/>
     <property name="lib" location="./WEB-INF/lib" />
-    <property name="webinf" location="./WEB-INF" />    
+    <property name="webinf" location="./WEB-INF" />
     <property name="system.lib" location="./WEB-INF/system-lib" />
     <property name="classes" location="./WEB-INF/classes" />
     <property name="src" location="./WEB-INF/src" />
@@ -201,7 +201,7 @@
     <!-- Clean the distribution directories to prevent dist from failing the second time around -->
     <target name="cleanDist">
         <tstamp/>
-        <delete  dir="${distpath.project}"/>
+        <delete dir="${distpath.project}"/>
     </target>
 
     <!-- Create binary distribution -->
@@ -241,14 +241,16 @@
 
 	<target name="deployForServer" description="deploys the project for use with a given database">
 		<delete file="${src}/hibernate.properties"/>
+        <delete file="${src}/quartz.properties"/>
 		<delete file="${repository}/digi.xml"/>
 		<delete file="${webinf}/jboss-web.xml"/>
 		<delete dir="${jackrabbit}"/>
-		<copy file="${deployConfigs}/${serverName}/hibernate.properties" todir="${src}"/> 
-		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/> 				
-		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/> 
+		<copy file="${deployConfigs}/${serverName}/hibernate.properties" todir="${src}"/>
+        <copy file="${deployConfigs}/${serverName}/quartz.properties" todir="${src}"/>
+		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
+		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>
 		<copy file="${deployConfigs}/${serverName}/repository.xml" todir="${jackrabbit}"/>
-		
+
 	</target>
 
     <target name="junit" depends="testCompile">
@@ -259,7 +261,7 @@
   		<test name="org.digijava.test.AllTests" haltonfailure="no" outfile="test_result"/>
 	</junit>
     </target>
-    
+
     <target name="restart" description="restarts the web application">
     	<touch file="${webinf}/web.xml"/>
     </target>

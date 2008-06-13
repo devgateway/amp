@@ -111,7 +111,7 @@
 	<page name="selectTeam" title=" - Select Team" />
 	<page name="viewNpdSettings" title="View Settings" />
 	<page name="viewStatusDescription" title="View Status Description"/>
-	
+
 	<!--
 	<page name="logout" title=" - Logout" />
 	-->
@@ -183,7 +183,7 @@
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />
 	<page page="viewCommentOverview" name="aim_viewCommentOverviewPopupLayout" title=" - Comment Detail" />
 	<page page="selectLocation" name="aim_locPopupLayout" title="AMP - Select Location" />
-	  
+
 	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" title="AMP - Select Organization" />
 	<page page="components/selectOrganization" name="aim_orgComponentPopUp" title="AMP - Select Organization" />
@@ -217,7 +217,7 @@
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
-	
+
 	<!-- applied patches -->
 	<page name="viewListAppliedPatches"  title ="- List Applied Patches " />
 	<page name="viewShowPatch"  title ="- Show Patch " />
@@ -247,17 +247,17 @@
 
 	<!-- for Components Manager -->
 	<page name="viewComponentTypes" title=": - AMP Component Types"/>
-	
+
 	<page page="addComponentType" title=" - Add Component Types"/>
 	<page page="addComponentType" name="aim_addComponentType" title=" - Add Component Types"/>
-	
-	
+
+
 	<page name="viewComponents" title=": - AMP Components"/>
-	
+
 	<page name="editComponents" title=": - Editing AMP Components"/>
 	<page name="addComponents" title=": - Adding AMP Components"/>
 	<page page="addComponents" name="aim_addComponents" title="AMP - Add Component"/>
-	
+
 	<page name="componentIndicatorManager" title=" - Component Indicator Manager" />
 	<page page="addComponentIndicator" name="aim_addComponentIndicator" title="AMP - Add Component Indicator"/>
 	<page page="editComponents" name="aim_editComponents" title="AMP - Edit Component"/>
@@ -340,7 +340,7 @@
 	<page name="visibilityManager" title=" - Feature Manager" />
 	<page name="cleaningVisibilityManager" title=" - Feature Manager" />
 	<page name="luceneIndex" title=" - Lucene Indexing" />
-	
+
 
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
 
@@ -382,7 +382,9 @@
     <page page="viewNPDgrid" name="amp_viewNPDgrid" title=" : NPD Print" />
     <page page="selectOrganisationForAhsurvey" name="selectOrganisationForAhsurvey" title="Select Organization" />
 
-	<!-- tab Views -->
+    <page name="quartzJobManager" title="Quartz Job Manager" />
+
+    <!-- tab Views -->
 	<page page="myTabs" name="aim_myTabs" title="My Tabs" />
         <page page="feedback" name="feedback" title="Feedback/Contact" />
 		<page name="showActivityLog" title="AMP - Activity Log" />
@@ -400,8 +402,8 @@
     <page page="addDisbOrderToContract" name="aim_addDisbOrderToContractPopupLayout" title="Disbursement Order Contract For Activity" />
     <page page="manageClassificationsConfig" name="manageClassificationsConfig" title="Manage Classifications Configuration" />
     <page page="editSectorClassConfig" name="editSectorClassConfig" title="Add/Edit Classifications Configuration" />
-    
-    
+
+
 </secondary-pages>
 <module>
 
@@ -436,8 +438,8 @@
 	<teaser name="myTasks" action="getDesktopTasks.do">
 		myTasks.jsp
 	</teaser>
-	
-	
+
+
     <teaser name="logout" action="logoutAction.do">
 		logout.jsp
 	</teaser>
@@ -457,11 +459,11 @@
 	<teaser name="costsBreakdown" action="projectCostsBreakdown.do">
 		viewCostsBreakdown.jsp
 	</teaser>
-        
+
        <teaser name="contractingBreakdown" action="contractingBreakdown.do">
 		viewContractingBreakdown.jsp
 	</teaser>
-        
+
 	<teaser name="regionalFundingBreakdown" action="getRegionalFundings.do">
 		viewRegionalFundingBreakdown.jsp
 	</teaser>

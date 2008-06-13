@@ -25,10 +25,10 @@ public class QuartzJobManager extends Action {
 
             SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();
             Scheduler sched = schedFact.getScheduler();
-            JobDetail ampJobDetail = new JobDetail("AmpActivityDisbursementsDatesJob", null, ActivityDisbursementsDatesJob.class);
-            Trigger ampJobTrigger = TriggerUtils.makeMinutelyTrigger(5);
+            JobDetail ampJobDetail = new JobDetail("ampActivityDisbursementsDatesJob", null, ActivityDisbursementsDatesJob.class);
+            Trigger ampJobTrigger = TriggerUtils.makeDailyTrigger(1,0);
             ampJobTrigger.setName("ampActivityDisbursementsDatesJobTrigger");
-            ampJobTrigger.setStartTime(TriggerUtils.getEvenSecondDate(new Date()));
+            ampJobTrigger.setStartTime(TriggerUtils.getEvenHourDate(new Date()));
             sched.scheduleJob(ampJobDetail, ampJobTrigger);
             sched.start();
 

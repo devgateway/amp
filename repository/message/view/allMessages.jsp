@@ -812,8 +812,7 @@ tr.my-border-style td {
                                         	</TD>					
 						</TR>
                                               
-                                                <TR><TD CLASS="contentbox_border"  >&nbsp;</TD></TR>						
-						<TR>
+                        
 							<TD bgColor="#ffffff" class="contentbox_border" align="left">
 								<TABLE id="msgsList">
 									<TR><TD colspan="4"></TD></TR>			

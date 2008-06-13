@@ -1,1 +1,1 @@
-ALTER TABLE amp_message MODIFY description TEXT NOT NULL;
+ALTER TABLE amp_message MODIFY description TEXT  NULL;

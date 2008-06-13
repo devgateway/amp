@@ -1,24 +1,8 @@
-
-#main {
-	clear:both;
-	text-align: left;
-	border: 1px solid #666;
-	background: #ebebeb;
-	width: 100%;
-	height:27px;
-}
-
-html>body #main {
-	height:25px;
-}
-
-
 #tabs {
-	font-family: tahoma,verdana,sans-serif;
+	font-family: Arial,Helvetica,sans-serif;
 	font-size: 8pt;
 	clear: both;
 	text-align: center;
-	font-weight: bold;
 }
 
 #tabs ul {
@@ -51,7 +35,7 @@ html>body #main {
 
 #tabs ul li a div { 
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
-	padding: 6px 10px 6px 10px;
+	padding: 4px 10px 4px 10px;
 }
 
 #tabs ul li span a { 
@@ -67,7 +51,7 @@ html>body #main {
 
 #tabs ul li span a div { 
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
-	padding: 6px 10px 6px 10px;
+	padding: 4px 10px 4px 10px;
 }
 
 #tabs a:hover {
@@ -87,7 +71,7 @@ html>body #main {
 	margin: 0 2px 0 0;
 	float: left;
 	background: #FFF3B3;
-	padding: 6px 10px 6px 10px;
+	padding: 4px 10px 4px 10px;
 	text-decoration: none;
 	color: #333;
 }
@@ -113,7 +97,7 @@ html>body #main {
 
 #subtabs li {
 	float: left;
-	padding: 6px 4px 0px 0px;
+	padding: 0px 4px 0px 4px;
 }
 
 #subtabs a, #subtabs span { 
@@ -121,35 +105,43 @@ html>body #main {
 }
 
 #subtabs a {
-	color:#000;
 }
 
 #subtabs ul li span {
-	position: relative;
-	top: 0;
-	margin: 0 0px 0 0;
-	background: #222e5d;
-	padding: 6px 4px 6px 10px;
 	text-decoration: none;
-	color: #fff;
 }
 
 #subtabs ul li div span {
-	position: relative;
-	top: 0;
-	margin: 0 0px 0 0;
-	background: #ebebeb;
-	padding: 6px 4px 6px 10px;
 	text-decoration: none;
-	color: #fff;
 }
 
 #subtabs {
-	clear: both;
 	text-align: center;
-	font-family: tahoma,verdana,sans-serif;
+	font-family:Arial,Helvetica,sans-serif;
 	font-size: 8pt;
-	font-weight: bold;
+	padding: 2px 4px 2px 4px;
+	background-color:#CCDBFF;
+}
 
+#main {
+	clear:both;
+	text-align: left;
+	border-top: 2px solid #222E5D;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	padding: 2px 4px 2px 4px;
+}
+html>body #main {
+	width:742px;
+}
+
+#mainEmpty {
+	border-top: 2px solid #222E5D;
+	width: 750px;
+	clear:both;
+}
+html>body #mainEmpty {
+	clear:both;
+	width:752px;
 }
 

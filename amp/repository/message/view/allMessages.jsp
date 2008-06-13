@@ -24,6 +24,11 @@ tr.my-border-style td {
 	font-size:8pt;!important
 	padding:2px;
 }
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 0px 1px 1px 1px; 
+	background-color: #f4f4f2;
+}
 -->
 </style>
 
@@ -42,8 +47,8 @@ tr.my-border-style td {
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
 	var from='<digi:trn key="message:from">From</digi:trn>';
         var to='<digi:trn key="message:to">To</digi:trn>';
-	var date='<digi:trn key="message:date">date</digi:trn>';
-	var prLevel='<digi:trn key="message:priority">priority</digi:trn>';
+	var date='<digi:trn key="message:date">Date</digi:trn>';
+	var prLevel='<digi:trn key="message:priority">Priority</digi:trn>';
 	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
 	var editBtn='<digi:trn key="message:Edit">Edit</digi:trn>';
 	var fwdBtn='<digi:trn key="message:Forward">Forward</digi:trn>';
@@ -207,6 +212,7 @@ tr.my-border-style td {
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
+                var messages;
 				
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
@@ -214,19 +220,23 @@ tr.my-border-style td {
 			//messages start	
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
-				messages=root.childNodes;
-				if((messages==null || messages.length==0) && firstEntry==0){
-					var newTR=document.createElement('TR');
+                           if(!root.hasChildNodes()&& firstEntry==0){
+                               var newTR=document.createElement('TR');
                                 var newTD=document.createElement('TD');
                                 newTD.innerHTML=noMsgs;
-                                newTD.colspan=4;
-					newTR.appendChild(newTD);
-					newTR.id="noMsg";
-                    var tableBody= tbl.getElementsByTagName("tbody");
-                    tableBody[0].appendChild(newTR);
-					firstEntry++;
-					return;
-				}else{
+                                newTD.colSpan=4;
+                                newTR.appendChild(newTD);
+                                newTR.id="noMsg";
+                                var tableBody= tbl.getElementsByTagName("tbody");
+                                tableBody[0].appendChild(newTR);
+                                firstEntry++;
+                                return;
+                               
+                            }
+				else{
+                                     messages=root.childNodes;
+                                    
+                                     
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
 					//	tblBody.removeChild(tblBody.childNodes[0]);
@@ -355,7 +365,7 @@ tr.my-border-style td {
 	
 	//creates table rows with message information
 	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
-	
+	    
 		var msgId=message.getAttribute('id');	
                 var newMsgId=message.getAttribute('newMsgId');// id of the newest message start of hierarchy for forwarding messages
 		//create image's td
@@ -465,7 +475,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(receivedTR);						
 				var priorityTR=document.createElement('TR');
 					var priorityTD1=document.createElement('TD');
-					priorityTD1.innerHTML='<strong>'+'&nbsp;'+prLevel+'</strong>';
+					priorityTD1.innerHTML='<strong>'+prLevel+'</strong>';
 				priorityTR.appendChild(priorityTD1);
 								
 					var priorityTD2=document.createElement('TD');
@@ -495,13 +505,15 @@ tr.my-border-style td {
 				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
-					detailsTD1.innerHTML='<strong>'+'&nbsp;'+desc+'</strong>';
-				detailsTR.appendChild(detailsTD1);									
+					detailsTD1.innerHTML='<strong>'+desc+'</strong>';
+				detailsTR.appendChild(detailsTD1);
+					
 					var detailsTD2=document.createElement('TD');
 					//getting description
 					var description=message.getAttribute('msgDetails');
                                         if(description!='null'){
-                                            detailsTD2.innerHTML=description;
+                                            description=description.substring(0,34);
+                                            detailsTD2.innerHTML=description+" (.........)";
                                         }
                                         else{
                                             detailsTD2.innerHTML="&nbsp";
@@ -540,9 +552,9 @@ tr.my-border-style td {
                 fwdOrEditTD.vAlign="top";
 		var isDraft=message.getAttribute('isDraft');
 		if(isDraft=='true'){
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'">'+editBtn+'</digi:link>';									
+                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'">'+editBtn+'</digi:link>';									
 		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'">'+fwdBtn+'</digi:link>';
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue"><img  src="/repository/message/view/images/forward.gif" border=0 /></digi:link>';
 		}
 		msgTr.appendChild(fwdOrEditTD);	
 					
@@ -552,7 +564,7 @@ tr.my-border-style td {
 		deleteTD.align='center';
                 deleteTD.vAlign="top";
 		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-		deleteTD.innerHTML='<a href="javascript:deleteMessage('+msgId+')">'+deleteBtn+'</a>';
+		deleteTD.innerHTML='<a href="javascript:deleteMessage('+msgId+')" style="cursor:pointer; text-decoration:underline; color: blue" hspace="2" ><img  src="/repository/message/view/images/trash_12.gif" border=0 /></a>';
 		msgTr.appendChild(deleteTD);
                 }
 					
@@ -571,7 +583,7 @@ tr.my-border-style td {
 <td>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=780 border="0">
     <tr>
-   <td width=14>&nbsp;</td>
+   <td width=20>&nbsp;</td>
 		<td align=left vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -616,14 +628,10 @@ tr.my-border-style td {
 					</td>
 				</tr>
 				<tr>
-	<td noWrap vAlign="top">
-
-	<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
-		<TR>
-			<TD class=r-dotted-lg-buttom vAlign=top>
-				<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
-	        		<TR><TD STYLE="width:750">
-                                   
+                            <td noWrap vAlign="top">
+				<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" >
+	        		<TR>
+                                    <TD STYLE="width:750">
                                         <DIV id="tabs">
                                             <UL>
                                                 
@@ -720,120 +728,145 @@ tr.my-border-style td {
                                             </UL>						
                                         </DIV>
                                         
-					</TD></TR>
+					
 					<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
-						<TR >
-							<TD width="100%">
-								<table align="center" width="30%" cellpadding="5" cellspacing="5">
-									<tr >
-										<td width="6%"></td>
-										<td width="38%" align="right">
+						
+                                                            <div id="main">
+                                                                <DIV id="subtabs">
+                                                                    <UL>
+								
 											<c:if test="${messageForm.childTab=='inbox'}">
-												<digi:trn key="message:inbox">Inbox</digi:trn>
-											</c:if>
+                                                                                            <LI>
+                                                                                                <span>
+                                                                                                    <digi:trn key="message:inbox">Inbox</digi:trn>|					
+                                                                                                </span>
+                                                                                            </LI>
+												
+                                                                                        </c:if>
 											<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}">
-													<digi:trn key="message:inbox">Inbox</digi:trn>
-												</a>
+                                                                                            
+                                                                                                <LI>
+                                                                                                    <div>
+                                                                                                        <span>
+                                                                                                            
+                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}">
+                                                                                                                <digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;|
+                                                                                                            </a>							
+                                                                                                        </span>
+                                                                                                    </div>	
+                                                                                                </LI>
+                                                                                                    
 											</c:if>
-										</td>
-										<td width="2%"> |</td>
-										<td width="14%" align="center">
+										
+										
 											<c:if test="${messageForm.childTab=='sent'}">
-												<digi:trn key="message:sent">Sent</digi:trn>
+                                                                                             <LI>
+                                                                                                <span>
+                                                                                                    <digi:trn key="message:sent">Sent</digi:trn>					
+                                                                                                </span>
+                                                                                            </LI>
+												
 											</c:if>
 											<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}">
-													<digi:trn key="message:sent">Sent</digi:trn>
-												</a>
+                                                                                             <LI>
+                                                                                                    <div>
+                                                                                                        <span>
+                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}">
+                                                                                                                <digi:trn key="message:sent">Sent</digi:trn>&nbsp;|
+                                                                                                            </a>							
+                                                                                                        </span>
+                                                                                                    </div>	
+                                                                                                </LI>
+												
 											</c:if>
-										</td>
-										<td width="2%"> |</td>
-										<td width="38%" align="left">
+										 
+										
 											<c:if test="${messageForm.childTab=='draft'}">
-												<digi:trn key="message:draft">Draft</digi:trn>
+                                                                                                <LI>
+                                                                                                <span>
+                                                                                                    <digi:trn key="message:draft">Draft</digi:trn>					
+                                                                                                </span>
+                                                                                            </LI>
+												
 											</c:if>
 											<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-												<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}">
-													<digi:trn key="message:draft">Draft</digi:trn>
-												</a>
-											</c:if>
-										</td>
-									</tr>
-								</table>
-							</TD>					
-						</TR>
-					</c:if>
+                                                                                              <LI>
+                                                                                                    <div>
+                                                                                                        <span>
+                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}">
+                                                                                                                <digi:trn key="message:draft">Draft</digi:trn>
+                                                                                                            </a>							
+                                                                                                        </span>
+                                                                                                    </div>	
+                                                                                                </LI>
 												
+											</c:if>
+                                                                                  
+                                                                                </UL>
+                                                                                &nbsp;
+                                                                                  </DIV>
+                                                                                </div>
+									
+						
+					</c:if>
+                                        	</TD>					
+						</TR>
+                                              
+                                                <TR><TD CLASS="contentbox_border"  >&nbsp;</TD></TR>						
 						<TR>
-							<TD bgColor="#ffffff" class="box-border" align="left" >
+							<TD bgColor="#ffffff" class="contentbox_border" align="left">
 								<TABLE id="msgsList">
 									<TR><TD colspan="4"></TD></TR>			
 								</TABLE>
 							</TD>
 						</TR>
-							<TD bgColor="#ffffff"  align="left" >
+                                                <TR>
+                                                      
+                                               
+							<TD bgColor="#ffffff"  align="left">
 								<TABLE >
 									<TR id="paginationPlace"><TD colspan="4"></TD></TR>			
 								</TABLE>
 							</TD>
-						<!-- 
-								<logic:notEmpty name="messageForm" property="pagedMessagesForTm">
-							<TR><TD> 
-								<digi:trn key="message:pages">Pages</digi:trn>:
-								<c:if test="${messageForm.page>1}">
-									<c:set var="trn">
-										<digi:trn key="message:firstPage">click here to go to first page</digi:trn>
-									</c:set>
-									<a href="javascript:goToPage('1')" title="${trn}" >&lt;&lt;</a>
-									
-									<c:set var="trn">
-										<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>
-									</c:set>
-									<a href="javascript:goToPage(${messageForm.page-1})" title="${trn}" > &lt; </a>
-									
-								</c:if>
-								&nbsp;
-								<c:if test="${not empty messageForm.allPages}">
-									
-									<c:set var="length" value="${messageForm.pagesToShow}"></c:set>
-									<c:set var="start" value="${messageForm.offset}"/>								
-									
-									<logic:iterate id="pg" name="messageForm" property="allPages" offset="${start}" length="${length}">
-										<c:if test="${pg==messageForm.page}"><font color="red">${pg}</font></c:if>
-										<c:if test="${pg!=messageForm.page}">
-											<c:set var="translation">
-												<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
-											</c:set>
-											<a href="javascript:goToPage(${pg})" title="${translation}" >${pg}</a> 
-										</c:if> |&nbsp;
-									</logic:iterate>
-								</c:if>
-								<c:if test="${messageForm.page<messageForm.lastPage}">
-									<c:set var="trn">
-										<digi:trn key="message:previousPage">click here to go to next page</digi:trn>
-									</c:set>
-									<a href="javascript:goToPage(${messageForm.page+1})" title="${trn}" > &gt; </a>
-									
-									<c:set var="trn">
-										<digi:trn key="message:firstPage">click here to go to last page</digi:trn>
-									</c:set>
-									<a href="javascript:goToPage(${messageForm.lastPage})" title="${trn}" >&gt;&gt;</a>							
-								</c:if>
-								&nbsp; ${messageForm.page}of ${messageForm.lastPage}
-							</TD></TR>					
-						</logic:notEmpty>					
-						 -->						
-				</TABLE>				
-			</TD>
-		</TR>
-	</TABLE>
-    </td>
-</tr>
-</table>
-</td>
-</tr></table>
-</td>
-</tr></table>
+                                                        </TR>
+                                                        <TR >
+                                                            <TD>&nbsp;</TD>
+                                                        </TR>
+                                                        <TR>
+                                                        <TD>
+                                                            <TABLE width="750px">
+                                                            <TR>
+                                                                <TD COLSPAN="2">
+                                                                <strong><digi:trn key="message:IconReference">Icons Reference</digi:trn></strong>
+                                                            </TD>
+                                                            </TR>
+                                                            <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/forward.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickForwardMessage"> Click here to forward Message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                            <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickDeleteMessage"> Click here to delete Message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                        </TABLE>
+                                                        </TD>
+                                                    </TR>
+						
+                                              
+                                             </TABLE>				
+                                                 
+                                         </td>
+                                     </tr>
+                                 </table>
+                             </td>
+                         </tr>
+                     </table>
+                 </td>
+             </tr>
+         </table>
 
 </digi:form>

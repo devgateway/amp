@@ -416,7 +416,9 @@ border-right:1px solid white;
 </logic:present>
 <script language="javascript">
 //Run initialization for menu
-var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", {  });
+var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
+autosubmenudisplay: true
+ });
 oMenuBar.render();
 
 </script>      

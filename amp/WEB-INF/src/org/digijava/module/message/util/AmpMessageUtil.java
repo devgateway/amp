@@ -2,29 +2,34 @@ package org.digijava.module.message.util;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageConstants;
 
 public class AmpMessageUtil {
 	private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
 	
-	public static List<AmpMessage> getAllMessages() throws AimException {
+	public static <E extends AmpMessage> List getAllMessages(Class<E> clazz) throws AimException {
 		Session session=null;
 		String queryString =null;
 		Query query=null;
 		List<AmpMessage> returnValue=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();			
-			queryString= "select a from " + AmpMessage.class.getName()+ " a";
+			queryString= "select a from " + clazz.getName()+ " a";
 			query=session.createQuery(queryString);
 			returnValue=query.list();
 		}catch(Exception ex) {
@@ -96,6 +101,24 @@ public class AmpMessageUtil {
 			}
 			throw new AimException("delete failed",ex);
 		}
+	}	
+	
+	public static List<TemplateAlert> getTemplateAlerts(String relatedTriggerName) throws Exception{
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<TemplateAlert>  returnValue=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			queryString= "select t from " + TemplateAlert.class.getName()+ " t where t.relatedTriggerName=:relTriggerName";
+			query=session.createQuery(queryString);			
+			query.setParameter("relTriggerName", relatedTriggerName);
+			returnValue=(List<TemplateAlert> )query.list();
+		}catch(Exception ex) {
+			logger.error("couldn't load TemplateAlert" + ex.getMessage());	
+			ex.printStackTrace();
+		}
+		return returnValue;
 	}
 	
 	//***********************************************Message State functions************************************************
@@ -362,5 +385,15 @@ public class AmpMessageUtil {
 			throw new AimException("update failed",ex);
 		}
 	}
-	
+
+	/**
+	 * returns domain 
+	 */
+	public static String getCurrentURL(HttpServletRequest request) throws DgException {
+		String partialURL=DgUtil.getCurrRootUrl(request);
+		if(!partialURL.endsWith("/")){
+			partialURL+="/";
+		}
+		return partialURL;
+	}
 }

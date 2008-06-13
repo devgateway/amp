@@ -7,17 +7,9 @@ package org.digijava.module.message.dbentity;
  *
  */
 public class AmpAlert extends AmpMessage{
-	private Integer alertType;
+
 	private String alertTriggerClass;
 
-	public Integer getAlertType() {
-		return alertType;
-	}
-
-	public void setAlertType(Integer alertType) {
-		this.alertType = alertType;
-	}
-	
 	/**
 	 * This method is used to define whether user should be able to edit message or not.
 	 *  It Message is of SystemMessage type,that user shouldn't be able to edit it.

@@ -10,8 +10,9 @@ public class MessageHelper {
 	private String creationDate;
 	private String from;
 	private List<String> receivers;
+	private String objectURL;
 	
-	public MessageHelper(){
+		public MessageHelper(){
 		
 	}
 	
@@ -65,6 +66,12 @@ public class MessageHelper {
 	public void setMsgId(Long msgId) {
 		this.msgId = msgId;
 	}
-	
+	public String getObjectURL() {
+		return objectURL;
+	}
+
+	public void setObjectURL(String objectURL) {
+		this.objectURL = objectURL;
+	}
 	
 }

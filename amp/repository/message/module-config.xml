@@ -11,10 +11,7 @@
 			</hibernate-class>
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.CalendarEvent
-			</hibernate-class>
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.SystemAdminMessage
-			</hibernate-class>
+			</hibernate-class>			
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.AmpMessageState	
 			</hibernate-class>	
@@ -24,6 +21,9 @@
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.UserMessage	
 			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.TemplateAlert	
+			</hibernate-class>	
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.AmpMessageSettings	
 			</hibernate-class>		

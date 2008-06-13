@@ -18,6 +18,11 @@
      	<forward name="settingsPage" path="/showLayout.do?layout=messageSettings" />
      	<forward name="index" path="/aim/index.do" redirect="true" />
      </action>
+     <action path="/message/templatesManager" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.TemplateAlertActions">
+     	<forward name="addOrEditPage" path="/showLayout.do?layout=addOrEditTemplate" />
+     	<forward name="templatesManager" path="/showLayout.do?layout=templateAlertsManager"/>
+     </action>
+     
 </action-mappings>
 
 </struts-config>

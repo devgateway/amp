@@ -27,7 +27,7 @@ public abstract class Trigger {
      * A list of parameter names, specific to this trigger,
      * that can be used in a message template to show information.
      * saved in the event. 
-     * Example of a template that uses the parameterNames as replacable keys:
+     * Example of a template that uses the parameterNames as replaceable keys:
      * <<A new activity with the name #name# has been created on #creationDate#.
      * The activity creator is #createdBy#. Check the new activity here: #url#>>
      * @see ActivitySaveTrigger
@@ -41,10 +41,13 @@ public abstract class Trigger {
      * is used here as a stub example. We need to implement it
      */
     protected void forwardEvent() {
-	Event e=generateEvent();
-	AmpMessageWorker.processEvent(e);
+		Event e=generateEvent();
+		try {
+			AmpMessageWorker.processEvent(e);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
-    
-    
-    
+  
 }

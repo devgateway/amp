@@ -8,16 +8,6 @@ package org.digijava.module.message.dbentity;
  */
 public class CalendarEvent extends AmpMessage {
 	
-	private Integer calendarEventType;
-
-	public Integer getCalendarEventType() {
-		return calendarEventType;
-	}
-
-	public void setCalendarEventType(Integer calendarEventType) {
-		this.calendarEventType = calendarEventType;
-	}
-	
 	/**
 	 * This method is used to define whether user should be able to edit message or not.
 	 *  It Message is of SystemMessage type,that user shouldn't be able to edit it.

@@ -21,28 +21,21 @@
 		<property name="emailable" column="is_emailable"  type="java.lang.Boolean"/>	
 		<property name="draft" column="is_draft"  type="java.lang.Boolean"/>
 		<property name="forwardedMessageId" column="forwarded_message_Id"  type="java.lang.Long"/>
-                
-               <property name="receivers" column="receivers"  type="java.lang.String"/>
-               <property name="senderName" column="sender_name"  type="java.lang.String"/>
+		
+        <property name="receivers" column="receivers"  type="java.lang.String"/>
+        <property name="senderName" column="sender_name"  type="java.lang.String"/>
+        <property name="objectURL" column="object_URL"  type="java.lang.String"/>
                                 
-		<subclass name="org.digijava.module.message.dbentity.AmpAlert" discriminator-value="a">
-			<property name="alertType" column="alert_type"  type="java.lang.Integer"/>
-		</subclass>			
+		<subclass name="org.digijava.module.message.dbentity.AmpAlert" discriminator-value="a"/>
 		
-		<subclass name="org.digijava.module.message.dbentity.CalendarEvent" discriminator-value="c">
-			<property name="calendarEventType" column="calendar_event_type"  type="java.lang.Integer"/>
-		</subclass>	
+		<subclass name="org.digijava.module.message.dbentity.CalendarEvent" discriminator-value="c"/>
 		
-		<subclass name="org.digijava.module.message.dbentity.SystemMessage" discriminator-value="s">
-			<property name="systemMessageType" column="system_message_type"  type="java.lang.Integer"/>
-		</subclass>	
+		<subclass name="org.digijava.module.message.dbentity.Approval" discriminator-value="p"/>
 		
-		<subclass name="org.digijava.module.message.dbentity.Approval" discriminator-value="p">
-			<property name="approvalType" column="approval_type"  type="java.lang.Integer"/>
-		</subclass>
+		<subclass name="org.digijava.module.message.dbentity.UserMessage" discriminator-value="u"/>
 		
-		<subclass name="org.digijava.module.message.dbentity.UserMessage" discriminator-value="u">
-			<property name="userMessageType" column="user_message_type"  type="java.lang.Integer"/>
+		<subclass name="org.digijava.module.message.dbentity.TemplateAlert" discriminator-value="t">
+			<property name="relatedTriggerName" column="related_trigger_name"  type="java.lang.String"/>
 		</subclass>
 		
 	</class>

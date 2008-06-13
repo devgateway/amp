@@ -7,14 +7,15 @@ package org.digijava.module.message.helper;
  */
 public class MessageConstants {
 	
-    	/**
-    	 * Add here all the other classes that extend Trigger class. Alternatively you can use a singleton for dynamic instantiation, see:
-    	 * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
-    	 */
-    	public static final Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class}; 
+    /**
+     * Add here all the other classes that extend Trigger class. Alternatively you can use a singleton for dynamic instantiation, see:
+     * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
+     */
+    public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,UserRegistrationTrigger.class}; 
+    public static final  String[] triggerName=new String[] {"Save Actvity","New User Registration"};
     
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
-	public static final String PRIORITY_LEVEL_KEY= "priorty_level";
+	public static final String PRIORITY_LEVEL_KEY= "priorty_level"; 
 	
 	public static final String MESSAGE_TYPE_NAME= "Message Type";
 	public static final String MESSAGE_TYPE_KEY= "message_type";
@@ -23,6 +24,7 @@ public class MessageConstants {
 	 * What or who sends the message
 	 */
 	public static final String SENDER_TYPE_USER= "User";
+	public static final String SENDER_TYPE_SYSTEM= "System";
 	public static final String SENDER_TYPE_ACTIVITY= "Activity";
 	public static final String SENDER_TYPE_USER_MANAGER= "UM";
 	
@@ -36,6 +38,6 @@ public class MessageConstants {
 	/**
 	 * pagination Elements
 	 */
-	public static final int MESSAGES_PER_PAGE=10;
+	public static final int MESSAGES_PER_PAGE=4;
 	public static final int PAGES_TO_SHOW=5;
 }

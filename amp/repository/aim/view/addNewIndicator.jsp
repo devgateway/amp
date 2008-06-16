@@ -232,8 +232,8 @@ function closeWindow() {
           </tr>
           <tr id="trCategory">
           </tr>
-          <field:display name="Sector" feature="Admin">
-          <tr id="trSector">
+          <field:display name="Sectors" feature="Admin">
+          <tr>
           <td>
           <digi:trn key="admin:sectors">
           	Sectors
@@ -244,6 +244,8 @@ function closeWindow() {
              </td>
           </tr> 
           </field:display>  
+           <tr id="trSector">
+           </tr>
           <field:display name="Creation date" feature="Admin">
 	      <tr id="trCreationDate">
             <td>

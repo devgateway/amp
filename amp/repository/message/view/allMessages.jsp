@@ -10,8 +10,8 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>">
 <style>
 <!--
-tr.my-border-style td {
-      border-bottom: 1px solid silver;
+.my-border-style {
+      border-top: 1px solid  #f4f4f2;
 }
 .trOdd {
 	background-color:#dbe5f1;
@@ -59,6 +59,9 @@ tr.my-border-style td {
 	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
 	var objURL='<digi:trn key="message:objURL">Object URL</digi:trn>';
+        var forwardClick="<digi:trn key="message:ClickForwardMessage"> Click here to forward Message&nbsp;</digi:trn>";
+        var editClick="<digi:trn key="message:ClickEditMessage"> Click here to Edit Message&nbsp;</digi:trn>";
+        var deleteClick="<digi:trn key="message:ClickDeleteMessage"> Click here to Delete Message&nbsp;</digi:trn>";
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -89,11 +92,11 @@ tr.my-border-style td {
 	function viewMessage(id,isMsg) {
             if(isMsg){
 		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
-                markMsgeAsRead(id);
-                }
-                else{           
+            markMsgeAsRead(id);
+        }
+        else{           
                     openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,600,430);
-                }
+        }
 	}
 	
 	function deleteMessage(msgId) {
@@ -376,8 +379,8 @@ tr.my-border-style td {
     
                 }
 		imgTD.vAlign='top';	
-                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>';
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage"> Click here to expand Message&nbsp;</digi:trn>"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click here to collapse Message&nbsp;</digi:trn>/>';
                     msgTr.appendChild(imgTD);
                 
                
@@ -392,9 +395,9 @@ tr.my-border-style td {
                       msgName=message.getAttribute('name');
                  }
                 if(fwdOrEditDel){
-                    nameTD.width='60%';}
+                    nameTD.width='80%';}
                 else{
-                    nameTD.width='90%';
+                    nameTD.width='95%';
                 }
                    
 		//creating visible div for message name
@@ -489,7 +492,7 @@ tr.my-border-style td {
 			divTblBody.appendChild(priorityTR);	
 				var objURLTR=document.createElement('TR');
 					var objURLTD1=document.createElement('TD');
-					objURLTD1.innerHTML='&nbsp;'+objURL;
+					objURLTD1.innerHTML='<strong>'+objURL+'</strong>';
 				objURLTR.appendChild(objURLTD1);
 					var objURLTD2=document.createElement('TD');
 					//getting URL
@@ -513,7 +516,7 @@ tr.my-border-style td {
 					var description=message.getAttribute('msgDetails');
                                         if(description!='null'){
                                             description=description.substring(0,34);
-                                            detailsTD2.innerHTML=description+" (.........)";
+                                            detailsTD2.innerHTML=description+" .........";
                                         }
                                         else{
                                             detailsTD2.innerHTML="&nbsp";
@@ -524,7 +527,8 @@ tr.my-border-style td {
         // create forwarded messages
         if(message.childNodes!=null&&message.childNodes.length>0){
             var forwardedTb=document.createElement('TABLE');
-            forwardedTb.width="100%"
+            forwardedTb.width="100%";
+            forwardedTb.className="my-border-style";
             var forwardedTbody=document.createElement('TBODY');
             for(var i=0;i<message.childNodes.length;i++){
                 var forwardedTR=document.createElement('TR');
@@ -534,7 +538,7 @@ tr.my-border-style td {
             forwardedTb.appendChild(forwardedTbody);
             var forwardTR=document.createElement('TR');
             var forwardTD=document.createElement('TD');
-            forwardTD.setAttribute("colSpan","2");
+            forwardTD.setAttribute("colSpan","3");
             
             forwardTD.appendChild(forwardedTb);
             forwardTR.appendChild(forwardTD);
@@ -547,27 +551,28 @@ tr.my-border-style td {
         if(fwdOrEditDel){
 		// forward or edit link
 		fwdOrEditTD=document.createElement('TD');
-		fwdOrEditTD.width='20%';
-		fwdOrEditTD.align='right';
+		fwdOrEditTD.width='10%';
+		fwdOrEditTD.align='center';
                 fwdOrEditTD.vAlign="top";
 		var isDraft=message.getAttribute('isDraft');
+                
 		if(isDraft=='true'){
-                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'">'+editBtn+'</digi:link>';									
+                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
 		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue"><img  src="/repository/message/view/images/forward.gif" border=0 /></digi:link>';
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" ><img  src="/repository/message/view/images/forward.gif" border=0  hspace="2" /></digi:link>';
 		}
 		msgTr.appendChild(fwdOrEditTD);	
 					
 		//delete link
 		var deleteTD=document.createElement('TD');
-		deleteTD.width='20%';
+		deleteTD.width='10%';
 		deleteTD.align='center';
                 deleteTD.vAlign="top";
 		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-		deleteTD.innerHTML='<a href="javascript:deleteMessage('+msgId+')" style="cursor:pointer; text-decoration:underline; color: blue" hspace="2" ><img  src="/repository/message/view/images/trash_12.gif" border=0 /></a>';
+		deleteTD.innerHTML='<a href="javascript:deleteMessage('+msgId+')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
 		msgTr.appendChild(deleteTD);
                 }
-					
+             
 		return msgTr;			
 	
 	}
@@ -738,7 +743,7 @@ tr.my-border-style td {
 											<c:if test="${messageForm.childTab=='inbox'}">
                                                                                             <LI>
                                                                                                 <span>
-                                                                                                    <digi:trn key="message:inbox">Inbox</digi:trn>|					
+                                                                                                    <digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;&nbsp;|					
                                                                                                 </span>
                                                                                             </LI>
 												
@@ -750,8 +755,8 @@ tr.my-border-style td {
                                                                                                         <span>
                                                                                                             
                                                                                                             <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}">
-                                                                                                                <digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;|
-                                                                                                            </a>							
+                                                                                                                <digi:trn key="message:inbox">Inbox</digi:trn>
+                                                                                                            </a>&nbsp;&nbsp;|							
                                                                                                         </span>
                                                                                                     </div>	
                                                                                                 </LI>
@@ -762,7 +767,7 @@ tr.my-border-style td {
 											<c:if test="${messageForm.childTab=='sent'}">
                                                                                              <LI>
                                                                                                 <span>
-                                                                                                    <digi:trn key="message:sent">Sent</digi:trn>					
+                                                                                                    <digi:trn key="message:sent">Sent</digi:trn>&nbsp;&nbsp;|					
                                                                                                 </span>
                                                                                             </LI>
 												
@@ -772,8 +777,8 @@ tr.my-border-style td {
                                                                                                     <div>
                                                                                                         <span>
                                                                                                             <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}">
-                                                                                                                <digi:trn key="message:sent">Sent</digi:trn>&nbsp;|
-                                                                                                            </a>							
+                                                                                                                <digi:trn key="message:sent">Sent</digi:trn>
+                                                                                                            </a>&nbsp;&nbsp;|							
                                                                                                         </span>
                                                                                                     </div>	
                                                                                                 </LI>
@@ -839,6 +844,18 @@ tr.my-border-style td {
                                                                 <strong><digi:trn key="message:IconReference">Icons Reference</digi:trn></strong>
                                                             </TD>
                                                             </TR>
+                                                              <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickExpandMessage"> Click here to expand Message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                             <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/read.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickCollapseMessage"> Click here to collapse Message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
                                                             <TR>
                                                                 <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/forward.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickForwardMessage"> Click here to forward Message&nbsp;</digi:trn>
@@ -846,6 +863,12 @@ tr.my-border-style td {
                                                             </TD>
                                                             </TR>
                                                             <TR>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickEditMessage"> Click here to edit Message&nbsp;</digi:trn>
+                                                                    <br />
+                                                            </TD>
+                                                            </TR>
+                                                             <TR>
                                                                 <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickDeleteMessage"> Click here to delete Message&nbsp;</digi:trn>
                                                                     <br />

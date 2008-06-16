@@ -102,7 +102,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setReportId(null);
 		myForm.setReportTitle( null );
 		myForm.setReportDescription( null );
-		myForm.setReportType( null );
+		myForm.setReportType( "donor" );
 		myForm.setReportPeriod("A");
 		myForm.setHideActivities( null );
 		myForm.setSelectedColumns( null );

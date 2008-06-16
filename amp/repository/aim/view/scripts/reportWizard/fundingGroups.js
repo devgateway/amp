@@ -76,8 +76,11 @@ function checkSelectedHierarchies() {
 				break;
 			}
 		}
-		if ( !isInSelectedColumns )
+		if ( !isInSelectedColumns ) {
 			selHierEl.removeChild( hiers[i] );
+			i=i-1;
+		}
+			
 	}
 	
 }

@@ -38,12 +38,6 @@
 																									</script>
 																								</logic:iterate>
 																							</logic:iterate>
-																					<html:button styleClass="dr-menu" onclick="treeObj.expandAll()" property="expand">
-																						<digi:trn key="btn:expand">Expand</digi:trn>
-																					</html:button>
-																					<html:button styleClass="dr-menu"  property="collapse" onclick="treeObj.collapseAll()">
-																						<digi:trn key="btn:collapse">Collapse</digi:trn>
-																					</html:button>
 																					<!--
 																						Because the donor report and the contribution report are now different (the donor has also the indicator columnns)
 																						we have to create different c:if for each report
@@ -109,17 +103,6 @@
 
 
 </digi:form>
-<script type="text/javascript">
-function initScripts() {
-	treeObj = new DHTMLSuite.JSDragDropTree();
-	treeObj.setTreeId('dhtmlgoodies_tree');
-	treeObj.init();
-	treeObj.showHideNode(false,'dhtmlgoodies_tree');
-	//treeObj.expandAll();
-}
-window.onload = function (){
-	initScripts();
-}
-</script>
+
 
 

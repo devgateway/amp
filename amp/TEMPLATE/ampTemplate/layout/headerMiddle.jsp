@@ -193,7 +193,7 @@ border-right:1px solid white;
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
-                                                    <a class="yuiampmenuitemlabel" onclick="return addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
+                                                    <a class="yuiampmenuitemlabel" href="javascrtip:addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
 												</li>
 </c:if></c:if>
 										<li class="yuiampmenuitem">

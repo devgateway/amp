@@ -105,7 +105,8 @@
 																					<tr><td></td></tr>
 																				</c:if>																					
 																				<tr>																					
-																					<td align="center" colspan="4"><textarea cols="60" rows="10" id="messageDescription" readonly="readonly">${messageForm.description}</textarea></td>																					
+																					<td align="center" colspan="4" >
+																					<div>${messageForm.description}</div>																																										
 																				</tr>
 																				<tr>
 																					<td colspan="4" align="center">

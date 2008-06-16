@@ -55,10 +55,10 @@ public class AmpMessageWorker {
 		}
     	HashMap<String, String> myHashMap=new HashMap<String, String>();
     	myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(ActivitySaveTrigger.PARAM_NAME));    	  
-    	myHashMap.put(MessageConstants.OBJECT_AUTHOR, (String)e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY));    	
+    	myHashMap.put(MessageConstants.OBJECT_AUTHOR, ((AmpTeamMember)e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getUser().getName());    	
     	//url
     	if(partialURL!=null){
-    		myHashMap.put(MessageConstants.OBJECT_URL,partialURL+e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
+    		myHashMap.put(MessageConstants.OBJECT_URL,"<a href=\""+partialURL+e.getParameters().get(ActivitySaveTrigger.PARAM_URL)+"\">activity URL</a>");
 			alert.setObjectURL(partialURL+e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
 		}
     	alert.setSenderId(((AmpTeamMember)e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getAmpTeamMemId());
@@ -80,7 +80,7 @@ public class AmpMessageWorker {
     	HashMap<String, String> myHashMap=new HashMap<String, String>();
     	myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
     	if(partialURL!=null){
-    		myHashMap.put(MessageConstants.OBJECT_URL, partialURL+e.getParameters().get(UserRegistrationTrigger.PARAM_URL));
+    		myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\""+partialURL+e.getParameters().get(UserRegistrationTrigger.PARAM_URL)+"\">User Profile URL</a>");
     		alert.setObjectURL(partialURL+e.getParameters().get(UserRegistrationTrigger.PARAM_URL));
     	}    	    	
     	alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);    	
@@ -100,7 +100,7 @@ public class AmpMessageWorker {
     	myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
     	//url
     	if(partialURL!=null){
-    		myHashMap.put(MessageConstants.OBJECT_URL,partialURL+e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
+    		myHashMap.put(MessageConstants.OBJECT_URL,"<a href=\""+partialURL+e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL)+"\">activity URL</a>");
 			alert.setObjectURL(partialURL+e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_URL));
 		}
     	alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);

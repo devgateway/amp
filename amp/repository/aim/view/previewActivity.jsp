@@ -1658,12 +1658,9 @@ function collapseAll() {
 													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="executingAgencies"
-														id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrgRole">
+														id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																<ul><li> 
-																<bean:write name="execAgencies" property="organisation.name" />
-																<field:display name="Executing Agency Percentage"  feature="Executing Agency">
-																	(<bean:write name="execAgencies" property="percentage"/>%)
-																</field:display>
+																<bean:write name="execAgencies" property="name" />
 																</li></ul>
 														</logic:iterate>
 														</td></tr>
@@ -1684,8 +1681,7 @@ function collapseAll() {
 												<div id="act_implementing_agency" style="display: none;">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="impAgencies"
-													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+													<logic:iterate name="aimEditActivityForm" property="impAgencies" id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> <bean:write name="impAgencies" property="name" /></li></ul>
 													</logic:iterate>
 													</td></tr>

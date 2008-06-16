@@ -228,6 +228,7 @@ function closeWindow() {
           </tr>
           <tr id="trCategory">
           </tr>
+          <field:display name="Sector" feature="Admin">
           <tr id="trSector">
           <td>
           <digi:trn key="admin:sectors">
@@ -237,7 +238,8 @@ function closeWindow() {
             <td >
               <jsp:include page="addIndicatorSector.jsp"/>
              </td>
-          </tr>   
+          </tr> 
+          </field:display>  
           <field:display name="Creation date" feature="Admin">
 	      <tr id="trCreationDate">
             <td>

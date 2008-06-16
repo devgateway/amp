@@ -7,6 +7,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="javascript">

@@ -522,6 +522,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Description" feature="Admin"></field:display>
 <field:display name="Indicator code" feature="Admin"></field:display>
 <field:display name="Indicator Type" feature="Admin"></field:display>
+<field:display name="Sector" feature="Admin"></field:display>
 <field:display name="Creation date" feature="Admin"></field:display>
 <field:display name="Add New Indicator" feature="Admin"></field:display>
 

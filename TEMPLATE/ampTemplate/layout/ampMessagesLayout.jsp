@@ -24,20 +24,17 @@
 				</TD>
 			</TR>
 			<TR>
-				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
-					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#5a5a58">
+				<TD width="100%" align="center" vAlign="top" bgcolor="#376091">
+					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#376091">
 						<TBODY>
-						  	<TR bgColor=#5a5a58 height="15">
+						  	<TR bgColor=#376091 height="15">
 						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
 							<td align="right" vAlign="top" height="15">
 									<digi:insert attribute="loginWidget" />	
 							</td>	
-							  	<TD width="20" align="right" vAlign="top" height="15">
-									<digi:insert attribute="dropdownLangSwitch" />
-								</TD>
-							</TR>
+						</TR>
 						</TBODY>
 					</TABLE>
 				</TD>

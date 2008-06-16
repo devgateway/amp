@@ -20,7 +20,7 @@ public class ReportWizardForm extends ActionForm {
 	
 	private HashMap ampTreeColumns;
 	private Collection ampMeasures		= null;
-	private String reportType 			= "";
+	private String reportType 			= "donor";
 	private Boolean desktopTab   		= false;
 	
 	private Boolean hideActivities 		= false;

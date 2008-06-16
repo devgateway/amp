@@ -8,7 +8,6 @@
 		
 			MyDragAndDropObject.prototype.onDragOver	= function (e, tId) {
 				var destObj			= document.getElementById(tId);
-				
 				var srcObj			= document.getElementById(this.id);
 				if (destObj.nodeName.toLowerCase()=="li") {
 					if ( this.goingUp ) {
@@ -24,6 +23,7 @@
 			}
 			MyDragAndDropObject.prototype.startDrag		= function(x, y) {
 				//alert('startDrag');
+				( new YAHOO.util.Element(this.getDragEl()) ).addClass("list1");
 				var realObj	= this.getEl();
 				var dragObj	= this.getDragEl();
 				dragObj.innerHTML	= realObj.innerHTML;
@@ -145,18 +145,25 @@
 				var divObj		= document.getElementById( this.containerId );
 				var liObjs		= divObj.getElementsByTagName('li');
 				var aObjs		= divObj.getElementsByTagName('a');
+				var imgObjs		= divObj.getElementsByTagName('img');
 				
-				for (i=0; i<liObjs.length; i++) {
+				for (var i=0; i<liObjs.length; i++) {
 					if ( liObjs[i].getElementsByTagName("ul").length==0 ) {
 						var tId				= liObjs[i].id;
 						var draggableItem	= new YAHOO.util.DDProxy(tId);
 						this.addActions(draggableItem);
 					}
 				}
+				
+				for (var i=0; i<imgObjs.length; i++) {
+					if ( imgObjs[i].src.indexOf("folder") >= 0 ) {
+						imgObjs[i].style.display	= "none";
+					}
+				}
 			}
 			ColumnsDragAndDropObject.prototype.startDrag	= function(x, y) {
-				//MyDragAndDropObject.prototype.startDrag.call(this,x,y);
-				this.getDragEl().setAttribute('class','list1');
+				//this.getDragEl().setAttribute('class','list1');
+				( new YAHOO.util.Element(this.getDragEl()) ).addClass("list1");
 				var realObj					= document.getElementById(this.id);
 				var inputEl					= realObj.getElementsByTagName('input')[0];
 				var spanEl					= realObj.getElementsByTagName('span')[0];

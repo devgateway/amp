@@ -23,11 +23,12 @@
 
 	.draglist { 
 		position: relative;
-		width: 250px; 
-		height: 250px;
+		width: 87%; 
+		height: 300px;
 		overflow: auto;
 		background: #f7f7f7;
-		border: 1px solid gray;
+		border: 1px solid;
+		border-right: 1px solid black;
 		margin:0;
 		padding:2px;
 		text-align: left;
@@ -80,18 +81,28 @@
 	}
 
 
-	li.list1 {
+	.list1, .list2 {
 		background-color: #D7EAFD;
 		border:1px solid #7EA6B2;
 		text-align: left;
+		font-size: 8pt;
+		font-weight: bold;
+		vertical-align: middle;
 	}
 
-	li.list2 {
-		background-color: #D7EAFD;
-	border:1px solid #6B4C86;
-}
 
-
+	
+	#dhtmlgoodies_tree {
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+		padding: 0px;
+		margin:  0px;
+	}
+	#dhtmlgoodies_tree li {
+		padding: 0px;
+		margin:  0px;
+	}
 
 
 
@@ -100,12 +111,14 @@
 
 
 				#wizard_container {  
-					width: 80%;
-					margin-left: 100px;
+					width: 90%;
+					margin-left: 10px;
 					margin-bottom: 100px;
 				}
 				#wizard_container .yui-nav{
-				
+					font-family: Arial,Helvetica,sans-serif;
+					font-weight: normal;
+					font-size: 8pt;
 				}
 				#wizard_container .yui-nav li {
 						margin-right:0;
@@ -113,37 +126,35 @@
 				
 				#wizard_container .yui-content { border-width: 1px; border-style: solid; border-color: black;}
 				
-				#wizard_container .yui-content div.yui-tab-content { padding: 45px; text-align: center;  vertical-align: middle; }
+				#wizard_container .yui-content div.yui-tab-content { padding: 10px 45px 10px 45px; text-align: center;  vertical-align: middle; }
 									
 				#wizard_container .yui-nav li a { 
 						float:left;
-					cursor:pointer; 
-					text-decoration: none; 
-					font-size: 8pt; 
-					color:#fff;
-					font-weight: bold;
-					background-color: white;
-					margin:0pt 0px 0pt 0pt;
-					background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
+						cursor:pointer; 
+						text-decoration: none; 
+						color:#fff;
+						background-color: white;
+						margin:0pt 0pt 0pt 0pt;
+						background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
 				}
 					
 				#wizard_container li.selected a{ 
 						float:left;
 					cursor:pointer; 
 					text-decoration: none; 
-					font-size: 8pt; 
-					font-weight: bold;
 					background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
 					color: white;
 				}
 				#wizard_container li a div{ 
 						background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top;
-					padding: 6px 10px 6px 10px;
+						padding: 4px 10px 4px 10px;
+						font-size: 8pt;
 				}
 						
 				#wizard_container li.selected a div{ 
 						background:url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top;
-					padding: 6px 10px 6px 10px;
+					padding: 4px 10px 4px 10px;
+					font-size: 8pt;
 				}
 				#wizard_container .yui-nav li a:hover {
 						background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
@@ -151,27 +162,31 @@
 					
 				#wizard_container .yui-nav li a:hover div {
 						background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+						font-size: 8pt;
 				}
 				
 				#wizard_container li.disabled a, #wizard_container .yui-nav li.disabled a:hover{ 
 						float:left;
 					cursor:pointer; 
 					text-decoration: none; 
-					font-size: 8pt; 
-					font-weight: bold;
 					background:#565656 url(/TEMPLATE/ampTemplate/images/tableftcornerdis.gif) no-repeat scroll left top;
 					color: white;
 				}
 				#wizard_container li.disabled a div, #wizard_container .yui-nav li.disabled a:hover div{ 
 					background:url(/TEMPLATE/ampTemplate/images/tabrightcornerdis.gif) no-repeat scroll right top;
-					padding: 6px 10px 6px 10px;
+					padding: 4px 10px 4px 10px;
 				}
 
 
+ .list_header {
+ 	color: #3754A1;
+ 	font-size: 10pt;
+ 	font-weight: bold;
+ }
 
-
-
-
+.repbuton {
+	font-weight: bold;
+}
 
 
 

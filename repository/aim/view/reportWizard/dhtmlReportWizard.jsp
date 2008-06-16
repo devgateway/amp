@@ -43,82 +43,21 @@
 
 	<script type="text/javascript">
 		YAHOO.namespace("YAHOO.amp.reportwizard");
+		YAHOO.amp.reportwizard.numOfSteps	= 4;
 		YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
-		YAHOO.amp.reportwizard.tabLabels	= new Array("type_tab_label", "columns_tab_label", 
-											"hierarchies_tab_label", "measures_tab_label", "details_tab_label");
+		YAHOO.amp.reportwizard.tabLabels	= new Array("reportdetails_tab_label", "columns_tab_label", 
+											"hierarchies_tab_label", "measures_tab_label");
 		selectedCols						= new Array();
 		selectedHiers						= new Array();
 		selectedMeas						= new Array();
 		
-		function addOnDragOverAction ( obj, id ) {
-			obj.objectdId			= id;
-			obj.lastY				= 0;
-			obj.goingUp				= false;
-			obj.onDragOver	= function (e, tId) {
-				var destObj			= document.getElementById(tId);
-				
-				var srcObj			= document.getElementById(this.id);
-				if (destObj.nodeName.toLowerCase()=="li") {
-					if ( this.goingUp ) {
-						destObj.parentNode.insertBefore(srcObj, destObj);
-					}
-					else
-						destObj.parentNode.insertBefore(srcObj, destObj.nextSibling);
-// 					alert(destObj.parentNode.id);
-				}
-			}
-			obj.startDrag	= function(x, y) {
-				var realObj	= this.getEl();
-				var dragObj	= this.getDragEl();
-				dragObj.innerHTML	= realObj.innerHTML;
-			}
-			obj.endDrag		= function(e) {
-				var realObj	= this.getEl();
-				var dragObj	= this.getDragEl();
-				YAHOO.util.Dom.setStyle(dragObj, "visibility", ""); 
-				var a = new YAHOO.util.Motion(  
-					dragObj, {  
-						points: {  
-							to: YAHOO.util.Dom.getXY(realObj) 
-						} 
-					},  
-					0.5,
-					YAHOO.util.Easing.easeOut  
-				);
-				a.onComplete.subscribe(function() { 
-					YAHOO.util.Dom.setStyle(dragObj.id, "visibility", "hidden"); 
-					YAHOO.util.Dom.setStyle(realObj.id, "visibility", ""); 
-				}); 
-				a.animate();
-			}
-			obj.onDrag		= function(e) {
-        // Keep track of the direction of the drag for use during onDragOver
-				var y = YAHOO.util.Event.getPageY(e);
-// 				alert(this.lastY + " -- " + y);
-				if (y < this.lastY) {
-					this.goingUp = true;
-				} else if (y > this.lastY) {
-					this.goingUp = false;
-				}
-				this.lastY = y;
-			}
-			
-			return obj;
-		}
-		function createDragAndDropItems( parentId ) {
-			var src_container	= document.getElementById( parentId );
-			var i=0;
-			for (i=0; i<src_container.childNodes.length; i++) {
-				var elId		= src_container.childNodes[i].id;
-				if (elId != null) {
-					var draggableItem	= new YAHOO.util.DDProxy(elId);
-					draggableItem		= addOnDragOverAction(draggableItem, elId);
-					//YAHOO.util.Event.addListener(draggableItem, "onDragOver", draggableItem.onDragOverAction);
-
-				}
-			}
-		}
+		
 		function initializeDragAndDrop() {
+		
+			treeObj = new DHTMLSuite.JSDragDropTree();
+	treeObj.setTreeId('dhtmlgoodies_tree');
+	treeObj.init();
+	treeObj.showHideNode(false,'dhtmlgoodies_tree');
 // 			if (YAHOO.widget.Logger) {
 // 				var reader = new YAHOO.widget.LogReader( "logDiv", 
 // 							{ newestOnTop: true, height: "400px" } );
@@ -146,7 +85,7 @@
 			//createDragAndDropItems('dest_col_ul');
 			//new YAHOO.util.DDTarget('dest_li_1');
 			//new YAHOO.util.DD('logDiv');
-			for (i=1; i<5; i++) {
+			for (i=1; i<4; i++) {
 				tab		= YAHOO.amp.reportwizard.tabView.getTab(i);
 				tab.set("disabled", true);
 			}
@@ -161,16 +100,26 @@
 			repManager.checkSteps();
 			
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
+			
+			
+			var dg			= document.getElementById("DHTMLSuite_treeNode1");
+			var cn			= dg.childNodes;
+			
+			
+			for (var i=0; i<cn.length; i++) {
+				if ( cn[i].nodeName.toLowerCase()=="input" || cn[i].nodeName.toLowerCase()=="img" ||
+					cn[i].nodeName.toLowerCase()=="a" )
+					cn[i].style.display		= "none";
+			}
 		}
 		YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop) ;
 	</script>
 
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="75%"
-	class="box-border-nopadding">
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="85%">
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td valign="bottom" class="crumb" >
+
+		<td valign="bottom">
 			&nbsp;&nbsp;&nbsp;
 			<c:set var="translation">
 					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
@@ -183,8 +132,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td class=r-dotted-lg width=14 >&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top>
+		<td align="left" vAlign="top">
 
 		<digi:instance property="aimReportWizardForm" />
 		<bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
@@ -209,15 +157,15 @@
 		<br />
 		<div id="wizard_container" class="yui-navset">
 		<ul class="yui-nav">
-			<li id="type_tab_label" class="selected"><a href="#type_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:reporttype">1. Report Type</digi:trn></div></a> </li>
+			<li id="reportdetails_tab_label" class="selected"><a href="#type_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:reportDetails">1. Report Details</digi:trn></div></a> </li>
 			<li id="columns_tab_label" class="disabled"><a href="#columns_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:columns">2. Columns</digi:trn></div></a> </li>
 			<li id="hierachies_tab_label" class="disabled"><a href="#hierarchies_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:hierarchies">3. Hierarchies</digi:trn></div></a> </li>
 			<li id="measures_tab_label" class="disabled"><a href="#measures_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:measures">4. Measures</digi:trn></div></a> </li>
-			<li id="details_tab_label" class="disabled"><a href="#details_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:details">5. Details</digi:trn></div></a> </li>
+			<%-- <li id="details_tab_label" class="disabled"><a href="#details_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:details">5. Details</digi:trn></div></a> </li> --%>
 		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
-				<div id="type_step_div" class="yui-tab-content" >
-					<table cellpadding="5px" width="100%" align="center" >
+				<div id="type_step_div" class="yui-tab-content" style="padding: 10px 15px 10px 15px;" >
+					<table cellpadding="25px" width="100%" align="center" >
 						<tr>
 							<%-- 
 							<td width="50%">
@@ -247,13 +195,65 @@
 									
 								</div>
 							</td> --%>
-							<td width="25%">&nbsp;</td>
-							<td width="50%">
-								<font color="#3754A1">
-									<b><digi:trn key="rep:wizard:fundingGrouping"> Funding Grouping </digi:trn></b>
-								</font>
-								<div id="reportGroupDiv" style="border: 1px solid gray; background-color: white; 
-											vertical-align: bottom;height: 130px; padding-top: 15px; padding-left: 30px; padding-bottom: 5px; padding-right: 5px;">
+							<td width="54%" style="vertical-align: top">
+								<table cellpadding="0px" style="vertical-align: top" width="100%">
+									<tr>
+										<td width="10%">&nbsp;</td>
+										<td>
+											<span class="list_header">
+												<digi:trn key="aim:reportBuilder:ReportTitle">Report Title</digi:trn>
+											</span>
+											<span id="reportTitleSpan">
+											<html:textarea onkeyup="repManager.checkSteps()" property="reportTitle" rows="2" styleClass="inp-text" style="border: 1px solid gray; width: 100%;" />
+											</span>
+										</td>
+										<td width="10%">&nbsp;</td>
+									</tr>
+									<tr>
+										<td width="10%">&nbsp;</td>
+										<td>
+											<span id="reportdetailsMust">
+											<font color="red">* 
+												<digi:trn key="rep:wizard:hint:mustDetails">
+													The report must have a title
+												</digi:trn>
+											</font>
+											</span>
+											<br />
+										</td>
+										<td width="10%">&nbsp;</td>
+									</tr>
+									<tr>
+										<td width="10%">&nbsp;</td>
+										<td>
+											<br/>
+											<span class="list_header">
+												<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
+											</span>
+											<br/>
+											<html:textarea property="reportDescription" rows="10" styleClass="inp-text" style="border: 1px solid gray;width: 100%;" />
+										</td>
+										<td width="10%">&nbsp;</td>
+									</tr>
+									
+									<%-- <tr>
+										<td align="right" colspan="3">
+											<button 
+											id="saveReportButton" type="button" class="buton" disabled="disabled" 
+											style="color: lightgray" onclick="saveReportEngine.saveReport()">
+												<digi:trn key="btn:saveReport">Save Report</digi:trn>
+											</button>
+										</td>
+									</tr> --%>
+									
+								</table>
+							</td>
+							<td width="46%" style="vertical-align: middle;">
+								<span class="list_header">
+									<digi:trn key="rep:wizard:fundingGrouping"> Funding Grouping </digi:trn>
+								</span>
+								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; 
+											vertical-align: bottom; padding-top: 5%; padding-left: 2%; padding-bottom: 5%; padding-right: 2%;">
 								<table>
 								<feature:display name="Donor Report" module="Reports">
                                              <tr>
@@ -301,26 +301,31 @@
                                                </feature:display>
                                      </table>
 									<br />
-									<span id="fundingGroupingMust">
-										<font color="red">* 
-											<digi:trn key="rep:wizard:hint:mustselect">
-												Must select at least one type
-											</digi:trn>
-										</font>
-									</span>
 								</div>
 							</td>
-							<td width="25%">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="right">
+								<button 
+								id="step0_prev_button" type="button" class="buton repbuton" 
+								onclick="repManager.previousStep();">
+									<digi:trn key="btn:cancel">Cancel</digi:trn>
+								</button>
+								<button id="step0_next_button" type="button" class="buton repbuton" 
+								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
+									<digi:trn key="btn:next">Next</digi:trn>
+								</button>
+							</td>
 						</tr>
 					</table>				
 				</div>
-				<div id="columns_step_div"  class="yui-tab-content" style="display: none; width: " align="center">
+				<div id="columns_step_div"  class="yui-tab-content" style="display: none;" align="center">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
-							<font color="#3754A1">
-								<b><digi:trn key="rep:wizard:availableColumns">Available Columns</digi:trn></b>
-							</font>	
+							<span class="list_header">
+								<digi:trn key="rep:wizard:availableColumns">Available Columns</digi:trn>
+							</span>
 							<div id="source_col_div" class="draglist">
 							</div>
 						</td>
@@ -334,9 +339,9 @@
 							</button>
 						</td>
 						<td width="47%" align="center">
-							<font color="#3754A1">
-								<b><digi:trn key="rep:wizard:selectedColumns">Selected Columns</digi:trn></b>
-							</font>
+							<span class="list_header">
+								<digi:trn key="rep:wizard:selectedColumns">Selected Columns</digi:trn>
+							</span>
 							<ul id="dest_col_ul" class="draglist">
 							
 							</ul>
@@ -352,16 +357,30 @@
 								</font>
 								</span>
 							</td>
+							<td colspan="2">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="3" align="right">
+								<button 
+								id="step1_prev_button" type="button" class="buton repbuton" 
+								onclick="repManager.previousStep();">
+									<digi:trn key="btn:previous">Previous</digi:trn>
+								</button>
+								<button id="step1_next_button" type="button" class="buton repbuton" 
+								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
+									<digi:trn key="btn:next">Next</digi:trn>
+								</button>
+							</td>
 						</tr>
 					</table>
 				</div>
 				<div id="hierarchies_step_div"  class="yui-tab-content" style="display: none;">
-					<table cellpadding="5px" style="vertical-align: middle" >
+					<table cellpadding="5px" style="vertical-align: middle" width="100%" >
 						<tr>
 						<td width="47%" align="center">
-							<font color="#3754A1">
-								<b><digi:trn key="rep:wizard:availableHierarchies">Available Hierarchies</digi:trn></b>
-							</font>
+							<span class="list_header">
+								<digi:trn key="rep:wizard:availableHierarchies">Available Hierarchies</digi:trn>
+							</span>
 							<ul id="source_hierarchies_ul" class="draglist">
 							</ul>
 						</td>
@@ -375,21 +394,45 @@
 							</button>
 						</td>
 						<td width="47%" align="center">
-							<font color="#3754A1">
-								<b><digi:trn key="rep:wizard:selectedHierarchies">Selected Hierarchies</digi:trn></b>
-							</font>
+							<span class="list_header">
+								<digi:trn key="rep:wizard:selectedHierarchies">Selected Hierarchies</digi:trn>
+							</span>
 							<ol id="dest_hierarchies_ul" class="draglist">
 							</ol>					
+						</tr>
+						<tr>
+							<td colspan="3">
+								<span id="hierarchiesMust">
+								<font color="red">* 
+									<digi:trn key="rep:wizard:hint:notmorehierarchies">
+										You cannot select more than 3 hierarchies
+									</digi:trn>
+								</font>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" align="right">
+								<button 
+								id="step2_prev_button" type="button" class="buton repbuton" 
+								onclick="repManager.previousStep();">
+									<digi:trn key="btn:previous">Previous</digi:trn>
+								</button>
+								<button id="step2_next_button" type="button" class="buton repbuton" 
+								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
+									<digi:trn key="btn:next">Next</digi:trn>
+								</button>
+							</td>
 						</tr>
 					</table>
 				</div>
 				<div id="measures_step_div"  class="yui-tab-content" style="display: none;">
-					<table cellpadding="5px" style="vertical-align: middle">
+					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
-							<font color="#3754A1">
-								<b><digi:trn key="rep:wizard:availableMeasures">Available Measures</digi:trn></b>
-							</font>
+							<span class="list_header">
+								<digi:trn key="rep:wizard:availableMeasures">Available Measures</digi:trn>
+							</span>
 							<ul id="source_measures_ul" class="draglist">
 								<jsp:include page="setMeasures.jsp" />
 							</ul>
@@ -404,9 +447,9 @@
 							</button>
 						</td>
 						<td width="47%" align="center">
-							<font color="#3754A1">
-								<b><digi:trn key="rep:wizard:selectedMeasures">Selected Measures</digi:trn></b>
-							</font>
+							<span class="list_header">
+								<digi:trn key="rep:wizard:selectedMeasures">Selected Measures</digi:trn>
+							</span>
 							<ul id="dest_measures_ul" class="draglist">
 							</ul>					
 						</tr>
@@ -421,41 +464,12 @@
 								</span>
 							</td>
 						</tr>
-					</table>
-				</div>
-				<div id="details_step_div"  class="yui-tab-content" style="display: none;">
-					<table cellpadding="5px" style="vertical-align: middle">
 						<tr>
-							<td width="20%">&nbsp;</td>
-							<td>
-								<font color="#3754A1">
-								<b>	<digi:trn key="aim:reportBuilder:ReportTitle">Report Title</digi:trn> </b>
-								</font>
-								<br />
-								<span id="reportTitleSpan">
-								<html:textarea onkeyup="repManager.checkSteps()" property="reportTitle" cols="60" rows="2" styleClass="inp-text" />
+							<td colspan="3" align="center">
+								<span class="list_header">
+									<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
 								</span>
-							</td>
-							<td width="20%">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="20%">&nbsp;</td>
-							<td>
-								<font color="#3754A1">
-								<b>	<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn> </b>
-								</font>
-								<br/>
-								<html:textarea property="reportDescription" cols="60" rows="10" styleClass="inp-text" />
-							</td>
-							<td width="20%">&nbsp;</td>
-						</tr>
-						<tr>
-							<td width="20%">&nbsp;</td>
-							<td>
-								<font color="#3754A1">
-								<b>	<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn> </b>
-								</font>
-								<div id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom;">
+								<div id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 33%">
 									<html:checkbox property="hideActivities" value="true">
 										<digi:trn key="aim:summaryReport">
 											Summary Report
@@ -479,32 +493,25 @@
 									</html:radio>
 								</div>
 							</td>
-							<td width="20%">&nbsp;</td>
 						</tr>
 						<tr>
-							<td width="20%">&nbsp;</td>
-							<td>
-								<span id="detailsMust">
-								<font color="red">* 
-									<digi:trn key="rep:wizard:hint:mustDetails">
-										The report must have a title
-									</digi:trn>
-								</font>
-								</span>
-							</td>
-							<td width="20%">&nbsp;</td>
-						</tr>
-						<tr>
-							<td align="right" colspan="3">
+							<td colspan="3" align="right">
 								<button 
-								id="saveReportButton" type="button" class="buton" disabled="disabled" 
-								style="color: lightgray" onclick="saveReportEngine.saveReport()">
+								id="step3_prev_button" type="button" class="buton repbuton"  
+								onclick="repManager.previousStep();">
+									<digi:trn key="btn:previous">Previous</digi:trn>
+								</button>
+								<button id="step3_next_button" type="button" class="buton repbuton" 
+								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
 									<digi:trn key="btn:saveReport">Save Report</digi:trn>
 								</button>
 							</td>
 						</tr>
 					</table>
 				</div>
+				<%-- <div id="details_step_div"  class="yui-tab-content" style="display: none;">
+					
+				</div> --%>
 			</div>
 		</div>
 		<%-- <div id="logDiv" style="border: medium solid red; width: 20%;">

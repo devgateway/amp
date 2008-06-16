@@ -86,7 +86,8 @@ public class Constants
 	public static final Integer ORIGINAL = new Integer(0);
 	public static final Integer REVISED = new Integer(1);
 	public static final Integer CURRENT = new Integer(2);
-
+	
+	public static final String USER_WORKSPACES="USER_WORKSPACES";
 	//Removed by Govind
 	//public static  String COUNTRY_ISO = "";
 	//public static  String COUNTRY = "";

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Vector;
+
 import javax.security.auth.Subject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -85,6 +87,8 @@ public class ViewAmp
         LoginForm lForm = (LoginForm) form; // login form instance
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         lForm.setMembers(members);
+
+        session.setAttribute(Constants.USER_WORKSPACES, members);
         //response.sendRedirect("showSelectTeam.do");
 
 

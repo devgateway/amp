@@ -602,17 +602,22 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setObjectURL(message.getObjectURL());
                          form.setReceiver(message.getReceivers());
                          if(isStateId){
-                          form.setMsgStateId(id);
-                          if(message.getSenderType().equalsIgnoreCase("User")){
-                        	  form.setSender(AmpMessageUtil.getMessageState(id).getSender());  
-                          } else{
-                        	  form.setSender(message.getSenderType());
-                          }
+	                          form.setMsgStateId(id);
+	                          if(message.getSenderType().equalsIgnoreCase("User")){
+	                        	  form.setSender(AmpMessageUtil.getMessageState(id).getSender());  
+	                          } else{
+	                        	  form.setSender(message.getSenderType());
+	                          }
                          }
                          else{
-                             AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(message.getSenderId());
-                             String sender = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName();
-                             form.setSender(sender);
+                        	 if(message.getSenderType().equalsIgnoreCase("User")){
+                        		 AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(message.getSenderId());
+                                 String sender = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName();
+                                 form.setSender(sender);
+                        	 }else{
+                        		 form.setSender(message.getSenderType());
+                        	 }
+                             
                          }
 			 
 			 form.setReceivers(getMessageRecipients(message.getId()));
@@ -658,7 +663,8 @@ public class AmpMessageActions extends DispatchAction {
                 result += " msgDetails=\"" +desc + "\"";
                 result += " read=\"" + state.getRead() + "\"";
                 result += " isDraft=\"" + state.getMessage().getDraft() + "\"";
-                result += " objURL=\"" + state.getMessage().getObjectURL() + "\"";
+                String objUrl=org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getObjectURL());
+                result += " objURL=\"" + objUrl + "\"";
                 result += ">";
                 if (state.getMessage().getForwardedMessageId() != null) {
                     AmpMessage forwarded = AmpMessageUtil.getMessage(state.getMessage().getForwardedMessageId());
@@ -694,7 +700,7 @@ public class AmpMessageActions extends DispatchAction {
         result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
         result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getReceivers()) + "\"";
         result += " priority=\"" + forwardedMessage.getPriorityLevel() + "\"";
-        result += " objURL=\"" + forwardedMessage.getObjectURL() + "\"";
+        result += " objURL=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getObjectURL()) + "\"";
         String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
         result += " msgDetails=\"" + desc + "\"";
         result+=" read=\""+true+"\"";

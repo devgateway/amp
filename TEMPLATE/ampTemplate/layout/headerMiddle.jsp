@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
         <!-- Dependencies --> 
-        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
         <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
@@ -193,7 +193,7 @@ border-right:1px solid white;
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
-                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
+                                                    <a class="yuiampmenuitemlabel" href="javascrtip:addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
 												</li>
 </c:if></c:if>
 										<li class="yuiampmenuitem">
@@ -202,32 +202,32 @@ border-right:1px solid white;
                                             </a>
                                         </li>
                                         <li class="yuiampmenuitem" style="_width:100px">
-                                        	<a class="yuiampmenuitemlabel" href="/selectTeam.do">
+                                        	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
                                             </a>
-<!--
-                                              <div id="workspaceSubmenu" class="yuiampmenu">
-                                                  <div class="bd">                    
+                                            <div id="workspaceSubmenu" class="yuiampmenu">
+                                          	<div class="bd">                    
                                                       <ul class="first-of-type">
-                                                        <li class="yuiampmenuitem yuiampmenuitem-checked">
-                                                            <a class="yuiampmenuitemlabel" href="#">
-                                                                Test Workspace
-                                                            </a>
-                                                        </li>
-                                                        <li class="yuiampmenuitem">
-                                                            <a  class="yuiampmenuitemlabel" href="#">
-                                                                Test Workspace
-                                                            </a>
-                                                        </li>
-                                                        <li class="yuiampmenuitem">
-                                                            <a  class="yuiampmenuitemlabel" href="#">
-                                                                Test Workspace
-                                                            </a>
-                                                        </li>
+                                                      
+                                                        <logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
+                                            		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
+                                            		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked ">
+                                            		   	  	 <digi:context name="URL" property="context/module/moduleinstance/selectTeam.do" />
+                                                            	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
+                                                          </li>
+                                                        </logic:equal>
+                                            		    
+                                            		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
+                                            		   	   <li class="yuiampmenuitem ">
+                                            		   	  	 <digi:context name="URL" property="context/module/moduleinstance/selectTeam.do" />
+                                                            	 <a class="yuiampmenuitemlabel" href='<%=URL%>~id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
+                                                          </li>
+                                                        </logic:notEqual>
+                                            		</logic:iterate>
                                                       </ul>
                                                   </div>
                                               </div>   
--->                           
                                         </li>
                                       </ul>
                                   </div>

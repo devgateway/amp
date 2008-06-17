@@ -67,22 +67,19 @@ public class UserLevelGate extends Gate {
 		String param = parameters.poll().trim();
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+		boolean owner=false;
+		if( tm!=null && act.getCreatedBy().getAmpTeamMemId().equals(tm.getMemberId()) ) owner=true;
+		
+		//if im the owner and this gate checks for ownership....
+		if(owner && PARAM_OWNER.equals(param)) return true;
+		
+		//if im not even a team member 
 		if(tm==null) 
 			if(PARAM_EVERYONE.equals(param)) return true; else return false;
 		
-		if(PARAM_GUEST.equals(param)) return true;
-		if(PARAM_OWNER.equals(param)) {
-			AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
-			if( act.getCreatedBy().getAmpTeamMemId().equals(tm.getMemberId()) ) return true;
-			else return false;
-		}
-		//the rest of the levels are not clearly defined yet.
-		
-		/*
-		AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-		PersistenceManager.releaseSession(session);
-		User user = atm.getUser();
-		*/
+		//if i am a guest and not the owner of the current object i will have guest access
+		if(!owner && PARAM_GUEST.equals(param)) return true;
 		
 		return false;
 		

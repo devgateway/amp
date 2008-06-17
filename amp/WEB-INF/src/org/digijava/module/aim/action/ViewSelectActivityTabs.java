@@ -1,5 +1,7 @@
-/*
+/**
  * ViewSelectActivityTabs.java
+ * 
+ * @author mouhamad
  */
 
 package org.digijava.module.aim.action;
@@ -32,14 +34,15 @@ public class ViewSelectActivityTabs extends Action {
 	private ServletContext ampContext = null;
 
 	// {{"FM type", "FM tabs name", "mapping forward"}}
-	// respects tab order
+	// respects tab order in mainProjectDetails.jsp
 	private static String[][] fmTabs = {
 			{ "field", "Channel Overview Tab", "channelOverview" },
 			{ "field", "References Tab", "references" },
 			{ "field", "Financial Progress Tab", "financialProgress" },
-			{ "field", "Physical Progress Tab", "physicalProgress" },
+			{ "field", "Funding Organizations Tab", "physicalProgress" },
 			{ "module", "Document", "documents" },
 			{ "field", "Regional Funding Tab", "regionalFunding" },
+			{ "field", "Paris Survey", "parisSurvey" },
 			{ "feature", "Activity Dashboard", "activityDashboard" },
 			{ "field", "Costing Tab", "costing" },
 			{ "field", "Contracting Tab", "contracting" } };

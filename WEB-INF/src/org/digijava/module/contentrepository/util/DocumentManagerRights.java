@@ -1,13 +1,14 @@
 package org.digijava.module.contentrepository.util;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Workspace;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class DocumentManagerRights {
 	
@@ -124,6 +125,10 @@ public class DocumentManagerRights {
 	}
 	
 	private static Boolean isLeaderOfManagementWorkspace( HttpServletRequest request ) {
+		HttpSession httpSession		= request.getSession(); 
+		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		AmpTeam ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+		if("Management".equals(ampTeam.getAccessType()) && teamMember.getTeamHead()) return true;
 		return false;
 	}
 	

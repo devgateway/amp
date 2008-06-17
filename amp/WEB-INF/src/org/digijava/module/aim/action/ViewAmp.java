@@ -69,8 +69,12 @@ public class ViewAmp
                 new String("true"));
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        
+        Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
+        session.setAttribute(Constants.USER_WORKSPACES, members);
+        
         if (tm != null && tm.getTeamId() != null &&
-                tm.getTeamId().longValue() > 0) {
+        	tm.getTeamId().longValue() > 0) {
             String fwdUrl = "showDesktop.do";
             response.sendRedirect(fwdUrl);
             return null;
@@ -85,10 +89,10 @@ public class ViewAmp
 
         // No menber info means that we could not set it automatically
         LoginForm lForm = (LoginForm) form; // login form instance
-        Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
+       
         lForm.setMembers(members);
 
-        session.setAttribute(Constants.USER_WORKSPACES, members);
+       
         //response.sendRedirect("showSelectTeam.do");
 
 

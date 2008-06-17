@@ -58,7 +58,7 @@ public class DocumentManagerRights {
 		Boolean manuallySetNoMakePublicFlag	= isManuallySetNoMakePublicFlag(request);
 		if ( manuallySetNoMakePublicFlag == null )
 			manuallySetNoMakePublicFlag = true;
-		return true && manuallySetNoMakePublicFlag && isOwnerOrTeamLeader(node, request);
+		return true && manuallySetNoMakePublicFlag && isLeaderOfManagementWorkspace( request ) ;
 	}
 	public static Boolean hasDeleteRightsOnPublicVersion(Node node, HttpServletRequest request) {
 		return true && isOwnerOrTeamLeader(node, request);
@@ -121,6 +121,10 @@ public class DocumentManagerRights {
 			return null;
 		}
 		
+	}
+	
+	private static Boolean isLeaderOfManagementWorkspace( HttpServletRequest request ) {
+		return false;
 	}
 	
 	private static Boolean isManuallySetNoShowVersionsFlag(HttpServletRequest request) {

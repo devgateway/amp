@@ -350,7 +350,8 @@
     	<forward name="financialProgress" path="/aim/viewFinancingBreakdown.do?tabIndex=2" redirect="true" />    	
     	<forward name="physicalProgress" path="/aim/viewPhysicalProgress.do?tabIndex=3" redirect="true" />   	
     	<forward name="documents" path="/aim/viewKnowledge.do?tabIndex=4" redirect="true" />   	
-    	<forward name="regionalFunding" path="/aim/viewRegionalFundingBreakdown.do?tabIndex=5" redirect="true" />   	
+    	<forward name="regionalFunding" path="/aim/viewRegionalFundingBreakdown.do?tabIndex=5" redirect="true" />   
+    	<forward name="activityDashboard" path="/aim/viewActivityDashboard.do?tabIndex=7" redirect="true" />       	
     	<forward name="costing" path="/aim/viewProjectCostsBreakdown.do?tabIndex=8" redirect="true" />   	
     	<forward name="contracting" path="/aim/viewIPAContracting.do?tabIndex=9" redirect="true" />  	
     </action>

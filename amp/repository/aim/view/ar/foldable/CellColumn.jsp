@@ -6,7 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
 <bean:define id="cellColumn" name="viewable" type="org.dgfoundation.amp.ar.CellColumn" scope="request" toScope="page"/>
 
 <bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="request" toScope="page"/>
@@ -29,7 +28,7 @@
 
 <logic:equal name="columnNo" value="0">
 <logic:present name="currentMember" scope="session">
-<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
+<a href='/aim/selectActivityTabs.do~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 </logic:present>
 <logic:notPresent name="currentMember" scope="session">
 <a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
@@ -44,7 +43,7 @@
 
 <logic:equal name="columnNo" value="0">
 <logic:present name="currentMember" scope="session">
-<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
+<a href='/aim/selectActivityTabs.do~ampActivityId=<bean:write name="ownerId"/>'>
 </logic:present>
 <logic:notPresent name="currentMember" scope="session">
 <a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank>

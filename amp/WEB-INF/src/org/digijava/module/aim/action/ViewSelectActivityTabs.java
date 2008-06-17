@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -39,6 +40,7 @@ public class ViewSelectActivityTabs extends Action {
 			{ "field", "Physical Progress Tab", "physicalProgress" },
 			{ "module", "Document", "documents" },
 			{ "field", "Regional Funding Tab", "regionalFunding" },
+			{ "feature", "Activity Dashboard", "activityDashboard" },
 			{ "field", "Costing Tab", "costing" },
 			{ "field", "Contracting Tab", "contracting" } };
 
@@ -67,6 +69,7 @@ public class ViewSelectActivityTabs extends Action {
 			String name = "";
 			String forward = "";
 			AmpFieldsVisibility fieldsVisibility = null;
+			AmpFeaturesVisibility featuresVisibility = null;
 			AmpModulesVisibility modulesVisibility = null;
 			boolean isVisible = false;
 			for (int i = 0; ((i < fmTabs.length) && (!isVisible)); i++) {
@@ -79,12 +82,18 @@ public class ViewSelectActivityTabs extends Action {
 							.getFieldByNameFromRoot(name);
 					isVisible = fieldsVisibility
 							.isVisibleTemplateObj(ampTreeVisibility.getRoot()
-									.getTemplate());					
+									.getTemplate());
+				} else if (type.equals("feature")) {
+					featuresVisibility = ampTreeVisibility
+							.getFeatureByNameFromRoot(name);
+					isVisible = featuresVisibility
+							.isVisibleTemplateObj(ampTreeVisibility.getRoot()
+									.getTemplate());
 				} else if (type.equals("module")) {
 					modulesVisibility = ampTreeVisibility
 							.getModuleByNameFromRoot(name);
 					isVisible = modulesVisibility
-							.isVisibleTemplateObj(ampTreeVisibility.getRoot());					
+							.isVisibleTemplateObj(ampTreeVisibility.getRoot());
 				}
 				if (isVisible) {
 					actionForward = mapping.findForward(forward);

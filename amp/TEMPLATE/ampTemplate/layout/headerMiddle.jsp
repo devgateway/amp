@@ -130,20 +130,86 @@ border-right:1px solid white;
 %>
 </logic:notPresent>
 <logic:present name="ampAdmin" scope="session">
-		<logic:equal name="ampAdmin" value="yes">
-        <DIV id="menu">
-            <UL>
-            <LI>
-                <div id="gen" title='<digi:trn key="aim:clickToAccessAdminTools">Click here to access admin tools</digi:trn>'>
-                    <c:set var="message">
-                        <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-                    </c:set>
-                    <digi:link styleClass="head-menu-link" href="/admin.do" module="aim" onclick="return quitRnot1('${message}')">
-                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
-                    </digi:link>
-                </div>
-            </LI>
-           </UL>
+	<logic:equal name="ampAdmin" value="yes">
+			 <div class="yuiamp-skin-amp" style="clear:both;">
+              <div id="mainmenuHeader" class="yuiampmenu">
+                  <div class="bd">
+                      <ul class="first-of-type">
+                    		  <li class="yuiampmenuitem">
+                                          <c:set var="message">
+                       							<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+                 						  </c:set>
+					                    <digi:link style="border-right:1px solid white;" styleClass="yuiampmenuitemlabel"  href="/admin.do" module="aim" onclick="return quitRnot1('${message}')">
+					                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
+					                    </digi:link>
+                                        </li>
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                 <digi:trn key="aim:tools">TOOLS</digi:trn>
+                              </a>
+                              <div id="tools" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li style="_width:200px">
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:deflanguage">Language</digi:trn>
+                                        </a>
+                                          <div id="reports2" class="yuiampmenu">
+                                              <div class="bd">                    
+                                                  <ul>
+													<digi:insert attribute="dropdownLangSwitch" />
+                                                  </ul>
+                                              </div>
+                                          </div>                              
+                                        </li>
+                                        <logic:notEmpty name="currentMember" scope="session">
+                                            <digi:secure actions="TRANSLATE">
+                                                    <digi:insert attribute="transmode"/>
+                                            </digi:secure>
+                                        </logic:notEmpty>                                        
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          <module:display name="HELP">
+                          <li class="yuiampmenuitem">
+                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                                  <digi:trn key="help:help">HELP</digi:trn>
+                              </a>
+                              <div id="help" class="yuiampmenu" style="opacity:0.9;">
+                                  <div class="bd">                    
+                                      <ul>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
+                                        <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:tutorial">Tutorial</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <digi:trn key="aim:aboutamp">About AMP</digi:trn>
+                                        </a>
+                                        </li>
+                                      </ul>
+                                  </div>
+                              </div>                    
+                          </li>
+                          </module:display>
+            
+                        </ul>            
+                  </div>
+              </div>
+            </div> 
+            
 		</logic:equal>
 </logic:present>
 
@@ -175,13 +241,15 @@ border-right:1px solid white;
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
                       <ul class="first-of-type">
-                          <li class="yuiampmenuitem">
+                    	 <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   My Desktop
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
                                       <ul>
+                                      
+                                      
 										<li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/showDesktop.do">
                                             <digi:trn key="aim:ampdesktop">AMP Desktop</digi:trn>

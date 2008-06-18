@@ -61,7 +61,10 @@ public final class AuditCleaner {
 	}
 
 	public String getRemainingdays() {
-		Long diff = (getNextcleanup().getTime() - ctime) / ONE_DAY;
-		return diff.toString();
+		if (getNextcleanup()!=null){
+			Long diff = (getNextcleanup().getTime() - ctime) / ONE_DAY;
+			return diff.toString();
+		}
+		return null;
 	}
 }

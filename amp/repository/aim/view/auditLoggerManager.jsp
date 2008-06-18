@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
 <style>
 .contentbox_border{
 	border:1px solid #666666;
@@ -157,7 +158,14 @@ function toggleSettings(){
 				<tr bgcolor="#edf5ff">
 				  <td valign="top">
 				  <div style="padding: 3px; width: 100%; background-color: rgb(204, 219, 255); font-size: 8pt;">
-				   <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
+				  <span style="cursor:pointer; font-style: italic;float:left;color: red;">
+				  	<%if (AuditCleaner.getInstance().getRemainingdays()!= null){%>
+				  		<digi:trn key="aim:auditautocleanup">The automatic cleanup of the audit trail will occur in</digi:trn> 
+				  		<%=AuditCleaner.getInstance().getRemainingdays()%>
+				  		<digi:trn key="aim:days">Days</digi:trn>
+				  	<%}%>
+				  </span>
+				  <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
                                 &nbsp;<br>
 								<div style="display:none;background-color:#FFFFCC;padding:2px" id="currentDisplaySettings" >
                                  <table cellpadding="2" cellspacing="2" border="0" width="250px">
@@ -178,9 +186,9 @@ function toggleSettings(){
                                  	</td>
                                  	<td align="left" height="30px">
                                  	<html:select property="frecuency" styleClass="inp-text">
-                                 			<html:option value="30">30 Days</html:option>
-                                 			<html:option value="60">60 Days</html:option>
-                                 			<html:option value="90">90 Days</html:option>
+                                 			<html:option value="30">30 <digi:trn key="aim:days">Days</digi:trn></html:option>
+                                 			<html:option value="60">60 <digi:trn key="aim:days">Days</digi:trn></html:option>
+                                 			<html:option value="90">90 <digi:trn key="aim:days">Days</digi:trn></html:option>
                                  	</html:select>
                                  	</td>
                                  </tr>

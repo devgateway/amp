@@ -309,11 +309,15 @@ public class TeamMemberUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tm from "
-					+ AmpTeamMember.class.getName()
-					+ " tm where (tm.ampTeam=:teamId)";
-
+					+ AmpTeamMember.class.getName()+" tm ";
+                          if(teamId!=null){
+                              queryString+="  where (tm.ampTeam=:teamId)";
+                          }
+					
 			qry = session.createQuery(queryString);
+                        if(teamId!=null){
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
+                        }
 			Iterator<AmpTeamMember> itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
@@ -386,7 +390,7 @@ public class TeamMemberUtil {
         logger.debug("returning members");
         return users;
 	}
-
+    
 	public static Collection getAllMembersUsingActivity(Long activityId) {
 		Session session = null;
 		Collection col = null;

@@ -478,6 +478,20 @@
                                 //getting receives
                                 var toTD2=document.createElement('TD');
                                 var msgReceiver=message.getAttribute('to');
+                                var receiver_array=msgReceiver.split(",");
+                                if(receiver_array.length>5){
+                                 msgReceiver="";
+                                 for(var j=0;j<5;j++){
+                                    msgReceiver+=receiver_array[j];
+                                    if(j!=4){
+                                        msgReceiver+=",";
+                                    }
+                                    else{
+                                         msgReceiver+="......";
+                                    }
+                                 }
+                                 
+                                }
                                 if(toTD2.textContent==undefined){
                                      toTD2.innerText=msgReceiver;
                                 }

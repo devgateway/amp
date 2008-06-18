@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:instance property="messageForm" />
+<html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script langauage="JavaScript">
@@ -113,10 +114,52 @@
 	}
 
 </script>
+<style>
+<!--
+
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #f4f4f2;
+}
+-->
+</style>
+<c:set var="messageType">
+    <c:choose>
+        <c:when test="${messageForm.tabIndex==1}">
+            <digi:trn key="message:Messages">Messages</digi:trn>
+        </c:when>
+        <c:when test="${messageForm.tabIndex==2}">
+            <digi:trn key="message:Alerts">Alerts</digi:trn>
+        </c:when>
+        <c:when test="${messageForm.tabIndex==3}">
+            <digi:trn key="message:approvals">Approvals</digi:trn>
+        </c:when>
+        <c:otherwise>
+            <digi:trn key="message:ebents">Calendar Events</digi:trn>
+        </c:otherwise>
+    </c:choose>
+</c:set>
 <c:set var="title">
     <c:choose>
         <c:when test="${not empty messageForm.forwardedMsg}">
-            <digi:trn key="message:ForwardMessage">Forward Message</digi:trn>
+            
+            <c:choose>
+                <c:when test="${messageForm.tabIndex==1}">
+                    <digi:trn key="message:ForwardMessage">Forward Message</digi:trn>
+                </c:when>
+                <c:when test="${messageForm.tabIndex==2}">
+                    <digi:trn key="message:ForwardAlert">Forward Alert</digi:trn>
+                </c:when>
+                <c:when test="${messageForm.tabIndex==3}">
+                    <digi:trn key="message:forwardApprovals">Forward Approvals</digi:trn>
+                </c:when>
+                <c:otherwise>
+                    <digi:trn key="message:ForwardEvents">Forward Calendar Events</digi:trn>
+                </c:otherwise>
+            </c:choose>
+            
+            
         </c:when>
         <c:when test="${messageForm.messageId==null}">
             <digi:trn key="message:AddMessage">Add Message</digi:trn>
@@ -148,8 +191,12 @@
 						</c:set>
 						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-                        ${title}
+						</digi:link>&nbsp;&gt;&nbsp
+                                                <digi:link href="/messageActions.do?actionType=gotoMessagesPage&tabIndex=${messageForm.tabIndex}" styleClass="comment"  >
+                                                ${messageType}
+                                                </digi:link>
+                                             
+                       &nbsp;&gt;&nbsp; ${title}
                        </span>
 					</td>
 				</tr>
@@ -162,20 +209,24 @@
 				</tr>
 				<tr>
 	<td noWrap vAlign="top">
-			<table width="100%" cellspacing="0" cellpadding="0" border="0"  align="center" valign="top">
+			<table class="contentbox_border">
 				<tr>				
 					<td>
 						<table width="100%" cellspacing="1" cellpadding="4"  align="left" valign="top">
 														<tr>
 															<td valign="top" bgcolor="#f4f4f2" align="center">
 																
-																			<table width="100%" cellspacing="1" cellpadding="5" >																				
+																			<table width="100%" cellspacing="1" cellpadding="5" >	
+                                                                                                                                                                 <tr>
+                                                                                                                                                                     <td colspan="2" bgcolor="#CCDBFF">&nbsp;</td>
+																					
+																				</tr>
 																				<tr>
 																					<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
 																					<td align="left"><html:text property="messageName" size="53" styleClass="inp-text"/></td>
 																				</tr>																																					
 																				<tr>
-																					<td align="right"><digi:trn key="messages:description">description</digi:trn></td>
+																					<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
 																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="50" styleClass="inp-text"/></td>
 																				</tr>																				
 																				<tr>
@@ -209,10 +260,11 @@
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
-																												<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+																												<logic:notEmpty name="messageForm"  property="teamMapValues" >
+                                                                                                                                                                                                                                    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
                                                                                                                 	<c:forEach var="team" items="${messageForm.teamMapValues}">
                                                                                                                     	<logic:notEmpty name="team" property="members">
-                                                                                                                        	<option value="t:${team.id}" style="font-weight: bold;background:#f4f4f2;font-size:12px;">${team.name}</option>
+                                                                                                                        	<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:12px;">${team.name}</option>
                                                                                                                             <c:forEach var="tm" items="${team.members}">
                                                                                                                          		<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
                                                                                                                             </c:forEach>
@@ -245,14 +297,14 @@
 																								<tr>
 																									<td align="right" width="30%">
 																										<c:set var="trnSavetBtn">
-																											<digi:trn key="message:btn:save">save</digi:trn>
+																											<digi:trn key="messages:btn:save">Save</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" />
 																									</td>
                                                                                                                                                                                                         <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
-																											<digi:trn key="message:btn:send">send</digi:trn>
+																											<digi:trn key="messages:btn:send">Send</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" />
 																									</td>
@@ -260,7 +312,7 @@
                                                                                                                                                                                                         <c:if test="${not empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnFwdtBtn">
-																											<digi:trn key="message:btn:fwd">forward</digi:trn>
+																											<digi:trn key="messages:btn:fwd">Forward</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" />
 																									</td>

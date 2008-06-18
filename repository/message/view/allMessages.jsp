@@ -45,6 +45,9 @@
 <script langauage="JavaScript">
 
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
+        var noAlerts='<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>';
+        var noApprovals='<digi:trn key="message:noPendingApprovals">No Pending Approvals</digi:trn>';
+        var noEvents='<digi:trn key="message:noUpcomingEvents">No Upcoming Events</digi:trn>';
 	var from='<digi:trn key="message:from">From</digi:trn>';
         var to='<digi:trn key="message:to">To</digi:trn>';
 	var date='<digi:trn key="message:date">Date</digi:trn>';
@@ -59,9 +62,9 @@
 	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
 	var objURL='<digi:trn key="message:objURL">Object URL</digi:trn>';
-        var forwardClick="<digi:trn key="message:ClickForwardMessage"> Click here to forward Message&nbsp;</digi:trn>";
-        var editClick="<digi:trn key="message:ClickEditMessage"> Click here to Edit Message&nbsp;</digi:trn>";
-        var deleteClick="<digi:trn key="message:ClickDeleteMessage"> Click here to Delete Message&nbsp;</digi:trn>";
+        var forwardClick="<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>";
+        var editClick="<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>";
+        var deleteClick="<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>";
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -226,7 +229,20 @@
                            if(!root.hasChildNodes()&& firstEntry==0){
                                var newTR=document.createElement('TR');
                                 var newTD=document.createElement('TD');
-                                newTD.innerHTML=noMsgs;
+                                switch (document.messageForm.tabIndex.value){
+                                case "2":
+                                    newTD.innerHTML=noAlerts;
+                                    break;
+                                case "3":
+                                    newTD.innerHTML=noApprovals;
+                                    break;
+                                case "4":
+                                    newTD.innerHTML=noEvents;
+                                    break;
+                        
+                                default :newTD.innerHTML=noMsgs;
+                                }
+                                
                                 newTD.colSpan=4;
                                 newTR.appendChild(newTD);
                                 newTR.id="noMsg";
@@ -257,17 +273,25 @@
 											var pagParams=paginationTag.childNodes[0];
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
-												var msgTR=document.createElement('TR');												
-												msgTR.className = 'my-border-style';									
-												msgTR.style.backgroundColor='#eeeeee';
-												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i]));
+												var msgTR=document.createElement('TR');	
+                                                                                                if(i!=1&&i%2==0){
+                                                                                                    msgTR.className = 'trEven'; 
+                                                                                                }
+                                                                                                else{
+                                                                                                    msgTR.className = 'trOdd';
+                                                                                                }
+												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
 												myArray[myArray.length]=msgId;										
 											}else{
 												tbl.tBodies[0].insertRow(whereToInsertRow);
 												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
-												msgTR.className = 'my-border-style';									
-												msgTR.style.backgroundColor='#ffffff';
-												createTableRow(tbl,msgTR,messages[i]);
+												  if(i!=1&&i%2==0){
+                                                                                                    msgTR.className = 'trEven'; 
+                                                                                                }
+                                                                                                else{
+                                                                                                    msgTR.className = 'trOdd';
+                                                                                                }
+												createTableRow(tbl,msgTR,messages[i],true);
 												myArray[myArray.length]=msgId;
 												whereToInsertRow++;										
 												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
@@ -379,8 +403,8 @@
     
                 }
 		imgTD.vAlign='top';	
-                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage"> Click here to expand Message&nbsp;</digi:trn>"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click here to collapse Message&nbsp;</digi:trn>/>';
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/unreadIcon.gif" title="<digi:trn key="message:ClickExpandMessage"> Click here to expand Message&nbsp;</digi:trn>"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/readIcon.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click here to collapse Message&nbsp;</digi:trn>/>';
                     msgTr.appendChild(imgTD);
                 
                
@@ -559,7 +583,7 @@
 		if(isDraft=='true'){
                     fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
 		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" ><img  src="/repository/message/view/images/forward.gif" border=0  hspace="2" /></digi:link>';
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" ><img  src="/repository/message/view/images/forwardIcon.gif" border=0  hspace="2" /></digi:link>';
 		}
 		msgTr.appendChild(fwdOrEditTD);	
 					
@@ -845,32 +869,32 @@
                                                             </TD>
                                                             </TR>
                                                               <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="message:ClickExpandMessage"> Click here to expand Message&nbsp;</digi:trn>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unreadIcon.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickExpandMessage"> Click on this icon to expand message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                              <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/read.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="message:ClickCollapseMessage"> Click here to collapse Message&nbsp;</digi:trn>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/readIcon.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickCollapseMessage">Click on this icon to collapse message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                             <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/forward.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="message:ClickForwardMessage"> Click here to forward Message&nbsp;</digi:trn>
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/forwardIcon.gif" vspace="2" border="0" align="absmiddle" />
+                                                                    <digi:trn key="message:ClickForwardMessage">Click on this icon to forward message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                             <TR>
                                                                 <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="message:ClickEditMessage"> Click here to edit Message&nbsp;</digi:trn>
+                                                                    <digi:trn key="message:ClickEditMessage">Click on this icon to edit message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                              <TR>
                                                                 <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="message:ClickDeleteMessage"> Click here to delete Message&nbsp;</digi:trn>
+                                                                    <digi:trn key="message:ClickDeleteMessage">Click on this icon to delete message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>

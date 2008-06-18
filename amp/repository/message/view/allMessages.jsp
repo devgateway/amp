@@ -403,8 +403,8 @@
     
                 }
 		imgTD.vAlign='top';	
-                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/unreadIcon.gif" title="<digi:trn key="message:ClickExpandMessage"> Click here to expand Message&nbsp;</digi:trn>"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/readIcon.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click here to collapse Message&nbsp;</digi:trn>/>';
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/unreadIcon.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/readIcon.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
                     msgTr.appendChild(imgTD);
                 
                

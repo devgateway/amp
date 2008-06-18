@@ -341,6 +341,24 @@ public class AmpMessageActions extends DispatchAction {
     		Long stateId=new Long(request.getParameter("msgStateId"));
         	AmpMessageState oldMsgsState=AmpMessageUtil.getMessageState(stateId);
         	AmpMessage msg=oldMsgsState.getMessage();
+                
+                // for Breadcrumb Generation. we need to which tab we must return..
+                if (msg instanceof AmpAlert) {
+                    messagesForm.setTabIndex(2);
+                } else {
+                    if (msg instanceof Approval) {
+                        messagesForm.setTabIndex(3);
+                    } else {
+                        if (msg instanceof CalendarEvent) {
+                            messagesForm.setTabIndex(4);
+                        } else {
+                            messagesForm.setTabIndex(1);
+                        }
+                    }
+                }
+                
+                
+                messagesForm.setMessageName("FWD: "+ msg.getName());
         	MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
         	messagesForm.setForwardedMsg(msgHelper);
     	}
@@ -483,9 +501,15 @@ public class AmpMessageActions extends DispatchAction {
 		if(messageReceivers!=null && messageReceivers.length>0){
 			Address [] addresses=new Address [messageReceivers.length];
 			int addressIndex=0;
-			for (String receiver : messageReceivers) {				
-				if(receiver.startsWith("t")){//<--this means that receiver is team
-					List<TeamMember> teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(new Long(receiver.substring(2)));
+			for (String receiver : messageReceivers) {
+				if(!receiver.startsWith("m")){//<--this means that receiver is team
+					List<TeamMember> teamMembers=null;
+                                        if(receiver.startsWith("t")){
+                                               teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(new Long(receiver.substring(2)));
+                                        }
+                                        else{
+                                             teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(null);
+                                        }
 					if(teamMembers!=null && teamMembers.size()>0){
 						for (TeamMember tm : teamMembers) {
 							if(! statesMemberIds.contains(tm.getMemberId())){

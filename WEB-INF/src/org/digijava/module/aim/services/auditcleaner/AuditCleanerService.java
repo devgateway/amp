@@ -8,9 +8,11 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  * @author Diego Dimunzio
  * 
-*/
+ */
+
 public class AuditCleanerService extends AbstractServiceImpl {
 	AuditCleanerRunner crummer = null;
+
 	protected void processInitEvent(ServiceContext serviceContext) {
 		String cleanerEnabled = FeaturesUtil
 				.getGlobalSettingValue("Automatic Audit Logger Cleanup");

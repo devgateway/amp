@@ -12,6 +12,7 @@
 <%@page import="org.digijava.module.aim.helper.GlobalSettings"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="java.util.Date"%>
+<%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
 <script langauage="JavaScript"><!--
 function saveClicked() {
 
@@ -511,6 +512,13 @@ function saveAllSettings(){
 	                                    				} 
 	                                    		%>
 												</select>
+												<%
+												if (!globalSett.getGlobalSettingsValue().equalsIgnoreCase("-1")){
+													String sdate = org.digijava.module.common.util.DateTimeUtil.formatDate(AuditCleaner.getInstance().getNextcleanup()); %>
+													<br>
+													<digi:trn key="aim:globalSettings:NextCleanUp">Next Audit Cleanup:</digi:trn>
+													<%=" " + sdate%>
+												<%}%>
 											</c:when>
 	                                    	
 											

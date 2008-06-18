@@ -533,7 +533,14 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff">
 												                            <c:forEach var="config" items="${aimChannelOverviewForm.classificationConfigs}" varStatus="ind">
-												                               <field:display name="${config.name}" feature="Sectors">
+																				<bean:define id="emptySector" value="Sector"></bean:define>
+																				<c:if test="${config.name== 'Secondary' }">
+																					<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
+																				</c:if>
+																				<c:if test="${config.name== 'Primary' }">
+																					<bean:define id="auxSectorType" value="Sector"></bean:define>
+																				</c:if>
+																				 <field:display name="${auxSectorType}" feature="Sectors">
 																				<c:set var="hasSectors">
 																					false
 																				</c:set>

@@ -915,7 +915,6 @@ function collapseAll() {
                             </feature:display>   
                             <!--19-->
                             <feature:display name="Sectors" module="Project ID and Planning">
-                                             <field:display name="Sector" feature="Sectors">	  
                                             
                                             <tr>
                                                 <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="sector_plus"  onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
@@ -925,7 +924,15 @@ function collapseAll() {
                                                     <div id="sector_dots">...</div>
                                                     <div id="act_sector" style="display: none;">
 							                            <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
-							                               <field:display name="${config.name}" feature="Sectors">
+							                               <bean:define id="emptySector" value="Sector"></bean:define>
+															<c:if test="${config.name== 'Secondary' }">
+																<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
+															</c:if>
+															<c:if test="${config.name== 'Primary' }">
+																<bean:define id="auxSectorType" value="Sector"></bean:define>
+															</c:if>
+															<field:display name="${auxSectorType}" feature="Sectors">
+																				
 															<c:set var="hasSectors">
 																false
 															</c:set>
@@ -938,8 +945,8 @@ function collapseAll() {
 															</c:forEach>
 															<c:if test="${hasSectors}">
 							                                <strong>
-								                               	<digi:trn key="aim:addactivitysectors:${config.name }">
-								                                <c:out value="${config.name }"/>
+								                               	<digi:trn key="aim:addactivitysectors:${auxSectorType }">
+								                                <c:out value="${auxSectorType }"/>
 								                                </digi:trn>
 								                                </strong><br/>
 							                                </c:if>
@@ -978,7 +985,6 @@ function collapseAll() {
                                                     </div>
 												</td>
                                             </tr>
-                                            </field:display>
                                     </feature:display>
                                     
                                     <c:if test="${not empty aimEditActivityForm.activityComponentes}">

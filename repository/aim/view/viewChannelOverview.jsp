@@ -554,8 +554,8 @@ function commentWin(val) {
 																				</c:forEach>
 																				<c:if test="${hasSectors}">
 												                                <strong>
-													                               	<digi:trn key="aim:addactivitysectors:${config.name }">
-													                                <c:out value="${config.name }"/>
+													                               	<digi:trn key="aim:addactivitysectors:${auxSectorType }">
+													                                <c:out value="${auxSectorType }"/>
 													                                </digi:trn>
 													                                </strong>
 												                                </c:if>

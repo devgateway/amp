@@ -272,7 +272,7 @@
 				</tr>
 				
 				
-				<field:display name="Primary" feature="Sectors">
+				<field:display name="Sector" feature="Sectors">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:primarySector">Primary Sector</digi:trn></td>
 				</tr>
@@ -287,7 +287,7 @@
 					</td>
 				</tr>
 				</field:display>
-				<field:display name="Secondary" feature="Sectors">
+				<field:display name="Secondary Sector" feature="Sectors">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:secondarySector">Secondary Sector</digi:trn></td>
 				</tr>

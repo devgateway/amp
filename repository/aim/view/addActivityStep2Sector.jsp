@@ -90,7 +90,14 @@
                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
                                    
                                     <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
-                                     <field:display name="${config.name}" feature="Sectors">
+                                    <bean:define id="emptySector" value="Sector"></bean:define>
+									<c:if test="${config.name== 'Secondary' }">
+										<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
+									</c:if>
+									<c:if test="${config.name== 'Primary' }">
+										<bean:define id="auxSectorType" value="Sector"></bean:define>
+									</c:if>
+									 <field:display name="${auxSectorType}" feature="Sectors">
                                          <c:set var="sectorAdded">
                                               false
                                           </c:set>
@@ -100,24 +107,21 @@
                                                      <FONT color="red">
                                                          *
                                                      </FONT>
-                                                     <b><digi:trn key="aim:addActivitySectors:${config.name}">${config.name}</digi:trn></b>
+                                                     <b><digi:trn key="aim:addActivitySectors:${auxSectorType}">${auxSectorType}</digi:trn></b>
                                                 </td>
-                                    </tr>
+                                    	</tr>
                                         <c:if test="${!empty aimEditActivityForm.activitySectors}">
                                             <tr>
                                                 <td>
                                                    
-        
+        											<bean:define id="auxSectorType" value="empty1"/>
                                                     <div id="config${ind.count}">  
                                                         <c:if test="${config.primary}">
-                                                           
-                                                            <div id="primaryConfig">
+        	                                                    <div id="primaryConfig">
                                                         </c:if>
                                                         <logic:equal name="config" property="primary" value="false">
-                                                        	<div id="secondaryConfig">
+	                                                        	<div id="secondaryConfig">
 														</logic:equal>
-                                                        
-                                                
                                                     <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
                                                        <tbody>
                                                         <c:forEach var="activitySectors" items="${aimEditActivityForm.activitySectors}" varStatus="index">

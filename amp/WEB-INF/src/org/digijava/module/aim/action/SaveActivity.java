@@ -103,6 +103,8 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.message.helper.ActivitySaveTrigger;
 import org.digijava.module.message.helper.AmpMessageWorker;
+import org.digijava.module.message.helper.ApprovedActivityTrigger;
+import org.digijava.module.message.helper.NotApprovedActivityTrigger;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -433,59 +435,59 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setLessonsLearned(eaForm.getLessonsLearned());
 				}
-				
+
 				if (eaForm.getProjectImpact() == null
 						|| eaForm.getProjectImpact().trim().length() == 0) {
 					activity.setProjectImpact(new String(" "));
 				} else {
 					activity.setProjectImpact(eaForm.getProjectImpact());
 				}
-				
+
 				if (eaForm.getActivitySummary() == null
 						|| eaForm.getActivitySummary().trim().length() == 0) {
 					activity.setActivitySummary(new String(" "));
 				} else {
 					activity.setActivitySummary(eaForm.getActivitySummary());
 				}
-				
+
 				if (eaForm.getContractingArrangements() == null
 						|| eaForm.getContractingArrangements().trim().length() == 0) {
 					activity.setContractingArrangements(new String(" "));
 				} else {
 					activity.setContractingArrangements(eaForm.getContractingArrangements());
 				}
-				
-				
+
+
 				if (eaForm.getCondSeq() == null
 						|| eaForm.getCondSeq().trim().length() == 0) {
 					activity.setCondSeq(new String(" "));
 				} else {
 					activity.setCondSeq(eaForm.getCondSeq());
 				}
-				
-				
+
+
 				if (eaForm.getLinkedActivities() == null
 						|| eaForm.getLinkedActivities().trim().length() == 0) {
 					activity.setLinkedActivities(new String(" "));
 				} else {
 					activity.setLinkedActivities(eaForm.getLinkedActivities());
 				}
-				
+
 				if (eaForm.getConditionality() == null
 						|| eaForm.getConditionality().trim().length() == 0) {
 					activity.setConditionality(new String(" "));
 				} else {
 					activity.setConditionality(eaForm.getConditionality());
 				}
-				
+
 				if (eaForm.getProjectManagement() == null
 						|| eaForm.getProjectManagement().trim().length() == 0) {
 					activity.setProjectManagement(new String(" "));
 				} else {
 					activity.setProjectManagement(eaForm.getProjectManagement());
 				}
-				
-		
+
+
 				if (eaForm.getContractDetails() == null
 						|| eaForm.getContractDetails().trim().length() == 0) {
 					activity.setContractDetails(new String(" "));
@@ -648,7 +650,7 @@ public class SaveActivity extends Action {
 				activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
 				activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
 				activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
-				
+
 				activity.setPrjCoFirstName(eaForm.getPrjCoFirstName());
 				activity.setPrjCoLastName(eaForm.getPrjCoLastName());
 				activity.setPrjCoEmail(eaForm.getPrjCoEmail());
@@ -656,7 +658,7 @@ public class SaveActivity extends Action {
 				activity.setPrjCoOrganization(eaForm.getPrjCoOrganization());
 				activity.setPrjCoPhoneNumber(eaForm.getPrjCoPhoneNumber());
 				activity.setPrjCoFaxNumber(eaForm.getPrjCoFaxNumber());
-				
+
 				activity.setSecMiCntFirstName(eaForm.getSecMiCntFirstName());
 				activity.setSecMiCntLastName(eaForm.getSecMiCntLastName());
 				activity.setSecMiCntEmail(eaForm.getSecMiCntEmail());
@@ -948,7 +950,7 @@ public class SaveActivity extends Action {
 							ampLoc.setDescription(new String(" "));
 							DbUtil.add(ampLoc);
 						}
-						
+
 						//AMP-2250
 						AmpActivityLocation actLoc=new AmpActivityLocation();
 						actLoc.setActivity(activity);//activity);
@@ -970,13 +972,13 @@ public class SaveActivity extends Action {
 					while (itr.hasNext()) {
 						Location loc = itr.next();
 						if(loc.getRegion().equals("") && eaForm.getRegionalFundings()!=null){
-							eaForm.getRegionalFundings().clear();	
+							eaForm.getRegionalFundings().clear();
 				 	      }
 					 }
 				}else if (eaForm.getSelectedLocs()==null || eaForm.getSelectedLocs().size() == 0){
 					if (eaForm.getRegionalFundings()!=null) eaForm.getRegionalFundings().clear();
 				}
-				
+
 
 				if(eaForm.getCosts()!=null && eaForm.getCosts().size()>0) {
 					Set costs=new HashSet();
@@ -1168,7 +1170,7 @@ public class SaveActivity extends Action {
 
 							ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
 							ampFunding.setFinancingId(fund.getOrgFundingId());
-							
+
 							ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
 							if (fund.getConditions() != null
 									&& fund.getConditions().trim().length() != 0) {
@@ -1216,7 +1218,7 @@ public class SaveActivity extends Action {
 										}
 									}
 								}
-								
+
 								boolean regionFlag=false;
 
 								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
@@ -1475,11 +1477,22 @@ public class SaveActivity extends Action {
 					//for logging the activity
 					AuditLoggerUtil.logObject(session, request,activity,"add");
 				}
-			
+
 			//If we're adding an activity, create system/admin message
 			if(!eaForm.isEditAct()) {
-				ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);				
+				ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 			}
+
+            String logframepr = (String) session.getAttribute("logframepr");
+            if (logframepr.equals("true")) {
+                if (activity.getApprovalStatus() != null && activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
+                    new ApprovedActivityTrigger(activity);
+                }
+            }else{
+                new NotApprovedActivityTrigger(activity);
+            }
+
+
 
             if(DocumentUtil.isDMEnabled()) {
                 Site currentSite = RequestUtils.getSite(request);
@@ -1623,7 +1636,7 @@ public class SaveActivity extends Action {
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setReportingOrganization(null);
 							ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
-						
+
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1658,11 +1671,11 @@ public class SaveActivity extends Action {
 						}
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
-						
+
 							ampCompFund.setTransactionAmount(new Double(
 									FormatHelper.parseDouble(fd
 											.getTransactionAmount())));
-						
+
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1697,7 +1710,7 @@ public class SaveActivity extends Action {
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setTransactionAmount(new Double(FormatHelper.parseDouble(fd.getTransactionAmount())));
-					
+
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1741,7 +1754,7 @@ public class SaveActivity extends Action {
 				}
                                 tempComp.setComponentId(comp.getComponentId());
                                 tempComp.setType_Id(comp.getType_Id());
-                    			
+
                                 tempComps.add(tempComp);
 			}
 		}
@@ -1761,7 +1774,7 @@ public class SaveActivity extends Action {
 				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				ampmtef.setAmount(FormatHelper.parseDouble(mtef.getAmount()));
-				
+
 				ampmtef.setAmpFunding(ampFunding);
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );

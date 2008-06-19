@@ -34,6 +34,9 @@
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	
+	<digi:instance property="aimReportWizardForm" />
+	<bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
+	
 	<c:set var="failureMessage">
 		<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>
 	</c:set>
@@ -44,7 +47,7 @@
 	<script type="text/javascript">
 		YAHOO.namespace("YAHOO.amp.reportwizard");
 		YAHOO.amp.reportwizard.numOfSteps	= 4;
-		YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
+		
 		YAHOO.amp.reportwizard.tabLabels	= new Array("reportdetails_tab_label", "columns_tab_label", 
 											"hierarchies_tab_label", "measures_tab_label");
 		selectedCols						= new Array();
@@ -53,16 +56,19 @@
 		
 		
 		function initializeDragAndDrop() {
-		
+			YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
+			YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization);
+		}
+		function continueInitialization(){
 			treeObj = new DHTMLSuite.JSDragDropTree();
-	treeObj.setTreeId('dhtmlgoodies_tree');
-	treeObj.init();
-	treeObj.showHideNode(false,'dhtmlgoodies_tree');
+			treeObj.setTreeId('dhtmlgoodies_tree');
+			treeObj.init();
+			treeObj.showHideNode(false,'dhtmlgoodies_tree');
 // 			if (YAHOO.widget.Logger) {
 // 				var reader = new YAHOO.widget.LogReader( "logDiv", 
 // 							{ newestOnTop: true, height: "400px" } );
 // 			}
-			if ( aimReportWizardForm.desktopTab.value == "true" )
+			if ( ${myForm.desktopTab} )
 				repManager		= new TabReportManager();
 			else
 				repManager		= new NormalReportManager();
@@ -85,7 +91,7 @@
 			//createDragAndDropItems('dest_col_ul');
 			//new YAHOO.util.DDTarget('dest_li_1');
 			//new YAHOO.util.DD('logDiv');
-			for (i=1; i<4; i++) {
+			for (var i=1; i<4; i++) {
 				tab		= YAHOO.amp.reportwizard.tabView.getTab(i);
 				tab.set("disabled", true);
 			}
@@ -96,8 +102,6 @@
 			generateHierarchies();
 			MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
 			MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
-			
-			repManager.checkSteps();
 			
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
 			
@@ -111,6 +115,8 @@
 					cn[i].nodeName.toLowerCase()=="a" )
 					cn[i].style.display		= "none";
 			}
+
+			repManager.checkSteps();
 		}
 		YAHOO.util.Event.addListener(window, "load", initializeDragAndDrop) ;
 	</script>
@@ -133,9 +139,6 @@
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-
-		<digi:instance property="aimReportWizardForm" />
-		<bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
 		<digi:form action="/reportWizard.do" method="post">
 		
 		<script type="text/javascript">
@@ -152,6 +155,7 @@
 		
 		
 		<html:hidden name="aimReportWizardForm" property="desktopTab"/>
+		<html:hidden name="aimReportWizardForm" property="originalTitle"/>
 		<div style="color: red; text-align: center; visibility: hidden" id="savingReportDiv">
 		</div>
 		<br />
@@ -161,94 +165,35 @@
 			<li id="columns_tab_label" class="disabled"><a href="#columns_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:columns">2. Columns</digi:trn></div></a> </li>
 			<li id="hierachies_tab_label" class="disabled"><a href="#hierarchies_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:hierarchies">3. Hierarchies</digi:trn></div></a> </li>
 			<li id="measures_tab_label" class="disabled"><a href="#measures_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:measures">4. Measures</digi:trn></div></a> </li>
-			<%-- <li id="details_tab_label" class="disabled"><a href="#details_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:details">5. Details</digi:trn></div></a> </li> --%>
 		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
-				<div id="type_step_div" class="yui-tab-content" style="padding: 10px 15px 10px 15px;" >
-					<table cellpadding="25px" width="100%" align="center" >
+				<div id="type_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
+					<div class="subtabs">
+						&nbsp;
+						<button id="step0_prev_button" type="button" class="toolbar-dis" disabled="disabled"
+							onclick="repManager.previousStep();">
+							<img src="/TEMPLATE/ampTemplate/images/prev_dis.png" class="toolbar" />
+							<digi:trn key="btn:previous">Previous</digi:trn>
+						</button>
+						<button id="step0_next_button" type="button" class="toolbar-dis" 
+							 onclick="repManager.nextStep()" disabled="disabled">
+							<img src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
+							<digi:trn key="btn:next">Next</digi:trn>
+						</button>
+						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
+																					onclick="saveReportEngine.decideToShowTitlePanel()" >
+							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
+							Save
+						</button>
+						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
+							<img height="16" src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
+							Save As..
+						</button>
+						
+					</div>
+					<table cellpadding="15px" width="100%" align="center" >
 						<tr>
-							<%-- 
-							<td width="50%">
-								<font color="#3754A1">
-									<b><digi:trn key="rep:wizard:typeOfReport">Type of Report</digi:trn></b>
-								</font>
-								<div id="reportTypeDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; height: 120px">
-									<html:checkbox property="desktopReport" value="true" onclick="checkSteps()" />
-									<digi:trn key="rep:wizard:hint:createDesktopReport"> Create a Desktop Report </digi:trn>
-									<br />
-									<html:checkbox property="normalReport" value="true"  onclick="checkSteps()"/>
-									<digi:trn key="rep:wizard:hint:createNormalReport"> Create a Standard Report </digi:trn>
-									<br /><br />
-									<font>* 
-										<digi:trn key="rep:wizard:hint:bothreporttypes">
-											To create both (Standard and Desktop Report) select both checkboxes
-										</digi:trn>
-									</font>
-									<br /><br />
-									<span id="reportTypeMust">
-										<font color="red">* 
-											<digi:trn key="rep:wizard:hint:mustselect">
-												Must select at least one type
-											</digi:trn>
-										</font>
-									</span>
-									
-								</div>
-							</td> --%>
-							<td width="54%" style="vertical-align: top">
-								<table cellpadding="0px" style="vertical-align: top" width="100%">
-									<tr>
-										<td width="10%">&nbsp;</td>
-										<td>
-											<span class="list_header">
-												<digi:trn key="aim:reportBuilder:ReportTitle">Report Title</digi:trn>
-											</span>
-											<span id="reportTitleSpan">
-											<html:textarea onkeyup="repManager.checkSteps()" property="reportTitle" rows="2" styleClass="inp-text" style="border: 1px solid gray; width: 100%;" />
-											</span>
-										</td>
-										<td width="10%">&nbsp;</td>
-									</tr>
-									<tr>
-										<td width="10%">&nbsp;</td>
-										<td>
-											<span id="reportdetailsMust">
-											<font color="red">* 
-												<digi:trn key="rep:wizard:hint:mustDetails">
-													The report must have a title
-												</digi:trn>
-											</font>
-											</span>
-											<br />
-										</td>
-										<td width="10%">&nbsp;</td>
-									</tr>
-									<tr>
-										<td width="10%">&nbsp;</td>
-										<td>
-											<br/>
-											<span class="list_header">
-												<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
-											</span>
-											<br/>
-											<html:textarea property="reportDescription" rows="10" styleClass="inp-text" style="border: 1px solid gray;width: 100%;" />
-										</td>
-										<td width="10%">&nbsp;</td>
-									</tr>
-									
-									<%-- <tr>
-										<td align="right" colspan="3">
-											<button 
-											id="saveReportButton" type="button" class="buton" disabled="disabled" 
-											style="color: lightgray" onclick="saveReportEngine.saveReport()">
-												<digi:trn key="btn:saveReport">Save Report</digi:trn>
-											</button>
-										</td>
-									</tr> --%>
-									
-								</table>
-							</td>
-							<td width="46%" style="vertical-align: middle;">
+							<td width="46%" style="vertical-align: top;">
 								<span class="list_header">
 									<digi:trn key="rep:wizard:fundingGrouping"> Funding Grouping </digi:trn>
 								</span>
@@ -303,23 +248,70 @@
 									<br />
 								</div>
 							</td>
+							<td width="52%" rowspan="2">
+								<span class="list_header">
+									<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
+								</span>
+								<br/>
+								<html:textarea property="reportDescription" rows="16" styleClass="inp-text" style="border: 1px solid gray;width: 100%;" />
+							</td>
 						</tr>
 						<tr>
-							<td colspan="2" align="right">
-								<button 
-								id="step0_prev_button" type="button" class="buton repbuton" 
-								onclick="repManager.previousStep();">
-									<digi:trn key="btn:cancel">Cancel</digi:trn>
-								</button>
-								<button id="step0_next_button" type="button" class="buton repbuton" 
-								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
-									<digi:trn key="btn:next">Next</digi:trn>
-								</button>
+							<td colspan="1">
+								<span class="list_header">
+									<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
+								</span>
+								<div align="center" id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
+									<html:checkbox property="hideActivities" value="true">
+										<digi:trn key="aim:summaryReport">
+											Summary Report
+										</digi:trn>
+									</html:checkbox>
+									<br />
+									<html:radio property="reportPeriod" value="A">
+										<digi:trn key="aim:AnnualReport">
+											Annual Report
+										</digi:trn>
+									</html:radio>								
+									<html:radio property="reportPeriod" value="Q">
+										<digi:trn key="aim:QuarterlyReport">
+											Quarterly Report
+										</digi:trn>
+									</html:radio>
+									<html:radio property="reportPeriod" value="M">
+										<digi:trn key="aim:MonthlyReport">
+											Monthly Report
+										</digi:trn>
+									</html:radio>
+								</div>
 							</td>
 						</tr>
 					</table>				
 				</div>
-				<div id="columns_step_div"  class="yui-tab-content" style="display: none;" align="center">
+				<div id="columns_step_div"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
+					<div class="subtabs">
+						&nbsp;
+						<button id="step1_prev_button" type="button" class="toolbar"
+							onclick="repManager.previousStep();">
+							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
+							<digi:trn key="btn:previous">Previous</digi:trn>
+						</button>
+						<button id="step1_next_button" type="button" class="toolbar-dis" 
+							onclick="repManager.nextStep()" disabled="disabled">
+							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
+							<digi:trn key="btn:next">Next</digi:trn>
+						</button>
+						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
+												onclick="saveReportEngine.decideToShowTitlePanel()" >
+							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
+							Save
+						</button>
+						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
+							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
+							Save As..
+						</button>
+						
+					</div>
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
@@ -348,7 +340,7 @@
 						</td>
 						</tr>
 						<tr>
-							<td>
+							<td align="center">
 								<span id="columnsMust">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectcolumn">
@@ -357,24 +349,43 @@
 								</font>
 								</span>
 							</td>
-							<td colspan="2">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="3" align="right">
-								<button 
-								id="step1_prev_button" type="button" class="buton repbuton" 
-								onclick="repManager.previousStep();">
-									<digi:trn key="btn:previous">Previous</digi:trn>
-								</button>
-								<button id="step1_next_button" type="button" class="buton repbuton" 
-								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
-									<digi:trn key="btn:next">Next</digi:trn>
-								</button>
+							<td>&nbsp;</td>
+							<td align="center" style="visibility: hidden;">
+								<span id="columnsLimit" >
+								<font color="red">* 
+									<digi:trn key="rep:wizard:hint:limit3columns">
+										You cannot select more than 3 columns in a desktop tab
+									</digi:trn>
+								</font>
+								</span>
 							</td>
 						</tr>
 					</table>
 				</div>
-				<div id="hierarchies_step_div"  class="yui-tab-content" style="display: none;">
+				<div id="hierarchies_step_div"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
+					<div class="subtabs">
+						&nbsp;
+						<button id="step2_prev_button" type="button" class="toolbar"
+							onclick="repManager.previousStep();">
+							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" /> 
+							<digi:trn key="btn:previous">Previous</digi:trn>
+						</button>
+						<button id="step2_next_button" type="button" class="toolbar-dis" 
+							onclick="repManager.nextStep()" disabled="disabled">
+							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
+							<digi:trn key="btn:next">Next</digi:trn>
+						</button>
+						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
+										onclick="saveReportEngine.decideToShowTitlePanel()" >
+							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar" />
+							Save
+						</button>
+						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
+							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
+							Save As..
+						</button>
+						
+					</div>
 					<table cellpadding="5px" style="vertical-align: middle" width="100%" >
 						<tr>
 						<td width="47%" align="center">
@@ -411,22 +422,32 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="3" align="right">
-								<button 
-								id="step2_prev_button" type="button" class="buton repbuton" 
-								onclick="repManager.previousStep();">
-									<digi:trn key="btn:previous">Previous</digi:trn>
-								</button>
-								<button id="step2_next_button" type="button" class="buton repbuton" 
-								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
-									<digi:trn key="btn:next">Next</digi:trn>
-								</button>
-							</td>
-						</tr>
 					</table>
 				</div>
-				<div id="measures_step_div"  class="yui-tab-content" style="display: none;">
+				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
+					<div class="subtabs">
+						&nbsp;
+						<button id="step1_prev_button" type="button" class="toolbar"
+							onclick="repManager.previousStep();">
+							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
+							<digi:trn key="btn:previous">Previous</digi:trn>
+						</button>
+						<button id="step1_next_button" type="button" class="toolbar-dis" 
+							onclick="repManager.nextStep()" disabled="disabled">
+							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
+							<digi:trn key="btn:next">Next</digi:trn>
+						</button>
+						<button type="button" class="toolbar-dis" onclick="saveReportEngine.decideToShowTitlePanel()" 
+								disabled="disabled" name="save">
+							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
+							Save
+						</button>
+						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
+							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
+							Save As..
+						</button>
+						
+					</div>
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
@@ -454,7 +475,7 @@
 							</ul>					
 						</tr>
 						<tr>
-							<td colspan="3">
+							<td>
 								<span id="measuresMust">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectmeasure">
@@ -463,55 +484,20 @@
 								</font>
 								</span>
 							</td>
-						</tr>
-						<tr>
-							<td colspan="3" align="center">
-								<span class="list_header">
-									<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
+							<td>&nbsp;</td>
+							<td>
+								<span id="measuresLimit" style="visibility: hidden">
+								<font color="red">* 
+									<digi:trn key="rep:wizard:hint:limit2measures">
+										You cannot select more than 2 measures in a desktop tab
+									</digi:trn>
+								</font>
 								</span>
-								<div id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 33%">
-									<html:checkbox property="hideActivities" value="true">
-										<digi:trn key="aim:summaryReport">
-											Summary Report
-										</digi:trn>
-									</html:checkbox>
-									<br />
-									<html:radio property="reportPeriod" value="A">
-										<digi:trn key="aim:AnnualReport">
-											Annual Report
-										</digi:trn>
-									</html:radio>								
-									<html:radio property="reportPeriod" value="Q">
-										<digi:trn key="aim:QuarterlyReport">
-											Quarterly Report
-										</digi:trn>
-									</html:radio>
-									<html:radio property="reportPeriod" value="M">
-										<digi:trn key="aim:MonthlyReport">
-											Monthly Report
-										</digi:trn>
-									</html:radio>
-								</div>
 							</td>
 						</tr>
-						<tr>
-							<td colspan="3" align="right">
-								<button 
-								id="step3_prev_button" type="button" class="buton repbuton"  
-								onclick="repManager.previousStep();">
-									<digi:trn key="btn:previous">Previous</digi:trn>
-								</button>
-								<button id="step3_next_button" type="button" class="buton repbuton" 
-								style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
-									<digi:trn key="btn:saveReport">Save Report</digi:trn>
-								</button>
-							</td>
-						</tr>
+					
 					</table>
 				</div>
-				<%-- <div id="details_step_div"  class="yui-tab-content" style="display: none;">
-					
-				</div> --%>
 			</div>
 		</div>
 		<%-- <div id="logDiv" style="border: medium solid red; width: 20%;">
@@ -519,6 +505,22 @@
 		<span style="display: none">
 			<jsp:include page="setColumns.jsp" />
 		</span>
+		<div id="titlePanel" style="display: none">
+			<div class="hd" style="font-size: 8pt">
+				<digi:trn key="rep:wizard:enterTitle">Please enter a title for this report: </digi:trn>
+			</div>
+			<div class="bd">
+			<html:text onkeyup="repManager.checkSteps()" property="reportTitle" styleClass="inp-text" 
+					style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
+			</div>
+			<div class="ft" align="right">
+				<button id="step3_next_button" type="button" class="buton repbuton" 
+					style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
+						<digi:trn key="btn:saveReport">Save Report</digi:trn>
+				</button>
+				&nbsp;&nbsp;&nbsp;
+			</div
+		</div>
 		</digi:form>
 	</td>
 	</tr>

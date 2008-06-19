@@ -82,7 +82,7 @@
 
 
 	.list1, .list2 {
-		background-color: #D7EAFD;
+		background-color: #CCDBFF;
 		border:1px solid #7EA6B2;
 		text-align: left;
 		font-size: 8pt;
@@ -188,5 +188,46 @@
 	font-weight: bold;
 }
 
+.subtabs {
+	background-color: #CCDBFF;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;
+	padding: 4px 4px;
+	text-align: left;
+}
 
+img.toolbar {
+	vertical-align: text-bottom;
+	height: 17px;
+}
 
+button.toolbar {
+	background-color: #CCDBFF; 
+	border-width: thin;
+	border-style: solid;
+	border-color: #CCDBFF;
+	font-size: 8pt;
+	height: 100%;
+	color: black;
+	vertical-align: bottom;
+	padding: 1px;
+	
+}
+button:hover.toolbar {
+	background-color: #DCEBFF; 
+	border-width: thin;
+	border-style: solid;
+	border-color: #BCCBFF;
+}
+
+button.toolbar-dis { 
+	background-color: #CCDBFF; 
+	border-width: thin;
+	border-style: solid;
+	border-color: #CCDBFF;
+	font-size: 8pt;
+	color: gray;
+	height: 100%;
+	vertical-align: bottom;
+	padding: 1px;
+}

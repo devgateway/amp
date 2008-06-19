@@ -14,5 +14,12 @@
 
 <digi:instance property="aimReportWizardForm" />
 
-<digi:trn key="aim:reportwizard:savingProblems">There were some problems while trying to save this report. The report was not saved. </digi:trn>
-
+<c:choose>
+	<c:when test="${aimReportWizardForm.duplicateName == true}">
+		<div style="display: none">duplicateName</div>
+		<digi:trn key="aim:reportwizard:duplicateName">There is already a report with the same name. Please choose a different one. </digi:trn>
+	</c:when>
+	<c:otherwise>
+		<digi:trn key="aim:reportwizard:savingProblems">There were some problems while trying to save this report. The report was not saved. </digi:trn>
+	</c:otherwise>	
+</c:choose>

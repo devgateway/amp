@@ -612,7 +612,7 @@
 				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
-                                        detailsTD1.noWrap=true;
+                                        detailsTD1.width='30%';
 					detailsTD1.innerHTML='<strong>'+desc+'</strong>';
 				detailsTR.appendChild(detailsTD1);
 					

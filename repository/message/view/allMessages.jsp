@@ -61,13 +61,14 @@
 	var prevPage='<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>';
 	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
-	var objURL='<digi:trn key="message:objURL">Object URL</digi:trn>';
+	var referenceURL='<digi:trn key="message:referenceURL">Reference URL</digi:trn>';
         var forwardClick="<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>";
         var editClick="<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>";
         var deleteClick="<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>";
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
+        var messages;
 	
 	//used to hold already rendered messages
 	var myArray=new Array();
@@ -92,15 +93,20 @@
 		openURLinWindow(url,600,550);
 	}
 	
-	function viewMessage(id,isMsg) {
-            if(isMsg){
-		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
-            markMsgeAsRead(id);
+    function viewMessage(id,isMsg) {
+        var ind=id.indexOf('_mId');
+        if(ind!=-1){
+            var stateId=id.substring(0,ind);
+            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+stateId,600,430);
+            markMsgeAsRead(stateId);
+            
         }
-        else{           
-                    openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,600,430);
+        else{
+            ind=id.indexOf('_fId');
+            var msgId=id.substring(0,ind);;            
+            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
         }
-	}
+    }
 	
 	function deleteMessage(msgId) {
 		if(deleteMsg()){
@@ -115,14 +121,19 @@
 				var msgTR=imgTD.parentNode;
 				tbl.tBodies[0].removeChild(msgTR);
 				//removing record from db
-				var url=addActionToURL('messageActions.do');	
+                                 var ind=msgId.indexOf('_mId');
+                                if(ind!=-1){
+                                var stateId=msgId.substring(0,ind);
+                                var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
 				url+='~editingMessage=false';
-				url+='~msgStateId='+msgId;
+				url+='~msgStateId='+stateId;
 				url+='~page='+currentPage;			
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
-				async.call(url);		
+				async.call(url);
+                                }
+						
 			}	
 		}
 	}
@@ -158,16 +169,54 @@
 		getMessages();		
 	}
         
-        function toggleGroup(group_id,forwardingThread){
-                var strId='#'+group_id;
-                $(strId+'_minus').toggle();
-                $(strId+'_plus').toggle();
-                $('#msg_'+group_id).toggle('fast');
-                if(!forwardingThread){
-                markMsgeAsRead(group_id);
+        function toggleGr(id){
+            $('#'+id+'_minus').slideUp('fast');
+            $('#'+id+'_plus').slideDown('fast');
+            $('#msg_'+id).slideUp('fast');
+        }
+        
+   
+        
+    function toggleGroup(group_id){
+        var strId='#'+group_id;
+        $(strId+'_minus').toggle();
+        $(strId+'_plus').toggle();
+        var ind=group_id.indexOf('_mId');
+        var messageId;
+        var stId=0;
+        if(ind!=-1){
+            messageId=group_id.slice(ind+4);
+            stId=group_id.substring(0,ind);
+            markMsgeAsRead(stId);
+            
+        }
+        else{
+            ind=group_id.indexOf('_fId');
+            messageId=group_id.slice(ind+4);
+        }
+       
+        for(var j=0;j<messages.length;j++){ 
+            var msgId=messages[j].getAttribute('msgId');
+            var stateId= messages[j].getAttribute('id');
+            var mId=stateId+'_mId'+msgId;
+            if(messageId!=msgId){
+                toggleGr(mId);
+            }  
+            for(var i=0;i<messages[j].childNodes.length;i++){
+                var forwardedMsg=messages[j].childNodes[i];
+                var parMsgId=forwardedMsg.getAttribute('parentMsgId');
+                if(messageId!=parMsgId){
+                    var lastMsgId=forwardedMsg.getAttribute('msgId');
+                    var fId=lastMsgId+'_fId'+parMsgId;
+                    toggleGr(fId);
                 }
                 
-	}
+            }
+            
+        }
+        $('#msg_'+group_id).toggle('fast');
+          
+    }
                   
 	function markMsgeAsRead(group_id){
         var partialUrl=addActionToURL('messageActions.do');
@@ -196,8 +245,10 @@
 		var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
 		var stateId=root.getAttribute('id');
 		var isRead=root.getAttribute('read');
+                var msgId=root.getAttribute('msgId');
+                
 		if(isRead){
-			var myid='#'+stateId+'_unreadLink';		
+			var myid='#'+stateId+'_mId'+msgId+'_unreadLink';
 			$(myid).css("color","");		
 		}
 		
@@ -218,7 +269,7 @@
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
-                var messages;
+               
 				
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
@@ -264,8 +315,10 @@
 						var whereToInsertRow=1;						
 							for(var i=0;i<messages.length;i++){
 							var msgId=messages[i].getAttribute('id');
+                                                        var mId=messages[i].getAttribute('msgId');
+                                                        var msId=msgId+"_mId"+mId; // create unique id for each message
 							for(var j=0;j<myArray.length;j++){
-								if(msgId==myArray[j]){
+								if(msId==myArray[j]){
 									break;
 								}else{
 									if(j==myArray.length-1){
@@ -281,7 +334,7 @@
                                                                                                     msgTR.className = 'trOdd';
                                                                                                 }
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
-												myArray[myArray.length]=msgId;										
+												myArray[myArray.length]=msId;										
 											}else{
 												tbl.tBodies[0].insertRow(whereToInsertRow);
 												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
@@ -292,7 +345,7 @@
                                                                                                     msgTR.className = 'trOdd';
                                                                                                 }
 												createTableRow(tbl,msgTR,messages[i],true);
-												myArray[myArray.length]=msgId;
+												myArray[myArray.length]=msId;
 												whereToInsertRow++;										
 												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
 											}
@@ -305,7 +358,8 @@
 					}else {
 						for(var i=0;i<messages.length;i++){				
 							var msgId=messages[i].getAttribute('id');
-							myArray[i]=msgId;
+                                                        var messId=messages[i].getAttribute('msgId');
+							myArray[i]=msgId+"_mId"+messId;
 							
 							//creating tr
 							var msgTr=document.createElement('TR');	
@@ -374,16 +428,16 @@
 							toIndex=currentPage+2;
 						}
 						for(var i=fromIndex;i<=toIndex;i++){
-							if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>';}
-							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>'; }
+							if(i<=allPages && i==page) {paginationTDContent+='<font color="red">'+i+'</font>|&nbsp;';}
+							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
 						}
 					}
 					if(page<lastPage){
 						var nextPg=page+1;									
 						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
-						paginationTDContent+='<a href="javascript:goToPage('+lastPage+')" title="'+lastPg+'">&gt;&gt;</a>';
+						paginationTDContent+='<a href="javascript:goToPage('+lastPage+')" title="'+lastPg+'">&gt;&gt;</a>|';
 					}	
-					paginationTDContent+='&nbsp;'+page+'of'+lastPage;
+					paginationTDContent+='&nbsp;'+page+'of '+lastPage;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						
 			}
@@ -393,18 +447,30 @@
 	//creates table rows with message information
 	function createTableRow(tbl,msgTr,message,fwdOrEditDel){
 	    
-		var msgId=message.getAttribute('id');	
-                var newMsgId=message.getAttribute('newMsgId');// id of the newest message start of hierarchy for forwarding messages
+		var msgId=message.getAttribute('id');	//message state id
+                var messageId=message.getAttribute('msgId');
+                var sateId;
+                if(msgId==null){
+                    msgId=messageId;
+                }
+                else{
+                    sateId=msgId;
+                }
+                var newMsgId=message.getAttribute('parentMsgId');// id of the hierarchy end for forwarding messages
 		//create image's td
 		var imgTD=document.createElement('TD');
-                var forwardingThread=!fwdOrEditDel;
+               
                 if(newMsgId!=null){
-                    msgId+='_'+newMsgId;
+                    msgId+='_fId'+newMsgId; // create id for forwarded message
     
                 }
+                else{
+                     msgId+='_mId'+messageId; // create id  for plain messages
+                }
 		imgTD.vAlign='top';	
-                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/unreadIcon.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
-				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\','+forwardingThread+')" src="/repository/message/view/images/readIcon.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
+               
+                    imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
+				'<img id="'+msgId+'_minus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/read.gif" style="display : none" <digi:trn key="message:ClickCollapseMessage"> Click on this icon to collapse message&nbsp;</digi:trn>/>';
                     msgTr.appendChild(imgTD);
                 
                
@@ -438,9 +504,9 @@
 		var sp=document.createElement('SPAN');
 		var isMsgRead=message.getAttribute('read');
 		if(isMsgRead=='false'){
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\','+fwdOrEditDel+')"; style="color:red" >'+msgName+'</A>';   
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\')"; style="color:red" >'+msgName+'</A>';   
 		}else {
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\','+fwdOrEditDel+')";>'+msgName+'</A>';
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\')";>'+msgName+'</A>';
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
@@ -528,21 +594,21 @@
 					else if(priority==-1){priorityTD2.innerHTML='None';}
 				priorityTR.appendChild(priorityTD2);
 			divTblBody.appendChild(priorityTR);	
-				var objURLTR=document.createElement('TR');
-					var objURLTD1=document.createElement('TD');
-					objURLTD1.innerHTML='<strong>'+objURL+'</strong>';
-				objURLTR.appendChild(objURLTD1);
-					var objURLTD2=document.createElement('TD');
+				
 					//getting URL
 					var objectURL=message.getAttribute('objURL');
-                    	if(objectURL!='null'){
-                        	objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
-                        }	
-                        else{
-                        	objURLTD2.innerHTML="&nbsp";
-                        }					
-				objURLTR.appendChild(objURLTD2);
-			divTblBody.appendChild(objURLTR);
+                                        if(objectURL!='null'){
+                                        var objURLTR=document.createElement('TR');
+                                        var objURLTD1=document.createElement('TD');
+                                        objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
+                                        objURLTR.appendChild(objURLTD1);
+                                        var objURLTD2=document.createElement('TD');
+                                        objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
+
+                                        objURLTR.appendChild(objURLTD2);
+                                        divTblBody.appendChild(objURLTR);
+                                    }	
+                      		
 				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
@@ -595,9 +661,9 @@
 		var isDraft=message.getAttribute('isDraft');
                 
 		if(isDraft=='true'){
-                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
 		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+msgId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" ><img  src="/repository/message/view/images/forwardIcon.gif" border=0  hspace="2" /></digi:link>';
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" ><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
 		}
 		msgTr.appendChild(fwdOrEditTD);	
 					
@@ -607,7 +673,7 @@
 		deleteTD.align='center';
                 deleteTD.vAlign="top";
 		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
-		deleteTD.innerHTML='<a href="javascript:deleteMessage('+msgId+')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
+		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
 		msgTr.appendChild(deleteTD);
                 }
              
@@ -771,10 +837,10 @@
                                             </UL>						
                                         </DIV>
                                         
-					
+					<div id="main">
 					<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
 						
-                                                            <div id="main">
+                                                            
                                                                 <DIV id="subtabs">
                                                                     <UL>
 								
@@ -848,10 +914,11 @@
                                                                                 </UL>
                                                                                 &nbsp;
                                                                                   </DIV>
-                                                                                </div>
+                                                                                
 									
 						
 					</c:if>
+                                        </div>
                                         	</TD>					
 						</TR>
                                               
@@ -883,19 +950,19 @@
                                                             </TD>
                                                             </TR>
                                                               <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unreadIcon.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickExpandMessage"> Click on this icon to expand message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                              <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/readIcon.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/read.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickCollapseMessage">Click on this icon to collapse message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>
                                                             </TR>
                                                             <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/forwardIcon.gif" vspace="2" border="0" align="absmiddle" />
+                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/finalForward.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickForwardMessage">Click on this icon to forward message&nbsp;</digi:trn>
                                                                     <br />
                                                             </TD>

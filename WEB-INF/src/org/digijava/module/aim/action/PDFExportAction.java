@@ -351,6 +351,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     	    cb.restoreState();
 	
 	} catch (Exception e) {
+		e.printStackTrace();
 	    logger.error("Error onEndPage",e);
 	    throw new ExceptionConverter(e);
 	}

@@ -27,12 +27,14 @@ public class ReportWizardForm extends ActionForm {
 	private String 	reportPeriod		= "A";
 	private String reportTitle 			= "";
 	private String reportDescription 	= "";
+	private String originalTitle		= "";
 	
 	private Long[] selectedColumns		= null;
 	private Long[] selectedHierarchies	= null;
 	private Long[] selectedMeasures		= null;
 
-		
+	private Boolean duplicateName		= false;
+	
 	public Long getReportId() {
 		return reportId;
 	}
@@ -138,7 +140,23 @@ public class ReportWizardForm extends ActionForm {
 	public void setSelectedMeasures(Long[] selectedMeasures) {
 		this.selectedMeasures = selectedMeasures;
 	}
-	
 
+	public String getOriginalTitle() {
+		return originalTitle;
+	}
+
+	public void setOriginalTitle(String originalTitle) {
+		this.originalTitle = originalTitle;
+	}
+
+	public Boolean getDuplicateName() {
+		return duplicateName;
+	}
+
+	public void setDuplicateName(Boolean duplicateName) {
+		this.duplicateName = duplicateName;
+	}
+	
+	
 	
 }

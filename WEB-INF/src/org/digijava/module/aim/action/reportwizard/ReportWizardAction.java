@@ -67,6 +67,8 @@ public class ReportWizardAction extends MultiAction {
 		this.myForm		= (ReportWizardForm) form;
 		this.myRequest	= request;
 		
+		this.myForm.setDuplicateName(false);
+		
 		return this.modeSelect(mapping, form, request, response);
 	}
 	
@@ -77,6 +79,10 @@ public class ReportWizardAction extends MultiAction {
 			return modeEdit(mapping, form, request, response);
 		}
 		if (request.getParameter("reportTitle") == null){
+			if ( "true".equals( request.getParameter("tab") ) )
+				myForm.setDesktopTab(true);
+			else
+				myForm.setDesktopTab(false);
 			return this.modeShow(mapping, form, request, response);
 		}
 		else {
@@ -101,6 +107,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		myForm.setReportId(null);
 		myForm.setReportTitle( null );
+		myForm.setOriginalTitle( null );
 		myForm.setReportDescription( null );
 		myForm.setReportType( "donor" );
 		myForm.setReportPeriod("A");
@@ -109,6 +116,8 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setSelectedHierarchies( null );
 		myForm.setSelectedMeasures( null );
 		myForm.setAmpTeamMember( null );
+		myForm.setDesktopTab( false );
+		myForm.setDuplicateName(false);
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
@@ -170,12 +179,18 @@ public class ReportWizardAction extends MultiAction {
 	
 	public ActionForward modeSave(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute("currentMember");
+		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+		
+		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId() ) ) {
+			myForm.setDuplicateName(true);
+			throw new Exception("The name " + myForm.getReportTitle() + " is already used by another report");
+		}
+			
 		
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();		
-		
-		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute("currentMember");
-		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
 		
 		AmpReports ampReport	= new AmpReports();
 		if ( "donor".equals(myForm.getReportType()) ) 
@@ -194,8 +209,10 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setName( myForm.getReportTitle().trim() );
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		
-		if ( myForm.getReportId() != null )
-				ampReport.setAmpReportId( myForm.getReportId() );
+		if ( myForm.getReportId() != null ) {
+				if ( myForm.getOriginalTitle()!=null && myForm.getOriginalTitle().equals(myForm.getReportTitle()) )
+						ampReport.setAmpReportId( myForm.getReportId() );
+		}
 		
 		if ( myForm.getAmpTeamMember() == null ) {
 				ampReport.setOwnerId( ampTeamMember );

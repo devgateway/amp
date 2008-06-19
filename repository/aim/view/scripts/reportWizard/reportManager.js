@@ -11,10 +11,10 @@ NormalReportManager.prototype.enableTab		= function (tabIndex) {
 		}
 	}
 	
+	
 	var btnid		= "step" + (tabIndex-1) + "_next_button";
 	var btn 		= document.getElementById(btnid);
-	btn.disabled	= false;
-	btn.style.color	= "black";
+	this.enableToolbarButton(btn);
 }
 NormalReportManager.prototype.disableTab	= function (tabIndex) {
 	if ( tabIndex < YAHOO.amp.reportwizard.numOfSteps ) {
@@ -28,40 +28,64 @@ NormalReportManager.prototype.disableTab	= function (tabIndex) {
 	
 	var btnid		= "step" + (tabIndex-1) + "_next_button";
 	var btn 		= document.getElementById(btnid);
-	btn.disabled	= true;
-	btn.style.color	= "lightgrey";
+	this.disableToolbarButton(btn);
 	
-	if ( tabIndex < 3 )
+	if ( tabIndex < YAHOO.amp.reportwizard.numOfSteps-1 )
 		this.disableTab(tabIndex+1);
 	
+	if ( tabIndex == YAHOO.amp.reportwizard.numOfSteps-1 ) {
+		this.disableSave();
+	}
+}
+
+NormalReportManager.prototype.enableSave	= function () {
+	btns	= document.getElementsByName("save");
+	for ( var i=0; i<btns.length; i++ ) {
+		this.enableToolbarButton( btns[i] );
+	}
+}
+
+NormalReportManager.prototype.disableSave	= function () {
+	btns	= document.getElementsByName("save");
+	for ( var i=0; i<btns.length; i++ ) {
+		this.disableToolbarButton( btns[i] );
+	}
+}
+
+NormalReportManager.prototype.enableToolbarButton	= function (btn) {
+	if ( btn.disabled ) {
+		var imgEl		= btn.getElementsByTagName("img")[0];
+		var imgSrc		= imgEl.src.replace("_dis.png", ".png");
+		
+		imgEl.src		= imgSrc;
+		btn.disabled	= false;
+		( new YAHOO.util.Element(btn) ).replaceClass('toolbar-dis', 'toolbar');
+	}
+}
+
+NormalReportManager.prototype.disableToolbarButton	= function (btn) {
+	if ( !btn.disabled ) {
+		var imgEl		= btn.getElementsByTagName("img")[0];
+		var imgSrc		= imgEl.src.replace(".png", "_dis.png");
+		imgEl.src		= imgSrc;
+		
+		btn.disabled	= true;
+		( new YAHOO.util.Element(btn) ).replaceClass('toolbar', 'toolbar-dis');
+	}
 }
 
 NormalReportManager.prototype.checkSteps	= function () {
 	if ( this.checkReportDetails() )
 		if ( this.checkColumns() )
 			if ( this.checkHierarchies() )
-				 	this.checkMeasures();
+				if ( this.checkMeasures() )
+						this.checkReportName() ;
 }
 
 NormalReportManager.prototype.checkReportDetails	= function () {
-	var spanEl			= document.getElementById("reportTitleSpan");
-	var title			= spanEl.getElementsByTagName("textarea")[0].value;
-	if ( title.length > 0 ) {
-		//var button			= document.getElementById("saveReportButton");
-		//button.disabled		= false;
-		//button.style.color	= "black";
-		this.enableTab(1);
-		document.getElementById("reportdetailsMust").style.visibility	= "hidden";
-		return true;
-	}
-	else {
-		//var button			= document.getElementById("saveReportButton");
-		//button.disabled		= true;
-		//button.style.color	= "lightgray";
-		this.disableTab(1);
-		document.getElementById("reportdetailsMust").style.visibility	= "";
-		return false;
-	}
+	this.enableTab(1);
+	return true;
+
 }
 
 NormalReportManager.prototype.checkMeasures	= function () {
@@ -71,12 +95,12 @@ NormalReportManager.prototype.checkMeasures	= function () {
 	if ( items.length > 0 ) {
 		
 		measuresMustEl.style.visibility="hidden";
-		this.enableTab(4);
+		this.enableSave();
 		return true;
 	}
 	else {
 		measuresMustEl.style.visibility="";
-		this.disableTab(4);
+		this.disableSave();
 		return false;
 	}
 }
@@ -115,6 +139,20 @@ NormalReportManager.prototype.checkColumns	= function () {
 		this.disableTab(2);
 		//this.disableTab(3);
 		return false;
+	}
+}
+
+NormalReportManager.prototype.checkReportName	= function () { 
+	btn 	= document.getElementById("step3_next_button");
+	if ( aimReportWizardForm.reportTitle.value == "" ) {
+		btn.disabled		= true;
+		btn.style.color		= "lightgray";
+		return false;
+	}
+	else {
+		btn.disabled		= false;
+		btn.style.color		= "black";
+		return true;
 	}
 }
 
@@ -171,4 +209,56 @@ TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;
 function TabReportManager() {
 	;
+}
+TabReportManager.prototype.checkColumns	= function () {
+	var ulEl			= document.getElementById("dest_col_ul") ;
+	var items			= ulEl.getElementsByTagName("li");
+	
+	if ( items.length > 0 && items.length <= 3 ) {
+		columnsMustEl	= document.getElementById("columnsMust");
+		columnsMustEl.style.visibility="hidden";
+		columnsLimitEl	= document.getElementById("columnsLimit");
+		columnsLimitEl.style.visibility="hidden";
+		this.enableTab(2);
+		return true;
+	}
+	else {
+		
+		columnsMustEl	= document.getElementById("columnsMust");
+		columnsLimitEl	= document.getElementById("columnsLimit");
+		if ( items.length == 0 )
+			columnsMustEl.style.visibility="visible";
+		else
+			columnsMustEl.style.visibility="hidden";
+		if ( items.length > 3 )
+			columnsLimitEl.style.visibility="visible";
+		else
+			columnsLimitEl.style.visibility="hidden";
+		this.disableTab(2);
+		return false;
+	}
+}
+TabReportManager.prototype.checkMeasures	= function () {
+	var ulEl			= document.getElementById("dest_measures_ul") ;
+	var items			= ulEl.getElementsByTagName("li");
+	measuresMustEl		= document.getElementById("measuresMust");
+	measuresLimitEl		= document.getElementById("measuresLimit");
+	if ( items.length > 0 && items.length <= 2) {
+		measuresMustEl.style.visibility="hidden";
+		measuresLimitEl.style.visibility="hidden";
+		this.enableSave();
+		return true;
+	}
+	else {
+		if ( items.length == 0 )
+			measuresMustEl.style.visibility		= "visible";
+		else
+			measuresMustEl.style.visibility		= "hidden";
+		if ( items.length > 2 )
+			measuresLimitEl.style.visibility	= "visible";
+		else
+			measuresLimitEl.style.visibility	= "hiddden";
+		this.disableSave();
+		return false;
+	}
 }

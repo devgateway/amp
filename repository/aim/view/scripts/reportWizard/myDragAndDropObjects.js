@@ -169,7 +169,7 @@
 				var spanEl					= realObj.getElementsByTagName('span')[0];
 				var startHtml				= "<input type='checkbox' name='selectedColumns' id='proxy_"+this.id+"' value='"+inputEl.value+"' />  ";
 				this.getDragEl().innerHTML	= startHtml + spanEl.innerHTML;
-				YAHOO.util.Dom.setStyle(this.getDragEl(), "background", "#D7EAFD");
+				//YAHOO.util.Dom.setStyle(this.getDragEl(), "background", "#D7EAFD");
 				//this.newObj					= document.createElement("li");
 				
 				//this.newObj.innerHTML		= startHtml + spanEl.innerHTML;

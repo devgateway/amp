@@ -80,8 +80,9 @@ public class UserLevelGate extends Gate {
 		if(tm==null) 
 			if(PARAM_EVERYONE.equals(param)) return true; else return false;
 		
-		//if i am a guest and not the owner of the current object i will have guest access
-		if(!owner && PARAM_GUEST.equals(param)) return true;
+		Gate relatedOrgGate = Gate.instantiateGate(scope, null, RelatedOrgGate.class.getName());
+		//if i am a guest and not the owner AND not related to the current object i will have guest access
+		if(!owner && !relatedOrgGate.logic() && PARAM_GUEST.equals(param) ) return true;
 		
 		return false;
 		

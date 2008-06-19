@@ -247,8 +247,7 @@ public class AmpMessageActions extends DispatchAction {
             
         } else {
             // view forwarded message
-            String msgId[]=request.getParameter("msgId").split("_");
-            id = new Long(msgId[0]);
+            id = new Long(request.getParameter("msgId"));
             message = AmpMessageUtil.getMessage(id);
             isMessageStateId=false;
         }
@@ -279,6 +278,7 @@ public class AmpMessageActions extends DispatchAction {
     		xml += "<" + ROOT_TAG +">";
     		xml+="<"+"message id=\""+msgStateId+"\" ";
     		xml+="read=\""+state.getRead()+"\" ";
+                xml+="msgId=\""+state.getMessage().getId()+"\" ";
     		xml+="/>";
     		xml+="</"+ROOT_TAG+">";
     		out.println(xml);
@@ -625,24 +625,22 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setClassName(message.getClassName());
 			 form.setObjectURL(message.getObjectURL());
                          form.setReceiver(message.getReceivers());
+                        if (message.getSenderType().equalsIgnoreCase("User")) {
+                             form.setSender(message.getSenderName());
+                         } else {
+                             form.setSender(message.getSenderType());
+                         }
                          if(isStateId){
 	                          form.setMsgStateId(id);
-	                          if(message.getSenderType().equalsIgnoreCase("User")){
-	                        	  form.setSender(AmpMessageUtil.getMessageState(id).getSender());  
-	                          } else{
-	                        	  form.setSender(message.getSenderType());
-	                          }
-                         }
-                         else{
-                        	 if(message.getSenderType().equalsIgnoreCase("User")){
-                        		 AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(message.getSenderId());
-                                 String sender = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName();
-                                 form.setSender(sender);
-                        	 }else{
-                        		 form.setSender(message.getSenderType());
-                        	 }
-                             
-                         }
+	                       
+                                 AmpMessage msg = AmpMessageUtil.getMessage(message.getForwardedMessageId());
+                                 if (msg != null) {
+                                     form.setForwardedMsg(createHelperMsgFromAmpMessage(msg, id));
+                                 } else {
+                                     form.setForwardedMsg(null);
+                                 }
+                        }
+                        
 			 
 			 form.setReceivers(getMessageRecipients(message.getId()));
 			 
@@ -653,12 +651,7 @@ public class AmpMessageActions extends DispatchAction {
 				 form.setSetAsAlert(0);
 			 }
 			 //getting forwarded message,if exists
-			 AmpMessage msg=AmpMessageUtil.getMessage(message.getForwardedMessageId());
-			 if(msg!=null){				 		        	
-				 form.setForwardedMsg(createHelperMsgFromAmpMessage(msg,id));
-			 }else{
-				 form.setForwardedMsg(null);
-			 }
+			
 			 
 		 }
 	 }
@@ -675,8 +668,9 @@ public class AmpMessageActions extends DispatchAction {
             for (AmpMessageState state : states) {
                 result += "<" + "message name=\"" + state.getMessage().getName() + "\" ";
                 result += " id=\"" + state.getId() + "\"";
+                result += " msgId=\"" + state.getMessage().getId() + "\"";
                 if(state.getMessage().getSenderType()!=null && state.getMessage().getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
-                	result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(state.getSender()) + "\"";
+                	result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getSenderName()) + "\"";
                 }else{
                 	result += " from=\"" +MessageConstants.SENDER_TYPE_SYSTEM + "\"";
                 }                
@@ -719,7 +713,7 @@ public class AmpMessageActions extends DispatchAction {
 
         String result = "";
         result += "<" + "forwarded name=\"" + forwardedMessage.getName() + "\" ";
-        result += " id=\"" + forwardedMessage.getId() + "\"";
+        result += " msgId=\"" + forwardedMessage.getId() + "\"";
         result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
         result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
         result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getReceivers()) + "\"";
@@ -728,7 +722,7 @@ public class AmpMessageActions extends DispatchAction {
         String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
         result += " msgDetails=\"" + desc + "\"";
         result+=" read=\""+true+"\"";
-        result += " newMsgId=\"" + messageId + "\"";
+        result += " parentMsgId=\"" + messageId + "\"";
         result += "/>";
         if (forwardedMessage.getForwardedMessageId() != null) {
             AmpMessage forwarded = AmpMessageUtil.getMessage(forwardedMessage.getForwardedMessageId());

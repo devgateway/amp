@@ -82,7 +82,7 @@
 																				<tr><td></td></tr>
 																				<tr>
 																					<td align="right"><b><digi:trn key="message:from">From</digi:trn></b></td>
-																					<td align="left" bgcolor="#ffffff" >${messageForm.sender}</td>
+																					<td align="left" bgcolor="#ffffff" ><c:out value="${messageForm.sender}"/></td>
 																					<td colspan="3"></td>
 																				</tr>
                                                                                 <tr><td colspan="5"></td></tr>	

@@ -202,7 +202,7 @@
       qdv.style.visibility="hidden";
       var adv=document.getElementById("dhtmlgoodies_a1");
       adv.style.visibility="hidden";
-      id=window.setTimeout("checkForNewMessages()",20000,"JavaScript");
+      id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
     }
 
     var clickToViewMsg='<digi:trn key="message:clickToEditAlert">Click here to view Message</digi:trn>';
@@ -219,7 +219,6 @@
       var async=new Asynchronous();
       async.complete=getNewMessagesAmount;
       async.call(url);
-      //60000*document.getElementsByName('msgRefreshTimeCurr')[0].value
       showMessage();
     }
 

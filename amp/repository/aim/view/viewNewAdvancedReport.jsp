@@ -24,7 +24,7 @@
 <%
 Integer counter = (Integer)session.getAttribute("progressValue");
 counter++;
-session.setAttribute("progresse Value", counter);
+session.setAttribute("progressValue", counter);
 %>
 
 <div id="myFilterWrapper" style="display: none;" >

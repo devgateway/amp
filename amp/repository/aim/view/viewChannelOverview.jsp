@@ -516,10 +516,8 @@ function commentWin(val) {
 																</TR>
 															</field:display>
 														</feature:display>
-														<feature:display module="Project ID and Planning"
-															name="Sectors">
-															<field:display feature="Sectors"
-																name="Level 1 Sectors List">
+														<feature:display module="Project ID and Planning" name="Sectors">
+															<field:display feature="Sectors" name="Level 1 Sectors List">
 																<TR>
 																	<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1

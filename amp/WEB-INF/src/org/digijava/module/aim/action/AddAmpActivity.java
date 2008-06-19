@@ -1291,8 +1291,10 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         	keySet = unsavedComments.keySet();
 
 
-        if (teamMember == null)
-          return mapping.findForward("publicPreview");
+        if (teamMember == null){
+        	request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
+        	return mapping.findForward("publicPreview");
+        }
         else {
           ArrayList<AmpComments> colAux	= null;
           Collection ampFields 			= DbUtil.getAmpFields();
@@ -1371,6 +1373,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
             eaForm.setAllCosts(new Double(allCosts));
             if ((eaForm.getIndicatorsME() != null) && (!eaForm.getIndicatorsME().isEmpty()))
               eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+            request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
             return mapping.findForward("previewLogframe");
           }
           /* Setting documents for preview */
@@ -1390,6 +1393,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
           eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
 
           /* END - Setting documents for preview */
+          request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
           return mapping.findForward("preview");
         }
       }

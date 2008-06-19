@@ -159,6 +159,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 document.open();
                 //add content
                 document.add(contenTable);
+                //document.add(grdp.getTable());
                 document.close();
 		return null;
 
@@ -301,12 +302,12 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);
     	    StringBuffer text =new StringBuffer();
     		
-    	    if (r.getFormatedUpdatedDate() != null) {
-    		text.append( TranslatorWorker.translate("rep:print:lastupdate", locale, siteId));
-    		text.append(" ");
-    		text.append(r.getFormatedUpdatedDate());
-    		text.append(" ");
-    	    } 
+//    	    if (r.getFormatedUpdatedDate() != null) {
+//    		text.append( TranslatorWorker.translate("rep:print:lastupdate", locale, siteId));
+//    		text.append(" ");
+//    		text.append(r.getFormatedUpdatedDate());
+//    		text.append(" ");
+//    	    } 
     	    if(r.getUser()!=null){
     		String translatedUser=TranslatorWorker.translate("rep:print:user", locale, siteId);
     		if ("".equalsIgnoreCase(translatedUser)){

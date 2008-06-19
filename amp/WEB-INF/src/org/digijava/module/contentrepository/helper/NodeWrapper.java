@@ -312,6 +312,21 @@ public class NodeWrapper {
 		return null;
 	}
 	
+	public Calendar getCalendarDate() {
+		Property calProperty	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_ADDING_DATE);
+		if ( calProperty != null ) {
+			try {
+				Calendar cal 	= calProperty.getDate();
+				return cal;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		return null;
+	}
+	
+	
 	public double getFileSizeInMegabytes() {
 		Property fileSize	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_FILE_SIZE);
 		if ( fileSize != null ) {

@@ -139,34 +139,15 @@
 													<digi:insert attribute="myReports" />
 
 												</TD></TR>
-												<logic:present name="currentMember">
+											
 
 												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
-
-												<c:if test="${lead == true}">
-
-												<TR><TD vAlign="top" align="left">
-
-													<digi:insert attribute="myTasks" />
-
-												</TD></TR>
-
-												</c:if>
-
-												<TR><TD vAlign="top" align="left">
-
-													<digi:insert attribute="myLinks" />
-
-												</TD></TR>
-																							
-													<TR><TD vAlign="top" align="left">
-														<digi:insert attribute="myMessages"/>
-													</TD></TR>
-												
-											
-												</logic:present>
-
-											</TABLE>
+												<TR>
+														<TD vAlign="top" align="left">
+															<digi:insert attribute="myLinks" />
+														</TD>
+												</TR>
+										</TABLE>
 
 										</TD>
 

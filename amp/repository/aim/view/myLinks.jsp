@@ -42,12 +42,12 @@
                     </c:set>					
 				  <div title='${translation}'  style="margin-left:12px;margin-top:5px; margin-bottom:7px">
                         <digi:link href="/viewQuickLinks.do">
-                            <digi:trn key="aim:moreLinks">More Links..</digi:trn>
+                            <digi:trn key="aim:moreLinks">More Links ...</digi:trn>
                         </digi:link>							
                     </div>
   				  </logic:notEmpty>
   				   <logic:empty name="myLinks" scope="session">
-               		 <digi:trn key="aim:noDesktopLinks">No links</digi:trn>
+               		 <div style="margin-left:12px;margin-top:5px; margin-bottom:7px"><digi:trn key="aim:noDesktopLinks">No links</digi:trn></div>
            		  </logic:empty>
   				 
                  	 <logic:notEmpty name="myDocuments" scope="session">
@@ -68,13 +68,13 @@
 	               		
 	               		 <div title='${translation}'  style="margin-left:12px;margin-top:5px; margin-bottom:7px">
 	                          <a href="/contentrepository/documentManager.do">
-	                            <digi:trn key="aim:moreDocuments">More Documents..</digi:trn>
+	                            <digi:trn key="aim:moreDocuments">More Documents ...</digi:trn>
 	                        </a>							
 	                    </div>
 	                    
               	 	 </logic:notEmpty>    
                        <logic:empty name="myDocuments" scope="session">
-               			 <digi:trn key="aim:noDcouments">No Documents</digi:trn>
+               			 <div style="margin-left:12px;margin-top:5px; margin-bottom:7px"> <digi:trn key="aim:noDcouments">No Documents</digi:trn></div>
            			  </logic:empty>
 		</div>
 </div>

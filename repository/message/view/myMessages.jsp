@@ -273,7 +273,7 @@
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=moreMsgs;
-      td1.innerHTML='<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">...more</a>';
+      td1.innerHTML='<div  style="margin-left:12px;margin-top:5px; margin-bottom:7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">More messages ...</a></div>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       tbl.appendChild(body);

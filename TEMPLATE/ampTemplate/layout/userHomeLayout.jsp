@@ -147,6 +147,10 @@
 															<digi:insert attribute="myLinks" />
 														</TD>
 												</TR>
+												
+													<TR><TD vAlign="top" align="left">
+														<digi:insert attribute="myMessages"/>
+													</TD></TR>
 										</TABLE>
 
 										</TD>

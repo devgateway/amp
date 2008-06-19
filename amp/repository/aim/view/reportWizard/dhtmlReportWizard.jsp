@@ -169,7 +169,7 @@
 			<div class="yui-content" style="background-color: #EEEEEE">
 				<div id="type_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
 					<div class="subtabs">
-						&nbsp;
+						
 						<button id="step0_prev_button" type="button" class="toolbar-dis" disabled="disabled"
 							onclick="repManager.previousStep();">
 							<img src="/TEMPLATE/ampTemplate/images/prev_dis.png" class="toolbar" />
@@ -189,8 +189,9 @@
 							<img height="16" src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
 							Save As..
 						</button>
-						
 					</div>
+					<div style="height: 355px;">
+					<br />
 					<table cellpadding="15px" width="100%" align="center" >
 						<tr>
 							<td width="46%" style="vertical-align: top;">
@@ -248,12 +249,12 @@
 									<br />
 								</div>
 							</td>
-							<td width="52%" rowspan="2">
+							<td width="47%" rowspan="2">
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
 								</span>
 								<br/>
-								<html:textarea property="reportDescription" rows="16" styleClass="inp-text" style="border: 1px solid gray;width: 100%;" />
+								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%;height: 94%" />
 							</td>
 						</tr>
 						<tr>
@@ -262,12 +263,13 @@
 									<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
 								</span>
 								<div align="center" id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
+									<br />
 									<html:checkbox property="hideActivities" value="true">
 										<digi:trn key="aim:summaryReport">
 											Summary Report
 										</digi:trn>
 									</html:checkbox>
-									<br />
+									<br /><br />
 									<html:radio property="reportPeriod" value="A">
 										<digi:trn key="aim:AnnualReport">
 											Annual Report
@@ -283,14 +285,15 @@
 											Monthly Report
 										</digi:trn>
 									</html:radio>
+									<br /><br />
 								</div>
 							</td>
 						</tr>
-					</table>				
+					</table>
+					</div>
 				</div>
 				<div id="columns_step_div"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
 					<div class="subtabs">
-						&nbsp;
 						<button id="step1_prev_button" type="button" class="toolbar"
 							onclick="repManager.previousStep();">
 							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
@@ -312,6 +315,7 @@
 						</button>
 						
 					</div>
+					<div style="height: 355px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
@@ -361,10 +365,10 @@
 							</td>
 						</tr>
 					</table>
+					</div>
 				</div>
 				<div id="hierarchies_step_div"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
 					<div class="subtabs">
-						&nbsp;
 						<button id="step2_prev_button" type="button" class="toolbar"
 							onclick="repManager.previousStep();">
 							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" /> 
@@ -386,6 +390,7 @@
 						</button>
 						
 					</div>
+					<div style="height: 355px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%" >
 						<tr>
 						<td width="47%" align="center">
@@ -423,10 +428,11 @@
 							</td>
 						</tr>
 					</table>
+					</div>
 				</div>
 				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
 					<div class="subtabs">
-						&nbsp;
+						
 						<button id="step1_prev_button" type="button" class="toolbar"
 							onclick="repManager.previousStep();">
 							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
@@ -446,8 +452,8 @@
 							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
 							Save As..
 						</button>
-						
 					</div>
+					<div style="height: 355px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
 						<td width="47%" align="center">
@@ -497,6 +503,7 @@
 						</tr>
 					
 					</table>
+					</div>
 				</div>
 			</div>
 		</div>

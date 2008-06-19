@@ -163,7 +163,9 @@
 			}
 			ColumnsDragAndDropObject.prototype.startDrag	= function(x, y) {
 				//this.getDragEl().setAttribute('class','list1');
-				( new YAHOO.util.Element(this.getDragEl()) ).addClass("list1");
+				var dragYEl					= new YAHOO.util.Element( this.getDragEl() );
+				dragYEl.addClass("list1");
+				dragYEl.setStyle("width", "29%");
 				var realObj					= document.getElementById(this.id);
 				var inputEl					= realObj.getElementsByTagName('input')[0];
 				var spanEl					= realObj.getElementsByTagName('span')[0];
@@ -335,5 +337,6 @@
 			this.colObj			= document.getElementById(colId);
 			YAHOO.util.Dom.setStyle(this.getDragEl(), "background", "#D7EAFD"); 	
 		}
+		
 		
 		

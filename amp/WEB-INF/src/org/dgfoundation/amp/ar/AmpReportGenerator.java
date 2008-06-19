@@ -187,7 +187,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				//get the column bound condition:
 				String columnFilterSQLClause = ColumnFilterGenerator.generateColumnFilterSQLClause(filter, col, true);
 			
-				if(columnFilterSQLClause.length()>0) logger.info("Column "+col.getColumnName()+" SQL Clause: "+columnFilterSQLClause);
+				if(columnFilterSQLClause.length()>0) logger.info("Column "+col.getColumnName()+" appendable SQL filter: ..."+columnFilterSQLClause);
 				
 				if (extractorView != null) {
 

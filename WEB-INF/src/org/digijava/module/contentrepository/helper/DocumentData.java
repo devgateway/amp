@@ -1,11 +1,13 @@
 package org.digijava.module.contentrepository.helper;
 
+import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 
-public class DocumentData {
+public class DocumentData implements Comparable<DocumentData>{
 	String name				= null;
 	String uuid				= null;
 	String title			= null;
@@ -16,7 +18,7 @@ public class DocumentData {
 	String webLink			= null;
 	String cmDocType		= "";
 	double fileSize			= 0;
-	
+	Calendar date = null;
 	String iconPath			= null;
 	
 	Long cmDocTypeId		= null;
@@ -219,4 +221,17 @@ public class DocumentData {
 		
 		
 	}
+	public Calendar getDate() {
+		return date;
+	}
+	public void setDate(Calendar date) {
+		this.date = date;
+	}
+	
+	
+	public int compareTo(DocumentData o) {
+		return this.getDate().compareTo(o.date);
+	}
+	
+	
 }

@@ -46,6 +46,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.action.SetAttributes;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
@@ -606,6 +607,116 @@ public class DocumentManagerUtil {
 			return applicationPath;
 		}
 		
+	}
+	
+	
+	
+	public  static ArrayList<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest request, Boolean showOnlyDocs, Boolean showOnlyLinks) {
+		ArrayList<DocumentData> documents = new ArrayList<DocumentData>();
+		HashMap<String, CrDocumentNodeAttributes> uuidMapOrg = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
+		HashMap<String, CrDocumentNodeAttributes> uuidMapVer = CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+		try {
+			while (nodeIterator.hasNext()) {
+				Node documentNode = (Node) nodeIterator.next();
+				NodeWrapper nodeWrapper = new NodeWrapper(documentNode);
+
+				if (nodeWrapper.getWebLink() != null && showOnlyDocs)
+					continue;
+				if (nodeWrapper.getWebLink() == null && showOnlyLinks)
+					continue;
+
+				Boolean hasViewRights = false;
+				Boolean hasShowVersionsRights = false;
+				Boolean hasVersioningRights = false;
+				Boolean hasDeleteRights = false;
+				Boolean hasMakePublicRights = false;
+				Boolean hasDeleteRightsOnPublicVersion = false;
+
+				String uuid = documentNode.getUUID();
+				boolean isPublicVersion = uuidMapVer.containsKey(uuid);
+
+				if (isPublicVersion) {
+					hasViewRights = true;
+				} else
+					hasViewRights = DocumentManagerRights.hasViewRights(documentNode, request);
+
+				if (hasViewRights == null || !hasViewRights.booleanValue()) {
+					continue;
+				}
+
+				String fileName = nodeWrapper.getName();
+				if (fileName == null && nodeWrapper.getWebLink() == null)
+					continue;
+
+				DocumentData documentData = new DocumentData();
+				documentData.setName(fileName);
+				documentData.setUuid(nodeWrapper.getUuid());
+				documentData.setTitle(nodeWrapper.getTitle());
+				documentData.setDescription(nodeWrapper.getDescription());
+				documentData.setNotes(nodeWrapper.getNotes());
+				documentData.setFileSize(nodeWrapper.getFileSizeInMegabytes());
+				documentData.setCalendar(nodeWrapper.getDate());
+				documentData.setDate(nodeWrapper.getCalendarDate());
+				documentData.setVersionNumber(nodeWrapper.getVersionNumber());
+				documentData.setContentType(nodeWrapper.getContentType());
+				documentData.setWebLink(nodeWrapper.getWebLink());
+				documentData.setCmDocTypeId(nodeWrapper.getCmDocTypeId());
+
+				documentData.process(request);
+				documentData.computeIconPath(true);
+
+				if (!isPublicVersion) {
+					hasShowVersionsRights = DocumentManagerRights.hasShowVersionsRights(documentNode, request);
+					if (hasShowVersionsRights != null)
+						documentData.setHasShowVersionsRights(hasShowVersionsRights);
+
+					hasVersioningRights = DocumentManagerRights.hasVersioningRights(documentNode, request);
+					if (hasVersioningRights != null) {
+						documentData.setHasVersioningRights(hasVersioningRights.booleanValue());
+					}
+					hasDeleteRights = DocumentManagerRights.hasDeleteRights(documentNode, request);
+					if (hasDeleteRights != null) {
+						documentData.setHasDeleteRights(hasDeleteRights.booleanValue());
+					}
+					hasMakePublicRights = DocumentManagerRights.hasMakePublicRights(documentNode, request);
+					if (hasMakePublicRights != null) {
+						documentData.setHasMakePublicRights(hasMakePublicRights.booleanValue());
+					}
+
+					hasDeleteRightsOnPublicVersion = DocumentManagerRights.hasDeleteRightsOnPublicVersion(documentNode, request);
+					if (hasDeleteRightsOnPublicVersion != null) {
+						documentData.setHasDeleteRightsOnPublicVersion(hasDeleteRightsOnPublicVersion.booleanValue());
+					}
+
+					if (uuidMapOrg.containsKey(uuid)) {
+						documentData.setIsPublic(true);
+
+						//Verify if the last (current) version is the public one.
+						Node lastVersion = DocumentManagerUtil.getNodeOfLastVersion(uuid, request);
+						String lastVerUUID = lastVersion.getUUID();
+						if (uuidMapVer.containsKey(lastVerUUID)) {
+							documentData.setLastVersionIsPublic(true);
+						}
+
+					} else
+						documentData.setIsPublic(false);
+
+				}
+				// This is not the actual document node. It is the node of the public version. That's why one shouldn't have 
+				// the above rights.
+				else {
+					documentData.setShowVersionHistory(false);
+				}
+				documents.add(documentData);
+			}
+
+			/*}*/
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return documents;
 	}
 	
 }

@@ -51,17 +51,19 @@ return false;
 				<logic:notEmpty name="myReports" scope="session">
 
 					<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
+						<div style="margin:2px">
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
 								<bean:write name="report" property="name"/>
-							</digi:link><br/>
+							</digi:link>
+							</div>
 					</logic:iterate>
 
                     <bean:size id="repCount" name="myReports" scope="session" />
-                    <div title="'<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>">
-                    	<br/>
-                        <digi:link href="/viewTeamReports.do">
-                            <digi:trn key="aim:more">..more</digi:trn>
+                    <div style="margin-left:12px;margin-top:5px; margin-bottom: 7px" title="'<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>">
+                  
+                    	 <digi:link href="/viewTeamReports.do">
+                            <digi:trn key="aim:moreReports">More Reports...</digi:trn>
                         </digi:link>
                     </div>
 				</logic:notEmpty>

@@ -5,9 +5,9 @@ package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -34,7 +34,7 @@ public class ColumnFilterGenerator {
 	 *            the object to which the hard coded filters will be attached
 	 */
 	public static void attachHardcodedFilters(AmpColumns c) {
-		c.setFilters(new TreeSet());
+		c.setFilters(new HashSet<AmpColumnsFilters>());
 		if (ArConstants.VIEW_DONOR_FUNDING.equals(c.getExtractorView())) {
 			// TODO: example here of how to add hardcoded filters for hardcoded
 			// FUNDING columns

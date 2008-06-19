@@ -170,9 +170,9 @@
 	}
         
         function toggleGr(id){
-            $('#'+id+'_minus').slideUp('fast');
-            $('#'+id+'_plus').slideDown('fast');
-            $('#msg_'+id).slideUp('fast');
+            $('#'+id+'_minus'+':visible').slideUp('fast');
+            $('#'+id+'_plus'+':hidden').slideDown('fast');
+            $('#msg_'+id+':visible').slideUp('fast');
         }
         
    

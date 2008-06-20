@@ -22,6 +22,8 @@
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
+    var newCount=0;
+    var prevCount=0;
 
     function initMsgDiv(){
 
@@ -51,6 +53,14 @@
       mdv.style.top=myHeight;
     }
 
+    function getInterval(){
+      var interval=60000*document.getElementsByName('msgRefreshTimeCurr')[0].value;
+      if(interval<=0){
+        return 1000;
+      }
+      return interval;
+    }
+
     function showMessage(){
       $('#msgDiv').show("slow");
       window.setTimeout("hideMessage()",4000,"JavaScript");
@@ -58,7 +68,7 @@
 
     function hideMessage(){
       $('#msgDiv').hide("slow");
-      id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
+      id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
     }
 
     var clickToViewMsg='<digi:trn key="message:clickToEditAlert">Click here to view Message</digi:trn>';
@@ -67,7 +77,7 @@
 
     //setting timer to check for new messages after specified time
     if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
-      id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
+      id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
     }
 
     function checkForNewMessages(){
@@ -75,7 +85,12 @@
       var async=new Asynchronous();
       async.complete=getNewMessagesAmount;
       async.call(url);
-      showMessage();
+      if(newCount!=prevCount){
+        showMessage();
+        prevCount=newCount;
+      }else{
+        id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
+      }
     }
 
     function viewMessage(id) {
@@ -84,10 +99,13 @@
 
     function getNewMessagesAmount(status, statusText, responseText, responseXML){
       var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
+
       var msgsAmount=root.getAttribute('messages');
       var alertsAmount=root.getAttribute('alerts');
       var approvalsAmount=root.getAttribute('approvals');
       var calEventsAmount=root.getAttribute('calEvents');
+
+      newCount=msgsAmount+alertsAmount+approvalsAmount+calEventsAmount;
 
       //creating table
       var tbl=document.getElementById('msgLinks');

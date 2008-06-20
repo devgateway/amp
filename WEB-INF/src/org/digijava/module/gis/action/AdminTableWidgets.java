@@ -143,9 +143,8 @@ public class AdminTableWidgets extends DispatchAction {
 		AmpDaTable widget = getWidgetFromSession(request);
 		if (wForm.getId()!=null && wForm.getId().longValue()==0){
 			wForm.setId(null);
-		}else{
-			widget = formToWidgetSimpleFileds(wForm,widget);
 		}
+		widget = formToWidgetSimpleFileds(wForm,widget);
 		wForm = widgetToForm(wForm, widget);
 		//set columns
 		List<AmpDaColumn> columns = getClumnsFromSession(request);
@@ -622,7 +621,6 @@ public class AdminTableWidgets extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
-		System.out.println(tableForm.getName());
 		tableForm.setColCode(null);
 		tableForm.setColCssClass(null);
 		tableForm.setColHtmlStyle(null);
@@ -666,8 +664,6 @@ public class AdminTableWidgets extends DispatchAction {
 		columns.add(newColumn);
 		//sort
 		Collections.sort(columns,new ColumnOrderNoComparator());
-		//also add new column to session widget. TODO do we need this?
-		sessionWidget.getColumns().add(newColumn);
 		
 		return mapping.findForward("returnToEdit");
 	}

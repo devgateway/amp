@@ -8,8 +8,14 @@ function getReportType() {
 	}
 }
 
+function getReportTitleEl() {
+	var divEl	= document.getElementById("titlePanelBody");
+	var titleEl	= divEl.getElementsByTagName("input")[0];
+	return titleEl;
+}
+
 function getReportTitle() {
-	return aimReportWizardForm.reportTitle.value;
+	return getReportTitleEl().value;
 }
 
 function getReportDescription() {
@@ -60,7 +66,7 @@ SaveReportEngine.prototype.success		= function (o) {
 	if ( o.responseText.length > 2 ) {
 		this.divEl.innerHTML	= o.responseText;
 		if ( o.responseText.indexOf("duplicateName") >= 0 ) {
-			aimReportWizardForm.reportTitle.value	= "";
+			getReportTitleEl().value	= "";
 		}
 	}
 	else
@@ -72,7 +78,7 @@ SaveReportEngine.prototype.failure			= function(o) {
 }
 
 SaveReportEngine.prototype.decideToShowTitlePanel	= function () {
-	if ( aimReportWizardForm.reportTitle.value == "" )
+	if ( getReportTitle() == "" )
 			this.showTitlePanel();
 	else
 			this.saveReport( aimReportWizardForm );
@@ -91,10 +97,10 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 					close:true, 
 					visible:false, 
 					draggable:true } );
-		this.titlePanel.render();
+		this.titlePanel.render( );
 	}
 	this.titlePanel.show();
-	aimReportWizardForm.reportTitle.focus();
+	getReportTitleEl().focus();
 }
 
 SaveReportEngine.prototype.saveReport	= function () {

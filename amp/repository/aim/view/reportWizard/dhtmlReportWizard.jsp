@@ -72,11 +72,20 @@
 				repManager		= new TabReportManager();
 			else
 				repManager		= new NormalReportManager();
-				
-			var colObj		= document.getElementById('columnTree');
-			var sourceObj	= document.getElementById('source_col_div');
-			colObj.parentNode.removeChild(colObj);
-			sourceObj.appendChild(colObj);
+			
+			var saveBtns		= document.getElementsByName("save");	
+			for (var i=0; i<saveBtns.length; i++  ) {
+				repManager.addStyleToButton(saveBtns[i]);
+			}
+			for (var i=0; i<YAHOO.amp.reportwizard.numOfSteps; i++) {
+				repManager.addStyleToButton("step"+ i +"_prev_button");
+				repManager.addStyleToButton("step"+ i +"_next_button");
+			}
+			
+			var numOfRows			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 33.7);
+			//alert( YAHOO.util.Dom.getDocumentHeight() );
+			//alert( YAHOO.util.Dom.getViewportHeight() / YAHOO.util.Dom.getViewportWidth() );
+			document.getElementsByName("reportDescription")[0].rows 	= numOfRows;
 
 			columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');
 			columnsDragAndDropObject.createDragAndDropItems();
@@ -91,7 +100,7 @@
 			//createDragAndDropItems('dest_col_ul');
 			//new YAHOO.util.DDTarget('dest_li_1');
 			//new YAHOO.util.DD('logDiv');
-			for (var i=1; i<4; i++) {
+			for (var i=1; i<YAHOO.amp.reportwizard.numOfSteps; i++) {
 				tab		= YAHOO.amp.reportwizard.tabView.getTab(i);
 				tab.set("disabled", true);
 			}
@@ -105,10 +114,8 @@
 			
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
 			
-			
 			var dg			= document.getElementById("DHTMLSuite_treeNode1");
 			var cn			= dg.childNodes;
-			
 			
 			for (var i=0; i<cn.length; i++) {
 				if ( cn[i].nodeName.toLowerCase()=="input" || cn[i].nodeName.toLowerCase()=="img" ||
@@ -139,8 +146,8 @@
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		<digi:form action="/reportWizard.do" method="post">
-		
+		<digi:form action="/reportWizard.do" method="post" >
+		<span id="formChild" style="display:none;">&nbsp;</span>
 		<script type="text/javascript">
 			<c:forEach items="${aimReportWizardForm.selectedColumns}" var="dbId">
 				selectedCols.push('${dbId}');
@@ -254,7 +261,7 @@
 									<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
 								</span>
 								<br/>
-								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%;height: 94%" />
+								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%; height: auto;" />
 							</td>
 						</tr>
 						<tr>
@@ -323,14 +330,15 @@
 								<digi:trn key="rep:wizard:availableColumns">Available Columns</digi:trn>
 							</span>
 							<div id="source_col_div" class="draglist">
+								<jsp:include page="setColumns.jsp" />
 							</div>
 						</td>
 						<td valign="middle" align="center">
-							<button class="buton" type="button" onClick="ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')">
+							<button class="buton arrow" type="button" onClick="ColumnsDragAndDropObject.selectObjs('source_col_div', 'dest_col_ul')">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 							</button>
 							<br/> <br />
-							<button class="buton" type="button" onClick="ColumnsDragAndDropObject.deselectObjs('dest_col_ul')">
+							<button class="buton arrow" type="button" onClick="ColumnsDragAndDropObject.deselectObjs('dest_col_ul')">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
 							</button>
 						</td>
@@ -401,11 +409,11 @@
 							</ul>
 						</td>
 						<td valign="middle" align="center">
-							<button class="buton" type="button" onClick="MyDragAndDropObject.selectObjs('source_hierarchies_ul', 'dest_hierarchies_ul')">
+							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.selectObjs('source_hierarchies_ul', 'dest_hierarchies_ul')">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 							</button>
 							<br/> <br />
-							<button class="buton" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_hierarchies_ul', 'source_hierarchies_ul')">
+							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_hierarchies_ul', 'source_hierarchies_ul')">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
 							</button>
 						</td>
@@ -433,12 +441,12 @@
 				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
 					<div class="subtabs">
 						
-						<button id="step1_prev_button" type="button" class="toolbar"
+						<button id="step3_prev_button" type="button" class="toolbar"
 							onclick="repManager.previousStep();">
 							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
 							<digi:trn key="btn:previous">Previous</digi:trn>
 						</button>
-						<button id="step1_next_button" type="button" class="toolbar-dis" 
+						<button id="step3_next_button" type="button" class="toolbar-dis" 
 							onclick="repManager.nextStep()" disabled="disabled">
 							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
 							<digi:trn key="btn:next">Next</digi:trn>
@@ -465,11 +473,11 @@
 							</ul>
 						</td>
 						<td valign="middle"  align="center">
-							<button class="buton" type="button" onClick="MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')">
+							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul')">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 							</button>
 							<br/> <br />
-							<button class="buton" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')">
+							<button class="buton arrow" type="button" onClick="MyDragAndDropObject.deselectObjs('dest_measures_ul', 'source_measures_ul')">
 								<img src="/TEMPLATE/ampTemplate/images/arrow_left.gif"/>
 							</button>
 						</td>
@@ -509,19 +517,17 @@
 		</div>
 		<%-- <div id="logDiv" style="border: medium solid red; width: 20%;">
 		</div> --%>
-		<span style="display: none">
-			<jsp:include page="setColumns.jsp" />
-		</span>
+			
 		<div id="titlePanel" style="display: none">
 			<div class="hd" style="font-size: 8pt">
 				<digi:trn key="rep:wizard:enterTitle">Please enter a title for this report: </digi:trn>
 			</div>
-			<div class="bd">
+			<div class="bd" id="titlePanelBody">
 			<html:text onkeyup="repManager.checkSteps()" property="reportTitle" styleClass="inp-text" 
 					style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
 			</div>
 			<div class="ft" align="right">
-				<button id="step3_next_button" type="button" class="buton repbuton" 
+				<button id="last_save_button" type="button" class="buton repbuton" 
 					style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
 						<digi:trn key="btn:saveReport">Save Report</digi:trn>
 				</button>

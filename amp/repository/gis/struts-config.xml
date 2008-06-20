@@ -19,7 +19,7 @@
 			<forward name="forward" path="/showLayout.do?layout=gisDashboardLayout"/>
 			<forward name="forwardOld" path="/showLayout.do?layout=gis_dashboard"/>
 		</action>
-		<action name="gisTableWidgetCreationForm" path="/gis/adminTableWidgets" parameter="actType" type="org.digijava.module.gis.action.AdminTableWidgets" validate="false">
+		<action name="gisTableWidgetCreationForm" path="/gis/adminTableWidgets" parameter="actType" scope="session" type="org.digijava.module.gis.action.AdminTableWidgets" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=gis_tableWidgetAdmin"/>
 			<forward name="showAdd" path="/showLayout.do?layout=add_tableWidget"/>
 			<forward name="showEdit" path="/showLayout.do?layout=edit_tableWidget"/>

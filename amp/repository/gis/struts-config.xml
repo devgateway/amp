@@ -7,7 +7,9 @@
 		<form-bean name="gisTableWidgetCreationForm" type="org.digijava.module.gis.form.TableWidgetCreationForm" />
 		<form-bean name="gisTableWidgetTeaserForm" type="org.digijava.module.gis.form.TableWidgetTeaserForm" />
 		<form-bean name="gisTableWidgetDataForm" type="org.digijava.module.gis.form.AdminTableWidgetDataForm" />
-	    <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
+	        <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
+		<form-bean name="gisFoundingDetailsForm" type="org.digijava.module.gis.form.GisFoundingDetailsForm"/>
+		<form-bean name="gisDemoForm" type="org.digijava.module.gis.form.GisDemoForm"/>
 	</form-beans>
 	
 	<global-forwards>
@@ -38,7 +40,19 @@
 	<action name="gisMapLoaderForm" path="/gis/getActivityMap" scope="request" type="org.digijava.module.gis.action.GetActivityMap" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
 	 </action>
-    	<action name="gisTableWidgetTeaserForm" path="/gis/widgetTest" scope="request" type="org.digijava.module.gis.action.TestWidget" validate="false">
+	<action name="gisFoundingDetailsForm" path="/gis/getFoundingDetails" scope="request" type="org.digijava.module.gis.action.GetFoundingDetails" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
+	 </action>
+	
+	<action name="gisFoundingDetailsForm" path="/gis/getFoundingDetails" scope="request" type="org.digijava.module.gis.action.GetFoundingDetails" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
+	</action>
+
+	<action name="gisDemoForm" path="/gis/showDemo" scope="request" type="org.digijava.module.gis.action.ShowDemo" validate="false">
+	      <forward name="forward" path="/showLayout.do?layout=gisDemo" />
+	</action>
+    	
+	<action name="gisTableWidgetTeaserForm" path="/gis/widgetTest" scope="request" type="org.digijava.module.gis.action.TestWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widgetTestPage" />
     	</action>
     	<action name="gisTableWidgetDataForm" path="/gis/tableWidgetData" scope="session" parameter="actType" type="org.digijava.module.gis.action.AdminTableWidgetData" validate="false">

@@ -7,6 +7,28 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
+  <!-- Dependencies --> 
+        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        
+        <!-- Source File -->
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+
+        <!-- Core + Skin CSS -->
+        <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+        <digi:ref href="css/container.css" type="text/css" rel="stylesheet" />
+
+        <!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>

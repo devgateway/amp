@@ -12,6 +12,10 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.gis.dbentity.GisMap;
+import java.util.List;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 
 /**
  * <p>Title: </p>
@@ -101,5 +105,93 @@ public class DbUtil {
         return map;
 
     }
+
+    //To be moved to aid module later
+    public static List getUsedSectors() {
+        List retVal = null;
+        Session session = null;
+        GisMap map = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
+                                          AmpActivitySector.class.getName() +
+                                          " group by sec.sectorId");
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get map from DB", ex);
+        }
+        return retVal;
+    }
+
+
+    public static List getSectorFoundings(Long sectorId) {
+        List retVal = null;
+        Session session = null;
+        GisMap map = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
+                                          AmpActivitySector.class.getName() +
+                                          " where sec.sectorId=:sectorId");
+            q.setParameter("sectorId", sectorId, Hibernate.LONG);
+            retVal = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get map from DB", ex);
+        }
+        return retVal;
+    }
+
+
+    public static Double getActivityFoundings(Long activityId) {
+        Double retVal = null;
+        Session session = null;
+        GisMap map = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            /*
+            Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
+                                          AmpActivitySector.class.getName() +
+                                          " where sec.sectorId=:sectorId");
+            */
+           Query q = session.createQuery("select sum(fd.transactionAmount) from fd in class " +
+                                          AmpFundingDetail.class.getName() +
+                                          " where fd.ampFundingId.ampActivityId.ampActivityId=:activityId");
+
+            q.setParameter("activityId", activityId, Hibernate.LONG);
+            List tmpLst = q.list();
+            if (!tmpLst.isEmpty())
+            retVal = (Double)tmpLst.get(0);
+        } catch (Exception ex) {
+            logger.debug("Unable to get map from DB", ex);
+        }
+        return retVal;
+    }
+
+    public static Double getTotalActivityFoundings(String ActIdWhereclause) {
+            Double retVal = null;
+            Session session = null;
+            GisMap map = null;
+            try {
+                session = PersistenceManager.getRequestDBSession();
+                /*
+                Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
+                                              AmpActivitySector.class.getName() +
+                                              " where sec.sectorId=:sectorId");
+                */
+               Query q = session.createQuery("select sum(fd.transactionAmount) from fd in class " +
+                                              AmpFundingDetail.class.getName() +
+                                              " where fd.ampFundingId.ampActivityId.ampActivityId in ("+
+                                              ActIdWhereclause + ")");
+
+                //q.setParameter("activityId", activityId, Hibernate.LONG);
+                List tmpLst = q.list();
+                if (!tmpLst.isEmpty())
+                retVal = (Double)tmpLst.get(0);
+            } catch (Exception ex) {
+                logger.debug("Unable to get map from DB", ex);
+            }
+            return retVal;
+    }
+
 
 }

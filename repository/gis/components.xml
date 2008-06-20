@@ -3,6 +3,9 @@
 	<secondary-pages>
 		<page page="gisDashboard" name="gis_dashboard" title="GIS dashboard"/>
 		<page page="mapLoader" name="mapLoader" title="AMP GIS map loader"/>
+
+		<page page="gisDemo" name="gisDemo" title="AMP GIS demo page"/>
+
 		<page page="testPage" name="widgetTestPage" title="Test Widget"/>
 
 		<page page="tableWidgetAdmin" name="gis_tableWidgetAdmin" title="Administer table widgets"/>
@@ -14,6 +17,7 @@
 		<page page="addWidgetColumnPopup" name="popup_addWidgetColumn" title="Add column to widget"/>
 		<page page="tableTeaser" name="preview_tableWidget" title="Preview table widget data"/>
 		
+
 	</secondary-pages>
 	<module>
 		<teaser name="gisMap" action="dashboardMapTeaser.do">showVerticalNavigation.jsp</teaser>			

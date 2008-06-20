@@ -14,15 +14,41 @@
 <!--
 	var reallyDeleteColumn = 'Do you relally want to remove column? this will remove data in this column.';
 
-	function addColumn(myForm,id){
+	function addColumn(id){
+		var myForm = document.getElementById('tableId').form;
+		refreshThis(myForm,id);
 		openURLinWindow('${contextPath}/gis/adminTableWidgets.do?actType=showColumnPopup');
+	}
+	function cancelEdit(){
+		var myForm = document.getElementById('tableId').form;
+		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=cancelEdit" />
+		myForm.action="<%=justSubmit%>";  
+		myForm.submit();
+	}
+	function refreshThis(myForm,id){
 		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=edit" />
 		myForm.action="<%=justSubmit%>&id="+id;  
 		myForm.submit();
 	}
-	function cancelEdit(myForm){
-		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=cancelEdit" />
-		myForm.action="<%=justSubmit%>";  
+	function deleteCol(colId){
+		var myForm = document.getElementById('tableId').form;
+		if ( confirm(reallyDeleteColumn) ){
+			<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=removeColumn" />
+			myForm.action="<%=justSubmit%>&colId="+colId;  
+			myForm.submit();
+		}
+	
+	}
+	function moveUp(colId){
+		var myForm = document.getElementById('tableId').form;
+		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=reorderUp" />
+		myForm.action="<%=justSubmit%>&colId="+colId;  
+		myForm.submit();
+	}
+	function moveDown(colId){
+		var myForm = document.getElementById('tableId').form;
+		<digi:context name="justSubmit" property="context/module/moduleinstance/adminTableWidgets.do?actType=reorderDown" />
+		myForm.action="<%=justSubmit%>&colId="+colId;  
 		myForm.submit();
 	}
 //-->
@@ -90,7 +116,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td align="right"><input type="button" value="Cancel" title="Cancel and return to list" onclick="cancelEdit(this.form)"></td>
+					<td align="right"><input type="button" value="Cancel" title="Cancel and return to list" onclick="cancelEdit()"></td>
 					<td><html:submit title="Save table widget" value="Save" /></td>
 				</tr>
 			</table>
@@ -121,31 +147,31 @@
 							${column.pattern}
 						</td>
 						<td nowrap="nowrap">
-							<digi:link onclick="return true==confirm(reallyDeleteColumn)" href="/adminTableWidgets.do?actType=removeColumn&colId=${column.id}">Remove</digi:link>
+							<a href="javascript:deleteCol(${column.id})">Remove</a>
 						</td>
 						<td>
 							<c:if test="${varStat.first != true}">
-								<digi:link href="/adminTableWidgets.do?actType=reorderUp&colId=${column.id}">Up</digi:link>
+								<a href="javascript:moveUp(${column.id})">Up</a>
 							</c:if>
 						</td>
 						<td>
 							<c:if test="${varStat.last != true}">
-								<digi:link href="/adminTableWidgets.do?actType=reorderDown&colId=${column.id}">Down</digi:link>
+								<a href="javascript:moveDown(${column.id})">Down</a>
 							</c:if>
 						</td>
 					</tr>
 				</c:forEach>
 			</table>
 			<br>
-			<c:if test="${! empty wform.id}">
-				<input type="button" onclick="addColumn(this.form, ${wform.id})" value="Add Column" title="Submit">
+			<c:if test="${not empty wform.id}">
+				<input type="button" onclick="addColumn(${wform.id})" value="Add Column" title="Submit">
 			</c:if>			
 			<c:if test="${empty wform.id}">
-				<input type="button" onclick="addColumn(this.form, null)" value="Add Column" title="Submit">
+				<input type="button" onclick="addColumn(null)" value="Add Column" title="Submit">
 			</c:if>			
 		</td>
 	</tr>
 </table>
-
+<html:hidden styleId="tableId" property="id"/>
 
 </digi:form>

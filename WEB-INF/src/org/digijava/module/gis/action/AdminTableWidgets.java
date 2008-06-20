@@ -7,12 +7,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.TabExpander;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -27,6 +25,7 @@ import org.digijava.module.gis.dbentity.AmpDaTable;
 import org.digijava.module.gis.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.gis.form.TableWidgetCreationForm;
 import org.digijava.module.gis.util.TableWidgetUtil;
+import org.digijava.module.gis.util.WidgetUtil;
 import org.digijava.module.gis.util.TableWidgetUtil.ColumnOrderNoComparator;
 import org.digijava.module.gis.util.TableWidgetUtil.TableWidgetColumnKeyResolver;
 
@@ -117,7 +116,12 @@ public class AdminTableWidgets extends DispatchAction {
 		wForm = widgetToForm(wForm, widget);
 		wForm.setColumns(getWidgetColumnsSorted(widget));
 		setPlaces(wForm);
-		startEditing(widget,wForm.getColumns(), request);
+		try{
+			startEditing(widget,wForm.getColumns(), request);
+		}catch (Exception e) {
+			stopEditing(request);
+			startEditing(widget,wForm.getColumns(), request);
+		}
 
 		return mapping.findForward("returnToEdit");
 	}
@@ -136,10 +140,12 @@ public class AdminTableWidgets extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
+		AmpDaTable widget = getWidgetFromSession(request);
 		if (wForm.getId()!=null && wForm.getId().longValue()==0){
 			wForm.setId(null);
+		}else{
+			widget = formToWidgetSimpleFileds(wForm,widget);
 		}
-		AmpDaTable widget = getWidgetFromSession(request);
 		wForm = widgetToForm(wForm, widget);
 		//set columns
 		List<AmpDaColumn> columns = getClumnsFromSession(request);
@@ -202,7 +208,7 @@ public class AdminTableWidgets extends DispatchAction {
 		//assign to the place if selected. 
 		AmpDaWidgetPlace place =null;
 		if ( ! "-1".equals(wForm.getSelectedPlaceCode())){
-			place = TableWidgetUtil.getPlace(wForm.getSelectedPlaceCode());
+			place = WidgetUtil.getPlace(wForm.getSelectedPlaceCode());
 			place.setWidget(dbWidget);
 			if (null == dbWidget.getPlaces()){
 				dbWidget.setPlaces(new HashSet<AmpDaWidgetPlace>());
@@ -299,6 +305,7 @@ public class AdminTableWidgets extends DispatchAction {
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
 
 		AmpDaTable widget = getWidgetFromSession(request);
+		widget = formToWidgetSimpleFileds(tableForm,widget);
 		if (widget!=null){
 			
 			formToWidgetSimpleFileds(tableForm, widget);
@@ -346,6 +353,7 @@ public class AdminTableWidgets extends DispatchAction {
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
 
 		AmpDaTable widget = getWidgetFromSession(request);
+		widget = formToWidgetSimpleFileds(tableForm,widget);
 		if (widget!=null){
 			
 			formToWidgetSimpleFileds(tableForm, widget);
@@ -423,7 +431,7 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @throws DgException
 	 */
 	private void setPlaces(TableWidgetCreationForm form) throws DgException{
-		List<AmpDaWidgetPlace> places = TableWidgetUtil.getAllPlaces();
+		List<AmpDaWidgetPlace> places = WidgetUtil.getAllPlaces();
 		List<LabelValueBean> placesBeans = new ArrayList<LabelValueBean>();
 		if (places != null){
 			for (AmpDaWidgetPlace place : places) {
@@ -614,6 +622,7 @@ public class AdminTableWidgets extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
+		System.out.println(tableForm.getName());
 		tableForm.setColCode(null);
 		tableForm.setColCssClass(null);
 		tableForm.setColHtmlStyle(null);

@@ -14,6 +14,11 @@
 		myForm.submit();
 		window.close();
 	}
+	function refreshParent(){
+		window.opener.refreshThis();
+	}
+	//window.onload = refreshParent;
+	
 //-->
 </script>
 

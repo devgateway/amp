@@ -22,10 +22,6 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.gis.dbentity.AmpDaColumn;
 import org.digijava.module.gis.dbentity.AmpDaTable;
@@ -329,7 +325,7 @@ public class TableWidgetUtil {
 					tx.rollback();
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					throw new DgException("Cannot rollback values save,update,delete operation!",e1);
+					throw new DgException("Cannot rollback values save,update,delete operations!",e1);
 				}
 			}
 			e.printStackTrace();
@@ -338,42 +334,6 @@ public class TableWidgetUtil {
 		
 	}
 	//=======PLACES=====================
-	public static AmpDaWidgetPlace getPlace(String code) throws DgException{
-		AmpDaWidgetPlace result=null;
-		Session session = PersistenceManager.getRequestDBSession();
-		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p ";
-		oql += " where p.code like :placeCode";
-		try {
-			Query q=session.createQuery(oql);
-			q.setString("placeCode", code);
-			result = (AmpDaWidgetPlace)q.uniqueResult();
-		} catch (Exception e) {
-			logger.error(e);
-			throw new DgException("Cannot load widget place object from db",e);
-		}
-		return result;
-	}
-	
-	public static void savePlace(AmpDaWidgetPlace place) throws DgException{
-		Session session=PersistenceManager.getRequestDBSession();
-		Transaction tx=null;
-		try {
-			tx=session.beginTransaction();
-			session.saveOrUpdate(place);
-			tx.commit();
-		} catch (Exception e) {
-			if (tx!=null){
-				try {
-					tx.rollback();
-				} catch (Exception e1) {
-					throw new DgException("Cannot rallback Widget place save or update!",e1);
-				}
-			}
-			throw new DgException("Cannot save or update Widget place!",e);
-		}
-		
-	}
-	
 	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getWidgetPlaces(Long id) throws DgException{
 		List<AmpDaWidgetPlace> places = null;
@@ -388,21 +348,6 @@ public class TableWidgetUtil {
 			throw new DgException("Cannot load widget places!",e);
 		}
 		return places;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static List<AmpDaWidgetPlace> getAllPlaces() throws DgException{
-		List<AmpDaWidgetPlace> result=null;
-		Session session = PersistenceManager.getRequestDBSession();
-		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p ";
-		try {
-			Query q=session.createQuery(oql);
-			result = q.list();
-		} catch (Exception e) {
-			logger.error(e);
-			throw new DgException("Cannot load all widget place object from db",e);
-		}
-		return result;
 	}
 	
 	//=======session====================

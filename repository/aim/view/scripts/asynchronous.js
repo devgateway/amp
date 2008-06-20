@@ -30,7 +30,9 @@ function Asynchronous_call(url){
                    break;
             }
             }catch(e){
-              alert('Error!!!'+e);
+            //Commented by Sebastian dimunzio
+            //Under a timer call, this will be show a recursive error, I will comment it untill we find a better way to hande the error
+             /// alert('Error!!!'+e);
             }
          }
 

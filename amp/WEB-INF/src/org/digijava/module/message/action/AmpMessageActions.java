@@ -458,7 +458,7 @@ public class AmpMessageActions extends DispatchAction {
     	 * this will be filled only when we are forwarding a message
     	 */
     	if(messageForm.getForwardedMsg()!=null){
-    		message.setForwardedMessageId(messageForm.getForwardedMsg().getMsgId());
+    		message.setForwardedMessage(AmpMessageUtil.getMessage(messageForm.getForwardedMsg().getMsgId()));
     	}    	
     	//should we send a message or not
     	if(request.getParameter("toDo")!=null){
@@ -633,7 +633,7 @@ public class AmpMessageActions extends DispatchAction {
                          if(isStateId){
 	                          form.setMsgStateId(id);
 	                       
-                                 AmpMessage msg = AmpMessageUtil.getMessage(message.getForwardedMessageId());
+                                 AmpMessage msg = message.getForwardedMessage();
                                  if (msg != null) {
                                      form.setForwardedMsg(createHelperMsgFromAmpMessage(msg, id));
                                  } else {
@@ -684,8 +684,8 @@ public class AmpMessageActions extends DispatchAction {
                 String objUrl=org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getObjectURL());
                 result += " objURL=\"" + objUrl + "\"";
                 result += ">";
-                if (state.getMessage().getForwardedMessageId() != null) {
-                    AmpMessage forwarded = AmpMessageUtil.getMessage(state.getMessage().getForwardedMessageId());
+                AmpMessage forwarded = state.getMessage().getForwardedMessage();
+                if (forwarded != null) {
                     result += messages2XML(forwarded,state.getId());
                     
                 }
@@ -735,8 +735,8 @@ public class AmpMessageActions extends DispatchAction {
         result+=" read=\""+true+"\"";
         result += " parentStateId=\"" + parentStateId + "\""; 
         result += "/>";
-        if (forwardedMessage.getForwardedMessageId() != null) {
-            AmpMessage forwarded = AmpMessageUtil.getMessage(forwardedMessage.getForwardedMessageId());
+        if (forwardedMessage.getForwardedMessage() != null) {
+            AmpMessage forwarded = forwardedMessage.getForwardedMessage();
             result += messages2XML(forwarded,parentStateId);
         }
         

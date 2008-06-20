@@ -686,7 +686,7 @@ public class AmpMessageActions extends DispatchAction {
                 result += ">";
                 if (state.getMessage().getForwardedMessageId() != null) {
                     AmpMessage forwarded = AmpMessageUtil.getMessage(state.getMessage().getForwardedMessageId());
-                    result += messages2XML(forwarded,state.getMessage().getId());
+                    result += messages2XML(forwarded,state.getId());
                     
                 }
                 result += "</message>";
@@ -709,12 +709,23 @@ public class AmpMessageActions extends DispatchAction {
         return result;
     }
 
-    private String messages2XML(AmpMessage forwardedMessage, Long messageId) throws AimException {
+    /**
+     * for forward thread generation
+     * @param forwardedMessage
+     * @param parentStateId state id of the newest message
+     * @return forwarded messages 
+     * @throws org.digijava.module.aim.exception.AimException
+     */
+    private String messages2XML(AmpMessage forwardedMessage, Long parentStateId) throws AimException {
 
         String result = "";
         result += "<" + "forwarded name=\"" + forwardedMessage.getName() + "\" ";
         result += " msgId=\"" + forwardedMessage.getId() + "\"";
-        result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
+        if(forwardedMessage.getSenderType()!=null && forwardedMessage.getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
+             result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
+        } else {
+            result += " from=\"" + MessageConstants.SENDER_TYPE_SYSTEM + "\"";
+        }
         result += " received=\"" + DateConversion.ConvertDateToString(forwardedMessage.getCreationDate()) + "\"";
         result += " to=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getReceivers()) + "\"";
         result += " priority=\"" + forwardedMessage.getPriorityLevel() + "\"";
@@ -722,11 +733,11 @@ public class AmpMessageActions extends DispatchAction {
         String desc=org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getDescription());
         result += " msgDetails=\"" + desc + "\"";
         result+=" read=\""+true+"\"";
-        result += " parentMsgId=\"" + messageId + "\"";
+        result += " parentStateId=\"" + parentStateId + "\""; 
         result += "/>";
         if (forwardedMessage.getForwardedMessageId() != null) {
             AmpMessage forwarded = AmpMessageUtil.getMessage(forwardedMessage.getForwardedMessageId());
-            result += messages2XML(forwarded,messageId);
+            result += messages2XML(forwarded,parentStateId);
         }
         
 

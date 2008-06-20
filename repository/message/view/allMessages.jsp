@@ -164,21 +164,22 @@
                                  *  and mouse out(returns to row it basic (new) color)
                                  */
                                 var trs=tbl.tBodies[0].rows;
-                                
+                              
+                                for(var i=1;i<trs.length;i++){
                                 var className;
-                                for(var i=0;i<trs.length;i++){
-                                    if(trs[i].className=='trOdd'){
-                                       trs[i].className='trEven';
-                                       className="this.className='trEven'";
-                                    }
-                                    else{
-                                        trs[i].className='trOdd';
-                                        className="this.className='trOdd'";
-                                    }
-                                       var setBGColor = new Function(className);
-                                       trs[i].onmouseover=hoverTr;
-                                       trs[i].onmouseout=setBGColor;
+                                if(i!=1&&i%2==0){
+                                    trs[i].className = 'trOdd';
+                                    className="this.className='trOdd'";
+                                                                                               
                                 }
+                                else{
+                                    trs[i].className = 'trEven';
+                                    className="this.className='trEven'"; 
+                                }
+                                var setBGColor = new Function(className);
+                                trs[i].onmouseover=hoverTr;
+                                trs[i].onmouseout=setBGColor;
+                            }
                                 
                               
 				//removing record from db
@@ -980,7 +981,7 @@
                                         </div>
                                         	</TD>					
 						</TR>
-                                              
+                                              <TR>
                         
 							<TD bgColor="#ffffff" class="contentbox_border" align="left">
 								<TABLE id="msgsList">
@@ -993,7 +994,7 @@
                                                
 							<TD bgColor="#ffffff"  align="left">
 								<TABLE >
-									<TR id="paginationPlace"><TD colspan="4"></TD></TR>			
+                                                                        <TR id="paginationPlace"><TD colspan="4"></TD></TR>
 								</TABLE>
 							</TD>
                                                         </TR>

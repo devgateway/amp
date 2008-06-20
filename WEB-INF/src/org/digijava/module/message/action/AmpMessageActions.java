@@ -20,14 +20,17 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
@@ -47,10 +50,13 @@ public class AmpMessageActions extends DispatchAction {
 	public static final String ROOT_TAG = "Messaging";
 	public static final String MESSAGES_TAG = "MessagesList";
 	public static final String PAGINATION_TAG = "Pagination";
+	
     
     public ActionForward fillTypesAndLevels (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {        		
     		AmpMessageForm messageForm=(AmpMessageForm)form;    		
     		if(request.getParameter("editingMessage").equals("false")){
+    			//load activities
+    	    	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds());
     			setDefaultValues(messageForm);
     		}else {
     			Long id=new Long(request.getParameter("msgStateId"));    			
@@ -94,7 +100,9 @@ public class AmpMessageActions extends DispatchAction {
     	if(childTab==null){
     		childTab="inbox";
     	}
-    	messageForm.setChildTab(childTab);    
+    	messageForm.setChildTab(childTab);  
+    	
+    	
     	
     	return mapping.findForward("showAllMessages");
     }
@@ -184,13 +192,23 @@ public class AmpMessageActions extends DispatchAction {
     	messageForm.setChildTab(childTab);    	
     	
     	//pagination
-    	List<AmpMessageState> messages=messageForm.getMessagesForTm();    
-
-    		if(count%MessageConstants.MESSAGES_PER_PAGE==0){ //<--10 messages will be per page. This should come from settings
-    			howManyPages=count/MessageConstants.MESSAGES_PER_PAGE;
-    		}else {
-    			howManyPages=(count/MessageConstants.MESSAGES_PER_PAGE)+1;
-    		} 
+    	List<AmpMessageState> messages=messageForm.getMessagesForTm();  
+    	/**
+    	 * if max.Storage per message type is less than messages in db,then we should show only max.Storage amount messages.
+    	 *and pages quantity will depend on max.Storage. In other case,we will show all messages and pages amount will depend on messages amount 
+    	 */    	
+    	if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()<=count){
+    		count=settings.getMsgStoragePerMsgType().intValue();
+    		messageForm.setMessagesForTm(messageForm.getMessagesForTm().subList(0,count));
+    	}
+    	if(count%MessageConstants.MESSAGES_PER_PAGE==0){ //<--10 messages will be per page. This should come from settings
+			howManyPages=count/MessageConstants.MESSAGES_PER_PAGE;
+		}else {
+			howManyPages=(count/MessageConstants.MESSAGES_PER_PAGE)+1;
+		}
+    	
+    	
+    	
     		// we always have at least 1 page
     		howManyPages=howManyPages==0?1:howManyPages;
     		
@@ -330,8 +348,7 @@ public class AmpMessageActions extends DispatchAction {
     	return null;
     }
     
-    
-    /**
+   /**
      * used when user clicks on forward link 
      */
     public ActionForward forwardMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -459,7 +476,17 @@ public class AmpMessageActions extends DispatchAction {
     	 */
     	if(messageForm.getForwardedMsg()!=null){
     		message.setForwardedMessage(AmpMessageUtil.getMessage(messageForm.getForwardedMsg().getMsgId()));
-    	}    	
+    	} 
+    	//link message to activity if necessary
+    	if(messageForm.getSelectedAct()!=null){
+    		String act=messageForm.getSelectedAct();
+    		String activityId=act.substring(act.lastIndexOf("(")+1,act.lastIndexOf("")-1);
+    		message.setRelatedActivityId(new Long(activityId));
+    		//now we must create activity URL
+    		String fullModuleURL=RequestUtils.getFullModuleUrl(request);
+    		String objUrl=fullModuleURL.substring(0,fullModuleURL.indexOf("message"))+"aim/viewChannelOverview.do~tabIndex=0~ampActivityId="+activityId;
+    		message.setObjectURL(objUrl);
+    	}
     	//should we send a message or not
     	if(request.getParameter("toDo")!=null){
     		if(request.getParameter("toDo").equals("draft")){
@@ -469,11 +496,10 @@ public class AmpMessageActions extends DispatchAction {
     		}
     	}
     	
-    	//We are adding a message,not editing already existing one
-    	//if(!messageForm.isEditingMessage()){ 
+    	 	 
     		Calendar cal=Calendar.getInstance();
     		message.setCreationDate(cal.getTime());   	
-    	//}        	 	
+    	      	 	
     	//saving message
     	AmpMessageUtil.saveOrUpdateMessage(message);   
     	
@@ -501,7 +527,7 @@ public class AmpMessageActions extends DispatchAction {
 		if(messageReceivers!=null && messageReceivers.length>0){
 			Address [] addresses=new Address [messageReceivers.length];
 			int addressIndex=0;
-			for (String receiver : messageReceivers) {
+			for (String receiver : messageReceivers) {				
 				if(!receiver.startsWith("m")){//<--this means that receiver is team
 					List<TeamMember> teamMembers=null;
                                         if(receiver.startsWith("t")){
@@ -541,8 +567,7 @@ public class AmpMessageActions extends DispatchAction {
 		    		DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(), message.getDescription());
 		    	}
 			}
-                        AmpMessageUtil.saveOrUpdateMessage(message);
-			
+           AmpMessageUtil.saveOrUpdateMessage(message);			
 		}
 		
     	//cleaning form values
@@ -625,11 +650,11 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setClassName(message.getClassName());
 			 form.setObjectURL(message.getObjectURL());
                          form.setReceiver(message.getReceivers());
-                        if (message.getSenderType().equalsIgnoreCase("User")) {
+	                          if(message.getSenderType().equalsIgnoreCase("User")){
                              form.setSender(message.getSenderName());
-                         } else {
-                             form.setSender(message.getSenderType());
-                         }
+	                          } else{
+	                        	  form.setSender(message.getSenderType());
+	                          }
                          if(isStateId){
 	                          form.setMsgStateId(id);
 	                       
@@ -638,22 +663,38 @@ public class AmpMessageActions extends DispatchAction {
                                      form.setForwardedMsg(createHelperMsgFromAmpMessage(msg, id));
                                  } else {
                                      form.setForwardedMsg(null);
-                                 }
-                        }
-                        
+                         }
+                        	 }
+                             
 			 
 			 form.setReceivers(getMessageRecipients(message.getId()));
+			 form.setSelectedAct(null);
+			 //getting related activity if exists
+			 if(message.getRelatedActivityId()!=null){
+				 form.setSelectedAct(getRelatedActivity(message.getRelatedActivityId()));
+			 }
 			 
 			 //is alert or not
 			 if(message.getClassName().equals("a")){
 				 form.setSetAsAlert(1);
 			 }else {
 				 form.setSetAsAlert(0);
-			 }
-			 //getting forwarded message,if exists
-			
-			 
+			 }	
 		 }
+	 }
+			 
+	 
+	 private String getRelatedActivity(Long actId){
+		 String retValue;
+		 String actName=null;
+		 try {
+			//it can't be null
+			actName=ActivityUtil.getActivityName(actId);
+		} catch (DgException e) {			
+			e.printStackTrace();
+		}
+		retValue=actName+"("+actId+")";
+		return retValue;
 	 }
 	 
 	 /**
@@ -722,7 +763,7 @@ public class AmpMessageActions extends DispatchAction {
         result += "<" + "forwarded name=\"" + forwardedMessage.getName() + "\" ";
         result += " msgId=\"" + forwardedMessage.getId() + "\"";
         if(forwardedMessage.getSenderType()!=null && forwardedMessage.getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
-             result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
+        result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";
         } else {
             result += " from=\"" + MessageConstants.SENDER_TYPE_SYSTEM + "\"";
         }

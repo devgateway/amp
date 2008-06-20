@@ -14,7 +14,7 @@
      	<forward name="forwardMsgPage" path="/showLayout.do?layout=forwardMessagesLayout"/>   	
      </action> 
      <action path="/message/getMessages" name="messageForm" scope="session" type="org.digijava.module.message.action.ViewMessages" />
-     <action path="/message/msgSettings" name="messageForm" scope="request" parameter="actionType" type="org.digijava.module.message.action.MsgSettingsAction">
+     <action path="/message/msgSettings" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.MsgSettingsAction">
      	<forward name="settingsPage" path="/showLayout.do?layout=messageSettings" />
      	<forward name="index" path="/aim/index.do" redirect="true" />
      </action>

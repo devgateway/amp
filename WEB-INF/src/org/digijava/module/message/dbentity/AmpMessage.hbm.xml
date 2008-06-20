@@ -25,7 +25,8 @@
                 
                 <property name="receivers" column="receivers"  type="org.digijava.kernel.db.SafeClobType"/>
                 <property name="senderName" column="sender_name"  type="org.digijava.kernel.db.SafeClobType"/>
-                <property name="objectURL" column="object_URL"  type="java.lang.String"/>
+        <property name="objectURL" column="object_URL"  type="java.lang.String"/>
+        <property name="relatedActivityId" column="related_act_id"  type="java.lang.Long"/>
                                 
 		<subclass name="org.digijava.module.message.dbentity.AmpAlert" discriminator-value="a"/>
 		

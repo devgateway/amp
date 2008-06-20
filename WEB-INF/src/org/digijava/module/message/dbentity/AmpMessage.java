@@ -20,6 +20,7 @@ public abstract class AmpMessage {
 	private Long senderId;  //if user sends alert, then it's that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
 	private Date creationDate; //date when it was created
     private String objectURL;
+    private Long relatedActivityId;    
     
     private String senderName;  //sender name
 
@@ -151,6 +152,14 @@ public abstract class AmpMessage {
 
 	public void setSenderName(String senderName) {
 		this.senderName = senderName;
+	}
+
+	public Long getRelatedActivityId() {
+		return relatedActivityId;
+	}
+
+	public void setRelatedActivityId(Long relatedActivityId) {
+		this.relatedActivityId = relatedActivityId;
 	}
         
 

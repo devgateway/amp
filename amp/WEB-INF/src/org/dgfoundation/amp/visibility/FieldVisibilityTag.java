@@ -146,7 +146,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
    		   if(ampTreeVisibility!=null)
    		   {
    			if(! existFeature(ampTreeVisibility)) 
- 			   return SKIP_BODY;
+ 			   {
+   				System.out.println("	FM ::: field:"+this.getName()+" is disabled");
+   				return SKIP_BODY;
+ 			   }
    			
  		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
  		    
@@ -154,31 +157,37 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			sessionMap.put("session", pageContext.getSession());
    			
    			Map scope=PermissionUtil.getScope(pageContext.getSession());   
-   			//ServletRequest requestForFields = pageContext.getRequest();
    			HttpSession requestForFields = pageContext.getSession();
-   			//String dbgFM=requestForFields.getParameter("debugFM");
    			String dbgFM=(String) requestForFields.getAttribute("debugFM");
-   			//System.out.println("fmmmmmmmmmmm:"+dbgFM);
    			
    			if(isFieldActive (ampTreeVisibility) ) {
    				HttpSession session		= pageContext.getSession();
    				TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
    			    
    				//TODO AMP-2579 this IF was added to fix null pointer temporary.
-   				if (teamMember!=null){
+   				if (teamMember!=null && !teamMember.getTeamHead()){
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
    	   			    ServletRequest request = pageContext.getRequest();
    	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
-   	   			    if(ampFieldFromTree.getPermission(false)!=null && PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
-   	   			    		!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?actionMode:GatePermConst.Actions.VIEW,scope))
-   	   			    return SKIP_BODY;
+   	   			    if(ampFieldFromTree.getPermission(false)!=null && 
+   	   			    	PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
+   	   			    	!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
+   	   			    			actionMode:GatePermConst.Actions.VIEW,scope))
+   	   			    {
+   	   			    	System.out.println("		FM ::: field:"+this.getName()+" is disabled from permissions");
+   	   			    	return SKIP_BODY;
+   	   			    }
    				}
    				String output="";
    				if(dbgFM!=null && "true".compareTo(dbgFM)==0)
    	   				output+=this.createDebugText2(bodyText);
    				else output=bodyText;
    			   pageContext.getOut().print(output);   			    
-   			} else return SKIP_BODY;//the field is not active!!!
+   			System.out.println("FM ::: field:"+this.getName()+" is ACTIVE");
+   			} else {
+   				System.out.println("	FM ::: field:"+this.getName()+" is disabled");
+   				return SKIP_BODY;//the field is not active!!!
+   			}
    		   }
     	   
        }

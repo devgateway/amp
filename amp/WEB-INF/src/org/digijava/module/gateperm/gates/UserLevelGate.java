@@ -68,8 +68,8 @@ public class UserLevelGate extends Gate {
 		String param = parameters.poll().trim();
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		//if(tm!=null && tm.getTeamHead()) return true;
-		if(tm!=null && tm.getTeamHead() && PARAM_WORKSPACE_MANAGER.equals(param)) return true;
+		if(tm!=null && tm.getTeamHead()) return true;
+		//if(tm!=null && tm.getTeamHead() && PARAM_WORKSPACE_MANAGER.equals(param)) return true;
 		
 		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		boolean owner=false;

@@ -147,7 +147,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    		   {
    			if(! existFeature(ampTreeVisibility)) 
  			   {
-   				System.out.println("	FM ::: field:"+this.getName()+" is disabled");
+   				//System.out.println("	FM ::: field:"+this.getName()+" is disabled");
    				return SKIP_BODY;
  			   }
    			
@@ -174,7 +174,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    	   			    	!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?
    	   			    			actionMode:GatePermConst.Actions.VIEW,scope))
    	   			    {
-   	   			    	System.out.println("		FM ::: field:"+this.getName()+" is disabled from permissions");
+   	   			    	//System.out.println("		FM ::: field:"+this.getName()+" is disabled from permissions");
    	   			    	return SKIP_BODY;
    	   			    }
    				}
@@ -183,9 +183,9 @@ public class FieldVisibilityTag extends BodyTagSupport {
    	   				output+=this.createDebugText2(bodyText);
    				else output=bodyText;
    			   pageContext.getOut().print(output);   			    
-   			System.out.println("FM ::: field:"+this.getName()+" is ACTIVE");
+   			//System.out.println("FM ::: field:"+this.getName()+" is ACTIVE");
    			} else {
-   				System.out.println("	FM ::: field:"+this.getName()+" is disabled");
+   				//System.out.println("	FM ::: field:"+this.getName()+" is disabled");
    				return SKIP_BODY;//the field is not active!!!
    			}
    		   }

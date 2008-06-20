@@ -208,6 +208,10 @@
 	text-align: center;
 }
 
+button.arrow {
+	padding: 4px;
+}
+
 img.toolbar {
 	vertical-align: text-bottom;
 	height: 17px;
@@ -225,11 +229,12 @@ button.toolbar {
 	padding: 1px;
 	
 }
-button:hover.toolbar {
+button.ieover, button:active {
 	background-color: #DCEBFF; 
 	border-width: thin;
 	border-style: solid;
 	border-color: #BCCBFF;
+	
 }
 
 button.toolbar-dis { 

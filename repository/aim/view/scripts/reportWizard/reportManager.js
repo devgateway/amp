@@ -130,56 +130,30 @@ NormalReportManager.prototype.checkColumns	= function () {
 		columnsMustEl	= document.getElementById("columnsMust");
 		columnsMustEl.style.visibility="hidden";
 		this.enableTab(2);
-		//this.enableTab(3);
 		return true;
 	}
 	else {
 		columnsMustEl	= document.getElementById("columnsMust");
 		columnsMustEl.style.visibility="";
 		this.disableTab(2);
-		//this.disableTab(3);
 		return false;
 	}
 }
 
 NormalReportManager.prototype.checkReportName	= function () { 
-	btn 	= document.getElementById("step3_next_button");
-	if ( aimReportWizardForm.reportTitle.value == "" ) {
+	var btn 	= document.getElementById("last_save_button");
+	var btnY	= new YAHOO.util.Element(btn);
+	if ( getReportTitle() == "" ) {
 		btn.disabled		= true;
-		btn.style.color		= "lightgray";
+		btnY.setStyle("color", "lightgrey");
 		return false;
 	}
 	else {
 		btn.disabled		= false;
-		btn.style.color		= "black";
+		btnY.setStyle("color", "black");
 		return true;
 	}
 }
-
-/*
-NormalReportManager.prototype.checkReportType	= function () {
-	//var reportTypeEl			= document.getElementById("reportTypeMust") ;
-	var fundingGroupingEl		= document.getElementById("fundingGroupingMust") ;
-	//var reportTypeDivEl			= document.getElementById("reportTypeDiv") ;
-	//var checkboxes				= reportTypeDivEl.getElementsByTagName("input");
-	//if ( !isAnyChecked(checkboxes) ) {
-	//	reportTypeEl.style.visibility="";
-	//	this.disableTab(1);
-	//	return false;
-	//}
-	//reportTypeEl.style.visibility="hidden";
-	
-	var reportGroupDivEl		= document.getElementById("reportGroupDiv") ;
-	var radios					= reportGroupDivEl.getElementsByTagName("input");
-	if ( !this.isAnyChecked(radios) ) {
-		fundingGroupingEl.style.visibility="";
-		this.disableTab(1);
-		return false;
-	}
-	fundingGroupingEl.style.visibility="hidden";
-	this.enableTab(1, "columns_tab_label");
-	return true;
-} */
 
 NormalReportManager.prototype.isAnyChecked		= function ( inputs ) {
 	for (i=0; i<inputs.length; i++) {
@@ -204,6 +178,20 @@ NormalReportManager.prototype.previousStep		= function ( ) {
 	else
 		window.location.replace("/aim/showDesktop.do");
 }
+NormalReportManager.prototype.addStyleToButton	= function ( id ) { 
+	function addClass(e) {
+		var btnY	= new YAHOO.util.Element( this );
+		btnY.addClass( "ieover" );
+	}
+	function removeClass(e) {
+		var btnY	= new YAHOO.util.Element( this );
+		btnY.removeClass( "ieover" );
+	}
+
+	YAHOO.util.Event.addListener(id, "mouseover", addClass) ;
+	YAHOO.util.Event.addListener(id, "mouseout", removeClass) ;
+}
+
 
 TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;
@@ -262,3 +250,4 @@ TabReportManager.prototype.checkMeasures	= function () {
 		return false;
 	}
 }
+

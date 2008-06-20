@@ -62,6 +62,10 @@
 			}
 			
 		MyDragAndDropObject.prototype.endAnimation		= function(realObj, dragObj) {
+				
+				if ( YAHOO.util.Dom.getX( realObj ) == null )
+						return;
+		
 				YAHOO.util.Dom.setStyle(dragObj, "visibility", ""); 
 				var a = new YAHOO.util.Motion(  
 					dragObj, {  
@@ -72,12 +76,12 @@
 					0.5,
 					YAHOO.util.Easing.easeOut  
 				);
+				
 				a.onComplete.subscribe(function() { 
 					YAHOO.util.Dom.setStyle(dragObj.id, "visibility", "hidden"); 
 					YAHOO.util.Dom.setStyle(realObj.id, "visibility", ""); 
 				}); 
 				a.animate();
-				
 		}
 		
 		MyDragAndDropObject.prototype.addActions	= function (obj) {
@@ -137,6 +141,7 @@
 		function ColumnsDragAndDropObject (containerId) {
 			//alert('childConstructor:' + containerId);
 			this.parent.call(this, containerId);
+			this.realWidth		= "29%";
 		}
 			ColumnsDragAndDropObject.prototype.createDragAndDropItems	= function () {
 				new YAHOO.util.DDTarget("dest_col_ul");
@@ -149,8 +154,9 @@
 				
 				for (var i=0; i<liObjs.length; i++) {
 					if ( liObjs[i].getElementsByTagName("ul").length==0 ) {
-						var tId				= liObjs[i].id;
-						var draggableItem	= new YAHOO.util.DDProxy(tId);
+						var tId					= liObjs[i].id;
+						var draggableItem		= new YAHOO.util.DDProxy(tId);
+						draggableItem.realWidth	= this.realWidth;
 						this.addActions(draggableItem);
 					}
 				}
@@ -165,7 +171,7 @@
 				//this.getDragEl().setAttribute('class','list1');
 				var dragYEl					= new YAHOO.util.Element( this.getDragEl() );
 				dragYEl.addClass("list1");
-				dragYEl.setStyle("width", "29%");
+				dragYEl.setStyle("width", this.realWidth );
 				var realObj					= document.getElementById(this.id);
 				var inputEl					= realObj.getElementsByTagName('input')[0];
 				var spanEl					= realObj.getElementsByTagName('span')[0];
@@ -250,8 +256,11 @@
 				var newObj					= document.createElement("li");
 				
 				newObj.innerHTML			= startHtml + html;
-				newObj.setAttribute('class',liClass);
+				//newObj.setAttribute('class',liClass);
 				newObj.setAttribute('id', liId);
+				
+				var newObjY					= new YAHOO.util.Element( newObj );
+				newObjY.addClass( liClass );
 				
 				return newObj;
 			}
@@ -328,7 +337,9 @@
 		SelColsDragAndDropObject.prototype				= new ColumnsDragAndDropObject();
 		SelColsDragAndDropObject.prototype.parent		= ColumnsDragAndDropObject;
 		SelColsDragAndDropObject.prototype.constructor	= SelColsDragAndDropObject;
-		function SelColsDragAndDropObject() {;}
+		function SelColsDragAndDropObject() {
+			this.realWidth	= "30%";
+		}
 		SelColsDragAndDropObject.prototype.startDrag	= function(x, y) {
 			MyDragAndDropObject.prototype.startDrag.call(this,x,y);
 			this.newObj			= document.getElementById(this.id);

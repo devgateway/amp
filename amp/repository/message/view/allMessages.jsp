@@ -29,6 +29,12 @@
 	border-width: 0px 1px 1px 1px; 
 	background-color: #f4f4f2;
 }
+
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+
 -->
 </style>
 
@@ -65,6 +71,7 @@
         var forwardClick="<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>";
         var editClick="<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>";
         var deleteClick="<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>";
+        var viewMessage="<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>";
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -79,6 +86,37 @@
 	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
+        
+    function hoverTr(){
+         this.className='Hovered';   
+    }
+    
+    /*code below doesn't look good... but still
+     *  its attachs events to rows: mouse over(makes row color darker) 
+     *  and mouse out(returns to row it basic color)
+     */
+    
+    function paintTr(msgTR,i){
+        var className='';
+        if(i!=1&&i%2==0){
+            msgTR.className = 'trEven';
+            className="this.className='trEven'";                                                            
+        }
+        else{
+            msgTR.className = 'trOdd';
+            className="this.className='trOdd'";
+        }
+        
+        
+        var setBGColor = new Function(className);
+       
+        msgTR.onmouseover=hoverTr;
+        msgTR.onmouseout=setBGColor;
+      
+        return msgTR;
+    }
+    
+    
 
 
 	 function checkForNewMessages(){
@@ -93,47 +131,65 @@
 		openURLinWindow(url,600,550);
 	}
 	
-    function viewMessage(id,isMsg) {
-        var ind=id.indexOf('_mId');
+    function viewMsg(id) {
+        var ind=id.indexOf('_fId');
         if(ind!=-1){
-            var stateId=id.substring(0,ind);
-            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+stateId,600,430);
-            markMsgeAsRead(stateId);
-            
+            var msgId=id.substring(0,ind);          
+            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
+        
         }
         else{
-            ind=id.indexOf('_fId');
-            var msgId=id.substring(0,ind);;            
-            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
+            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
+            markMsgeAsRead(id);
         }
     }
+     
 	
 	function deleteMessage(msgId) {
 		if(deleteMsg()){
 			//remove current element from array
 			var index=getIndexOfElement(msgId);
 			if(index!=-1){
-				myArray.splice(index,1);	
+				myArray.splice(index,1);
 				//removing TR from rendered messages list
 				var tbl=document.getElementById('msgsList');			
 				var img=document.getElementById(msgId+'_plus');
 				var imgTD=img.parentNode;
 				var msgTR=imgTD.parentNode;
 				tbl.tBodies[0].removeChild(msgTR);
+                                
+                                /* 
+                                 * after we delete row we need to repaint remain rows
+                                 *  its also reattachs events to rows: mouse over(makes row color darker) 
+                                 *  and mouse out(returns to row it basic (new) color)
+                                 */
+                                var trs=tbl.tBodies[0].rows;
+                                
+                                var className;
+                                for(var i=0;i<trs.length;i++){
+                                    if(trs[i].className=='trOdd'){
+                                       trs[i].className='trEven';
+                                       className="this.className='trEven'";
+                                    }
+                                    else{
+                                        trs[i].className='trOdd';
+                                        className="this.className='trOdd'";
+                                    }
+                                       var setBGColor = new Function(className);
+                                       trs[i].onmouseover=hoverTr;
+                                       trs[i].onmouseout=setBGColor;
+                                }
+                                
+                              
 				//removing record from db
-                                 var ind=msgId.indexOf('_mId');
-                                if(ind!=-1){
-                                var stateId=msgId.substring(0,ind);
                                 var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
 				url+='~editingMessage=false';
-				url+='~msgStateId='+stateId;
+				url+='~msgStateId='+msgId;
 				url+='~page='+currentPage;			
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
-				async.call(url);
-                                }
-						
+				async.call(url);			
 			}	
 		}
 	}
@@ -181,33 +237,30 @@
         var strId='#'+group_id;
         $(strId+'_minus').toggle();
         $(strId+'_plus').toggle();
-        var ind=group_id.indexOf('_mId');
-        var messageId;
-        var stId=0;
+        var ind=group_id.indexOf('_fId');
+        var stateId;
+       
         if(ind!=-1){
-            messageId=group_id.slice(ind+4);
-            stId=group_id.substring(0,ind);
-            markMsgeAsRead(stId);
-            
+            ind=group_id.indexOf('_fId');
+            stateId=group_id.slice(ind+4);   
         }
         else{
-            ind=group_id.indexOf('_fId');
-            messageId=group_id.slice(ind+4);
+            stateId=group_id;
+            markMsgeAsRead( stateId);
+          
         }
        
         for(var j=0;j<messages.length;j++){ 
-            var msgId=messages[j].getAttribute('msgId');
-            var stateId= messages[j].getAttribute('id');
-            var mId=stateId+'_mId'+msgId;
-            if(messageId!=msgId){
-                toggleGr(mId);
+            var stId= messages[j].getAttribute('id');
+            if(stateId!=stId){
+                toggleGr(stId);
             }  
             for(var i=0;i<messages[j].childNodes.length;i++){
                 var forwardedMsg=messages[j].childNodes[i];
-                var parMsgId=forwardedMsg.getAttribute('parentMsgId');
-                if(messageId!=parMsgId){
+                var parStId=forwardedMsg.getAttribute('parentStateId');
+                if(stateId!=parStId){
                     var lastMsgId=forwardedMsg.getAttribute('msgId');
-                    var fId=lastMsgId+'_fId'+parMsgId;
+                    var fId=lastMsgId+'_fId'+parStId;
                     toggleGr(fId);
                 }
                 
@@ -245,10 +298,8 @@
 		var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
 		var stateId=root.getAttribute('id');
 		var isRead=root.getAttribute('read');
-                var msgId=root.getAttribute('msgId');
-                
 		if(isRead){
-			var myid='#'+stateId+'_mId'+msgId+'_unreadLink';
+			var myid='#'+stateId+'_unreadLink';
 			$(myid).css("color","");		
 		}
 		
@@ -315,10 +366,9 @@
 						var whereToInsertRow=1;						
 							for(var i=0;i<messages.length;i++){
 							var msgId=messages[i].getAttribute('id');
-                                                        var mId=messages[i].getAttribute('msgId');
-                                                        var msId=msgId+"_mId"+mId; // create unique id for each message
+                                                       
 							for(var j=0;j<myArray.length;j++){
-								if(msId==myArray[j]){
+								if(msgId==myArray[j]){
 									break;
 								}else{
 									if(j==myArray.length-1){
@@ -327,25 +377,18 @@
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
 												var msgTR=document.createElement('TR');	
-                                                                                                if(i!=1&&i%2==0){
-                                                                                                    msgTR.className = 'trEven'; 
-                                                                                                }
-                                                                                                else{
-                                                                                                    msgTR.className = 'trOdd';
-                                                                                                }
+                                                                                                msgTR=paintTr(msgTR,i);
+                                                                                                
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
-												myArray[myArray.length]=msId;										
+												myArray[myArray.length]=msgId;										
 											}else{
 												tbl.tBodies[0].insertRow(whereToInsertRow);
 												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
-												  if(i!=1&&i%2==0){
-                                                                                                    msgTR.className = 'trEven'; 
-                                                                                                }
-                                                                                                else{
-                                                                                                    msgTR.className = 'trOdd';
-                                                                                                }
+                              
+                                                                                                msgTR=paintTr(msgTR,i);
+												
 												createTableRow(tbl,msgTR,messages[i],true);
-												myArray[myArray.length]=msId;
+												myArray[myArray.length]=msgId;
 												whereToInsertRow++;										
 												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
 											}
@@ -358,21 +401,23 @@
 					}else {
 						for(var i=0;i<messages.length;i++){				
 							var msgId=messages[i].getAttribute('id');
-                                                        var messId=messages[i].getAttribute('msgId');
-							myArray[i]=msgId+"_mId"+messId;
+							myArray[i]=msgId;
 							
 							//creating tr
 							var msgTr=document.createElement('TR');	
-							var isMsgRead=messages[i].getAttribute('read');					
-                                                       
-                                                        if(i!=1&&i%2==0){
-                                                            msgTr.className = 'trEven'; 
-                                                          }
-                                                           else{
-                                                             msgTr.className = 'trOdd';
-							}
+                                                      
+                                                        
+							var isMsgRead=messages[i].getAttribute('read');	
+                                                     
+                                                        msgTr=paintTr(msgTr,i);
+                                                        
 								
-							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
+							var myTR=createTableRow(tbl,msgTr,messages[i],true);
+                                                       
+                                                       
+                                                          
+                                                         
+                                                          
                                                 var tablBody= tbl.getElementsByTagName("tbody");
                                                 tablBody[0].appendChild(myTR);
                         
@@ -456,7 +501,7 @@
                 else{
                     sateId=msgId;
                 }
-                var newMsgId=message.getAttribute('parentMsgId');// id of the hierarchy end for forwarding messages
+                var newMsgId=message.getAttribute('parentStateId');// id of the hierarchy end for forwarding messages
 		//create image's td
 		var imgTD=document.createElement('TD');
                
@@ -464,9 +509,7 @@
                     msgId+='_fId'+newMsgId; // create id for forwarded message
     
                 }
-                else{
-                     msgId+='_mId'+messageId; // create id  for plain messages
-                }
+               
 		imgTD.vAlign='top';	
                
                     imgTD.innerHTML='<img id="'+msgId+'_plus"  onclick="toggleGroup(\''+msgId+'\')" src="/repository/message/view/images/unread.gif" title="<digi:trn key="message:ClickExpandMessage">Click on this icon to expand message&nbsp;</digi:trn>"/>'+
@@ -504,9 +547,9 @@
 		var sp=document.createElement('SPAN');
 		var isMsgRead=message.getAttribute('read');
 		if(isMsgRead=='false'){
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\')"; style="color:red" >'+msgName+'</A>';   
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMsg(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
 		}else {
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMessage(\''+msgId+'\')";>'+msgName+'</A>';
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMsg(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
@@ -681,7 +724,7 @@
 		return msgTr;			
 	
 	}
-        
+   
 </script>
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr>
@@ -724,6 +767,21 @@
                                                    <digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                 </c:otherwise>
                                                 </c:choose>
+                                                <c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
+                                                &nbsp;&gt;&nbsp;
+                                                <c:choose>
+                                                 <c:when test="${messageForm.childTab=='inbox'}">
+                                                    <digi:trn key="message:inbox">Inbox</digi:trn>
+                                                </c:when>
+                                                <c:when test="${messageForm.childTab=='sent'}">
+                                                  <digi:trn key="message:sent">Sent</digi:trn>
+                                                </c:when>
+                                                <c:otherwise>
+                                                     <digi:trn key="message:draft">Draft</digi:trn>	
+                                                </c:otherwise>
+                                                </c:choose>
+                                                    
+                                                </c:if>
 
                                                 </span>
 					</td>

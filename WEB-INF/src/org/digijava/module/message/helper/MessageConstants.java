@@ -12,7 +12,7 @@ public class MessageConstants {
      * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
      */
     public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,ActivityDisbursementDateTrigger.class,UserRegistrationTrigger.class,ApprovedActivityTrigger.class,NotApprovedActivityTrigger.class};
-    public static final  String[] triggerName=new String[] {"Save Actvity","Activity Disbursement Date","New User Registration"};
+    public static final  String[] triggerName=new String[] {"Save Actvity","Activity Disbursement Date","New User Registration","Activity Approved", "Activity Not Approved"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

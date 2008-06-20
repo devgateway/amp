@@ -38,7 +38,7 @@ public abstract class AmpMessage {
 	/**
 	 * this field holds Id of the forwarded message, if it exists 
 	 */
-	private Long forwardedMessageId;
+	private AmpMessage forwardedMessage;
         
         
 	/**
@@ -129,12 +129,12 @@ public abstract class AmpMessage {
 		this.draft = draft;
 	}
 
-	public Long getForwardedMessageId() {
-		return forwardedMessageId;
+	public AmpMessage getForwardedMessage() {
+		return forwardedMessage;
 	}
 
-	public void setForwardedMessageId(Long forwardedMessageId) {
-		this.forwardedMessageId = forwardedMessageId;
+	public void setForwardedMessage(AmpMessage forwardedMessage) {
+		this.forwardedMessage = forwardedMessage;
 	}
 
 	public String getObjectURL() {

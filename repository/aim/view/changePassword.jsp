@@ -41,7 +41,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap width="40%">
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:email">
 							UserId:
 						</digi:trn>
@@ -59,7 +59,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap>
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:oldPassword">
 						Old Password:
 						</digi:trn>
@@ -71,7 +71,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap>
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:newPassword">
 						New Password:
 						</digi:trn>
@@ -83,7 +83,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap>
-						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+<!--						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>-->
 						<digi:trn key="aim:confirmNewPassword">
 						Confirm new Password:
 						</digi:trn>

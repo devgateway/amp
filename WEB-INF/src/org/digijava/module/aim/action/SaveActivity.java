@@ -1484,7 +1484,7 @@ public class SaveActivity extends Action {
 			}
 
             String logframepr = (String) session.getAttribute("logframepr");
-            if (logframepr.equals("true")) {
+            if ("true".equals(logframepr)) {
                 if (activity.getApprovalStatus() != null && activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
                     new ApprovedActivityTrigger(activity);
                 }

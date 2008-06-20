@@ -26,6 +26,7 @@ public class UserLevelGate extends Gate {
 	public static final String PARAM_EVERYONE="everyone";
 	public static final String PARAM_GUEST="guest";
 	public static final String PARAM_OWNER="owner";
+	public static final String PARAM_WORKSPACE_MANAGER="worskpacemanager";
 	
 	public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER, GatePermConst.ScopeKeys.ACTIVITY  };
 	
@@ -67,8 +68,9 @@ public class UserLevelGate extends Gate {
 		String param = parameters.poll().trim();
 		
 		TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
-		if(tm.getTeamHead()) 
-			return true;
+		//if(tm!=null && tm.getTeamHead()) return true;
+		if(tm!=null && tm.getTeamHead() && PARAM_WORKSPACE_MANAGER.equals(param)) return true;
+		
 		AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		boolean owner=false;
 		if( tm!=null && act.getCreatedBy().getAmpTeamMemId().equals(tm.getMemberId()) ) owner=true;
@@ -80,9 +82,14 @@ public class UserLevelGate extends Gate {
 		if(tm==null) 
 			if(PARAM_EVERYONE.equals(param)) return true; else return false;
 		
+		//if i am a guest and not the owner of the current object i will have guest access
+		//if(!owner && PARAM_GUEST.equals(param)) return true;
+		
 		Gate relatedOrgGate = Gate.instantiateGate(scope, null, RelatedOrgGate.class.getName());
 		//if i am a guest and not the owner AND not related to the current object i will have guest access
 		if(!owner && !relatedOrgGate.logic() && PARAM_GUEST.equals(param) ) return true;
+		
+		
 		
 		return false;
 		

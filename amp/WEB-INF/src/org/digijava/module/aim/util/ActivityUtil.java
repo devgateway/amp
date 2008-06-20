@@ -3632,6 +3632,64 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             return steps;
         }
         
+        /**
+         * @author Dare
+         * @param partOfName
+         * @return Array of Strings,which have a look like: activity_name(activiti_id) 
+         */
+        public static String[] loadActivitiesNamesAndIds() throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;
+    		List activities=null;
+    		String [] retValue=null;
+    		try {
+    			session=PersistenceManager.getRequestDBSession();
+    			queryString= "select a.name,a.ampActivityId from " + AmpActivity.class.getName()+ " a order by a.name";
+    			query=session.createQuery(queryString);    			
+    			activities=query.list(); 			
+    		}catch(Exception ex) { 
+    			logger.error("couldn't load Activities" + ex.getMessage());	
+    			ex.printStackTrace(); 
+    		} 
+    		if (activities != null){
+    			retValue=new String[activities.size()];    		
+    			int i=0;
+    			for (Object rawRow : activities) {
+					Object[] row = (Object[])rawRow; //:)
+					String nameRow=(String)row[0];					
+					nameRow = nameRow.replace('\n', ' ');
+					nameRow = nameRow.replace('\r', ' ');
+					nameRow = nameRow.replace("\\", "");
+					System.out.println(nameRow);
+					retValue[i]=nameRow+"("+row[1]+")";
+					i++;					
+				}
+    		}
+    		return retValue;
+        }
+        
+        /** 
+         * @param actId
+         * @return activity name
+         * @author dare
+         */
+        public static String getActivityName(Long actId) throws DgException{
+        	Session session=null;
+    		String queryString =null;
+    		Query query=null;    		
+    		String name=null;
+    		try {
+    			session=PersistenceManager.getRequestDBSession();
+    			queryString= "select a.name  from " + AmpActivity.class.getName()+ " a where a.ampActivityId="+actId;
+    			query=session.createQuery(queryString);    			
+    			name=(String)query.uniqueResult();    			
+    		}catch(Exception ex) { 
+    			logger.error("couldn't load Activity" + ex.getMessage());	
+    			ex.printStackTrace(); 
+    		} 
+    		return null;
+        }
        
 	
 } // End

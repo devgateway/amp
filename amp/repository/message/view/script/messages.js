@@ -54,3 +54,10 @@ function removeUserOrTeam() {
 		}			
 	}			
 }
+
+function addActionToURL(actionName){
+	var fullURL=document.URL;
+	var lastSlash=fullURL.lastIndexOf("/");
+	var partialURL=fullURL.substring(0,lastSlash);
+	return partialURL+"/"+actionName;
+}

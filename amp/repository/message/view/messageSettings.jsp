@@ -9,6 +9,7 @@
 
 
 <digi:instance property="messageForm"/>
+<digi:form action="/msgSettings.do" >
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -41,8 +42,8 @@
 		if(validate(record.value)){			
 			 <digi:context name="saveRecord" property="context/module/moduleinstance/msgSettings.do"/>
 			 url = "<%= saveRecord %>?actionType=saveSettings&settingType="+settingType;
-			 document.forms[0].action =url;
-			 document.forms[0].submit();		 
+			 messageForm.action =url;
+			 messageForm.submit();		 
 			 return true;
 		}
 	}
@@ -50,13 +51,13 @@
 	function saveAll(){
 		<digi:context name="saveAll" property="context/module/moduleinstance/msgSettings.do"/>
 		url = "<%= saveAll %>?actionType=saveSettings&settingType=saveAll";
-		document.forms[0].action =url;
-		document.forms[0].submit();		 
+		messageForm.action =url;
+		messageForm.submit();		 
 		return true;
 	}	
 </script>
 
-<digi:form action="/msgSettings.do" >
+
 	<TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 		<TR>
 			<TD class=r-dotted-lg-buttom vAlign=top>

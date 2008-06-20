@@ -86,7 +86,7 @@
 	if(document.getElementsByName('msgRefreshTimeCurr')[0].value>0){
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
-        
+
     function hoverTr(){
          this.className='Hovered';   
     }
@@ -95,7 +95,7 @@
      *  its attachs events to rows: mouse over(makes row color darker) 
      *  and mouse out(returns to row it basic color)
      */
-    
+
     function paintTr(msgTR,i){
         var className='';
         if(i!=1&&i%2==0){
@@ -136,21 +136,20 @@
         if(ind!=-1){
             var msgId=id.substring(0,ind);          
             openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
-        
-        }
-        else{
+            
+                }
+                else{           
             openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
             markMsgeAsRead(id);
-        }
-    }
-     
+                }
+	}
 	
 	function deleteMessage(msgId) {
 		if(deleteMsg()){
 			//remove current element from array
 			var index=getIndexOfElement(msgId);
 			if(index!=-1){
-				myArray.splice(index,1);
+				myArray.splice(index,1);	
 				//removing TR from rendered messages list
 				var tbl=document.getElementById('msgsList');			
 				var img=document.getElementById(msgId+'_plus');
@@ -164,7 +163,7 @@
                                  *  and mouse out(returns to row it basic (new) color)
                                  */
                                 var trs=tbl.tBodies[0].rows;
-                              
+                                
                                 for(var i=1;i<trs.length;i++){
                                 var className;
                                 if(i!=1&&i%2==0){
@@ -173,24 +172,24 @@
                                                                                                
                                 }
                                 else{
-                                    trs[i].className = 'trEven';
-                                    className="this.className='trEven'"; 
+                                       trs[i].className='trEven';
+                                       className="this.className='trEven'";
+                                    }
+                                       var setBGColor = new Function(className);
+                                       trs[i].onmouseover=hoverTr;
+                                       trs[i].onmouseout=setBGColor;
                                 }
-                                var setBGColor = new Function(className);
-                                trs[i].onmouseover=hoverTr;
-                                trs[i].onmouseout=setBGColor;
-                            }
                                 
                               
 				//removing record from db
-                                var url=addActionToURL('messageActions.do');	
+				var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
 				url+='~editingMessage=false';
 				url+='~msgStateId='+msgId;
 				url+='~page='+currentPage;			
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
-				async.call(url);			
+				async.call(url);		
 			}	
 		}
 	}
@@ -235,9 +234,9 @@
    
         
     function toggleGroup(group_id){
-        var strId='#'+group_id;
-        $(strId+'_minus').toggle();
-        $(strId+'_plus').toggle();
+                var strId='#'+group_id;
+                $(strId+'_minus').toggle();
+                $(strId+'_plus').toggle();
         var ind=group_id.indexOf('_fId');
         var stateId;
        
@@ -268,9 +267,9 @@
             }
             
         }
-        $('#msg_'+group_id).toggle('fast');
-          
-    }
+                $('#msg_'+group_id).toggle('fast');
+                
+	}
                   
 	function markMsgeAsRead(group_id){
         var partialUrl=addActionToURL('messageActions.do');
@@ -279,14 +278,6 @@
 		async.complete=makeRead;
 		async.call(url);                
    }
-                  
-              
-	function addActionToURL(actionName){
-		var fullURL=document.URL;
-		var lastSlash=fullURL.lastIndexOf("/");
-		var partialURL=fullURL.substring(0,lastSlash);
-		return partialURL+"/"+actionName;
-	}
 	
 	function getUrl(url,group_id){				
 		var result=url;
@@ -321,7 +312,6 @@
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
-               
 				
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
@@ -377,7 +367,7 @@
 											var pagParams=paginationTag.childNodes[0];
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
-												var msgTR=document.createElement('TR');	
+												var msgTR=document.createElement('TR');												
                                                                                                 msgTR=paintTr(msgTR,i);
                                                                                                 
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
@@ -406,19 +396,12 @@
 							
 							//creating tr
 							var msgTr=document.createElement('TR');	
-                                                      
-                                                        
-							var isMsgRead=messages[i].getAttribute('read');	
-                                                     
+							var isMsgRead=messages[i].getAttribute('read');					
+                                                       
                                                         msgTr=paintTr(msgTr,i);
                                                         
 								
-							var myTR=createTableRow(tbl,msgTr,messages[i],true);
-                                                       
-                                                       
-                                                          
-                                                         
-                                                          
+							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");
                                                 tablBody[0].appendChild(myTR);
                         
@@ -483,7 +466,7 @@
 						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
 						paginationTDContent+='<a href="javascript:goToPage('+lastPage+')" title="'+lastPg+'">&gt;&gt;</a>|';
 					}	
-					paginationTDContent+='&nbsp;'+page+'of '+lastPage;
+					paginationTDContent+='&nbsp;'+page+'of'+lastPage;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						
 			}
@@ -642,17 +625,16 @@
 					//getting URL
 					var objectURL=message.getAttribute('objURL');
                                         if(objectURL!='null'){
-                                        var objURLTR=document.createElement('TR');
-                                        var objURLTD1=document.createElement('TD');
+				var objURLTR=document.createElement('TR');
+					var objURLTD1=document.createElement('TD');
                                         objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
-                                        objURLTR.appendChild(objURLTD1);
-                                        var objURLTD2=document.createElement('TD');
-                                        objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
+				objURLTR.appendChild(objURLTD1);
+					var objURLTD2=document.createElement('TD');
+                        	objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
 
-                                        objURLTR.appendChild(objURLTD2);
-                                        divTblBody.appendChild(objURLTR);
+				objURLTR.appendChild(objURLTD2);
+			divTblBody.appendChild(objURLTR);
                                     }	
-                      		
 				
 				var detailsTR=document.createElement('TR');
 					var detailsTD1=document.createElement('TD');
@@ -704,7 +686,6 @@
 		fwdOrEditTD.align='center';
                 fwdOrEditTD.vAlign="top";
 		var isDraft=message.getAttribute('isDraft');
-                
 		if(isDraft=='true'){
                     fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
 		}else{
@@ -721,11 +702,11 @@
 		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
 		msgTr.appendChild(deleteTD);
                 }
-             
+					
 		return msgTr;			
 	
 	}
-   
+        
 </script>
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr>
@@ -899,8 +880,8 @@
                                         
 					<div id="main">
 					<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
+					
 						
-                                                            
                                                                 <DIV id="subtabs">
                                                                     <UL>
 								
@@ -974,7 +955,6 @@
                                                                                 </UL>
                                                                                 &nbsp;
                                                                                   </DIV>
-                                                                                
 									
 						
 					</c:if>
@@ -982,6 +962,7 @@
                                         	</TD>					
 						</TR>
                                               <TR>
+                                              
                         
 							<TD bgColor="#ffffff" class="contentbox_border" align="left">
 								<TABLE id="msgsList">
@@ -994,7 +975,7 @@
                                                
 							<TD bgColor="#ffffff"  align="left">
 								<TABLE >
-                                                                        <TR id="paginationPlace"><TD colspan="4"></TD></TR>
+									<TR id="paginationPlace"><TD colspan="4"></TD></TR>			
 								</TABLE>
 							</TD>
                                                         </TR>
@@ -1009,7 +990,7 @@
                                                                 <strong><digi:trn key="message:IconReference">Icons Reference</digi:trn></strong>
                                                             </TD>
                                                             </TR>
-                                                              <TR>
+                                                            <TR>
                                                                 <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/unread.gif" vspace="2" border="0" align="absmiddle" />
                                                                     <digi:trn key="message:ClickExpandMessage"> Click on this icon to expand message&nbsp;</digi:trn>
                                                                     <br />

@@ -7,12 +7,20 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
+<script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/autocomplete-min.js"/>"></script>
+
+
 <digi:instance property="messageForm" />
 <html:hidden name="messageForm" property="tabIndex"/>
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
-<script langauage="JavaScript">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
+<script langauage="JavaScript">
+	
 	function validate(){
 		if(document.messageForm.messageName.value.length==0){
 			alert('Please Enter Name');
@@ -53,68 +61,13 @@
     		}
     	}
     	
-    return true;
-}
-	
-	function addUserOrTeam(){
-		
-		var reslist = document.getElementById('whoIsReceiver');
-	    var selreceivers=document.getElementById('selreceivers');
-	
-	    if (reslist == null) {
-	        return false;
-	    }
-	
-	    var index = reslist.selectedIndex;
-	    if (index != -1) {
-	        for(var i = 0; i < reslist.length; i++) {
-	            if (reslist.options[i].selected){
-	              if(selreceivers.length!=0){
-	                var flag=false;
-	                for(var j=0; j<selreceivers.length;j++){
-	                  if(selreceivers.options[j].value==reslist.options[i].value && selreceivers.options[j].text==reslist.options[i].text){
-	                    flag=true;
-	                  }
-	                }
-	                if(!flag){
-	                  addOnption(selreceivers,reslist.options[i].text,reslist.options[i].value);
-	                }
-	              }else{
-	                addOnption(selreceivers,reslist.options[i].text,reslist.options[i].value);
-	              }
-	            }	
-	        }
-	    }
-	    return false;
-		
+    	return true;
 	}
 	
-	function addOnption(list, text, value){
-    if (list == null) {
-        return;
-    }
-    var option = document.createElement("OPTION");
-    option.value = value;
-    option.text = text;
-    list.options.add(option);
-    return false;
-}
-	
-	function removeUserOrTeam() {
-		var tobeRemoved=document.getElementById('selreceivers');
-		if(tobeRemoved==null){
-			return;
-		}		
-		
-		for(var i=tobeRemoved.length-1; i>=0; i--){
-			if(tobeRemoved.options[i].selected){
-				tobeRemoved.options[i]=null;
-			}			
-		}			
-	}
 
 </script>
-<style>
+
+<style  type="text/css">
 <!--
 
 .contentbox_border{
@@ -122,8 +75,38 @@
 	border-width: 1px 1px 1px 1px; 
 	background-color: #f4f4f2;
 }
+
+.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}.yui-skin-sam .yui-ac-input{position:absolute;width:100%;}.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;}.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+
+#statesautocomplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#statesautocomplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+
+
+#statesautocomplete,
+#statesautocomplete2 {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#statesautocomplete {
+    z-index:9000; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+}
+#statesinput,
+#statesinput2 {
+    _position:absolute; /* abs pos needed for ie quirks */
+}
+
 -->
 </style>
+
 <c:set var="messageType">
     <c:choose>
         <c:when test="${messageForm.tabIndex==1}">
@@ -146,8 +129,8 @@
             
             <c:choose>
                 <c:when test="${messageForm.tabIndex==1}">
-                    <digi:trn key="message:ForwardMessage">Forward Message</digi:trn>
-                </c:when>
+            <digi:trn key="message:ForwardMessage">Forward Message</digi:trn>
+        </c:when>
                 <c:when test="${messageForm.tabIndex==2}">
                     <digi:trn key="message:ForwardAlert">Forward Alert</digi:trn>
                 </c:when>
@@ -172,81 +155,89 @@
 
 <digi:form action="/messageActions.do">
     <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
-<tr>
-<td width="100%">
-<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
-</td>
-</tr>
-<tr>
-<td>
-<table  cellPadding=0 cellSpacing=0 width=780 border="0">
-    <tr>
-   <td width=14>&nbsp;</td>
-		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-					<td height=33><span class=crumb>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</c:set>
-						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
-							<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp
-                                                <digi:link href="/messageActions.do?actionType=gotoMessagesPage&tabIndex=${messageForm.tabIndex}" styleClass="comment"  >
-                                                ${messageType}
-                                                </digi:link>
-                                             
-                       &nbsp;&gt;&nbsp; ${title}
-                       </span>
-					</td>
-				</tr>
-				<tr>
-					<td height=16 vAlign=center width=571>
-						<span class=subtitle-blue>							
-								${title}						
-						</span>
-					</td>
-				</tr>
-				<tr>
-	<td noWrap vAlign="top">
-			<table class="contentbox_border">
-				<tr>				
-					<td>
-						<table width="100%" cellspacing="1" cellpadding="4"  align="left" valign="top">
+		<tr>
+			<td width="100%">
+				<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+			</td>
+		</tr>
+		<tr>
+		<td>
+			<table  cellPadding=0 cellSpacing=0 width=780 border="0">
+			    <tr>
+				   <td width=14>&nbsp;</td>
+					<td align=left vAlign=top width=750>
+						<table cellPadding=5 cellSpacing=0 width="100%">
+							<tr>
+								<td height=33>
+									<span class=crumb>
+										<c:set var="translation">
+											<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+										</c:set>
+										<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
+											<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+										</digi:link>&nbsp;&gt;&nbsp
+				                        <digi:link href="/messageActions.do?actionType=gotoMessagesPage&tabIndex=${messageForm.tabIndex}" styleClass="comment"  >
+				                             ${messageType}
+				                        </digi:link>
+				                       &nbsp;&gt;&nbsp; ${title}
+				                    </span>
+								</td>
+							</tr>
+							<tr>
+								<td height=16 vAlign=center width=571>
+									<span class=subtitle-blue>							
+											${title}						
+									</span>
+								</td>
+							</tr>
+							<tr>
+								<td noWrap vAlign="top">
+										<table class="contentbox_border">
+											<tr>				
+												<td>
+													<table width="100%" cellspacing="1" cellpadding="4"  align="left" valign="top">
 														<tr>
 															<td valign="top" bgcolor="#f4f4f2" align="center">
-																
-																			<table width="100%" cellspacing="1" cellpadding="5" >	
-                                                                                                                                                                 <tr>
-                                                                                                                                                                     <td colspan="2" bgcolor="#CCDBFF">&nbsp;</td>
-																					
-																				</tr>
-																				<tr>
-																					<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-																					<td align="left"><html:text property="messageName" size="53" styleClass="inp-text"/></td>
-																				</tr>																																					
-																				<tr>
-																					<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="50" styleClass="inp-text"/></td>
-																				</tr>																				
-																				<tr>
-																					<td align="right" nowrap><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
-																					<td align="left"> 
-																						<html:select property="priorityLevel" styleClass="inp-text">
-																							<html:option value="-1"><digi:trn key="message:selectPriorityLevel">Select Priority level </digi:trn></html:option>
-																							<html:option value="1"><digi:trn key="message:priorityLeel:low">low</digi:trn> </html:option>
-																							<html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
-																							<html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
-																						</html:select>																												                                                																																												
-																					</td>
-																				</tr>					
-																					<td align="right" nowrap><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
-																					<td align="left"> 
-																						<html:select property="setAsAlert" styleClass="inp-text">																							
+																<table width="100%" cellspacing="1" cellpadding="5" >																				
+																	<tr>
+    	                                                                 <td colspan="2" bgcolor="#CCDBFF">&nbsp;</td>
+																	</tr>
+																	<tr>
+																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
+																		<td align="left"><html:text property="messageName" size="53" styleClass="inp-text"/></td>
+																	</tr>																																					
+																	<tr>
+																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
+																		<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="50" styleClass="inp-text"/></td>
+																	</tr>																				
+																	<tr>
+																		<td align="right" nowrap><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
+																		<td align="left"> 
+																			<html:select property="priorityLevel" styleClass="inp-text">
+																				<html:option value="-1"><digi:trn key="message:selectPriorityLevel">Select Priority level </digi:trn></html:option>
+																				<html:option value="1"><digi:trn key="message:priorityLeel:low">low</digi:trn> </html:option>
+																				<html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
+																				<html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
+																			</html:select>																												                                                																																												
+																		</td>
+																	</tr>
+																	<tr>
+																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
+																		<td align="left" width="53">
+																			<div id="statesautocomplete" style="width:50px"> 
+																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" ></html:text>																			    
+																				<div id="statescontainer" style="position:absolute;width:200px;background-color: white; border: solid black 1px;border-top: 0px"></div> 
+																			</div>																		
+																		</td>																					
+																	</tr>						
+																	<tr>
+																		<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
+																		<td align="left"> 
+																			<html:select property="setAsAlert" styleClass="inp-text">																							
 																							<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
 																							<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
 																						</html:select>																												                                                																																												
-																					</td>													 																			
+																					</td>
 																				<tr>
 																				</tr>															
 																				<tr>
@@ -255,23 +246,22 @@
 																                        <table border="0" >
 																                            <tr>
 																                                <td valign="top">
-																                                    
-																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
-																												<logic:empty name="messageForm" property="teamMapValues">
-																													<option value="-1">No receivers</option>
-																												</logic:empty>
-																												<logic:notEmpty name="messageForm"  property="teamMapValues" >
-                                                                                                                                                                                                                                    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
-                                                                                                                	<c:forEach var="team" items="${messageForm.teamMapValues}">
-                                                                                                                    	<logic:notEmpty name="team" property="members">
-                                                                                                                        	<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:12px;">${team.name}</option>
-                                                                                                                            <c:forEach var="tm" items="${team.members}">
-                                                                                                                         		<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
-                                                                                                                            </c:forEach>
-                                                                                                                        </logic:notEmpty>											                                                		
-                                                                                                                    </c:forEach>
-																                                                </logic:notEmpty>
-																                                            </select>																                                         
+																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
+																										<logic:empty name="messageForm" property="teamMapValues">
+																											<option value="-1">No receivers</option>
+																										</logic:empty>
+																										<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+                                                                                                    	    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
+                                                                                                               	<c:forEach var="team" items="${messageForm.teamMapValues}">
+                                                                                                                   	<logic:notEmpty name="team" property="members">
+                                                                                                                       	<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:12px;">${team.name}</option>
+                                                                                                                        <c:forEach var="tm" items="${team.members}">
+                                                                                                                       		<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
+                                                                                                                         </c:forEach>
+                                                                                                                     </logic:notEmpty>											                                                		
+                                                                                                                </c:forEach>
+																                                        </logic:notEmpty>
+																                                	</select>																                                         
 																                                </td>
 																                                <td>
 																                                  <input type="button" onclick="addUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
@@ -292,31 +282,29 @@
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >
-																							
-																							
-																								<tr>
+																							<tr>
 																									<td align="right" width="30%">
 																										<c:set var="trnSavetBtn">
 																											<digi:trn key="messages:btn:save">Save</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" />
 																									</td>
-                                                                                                                                                                                                        <c:if test="${empty messageForm.forwardedMsg}">
+                                                                                                     <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
 																											<digi:trn key="messages:btn:send">Send</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" />
 																									</td>
-                                                                                                                                                                                                        </c:if>
-                                                                                                                                                                                                        <c:if test="${not empty messageForm.forwardedMsg}">
+                                                                                                    </c:if>
+                                                                                                  <c:if test="${not empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnFwdtBtn">
 																											<digi:trn key="messages:btn:fwd">Forward</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" />
 																									</td>
-                                                                                                                                                                                                        </c:if>
+                                                                                                    </c:if>
 																									<td align="left" width="47%">
 																										<c:set var="trnCancelBtn">
 																											<digi:trn key="message:btn:cancel">Cancel</digi:trn>
@@ -324,18 +312,13 @@
 																										<input type="button" value="${trnCancelBtn}" onclick="cancel();">																																							
 																									</td>
 																								</tr>
-																							
 																						</table>
 																					</td>
 																				</tr>
 																			</table>
-																	
 															</td>
 														</tr>
 													</table>
-										
-								
-						
 					</td>
 					<td width="10"/>
 				</tr>
@@ -347,4 +330,31 @@
        </tr></table>
    </td>
 </tr></table>
+
+<script type="text/javascript">
+	var myArray = [
+		<c:forEach var="relAct" items="${messageForm.relatedActivities}">
+			 "<bean:write name="relAct" filter="true"/>",
+		</c:forEach>     
+	];
+
+	YAHOO.example.ACJSArray = new function() {	
+	    // Instantiate first JS Array DataSource 
+	    this.oACDS = new YAHOO.widget.DS_JSArray(myArray); 
+	    // Instantiate first AutoComplete 
+	    this.oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS); 
+	    this.oAutoComp.prehighlightClassName = "yui-ac-prehighlight"; 
+	    this.oAutoComp.typeAhead = true; 
+	    this.oAutoComp.useShadow = true; 
+	    this.oAutoComp.minQueryLength = 0; 
+	    this.oAutoComp.textboxFocusEvent.subscribe(function(){ 
+	        var sInputValue = YAHOO.util.Dom.get('statesinput').value; 
+	        if(sInputValue.length === 0) { 
+	            var oSelf = this; 
+	            setTimeout(function(){oSelf.sendQuery(sInputValue);},0); 
+	        } 
+	    });	   
+	}; 
+
+</script>
 </digi:form>

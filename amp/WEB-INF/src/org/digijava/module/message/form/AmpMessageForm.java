@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
@@ -39,6 +40,9 @@ public class AmpMessageForm extends ActionForm {
 	
 	private int setAsAlert;
 	private boolean deleteActionWasCalled;
+	
+	private String[] relatedActivities;
+	private String selectedAct;
 	
 	private String [] allPages;
 	private String page;
@@ -479,4 +483,21 @@ public class AmpMessageForm extends ActionForm {
 		public void setObjectURL(String objectURL) {
 			this.objectURL = objectURL;
 		}
-}
+
+		public String[] getRelatedActivities() {
+			return relatedActivities;
+		}
+
+		public void setRelatedActivities(String[] relatedActivities) {
+			this.relatedActivities = relatedActivities;
+		}
+
+		public String getSelectedAct() {
+			return selectedAct;
+		}
+
+		public void setSelectedAct(String selectedAct) {
+			this.selectedAct = selectedAct;
+		}
+
+	}

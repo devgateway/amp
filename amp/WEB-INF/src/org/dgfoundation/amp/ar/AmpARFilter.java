@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -299,19 +300,33 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				+ (budget != null ? budget.toString() : "null")
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
 						: "");
-		String TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("
+		String TEAM_FILTER = "";
+		if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0){
+			Set<String> activityStatus = new HashSet<String>();
+			activityStatus.add(Constants.APPROVED_STATUS);
+			activityStatus.add(Constants.EDITED_STATUS);
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE draft=false AND approval_status IN (" +
+				Util.toCSString(activityStatus)
+				+")" +
+				"AND ( amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") "
 				+ "OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )";
-
+		}
+		else 
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("
+			+ Util.toCSString(ampTeams)
+			+ ") "
+			+ "OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			+ Util.toCSString(ampTeams) + ") )";
 		// computed workspace filter -- append it to the team filter so normal
 		// team activities are also possible
 		if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
 			TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ("
 					+ Util.toCSString(teamAssignedOrgs) + ") )";
 			TEAM_FILTER += "OR amp_activity_id IN (SELECT distinct(amp_activity_id) FROM amp_funding WHERE amp_donor_org_id IN ("
-					+ Util.toCSString(teamAssignedOrgs) + "))";
+					+ Util.toCSString(teamAssignedOrgs) + ")) )";
 
 		}
 

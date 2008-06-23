@@ -64,24 +64,23 @@ public class UpdateWorkspace extends Action {
             //System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.info("event : " + event + " dest : " + dest);
             ActionErrors errors = new ActionErrors();
-            if( "Team".compareTo(uwForm.getWorkspaceType()) ==0 )
-	            if( (uwForm.getComputation()!=null && uwForm.getComputation()==true)  && (uwForm.getOrganizations()==null || uwForm.getOrganizations().size()==0)){
+            if(uwForm.getWorkspaceType()!=null &&  "Team".compareTo(uwForm.getWorkspaceType()) ==0 )
+            {
+            	if( (uwForm.getComputation()!=null && uwForm.getComputation()==true)  && (uwForm.getOrganizations()==null || uwForm.getOrganizations().size()==0)){
 	            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateWorkspace.noChildOrg"));
 	            	saveErrors(request, errors);   
 	            	return mapping.getInputForward();
 	            }
-            if( "Management".compareTo(uwForm.getWorkspaceType()) == 0 )
-            	{
-            		uwForm.setOrganizations(new ArrayList());
-            		uwForm.setComputation(null);
-            		uwForm.setAddActivity(null);
-            	}
-            if( "Team".compareTo(uwForm.getWorkspaceType()) == 0 )
-            	{
-            		uwForm.setChildWorkspaces(new ArrayList());
-            		if(uwForm.getComputation()==null || uwForm.getComputation()==false) 
-            			uwForm.setAddActivity(true);
-            	}
+            	uwForm.setChildWorkspaces(new ArrayList());
+            	if(uwForm.getComputation()==null || uwForm.getComputation()==false) 
+            		uwForm.setAddActivity(true);
+			}
+            if(uwForm.getWorkspaceType()!=null && "Management".compareTo(uwForm.getWorkspaceType()) == 0 )
+           	{
+           		uwForm.setOrganizations(new ArrayList());
+           		uwForm.setComputation(null);
+           		uwForm.setAddActivity(null);
+           	}
             
             AmpTeam newTeam = null;
             newTeam = null;
@@ -227,18 +226,26 @@ public class UpdateWorkspace extends Action {
                 String tId = request.getParameter("tId");
                 Long teamId = new Long(Long.parseLong(tId));
                 boolean memExist = TeamUtil.membersExist(teamId);
-                if(!memExist) {
-                    TeamUtil.removeTeam(teamId);
-                } else {
-                    errors = new ActionErrors();
+                boolean actExist = TeamUtil.teamHasActivities(teamId);
+
+                if(memExist) {
+                	errors = new ActionErrors();
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                         "error.aim.membersExistForTeam"));
                     saveErrors(request, errors);
-                }
-                return mapping.findForward("forward");
+                
+                  return mapping.findForward("forward");
+                } 
+                if(actExist) {
+                	errors = new ActionErrors();
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                        "error.aim.activitiesExistForTeam"));
+                    saveErrors(request, errors);
+                
+                  return mapping.findForward("forward");
+                } 
+                TeamUtil.removeTeam(teamId);
             }
-
-
             uwForm.setReset(true);
             uwForm.reset(mapping, request);
 

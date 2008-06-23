@@ -1268,7 +1268,7 @@ public class AdvancedReport extends Action {
 								while(iter.hasNext())
 								{	AmpReportMeasures measure=(AmpReportMeasures) iter.next();;
 									measure.setOrderId(""+i);
-;									measures.add(measure);
+									measures.add(measure);
 									i = i + 1;
 								}
 							}
@@ -1281,7 +1281,7 @@ public class AdvancedReport extends Action {
 								{
 								    AmpReportMeasures measure=(AmpReportMeasures) iter.next();;
 									measure.setOrderId(""+i);
-;									measures.add(measure);
+									measures.add(measure);
 									i = i + 1;
 								}
 							}

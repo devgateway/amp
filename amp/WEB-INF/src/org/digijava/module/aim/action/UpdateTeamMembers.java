@@ -141,6 +141,7 @@ public class UpdateTeamMembers extends Action {
             Long selMembers[] = new Long[1];
             selMembers[0] = upForm.getTeamMemberId();
             Site site = RequestUtils.getSite(request);
+            //TeamMemberUtil.updateAppSettingDefReport(selMembers[0]);
             TeamMemberUtil.removeTeamMembers(selMembers, site.getId());
 
             if (ampTeam != null) {

@@ -159,8 +159,6 @@
 	}
 
 	function load() {
-		document.aimSelectOrganizationForm.tempNumResults.value=10;
-		document.aimSelectOrganizationForm.keyword.focus();
 	}
 
 	function unload() {
@@ -170,42 +168,49 @@
 		window.close();
 	}
 
-
+	window.onload=function(){
+		processLoad();
+	}
 	
 
 </script>
 
 <digi:instance property="aimSelectOrganizationForm" />
 <digi:form action="/selectOrganizationComponent.do" method="post">
-	<html:hidden property="selectedOrganisationFromPages" />
 
+<html:hidden property="selectedOrganisationFromPages" />
 	<script language="JavaScript">
-
-
-
+	//if use client yes
+	
 	<logic:equal name="aimSelectOrganizationForm" property="useClient" value="true">
 		function setValues(id,name){
 			window.opener.document.getElementById('<bean:write name="aimSelectOrganizationForm" property="valueHoder"/>').value =id;
 			window.opener.document.getElementById('<bean:write name="aimSelectOrganizationForm" property="nameHolder"/>').value =name;
 			window.close();
 		}
-		</logic:equal>
-<logic:equal name="aimSelectOrganizationForm" property="afterSelect" value="true">
+	</logic:equal>
+	//was selcted
 
+	function processLoad(){	
+	<logic:equal name="aimSelectOrganizationForm" property="afterSelect" value="true">
+	//call back function 
 	<logic:notEmpty name="aimSelectOrganizationForm" property="callbackFunction">
-		window.opener.<bean:write name="aimSelectOrganizationForm" property="callbackFunction"/>;
-	</logic:notEmpty>
-
+			window.opener.<bean:write name="aimSelectOrganizationForm" property="callbackFunction"/>;
+	</logic:notEmpty>	
+	//Refresh
 	<logic:equal name="aimSelectOrganizationForm" property="refreshParent" value="true">
 		window.opener.document.location=window.opener.document.location;
 	</logic:equal>
-	
-
-	
+		//fcous on parent windows
 		window.opener.focus();
+		//close this
 		window.close();
-</logic:equal>
-	</script>
+	</logic:equal>
+	}
+</script>
+
+
+
 
 
 

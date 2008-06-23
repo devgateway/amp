@@ -15,7 +15,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 	private Long ampOrgTypeId = null;
 	private int tempNumResults;
 	private int numResults;
-	private String keyword;
+	private String keyword="";
 	private Collection<AmpOrganisation> allOrganization = null;
 
 	private Collection<AmpOrganisation> organizations = null;
@@ -33,15 +33,16 @@ public class selectOrganizationComponentForm extends ActionForm {
 	boolean orgSelReset;
 	boolean multiSelect = true;
 	boolean afterSelect = false;
-	String targetCollection;
-	String targetProperty;
-	String callbackFunction;
+	String targetCollection="";
+	String targetProperty="";
+	String callbackFunction="";
 	ActionForm targetForm;
 	boolean refreshParent;
+	
 
 	boolean useClient;
-	private String valueHoder;
-	private String nameHolder;
+	private String valueHoder="";
+	private String nameHolder="";
 
 	public boolean isUseClient() {
 		return useClient;

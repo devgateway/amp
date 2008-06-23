@@ -65,8 +65,9 @@ public class selectOrganizationComponent extends Action {
 		oForm.setTargetProperty(propertyName);
 
 		String callbackFunction = request.getParameter(AddOrganizationButton.PARAM_CALLBACKFUNCTION_NAME);
-		oForm.setCallbackFunction(callbackFunction);
-
+		if (callbackFunction!=null && !"null".equalsIgnoreCase(callbackFunction)){
+			oForm.setCallbackFunction(callbackFunction);
+		}
 		if ("true".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_REFRESH_PARENT))) {
 			oForm.setRefreshParent(true);
 		} else {

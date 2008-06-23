@@ -41,7 +41,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
-import java.util.List;
 import java.util.*;
 import net.sf.hibernate.FlushMode;
 
@@ -1521,6 +1520,33 @@ public class TeamMemberUtil {
 		return members;
 	}
 
+	
+	public static void updateAppSettingDefReport(Long memId) {
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+				session = PersistenceManager.getSession();
+				tx = session.beginTransaction();
+	
+				String queryString = "select app from "
+					+ AmpApplicationSettings.class.getName()
+					+ " app where (app.member=:memId)";
+	
+				Query qry = session.createQuery(queryString);
+				qry.setParameter("memId", memId, Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				if(itr.hasNext()){
+					AmpApplicationSettings app=(AmpApplicationSettings) itr.next();
+					app.setDefaultTeamReport(null);
+					session.saveOrUpdate(app);
+				}
+				tx.commit();
+			}
+		catch (Exception ex){
+			ex.printStackTrace();
+		}
+	}
 
     public static void removeTeamMembers(Long id[], Long groupId) {
         Session session = null;
@@ -1598,6 +1624,7 @@ public class TeamMemberUtil {
                         if (itr.hasNext()) {
                             logger.info("Got the app settings..");
                             AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
+                            ampAppSettings.setDefaultTeamReport(null);
                             session.delete(ampAppSettings);
                             logger.info("deleted the app settings..");
                         }

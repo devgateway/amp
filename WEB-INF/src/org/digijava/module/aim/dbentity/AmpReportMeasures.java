@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 
 
 public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMeasures>{
@@ -17,6 +19,10 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 	private String orderId;
 	@Level
 	private AmpCategoryValue level;
+	
+	public AmpReportMeasures() {
+	    level=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+	}
 	
 	public AmpMeasures getMeasure() {
 		return measure;

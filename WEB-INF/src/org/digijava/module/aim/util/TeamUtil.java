@@ -668,6 +668,41 @@ public class TeamUtil {
         return memExist;
     }
 
+    public static boolean teamHasActivities(Long teamId) {
+        boolean memExist = false;
+        Session session = null;
+        String qryStr = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            qryStr = "select count(*) from " + AmpActivity.class.getName()
+                + " tm" + " where (tm.team=:teamId)";
+            qry = session.createQuery(qryStr);
+            qry.setParameter("teamId", teamId, Hibernate.LONG);
+
+            Iterator itr = qry.list().iterator();
+            if(itr.hasNext()) {
+                Integer cnt = (Integer) itr.next();
+                logger.info("cnt.intValue = " + cnt.intValue());
+                if(cnt.intValue() > 0)
+                    memExist = true;
+            }
+
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.error("releaseSession() failed");
+            }
+        }
+        return memExist;
+    }
+    
     /**
      * Removes a team
      *

@@ -8,6 +8,7 @@ public class TeamActivitiesForm extends ActionForm {
 
 	private Collection activities;
 	private Collection allActivities;
+	private Collection members;
 	private Long activityId;
 	private Long teamId;
 	private String teamName;
@@ -254,5 +255,11 @@ public class TeamActivitiesForm extends ActionForm {
 	 */
 	public void setDonorFlag(boolean donorFlag) {
 		this.donorFlag = donorFlag;
+	}
+	public Collection getMembers() {
+		return members;
+	}
+	public void setMembers(Collection members) {
+		this.members = members;
 	}
 }

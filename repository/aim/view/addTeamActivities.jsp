@@ -284,6 +284,10 @@ function checkSelActivities() {
 															<table cellspacing="5">
 																<tr>
 																	<td>
+																	<digi:trn key="aim:newOwner">New owner for the assigned activities:</digi:trn> 
+																	<html:select property="memberId">
+																	<html:optionsCollection property="members" value="memberId" label="memberName" /> 
+																	</html:select>
 																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return checkSelActivities()">
 																			<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
 																		</html:submit>

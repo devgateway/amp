@@ -102,6 +102,7 @@ public class UpdateTeamActivities extends Action {
 			/* add the selected activities to the team list */
 			logger.info("in assign activity");
 			Long selActivities[] = taForm.getSelActivities();
+			Long memberId = taForm.getMemberId();
 
 			if (selActivities != null) {
 				for (int i = 0; i < selActivities.length; i++) {
@@ -111,6 +112,7 @@ public class UpdateTeamActivities extends Action {
 						
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);
+						activity.setActivityCreator(TeamMemberUtil.getAmpTeamMember(memberId));
 						
 						if (activity.getActivityCreator() == null) {
 							AmpTeamMember thisTeamMember	= TeamUtil.getAmpTeamMember(tm.getMemberId());
@@ -236,6 +238,8 @@ public class UpdateTeamActivities extends Action {
 			taForm.setTeamName(ampTeam.getName());
 			taForm.setCurrentPage(new Integer(page));
 			taForm.setSelActivities(null);
+			taForm.setMembers(TeamMemberUtil.getAllTeamMembers(id));
+			if(ampTeam.getTeamLead()!=null) taForm.setMemberId(ampTeam.getTeamLead().getAmpTeamMemId()); else taForm.setMemberId(null);
 			session.setAttribute("pageno", new Integer(page));
 			return mapping.findForward("showAddActivity");
 		}

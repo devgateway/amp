@@ -300,6 +300,7 @@ border-right:1px solid white;
                                   </div>
                               </div>                    
                           </li>
+						<module:display name="New Report Wizard" parentModule="REPORTING"></module:display>
                           <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
@@ -307,11 +308,27 @@ border-right:1px solid white;
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
-                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
-                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+                                      	<feature:display  name="Tab Generator" module="New Report Wizard">
+                                      	<li title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
+                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true">
+                                                <b><digi:trn key="aim:tabGenerator">Tab Generator</digi:trn></b>
                                             </a>
                                         </li>
+                                        </feature:display>
+                                        <feature:display  name="Report Generator" module="New Report Wizard">
+	                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do">
+	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+	                                            </a>
+	                                        </li>
+                                        </feature:display>
+                                        <module:display name="Old Report Wizard" parentModule="REPORTING">
+                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
+                                                <b><digi:trn key="aim:standardReportGenerator"> Standard Report Generator</digi:trn></b>
+                                            </a>
+                                        </li>
+                                        </module:display>
 										<LI title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
                                             <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
                                                 <digi:trn key="aim:ReportManager">Report Manager</digi:trn>

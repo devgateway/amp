@@ -43,6 +43,29 @@
 	<c:set var="savingMessage">
 		<digi:trn key="aim:reportwizard:savingReport">Saving report</digi:trn>
 	</c:set>
+	
+	<c:if test="${myForm.desktopTab}">
+		<c:set var="pageTitle">
+			<digi:trn key="aim:reportwizard:tabgenerator">Tab Generator</digi:trn>
+		</c:set>
+		<c:set var="detailsStepName">
+			<digi:trn key="rep:wizard:dhtmlTab:tabDetails">1. Tab Details</digi:trn>
+		</c:set>
+		<c:set var="descriptionName">
+			<digi:trn key="aim:reportBuilder:TabDescription">Tab Description</digi:trn>
+		</c:set>
+	</c:if>
+	<c:if test="${!myForm.desktopTab}">
+		<c:set var="pageTitle">
+			<digi:trn key="aim:reportwizard:reportgenerator">Report Generator</digi:trn>
+		</c:set>
+		<c:set var="detailsStepName">
+			<digi:trn key="rep:wizard:dhtmlTab:reportDetails">1. Report Details</digi:trn>
+		</c:set>
+		<c:set var="descriptionName">
+			<digi:trn key="aim:reportBuilder:ReportDescription">Report Description</digi:trn>
+		</c:set>
+	</c:if>
 
 	<script type="text/javascript">
 		YAHOO.namespace("YAHOO.amp.reportwizard");
@@ -55,7 +78,14 @@
 		selectedMeas						= new Array();
 		
 		
+		
 		function initializeDragAndDrop() {
+			var height			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 2.3);
+			//alert( YAHOO.util.Dom.getDocumentHeight() );
+			//alert( document.body.clientHeight );
+			var rd				= document.getElementsByName("reportDescription")[0];
+			rd.style.height		= (rd.parentNode.offsetHeight - 40) + "px";
+			
 			YAHOO.amp.reportwizard.tabView 		= new YAHOO.widget.TabView('wizard_container');
 			YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization);
 		}
@@ -82,11 +112,6 @@
 				repManager.addStyleToButton("step"+ i +"_next_button");
 			}
 			
-			var numOfRows			= Math.round(YAHOO.util.Dom.getDocumentHeight() / 33.7);
-			//alert( YAHOO.util.Dom.getDocumentHeight() );
-			//alert( YAHOO.util.Dom.getViewportHeight() / YAHOO.util.Dom.getViewportWidth() );
-			document.getElementsByName("reportDescription")[0].rows 	= numOfRows;
-
 			columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');
 			columnsDragAndDropObject.createDragAndDropItems();
 			new YAHOO.util.DDTarget('source_measures_ul');
@@ -139,7 +164,7 @@
 			</c:set>
 			<digi:link href="/../aim/viewMyDesktop.do" styleClass="comment" title="${translation}" >
                	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
-               </digi:link> &gt; <digi:trn key="aim:reportwizard:reportgenerator">Report Generator</digi:trn>
+               </digi:link> &gt; ${pageTitle}
 			<br />
 			<br />
 		</td>
@@ -168,7 +193,7 @@
 		<br />
 		<div id="wizard_container" class="yui-navset">
 		<ul class="yui-nav">
-			<li id="reportdetails_tab_label" class="selected"><a href="#type_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:reportDetails">1. Report Details</digi:trn></div></a> </li>
+			<li id="reportdetails_tab_label" class="selected"><a href="#type_step_div"><div>${detailsStepName}</div></a> </li>
 			<li id="columns_tab_label" class="disabled"><a href="#columns_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:columns">2. Columns</digi:trn></div></a> </li>
 			<li id="hierachies_tab_label" class="disabled"><a href="#hierarchies_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:hierarchies">3. Hierarchies</digi:trn></div></a> </li>
 			<li id="measures_tab_label" class="disabled"><a href="#measures_step_div"><div><digi:trn key="rep:wizard:dhtmlTab:measures">4. Measures</digi:trn></div></a> </li>
@@ -258,10 +283,10 @@
 							</td>
 							<td width="47%" rowspan="2">
 								<span class="list_header">
-									<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
+									${descriptionName}
 								</span>
 								<br/>
-								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%; height: auto;" />
+								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%; height: 250px;" />
 							</td>
 						</tr>
 						<tr>

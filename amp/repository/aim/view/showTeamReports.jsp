@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
@@ -348,22 +351,36 @@ function confirmFunc() {
 																</c:set>
 																<c:set target="${urlParams}" property="event" value="edit" />
 																<logic:equal name="teamLeadFlag" scope="session" value="true"> 
-																	[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
+																	[ <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
 																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
 																	</digi:link> ]
-																	[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
-																		<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																	</digi:link> ]
+																	<module:display name="New Report Wizard" parentModule="REPORTING">
+																		[ <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" >
+																			<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																		</digi:link> ]
+																	</module:display>
+																	<module:display name="Old Report Wizard" parentModule="REPORTING">
+																		[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" >
+																			<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																		</digi:link> ]
+																	</module:display>
 																</logic:equal>														
 																<logic:equal name="teamLeadFlag" scope="session" value="false">
 																	<logic:present name="report" property="ownerId">
 																		<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
-																			[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
+																			[ <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
 																				<digi:trn key="aim:reportDelete">Delete</digi:trn>
 																			</digi:link> ]
-																			[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
-																				<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																			</digi:link> ]
+																			<module:display name="New Report Wizard" parentModule="REPORTING">
+																				[ <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" >
+																					<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																				</digi:link> ]
+																			</module:display>
+																			<module:display name="Old Report Wizard" parentModule="REPORTING">
+																				[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams">
+																					<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																				</digi:link> ]
+																			</module:display>
 																		</logic:equal>		
 																	</logic:present>																																																
 																</logic:equal>															

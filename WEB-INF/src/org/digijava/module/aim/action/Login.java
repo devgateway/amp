@@ -265,7 +265,7 @@ public class Login extends Action {
 							.getAmpCurrencyId());
 					appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
 							.getAmpFiscalCalId());
-
+					appSettings.setValidation(ampAppSettings.getValidation());
 
 					//appSettings.setLanguage(ampAppSettings.getLanguage());
 
@@ -273,7 +273,7 @@ public class Login extends Action {
 							usr,RequestUtils.getSite(request)).getAlertsLanguage().getCode();
 
 					appSettings.setLanguage(langCode);
-
+					
 					tm.setMemberId(member.getAmpTeamMemId());
 					tm.setMemberName(member.getUser().getName());
 					tm.setRoleId(member.getAmpMemberRole()

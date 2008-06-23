@@ -11,6 +11,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private int defRecsPerPage;
 
 	private String language = null;
+	
+	private String validation=null;
 
 	private Long currencyId = null;
 
@@ -212,6 +214,14 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	public void setReportEndYear(int reportEndYear) {
 	    this.reportEndYear = reportEndYear;
+	}
+
+	public String getValidation() {
+		return validation;
+	}
+
+	public void setValidation(String validation) {
+		this.validation = validation;
 	}
 
 }

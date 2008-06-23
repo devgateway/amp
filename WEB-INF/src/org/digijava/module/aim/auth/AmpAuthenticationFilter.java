@@ -336,7 +336,7 @@ public class AmpAuthenticationFilter
                                       .getAmpCurrencyId());
             appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
                                     .getAmpFiscalCalId());
-
+            appSettings.setValidation(ampAppSettings.getValidation());
             //appSettings.setLanguage(ampAppSettings.getLanguage());
 
             String langCode = UserUtils.getUserLangPreferences(

@@ -264,6 +264,7 @@ public class ViewAmp
                 appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
                         .getAmpFiscalCalId());
                 appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
+                appSettings.setValidation(ampAppSettings.getValidation());
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -274,7 +275,7 @@ public class ViewAmp
                     usr, site).getNavigationLanguage().getCode();
 
             appSettings.setLanguage(langCode);
-
+            
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());

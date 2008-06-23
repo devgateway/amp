@@ -64,6 +64,12 @@ border-right:1px solid white;
                 <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
             </li>
             </feature:display>
+			<li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
+               <digi:trn key="aim:publicReports">Public Reports</digi:trn>
+               </a>
+			</li>
+            
             <li>
                 <a class="yuiampmenuitemlabel" href="#">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>

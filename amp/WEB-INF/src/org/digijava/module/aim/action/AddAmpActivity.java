@@ -39,9 +39,12 @@ import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -132,8 +135,22 @@ public class AddAmpActivity extends Action {
           List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
           eaForm.setSteps(steps);
       }
+      
     if(eaForm.getClassificationConfigs()==null){
-        eaForm.setClassificationConfigs(SectorUtil.getAllClassificationConfigs());
+    	List<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
+    	if(configs!=null){
+    		AmpClassificationConfiguration primConf = null;
+        	Iterator<AmpClassificationConfiguration> it = configs.iterator();        	
+        	while(it.hasNext()){
+        		AmpClassificationConfiguration conf = it.next();        		
+				if(conf.isPrimary())
+        			primConf = conf;
+        	}
+        	if(!isPrimarySectorEnabled() && primConf!=null){
+        		configs.remove(primConf);
+        	}
+    	}
+        eaForm.setClassificationConfigs(configs);
     }
 
     //set the level, if available
@@ -1447,7 +1464,25 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
     return null;
   }
 
-  public static Documents createHelperDocument (CMSContentItem cmsItem, Long activityId, String activityName) {
+  private boolean isPrimarySectorEnabled() {
+ 	    ServletContext ampContext = getServlet().getServletContext();
+	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+		if(currentTemplate!=null)
+			if(currentTemplate.getFeatures()!=null)
+				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+				{
+					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+					if(field.getName().compareTo("Sector")==0) 
+					{	
+						return true;
+					}
+			
+				}
+		return false;
+  }
+
+public static Documents createHelperDocument (CMSContentItem cmsItem, Long activityId, String activityName) {
 		Documents document = new Documents();
       document.setActivityId( activityId );
       document.setActivityName( activityName );

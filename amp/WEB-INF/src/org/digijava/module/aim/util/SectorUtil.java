@@ -1080,10 +1080,10 @@ public class SectorUtil {
      * @return All Configurations
      * @throws DgException If exception occurred
      */
-    public static List getAllClassificationConfigs() throws DgException {
+    public static List<AmpClassificationConfiguration> getAllClassificationConfigs() throws DgException {
         String queryString = null;
         Session session = null;
-        List configs = null;
+        List<AmpClassificationConfiguration> configs = null;
         Query qry = null;
 
         try {

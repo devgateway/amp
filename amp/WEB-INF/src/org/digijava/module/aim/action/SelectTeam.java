@@ -110,7 +110,7 @@ public class SelectTeam extends Action {
                     .getAmpFiscalCalId());
             appSettings.setLanguage(ampAppSettings.getLanguage());
             appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
-
+            appSettings.setValidation(ampAppSettings.getValidation());
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());

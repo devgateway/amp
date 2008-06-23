@@ -27,6 +27,8 @@ public class AmpApplicationSettings implements Serializable {
 	private AmpFiscalCalendar fiscalCalendar;
 
 	private String language;
+	
+	private String validation;
 
 	private Boolean useDefault; /*
 								 * use customized settings or use default team
@@ -130,5 +132,13 @@ public class AmpApplicationSettings implements Serializable {
 
 	public void setReportEndYear(Integer reportEndYear) {
 	    this.reportEndYear = reportEndYear;
+	}
+
+	public String getValidation() {
+		return validation;
+	}
+
+	public void setValidation(String validation) {
+		this.validation = validation;
 	}
 }

@@ -13,9 +13,18 @@ public class ApplicationSettings {
 		  private Integer reportStartYear;
 		  private Integer reportEndYear;
 		  private AmpReports defaultAmpReport;
-                  private int defReportsPerPage;
+          private int defReportsPerPage;
+          private String validation;
 
-  public Long getAppSettingsId() {
+  public String getValidation() {
+			return validation;
+		}
+
+		public void setValidation(String validation) {
+			this.validation = validation;
+		}
+
+public Long getAppSettingsId() {
 					 return this.appSettingsId;
 		  }
 

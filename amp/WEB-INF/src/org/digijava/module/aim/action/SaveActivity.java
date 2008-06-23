@@ -1405,8 +1405,13 @@ public class SaveActivity extends Action {
 				if (eaForm.isEditAct()) {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
-                    activity.setActivityCreator(eaForm.getCreatedBy());
+					//AMP-3464
+					//if an approved activity is edited and the appsettins is set to newOnly then the activity
+					//doesn't need to be approved again!
+					if("newOnly".equals(tm.getAppSettings().getValidation()) && Constants.APPROVED_STATUS.equals(Constants.APPROVED_STATUS))
+								activity.setApprovalStatus(Constants.APPROVED_STATUS);
 
+					activity.setActivityCreator(eaForm.getCreatedBy());
                     List<String> auditTrail = AuditLoggerUtil.generateLogs(
 												activity, eaForm.getActivityId());
 					// update an existing activity

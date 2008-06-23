@@ -120,7 +120,6 @@ function toggleSettings(){
 </script>
 <digi:instance property="aimAuditLoggerManagerForm" />
 <!--  AMP Admin Logo -->
-<link href="../../../../../../../../../workspace/amp-support/WebRoot/Styles/common.css" rel="stylesheet" type="text/css" />
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 <digi:form action="/auditLoggerManager.do" method="post">

@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -45,6 +46,8 @@ import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -59,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
@@ -301,12 +305,15 @@ public class SaveActivity extends Action {
                 Long statId=eaForm.getStatusId();
 
 
-				if (statId != null && statId.equals(new Long(0))) {
-					errors.add("status", new ActionError(
-							"error.aim.addActivity.statusMissing"));
-					saveErrors(request, errors);
-					statusFlag = true;
-				}
+                if(isStatusEnabled()){
+					if (statId != null && statId.equals(new Long(0))) {
+						errors.add("status", new ActionError(
+								"error.aim.addActivity.statusMissing"));
+						saveErrors(request, errors);
+						statusFlag = true;
+					}
+                }
+				
 				if (titleFlag) {
 					eaForm.setStep("1");
 					return mapping.findForward("addActivity");
@@ -318,73 +325,60 @@ public class SaveActivity extends Action {
                         return mapping.findForward("addActivity");
                     }
 
-                    if (eaForm.getActivitySectors() == null
-                        || eaForm.getActivitySectors().size() < 1) {
-                        errors.add("sector", new ActionError(
-                            "error.aim.addActivity.sectorEmpty"));
-                        saveErrors(request, errors);
-                        eaForm.setStep("2");
-                        return mapping.findForward("addActivity");
-                    }
+                    if(isSectorEnabled()){
+	                    if (eaForm.getActivitySectors() == null
+	                        || eaForm.getActivitySectors().size() < 1) {
+	                        errors.add("sector", new ActionError(
+	                            "error.aim.addActivity.sectorEmpty"));
+	                        saveErrors(request, errors);
+	                        eaForm.setStep("2");
+	                        return mapping.findForward("addActivity");
+	                    }
+	                    boolean secPer = false;
+	                    int percent = 0;
+	                    boolean primary=false;
+	                    Iterator<ActivitySector> secPerItr = eaForm.getActivitySectors().iterator();
+	                    while (secPerItr.hasNext()) {
+	                        ActivitySector actSect = (ActivitySector) secPerItr.next();
+	                        AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(actSect.getConfigId());
+	                        if(config.isPrimary()){
+	                            primary=true;
+	                        }
+	                        if (null == actSect.getSectorPercentage()
+	                            || "".equals(actSect.getSectorPercentage())) {
+	                            errors.add("sectorPercentageEmpty",
+	                                       new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
+	                            logger.debug("sector percentage is empty");
+	                            secPer = true;
+	                        }
+	                        // sector percentage is not a number
+	                        else {
+	                            try {
+	                                percent += actSect.getSectorPercentage().intValue();
+	                            } catch (NumberFormatException nex) {
+	                                logger.debug("sector percentage is not a number : " + nex);
+	                                errors.add("sectorPercentageNonNumeric",
+	                                           new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
+	                                secPer = true;
+	                            }
+	                        }
+	                        if (secPer) {
+	                            saveErrors(request, errors);
+	                            eaForm.setStep("2");
+	                            return mapping.findForward("addActivityStep2");
+	                        }
+	                    }
 
-                    boolean secPer = false;
-                    int percent = 0;
-                    boolean primary=false;
-                    Iterator<ActivitySector> secPerItr = eaForm.getActivitySectors().iterator();
-                    while (secPerItr.hasNext()) {
-                        ActivitySector actSect = (ActivitySector) secPerItr.next();
-                        AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(actSect.getConfigId());
-                        if(config.isPrimary()){
-                            primary=true;
-                        }
-                        if (null == actSect.getSectorPercentage()
-                            || "".equals(actSect.getSectorPercentage())) {
-                            errors.add("sectorPercentageEmpty",
-                                       new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
-                            logger.debug("sector percentage is empty");
-                            secPer = true;
-                        }
-                        // sector percentage is not a number
-                        else {
-                            try {
-                                percent += actSect.getSectorPercentage().intValue();
-                            } catch (NumberFormatException nex) {
-                                logger.debug("sector percentage is not a number : " + nex);
-                                errors.add("sectorPercentageNonNumeric",
-                                           new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
-                                secPer = true;
-                            }
-                        }
-                        if (secPer) {
-                            saveErrors(request, errors);
-                            eaForm.setStep("2");
-                            return mapping.findForward("addActivityStep2");
-                        }
+	                    // no primary sectors added
+	                    if (isPrimarySectorEnabled() && !primary) {
+	                        errors.add("noPrimarySectorsAdded",
+	                                   new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
+	                        saveErrors(request, errors);
+	                        logger.debug("n oPrimary Sectors Added");
+	                        eaForm.setStep("2");
+	                        return mapping.findForward("addActivityStep2");
+	                    }	                    
                     }
-
-                    // no primary sectors added
-                    if (!primary) {
-                        errors.add("noPrimarySectorsAdded",
-                                   new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
-                        saveErrors(request, errors);
-                        logger.debug("n oPrimary Sectors Added");
-                        eaForm.setStep("2");
-                        return mapping.findForward("addActivityStep2");
-                    }
-                  //AMP-2947 Funding amount should not be mandatory when adding a Funding Agency
-                    /*if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size() > 0) {
-                        Iterator tempItr = eaForm.getFundingOrganizations().iterator();
-                        while (tempItr.hasNext()) {
-                            FundingOrganization forg = (FundingOrganization) tempItr.next();
-                            if (forg.getFundings() == null || forg.getFundings().size() == 0) {
-                                errors.add("fundings",new ActionError("error.aim.addActivity.fundingsNotEntered"));
-                                saveErrors(request, errors);
-                                logger.info(" the funds added is null... please check");
-                                eaForm.setStep("3");
-                                return mapping.findForward("addActivity");
-                            }
-                        }
-                    }*/
                 }
 				// end of Modified code
 
@@ -1589,6 +1583,45 @@ public class SaveActivity extends Action {
 
 		}
 	}
+	
+
+	private boolean isSectorEnabled() {
+ 	    ServletContext ampContext = getServlet().getServletContext();
+	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+		if(currentTemplate!=null)
+			if(currentTemplate.getFeatures()!=null)
+				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+				{
+					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
+					if(feature.getName().compareTo("Sector")==0) 
+					{
+						return true;
+					}	
+					
+				}
+		return false;
+	}
+
+	private boolean isStatusEnabled() {
+ 	   ServletContext ampContext = getServlet().getServletContext();
+ 	   
+	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+ 	   
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+		if(currentTemplate!=null)
+			if(currentTemplate.getFeatures()!=null)
+				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+				{
+					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
+					if(feature.getName().compareTo("Status")==0) 
+					{
+						return true;
+					}	
+					
+				}
+		return false;
+	}
 
 	/**
 	 * @param tempComp
@@ -1784,5 +1817,22 @@ public class SaveActivity extends Action {
 			}
 		}
 	}
+	  private boolean isPrimarySectorEnabled() {
+	 	    ServletContext ampContext = getServlet().getServletContext();
+		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+			if(currentTemplate!=null)
+				if(currentTemplate.getFeatures()!=null)
+					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+					{
+						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+						if(field.getName().compareTo("Sector")==0) 
+						{	
+							return true;
+						}
+				
+					}
+			return false;
+	  }
 
 }

@@ -141,6 +141,7 @@ function validateForm(){
   </c:set>
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null && draftStatus.value!="true"){
+  <feature:display name="Sectors" module="Project ID and Planning">
     if (document.aimEditActivityForm.selActivitySectors == null) {
      // alert("${errMsgAddSector}");
      var primConf=document.getElementById('primaryConfig');
@@ -152,10 +153,11 @@ function validateForm(){
       document.aimEditActivityForm.addSec.focus();
       return false;
     }
+   </feature:display>
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if (!validateSectorPercentage()||!validateLocationPercentage() ||
+    if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage() || </feature:display> !validateLocationPercentage() ||
     !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
     !validateProgramsPercentage(ppSize,"primaryPrograms") ||
     !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
@@ -803,9 +805,8 @@ function remProgram(programType) {
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Sectors" module="Project ID and Planning">
-			                            &nbsp;
-			                            </feature:display>
-			                            <jsp:include page="addActivityStep2Sector.jsp"/>
+			                            	<jsp:include page="addActivityStep2Sector.jsp"/>
+										</feature:display>
 			                            <tr>
 			                              <td>
 			                              &nbsp;

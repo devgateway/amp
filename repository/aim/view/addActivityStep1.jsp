@@ -116,6 +116,7 @@ function resetAll(){
 }
 
 function validateForm() {
+  <field:display name="Project Title" feature="Identification">
   if (trim(document.aimEditActivityForm.title.value) == "") {
     <c:set var="translation">
     <digi:trn key="aim:pleaseEnterTitle">Please enter title</digi:trn>
@@ -124,10 +125,12 @@ function validateForm() {
     document.aimEditActivityForm.title.focus();
     return false;
   }
+  </field:display>
+  
   var stId=document.getElementsByName("statusId");
-
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null && draftStatus.value!="true"){
+  	<field:display name="Status" feature="Planning">
     if(stId==null || stId[0]==null || stId[0].value==0){
       <c:set var="message">
       <digi:trn key="aim:pleaseSelectStatus">Please select status!</digi:trn>
@@ -135,6 +138,7 @@ function validateForm() {
       alert("${message}");
       return false;
     }
+    </field:display>
   }
   /*	if (document.aimEditActivityForm.status.value == "-1") {
     alert("Please select status");

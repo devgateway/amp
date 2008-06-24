@@ -1,7 +1,6 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
@@ -178,7 +176,7 @@ public class EditReport extends Action {
 				}
 				else 
 					logger.error("Couldn't find the AmpReport with rid " + strReportId);
-				session.close();
+				PersistenceManager.releaseSession(session);
 			}
 			else{
 				logger.error("Couldn't find rid" + strReportId + "parameter in request.");
@@ -206,8 +204,8 @@ public class EditReport extends Action {
 			e.printStackTrace();
 		} finally {
 			try {
-				pmsession.close();
-			} catch (HibernateException e) {
+				PersistenceManager.releaseSession(pmsession);
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

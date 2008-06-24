@@ -201,19 +201,20 @@ function deleteComponent(id){
     <tr>
       <td bgColor=#ffffff class=box-border>
         <table cellPadding=5 cellSpacing=1 width="100%">
-          <tr>
-            <td nowrap>
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-              <c:set var="toCompIndicatorManager">
-                <digi:trn key="aim:clickforCompIndManager">Click here to goto Component Indicator Manager</digi:trn>
-              </c:set>
-              <digi:link href="/componentIndicatorManager.do"  title="${toCompIndicatorManager}" >
-                <digi:trn key="aim:componentsIndicatorManager">
-                Component Indicator Manager
-                </digi:trn>
-              </digi:link>
-            </td>
-          </tr>
+<!--        the following comments will be removed further-->
+<!--          <tr>-->
+<!--            <td nowrap>-->
+<!--              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>-->
+<!--              <c:set var="toCompIndicatorManager">-->
+<!--                <digi:trn key="aim:clickforCompIndManager">Click here to goto Component Indicator Manager</digi:trn>-->
+<!--              </c:set>-->
+<!--              <digi:link href="/componentIndicatorManager.do"  title="${toCompIndicatorManager}" >-->
+<!--                <digi:trn key="aim:componentsIndicatorManager">-->
+<!--                Component Indicator Manager-->
+<!--                </digi:trn>-->
+<!--              </digi:link>-->
+<!--            </td>-->
+<!--          </tr>-->
           <tr>
             <td>
               <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

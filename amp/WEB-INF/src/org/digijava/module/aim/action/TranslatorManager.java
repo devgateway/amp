@@ -429,7 +429,6 @@ public class TranslatorManager extends Action {
 						+ Message.class.getName() + " m where m.locale = ?",lang,Hibernate.STRING);
 
 				tx.commit();
-				//session.close();
 				
 		}
 		catch (Exception ex) {
@@ -456,8 +455,6 @@ public class TranslatorManager extends Action {
 				Transaction tx=session.beginTransaction();
 				session.save(msgLocal);
 				tx.commit();
-				//session.close();
-				
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -495,7 +492,6 @@ public class TranslatorManager extends Action {
 				session.save(msgLocal);
 				}
 				tx.commit();
-				session.close();
 		}
 		catch (Exception ex) {
 			logger.error("Error...Inserting non existing messages... " + ex.getMessage());
@@ -544,8 +540,6 @@ public class TranslatorManager extends Action {
 					}
 				}
 				tx.commit();
-				session.close();
-
 			}else{
 				logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
 				Message msg= new Message();

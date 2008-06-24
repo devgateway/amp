@@ -140,7 +140,7 @@ public final class ARUtil {
 
 		arg.generate();
 
-		session.close();
+		PersistenceManager.releaseSession(session);
 
 		return arg.getReport();
 

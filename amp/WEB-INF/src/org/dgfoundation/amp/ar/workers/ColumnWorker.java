@@ -180,12 +180,14 @@ public abstract class ColumnWorker {
 			e.printStackTrace();
 		} 
 		finally {
-		    try {
-			sess.close();
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
 		}
 		return cc;
 	}

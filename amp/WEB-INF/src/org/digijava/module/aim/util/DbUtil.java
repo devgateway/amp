@@ -1135,15 +1135,6 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get AmpActivity [getActivityApprovalStatus()]", ex);
         }
-//		finally {
-//			try {
-//				session.close();
-//			} catch (HibernateException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-
         logger.debug("getActivityApprovalStatus Executed successfully ");
         return ans;
     }

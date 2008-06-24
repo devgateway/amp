@@ -140,7 +140,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 				}
 		
 			}
-			session.close();
+			PersistenceManager.releaseSession(session);
 			
 			} catch (HibernateException e1) {
 				// TODO Auto-generated catch block

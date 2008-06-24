@@ -406,7 +406,7 @@ public class EditEUActivity extends MultiAction {
 		if(eaf.getCosts()==null) eaf.setCosts(new ArrayList());
 		if(euaf.getEditingIndexId()==null) eaf.getCosts().add(eua);
 
-		sess.close();
+		PersistenceManager.releaseSession(sess);
 		request.setAttribute("close", "close");
 		return modeFinalize(mapping, form, request, response);
 	}

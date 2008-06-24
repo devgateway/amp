@@ -204,7 +204,7 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("report",rd);
 		httpSession.setAttribute("reportMeta",ar);
 		
-		session.close();
+		PersistenceManager.releaseSession(session);
 
 		progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 		httpSession.setAttribute("progressValue", progressValue);

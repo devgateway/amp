@@ -26,7 +26,6 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.autopatcher.dbentity.AmpPatch;
 import org.digijava.module.autopatcher.dbentity.AmpPatchLog;
@@ -69,7 +68,7 @@ public class PatcherWorker {
 				+ AmpPatch.class.getName() + " p.name=:name");
 		query.setParameter("name", patchName);
 		List list = query.list();
-		session.close();
+		PersistenceManager.releaseSession(session);
 		if(list.size()==0) throw new MissingPatchException("Cannot find a db reference for a patch with name "+patchName);
 		return (AmpPatch) list.get(0);
 	}
@@ -88,7 +87,7 @@ public class PatcherWorker {
 		apl.setElapsed(new Long(endTime-apl.getInvoked().getTime()));
 		logger.debug("Saving AmpPatchLog for patch: "+apl.getPatch().getName());
 		session.save(apl);
-		session.close();
+		PersistenceManager.releaseSession(session);
 	}
 	
 	/**

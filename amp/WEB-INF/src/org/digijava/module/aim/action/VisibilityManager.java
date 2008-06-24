@@ -21,9 +21,9 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.xerces.parsers.DOMParser;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -31,8 +31,6 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
  
 public class VisibilityManager extends MultiAction {
 	
@@ -240,7 +238,7 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 		vForm.setTemplates(templates);
-		hbsession.close();
+		PersistenceManager.releaseSession(hbsession);
 		return mapping.findForward("forward");
 	}
 	
@@ -278,7 +276,7 @@ public class VisibilityManager extends MultiAction {
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
 		}
-		hbsession.close();
+		PersistenceManager.releaseSession(hbsession);
 		return mapping.findForward("forward");
 	}
 	
@@ -325,7 +323,7 @@ public class VisibilityManager extends MultiAction {
 		}
 	 	((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 		
-	 	hbsession.close();
+	 	PersistenceManager.releaseSession(hbsession);
 		return mapping.findForward("forward");
 	}
 	
@@ -336,7 +334,7 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
 		if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(new Long(Long.parseLong(request.getParameter("featureId"))),hbsession);//delete feature
 		if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(new Long(Long.parseLong(request.getParameter("moduleId"))),hbsession);//delete module
-		hbsession.close();
+		PersistenceManager.releaseSession(hbsession);
 		return modeViewFields(mapping, form, request, response);
 	}
 	
@@ -408,7 +406,7 @@ public class VisibilityManager extends MultiAction {
         	ampContext=this.getServlet().getServletContext();
         	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
         	
-        	hbsession.close();
+        	PersistenceManager.releaseSession(hbsession);
     	
 		return modeEditTemplate(mapping,form,request,response);
 	}

@@ -438,7 +438,7 @@ function cancel()
 																			<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceType" /></b>
 																		</c:when>
 																		<c:otherwise>
-																			<html:select property="workspaceType" styleClass="inp-text" onchange="workspaceChangeType()" >
+																			<html:select property="workspaceType" styleClass="inp-text" disabled="true" >
 																				<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
 																				<html:option value="Management" ><digi:trn key="aim:management">Management</digi:trn></html:option>
 																				<html:option value="Team" ><digi:trn key="aim:team">Team</digi:trn></html:option>

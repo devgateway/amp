@@ -55,6 +55,8 @@ public class DonorDimension extends ARDimension {
 	       groupMap.put(as.getAmpOrgId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
 	}
 	
+	session.close();
+	
     }
 
 }

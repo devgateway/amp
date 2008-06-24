@@ -49,6 +49,7 @@ public class DonorTypeDimension extends ARDimension {
 		       if(as.getOrgTypeId()==null) continue;
 		       typeMap.put(as.getOrgTypeId().getAmpOrgTypeId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
 		}
+		session.close();
 		
 	    }
 }

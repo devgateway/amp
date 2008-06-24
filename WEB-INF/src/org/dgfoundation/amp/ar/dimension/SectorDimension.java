@@ -47,6 +47,8 @@ public class SectorDimension extends ARDimension {
 	       sectorMap.put(as.getAmpSectorId(), as.getParentSectorId()==null?null:as.getParentSectorId().getAmpSectorId());
 	}
 	
+	session.close();
+	
     }
 
    

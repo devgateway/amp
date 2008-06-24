@@ -56,7 +56,7 @@
     function getInterval(){
       var interval=60000*document.getElementsByName('msgRefreshTimeCurr')[0].value;
       if(interval<=0){
-        return 1000;
+        return 60000;
       }
       return interval;
     }

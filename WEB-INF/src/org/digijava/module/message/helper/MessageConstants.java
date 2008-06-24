@@ -38,7 +38,7 @@ public class MessageConstants {
 	/**
 	 * pagination Elements
 	 */
-	public static final int MESSAGES_PER_PAGE=4;
+	public static final int MESSAGES_PER_PAGE=10;
 	public static final int PAGES_TO_SHOW=5;
 
 	/**

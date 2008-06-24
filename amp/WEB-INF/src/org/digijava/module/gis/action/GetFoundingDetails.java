@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.apache.ecs.xml.XML;
 
 /**
  * <p>Title: </p>
@@ -53,7 +54,6 @@ public class GetFoundingDetails extends Action {
 
         String action = request.getParameter("action");
 
-
         String mapCode = request.getParameter("mapCode");
         GisMap map = null;
 
@@ -61,231 +61,246 @@ public class GetFoundingDetails extends Action {
             map = GisUtil.getMap(mapCode);
         }
 
-
-        int canvasWidth = 500;
-        int canvasHeight = 500;
+        int canvasWidth = 700;
+        int canvasHeight = 700;
 
         CoordinateRect rect = gisUtil.getMapRect(map);
 
         if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
-                    response.setContentType("image/png");
+            response.setContentType("image/png");
+
+            BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
+                    BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D g2d = graph.createGraphics();
+
+            g2d.setBackground(new Color(0, 0, 100, 255));
+
+            g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            gisUtil.addDataToImage(g2d,
+                                   map.getSegments(),
+                                   -1,
+                                   canvasWidth, canvasHeight,
+                                   rect.getLeft(), rect.getRight(),
+                                   rect.getTop(), rect.getBottom(), true);
+
+            g2d.dispose();
+
+            RenderedImage ri = graph;
+
+            ImageIO.write(ri, "png", sos);
+
+            graph.flush();
+
+        } else if (action.equalsIgnoreCase(GisService.ACTION_GET_IMAGE_MAP)) {
+            response.setContentType("text/xml");
 
 
-                    BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
-                                                            BufferedImage.TYPE_INT_ARGB);
+           List mapDataSegments = map.getSegments();
 
 
-                    Graphics2D g2d = graph.createGraphics();
-
-                    g2d.setBackground(new Color(0, 0, 100, 255));
-
-                    g2d.clearRect(0, 0, canvasWidth, canvasHeight);
-
-                    gisUtil.addDataToImage(g2d,
-                                            map.getSegments(),
-                                           -1,
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true);
+           String imageMapCode = gisUtil.getImageMap(mapDataSegments, 20, canvasWidth,
+                                  canvasHeight, rect.getLeft(), rect.getLeft(), rect.getTop(),
+                                  rect.getBottom()).toString();
 
 
-                    g2d.dispose();
+           sos.print(imageMapCode);
 
-                    RenderedImage ri = graph;
+        } else if (action.equalsIgnoreCase("getDataForSector")) {
 
+            response.setContentType("image/png");
 
-                    ImageIO.write(ri, "png", sos);
+            String secIdStr = request.getParameter("sectorId");
 
-                    graph.flush();
+            List secFundings = DbUtil.getSectorFoundings(new Long(secIdStr));
+            Iterator it = secFundings.iterator();
 
+            Map locationIdObjectMap = new HashMap();
+            Map locationFoundMap = new HashMap();
 
+            Double totalFund = 0d;
+            while (it.hasNext()) {
+                Object[] secFounding = (Object[]) it.next();
+                AmpActivity ampActivity = (AmpActivity) secFounding[0];
+                Double activityFound = DbUtil.getActivityFoundings(ampActivity.
+                        getAmpActivityId());
 
+                Double addAmmount = 0d;
+                if (activityFound != null) {
+                    float addPercent = (Float) secFounding[1];
+                    addAmmount = activityFound * addPercent /
+                                 100;
+                    totalFund += addAmmount;
+                }
 
-                } else if (action.equalsIgnoreCase(GisService.ACTION_GET_IMAGE_MAP)) {
-                    response.setContentType("text/xml");
+                Iterator locIt = ampActivity.getLocations().iterator();
+                while (locIt.hasNext()) {
 
+                    AmpActivityLocation loc = (AmpActivityLocation) locIt.next();
 
-                    List mapDataSegments = map.getSegments();
+                    locationIdObjectMap.put(loc.getLocation().getAmpLocationId(),
+                                            loc.getLocation());
 
-        /*
-                    String imageMapCode = gisUtil.getImageMap(mapDataSegments, 10, canvasWidth,
-                                           canvasHeight, mapLeft, mapRight, mapTop,
-                                           mapBottom).toString();
-
-
-
-                    sos.print(imageMapCode);
-         */
-                } else if (action.equalsIgnoreCase("getDataForSector")) {
-
-                    response.setContentType("image/png");
-
-                    String secIdStr = request.getParameter("sectorId");
-
-                    List secFundings = DbUtil.getSectorFoundings(new Long(secIdStr));
-                    Iterator it = secFundings.iterator();
-
-                    Map locationIdObjectMap = new HashMap();
-                    Map locationFoundMap = new HashMap();
-
-                    Double totalFund = 0d;
-                    while (it.hasNext()) {
-                        Object[] secFounding = (Object[]) it.next();
-                        AmpActivity ampActivity = (AmpActivity) secFounding[0];
-                        Double activityFound = DbUtil.getActivityFoundings(ampActivity.
-                                getAmpActivityId());
-
-                        Double addAmmount = 0d;
-                        if (activityFound != null) {
-                            float addPercent = (Float) secFounding[1];
-                            addAmmount = activityFound * addPercent /
-                                         100;
-                            totalFund += addAmmount;
-                        }
-
-                        Iterator locIt = ampActivity.getLocations().iterator();
-                        while (locIt.hasNext()) {
-
-                            AmpActivityLocation loc = (AmpActivityLocation) locIt.next();
-
-                            locationIdObjectMap.put(loc.getLocation().getAmpLocationId(),
-                                                    loc.getLocation());
-
-                            if (locationFoundMap.containsKey(loc.getLocation().getAmpLocationId())) {
-                                Double existingVal = (Double) locationFoundMap.get(loc.
-                                        getLocation().getAmpLocationId());
-                                locationFoundMap.put(loc.getLocation().getAmpLocationId(),
-                                                     existingVal +
-                                                     addAmmount * loc.getLocationPercentage() /
-                                                     100);
-                            } else {
-                                locationFoundMap.put(loc.getLocation().getAmpLocationId(),
-                                                     addAmmount * loc.getLocationPercentage() /
-                                                     100);
-                            }
-                        }
-
+                    if (locationFoundMap.containsKey(loc.getLocation().
+                            getAmpLocationId())) {
+                        Double existingVal = (Double) locationFoundMap.get(loc.
+                                getLocation().getAmpLocationId());
+                        locationFoundMap.put(loc.getLocation().getAmpLocationId(),
+                                             existingVal +
+                                             addAmmount *
+                                             loc.getLocationPercentage() /
+                                             100);
+                    } else {
+                        locationFoundMap.put(loc.getLocation().getAmpLocationId(),
+                                             addAmmount *
+                                             loc.getLocationPercentage() /
+                                             100);
                     }
+                }
 
-                    List segmentDataList = new ArrayList();
-                    List locDataList = new ArrayList();
-                    Iterator locFoundingMapIt = locationFoundMap.keySet().iterator();
-                    while (locFoundingMapIt.hasNext()) {
-                        Long key = (Long) locFoundingMapIt.next();
-                        AmpLocation loc = (AmpLocation) locationIdObjectMap.get(key);
-                        Double ammount = (Double) locationFoundMap.get(key);
-                        Object[] dataStore = new Object[2];
-                        dataStore[0] = loc;
-                        dataStore[1] = ammount;
+            }
+
+            List segmentDataList = new ArrayList();
+            Iterator locFoundingMapIt = locationFoundMap.keySet().iterator();
+            while (locFoundingMapIt.hasNext()) {
+                Long key = (Long) locFoundingMapIt.next();
+                AmpLocation loc = (AmpLocation) locationIdObjectMap.get(key);
+                Double ammount = (Double) locationFoundMap.get(key);
+                Object[] dataStore = new Object[2];
+                dataStore[0] = loc;
+                dataStore[1] = ammount;
 
                 //                        locDataList.add(dataStore);
 
 
-                        if (loc.getRegion() != null) {
-                            SegmentData segmentData = new SegmentData();
-                            segmentData.setSegmentCode(loc.getRegion());
-                            Double PercentFromTotal = ammount / totalFund * 100;
-                            segmentData.setSegmentValue(PercentFromTotal.toString());
-                            segmentDataList.add(segmentData);
-                        }
+                if (loc.getRegion() != null) {
+                    SegmentData segmentData = new SegmentData();
+                    segmentData.setSegmentCode(loc.getRegion());
+                    Double PercentFromTotal = ammount / totalFund * 100;
+                    segmentData.setSegmentValue(PercentFromTotal.toString());
+                    segmentDataList.add(segmentData);
+                }
+            }
+
+            List hilightData = prepareHilightSegments(segmentDataList, map);
+
+            BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
+                    BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D g2d = graph.createGraphics();
+
+            g2d.setBackground(new Color(0, 0, 100, 255));
+
+            g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            gisUtil.addDataToImage(g2d,
+                                   map.getSegments(),
+                                   hilightData,
+                                   canvasWidth, canvasHeight,
+                                   rect.getLeft(), rect.getRight(),
+                                   rect.getTop(), rect.getBottom(), true);
+
+            g2d.dispose();
+
+            RenderedImage ri = graph;
+
+            ImageIO.write(ri, "png", sos);
+
+            graph.flush();
+
+        } else if (action.equalsIgnoreCase("getSectorDataXML")) {
+            response.setContentType("text/xml");
+            String secIdStr = request.getParameter("sectorId");
+
+            List secFundings = DbUtil.getSectorFoundings(new Long(secIdStr));
+            Iterator it = secFundings.iterator();
+
+            Map locationIdObjectMap = new HashMap();
+            Map locationFoundMap = new HashMap();
+
+            Double totalFund = 0d;
+            while (it.hasNext()) {
+                Object[] secFounding = (Object[]) it.next();
+                AmpActivity ampActivity = (AmpActivity) secFounding[0];
+                Double activityFound = DbUtil.getActivityFoundings(ampActivity.
+                        getAmpActivityId());
+
+                Double addAmmount = 0d;
+                if (activityFound != null) {
+                    float addPercent = (Float) secFounding[1];
+                    addAmmount = activityFound * addPercent /
+                                 100;
+                    totalFund += addAmmount;
+                }
+
+                Iterator locIt = ampActivity.getLocations().iterator();
+                while (locIt.hasNext()) {
+
+                    AmpActivityLocation loc = (AmpActivityLocation) locIt.next();
+
+                    locationIdObjectMap.put(loc.getLocation().getAmpLocationId(),
+                                            loc.getLocation());
+
+                    if (locationFoundMap.containsKey(loc.getLocation().
+                            getAmpLocationId())) {
+                        Double existingVal = (Double) locationFoundMap.get(loc.
+                                getLocation().getAmpLocationId());
+                        locationFoundMap.put(loc.getLocation().getAmpLocationId(),
+                                             existingVal +
+                                             addAmmount *
+                                             loc.getLocationPercentage() /
+                                             100);
+                    } else {
+                        locationFoundMap.put(loc.getLocation().getAmpLocationId(),
+                                             addAmmount *
+                                             loc.getLocationPercentage() /
+                                             100);
                     }
+                }
 
-                    List hilightData = prepareHilightSegments(segmentDataList, map);
+            }
 
-                    BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
-                                                                BufferedImage.TYPE_INT_ARGB);
+            XMLDocument segmendDataInfo = new XMLDocument();
+            XML root = new XML("funding");
+            root.addAttribute("total", ((float)Math.round(totalFund/10))/100f);
+            segmendDataInfo.addElement(root);
+            Iterator locFoundingMapIt = locationFoundMap.keySet().iterator();
+            while (locFoundingMapIt.hasNext()) {
+                Long key = (Long) locFoundingMapIt.next();
+                AmpLocation loc = (AmpLocation) locationIdObjectMap.get(key);
+                Double ammount = (Double) locationFoundMap.get(key);
+                if (loc.getRegion() != null) {
+                    XML regionData = new XML("region");
+                    regionData.addAttribute("reg-code", loc.getRegion());
+                    regionData.addAttribute("funding", ammount);
+                    root.addElement(regionData);
+                }
+            }
 
-                        Graphics2D g2d = graph.createGraphics();
+            sos.print(segmendDataInfo.toString());
+        }
 
-                        g2d.setBackground(new Color(0, 0, 100, 255));
-
-                        g2d.clearRect(0, 0, canvasWidth, canvasHeight);
-
-                        gisUtil.addDataToImage(g2d,
-                                               map.getSegments(),
-                                               hilightData,
-                                               canvasWidth, canvasHeight,
-                                               rect.getLeft(), rect.getRight(),
-                                               rect.getTop(), rect.getBottom(), true);
-
-                        g2d.dispose();
-
-                        RenderedImage ri = graph;
-
-                        ImageIO.write(ri, "png", sos);
-
-                        graph.flush();
-
-
-
-                }else  if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
-                        response.setContentType("image/png");
-
-                        BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
-                                                                BufferedImage.TYPE_INT_ARGB);
-
-                        Graphics2D g2d = graph.createGraphics();
-
-                        g2d.setBackground(new Color(0, 0, 100, 255));
-
-                        g2d.clearRect(0, 0, canvasWidth, canvasHeight);
-
-                        gisUtil.addDataToImage(g2d,
-                                               map.getSegments(),
-                                               -1,
-                                               canvasWidth, canvasHeight,
-                                               rect.getLeft(), rect.getRight(),
-                                               rect.getTop(), rect.getBottom(), true);
-
-                        g2d.dispose();
-
-                        RenderedImage ri = graph;
-
-                        ImageIO.write(ri, "png", sos);
-
-                        graph.flush();
-
-                        /*
-                                             StringBuffer actIds = new StringBuffer();
-
-
-                                             while (it.hasNext()) {
-                            Object[] secFounding = (Object[]) it.next();
-                            //Double activityFound = DbUtil.getActivityFoundings(((AmpActivity)secFounding[0]).getAmpActivityId());
-                            actIds.append(((AmpActivity)secFounding[0]).getAmpActivityId());
-                            if (it.hasNext()) {
-                                actIds.append(",");
-                            }
-
-                                             }
-                         Double totalFunds = DbUtil.getActivityFoundings(actIds.toString());
-                         */
-
-
-
-                //                    List mapDataSegments = map.getSegments();
-                //                    String segmentInfoCode = gisUtil.getSegmentData(mapDataSegments).toString();
-                //                    sos.print(segmentInfoCode);
-                    }
-
-                sos.close();
-                return null;
+        sos.close();
+        return null;
 
     }
 
-    private List prepareHilightSegments (List segmentData, GisMap map) {
+    private List prepareHilightSegments(List segmentData, GisMap map) {
         List retVal = new ArrayList();
         Iterator it = map.getSegments().iterator();
 
         while (it.hasNext()) {
             GisMapSegment segment = (GisMapSegment) it.next();
-            for (int idx =(int) 0; idx < segmentData.size(); idx++) {
+            for (int idx = (int) 0; idx < segmentData.size(); idx++) {
                 SegmentData sd = (SegmentData) segmentData.get(idx);
                 if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
-                    float redColor = Float.parseFloat(sd.getSegmentValue()) * 2.55f;
-                    hData.setColor(new ColorRGB((int)redColor, (int) (255f - redColor) , 0));
+                    float redColor = Float.parseFloat(sd.getSegmentValue()) *
+                                     2.55f;
+                    hData.setColor(new ColorRGB((int) redColor,
+                                                (int) (255f - redColor), 0));
                     retVal.add(hData);
                 }
             }
@@ -293,7 +308,7 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    private List getSegmentsForParent (String parentCode, GisMap map) {
+    private List getSegmentsForParent(String parentCode, GisMap map) {
         List retVal = new ArrayList();
         Iterator it = map.getSegments().iterator();
 

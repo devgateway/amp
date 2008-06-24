@@ -23,7 +23,7 @@ import java.awt.font.GlyphVector;
 import org.digijava.module.gis.util.HilightData;
 
 /**
- * 
+ *
  * @author George Kvizhinadze
  *
  */
@@ -406,11 +406,11 @@ public class GisUtil {
         retVal.addElement(imageMapDefRoot);
 
         float scale = 1f; //Pixels per degree
+
         int border = 10;
 
-
-        float scaleX = (float) (canvasWidth - border * 2) / (mapRightX - mapLeftX);
-        float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
+        float scaleX = (float) (canvasWidth - border * 4) / (mapRightX - mapLeftX);
+        float scaleY = (float) (canvasHeight - border * 4) / (mapTopY - mapLowY);
 
         if (scaleX < scaleY) {
             scale = scaleX;
@@ -419,6 +419,7 @@ public class GisUtil {
         }
         int xOffset = (int) ( -mapLeftX * scale) + border;
         int yOffset = (int) ( -mapLowY * scale);
+
 
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
@@ -456,8 +457,10 @@ public class GisUtil {
                                  (int) ((gmp.getLongatude()) *
                                         scale);
                     int yCoord = canvasHeight - border - (yOffset +
-                                                 (int) ((gmp.getLatitude()) *
-                            scale));
+                                                          (int) ((gmp.getLatitude()) *
+                                                                 scale));
+
+
 
                     XML pointNode = new XML("point");
                     pointNode.addAttribute("x", xCoord);

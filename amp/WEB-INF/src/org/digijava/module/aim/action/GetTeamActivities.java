@@ -161,7 +161,7 @@ public class GetTeamActivities
                 int stIndex = ((page - 1) * numRecords) + 1;
                 int edIndex = page * numRecords;
                 edIndex = (edIndex > totActivities) ? totActivities : edIndex;
-                if (stIndex<0) stIndex=0;
+                if (stIndex<1) stIndex=1;
                 Vector vect = new Vector();
                 vect.addAll(taForm.getAllActivities());
 

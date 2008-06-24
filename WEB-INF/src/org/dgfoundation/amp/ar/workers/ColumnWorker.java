@@ -135,8 +135,8 @@ public abstract class ColumnWorker {
 		
 		
 
-		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ( "
-				+ condition + " )";
+		String query = "SELECT * FROM " + viewName + " WHERE amp_activity_id IN ("
+				+ condition + " ) "+(internalCondition!=null?internalCondition:"");
 		PreparedStatement ps;
 		try {
 			ps = conn.prepareStatement(query);
@@ -333,6 +333,14 @@ public abstract class ColumnWorker {
 
 	public void setRelatedColumn(AmpColumns relatedColumn) {
 		this.relatedColumn = relatedColumn;
+	}
+
+	public String getInternalCondition() {
+		return internalCondition;
+	}
+
+	public void setInternalCondition(String internalCondition) {
+		this.internalCondition = internalCondition;
 	}
 
 

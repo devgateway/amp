@@ -48,7 +48,7 @@ public class ColumnFilterGenerator {
 		}
 		if (ArConstants.VIEW_CONTRIBUTION_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
-			AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","amp_org_id");
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"donorGroups","org_grp_id");
 			c.getFilters().add(acf);
 		}
 		if (ArConstants.VIEW_COMPONENT_FUNDING.equals(c.getExtractorView())) {
@@ -58,7 +58,7 @@ public class ColumnFilterGenerator {
 		}
 		if (ArConstants.VIEW_REGIONAL_FUNDING.equals(c.getExtractorView())) {
 			//TODO: add filters here
-			AmpColumnsFilters acf = new AmpColumnsFilters(c,"regions","region_id");
+			AmpColumnsFilters acf = new AmpColumnsFilters(c,"selectedRegion","region_id");
 			c.getFilters().add(acf);
 		}
 	}

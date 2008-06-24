@@ -305,7 +305,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			Set<String> activityStatus = new HashSet<String>();
 			activityStatus.add(Constants.APPROVED_STATUS);
 			activityStatus.add(Constants.EDITED_STATUS);
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE draft=false AND approval_status IN (" +
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND draft=false AND approval_status IN (" +
 				Util.toCSString(activityStatus)
 				+")" +
 				"AND ( amp_team_id IN ("

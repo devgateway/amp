@@ -187,13 +187,14 @@ public class AmpReportGenerator extends ReportGenerator {
 				//get the column bound condition:
 				String columnFilterSQLClause = ColumnFilterGenerator.generateColumnFilterSQLClause(filter, col, true);
 			
-				if(columnFilterSQLClause.length()>0) logger.info("Column "+col.getColumnName()+" appendable SQL filter: ..."+columnFilterSQLClause);
+				if(columnFilterSQLClause.length()>0) 
+					logger.info("Column "+col.getColumnName()+" appendable SQL filter: ..."+columnFilterSQLClause);
 				
 				if (extractorView != null) {
 
 					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							filter.getGeneratedFilterQuery()+columnFilterSQLClause, extractorView,
+							filter.getGeneratedFilterQuery(), extractorView,
 							columnName, this });
 				} else {
 					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 3);
@@ -202,6 +203,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 
 				ce.setRelatedColumn(col);
+				ce.setInternalCondition(columnFilterSQLClause);
+				
 				Column column = ce.populateCellColumn();
 				
 				

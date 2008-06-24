@@ -145,7 +145,7 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
 		
 		if( (!cached && (applySorter == null && sortBy == null || ar==null)) || 
-			(ampReportId != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 
+			(ampReportId != null && ar != null && !ampReportId.equals(ar.getAmpReportId().toString()) )) 
 		{
 			
 			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar

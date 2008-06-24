@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Collections;
+import java.util.LinkedList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -80,8 +82,9 @@ public class PatcherUtil {
 
 	public static Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
 			throws InvalidPatchRepositoryException {
+		boolean firstPatch = true;
 		File dir = new File(abstractPatchesLocation);
-		Set<File> patchFiles = new TreeSet<File>();
+		List<File> patchFiles = new LinkedList<File>();
 		if (!dir.isDirectory())
 			throw new InvalidPatchRepositoryException(
 					"Patches repository needs to be a dir!");
@@ -90,8 +93,22 @@ public class PatcherUtil {
 			File f = new File(dir, files[i]);
 			if (f.isDirectory() && !f.getName().equals("CVS"))
 				patchFiles.addAll(getAllPatchesFiles(f.getAbsolutePath()));
-			if(!f.isDirectory())
-				patchFiles.add(f);
+			if(!f.isDirectory()) {
+				if (firstPatch) {
+					patchFiles.add(f);
+					firstPatch = false;
+				}
+				else {
+					Iterator<File> it = patchFiles.iterator();
+					while (it.hasNext()) {
+						File ff = it.next();
+						if (f.lastModified() > ff.lastModified())
+							continue;
+						patchFiles.add(patchFiles.indexOf(ff),f);
+						break;
+					}
+				}
+			}
 		}
 		return patchFiles;
 	}

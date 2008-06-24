@@ -21,7 +21,7 @@
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 	
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <digi:instance property="aimTeamReportsForm" />
 <c:set var="translation">
 	<digi:trn key="aim:confirmDeleteReport">
@@ -188,15 +188,16 @@ function confirmFunc() {
 													</c:if>
 													<logic:iterate name="aimTeamReportsForm"  property="reports" id="report" indexId="idx"
 														type="org.digijava.module.aim.dbentity.AmpReports">
-														<TR bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">
-															<TD>
+                                                         <tr bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#eeeeee\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
+                                                         	onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#eeeeee\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >														
+															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 															<p style="white-space: nowrap">
 							                 	 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
 															</c:set>
 															</td>		
-															<td>
+															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 															<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
 															<b>
 																<p style="max-width: 400px;white-space: normal">
@@ -210,9 +211,9 @@ function confirmFunc() {
 															 		<bean:write name="report" property="reportDescription" />
 															 	</p>
 														 	</logic:present>
-															</TD>
+															</td>
 
-														 	<td>
+														 	<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 														 		<p style="white-space: nowrap">
 														 		<logic:present name="report" property="ownerId">
 														 			 <i><bean:write name="report" property="ownerId.user.name" /></i>
@@ -221,14 +222,14 @@ function confirmFunc() {
 														 		</logic:present>
 														 		</p>
 														 	</td>
-														 	<td>
+														 	<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 														 		<p style="white-space: nowrap">
 														 			<logic:present name="report" property="updatedDate">
 														 	    		<bean:write name="report" property="formatedUpdatedDate" />
 														 	    	</logic:present>
 														 	    </p>
 														 	</td>
-														 	<td>
+														 	<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 														 		<p style="white-space: nowrap">
 														 		 <%
                                                                              if (report.getType()!=null && report.getType().equals(new Long(1))) {
@@ -302,7 +303,7 @@ function confirmFunc() {
 														 	</td>
 
 														 												
-															<TD>
+															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 																<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
 																	<logic:iterate name="report" property="columns" id="column" indexId="index"  >
 																		<%if (index.intValue()%2==0){ %>
@@ -319,9 +320,9 @@ function confirmFunc() {
 															 	
 															 	<div align="center" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:list">list...</digi:trn></u>]
 																</div>
-															</TD>
+															</td>
 															
-															<td>
+															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 																<logic:iterate name="report" property="hierarchies" id="hierarchy" >
 																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 																	<li>
@@ -330,7 +331,7 @@ function confirmFunc() {
 																</logic:iterate>
 															</td>
 															
-															<td>
+															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
 																<logic:iterate name="report" property="measures" id="measure" >
 																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 																	<li>
@@ -343,7 +344,7 @@ function confirmFunc() {
 														 	if(tm!=null)
 														 	{ %>
 
-															<td>  
+															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">  
 																<p style="white-space: nowrap">
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="rid">

@@ -27,36 +27,36 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
  */
 public class DonorDimension extends ARDimension {
 
-    /** TODO description here
-     * 
-     */
-    public DonorDimension() {
-	super();
-    }
-
-    /** @see org.dgfoundation.amp.ar.dimension.ARDimension#initialize()
-     */
-    @Override
-    public void initialize() throws HibernateException, SQLException {
-	Session session = PersistenceManager.getSession();
-	Query createQuery = session.createQuery("from "+AmpOrganisation.class.getName());
-	HashMap<Long,Long> typeMap=new HashMap<Long, Long>();
-	links.put(AmpOrgType.class,typeMap);
-
-	HashMap<Long,Long> groupMap=new HashMap<Long, Long>();
-	links.put(AmpOrgGroup.class,groupMap);
-
-	List list;
-	    list = createQuery.list();
-	Iterator it=list.iterator();
-	while (it.hasNext()) {
-	       AmpOrganisation as= (AmpOrganisation) it.next();
-	       typeMap.put(as.getAmpOrgId(), as.getOrgTypeId()==null?null:as.getOrgTypeId().getAmpOrgTypeId());
-	       groupMap.put(as.getAmpOrgId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
+	/** TODO description here
+	 * 
+	 */
+	public DonorDimension() {
+		super();
 	}
-	
-	session.close();
-	
-    }
+
+	/** @see org.dgfoundation.amp.ar.dimension.ARDimension#initialize()
+	 */
+	@Override
+	public void initialize() throws HibernateException, SQLException {
+		Session session = PersistenceManager.getSession();
+		Query createQuery = session.createQuery("from "+AmpOrganisation.class.getName());
+		HashMap<Long,Long> typeMap=new HashMap<Long, Long>();
+		links.put(AmpOrgType.class,typeMap);
+
+		HashMap<Long,Long> groupMap=new HashMap<Long, Long>();
+		links.put(AmpOrgGroup.class,groupMap);
+
+		List list;
+		list = createQuery.list();
+		Iterator it=list.iterator();
+		while (it.hasNext()) {
+			AmpOrganisation as= (AmpOrganisation) it.next();
+			typeMap.put(as.getAmpOrgId(), as.getOrgTypeId()==null?null:as.getOrgTypeId().getAmpOrgTypeId());
+			groupMap.put(as.getAmpOrgId(), as.getOrgGrpId()==null?null:as.getOrgGrpId().getAmpOrgGrpId());	       
+		}
+
+		PersistenceManager.releaseSession(session);
+
+	}
 
 }

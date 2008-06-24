@@ -8,14 +8,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author mihai
@@ -42,15 +41,15 @@ public class DonorGroupDimension extends ARDimension {
 
 
 		List list;
-		    list = createQuery.list();
+		list = createQuery.list();
 		Iterator it=list.iterator();
 		while (it.hasNext()) {
-		       AmpOrganisation as= (AmpOrganisation) it.next();
-		       if(as.getOrgGrpId()==null) continue;
-		       typeMap.put(as.getOrgGrpId().getAmpOrgGrpId(), as.getOrgTypeId()==null?null:as.getOrgTypeId().getAmpOrgTypeId());	       
+			AmpOrganisation as= (AmpOrganisation) it.next();
+			if(as.getOrgGrpId()==null) continue;
+			typeMap.put(as.getOrgGrpId().getAmpOrgGrpId(), as.getOrgTypeId()==null?null:as.getOrgTypeId().getAmpOrgTypeId());	       
 		}
-		session.close();
-		
-	    }
+		PersistenceManager.releaseSession(session);
+
+	}
 }
 

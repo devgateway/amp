@@ -53,9 +53,9 @@ function confirmFunc() {
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left vAlign=top width=750>
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
@@ -197,7 +197,7 @@ function confirmFunc() {
 																<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
 															</c:set>
 															</td>		
-															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+															<td>
 															<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
 															<b>
 																<p style="max-width: 400px;white-space: normal">
@@ -213,7 +213,7 @@ function confirmFunc() {
 														 	</logic:present>
 															</td>
 
-														 	<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+														 	<td>
 														 		<p style="white-space: nowrap">
 														 		<logic:present name="report" property="ownerId">
 														 			 <i><bean:write name="report" property="ownerId.user.name" /></i>
@@ -222,14 +222,14 @@ function confirmFunc() {
 														 		</logic:present>
 														 		</p>
 														 	</td>
-														 	<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+														 	<td>
 														 		<p style="white-space: nowrap">
 														 			<logic:present name="report" property="updatedDate">
 														 	    		<bean:write name="report" property="formatedUpdatedDate" />
 														 	    	</logic:present>
 														 	    </p>
 														 	</td>
-														 	<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+														 	<td>
 														 		<p style="white-space: nowrap">
 														 		 <%
                                                                              if (report.getType()!=null && report.getType().equals(new Long(1))) {
@@ -303,7 +303,7 @@ function confirmFunc() {
 														 	</td>
 
 														 												
-															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+															<td>
 																<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
 																	<logic:iterate name="report" property="columns" id="column" indexId="index"  >
 																		<%if (index.intValue()%2==0){ %>
@@ -322,7 +322,7 @@ function confirmFunc() {
 																</div>
 															</td>
 															
-															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+															<td>
 																<logic:iterate name="report" property="hierarchies" id="hierarchy" >
 																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 																	<li>
@@ -331,7 +331,7 @@ function confirmFunc() {
 																</logic:iterate>
 															</td>
 															
-															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
+															<td>
 																<logic:iterate name="report" property="measures" id="measure" >
 																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
 																	<li>
@@ -344,7 +344,7 @@ function confirmFunc() {
 														 	if(tm!=null)
 														 	{ %>
 
-															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">  
+															<td>  
 																<p style="white-space: nowrap">
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="rid">

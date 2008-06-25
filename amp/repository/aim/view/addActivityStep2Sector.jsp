@@ -97,7 +97,13 @@
 									<c:if test="${config.name== 'Secondary' }">
 										<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
 									</c:if>
-									 <field:display name="${auxSectorType}" feature="Sectors">
+									<bean:define id="contentDisabled">false</bean:define>
+									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
+									</c:set>
+									<c:if test="${contentDisabled==''}">
+										<c:set var="contentDisabled">true</c:set>
+									</c:if>
+									<field:display name="${auxSectorType}" feature="Sectors"></field:display>
                                          <c:set var="sectorAdded">
                                               false
                                           </c:set>
@@ -126,7 +132,7 @@
                                                             <c:if test="${activitySectors.configId==config.id}">
                                                                 <tr> 
                                                                     <td width="3%" vAlign="center">
-                                                                        <html:multibox property="selActivitySectors">
+                                                                        <html:multibox property="selActivitySectors" disabled="${contentDisabled}">
                                                                             <c:if test="${activitySectors.subsectorLevel1Id == -1}">
                                                                             ${activitySectors.sectorId}
                                                                             </c:if>
@@ -158,7 +164,7 @@
                                                                     <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
                                                                     <td width="5%" vAlign="center" align="left">
                                                                         <html:text name="activitySectors" indexed="true" property="sectorPercentage"
-                                                                                   size="2" onkeyup="fnChk(this)" />
+                                                                                   size="2" onkeyup="fnChk(this)" disabled="${contentDisabled}"/>
                                                                     </td>
                                                                 </tr>
                                                                 <c:set var="sectorAdded">
@@ -189,7 +195,7 @@
                                                             <c:if test="${config.multisector||sectorAdded==false}">
                                                                 <field:display name="Add Sectors Button" feature="Sectors">
                                                                     <html:hidden name="aimEditActivityForm" property="editAct"/>
-                                                                    <html:button styleClass="dr-menu"
+                                                                    <html:button styleClass="dr-menu" disabled="${contentDisabled}" 
                                                                                  property="submitButton" onclick="addSectors(${aimEditActivityForm.editAct},${config.id});">
                                                                         <digi:trn key="btn:addSectors">Add Sectors</digi:trn>
                                                                     </html:button>
@@ -201,7 +207,7 @@
                                                         
                                                         <td>
                                                             <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
-                                                                <html:button styleClass="dr-menu"
+                                                                <html:button styleClass="dr-menu" disabled="${contentDisabled}" 
                                                                              property="submitButton" onclick="return removeSelSectors(${config.id})">
                                                                     <digi:trn key="btn:removeSector">Remove Sector</digi:trn>
                                                                 </html:button>
@@ -214,8 +220,6 @@
                                             </td>
                                         </tr>
                                         
-                                        
-                                        </field:display>
                                     </c:forEach>
                                     
                                 </table>

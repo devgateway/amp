@@ -79,8 +79,13 @@ target.style.cursor = "default"
 
 <digi:instance property="aimEditActivityForm" />
 										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
-											
-											<field:display name="Project Title" feature="Identification">
+											<bean:define id="contentDisabled">false</bean:define>
+											<c:set var="contentDisabled"><field:display name="Project Title" feature="Identification">false</field:display>
+											</c:set>
+											<c:if test="${contentDisabled==''}">
+												<c:set var="contentDisabled">true</c:set>
+											</c:if>
+											<field:display name="Project Title" feature="Identification"></field:display>
 											<tr bgcolor="#ffffff">											
 												<td valign="top" align="left">
 													<FONT color=red>*</FONT>
@@ -93,11 +98,11 @@ target.style.cursor = "default"
 													<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">
 													Title used in donors or MoFED internal systems
 													</digi:trn>">
-													<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
+													<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"  disabled="${contentDisabled}"/>
 													</a>
 												</td>											
 											</tr>
-											</field:display>											
+																						
 												<field:display name="Objective" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">

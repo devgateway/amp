@@ -383,6 +383,8 @@
     <page page="selectOrganisationForAhsurvey" name="selectOrganisationForAhsurvey" title="Select Organization" />
 
     <page name="quartzJobManager" title="Quartz Job Manager" />
+    <page name="addQuartzJob" title="Add Job" />
+    <page name="editQuartzJob" title="Edit Job" />
 
     <!-- tab Views -->
 	<page page="myTabs" name="aim_myTabs" title="My Tabs" />

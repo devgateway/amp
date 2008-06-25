@@ -199,7 +199,7 @@ public class AmpMessageActions extends DispatchAction {
     	 */    	
     	if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()<=count){
     		count=settings.getMsgStoragePerMsgType().intValue();
-               
+    		//messageForm.setMessagesForTm(messageForm.getMessagesForTm().subList(0,count));   
     	}
     	if(count%MessageConstants.MESSAGES_PER_PAGE==0){ //<--10 messages will be per page. This should come from settings
 			howManyPages=count/MessageConstants.MESSAGES_PER_PAGE;

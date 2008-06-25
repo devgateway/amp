@@ -150,8 +150,8 @@ function validateForm(){
         // alert("${errMsgAddSector}");
          // return false;
      }
-      document.aimEditActivityForm.addSec.focus();
-      return false;
+     // document.aimEditActivityForm.addSec.focus();
+      // return false;
     }
    </feature:display>
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;

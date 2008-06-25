@@ -146,7 +146,7 @@ function validateForm(){
      // alert("${errMsgAddSector}");
      var primConf=document.getElementById('primaryConfig');
      var secConf=document.getElementById('secondaryConfig');
-     if(primConf==null || secConf==null){
+     if(primConf==null && secConf==null){
          alert("${errMsgAddSector}");
         return false;
      }

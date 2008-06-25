@@ -7,9 +7,14 @@
 		<form-bean name="gisTableWidgetCreationForm" type="org.digijava.module.gis.form.TableWidgetCreationForm" />
 		<form-bean name="gisTableWidgetTeaserForm" type="org.digijava.module.gis.form.TableWidgetTeaserForm" />
 		<form-bean name="gisTableWidgetDataForm" type="org.digijava.module.gis.form.AdminTableWidgetDataForm" />
-	        <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
+	    <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
 		<form-bean name="gisFoundingDetailsForm" type="org.digijava.module.gis.form.GisFoundingDetailsForm"/>
 		<form-bean name="gisDemoForm" type="org.digijava.module.gis.form.GisDemoForm"/>
+	  <form-bean name="gisWidgetPlacesForm" type="org.digijava.module.gis.form.WidgetPlacesForm"/>
+	  <form-bean name="gisIndicatorChartForm" type="org.digijava.module.gis.form.AdminIndicatorChartsForm"/>
+	  <form-bean name="gisWidgetTeaserForm" type="org.digijava.module.gis.form.WidgetTeaserForm"/>
+	  <form-bean name="gisWidgetChartForm" type="org.digijava.module.gis.form.ShowWidgetChartForm"/>
+	  
 	</form-beans>
 	
 	<global-forwards>
@@ -61,9 +66,29 @@
     	<action name="gisTableWidgetTeaserForm" path="/gis/previewTable" scope="request" type="org.digijava.module.gis.action.PreviewTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
     	</action>
+
+		  <action name="gisIndicatorChartForm" parameter="actType"
+		   path="/gis/indicatorchartwidgets" scope="session"
+		   type="org.digijava.module.gis.action.AdminIndicatorChartWidgets" validate="false">
+		   <forward name="forward" path="/showLayout.do?layout=gis_indicchartwidgets"/>
+		   <forward name="showEdit" path="/showLayout.do?layout=gis_editindicchartwidget"/>
+		   <forward name="showList" path="/gis/indicatorchartwidgets.do" redirect="true"/>
+		  </action>
+
+
+		  <action name="gisWidgetPlacesForm" parameter="actType"
+		   path="/gis/widgetplaces" scope="session"
+		   type="org.digijava.module.gis.action.AdminWidgetPlaces" validate="false">
+		   <forward name="forward" path="/showLayout.do?layout=gis_widgetPlaces"/>
+		  </action>
+
+		  <action name="gisWidgetChartForm" parameter="actType"
+		   path="/gis/widgetchart" scope="request"
+		   type="org.digijava.module.gis.action.ShowWidgetChart" validate="false"/>
 		
 		<!-- Teasers below this -->
 		<action name="gisTableWidgetTeaserForm" path="/gis/tableWidgetTeaser" type="org.digijava.module.gis.action.TableWidgetTeaser"/>
+		<action name="gisWidgetTeaserForm" path="/gis/widgetTeaser" type="org.digijava.module.gis.action.WidgetTeaser"/>
 		<action name="gisDashboardForm" path="/gis/dashboardMapTeaser" type="org.digijava.module.gis.action.DashboardMapTeaser"/>
 	</action-mappings>
 </struts-config>

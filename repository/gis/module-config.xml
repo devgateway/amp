@@ -14,6 +14,8 @@
 		<hibernate-class>org.digijava.module.gis.dbentity.AmpDaColumn</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.AmpDaValue</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.AmpDaWidgetPlace</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.AmpWidget</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.AmpWidgetIndicatorChart</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.GisMap</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.GisMapPoint</hibernate-class>
 		<hibernate-class>org.digijava.module.gis.dbentity.GisMapSegment</hibernate-class>

@@ -12,39 +12,26 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.gis.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.gis.form.WidgetPlacesForm;
 import org.digijava.module.gis.util.WidgetUtil;
-
 /**
- * Lists all widgets
+ * Widget places administration action.
  * @author Irakli Kobiashvili
- * @deprecated use {@link AdminWidgetPlaces} instead.
  *
  */
-@Deprecated
-public class ListWidgetPlaces extends DispatchAction {
-
-	public ActionForward list(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		WidgetPlacesForm wForm = (WidgetPlacesForm)form;
-		List<AmpDaWidgetPlace> places = WidgetUtil.getAllPlaces();
-		wForm.setPlaces(places);
-		return mapping.findForward("forward");
-	}
-
-	public ActionForward delete(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		WidgetPlacesForm wForm = (WidgetPlacesForm)form;
-		List<AmpDaWidgetPlace> places = WidgetUtil.getAllPlaces();
-		wForm.setPlaces(places);
-		return mapping.findForward("forward");
-	}
+public class AdminWidgetPlaces extends DispatchAction {
 
 	@Override
 	protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		return list(mapping, form, request, response);
+	}
+	public ActionForward list(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		WidgetPlacesForm pform = (WidgetPlacesForm)form;
+		List<AmpDaWidgetPlace> places = WidgetUtil.getAllPlaces();
+		pform.setPlaces(places);
+		return mapping.findForward("forward");
 	}
 
 }

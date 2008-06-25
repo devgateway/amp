@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.utils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -150,6 +151,35 @@ public class AmpCollectionUtils {
 			}
 		}
 		return mainCol;
+	}
+	
+	public static <K,E> Collection<E> split(Collection<E> mainCol,Collection<E> refCol,KeyWorker<K, E> keyWorker){
+		Collection<E> deleted = null;
+		Map<K, E> mapEref = createMap(refCol, keyWorker);
+		Iterator<E> iterEmain = mainCol.iterator();
+		while (iterEmain.hasNext()) {
+			E mainE = (E) iterEmain.next();
+			E refE = mapEref.get(keyWorker.resolveKey(mainE));
+			if (refE == null){
+				iterEmain.remove();
+				if (deleted == null){
+					deleted = new ArrayList<E>();
+				}
+				deleted.add(mainE);
+			}else{
+				mapEref.remove(keyWorker.resolveKey(mainE));
+			}
+		}
+		mainCol.addAll(mapEref.values());
+
+		for (E e : refCol) {
+			K key = keyWorker.resolveKey(e);
+			if (null == key){
+				mainCol.add(e);
+			}
+		}
+		
+		return deleted;
 	}
 	
 }

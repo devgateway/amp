@@ -3,17 +3,14 @@
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.tiles.ComponentContext;
-import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.gis.dbentity.AmpDaWidgetPlace;
+import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.gis.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.gis.form.ShowWidgetChartForm;
 import org.digijava.module.gis.util.ChartWidgetUtil;
-import org.digijava.module.gis.util.WidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -24,33 +21,33 @@ import org.jfree.chart.JFreeChart;
  * @author Irakli Kobiashvili
  *
  */
-public class ShowWidgetChart extends TilesAction {
+public class ShowWidgetChart extends Action {
 
-	
-	
-	@Override
-	public ActionForward execute(ComponentContext context,
+	public ActionForward execute(
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		ShowWidgetChartForm wForm = (ShowWidgetChartForm)form;
         response.setContentType("image/png");
         
         if (wForm.getImageHeight() == null || wForm.getImageHeight().intValue()<=0){
-        	wForm.setImageHeight(new Integer(50));
+        	wForm.setImageHeight(new Integer(160));
         }
         if (wForm.getImageWidth() == null || wForm.getImageWidth().intValue()<=0){
-        	wForm.setImageWidth(new Integer(80));
+        	wForm.setImageWidth(new Integer(220));
         }
 
-        AmpDaWidgetPlace place = WidgetUtil.saveOrUpdatePlace(context);
         
-        
-        Long indicatorId = wForm.getObjectId();
-        if (indicatorId != null){
-        	//load indicator
-            AmpIndicator indicator = IndicatorUtil.getIndicator(indicatorId);
+        AmpWidgetIndicatorChart widget = null;
+        if (wForm.getWidgetId()!=null){
+        	widget = ChartWidgetUtil.getIndicatorChartWidget(wForm.getWidgetId());
+        }else{
+        	System.out.println("No chart assigned to this teaser!");//TODO this should go to form ass error message.
+        	return null;
+        }
+        IndicatorSector indicatorCon = widget.getIndicator();
+        if (indicatorCon != null){
             //generate chart
-            JFreeChart chart = ChartWidgetUtil.getIndicatorChart(indicator);
+            JFreeChart chart = ChartWidgetUtil.getIndicatorChart(indicatorCon);
             ChartRenderingInfo info = new ChartRenderingInfo();
             //write image in response
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(), 

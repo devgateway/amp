@@ -101,7 +101,21 @@ public class AddTeamMember extends Action {
 				logger.debug("Forwarding to showAddFromTeam");
 				return mapping.findForward("showAddFromTeam");	
 			}				
-		}		
+		}
+		/*check if user is not admin; as admin he can't be part of a workspace*/
+		if (upMemForm.getEmail().equalsIgnoreCase("admin@amp.org")) {
+			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.addTeamMember.teamMemberIsAdmin"));
+			saveErrors(request, errors);
+			logger.debug("Member is already existing");
+			if (upMemForm.getFromPage() == 1) {
+				logger.debug("Forwarding to showAddFromAdmin");
+				return mapping.findForward("showAddFromAdmin");	
+			} else {
+				logger.debug("Forwarding to showAddFromTeam");
+				return mapping.findForward("showAddFromTeam");	
+			}
+		}
 		
 		AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upMemForm.getRole());
 		if (role != null) {

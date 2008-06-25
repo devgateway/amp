@@ -405,15 +405,7 @@ public class DocumentManager extends Action {
 				if ( nodeWrapper.getWebLink()==null && showOnlyLinks )
 					continue;
 					
-/*				Property name			= null;
-				Property title			= null;
-				Property description	= null;
-				Property notes			= null;
-				Property calendar		= null;
-				Property contentType	= null;
-				Property versionNumber	= null;
-				Property fileSize		= null;
-*/				
+		
 				Boolean hasViewRights			= false;
 				Boolean hasShowVersionsRights	= false;
 				Boolean hasVersioningRights		= false;

@@ -18,48 +18,27 @@
           </a>
           </li>
         </ul>
+    
+        
         <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
-        	<div style="margin-top: 5px;margin-bottom: 2px">
-	        	<digi:trn key="aim:webResources">Web Resources</digi:trn>
-        	</div>
-        	<c:set var="translation">
-	            <digi:trn key="aim:clickToViewLinkDetails">Click here to view Link Details</digi:trn>
-            </c:set>				
-	        <logic:notEmpty name="myLinks" scope="session">
-                <div title="${translation}">
-                		<logic:iterate name="myLinks" id="link" scope="session" type="org.digijava.module.aim.helper.Documents"> 
-                        <div style="margin: 2px">
-                        	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
-                            <digi:link href="/viewQuickLinks.do">
-                                <bean:write name="link" property="title"/>
-                            </digi:link>
-                        </div>
-                </logic:iterate>
-               
-                <bean:size id="linkCount" name="myLinks" scope="session" />
-			         <c:set var="translation">
-                        <digi:trn key="aim:clickToViewMoreLinks">Click here to view more Links</digi:trn>
-                    </c:set>					
-				  <div title='${translation}'  style="margin-left:12px;margin-top:5px; margin-bottom:7px">
-                        <digi:link href="/viewQuickLinks.do">
-                            <digi:trn key="aim:moreLinks">More Links ...</digi:trn>
-                        </digi:link>							
-                    </div>
-  				  </logic:notEmpty>
-  				   <logic:empty name="myLinks" scope="session">
-               		 <div style="margin-left:12px;margin-top:5px; margin-bottom:7px"><digi:trn key="aim:noDesktopLinks">No links</digi:trn></div>
-           		  </logic:empty>
-  				 
-                 	 <logic:notEmpty name="myDocuments" scope="session">
-  						<div style="margin-top: 5px;margin-bottom: 2px"><digi:trn key="aim:documents">Documents</digi:trn></div>
+        	<logic:notEmpty name="myLinks" scope="session">
+  			
 	  						<div title="${translation}" style="margin: 2px">
-		               			 <logic:iterate name="myDocuments" id="doc" scope="session" type="org.digijava.module.contentrepository.helper.DocumentData"> 
+		               			 <logic:iterate name="myLinks" id="doc" scope="session" type="org.digijava.module.contentrepository.helper.DocumentData"> 
 		                    	   <div style="margin: 2px">
 		                        	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
-		                            <a href="/contentrepository/documentManager.do">
-		                                <bean:write name="doc" property="title"/>
-		                            </a>
-		                      	 </div>
+		                          	<c:if test="${doc.webLink == null}" >
+		                             	<a  href="/contentrepository/downloadFile.do?uuid=<bean:write name='doc' property='uuid'/>">
+										<bean:write name="doc" property="title"/>
+		                            	</a>
+									</c:if>
+									
+									<c:if test="${doc.webLink != null}" >
+		                    	       <a href="<bean:write name="doc" property="webLink"/>">
+										<bean:write name="doc" property="title"/>
+										</a>
+									</c:if>
+		                         </div>
 		                </logic:iterate>
 		                
 		                 <c:set var="translation">
@@ -68,15 +47,14 @@
 	               		
 	               		 <div title='${translation}'  style="margin-left:12px;margin-top:5px; margin-bottom:7px">
 	                          <a href="/contentrepository/documentManager.do">
-	                            <digi:trn key="aim:moreDocuments">More Documents ...</digi:trn>
+	                            <digi:trn key="aim:moreResources">More Resources ...</digi:trn>
 	                        </a>							
 	                    </div>
 	                    
               	 	 </logic:notEmpty>    
-                       <logic:empty name="myDocuments" scope="session">
-               			 <div style="margin-left:12px;margin-top:5px; margin-bottom:7px"> <digi:trn key="aim:noDcouments">No Documents</digi:trn></div>
+                       <logic:empty name="myLinks" scope="session">
+               			 <div style="margin-left:12px;margin-top:5px; margin-bottom:7px"> <digi:trn key="aim:noResources">No Resources</digi:trn></div>
            			  </logic:empty>
 		</div>
 </div>
-                
-                
+    

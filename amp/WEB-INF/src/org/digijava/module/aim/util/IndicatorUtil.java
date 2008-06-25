@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
+import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -267,7 +268,48 @@ public class IndicatorUtil {
 		} catch (ObjectNotFoundException e) {
 			logger.debug("Activity-Indicator conenction with ID="+connId+" not found",e);
 		} catch (Exception ex){
-			throw new DgException("cannot load indicatorActivity with id="+connId,ex);
+			throw new DgException("cannot load IndicatorActivity with id="+connId,ex);
+		}
+		return result;
+	}
+
+	/**
+	 * Loads sector indicator connection by its ID.
+	 * @param connId
+	 * @return
+	 * @throws DgException
+	 */
+	public static IndicatorSector getConnectionToSector(Long connId) throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		IndicatorSector result=null;
+		try {
+			result= (IndicatorSector)session.load(IndicatorSector.class, connId);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("Sector-Indicator conenction with ID="+connId+" not found",e);
+		} catch (Exception ex){
+			throw new DgException("cannot load IndicatorSector with id="+connId,ex);
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns any indicator connection type by its id and class.
+	 * @param <E>
+	 * @param connId
+	 * @param clazz
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends IndicatorConnection> E getConnection(Long connId,Class<E> clazz)throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		E result=null;
+		try {
+			result= (E)session.load(clazz, connId);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("Sector-Indicator conenction with ID="+connId+" not found",e);
+		} catch (Exception ex){
+			throw new DgException("cannot load IndicatorSector with id="+connId,ex);
 		}
 		return result;
 	}
@@ -424,6 +466,55 @@ public class IndicatorUtil {
 			}
 			throw new DgException("Cannot create indicator-activity connection ",e);
 		}
+	}
+
+	/**
+	 * Saves any IndicatorConnection to db.
+	 * @param <E>
+	 * @param connection
+	 * @return
+	 * @throws DgException
+	 */
+	public static <E extends IndicatorConnection> E saveIndicatorConnection(E connection) throws DgException{
+		Session sessioin=PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=sessioin.beginTransaction();
+			sessioin.saveOrUpdate(connection);
+			tx.commit();
+			return connection;
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback create indicator connection action",e1);
+				}
+			}
+			throw new DgException("Cannot create indicator connection ",e);
+		}
+	}
+	
+	/**
+	 * Loads all indictaor connections of specified type.
+	 * @param <E>
+	 * @param clazz
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends IndicatorConnection> List<E> getAllConnections(Class<E> clazz)throws DgException{
+		List<E> result = null;
+		Session session=PersistenceManager.getRequestDBSession();
+		String oql = "from "+clazz.getName();
+		try {
+			Query query = session.createQuery(oql);
+			result = (List<E>)query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot load indicator connection",e);
+		}
+		return result;
 	}
 	
 	/**

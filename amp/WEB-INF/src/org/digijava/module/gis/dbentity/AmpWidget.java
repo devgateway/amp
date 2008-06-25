@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Abstract widget.
+ * Lets prefix all subclasses with AmpWidget.
  * @author Irakli Kobiashvili
  *
  */
@@ -13,7 +14,6 @@ public class AmpWidget implements Serializable {
 	private Long id;
 	private String name;
 	private String code;
-	private AmpDaWidgetPlace place;
 	
 	public Long getId() {
 		return id;
@@ -32,12 +32,6 @@ public class AmpWidget implements Serializable {
 	}
 	public void setCode(String code) {
 		this.code = code;
-	}
-	public AmpDaWidgetPlace getPlace() {
-		return place;
-	}
-	public void setPlace(AmpDaWidgetPlace place) {
-		this.place = place;
 	}
 
 }

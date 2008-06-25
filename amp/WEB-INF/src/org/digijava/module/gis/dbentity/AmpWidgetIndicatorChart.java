@@ -7,7 +7,7 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
  * @author Irakli Kobiashvili
  *
  */
-public class AmpIndicatorChartWidget extends AmpWidget {
+public class AmpWidgetIndicatorChart extends AmpWidget {
 
 	private static final long serialVersionUID = 1L;
 	

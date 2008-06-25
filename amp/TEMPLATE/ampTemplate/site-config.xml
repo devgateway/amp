@@ -10,6 +10,13 @@
 			<put-item name="tableWidget4" module="gis" instance="default" teaser="teaserTableWidget"/>
 			<put-item name="tableWidget5" module="gis" instance="default" teaser="teaserTableWidget"/>
 			<put-item name="tableWidget6" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget7" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="widget1" module="gis" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget2" module="gis" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget3" module="gis" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget4" module="gis" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget5" module="gis" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget6" module="gis" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="body" module="gis" page="gisDashboard"/>
 		</layout>
 		<layout name="helpLayout" file="helpLayout.jsp">

@@ -22,7 +22,7 @@
 <table width="60%" border="0" cellpadding="15">
 	<tr>
 		<td>
-			<span class=crumb>
+			<span class="crumb">
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
               </c:set>

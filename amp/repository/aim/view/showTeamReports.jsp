@@ -60,14 +60,12 @@ function confirmFunc() {
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 				<td valign="bottom" class="crumb" >
-<c:set var="translation">
-	<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-</c:set>
+				<c:set var="translation">
+					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+				</c:set>
                 <digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
                 	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
                 </digi:link> &gt; <digi:trn key="aim:AllReports">All Reports</digi:trn></td></tr>
-				<tr>
-		<td>&nbsp;</td></tr>
 				<tr>
 					<td height=16 align="center" vAlign=center><span class=subtitle-blue>
 						<digi:trn key="aim:teamReports">
@@ -76,63 +74,39 @@ function confirmFunc() {
 						</span>
 					</td>
 				</tr>
-				<logic:present name="currentMember">
-	        		<tr>
-	        			<td title='<digi:trn key="aim:createReport">Create Report</digi:trn>' align="left">
-							<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false">
-								<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
-							</digi:link>
-						</td>
-					</tr>
-				</logic:present>
 				<tr>
 					<td noWrap width=650 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-							<tr bgColor=#f4f4f2>
-								<td>&nbsp;
-								</td>
-							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr>
 										<digi:errors/>
-											<td bgColor=#ffffff class=box-border>
+											<td>
 												<table border=0 cellPadding=3 cellSpacing=3 class=box-border width="100%" >
 													<tr bgColor=#dddddb>
-														<td>
-														</td>
-														<td bgColor=#dddddb align="left" height="20">
+														<td bgColor=#dddddb align="center" height="20">
 															<b>
 															<digi:trn key="aim:publicTeamReportsList">
 																List of public team reports
 															</digi:trn>
 															</b>
 														</td>
-														<!--
 														<td bgColor=#dddddb align="center" height="20">
-															<b>
-															<digi:trn key="aim:reportDescription">
-																Description
-															</digi:trn>
-															</b>
-														</td>
-														 -->
-														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:reportOwnerName">
 																Owner
 															</digi:trn>
 															</b>
 														</td>
-														<td bgColor=#dddddb align="left" height="20">
+														<td bgColor=#dddddb align="center" height="20">
 															<b>
 															<digi:trn key="aim:reportCreationDate">
 																Creation Date 
 															</digi:trn>
 															</b>
 														</td>
-														<td bgColor=#dddddb align="left" height="20">
+														<td bgColor=#dddddb align="center" height="20">
 															<b>
 															<digi:trn key="aim:reportType">
 																Type 
@@ -140,24 +114,10 @@ function confirmFunc() {
 															</b>
 														</td>
 														
-														<td bgColor=#dddddb align="left" height="20">
-															<b>
-															<digi:trn key="aim:reportColumns">
-															Report Columns
-															</digi:trn>
-															</b>
-														</td>
-														<td bgColor=#dddddb align="left" height="20">
+														<td bgColor=#dddddb align="center" height="20">
 															<b>
 															<digi:trn key="aim:reportHierarchies">
 															Report Hierarchies
-															</digi:trn>
-															</b>
-														</td>
-														<td bgColor=#dddddb align="left" height="20">
-															<b>
-															<digi:trn key="aim:reportMeasures">
-															Report Measures
 															</digi:trn>
 															</b>
 														</td>
@@ -166,7 +126,7 @@ function confirmFunc() {
 														 if(tm!=null)
 														  {
 														%>
-															<td bgColor=#dddddb align="left" height="20">
+															<td bgColor=#dddddb align="center" height="20">
 																<b>
 																<digi:trn key="aim:reportAction">
 																	Action
@@ -191,14 +151,7 @@ function confirmFunc() {
                                                          <tr bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#eeeeee\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
                                                          	onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#eeeeee\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >														
 															<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>" class="reportsBorderTD">
-															<p style="white-space: nowrap">
-							                 	 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
-															</c:set>
-															</td>		
-															<td>
-															<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
+															<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 															<b>
 																<p style="max-width: 400px;white-space: normal">
 																	<bean:write name="report" property="name"/>
@@ -217,8 +170,8 @@ function confirmFunc() {
 														 		<p style="white-space: nowrap">
 														 		<logic:present name="report" property="ownerId">
 														 			 <i><bean:write name="report" property="ownerId.user.name" /></i>
-														 			 <br>
-														 			 <bean:write name="report" property="ownerId.ampTeam.name" />
+<!--														 			 <br>-->
+<!--														 			 <bean:write name="report" property="ownerId.ampTeam.name" />-->
 														 		</logic:present>
 														 		</p>
 														 	</td>
@@ -301,9 +254,24 @@ function confirmFunc() {
 															 		</logic:equal>
 														 		</p>
 														 	</td>
-
-														 												
 															<td>
+																<logic:iterate name="report" property="hierarchies" id="hierarchy" >
+																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
+																	<li>
+																	${hierarchy.column.columnName}
+																	</li>
+																</logic:iterate>
+															</td>
+															
+																<%
+														 	if(tm!=null)
+														 	{ %>
+
+															<td>  
+															 	
+                                                                <table>
+                                                                <tr>
+                                                                <td>
 																<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
 																	<logic:iterate name="report" property="columns" id="column" indexId="index"  >
 																		<%if (index.intValue()%2==0){ %>
@@ -317,34 +285,24 @@ function confirmFunc() {
 																		<%} %>
 																 	</logic:iterate>
 															 	</div>
-															 	
-															 	<div align="center" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:list">list...</digi:trn></u>]
+                                                                
+															 	<div align="center" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:viewColumns">View Columns</digi:trn></u>]
 																</div>
-															</td>
-															
-															<td>
-																<logic:iterate name="report" property="hierarchies" id="hierarchy" >
-																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
-																	<li>
-																	${hierarchy.column.columnName}
-																	</li>
-																</logic:iterate>
-															</td>
-															
-															<td>
-																<logic:iterate name="report" property="measures" id="measure" >
-																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
-																	<li>
-																	${measure.measure.measureName}
-																	</li>
-																</logic:iterate>
-															</td>
-															
-																<%
-														 	if(tm!=null)
-														 	{ %>
-
-															<td>  
+															    </td>
+															 	<td>
+															 	
+																<div style='position:relative;display:none;' id='measure-<bean:write name="report" property="measures"/>'> 
+																	<logic:iterate name="report" property="measures" id="measure" indexId="index"  >
+																		<li>																			
+																	 		${measure.measure.measureName}
+																		</li>
+																 	</logic:iterate>
+															 	</div>
+															 	
+															 	<div align="center" onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:viewMeasures">View Measures</digi:trn></u>]
+																</div>
+																</td>
+																<td>
 																<p style="white-space: nowrap">
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="rid">
@@ -352,40 +310,36 @@ function confirmFunc() {
 																</c:set>
 																<c:set target="${urlParams}" property="event" value="edit" />
 																<logic:equal name="teamLeadFlag" scope="session" value="true"> 
-																	[ <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
-																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
-																	</digi:link> ]
 																	<module:display name="New Report Wizard" parentModule="REPORTING">
-																		[ <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" >
+																		| <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" >
 																			<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																		</digi:link> ]
+																		</digi:link> 
 																	</module:display>
-																	<module:display name="Old Report Wizard" parentModule="REPORTING">
-																		[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" >
-																			<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																		</digi:link> ]
-																	</module:display>
+																	| <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
+																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
+																	</digi:link> 
+																	
 																</logic:equal>														
 																<logic:equal name="teamLeadFlag" scope="session" value="false">
 																	<logic:present name="report" property="ownerId">
 																		<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
-																			[ <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
-																				<digi:trn key="aim:reportDelete">Delete</digi:trn>
-																			</digi:link> ]
 																			<module:display name="New Report Wizard" parentModule="REPORTING">
-																				[ <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" >
+																				| <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}">
 																					<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																				</digi:link> ]
+																				</digi:link> 
 																			</module:display>
-																			<module:display name="Old Report Wizard" parentModule="REPORTING">
-																				[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams">
-																					<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																				</digi:link> ]
-																			</module:display>
+																			| <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
+																				<digi:trn key="aim:reportDelete">Delete</digi:trn>
+																			</digi:link> 
+																			
 																		</logic:equal>		
 																	</logic:present>																																																
 																</logic:equal>															
 																</p>
+																</td>
+																</tr>																</tr>
+															    </table>
+																
 															</td>
 															<% } %>		
 															

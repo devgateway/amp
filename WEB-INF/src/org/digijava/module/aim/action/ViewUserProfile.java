@@ -59,8 +59,9 @@ public class ViewUserProfile
                 return mapping.getInputForward();
             }
         } else if (memId != null) {
-            user = DbUtil.getUser(memId);
-            memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+           // user = DbUtil.getUser(memId);
+        	 user = DbUtil.getUser(member.getUser().getId());
+            if(user!=null) memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
         }
 
 

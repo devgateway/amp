@@ -124,7 +124,7 @@ public class AddAmpActivity extends Action {
     
    
     
-    if (teamMember != null && teamMember.getTeamType()
+    if (teamMember != null && teamMember.getTeamType()!=null && teamMember.getTeamType()
        .equalsIgnoreCase("GOVERNMENT")) {
        eaForm.setGovFlag(true);
     } else {

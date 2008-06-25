@@ -281,12 +281,7 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false;
-//			if(maxStorage!=-1){
-//				query=session.createQuery(queryString).setMaxResults(maxStorage);
-//			}else{
-//				query=session.createQuery(queryString);
-//			}	
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false;	
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){

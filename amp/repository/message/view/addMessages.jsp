@@ -18,6 +18,22 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<style>
+<!--
+
+.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}
+.yui-skin-sam .yui-ac-input{position:absolute;width:100%;}
+.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
+.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
+.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
+.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
+.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;}
+.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
+.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+
+-->
+</style>
 
 <script langauage="JavaScript">
 	
@@ -64,6 +80,7 @@
     	return true;
 	}
 	
+	document.getElementsByTagName('body')[0].className='yui-skin-sam';
 
 </script>
 
@@ -204,14 +221,14 @@
 																	</tr>
 																	<tr>
 																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-																		<td align="left"><html:text property="messageName" size="53" styleClass="inp-text"/></td>
+																		<td align="left"><html:text property="messageName" style="width:485px" styleClass="inp-text"/></td>
 																	</tr>																																					
 																	<tr>
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-																		<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="50" styleClass="inp-text"/></td>
+																		<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="73" styleClass="inp-text"/></td>
 																	</tr>																				
 																	<tr>
-																		<td align="right" nowrap><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
+																		<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
 																		<td align="left"> 
 																			<html:select property="priorityLevel" styleClass="inp-text">
 																				<html:option value="-1"><digi:trn key="message:selectPriorityLevel">Select Priority level </digi:trn></html:option>
@@ -220,16 +237,16 @@
 																				<html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
 																			</html:select>																												                                                																																												
 																		</td>
-																	</tr>
+																	</tr> 
 																	<tr>
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
-																		<td align="left" width="53">
-																			<div id="statesautocomplete" style="width:50px"> 
-																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" ></html:text>																			    
-																				<div id="statescontainer" style="position:absolute;width:200px;background-color: white; border: solid black 1px;border-top: 0px"></div> 
+																		<td align="left">
+																			<div id="statesautocomplete"> 
+																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:485px"></html:text>																			    
+																				<div id="statescontainer" style="width:485px"></div> 
 																			</div>																		
 																		</td>																					
-																	</tr>						
+																	</tr>																	 																							
 																	<tr>
 																		<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																		<td align="left"> 
@@ -278,7 +295,7 @@
 																                            </tr>
 																                        </table>
 																                    </td>
-																				</tr>																											
+																				</tr>																																												
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >
@@ -318,6 +335,7 @@
 																			</table>
 															</td>
 														</tr>
+														
 													</table>
 					</td>
 					<td width="10"/>
@@ -330,6 +348,7 @@
        </tr></table>
    </td>
 </tr></table>
+																						
 
 <script type="text/javascript">
 	var myArray = [

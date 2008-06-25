@@ -147,8 +147,8 @@ function validateForm(){
      var primConf=document.getElementById('primaryConfig');
      var secConf=document.getElementById('secondaryConfig');
      if(primConf==null && secConf==null){
-         alert("${errMsgAddSector}");
-         return false;
+        // alert("${errMsgAddSector}");
+         // return false;
      }
       document.aimEditActivityForm.addSec.focus();
       return false;

@@ -103,7 +103,7 @@
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-									<field:display name="${auxSectorType}" feature="Sectors"></field:display>
+									<field:display name="${auxSectorType}" feature="Sectors">
                                          <c:set var="sectorAdded">
                                               false
                                           </c:set>
@@ -219,7 +219,7 @@
                                                 </table>
                                             </td>
                                         </tr>
-                                        
+                                        </field:display>
                                     </c:forEach>
                                     
                                 </table>

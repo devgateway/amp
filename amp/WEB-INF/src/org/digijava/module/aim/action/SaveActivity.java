@@ -1414,8 +1414,13 @@ public class SaveActivity extends Action {
 						activity.setApprovalStatus(Constants.STARTED_STATUS);
 					if("newOnly".equals(tm.getAppSettings().getValidation()) && Constants.APPROVED_STATUS.equals(eaForm.getApprovalStatus()))
 								activity.setApprovalStatus(Constants.APPROVED_STATUS);
-					if(eaForm.getDraft()==true)
-						activity.setApprovalStatus(aAct.getApprovalStatus());
+					if(tm.getTeamHead())
+						activity.setApprovalStatus(Constants.APPROVED_STATUS);
+					if(eaForm.getDraft()==true){
+						if(tm.getTeamHead())
+							activity.setApprovalStatus(Constants.APPROVED_STATUS);
+						else activity.setApprovalStatus(aAct.getApprovalStatus());
+					}
 
 					activity.setActivityCreator(eaForm.getCreatedBy());
                     List<String> auditTrail = AuditLoggerUtil.generateLogs(

@@ -92,7 +92,7 @@
                                     <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
                                     <bean:define id="emptySector" value="Sector"></bean:define>
 									<c:if test="${config.name== 'Primary' }">
-										<bean:define id="auxSectorType" value="Sector"></bean:define>
+										<bean:define id="auxSectorType" value="Primary Sector"></bean:define>
 									</c:if>
 									<c:if test="${config.name== 'Secondary' }">
 										<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>

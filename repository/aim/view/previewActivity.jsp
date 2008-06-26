@@ -929,7 +929,7 @@ function collapseAll() {
 																<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
 															</c:if>
 															<c:if test="${config.name== 'Primary' }">
-																<bean:define id="auxSectorType" value="Sector"></bean:define>
+																<bean:define id="auxSectorType" value="Primary Sector"></bean:define>
 															</c:if>
 															<field:display name="${auxSectorType}" feature="Sectors">
 																				
@@ -946,7 +946,7 @@ function collapseAll() {
 															<c:if test="${hasSectors}">
 							                                <strong>
 								                               	<digi:trn key="aim:addactivitysectors:${auxSectorType }">
-								                                <c:out value="${auxSectorType }"/>
+								                                <c:out value="${auxSectorType}"/>
 								                                </digi:trn>
 								                                </strong><br/>
 							                                </c:if>
@@ -963,19 +963,25 @@ function collapseAll() {
                                                                             <c:out value="${sectors.sectorName}" />
                                                               			</c:if> 
                                                               			<c:if test="${!empty sectors.subsectorLevel1Name}">
-                                                              				<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                                                			<c:out value="${sectors.subsectorLevel1Name}"/>
+                                                              				<field:display name="${auxSectorType} Sub-Sector" feature="Sectors">																										
+	                                                              				<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+	                                                                			<c:out value="${sectors.subsectorLevel1Name}"/>
+                                                                			</field:display>
                                                             			</c:if>
                                                             			<c:if test="${!empty sectors.subsectorLevel2Name}">
-                                                            				<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                                                			<c:out value="${sectors.subsectorLevel2Name}"/>
+                                                            				<field:display name="${auxSectorType} Sub-Sub-Sector" feature="Sectors">
+	                                                            				<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+	                                                                			<c:out value="${sectors.subsectorLevel2Name}"/>
+	                                                                		</field:display>
                                                                 		</c:if>
-                                                                		&nbsp;&nbsp; 
-                                                                		<c:if test="${sector.sectorPercentage!=''}">                                                                                        
-                                                                            <c:if test="${sector.sectorPercentage!='0'}">
-                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%
-                                                                            </c:if>
-                                                                        </c:if><br/>
+                                                                		&nbsp;&nbsp;
+                                                                		<field:display name="Percentage" feature="Sectors">
+	                                                                		<c:if test="${sector.sectorPercentage!=''}">                                                                                        
+	                                                                            <c:if test="${sector.sectorPercentage!='0'}">
+	                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%
+	                                                                            </c:if>
+	                                                                        </c:if><br/>
+	                                                                    </field:display>
 
 																		</c:if>
 																	</c:forEach>

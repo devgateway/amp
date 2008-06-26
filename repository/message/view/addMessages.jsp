@@ -22,13 +22,13 @@
 <style>
 <!--
 
-.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}
-.yui-skin-sam .yui-ac-input{position:absolute;width:100%;}
+.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size: 100%}
+.yui-skin-sam .yui-ac-input{position:absolute;width:100%;font-size: 100%}
 .yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}
 .yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}
 .yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}
 .yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
-.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;}
+.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;FONT-SIZE: 100%;}
 .yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
 .yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
@@ -92,8 +92,6 @@
 	border-width: 1px 1px 1px 1px; 
 	background-color: #f4f4f2;
 }
-
-.yui-skin-sam .yui-ac{position:relative;font-family:arial;font-size:100%;}.yui-skin-sam .yui-ac-input{position:absolute;width:100%;}.yui-skin-sam .yui-ac-container{position:absolute;top:1.6em;width:100%;}.yui-skin-sam .yui-ac-content{position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;}.yui-skin-sam .yui-ac-shadow{position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity:0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;}.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}.yui-skin-sam .yui-ac-content li{margin:0;padding:2px 5px;cursor:default;white-space:nowrap;}.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}.yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
 #statesautocomplete ul {
 	list-style: square;
@@ -221,7 +219,7 @@
 																	</tr>
 																	<tr>
 																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-																		<td align="left"><html:text property="messageName" style="width:485px" styleClass="inp-text"/></td>
+																		<td align="left"><html:text property="messageName" style="width:485px;" styleClass="inp-text"/></td>
 																	</tr>																																					
 																	<tr>
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
@@ -242,7 +240,7 @@
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 
-																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:485px"></html:text>																			    
+																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:485px;font-size:100%"></html:text>																			    
 																				<div id="statescontainer" style="width:485px"></div> 
 																			</div>																		
 																		</td>																					
@@ -333,21 +331,22 @@
 																					</td>
 																				</tr>
 																			</table>
+																		</td>
+																	</tr>
+																</table>
 															</td>
+															<td width="10"/>
 														</tr>
-														
 													</table>
-					</td>
-					<td width="10"/>
-				</tr>
-			</table>
-                           </td>
-                       </tr>
-                   </table>
-               </td>
-       </tr></table>
-   </td>
-</tr></table>
+                           						</td>
+                       						</tr>
+                   						</table>	
+               						</td>
+       							</tr>
+       						</table>
+   						</td>
+					</tr>
+</table>
 																						
 
 <script type="text/javascript">
@@ -357,22 +356,18 @@
 		</c:forEach>     
 	];
 
-	YAHOO.example.ACJSArray = new function() {	
-	    // Instantiate first JS Array DataSource 
-	    this.oACDS = new YAHOO.widget.DS_JSArray(myArray); 
-	    // Instantiate first AutoComplete 
-	    this.oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS); 
-	    this.oAutoComp.prehighlightClassName = "yui-ac-prehighlight"; 
-	    this.oAutoComp.typeAhead = true; 
-	    this.oAutoComp.useShadow = true; 
-	    this.oAutoComp.minQueryLength = 0; 
-	    this.oAutoComp.textboxFocusEvent.subscribe(function(){ 
-	        var sInputValue = YAHOO.util.Dom.get('statesinput').value; 
-	        if(sInputValue.length === 0) { 
-	            var oSelf = this; 
-	            setTimeout(function(){oSelf.sendQuery(sInputValue);},0); 
-	        } 
-	    });	   
+	YAHOO.example.ACJSArray = new function() {
+		// Instantiate JS Array DataSource
+	    this.oACDS2 = new YAHOO.widget.DS_JSArray(myArray);
+	    // Instantiate AutoComplete
+	    this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS2);
+	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";    
+	    this.oAutoComp2.useShadow = true;
+	    this.oAutoComp2.forceSelection = true;
+	    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
+	        var sMarkup = oResultItem[0];
+	        return (sMarkup);
+	    };
 	}; 
 
 </script>

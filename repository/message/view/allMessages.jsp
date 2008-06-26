@@ -106,8 +106,7 @@
         else{
             msgTR.className = 'trOdd';
             className="this.className='trOdd'";
-        }
-        
+        }        
         
         var setBGColor = new Function(className);
        
@@ -129,20 +128,21 @@
 	}
 	
 	function openObjectURL(url){
-		openURLinWindow(url,600,550);
+		window.open(url,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes')
+		//openURLinWindow(url,600,550);
 	}
 	
     function viewMsg(id) {
         var ind=id.indexOf('_fId');
         if(ind!=-1){
-            var msgId=id.substring(0,ind);          
-            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
-            
-                }
-                else{           
-            openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
+            var msgId=id.substring(0,ind);
+            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
+            //openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
+        }else{   
+            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
+           // openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
             markMsgeAsRead(id);
-                }
+        }
 	}
 	
 	function deleteMessage(msgId) {
@@ -528,7 +528,7 @@
                    visId=+msgId+'_dots' 
                 }
                 
-		nameDiv.setAttribute("id",visId);		
+		nameDiv.setAttribute("id",visId);	
 		var sp=document.createElement('SPAN');
 		var isMsgRead=message.getAttribute('read');
 		if(isMsgRead=='false'){

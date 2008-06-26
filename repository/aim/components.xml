@@ -382,10 +382,6 @@
     <page page="viewNPDgrid" name="amp_viewNPDgrid" title=" : NPD Print" />
     <page page="selectOrganisationForAhsurvey" name="selectOrganisationForAhsurvey" title="Select Organization" />
 
-    <page name="quartzJobManager" title="Quartz Job Manager" />
-    <page name="addQuartzJob" title="Add Job" />
-    <page name="editQuartzJob" title="Edit Job" />
-
     <!-- tab Views -->
 	<page page="myTabs" name="aim_myTabs" title="My Tabs" />
         <page page="feedback" name="feedback" title="Feedback/Contact" />

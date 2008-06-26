@@ -42,10 +42,14 @@ public class MetaTextCell extends TextCell {
 	}
 	
 	public String getColour(){
-		if( getDraftFlag() && "started".compareTo(getStatusFlag())==0 ) return "RED";
-		if( !getDraftFlag() && "started".compareTo(getStatusFlag())==0 ) return "GREEN";
-		if( !getDraftFlag() && "edited".compareTo(getStatusFlag())==0 ) return "GREEN";
+		try{
+		if( getDraftFlag() && "started".equals(getStatusFlag()) ) return "RED";
+		if( !getDraftFlag() && "started".equals(getStatusFlag()) ) return "GREEN";
+		if( !getDraftFlag() && "edited".equals(getStatusFlag()) ) return "GREEN";
 		if( getDraftFlag()) return "RED";
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		return "";
 	}
 	

@@ -4,6 +4,7 @@
 <struts-config>
 <form-beans>
 	<form-bean name="messageForm" type="org.digijava.module.message.form.AmpMessageForm"/>
+	<form-bean name="quartzJobManagerForm" type="org.digijava.module.message.form.QuartzJobManagerForm" />
 </form-beans>
 <action-mappings>
  	<action path="/message/messageActions" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.AmpMessageActions">
@@ -22,6 +23,9 @@
      	<forward name="addOrEditPage" path="/showLayout.do?layout=addOrEditTemplate" />
      	<forward name="templatesManager" path="/showLayout.do?layout=templateAlertsManager"/>
      </action>
+     <action name="quartzJobManagerForm" path="/message/quartzJobManager" type="org.digijava.module.message.action.QuartzJobManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />
+    </action>
      
 </action-mappings>
 

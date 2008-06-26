@@ -1,14 +1,13 @@
-package org.digijava.module.aim.util;
+package org.digijava.module.message.util;
 
-import org.digijava.module.aim.helper.QuartzJobForm;
 import java.util.ArrayList;
+
+import org.digijava.module.message.helper.QuartzJobForm;
+import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
-import java.util.Date;
-import org.quartz.JobDetail;
 import org.quartz.TriggerUtils;
-import java.text.SimpleDateFormat;
 
 public class QuartzJobUtils {
 

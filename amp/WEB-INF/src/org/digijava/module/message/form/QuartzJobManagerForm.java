@@ -1,14 +1,19 @@
-package org.digijava.module.aim.form;
+package org.digijava.module.message.form;
 
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.helper.QuartzJobForm;
+import org.digijava.module.message.helper.QuartzJobForm;
 
 public class QuartzJobManagerForm extends ActionForm {
-    private String name;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String name;
     private String classFullname;
     private String startDateTime;
     private String endDateTime;

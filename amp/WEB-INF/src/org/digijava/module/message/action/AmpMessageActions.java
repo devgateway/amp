@@ -100,9 +100,7 @@ public class AmpMessageActions extends DispatchAction {
     	if(childTab==null){
     		childTab="inbox";
     	}
-    	messageForm.setChildTab(childTab);  
-    	
-    	
+    	messageForm.setChildTab(childTab);
     	
     	return mapping.findForward("showAllMessages");
     }
@@ -199,15 +197,29 @@ public class AmpMessageActions extends DispatchAction {
     	 */    	
     	if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()<=count){
     		count=settings.getMsgStoragePerMsgType().intValue();
-    		//messageForm.setMessagesForTm(messageForm.getMessagesForTm().subList(0,count));   
+    		//if(count<messages.size()){
+    			if(page==1){
+    				if(count<messages.size()){
+    					messageForm.setMessagesForTm(messages.subList(0,count));
+    				}    				
+    			}else if(page>1){
+    				int toIndex=count-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
+    				if(toIndex<messages.size()){    
+    					messageForm.setMessagesForTm(null);
+    					List<AmpMessageState> msgs=new ArrayList<AmpMessageState>();    					
+    					for (int i=0;i<toIndex;i++) {
+    						msgs.add(messages.get(i));							
+						}
+    					messageForm.setMessagesForTm(msgs);
+    				}    				
+    			}    			
+    		//}    		   
     	}
-    	if(count%MessageConstants.MESSAGES_PER_PAGE==0){ //<--10 messages will be per page. This should come from settings
+    	if(count%MessageConstants.MESSAGES_PER_PAGE==0){ 
 			howManyPages=count/MessageConstants.MESSAGES_PER_PAGE;
 		}else {
 			howManyPages=(count/MessageConstants.MESSAGES_PER_PAGE)+1;
-		}
-    	
-    	
+		} 
     	
     		// we always have at least 1 page
     		howManyPages=howManyPages==0?1:howManyPages;
@@ -261,16 +273,13 @@ public class AmpMessageActions extends DispatchAction {
             AmpMessageState msgState = AmpMessageUtil.getMessageState(id);
             msgState.setRead(true);
             AmpMessageUtil.saveOrUpdateMessageState(msgState);
-            message = msgState.getMessage();
-            
+            message = msgState.getMessage();            
         } else {
             // view forwarded message
             id = new Long(request.getParameter("msgId"));
             message = AmpMessageUtil.getMessage(id);
             isMessageStateId=false;
         }
-
-
         fillFormFields(message, messagesForm, id,isMessageStateId);
         return mapping.findForward("viewMessage");
     }
@@ -287,8 +296,7 @@ public class AmpMessageActions extends DispatchAction {
     		}    		
     		AmpMessageUtil.saveOrUpdateMessageState(state);
     		
-    		//creating xml that will be returned   		
-    		
+    		//creating xml that will be returned
     		response.setContentType("text/xml");
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
@@ -359,7 +367,7 @@ public class AmpMessageActions extends DispatchAction {
         	AmpMessageState oldMsgsState=AmpMessageUtil.getMessageState(stateId);
         	AmpMessage msg=oldMsgsState.getMessage();
                 
-                // for Breadcrumb Generation. we need to which tab we must return..
+                // for Bread-crumb Generation. we need to which tab we must return..
                 if (msg instanceof AmpAlert) {
                     messagesForm.setTabIndex(2);
                 } else {
@@ -372,10 +380,9 @@ public class AmpMessageActions extends DispatchAction {
                             messagesForm.setTabIndex(1);
                         }
                     }
-                }
+                }                
                 
-                
-                messagesForm.setMessageName("FWD: "+ msg.getName());
+            messagesForm.setMessageName("FWD: "+ msg.getName());
         	MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
         	messagesForm.setForwardedMsg(msgHelper);
     	}
@@ -576,9 +583,7 @@ public class AmpMessageActions extends DispatchAction {
 //    		return mapping.findForward("showAllMessages");
 //		}
     	
-		return mapping.findForward("viewMyDesktop");	
-		
-		
+		return mapping.findForward("viewMyDesktop");		
 	}   
     
     
@@ -634,7 +639,8 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setPagedMessagesForTm(null);
 		 form.setLastPage(null);
 		 form.setDeleteActionWasCalled(false);
-                 form.setReceiver(null);
+         form.setReceiver(null);
+         form.setSelectedAct(null);        
 	 }
 	 
 	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long id,boolean isStateId) throws Exception{	 
@@ -649,22 +655,21 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setCreationDate(DateConversion.ConvertDateToString(message.getCreationDate()));		 
 			 form.setClassName(message.getClassName());
 			 form.setObjectURL(message.getObjectURL());
-                         form.setReceiver(message.getReceivers());
-	                          if(message.getSenderType().equalsIgnoreCase("User")){
-                             form.setSender(message.getSenderName());
-	                          } else{
-	                        	  form.setSender(message.getSenderType());
-	                          }
-                         if(isStateId){
-	                          form.setMsgStateId(id);
-	                       
-                                 AmpMessage msg = message.getForwardedMessage();
-                                 if (msg != null) {
-                                     form.setForwardedMsg(createHelperMsgFromAmpMessage(msg, id));
-                                 } else {
-                                     form.setForwardedMsg(null);
-                         }
-                        	 }
+             form.setReceiver(message.getReceivers());
+	         if(message.getSenderType().equalsIgnoreCase("User")){
+	        	 form.setSender(message.getSenderName());
+	         } else{
+	        	 form.setSender(message.getSenderType());
+	         }
+             if(isStateId){
+            	 form.setMsgStateId(id);
+	             AmpMessage msg = message.getForwardedMessage();
+                 if (msg != null) {
+                	 form.setForwardedMsg(createHelperMsgFromAmpMessage(msg, id));
+                 } else {
+                	 form.setForwardedMsg(null);
+                 }
+             }
                              
 			 
 			 form.setReceivers(getMessageRecipients(message.getId()));
@@ -698,7 +703,7 @@ public class AmpMessageActions extends DispatchAction {
 	 }
 	 
 	 /**
-	     * Constructs XML from Messages      
+	 * Constructs XML from Messages      
 	 */     
     private String messages2XML(List<AmpMessageState> states,AmpMessageForm form) throws AimException {
                
@@ -735,17 +740,15 @@ public class AmpMessageActions extends DispatchAction {
         }
         result+="</" + MESSAGES_TAG +">";
         //pagination
-		    	boolean messagesExist=(states==null||states.size()==0)?false:true;
-		    	result+="<" + PAGINATION_TAG +">";
-		    	result+="<"+"pagination messagesExist=\""+messagesExist+"\"";
-		    	result+=" page=\""+form.getPage()+"\"";
-		    	result+=" allPages=\""+form.getAllPages().length+"\"";
-		    //	result+=" pagesToShow=\""+form.getPagesToShow()+"\"";
-		    	result+=" lastPage=\""+form.getLastPage()+"\"";
-		    	result+=" deleteWasCalled=\""+form.isDeleteActionWasCalled()+"\"";
-		    //	result+=" offset=\""+form.getOffset()+"\"";
-		    	result+="/>";
-		    	result+="</" + PAGINATION_TAG +">";
+		boolean messagesExist=(states==null||states.size()==0)?false:true;
+		result+="<" + PAGINATION_TAG +">";
+		result+="<"+"pagination messagesExist=\""+messagesExist+"\"";
+		result+=" page=\""+form.getPage()+"\"";
+		result+=" allPages=\""+form.getAllPages().length+"\"";
+		result+=" lastPage=\""+form.getLastPage()+"\"";
+		result+=" deleteWasCalled=\""+form.isDeleteActionWasCalled()+"\"";
+		result+="/>";
+		result+="</" + PAGINATION_TAG +">";
         result += "</" + ROOT_TAG + ">";
         return result;
     }
@@ -780,9 +783,6 @@ public class AmpMessageActions extends DispatchAction {
             AmpMessage forwarded = forwardedMessage.getForwardedMessage();
             result += messages2XML(forwarded,parentStateId);
         }
-        
-
-
         return result;
     }
 	 
@@ -809,19 +809,18 @@ public class AmpMessageActions extends DispatchAction {
 	  * used to get message recipients, which will be shown on edit Message Page 
 	  */
 	 private static List<LabelValueBean> getMessageRecipients(Long messageId) throws Exception{
-		 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(messageId);
-			List<LabelValueBean> members=null;
-			if(msgStates!=null && msgStates.size()>0){
-				members=new ArrayList<LabelValueBean>();
-				for (AmpMessageState state :msgStates) {
-					if(state.getMemberId()!=null){
-						AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-						LabelValueBean tm=new LabelValueBean(teamMember.getUser().getName(),"m:"+state.getMemberId());				
-						members.add(tm);
-					}					
-				}
+	 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(messageId);
+		List<LabelValueBean> members=null;
+		if(msgStates!=null && msgStates.size()>0){
+			members=new ArrayList<LabelValueBean>();
+			for (AmpMessageState state :msgStates) {
+				if(state.getMemberId()!=null){
+					AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+					LabelValueBean tm=new LabelValueBean(teamMember.getUser().getName(),"m:"+state.getMemberId());				
+					members.add(tm);
+				}					
 			}
-			return members;
-	 }
-         
+		}
+		return members;
+	 }         
 }

@@ -25,6 +25,7 @@
      </action>
      <action name="quartzJobManagerForm" path="/message/quartzJobManager" type="org.digijava.module.message.action.QuartzJobManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />
+      <forward name="addJob" path="/showLayout.do?layout=addQuartzJob" />
     </action>
      
 </action-mappings>

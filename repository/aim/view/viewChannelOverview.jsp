@@ -536,7 +536,7 @@ function commentWin(val) {
 																					<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
 																				</c:if>
 																				<c:if test="${config.name== 'Primary' }">
-																					<bean:define id="auxSectorType" value="Primary Sector"></bean:define>
+																					<bean:define id="auxSectorType" value="Sector"></bean:define>
 																				</c:if>
 																				 <field:display name="${auxSectorType}" feature="Sectors">
 																				<c:set var="hasSectors">
@@ -567,17 +567,17 @@ function commentWin(val) {
 																										<br/>&nbsp;
 																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
 																									</field:display>
-																									<field:display name="${auxSectorType}" feature="Sectors">
+																									<field:display name="Sector" feature="Sectors">
 																										<c:out value="${actSect.sectorName}" />
 																									</field:display>
 																									<c:if test="${!empty actSect.subsectorLevel1Name}">
-																										<field:display name="${auxSectorType} Sub-Sector" feature="Sectors">
+																										<field:display name="Sub-Sector" feature="Sectors">
 																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																											src="../ampTemplate/images/link_out_bot.gif"/>
 																										<c:out value="${actSect.subsectorLevel1Name}" />
 																										</field:display>
 																										<c:if test="${!empty actSect.subsectorLevel2Name}">
-																										<field:display name="${auxSectorType} Sub-Sub-Sector" feature="Sectors">
+																										<field:display name="Sub-Sub-Sector" feature="Sectors">
 																											 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																												src="../ampTemplate/images/link_out_bot.gif"/>
 																											<c:out value="${actSect.subsectorLevel2Name}" />
@@ -585,7 +585,7 @@ function commentWin(val) {
 																										</field:display>
 																										</c:if>
 																									</c:if>
-																									<field:display name="Percentage" feature="Sectors">
+																									<field:display name="Sectors Percentage" feature="Sectors">
 				                                                                                    <logic:present name="actSect" property="sectorPercentage">
 																										<c:if test="${actSect.sectorPercentage!=0}">
 																											(<c:out value="${actSect.sectorPercentage}" />%)

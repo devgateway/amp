@@ -301,6 +301,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
 						: "");
 		String TEAM_FILTER = "";
+		/*
 		if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0){
 			Set<String> activityStatus = new HashSet<String>();
 			activityStatus.add(Constants.APPROVED_STATUS);
@@ -329,7 +330,31 @@ public class AmpARFilter extends PropertyListable implements Filter {
 					+ Util.toCSString(teamAssignedOrgs) + ")) )";
 
 		}
+		*/
+		//new computed filter - after permissions #3167
+		TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("
+			+ Util.toCSString(ampTeams)
+			+ ") "
+			+ "OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			+ Util.toCSString(ampTeams) + ") )";
 
+	// computed workspace filter -- append it to the team filter so normal
+	// team activities are also possible
+			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
+				
+				Set<String> activityStatus = new HashSet<String>();
+				activityStatus.add(Constants.APPROVED_STATUS);
+				activityStatus.add(Constants.EDITED_STATUS);
+				
+				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
+						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.draft=false AND a.approval_status IN (" +
+						Util.toCSString(activityStatus)	+") )";
+				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
+						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.draft=false AND b.approval_status IN (" +
+						Util.toCSString(activityStatus)	+") )";
+		
+			}
+		
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
 

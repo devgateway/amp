@@ -1403,12 +1403,16 @@ public class SaveActivity extends Action {
 
 
 				if (eaForm.isEditAct()) {
+					//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					//AMP-3464
 					//if an approved activity is edited and the appsettins is set to newOnly then the activity
 					//doesn't need to be approved again!
-					if("newOnly".equals(tm.getAppSettings().getValidation()) && Constants.APPROVED_STATUS.equals(Constants.APPROVED_STATUS))
+					AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) )
+						activity.setApprovalStatus(Constants.STARTED_STATUS);
+					if("newOnly".equals(tm.getAppSettings().getValidation()) && Constants.APPROVED_STATUS.equals(eaForm.getApprovalStatus()))
 								activity.setApprovalStatus(Constants.APPROVED_STATUS);
 
 					activity.setActivityCreator(eaForm.getCreatedBy());
@@ -1440,7 +1444,7 @@ public class SaveActivity extends Action {
 							ampContext.setAttribute(Constants.EDIT_ACT_LIST,
 									activityMap);
 							ampContext.setAttribute(Constants.SESSION_LIST,
-									sessList);
+									sessList); 
 
 							HashMap tsList = (HashMap) ampContext
 									.getAttribute(Constants.TS_ACT_LIST);

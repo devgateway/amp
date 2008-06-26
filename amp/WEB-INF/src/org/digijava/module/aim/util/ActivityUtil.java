@@ -1377,7 +1377,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setDocumentSpace(ampActivity.getDocumentSpace());
         activity.setProposedCompletionDate(ampActivity.
                                            getProposedCompletionDate());
-
+        activity.setApprovalStatus(ampActivity.getApprovalStatus());
         activity.setBudget(ampActivity.getBudget());
         activity.setUpdatedBy(ampActivity.getUpdatedBy());
         activity.setGovAgreementNumber(ampActivity.getGovAgreementNumber());
@@ -1493,6 +1493,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setContractDetails(ampActivity.getContractDetails());
         activity.setConvenioNumcont(ampActivity.getConvenioNumcont());
         activity.setClasiNPD(ampActivity.getClasiNPD());
+        activity.setDraft(ampActivity.getDraft());
 
       }
     }

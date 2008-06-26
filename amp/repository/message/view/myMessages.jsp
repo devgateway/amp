@@ -94,7 +94,8 @@
     }
 
     function viewMessage(id) {
-      openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,550,400);
+      window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+      //openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,550,400);
     }
 
     function getNewMessagesAmount(status, statusText, responseText, responseXML){

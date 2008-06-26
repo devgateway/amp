@@ -385,6 +385,7 @@ public class AmpMessageActions extends DispatchAction {
             messagesForm.setMessageName("FWD: "+ msg.getName());
         	MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
         	messagesForm.setForwardedMsg(msgHelper);
+        	messagesForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds());
     	}
     	return loadReceiversList(mapping,messagesForm,request,response);	
     }

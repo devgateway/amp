@@ -36,6 +36,8 @@ public class AmpMessageWorker {
     				newMsg=proccessUserRegistrationEvent(e,newAlert,template);
     			}else if(e.getTrigger().equals(ActivityDisbursementDateTrigger.class)){
     				newMsg=processActivityDisbursementDateComingEvent(e,newAlert,template);
+                }else if(e.getTrigger().equals(CalendarEventTrigger.class)){
+    				newMsg=proccessCalendarEvent(e,newAlert,template);
     			}else if(e.getTrigger().equals(ApprovedActivityTrigger.class)){
                     newMsg=processApprovedActivityEvent(e,newApproval,template);
                 }else if(e.getTrigger().equals(NotApprovedActivityTrigger.class)){
@@ -56,6 +58,26 @@ public class AmpMessageWorker {
     	}
     }
 
+    /**
+     *	Calendar Event Event processing
+     */
+    private static AmpAlert proccessCalendarEvent(Event e, AmpAlert alert,TemplateAlert template){
+        //url
+        String partialURL=null;
+        if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)!=null){
+            partialURL=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)+"/";
+        }
+
+        HashMap<String, String> myHashMap=new HashMap<String, String>();
+        myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
+        if(partialURL!=null){
+            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\""+partialURL+e.getParameters().get(CalendarEventTrigger.PARAM_URL)+"\">View Event</a>");
+            alert.setObjectURL(partialURL+e.getParameters().get(CalendarEventTrigger.PARAM_URL));
+        }
+        alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
+
+        return createAlertFromTemplate(template, myHashMap,alert);
+    }
     /**
      *	Not Approved Activity Event processing
      */

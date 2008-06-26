@@ -8,7 +8,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
@@ -173,6 +172,43 @@ public class AmpDbUtil {
     }
   }
 
+  public static List<Calendar> getAmpCalendarsByStartDate(Date startDate) {
+    if(startDate == null) {
+      return null;
+    }
+    try{
+      Session session = PersistenceManager.getRequestDBSession();
+
+      String queryString = "select c from "+Calendar.class.getName()+" c where :startDate = c.startDate";
+
+      Query query = session.createQuery(queryString);
+      query.setDate("startDate", startDate);
+
+      return query.list();
+    }catch (Exception e) {
+      logger.debug("Unable to get AmpCalendars by Start Date", e);
+      return null;
+    }
+  }
+
+  public static List<Calendar> getAmpCalendarsByEndDate(Date endDate) {
+    if(endDate == null) {
+      return null;
+    }
+    try{
+      Session session = PersistenceManager.getRequestDBSession();
+
+      String queryString = "select c from "+Calendar.class.getName()+" c where :endDate = c.endDate";
+
+      Query query = session.createQuery(queryString);
+      query.setDate("endDate", endDate);
+
+      return query.list();
+    }catch (Exception e) {
+      logger.debug("Unable to get AmpCalendars by Start Date", e);
+      return null;
+    }
+  }
   public static AmpCalendar getAmpCalendar(Long ampCalendarId,
                                            String instanceId, String siteId) {
     AmpCalendar ampCalendar = getAmpCalendar(ampCalendarId);
@@ -308,12 +344,12 @@ public class AmpDbUtil {
       else {
         queryString += " and 0 = 1";
       }
-      
+
 		if (selectedDonorIds != null && selectedDonorIds.length != 0) {
 			queryString += " and (don.id in (:selectedDonorIds)";
-	
+
 			// FFerreyra: Add clause to where for "None" donor selected. See AMP-2691
-			
+
 			for(int index=0;index<selectedDonorIds.length;index++){
 				if(selectedDonorIds[index].equals("None")){
 					queryString += " or don.id is null ";
@@ -349,7 +385,7 @@ public class AmpDbUtil {
         query.setParameterList("selectedDonorIds",
                                selectedDonorIds);
       }
-      
+
       /*   if(userId != null && !showPublicEvents) {
              query.setLong("userId", userId.longValue());
          }
@@ -360,10 +396,10 @@ public class AmpDbUtil {
       if (siteId != null) {
         query.setString("siteId", siteId);
       }
-      
+
       System.out.println("\n\n\n\n\n\n" + query.getQueryString());
-      
-      
+
+
       List events = query.list();
       /*if(events != null && !events.isEmpty() && selectedDonorIds != null &&
          selectedDonorIds.length != 0) {

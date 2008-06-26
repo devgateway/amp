@@ -7,12 +7,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.message.form.QuartzJobManagerForm;
-import org.digijava.module.message.helper.QuartzJobForm;
 import org.digijava.module.message.util.QuartzJobUtils;
-
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import org.digijava.module.message.helper.QuartzJobForm;
+import org.digijava.module.message.form.QuartzJobManagerForm;
 
 public class QuartzJobManager extends Action {
 
@@ -27,16 +24,12 @@ public class QuartzJobManager extends Action {
             QuartzJobForm job=new QuartzJobForm();
             job.setClassFullname(qmform.getClassFullname());
             job.setDayOfWeek(qmform.getSelectedDay());
-
-            Date date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(qmform.getStartDateTime());
-            job.setStartDateTime(date);
-
+            job.setStartDateTime(qmform.getStartDateTime());
             job.setExeTime(qmform.getExeTime());
             job.setName(qmform.getName());
 
             if(!"".equals(qmform.getEndDateTime())){
-                date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(qmform.getEndDateTime());
-                job.setEndDateTime(date);
+                job.setEndDateTime(qmform.getEndDateTime());
             }
             job.setTriggerType(qmform.getTriggerType());
 

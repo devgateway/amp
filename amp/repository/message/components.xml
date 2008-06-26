@@ -7,6 +7,10 @@
 	<page page="messageSettings" name="messageSettings" title="Message Settings"></page>
 	<page page="templateAlertsManager" name="templateAlertsManager" title="TemplateAlert Manager"/>
 	<page page="addOrEditTemplate" name="addOrEditTemplate" title="Add/Edit Template"/>
+	
+	<page name="quartzJobManager" title="Quartz Job Manager" />
+    <page name="addQuartzJob" title="Add Job" />
+    <page name="editQuartzJob" title="Edit Job" />
 </secondary-pages>
 <module>
 	<teaser name="myMessages" action="getMessages.do">

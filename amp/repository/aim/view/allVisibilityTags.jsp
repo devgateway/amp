@@ -452,9 +452,12 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Secondary Program" feature="NPD Programs"></field:display>
 <field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display>
 <field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display>
-<field:display name="Sector" feature="Sectors"></field:display>
-<field:display name="Secondary Sub-Sector" feature="Sectors">&nbsp;</field:display>
-<field:display name="Secondary Sector" feature="Sectors">&nbsp;</field:display>
+<field:display name="Primary Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>
@@ -465,8 +468,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub Program Level 7" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display>
 <field:display name="Sub-Program" feature="Budget"></field:display>
-<field:display name="Sub-Sector" feature="Sectors"></field:display>
-<field:display name="Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display>
 <field:display name="Team" feature="Identification"></field:display>

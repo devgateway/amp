@@ -435,8 +435,7 @@
 <field:display name="Organizations and Project ID" feature="Identification"></field:display> 
 <field:display name="Overall Contribution" feature="Planning"></field:display> 
 <field:display name="Overall Cost" feature="Planning"></field:display> 
-<field:display name="Paris Survey" feature="Paris Indicators"></field:display> 
-<field:display name="Percentage" feature="Sectors"></field:display> 
+<field:display name="Paris Survey" feature="Paris Indicators"></field:display>
 <field:display name="Perspective Commitment" feature="Funding Organizations"></field:display> 
 <field:display name="Perspective Disbursement" feature="Disbursement"></field:display> 
 <field:display name="Perspective Expenditure" feature="Funding Organizations"></field:display> 
@@ -529,8 +528,13 @@
 <field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact"></field:display> 
 <field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact"></field:display> 
 <field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector" feature="Sectors"></field:display> 
-<field:display name="Sectors Percentage" feature="Sectors"></field:display> 
+<field:display name="Primary Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
+<field:display name="Percentage" feature="Sectors"></field:display>
 <field:display name="Signature of Contract" feature="Contracting"></field:display> 
 <field:display name="Contracting Start of Tendering" feature="Contracting"></field:display> 
 <field:display name="Status" feature="Planning"></field:display> 

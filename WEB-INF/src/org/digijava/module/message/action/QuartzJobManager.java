@@ -1,4 +1,4 @@
-package org.digijava.module.aim.action;
+package org.digijava.module.message.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,9 +7,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.QuartzJobManagerForm;
-import org.digijava.module.aim.helper.QuartzJobForm;
-import org.digijava.module.aim.util.QuartzJobUtils;
+import org.digijava.module.message.form.QuartzJobManagerForm;
+import org.digijava.module.message.helper.QuartzJobForm;
+import org.digijava.module.message.util.QuartzJobUtils;
+
 import java.util.Date;
 import java.text.SimpleDateFormat;
 

@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper;
+package org.digijava.module.message.helper;
 
 import java.util.Date;
 

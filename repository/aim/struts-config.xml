@@ -107,8 +107,6 @@
     <form-bean name="aimCurrencyRateForm" type="org.digijava.module.aim.form.CurrencyRateForm" />
     <form-bean name="aimDonorDataImportForm" type="org.digijava.module.aim.form.DonorDataImportForm" />
 
-    <form-bean name="quartzJobManagerForm" type="org.digijava.module.aim.form.QuartzJobManagerForm" />
-
     <form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
 
@@ -153,18 +151,13 @@
 	<!-- new organization Component -->
 	<form-bean name="aimSelectOrganizationForm" type="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm"/>
 	<!-- End new organization Component -->
-
 </form-beans>
 
   <global-forwards>
     <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
     <forward name="index" path="/aim/index.do" />
   </global-forwards>
-  <action-mappings>
-    <action name="quartzJobManagerForm" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />
-      <forward name="addJob" path="/showLayout.do?layout=addQuartzJob" />
-    </action>
+  <action-mappings>    
     <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />
     </action>

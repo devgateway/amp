@@ -201,10 +201,12 @@
                                   <digi:trn key="message:viewSettings">Click here to view Message Settings</digi:trn>
                                 </c:set>
                                <digi:link module="message" href="/msgSettings.do?actionType=getSettings" title="${trn}">
-                                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
+                                  <digi:trn key="message:messagesManager">Message Manager</digi:trn>
                                 </digi:link>
                               </td>
                           	</tr>
+                            <!-- 
+                            
                             <tr>
                               <td class="f-names" nowrap="nowrap">
                                 <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -227,6 +229,8 @@
                                 </digi:link>
                               </td>
                             </tr>
+                            
+                             -->
 						  <!-- hidden Lucene Debug!
 						  <feature:display name="Lucene Debug" module="Admin Home">
                           <tr>

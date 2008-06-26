@@ -133,6 +133,68 @@
 											</tr>
 										</TABLE>
 									</TD>
+									<TD>&nbsp;</TD>
+									<td  vAlign="top">
+										<table align=center cellPadding=0 cellSpacing=0 width="70%" border=0>
+											<tr>
+												<td>
+													<!-- Other Links -->
+													<table cellPadding=0 cellSpacing=0 width=100>
+														<tr>
+															<td bgColor=#c9c9c7 class=box-title>
+																<digi:trn key="aim:otherLinks">
+																Other links
+																</digi:trn>
+															</td>
+															<td background="module/aim/images/corner-r.gif" height="17" width=17>
+																&nbsp;
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td bgColor=#ffffff class=box-border>
+													<table cellPadding=3 cellSpacing=1 width="100%">
+														<tr>
+															<td>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<c:set var="translation">
+																	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+																</c:set>
+																<digi:link href="/admin.do" title="${translation}" module="aim">
+																	<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+																</digi:link>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<c:set var="trn">
+								                                  <digi:trn key="message:viewSettings">Click here to view TemplateAlerts Manager</digi:trn>
+								                                </c:set>
+								                                <digi:link module="message" href="/templatesManager.do?actionType=viewTemplates" title="${trn}">
+								                                  <digi:trn key="message:templatesManager">TemplateAlerts Manager</digi:trn>
+								                                </digi:link>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<c:set var="trn">
+								                                  <digi:trn key="aim:viewSettings">Click here to view Job Manager</digi:trn>
+								                                </c:set>
+								                                <digi:link module="message" href="/quartzJobManager.do" title="${trn}">
+								                                  <digi:trn key="aim:jobManager">Job Manager</digi:trn>
+								                                </digi:link>
+															</td>
+														</tr>
+														<!-- end of other links -->
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
 								</TR>													
 							</TABLE>
 						</TD></TR>												

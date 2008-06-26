@@ -1,19 +1,21 @@
 package org.digijava.module.message.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import org.digijava.module.message.helper.QuartzJobForm;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.TriggerUtils;
+import org.digijava.module.message.helper.QuartzJobForm;
 
 public class QuartzJobUtils {
 
     public static ArrayList<QuartzJobForm> getAllJobs(){
         Scheduler sched=getScheduler();
         try{
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             ArrayList<QuartzJobForm> qrtzCol = new ArrayList<QuartzJobForm> ();
 
             String[] trgGroupNames = sched.getTriggerGroupNames();
@@ -29,11 +31,11 @@ public class QuartzJobUtils {
                         job.setGroupName(exTrg.getJobGroup());
                         job.setTriggerGroupName(exTrg.getGroup());
                         job.setTriggerName(exTrg.getName());
-                        job.setEndDateTime(exTrg.getEndTime());
-                        job.setFinalFireDateTime(exTrg.getFinalFireTime());
-                        job.setNextFireDateTime(exTrg.getNextFireTime());
-                        job.setPrevFireDateTime(exTrg.getPreviousFireTime());
-                        job.setStartDateTime(exTrg.getStartTime());
+                        if(exTrg.getEndTime()!=null)job.setEndDateTime(sdf.format(exTrg.getEndTime()));
+                        if(exTrg.getFinalFireTime()!=null)job.setFinalFireDateTime(sdf.format(exTrg.getFinalFireTime()));
+                        if(exTrg.getNextFireTime()!=null)job.setNextFireDateTime(sdf.format(exTrg.getNextFireTime()));
+                        if(exTrg.getPreviousFireTime()!=null)job.setPrevFireDateTime(sdf.format(exTrg.getPreviousFireTime()));
+                        if(exTrg.getStartTime()!=null)job.setStartDateTime(sdf.format(exTrg.getStartTime()));
 
                         if(sched.getTriggerState(exTrg.getName(),exTrg.getGroup())==Trigger.STATE_PAUSED){
                             job.setPaused(true);
@@ -47,7 +49,7 @@ public class QuartzJobUtils {
             }
             return qrtzCol;
         }catch(Exception ex){
-            return null;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -109,15 +111,17 @@ public class QuartzJobUtils {
                     }
                     break;
             }
-
             trg.setName(job.getName() + "Trigger");
-            trg.setStartTime(job.getStartDateTime());
-            trg.setEndTime(job.getEndDateTime());
+
+            SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+            trg.setStartTime(sdf.parse(job.getStartDateTime()));
+            if(job.getEndDateTime()!=null && job.getEndDateTime().equals(""))trg.setEndTime(sdf.parse(job.getEndDateTime()));
             sched.scheduleJob(newJob, trg);
 
             sched.start();
         }catch(Exception ex){
-
+            throw new RuntimeException(ex);
         }
     }
 
@@ -126,7 +130,7 @@ public class QuartzJobUtils {
         try{
             sched.pauseAll();
         }catch(Exception ex){
-            return;
+            throw new RuntimeException(ex);
         }
     }
     public static void resumeAll(){
@@ -134,7 +138,7 @@ public class QuartzJobUtils {
         try{
             sched.resumeAll();
         }catch(Exception ex){
-           return;
+           throw new RuntimeException(ex);
         }
     }
 
@@ -149,7 +153,7 @@ public class QuartzJobUtils {
             sched.pauseJob(job.getName(),job.getGroupName());
             sched.pauseTrigger(job.getTriggerGroupName(),job.getTriggerGroupName());
         }catch(Exception ex){
-            return;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -163,7 +167,7 @@ public class QuartzJobUtils {
             sched.resumeTrigger(job.getTriggerGroupName(),job.getTriggerGroupName());
             sched.resumeJob(job.getName(),job.getGroupName());
         }catch(Exception ex){
-            return;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -177,7 +181,7 @@ public class QuartzJobUtils {
         try{
             sched.deleteJob(job.getName(),job.getGroupName());
         }catch(Exception ex){
-            return;
+            throw new RuntimeException(ex);
         }
     }
 
@@ -187,7 +191,7 @@ public class QuartzJobUtils {
             Scheduler sched = schedFact.getScheduler();
             return sched;
         }catch(Exception ex){
-            return null;
+            throw new RuntimeException(ex);
         }
     }
     public QuartzJobUtils() {

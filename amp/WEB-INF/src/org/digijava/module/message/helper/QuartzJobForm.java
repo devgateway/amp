@@ -1,14 +1,12 @@
 package org.digijava.module.message.helper;
 
-import java.util.Date;
-
 public class QuartzJobForm {
     private String name;
-    private Date startDateTime;
-    private Date endDateTime;
-    private Date nextFireDateTime;
-    private Date prevFireDateTime;
-    private Date finalFireDateTime;
+    private String startDateTime;
+    private String endDateTime;
+    private String nextFireDateTime;
+    private String prevFireDateTime;
+    private String finalFireDateTime;
     private String classFullname;
     private String triggerName;
     private String groupName;
@@ -21,11 +19,11 @@ public class QuartzJobForm {
     public QuartzJobForm() {
     }
 
-    public Date getFinalFireDateTime() {
+    public String getFinalFireDateTime() {
         return finalFireDateTime;
     }
 
-    public Date getEndDateTime() {
+    public String getEndDateTime() {
         return endDateTime;
     }
 
@@ -33,15 +31,15 @@ public class QuartzJobForm {
         return name;
     }
 
-    public Date getNextFireDateTime() {
+    public String getNextFireDateTime() {
         return nextFireDateTime;
     }
 
-    public Date getPrevFireDateTime() {
+    public String getPrevFireDateTime() {
         return prevFireDateTime;
     }
 
-    public Date getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
@@ -77,11 +75,11 @@ public class QuartzJobForm {
         return paused;
     }
 
-    public void setEndDateTime(Date endDateTime) {
+    public void setEndDateTime(String endDateTime) {
         this.endDateTime = endDateTime;
     }
 
-    public void setFinalFireDateTime(Date finalFireDateTime) {
+    public void setFinalFireDateTime(String finalFireDateTime) {
         this.finalFireDateTime = finalFireDateTime;
     }
 
@@ -89,15 +87,15 @@ public class QuartzJobForm {
         this.name = name;
     }
 
-    public void setNextFireDateTime(Date nextFireDateTime) {
+    public void setNextFireDateTime(String nextFireDateTime) {
         this.nextFireDateTime = nextFireDateTime;
     }
 
-    public void setPrevFireDateTime(Date prevFireDateTime) {
+    public void setPrevFireDateTime(String prevFireDateTime) {
         this.prevFireDateTime = prevFireDateTime;
     }
 
-    public void setStartDateTime(Date startDateTime) {
+    public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
 

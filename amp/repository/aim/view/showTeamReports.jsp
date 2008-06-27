@@ -460,7 +460,7 @@ function confirmFunc() {
                         </c:if>
                       <c:if test="${pageidx < maxpages}"> | </c:if>
                     </logic:iterate>
-                    <c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
+                    <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
                       <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
                       <c:set target="${urlParamsNext}" property="action" value="getPage"/>
                       <c:set var="translation">

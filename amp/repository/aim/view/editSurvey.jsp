@@ -294,7 +294,7 @@
                                           ${aimEditActivityForm.ahsurvey.pointOfDeliveryDonor.name}
                                           </td>
                                           <td align="right">
-                                          
+
                                             <input type="button" value="<digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn>" onclick="openSelOrgPopup();" style="font-family:tahoma;font-size:8pt;" />
                                           </td>
                                         </tr>
@@ -583,14 +583,14 @@
 
 						<td width="25%" vAlign="top" align="right">
 
-  <!-- edit activity form menu -->
+  <%-- edit activity form menu -->
   <c:if test="${aimEditActivityForm.donorFlag == false}">
     <jsp:include page="editActivityMenu.jsp" flush="true" />
   </c:if>
   <c:if test="${aimEditActivityForm.donorFlag == true}">
     <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
   </c:if>
-  <!-- end of activity form menu -->
+  <!-- end of activity form menu --%>
 
 						</td></tr>
 

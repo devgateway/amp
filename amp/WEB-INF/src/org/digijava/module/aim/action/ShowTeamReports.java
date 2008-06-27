@@ -171,7 +171,7 @@ public class ShowTeamReports extends Action {
 			//AmpReports are comparable by name, so this will sort by name.
 			Collections.sort(sortedReports);
 			rf.setReports(sortedReports);
-			
+			rf.setPage(0);
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -17,9 +18,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.harvest.DBUtil;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -42,13 +45,76 @@ public class ShowTeamReports extends Action {
 
 		List dbReturnSet = null;
 		HttpSession session = request.getSession();
-		int reportsPerPage = 0;
-		int startReport = 0;
+		String action = request.getParameter("action");
+		
 		boolean appSettingSet = false;
 
 		ReportsForm rf = (ReportsForm) form;
 		rf.setCurrentMemberId(null);
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if(action==null){
+			getAllReports(appSettingSet, rf, tm);
+		}
+		                                             
+		int page = 0;
+		if (request.getParameter("page") == null) {
+			page = 0;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));
+		}
+		rf.setCurrentPage(new Integer (page));
+		rf.setPagesToShow(10);
+		
+		doPagination(rf, request);
+
+		return mapping.findForward("forward");
+	}
+	private void doPagination(ReportsForm rf, HttpServletRequest request) {
+		Collection allReports = rf.getReports();
+		Collection pageList = rf.getReportsList();
+		int pageSize = rf.getTempNumResults();
+		if (pageList == null) {
+			pageList = new ArrayList<AmpReports>();
+			rf.setReportsList(pageList);
+		}
+
+		pageList.clear();
+		int i = 0;
+
+
+		int idx = 0;
+
+		if(pageSize != -1 && rf.getPage() * rf.getPageSize() < allReports.size()){
+			idx =  rf.getPage() * rf.getPageSize();
+		}else{
+			idx = 0;
+			rf.setPage(0);
+		}
+
+		Double totalPages = 0.0;
+		if(pageSize != -1){
+			Iterator iterator = allReports.iterator();
+			while(i<idx){
+				iterator.next();
+				i++;
+			}
+			for (i=0; iterator.hasNext() && i < pageSize; i++) {
+				pageList.add(iterator.next());
+			}
+        	totalPages=Math.ceil(1.0*allReports.size() / rf.getPageSize());
+		}
+		else{
+			Iterator iterator = allReports.iterator();
+			for (i=0;iterator.hasNext(); i++) {
+				pageList.add(iterator.next());
+	       }
+			totalPages=1.0;       	
+        }
+
+		rf.setTotalPages(totalPages.intValue());
+	}
+
+	private void getAllReports(boolean appSettingSet, ReportsForm rf, TeamMember tm) {
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}
@@ -63,45 +129,18 @@ public class ShowTeamReports extends Action {
 			if (appSettings == null || appSettings.getDefReportsPerPage() == 0) {
 				rf.setTotalPages(FIRST_PAGE);
 			} else {
-				reportsPerPage = appSettings.getDefReportsPerPage();
-				startReport = reportsPerPage * (rf.getCurrentPage() - 1);
 				appSettingSet = true;
 			}
-/**
- * New Code, for AMP-2191
- */
+
 			Set<AmpReports> reps = new TreeSet<AmpReports>(
 					new AdvancedReportUtil.AmpReportIdComparator());
-
-//			Collection results = null;
-//			if (appSettingSet) {
-//				results = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
-//				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(), startReport, reportsPerPage);
-//				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
-//				rf.setTotalPages(totalPages.intValue());
-//			}else{
-//				results = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
-//				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(),null,null);
-//				 
-//			}
-//			/*
-//			if(teamLeadResults!=null){
-//				reps.addAll(teamLeadResults);
-//			}
-//			if (teamMemberResults!=null){
-//				reps.addAll(teamMemberResults);
-//			}
-//			*/
-//			if (results!=null){
-//				reps.addAll(results);
-//			}		
 			
 			ArrayList teamResults = null;
 			//Collection teamMemberResults = null;
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(),0, 0,true,tm.getMemberId());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				
@@ -125,11 +164,7 @@ public class ShowTeamReports extends Action {
 			if(teamResults!=null){
 				reps.addAll(teamResults);
 			}
-			/*
-			if (teamMemberResults!=null){
-				reps.addAll(teamMemberResults);
-			}
-			*/
+
 			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
 			//do not add this in ArrayList constructor.
 			sortedReports.addAll(reps);
@@ -137,47 +172,7 @@ public class ShowTeamReports extends Action {
 			Collections.sort(sortedReports);
 			rf.setReports(sortedReports);
 			
-/***********
- * Old Code. 
- */			
-//			if (tm.getTeamHead() == true) {
-//				if (appSettingSet) {
-//					dbReturnSet = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage);
-//
-//					Double totalPages = Math.ceil(1.0
-//							* TeamUtil.getAllTeamReportsCount(tm.getTeamId())
-//							/ appSettings.getDefReportsPerPage());
-//					rf.setTotalPages(totalPages.intValue());
-//
-//				} else {
-//					dbReturnSet = new ArrayList(TeamUtil.getAllTeamReports(tm.getTeamId()));
-//				}
-//			} else {
-//				if (appSettingSet) {
-//					dbReturnSet = TeamMemberUtil.getAllMemberReports(tm
-//							.getMemberId(), startReport, reportsPerPage);
-//					if (dbReturnSet == null)
-//						dbReturnSet = new ArrayList();
-//					/*
-//					 * AmpReports defaultReport =
-//					 * (AmpReports)session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
-//					 * if (defaultReport != null) { dbReturnSet.add(
-//					 * session.getAttribute(Constants.DEFAULT_TEAM_REPORT) ); }
-//					 * else logger.info("There is no default team report set!");
-//					 */
-//					Double totalPages = Math.ceil(0.1
-//							* TeamMemberUtil.getAllMemberReportsCount(tm.getMemberId())
-//							/ appSettings.getDefReportsPerPage());
-//					rf.setTotalPages(totalPages.intValue());
-//				} else {
-//					dbReturnSet = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-//				}
-//			}
-//			rf.setReports(dbReturnSet);
-
-		}                                             
-
-		return mapping.findForward("forward");
+		}
 	}
 
 }

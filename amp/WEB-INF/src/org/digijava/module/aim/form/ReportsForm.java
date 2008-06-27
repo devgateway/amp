@@ -6,161 +6,214 @@ import org.apache.struts.action.*;
 
 public class ReportsForm extends ActionForm {
 
-		  private Boolean reportEdit=null;
-		  private Long currentMemberId=null;;
+	private Boolean reportEdit = null;
+	private Long currentMemberId = null;;
 
-		  private Collection reports = null;
-		  private Long reportId = null;
-		  private String name = null;
-		  private String description = null;
-		  private String flag = null;
-		  private Long selReports[] = null;
-		  private String addReport = null;
-		  private String removeReports = null;
-		  private String assignReports = null;
-		  private Long teamId = null;
-		  private String teamName = null;
-		  private Long memberId = null;
-		  private String memberName = null;
-                  private int currentPage;
-                  private int totalPages;
-                  
+	private Collection reports = null;
+	private Collection reportsList;
+	private int tempNumResults = 10;
+	private int pageSize = 10;
+	private Long reportId = null;
+	private String name = null;
+	private String description = null;
+	private String flag = null;
+	private Long selReports[] = null;
+	private String addReport = null;
+	private String removeReports = null;
+	private String assignReports = null;
+	private Long teamId = null;
+	private String teamName = null;
+	private Long memberId = null;
+	private String memberName = null;
+	private int currentPage;
+	private int totalPages;
+	private int page;
+    private int pagesToShow;
+    private int offset;
 
-  public Long getMemberId() {
-					 return this.memberId;
-		  }
 
-		  public void setMemberId(Long memberId) {
-					 this.memberId = memberId;
-		  }
+	public int getPagesToShow() {
+		return pagesToShow;
+	}
 
-		  public String getMemberName() {
-					 return this.memberName;
-		  }
+	public void setPagesToShow(int pagesToShow) {
+		this.pagesToShow = pagesToShow;
+	}
 
-		  public void setMemberName(String memberName) {
-					 this.memberName = memberName;
-		  }
+	public int getOffset() {
+		return offset;
+	}
 
-		  public Long getTeamId() {
-					 return this.teamId;
-		  }
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
 
-		  public void setTeamId(Long teamId) {
-					 this.teamId = teamId;
-		  }
+	public int getPage() {
+		return page;
+	}
 
-		  public String getTeamName() {
-					 return this.teamName;
-		  }
+	public void setPage(int page) {
+		this.page = page;
+	}
 
-		  public void setTeamName(String teamName) {
-					 this.teamName = teamName;
-		  }
+	public Long getMemberId() {
+		return this.memberId;
+	}
 
-		  public Long[] getSelReports() {
-					 return this.selReports;
-		  }
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
 
-		  public void setSelReports(Long selReports[]) {
-					 this.selReports = selReports;
-		  }
+	public String getMemberName() {
+		return this.memberName;
+	}
 
-		  public String getAddReport() {
-					 return this.addReport;
-		  }
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
 
-		  public void setAddReport(String addReport) {
-					 this.addReport = addReport;
-		  }
+	public Long getTeamId() {
+		return this.teamId;
+	}
 
-		  public String getRemoveReports() {
-					 return this.removeReports;
-		  }
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
+	}
 
-		  public void setRemoveReports(String removeReports) {
-					 this.removeReports = removeReports;
-		  }
+	public String getTeamName() {
+		return this.teamName;
+	}
 
-		  public String getAssignReports() {
-					 return this.assignReports;
-		  }
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
 
-		  public void setAssignReports(String assignReports) {
-					 this.assignReports = assignReports;
-		  }
+	public Long[] getSelReports() {
+		return this.selReports;
+	}
 
-		  public Long getReportId() {
-					 return reportId;
-		  }
+	public void setSelReports(Long selReports[]) {
+		this.selReports = selReports;
+	}
 
-		  public void setReportId(Long reportId) {
-					 this.reportId = reportId;
-		  }
+	public String getAddReport() {
+		return this.addReport;
+	}
 
-		  public Collection getReports() {
-					 return (this.reports);
-		  }
+	public void setAddReport(String addReport) {
+		this.addReport = addReport;
+	}
 
-		  public void setReports(Collection reports) {
-					 this.reports = reports;
-		  }
+	public String getRemoveReports() {
+		return this.removeReports;
+	}
 
-		  public String getName() {
-					 return name;
-		  }
+	public void setRemoveReports(String removeReports) {
+		this.removeReports = removeReports;
+	}
 
-		  public String getFlag() {
-					 return flag;
-		  }
+	public String getAssignReports() {
+		return this.assignReports;
+	}
 
-		  public String getDescription() {
-					 return description;
-		  }
+	public void setAssignReports(String assignReports) {
+		this.assignReports = assignReports;
+	}
 
-		  public void setName(String name) {
-					 this.name = name;
-		  }
+	public Long getReportId() {
+		return reportId;
+	}
 
-		  public void setFlag(String flag) {
-					 this.flag = flag;
-		  }
+	public void setReportId(Long reportId) {
+		this.reportId = reportId;
+	}
 
-		  public void setDescription(String description) {
-					this.description = description;
-		  }
+	public Collection getReports() {
+		return (this.reports);
+	}
 
-		public Boolean getReportEdit() {
-			return reportEdit;
-		}
+	public void setReports(Collection reports) {
+		this.reports = reports;
+	}
 
-                public int getCurrentPage() {
-                  return currentPage;
-                }
+	public String getName() {
+		return name;
+	}
 
-                public int getTotalPages() {
-                  return totalPages;
-                }
+	public String getFlag() {
+		return flag;
+	}
 
-  public void setReportEdit(Boolean reportEdit) {
-			this.reportEdit = reportEdit;
-		}
+	public String getDescription() {
+		return description;
+	}
 
-                public void setCurrentPage(int currentPage) {
-                  this.currentPage = currentPage;
-                }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-                public void setTotalPages(int totalPages) {
-                  this.totalPages = totalPages;
-               }
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 
-				public Long getCurrentMemberId() {
-					return currentMemberId;
-				}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-				public void setCurrentMemberId(Long currentMemberId) {
-					this.currentMemberId = currentMemberId;
-				}			
-			
-				
+	public Boolean getReportEdit() {
+		return reportEdit;
+	}
+
+	public int getCurrentPage() {
+		return currentPage;
+	}
+
+	public int getTotalPages() {
+		return totalPages;
+	}
+
+	public void setReportEdit(Boolean reportEdit) {
+		this.reportEdit = reportEdit;
+	}
+
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public void setTotalPages(int totalPages) {
+		this.totalPages = totalPages;
+	}
+
+	public Long getCurrentMemberId() {
+		return currentMemberId;
+	}
+
+	public void setCurrentMemberId(Long currentMemberId) {
+		this.currentMemberId = currentMemberId;
+	}
+
+	public Collection getReportsList() {
+		return reportsList;
+	}
+
+	public void setReportsList(Collection reportsList) {
+		this.reportsList = reportsList;
+	}
+
+	public int getTempNumResults() {
+		return tempNumResults;
+	}
+
+	public void setTempNumResults(int tempNumResults) {
+		this.tempNumResults = tempNumResults;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
 }

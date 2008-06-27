@@ -108,27 +108,33 @@ function toggleSettings(){
 
 <ul id="MyTabs" class="yui-nav"">
 <c:set var="counter" value="0"/> 
-<logic:present name="myReports" scope="session">
-	<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
-				<logic:equal name="report" property="drilldownTab" value="true">
-                    <c:set var="counter" value="${counter+1}" />
-                    <c:set var="reportNameTrn">
-	                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
-                    </c:set>
-                   
-                    <c:if test="${counter < 6}">
-                    <li>
-                    <c:if test="${fn:length(reportNameTrn) > 25}" >
-						<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${reportNameTrn}" />'><div><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div></a>
-                    </c:if>
-                    <c:if test="${fn:length(reportNameTrn) <= 25}" >
-						<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${reportNameTrn}" />'><div><c:out value="${reportNameTrn}" /></div></a>
-                    </c:if>
-                                                                
-                    </li>
-                    </c:if>
-				</logic:equal>
-	</logic:iterate>
+<logic:present name="myTabs" scope="session">
+	<logic:present name="myReports" scope="session">
+		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+			<logic:iterate name="myTabs" id="sessReport" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+				<c:if test="${report.ampReportId==sessReport.ampReportId}">
+					<logic:equal name="report" property="drilldownTab" value="true">
+	                    <c:set var="counter" value="${counter+1}" />
+	                    <c:set var="reportNameTrn">
+		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
+	                    </c:set>
+	                   
+	                    <c:if test="${counter < 6}">
+	                    <li>
+	                    <c:if test="${fn:length(reportNameTrn) > 25}" >
+							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${reportNameTrn}" />'><div><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div></a>
+	                    </c:if>
+	                    <c:if test="${fn:length(reportNameTrn) <= 25}" >
+							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${reportNameTrn}" />'><div><c:out value="${reportNameTrn}" /></div></a>
+	                    </c:if>
+	                                                                
+	                    </li>
+	                    </c:if>
+					</logic:equal>
+				</c:if>
+			</logic:iterate>
+		</logic:iterate>
+	</logic:present>
 </logic:present>
 </ul>
 </div>

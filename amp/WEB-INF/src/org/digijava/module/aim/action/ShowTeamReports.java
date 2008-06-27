@@ -43,6 +43,8 @@ public class ShowTeamReports extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
+		String forwardName	= "forward";
+		
 		List dbReturnSet = null;
 		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
@@ -50,6 +52,16 @@ public class ShowTeamReports extends Action {
 		boolean appSettingSet = false;
 
 		ReportsForm rf = (ReportsForm) form;
+		rf.setShowTabs(null);
+		if ( request.getParameter("tabs") != null ) {
+			if (  "true".equals( request.getParameter("tabs") )  ) {
+				rf.setShowTabs(true);
+				forwardName	= "forwardTabs";
+			}
+			if (  "false".equals( request.getParameter("tabs") )  )
+				rf.setShowTabs(false);
+		}
+		
 		rf.setCurrentMemberId(null);
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if(action==null){
@@ -67,7 +79,7 @@ public class ShowTeamReports extends Action {
 		
 		doPagination(rf, request);
 
-		return mapping.findForward("forward");
+		return mapping.findForward( forwardName );
 	}
 	private void doPagination(ReportsForm rf, HttpServletRequest request) {
 		Collection allReports = rf.getReports();
@@ -140,12 +152,12 @@ public class ShowTeamReports extends Action {
 			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(),0, 0,true,tm.getMemberId());
-				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), 0, 0,true,tm.getMemberId());
+				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(), rf.getShowTabs(), true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 				
 			}else{
-				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(), rf.getShowTabs(), null, null,true,tm.getMemberId());
 				}
 			boolean found = false;
 			if (defaultTeamReport != null){

@@ -66,6 +66,12 @@
 				<property name="orderId" column="order_id"  type="java.lang.String"/>					
 			</composite-element>
 		</set>
+		
+		<set name="desktopTabSelections" lazy="true" inverse="true" cascade="all-delete-orphan" >
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection"  />
+		</set>
 <!--  <many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>-->
 					
 	</class>

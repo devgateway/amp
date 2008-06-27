@@ -96,6 +96,7 @@
     <form-bean name="aimActivityForm" type="org.digijava.module.aim.form.ActivityForm" />
     <form-bean name="aimReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimTeamReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
+    <form-bean name="aimTabManagerForm" type="org.digijava.module.aim.form.TabManagerForm" />
     <form-bean name="aimTeamAuditListForm" type="org.digijava.module.aim.form.TeamAuditForm" />
     <form-bean name="aimMemberReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimIndicatorForm" type="org.digijava.module.aim.form.IndicatorForm" />
@@ -333,24 +334,24 @@
     <action input="/aim/viewYearlyDiscrepancyFilter" name="aimYearlyDiscrepancyForm" path="/aim/yearlyDiscrepancyFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyFilter" validate="true" />
     <action name="aimQuarterlyDiscrepancyAllForm" path="/aim/quarterlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewQuarterlyDiscrepancyAll" validate="false" />
     <action name="aimQuarterlyDiscrepancyAllForm" path="/aim/quarterlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.QuarterlyDiscrepancyAllFilter" validate="false" />
-    <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />
-
+    <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAll" scope="request" type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll" validate="false" />   
+    
     <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyAllFilter" validate="false" />
     <action name="aimViewIndicatorForm" path="/aim/meIndicatorValues" scope="request" type="org.digijava.module.aim.action.ViewIndicatorValues" validate="false" />
-
+    
     <action path="/aim/selectActivityTabs" type="org.digijava.module.aim.action.ViewSelectActivityTabs" scope="request">
     	<forward name="channelOverview" path="/aim/viewChannelOverview.do?tabIndex=0" redirect="true" />
-    	<forward name="references" path="/aim/viewReferences.do?tabIndex=1" redirect="true" />
-    	<forward name="financialProgress" path="/aim/viewFinancingBreakdown.do?tabIndex=2" redirect="true" />
-    	<forward name="physicalProgress" path="/aim/viewPhysicalProgress.do?tabIndex=3" redirect="true" />
-    	<forward name="documents" path="/aim/viewKnowledge.do?tabIndex=4" redirect="true" />
-    	<forward name="regionalFunding" path="/aim/viewRegionalFundingBreakdown.do?tabIndex=5" redirect="true" />
-    	<forward name="parisSurvey" path="/aim/viewSurveyList.do?tabIndex=6" redirect="true" />
-    	<forward name="activityDashboard" path="/aim/viewActivityDashboard.do?tabIndex=7" redirect="true" />
-    	<forward name="costing" path="/aim/viewProjectCostsBreakdown.do?tabIndex=8" redirect="true" />
-    	<forward name="contracting" path="/aim/viewIPAContracting.do?tabIndex=9" redirect="true" />
+    	<forward name="references" path="/aim/viewReferences.do?tabIndex=1" redirect="true" />    	
+    	<forward name="financialProgress" path="/aim/viewFinancingBreakdown.do?tabIndex=2" redirect="true" />    	
+    	<forward name="physicalProgress" path="/aim/viewPhysicalProgress.do?tabIndex=3" redirect="true" />   	
+    	<forward name="documents" path="/aim/viewKnowledge.do?tabIndex=4" redirect="true" />   	
+    	<forward name="regionalFunding" path="/aim/viewRegionalFundingBreakdown.do?tabIndex=5" redirect="true" /> 
+    	<forward name="parisSurvey" path="/aim/viewSurveyList.do?tabIndex=6" redirect="true" />       	
+    	<forward name="activityDashboard" path="/aim/viewActivityDashboard.do?tabIndex=7" redirect="true" />       	
+    	<forward name="costing" path="/aim/viewProjectCostsBreakdown.do?tabIndex=8" redirect="true" />   	
+    	<forward name="contracting" path="/aim/viewIPAContracting.do?tabIndex=9" redirect="true" />  	
     </action>
-
+    
     <action name="aimChannelOverviewForm" path="/aim/channelOverview" scope="request" type="org.digijava.module.aim.action.ViewChannelOverview" validate="false" />
     <action name="aimReferenceForm" path="/aim/reference" scope="request" type="org.digijava.module.aim.action.ViewReferences" validate="false" />
     <action name="aimChannelOverviewObjectiveForm" path="/aim/channelOverviewObjective" scope="request" type="org.digijava.module.aim.action.ViewChannelOverviewObjective" validate="false" />
@@ -1072,7 +1073,11 @@
     </action>
     <action name="aimTeamReportsForm" path="/aim/viewTeamReports" scope="session" type="org.digijava.module.aim.action.ShowTeamReports">
       <forward name="forward" path="/showLayout.do?layout=showTeamReports" />
+      <forward name="forwardTabs" path="/showLayout.do?layout=showTeamTabs" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimTabManagerForm" path="/aim/tabManager" scope="request" type="org.digijava.module.aim.action.TabManagerAction">
+    	<forward name="forward" path="/showLayout.do?layout=tabManagerData" />
     </action>
     <action path="/aim/configureTeam" scope="request" type="org.digijava.module.aim.action.ConfigureTeam">
       <forward name="forward" path="/showLayout.do?layout=teamConfiguration" />

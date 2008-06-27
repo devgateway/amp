@@ -348,6 +348,9 @@
          <hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpCategoryValueLocations
 	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpDesktopTabSelection
+	</hibernate-class>
 
 	</hibernate-classes>
         <!-- highlights classes End-->

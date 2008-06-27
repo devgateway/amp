@@ -260,7 +260,8 @@ public class Constants
 	public static final String DEFAULT_TEAM_REPORT		= "defaultTeamReport";
 	public static final String FILTER_CURRENT_REPORT	= "filterCurrentReport";
 	
-	public static final String MY_REPORTS = "myReports";
+	public static final String MY_REPORTS 	= "myReports";
+	public static final String MY_TABS 		= "myTabs";
 	public static final String MY_TASKS = "myTasks";
 	public static final String MY_MESSAGES = "myMessages";
 	public static final String MY_LINKS = "myLinks";

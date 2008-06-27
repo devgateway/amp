@@ -31,6 +31,7 @@ public class ReportsForm extends ActionForm {
     private int pagesToShow;
     private int offset;
 
+    private Boolean showTabs	= false;
 
 	public int getPagesToShow() {
 		return pagesToShow;
@@ -224,5 +225,15 @@ public class ReportsForm extends ActionForm {
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
 	}
+
+	public Boolean getShowTabs() {
+		return showTabs;
+	}
+
+	public void setShowTabs(Boolean showTabs) {
+		this.showTabs = showTabs;
+	}
+	
+	
 
 }

@@ -264,9 +264,21 @@ border-right:1px solid white;
 												</li>
 </c:if></c:if>
 										<li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
+                                            <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
-                                            </a>
+                                            </a> --%>
+                                            <feature:display  name="Tab Generator" module="New Report Wizard">
+		                                      	<li title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
+		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true">
+		                                                <b><digi:trn key="aim:addTab">Add Tab</digi:trn></b>
+		                                            </a>
+		                                        </li>
+		                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+		                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=true">
+		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
+		                                            </a>
+												</li>
+	                                        </feature:display>
                                         </li>
                                         <li class="yuiampmenuitem" style="_width:100px">
                                         	<a class="yuiampmenuitemlabel" href="#">
@@ -308,32 +320,31 @@ border-right:1px solid white;
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
-                                      	<feature:display  name="Tab Generator" module="New Report Wizard">
-                                      	<li title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
-                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true">
-                                                <b><digi:trn key="aim:tabGenerator">Tab Generator</digi:trn></b>
-                                            </a>
-                                        </li>
-                                        </feature:display>
                                         <feature:display  name="Report Generator" module="New Report Wizard">
 	                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do">
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
+	                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+	                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false">
+	                                                <digi:trn key="aim:ReportManager">Report Manager</digi:trn>
+	                                            </a>
+											</li>
                                         </feature:display>
                                         <module:display name="Old Report Wizard" parentModule="REPORTING">
-                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
-                                                <b><digi:trn key="aim:standardReportGenerator"> Standard Report Generator</digi:trn></b>
-                                            </a>
-                                        </li>
+	                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+	                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
+	                                                <b><digi:trn key="aim:standardReportGenerator"> Standard Report Generator</digi:trn></b>
+	                                            </a>
+	                                        </li>
+	                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+	                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
+	                                                <digi:trn key="aim:standardReportManager">Standard Report Manager</digi:trn>
+	                                            </a>
+											</li>
                                         </module:display>
-										<LI title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
-                                                <digi:trn key="aim:ReportManager">Report Manager</digi:trn>
-                                            </a>
-										</li>
+										
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
                                                     <a class="yuiampmenuitemlabel" href="/parisIndicatorReport.do">

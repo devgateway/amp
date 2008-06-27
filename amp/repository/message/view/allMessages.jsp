@@ -138,10 +138,10 @@
         var ind=id.indexOf('_fId');
         if(ind!=-1){
             var msgId=id.substring(0,ind);
-            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
+            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
             //openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
         }else{   
-            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
+            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
            // openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
             markMsgeAsRead(id);
         }

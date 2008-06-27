@@ -161,12 +161,12 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     //         valid values with "getAttribute"
     if (typeof(window.opera) == 'undefined'
         && typeof(theCells[0].getAttribute) != 'undefined') {
-        currentColor = theCells[0].getAttribute('bgcolor');
+        currentColor = theRow.getAttribute('bgcolor');
         domDetect    = true;
     }
     // 3.2 ... with other browsers
     else {
-        currentColor = theCells[0].style.backgroundColor;
+        currentColor = theRow.style.backgroundColor;
         domDetect    = false;
     } // end 3
 	// alert(currentColor);
@@ -235,6 +235,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     if (newColor) {
         var c = null;
         var aux=null;
+        theRow.setAttribute('bgcolor', newColor, 0);
         // 5.1 ... with DOM compatible browsers except Opera
         if (domDetect) {
         	if(lastClickedRowNum == -1) firstColor=currentColor;

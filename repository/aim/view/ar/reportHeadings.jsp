@@ -26,15 +26,14 @@
       	int rowsp = column.getCurrentRowSpan();
       %>
 
-
-      <logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
+		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
-        <td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        <td style="padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
             <logic:equal name="column" property="columnDepth" value="1">          
 	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
+	              <a style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -43,7 +42,7 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+	              <html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 	              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </html:link>
 	            </logic:notEqual>
@@ -65,7 +64,7 @@
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
+	              <a style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -74,7 +73,7 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	              <html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </html:link>
 	            </logic:notEqual>  
@@ -92,10 +91,8 @@
           </logic:notEqual>
           
         </td>
-
-      </logic:iterate>
-      
-    </logic:iterate>
+	</logic:iterate>
+   </logic:iterate>
   </tr>
 
   <%}

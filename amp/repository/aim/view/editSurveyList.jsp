@@ -368,6 +368,7 @@
   <c:if test="${aimEditActivityForm.donorFlag == true}">
     <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
   </c:if>--%>
+  <jsp:include page="editActivityMenu.jsp" flush="true" />
   <!-- end of activity form menu -->
 
 						</td></tr>

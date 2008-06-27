@@ -591,7 +591,7 @@
     <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
   </c:if>
   <!-- end of activity form menu --%>
-
+<jsp:include page="editActivityMenu.jsp" flush="true" />
 						</td></tr>
 
 					</table>

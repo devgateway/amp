@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.gis.dbentity.AmpDaColumn" table="AMP_DA_COLUMN">
+	<class name="org.digijava.module.gis.dbentity.AmpDaColumn" table="AMP_WIDGET_COLUMN">
 		<cache usage="read-write"/>
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
-				<param name="sequence">AMP_DA_COLUMN_seq</param>
+				<param name="sequence">AMP_WIDGET_COLUMN_seq</param>
 			</generator>
 		</id>
 

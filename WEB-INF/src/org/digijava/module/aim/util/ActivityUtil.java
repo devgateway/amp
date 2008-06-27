@@ -3650,10 +3650,12 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     			int i=0;
     			for (Object rawRow : activities) {
 					Object[] row = (Object[])rawRow; //:)
-					String nameRow=(String)row[0];					
+					String nameRow=(String)row[0];			
+					if(nameRow != null){
 					nameRow = nameRow.replace('\n', ' ');
 					nameRow = nameRow.replace('\r', ' ');
 					nameRow = nameRow.replace("\\", "");
+					}
 					System.out.println(nameRow);
 					retValue[i]=nameRow+"("+row[1]+")";
 					i++;					

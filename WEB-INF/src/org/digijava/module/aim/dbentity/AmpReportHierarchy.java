@@ -18,8 +18,12 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	@Level
 	private AmpCategoryValue level;
 	
+	private static AmpCategoryValue defaultLevel = null;
+	
 	public AmpReportHierarchy(){
-	    level=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+		if ( defaultLevel==null )
+			defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+		level	= defaultLevel;
 	}
 
 	public AmpColumns getColumn() {

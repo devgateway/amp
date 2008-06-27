@@ -151,6 +151,11 @@ TABLE {
 
 }
 
+.clsTableTitleColHtml {
+
+	BORDER-RIGHT: #E2E2E2 1px solid; FONT: bold 11px "Arial"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #E2E2E2 1px solid;TEXT-ALIGN: center
+
+}
 .clsTableTitleCol {
 
 	BORDER-RIGHT: #ffcccc 1px solid; FONT: bold 7.5pt "Verdana"; CURSOR: default; COLOR: white; BORDER-BOTTOM: #cccccc 1px solid; BACKGROUND-COLOR: #336699; TEXT-ALIGN: center
@@ -258,7 +263,11 @@ DIV.page {
 	BORDER-RIGHT: #f0fcf0 1px solid; BORDER-TOP: #000000 1px solid; FONT-SIZE: 8pt; VERTICAL-ALIGN: middle; BORDER-LEFT: #000000 1px solid; CURSOR: default; COLOR: #000000; BORDER-BOTTOM: #f0fcf0 1px solid; FONT-FAMILY: verdana,arial,helvetica; TEXT-DECORATION: none
 
 }
+.clsTableCellDataHtml {
 
+	BORDER-RIGHT: #E0E0E0 1px solid; FONT: 10px "Arial"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #E0E0E0 1px solid;
+
+}
 .clsTableCellData {
 
 	BORDER-RIGHT: #ffcccc 1px solid; FONT: 7.5pt "Verdana"; CURSOR: default; COLOR: black; BORDER-BOTTOM: #cccccc 1px solid; TEXT-ALIGN: right
@@ -516,6 +525,12 @@ DIV.page {
 	BORDER-RIGHT: #ffcccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
 
 }
+.newClsTableL1SubTotalEndSectionHtml {
+
+	border-bottom:#E2E2E2; BORDER-RIGHT: #E2E2E2 1px solid; CURSOR: default; COLOR: black; FONT-STYLE: normal; FONT-FAMILY: Arial; FONT-VARIANT: normal
+
+}
+
 
 .newClsTableL1SubTotalEndSection {
 

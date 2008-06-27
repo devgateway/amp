@@ -11,35 +11,42 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
-<tr class=newClsTableL1SubTotalEndSectionLabel height="20px;"><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<b>
-	<digi:trn key="rep:popu:${columnReport.columnIdTrn}">${columnReport.columnId}</digi:trn>
-	<% if (!("".equals(columnReport.getRepName()))){ %>
-		: <digi:trn key="rep:pop:${columnReport.repNameTrn}">${columnReport.repName}</digi:trn>
-	<% } %>
-</td></tr>
-
-<%int rowIdx = 2;%>
-
-<!-- generate report data -->
-
-<logic:notEqual name="reportMeta" property="hideActivities" value="true">
-<logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<logic:equal name="columnReport" property="canDisplayRow" value="true">
-<%rowIdx++;	%>
-<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
-	<logic:iterate name="columnReport" property="items" id="column" scope="page">
-		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>
-	</logic:iterate>
-</tr>
-</logic:equal>
-</logic:iterate>
-</logic:notEqual>
-
 <!-- generate total row -->
 <logic:equal name="columnReport" property="canDisplayRow" value="true">
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
 </logic:equal>
+
+<%int rowIdx = 2;%>
+
+<!-- generate report data -->
+
+<logic:notEqual name="reportMeta" property="hideActivities" value="true">	
+<logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
+<logic:equal name="columnReport" property="canDisplayRow" value="true">
+<%rowIdx++;	%>
+<% if(columnReport.getLevelDepth()<=2){
+		request.setAttribute("pading","5px");
+	}
+	if (columnReport.getLevelDepth()==3){
+		request.setAttribute("pading","15px");
+	}
+	if (columnReport.getLevelDepth()==4){
+		request.setAttribute("pading","25px");
+	}
+%>
+<%if (rowIdx%2==0){ %>
+	<tr bgcolor="#FFFFFF" height="15px" onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
+<%}else{%>
+	<tr bgcolor="#ECECEC" height="15px"  onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#ECECEC', '#ECECEC', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#ECECEC'">
+<%}%>
+	<logic:iterate name="columnReport" property="items" id="column" scope="page">
+		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
+	</logic:iterate>	
+</tr>
+</logic:equal>
+</logic:iterate>
+</logic:notEqual>
+

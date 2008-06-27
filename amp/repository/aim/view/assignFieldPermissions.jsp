@@ -70,6 +70,11 @@
 			<td><digi:trn key="aim:gateperm:implementingAgency">Implementing Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="iaRead" /></td>
 			<td align="center"><html:checkbox property="iaEdit" /></td>
+		</tr>
+		<tr>
+			<td><digi:trn key="aim:gateperm:responsibleAgency">Responsible Agency</digi:trn></td>
+			<td align="center"><html:checkbox property="raRead" /></td>
+			<td align="center"><html:checkbox property="raEdit" /></td>
 		</tr>	
 		<tr>
 			<td><digi:trn key="aim:gateperm:regionalGroup">Regional Group</digi:trn></td>

@@ -40,6 +40,9 @@ public class FieldPermissionsForm extends ActionForm {
     private String faRead;
     private String faEdit;
     
+    private String raRead;
+    private String raEdit;
+    
     private String iaRead;
     private String iaEdit;
     
@@ -190,6 +193,18 @@ public class FieldPermissionsForm extends ActionForm {
 	}
 	public void setOwEdit(String owEdit) {
 		this.owEdit = owEdit;
+	}
+	public String getRaRead() {
+		return raRead;
+	}
+	public void setRaRead(String raRead) {
+		this.raRead = raRead;
+	}
+	public String getRaEdit() {
+		return raEdit;
+	}
+	public void setRaEdit(String raEdit) {
+		this.raEdit = raEdit;
 	}
 	
 }

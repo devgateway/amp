@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.gis.dbentity.AmpWidget" table="AMP_DA_WIDGET" discriminator-value="w">
+	<class name="org.digijava.module.gis.dbentity.AmpWidget" table="AMP_WIDGET" discriminator-value="w">
 		<cache usage="read-write"/>
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
-				<param name="sequence">AMP_DA_WIDGET_seq</param>
+				<param name="sequence">AMP_WIDGET_seq</param>
 			</generator>
 		</id>
 

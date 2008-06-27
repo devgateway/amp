@@ -4,113 +4,138 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+<digi:instance property="gisDashboardForm"/>
 
-<%@ page import="java.util.Date" %>
-
-
-<% Date now = new Date(); %>
-
-
-
-
-
-<table width="100%">
+<table>
 	<tr>
-		<td><img onLoad="updateMap()" src = "../../gis/gisService.do?action=paintMap&canvasWidth=800&canvasHeight=400&autoRect=true&mapCode=WORLD&hilight=TZA">
+		<td>
+			<img onLoad="getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&segmentData=Tanga/Muheza%20DC/38|Tanga/Korogwe%20DC/15|Tanga/Lushoto%20DC/30|Tanga/Handeni%20DC/5|Tanga/Pangani%20DC/12">
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<div id="mapHolder" style="border:1px solid black; width:500px; height:500px"></div>
-			<div id="imageMapContainer" style="visibility:hidden;"></div>
+			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
+
+			<MAP NAME="legendMap">
+				<AREA TITLE="0-10%" SHAPE=RECT COORDS="0,0,70,20">
+				<AREA TITLE="10-20%" SHAPE=RECT COORDS="70,0,140,20">
+				<AREA TITLE="20-30%" SHAPE=RECT COORDS="140,0,210,20">
+				<AREA TITLE="30-40%" SHAPE=RECT COORDS="210,0,280,20">
+				<AREA TITLE="40-50%" SHAPE=RECT COORDS="280,0,350,20">
+				<AREA TITLE="50-60%" SHAPE=RECT COORDS="350,0,420,20">
+				<AREA TITLE="60-70%" SHAPE=RECT COORDS="420,0,490,20">
+				<AREA TITLE="70-80%" SHAPE=RECT COORDS="490,0,560,20">
+				<AREA TITLE="80-90%" SHAPE=RECT COORDS="560,0,630,20">
+				<AREA TITLE="90-100%" SHAPE=RECT COORDS="630,0,700,20">
+			</MAP>
+
 		</td>
 	</tr>
 	<tr>
-		<td><select id="regionCombo" onChange="hilightRegion(this.value)"></select></tr>
-	<tr>
-		<td><input type="Button" value="Load map" onClick="updateMap()"></td>
+		<td>
+		<select onChange="sectorSelected(this)">
+			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
+				<option value="<bean:write name="sec" property="sector.ampSectorId"/>"><bean:write name="sec" property="sector.name"/> (<bean:write name="sec" property="count"/>)</option>
+			</logic:iterate>
+		</select>
+		<div id="imageMapContainer" style="visibility:hidden;"></div>
+		</td>
 	</tr>
 </table>
 
+<div id="tooltipContainer" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;">
+	<div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">
+	
+	<table border="1" bordercolor="#c3b7a1" cellpadding="3" cellspacing="2" width="100%" style="border-collapse:collapse">
+		<tr>
+			<td nowrap width="50%">Region</td>
+			<td width="50%" id="tooltipRegionContainer">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Total funding</td>
+			<td width="50%" id="tooltipTotalContainer">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">For this region</td>
+			<td width="50%" id="tooltipCurrentContainer">&nbsp;</td>
+		</tr>
+	</table>
+	</div>
+</div>
+
+
 
 <script language="JavaScript">
-	var sessionIdStr = '<%= request.getRequestedSessionId() %>';
 
-	var mapImg = null;
+	document.onmousemove = mouseMoveTranslatorIE;
 	
+	function mouseMoveTranslatorIE(e) {
+			if (e == null) {
+				e = window.event;
+			}
+			document.getElementById("tooltipContainer").style.left = e.clientX  + 2 + "px";
+			document.getElementById("tooltipContainer").style.top = e.clientY + document.body.scrollTop + 2 + "px";
+	}
+	
+	
+	var mouseX, mouseY;
+	var evt;
+	
+
+
 	var xmlhttp =  new XMLHttpRequest();
-	var mapImageContainer = document.getElementById("mapHolder");
 	var imageMapLoaded = false;
-	var imageMapLoaded1 = false;
 	
+	var fundingDataByRegion = new Array();
+	var totalFund = "0";
 	
-	function initMap() {
-		mapImg = document.createElement("IMG");
-		mapImg.onLoad = imageLoaded(); 
-		mapImg.border=0;
-		mapImg.useMap="#areaMap";
+	function sectorSelected(sec) {
+		var uniqueStr = (new Date()).getTime();
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForSector&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr;
+		getDataForSector(sec);
 	}
-	
-	function updateMap() {
-		if (mapImg == null) {
-			initMap();
-		}
-		mapImg.src = "../../gis/gisService.do?action=paintMap&canvasWidth=500&canvasHeight=500&autoRect=true&mapCode=TZA";
-	}
+
 	
 	function getImageMap() {
-		imageMapLoaded = false;
-		var uniqueStr = (new Date()).getTime();
-		xmlhttp.open("GET", "../../gis/gisService.do?action=getImageMap&canvasWidth=500&canvasHeight=500&autoRect=true&mapCode=TZA&uniqueStr=" + uniqueStr, true);
-		xmlhttp.onreadystatechange = addImageMap;
-		xmlhttp.send(null);
-		mapImageContainer.appendChild(mapImg);
+		if (!imageMapLoaded) {
+			var uniqueStr = (new Date()).getTime();
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&uniqueStr=" + uniqueStr, true);
+			xmlhttp.onreadystatechange = addImageMap;
+			xmlhttp.send(null);
+		}
 	}
 	
 	function addImageMap() {
 		if (xmlhttp.readyState == 4) {
-			imageMapLoaded1 = true;
+			imageMapLoaded = true;
 			document.getElementById("imageMapContainer").innerHTML = null;
 			document.getElementById("imageMapContainer").innerHTML = generateImageMap (xmlhttp.responseXML);
-			window.setTimeout(getRegionList,10);
 		}
 	}
 	
-	
-	
-	function getRegionList() {
-		var uniqueStr = (new Date()).getTime();
-		xmlhttp.open("GET", "../../gis/gisService.do?action=getSegmentInfo&mapCode=TZA&uniqueStr=" + uniqueStr, true);
-		xmlhttp.onreadystatechange = addRegionList;
-		xmlhttp.send(null);
-		
+	function getDataForSector(sec) {
+			var uniqueStr = (new Date()).getTime();
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr, true);
+			xmlhttp.onreadystatechange = dataForSectorReady;
+			xmlhttp.send(null);
 	}
 	
-	function addRegionList() {
+	function dataForSectorReady () {
 		if (xmlhttp.readyState == 4) {
-			var segments = xmlhttp.responseXML.getElementsByTagName('segment');
-			var combo = document.getElementById("regionCombo");
-			var segmentIndex = 0;
-			
-			for (segmentIndex = 0; segmentIndex < segments.length; segmentIndex ++) {
-				var segment = segments[segmentIndex];
-				var comboOption = document.createElement("OPTION");
-				comboOption.value = segment.attributes.getNamedItem("code").value;
-				comboOption.text = segment.attributes.getNamedItem("name").value;
-				comboOption.innerText = segment.attributes.getNamedItem("name").value;
-				combo.appendChild(comboOption);
+			totalFund = xmlhttp.responseXML.getElementsByTagName('funding')[0].attributes[0].value;
+			var regionDataList = xmlhttp.responseXML.getElementsByTagName('region');
+			fundingDataByRegion = new Array();
+			var regIndex = 0;
+			for (regIndex = 0; regIndex < regionDataList.length; regIndex ++) {
+				var regData = regionDataList[regIndex];
+				var regionDataMap = new Array();
+				regionDataMap[0] = regData.attributes.getNamedItem("reg-code").value;
+				regionDataMap[1] = regData.attributes.getNamedItem("funding").value;
+				fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
 			}
-	
-		}
-		
-	}
-	
-	function imageLoaded() {
-		if (!imageMapLoaded) {
-			getImageMap();
+			
 		}
 	}
-	
 	
 	function generateImageMap (XmlObj) {
 		var retVal = "<map name=\"areaMap\">";
@@ -140,30 +165,42 @@
 					}
 				}
 				retVal += "\"";
-				retVal += " title=\"" + segment.attributes.getNamedItem("name").value + "\"";
-				//retVal += ">";
-				retVal += " onClick=\"setRegionCombo('" + segment.attributes.getNamedItem("code").value + "')\">";
+				retVal += " onMouseOut=\"hideRegionTooltip()\"";
+				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "')\">";
 			}
 		}
 		retVal += "</map>";
 		return retVal;
 	}
 	
-	function hilightRegion (regionCode) {
-		mapImg.src = "../../gis/gisService.do?action=paintMap&canvasWidth=500&canvasHeight=500&autoRect=true&mapCode=TZA&hilight="+regionCode;
+	function showRegionTooltip(regCode) {
+		var mouseEvent = null;
+		document.getElementById("tooltipRegionContainer").innerHTML = regCode;
+		document.getElementById("tooltipTotalContainer").innerHTML = totalFund + " k";
+		document.getElementById("tooltipCurrentContainer").innerHTML = getRegFounding (regCode);
+		document.getElementById("tooltipContainer").style.display = "block";
+		
 	}
 	
-	function setRegionCombo (regionCode) {
-		var regCombo = document.getElementById("regionCombo");
-		var optionIndex;
-		for (optionIndex = 0; optionIndex < regCombo.childNodes.length; optionIndex ++) {
-			if (regCombo.childNodes[optionIndex].value == regionCode) {
-				regCombo.childNodes[optionIndex].selected=true;
+	function hideRegionTooltip() {
+		document.getElementById("tooltipContainer").style.display = "none";
+	}
+	
+	function getRegFounding (regCode) {
+		var retVal = "0";
+		var dataIndex = 0;
+		for (dataIndex = 0; dataIndex < fundingDataByRegion.length; dataIndex ++) {
+			var dataItem = fundingDataByRegion[dataIndex];
+			if (dataItem[0] == regCode) {
+				retVal = dataItem[1];
 				break;
 			}
 		}
-		hilightRegion (regionCode)
+		return retVal;
 	}
-
+	
 	
 </script>
+
+
+

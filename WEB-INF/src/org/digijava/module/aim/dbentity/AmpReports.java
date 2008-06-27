@@ -71,6 +71,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private AmpCategoryValue activityLevel;
 
 	private String user;
+	
+	private Set<AmpDesktopTabSelection> desktopTabSelections;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
@@ -352,6 +354,16 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	public AmpPages getAmpPage() {
 		return ampPage;
+	}
+	
+
+	public Set<AmpDesktopTabSelection> getDesktopTabSelections() {
+		return desktopTabSelections;
+	}
+
+	public void setDesktopTabSelections(
+			Set<AmpDesktopTabSelection> desktopTabSelections) {
+		this.desktopTabSelections = desktopTabSelections;
 	}
 
 	public String getUser() {

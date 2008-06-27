@@ -24,11 +24,62 @@
   
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <digi:instance property="aimTeamReportsForm" />
-<c:set var="translation">
-  <digi:trn key="aim:confirmDeleteReport">
-    Are you sure you want to delete the selected report ?
-  </digi:trn>
-</c:set>
+
+<c:if test="${aimTeamReportsForm.showTabs}">
+
+	<c:set var="translation">
+		<digi:trn key="aim:confirmDeleteTab">
+			Are you sure you want to delete the selected desktop tab ?
+		</digi:trn>
+	</c:set>
+	<c:set var="pageTitle">
+		<digi:trn key="aim:teamTabs">
+			Team Tabs
+		</digi:trn>
+	</c:set>
+	<c:set var="breadCrumb">
+		<digi:trn key="aim:AllTabs">All Tabs</digi:trn>
+	</c:set>
+	<c:set var="titleColumn">
+		<digi:trn key="aim:tabTitle">
+			Tab Title
+		</digi:trn>
+	</c:set>
+	<c:set var="generator">
+		<digi:trn key="aim:tabGenerator">Tab Generator</digi:trn>
+	</c:set>
+	
+	<c:set var="viewParameters">widget=true&viewFormat=foldable</c:set>
+	
+	<jsp:include page="tabManager/tabManager.jsp" />
+	
+</c:if>
+
+<c:if test="${!aimTeamReportsForm.showTabs}">
+	<c:set var="translation">
+		<digi:trn key="aim:confirmDeleteReport">
+			Are you sure you want to delete the selected report ?
+		</digi:trn>
+	</c:set>
+	<c:set var="pageTitle">
+		<digi:trn key="aim:teamReports">
+			Team Reports
+		</digi:trn>
+	</c:set>
+	<c:set var="breadCrumb">
+		<digi:trn key="aim:AllReports">All Reports</digi:trn>
+	</c:set>
+	<c:set var="titleColumn">
+		<digi:trn key="aim:reportTitle">
+			Report Title
+		</digi:trn>
+	</c:set>
+	<c:set var="generator">
+		<digi:trn key="aim:reportGenerator">Report Generator</digi:trn>
+	</c:set>
+	<c:set var="viewParameters">widget=false</c:set>
+</c:if>
+
 <SCRIPT TYPE="text/javascript">
 <!--
 function popup(mylink, windowname)
@@ -66,14 +117,22 @@ function confirmFunc() {
         </c:set>
           <digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
             <digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
-          </digi:link> &gt; <digi:trn key="aim:AllReports">All Reports</digi:trn></td></tr>
+          </digi:link> &gt; ${breadCrumb}</td></tr>
         <tr>
-          <td height=16 align="center" vAlign=center><span class=subtitle-blue>
-            <digi:trn key="aim:teamReports">
-              Team Reports
-            </digi:trn>
+          <td height=16 align="center" vAlign=center>
+          	<span class=subtitle-blue>
+            	${pageTitle}
             </span>
           </td>
+        </tr>
+        <tr>
+        	<td>
+        		<c:if test="${aimTeamReportsForm.showTabs}">
+					<a style="cursor:pointer; text-decoration:underline; color: #05528b" onclick="initializeTabManager()">
+						<b><digi:trn key="aim:tabmanager:manageactivetabs">Manage Active Tabs</digi:trn></b>
+					</a>
+				</c:if>
+        	</td>
         </tr>
         <tr>
           <td noWrap width=650 vAlign="top">
@@ -175,9 +234,7 @@ function confirmFunc() {
                           <tr bgColor=#dddddb>
                             <td bgColor=#dddddb align="center" height="20">
                               <b>
-                              <digi:trn key="aim:publicTeamReportsList">
-                                List of public team reports
-                              </digi:trn>
+                              ${titleColumn}
                               </b>
                             </td>
                             <td bgColor=#dddddb align="center" height="20">

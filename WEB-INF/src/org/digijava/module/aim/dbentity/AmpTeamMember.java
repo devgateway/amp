@@ -25,6 +25,8 @@ public class AmpTeamMember implements Serializable {
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
+	
+	private Set<AmpDesktopTabSelection> desktopTabSelections;
 
 	public void setReports(Set reports) {
 		this.reports = reports;
@@ -160,10 +162,19 @@ public class AmpTeamMember implements Serializable {
 		this.editableFundingOrgs = editableFundingOrgs;
 	}
 
+	public Set<AmpDesktopTabSelection> getDesktopTabSelections() {
+		return desktopTabSelections;
+	}
+
+	public void setDesktopTabSelections(
+			Set<AmpDesktopTabSelection> desktopTabSelections) {
+		this.desktopTabSelections = desktopTabSelections;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 
-
+	
 
 }

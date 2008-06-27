@@ -154,7 +154,9 @@
 	<page page="selectCMSCategory" name="aim_selectCMSCategoryPopupLayout" title="AMP - Select Category" />
 	<page name="teamPagesConfigure" title=" - Configure Team Pages" />
 	<page name="configureTeam" title=" - Configure Team Pages" />
-	<page name="showTeamReports" title=" - Public Team Reports" />
+	<page name="showTeamReports" page="showTeamReports" title=" - Public Team Reports" />
+	<page name="showTeamTabs" page="showTeamReports" title=" - Public Team Tabs" />
+	<page name="tabManagerData" page="tabManager/tabManagerData" />
 	<page name="teamConfiguration" title=" - Configure Team" />
 	<page name="viewProjectPdf" title=" - View Project PDF " />
 	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />

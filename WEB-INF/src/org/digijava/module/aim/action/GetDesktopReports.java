@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,9 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -34,13 +37,15 @@ public class GetDesktopReports extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		
 		if (tm != null) {
 				Collection reports = new ArrayList();
 				//Adding the default team report
 				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+				
 				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 				//ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-				ArrayList userReports = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());
+				ArrayList userReports = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), null,null, null,true,tm.getMemberId());
 				if (defaultTeamReport != null){
 					Iterator iter = userReports.iterator();
 					boolean found = false;
@@ -69,8 +74,25 @@ public class GetDesktopReports extends TilesAction {
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
                                 session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
 
+                /* Setting Team Members tabs */
+                AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(tm.getMemberId());
+                Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
+                if ( ampTeamMember.getDesktopTabSelections()==null || ampTeamMember.getDesktopTabSelections().size()==0 ) {
+                	if ( defaultTeamReport != null )
+                		tabs.add( defaultTeamReport );
+                }
+                else {
+                		TreeSet<AmpDesktopTabSelection> sortedSelection	= 
+                			new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator);
+                		sortedSelection.addAll( ampTeamMember.getDesktopTabSelections() );
+                		Iterator<AmpDesktopTabSelection> iter	= sortedSelection.iterator();
+                		while ( iter.hasNext() ) {
+                			tabs.add( iter.next().getReport() );
+                		}
+                }
+                session.setAttribute( Constants.MY_TABS , tabs);
 
-				/* Setting default_team_report in session*/
+				/* Setting default_team_report in session */
 				ApplicationSettings appSettings	= tm.getAppSettings();
 				if ( appSettings != null ) {
 					if ( appSettings.getDefaultAmpReport() != null ) {

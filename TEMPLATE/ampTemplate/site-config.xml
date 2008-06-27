@@ -4,21 +4,12 @@
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
 			<put name="title">GIS Dashboard</put>
 <!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->
-			<put-item name="widget1" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget2" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget3" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget4" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget5" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget6" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget7" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget8" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget9" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget10" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget11" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget12" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget13" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget14" module="gis" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="widget15" module="gis" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="tableWidget1" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget2" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget3" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget4" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget5" module="gis" instance="default" teaser="teaserTableWidget"/>
+			<put-item name="tableWidget6" module="gis" instance="default" teaser="teaserTableWidget"/>
 			<put-item name="body" module="gis" page="gisDashboard"/>
 		</layout>
 		<layout name="helpLayout" file="helpLayout.jsp">
@@ -485,7 +476,6 @@
             	<page>preview_tableWidget</page>
             </module>
 			<module name="aim">
-				<page>aim_saveMessage</page>
 				<page>aim_showDocumentsInPopup</page>
 				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>
@@ -600,6 +590,10 @@
 				<page>amp_getDocumentList</page>
 				<page>amp_getDocumentVersionList</page>
 				<page>amp_deleteDocumentResponse</page>
+			</module>
+			<module name="aim">
+				<page>aim_saveMessage</page>
+				<page>tabManagerData</page>
 			</module>
 		</page-group>
 	</site-layout>

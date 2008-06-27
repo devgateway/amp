@@ -77,7 +77,7 @@
 	var firstEntry=0;
 	var currentPage=1;
         var messages;
-	
+	var slMsgId;
 	//used to hold already rendered messages
 	var myArray=new Array();
 	
@@ -88,8 +88,10 @@
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
 
-    function hoverTr(){
-         this.className='Hovered';   
+    function hoverTr(id, obj){
+    	if(slMsgId!=id){
+         obj.className='Hovered';
+        }   
     }
     
     /*code below doesn't look good... but still
@@ -110,12 +112,11 @@
         
         var setBGColor = new Function(className);
        
-        msgTR.onmouseover=hoverTr;
+        /*msgTR.onmouseover=hoverTr;*/
         msgTR.onmouseout=setBGColor;
       
         return msgTR;
     }
-    
     
 
 
@@ -235,6 +236,12 @@
    
         
     function toggleGroup(group_id){
+    if(group_id==slMsgId){
+    	slMsgId='';
+    }else{
+    	slMsgId=group_id;
+    }
+    
                 var strId='#'+group_id;
                 $(strId+'_minus').toggle();
                 $(strId+'_plus').toggle();
@@ -348,15 +355,17 @@
                             }
 				else{
                                      messages=root.childNodes;
-                                    
+                                  
                                      
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
 					//	tblBody.removeChild(tblBody.childNodes[0]);
 					//}
+					
 					if(myArray!=null && myArray.length>0){
 						var whereToInsertRow=1;						
 							for(var i=0;i<messages.length;i++){
+							
 							var msgId=messages[i].getAttribute('id');
                                                        
 							for(var j=0;j<myArray.length;j++){
@@ -370,6 +379,7 @@
 											if(wasDelteActionCalled=='true'){
 												var msgTR=document.createElement('TR');												
                                                                                                 msgTR=paintTr(msgTR,i);
+                                                                                                msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
                                                                                                 
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
 												myArray[myArray.length]=msgId;										
@@ -378,6 +388,7 @@
 												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
                               
                                                                                                 msgTR=paintTr(msgTR,i);
+                                                                                                msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
 												
 												createTableRow(tbl,msgTR,messages[i],true);
 												myArray[myArray.length]=msgId;
@@ -396,16 +407,16 @@
 							myArray[i]=msgId;
 							
 							//creating tr
+							
 							var msgTr=document.createElement('TR');	
-							var isMsgRead=messages[i].getAttribute('read');					
-                                                       
-                                                        msgTr=paintTr(msgTr,i);
-                                                        
-								
-							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
-                                                var tablBody= tbl.getElementsByTagName("tbody");
-                                                tablBody[0].appendChild(myTR);
-                        
+							var isMsgRead=messages[i].getAttribute('read');	
+							msgTr=paintTr(msgTr,i);				
+                         	var myTR=createTableRow(tbl,msgTr,messages[i],true);													
+                            var tablBody= tbl.getElementsByTagName("tbody");
+                         
+                                tablBody[0].appendChild(myTR);
+                      			 msgTr=paintTr(msgTr,i);
+                      			 msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
 																				
 						}//end of for loop
 					}			
@@ -421,6 +432,7 @@
 						var allPages=paginationParams.getAttribute('allPages');
 						var lastPage=paginationParams.getAttribute('lastPage');
 						setupPagionation(paginationTag,parseInt(page),parseInt(allPages));
+						
 					}				
 				}
 				//pagination end
@@ -544,6 +556,7 @@
                 var invId='msg_'+msgId;
 		descDiv.setAttribute("id",invId);	
 		descDiv.style.display='none';
+		
 		//creating table inside hidden div
 			var divTable=document.createElement('TABLE');
                         var divTblBody=document.createElement('TBODY');

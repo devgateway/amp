@@ -1,5 +1,7 @@
 package org.digijava.module.gis.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,17 +11,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import java.util.Collection;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.gis.form.GisDemoForm;
 import org.digijava.module.gis.util.DbUtil;
-import java.util.Iterator;
-import java.util.ArrayList;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.gis.util.SectorRefCount;
 
 

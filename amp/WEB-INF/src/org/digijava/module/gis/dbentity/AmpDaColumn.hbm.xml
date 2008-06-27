@@ -18,7 +18,7 @@
 		<property name="orderNo" column="order_no" type="java.lang.Integer"/>
 		<property name="columnType" column="column_type_no" type="java.lang.Integer"/>
 
-		<many-to-one name="widget" column="widget_id" class="org.digijava.module.gis.dbentity.AmpDaTable" cascade="none"/>		
+		<many-to-one name="widget" column="table_widget_id" class="org.digijava.module.gis.dbentity.AmpDaTable" cascade="none"/>		
 		
 	</class>
 </hibernate-mapping>

@@ -30,22 +30,20 @@
 	</tr>
 	<tr>
 		<td>
-			&nbsp;
-		</td>
-	</tr>
-	<tr>
-		<td>
 		
 			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">
 					<td>
+						<strong><digi:trn key="gis:widgetPlacesTable:lastRenderTime">Last render time</digi:trn></strong>
+					</td>
+					<td>
 						<strong><digi:trn key="gis:widgetPlacesTable:placeName">Place Name (parameter for teaser)</digi:trn></strong>
 					</td>
 					<td>
-						<strong><digi:trn key="gis:widgetPlacesTable:pagemodule">Page module</digi:trn></strong>
+						<strong><digi:trn key="gis:widgetPlacesTable:assignedWidgetName">Assigned widget name</digi:trn></strong>
 					</td>
 					<td>
-						<strong><digi:trn key="gis:widgetPlacesTable:lastRenderTime">Last render time</digi:trn></strong>
+						<strong><digi:trn key="gis:widgetPlacesTable:assignedWidgetType">Assigned widget type</digi:trn></strong>
 					</td>
 					<td>
 						<strong><digi:trn key="gis:widgetPlacesTable:operations">Operation</digi:trn></strong>
@@ -53,17 +51,22 @@
 				</tr>
 				<c:forEach var="pl" items="${gisWidgetPlacesForm.places}" varStatus="stat">
 					<tr>
-						<td nowrap="nowrap">
-							${pl.name}
+						<td>
+							<bean:write name="pl" property="placeLastRenderTime" format="dd MMMM yyyy - hh:mm:ss"/>
 						</td>
 						<td nowrap="nowrap">
-						 	${pl.module}
+							${pl.placeName}
+						</td>
+						<td nowrap="nowrap">
+						 	${pl.widgetName}
+						</td>
+						<td nowrap="nowrap">
+						 	${pl.widgetTypeName}
 						</td>
 						<td>
-							<bean:write name="pl" property="lastRendered" format="dd MMMM yyyy - hh:mm:ss"/>
-						</td>
-						<td>
-							<a href="#">Delete</a>
+							<digi:link href="/widgetplaces.do~actType=assignWidgt~placeId=${pl.placeId}"><digi:trn key="gis:widgetPlacesTable:assignWidgetLink">Assign widget</digi:trn></digi:link>
+							&nbsp;
+							<digi:link href="/widgetplaces.do~actType=delete~placeId=${pl.placeId}" onclick="return confirm('Are you sure?')"><digi:trn key="gis:widgetPlaceTable:deleteLink">Delete</digi:trn></digi:link>
 						</td>
 					</tr>
 				</c:forEach>
@@ -72,6 +75,13 @@
 		
 		</td>
 	</tr>	
+	<tr>
+		<td>
+			<small>
+				<digi:trn key="gis:widgetPlacesTable:note1">Please note that place objects may reappear after deletion if pages they exists on are rendered again.</digi:trn>
+			</small>
+		</td>
+	</tr>
 </table>
 
 </digi:form>

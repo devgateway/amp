@@ -30,7 +30,6 @@ public class AmpDaWidgetPlace implements Serializable {
 	 * This is set at save too.
 	 */
 	private String moduleInstance;
-	private AmpDaTable widget;
 	/**
 	 * Last render time.
 	 * This should be updated on each render to see which places are not used any more.
@@ -90,12 +89,6 @@ public class AmpDaWidgetPlace implements Serializable {
 	}
 	public void setModuleInstance(String moduleInstance) {
 		this.moduleInstance = moduleInstance;
-	}
-	public AmpDaTable getWidget() {
-		return widget;
-	}
-	public void setWidget(AmpDaTable widget) {
-		this.widget = widget;
 	}
 	public Integer getPlaceType() {
 		return placeType;

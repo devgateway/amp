@@ -2,6 +2,7 @@ package org.digijava.module.gis.form;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.gis.dbentity.AmpWidget;
+import org.digijava.module.gis.widget.table.DaTable;
 
 /**
  * Generic widget form.
@@ -11,12 +12,7 @@ import org.digijava.module.gis.dbentity.AmpWidget;
 public class WidgetTeaserForm extends ActionForm {
 
 	private static final long serialVersionUID = 1L;
-	
-	public static final int EMPTY = 0;
-	public static final int EMBEDED = 1;
-	public static final int TABLE = 2;
-	public static final int CHART_INDICATOR = 3;
-	
+	private String placeName;
 	/**
 	 * Defines what should be rendered on teaser.
 	 * For this one use constants defined in this class.
@@ -28,6 +24,7 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private String embeddedHtml;
 	private AmpWidget widget;
+	private DaTable table;
 	/**
 	 * multi-purpose ID.
 	 * Depending on {@link #rendertype} this is used for table or indicator or chart widget id in teaser JSP.
@@ -57,5 +54,17 @@ public class WidgetTeaserForm extends ActionForm {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public DaTable getTable() {
+		return table;
+	}
+	public void setTable(DaTable table) {
+		this.table = table;
+	}
+	public String getPlaceName() {
+		return placeName;
+	}
+	public void setPlaceName(String placeName) {
+		this.placeName = placeName;
 	}
 }

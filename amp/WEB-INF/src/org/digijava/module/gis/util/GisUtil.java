@@ -2,6 +2,7 @@ package org.digijava.module.gis.util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.font.GlyphVector;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -11,16 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.ecs.xml.XML;
+import org.apache.ecs.xml.XMLDocument;
 import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapPoint;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.dbentity.GisMapShape;
-import org.apache.ecs.xml.XMLDocument;
-import org.apache.ecs.xml.XML;
-import java.awt.font.LineMetrics;
-import java.awt.Font;
-import java.awt.font.GlyphVector;
-import org.digijava.module.gis.util.HilightData;
 
 /**
  *

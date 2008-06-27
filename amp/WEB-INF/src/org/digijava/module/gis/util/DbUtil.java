@@ -1,6 +1,7 @@
 package org.digijava.module.gis.util;
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -11,11 +12,9 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.gis.dbentity.GisMap;
-import java.util.List;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.gis.dbentity.GisMap;
 
 /**
  * <p>Title: </p>
@@ -106,7 +105,7 @@ public class DbUtil {
 
     }
 
-    //To be moved to aid module later
+    //TODO To be moved to aid module later
     public static List getUsedSectors() {
         List retVal = null;
         Session session = null;

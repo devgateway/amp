@@ -168,6 +168,8 @@ public class AdminTableWidgets extends DispatchAction {
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
 
 		AmpDaTable dbWidget = null;
+		List<AmpDaWidgetPlace> oldPlaces = null;
+		List<AmpDaWidgetPlace> newPlaces = null;
 		
 		Long id = wForm.getId();
 		if (id==null || id.longValue()<=0){
@@ -176,6 +178,7 @@ public class AdminTableWidgets extends DispatchAction {
 		}else{
 			logger.debug("loading table widget to update");
 			dbWidget = TableWidgetUtil.getTableWidget(id);
+			oldPlaces = WidgetUtil.getWidgetPlaces(dbWidget.getId());
 		}
 		
 		//update db widgets simple fields from the action form.
@@ -204,19 +207,31 @@ public class AdminTableWidgets extends DispatchAction {
 			}
 		}
 		
-		//assign to the place if selected. 
-		AmpDaWidgetPlace place =null;
-		if ( ! "-1".equals(wForm.getSelectedPlaceCode())){
-			place = WidgetUtil.getPlace(wForm.getSelectedPlaceCode());
-			place.setWidget(dbWidget);
-			if (null == dbWidget.getPlaces()){
-				dbWidget.setPlaces(new HashSet<AmpDaWidgetPlace>());
+		//assign to the place if selected.
+		if (wForm.getSelPlaces()!=null && wForm.getSelPlaces().length>0){
+			newPlaces = WidgetUtil.getPlacesWithIDs(wForm.getSelPlaces());
+			if (newPlaces!=null && newPlaces.size()>0){
+				Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
+				WidgetUtil.updatePlacesWithWidget(oldPlaces, dbWidget);
+				WidgetUtil.updatePlacesWithWidget(deleted, null);
+			}else{
+				WidgetUtil.updatePlacesWithWidget(newPlaces, dbWidget);
 			}
-			dbWidget.getPlaces().add(place);
 		}
+		
+		//==old places
+//		AmpDaWidgetPlace place =null;
+//		if ( ! "-1".equals(wForm.getSelectedPlaceCode())){
+//			place = WidgetUtil.getPlace(wForm.getSelectedPlaceCode());
+//			place.setWidget(dbWidget);
+//			if (null == dbWidget.getPlaces()){
+//				dbWidget.setPlaces(new HashSet<AmpDaWidgetPlace>());
+//			}
+//			dbWidget.getPlaces().add(place);
+//		}
  		
 		//save or update widget with columns.
-		TableWidgetUtil.saveOrUpdateWidget(dbWidget, place);
+		TableWidgetUtil.saveOrUpdateWidget(dbWidget);
 		
 		stopEditing(request);
 		
@@ -403,22 +418,24 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @param widget
 	 * @return
 	 */
-	private TableWidgetCreationForm widgetToForm(TableWidgetCreationForm form,AmpDaTable widget) {
+	private TableWidgetCreationForm widgetToForm(TableWidgetCreationForm form,AmpDaTable widget) throws DgException {
 		form.setId(widget.getId());
 		form.setName(widget.getName());
 		form.setCode(widget.getCode());
 		form.setCssClass(widget.getCssClass());
 		form.setHtmlStyle(widget.getHtmlStyle());
 		form.setWidth(widget.getWidth());
-		//List<AmpDaColumn> columns = getWidgetColumnsSorted(widget);
-		//form.setColumns(columns);
-		form.setSelectedPlaceCode("-1");
-		//TODO temporary just setting one (first) place to form.
-		if (widget.getPlaces()!=null){
-			for (AmpDaWidgetPlace place : widget.getPlaces()) {
-				form.setSelectedPlaceCode(place.getCode());
-				break;
+		if (widget.getId()!=null && widget.getId()>0){
+			Long[] selectedPlaces = null;
+			List<AmpDaWidgetPlace> widgetPlaces=WidgetUtil.getWidgetPlaces(widget.getId());
+			if (widgetPlaces!=null){
+				selectedPlaces = new Long[widgetPlaces.size()];
+				int c=0;
+				for (AmpDaWidgetPlace place : widgetPlaces) {
+					selectedPlaces[c++]=place.getId();
+				}
 			}
+			form.setSelPlaces(selectedPlaces);
 		}
 		
 		return form;
@@ -434,7 +451,7 @@ public class AdminTableWidgets extends DispatchAction {
 		List<LabelValueBean> placesBeans = new ArrayList<LabelValueBean>();
 		if (places != null){
 			for (AmpDaWidgetPlace place : places) {
-				placesBeans.add(new LabelValueBean(place.getName(),place.getCode()));
+				placesBeans.add(new LabelValueBean(place.getName(),place.getId().toString()));
 			}
 		}else{
 			//TODO what should go here?

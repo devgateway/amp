@@ -100,29 +100,28 @@
 														<digi:insert attribute="widget6">
 															<digi:put name="widget-teaser-param">chart_widget6</digi:put>
 														</digi:insert>
-													
 													</td>
 												</tr>
 											</table>
 										</td>
 										<td>
 											<table cellpadding="5">
-												<tr>
+												<tr valign="top">
 													<td>
-														<digi:insert attribute="tableWidget5">
-															<digi:put name="widget-teaser-param">test_widget1</digi:put>
+														<digi:insert attribute="widget7">
+															<digi:put name="widget-teaser-param">atGlanceTable1</digi:put>
 														</digi:insert>
 													</td>
 													<td rowspan="2">
-														<digi:insert attribute="tableWidget6">
-															<digi:put name="widget-teaser-param">test_widget1</digi:put>
+														<digi:insert attribute="widget8">
+															<digi:put name="widget-teaser-param">atGlanceTable3</digi:put>
 														</digi:insert>
 													</td>
 												</tr>
 												<tr>
 													<td>
-														<digi:insert attribute="tableWidget7">
-															<digi:put name="widget-teaser-param">test_widget1</digi:put>
+														<digi:insert attribute="widget9">
+															<digi:put name="widget-teaser-param">atGalnceTable2</digi:put>
 														</digi:insert>
 													</td>
 												</tr>
@@ -131,27 +130,37 @@
 									</tr>
 									<tr>
 										<td>
-											<digi:insert attribute="tableWidget1">
-												<digi:put name="widget-teaser-param">test_widget1</digi:put>
+											<digi:insert attribute="widget10">
+												<digi:put name="widget-teaser-param">table1</digi:put>
 											</digi:insert>
-										
 										</td>
 										<td>
-											<digi:insert attribute="tableWidget1">
-												<digi:put name="widget-teaser-param">test_widget1</digi:put>
+											<digi:insert attribute="widget11">
+												<digi:put name="widget-teaser-param">table2</digi:put>
 											</digi:insert>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											<digi:insert attribute="tableWidget3">
-												<digi:put name="widget-teaser-param">test_widget1</digi:put>
+											<digi:insert attribute="widget12">
+												<digi:put name="widget-teaser-param">table3</digi:put>
 											</digi:insert>
-										
 										</td>
 										<td>
-											<digi:insert attribute="tableWidget4">
-												<digi:put name="widget-teaser-param">test_widget1</digi:put>
+											<digi:insert attribute="widget13">
+												<digi:put name="widget-teaser-param">table4</digi:put>
+											</digi:insert>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<digi:insert attribute="widget14">
+												<digi:put name="widget-teaser-param">table5</digi:put>
+											</digi:insert>
+										</td>
+										<td>
+											<digi:insert attribute="widget15">
+												<digi:put name="widget-teaser-param">table6</digi:put>
 											</digi:insert>
 										</td>
 									</tr>

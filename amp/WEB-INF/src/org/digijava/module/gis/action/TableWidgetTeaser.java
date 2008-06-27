@@ -35,7 +35,7 @@ public class TableWidgetTeaser extends TilesAction {
 		
 		AmpDaWidgetPlace place = WidgetUtil.saveOrUpdatePlace(context);
 		
-		AmpDaTable widget=place.getWidget();
+		AmpDaTable widget=null;//place.getWidget();
 
 		if (null != widget){
 			table = TableWidgetUtil.widgetToHelper(widget);

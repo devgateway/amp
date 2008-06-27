@@ -88,28 +88,28 @@
 			<table id="tableNames" border="0" cellpadding="5" align="center" style="font-family:verdana;font-size:11px; border:1px solid silver;">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong>Code:</strong></td>
-					<td><html:text name="wform" property="code"/></td>
+					<td><html:text name="wform" property="code" style="width : 200px"/></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><strong>Name:</strong></td>
-					<td><html:text name="wform" property="name"/></td>
+					<td><html:text name="wform" property="name" style="width : 200px"/></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><strong>CSS class:</strong></td>
-					<td><html:text name="wform" property="cssClass"/></td>
+					<td><html:text name="wform" property="cssClass" style="width : 200px"/></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><strong>Style:</strong></td>
-					<td><html:text name="wform" property="htmlStyle"/></td>
+					<td><html:text name="wform" property="htmlStyle" style="width : 200px"/></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><strong>Width:</strong></td>
-					<td><html:text name="wform" property="width"/></td>
+					<td><html:text name="wform" property="width" style="width : 200px"/></td>
 				</tr>
 				<tr>
 					<td align="right" nowrap="nowrap"><strong>Place:</strong></td>
 					<td>
-						<html:select name="wform" property="selectedPlaceCode">
+						<html:select name="wform" property="selPlaces" multiple="true" size="7" style="width : 200px">
 							<html:option value="-1">-= No Selection =-</html:option>
 							<html:optionsCollection name="wform" property="places" label="label" value="value"/>
 						</html:select>

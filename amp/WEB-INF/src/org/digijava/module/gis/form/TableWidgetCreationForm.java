@@ -28,6 +28,7 @@ public class TableWidgetCreationForm extends ActionForm {
 	private List<AmpDaColumn> columns;
 	private List<LabelValueBean> places;
 	private String selectedPlaceCode;
+	private Long[] selPlaces;
 	
 	private AmpDaTable dbEntity;
 	
@@ -192,6 +193,14 @@ public class TableWidgetCreationForm extends ActionForm {
 
 	public void setSelectedPlaceCode(String selectedPlaceCode) {
 		this.selectedPlaceCode = selectedPlaceCode;
+	}
+
+	public Long[] getSelPlaces() {
+		return selPlaces;
+	}
+
+	public void setSelPlaces(Long[] selPlaces) {
+		this.selPlaces = selPlaces;
 	}
 	
 }

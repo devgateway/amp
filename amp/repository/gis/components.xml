@@ -13,7 +13,8 @@
 		<page page="editTableWidget" name="edit_tableWidget" title="Edit new table widget"/>
 		<page page="editTableWidgetData" name="edit_tableWidgetData" title="Table widget data"/>
 		<page page="editTableWidgetData" name="preview_tableWidget" title="Preview table widget data"/>
-		<page page="widgetPlaces" name="gis_widgetPlaces" title="Administer table widgets"/>
+		<page page="widgetPlaces" name="gis_widgetPlaces" title="Administer widget places"/>
+		<page page="assignWidgetToPlace" name="gis_widgetPlaceAssign" title="Assign widget to place"/>
 		<page page="indicatorchartwidgets" name="gis_indicchartwidgets" title="Administer table widgets"/>
 		<page page="editIndicChartWidget" name="gis_editindicchartwidget" title="Administer table widgets"/>
 		

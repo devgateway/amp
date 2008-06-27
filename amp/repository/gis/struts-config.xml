@@ -80,6 +80,8 @@
 		   path="/gis/widgetplaces" scope="session"
 		   type="org.digijava.module.gis.action.AdminWidgetPlaces" validate="false">
 		   <forward name="forward" path="/showLayout.do?layout=gis_widgetPlaces"/>
+		   <forward name="showAssignWidget" path="/showLayout.do?layout=gis_widgetPlaceAssign"/>
+		   <forward name="showPlacesList" path="/gis/widgetplaces.do" redirect="true"/>
 		  </action>
 
 		  <action name="gisWidgetChartForm" parameter="actType"

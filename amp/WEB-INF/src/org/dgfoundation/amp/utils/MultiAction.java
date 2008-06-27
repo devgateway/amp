@@ -41,9 +41,13 @@ import org.digijava.kernel.persistence.PersistenceManager;
 public abstract class MultiAction extends Action {
 	private static Logger logger = Logger.getLogger(MultiAction.class);
 
+	@Deprecated
     protected ServletContext sc;
+    
+    @Deprecated
     protected Session session;
 
+    @Deprecated
     public Session createSession() throws HibernateException, SQLException {
     	if(session!=null) return session;
     	session = PersistenceManager.getSession();
@@ -63,24 +67,9 @@ public abstract class MultiAction extends Action {
 		 */
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-        HttpServletRequest request, HttpServletResponse response) {
-        try {
-			sc = getServlet().getServletContext();
+        HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
             return modePrepare(mapping, form, request, response);
-        } catch (Exception e) {
-        	logger.error(e);
-        	e.printStackTrace();
-            return null;
-        } finally {
-        	if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-					session=null;
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-        }
     }
 
 		/**

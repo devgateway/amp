@@ -20,6 +20,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.hibernate.Session;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -27,6 +29,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
@@ -46,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -57,23 +61,21 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public class ReportWizardAction extends MultiAction {
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
-	private ReportWizardForm myForm;
-	private HttpServletRequest myRequest;
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		this.createSession();
-		this.myForm		= (ReportWizardForm) form;
-		this.myRequest	= request;
+		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
-		this.myForm.setDuplicateName(false);
+		myForm.setDuplicateName(false);
 		
 		return this.modeSelect(mapping, form, request, response);
 	}
 	
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		
+		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		if (request.getParameter("editReportId") != null ) {
 			return modeEdit(mapping, form, request, response);
@@ -103,7 +105,10 @@ public class ReportWizardAction extends MultiAction {
 		
 	}
 	
-	public void modeReset() {
+	public void modeReset(ActionMapping mapping, ActionForm form, 
+			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		
+		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		myForm.setReportId(null);
 		myForm.setReportTitle( null );
@@ -123,6 +128,8 @@ public class ReportWizardAction extends MultiAction {
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		
+		ReportWizardForm myForm		= (ReportWizardForm) form;
+		
 		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList()) );
 		myForm.setAmpMeasures( AdvancedReportUtil.getMeasureList() );
 		
@@ -132,9 +139,11 @@ public class ReportWizardAction extends MultiAction {
 		
 		return mapping.findForward("show");		
 	}
-	
 	public ActionForward modeEdit(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		
+		ReportWizardForm myForm		= (ReportWizardForm) form;
+		Session session				= PersistenceManager.getRequestDBSession();
 		
 		Long reportId		= Long.parseLong( request.getParameter("editReportId") );
 		
@@ -180,7 +189,9 @@ public class ReportWizardAction extends MultiAction {
 	public ActionForward modeSave(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 
-		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute("currentMember");
+		ReportWizardForm myForm		= (ReportWizardForm) form;
+		
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
 		
 		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId() ) ) {
@@ -235,7 +246,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		
-		modeReset();	
+		modeReset(mapping, form, request, response);
 		
 		return null;
 	}

@@ -134,8 +134,14 @@ function confirmFunc() {
                         </logic:iterate>
                         <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
                           <jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
-                          <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
-                          <c:set target="${urlParamsNext}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
+                            <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>
+                          </c:if>
+                          <c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
+                            <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
+                          </c:if>
+                          
+                         <c:set target="${urlParamsNext}" property="action" value="getPage"/>
                           <c:set var="translation">
                             <digi:trn key="aim:nextpage">Next Page</digi:trn>
                           </c:set>
@@ -143,12 +149,7 @@ function confirmFunc() {
                             &gt;
                           </digi:link>
                           <jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-                          <c:if test="${aimTeamReportsForm.totalPages  > aimTeamReportsForm.pagesToShow}">
-                            <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-aimOrgManagerForm.pagesToShow}"/>
-                            </c:if>
-                          <c:if test="${aimTeamReportsForm.totalPages < aimTeamReportsForm.pagesToShow}">
-                            <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
-                          </c:if>
+                          <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
                           <c:set target="${urlParamsLast}" property="action" value="getPage"/>
                           <c:set var="translation">
                             <digi:trn key="aim:lastpage">Last Page</digi:trn>
@@ -461,7 +462,13 @@ function confirmFunc() {
                       <c:if test="${pageidx < maxpages}"> | </c:if>
                     </logic:iterate>
                     <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
-                      <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
+                        <c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
+                           <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>
+                        </c:if>
+                        <c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
+                           <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
+                        </c:if>
+
                       <c:set target="${urlParamsNext}" property="action" value="getPage"/>
                       <c:set var="translation">
                         <digi:trn key="aim:nextpage">Next Page</digi:trn>
@@ -469,12 +476,7 @@ function confirmFunc() {
                       <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
                         &gt;
                       </digi:link>
-                        <c:if test="${aimTeamReportsForm.totalPages  > aimTeamReportsForm.pagesToShow}">
-                        <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-aimOrgManagerForm.pagesToShow}"/>
-                        </c:if>
-                      <c:if test="${aimTeamReportsForm.totalPages < aimTeamReportsForm.pagesToShow}">
-                        <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
-                      </c:if>
+                      <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
                       <c:set target="${urlParamsLast}" property="action" value="getPage"/>
                       <c:set var="translation">
                         <digi:trn key="aim:lastpage">Last Page</digi:trn>

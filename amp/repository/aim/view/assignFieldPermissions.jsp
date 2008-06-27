@@ -73,8 +73,8 @@
 		</tr>
 		<tr>
 			<td><digi:trn key="aim:gateperm:responsibleAgency">Responsible Agency</digi:trn></td>
-			<td align="center"><html:checkbox property="raRead" /></td>
-			<td align="center"><html:checkbox property="raEdit" /></td>
+			<td align="center"><html:checkbox property="roRead" /></td>
+			<td align="center"><html:checkbox property="roEdit" /></td>
 		</tr>	
 		<tr>
 			<td><digi:trn key="aim:gateperm:regionalGroup">Regional Group</digi:trn></td>

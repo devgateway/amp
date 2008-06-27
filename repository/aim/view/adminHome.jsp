@@ -343,6 +343,28 @@
                             </td>
                           </tr>
                           </feature:display>
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="gis:clickToViewChartWidgetAdmin">Click here to view Indicator Chart Widgets Manager</digi:trn>
+                              </c:set>
+                              <a href="/gis/indicatorchartwidgets.do" title="${translation}">
+                                <digi:trn key="gis:indicatorChartWidgetManager">Indicator Chart Widget Manager</digi:trn>
+                              </a>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="gis:clickToViewWidgetPlaceAdmin">Click here to view Widgets Place Manager</digi:trn>
+                              </c:set>
+                              <a href="/gis/widgetplaces.do" title="${translation}">
+                                <digi:trn key="gis:widgetPlaceManager">Widget Place Manager</digi:trn>
+                              </a>
+                            </td>
+                          </tr>
                           <!-- Satus Manager is deprecated. Use Category Manager instead. <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

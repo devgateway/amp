@@ -529,8 +529,11 @@
 <field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact"></field:display> 
 <field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display>
-<field:display name="Secondary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Secondary Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 <field:display name="Percentage" feature="Sectors"></field:display>
 <field:display name="Signature of Contract" feature="Contracting"></field:display> 
 <field:display name="Contracting Start of Tendering" feature="Contracting"></field:display> 

@@ -974,12 +974,14 @@ function collapseAll() {
 	                                                                			<c:out value="${sectors.subsectorLevel2Name}"/>
 	                                                                		</field:display>
                                                                 		</c:if>
-                                                                		&nbsp;&nbsp; 
-                                                                		<c:if test="${sector.sectorPercentage!=''}">                                                                                        
-                                                                            <c:if test="${sector.sectorPercentage!='0'}">
-                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%
-                                                                            </c:if>
-                                                                        </c:if><br/>
+                                                                		&nbsp;&nbsp;
+                                                                		<field:display name="Percentage" feature="Sectors">
+	                                                                		<c:if test="${sector.sectorPercentage!=''}">                                                                                        
+	                                                                            <c:if test="${sector.sectorPercentage!='0'}">
+	                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%
+	                                                                            </c:if>
+	                                                                        </c:if><br/>
+	                                                                    </field:display>
 
 																		</c:if>
 																	</c:forEach>

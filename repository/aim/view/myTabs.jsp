@@ -139,9 +139,9 @@ function toggleSettings(){
 </ul>
 </div>
 <div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
-<digi:trn key="aim:clickOnATab">
+<digi:trn key="aim:addATab">
 <p/>
-Click on one of the tabs to display activities. You can create more tabs by using the Advanced Reports Manager.
+Click on one of the tabs to display activities. You can add more tabs by using the Tab Manager.
 </digi:trn>
 </div>
 </div> 

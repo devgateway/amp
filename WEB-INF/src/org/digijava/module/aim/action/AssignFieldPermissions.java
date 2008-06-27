@@ -104,6 +104,7 @@ public class AssignFieldPermissions extends Action {
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Contracting Agency Permission","CA",OrgRoleGate.class,fpf.getCaRead(),fpf.getCaEdit());		
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Executing Agency Permission","EA",OrgRoleGate.class,fpf.getEaRead(),fpf.getEaEdit());
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Implementing Agency Permission","IA",OrgRoleGate.class,fpf.getIaRead(),fpf.getIaEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Responsible Agency Permission","RA",OrgRoleGate.class,fpf.getRaRead(),fpf.getRaEdit());
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Funding Agency Permission","DN",OrgRoleGate.class,fpf.getFaRead(),fpf.getFaEdit());		
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Regional Group Permission","RG",OrgRoleGate.class,fpf.getRgRead(),fpf.getRgEdit());	
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Sector Group Permission","SG",OrgRoleGate.class,fpf.getSgRead(),fpf.getSgEdit());
@@ -152,7 +153,11 @@ public class AssignFieldPermissions extends Action {
 		    if(agencyPerm.hasParameter("RG")) {
 				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setRgEdit("on");
 				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setRgRead("on");			
-			}    
+			}  
+		    if(agencyPerm.hasParameter("RA")) {
+				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setRaEdit("on");
+				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setRaRead("on");			
+			}  
 		    if(agencyPerm.hasParameter(UserLevelGate.PARAM_EVERYONE)) {
 				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setEvEdit("on");
 				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setEvRead("on");			
@@ -187,6 +192,7 @@ public class AssignFieldPermissions extends Action {
 		    fpf.setCaEdit("on");
 		    fpf.setEaEdit("on");
 		    fpf.setIaEdit("on");
+		    fpf.setRaEdit("on");
 		    fpf.setFaEdit("on");
 		    fpf.setRgEdit("on");
 		    fpf.setSgEdit("on");
@@ -196,6 +202,7 @@ public class AssignFieldPermissions extends Action {
 		    fpf.setCaRead("on");
 		    fpf.setEaRead("on");
 		    fpf.setIaRead("on");
+		    fpf.setRaRead("on");
 		    fpf.setFaRead("on");
 		    fpf.setRgRead("on");
 		    fpf.setSgRead("on");

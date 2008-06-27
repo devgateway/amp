@@ -12,7 +12,7 @@
 <td>
 <!-- generate report headings -->
 <bean:define id="viewable" name="groupReport" property="firstColumnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-<jsp:include page="../reportHeadings.jsp"/>
+<jsp:include page="reportHeading.jsp"/>
 
 
 <!-- generate total row -->

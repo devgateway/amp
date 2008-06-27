@@ -191,6 +191,7 @@ public class AmpMessageActions extends DispatchAction {
     	
     	//pagination
     	List<AmpMessageState> messages=messageForm.getMessagesForTm();  
+    	List<AmpMessageState> msgs=messageForm.getMessagesForTm();
     	/**
     	 * if max.Storage per message type is less than messages in db,then we should show only max.Storage amount messages.
     	 *and pages quantity will depend on max.Storage. In other case,we will show all messages and pages amount will depend on messages amount 
@@ -206,7 +207,7 @@ public class AmpMessageActions extends DispatchAction {
     				int toIndex=count-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
     				if(toIndex<messages.size()){    
     					messageForm.setMessagesForTm(null);
-    					List<AmpMessageState> msgs=new ArrayList<AmpMessageState>();    					
+    					msgs=new ArrayList<AmpMessageState>();    					
     					for (int i=0;i<toIndex;i++) {
     						msgs.add(messages.get(i));							
 						}
@@ -243,7 +244,7 @@ public class AmpMessageActions extends DispatchAction {
     		messageForm.setLastPage(Integer.toString(howManyPages));
     		messageForm.setPagesToShow(MessageConstants.PAGES_TO_SHOW);
 
-    	messageForm.setPagedMessagesForTm(messages);
+    	messageForm.setPagedMessagesForTm(msgs);
     	
     	response.setContentType("text/xml");
 		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
@@ -336,6 +337,15 @@ public class AmpMessageActions extends DispatchAction {
 		approvalType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(Approval.class, teamMember.getMemberId());
 		calEventType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(CalendarEvent.class, teamMember.getMemberId());
 		
+		//checking if inbox is full
+		AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
+		if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()>0){
+			int maxStorage=settings.getMsgStoragePerMsgType().intValue();
+			if(msgType<=maxStorage || alertType<=maxStorage|| approvalType<=maxStorage ||calEventType<=maxStorage){
+				messagesForm.setInboxFull(true);
+			}
+		}		
+		
 		//creating xml that will be returned   		
 		
 		response.setContentType("text/xml");
@@ -347,6 +357,7 @@ public class AmpMessageActions extends DispatchAction {
 		xml+="alerts=\""+alertType+"\" ";
 		xml+="approvals=\""+approvalType+"\" ";
 		xml+="calEvents=\""+calEventType+"\" ";
+		xml+="inboxFull=\""+messagesForm.isInboxFull()+"\" ";
 		xml+="/>";
 		xml+="</"+ROOT_TAG+">";
 		out.println(xml);
@@ -486,7 +497,7 @@ public class AmpMessageActions extends DispatchAction {
     		message.setForwardedMessage(AmpMessageUtil.getMessage(messageForm.getForwardedMsg().getMsgId()));
     	} 
     	//link message to activity if necessary
-    	if(messageForm.getSelectedAct()!=null){
+    	if(messageForm.getSelectedAct()!=null && messageForm.getSelectedAct().length()>0){ 
     		String act=messageForm.getSelectedAct();
     		String activityId=act.substring(act.lastIndexOf("(")+1,act.lastIndexOf("")-1);
     		message.setRelatedActivityId(new Long(activityId));
@@ -641,7 +652,8 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setLastPage(null);
 		 form.setDeleteActionWasCalled(false);
          form.setReceiver(null);
-         form.setSelectedAct(null);        
+         form.setSelectedAct(null);  
+         form.setInboxFull(false);
 	 }
 	 
 	 private void fillFormFields (AmpMessage message,AmpMessageForm form,Long id,boolean isStateId) throws Exception{	 

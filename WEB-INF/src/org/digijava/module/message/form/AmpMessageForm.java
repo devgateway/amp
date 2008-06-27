@@ -58,6 +58,8 @@ public class AmpMessageForm extends ActionForm {
 	private int calendarEventType=0;					//holds amount of calendar events
 	private int alertType=0;							//holds amount of alerts
 	
+	private boolean inboxFull=false;
+	
 	
 	private Map<String,Team> teamsMap;	
 	private List<AmpMessageState> messagesForTm;
@@ -498,6 +500,14 @@ public class AmpMessageForm extends ActionForm {
 
 		public void setSelectedAct(String selectedAct) {
 			this.selectedAct = selectedAct;
+		}
+
+		public boolean isInboxFull() {
+			return inboxFull;
+		}
+
+		public void setInboxFull(boolean inboxFull) {
+			this.inboxFull = inboxFull;
 		}
 
 	}

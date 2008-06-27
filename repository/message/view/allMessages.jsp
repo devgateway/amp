@@ -118,6 +118,7 @@
         return msgTR;
     }
     
+    
 
 
 	 function checkForNewMessages(){
@@ -140,7 +141,7 @@
             window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
             //openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
         }else{   
-            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
+            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
            // openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
             markMsgeAsRead(id);
         }
@@ -355,17 +356,15 @@
                             }
 				else{
                                      messages=root.childNodes;
-                                  
+                                    
                                      
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
 					//	tblBody.removeChild(tblBody.childNodes[0]);
 					//}
-					
 					if(myArray!=null && myArray.length>0){
 						var whereToInsertRow=1;						
 							for(var i=0;i<messages.length;i++){
-							
 							var msgId=messages[i].getAttribute('id');
                                                        
 							for(var j=0;j<myArray.length;j++){
@@ -407,16 +406,18 @@
 							myArray[i]=msgId;
 							
 							//creating tr
-							
 							var msgTr=document.createElement('TR');	
-							var isMsgRead=messages[i].getAttribute('read');	
-							msgTr=paintTr(msgTr,i);				
-                         	var myTR=createTableRow(tbl,msgTr,messages[i],true);													
-                            var tablBody= tbl.getElementsByTagName("tbody");
-                         
-                                tablBody[0].appendChild(myTR);
+							var isMsgRead=messages[i].getAttribute('read');					
+                                                       
+                                                        msgTr=paintTr(msgTr,i);
+                                                        
+								
+							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
+                                                var tablBody= tbl.getElementsByTagName("tbody");
+                                                tablBody[0].appendChild(myTR);
                       			 msgTr=paintTr(msgTr,i);
                       			 msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                        
 																				
 						}//end of for loop
 					}			
@@ -432,7 +433,6 @@
 						var allPages=paginationParams.getAttribute('allPages');
 						var lastPage=paginationParams.getAttribute('lastPage');
 						setupPagionation(paginationTag,parseInt(page),parseInt(allPages));
-						
 					}				
 				}
 				//pagination end
@@ -556,7 +556,6 @@
                 var invId='msg_'+msgId;
 		descDiv.setAttribute("id",invId);	
 		descDiv.style.display='none';
-		
 		//creating table inside hidden div
 			var divTable=document.createElement('TABLE');
                         var divTblBody=document.createElement('TBODY');

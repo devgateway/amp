@@ -17,7 +17,6 @@
         <property name="placeType" column="place_type" type="java.lang.Integer"/>
 		
 		
-		<many-to-one name="widget" class="org.digijava.module.gis.dbentity.AmpDaTable" column="widget_id" cascade="none"/>		
 		<many-to-one name="assignedWidget" class="org.digijava.module.gis.dbentity.AmpWidget" column="assigned_widget_id" cascade="none"/>		
 
 	</class>

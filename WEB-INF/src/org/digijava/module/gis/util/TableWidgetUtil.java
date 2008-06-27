@@ -128,17 +128,13 @@ public class TableWidgetUtil {
 	/**
 	 * Saves or updates widget and also place if specified.
 	 * @param widget table widget together with columns. 
-	 * @param place this can be null. if not null than save is attempted in same transaction. 
 	 * @throws DgException
 	 */
-	public static void saveOrUpdateWidget(AmpDaTable widget, AmpDaWidgetPlace place) throws DgException{
+	public static void saveOrUpdateWidget(AmpDaTable widget) throws DgException{
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
 			tx=session.beginTransaction();
-			if (place != null){
-				session.update(place);
-			}
 			session.saveOrUpdate(widget);
 			tx.commit();
 		} catch (Exception e) {
@@ -159,21 +155,21 @@ public class TableWidgetUtil {
 	 * @throws DgException
 	 */
 	public static void deleteWidget(AmpDaTable widget) throws DgException{
+		//first unassign from all places this widget was assigned.
+		List<AmpDaWidgetPlace> places = getWidgetPlaces(widget.getId());
+		if (null != places){
+			WidgetUtil.updatePlacesWithWidget(places, null);
+		}
+		//then execute widget specific delete operations.
+		//TODO it would be better if those two action could go in one transaction.
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
 			List<AmpDaValue> values = getTableData(widget.getId());
-			List<AmpDaWidgetPlace> places = getWidgetPlaces(widget.getId());
 			tx=session.beginTransaction();
 			if (null != values){
 				for (AmpDaValue value : values) {
 					session.delete(value);
-				}
-			}
-			if (null != places){
-				for (AmpDaWidgetPlace place : places) {
-					place.setWidget(null);
-					session.update(widget);
 				}
 			}
 			session.delete(widget);

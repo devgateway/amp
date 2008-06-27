@@ -1,14 +1,13 @@
 package org.digijava.module.gis.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -17,6 +16,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.gis.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.gis.dbentity.AmpWidget;
+import org.digijava.module.gis.widget.WidgetPlaceHelper;
 
 /**
  * Widgets utilities.
@@ -27,9 +27,23 @@ public class WidgetUtil {
 
     private static Logger logger = Logger.getLogger(WidgetUtil.class);
 	public static final String WIDGET_TEASER_PARAM = "widget-teaser-param";
+
+	public static final int NO_PLACE_PARAM = 0;
+	public static final int EMPTY = 1;
+	public static final int EMBEDED = 2;
+	public static final int TABLE = 3;
+	public static final int CHART_INDICATOR = 4;
 	
-	public static AmpWidget getWidget(Long widgetId){
+	
+	public static AmpWidget getWidget(Long widgetId) throws DgException{
 		AmpWidget result = null;
+		Session session = PersistenceManager.getRequestDBSession();
+		try {
+			result = (AmpWidget)session.load(AmpWidget.class, widgetId);
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot load widget from db with id="+widgetId,e);
+		}
 		return result;
 	}
 	
@@ -68,7 +82,7 @@ public class WidgetUtil {
 	public static List<AmpDaWidgetPlace> getAllPlaces() throws DgException{
 		List<AmpDaWidgetPlace> result=null;
 		Session session = PersistenceManager.getRequestDBSession();
-		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p ";
+		String oql="from "+AmpDaWidgetPlace.class.getName()+" as p order by p.lastRendered desc";
 		try {
 			Query q=session.createQuery(oql);
 			result = q.list();
@@ -120,7 +134,7 @@ public class WidgetUtil {
 	}
 
 	/**
-	 * ave place object to db.
+	 * Saves place object to db.
 	 * @param place
 	 * @throws DgException
 	 */
@@ -144,6 +158,12 @@ public class WidgetUtil {
 		
 	}
 	
+	/**
+	 * Retrieves widget assigned to particular place.
+	 * @param placeId
+	 * @return
+	 * @throws DgException
+	 */
 	public static AmpWidget getWidgetOnPlace(Long placeId)throws DgException{
 		AmpDaWidgetPlace place = getPlace(placeId);
 		if (place!=null){
@@ -152,6 +172,13 @@ public class WidgetUtil {
 		return null;
 	}
 	
+	/**
+	 * Retrieves all places to which the widget is assigned.
+	 * widget is specified by id.
+	 * @param widgetId widget for which to search places.
+	 * @return
+	 * @throws DgException
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getWidgetPlaces(Long widgetId) throws DgException{
 		List<AmpDaWidgetPlace> places = null;
@@ -168,6 +195,12 @@ public class WidgetUtil {
 		return places;
 	}
 
+	/**
+	 * Retrieves places with IDs specified.
+	 * @param pids id's of places.
+	 * @return
+	 * @throws DgException
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getPlacesWithIDs(Long[] pids) throws DgException{
 		List<AmpDaWidgetPlace> places = null;
@@ -190,6 +223,12 @@ public class WidgetUtil {
 		return places;
 	}
 
+	/**
+	 * Removes assignment to this widget from all widget place objects.
+	 * Used when deleting widget.
+	 * @param widgetId
+	 * @throws DgException
+	 */
 	public static void clearPlacesForWidget(Long widgetId) throws DgException{
 		List<AmpDaWidgetPlace> places = getWidgetPlaces(widgetId);
 		if (places!=null && places.size()>0){
@@ -217,6 +256,49 @@ public class WidgetUtil {
 		}
 	}
 	
+	/**
+	 * Deletes widget place from db.
+	 * @param placeId
+	 * @throws DgException
+	 */
+	public static void deleteWidgetPlace(Long placeId) throws DgException{
+		AmpDaWidgetPlace place = getPlace(placeId);
+		deleteWidgetPlace(place);
+	}
+
+	/**
+	 * Deletes widget place from db.
+	 * @param place
+	 * @throws DgException
+	 */
+	public static void deleteWidgetPlace(AmpDaWidgetPlace place) throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			session.delete(place);
+			tx.commit();
+		} catch (Exception e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception e1) {
+					logger.error(e1);
+					throw new DgException("Cannot rallback place removal",e1);
+				}
+			}
+			logger.error(e);
+			throw new DgException("Cannot remove place",e);
+		}
+	}
+	
+	/**
+	 * Assigns widget to all places in collection.
+	 * widget parameter can be null, in this case places will have no widget assigned. 
+	 * @param places
+	 * @param widget can be null.
+	 * @throws DgException
+	 */
 	public static void updatePlacesWithWidget(Collection<AmpDaWidgetPlace> places, AmpWidget widget) throws DgException{
 		if (places==null || places.size()==0) return; 
 		Session session = PersistenceManager.getRequestDBSession();
@@ -248,6 +330,54 @@ public class WidgetUtil {
 			logger.error(e);
 			throw new DgException("Cannot clear places",e);
 		}
+	}
+
+	/**
+	 * Returns all widgets from db.
+	 * This will include chart and table widgets.
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<AmpWidget> getAllWidgets() throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		String oql = "from "+AmpWidget.class.getName() + " as w order by w.name";
+		List<AmpWidget> result = null;
+		try {
+			Query query = session.createQuery(oql);
+			result = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot clear places",e);
+		}
+		return result;
+	}
+
+	/**
+	 * Return all widgets converted to {@link WidgetPlaceHelper} beans.
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<WidgetPlaceHelper> getAllWidgetsHelpers() throws DgException{
+		List<WidgetPlaceHelper> result = null;
+		Session session = PersistenceManager.getRequestDBSession();
+		String oql = "from "+AmpWidget.class.getName() + " as w order by w.name";
+		try {
+			Query query = session.createQuery(oql);
+			List list = query.list();
+			if (list==null || list.size()==0) return null;
+			result = new ArrayList<WidgetPlaceHelper>(list.size());
+			for (Object row : list) {
+				AmpWidget widget = (AmpWidget)row;
+				WidgetPlaceHelper helper = new WidgetPlaceHelper(widget);
+				result.add(helper);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("Cannot clear places",e);
+		}
+		return result;
 	}
 	
 	public static class PlaceKeyWorker implements KeyWorker<Long, AmpDaWidgetPlace>{

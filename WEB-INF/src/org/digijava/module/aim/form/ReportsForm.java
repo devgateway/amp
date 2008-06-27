@@ -40,13 +40,22 @@ public class ReportsForm extends ActionForm {
 		this.pagesToShow = pagesToShow;
 	}
 
-	public int getOffset() {
-		return offset;
-	}
+    public int getOffset() {
+    	int value;
+    	if (getCurrentPage()> (this.getPagesToShow()/2)){
+    		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+    	}
+    	else {
+    		value = 0;
+    	}
+    	setOffset(value);
+    	return this.offset;
+    }
+ 
+    public void setOffset(int offset) {
+    	this.offset = offset;
+    }
 
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
 
 	public int getPage() {
 		return page;

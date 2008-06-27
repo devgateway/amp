@@ -36,9 +36,9 @@
 	}
 %>
 <%if (rowIdx%2==0){ %>
-	<tr bgcolor="#FFFFFF" height="15px" onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
+	<tr bgcolor="#FFFFFF" height="15px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
 <%}else{%>
-	<tr bgcolor="#ECECEC" height="15px"  onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#ECECEC', '#ECECEC', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#ECECEC'">
+	<tr bgcolor="#ECECEC" height="15px"  onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#ECECEC', '#ECECEC', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#ECECEC'">
 <%}%>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

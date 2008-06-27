@@ -143,15 +143,15 @@ function validateForm(){
   if(draftStatus!=null && draftStatus.value!="true"){
   <feature:display name="Sectors" module="Project ID and Planning">
     if (document.aimEditActivityForm.selActivitySectors == null) {
-     // alert("${errMsgAddSector}");
+      //alert("${errMsgAddSector}");
      var primConf=document.getElementById('primaryConfig');
      var secConf=document.getElementById('secondaryConfig');
      if(primConf==null && secConf==null){
-        // alert("${errMsgAddSector}");
-         // return false;
+         alert("${errMsgAddSector}");
+          return false;
      }
-     // document.aimEditActivityForm.addSec.focus();
-      // return false;
+      document.aimEditActivityForm.addSec.focus();
+       return false;
     }
    </feature:display>
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
@@ -237,8 +237,8 @@ function validateSectorPercentage(){
     var flag = false;
     var primConf=document.getElementById('primaryConfig');
     if(primConf==null){
-         //alert("${errMsgAddSector}");
-        //return false;
+         alert("${errMsgAddSector}");
+        return false;
      }
     var sum_prim_sector=false;
     var sum_sec_sector=false;
@@ -254,8 +254,8 @@ function validateSectorPercentage(){
         var primaryDiv=sectorDiV.getElementsByTagName("div").length;
         var inputs=sectorDiV.getElementsByTagName("input");
         if(inputs.length==0 && primaryDiv>0){
-           // alert("${errMsgAddSector}");
-           // return false;
+           alert("${errMsgAddSector}");
+            return false;
         }
         
         for (j=0; j<inputs.length; j++){

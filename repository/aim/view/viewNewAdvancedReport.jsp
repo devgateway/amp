@@ -132,7 +132,8 @@ session.setAttribute("progressValue", counter);
 			</span>
 		</td>
 	</tr>
-	
+</logic:notEqual>
+</logic:notEqual>
 	<logic:equal name="viewFormat" scope="request" value="print">
 	<script language="JavaScript">
 		function load()
@@ -157,10 +158,14 @@ session.setAttribute("progressValue", counter);
 				</a>
 			</logic:notEqual>
 			| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
-	</logic:notEqual>
-	</logic:notEqual>
+			</td>
+		</tr>
+	
 </logic:notEqual>
+
 	<logic:equal name="widget" scope="request" value="true">
+	<table width="100%"> 
+		<tr>
 		<td style="padding-left:-2px;">
 		<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
 	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
@@ -205,12 +210,54 @@ session.setAttribute("progressValue", counter);
                 <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=arf.getRenderEndYear()%> |
              </td>
              </tr>
-             </table>
+             <tr>
+           </table>
            </div>
     	</div>
-	</logic:equal>
 	</td>
 	</tr>
+	<tr>
+		<td align="right">
+			<span style="color: red;font-family: Arial;padding-right: 5px">
+				<c:set var="AllAmount">
+					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+				</c:set>
+				<digi:trn key="rep:pop:AllAmount">
+					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+				</digi:trn>
+				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
+				</logic:present>
+			</span>
+		</td>
+	</tr>
+		<tr>
+		<td style="padding-left: 5px;padding-right: 5px" align="left">
+			<logic:notEqual name="viewFormat" value="print">
+			<c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
+				<logic:equal name="viewFormat" value="html">
+					<a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
+				</logic:equal>
+				<logic:equal name="viewFormat" value="foldable">
+					<a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
+				</logic:equal>
+				<c:choose>							
+					<c:when  test="${i eq report.startRow}">
+						<font color="#FF0000"><fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
+					</c:when>
+					<c:otherwise>
+						<fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/>
+					</c:otherwise>								
+				</c:choose>
+				</a>
+				|
+				</c:forEach>
+				</logic:notEqual>
+			</td>
+		</tr>
+	</logic:equal>
+	
 	<logic:notEmpty name="reportMeta" property="hierarchies">
 		<logic:notEmpty name="report" property="levelSorters">
 			<tr>

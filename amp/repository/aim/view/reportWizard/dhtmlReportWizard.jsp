@@ -557,7 +557,7 @@
 						<digi:trn key="btn:saveReport">Save Report</digi:trn>
 				</button>
 				&nbsp;&nbsp;&nbsp;
-			</div
+			</div>
 		</div>
 		</digi:form>
 	</td>

@@ -83,20 +83,27 @@ public class ViewSelectActivityTabs extends Action {
 				if (type.equals("field")) {
 					fieldsVisibility = ampTreeVisibility
 							.getFieldByNameFromRoot(name);
-					isVisible = fieldsVisibility
-							.isVisibleTemplateObj(ampTreeVisibility.getRoot()
-									.getTemplate());
+					if (fieldsVisibility != null) {
+						isVisible = fieldsVisibility
+								.isVisibleTemplateObj(ampTreeVisibility
+										.getRoot().getTemplate());
+					}
 				} else if (type.equals("feature")) {
 					featuresVisibility = ampTreeVisibility
 							.getFeatureByNameFromRoot(name);
-					isVisible = featuresVisibility
-							.isVisibleTemplateObj(ampTreeVisibility.getRoot()
-									.getTemplate());
+					if (featuresVisibility != null) {
+						isVisible = featuresVisibility
+								.isVisibleTemplateObj(ampTreeVisibility
+										.getRoot().getTemplate());
+					}
 				} else if (type.equals("module")) {
 					modulesVisibility = ampTreeVisibility
 							.getModuleByNameFromRoot(name);
-					isVisible = modulesVisibility
-							.isVisibleTemplateObj(ampTreeVisibility.getRoot());
+					if (modulesVisibility != null) {
+						isVisible = modulesVisibility
+								.isVisibleTemplateObj(ampTreeVisibility
+										.getRoot());
+					}
 				}
 				if (isVisible) {
 					actionForward = mapping.findForward(forward);

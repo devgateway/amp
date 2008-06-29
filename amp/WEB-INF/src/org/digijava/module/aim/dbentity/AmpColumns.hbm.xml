@@ -14,6 +14,7 @@
 		<property column="extractorView" name="extractorView" type="java.lang.String"/>
 		<property column="tokenExpression" name="tokenExpression" type="java.lang.String"/>
 		<property column="relatedContentPersisterClass" name="relatedContentPersisterClass" type="java.lang.String"/>		
+		<property column="filterRetrievable" name="filterRetrievable" type="java.lang.Boolean"/>
 
 		<set name="filters" cascade="all-delete-orphan">
 			<key column="column_id"/>

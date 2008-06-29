@@ -230,7 +230,7 @@ public final class AdvancedReportUtil {
 		catch(Exception e)
 		{
 			logger.error(e);
-			//System.out.println(" Error in getColumnList()  :  " + e);
+			////System.out.println(" Error in getColumnList()  :  " + e);
 		} finally {
 			try {
 				PersistenceManager.releaseSession(session);
@@ -276,7 +276,7 @@ public final class AdvancedReportUtil {
 		catch(Exception e)
 		{
 			logger.error(e);
-			//System.out.println(" Error in getMeasureList()  :  " + e);
+			////System.out.println(" Error in getMeasureList()  :  " + e);
 		} finally {
 			try {
 				PersistenceManager.releaseSession(session);

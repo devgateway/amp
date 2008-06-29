@@ -433,7 +433,7 @@ public class FeaturesUtil {
       ampTemplate = (FeatureTemplates) session.load(FeatureTemplates.class,
           templateId);
       ampTemplate.setFeatureTemplateName(templateName);
-      //System.out.println(ampTemplate.getFeatureTemplateName());
+      ////System.out.println(ampTemplate.getFeatureTemplateName());
       ampTemplate.setFeatures(new HashSet());
       //ampTemplate.getFeatures().addAll(features);
       for (Iterator it = features.iterator(); it.hasNext(); ) {
@@ -1834,7 +1834,7 @@ public class FeaturesUtil {
     try {
       session = PersistenceManager.getSession();
       if(session.isDirty()) {
-    	  System.out.println("field:::: dirtyyyyyyyyyyyyyyyyyyyyyyy");
+    	  //System.out.println("field:::: dirtyyyyyyyyyyyyyyyyyyyyyyy");
     	  session.flush();
       }
       tx = session.beginTransaction();
@@ -2426,7 +2426,7 @@ public class FeaturesUtil {
 				element.getFields().remove(field);
 			}
 			session.delete(field);
-	//	 if(session.contains(field)) System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + field.getName());
+	//	 if(session.contains(field)) //System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + field.getName());
     	 session.flush();
     	 tx.commit();
     }

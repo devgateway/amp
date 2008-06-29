@@ -2670,7 +2670,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	     			}	
 	    		  
 	    		  double execRate=c.getTotalDisbursements()/finalAmount1;
-	    		  System.out.println("1 execution rate: "+execRate);
+	    		  //System.out.println("1 execution rate: "+execRate);
 	    		  c.setExecutionRate(execRate);
 	    	  }
 	    	  else c.setExecutionRate(new Double(0));
@@ -3656,7 +3656,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 					nameRow = nameRow.replace('\r', ' ');
 					nameRow = nameRow.replace("\\", "");
 					}
-					System.out.println(nameRow);
+					//System.out.println(nameRow);
 					retValue[i]=nameRow+"("+row[1]+")";
 					i++;					
 				}

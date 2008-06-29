@@ -128,7 +128,7 @@ public class EditReport extends Action {
 					formBean.setReportDescription ( ampreport.getReportDescription() );
 					
 					formBean.setHideActivities( ampreport.getHideActivities() );
-					System.out.println("2.........."+formBean.getHideActivities());
+					//System.out.println("2.........."+formBean.getHideActivities());
 					formBean.setReportOption( ampreport.getOptions() );
 					formBean.setPublicReport( ampreport.getPublicReport() );
 					formBean.setDrilldownTab( ampreport.getDrilldownTab() );

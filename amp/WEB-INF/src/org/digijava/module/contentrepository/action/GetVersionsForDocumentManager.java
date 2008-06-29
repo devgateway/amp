@@ -58,7 +58,7 @@ public class GetVersionsForDocumentManager extends Action {
 					DocumentData docData	= new DocumentData();
 					Node n					= nIter.nextNode();
 					String testUUID			= n.getUUID();
-					System.out.println(testUUID);
+					//System.out.println(testUUID);
 					
 					if ( this.generateDocumentData(n, counter+1, docData) ) {
 						docs.add(0, docData );

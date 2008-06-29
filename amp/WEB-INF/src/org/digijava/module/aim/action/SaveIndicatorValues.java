@@ -77,7 +77,7 @@ public class SaveIndicatorValues extends Action
 							temp.setActualVal(null);
 						}
 						temp.setRisk(eaForm.getIndicatorRisk());
-						////System.out.println(eaForm.getLogframeCategory());
+						//////System.out.println(eaForm.getLogframeCategory());
 						//temp.setLogframeValueId(eaForm.getLogframeCategory());
 						AmpCategoryValue acv=CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getLogframeCategory());
 						temp.setIndicatorsCategory(acv);

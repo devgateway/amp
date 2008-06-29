@@ -161,7 +161,7 @@ public class ViewChannelOverview extends TilesAction {
 			for(Iterator itAux=ampFields.iterator(); itAux.hasNext();)
 			{
 				AmpField field = (AmpField) itAux.next();
-				//System.out.println(field.getFieldName());
+				////System.out.println(field.getFieldName());
 				colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),id);
 				allComments.put(field.getFieldName(),colAux);
 			}
@@ -268,7 +268,7 @@ public class ViewChannelOverview extends TilesAction {
 		}
 		else //we are not checking for TL because of AMP-2705
 		{
-			//System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
+			////System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
 			if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
 				formBean.addError("error.aim.activityAwaitingApproval", 
 						"The activity is awaiting approval");

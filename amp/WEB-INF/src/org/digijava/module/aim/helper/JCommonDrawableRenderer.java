@@ -15,7 +15,7 @@ public class JCommonDrawableRenderer extends JRAbstractSvgRenderer
 
 	public JCommonDrawableRenderer(Drawable drawable) 
 	{
-		//System.out.println("Inside Jfree Webapp CommonDrawable....UNKNOWN(may come here-7)");
+		////System.out.println("Inside Jfree Webapp CommonDrawable....UNKNOWN(may come here-7)");
 		this.drawable = drawable;
 	}
 

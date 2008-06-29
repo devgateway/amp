@@ -19,7 +19,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-		//	//System.out.println("creating now- dynamic trend...");
+		//	////System.out.println("creating now- dynamic trend...");
 
 			int pgwidth = (cols*60)+((measureCount+1)*4*60);
 			int n=3;//cnt;
@@ -36,12 +36,12 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 					if(undis)
 					{
 						pgwidth = (cols*des)+((measureCount-1)*60*4)+measureCount*60 +60;
-						//System.out.println("pgwidthxlstrue" + pgwidth);
+						////System.out.println("pgwidthxlstrue" + pgwidth);
 					}
 					else
 					{
 						pgwidth = (cols*des)+((measureCount)*60*4)+measureCount*60 +60;
-						//System.out.println("pgwidthxlsfalse	" + pgwidth);
+						////System.out.println("pgwidthxlsfalse	" + pgwidth);
 					}
 				}
 				else 
@@ -83,11 +83,11 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 //			DYNAMIC CCCCCCCCC
 			String dc;
 			int colCnt = 20+cols+4*mcnt;
-	//		//System.out.println(" Cnt = " + colCnt);
+	//		////System.out.println(" Cnt = " + colCnt);
 //			 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 			for(int k=0; k<=colCnt; k++)
 			{
-//				//System.out.println("k="+k);
+//				////System.out.println("k="+k);
 				dc="c"+k;
 				p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 			}
@@ -96,7 +96,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			colCnt = (20+cols+4*mcnt);
 			for(int k=0; k<=colCnt; k++)
 			{
-//				//System.out.println("k="+k);
+//				////System.out.println("k="+k);
 				dc="m"+k;
 				p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 			}
@@ -104,7 +104,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			int lwidth=0;
 			if(undis)
 				{
-							//	//System.out.println("des "+des); 
+							//	////System.out.println("des "+des); 
 					//lwidth=(cols+((mcnt-1)*3)+mcnt)*60*2-150;
 					//lwidth = ((des*cols)+((measureCount-1)*4*60));
 					lwidth = pgwidth -60;
@@ -112,7 +112,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 
 			else
 				{
-				////System.out.println("des "+des);
+				//////System.out.println("des "+des);
 									//lwidth = ((des*cols)+((measureCount)*4*60));
 									lwidth = pgwidth -60;
 					//lwidth=(cols+(mcnt*3)+mcnt)*60*2-150;
@@ -164,7 +164,7 @@ p2.println("</group>");
 								htext="h"+i;
 								//htextkey="h"+i;
 								ctextkey="c"+(h++);
-							//	//System.out.println("grr"+ctextkey);
+							//	////System.out.println("grr"+ctextkey);
 								p2.println("<group  name='"+htext+"' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
 								p2.println("<groupExpression><![CDATA[$F{"+ctextkey+"}]]></groupExpression>");
 								p2.println("<groupHeader>");
@@ -368,10 +368,10 @@ p2.println("</group>");
 				
 
 					yrwidth=(measureCount*60);
-					////System.out.println("****"+chek(labels));
+					//////System.out.println("****"+chek(labels));
 					
 					if(undis){
-//						//System.out.println("grrr.."+m);
+//						////System.out.println("grrr.."+m);
 						yrwidth=(measureCount-1)*60;
 					}
 
@@ -379,7 +379,7 @@ p2.println("</group>");
 
 					m=cols+2;
 					for(int j=0;j<3;j++){
-					//	//System.out.println("grrr.."+arr[0][cols+j]);
+					//	////System.out.println("grrr.."+arr[0][cols+j]);
 							ctextkey= "c"+c;
 								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 								p2.println("mode='Opaque'");
@@ -412,12 +412,12 @@ p2.println("</group>");
 						if(undis)
 							mcnt = measureCount-1;
 						m--;	
-						////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+						//////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 						for(int i=0;i<mcnt;i++){
 							//if(!labels[(temp)+i].equals("Undisbursed"))
 							{	
 								ctextkey="m"+m;
-								////System.out.println("com found.."+i);
+								//////System.out.println("com found.."+i);
 								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 								p2.println("mode='Transparent'");
 								p2.println("x='"+x1+"'");
@@ -442,11 +442,11 @@ p2.println("</group>");
 							x1+=60;
 							m++;
 							}
-							////System.out.println("&&&&&&&&&&------------------" + ctextkey);
+							//////System.out.println("&&&&&&&&&&------------------" + ctextkey);
 						}
-						////System.out.println("temp:"+temp++);
+						//////System.out.println("temp:"+temp++);
 						m++;
-						//System.out.println("mmm "+m);
+						////System.out.println("mmm "+m);
 					}
 					//// m--------------- m--;
 					temp=0;
@@ -454,13 +454,13 @@ p2.println("</group>");
 						mcnt = measureCount;
 						temp=(3+cols+(mcnt*3))+1;
 						ctextkey = "c"+temp;
-						 ////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						 //////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					else{
 						mcnt = measureCount;
 						temp=(3+cols+((mcnt+1)*3))+1;
 						ctextkey = "c"+temp;
-						////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						//////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					
 					p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -493,7 +493,7 @@ p2.println("</group>");
 					}
 				m--;
 					
-					////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+					//////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 					for(int i=1;i<=measureBlocks;i++){
 					
 						ctextkey="m"+m;
@@ -591,10 +591,10 @@ p2.println("</group>");
 			temp=cols;
 
 				yrwidth=(measureCount*60);
-				////System.out.println("****"+chek(labels));
+				//////System.out.println("****"+chek(labels));
 				
 				if(undis){
-//					//System.out.println("grrr.."+m);
+//					////System.out.println("grrr.."+m);
 					yrwidth=(measureCount-1)*60;
 				}
 
@@ -602,7 +602,7 @@ p2.println("</group>");
 
 				m=cols+2;
 				for(int j=0;j<3;j++){
-					////System.out.println("flag test.."+arr[0][cols+j]);
+					//////System.out.println("flag test.."+arr[0][cols+j]);
 						ctextkey= "c"+c;
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Opaque'");
@@ -636,12 +636,12 @@ p2.println("</group>");
 						mcnt = measureCount-1;
 					y1 =95;
 						
-					////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+					//////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 					for(int i=0;i<mcnt;i++){
 						//if(!labels[(temp)+i].equals("Undisbursed"))
 						{	
 							ctextkey="m"+m;
-							////System.out.println("com found.."+i);
+							//////System.out.println("com found.."+i);
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x1+"'");
@@ -666,9 +666,9 @@ p2.println("</group>");
 						x1+=60;
 						m++;
 						}
-						////System.out.println("&&&&&&&&&&------------------" + ctextkey);
+						//////System.out.println("&&&&&&&&&&------------------" + ctextkey);
 					}
-					//System.out.println("temp:"+m);
+					////System.out.println("temp:"+m);
 					m++;
 				}
 				
@@ -677,13 +677,13 @@ p2.println("</group>");
 					mcnt = measureCount;
 					temp=(3+cols+(mcnt*3))+1;
 					ctextkey = "c"+temp;
-					////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					//////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 				else{
 					mcnt = measureCount;
 					temp=(3+cols+((mcnt+1)*3))+1;
 					ctextkey = "c"+temp;
-					////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					//////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 			
 				p2.println("<staticText>");
@@ -737,7 +737,7 @@ p2.println("</group>");
 					//measureBlocks=3*(measureCount);
 				}
 				m--;
-				////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+				//////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
 					ctextkey="m"+m;
@@ -816,10 +816,10 @@ p2.println("</group>");
 			temp=cols;
 
 				yrwidth=(measureCount*60);
-				////System.out.println("****"+chek(labels));
+				//////System.out.println("****"+chek(labels));
 				
 				if(undis){
-//					//System.out.println("grrr.."+m);
+//					////System.out.println("grrr.."+m);
 					yrwidth=(measureCount-1)*60;
 				}
 		
@@ -827,7 +827,7 @@ p2.println("</group>");
 
 				m=cols+2;
 				for(int j=0;j<3;j++){
-					////System.out.println("flag test.."+arr[0][cols+j]);
+					//////System.out.println("flag test.."+arr[0][cols+j]);
 						ctextkey= "c"+c;
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Opaque'");
@@ -860,12 +860,12 @@ p2.println("</group>");
 					if(undis)
 						mcnt = measureCount-1;
 						
-					////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+					//////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 					for(int i=0;i<mcnt;i++){
 						//if(!labels[(temp)+i].equals("Undisbursed"))
 						{	
 							ctextkey="m"+m;
-							////System.out.println("com found.."+i);
+							//////System.out.println("com found.."+i);
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x1+"'");
@@ -890,9 +890,9 @@ p2.println("</group>");
 						x1+=60;
 						m++;
 						}
-						////System.out.println("&&&&&&&&&&------------------" + ctextkey);
+						//////System.out.println("&&&&&&&&&&------------------" + ctextkey);
 					}
-					////System.out.println("temp:"+temp++);
+					//////System.out.println("temp:"+temp++);
 					m++;
 				}
 				
@@ -901,13 +901,13 @@ p2.println("</group>");
 					mcnt = measureCount;
 					temp=(3+cols+(mcnt*3))+1;
 					ctextkey = "c"+temp;
-					////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					//////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 				else{
 					mcnt = measureCount;
 					temp=(3+cols+((mcnt+1)*3))+1;
 					ctextkey = "c"+temp;
-					////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					//////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 
 				p2.println("<staticText>");
@@ -940,7 +940,7 @@ p2.println("</group>");
 					//measureBlocks=3*(measureCount);
 				}
 				m--;
-				////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+				//////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
 					ctextkey="m"+m;
@@ -996,7 +996,7 @@ p2.println("</group>");
 			
 			
 			p2.println("</band>");
-			////System.out.println("Page..........Header " + c);
+			//////System.out.println("Page..........Header " + c);
 			p2.println("</pageHeader>");}
 			p2.println("<columnHeader>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");
@@ -1053,7 +1053,7 @@ p2.println("</group>");
 					for(int j=0;j<dcnt;j++)
 					{		
 					ctextkey = "c"+c;
-//					//System.out.println("########LOOP:: "+i+" ::"+x+":"+w+":"+arr[0][i]);
+//					////System.out.println("########LOOP:: "+i+" ::"+x+":"+w+":"+arr[0][i]);
 					w=60;
 
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -1085,7 +1085,7 @@ p2.println("</group>");
 				}
 
 			c=3+cols+3*dcnt+3+2+hcnt;
-			////System.out.println("----------------->"+c);
+			//////System.out.println("----------------->"+c);
 
 					for(int j=0;j<mcnt;j++)
 					{		
@@ -1122,7 +1122,7 @@ p2.println("</group>");
 			temp=cols;
 
 				yrwidth=(measureCount*60);
-				////System.out.println("****"+chek(labels));
+				//////System.out.println("****"+chek(labels));
 				
 				if( undis ){
 					yrwidth=(measureCount-1)*60;
@@ -1151,7 +1151,7 @@ p2.println("</group>");
 
 				
 			p2.println("</band>");
-			////System.out.println("Detail..........Header" + c);
+			//////System.out.println("Detail..........Header" + c);
 			p2.println("</detail>");
 			p2.println("<columnFooter>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");
@@ -1187,10 +1187,10 @@ p2.println("</group>");
 				boolean b=false;
 				for(int i=0;i<cols.length;i++)
 				{
-//					//System.out.println("Temp---"+temp);
+//					////System.out.println("Temp---"+temp);
 					if(cols[i].equals(str))
 					{
-//						//System.out.println("aaya..");
+//						////System.out.println("aaya..");
 						b = true;
 						break;
 					}
@@ -1206,10 +1206,10 @@ p2.println("</group>");
 			/*	for(int i=0;i<arr.length;i++){
 					if(arr[i].equals("Comulative"))
 					{
-						//System.out.println("Comulative found... :::"+i);
+						////System.out.println("Comulative found... :::"+i);
 						flag=true;
 					}
-//					//System.out.println("chek.."+arr[i]);
+//					////System.out.println("chek.."+arr[i]);
 				}
 			*/	
 				return flag;
@@ -1218,7 +1218,7 @@ p2.println("</group>");
 
 /*	public static void main(String args[])
 	{
-		//System.out.println("inside main...");
+		////System.out.println("inside main...");
 		int i=2;
 //		String arr[]={"donorName","status","region","startDate"};
 		String arr2[]={

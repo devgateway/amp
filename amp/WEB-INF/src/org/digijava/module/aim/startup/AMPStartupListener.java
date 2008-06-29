@@ -3,10 +3,9 @@
  */
 package org.digijava.module.aim.startup;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -18,15 +17,15 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.core.Permissible;
 
 
 
@@ -101,8 +100,14 @@ public class AMPStartupListener extends HttpServlet
         	//Lucene indexation
         	Directory idx = LuceneUtil.createIndex();
 			ampContext.setAttribute(Constants.LUCENE_INDEX, idx);
-        	//
         	
+			
+			//initialize permissible simple name singleton
+			GatePermConst.availablePermissiblesBySimpleNames=new Hashtable<String, Class>();
+        	for (int i = 0; i < GatePermConst.availablePermissibles.length; i++) {
+        		GatePermConst.availablePermissiblesBySimpleNames.put(GatePermConst.availablePermissibles[i].getSimpleName(),GatePermConst.availablePermissibles[i]);
+			}
+			
         	
         	
     	} catch (Exception e) {

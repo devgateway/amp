@@ -30,9 +30,9 @@ index = -1;
 for (int i = 0;i < obj.length;i ++) {
 	for (int j = 0;j < obj[0].length;j ++) {
 		data[i][j] = obj[i][j];
-//		//System.out.println(j +" : "+data[i][j]);
+//		////System.out.println(j +" : "+data[i][j]);
 	}
-//	//System.out.println();
+//	////System.out.println();
 }
 colCnt = obj[0].length;
 name = new String[colCnt];

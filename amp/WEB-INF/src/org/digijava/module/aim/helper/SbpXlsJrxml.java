@@ -9,7 +9,7 @@ public class SbpXlsJrxml
        {		
 		  try
 			{
-			//System.out.println("DYNAMIC Multi-JRXML..Sector by project");
+			////System.out.println("DYNAMIC Multi-JRXML..Sector by project");
 
 //			File fopen = new File("TrendAnalysisPdf_new.jrxml");
 			FileOutputStream out2; // declare a file output object
@@ -19,7 +19,7 @@ public class SbpXlsJrxml
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			//System.out.println("creating now- dynamic trend...");
+			////System.out.println("creating now- dynamic trend...");
 
 int n=cnt;//cnt;
 int totalIndex = n;
@@ -387,11 +387,11 @@ p2.println("<band height='46'  isSplitAllowed='true' >");
 c=8;
 x =82;y=0;
 //for2
-//System.out.println("n"+n);
+////System.out.println("n"+n);
 for(int j=0;j<n;j++)
 {
 ctextkey="c"+c;
-//System.out.println("cc2"+c);
+////System.out.println("cc2"+c);
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
@@ -417,7 +417,7 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
-//System.out.println("cc3"+c);
+////System.out.println("cc3"+c);
 
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -444,7 +444,7 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
-//System.out.println("cc4"+c);
+////System.out.println("cc4"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -469,7 +469,7 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
-//System.out.println("cc5"+c);
+////System.out.println("cc5"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -493,7 +493,7 @@ p2.println("</textField>");
 
 x += 60;
 c += 2;
-////System.out.println("ccccccccccc  "+c);
+//////System.out.println("ccccccccccc  "+c);
 }
 
 c=6+(n*4)+1+3;
@@ -503,7 +503,7 @@ y=0;
 for(int j=0;j<3+1;j++)
 {
 ctextkey="c"+c;
-//System.out.println("cc"+c);
+////System.out.println("cc"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");

@@ -1026,7 +1026,7 @@ queryString +=
 	    // -----------------
 	    list = q.list();
 	    if (list != null) {
-		//System.out.println("ARCHIVE SIZEEEEEE: " + list.size());
+		////System.out.println("ARCHIVE SIZEEEEEE: " + list.size());
 	    }
 
 	}

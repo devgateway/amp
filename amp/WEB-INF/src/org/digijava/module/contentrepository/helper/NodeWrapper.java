@@ -79,7 +79,7 @@ public class NodeWrapper {
 					errorAppeared	= true;
 			}
 			else{
-				System.out.println("NodeWrapper.NodeWrapper() 1");
+				//System.out.println("NodeWrapper.NodeWrapper() 1");
 				if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
 					errorAppeared	= true;
 				}
@@ -164,7 +164,7 @@ public class NodeWrapper {
 				newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, tempDoc.getWebLink() );
 			}
 			else{
-				System.out.println("NodeWrapper.NodeWrapper() 2");
+				//System.out.println("NodeWrapper.NodeWrapper() 2");
 				if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
 					errorAppeared	= true;
 				}

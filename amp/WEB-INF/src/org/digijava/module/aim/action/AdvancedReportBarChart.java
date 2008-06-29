@@ -41,7 +41,7 @@ public class AdvancedReportBarChart	extends Action
 	{
 
 		AdvancedReportForm formbean = (AdvancedReportForm) form;
-		//System.out.println("CHART FORM SIZE::::::::::::::::"+formbean.getFinalData().size());
+		////System.out.println("CHART FORM SIZE::::::::::::::::"+formbean.getFinalData().size());
 		
 		Iterator iter= formbean.getFinalData().iterator();
 		
@@ -68,7 +68,7 @@ public class AdvancedReportBarChart	extends Action
 					title = advReport.getTitle();
 				
 				if(advReport.getAmpFund() != null){
-						//System.out.println("ampFund is NOT NULL....");
+						////System.out.println("ampFund is NOT NULL....");
 					fundItr = advReport.getAmpFund().iterator();
 
 					AmpFund ampFund1 = new AmpFund();
@@ -85,7 +85,7 @@ public class AdvancedReportBarChart	extends Action
 					//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
 				//chart_coll.add(advReport.getTitle());
 			}//end of while
-			//System.out.println("ZZZZZZZZZZz"+title+"<------***********------->"  + comm +"<------***********------->" +disb + "<------***********------->"  + exp );
+			////System.out.println("ZZZZZZZZZZz"+title+"<------***********------->"  + comm +"<------***********------->" +disb + "<------***********------->"  + exp );
 			//chart_coll.add(new Double(commit.replaceAll(",", "")) );
 
 			chart_coll.add(new Double(comm.replaceAll(",", "")) );
@@ -97,7 +97,7 @@ public class AdvancedReportBarChart	extends Action
 
 		}
 		
-		//System.out.println("  Chart Size : " +chart_coll.size());
+		////System.out.println("  Chart Size : " +chart_coll.size());
 
 /*
 		chart_coll.add("60");
@@ -110,7 +110,7 @@ public class AdvancedReportBarChart	extends Action
 
 		
 	ActionServlet s = getServlet();
-	//////System.out.println("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
+	////////System.out.println("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
 			
 			JFreeChartScriptlet ws= new JFreeChartScriptlet();
 			ws.setV(chart_coll);	
@@ -143,7 +143,7 @@ public class AdvancedReportBarChart	extends Action
 	parameters.put("ReportTitle", "JFREE ChArt Report - MULTILATERAL");
 	parameters.put("BaseDir", reportFile.getParentFile());
 				
-	////System.out.println("Inside Jfree PDF Compile....2");
+	//////System.out.println("Inside Jfree PDF Compile....2");
 
 	byte[] bytes = 
 		JasperRunManager.runReportToPdf(
@@ -151,12 +151,12 @@ public class AdvancedReportBarChart	extends Action
 			parameters, 
 			new WebappDataSource()
 			);
-	////System.out.println("Inside Jfree PDF EXPORT...3");
+	//////System.out.println("Inside Jfree PDF EXPORT...3");
 
 			if (bytes != null && bytes.length > 0)
 			{
 				ServletOutputStream ouputStream = response.getOutputStream();
-				//System.out.println("Generating Bar Chart PDF");
+				////System.out.println("Generating Bar Chart PDF");
 				response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","inline; filename=AdvancedReportBarChart.pdf");
 				response.setContentLength(bytes.length);
@@ -166,10 +166,10 @@ public class AdvancedReportBarChart	extends Action
 			}
 			else
 			{
-				//System.out.println("Nothing to display");
+				////System.out.println("Nothing to display");
 			}
 
-	////System.out.println("Inside Jfree PDF EXPORT...FINISHED..");
+	//////System.out.println("Inside Jfree PDF EXPORT...FINISHED..");
 
 		return null;
 	}// end of Execute Func

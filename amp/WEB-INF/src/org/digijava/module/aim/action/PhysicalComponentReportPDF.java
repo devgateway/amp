@@ -41,19 +41,19 @@ public class PhysicalComponentReportPDF extends Action
 	
 		Collection coll = new ArrayList();
 		if (formBean != null) {
-			//System.out.println("formBean is not null");
+			////System.out.println("formBean is not null");
 			coll= formBean.getMultiReport();
 		} 
 	
 		
 		Iterator iter = null;
 		if (coll.size() == 0) {
-			//System.out.println("collection is empty");
+			////System.out.println("collection is empty");
 		} else {
-			//System.out.println("collection is not empty");
+			////System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
-		//System.out.println("col size "+ coll.size());
+		////System.out.println("col size "+ coll.size());
 		
 		multiReport report;
 		AmpTeamDonors teamDonors;
@@ -170,15 +170,15 @@ public class PhysicalComponentReportPDF extends Action
 		else
 		{
 			flag = 0;	
-			//System.out.println("Collection empty");
+			////System.out.println("Collection empty");
 		}
 		
 		/*for(int i=0;i<data.length;i++){
 			for(int j=0;j<data[0].length;j++){
 				if(data[i][j]!=null)
-				//System.out.println("data ::::: ["+i+"]"+"["+j+"] ::::::"+data[i][j].toString());
+				////System.out.println("data ::::: ["+i+"]"+"["+j+"] ::::::"+data[i][j].toString());
 			}
-			//System.out.println("-------------------------------------------------------"+i);
+			////System.out.println("-------------------------------------------------------"+i);
 		}*/
 		
 		int height = (( fieldHeight / 25 ) * 3 );
@@ -207,18 +207,18 @@ public class PhysicalComponentReportPDF extends Action
 				String jasperFile = s.getServletContext().getRealPath(
 						"/WEB-INF/classes/org/digijava/module/aim/reports/PhysicalComponentReportPdf.jasper");
 				Map parameters = new HashMap();
-				//System.out.println(jasperFile );
-				//System.out.println(parameters);
+				////System.out.println(jasperFile );
+				////System.out.println(parameters);
 				bytes = JasperRunManager.runReportToPdf( jasperFile,  parameters, dataSource);
 			}
 			catch (JRException e)
 			{
-				//System.out.println("Exception from PhysicalComponentReportPdf = " + e);
+				////System.out.println("Exception from PhysicalComponentReportPdf = " + e);
 			}
 			if (bytes != null && bytes.length > 0)
 			{
 				ServletOutputStream ouputStream = response.getOutputStream();
-				//System.out.println("Generating PDF");
+				////System.out.println("Generating PDF");
 				response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","inline; filename=PhysicalComponentReportPdf.pdf");
 				response.setContentLength(bytes.length);
@@ -228,7 +228,7 @@ public class PhysicalComponentReportPDF extends Action
 			}
 			else
 			{
-				//System.out.println("Nothing to display");
+				////System.out.println("Nothing to display");
 			}
 		}
 
@@ -239,7 +239,7 @@ public class PhysicalComponentReportPDF extends Action
 	{
 		if(input.length() > 0)
 		{
-			//System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
+			////System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
 			if(input.length() > fieldHeight)
 				fieldHeight = input.length();
 		}

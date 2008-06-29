@@ -335,7 +335,7 @@ public class TeamMemberUtil {
 				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
 						headRole.getAmpTeamMemRoleId())) {
 					tm.setTeamHead(true);
-					System.out.println("[team member util] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
+					//System.out.println("[team member util] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
 					logger.info("[logger] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
 
 				} else {
@@ -1497,7 +1497,7 @@ public class TeamMemberUtil {
 				tm.setMemberId(memId);
 				tm.setMemberName((String)temp[1] + " " + (String)temp[2]);
 				if (memId.equals(id)) {
-				    {	System.out.println("!!!this team member: "+tm.getMemberName()+" is the TEAM LEADER!!!");
+				    {	//System.out.println("!!!this team member: "+tm.getMemberName()+" is the TEAM LEADER!!!");
 				    	tm.setTeamHead(true);
 				    }
 				}

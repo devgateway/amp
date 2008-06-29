@@ -271,11 +271,11 @@ public class CurrencyUtil {
 				// if the currency rate already exist update the rate
 				AmpCurrencyRate actRate = (AmpCurrencyRate) itr.next();
 				actRate.setExchangeRate(cRate.getExchangeRate());
-				System.out.println("updating......................");
+				//System.out.println("updating......................");
 				session.update(actRate);
 			} else {
 				// add the currency rate object if it does not exist
-				System.out.println("saving......................");
+				//System.out.println("saving......................");
 				session.save(cRate);
 			}
 
@@ -1144,7 +1144,7 @@ public class CurrencyUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			////System.out.println(ex.toString()) ;
+			//////System.out.println(ex.toString()) ;
 		} finally {
 			try {
 				if (session != null) {

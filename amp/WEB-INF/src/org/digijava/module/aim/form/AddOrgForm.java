@@ -73,7 +73,7 @@ public class AddOrgForm extends ActionForm {
 		return (Pledge)fundingDetails.get(index);
 	}
 	public void setFundingDetail(int index, Object test){
-		//System.out.println("NU merge!");
+		////System.out.println("NU merge!");
 	}
 	//
 	public Collection getCurrencies() {

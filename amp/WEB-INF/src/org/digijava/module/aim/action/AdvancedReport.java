@@ -255,7 +255,7 @@ public class AdvancedReport extends Action {
 				
 				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(), formBean.getArReportType());
 				//TODO
-				//System.out.println("ssssssssssssssssssss"+formBean.getArReportType());
+				////System.out.println("ssssssssssssssssssss"+formBean.getArReportType());
 				formBean.setAmpTreeColumns(ampTreeColumns);				
 				return goTo("SelectCols",formBean,mapping);
 			}
@@ -565,15 +565,15 @@ public class AdvancedReport extends Action {
 					int page=0;
 					
 /*					Collection aa= formBean.getColumnHierarchie();
-					//System.out.println("hhhhhhhh: "+aa.size());
+					////System.out.println("hhhhhhhh: "+aa.size());
 					Iterator itr=aa.iterator();
 					String str="";
 					AmpColumns amp=new AmpColumns();
 					while(itr.hasNext()){
-						//System.out.println("********************"+itr.next().getClass().getName());
+						////System.out.println("********************"+itr.next().getClass().getName());
 						if(itr.next() instanceof AmpColumns){
 							amp=(AmpColumns) itr.next();
-							//System.out.println("h2h2h2h2h2h2:"+amp.getColumnName());
+							////System.out.println("h2h2h2h2h2h2:"+amp.getColumnName());
 						}
 					}
 */					
@@ -1334,7 +1334,7 @@ public class AdvancedReport extends Action {
 					
 				}
 				//else
-					//System.out.println("AAAAAAAAAAAAAAAAAAAAAa");
+					////System.out.println("AAAAAAAAAAAAAAAAAAAAAa");
 				
 				return goTo("viewMyDesktop",formBean,mapping);				
 			}
@@ -1404,7 +1404,7 @@ public class AdvancedReport extends Action {
 			String filename = null;
 			DefaultCategoryDataset data = new DefaultCategoryDataset(); 
 	        Iterator iter = chart_coll.iterator();
-			//////System.out.println("@@@@@@@@@@ flag:"+chart_coll.size());
+			////////System.out.println("@@@@@@@@@@ flag:"+chart_coll.size());
 
 //			data.addValue(new Double(30.0), "CDAC", "");
 			
@@ -1414,15 +1414,15 @@ public class AdvancedReport extends Action {
 			while (iter.hasNext()) {
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				//System.out.println(temp+":::::"+demp);
+//				////System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"comm");
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				//System.out.println(temp+":::::"+demp);
+//				////System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"disb");
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				//System.out.println(temp+":::::"+demp);
+//				////System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"exp");
 	        }
 
@@ -1433,7 +1433,7 @@ public class AdvancedReport extends Action {
 
 			//String chartTitle=formBean.getReportTitle();
 			String chartTitle="";
-//			//System.out.println("CHART TITLE----(ACTION)----------------"+chartTitle);
+//			////System.out.println("CHART TITLE----(ACTION)----------------"+chartTitle);
 			
 			JFreeChart jfreechart = ChartFactory.createBarChart(chartTitle+" - Bar Chart", "Title", "Amount(in US$)", categorydataset, PlotOrientation.VERTICAL,true, true, true);
 			jfreechart.setBackgroundPaint(java.awt.Color.white);
@@ -1445,7 +1445,7 @@ public class AdvancedReport extends Action {
 			int dim=chart_coll.size()/6;
 			int x=dim*30;
 			int y=dim*25;
-				//System.out.println("IMG DIMMMMMMMMMMMMM: "+"dim="+dim+"x="+x+"::"+y);
+				////System.out.println("IMG DIMMMMMMMMMMMMM: "+"dim="+dim+"x="+x+"::"+y);
 			try{
 			//filename = ServletUtilities.saveChartAsPNG(jfreechart, x, y, info, httpSession);
 			}
@@ -1453,7 +1453,7 @@ public class AdvancedReport extends Action {
 					logger.info("EXCEPTION thrown at image:"+e);				
 			}
 
-//			////System.out.println("@@@@@@@@@@IMAGE FILE NAME:"+filename);
+//			//////System.out.println("@@@@@@@@@@IMAGE FILE NAME:"+filename);
 
 			return filename;
 		}
@@ -1644,7 +1644,7 @@ public class AdvancedReport extends Action {
 							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
 							ampColumnsVisibles.add(ampColumnVisibilityObj);
 							ampThemes.add(ampFieldVisibility.getParent().getName());
-							//System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
+							////System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
 						}
 					}
 				}
@@ -1708,11 +1708,11 @@ public class AdvancedReport extends Action {
 							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
 							{
 								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
-								System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
+								//System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
 								if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0)
 									{
 										ampThemesOrdered.add(aco);
-										System.out.println("	----------------ADDED!");
+										//System.out.println("	----------------ADDED!");
 									}
 								
 							}
@@ -1737,7 +1737,7 @@ public class AdvancedReport extends Action {
 						if("donor".compareTo(reportType)==0)
 						{
 							aux.add(acv.getAmpColumn());
-								System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+								//System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 							added=true;
 						}
 						//the contribution report doesn't have access to columns 33-38 from amp_columns
@@ -1746,7 +1746,7 @@ public class AdvancedReport extends Action {
 							//if(acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) 
 								{
 									aux.add(acv.getAmpColumn());
-								//	System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+								//	//System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 									added=true;
 								}
 						}
@@ -1758,7 +1758,7 @@ public class AdvancedReport extends Action {
 							//if((acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) && acv.getAmpColumn().getColumnId().intValue()!=5) 
 							{
 								aux.add(acv.getAmpColumn());
-						//		System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+						//		//System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 								added=true;
 							}
 						}
@@ -1829,7 +1829,7 @@ public class AdvancedReport extends Action {
 					
 				}
 				if(added) {
-					System.out.println("-------------->"+themeName);
+					//System.out.println("-------------->"+themeName);
 					ampTreeColumn.put(themeName, aux);
 				}
 				

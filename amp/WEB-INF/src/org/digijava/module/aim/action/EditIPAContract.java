@@ -293,7 +293,7 @@ public class EditIPAContract extends MultiAction {
    	  		//double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
    	  		contract.setExecutionRate(amountRate);
    	  		euaf.setExecutionRate(amountRate);
-   	  	System.out.println("2 execution rate: "+amountRate);
+   	  	//System.out.println("2 execution rate: "+amountRate);
    	  	}
    	  	else {
    	  		contract.setExecutionRate(new Double(0));
@@ -615,7 +615,7 @@ public class EditIPAContract extends MultiAction {
   		 double amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;	
         	// double amountRate=eua.getTotalDisbursements().doubleValue()/eua.getTotalAmount().doubleValue();
     	  		eua.setExecutionRate(amountRate);
-    	  		System.out.println("3 execution rate: "+amountRate);
+    	  		//System.out.println("3 execution rate: "+amountRate);
     	  	}
     	  	else eua.setExecutionRate(new Double(0));
          

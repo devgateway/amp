@@ -66,12 +66,12 @@ public class AdvancedReportPieChart extends Action
 					//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
 				//chart_coll.add(advReport.getTitle());
 			}
-			//System.out.println(title + "<------***********------->"  + commit );
+			////System.out.println(title + "<------***********------->"  + commit );
 			chart_coll.add(new Double(commit.replaceAll(",", "")) );
 			chart_coll.add(title);
 		}
 		
-		//System.out.println("  Chart Size : " +chart_coll.size());
+		////System.out.println("  Chart Size : " +chart_coll.size());
 
 	ActionServlet s = getServlet();
 	////logger.info("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
@@ -124,7 +124,7 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 		if (bytes != null && bytes.length > 0)
 			{
 				ServletOutputStream ouputStream = response.getOutputStream();
-				//System.out.println("Generating Pie Chart PDF");
+				////System.out.println("Generating Pie Chart PDF");
 				response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","inline; filename=AdvancedReportPieChart.pdf");
 				response.setContentLength(bytes.length);
@@ -134,7 +134,7 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 			}
 		else
 			{
-				//System.out.println("Nothing to display");
+				////System.out.println("Nothing to display");
 			}
 
 	//logger.info("Inside Jfree PDF EXPORT...FINISHED..");

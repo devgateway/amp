@@ -61,7 +61,7 @@ public class Copy_2_of_UpdateWorkspace extends Action {
             String dest = request.getParameter("dest");
             String tId1 = request.getParameter("tId");
             	
-            //System.out.println("Am primit parametrul " + tId1 +" *****************************8");
+            ////System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.debug("event : " + event + " dest : " + dest);
             ActionErrors errors = new ActionErrors();
             if(!("Management".compareTo(uwForm.getWorkspaceType())==0))

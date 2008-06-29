@@ -67,7 +67,7 @@ public class SectorByProjectXLS
 				logger.info("collection is not empty");
 				iter = coll.iterator();
 			}
-			//System.out.println("col size "+ coll.size());
+			////System.out.println("col size "+ coll.size());
 			multiReport multiReport;
 			Project project;
 			AmpFund ampFund;

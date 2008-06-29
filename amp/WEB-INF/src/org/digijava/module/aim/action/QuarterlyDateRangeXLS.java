@@ -56,7 +56,7 @@ public class QuarterlyDateRangeXLS	extends Action
 			logger.info("collection is not empty");
 			iter = report.iterator();
 		}
-		//System.out.println("col size "+ report.size());
+		////System.out.println("col size "+ report.size());
 
 		int i=0, j=0, yy=0, yyTmp=0, flag=0, colCnt=0, yyCnt=0;
 		Report r;

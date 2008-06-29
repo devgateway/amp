@@ -208,7 +208,7 @@ public class EditEUActivity extends MultiAction {
 		eaf.getContrDonorNameList().set(0,"");
          
 		
-		System.out.println("DueDate:"+eaf.getDueDate());
+		//System.out.println("DueDate:"+eaf.getDueDate());
 		return modeFinalize(mapping, form, request, response);
 	}
 
@@ -264,11 +264,11 @@ public class EditEUActivity extends MultiAction {
 		}
 
 		try {
-			System.out.println("DueDate:"+eaf.getDueDate());
+			//System.out.println("DueDate:"+eaf.getDueDate());
 			DateTimeUtil.parseDateForPicker(eaf.getDueDate());
 			
 		} catch (ParseException e) {
-			System.out.println("Exception:"+e);
+			//System.out.println("Exception:"+e);
 			errors.add("title", new ActionError(
 					"error.aim.euactivity.dueDate"));
 		}

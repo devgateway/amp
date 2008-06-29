@@ -4,6 +4,8 @@
  */
 package org.digijava.module.gateperm.core;
 
+import java.util.Hashtable;
+
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -27,6 +29,8 @@ public final class GatePermConst {
 	public static final Class[] availablePermissibles = new Class[] {
 			AmpActivity.class, AmpFieldsVisibility.class };
 
+	public static Hashtable<String,Class> availablePermissiblesBySimpleNames = null;
+	
 	/**
 	 * Add here all the new actions that you may need to implement. Do not
 	 * forget to add them into getImplementedActions for your Permissible

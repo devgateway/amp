@@ -7,19 +7,19 @@ package org.dgfoundation.amp.visibility;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.Permissible;
 
 /**
  * @author dan
  *
  */
-public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable {
+public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable,ClusterIdentifiable {
 
     	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)
 	protected Long id;
@@ -113,12 +113,16 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	}
 
 	public String getProperName() throws IOException {
-		//System.out.println("-----------------------"+FeaturesUtil.makeProperString(this.getName()));
+		////System.out.println("-----------------------"+FeaturesUtil.makeProperString(this.getName()));
 		return FeaturesUtil.makeProperString(this.getName());
 	}
 
 	public void setProperName(String properName) {
 		this.properName = properName;
+	}
+	
+	public String getClusterIdentifier() { 
+		return name;
 	}
 	
 		

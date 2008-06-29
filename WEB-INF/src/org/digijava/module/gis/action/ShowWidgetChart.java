@@ -41,7 +41,7 @@ public class ShowWidgetChart extends Action {
         if (wForm.getWidgetId()!=null){
         	widget = ChartWidgetUtil.getIndicatorChartWidget(wForm.getWidgetId());
         }else{
-        	System.out.println("No chart assigned to this teaser!");//TODO this should go to form ass error message.
+        	//System.out.println("No chart assigned to this teaser!");//TODO this should go to form ass error message.
         	return null;
         }
         IndicatorSector indicatorCon = widget.getIndicator();

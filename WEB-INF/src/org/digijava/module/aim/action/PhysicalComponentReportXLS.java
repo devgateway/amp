@@ -47,17 +47,17 @@ public class PhysicalComponentReportXLS extends Action
 	
 		Collection coll = new ArrayList();
 		if (formBean != null) {
-			//System.out.println("formBean is not null");
+			////System.out.println("formBean is not null");
 			coll= formBean.getMultiReport();
 		} 
 		Iterator iter = null;
 		if (coll.size() == 0) {
-			//System.out.println("collection is empty");
+			////System.out.println("collection is empty");
 		} else {
-			//System.out.println("collection is not empty");
+			////System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
-		//System.out.println("col size "+ coll.size());
+		////System.out.println("col size "+ coll.size());
 		
 		multiReport report;
 		AmpTeamDonors teamDonors;
@@ -172,7 +172,7 @@ public class PhysicalComponentReportXLS extends Action
 		else
 		{
 			flag = 0;	
-			//System.out.println("Collection empty");
+			////System.out.println("Collection empty");
 		}
 		
 		int height = (( fieldHeight / 25 ) * 5 ) + 50;
@@ -222,7 +222,7 @@ public class PhysicalComponentReportXLS extends Action
 			{
 				if (outputStream != null) 
 					outputStream.close();
-				//System.out.println("Exception from PhysicalComponentReportXls = " + e);
+				////System.out.println("Exception from PhysicalComponentReportXls = " + e);
 			}
 		}
 
@@ -271,7 +271,7 @@ public class PhysicalComponentReportXLS extends Action
 	{
 		if(input.length() > 0)
 		{
-			//System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
+			////System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
 			if(input.length() > fieldHeight)
 				fieldHeight = input.length();
 		}

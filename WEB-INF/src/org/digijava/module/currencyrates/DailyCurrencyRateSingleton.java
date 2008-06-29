@@ -99,7 +99,7 @@ public final class DailyCurrencyRateSingleton {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println(DailyCurrencyRateSingleton.getInstance().getLastExcecution());
+		//System.out.println(DailyCurrencyRateSingleton.getInstance().getLastExcecution());
 	}
 
 	public WSCurrencyClient getMyWSCurrencyClient() {

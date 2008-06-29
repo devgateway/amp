@@ -135,7 +135,7 @@ public class ContractingBreakdown extends TilesAction {
 					 
 					 double amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
 			   	  		contract.setExecutionRate(amountRate);
-			   	  	System.out.println("2 execution rate: "+amountRate);
+			   	  	//System.out.println("2 execution rate: "+amountRate);
 			   	  	}
 			   	  	else {
 			   	  		contract.setExecutionRate(new Double(0));

@@ -48,10 +48,10 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
 //							DYNAMIC CCCCCCCCC
             String dc;
             int colCnt = 13;
-            ////System.out.println(" Cnt = " + colCnt);
+            //////System.out.println(" Cnt = " + colCnt);
 //							 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
             for (int k = 1; k <= cols; k++) {
-                ////System.out.println("k="+k);
+                //////System.out.println("k="+k);
                 dc = "m" + k;
                 p2.println("<field name='" + dc + "' class='java.lang.String'/>");
             }
@@ -436,12 +436,12 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
                 ctextkey = "m" + j;
                 for (int i = 0; i <= cols; i++) {
                     if ( (4 * i) + 2 == j) {
-                        ////System.out.println( " in equals");
+                        //////System.out.println( " in equals");
                         flag = false;
                         break;
                     }
                 }
-                ////System.out.println(" this is  j "+ j + " ctextkey "+ ctextkey);
+                //////System.out.println(" this is  j "+ j + " ctextkey "+ ctextkey);
                 if (flag) {
                     p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
                     p2.println("					<reportElement");

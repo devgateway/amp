@@ -71,7 +71,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 			row = sheet.createRow(rowId.shortValue());
 //			if (rowId.value == 8){
 //				row.setHeight((short)(3*row.getHeight()));
-//				System.out.println((short)(3*row.getHeight()));
+//				//System.out.println((short)(3*row.getHeight()));
 //			}
 			Iterator i = columnReport.getItems().iterator();
 			//int cellCount = 0;
@@ -127,7 +127,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						else 
 							cell.setCellValue(translatedCellValue);
 						
-						// //System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
+						// ////System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
 						// depth="+curDepth+" "+element2.getName());
 						// create spanning
 						// if(rowsp>1) makeRowSpan(rowsp);

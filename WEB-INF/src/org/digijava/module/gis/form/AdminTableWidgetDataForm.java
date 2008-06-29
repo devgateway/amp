@@ -63,8 +63,8 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	}
 	
 	public DaRow getRows(int index) {
-		System.out.println("getRows(int index)");
-		if (this.rows==null) System.out.println("Ooo, rows is NULL !!!");
+		//System.out.println("getRows(int index)");
+		//if (this.rows==null) //System.out.println("Ooo, rows is NULL !!!");
 		return (rows==null)?null:rows.get(index);
 	}
 	
@@ -77,8 +77,8 @@ public class AdminTableWidgetDataForm extends ActionForm {
 		this.rows = rows;
 	}
 	public DaRow getRow(int index) {
-		System.out.println("getRows(int index)");
-		if (this.rows==null) System.out.println("Ooo, rows is NULL !!!");
+		//System.out.println("getRows(int index)");
+		//if (this.rows==null) //System.out.println("Ooo, rows is NULL !!!");
 		return (rows==null)?null:rows.get(index);
 	}
 

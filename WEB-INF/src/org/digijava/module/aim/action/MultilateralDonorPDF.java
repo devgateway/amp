@@ -43,20 +43,20 @@ public class MultilateralDonorPDF extends Action
 		MulitlateralbyDonorForm formBean = (MulitlateralbyDonorForm) form;
 		Collection coll = new ArrayList();
 		if (formBean != null) {
-			//System.out.println("formBean is not null");
+			////System.out.println("formBean is not null");
 			coll= formBean.getMultiReport();
 		} else {
-			//System.out.println("formbean is null");
+			////System.out.println("formbean is null");
 		}
 		
 		Iterator iter = null;
 		if (coll.size() == 0) {
-			//System.out.println("collection is empty");
+			////System.out.println("collection is empty");
 		} else {
-			//System.out.println("collection is not empty");
+			////System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
-		//System.out.println("col size "+ coll.size());
+		////System.out.println("col size "+ coll.size());
 		
 		multiReport report;
 		FundTotal fundTotal;
@@ -114,7 +114,7 @@ public class MultilateralDonorPDF extends Action
 		rowCnt = rowCnt + 1;
 		yyCount = formBean.getFiscalYearRange().size();
 		colCnt = 4 + yyCount + (yyCount*4) + 6 + 2 ;
-		//System.out.println(rowCnt +" :  Row :Cnt : Col : " + colCnt);
+		////System.out.println(rowCnt +" :  Row :Cnt : Col : " + colCnt);
 
 		Integer year = null;
 		String teamName="";
@@ -338,7 +338,7 @@ public class MultilateralDonorPDF extends Action
 		else
 		{
 			flag = 0;	
-			//System.out.println("Collection empty");
+			////System.out.println("Collection empty");
 		}
 		
 		int height = (( fieldHeight / 25 ) * 10 ) + 50;
@@ -374,7 +374,7 @@ public class MultilateralDonorPDF extends Action
 			MultiJrxml jrxml = new MultiJrxml();
 			//calling dynamic jrxml
 			jrxml.createJrxml(yyCount,realPathJrxml, height);
-			//System.out.println( realPathJrxml + " : YEAR  + " + yyCount );
+			////System.out.println( realPathJrxml + " : YEAR  + " + yyCount );
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -382,18 +382,18 @@ public class MultilateralDonorPDF extends Action
 				String jasperFile = s.getServletContext().getRealPath(
 						"/WEB-INF/classes/org/digijava/module/aim/reports/MultilateralDonorPdf.jasper");
 				Map parameters = new HashMap();
-				//System.out.println(jasperFile );
-				//System.out.println(parameters);
+				////System.out.println(jasperFile );
+				////System.out.println(parameters);
 				bytes = JasperRunManager.runReportToPdf( jasperFile,  parameters, dataSource);
 			}
 			catch (JRException e)
 			{
-				//System.out.println("Exception from MultilateralDonorDatasource = " + e);
+				////System.out.println("Exception from MultilateralDonorDatasource = " + e);
 			}
 			if (bytes != null && bytes.length > 0)
 			{
 				ServletOutputStream ouputStream = response.getOutputStream();
-				//System.out.println("Generating PDF");
+				////System.out.println("Generating PDF");
 				response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","inline; filename=MultilateralDonorPdf.pdf");
 				response.setContentLength(bytes.length);
@@ -403,7 +403,7 @@ public class MultilateralDonorPDF extends Action
 			}
 			else
 			{
-				//System.out.println("Nothing to display");
+				////System.out.println("Nothing to display");
 			}
 		}
 	
@@ -412,7 +412,7 @@ public class MultilateralDonorPDF extends Action
 
 	void calculateFieldHeight(String input)
 	{
-		//System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
+		////System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
 		if(input.length() > fieldHeight)
 			fieldHeight = input.length();
 	}

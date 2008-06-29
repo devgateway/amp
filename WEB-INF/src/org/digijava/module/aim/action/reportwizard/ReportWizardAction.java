@@ -333,11 +333,11 @@ public class ReportWizardAction extends MultiAction {
 							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
 							{
 								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
-								//System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
+								////System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
 								if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0)
 									{
 										ampThemesOrdered.add(aco);
-										//System.out.println("	----------------ADDED!");
+										////System.out.println("	----------------ADDED!");
 									}
 								
 							}

@@ -397,7 +397,7 @@ public class AmpDbUtil {
         query.setString("siteId", siteId);
       }
 
-      System.out.println("\n\n\n\n\n\n" + query.getQueryString());
+      //System.out.println("\n\n\n\n\n\n" + query.getQueryString());
 
 
       List events = query.list();

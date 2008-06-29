@@ -120,9 +120,7 @@ public abstract class GenericFeedBinder implements Cloneable {
 			try {
 				Object dobj = bindObject(sobj);
 				dst.add(dobj);
-			} catch (JAXBException e) {
-				logger.info(e);
-			} catch (ParseException e) {
+			} catch (Exception e) {
 				logger.info(e);
 				e.printStackTrace();
 			}

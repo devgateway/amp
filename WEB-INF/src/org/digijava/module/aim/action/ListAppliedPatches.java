@@ -102,7 +102,7 @@ public class ListAppliedPatches extends Action {
 				Connection	conn	= session.connection();
 				Statement st		= conn.createStatement();
 
-				Query query = session.createQuery("select plm from " + PatchFile.class.getName() + " plm");
+				Query query = session.createQuery("select plm from " + PatchFile.class.getName() + " plm order by plm.invoked desc");
 				col = query.list();
 				
 				Iterator it = col.iterator();

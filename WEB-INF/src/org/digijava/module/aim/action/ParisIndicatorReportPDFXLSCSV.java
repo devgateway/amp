@@ -58,15 +58,15 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
         ParisIndicatorReportForm formBean = (ParisIndicatorReportForm) form;
         Collection coll = null;
         if (formBean != null) {
-            //	//System.out.println("formBean is not null");
+            //	////System.out.println("formBean is not null");
             coll = formBean.getDonorsColl();
         }
         Iterator iter = null;
         Iterator iter1 = null;
         if (coll.size() == 0) {
-            //System.out.println("collection is empty");
+            ////System.out.println("collection is empty");
         } else {
-            //System.out.println("collection is not empty");
+            ////System.out.println("collection is not empty");
             iter = coll.iterator();
         }
         int colCnt1 = coll.size();
@@ -118,7 +118,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
                             if (val == -1) {
                                 data2[row][col] = "n.a.";
-                                //System.out.println(" this sis where na is coming "+ col);
+                                ////System.out.println(" this sis where na is coming "+ col);
                             } else {
                                 double d = Math.round(val);
                                 int temp1 = (int) d;
@@ -130,7 +130,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
                     if (pId.equals("3") || pId.equals("4") || pId.equals("7") || pId.equals("10a") || pId.equals("5b")) {
                         int c = 4;
                         for (int i = 0; i < arrSize; i++) {
-                            //System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+                            ////System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
                             if (!data2[row][c].toString().equalsIgnoreCase("n.a.")) {
                                 data2[row][c] = data2[row][c] + "%";
                             }
@@ -141,7 +141,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
                     if (pId.equals("9")) {
                         int c = 5;
                         for (int i = 0; i < arrSize; i++) {
-                            //System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+                            ////System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
                             if (!data2[row][c].toString().equalsIgnoreCase("n.a.")) {
                                 data2[row][c] = data2[row][c] + "%";
                             }
@@ -152,7 +152,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
                     if (pId.equals("5a")) {
                         int c = 7;
                         for (int i = 0; i < arrSize; i++) {
-                            //System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+                            ////System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
                             if (!data2[row][c].toString().equalsIgnoreCase("n.a.")) {
                                 data2[row][c] = data2[row][c] + "%";
                                 data2[row][c + 1] = data2[row][c + 1] + "%";

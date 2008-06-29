@@ -84,7 +84,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 			try{
 				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
 			}catch (WorkerException e)
-				{//System.out.println(e);
+				{////System.out.println(e);
 				
 				}
 			

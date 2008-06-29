@@ -26,7 +26,7 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 		
 		String str="";
 		for(int j=0;j<v.size();j++){
-			//System.out.println("####### JFREE SCRIPTLET"+v.get(j).toString());
+			////System.out.println("####### JFREE SCRIPTLET"+v.get(j).toString());
 		}	
 	}
 /*
@@ -37,7 +37,7 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 */	
 	public void setChartTitle(String str){
 		chartTitle = str;
-		////System.out.println("CHART TITLE----------------"+chartTitle);
+		//////System.out.println("CHART TITLE----------------"+chartTitle);
 	}
 
 
@@ -89,15 +89,15 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 			while (iter.hasNext()) {
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				//System.out.println(temp+":::::"+demp);
+//				////System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"comm");
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				//System.out.println(temp+":::::"+demp);
+//				////System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"disb");
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				//System.out.println(temp+":::::"+demp);
+//				////System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"exp");
 
 				

@@ -33,7 +33,7 @@ public class SearchLocation extends Action {
 
 		eaForm.setNumResults(eaForm.getTempNumResults());
 		//eaForm.setTempNumResults(10);
-		//System.out.println("tempNumResults----->"+eaForm.getTempNumResults());
+		////System.out.println("tempNumResults----->"+eaForm.getTempNumResults());
 			
 		if(eaForm.getKeyword()!=null) request.getSession().setAttribute("keywordForLocation",eaForm.getKeyword());
 		else eaForm.setKeyword((String)request.getSession().getAttribute("keywordForLocation"));
@@ -67,7 +67,7 @@ public class SearchLocation extends Action {
 			stIndex = ((page - 1) * eaForm.getTempNumResults()) + 1;
 			edIndex = page * eaForm.getTempNumResults();
 		}
-		//System.out.println("start->"+stIndex);
+		////System.out.println("start->"+stIndex);
 		Vector vect = new Vector();
 		int numPages=0;
 		

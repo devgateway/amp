@@ -33,10 +33,10 @@ for (int i = 0;i < obj.length;i ++) {
 		data[i][j] = obj[i][j];
 //		System.out.print(j+ " : " + data[i][j]);
 	}
-//	//System.out.println();
+//	////System.out.println();
 }
 colCnt = obj[0].length;
-////System.out.println(" colNct" +  colCnt);
+//////System.out.println(" colNct" +  colCnt);
 name = new String[colCnt];
 for(int i=0; i<colCnt; i++)
 {

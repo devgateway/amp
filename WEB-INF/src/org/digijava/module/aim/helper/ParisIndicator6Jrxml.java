@@ -46,10 +46,10 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
 //							DYNAMIC CCCCCCCCC
             String dc;
             int colCnt = 13;
-            //System.out.println(" Cnt = " + colCnt + " colsssssssssssssssssssssss "+cols);
+            ////System.out.println(" Cnt = " + colCnt + " colsssssssssssssssssssssss "+cols);
 //							 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
             for (int k = 1; k <= cols; k++) {
-                //System.out.println("k="+k);
+                ////System.out.println("k="+k);
                 dc = "m" + k;
                 p2.println("<field name='" + dc + "' class='java.lang.String'/>");
             }

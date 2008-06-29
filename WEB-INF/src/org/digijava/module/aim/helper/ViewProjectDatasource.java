@@ -32,7 +32,7 @@ public class ViewProjectDatasource implements JRDataSource
 				data[i][j] = obj[i][j];
 //				System.out.print( j +" : " + data[i][j]);
 			}
-//			//System.out.println();
+//			////System.out.println();
 		}
 		colCnt = obj[0].length;
 		name = new String[colCnt];

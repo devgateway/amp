@@ -45,10 +45,10 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
             int colCnt = 13;
             int height = ( (cols - 1) / 4) * 27;
             int height1 = height + 1;
-            //System.out.println(" Cnt = " + colCnt +  " cols "+cols);
+            ////System.out.println(" Cnt = " + colCnt +  " cols "+cols);
 //				 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
             for (int k = 1; k <= cols; k++) {
-                //System.out.println("k="+k);
+                ////System.out.println("k="+k);
                 dc = "m" + k;
                 p2.println("<field name='" + dc + "' class='java.lang.String'/>");
             }
@@ -413,7 +413,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
                 p2.println("				</textField>");
                 x = x + 146;
                 if (count % 4 == 0) {
-                    //System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
+                    ////System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
                     x = 117;
                     y = y + 27;
                     add = 0;
@@ -467,7 +467,7 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
                     p2.println("				</line>");
                     x = x + 146;
                     if (count % 4 == 0) {
-                        //System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
+                        ////System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
                         x = 117;
                         y = y + 27;
                         add = 0;

@@ -243,7 +243,7 @@ public class VisibilityManager extends MultiAction {
 	}
 	
 	public ActionForward modeEditTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		if(request.getParameter("changeLevel")!=null) System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaa");
+//		if(request.getParameter("changeLevel")!=null) //System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaa");
 		VisibilityManagerForm vForm = (VisibilityManagerForm) form;
 		Long templateId=null;
 		Session hbsession = this.createSession();
@@ -466,13 +466,13 @@ public class VisibilityManager extends MultiAction {
 			   		}
 			   		if(!f.isDirectory() && f.getName().contains(".jsp") && !f.getName().contains("allVisibilityTagsComputed"))
 			   		{
-//			   			if(f.getName().contains("allvisibilityTagsComputed")) System.out.println("e jsssssssssssssssssssssssssssssssssssppuuuuuuuuul");
+//			   			if(f.getName().contains("allvisibilityTagsComputed")) //System.out.println("e jsssssssssssssssssssssssssssssssssssppuuuuuuuuul");
 			   			Scanner scanner = new Scanner(f);
 			   			scanner.useDelimiter (System.getProperty("line.separator"));
 			   			while(scanner.hasNext()) {
 			   				String s=scanner.next();
 //			   				if(s.contains("Adjustment Type Disbursement"))
-//		   						System.out.println("################################# "+s);
+//		   						//System.out.println("################################# "+s);
 			   				if(s.indexOf("<module:display")>=0)
 			   				{
 			   					String aux="";
@@ -534,7 +534,7 @@ public class VisibilityManager extends MultiAction {
 			int i=0;
 			try{
 			    FileWriter fstream = new FileWriter(this.getServlet().getServletContext().getRealPath("/")+"repository/aim/view/allVisibilityTagsComputed.jsp");
-			    //System.out.println("=================="+this.getServlet().getServletContext().getRealPath("/")+"repository/aim/view/out.txt");
+			    ////System.out.println("=================="+this.getServlet().getServletContext().getRealPath("/")+"repository/aim/view/out.txt");
 			    BufferedWriter out = new BufferedWriter(fstream);
 			    String outHeader="";
 			    outHeader="<%@ page pageEncoding=\"UTF-8\" %>\n"+

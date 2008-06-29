@@ -13,7 +13,7 @@ import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.gateperm.core.GatePermConst;
 
-public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable {
+public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable{
     
     	private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
     	
@@ -68,6 +68,10 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 	@Override
 	public Class getPermissibleCategory() {
 	    return AmpFieldsVisibility.class;
+	}
+	
+	public String getClusterIdentifier() {
+		return name;
 	}
 
 

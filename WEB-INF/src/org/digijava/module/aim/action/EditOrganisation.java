@@ -752,13 +752,13 @@ public class EditOrganisation
             pledge.setCurrency(c);
             pledge.setProgram(el.getProgram());
             String date = el.getDate();
-            //System.out.println(date);
+            ////System.out.println(date);
             if (! ("".equals(date))) {
               Date d = new Date();
               SimpleDateFormat dz = new SimpleDateFormat(Constants.
                   CALENDAR_DATE_FORMAT);
               d = dz.parse(date);
-              //System.out.println(d.toString());
+              ////System.out.println(d.toString());
               pledge.setDate(d);
             }
             ampPledges.add(pledge);

@@ -99,7 +99,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 			try{
 				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
 			}catch (WorkerException e)
-				{//System.out.println(e);}
+				{////System.out.println(e);}
 			
 		 
 			if(translatedName.compareTo("")==0)

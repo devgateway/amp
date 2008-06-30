@@ -7,12 +7,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsFilters;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.util.Identifiable;
 
 /**
@@ -105,7 +114,7 @@ public class ColumnFilterGenerator {
 	 *            operators , otherwise it will use OR
 	 * @return the complete SQL logical clause
 	 */
-	public static String generateColumnFilterSQLClause(Filter f, AmpColumns c,
+	public static String generateColumnFilterSQLClause(AmpARFilter f, AmpColumns c,
 			boolean exclusive) {
 		// get all bindings between this column and possible filter properties:
 		StringBuffer sb = new StringBuffer("");
@@ -136,5 +145,82 @@ public class ColumnFilterGenerator {
 		}
 		return sb.toString();
 
+	}
+	
+	
+	
+	/**
+	 * Append filter retrievable columns to list. those are columns that appear
+	 * in the current filter as selections and for filtering to be correctly
+	 * applied the content of the columns has to be present (it holds extra
+	 * metadata like percentages, etc...)
+	 * 
+	 * @see http://bugs.digijava.org/jira/browse/AMP-3454?focusedCommentId=39811#action_39811
+	 * @param extractable
+	 *            the list of already extractable columns
+	 * @param filter
+	 * @return the no of cols added
+	 */
+	public static int appendFilterRetrievableColumns(
+			List<AmpReportColumn> extractable, AmpARFilter filter) {
+		// check which columns are selected in the filter and have attached
+		// columns that are filter retrievable
+		int ret=0;
+		TreeSet<String> colNames = new TreeSet<String>();
+		Iterator<AmpReportColumn> iterator2 = extractable.iterator();
+		while (iterator2.hasNext()) {
+			AmpReportColumn elem = (AmpReportColumn) iterator2.next();
+			colNames.add(elem.getColumn().getColumnName());
+		}
+		
+		try {
+			Query query;
+			Session session = PersistenceManager.getRequestDBSession();
+			query = session.createQuery("from "
+					+ AmpColumnsFilters.class.getName());
+			Iterator i = query.list().iterator();
+			while (i.hasNext()) {
+				AmpColumnsFilters cf = (AmpColumnsFilters) i.next();
+				
+				if(colNames.contains(cf.getColumn().getColumnName())) continue;
+				
+				Object property = PropertyUtils.getSimpleProperty(filter, cf
+						.getBeanFieldName());
+				if (property == null)
+					continue;
+				
+				if(cf.getColumn().getFilterRetrievable()!=null && cf.getColumn().getFilterRetrievable().booleanValue()) {
+					AmpReportColumn arc = new AmpReportColumn();
+					arc.setColumn(cf.getColumn());
+					arc.setOrderId(new String("1"));
+					logger.info("Adding additional column "+cf.getColumn().getColumnName()+" because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
+					extractable.add(arc);
+					ret++;
+				}
+				
+			}
+	
+		} catch (HibernateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ARUtil.logger.error(e);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ARUtil.logger.error(e);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ARUtil.logger.error(e);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ARUtil.logger.error(e);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ARUtil.logger.error(e);
+		}
+		return ret;
 	}
 }

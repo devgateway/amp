@@ -18,7 +18,9 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
@@ -32,10 +34,6 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
-
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -43,8 +41,8 @@ import com.lowagie.text.pdf.PdfPCell;
  * 
  */
 public class AmpReportGenerator extends ReportGenerator {
-    	
-    
+
+	List<AmpReportColumn> extractable;
 	protected int extractableCount;
 
 	/**
@@ -65,19 +63,21 @@ public class AmpReportGenerator extends ReportGenerator {
 			boolean monthly = false;
 			if ("Q".equals(reportMetadata.getOptions()))
 				annual = false;
-			
+
 			if ("M".equals(reportMetadata.getOptions()))
 				monthly = true;
-			
+
 			ret.add(ArConstants.YEAR);
 			if (!annual)
 				ret.add(ArConstants.QUARTER);
-			if(monthly) ret.add(ArConstants.MONTH);
+			if (monthly)
+				ret.add(ArConstants.MONTH);
 
-			if(reportMetadata.getType().intValue()!=ArConstants.CONTRIBUTION_TYPE)
-				ret.add(ArConstants.FUNDING_TYPE); else {
-					ret.add(ArConstants.FINANCING_INSTRUMENT);
-				}
+			if (reportMetadata.getType().intValue() != ArConstants.CONTRIBUTION_TYPE)
+				ret.add(ArConstants.FUNDING_TYPE);
+			else {
+				ret.add(ArConstants.FINANCING_INSTRUMENT);
+			}
 			Iterator i = reportMetadata.getColumns().iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
@@ -87,7 +87,7 @@ public class AmpReportGenerator extends ReportGenerator {
 					break;
 				}
 			}
-			
+
 		}
 		return ret;
 	}
@@ -102,33 +102,33 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void retrieveData() {
 		// divide the column set into those that can be extracted
 		// (extractorView!=null) and those that are to be generated
-		
-		Set<String> extractableNames=new TreeSet<String>();
-		List<AmpReportColumn> extractable = new ArrayList<AmpReportColumn>();
+
+		Set<String> extractableNames = new TreeSet<String>();
+
+		extractable = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
 		List<AmpReportColumn> colNames = reportMetadata.getOrderedColumns();
 		Iterator<AmpReportColumn> i = colNames.iterator();
 		while (i.hasNext()) {
 			AmpReportColumn element2 = (AmpReportColumn) i.next();
 			AmpColumns element = element2.getColumn();
-			if(element.getColumnName().equals(ArConstants.COLUMN_TOTAL))
+			if (element.getColumnName().equals(ArConstants.COLUMN_TOTAL))
 				extractableCount--;
-			
-			if (element.getExtractorView() != null)
-				{
-			    		extractable.add(element2);
-			    		if(!element.getColumnName().equals(ArConstants.COLUMN_PROPOSED_COST)) extractableNames.add(element.getColumnName());
-				}
-			else
+
+			if (element.getExtractorView() != null) {
+				extractable.add(element2);
+				if (!element.getColumnName().equals(
+						ArConstants.COLUMN_PROPOSED_COST))
+					extractableNames.add(element.getColumnName());
+			} else
 				generated.add(element2);
 		}
 
 		extractableCount += extractableNames.size();
-		
-		
-		
+
 		// also add hierarchical columns to extractable:
-		Iterator<AmpReportHierarchy> ii = reportMetadata.getHierarchies().iterator();
+		Iterator<AmpReportHierarchy> ii = reportMetadata.getHierarchies()
+				.iterator();
 		while (ii.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) ii.next();
 			AmpReportColumn arc = new AmpReportColumn();
@@ -136,14 +136,16 @@ public class AmpReportGenerator extends ReportGenerator {
 			arc.setOrderId(new String("1"));
 			extractable.add(arc);
 		}
-		
 
-		if (extractable.size() > 0){
-		    createDataForColumns(extractable);
+		extractableCount += ColumnFilterGenerator
+				.appendFilterRetrievableColumns(extractable, filter);
+
+		if (extractable.size() > 0) {
+			createDataForColumns(extractable);
 		}
-		
-		if (generated.size() > 0){
-		    createDataForColumns(generated);
+
+		if (generated.size() > 0) {
+			createDataForColumns(generated);
 		}
 	}
 
@@ -160,13 +162,14 @@ public class AmpReportGenerator extends ReportGenerator {
 			while (i.hasNext()) {
 				AmpReportColumn rcol = (AmpReportColumn) i.next();
 				AmpColumns col = rcol.getColumn();
-				logger.info("Extracting column "+col.getColumnName()+ " with view "+col.getExtractorView());
+				logger.info("Extracting column " + col.getColumnName()
+						+ " with view " + col.getExtractorView());
 				String cellTypeName = col.getCellType();
 				String extractorView = col.getExtractorView();
 				String columnName = col.getColumnName();
-				String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
+				String relatedContentPersisterClass = col
+						.getRelatedContentPersisterClass();
 
-				
 				logger.debug("Seeking class " + cellTypeName);
 
 				Class cellType = Class.forName(cellTypeName);
@@ -183,13 +186,16 @@ public class AmpReportGenerator extends ReportGenerator {
 				// create an instance of the column worker
 
 				ColumnWorker ce = null;
-				
-				//get the column bound condition:
-				String columnFilterSQLClause = ColumnFilterGenerator.generateColumnFilterSQLClause(filter, col, true);
-			
-				if(columnFilterSQLClause.length()>0) 
-					logger.info("Column "+col.getColumnName()+" appendable SQL filter: ..."+columnFilterSQLClause);
-				
+
+				// get the column bound condition:
+				String columnFilterSQLClause = ColumnFilterGenerator
+						.generateColumnFilterSQLClause(filter, col, true);
+
+				if (columnFilterSQLClause.length() > 0)
+					logger.info("Column " + col.getColumnName()
+							+ " appendable SQL filter: ..."
+							+ columnFilterSQLClause);
+
 				if (extractorView != null) {
 
 					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass, 4);
@@ -204,26 +210,80 @@ public class AmpReportGenerator extends ReportGenerator {
 
 				ce.setRelatedColumn(col);
 				ce.setInternalCondition(columnFilterSQLClause);
-				
+
 				Column column = ce.populateCellColumn();
-				
-				
-				if(relatedContentPersisterClass!=null) {
-        				column.setRelatedContentPersisterClass(Class.forName(relatedContentPersisterClass));
-        				//instantiate a relatedContentPersister bean to get the ARDimension and store it for later use
-        				Constructor contentPersisterCons = ARUtil.getConstrByParamNo(column.getRelatedContentPersisterClass(), 0);
-        				ARDimensionable cp = (ARDimensionable) contentPersisterCons.newInstance();
-        				column.setDimensionClass(cp.getDimensionClass());
+
+				if (relatedContentPersisterClass != null) {
+					column.setRelatedContentPersisterClass(Class
+							.forName(relatedContentPersisterClass));
+					// instantiate a relatedContentPersister bean to get the
+					// ARDimension and store it for later use
+					Constructor contentPersisterCons = ARUtil
+							.getConstrByParamNo(column
+									.getRelatedContentPersisterClass(), 0);
+					ARDimensionable cp = (ARDimensionable) contentPersisterCons
+							.newInstance();
+					column.setDimensionClass(cp.getDimensionClass());
 				}
-				
-				
+
 				rawColumns.addColumn(new Integer(rcol.getOrderId()), column);
+				rawColumnsByName.put(column.getName(), (CellColumn) column);
 			}
 
 		} catch (Exception e) {
 			logger.error("Exception: ", e);
 		}
 
+	}
+
+	/**
+	 * from the extractable list, we get the columns that are filter retrievable
+	 * and we apply percentages
+	 */
+	protected void applyPercentagesToFilterColumns() {
+		Iterator<AmpReportColumn> i = extractable.iterator();
+		TextCell fakeMc = new TextCell();
+		Set<String> hierarchyNames=new TreeSet<String>();
+		Iterator itH = reportMetadata.getHierarchies().iterator();
+		while (itH.hasNext()) {
+			AmpReportHierarchy h = (AmpReportHierarchy) itH.next();
+			hierarchyNames.add(h.getColumn().getColumnName());
+		}
+		
+		while (i.hasNext()) {
+			AmpReportColumn elem = (AmpReportColumn) i.next();
+			if(hierarchyNames.contains(elem.getColumn().getColumnName())) continue;
+			
+			if (elem.getColumn().getFilterRetrievable()!=null && elem.getColumn().getFilterRetrievable().booleanValue()) {
+				CellColumn c = rawColumnsByName.get(elem.getColumn()
+						.getColumnName());
+				// construct a unique set of cell values to fake the metacells of
+				// hierarchies
+				Set<String> cellValues = new TreeSet<String>();
+				Iterator<Cell> iterator = c.iterator();
+				while (iterator.hasNext()) {
+					// all filterRetrievable are metatextcells
+					Cell cell = (Cell) iterator.next();
+					cellValues.add((String) cell.getValue());
+				}
+				// iterate all funding columns and apply them:
+				fakeMc.setColumn(c);
+				Iterator<String> metaValuesIt = cellValues.iterator();
+				while (metaValuesIt.hasNext()) {
+					String value = (String) metaValuesIt.next();
+					fakeMc.setValue(value);
+
+					Iterator<Cell> fundingIt = rawColumnsByName.get(
+							ArConstants.COLUMN_FUNDING).iterator();
+					while (fundingIt.hasNext()) {
+						CategAmountCell cac = (CategAmountCell) fundingIt
+								.next();
+						cac.applyMetaFilter(c.getName(), fakeMc, cac);
+					}
+				}
+			}
+
+		}
 	}
 
 	protected void attachFundingMeta() {
@@ -243,10 +303,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (reportMetadata.getType().intValue() == ArConstants.REGIONAL_TYPE)
 			ac.setExtractorView(ArConstants.VIEW_REGIONAL_FUNDING);
 		if (reportMetadata.getType().intValue() == ArConstants.CONTRIBUTION_TYPE)
-			ac.setExtractorView(ArConstants.VIEW_CONTRIBUTION_FUNDING);		
+			ac.setExtractorView(ArConstants.VIEW_CONTRIBUTION_FUNDING);
 
 		ColumnFilterGenerator.attachHardcodedFilters(ac);
-		
+
 		reportMetadata.getOrderedColumns().add(arc);
 
 		// ugly but useful :) get cummulative columns right before funding:
@@ -257,9 +317,12 @@ public class AmpReportGenerator extends ReportGenerator {
 				element.setOrderId(Integer.toString(reportMetadata
 						.getOrderedColumns().size() - 1));
 		}
-		
-		//attach funding coming from extra sources ... inject funding from proposed project cost, but with isShow=false so it won't be taken into calculations
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
+
+		// attach funding coming from extra sources ... inject funding from
+		// proposed project cost, but with isShow=false so it won't be taken
+		// into calculations
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,
+				reportMetadata.getMeasures())) {
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);
@@ -280,42 +343,48 @@ public class AmpReportGenerator extends ReportGenerator {
 		// we perform totals by categorizing only by Funding Type...
 		boolean categorizeByFundingType = false;
 		if (reportMetadata.getType().intValue() != 4)
-			categorizeByFundingType = true; 
+			categorizeByFundingType = true;
 
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns
 				.getColumn(ArConstants.COLUMN_FUNDING);
 
-		Column newcol=new GroupColumn();
+		Column newcol = new GroupColumn();
 		if (categorizeByFundingType) {
 			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
-			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(measures);
+			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(
+					measures);
 			Collections.sort(measuresList);
 			Iterator<AmpReportMeasures> ii = measuresList.iterator();
 			while (ii.hasNext()) {
 				AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
-				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE)   || 
-					element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
-					element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE))
-				   continue;
+				if (element.getMeasureName().equals(
+						ArConstants.UNDISBURSED_BALANCE)
+						|| element.getMeasureName().equals(
+								ArConstants.TOTAL_COMMITMENTS)
+						|| element.getMeasureName().equals(
+								ArConstants.UNCOMMITTED_BALANCE))
+					continue;
 
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
 						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
 								element.getMeasureName(), reportMetadata
 										.getMeasureOrder(element
 												.getMeasureName())));
-	            CellColumn cc = new TotalAmountColumn(metaInfo.getValue().toString(),true);
-	            newcol.getItems().add(cc);
-	            cc.setParent(newcol);
-	            
-	            cc.setContentCategory(ArConstants.COLUMN_FUNDING);
-	            //iterate the src column and add the items with same MetaInfo
-	            Iterator it=funding.iterator();
-	            while (it.hasNext()) {
-	    			Categorizable item = (Categorizable) it.next();
-	    			if(item.hasMetaInfo(metaInfo)) cc.addCell(item);
-	    		}
+				CellColumn cc = new TotalAmountColumn(metaInfo.getValue()
+						.toString(), true);
+				newcol.getItems().add(cc);
+				cc.setParent(newcol);
+
+				cc.setContentCategory(ArConstants.COLUMN_FUNDING);
+				// iterate the src column and add the items with same MetaInfo
+				Iterator it = funding.iterator();
+				while (it.hasNext()) {
+					Categorizable item = (Categorizable) it.next();
+					if (item.hasMetaInfo(metaInfo))
+						cc.addCell(item);
+				}
 			}
 		}
 
@@ -323,75 +392,80 @@ public class AmpReportGenerator extends ReportGenerator {
 		// act disbursement
 		// iterate each owner
 
-		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
+		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,
+				reportMetadata.getMeasures())) {
 
 			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn(
 					ArConstants.UNDISBURSED_BALANCE);
-			Iterator i=funding.iterator();
+			Iterator i = funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
-				//we do not care here about filtering commitments, that is done at UndisbursedAmountCell level
+				// we do not care here about filtering commitments, that is done
+				// at UndisbursedAmountCell level
 				tac.addCell(element);
 			}
 
 			newcol.getItems().add(tac);
 		}
 
-		//uncommitted balance
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
+		// uncommitted balance
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,
+				reportMetadata.getMeasures())) {
 
 			UncommittedTotalAmountColumn tac = new UncommittedTotalAmountColumn(
 					ArConstants.UNCOMMITTED_BALANCE);
-			Iterator i=funding.iterator();
+			Iterator i = funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
-				//we do not care here about filtering commitments, that is done at UndisbursedAmountCell level
+				// we do not care here about filtering commitments, that is done
+				// at UndisbursedAmountCell level
 				tac.addCell(element);
 			}
 
 			newcol.getItems().add(tac);
 		}
 
-		//we create the total commitments column
-		
-		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+		// we create the total commitments column
+
+		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,
+				reportMetadata.getMeasures())) {
 
 			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
 					ArConstants.TOTAL_COMMITMENTS);
-			Iterator i=funding.iterator();
+			Iterator i = funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
-				//we do not care here about filtering commitments, that is done at UndisbursedAmountCell level
+				// we do not care here about filtering commitments, that is done
+				// at UndisbursedAmountCell level
 				tac.addCell(element);
 			}
 
 			newcol.getItems().add(tac);
 		}
 
-		
-		newcol.setName(reportMetadata.getType().intValue()==4?ArConstants.COLUMN_CONTRIBUTION_TOTAL:ArConstants.COLUMN_TOTAL);
-		
-		
-		
-		//make order to  measurements
-		List<AmpReportMeasures> listMeasurement=new ArrayList<AmpReportMeasures>(reportMetadata.getMeasures());
+		newcol
+				.setName(reportMetadata.getType().intValue() == 4 ? ArConstants.COLUMN_CONTRIBUTION_TOTAL
+						: ArConstants.COLUMN_TOTAL);
+
+		// make order to measurements
+		List<AmpReportMeasures> listMeasurement = new ArrayList<AmpReportMeasures>(
+				reportMetadata.getMeasures());
 		Collections.sort(listMeasurement);
-		
-		List<Column> columnlist=newcol.getItems();
-		List<Column> tmpColumnList=new ArrayList<Column>(columnlist.size());
-		//add columns as measurements order
-		
-		
-		if(!categorizeByFundingType){
-		    try {
-			tmpColumnList.add((Column) funding.clone());
-        		} catch (CloneNotSupportedException e) {
-        			logger.error(e);
-        			e.printStackTrace();
-        		}
-  
+
+		List<Column> columnlist = newcol.getItems();
+		List<Column> tmpColumnList = new ArrayList<Column>(columnlist.size());
+		// add columns as measurements order
+
+		if (!categorizeByFundingType) {
+			try {
+				tmpColumnList.add((Column) funding.clone());
+			} catch (CloneNotSupportedException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
+
 		}
-		
+
 		for (AmpReportMeasures measures : listMeasurement) {
 			for (Column column : columnlist) {
 				if (column.getName().equalsIgnoreCase(
@@ -401,7 +475,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 		}
-		
+
 		// replace items by ordered items
 		newcol.setItems(tmpColumnList);
 		rawColumns.addColumn(newcol);
@@ -412,62 +486,60 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 
 	protected void removeUnselectedHierarchies() {
-		AmpARFilter arf=(AmpARFilter) filter;
-		
-	}
-	
-	protected void prepareData() {
-		
+		AmpARFilter arf = (AmpARFilter) filter;
 
+	}
+
+	protected void prepareData() {
+
+		applyPercentagesToFilterColumns();
+		
 		applyExchangeRate();
 
 		createTotals();
-		AmpARFilter arf=(AmpARFilter) filter;
-		
-		if (!arf.isWidget()){
-		    categorizeData();
+		AmpARFilter arf = (AmpARFilter) filter;
+
+		if (!arf.isWidget()) {
+			categorizeData();
 		}
-		
+
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);
 		report.setSourceColsCount(new Integer(extractableCount - 1));
-		//ensure acess to the report metadata from the raw columns. we should not need this but ...
+		// ensure acess to the report metadata from the raw columns. we should
+		// not need this but ...
 		rawColumns.setParent(report);
-	
-
 
 		ColumnReportData reportChild = new ColumnReportData(reportMetadata
 				.getName());
-		
-		//add a fake first column ONLY IF the Columns metadata is empty (if we only have hierarchies but no columns). This is needed
-		//in order to preserve the table structure of the output
-		if(reportMetadata.getColumns().size()==0) {
+
+		// add a fake first column ONLY IF the Columns metadata is empty (if we
+		// only have hierarchies but no columns). This is needed
+		// in order to preserve the table structure of the output
+		if (reportMetadata.getColumns().size() == 0) {
 			reportChild.addColumn(new CellColumn(""));
 		}
-		
-		
+
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
-		
-		
-		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
-		//or if widget mode is true...
-		if((reportMetadata.getMeasures().size()==1 && (
-			ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures()) ||
-			ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())))
-				|| arf.isWidget()) 
-			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
-		
 
-		
+		// perform removal of funding column if no measure except undisbursed
+		// balance is selected. in such case,we just need totals
+		// or if widget mode is true...
+		if ((reportMetadata.getMeasures().size() == 1 && (ARUtil
+				.containsMeasure(ArConstants.UNDISBURSED_BALANCE,
+						reportMetadata.getMeasures()) || ARUtil
+				.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,
+						reportMetadata.getMeasures())))
+				|| arf.isWidget())
+			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
+
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
 
-		
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
-		
 
 	}
 
@@ -478,14 +550,14 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 */
 	protected void createHierarchies() {
-		List orderedHierarchies = ARUtil
-				.createOrderedHierarchies(reportMetadata.getColumns(),reportMetadata.getHierarchies());
+		List orderedHierarchies = ARUtil.createOrderedHierarchies(
+				reportMetadata.getColumns(), reportMetadata.getHierarchies());
 		// add Unallocated fake items for activities missing hierarchy enabled
 		// data
 		Iterator i = orderedHierarchies.iterator();
-	
+
 		while (i.hasNext()) {
-		    	Collection allIds = report.getOwnerIds();
+			Collection allIds = report.getOwnerIds();
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 			AmpColumns c = element.getColumn();
 			// the report always has one ColumnReportData since we did no
@@ -500,46 +572,47 @@ public class AmpReportGenerator extends ReportGenerator {
 			// now we have the ids of the items that do not have the hierarchy
 			// cells present, and we need to add fakes so we can
 			// show the Unallocated hierarchy
-//			if(hc.getName().equals("Sub-Sector")){
-//			    //"
-//			    Cell fakeC = hc.getWorker().newCellInstance();
-//			    fakeC.setOwnerId(new Long(340));
-//			    hc.addCell(fakeC);
-//			}
+			// if(hc.getName().equals("Sub-Sector")){
+			// //"
+			// Cell fakeC = hc.getWorker().newCellInstance();
+			// fakeC.setOwnerId(new Long(340));
+			// hc.addCell(fakeC);
+			// }
 			Iterator ii = allIds.iterator();
 			while (ii.hasNext()) {
 				Long id = (Long) ii.next();
 				Cell fakeC = hc.getWorker().newCellInstance();
 				fakeC.setOwnerId(id);
 				//
-				//requirements for translation purposes
+				// requirements for translation purposes
 				TranslatorWorker translator = TranslatorWorker.getInstance();
 				String siteId = rd.getParent().getReportMetadata().getSiteId();
-				String locale = rd.getParent().getReportMetadata().getLocale();				
-				String text = fakeC.getValue().toString();				
+				String locale = rd.getParent().getReportMetadata().getLocale();
+				String text = fakeC.getValue().toString();
 				String translatedText = null;
 				String prefix = "aim:reportGenerator:";
 				try {
-					translatedText = TranslatorWorker.translate(prefix+text.toLowerCase(), locale, siteId);
+					translatedText = TranslatorWorker.translate(prefix
+							+ text.toLowerCase(), locale, siteId);
 				} catch (WorkerException e) {
 					e.printStackTrace();
 				}
-				if (translatedText.compareTo("") == 0) translatedText=text;
-				else fakeC.setValue(translatedText);	
+				if (translatedText.compareTo("") == 0)
+					translatedText = text;
+				else
+					fakeC.setValue(translatedText);
 				//
 				hc.addCell(fakeC);
 			}
-			
 
 		}
-		//now we can create the hiearchy tree
+		// now we can create the hiearchy tree
 		i = orderedHierarchies.iterator();
-		while (i.hasNext()) {			
+		while (i.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 			// TODO: the set is NOT a list, so the hierarchies are unordered.
 			AmpColumns c = element.getColumn();
-			
-			
+
 			try {
 				report = report.horizSplitByCateg(c.getColumnName());
 			} catch (UnidentifiedItemException e) {
@@ -550,7 +623,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				e.printStackTrace();
 			}
 		}
-		
+
 		report.removeEmptyChildren();
 	}
 
@@ -564,12 +637,15 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmpColumns element = ((AmpReportColumn) i.next()).getColumn();
 			String colName = element.getColumnName();
 			List cats = getColumnSubCategories(element.getColumnName());
-			Column c=rawColumns.getColumn(colName);
-			if(c instanceof GroupColumn) continue; //ugly fix to AMP-2793 and the problem created by mauricio after generating GroupColumnS before categorizeData
-			CellColumn src = (CellColumn)c;
+			Column c = rawColumns.getColumn(colName);
+			if (c instanceof GroupColumn)
+				continue; // ugly fix to AMP-2793 and the problem created by
+							// mauricio after generating GroupColumnS before
+							// categorizeData
+			CellColumn src = (CellColumn) c;
 			if (cats.size() != 0) {
 				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,
-						true,reportMetadata);
+						true, reportMetadata);
 				rawColumns.replaceColumn(colName, newcol);
 			}
 		}
@@ -579,33 +655,34 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param reportMetadata
 	 * @param condition
 	 */
-	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter, HttpServletRequest request) {
+	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter,
+			HttpServletRequest request) {
 		super();
 		this.reportMetadata = reportMetadata;
-		rawColumns = new GroupColumn("RAW DATA");
+		rawColumns = new GroupColumn(ArConstants.COLUMN_RAW_DATA);
 		this.filter = filter;
-		extractableCount=0;
-		
+		extractableCount = 0;
+
 		filter.generateFilterQuery(request);
-		
+
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 
-	//remove the columns that are also hierarchies
-		
-		Iterator i=reportMetadata.getColumns().iterator();
+		// remove the columns that are also hierarchies
+
+		Iterator i = reportMetadata.getColumns().iterator();
 		while (i.hasNext()) {
 			AmpReportColumn col = (AmpReportColumn) i.next();
-			Iterator ii=reportMetadata.getHierarchies().iterator();
+			Iterator ii = reportMetadata.getHierarchies().iterator();
 			while (ii.hasNext()) {
 				AmpReportHierarchy h = (AmpReportHierarchy) ii.next();
-				if(h.getColumn().getColumnName().equals(col.getColumn().getColumnName())) 
+				if (h.getColumn().getColumnName().equals(
+						col.getColumn().getColumnName()))
 					i.remove();
 			}
 		}
-	
-		
-		reportMetadata.setOrderedColumns(ARUtil
-				.createOrderedColumns(reportMetadata.getColumns(),reportMetadata.getHierarchies()));
+
+		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(
+				reportMetadata.getColumns(), reportMetadata.getHierarchies()));
 
 		attachFundingMeta();
 	}

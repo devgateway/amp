@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Aug 5, 2006
- *
+ * @deprecated
  */
 public interface Filter {
 	public void generateFilterQuery(HttpServletRequest request);

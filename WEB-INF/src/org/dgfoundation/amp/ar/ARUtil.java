@@ -48,7 +48,6 @@ import org.digijava.module.aim.util.DbUtil;
  */
 public final class ARUtil {
 
-	
 	public static ArrayList getAllPublicReports() {
 		Session session = null;
 		ArrayList col = new ArrayList();
@@ -56,11 +55,10 @@ public final class ARUtil {
 		try {
 
 			session = PersistenceManager.getSession();
-			String queryString = "select r from "
-					+ AmpReports.class.getName() + " r "
-					+ "where (r.publicReport=true)";
+			String queryString = "select r from " + AmpReports.class.getName()
+					+ " r " + "where (r.publicReport=true)";
 			Query qry = session.createQuery(queryString);
-			
+
 			Iterator itrTemp = qry.list().iterator();
 			AmpReports ar = null;
 			while (itrTemp.hasNext()) {
@@ -83,7 +81,6 @@ public final class ARUtil {
 		return col;
 	}
 
-
 	protected static Logger logger = Logger.getLogger(ARUtil.class);
 
 	public static Constructor getConstrByParamNo(Class c, int paramNo) {
@@ -102,39 +99,39 @@ public final class ARUtil {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		String ampReportId = request.getParameter("ampReportId");
-		if(ampReportId==null) ampReportId=(String) request.getAttribute("ampReportId");
+		if (ampReportId == null)
+			ampReportId = (String) request.getAttribute("ampReportId");
 		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
 
 		TeamMember teamMember = (TeamMember) httpSession
 				.getAttribute("currentMember");
-		
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
-		
-		//the siteid and locale are set for translation purposes
+
+		// the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		String siteId=site.getSiteId();
-		String locale=navigationLanguage.getCode();
-		
+		String siteId = site.getSiteId();
+		String locale = navigationLanguage.getCode();
+
 		r.setSiteId(siteId);
 		r.setLocale(locale);
 
-		
 		httpSession.setAttribute("reportMeta", r);
 
-		if(teamMember!=null)
-		logger.info("Report '" + r.getName() + "' requested by user "
-				+ teamMember.getEmail() + " from team "
-				+ teamMember.getTeamName());
+		if (teamMember != null)
+			logger.info("Report '" + r.getName() + "' requested by user "
+					+ teamMember.getEmail() + " from team "
+					+ teamMember.getTeamName());
 
-		AmpARFilter af = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+		AmpARFilter af = (AmpARFilter) httpSession
+				.getAttribute(ArConstants.REPORTS_FILTER);
 		if (af == null)
-			af=new AmpARFilter();
+			af = new AmpARFilter();
 		af.readRequestData(request);
-		httpSession.setAttribute(ArConstants.REPORTS_FILTER,af);
+		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, af, request);
 
@@ -165,18 +162,22 @@ public final class ARUtil {
 
 		return ret;
 	}
-	
+
 	public static Collection filterDonorGroups(Collection donorGroups) {
-		Collection ret	= new ArrayList<AmpOrgGroup>();
-		if ( donorGroups == null ){
-			logger.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
+		Collection ret = new ArrayList<AmpOrgGroup>();
+		if (donorGroups == null) {
+			logger
+					.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
 			return ret;
 		}
-		Iterator iter	= donorGroups.iterator();
-		while ( iter.hasNext() ) {
-			AmpOrgGroup grp	= (AmpOrgGroup)iter.next();
-			if ( grp.getOrgType() != null && grp.getOrgType().getOrgType() != null && 
-				(grp.getOrgType().getOrgType().toLowerCase().contains("gov") || grp.getOrgType().getOrgType().toLowerCase().contains("gouv") )	) {
+		Iterator iter = donorGroups.iterator();
+		while (iter.hasNext()) {
+			AmpOrgGroup grp = (AmpOrgGroup) iter.next();
+			if (grp.getOrgType() != null
+					&& grp.getOrgType().getOrgType() != null
+					&& (grp.getOrgType().getOrgType().toLowerCase().contains(
+							"gov") || grp.getOrgType().getOrgType()
+							.toLowerCase().contains("gouv"))) {
 				continue;
 			}
 			ret.add(grp);
@@ -184,9 +185,9 @@ public final class ARUtil {
 		return ret;
 	}
 
-
 	public static boolean containsMeasure(String measureName, Set measures) {
-		if(measureName==null) return false;
+		if (measureName == null)
+			return false;
 		Iterator i = measures.iterator();
 		while (i.hasNext()) {
 			AmpMeasures element = ((AmpReportMeasures) i.next()).getMeasure();
@@ -196,9 +197,10 @@ public final class ARUtil {
 		return false;
 	}
 
-	public static List createOrderedHierarchies(Collection columns, Collection hierarchies) {
+	public static List createOrderedHierarchies(Collection columns,
+			Collection hierarchies) {
 		List orderedColumns = new ArrayList(hierarchies.size());
-		for (int x = 0; x < hierarchies.size()+columns.size(); x++) {
+		for (int x = 0; x < hierarchies.size() + columns.size(); x++) {
 			Iterator i = hierarchies.iterator();
 			while (i.hasNext()) {
 				AmpReportHierarchy element = (AmpReportHierarchy) i.next();
@@ -210,9 +212,19 @@ public final class ARUtil {
 		return orderedColumns;
 	}
 
+	/**
+	 * Creates a list in the index order of the report wizard selected column
+	 * order.
+	 * 
+	 * @param columns
+	 * @param hierarchies
+	 *            this set is needed because also hierarchies were ordered by
+	 *            the same values and we need the max
+	 * @return
+	 */
 	public static List createOrderedColumns(Collection columns, Set hierarchies) {
 		List orderedColumns = new ArrayList(columns.size());
-		for (int x = 0; x < columns.size()+hierarchies.size(); x++) {
+		for (int x = 0; x < columns.size() + hierarchies.size(); x++) {
 			Iterator i = columns.iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
@@ -223,5 +235,4 @@ public final class ARUtil {
 		}
 		return orderedColumns;
 	}
-
 }

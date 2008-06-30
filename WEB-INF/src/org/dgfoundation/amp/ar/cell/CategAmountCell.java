@@ -137,7 +137,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	
 public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret) {
 	if(metaCell.getColumn().getName().equals(columnName) && !metaCell.getValue().equals(ArConstants.UNALLOCATED)) {
-		//we need to get the location percentage, it is stored in the MetaText of related to the owner of the current cell
+		//we need to get the percentage, it is stored in the MetaText of related to the owner of the current cell
 		CellColumn c=(CellColumn) metaCell.getColumn();
 		MetaTextCell relatedHierarchyCell=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
 		if(relatedHierarchyCell!=null) { 

@@ -25,56 +25,67 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public class CellColumn extends Column {
 
-    	@Override
+	@Override
 	public int getVisibleRows() {
-	    return items.size();
+		return items.size();
 	}
-    
-	protected HashMap itemsMap; 
-	
+
+	/**
+	 * Iterator for the internal list of items
+	 * 
+	 * @return the Iterator
+	 */
+	public Iterator<Cell> iterator() {
+		return items.iterator();
+	}
+
+	protected HashMap itemsMap;
+
 	public CellColumn(ColumnWorker worker) {
 		super(worker);
-		itemsMap=new HashMap();
+		itemsMap = new HashMap();
 	}
 
 	public CellColumn(String name) {
 		super(name);
-		itemsMap=new HashMap();
-	}
-	
-	public CellColumn(String name,int initialCapacity) {
-		super(name,initialCapacity);
-		itemsMap=new HashMap(initialCapacity);
+		itemsMap = new HashMap();
 	}
 
+	public CellColumn(String name, int initialCapacity) {
+		super(name, initialCapacity);
+		itemsMap = new HashMap(initialCapacity);
+	}
 
 	public CellColumn(Column source) {
-		super(source.getParent(),source.getName());
-		this.contentCategory=source.getContentCategory();
-		this.dimensionClass=source.getDimensionClass();
-		this.relatedContentPersisterClass=source.getRelatedContentPersisterClass();
-		itemsMap=new HashMap();
+		super(source.getParent(), source.getName());
+		this.contentCategory = source.getContentCategory();
+		this.dimensionClass = source.getDimensionClass();
+		this.relatedContentPersisterClass = source
+				.getRelatedContentPersisterClass();
+		itemsMap = new HashMap();
 	}
-	
+
 	public CellColumn(Column parent, String name) {
 		super(parent, name);
-		this.contentCategory=parent.getContentCategory();	
-		itemsMap=new HashMap();
+		this.contentCategory = parent.getContentCategory();
+		itemsMap = new HashMap();
 	}
 
 	public Cell getByOwner(Long ownerId) {
 		return (Cell) itemsMap.get(ownerId);
 	}
-	
-	public Cell getByOwnerAndValue(Long ownerId,Object value) {
-		Iterator i=items.iterator();
+
+	public Cell getByOwnerAndValue(Long ownerId, Object value) {
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			if(element.getOwnerId().equals(ownerId) && value.equals(element.getValue())) return element;
+			if (element.getOwnerId().equals(ownerId)
+					&& value.equals(element.getValue()))
+				return element;
 		}
 		return null;
 	}
-	
+
 	public Cell getCell(int i) {
 		return (Cell) getItem(i);
 	}
@@ -82,7 +93,7 @@ public class CellColumn extends Column {
 	public void addCell(Object cc) {
 		Cell c = (Cell) cc;
 		c.setColumn(this);
-		itemsMap.put(c.getOwnerId(),c);
+		itemsMap.put(c.getOwnerId(), c);
 		items.add(c);
 	}
 
@@ -111,55 +122,57 @@ public class CellColumn extends Column {
 	 */
 	@Override
 	public Column postProcess() {
-	  	CellColumn dest = (CellColumn) this.newInstance();
+		CellColumn dest = (CellColumn) this.newInstance();
 		ListCell lc = new ListCell();
 		Iterator i = this.iterator();
 		while (i.hasNext()) {
-		    try {
-			Object objelement = i.next();
-			//If type total column do nothing
-			if (!( objelement instanceof Column)) {
-			
-			
-			    Cell element = (Cell) objelement;
-			
-				// if we don't have items in the cell list, just add the cell
-				if (lc.size() == 0)
-					lc.addCell(element);
-				else
-				// if we have, verify if the owner of one cell in the list is
-				// the same
-				// if it is, add this cell to the list. if not, verify if the
-				// list has
-				// more than one element. if it does, add the whole list to the
-				// dest column
-				// if it has only one, add just that element to the dest colmn
-				if (lc.getCell(0).getOwnerId().equals(element.getOwnerId()))
-					lc.addCell(element);
-				else {
-					if (lc.size() == 1)
-						dest.addCell(lc.getCell(0));
+			try {
+				Object objelement = i.next();
+				// If type total column do nothing
+				if (!(objelement instanceof Column)) {
+
+					Cell element = (Cell) objelement;
+
+					// if we don't have items in the cell list, just add the
+					// cell
+					if (lc.size() == 0)
+						lc.addCell(element);
 					else
-						dest.addCell(lc);
-					lc = new ListCell();
-					lc.addCell(element);
+					// if we have, verify if the owner of one cell in the list
+					// is
+					// the same
+					// if it is, add this cell to the list. if not, verify if
+					// the
+					// list has
+					// more than one element. if it does, add the whole list to
+					// the
+					// dest column
+					// if it has only one, add just that element to the dest
+					// colmn
+					if (lc.getCell(0).getOwnerId().equals(element.getOwnerId()))
+						lc.addCell(element);
+					else {
+						if (lc.size() == 1)
+							dest.addCell(lc.getCell(0));
+						else
+							dest.addCell(lc);
+						lc = new ListCell();
+						lc.addCell(element);
+					}
 				}
-			}	
 			} catch (IncompatibleCellException e) {
 				logger.error(e);
 				e.printStackTrace();
-			} 
-			
-			
+			}
+
 		}
 
 		if (lc.size() == 1)
 			dest.addCell(lc.getCell(0));
 		if (lc.size() > 1)
 			dest.addCell(lc);
-	    
+
 		return dest;
-	    
 
 	}
 
@@ -167,18 +180,23 @@ public class CellColumn extends Column {
 		return 1;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#getSubColumn(int)
 	 */
 	@Override
 	public List getSubColumns(int depth) {
-		ArrayList ret=new ArrayList();
-		if(depth>0) return ret;
+		ArrayList ret = new ArrayList();
+		if (depth > 0)
+			return ret;
 		ret.add(this);
 		return ret;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#getColumnDepth()
 	 */
 	@Override
@@ -186,20 +204,24 @@ public class CellColumn extends Column {
 		return 0;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#getCurrentRowSpan()
 	 */
 	public int getCurrentRowSpan() {
 		return rowSpan;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#getOwnerIds()
 	 */
 	@Override
 	public Set getOwnerIds() {
-		TreeSet ret=new TreeSet();
-		Iterator i=items.iterator();
+		TreeSet ret = new TreeSet();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
 			ret.add(element.getOwnerId());
@@ -208,14 +230,17 @@ public class CellColumn extends Column {
 	}
 
 	/**
-	 * Trail Cells are by default TextCellS, in any CellColumn. Override this to add a different behaviour...
+	 * Trail Cells are by default TextCellS, in any CellColumn. Override this to
+	 * add a different behaviour...
 	 */
 	@Override
 	public List getTrailCells() {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#newInstance()
 	 */
 	@Override
@@ -223,25 +248,28 @@ public class CellColumn extends Column {
 		return new CellColumn(this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#getColumnDepth()
 	 */
 	@Override
 	public int getColumnDepth() {
 		return 1;
 	}
-	
 
 	public void replaceCell(Cell oldCell, Cell newCell) {
 		int idx = items.indexOf(oldCell);
 		items.remove(idx);
 		items.add(idx, newCell);
 		itemsMap.remove(oldCell.getOwnerId());
-		itemsMap.put(newCell.getOwnerId(),newCell);
+		itemsMap.put(newCell.getOwnerId(), newCell);
 		newCell.setColumn(this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#cellCount()
 	 */
 	@Override
@@ -249,16 +277,20 @@ public class CellColumn extends Column {
 		return items.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Column#getVisibleCellCount()
 	 */
 	@Override
 	public int getVisibleCellCount(Long ownerId) {
-		int count=0;
-		Iterator i=items.iterator();
+		int count = 0;
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			if(element.getOwnerId().equals(ownerId) && !(element.toString().trim().equals(""))) count++;
+			if (element.getOwnerId().equals(ownerId)
+					&& !(element.toString().trim().equals("")))
+				count++;
 		}
 		return count;
 	}
@@ -269,13 +301,11 @@ public class CellColumn extends Column {
 	}
 
 	public HashMap getItemsMap() {
-	    return itemsMap;
+		return itemsMap;
 	}
 
 	public void setItemsMap(HashMap itemsMap) {
-	    this.itemsMap = itemsMap;
+		this.itemsMap = itemsMap;
 	}
 
 }
-
-

@@ -119,7 +119,7 @@ public class GetDesktopReports extends TilesAction {
 						else{
 							
 						
-						logger.info("!!!!!!!!!!!! The default team report is null");
+//						logger.info("!!!!!!!!!!!! The default team report is null");
                                               reportsPerPage=appSettings.getDefReportsPerPage();
                                               if(reportsPerPage==null){
                                                 reportsPerPage=0;

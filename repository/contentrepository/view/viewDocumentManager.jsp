@@ -258,9 +258,6 @@ div.fakefile2 input{
 			        </div>
 			        <div id="public_res">
 			        <div>
-			        <jsp:include page="iconReferences.jsp"/>
-			        </div>
-			        <div>
 						<c:set var="translation">
 							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 						</c:set>			        
@@ -268,6 +265,10 @@ div.fakefile2 input{
 			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>
 			            </a>	
 			        </div>    		        
+			        
+			        <div>
+			        <jsp:include page="iconReferences.jsp"/>
+			        </div>
 
 					<div id="addDocumentDiv" style="display: none">
 						<div align="center">
@@ -338,9 +339,6 @@ div.fakefile2 input{
 			        </div>
 			        <div id="team_mem_res">
 			        <div>
-			        <jsp:include page="iconReferences.jsp"/>
-			        </div>
-			        <div>
 						<c:set var="translation">
 							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 						</c:set>			        
@@ -348,6 +346,10 @@ div.fakefile2 input{
 			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>
 			            </a>	
 			        </div>    		        
+			        
+			        <div>
+			        <jsp:include page="iconReferences.jsp"/>
+			        </div>
 
 					<div id="addDocumentDiv" style="display: none">
 						<div align="center">

@@ -95,6 +95,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -137,7 +138,8 @@ public class SaveActivity extends Action {
 		if (session.getAttribute("currentMember") == null) {
 			return mapping.findForward("index");
 		}
-
+		
+		
 		session.removeAttribute("report");
 		session.removeAttribute("reportMeta");
 		session.removeAttribute("forStep9");
@@ -148,8 +150,10 @@ public class SaveActivity extends Action {
 			TeamMember tm = null;
 			if (session.getAttribute("currentMember") != null)
 				tm = (TeamMember) session.getAttribute("currentMember");
-
+			
 			EditActivityForm eaForm = (EditActivityForm) form;
+			//if(eaForm!=null) return mapping.findForward("addActivityStepX");
+			
 			AmpActivity activity = new AmpActivity();
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
@@ -324,19 +328,23 @@ public class SaveActivity extends Action {
                         eaForm.setStep("1");
                         return mapping.findForward("addActivity");
                     }
-
+                    eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+                    eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+                    session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+                    session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
                     if(isSectorEnabled()){
 	                    if (eaForm.getActivitySectors() == null
 	                        || eaForm.getActivitySectors().size() < 1) {
 	                        errors.add("sector", new ActionError(
 	                            "error.aim.addActivity.sectorEmpty"));
 	                        saveErrors(request, errors);
-	                        eaForm.setStep("2");
+	                        eaForm.setStep("1");
 	                        return mapping.findForward("addActivity");
 	                    }
 	                    boolean secPer = false;
-	                    int percent = 0;
+	                    int percent = 0, primaryPrc=0,secondaryPrc=0;
 	                    boolean primary=false;
+	                    boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false;
 	                    Iterator<ActivitySector> secPerItr = eaForm.getActivitySectors().iterator();
 	                    while (secPerItr.hasNext()) {
 	                        ActivitySector actSect = (ActivitySector) secPerItr.next();
@@ -344,6 +352,8 @@ public class SaveActivity extends Action {
 	                        if(config.isPrimary()){
 	                            primary=true;
 	                        }
+	                        if("Primary".equals(config.getName())) hasPrimarySectorsAdded=true;
+	                        if("Secondary".equals(config.getName())) hasSecondarySectorsAdded=true;
 	                        if (null == actSect.getSectorPercentage()
 	                            || "".equals(actSect.getSectorPercentage())) {
 	                            errors.add("sectorPercentageEmpty",
@@ -354,7 +364,9 @@ public class SaveActivity extends Action {
 	                        // sector percentage is not a number
 	                        else {
 	                            try {
-	                                percent += actSect.getSectorPercentage().intValue();
+	                                if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().intValue();
+	                                if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().intValue();
+	                            	percent += actSect.getSectorPercentage().intValue();
 	                            } catch (NumberFormatException nex) {
 	                                logger.debug("sector percentage is not a number : " + nex);
 	                                errors.add("sectorPercentageNonNumeric",
@@ -368,16 +380,48 @@ public class SaveActivity extends Action {
 	                            return mapping.findForward("addActivityStep2");
 	                        }
 	                    }
-
+//	                    if(percent!=100 && percent >0)
+//	                    {
+//	                    	//if("Primary".equals(config))
+//	                    	errors.add("sectorPercentageSumWrong", new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
+//	                    	saveErrors(request, errors);
+//                            eaForm.setStep("2");
+//                            return mapping.findForward("addActivityStep2");
+//	                    }
+	                    if(primaryPrc!=100 && primaryPrc >0)
+	                    {
+	                    	//if("Primary".equals(config))
+	                    	errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong"));
+	                    	saveErrors(request, errors);
+                            eaForm.setStep("2");
+                            return mapping.findForward("addActivityStep2");
+	                    }
+	                    if(secondaryPrc!=100 && secondaryPrc >0)
+	                    {
+	                    	//if("Primary".equals(config))
+	                    	errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong"));
+	                    	saveErrors(request, errors);
+                            eaForm.setStep("2");
+                            return mapping.findForward("addActivityStep2");
+	                    }
 	                    // no primary sectors added
-	                    if (isPrimarySectorEnabled() && !primary) {
+	                    if (isPrimarySectorEnabled() && !hasPrimarySectorsAdded) {
 	                        errors.add("noPrimarySectorsAdded",
 	                                   new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
 	                        saveErrors(request, errors);
-	                        logger.debug("n oPrimary Sectors Added");
+	                        logger.debug("no Primary Sectors Added");
 	                        eaForm.setStep("2");
 	                        return mapping.findForward("addActivityStep2");
-	                    }	                    
+	                    }
+	                    if (isSecondarySectorEnabled() && !hasSecondarySectorsAdded) {
+	                        errors.add("noSecondarySectorsAdded",
+	                                   new ActionError("error.aim.addActivity.noSecondarySectorsAdded"));
+	                        saveErrors(request, errors);
+	                        logger.debug("no Secondary Sectors Added");
+	                        eaForm.setStep("2");
+	                        return mapping.findForward("addActivityStep2");
+	                    }
+	                    
                     }
                 }
 				// end of Modified code
@@ -1610,7 +1654,7 @@ public class SaveActivity extends Action {
 				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
 				{
 					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
-					if(feature.getName().compareTo("Sector")==0) 
+					if(feature.getName().compareTo("Sectors")==0) 
 					{
 						return true;
 					}	
@@ -1842,7 +1886,24 @@ public class SaveActivity extends Action {
 					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 					{
 						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-						if(field.getName().compareTo("Sector")==0) 
+						if(field.getName().compareTo("Primary Sector")==0) 
+						{	
+							return true;
+						}
+				
+					}
+			return false;
+	  }	  
+	  private boolean isSecondarySectorEnabled() {
+	 	    ServletContext ampContext = getServlet().getServletContext();
+		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
+			if(currentTemplate!=null)
+				if(currentTemplate.getFeatures()!=null)
+					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+					{
+						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+						if(field.getName().compareTo("Secondary Sector")==0) 
 						{	
 							return true;
 						}

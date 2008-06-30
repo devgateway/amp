@@ -1,4 +1,4 @@
-a.header_title, A.header_title:active, A.header_title:visited {
+a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A.header_title:visited {
 	font-family: Verdana,Tahoma,Arial,sans-serif;
 	color:#D6D6D6;
 	font-size:19px;

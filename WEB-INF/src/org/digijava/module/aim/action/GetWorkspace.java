@@ -52,7 +52,7 @@ public class GetWorkspace extends Action {
 			}
 		}
 		if (!permitted) {
-			return mapping.findForward("index");
+			return mapping.findForward("justList");
 		}
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setUpdateFlag(false);

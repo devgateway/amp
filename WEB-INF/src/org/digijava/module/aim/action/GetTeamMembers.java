@@ -29,10 +29,18 @@ public class GetTeamMembers extends Action {
 		logger.debug("In get team members");
 
 		TeamMemberForm upMemForm = (TeamMemberForm) form;
+		
+		HttpSession session 	= request.getSession();
+		TeamMember tm = null;
+		if (session.getAttribute("currentMember") != null) {
+			tm = (TeamMember) session.getAttribute("currentMember");	
+		}
+		else
+			return mapping.findForward("index");
+		
 		try {
 			
 		boolean permitted = false;
-		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") != null) {
 			String key = (String) session.getAttribute("ampAdmin");
 			logger.info("Key :" + key);
@@ -48,14 +56,8 @@ public class GetTeamMembers extends Action {
 			}logger.info(" this is the key to tell us "+key);
 		}
 		
-		if (!permitted) {
-			return mapping.findForward("index");
-		}
 
-		TeamMember tm = null;
-		if (session.getAttribute("currentMember") != null) {
-			tm = (TeamMember) session.getAttribute("currentMember");	
-		}
+		
 		
 		Long id = null; 
 		if (upMemForm.getTeamId() == null) {
@@ -75,7 +77,10 @@ public class GetTeamMembers extends Action {
 			if (tm != null) {
 				upMemForm.setTeamMemberId(tm.getMemberId());
 			}
-			return mapping.findForward("forward");
+			if ( permitted )
+				return mapping.findForward("forward");
+			else
+				return mapping.findForward("justList");
 		}
 		
 		} catch (Exception e) {

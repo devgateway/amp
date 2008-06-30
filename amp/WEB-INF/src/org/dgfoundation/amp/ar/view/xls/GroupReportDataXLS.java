@@ -14,6 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 
 
@@ -60,7 +61,12 @@ public class GroupReportDataXLS extends XLSExporter {
 		//show Headings:		
 		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
 		headings.generate();
-		
+
+		//		trail cells:
+		if ((grd != null) && ((GroupReportData)grd.getParent() != null) && ((GroupReportData)grd.getParent()).getLevelDepth() != 0){
+			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
+			trails2.generate();
+		}
 		//iterate the data
 		Iterator i = grd.getItems().iterator();
 		while (i.hasNext()) {
@@ -81,9 +87,10 @@ public class GroupReportDataXLS extends XLSExporter {
 		//cell.setCellValue("xx");
 		//makeColSpan(grd.getTotalDepth());
 
-		//		trail cells:
-		TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
-		trails2.generate();
+		if ((grd.getParent() == null) || ((GroupReportData)grd.getParent()).getLevelDepth() == 0){
+			TrailCellsXLS trails2=new TrailCellsXLS(this,grd);
+			trails2.generate();
+		}
 		
 	}
 

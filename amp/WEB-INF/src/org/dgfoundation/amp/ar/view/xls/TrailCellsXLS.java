@@ -65,7 +65,7 @@ public class TrailCellsXLS extends XLSExporter {
 		if (grd.getParent() != null) {
 			String indent = "";
 			if (colId.value == 0)
-				for (int k = 0; k < ((ReportData)grd.getParent()).getLevelDepth(); k++)
+				for (int k = 0; k < ((ReportData)grd.getParent()).getLevelDepth() - 1; k++)
 					indent = indent + Constants.excelIndexString;
 //			rowId.inc();
 //			colId.reset();

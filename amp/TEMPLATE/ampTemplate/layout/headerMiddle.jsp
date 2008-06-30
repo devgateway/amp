@@ -64,7 +64,7 @@ border-right:1px solid white;
                 <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
             </li>
             </feature:display>
-			<li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'  style="float:left;">
+			<li style="float:left;"  title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
                <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
                <digi:trn key="aim:publicReports">Public Reports</digi:trn>
                </a>
@@ -101,14 +101,14 @@ border-right:1px solid white;
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
           <ul class="first-of-type">
-            <li class="yuiampmenuitem" style="float:left;">
+            <li class="yuiampmenuitem">
                 <digi:link styleClass="yuiampmenuitemlabel" href="/showRegisterUser.do" module="aim" title="${trn3}">
                 <digi:trn key="aim:newUserRegistration">
                 New user registration
                 </digi:trn>
 	            </digi:link>
             </li>
-            <li style="float:left;">
+            <li>
                 <a class="yuiampmenuitemlabel" href="#">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
                 </a>
@@ -134,7 +134,7 @@ border-right:1px solid white;
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
                       <ul class="first-of-type">
-                    		  <li class="yuiampmenuitem" style="float:left;">
+                    		  <li class="yuiampmenuitem">
                                           <c:set var="message">
                        							<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
                  						  </c:set>
@@ -142,7 +142,7 @@ border-right:1px solid white;
 					                        <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
 					                    </digi:link>
                                         </li>
-                          <li class="yuiampmenuitem" style="float:left;">
+                          <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
                               </a>
@@ -171,7 +171,7 @@ border-right:1px solid white;
                               </div>                    
                           </li>
                           <module:display name="HELP">
-                          <li class="yuiampmenuitem" style="float:left;">
+                          <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   <digi:trn key="help:help">HELP</digi:trn>
                               </a>
@@ -247,6 +247,8 @@ border-right:1px solid white;
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
                                       <ul>
+                                      
+                                      
 										<li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/showDesktop.do">
                                             <digi:trn key="aim:ampdesktop">AMP Desktop</digi:trn>
@@ -254,30 +256,30 @@ border-right:1px solid white;
                                         </li>
 <c:if test="${not empty sessionScope.currentMember}">
 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
-										<li class="yuiampmenuitem">
-											<c:set var="trnClickToAddNewActivit">
-											<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
-											</c:set>
-											<a class="yuiampmenuitemlabel" href="javascript:addActivity()" title="${trnClickToAddNewActivit}">
-											<digi:trn key="btn:addActivity">Add Activity</digi:trn>
-											</a>
-										</li>
+		                                        <li class="yuiampmenuitem">
+                                                    <c:set var="trnClickToAddNewActivit">
+                                                    <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
+                                                    </c:set>
+                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
+												</li>
 </c:if></c:if>
+										<li class="yuiampmenuitem">
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>
                                             <feature:display  name="Tab Generator" module="New Report Wizard">
-		                                      	<li title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'  class="yuiampmenuitem">
+		                                      	<li title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true">
 		                                                <b><digi:trn key="aim:addTab">Add Tab</digi:trn></b>
 		                                            </a>
 		                                        </li>
-		                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>' class="yuiampmenuitem">
+		                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=true">
 		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
 		                                            </a>
 												</li>
 	                                        </feature:display>
+                                        </li>
                                         <li class="yuiampmenuitem" style="_width:100px">
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
@@ -311,7 +313,7 @@ border-right:1px solid white;
                               </div>                    
                           </li>
 						<module:display name="REPORTING">
-                          <li class="yuiampmenuitem"  style="float:left;">
+                          <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
@@ -354,6 +356,7 @@ border-right:1px solid white;
                                   </div>
                               </div>                    
                           </li>
+                          </module:display>
 						  <feature:display name="Content Repository" module="Document Management">
                           <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;">
@@ -362,7 +365,7 @@ border-right:1px solid white;
                           </li>
                           </feature:display>
 						  <feature:display name="Calendar" module="Calendar">
-                          <li class="yuiampmenuitem" style="float:left;">
+                          <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel"  href="#" style="border-right:1px solid white;">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>

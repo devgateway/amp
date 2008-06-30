@@ -22,7 +22,7 @@ public class ActivityDisbursementDateTrigger extends Trigger {
 		AmpActivity activity=(AmpActivity) source;
 		e.getParameters().put(PARAM_NAME,activity.getName());		
 		e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);		
-		e.getParameters().put(PARAM_URL, ""+activity.getAmpActivityId());
+		e.getParameters().put(PARAM_URL, "aim/viewChannelOverview.do~tabIndex=0~ampActivityId="+activity.getAmpActivityId());
 		return e;
 	}
 

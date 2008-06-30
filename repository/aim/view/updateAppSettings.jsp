@@ -144,7 +144,7 @@
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="currencyId" styleClass="inp-text">
-															<html:option value="">------ Select Currency ------</html:option>
+															<html:option value="">------ <digi:trn key="aim:selDefCurrency">Select Currency</digi:trn> ------</html:option>
 															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="currencies" value="ampCurrencyId" label="currencyCode" />
 															</html:select>
@@ -194,7 +194,7 @@
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="fisCalendarId" styleClass="inp-text">
-															<html:option value="">------ Select Fiscal Calendar ------</html:option>
+															<html:option value="">------ <digi:trn key="aim:selFisCalendar">Select Fiscal Calendar</digi:trn> ------</html:option>
 															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="fisCalendars" value="ampFiscalCalId" label="name" />
 															</html:select>
@@ -202,11 +202,13 @@
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defaultTeamReport">Default Team Report</digi:trn>
+															<digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="defaultReportForTeamId" styleClass="inp-text" onchange="changePanel()" styleId="defaultReport">
-															<html:option value="0">------ Select Default Team Report ------</html:option>
+															<html:option value="0">
+															------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
+															</html:option>
 															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="reports" value="ampReportId" label="name" />
 															</html:select>

@@ -111,8 +111,6 @@ function toggleSettings(){
 <logic:present name="myTabs" scope="session">
 	<logic:present name="myReports" scope="session">
 		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
-			<logic:iterate name="myTabs" id="sessReport" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
-				<c:if test="${report.ampReportId==sessReport.ampReportId}">
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                    <c:set var="counter" value="${counter+1}" />
 	                    <c:set var="reportNameTrn">
@@ -131,8 +129,6 @@ function toggleSettings(){
 	                    </li>
 	                    </c:if>
 					</logic:equal>
-				</c:if>
-			</logic:iterate>
 		</logic:iterate>
 	</logic:present>
 </logic:present>

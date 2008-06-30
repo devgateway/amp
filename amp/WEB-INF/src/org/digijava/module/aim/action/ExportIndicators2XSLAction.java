@@ -98,8 +98,15 @@ public class ExportIndicators2XSLAction extends Action {
 			cell = row.createCell(cellNum++);
 			cell.setCellValue(" ");
 			
+			cell = row.createCell(cellNum++);
+			cell.setCellValue(" ");
+			
+			cell = row.createCell(cellNum++);
+			cell.setCellValue(" ");
+			
 			for (int i = 0; i < npdForm.getSelYears().length; i++) {
 				cell = row.createCell(cellNum++);
+				cellNum++;
 				cellNum++;
 				cell.setCellValue(npdForm.getSelYears()[i]);
 				cell.setCellStyle(csSubHeader);
@@ -108,6 +115,7 @@ public class ExportIndicators2XSLAction extends Action {
 			// table header 2
 			cellNum = 0;
 			row = sheet.createRow(rowNum++);
+			
 			cell = row.createCell(cellNum++);
 			cell.setCellValue("indicator Name");			
 			cell.setCellStyle(csSubHeader);			
@@ -122,6 +130,9 @@ public class ExportIndicators2XSLAction extends Action {
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
 				cell.setCellValue("Target");
+				cell.setCellStyle(csSubHeader);
+				cell = row.createCell(cellNum++);
+				cell.setCellValue("Base");
 				cell.setCellStyle(csSubHeader);
 			}
 
@@ -147,6 +158,8 @@ public class ExportIndicators2XSLAction extends Action {
 							cell.setCellValue(item.getActualValue());
 							cell = row.createCell(cellNum++);
 							cell.setCellValue(item.getTargetValue());
+							cell = row.createCell(cellNum++);
+							cell.setCellValue(item.getBaseValue());
 						}
 					}
 				}

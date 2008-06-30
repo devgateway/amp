@@ -122,7 +122,7 @@
 												&nbsp;
 											</td>
 											<c:forEach  var="year" items="${aimNPDForm.selYears}">
-												<td colspan="2" align="center">
+												<td colspan="3" align="center">
 													<strong>${year}</strong>
 												</td>
 											</c:forEach>
@@ -138,7 +138,11 @@
 												<td align="center">
 													<strong><digi:trn key="aim:indGrid:targetVal">Target</digi:trn></strong>
 												</td>
+												<td align="center">
+													<strong><digi:trn key="aim:indGrid:baseVal">Base</digi:trn></strong>
+												</td>
 											</c:forEach>
+											
 										</tr>
 										<c:if test="${!empty aimNPDForm.indicators}">
 											<c:forEach var="indRow" items="${aimNPDForm.indicators}">
@@ -153,7 +157,10 @@
 														<td align="right">
 															${val.targetValue}
 														</td>
-													</c:forEach>
+															<td align="right">
+															${val.baseValue}
+														</td>
+												</c:forEach>
 												</tr>
 											</c:forEach>
 										</c:if>

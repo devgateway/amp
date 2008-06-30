@@ -158,6 +158,13 @@ div.fakefile2 input{
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE">
 			        <div id="my_res">
+			        <div>
+			        	<button type="button" class="dr-menu" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
+					  		<digi:trn key="contentrepository:addResource">
+					 	    	       Add Resource ...    				
+					  		</digi:trn>            
+				    	</button>
+			        </div>
 			        <p>		
 			        <jsp:include page="iconReferences.jsp"/>	        
 
@@ -165,21 +172,21 @@ div.fakefile2 input{
 			        <p>
 						  <table border="0" cellPadding=5 cellSpacing=0 width="95%"
 							style="position: relative; left: 20px">
-							<tr>
-								<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
-								width="13" height="20"> </td>
-								<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">
-								<a style="cursor:pointer"  onclick="isMinusPrivate=toggleView('myDocumentstr', 'clipIcon', isMinusPrivate)">
-								<img
-									border="0" align="absmiddle"
-									src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIcon" />
-								<digi:img skipBody="true" height="16"
-									border="0" align="absmiddle"
-									src="module/contentrepository/images/folder_folder.gif" />
-								</a>
-									<digi:trn key="contentrepository:documentManagerMyDocuments">My Documents</digi:trn>				</td>
-								<td background="/repository/contentrepository/view/images/right-side.gif" width="13" height="20" 
-								style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> </td>
+							<tr><td></td>
+<!--								<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" -->
+<!--								width="13" height="20"> </td>-->
+<!--								<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">-->
+<!--								<a style="cursor:pointer"  onclick="isMinusPrivate=toggleView('myDocumentstr', 'clipIcon', isMinusPrivate)">-->
+<!--								<img-->
+<!--									border="0" align="absmiddle"-->
+<!--									src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIcon" />-->
+<!--								<digi:img skipBody="true" height="16" border="0" align="absmiddle"	src="module/contentrepository/images/folder_folder.gif" />-->
+<!--								</a>-->
+<!--									<digi:trn key="contentrepository:documentManagerMyDocuments">My Documents</digi:trn>				-->
+<!--								</td>-->
+<!--								<td background="/repository/contentrepository/view/images/right-side.gif" width="13" height="20" -->
+<!--								style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> -->
+<!--								</td>-->
 							</tr>
 							<tr style="display: table-row" id="myDocumentstr">
 								<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
@@ -192,10 +199,7 @@ div.fakefile2 input{
 									</div>
 									<br />
 								</logic:notEmpty>
-								<button type="button" class="dr-menu" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
-					               <digi:trn key="contentrepository:addResource">
-					 	    	       Add Resource ...    				</digi:trn>            
-				                </button>				</td>
+				</td>
 							</tr>
 						</table>
 
@@ -204,29 +208,35 @@ div.fakefile2 input{
 
 			        <div id="team_res">
 			        <div>
+			        <div>
+						<c:if test="${isTeamLeader}">
+							<button class="dr-menu" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
+                            	<digi:trn key="contentrepository:addResource">
+		 	    	       				Add Resource ...    							
+	 	    	       			</digi:trn>            
+							</button>
+						</c:if>
+			        </div>
 			        <p>
 			        <jsp:include page="iconReferences.jsp"/>
 		        
 			        </p>
-
 			        <p>
-					<table border="0" cellPadding=5 cellSpacing=0 width="95%"
+					<table border="0" cellPadding=5 cellSpacing=0 width="100%"
 						style="position: relative; left: 20px" >
-						<tr>
-							<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
-							width="13" height="20"> </td>
-							<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">
-							<a style="cursor:pointer"  onclick="isMinusTeam=toggleView('teamDocumentstr', 'clipIconTD', isMinusTeam)">
-							<img
-								border="0" align="absmiddle"
-								src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIconTD" />
-							<digi:img skipBody="true" height="16"
-								border="0" align="absmiddle"
-								src="module/contentrepository/images/folder_folder.gif" />
-							</a>
-								<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>				</td>
-							<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" 
-							width="13" height="20"> </td>
+						<tr><td></td>
+<!--							<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" -->
+<!--							width="13" height="20"> </td>-->
+<!--							<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">-->
+<!--							<a style="cursor:pointer"  onclick="isMinusTeam=toggleView('teamDocumentstr', 'clipIconTD', isMinusTeam)">-->
+<!--							<img-->
+<!--								border="0" align="absmiddle"-->
+<!--								src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIconTD" />-->
+<!--							<digi:img skipBody="true" height="16" border="0" align="absmiddle" src="module/contentrepository/images/folder_folder.gif" />-->
+<!--							</a>-->
+<!--								<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>				</td>-->
+<!--							<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" -->
+<!--							width="13" height="20"> </td>-->
 						</tr>
 						<tr style="display: table-row" id="teamDocumentstr">
 							<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
@@ -238,14 +248,8 @@ div.fakefile2 input{
 								<jsp:include page="documentTable.jsp" flush="true" />
 								</div>
 								<br />
-							</logic:notEmpty>
-							<c:if test="${isTeamLeader}">
-								<button class="dr-menu" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
-			                            	<digi:trn key="contentrepository:addResource">
-				 	    	       				Add Resource ...    							
-				 	    	       			</digi:trn>            
-								</button>
-							</c:if>				</td>
+								</logic:notEmpty>
+							</td>
 						</tr>
 					</table>
 			        

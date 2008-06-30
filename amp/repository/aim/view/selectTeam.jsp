@@ -12,9 +12,9 @@
 <tr><td width="100%" valign="top" align="left">
 <table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772 height="201">
 	<tr>
-		<td class=r-dotted-lg width=4>&nbsp;
+		<td width=4>&nbsp;
 		</td>
-		<td align=left class=r-dotted-lg vAlign=top width=600><br>
+		<td align=left vAlign=top width=600><br>
 			<table border=0 cellPadding=5 cellSpacing=3 width="100%">
 				<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="page-title">

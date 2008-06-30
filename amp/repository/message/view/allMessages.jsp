@@ -89,6 +89,7 @@
 	}
 
     function hoverTr(id, obj){
+    	
     	if(slMsgId!=id){
          obj.className='Hovered';
         }   
@@ -237,10 +238,22 @@
    
         
     function toggleGroup(group_id){
+    
+    
     if(group_id==slMsgId){
     	slMsgId='';
+    	
     }else{
-    	slMsgId=group_id;
+    		slMsgId=group_id;
+    		 
+    		 var ind=group_id.indexOf('_fId');
+        	 var stateId;
+    	
+    			if(ind!=-1){
+    				stateId = group_id.slice(ind+4);
+    				slMsgId = stateId;
+    			
+    	}
     }
     
                 var strId='#'+group_id;
@@ -409,15 +422,16 @@
 							var msgTr=document.createElement('TR');	
 							var isMsgRead=messages[i].getAttribute('read');					
                                                        
+                                                       
                                                         msgTr=paintTr(msgTr,i);
-                                                        
+                      			 						msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                        
 								
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");
                                                 tablBody[0].appendChild(myTR);
-                      			 msgTr=paintTr(msgTr,i);
-                      			 msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                        
+                                                
+                      			 
 																				
 						}//end of for loop
 					}			

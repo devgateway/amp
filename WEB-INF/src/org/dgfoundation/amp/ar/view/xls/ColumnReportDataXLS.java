@@ -115,6 +115,10 @@ public class ColumnReportDataXLS extends XLSExporter {
 		
 		
 		
+		// add trail cells
+		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
+		trails.generate();
+	
 		
 
 		// add data
@@ -134,10 +138,6 @@ public class ColumnReportDataXLS extends XLSExporter {
 				colId.reset();
 			}
 		}
-		// add trail cells
-		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
-		trails.generate();
-	
 		
 
 

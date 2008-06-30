@@ -52,6 +52,10 @@ public class AmountCell extends Cell {
 	protected Set<String> percentageSourceColumnName;
 	
 	
+		public Set<String> getPercentageSourceColumnName() {
+		return percentageSourceColumnName;
+	}
+
 		/**
 	 * @return Returns the toExchangeRate.
 	 */

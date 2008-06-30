@@ -57,7 +57,7 @@ import org.digijava.module.aim.util.TeamUtil;
  * @since Aug 5, 2006
  * 
  */
-public class AmpARFilter extends PropertyListable implements Filter {
+public class AmpARFilter extends PropertyListable {
 
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
@@ -660,7 +660,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
 
-		System.out.println("XXXXX: " + generatedFilterQuery);
 	}
 
 	/**

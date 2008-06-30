@@ -23,6 +23,7 @@
 <li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/></li>
 <li>To Rate=<bean:write name="amountCell" property="toExchangeRate"/></li>
 <li>Percentage=<bean:write name="amountCell" property="percentage"/>%</li>
+<li>Percentage Columns=<bean:write name="amountCell" property="percentageSourceColumnName"/></li>
 <li>Currency Code=<bean:write name="amountCell" property="currencyCode"/></li>
 <li>Currency Date=<bean:write name="amountCell" property="currencyDate"/></li>
 <li>Activity Owner Id=<bean:write name="amountCell" property="ownerId"/></li>

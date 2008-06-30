@@ -29,7 +29,7 @@ public abstract class ReportData extends Viewable {
     	/**
     	 * This property is set with the cell that is responsible of creating the reportdata (in hierarchy).
     	 * a hierarchy is created based on a unique set of cells coming from a column. each cell in this column creates a new sub-report
-    	 * to be able to keep track of dimensions, we remember this cell as the splitterCell
+    	 * to be able to keep track of dimensions, we remember this cell as the "splitterCell"
     	 */
     	protected Cell splitterCell=null;
     

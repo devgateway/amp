@@ -6,9 +6,12 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
@@ -22,9 +25,11 @@ import org.digijava.module.aim.dbentity.AmpReports;
 public abstract class ReportGenerator {
 
 	protected GroupColumn rawColumns;
+	protected Map<String, CellColumn> rawColumnsByName;
+	
 	protected GroupReportData report;
 	
-	protected Filter filter;
+	protected AmpARFilter filter;
 	
 	protected AmpReports reportMetadata;
 	
@@ -66,6 +71,7 @@ public abstract class ReportGenerator {
 	
 	public ReportGenerator() {
 		super();
+		rawColumnsByName=new HashMap<String,CellColumn>();
 	}
 
 	/**
@@ -85,14 +91,14 @@ public abstract class ReportGenerator {
 	/**
 	 * @return Returns the filter.
 	 */
-	public Filter getFilter() {
+	public AmpARFilter getFilter() {
 		return filter;
 	}
 
 	/**
 	 * @param filter The filter to set.
 	 */
-	public void setFilter(Filter filter) {
+	public void setFilter(AmpARFilter filter) {
 		this.filter = filter;
 	}
 

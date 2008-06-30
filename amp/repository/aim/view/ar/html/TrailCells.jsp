@@ -12,14 +12,14 @@
 <!-- generate total row -->
 <tr>
 	<c:if test="${reportData.levelDepth == 1}">
-		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;" height="22px" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
-		<span style="font-family: Arial;font-weight: bold;font-size: 14px;">
+		<td nowrap="nowrap" style="background:#376091; border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;" height="22px" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+		<span style="font-family: Arial;color:white; font-weight: bold;font-size: 14px;margin-left: 2px">
 				<digi:trn key="rep:popup:reporttotals ">Report Totals:</digi:trn>
 			</span>
 	</c:if>
 	
 	<c:if test="${reportData.levelDepth == 2}">
-		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;border-top:#E2E2E2 1px solid " height="23px" title='<bean:write name="reportData" property="repName"/>' colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+		<td nowrap="nowrap" style="background:#A5A5A5; border-bottom:#868383 1px solid;border-right:#868383 1px solid;" height="23px" title='<bean:write name="reportData" property="repName"/>' colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
 			<span style="font-family: Arial;font-weight: bold;font-size: 12px;padding-left: 5px;padding-right: 3px;">
 				<%if(reportData.getRepName().length()<40){ %>
 					<% if (!("".equals(reportData.getRepName()))){ %>
@@ -56,7 +56,7 @@
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<c:if test="${reportData.levelDepth == 1}">
-			<td align="center" height="25px" style="background:#E2E2E2; border-bottom: #E0E0E0;border-right: #E0E0E0;font-family: Arial;font-weight: bold">
+			<td align="center" height="25px" style="border-bottom: #E0E0E0 1px solid;border-right: #E0E0E0 1px solid;font-family: Arial;font-weight: bold">
 		</c:if>
 		<c:if test="${reportData.levelDepth == 2}">
 			<td height="22px" style="background: #A5A5A5;border-bottom: #868383 1px solid;border-right: #868383 1px solid;font-weight: bold;font-family: Arial;">

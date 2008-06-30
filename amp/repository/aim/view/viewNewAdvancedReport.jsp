@@ -144,24 +144,25 @@ session.setAttribute("progressValue", counter);
 	</script>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">
-	<tr>
-		<td height="20px" style="padding-left: 5px;padding-left: 5px;">
-		<logic:notEmpty name="reportMeta" property="hierarchies">
-			<a style="cursor:pointer" onClick="showSorter(); ">
-			<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>&nbsp;
-			| 
-			</logic:notEmpty> 
+		<tr>
+			<td height="20px" style="padding-left: 5px;padding-left: 5px;">
+				<logic:notEmpty name="reportMeta" property="hierarchies">
+					<a style="cursor:pointer" onClick="showSorter(); ">
+						<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> 
+					</a>&nbsp;
+					| 
+				</logic:notEmpty> 
 				<a style="cursor:pointer" onClick="showFilter(); "> <u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
-			<logic:notEqual name="widget" scope="request" value="true">
-				| <a style="cursor:pointer"	onClick="showRange(); ">
-					<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> 
-				</a>
-			</logic:notEqual>
-			| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
+				<logic:notEqual name="widget" scope="request" value="true">
+				| 	<a style="cursor:pointer"	onClick="showRange(); ">
+						<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> 
+					</a>
+				</logic:notEqual>
+				| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
 			</td>
 		</tr>
 	
-</logic:notEqual>
+	</logic:notEqual>
 
 	<logic:equal name="widget" scope="request" value="true">
 	<table width="100%"> 
@@ -171,7 +172,7 @@ session.setAttribute("progressValue", counter);
 	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
-                <a class="settingsLink" onClick="showSorter();" href="#">
+                <a class="settingsLink" onClick="showSorter();">
                 <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
                 </a> | 
             </logic:notEmpty> 
@@ -281,7 +282,7 @@ session.setAttribute("progressValue", counter);
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 	<tr>
 		<td  style="padding-left: 5px;padding-left: 5px;">
-		<table>
+		<table style="width: 100%">
 		<tr>
 		<td>
 			<!-- begin big report table -->

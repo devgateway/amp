@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.message.dbentity.AmpQuartzJobClass;
 import org.digijava.module.message.helper.QuartzJobForm;
 
 public class QuartzJobManagerForm extends ActionForm {
@@ -22,6 +23,7 @@ public class QuartzJobManagerForm extends ActionForm {
     private String exeTime;
     private QuartzJobForm job;
     private Collection<QuartzJobForm> jobs;
+    private Collection<AmpQuartzJobClass> jcCol;
     private String action;
 
     public QuartzJobManagerForm() {
@@ -79,6 +81,10 @@ public class QuartzJobManagerForm extends ActionForm {
         return classFullname;
     }
 
+    public Collection<AmpQuartzJobClass> getJcCol() {
+        return jcCol;
+    }
+
     public void setJobs(Collection<QuartzJobForm> jobs) {
         this.jobs = jobs;
     }
@@ -117,5 +123,9 @@ public class QuartzJobManagerForm extends ActionForm {
 
     public void setClassFullname(String classFullname) {
         this.classFullname = classFullname;
+    }
+
+    public void setJcCol(Collection<AmpQuartzJobClass> jcCol) {
+        this.jcCol = jcCol;
     }
 }

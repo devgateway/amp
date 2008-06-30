@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.message.util.QuartzJobUtils;
 import org.digijava.module.message.helper.QuartzJobForm;
 import org.digijava.module.message.form.QuartzJobManagerForm;
+import org.digijava.module.message.util.QuartzJobClassUtils;
 
 public class QuartzJobManager extends Action {
 
@@ -67,6 +68,7 @@ public class QuartzJobManager extends Action {
             QuartzJobUtils.deleteJob(qmform.getName());
         }
 
+        qmform.setJcCol(QuartzJobClassUtils.getAllJobClasses());
         qmform.setJobs(QuartzJobUtils.getAllJobs());
         qmform.setAction(null);
 

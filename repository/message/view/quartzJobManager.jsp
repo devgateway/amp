@@ -84,13 +84,16 @@ function addJob(){
         <table>
           <tr>
             <!-- Start Navigation -->
-            <td>
+            <td colspan="6">
               <span class="crumb">
                 <c:set var="translation">
                   <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                 </c:set>
-                <digi:link href="/admin.do" styleClass="comment" title="${translation}" module="aim">
+                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+                </digi:link>&nbsp;&gt;&nbsp;
+                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
+                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:trn key="aim:jobManager">Job Manager</digi:trn>
               </span>
@@ -98,7 +101,7 @@ function addJob(){
             <!-- End navigation -->
           </tr>
           <tr>
-            <td style="height:53px;">
+            <td colspan="6" style="height:53px;width:350px;">
               <span class="subtitle-blue">
                 <digi:trn key="aim:jobManager">Job Manager</digi:trn>
               </span>
@@ -114,29 +117,29 @@ function addJob(){
             &nbsp;
             </td>
           </tr>
-          <tr style="">
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+          <tr>
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:150px;">
               <digi:trn key="aim:job:clmName">Name</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
               <digi:trn key="aim:job:clmStartDate">Start date</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
               <digi:trn key="aim:job:clmEndDate">End date</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
               <digi:trn key="aim:job:clmNextFiredate">Next fire date</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
               <digi:trn key="aim:job:clmPrevFireDate">Previus fire date</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
               <digi:trn key="aim:job:clmFinalFireDate">Final fire date</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
               <digi:trn key="aim:job:clmStatus">Status</digi:trn>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 15px 5px 15px;">
+            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:165px;">
               <digi:trn key="aim:job:clmCommands">Commands</digi:trn>
             </td>
           </tr>

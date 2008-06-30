@@ -2,31 +2,35 @@
 <module-config>
 	<name>message</name>
 	<security login-required="true" default="READ">
-		<action login-required="true" pattern="/messageActions" /> 
+		<action login-required="true" pattern="/messageActions" />
 	</security>
 		<hibernate-classes required="false">
-			<hibernate-class>org.digijava.module.message.dbentity.AmpMessage</hibernate-class>	
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpAlert
+                      org.digijava.module.message.dbentity.AmpMessage
+            </hibernate-class>
+			<hibernate-class>
+                      org.digijava.module.message.dbentity.AmpAlert
 			</hibernate-class>
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.CalendarEvent
-			</hibernate-class>			
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpMessageState	
-			</hibernate-class>	
-			<hibernate-class>
-					  org.digijava.module.message.dbentity.Approval	
 			</hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.UserMessage	
+					  org.digijava.module.message.dbentity.AmpMessageState
 			</hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.TemplateAlert	
-			</hibernate-class>	
+					  org.digijava.module.message.dbentity.Approval
+			</hibernate-class>
 			<hibernate-class>
-					  org.digijava.module.message.dbentity.AmpMessageSettings	
-			</hibernate-class>		
-			
+					  org.digijava.module.message.dbentity.UserMessage
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.TemplateAlert
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpMessageSettings
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpQuartzJobClass
+			</hibernate-class>
 		</hibernate-classes>
 </module-config>

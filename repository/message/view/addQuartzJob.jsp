@@ -22,12 +22,14 @@ function setAction(action){
 
 function saveJob(){
   var txt=null;
-
-  txt=document.getElementById("txtClassFullname");
-  if(txt==null || txt.value==""){
-    alert("Please enter Class Fullname!");
-    txt.focus();
-    return false;
+  txt=document.getElementById("cmbJc");
+  if(txt==null){
+    txt=document.getElementById("txtClassFullname");
+    if(txt==null || txt.value==""){
+      alert("Please enter Class Fullname!");
+      txt.focus();
+      return false;
+    }
   }
 
   txt=document.getElementById("txtName");
@@ -97,10 +99,12 @@ function typeChanged(value){
                 <c:set var="translation">
                   <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
                 </c:set>
-                <digi:link href="/admin.do" styleClass="comment" title="${translation}" module="message">
+                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-                </digi:link>
-                &nbsp;&gt;&nbsp;
+                </digi:link>&nbsp;&gt;&nbsp;
+                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
+                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
+                </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/quartzJobManager.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                 </digi:link>
@@ -122,11 +126,25 @@ function typeChanged(value){
               <table style="width:400px;">
                 <tr>
                   <td>
-                    <span style="color:red;">*</span>
-                    <digi:trn key="aim:job:classFullname">Class fullname:</digi:trn>
+                    <c:if test="${empty quartzJobManagerForm.jcCol}">
+                      <span style="color:red;">*</span>
+                      <digi:trn key="aim:job:classFullname">Class fullname:</digi:trn>
+                    </c:if>
+                    <c:if test="${!empty quartzJobManagerForm.jcCol}">
+                      <digi:trn key="aim:job:class">Class:</digi:trn>
+                    </c:if>
                   </td>
                   <td>
-                    <html:text name="quartzJobManagerForm" property="classFullname" styleId="txtClassFullname" style="font-family:Verdana;font-size:10px;width:250px;" />
+                    <c:if test="${!empty quartzJobManagerForm.jcCol}">
+                      <html:select name="quartzJobManagerForm" property="classFullname" value="classFullname" styleId="cmbJc" style="font-family:Verdana;font-size:10px;width:250px;">
+                        <c:forEach var="jc" items="${quartzJobManagerForm.jcCol}">
+                          <html:option value="${jc.classFullname}">${jc.name}</html:option>
+                        </c:forEach>
+                      </html:select>
+                    </c:if>
+                    <c:if test="${empty quartzJobManagerForm.jcCol}">
+                      <html:text name="quartzJobManagerForm" property="classFullname" styleId="txtClassFullname" style="font-family:Verdana;font-size:10px;width:250px;" />
+                    </c:if>
                   </td>
                 </tr>
                 <tr>
@@ -153,7 +171,6 @@ function typeChanged(value){
                   <td>
                     <span style="color:red;">*</span>
                     <digi:trn key="aim:job:startDateTime">Start date/time</digi:trn>
-
                   </td>
                   <td>
                     <html:text name="quartzJobManagerForm" property="startDateTime" styleId="txtStartDateTime" style="font-family:Verdana;font-size:10px;width:250px;" />
@@ -197,7 +214,7 @@ function typeChanged(value){
               <tr>
                 <td colspan="2">
                   <digi:trn key="aim:job:jobDayOfWeek">Select Day of week</digi:trn>
-                  <html:select name="quartzJobManagerForm" property="selectedDay" value="selectedDay" styleId="cmbWeekDays" disabled="true">
+                  <html:select name="quartzJobManagerForm" property="selectedDay" value="selectedDay" styleId="cmbWeekDays" style="font-family:Verdana;font-size:10px;" disabled="true">
                     <html:option value="1">1</html:option>
                     <html:option value="2">2</html:option>
                     <html:option value="3">3</html:option>

@@ -140,7 +140,7 @@
 							<TD width="100%" align="left" valign="top">
 
 				   			<digi:insert attribute="body" />
-
+<br /><br /><br /><br />
 							</TD>
 
 						</TR>

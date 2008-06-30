@@ -230,6 +230,7 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
+		    
 		var myPanel2 = new YAHOOAmp.widget.Panel("new2", {
 		    fixedcenter: true,
 		    constraintoviewport: true,
@@ -273,6 +274,7 @@ background-color: yellow;
 		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("");
 		myPanel2.render(document.body);
+		myPanel2EmptyBody	= true;
 		
 		var msgP3='\n<digi:trn key="rep:filter:selectRange">Please select range</digi:trn>';
 		myPanel3.setHeader(msgP3);
@@ -357,9 +359,12 @@ background-color: yellow;
 		myPanel1.hide();
 	}
 	function showSorter() {
-		var element2 = document.getElementById("mySorter");
-		element2.style.display = "inline";
-		myPanel2.setBody(element2);
+		if ( myPanel2EmptyBody ) {
+			var element2 = document.getElementById("mySorter");
+			element2.style.display 	= "inline";
+			myPanel2.setBody(element2);
+			myPanel2EmptyBody		= false;
+		}
 		myPanel2.show();
 	}
 	function hideSorter() {

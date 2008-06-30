@@ -4,6 +4,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -156,7 +157,7 @@ public class AssignFieldPermissions extends Action {
 				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setRgEdit("on");
 				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setRgRead("on");			
 			}  
-		    if(agencyPerm.hasParameter("RA")) {
+		    if(agencyPerm.hasParameter("RO")) {
 				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setRoEdit("on");
 				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setRoRead("on");			
 			}  

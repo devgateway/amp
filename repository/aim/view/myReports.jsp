@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <SCRIPT TYPE="text/javascript">
 <!--
@@ -53,14 +54,19 @@ return false;
 					<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 						<div style="margin:2px">
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
-							<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
-								<bean:write name="report" property="name"/>
+							<digi:link title="${report.name}" href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
+			                    <c:if test="${fn:length(report.name) > 50}" >
+			                    <c:out value="${fn:substring(report.name, 0, 50)}" />...
+			                    </c:if>
+			                    <c:if test="${fn:length(report.name) <= 50}" >
+			                    <c:out value="${report.name}" />
+			                    </c:if>
 							</digi:link>
 							</div>
 					</logic:iterate>
 
                     <bean:size id="repCount" name="myReports" scope="session" />
-                    <div style="margin-left:12px;margin-top:5px; margin-bottom: 7px" title="'<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>">
+                    <div style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom: 7px" title="<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>">
                   
                     	 <digi:link href="/viewTeamReports.do">
                             <digi:trn key="aim:moreReports">More Reports...</digi:trn>

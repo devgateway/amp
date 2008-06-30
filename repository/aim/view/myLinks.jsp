@@ -42,12 +42,12 @@
 		                </logic:iterate>
 		                
 		                 <c:set var="translation">
-	                        <digi:trn key="aim:clickToViewMoreDocuments">Click here to view more Documents</digi:trn>
+	                        <digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
 	                    </c:set>	
 	               		
-	               		 <div title='${translation}'  style="margin-left:12px;margin-top:5px; margin-bottom:7px">
+	               		 <div title='${translation}'  style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom:7px">
 	                          <a href="/contentrepository/documentManager.do">
-	                            <digi:trn key="aim:moreResources">More Resources ...</digi:trn>
+	                            <digi:trn key="aim:moreResources">More resources ...</digi:trn>
 	                        </a>							
 	                    </div>
 	                    

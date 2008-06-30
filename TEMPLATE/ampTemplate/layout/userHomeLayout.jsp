@@ -127,7 +127,7 @@
 										<TD vAlign="top" align="left" width="85%">
 
 											<digi:insert attribute="body" />
-
+<br/><br/><br/><br/>
 										</TD>
 
 										<TD vAlign="top" align="left" width="15%">
@@ -142,15 +142,15 @@
 											
 
 												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
+												
+													<TR><TD vAlign="top" align="left">
+														<digi:insert attribute="myMessages"/>
+													</TD></TR>
 												<TR>
 														<TD vAlign="top" align="left">
 															<digi:insert attribute="myLinks" />
 														</TD>
 												</TR>
-												
-													<TR><TD vAlign="top" align="left">
-														<digi:insert attribute="myMessages"/>
-													</TD></TR>
 										</TABLE>
 
 										</TD>

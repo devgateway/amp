@@ -58,7 +58,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="PI Reports" parentModule="REPORTING"></module:display>
-<module:display name="Old Report Wizard" parentModule="REPORTING"></module:display>
 <module:display name="New Report Wizard" parentModule="REPORTING"></module:display>
 
 <feature:display  name="Tab Generator" module="New Report Wizard"></feature:display>

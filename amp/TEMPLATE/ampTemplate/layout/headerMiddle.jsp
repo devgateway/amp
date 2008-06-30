@@ -332,18 +332,6 @@ border-right:1px solid white;
 	                                            </a>
 											</li>
                                         </feature:display>
-                                        <module:display name="Old Report Wizard" parentModule="REPORTING">
-	                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-	                                            <a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
-	                                                <b><digi:trn key="aim:standardReportGenerator"> Standard Report Generator</digi:trn></b>
-	                                            </a>
-	                                        </li>
-	                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-	                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
-	                                                <digi:trn key="aim:standardReportManager">Standard Report Manager</digi:trn>
-	                                            </a>
-											</li>
-                                        </module:display>
 										
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>

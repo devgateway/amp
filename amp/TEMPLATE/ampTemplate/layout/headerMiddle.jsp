@@ -312,7 +312,7 @@ border-right:1px solid white;
                                   </div>
                               </div>                    
                           </li>
-						<module:display name="New Report Wizard" parentModule="REPORTING"></module:display>
+						<module:display name="REPORTING">
                           <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
@@ -356,6 +356,7 @@ border-right:1px solid white;
                                   </div>
                               </div>                    
                           </li>
+                          </module:display>
 						  <feature:display name="Content Repository" module="Document Management">
                           <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;">

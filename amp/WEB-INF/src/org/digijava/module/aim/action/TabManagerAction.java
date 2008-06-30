@@ -8,13 +8,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -81,21 +80,15 @@ public class TabManagerAction extends Action {
 	public ActionForward modeGet(ActionMapping mapping, ActionForm form, HttpServletRequest request, 
 							HttpServletResponse response) throws Exception {
 		
+		
+		TeamMember teamMember					=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		
 		TabManagerForm myForm					= (TabManagerForm) form;
-		ArrayList<AmpReports> reports			= new ArrayList<AmpReports>(); 
+		List<AmpReports> reports				= TeamUtil.getAllTeamReports( teamMember.getTeamId(), true, null, null, true, teamMember.getMemberId() );
+		if ( reports == null ) 
+			throw new Exception("Tabs could not be loaded from database");
 		myForm.setTabs( reports );
 		
-		Collection<AmpReports> myReports		= (Collection<AmpReports>) request.getSession().getAttribute( Constants.MY_REPORTS );
-		if ( myReports == null ) 
-				throw new Exception("No reports found in session");
-		
-		Iterator<AmpReports> repIter			= myReports.iterator();
-		while ( repIter.hasNext() ) {
-			 AmpReports report		= repIter.next();
-			 if ( report.getDrilldownTab() != null && report.getDrilldownTab() ) {
-				 myForm.getTabs().add(report);
-			 }
-		}
 		Collections.sort(reports, 
 				new Comparator<AmpReports> () {
 					public int compare(AmpReports o1, AmpReports o2) {
@@ -104,7 +97,7 @@ public class TabManagerAction extends Action {
 				}
 			);
 		
-		TeamMember teamMember					=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		
 		if ( teamMember == null )
 			throw new Exception( "TeamMember not found in session" );
 		AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(teamMember.getMemberId());
@@ -140,10 +133,10 @@ public class TabManagerAction extends Action {
 				throw new Exception( "TeamMember not found in session" );
 		
 		AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-		Collection<AmpReports> myReports		= (Collection<AmpReports>) request.getSession().getAttribute( Constants.MY_REPORTS );
+		Collection<AmpReports> myReports		= TeamUtil.getAllTeamReports( teamMember.getTeamId(), true, null, null, true, teamMember.getMemberId() );;
 		
 		if ( myReports == null)
-			throw new Exception("No reports found in session");
+			throw new Exception("Tabs could not be loaded from database");
 		
 		TabManagerForm myForm						= (TabManagerForm) form;
 		ArrayList<AmpDesktopTabSelection> selection	= new ArrayList<AmpDesktopTabSelection>();
@@ -158,7 +151,7 @@ public class TabManagerAction extends Action {
 					sel.setReport( getReportById(myReports, myForm.getTabsId()[i]) );
 					
 					if ( sel.getReport() == null )
-						throw new Exception("The requested tab was not found among the reports in session");
+						throw new Exception("The requested tab was not found in the list of existing tabs");
 					
 					selection.add(sel);
 					counter++;

@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +41,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -139,7 +139,7 @@ public class UpdateAppSettings extends Action {
 					uForm.setDefaultReportForTeamId(new Long(0));
 			}
 			/* Select only the reports that are shown as tabs */
-			Collection reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,
+			List<AmpReports> reports = TeamUtil.getAllTeamReports(tm.getTeamId(), null,
 					null, null, true, tm.getMemberId());
 			if (reports != null) {
 				Iterator iterator = reports.iterator();
@@ -151,7 +151,15 @@ public class UpdateAppSettings extends Action {
 					}
 				}
 			}
-
+			
+			Collections.sort(reports, 
+					new Comparator<AmpReports> () {
+						public int compare(AmpReports o1, AmpReports o2) {
+							return o1.getName().compareTo( o2.getName() );
+						}
+					}
+				);
+			
 			uForm.setReports(reports);
 			uForm.setCurrencies(CurrencyUtil
 					.getAllCurrencies(CurrencyUtil.ALL_ACTIVE));

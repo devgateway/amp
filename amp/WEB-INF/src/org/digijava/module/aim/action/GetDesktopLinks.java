@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ecs.xhtml.li;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -56,15 +55,17 @@ public class GetDesktopLinks extends TilesAction {
 			Collections.reverse(list);
 	
 			
-			if (list.size() > 5) {
-				ArrayList<DocumentData> reducedList=new ArrayList<DocumentData>();
-				for(int i=0; i < 5;i++){
-					reducedList.add(list.get(i));
-					session.setAttribute(Constants.MY_LINKS,reducedList);	
+			ArrayList<DocumentData> reducedList=new ArrayList<DocumentData>();
+			Iterator<DocumentData> it = list.iterator();
+			while(it.hasNext() && reducedList.size() <= 5){
+				DocumentData document = it.next();
+				//Checking to skip URLs
+				if(!document.getContentType().equalsIgnoreCase("URL")){
+					reducedList.add(document);
 				}
-			}else{
-				session.setAttribute(Constants.MY_LINKS,list);	
 			}
+				
+			session.setAttribute(Constants.MY_LINKS,reducedList);	
 			 
 		} catch (Exception e) {
 			e.printStackTrace();

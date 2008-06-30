@@ -14,7 +14,7 @@
 <module:display name="Messaging System">
 
   <digi:instance property="messageForm"/>
-  <digi:form action="/messageActions.do">
+  <digi:form action="/messageActions.do" style="margin-bottom:0;">
     <html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
     <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
@@ -148,7 +148,7 @@
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=moreMsgs;
-      td1.innerHTML='<div  style="margin-left:12px;margin-top:5px; margin-bottom:7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">More messages ...</a></div>';
+      td1.innerHTML='<div  style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom:7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">More messages ...</a></div>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       tbl.appendChild(body);

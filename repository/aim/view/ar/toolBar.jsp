@@ -5,24 +5,8 @@
 
 <style>
 <!--
-.toolbar{
-	width: 120px;
-	background: #addadd; 
-	background-color: #addadd; 
-	padding: 3px 3px 3px 3px; 
-	position: relative; 
-	top: 10px; 
-	left: 10px;
-	bottom: 100px;
-		
-}
 .toolbartable{
-	border-color: #FFFFFF;
-	border-width: 2px;
-	border-bottom-width: 2px; 
-	border-right-width: 2px;"
-	border-left-width: 2px;
-	border-style: solid;
+	border-top: #222E5D 3px solid;
 }
 -->
 </style>
@@ -37,43 +21,38 @@
    String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree";
    String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
 %>
-<div class="toolbar" align="center">
-<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
-	<tr>
-		<!-- 
-			<td noWrap align=left valign="center">	
-				<digi:img src="module/aim/images/close.gif" border="0" alt="Close Report"/>
-					<a href="javascript:window.close();"><digi:trn key="rep:tool:CloseReport">Close Report</digi:trn></a>
-				</td>					
-			<td noWrap align=left valign="center">	
-				<digi:img src="module/aim/images/reload.gif" border="0" alt="Reload Report"/>
-			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
-		-->
-
-		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="25" height="30" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
-			</digi:link>
-		</td>
-
-		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="25" height="30" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
-			</digi:link>
-		</td>
-
-		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="25" height="30" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
-			</digi:link>
-		</td>
-		
-		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="25" height="30" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
-			</digi:link>
-		</td>
-	</tr>
-</table>
+<div class="yuiamp-skin-amp" style="clear:both;width: 285px;margin-left:10px;margin-bottom: 25px;margin-top: 25px">
+	<div id="mainmenuExport" class="yuiampmenu">
+		<div class="bd">
+			<ul class="first-of-type">
+				<li class="yuiampmenuitem" style="float:left;">
+					<digi:link styleClass="yuiampmenuitemlabel" style="border-right:1px solid white;" href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+						<digi:trn key="rep:tool:pdf">PDF</digi:trn>
+					</digi:link>
+				</li>
+				<li class="yuiampmenuitem" style="float:left;">
+					<digi:link styleClass="yuiampmenuitemlabel" style="border-right:1px solid white;" href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+						<digi:trn key="rep:tool:excel">EXCEL</digi:trn>
+					</digi:link>
+				</li>
+				<li class="yuiampmenuitem" style="float:left;">
+					<digi:link styleClass="yuiampmenuitemlabel" style="border-right:1px solid white;" href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+						<digi:trn key="rep:tool:csv">CSV</digi:trn>
+					</digi:link>
+				</li>
+				<li class="yuiampmenuitem" style="float:left;">
+					<digi:link styleClass="yuiampmenuitemlabel" style="border-right:1px solid white;" href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+						<digi:trn key="aim:tool:printer">PRINTER</digi:trn>
+					</digi:link>
+				</li>
+			</ul>
+		</div>
+	</div>
 </div>
-<br>
+
+<script language="javascript">
+//Run initialization for menu
+	var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuExport", {
+	autosubmenudisplay: true});
+	oMenuBar.render();
+</script>

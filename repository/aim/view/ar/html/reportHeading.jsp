@@ -9,7 +9,6 @@
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 
-
 <%int rowIdx = 2;%>
 
 <!-- generate report headings -->
@@ -43,7 +42,7 @@
             
 	            <logic:notEqual name="widget" scope="request" value="true">
 	              <html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-	              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </html:link>
 	            </logic:notEqual>
             
@@ -55,7 +54,6 @@
 	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
 	            </c:if>
-            
           </logic:equal>
             
           <logic:notEqual name="column" property="columnDepth" value="1">
@@ -71,11 +69,12 @@
 		              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 				  </a>
 	            </logic:equal>
-            
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
-	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
-	              </html:link>
+	            	<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: white;cursor:pointer;background: #376091;padding: 1px" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	              		<digi:trn key="aim:reportBuilder:${reportHeading}">
+	              			<c:out value="${reportHeading}"/>
+	              		</digi:trn>
+	             	</html:link>
 	            </logic:notEqual>  
 	            
 				<c:if test="${subColumn.name == columnReport.sorterColumn}">

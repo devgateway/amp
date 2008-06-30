@@ -88,26 +88,27 @@ session.setAttribute("progressValue", counter);
 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
 <logic:notEqual name="widget" scope="request" value="true">
-	<div class="reportname">
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" background="#bbe0e3">
-  			<tr background="#bbe0e3">
+	<div class="reportname" style="background: #222E5D">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  			<tr>
     			<td align="left">
-    				<img src="module/aim/images/reporttableft.gif"/>
+    				<img src="images/tableftcorner.gif"/>
     			</td>
-    			<td align="center" nowrap="nowrap">
+    			<td align="center" nowrap="nowrap" style="font-family: Arial;color: white;font-weight: bold;">
     				<bean:write scope="session" name="reportMeta" property="name" />
     			</td>
     			<td align="right">
-    				<img src="module/aim/images/reporttabrigth.gif" />
+    				<img src="images/tabrightcorner.gif" />
     			</td>
   			</tr>
 		</table>
 	</div>
 </logic:notEqual>
 
+
 <table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
 	<logic:notEmpty property="reportDescription" name="reportMeta">
-	<tr>
+	<tr style="border-top:#222E5D 3px solid;">
 		<td style="padding-left: 5px;padding-left: 5px;">
 			<digi:trn key="rep:pop:Description">Description:</digi:trn><br>
 				<span style="font-weight: bold;font-size: 13px;margin-left: 5px;margin-top: 3px; font-family: Arial">
@@ -116,7 +117,12 @@ session.setAttribute("progressValue", counter);
 		</td>
 	</tr>
 	</logic:notEmpty>
+	<logic:empty property="reportDescription" name="reportMeta">
+		<tr style="border-top:#222E5D 3px solid;">
+	</logic:empty>
+	<logic:notEmpty property="reportDescription" name="reportMeta">
 	<tr>
+	</logic:notEmpty> 
 		<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
 			<span  style="color: red;font-family: Arial;font-size: 12px;">
 				<c:set var="AllAmount">
@@ -144,6 +150,7 @@ session.setAttribute("progressValue", counter);
 	</script>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">
+	<logic:notEqual name="viewFormat" scope="request" value="print">
 		<tr>
 			<td height="20px" style="padding-left: 5px;padding-left: 5px;">
 				<logic:notEmpty name="reportMeta" property="hierarchies">
@@ -161,7 +168,7 @@ session.setAttribute("progressValue", counter);
 				| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
 			</td>
 		</tr>
-	
+	</logic:notEqual>
 	</logic:notEqual>
 
 	<logic:equal name="widget" scope="request" value="true">

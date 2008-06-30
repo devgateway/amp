@@ -24,21 +24,29 @@
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">	
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 <logic:equal name="columnReport" property="canDisplayRow" value="true">
-<%rowIdx++;	%>
-<% if(columnReport.getLevelDepth()<=2){
+<%
+	rowIdx++;	
+	String width="0";
+%>
+
+<% 
+	if(columnReport.getLevelDepth()<=2){
 		request.setAttribute("pading","5px");
+		 width= "5px";
 	}
 	if (columnReport.getLevelDepth()==3){
 		request.setAttribute("pading","15px");
+		width="15px";
 	}
 	if (columnReport.getLevelDepth()==4){
 		request.setAttribute("pading","25px");
+		width="25px";
 	}
 %>
 <%if (rowIdx%2==0){ %>
-	<tr bgcolor="#FFFFFF" height="15px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
+	<tr bgcolor="#FFFFFF" height="16px"  onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
 <%}else{%>
-	<tr bgcolor="#ECECEC" height="15px"  onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#ECECEC', '#ECECEC', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#ECECEC'">
+	<tr bgcolor="#ECECEC" height="16px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#ECECEC', '#ECECEC', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#ECECEC'">
 <%}%>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

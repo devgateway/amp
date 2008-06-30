@@ -19,6 +19,7 @@
 <script language="JavaScript" type="text/javascript">
 <!--
 function goNextStep(){
+alert("goNextStep");
   if(validateForm()){
     <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
     document.aimEditActivityForm.action = "<%= nextStepUrl %>";
@@ -141,19 +142,7 @@ function validateForm(){
   </c:set>
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null && draftStatus.value!="true"){
-  <feature:display name="Sectors" module="Project ID and Planning">
-    if (document.aimEditActivityForm.selActivitySectors == null) {
-      //alert("${errMsgAddSector}");
-     var primConf=document.getElementById('primaryConfig');
-     var secConf=document.getElementById('secondaryConfig');
-     if(primConf==null && secConf==null){
-         alert("${errMsgAddSector}");
-          return false;
-     }
-      document.aimEditActivityForm.addSec.focus();
-       return false;
-    }
-   </feature:display>
+  
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
@@ -165,7 +154,7 @@ function validateForm(){
     }
   }
 
-  document.aimEditActivityForm.step.value="3";
+  document.aimEditActivityForm.step.value="2";
   return true;
 }
 
@@ -187,6 +176,7 @@ function popupwin(){
 }
 
 function validateSectorPercentage(){
+	return true;
   <c:set var="errMsgAddSector">
   <digi:trn key="aim:addSecorErrorMessage">
   Please add sectors

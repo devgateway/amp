@@ -2730,5 +2730,13 @@ public class FeaturesUtil {
 			String defaultComponentTypeIdStr = getGlobalSettingValue("Default Component Type");
 			return ComponentsUtil.getComponentTypeById(Long.parseLong(defaultComponentTypeIdStr));
 		}
+		
+		public static boolean isVisibleSectors(String type, ServletContext ampContext){
+			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+       	  AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(type+" Sector");
+       	  if(fieldToTest!=null)
+         	  	return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+       	  return false;
+		}
 
 }

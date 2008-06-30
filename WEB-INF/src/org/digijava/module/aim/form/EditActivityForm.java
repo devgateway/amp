@@ -85,6 +85,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String conditionality=null;
 	private String projectManagement=null;
 	private String contractDetails=null;
+	private String primarySectorVisible=null;
+	private String secondarySectorVisible=null;
 	
     private Long selPrograms[];
     private Long selProgramId;
@@ -880,6 +882,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			allReferenceDocNameIds =null;
 //			refDocComments = null;
 			referenceDocs = null;
+			primarySectorVisible=null;
+			secondarySectorVisible=null;
 
 			budget		= false;
                         equalOpportunity=null;
@@ -5368,5 +5372,21 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	  //Dumies
 	public String getPerspectives(){
 		return null;
+	}
+
+	public String getPrimarySectorVisible() {
+		return primarySectorVisible;
+	}
+
+	public void setPrimarySectorVisible(String primarySectorVisible) {
+		this.primarySectorVisible = primarySectorVisible;
+	}
+
+	public String getSecondarySectorVisible() {
+		return secondarySectorVisible;
+	}
+
+	public void setSecondarySectorVisible(String secondarySectorVisible) {
+		this.secondarySectorVisible = secondarySectorVisible;
 	}
 }

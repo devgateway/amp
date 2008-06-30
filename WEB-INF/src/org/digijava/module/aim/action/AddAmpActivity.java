@@ -309,7 +309,11 @@ public class AddAmpActivity extends Action {
 				}
 				session.removeAttribute("sectorSelected");
 				session.removeAttribute("add");
-                                session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
+                session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
+                eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+                eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+                session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+                session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
 				return mapping.findForward("addActivityStep2");
 
 			} else {
@@ -394,7 +398,11 @@ public class AddAmpActivity extends Action {
                 }
 				eaForm.setActivitySectors(prevSelSectors);
 				session.removeAttribute("sectorSelected");
-                                session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
+                session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
+                eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+                eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+                session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+                session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
 				return mapping.findForward("addActivityStep2");
 
 			}
@@ -439,6 +447,10 @@ public class AddAmpActivity extends Action {
 
       eaForm.setActivitySectors(newSectors);
       session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
+      eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+      eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+      session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+      session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
       return mapping.findForward("addActivityStep2");
     }
     //
@@ -514,6 +526,10 @@ public class AddAmpActivity extends Action {
       }
 
       eaForm.setActivityComponentes(prevSelComponentes);
+      eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+      eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+      session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+      session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
       return mapping.findForward("addActivityStep2");
     }
 
@@ -552,6 +568,10 @@ public class AddAmpActivity extends Action {
       }
 
       eaForm.setActivitySectors(newComponentes);
+      eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+      eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+      session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+      session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
       return mapping.findForward("addActivityStep2");
     }
 
@@ -1087,7 +1107,10 @@ public class AddAmpActivity extends Action {
   	                               System.currentTimeMillis());
   	          setEditorKey(eaForm.getMinorities(), request);
   	        }
-
+    	  eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
+    	  eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
+          session.setAttribute("Primary Sector", eaForm.getPrimarySectorVisible());
+          session.setAttribute("Secondary Sector", eaForm.getSecondarySectorVisible());
         return mapping.findForward("addActivityStep2");
       }
       else if (eaForm.getStep().equals("3")) { // show the step 3 page.
@@ -1473,7 +1496,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
 				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 				{
 					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-					if(field.getName().compareTo("Sector")==0) 
+					if(field.getName().compareTo("Primary Sector")==0) 
 					{	
 						return true;
 					}

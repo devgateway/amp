@@ -6,21 +6,15 @@
  */
 package org.dgfoundation.amp.utils;
 
-import java.sql.SQLException;
-
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.action.EditEUActivity;
 
 
 /**
@@ -39,66 +33,50 @@ import org.digijava.kernel.persistence.PersistenceManager;
  * @version 0.2
  */
 public abstract class MultiAction extends Action {
+
 	private static Logger logger = Logger.getLogger(MultiAction.class);
 
-	@Deprecated
-    protected ServletContext sc;
-    
-    @Deprecated
-    protected Session session;
+	/**
+	 * @param mapping object list to be passed to other modes
+	 * @param form the form (if available) to be passed to other modes
+	 * @param request
+	 * @param response
+	 * @return the forward to be passwd to execute() method.
+	 * This overrides execute() and implements exception catching and some global properties
+	 * @throws Exception this will be caught in the main execute method
+	 */
+	public ActionForward execute(ActionMapping mapping,
+			ActionForm form,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 
-    @Deprecated
-    public Session createSession() throws HibernateException, SQLException {
-    	if(session!=null) return session;
-    	session = PersistenceManager.getSession();
-    	return session;
-    }
-    
-    
+		return modePrepare(mapping, form, request, response);
+	}
 
 	/**
-		 * @param mapping object list to be passed to other modes
-		 * @param form the form (if available) to be passed to other modes
-		 * @param request
-		 * @param response
-		 * @return the forward to be passwd to execute() method.
-		 * This overrides execute() and implements exception catching and some global properties
-		 * @throws Exception this will be caught in the main execute method
-		 */
-
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-        HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
-            return modePrepare(mapping, form, request, response);
-    }
-
-		/**
-		 * @param mapping object list to be passed to other modes
-		 * @param form the form (if available) to be passed to other modes
-		 * @param request
-		 * @param response
-		 * @return the forward to be passwd to execute() method.
-		 * This is the default mode that will be implemented in the subclass
-		 * @throws Exception this will be caught in the main execute method
-		 */
-
-
-    public abstract ActionForward modePrepare(ActionMapping mapping,
-        ActionForm form, HttpServletRequest request,
-        HttpServletResponse response) throws Exception;
+	 * @param mapping object list to be passed to other modes
+	 * @param form the form (if available) to be passed to other modes
+	 * @param request
+	 * @param response
+	 * @return the forward to be passwd to execute() method.
+	 * This is the default mode that will be implemented in the subclass
+	 * @throws Exception this will be caught in the main execute method
+	 */
+	public abstract ActionForward modePrepare(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception;
 
 	/**
-		 * @param mapping object list to be passed to other modes
-		 * @param form the form (if available) to be passed to other modes
-		 * @param request
-		 * @param response
-		 * @return the forward to be passwd to execute() method.
-		 * This is returned by the current mode, after execution.
-		 * Further mode selection is done within this method implementation.
-		 * @throws Exception this will be caught in the main execute method
-		 */
-
-    public abstract ActionForward modeSelect(ActionMapping mapping,
-        ActionForm form, HttpServletRequest request,
-        HttpServletResponse response) throws Exception;
+	 * @param mapping object list to be passed to other modes
+	 * @param form the form (if available) to be passed to other modes
+	 * @param request
+	 * @param response
+	 * @return the forward to be passwd to execute() method.
+	 * This is returned by the current mode, after execution.
+	 * Further mode selection is done within this method implementation.
+	 * @throws Exception this will be caught in the main execute method
+	 */
+	public abstract ActionForward modeSelect(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception;
 }

@@ -44,6 +44,7 @@ if("On".equals(publicView)) {
 .yuiampmenuitemlabel
 {
 border-right:1px solid white;
+cursor:pointer;
 }
 </style>
 <div class="yuiamp-skin-amp" style="clear:both;">
@@ -241,19 +242,19 @@ border-right:1px solid white;
                   <div class="bd">
                       <ul class="first-of-type">
                     	 <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="border-right:1px solid white;">
                                   My Desktop
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
                                       <ul>
-                                      
-                                      
-										<li class="yuiampmenuitem">
+<!--
+ 										<li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/showDesktop.do">
                                             <digi:trn key="aim:ampdesktop">AMP Desktop</digi:trn>
                                             </a>
                                         </li>
+-->
 <c:if test="${not empty sessionScope.currentMember}">
 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
 		                                        <li class="yuiampmenuitem">
@@ -314,7 +315,7 @@ border-right:1px solid white;
                           </li>
 						<module:display name="REPORTING">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="border-right:1px solid white;">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
@@ -326,11 +327,13 @@ border-right:1px solid white;
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
+<!-- 
 	                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false">
 	                                                <digi:trn key="aim:ReportManager">Report Manager</digi:trn>
 	                                            </a>
 											</li>
+ -->
                                         </feature:display>
 										
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
@@ -353,8 +356,8 @@ border-right:1px solid white;
                           </li>
                           </feature:display>
 						  <feature:display name="Calendar" module="Calendar">
-                          <li class="yuiampmenuitem">
-                              <a class="yuiampmenuitemlabel"  href="#" style="border-right:1px solid white;">
+                          <li class="yuiampmenuitem" style="float:left;">
+                              <a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="border-right:1px solid white;">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
@@ -363,11 +366,6 @@ border-right:1px solid white;
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new">
                                             <digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
-                                            </a>
-                                        </li>
-                                        <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/calendar/showCalendarView.do">
-                                            <digi:trn key="aim:calendar">Calendar</digi:trn>
                                             </a>
                                         </li>
                                       </ul>
@@ -403,7 +401,7 @@ border-right:1px solid white;
                           </li>
 						  <feature:display name="Messages" module="Messaging System">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1" style="border-right:1px solid white;">
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
@@ -414,12 +412,14 @@ border-right:1px solid white;
                                         	<digi:trn key="aim:createmessage">Create Message</digi:trn>
                                         </a>
                                         </li>
+<!-- 
                                         <li class="yuiampmenuitem">
                                         <a class="yuiampmenuitemlabel"  href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
                                         	<digi:trn key="aim:messagemanager">Message Manager</digi:trn>
                                         </a>
                                         </li>
-                                      </ul>
+ -->
+                                       </ul>
                                   </div>
                               </div>                    
                           </li>

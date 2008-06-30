@@ -96,12 +96,17 @@ public class AmpTeamMemberRoles implements Serializable {
 	}
 	
 	/**
-	 * 
 	 * @return the translation key used
 	 */
 	public String getAmpTeamMemberKey () {
-		String asciiName	= CategoryManagerUtil.asciiStringFilter(role);
+		return 
+			getAmpTeamMemberKey( this.role );
+	}
+	
+	public static String getAmpTeamMemberKey ( String roleName ) {
+		String asciiName	= CategoryManagerUtil.asciiStringFilter(roleName);
 		return 
 			"aim:AmpTeamMemeberRoleTrnKey:" + asciiName;
 	}
+
 }

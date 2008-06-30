@@ -123,6 +123,7 @@
 	<page name="teamActivities" title=" - Team Workspace Setup" />
 	<page name="teamMembersAdd" title=" - Team Workspace Setup" />
 	<page name="teamMembers" title=" - Team Workspace Setup" />
+	<page name="teamMemberList" title=" - Team Workspace Info" />
 	<page name="index" title=" - Home" />
 	<page name="changePassword" title=" - Change Password" />
 	<page name="changePasswordSuccess" title=" - Change Password Success" />

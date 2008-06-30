@@ -679,6 +679,7 @@
     </action>
     <action name="aimUpdateWorkspaceForm" path="/aim/workspaceOverview" scope="session" type="org.digijava.module.aim.action.GetWorkspace" validate="false">
       <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
+      <forward name="justList" path="/aim/teamMemberList.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimUpdateWorkspaceForm" path="/aim/createWorkspace" scope="session" type="org.digijava.module.aim.action.GetWorkspace" validate="false">
@@ -753,6 +754,7 @@
     </action>
     <action name="aimTeamMemberForm" path="/aim/teamMemberList" scope="request" type="org.digijava.module.aim.action.GetTeamMembers" validate="false">
       <forward name="forward" path="/showLayout.do?layout=teamMembers" />
+      <forward name="justList" path="/showLayout.do?layout=teamMemberList" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimTeamMemberForm" path="/aim/updateTeamMemberList" scope="request" type="org.digijava.module.aim.action.UpdateTeamMemberList" validate="false">

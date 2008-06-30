@@ -296,7 +296,7 @@ public class AmountCell extends Cell {
 		percentageSourceColumnName.add(source.getName());
 		
 		
-		if(percentageSourceColumnName.contains(ArConstants.COLUMN_SECTOR) && source.getName().equals(ArConstants.COLUMN_SUB_SECTOR))  {
+		if(percentageSourceColumnName.contains(ArConstants.COLUMN_ANY_SECTOR) && source.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
 			//we forget the sector percentage, and apply the sub-sector percentage:
 			this.percentage=percentage;
 			return;

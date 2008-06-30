@@ -53,6 +53,16 @@ a.header_text:hover {
 	text-transform:uppercase;
 	text-decoration:none; 
 }
+a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A.header_title:visited {
+	font-family: Verdana,Tahoma,Arial,sans-serif;
+	color:#D6D6D6;
+	font-size:19px;
+	letter-spacing:2px;
+	text-decoration:none;
+	text-transform:uppercase;
+	font-size:18px;!important
+	letter-spacing:2px;!important
+}
 </style>
 <table cellspacing="0" cellPadding="0" border="0" width="100%" vAlign="top" bgcolor="#27415f">
 	<tbody>

@@ -20,7 +20,6 @@ public class CalendarEventJob implements StatefulJob{
     public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
-        logger.info("Starting Activity Disbursements Dates checker quartz job at "+curDate);
         Date dateAfterDays=AmpDateUtils.getDateBeforeDays(curDate,3);
 
         java.util.Calendar cl=java.util.Calendar.getInstance();
@@ -37,7 +36,6 @@ public class CalendarEventJob implements StatefulJob{
         } catch (DgException e) {
             e.printStackTrace();
         }
-        logger.info("Finnished Activity Disbursements Dates checker quartz job for "+curDate);
     }
 
     public CalendarEventJob() {

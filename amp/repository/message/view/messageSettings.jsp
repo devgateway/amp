@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script langauage="JavaScript">
-	
+
 	function validate(record){
 		if(record==null || record==""){
 			alert('Please enter data to save');
@@ -24,7 +24,7 @@
 		}
 		return true;
 	}
-	
+
 	function saveRecord(settingType) {
 		var record;
 		if(settingType=='refreshTime'){
@@ -38,23 +38,23 @@
 		}else if(settingType=='emailAlerts'){
 			record=document.getElementsByName('emailMsgsNew')[0];
 		}
-		
-		if(validate(record.value)){			
+
+		if(validate(record.value)){
 			 <digi:context name="saveRecord" property="context/module/moduleinstance/msgSettings.do"/>
 			 url = "<%= saveRecord %>?actionType=saveSettings&settingType="+settingType;
 			 messageForm.action =url;
-			 messageForm.submit();		 
+			 messageForm.submit();
 			 return true;
 		}
 	}
-	
+
 	function saveAll(){
 		<digi:context name="saveAll" property="context/module/moduleinstance/msgSettings.do"/>
 		url = "<%= saveAll %>?actionType=saveSettings&settingType=saveAll";
 		messageForm.action =url;
-		messageForm.submit();		 
+		messageForm.submit();
 		return true;
-	}	
+	}
 </script>
 
 
@@ -62,13 +62,13 @@
 		<TR>
 			<TD class=r-dotted-lg-buttom vAlign=top>
 				<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
-						<TR><TD bgColor="#ffffff" class="box-border" align="left"> 
+						<TR><TD bgColor="#ffffff" class="box-border" align="left">
 							<TABLE border="0" cellPadding="1" cellSpacing="1" width="100%">
 								<TR>
 									<TD>
 										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">
 											<tr>
-												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn key="message:msgSettings">Message Settings</digi:trn> </td>								
+												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn key="message:msgSettings">Message Settings</digi:trn> </td>
 											</tr>
 											<tr>
 												<td align="center"><digi:trn key="message:setting">Setting</digi:trn> </td>
@@ -108,13 +108,13 @@
 												<td align="center">
 													<c:if test="${messageForm.emailMsgsCurrent==-1}">
 														&nbsp;
-													</c:if>			
+													</c:if>
 													<c:if test="${messageForm.emailMsgsCurrent==0}">
 														<digi:trn key="message:No">No</digi:trn>
-													</c:if>	
+													</c:if>
 													<c:if test="${messageForm.emailMsgsCurrent==1}">
 														<digi:trn key="message:yes">Yes</digi:trn>
-													</c:if>	
+													</c:if>
 												</td>
 												<td align="center">
 													<html:select property="emailMsgsNew" name="messageForm">
@@ -124,12 +124,12 @@
 													</html:select>
 												</td>
 												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>
-											</tr>																			
+											</tr>
 											<tr>
 												<td colspan="4" align="right">
 													<c:set var="saveAllBtn"><digi:trn key="message:btn:saveAll">Save All</digi:trn></c:set>
 													<input type="button" value="${saveAllBtn}" onclick="saveAll()" />
-												</td>											
+												</td>
 											</tr>
 										</TABLE>
 									</TD>
@@ -189,16 +189,27 @@
 								                                </digi:link>
 															</td>
 														</tr>
+														<tr>
+															<td>
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+																<c:set var="trn">
+								                                  <digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn>
+								                                </c:set>
+								                                <digi:link module="message" href="/quartzJobClassManager.do" title="${trn}">
+								                                  <digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn>
+								                                </digi:link>
+															</td>
+														</tr>
 														<!-- end of other links -->
 													</table>
 												</td>
 											</tr>
 										</table>
 									</td>
-								</TR>													
+								</TR>
 							</TABLE>
-						</TD></TR>												
-				</TABLE>				
+						</TD></TR>
+				</TABLE>
 			</TD>
 		</TR>
 	</TABLE>

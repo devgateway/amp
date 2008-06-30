@@ -9,9 +9,8 @@
 <jsp:include page="utils/closePopup.jsp"/>
 
 
-
 <digi:form action="/assignFieldPermissions.do">
-	<html:hidden property="fieldId" />
+	<html:hidden property="fieldId"  />
 			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
 				<tr>
 					<td colspan="3" width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
@@ -88,7 +87,7 @@
 		</tr>			
 		<tr>
 			<td align="center" colspan="3">
-			<html:submit styleClass="dr-menu" property="save"><digi:trn key="aim:gateperm:save">Save</digi:trn></html:submit>&nbsp;&nbsp;
+			<html:submit styleClass="dr-menu" property="save" onclick="javascript:savePermissions();"><digi:trn key="aim:gateperm:save">Save</digi:trn></html:submit>&nbsp;&nbsp;
 			<html:button property="cancel" styleClass="dr-menu" onclick="javascript:window.close()"><digi:trn key="aim:gateperm:cancel">Cancel</digi:trn></html:button>
 			</td>			
 		</tr>			

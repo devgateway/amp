@@ -261,26 +261,26 @@ border-right:1px solid white;
                                                     <c:set var="trnClickToAddNewActivit">
                                                     <digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
                                                     </c:set>
-                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" title="${trnClickToAddNewActivit}"><digi:trn key="btn:addActivity">Add Activity</digi:trn></a>
+                                                    <a class="yuiampmenuitemlabel" href="javascript:addActivity()" title="${trnClickToAddNewActivit}">
+                                                    <digi:trn key="btn:addActivity">Add Activity</digi:trn>
+                                                    </a>
 												</li>
 </c:if></c:if>
-										<li class="yuiampmenuitem">
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>
                                             <feature:display  name="Tab Generator" module="New Report Wizard">
-		                                      	<li title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
+		                                      	<li class="yuiampmenuitem" title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true">
 		                                                <b><digi:trn key="aim:addTab">Add Tab</digi:trn></b>
 		                                            </a>
 		                                        </li>
-		                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+		                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=true">
 		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
 		                                            </a>
 												</li>
 	                                        </feature:display>
-                                        </li>
                                         <li class="yuiampmenuitem" style="_width:100px">
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>

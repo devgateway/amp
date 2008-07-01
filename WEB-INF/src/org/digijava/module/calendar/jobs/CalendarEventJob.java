@@ -13,6 +13,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.digijava.module.calendar.dbentity.Calendar;
+import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.util.AmpMessageUtil;
 
 public class CalendarEventJob implements StatefulJob{
     private static Logger logger = Logger.getLogger(CalendarEventJob.class);
@@ -20,13 +22,24 @@ public class CalendarEventJob implements StatefulJob{
     public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
-        Date dateAfterDays=AmpDateUtils.getDateBeforeDays(curDate,3);
+        Date dateBeforeDays;
+        try{
+            AmpMessageSettings as=AmpMessageUtil.getMessageSettings();
+            if(as!=null &&
+               as.getDaysForAdvanceAlertsWarnings()!=null &&
+               as.getDaysForAdvanceAlertsWarnings().intValue()>0){
+                dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,as.getDaysForAdvanceAlertsWarnings().intValue());
+            }else{
+                dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,3);
+            }
+        }catch(Exception ex){
+            dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,3);
+        }
 
         java.util.Calendar cl=java.util.Calendar.getInstance();
         cl.setTime(curDate);
 
-
-        List<Calendar> eventList=AmpDbUtil.getAmpCalendarsByStartDate(dateAfterDays);
+        List<Calendar> eventList=AmpDbUtil.getAmpCalendarsByStartDate(dateBeforeDays);
 
         for (Calendar cal: eventList){
             new CalendarEventTrigger(cal);

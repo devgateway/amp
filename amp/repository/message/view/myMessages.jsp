@@ -120,7 +120,7 @@
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+msgsAmount+'New Messages</a>';
+      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+'New Messages</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
 
@@ -128,7 +128,7 @@
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">'+alertsAmount+'New Alerts</a>';
+      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+'New Alerts</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       var tr1=document.createElement('TR');

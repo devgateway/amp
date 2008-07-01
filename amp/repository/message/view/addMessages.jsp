@@ -206,18 +206,25 @@
 								</td>
 							</tr>
 							<tr>
-								<td noWrap vAlign="top" >
-										<table class="contentbox_border" width="100%" cellPadding=3 cellSpacing=0 >
+								<td noWrap vAlign="top">
+                                                                    <table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
+                                                                        <tr>				
+                                                                            <td align="center" style="padding: 0px 3px 0px 3px;">
+                                                                                <table width="100%">
                                                                                     <tr>
-                                                                                        <td colspan="2" style="height: 5px;"/>
+                                                                                        <td  style="height: 5px;"/>
                                                                                     </tr>
                                                                                     <tr>
-                                                                                        <td colspan="2" bgcolor="#CCDBFF">&nbsp;</td>
+                                                                                        <td style="background-color: #CCDBFF;height: 18px;"/>
                                                                                     </tr>
-											<tr>				
-												<td>
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                       
+                                                                                  <tr>				
+                                                                                      <td>
 													<table width="100%" cellspacing="1" cellpadding="0"   valign="top">
-														<tr>
+                                                                                                            <tr>
 															<td valign="top" bgcolor="#f4f4f2" align="center">
 																<table width="100%" cellspacing="0" cellpadding="3" >																				
 																	

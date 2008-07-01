@@ -137,8 +137,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			extractable.add(arc);
 		}
 
-//		extractableCount += ColumnFilterGenerator
-//				.appendFilterRetrievableColumns(extractable, filter);
+		extractableCount += ColumnFilterGenerator
+				.appendFilterRetrievableColumns(extractable, filter);
 
 		if (extractable.size() > 0) {
 			createDataForColumns(extractable);
@@ -492,7 +492,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 	protected void prepareData() {
 
-//		applyPercentagesToFilterColumns();
+		applyPercentagesToFilterColumns();
 		
 		applyExchangeRate();
 

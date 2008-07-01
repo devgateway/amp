@@ -90,7 +90,7 @@
 .contentbox_border{
         border: 1px solid black;
 	border-width: 1px 1px 1px 1px; 
-	background-color: #f4f4f2;
+	background-color: #ffffff;
 }
 
 #statesautocomplete ul {
@@ -206,17 +206,21 @@
 								</td>
 							</tr>
 							<tr>
-								<td noWrap vAlign="top">
-										<table class="contentbox_border">
+								<td noWrap vAlign="top" >
+										<table class="contentbox_border" width="100%" cellPadding=3 cellSpacing=0 >
+                                                                                    <tr>
+                                                                                        <td colspan="2" style="height: 5px;"/>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td colspan="2" bgcolor="#CCDBFF">&nbsp;</td>
+                                                                                    </tr>
 											<tr>				
 												<td>
-													<table width="100%" cellspacing="1" cellpadding="4"  align="left" valign="top">
+													<table width="100%" cellspacing="1" cellpadding="0"   valign="top">
 														<tr>
 															<td valign="top" bgcolor="#f4f4f2" align="center">
-																<table width="100%" cellspacing="1" cellpadding="5" >																				
-																	<tr>
-    	                                                                 <td colspan="2" bgcolor="#CCDBFF">&nbsp;</td>
-																	</tr>
+																<table width="100%" cellspacing="0" cellpadding="3" >																				
+																	
 																	<tr>
 																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
 																		<td align="left"><html:text property="messageName" style="width:485px;" styleClass="inp-text"/></td>
@@ -302,14 +306,14 @@
 																										<c:set var="trnSavetBtn">
 																											<digi:trn key="messages:btn:save">Save</digi:trn>
 																										</c:set> 
-																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" />
+																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" class="dr-menu"/>
 																									</td>
                                                                                                      <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
 																											<digi:trn key="messages:btn:send">Send</digi:trn>
 																										</c:set> 
-																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" />
+																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="dr-menu"/>
 																									</td>
                                                                                                     </c:if>
                                                                                                   <c:if test="${not empty messageForm.forwardedMsg}">
@@ -317,14 +321,14 @@
 																										<c:set var="trnFwdtBtn">
 																											<digi:trn key="messages:btn:fwd">Forward</digi:trn>
 																										</c:set> 
-																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" />
+																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="dr-menu" />
 																									</td>
                                                                                                     </c:if>
 																									<td align="left" width="47%">
 																										<c:set var="trnCancelBtn">
 																											<digi:trn key="message:btn:cancel">Cancel</digi:trn>
 																										</c:set>
-																										<input type="button" value="${trnCancelBtn}" onclick="cancel();">																																							
+																										<input type="button" value="${trnCancelBtn}" onclick="cancel();" class="dr-menu">																																							
 																									</td>
 																								</tr>
 																						</table>
@@ -335,7 +339,7 @@
 																	</tr>
 																</table>
 															</td>
-															<td width="10"/>
+															
 														</tr>
 													</table>
                            						</td>

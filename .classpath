@@ -48,7 +48,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/optional.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/proxool.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/quartz.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/spring.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/standard.jar"/>
@@ -120,5 +119,10 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-contrib-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/axis.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ecs-1.4.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/org.apache.commons.logging_1.0.4.v200706111724.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

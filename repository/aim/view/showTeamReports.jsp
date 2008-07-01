@@ -159,6 +159,9 @@ function confirmFunc() {
                           <jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
                           <c:set target="${urlParamsFirst}" property="page" value="0"/>
                           <c:set target="${urlParamsFirst}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsFirst}" property="tabs" value="true"/>
+                          </c:if>
                           <c:set var="translation">
                             <digi:trn key="aim:firstpage">First Page</digi:trn>
                           </c:set>
@@ -169,6 +172,9 @@ function confirmFunc() {
                           <jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
                           <c:set target="${urlParamsPrevious}" property="page" value="${aimTeamReportsForm.currentPage -1}"/>
                           <c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsPrevious}" property="tabs" value="true"/>
+                          </c:if>
                           | 
                           <c:set var="translation">
 	                          <digi:trn key="aim:previous">Previous</digi:trn>
@@ -188,6 +194,9 @@ function confirmFunc() {
                                 <bean:write name="pageidx"/>
                             </c:if>
                             <c:if test="${(pageidx - 1) ne actualPage}"> 
+	                          <c:if test="${aimTeamReportsForm.showTabs}">
+	                          	<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
+	                          </c:if>
                               <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
                                 <bean:write name="pageidx"/>
                               </digi:link>
@@ -207,6 +216,10 @@ function confirmFunc() {
                           <c:set var="translation">
                             <digi:trn key="aim:nextpage">Next Page</digi:trn>
                           </c:set>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsNext}" property="tabs" value="true"/>
+                          </c:if>
+                          
                           <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
                             <digi:trn key="aim:next">Next</digi:trn>
                           </digi:link>
@@ -214,6 +227,9 @@ function confirmFunc() {
                           <jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
                           <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
                           <c:set target="${urlParamsLast}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsLast}" property="tabs" value="true"/>
+                          </c:if>
                           <c:set var="translation">
                             <digi:trn key="aim:lastpage">Last Page</digi:trn>
                           </c:set>
@@ -450,7 +466,12 @@ function confirmFunc() {
 	                                <logic:equal name="teamLeadFlag" scope="session" value="true"> 
 	                                  <module:display name="New Report Wizard" parentModule="REPORTING">
                                       	<c:set var="translation">
-                                        <digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
+	                                      	<c:if test="${aimTeamReportsForm.showTabs}">
+		                                        <digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
+	                                      	</c:if>
+	                                      	<c:if test="${!aimTeamReportsForm.showTabs}">
+	    	                                    <digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
+	                                      	</c:if>
                                         </c:set>
 	                                    <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
 	                                      <img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
@@ -458,7 +479,12 @@ function confirmFunc() {
 	                                  </module:display>
                                       &nbsp;
                                       <c:set var="translation">
-                                          <digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+                                      	<c:if test="${aimTeamReportsForm.showTabs}">
+	                                        <digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+                                      	</c:if>
+                                      	<c:if test="${!aimTeamReportsForm.showTabs}">
+	                                        <digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+                                      	</c:if>
                                        </c:set>
                                       <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
 										<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
@@ -501,6 +527,9 @@ function confirmFunc() {
                         <c:if test="${aimTeamReportsForm.currentPage >0}">
                           <c:set target="${urlParamsFirst}" property="page" value="0"/>
                           <c:set target="${urlParamsFirst}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsFirst}" property="tabs" value="true"/>
+                          </c:if>
                           <c:set var="translation">
                             <digi:trn key="aim:firstpage">First Page</digi:trn>
                           </c:set>
@@ -510,6 +539,10 @@ function confirmFunc() {
                           
                           <c:set target="${urlParamsPrevious}" property="page" value="${aimTeamReportsForm.currentPage -1}"/>
                           <c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsPrevious}" property="tabs" value="true"/>
+                          </c:if>
+
                           | 
                           <c:set var="translation">
 	                          <digi:trn key="aim:previous">Previous</digi:trn>
@@ -529,6 +562,9 @@ function confirmFunc() {
                                 <bean:write name="pageidx"/>
                             </c:if>
                             <c:if test="${(pageidx - 1) ne actualPage}"> 
+	                          <c:if test="${aimTeamReportsForm.showTabs}">
+	                          	<c:set target="${urlParamsPagination}" property="tabs" value="true"/>
+	                          </c:if>
                               <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
                                 <bean:write name="pageidx"/>
                               </digi:link>
@@ -542,6 +578,9 @@ function confirmFunc() {
                           <c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
                             <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
                           </c:if>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsNext}" property="tabs" value="true"/>
+                          </c:if>
                           
                          <c:set target="${urlParamsNext}" property="action" value="getPage"/>
                           <c:set var="translation">
@@ -553,6 +592,9 @@ function confirmFunc() {
                           |
                           <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
                           <c:set target="${urlParamsLast}" property="action" value="getPage"/>
+                          <c:if test="${aimTeamReportsForm.showTabs}">
+                          	<c:set target="${urlParamsLast}" property="tabs" value="true"/>
+                          </c:if>
                           <c:set var="translation">
                             <digi:trn key="aim:lastpage">Last Page</digi:trn>
                           </c:set>
@@ -568,25 +610,41 @@ function confirmFunc() {
               </td></tr>
             </table>
           
-                                                                      <TABLE width="750px">
-                                                            <TR>
-                                                                <TD COLSPAN="2">
-                                                                <strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>
-                                                            </TD>
-                                                            </TR>
-                                                            <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
-                                                                    <br />
-                                                            </TD>
-                                                            </TR>
-                                                             <TR>
-                                                                <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
-                                                                    <digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
-                                                                    <br />
-                                                            </TD>
-                                                            </TR>
-                                                        </TABLE>
+            <TABLE width="750px">
+               <TR>
+                   <TD COLSPAN="2">
+                   <strong><digi:trn key="aim:IconReference">Icons Reference</digi:trn></strong>
+               </TD>
+               </TR>
+<c:if test="${!aimTeamReportsForm.showTabs}">
+               <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn key="aim:ClickEditReport">Click on this icon to edit report&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+                <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+</c:if>
+<c:if test="${aimTeamReportsForm.showTabs}">
+               <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+                <TR>
+                   <TD nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                       <digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+                       <br />
+               </TD>
+               </TR>
+</c:if>
+           </TABLE>
 
           </td>
         </tr>

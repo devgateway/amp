@@ -14,6 +14,7 @@
 	  <form-bean name="gisIndicatorChartForm" type="org.digijava.module.gis.form.AdminIndicatorChartsForm"/>
 	  <form-bean name="gisWidgetTeaserForm" type="org.digijava.module.gis.form.WidgetTeaserForm"/>
 	  <form-bean name="gisWidgetChartForm" type="org.digijava.module.gis.form.ShowWidgetChartForm"/>
+	  <form-bean name="gisSectorByDonorTeaserForm" type="org.digijava.module.gis.form.SectorByDonorTeaserForm"/>
 	  
 	</form-beans>
 	
@@ -87,10 +88,15 @@
 		  <action name="gisWidgetChartForm" parameter="actType"
 		   path="/gis/widgetchart" scope="request"
 		   type="org.digijava.module.gis.action.ShowWidgetChart" validate="false"/>
+
+		  <action name="gisSectorByDonorTeaserForm" parameter="actType"
+		   path="/gis/showSectorByDonorChart" scope="request"
+		   type="org.digijava.module.gis.action.ShowSectorByDonorChart" validate="false"/>
 		
 		<!-- Teasers below this -->
 		<action name="gisTableWidgetTeaserForm" path="/gis/tableWidgetTeaser" type="org.digijava.module.gis.action.TableWidgetTeaser"/>
 		<action name="gisWidgetTeaserForm" path="/gis/widgetTeaser" type="org.digijava.module.gis.action.WidgetTeaser"/>
+		<action name="gisSectorByDonorTeaserForm" path="/gis/sectorByDonorTeaser" type="org.digijava.module.gis.action.SectorsByDonorTeaser"/>
 		<action name="gisDashboardForm" path="/gis/dashboardMapTeaser" type="org.digijava.module.gis.action.DashboardMapTeaser"/>
 	</action-mappings>
 </struts-config>

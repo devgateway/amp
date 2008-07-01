@@ -57,7 +57,7 @@
 											<digi:insert attribute="body" />
 										</TD>
 										<td valign="top">
-											Pie Chart											
+											<digi:insert attribute="pieChart"/>											
 										</td>										
 									</TR>
 									<tr>

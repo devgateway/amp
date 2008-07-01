@@ -27,6 +27,7 @@
 	<module>
 		<teaser name="gisMap" action="dashboardMapTeaser.do">showVerticalNavigation.jsp</teaser>			
 		<teaser name="teaserTableWidget" action="tableWidgetTeaser.do">tableTeaser.jsp</teaser>
+		<teaser name="teaserOfSectorByDonor" action="sectorByDonorTeaser.do">teaserSectorByDonor.jsp</teaser>
 		<teaser name="teaserOfWidget" action="widgetTeaser.do">widgetTeaser.jsp</teaser>
 	</module>
 	

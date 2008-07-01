@@ -156,7 +156,7 @@ div.fakefile2 input{
 			        <li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Publicy Resources</digi:trn></div></a></li>
 			        <li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:teamMemberResources">Team Member Resources</digi:trn></div></a></li>
 			    </ul>            
-			    <div class="yui-content" style="background-color: #EEEEEE">
+			    <div class="yui-content" style="background-color: #EEEEEE;border-color: rgb(0, 102, 153);border-left: thin solid rgb(0, 102, 153); border-right: thin solid rgb(0, 102, 153); border-bottom: thin solid rgb(0, 102, 153);">
 			        <div id="my_res">
 			        <div>
 			        	<button type="button" class="dr-menu" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
@@ -189,8 +189,7 @@ div.fakefile2 input{
 <!--								</td>-->
 <!--							</tr>-->
 							<tr style="display: table-row" id="myDocumentstr">
-								<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
-									border-bottom-style: solid; border-bottom-width: thin; border-right-style: solid; border-right-width: thin; ">
+								<td colspan="3">
 									<logic:notEmpty name="crDocumentManagerForm" property="myPersonalDocuments">
 									<br />
 									<div id="my_markup" align="center" class="all_markup">

@@ -494,74 +494,77 @@ function confirmFunc() {
                 </td>
               </tr>
               <tr><td valign="top">
-                  <table height="20" ><tr><td>  
-                    <c:set target="${urlParamsPagination}" property="action" value="getPage"/>
-                    <digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
-                    <c:if test="${aimTeamReportsForm.currentPage >0}">
-                      
-                      <c:set target="${urlParamsFirst}" property="page" value="0"/>
-                      <c:set target="${urlParamsFirst}" property="action" value="getPage"/>
-                      <c:set var="translation">
-                        <digi:trn key="aim:firstpage">First Page</digi:trn>
-                      </c:set>
-                      <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
-                        &lt;&lt;
-                      </digi:link>
-                      
-                      
-                      <c:set target="${urlParamsPrevious}" property="page" value="${aimTeamReportsForm.currentPage -1}"/>
-                      <c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
-                      <c:set var="translation">
-                        <digi:trn key="aim:previouspage">Previous Page</digi:trn>
-                      </c:set>
-                      <digi:link href="/viewTeamReports.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
-                        &lt;
-                      </digi:link>
-                    </c:if>
-                    
-                    <c:set var="length" value="${aimTeamReportsForm.pagesToShow}"></c:set>
-                    <c:set var="start" value="${aimTeamReportsForm.offset}"/>
-                    
-                    <logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
-                      <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
-                        <c:if test="${(pageidx - 1) eq actualPage}"> 
-                            <bean:write name="pageidx"/>
-                        </c:if>
-                        <c:if test="${(pageidx - 1) ne actualPage}"> 
-                          <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
-                            <bean:write name="pageidx"/>
+                  <table cellpadding="3" cellspacing="3" border="0" width="100%" height="20">
+                    <tr>
+                      <td>                                     
+                        <c:set target="${urlParamsPagination}" property="action" value="getPage"/>
+                        <c:if test="${aimTeamReportsForm.currentPage >0}">
+                          <c:set target="${urlParamsFirst}" property="page" value="0"/>
+                          <c:set target="${urlParamsFirst}" property="action" value="getPage"/>
+                          <c:set var="translation">
+                            <digi:trn key="aim:firstpage">First Page</digi:trn>
+                          </c:set>
+                          <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+                            &lt;&lt;
                           </digi:link>
+                          
+                          <c:set target="${urlParamsPrevious}" property="page" value="${aimTeamReportsForm.currentPage -1}"/>
+                          <c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
+                          | 
+                          <c:set var="translation">
+	                          <digi:trn key="aim:previous">Previous</digi:trn>
+                          </c:set>
+                          <digi:link href="/viewTeamReports.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+                            <digi:trn key="aim:previous">Previous</digi:trn>
+                          </digi:link>
+                          | 
                         </c:if>
-                      <c:if test="${pageidx < maxpages}"> | </c:if>
-                    </logic:iterate>
-                    <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
-                        <c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
-                           <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>
+                        
+                        <c:set var="length" value="${aimTeamReportsForm.pagesToShow}"></c:set>
+                        <c:set var="start" value="${aimTeamReportsForm.offset}"/>
+                        
+                        <logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
+                          <c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>                         
+                            <c:if test="${(pageidx - 1) eq actualPage}"> 
+                                <bean:write name="pageidx"/>
+                            </c:if>
+                            <c:if test="${(pageidx - 1) ne actualPage}"> 
+                              <digi:link href="/viewTeamReports.do"  name="urlParamsPagination" >
+                                <bean:write name="pageidx"/>
+                              </digi:link>
+                            </c:if>
+                          <c:if test="${pageidx < maxpages}"> | </c:if>
+                        </logic:iterate>
+                        <c:if test="${aimTeamReportsForm.currentPage+1 != aimTeamReportsForm.totalPages}">
+                          <c:if test="${aimTeamReportsForm.currentPage+1 > aimTeamReportsForm.totalPages}">
+                            <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage}"/>
+                          </c:if>
+                          <c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
+                            <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
+                          </c:if>
+                          
+                         <c:set target="${urlParamsNext}" property="action" value="getPage"/>
+                          <c:set var="translation">
+                            <digi:trn key="aim:nextpage">Next Page</digi:trn>
+                          </c:set>
+                          <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+                            <digi:trn key="aim:next">Next</digi:trn>
+                          </digi:link>
+                          |
+                          <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
+                          <c:set target="${urlParamsLast}" property="action" value="getPage"/>
+                          <c:set var="translation">
+                            <digi:trn key="aim:lastpage">Last Page</digi:trn>
+                          </c:set>
+                          <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+                            &gt;&gt; 
+                          </digi:link>
+                          &nbsp;&nbsp; 
                         </c:if>
-                        <c:if test="${aimTeamReportsForm.currentPage+1 <= aimTeamReportsForm.totalPages}">
-                           <c:set target="${urlParamsNext}" property="page" value="${aimTeamReportsForm.currentPage+1}"/>
-                        </c:if>
-
-                      <c:set target="${urlParamsNext}" property="action" value="getPage"/>
-                      <c:set var="translation">
-                        <digi:trn key="aim:nextpage">Next Page</digi:trn>
-                      </c:set>
-                      <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
-                        &gt;
-                      </digi:link>
-                      <c:set target="${urlParamsLast}" property="page" value="${aimTeamReportsForm.totalPages-1}"/>
-                      <c:set target="${urlParamsLast}" property="action" value="getPage"/>
-                      <c:set var="translation">
-                        <digi:trn key="aim:lastpage">Last Page</digi:trn>
-                      </c:set>
-                      <digi:link href="/viewTeamReports.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
-                        &gt;&gt; 
-                      </digi:link>
-                      &nbsp;&nbsp; 
-                    </c:if>
-                    <c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>
-                  </td></tr>
-                  </table>              
+                        <c:out value="${aimTeamReportsForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimTeamReportsForm.totalPages}"></c:out>
+                      </td>
+                    </tr>
+                  </table>
               </td></tr>
             </table>
           

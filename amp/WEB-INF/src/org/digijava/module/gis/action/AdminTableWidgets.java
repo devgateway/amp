@@ -206,15 +206,17 @@ public class AdminTableWidgets extends DispatchAction {
 				col.setId(null);
 			}
 		}
+		//save widget
+		TableWidgetUtil.saveOrUpdateWidget(dbWidget);
 		
 		//assign to the place if selected.
 		if (wForm.getSelPlaces()!=null && wForm.getSelPlaces().length>0){
 			newPlaces = WidgetUtil.getPlacesWithIDs(wForm.getSelPlaces());
-			if (newPlaces!=null && newPlaces.size()>0){
+			if (newPlaces!=null && newPlaces.size()>0 && oldPlaces!=null && oldPlaces.size()>0){
 				Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
-				WidgetUtil.updatePlacesWithWidget(oldPlaces, dbWidget);
 				WidgetUtil.updatePlacesWithWidget(deleted, null);
-			}else{
+				WidgetUtil.updatePlacesWithWidget(oldPlaces, dbWidget);
+			}else if((oldPlaces==null || oldPlaces.size()>0) && newPlaces!=null && newPlaces.size()>0){
 				WidgetUtil.updatePlacesWithWidget(newPlaces, dbWidget);
 			}
 		}
@@ -231,7 +233,6 @@ public class AdminTableWidgets extends DispatchAction {
 //		}
  		
 		//save or update widget with columns.
-		TableWidgetUtil.saveOrUpdateWidget(dbWidget);
 		
 		stopEditing(request);
 		

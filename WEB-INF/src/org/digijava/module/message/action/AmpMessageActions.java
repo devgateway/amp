@@ -70,9 +70,10 @@ public class AmpMessageActions extends DispatchAction {
     * user clicked cancel on view Messages page   
     */ 
     public ActionForward cancelMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {    	
-    	AmpMessageForm alertsForm=(AmpMessageForm)form;
-    	setDefaultValues(alertsForm);
-    	return mapping.findForward("viewMyDesktop");
+    	//AmpMessageForm alertsForm=(AmpMessageForm)form;
+    	//setDefaultValues(alertsForm);
+        return mapping.findForward("showAllMessages");
+    	
     }
     
     public ActionForward gotoMessagesPage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -464,13 +465,13 @@ public class AmpMessageActions extends DispatchAction {
     		if(messageForm.getSetAsAlert()==0){
     			message=new UserMessage();
     		}else {
-    			message=new AmpAlert();    			
+    			message=new AmpAlert(); 
     		}    		    		
     	}else {
     		if(messageForm.getSetAsAlert()==0){
     			message=new UserMessage();
     		}else {    			
-    			message=new AmpAlert();     			
+    			message=new AmpAlert();  
     		}
     		//remove all States that were associated to this message
 			List<AmpMessageState> statesAssociatedWithMsg=AmpMessageUtil.loadMessageStates(messageForm.getMessageId());
@@ -479,7 +480,13 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			//remove message
 			AmpMessageUtil.removeMessage(messageForm.getMessageId());
-    	}    	
+    	}
+        if(message instanceof AmpAlert){
+             messageForm.setTabIndex(2); // to navigate to the Alert Tab
+        }
+        else{
+             messageForm.setTabIndex(1);// to navigate to the Message Tab
+        }
     	message.setName(messageForm.getMessageName());
     	message.setDescription(messageForm.getDescription());
     	message.setMessageType(messageForm.getMessageType());  
@@ -591,11 +598,14 @@ public class AmpMessageActions extends DispatchAction {
 		
     	//cleaning form values
     	setDefaultValues(messageForm);
-//    	if(request.getParameter("toDo").equals("draft")){
-//    		return mapping.findForward("showAllMessages");
-//		}
+   	    if (request.getParameter("toDo")!=null&&request.getParameter("toDo").equals("draft")) {
+              //  messageForm.setChildTab("draft");
+            return mapping.findForward("showAllMessages");
+        }
+            else{
     	
-		return mapping.findForward("viewMyDesktop");		
+		return mapping.findForward("viewMyDesktop");
+            }
 	}   
     
     

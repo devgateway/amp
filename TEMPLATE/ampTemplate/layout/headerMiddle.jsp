@@ -401,7 +401,7 @@ border-right:1px solid white;
                           </li>
 						  <feature:display name="Messages" module="Messaging System">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox" style="border-right:1px solid white;">
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">

@@ -77,11 +77,7 @@ public class GetDesktopReports extends TilesAction {
                 /* Setting Team Members tabs */
                 AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(tm.getMemberId());
                 Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
-                if ( ampTeamMember.getDesktopTabSelections()==null || ampTeamMember.getDesktopTabSelections().size()==0 ) {
-                	if ( defaultTeamReport != null )
-                		tabs.add( defaultTeamReport );
-                }
-                else {
+                if ( ampTeamMember.getDesktopTabSelections()!=null && ampTeamMember.getDesktopTabSelections().size() > 0 ) {
                 		TreeSet<AmpDesktopTabSelection> sortedSelection	= 
                 			new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator);
                 		sortedSelection.addAll( ampTeamMember.getDesktopTabSelections() );
@@ -90,6 +86,8 @@ public class GetDesktopReports extends TilesAction {
                 			tabs.add( iter.next().getReport() );
                 		}
                 }
+                if ( defaultTeamReport != null )
+            		tabs.add( defaultTeamReport );
                 session.setAttribute( Constants.MY_TABS , tabs);
 
 				/* Setting default_team_report in session */

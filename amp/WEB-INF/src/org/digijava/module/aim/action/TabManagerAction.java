@@ -189,18 +189,17 @@ public class TabManagerAction extends Action {
 			}
 		}
 		Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
-		if ( selection.size() == 0 ) {
-			AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
-			AmpReports defaultTeamReport 			= ampAppSettings.getDefaultTeamReport();
-			if ( defaultTeamReport != null )
-				tabs.add( defaultTeamReport );
-		}
-		else{
+		
+		if ( selection.size() > 0 ){
 			Iterator<AmpDesktopTabSelection> iter	= selection.iterator();
 			while ( iter.hasNext() ) {
 				tabs.add( iter.next().getReport() );
 			}
 		}
+		AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
+		AmpReports defaultTeamReport 			= ampAppSettings.getDefaultTeamReport();
+		if ( defaultTeamReport != null )
+			tabs.add( defaultTeamReport );
 		request.getSession().setAttribute(Constants.MY_TABS, tabs);	
 		
 		return mapping.findForward( "forward" );

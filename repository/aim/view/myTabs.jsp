@@ -84,9 +84,9 @@ function toggleSettings(){
 	
 	var tabName	= "Tab-By Project";
 	<logic:empty name="filterCurrentReport" scope="session">
-	<logic:notEmpty name="defaultTeamReport" scope="session">
-			tabName	= 'Tab-<bean:write name="defaultTeamReport" scope="session" property="name"/>';
-	</logic:notEmpty>
+		<logic:notEmpty name="myTabs" scope="session">
+				tabName	= 'Tab-${myTabs[0].name}';
+		</logic:notEmpty>
 	</logic:empty>
 	<logic:notEmpty name="filterCurrentReport" scope="session">
 		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';

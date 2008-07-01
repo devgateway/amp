@@ -170,9 +170,9 @@ div.fakefile2 input{
 
 			        </p>
 			        <p>
-						  <table border="0" cellPadding=5 cellSpacing=0 width="95%"
+						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"
 							style="position: relative; left: 20px">
-							<tr><td></td>
+<!--							<tr><td></td>-->
 <!--								<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" -->
 <!--								width="13" height="20"> </td>-->
 <!--								<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">-->
@@ -187,7 +187,7 @@ div.fakefile2 input{
 <!--								<td background="/repository/contentrepository/view/images/right-side.gif" width="13" height="20" -->
 <!--								style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> -->
 <!--								</td>-->
-							</tr>
+<!--							</tr>-->
 							<tr style="display: table-row" id="myDocumentstr">
 								<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
 									border-bottom-style: solid; border-bottom-width: thin; border-right-style: solid; border-right-width: thin; ">
@@ -198,8 +198,8 @@ div.fakefile2 input{
 									<jsp:include page="documentTable.jsp" flush="true" />
 									</div>
 									<br />
-								</logic:notEmpty>
-				</td>
+									</logic:notEmpty>
+								</td>
 							</tr>
 						</table>
 
@@ -222,9 +222,9 @@ div.fakefile2 input{
 		        
 			        </p>
 			        <p>
-					<table border="0" cellPadding=5 cellSpacing=0 width="100%"
+					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 						style="position: relative; left: 20px" >
-						<tr><td></td>
+<!--						<tr><td></td>-->
 <!--							<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" -->
 <!--							width="13" height="20"> </td>-->
 <!--							<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">-->
@@ -237,10 +237,9 @@ div.fakefile2 input{
 <!--								<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>				</td>-->
 <!--							<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" -->
 <!--							width="13" height="20"> </td>-->
-						</tr>
+<!--						</tr>-->
 						<tr style="display: table-row" id="teamDocumentstr">
-							<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
-								border-bottom-style: solid; border-bottom-width: thin; border-right-style: solid; border-right-width: thin; ">
+							<td colspan="3">
 								<logic:notEmpty name="crDocumentManagerForm" property="myTeamDocuments">
 								<br />
 								<div id="team_markup" align="center" class="all_markup">

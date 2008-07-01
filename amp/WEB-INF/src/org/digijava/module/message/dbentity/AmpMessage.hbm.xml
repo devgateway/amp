@@ -11,7 +11,7 @@
 
 		<discriminator column="message_clazz"/>
 
-		<property name="name" column="name" type="java.lang.String"/>
+		<property name="name" column="name" type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="description" column="description" type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="priorityLevel" column="priority_level" type="java.lang.Long"/>
 		<property name="messageType" column="message_type"  type="java.lang.Long"/>

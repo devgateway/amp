@@ -156,38 +156,24 @@ div.fakefile2 input{
 			        <li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Publicy Resources</digi:trn></div></a></li>
 			        <li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:teamMemberResources">Team Member Resources</digi:trn></div></a></li>
 			    </ul>            
-			    <div class="yui-content" style="background-color: #EEEEEE;border-color: rgb(0, 102, 153);border-left: thin solid rgb(0, 102, 153); border-right: thin solid rgb(0, 102, 153); border-bottom: thin solid rgb(0, 102, 153);">
-			        <div id="my_res">
+			    <div class="yui-content" style="background-color: #EEEEEE;">
+			        <div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
 			        <div>
+			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
+			        <tr>
+			        <td>
 			        	<button type="button" class="dr-menu" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 					  		<digi:trn key="contentrepository:addResource">
 					 	    	       Add Resource ...    				
 					  		</digi:trn>            
 				    	</button>
+				    <tr>
+				    <td>	
+				    </table>				    	
 			        </div>
-			        <p>		
-			        <jsp:include page="iconReferences.jsp"/>	        
-
-			        </p>
-			        <p>
+			        <jsp:include page="iconReferences.jsp"/>
 						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"
 							style="position: relative; left: 20px">
-<!--							<tr><td></td>-->
-<!--								<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" -->
-<!--								width="13" height="20"> </td>-->
-<!--								<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">-->
-<!--								<a style="cursor:pointer"  onclick="isMinusPrivate=toggleView('myDocumentstr', 'clipIcon', isMinusPrivate)">-->
-<!--								<img-->
-<!--									border="0" align="absmiddle"-->
-<!--									src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIcon" />-->
-<!--								<digi:img skipBody="true" height="16" border="0" align="absmiddle"	src="module/contentrepository/images/folder_folder.gif" />-->
-<!--								</a>-->
-<!--									<digi:trn key="contentrepository:documentManagerMyDocuments">My Documents</digi:trn>				-->
-<!--								</td>-->
-<!--								<td background="/repository/contentrepository/view/images/right-side.gif" width="13" height="20" -->
-<!--								style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> -->
-<!--								</td>-->
-<!--							</tr>-->
 							<tr style="display: table-row" id="myDocumentstr">
 								<td colspan="3">
 									<logic:notEmpty name="crDocumentManagerForm" property="myPersonalDocuments">
@@ -201,13 +187,14 @@ div.fakefile2 input{
 								</td>
 							</tr>
 						</table>
-
-					</p>
 					</div>
 
-			        <div id="team_res">
+			        <div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
+
 			        <div>
-			        <div>
+			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
+			        	<tr>
+			        	<td>
 						<c:if test="${isTeamLeader}">
 							<button class="dr-menu" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
                             	<digi:trn key="contentrepository:addResource">
@@ -215,28 +202,13 @@ div.fakefile2 input{
 	 	    	       			</digi:trn>            
 							</button>
 						</c:if>
+						</td>
+						</tr>
+					</table>	
 			        </div>
-			        <p>
-			        <jsp:include page="iconReferences.jsp"/>
-		        
-			        </p>
-			        <p>
+			        <jsp:include page="iconReferences.jsp"/>		        
 					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 						style="position: relative; left: 20px" >
-<!--						<tr><td></td>-->
-<!--							<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" -->
-<!--							width="13" height="20"> </td>-->
-<!--							<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">-->
-<!--							<a style="cursor:pointer"  onclick="isMinusTeam=toggleView('teamDocumentstr', 'clipIconTD', isMinusTeam)">-->
-<!--							<img-->
-<!--								border="0" align="absmiddle"-->
-<!--								src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIconTD" />-->
-<!--							<digi:img skipBody="true" height="16" border="0" align="absmiddle" src="module/contentrepository/images/folder_folder.gif" />-->
-<!--							</a>-->
-<!--								<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>				</td>-->
-<!--							<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" -->
-<!--							width="13" height="20"> </td>-->
-<!--						</tr>-->
 						<tr style="display: table-row" id="teamDocumentstr">
 							<td colspan="3">
 								<logic:notEmpty name="crDocumentManagerForm" property="myTeamDocuments">
@@ -250,19 +222,16 @@ div.fakefile2 input{
 							</td>
 						</tr>
 					</table>
-			        
-			        </p>
 			        </div>
-			        </div>
-			        <div id="public_res">
-			        <div>
-						<c:set var="translation">
-							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
-						</c:set>			        
-                		<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'publicDocumentsDiv')" />
-			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>
-			            </a>	
-			        </div>    		        
+			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
+<!--			        <div>-->
+<!--						<c:set var="translation">-->
+<!--							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>-->
+<!--						</c:set>			        -->
+<!--                		<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'publicDocumentsDiv')" />-->
+<!--			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>-->
+<!--			            </a>	-->
+<!--			        </div>    		        -->
 			        
 			        <div>
 			        <jsp:include page="iconReferences.jsp"/>
@@ -331,20 +300,20 @@ div.fakefile2 input{
 						</digi:form>
 						</div>			        
 				    </div>
+				    <br/>
 					<div id="publicDocumentsDiv">
 					</div>
 			        
 			        </div>
-			        <div id="team_mem_res">
-			        <div>
-						<c:set var="translation">
-							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
-						</c:set>			        
-                		<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />
-			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>
-			            </a>	
-			        </div>    		        
-			        
+			        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
+<!--			        <div>-->
+<!--						<c:set var="translation">-->
+<!--							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>-->
+<!--						</c:set>			        -->
+<!--                		<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />-->
+<!--			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>-->
+<!--			            </a>	-->
+<!--			        </div>    		        -->
 			        <div>
 			        <jsp:include page="iconReferences.jsp"/>
 			        </div>
@@ -412,6 +381,7 @@ div.fakefile2 input{
 						</digi:form>
 						</div>			        
 				    </div>
+				    <br/>
 					<div id="otherDocumentsDiv">
 					</div>
 			    </div>
@@ -424,7 +394,7 @@ div.fakefile2 input{
       </td>
 	</tr>
 </table>
-
+<br/>
 
 	
 <%@include file="documentManagerDivHelper.jsp" %>
@@ -437,3 +407,13 @@ YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 <script type="text/javascript">
 	initFileUploads();
 </script>
+<script type="text/javascript">
+	function afterPageLoad(e) {
+		windowController	= newWindow( 'Public Resources', false, 'publicDocumentsDiv');
+		windowController.populateWithPublicDocs();
+		windowController	= newWindow( 'Team Member Resources', true, 'otherDocumentsDiv');
+		windowController.populateWithPublicDocs();
+		
+	}
+	YAHOO.util.Event.on(window, "load", afterPageLoad); 
+</script>	

@@ -172,7 +172,52 @@ public class AmpDbUtil {
     }
   }
 
-  public static List<Calendar> getAmpCalendarsByStartDate(Date startDate) {
+  public static List<AmpCalendar> getAmpCalendarsByStartDate(Date startDate) {
+      if (startDate == null) {
+          return null;
+      }
+      try {
+          Session session = PersistenceManager.getRequestDBSession();
+
+          List<AmpCalendar> ampCalLst = new ArrayList<AmpCalendar> ();
+
+          List<Calendar> clst = getCalendarsByStartDate(startDate);
+          for (Calendar cal : clst) {
+              AmpCalendarPK ampCalendarPK = new AmpCalendarPK(cal);
+              AmpCalendar ampCalendar = (AmpCalendar) session.load(AmpCalendar.class, ampCalendarPK);
+              ampCalLst.add(ampCalendar);
+          }
+          return ampCalLst;
+      } catch (Exception e) {
+          logger.debug("Unable to get AmpCalendars by Start Date", e);
+          return null;
+      }
+  }
+
+  public static List<AmpCalendar> getAmpCalendarsByEndDate(Date endDate) {
+      if (endDate == null) {
+          return null;
+      }
+      try {
+          Session session = PersistenceManager.getRequestDBSession();
+
+          List<AmpCalendar> ampCalLst = new ArrayList<AmpCalendar> ();
+
+          List<Calendar> clst = getCalendarsByEndDate(endDate);
+          for (Calendar cal : clst) {
+              AmpCalendarPK ampCalendarPK = new AmpCalendarPK(cal);
+              AmpCalendar ampCalendar = (AmpCalendar) session.load(AmpCalendar.class, ampCalendarPK);
+              ampCalLst.add(ampCalendar);
+          }
+          return ampCalLst;
+      } catch (Exception e) {
+          logger.debug("Unable to get Calendars by Start Date", e);
+          return null;
+      }
+  }
+
+
+  public static List<Calendar> getCalendarsByStartDate(Date startDate) {
     if(startDate == null) {
       return null;
     }
@@ -191,7 +236,7 @@ public class AmpDbUtil {
     }
   }
 
-  public static List<Calendar> getAmpCalendarsByEndDate(Date endDate) {
+  public static List<Calendar> getCalendarsByEndDate(Date endDate) {
     if(endDate == null) {
       return null;
     }

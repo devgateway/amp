@@ -312,7 +312,7 @@ public class TeamMemberUtil {
                           if(teamId!=null){
                               queryString+="  where (tm.ampTeam=:teamId)";
                           }
-					
+
 			qry = session.createQuery(queryString);
                         if(teamId!=null){
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
@@ -389,7 +389,7 @@ public class TeamMemberUtil {
         logger.debug("returning members");
         return users;
 	}
-    
+
 	public static Collection getAllMembersUsingActivity(Long activityId) {
 		Session session = null;
 		Collection col = null;
@@ -1520,7 +1520,7 @@ public class TeamMemberUtil {
 		return members;
 	}
 
-	
+
 	public static void updateAppSettingDefReport(Long memId) {
 		Session session = null;
 		Transaction tx = null;
@@ -1528,11 +1528,11 @@ public class TeamMemberUtil {
 		try {
 				session = PersistenceManager.getSession();
 				tx = session.beginTransaction();
-	
+
 				String queryString = "select app from "
 					+ AmpApplicationSettings.class.getName()
 					+ " app where (app.member=:memId)";
-	
+
 				Query qry = session.createQuery(queryString);
 				qry.setParameter("memId", memId, Hibernate.LONG);
 				Iterator itr = qry.list().iterator();
@@ -1734,6 +1734,14 @@ public class TeamMemberUtil {
 
             return teamMembers;
 
+        }
+
+        public static List<AmpTeamMember> getAmpTeamMembersbyDgUser(User user) {
+            try {
+                return getAmpTeamMembersbyDgUserId(user.getId());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     private static void removeLinksFromATMToActivity (Collection activities, AmpTeamMember atm) {

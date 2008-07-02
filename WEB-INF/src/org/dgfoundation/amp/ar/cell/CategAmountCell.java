@@ -136,6 +136,10 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	
 public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret) {
+	//NEVER apply this for regional reports with regional metaCell:
+	if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType().equals(ArConstants.REGIONAL_TYPE))
+		return;
+	
 	if(metaCell.getColumn().getName().equals(columnName) && !metaCell.getValue().equals(ArConstants.UNALLOCATED)) {
 		//we need to get the percentage, it is stored in the MetaText of related to the owner of the current cell
 		CellColumn c=(CellColumn) metaCell.getColumn();

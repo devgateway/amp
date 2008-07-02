@@ -268,6 +268,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 				// iterate all funding columns and apply them:
 				fakeMc.setColumn(c);
+				//NEVER apply this for regional reports with regional metaCell:
+				if(fakeMc.getColumn().getName().equals(ArConstants.REGION) && reportMetadata.getType().equals(ArConstants.REGIONAL_TYPE))
+					continue;
 				Iterator<String> metaValuesIt = cellValues.iterator();
 				while (metaValuesIt.hasNext()) {
 					String value = (String) metaValuesIt.next();

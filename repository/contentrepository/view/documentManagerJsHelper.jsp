@@ -676,7 +676,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu})   );
 	</logic:notEmpty>
 	
-	<logic:notEmpty name="meTeamMember">
+	/*<logic:notEmpty name="meTeamMember">
 		var scopeObj	= {
 			teamId				: '<bean:write name="meTeamMember" property="teamId" />'
 		};
@@ -723,7 +723,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	optionsMenu.addItem( showLinkItem );
 	
 	menu.addItem(  new YAHOO.widget.MenuItem("${trans_options}", {submenu: optionsMenu})   );
-	
+	*/
 	menu.render(containerElement);
 	//menu.show();
 	return menu;

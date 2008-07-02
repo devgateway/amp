@@ -131,6 +131,9 @@
 #statesinput2 {
     _position:absolute; /* abs pos needed for ie quirks */
 }
+.charcounter {
+    display: block;
+}
 
 -->
 </style>
@@ -395,9 +398,15 @@
 	        return (sMarkup);
 	    };
 	}; 
-        var format='<digi:trn key="message:charactersRemaining">characters remaining</digi:trn>'
-        $("#titleMax").charCounter(format,50);
-        $("#descMax").charCounter(format,500);
+        
+        // attach character counters
+        $("#titleMax").charCounter(50,{
+	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
+	pulse: false});
+        $("#descMax").charCounter(500,{
+	format: " (%1"+ " <digi:trn key="message:charactersRemaining">characters remaining</digi:trn>)",
+	pulse: false});
+        
 
 </script>
 </digi:form>

@@ -34,6 +34,9 @@
 	background-color:#a5bcf2;
 }
 
+.userMsg{
+background-color:yellow;
+}
 
 -->
 </style>
@@ -139,7 +142,7 @@
         var ind=id.indexOf('_fId');
         if(ind!=-1){
             var msgId=id.substring(0,ind);
-            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
+            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
             //openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
         }else{   
             window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
@@ -733,6 +736,34 @@
 		return msgTr;			
 	
 	}
+    
+ $(document).ready(function() {
+   $("#show").click(function () {
+      				var Str = "Hidde more information <<";
+      				$(this).text(Str);
+    				});
+ });
+ 
+$(document).ready(function(){
+	   $("#displaySettingsButton").toggle(function(){
+	     	$("#currentDisplaySettings").show('fast');
+	     	$("#show").css("background", "#FFFFCC" );
+	     	$("#show").click(function () {
+      				var Str = "Show more information >>";
+      				$(this).text(Str);
+    				});
+	     	
+	     	
+	   },function(){
+	     	$("#currentDisplaySettings").hide('fast');
+	     	$("#show").css("background", "#CCDBFF" );
+	     	$("#show").click(function () {
+      				var Str = "Hidde more information <<";
+      				$(this).text(Str);
+    				});
+	     	
+	   	});
+});
         
 </script>
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
@@ -747,7 +778,7 @@
     <tr>
    <td width=20>&nbsp;</td>
 		<td align=left vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellSpacing=0 width="100%" border="0">
 				<tr>
 					<td height=33><span class=crumb>
 						<c:set var="translation">
@@ -806,7 +837,7 @@
 				</tr>
 				<tr>
                             <td noWrap vAlign="top">
-				<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" >
+				<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" border="0" >
 	        		<TR>
                                     <TD STYLE="width:750">
                                         <DIV id="tabs">
@@ -861,7 +892,7 @@
                                                     
 								<c:if test="${messageForm.tabIndex==3}">
                                                     <LI>
-                                                        <a name="node"	>
+                                                        <a name="node"	>show
                                                             <div>
 									<digi:trn key="message:approvals">Approvals</digi:trn>
                                                         </div>
@@ -910,6 +941,7 @@
 					
 						
                                                                 <DIV id="subtabs">
+                                                                 <div style="pa">
                                                                     <UL>
 								
 											<c:if test="${messageForm.childTab=='inbox'}">
@@ -978,13 +1010,57 @@
                                                                                                 </LI>
 												
 											</c:if>
-                                                                                  
-                                                                                </UL>
-                                                                                &nbsp;
-                                                                                  </DIV>
-									
-						
-					</c:if>
+											<span id="displaySettingsButton"  style="cursor: pointer; font-style: italic; float: right"><li id="show">Show more information &gt;&gt;</li></span>
+											
+											</UL>
+											</div>
+									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
+			                                        <table  cellpadding="4" cellspacing="4" style="clear:both; padding:4px; border:silver dotted 1px; " >
+														<tr>
+															<td colspan="4">
+																<b>Total of Massages</b>:		
+															</td>
+															<td colspan="4">
+																<c:if test="${messageForm.allmsg != 0}">
+																	${messageForm.allmsg}
+																</c:if>
+																<c:if test="${messageForm.allmsg == 0}">
+																	(No of messages)
+																</c:if>		
+															</td>
+														</tr>
+														<tr>
+															<td colspan="4">
+																<b>Admin Settings</b>:
+														
+															</td>
+															<td colspan="4">
+																	<b>Message Refresh Time(minutes)</b>: ${messageForm.msgRefreshTimeCurr}|
+																	<b>Message Storage Per Message Type</b>: ${messageForm.msgStoragePerMsgTypeCurr}|
+																	<b>Days of Advance Alert Warnings</b>: ${messageForm.daysForAdvanceAlertsWarningsCurr}|
+																	<b>Maximum validate</b>: ${messageForm.maxValidityOfMsgCurr}|
+																	<b>Email Alerts</b>:
+																	<c:if test="${messageForm.emailMsgsCurrent==-1}">
+																		&nbsp;
+																	</c:if>
+																	<c:if test="${messageForm.emailMsgsCurrent==0}">
+																		<digi:trn key="message:No">No</digi:trn>
+																	</c:if>
+																	<c:if test="${messageForm.emailMsgsCurrent==1}">
+																		<digi:trn key="message:yes">Yes</digi:trn>
+																	</c:if>
+																	<br>
+																	
+															</td>
+															
+														</tr>
+																		
+			                                			
+													</table>
+											   </div>   
+                                                &nbsp;
+                                             </DIV>
+											</c:if>
                                         </div>
                                         	</TD>					
 						</TR>
@@ -992,8 +1068,12 @@
                                               
                         
 							<TD bgColor="#ffffff" class="contentbox_border" align="left">
-								<TABLE id="msgsList">
-									<TR><TD colspan="4"></TD></TR>			
+								<TABLE id="msgsList" border="1">
+									<TR class="usersg">
+										<TD colspan="4">
+										
+										</TD>
+									</TR>			
 								</TABLE>
 							</TD>
 						</TR>

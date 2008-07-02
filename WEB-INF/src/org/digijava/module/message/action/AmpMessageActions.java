@@ -183,6 +183,8 @@ public class AmpMessageActions extends DispatchAction {
     	}
     	Collections.reverse(allMessages);
     	messageForm.setMessagesForTm(allMessages);
+    	messageForm.setAllmsg(allMessages.size());
+    	
     	messageForm.setTabIndex(tabIndex);
     	
     	if(childTab==null){

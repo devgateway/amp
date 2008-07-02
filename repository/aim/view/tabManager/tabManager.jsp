@@ -26,10 +26,12 @@
 	}
 	
 	function TabManager() {
-		this.bodyEl		= document.getElementById("panelBody");
-		this.footerEl	= document.getElementById("panelFooter");
-		this.btnDivEl	= document.getElementById("buttonDiv");
-		this.btnEl		= document.getElementById("tabManagerButton");
+		this.bodyEl			= document.getElementById("panelBody");
+		this.footerEl		= document.getElementById("panelFooter");
+		this.btnDivEl		= document.getElementById("buttonDiv");
+		this.btnEl			= document.getElementById("tabManagerButton");
+		
+		this.doubleTabErrEl		= document.getElementById("doubleTabErr");
 		
 		this.saveDataManager	= new SaveDataManager("panelBody");
 	}
@@ -67,6 +69,12 @@
 	TabManager.prototype.hideButton	= function () {
 		this.btnDivEl.style.display	= "none";
 	}
+	TabManager.prototype.showDoubleTabErr	= function () {
+		this.doubleTabErrEl.style.display	= "";
+	}
+	TabManager.prototype.hideDoubleTabErr	= function () {
+		this.doubleTabErrEl.style.display	= "none";
+	}
 	TabManager.prototype.enableButton	= function () {
 		this.btnEl.style.color	= "black";
 		this.btnEl.disabled		= false;
@@ -89,6 +97,30 @@
 	}
 	TabManager.prototype.save		= function ( content ) {
 		this.saveDataManager.saveData();
+	}
+	
+	TabManager.prototype.check 		= function () {
+		var items		= document.getElementById("panelBody").getElementsByTagName( "select" );
+		for ( var i=0; i<items.length; i++ )  {
+			var compIdx		= items[i].selectedIndex;
+			var compOption	= items[i].options[compIdx];
+			if ( parseInt(compOption.value) > 0 ) {
+				for (var j=0; j<items.length; j++) {
+					if ( i!=j ) {
+						var idx		= items[j].selectedIndex;
+						var option	= items[j].options[idx];
+						if ( compOption.value == option.value ){
+							this.disableButton();
+							this.showDoubleTabErr();
+							return;
+						}
+					}
+				}
+			}
+		}
+		this.hideDoubleTabErr();
+		this.enableButton();
+		return;
 	}
 
 	function GetDataManager () {
@@ -161,13 +193,14 @@
 			<digi:trn key="aim:tabmanager:dtSelection">Desktop Tab Selection </digi:trn>
 		</div>
 		<div class="bd" align="center">
+			<span id="doubleTabErr" style="display: none; color: red;"><digi:trn key="aim:tabmanager:errDoubleTab">Please do not select the same tab in 2 or more positions</digi:trn></span>
 			<div id="panelBody" style="font-size: 8pt;">
 			</div>
 			<br />
-			<div id="buttonDiv" style="display: none; float: right;">
+			<div id="buttonDiv" style="display: none;" align="center">
 				<button  type="button" class="buton"  id="tabManagerButton"
 					style="color: lightgray" onclick="tabManager.save()">
-					<digi:trn key="aim:tabmanager:done">Done</digi:trn>
+					<digi:trn key="aim:tabmanager:save">Save</digi:trn>
 				</button>
 			</div>
 		</div>

@@ -52,10 +52,36 @@
 					<td colspan="5">&nbsp;</td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><digi:trn key="rep:filter:Keywords">Keywords</digi:trn> <br />
+					<td colspan="5"><digi:trn key="rep:filter:Keywords">`s</digi:trn> <br />
 					<html:text property="indexString" style="width: 250px"	styleClass="inp-text" /></td>
 				</tr>
-				
+				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><b><digi:trn
+						key="rep:filter:ActivityStatus">Activity Status</digi:trn></b><br/>
+					</td>
+				</tr>
+				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+				<tr  bgcolor="#EEEEEE">
+				<td colspan="5">
+					<html:select property="approvalStatusSelected"
+						style="width: 300px" styleClass="inp-text">
+						<html:option value="-1">
+							<digi:trn key="rep:filer:All">All</digi:trn>
+						</html:option>
+						<html:option value="0">
+							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
+						</html:option>
+						<html:option value="1">
+							<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
+						</html:option>
+						<html:option value="2">
+							<digi:trn key="rep:filter:NewUnvalidated">New Un-validated</digi:trn>
+						</html:option>
+					</html:select>
+					</td>
+				</tr>
 			</table>
 		</td>
 		<td align="center">
@@ -145,7 +171,9 @@
 					</td>
 				</tr>
 		</table>
-			</td> </tr>
+			</td> 
+				</tr>
+			</tr>
 		</table>
 		</div>
 		<div id="financing" style="display: none;">

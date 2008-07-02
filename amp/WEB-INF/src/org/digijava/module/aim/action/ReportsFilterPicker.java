@@ -218,6 +218,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCountYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setRegionSelectedCollection(regions);
+		filterForm.setApprovalStatusSelectedCollection(new ArrayList());
 		filterForm.setDonorTypes(donorTypes);
 		filterForm.setDonorGroups(donorGroups);
 		
@@ -384,6 +385,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setGovernmentApprovalProcedures(null);
 		filterForm.setJointCriteria(null);
 		filterForm.setRegionSelected(null);
+		filterForm.setApprovalStatusSelected(null);
 		//filterForm.setRegions(null);
 		filterForm.setDonorGroups(null);
 		filterForm.setDonorTypes(null);
@@ -542,6 +544,7 @@ public class ReportsFilterPicker extends MultiAction {
 		if(!all.equals(filterForm.getLineMinRank())) arf.setLineMinRank(filterForm.getLineMinRank());
 		if(!all.equals(filterForm.getPlanMinRank())) arf.setPlanMinRank(filterForm.getPlanMinRank());
 		if(!all.equals(filterForm.getRegionSelected())) arf.setRegionSelected(filterForm.getRegionSelected()==null ||filterForm.getRegionSelected()==-1?null:filterForm.getRegionSelected() );
+		if(!all.equals(filterForm.getApprovalStatusSelected())) arf.setApprovalStatusSelected(filterForm.getApprovalStatusSelected()==null ||filterForm.getApprovalStatusSelected()==-1?null:filterForm.getApprovalStatusSelected() );
 		
 		if(filterForm.getSelectedStatuses()!=null && filterForm.getSelectedStatuses().length>0)
 		arf.setStatuses(new HashSet()); else arf.setStatuses(null);
@@ -677,6 +680,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setGovernmentApprovalProcedures(null);
 		filterForm.setJointCriteria(null);
 		filterForm.setRegionSelected(null);
+		filterForm.setApprovalStatusSelected(null);
 		filterForm.setDonorGroups(null);
 		filterForm.setDonorTypes(null);
 		filterForm.setExecutingAgency(null);

@@ -12,12 +12,12 @@
 	 * usage: $("#myTextArea").charCounter(max, settings);
 	 */
 	
-	$.fn.charCounter = function (format, max, settings) {
+	$.fn.charCounter = function (max, settings) {
 		max = max || 100;
 		settings = $.extend({
 			container: "<span></span>",
 			classname: "charcounter",
-			format: "(%1 "+ format+" )",
+			format: "(%1 characters remaining )",
 			pulse: true,
 			delay: 0
 		}, settings);

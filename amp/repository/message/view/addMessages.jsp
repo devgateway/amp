@@ -19,6 +19,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <style>
 <!--
 
@@ -38,10 +39,22 @@
 <script langauage="JavaScript">
 	
 	function validate(){
-		if(document.messageForm.messageName.value.length==0){
+            var titleSize=document.messageForm.messageName.value.length;
+            var descSize=document.messageForm.description.value.length;
+		if(titleSize==0){
 			alert('Please Enter Name');
 			return false;
 		}
+                else{
+                    if(titleSize>50){
+                        alert(' You have entered '+titleSize+' symblos but maximum allowed are 50');
+			return false;
+                    }
+                    if(descSize>500){
+                        alert(' You have entered '+descSize+' symblos but maximum allowed are 500');
+			return false;
+                    }
+                }
 		return true;
 	}
 
@@ -230,49 +243,51 @@
 																	
 																	<tr>
 																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-																		<td align="left"><html:text property="messageName" style="width:485px;" styleClass="inp-text"/></td>
+                                                                                                                                                <td align="left"><html:text property="messageName" style="width:400px;" styleClass="inp-text" styleId="titleMax"/></td>
 																	</tr>																																					
 																	<tr>
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-																		<td align="left"> <html:textarea name="messageForm" property="description"  rows="3" cols="73" styleClass="inp-text"/></td>
+                                                                                                                                                <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:400px;"  styleId="descMax"/></td>
 																	</tr>																				
-																	<tr>
-																		<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
-																		<td align="left"> 
-																			<html:select property="priorityLevel" styleClass="inp-text">
-																				<html:option value="-1"><digi:trn key="message:selectPriorityLevel">Select Priority level </digi:trn></html:option>
-																				<html:option value="1"><digi:trn key="message:priorityLeel:low">low</digi:trn> </html:option>
-																				<html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
-																				<html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
-																			</html:select>																												                                                																																												
-																		</td>
-																	</tr> 
+																	
 																	<tr>
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 
-																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:485px;font-size:100%"></html:text>																			    
+																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:400px;font-size:100%"></html:text>																			    
 																				<div id="statescontainer" style="width:485px"></div> 
 																			</div>																		
 																		</td>																					
-																	</tr>																	 																							
+																	</tr>	
+                                                                                                                                        <tr>
+                                                                                                                                            <td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
+                                                                                                                                            <td align="left"> 
+                                                                                                                                                <html:select property="priorityLevel" styleClass="inp-text" style="width:140px">
+                                                                                                                                                    <html:option value="-1"><digi:trn key="message:selectPriorityLevel">Select Priority level </digi:trn></html:option>
+                                                                                                                                                    <html:option value="1"><digi:trn key="message:priorityLeel:low">low</digi:trn> </html:option>
+                                                                                                                                                    <html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
+                                                                                                                                                    <html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
+                                                                                                                                                </html:select>																												                                                																																												
+                                                                                                                                            </td>
+                                                                                                                                        </tr> 
 																	<tr>
 																		<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																		<td align="left"> 
-																			<html:select property="setAsAlert" styleClass="inp-text">																							
+                                                                                                                                                    <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
 																							<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
 																							<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
 																						</html:select>																												                                                																																												
 																					</td>
 																				<tr>
-																				</tr>															
+																				</tr>	
+                                                                                                                                                               
 																				<tr>
 																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
 																                                <td valign="top">
-																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
+																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
 																										<logic:empty name="messageForm" property="teamMapValues">
 																											<option value="-1">No receivers</option>
 																										</logic:empty>
@@ -280,9 +295,9 @@
                                                                                                     	    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
                                                                                                                	<c:forEach var="team" items="${messageForm.teamMapValues}">
                                                                                                                    	<logic:notEmpty name="team" property="members">
-                                                                                                                       	<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:12px;">${team.name}</option>
+                                                                                                                       	<option title="${team.name}" value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:12px;">${team.name}</option>
                                                                                                                         <c:forEach var="tm" items="${team.members}">
-                                                                                                                       		<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
+                                                                                                                       		<option title="${tm.memberName}" value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
                                                                                                                          </c:forEach>
                                                                                                                      </logic:notEmpty>											                                                		
                                                                                                                 </c:forEach>
@@ -380,6 +395,9 @@
 	        return (sMarkup);
 	    };
 	}; 
+        var format='<digi:trn key="message:charactersRemaining">characters remaining</digi:trn>'
+        $("#titleMax").charCounter(format,50);
+        $("#descMax").charCounter(format,500);
 
 </script>
 </digi:form>

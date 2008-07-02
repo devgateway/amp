@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="WEB-INF/src"/>
-	<classpathentry kind="src" path="digi-src"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/activation.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ant.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ant-contrib.jar"/>

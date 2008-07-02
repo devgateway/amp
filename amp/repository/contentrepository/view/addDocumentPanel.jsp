@@ -6,12 +6,13 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>
+<!--<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>">.</script>-->
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
+<!--<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>-->
+
+<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
-
-
 
 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
@@ -51,6 +52,7 @@
 <script type="text/javascript">
     var tabView = new YAHOOAmp.widget.TabView("demo"); 
 </script>    
+
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
 

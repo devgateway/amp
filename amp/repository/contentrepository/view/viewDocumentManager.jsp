@@ -224,170 +224,86 @@ div.fakefile2 input{
 					</table>
 			        </div>
 			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-<!--			        <div>-->
-<!--						<c:set var="translation">-->
-<!--							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>-->
-<!--						</c:set>			        -->
-<!--                		<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'publicDocumentsDiv')" />-->
-<!--			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>-->
-<!--			            </a>	-->
-<!--			        </div>    		        -->
-			        
 			        <div>
 			        <jsp:include page="iconReferences.jsp"/>
 			        </div>
-
-					<div id="addDocumentDiv" style="display: none">
-						<div align="center">
-						<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
-						<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
-							<input type="hidden" name="type" id="typeId"/>
-							<input type="hidden" name="uuid" id="nodeUUID"/>
-							<table cellpadding="3" cellspacing="3" border="0">
-								<tr>
-									<td> 
-										<digi:trn key="contentrepository:addEdit:typeDocument">Document</digi:trn>
-										<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
-									</td>
-									<td> 
-										<digi:trn key="contentrepository:addEdit:typeUrl">URL</digi:trn>
-										<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
-									</td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
-								<td><html:text property="docTitle" size="30" /></td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
-								<td><html:textarea property="docDescription" cols="28"/></td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
-								<td><html:textarea property="docNotes" cols="28" /></td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
-								<td>
-									<c:set var="translation">
-										<digi:trn key="contentrepository:doctype:firstline">Please select a type from below</digi:trn>
-									</c:set>
-									<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
-								</td>
-								</tr>
-								<tr id="tr_path">
-								<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
-								<td>
-					                             <!-- <html:file property="fileData"></html:file> -->
-					                             <div class="fileinputs"> 
-									
-								<input id="fileData" name="fileData" type="file" class="file">
-					                        </div></td>
-								</tr>
-								<tr style="display: none" id="tr_url">
-								<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
-								<td><html:text property="webLink" size="32"></html:text></td>
-								</tr>
-								<tr>
-									<td align="right">
-										<html:submit styleClass="dr-menu" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
-									</td>
-									<td align="left">
-										&nbsp;<button class="dr-menu" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
-									</td>
-								</tr>
-							</table>
-						</digi:form>
-						</div>			        
-				    </div>
 				    <br/>
 					<div id="publicDocumentsDiv">
-					</div>
-			        
+					</div>			        
 			        </div>
+			        
 			        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-<!--			        <div>-->
-<!--						<c:set var="translation">-->
-<!--							<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>-->
-<!--						</c:set>			        -->
-<!--                		<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />-->
-<!--			            <digi:trn key="contentrepository:newWindow">New window</digi:trn>-->
-<!--			            </a>	-->
-<!--			        </div>    		        -->
 			        <div>
 			        <jsp:include page="iconReferences.jsp"/>
 			        </div>
-
-					<div id="addDocumentDiv" style="display: none">
-						<div align="center">
-						<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
-						<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
-							<input type="hidden" name="type" id="typeId"/>
-							<input type="hidden" name="uuid" id="nodeUUID"/>
-							<table cellpadding="3" cellspacing="3" border="0">
-								<tr>
-									<td> 
-										<digi:trn key="contentrepository:addEdit:typeDocument">Document</digi:trn>
-										<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
-									</td>
-									<td> 
-										<digi:trn key="contentrepository:addEdit:typeUrl">URL</digi:trn>
-										<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
-									</td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
-								<td><html:text property="docTitle" size="30" /></td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
-								<td><html:textarea property="docDescription" cols="28"/></td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
-								<td><html:textarea property="docNotes" cols="28" /></td>
-								</tr>
-								<tr>
-								<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
-								<td>
-									<c:set var="translation">
-										<digi:trn key="contentrepository:doctype:firstline">Please select a type from below</digi:trn>
-									</c:set>
-									<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
-								</td>
-								</tr>
-								<tr id="tr_path">
-								<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
-								<td>
-					                             <!-- <html:file property="fileData"></html:file> -->
-					                             <div class="fileinputs"> 
-									
-								<input id="fileData" name="fileData" type="file" class="file">
-					                        </div></td>
-								</tr>
-								<tr style="display: none" id="tr_url">
-								<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
-								<td><html:text property="webLink" size="32"></html:text></td>
-								</tr>
-								<tr>
-									<td align="right">
-										<html:submit styleClass="dr-menu" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
-									</td>
-									<td align="left">
-										&nbsp;<button class="dr-menu" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
-									</td>
-								</tr>
-							</table>
-						</digi:form>
-						</div>			        
-				    </div>
 				    <br/>
 					<div id="otherDocumentsDiv">
 					</div>
-			    </div>
+			    </div>			    
 			</div>			
-
-		
+			<div id="addDocumentDiv" style="display: none">
+				<div align="center">
+				<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
+				<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
+					<input type="hidden" name="type" id="typeId"/>
+					<input type="hidden" name="uuid" id="nodeUUID"/>
+					<table cellpadding="3" cellspacing="3" border="0">
+						<tr>
+							<td> 
+								<digi:trn key="contentrepository:addEdit:typeDocument">Document</digi:trn>
+								<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
+							</td>
+							<td> 
+								<digi:trn key="contentrepository:addEdit:typeUrl">URL</digi:trn>
+								<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
+							</td>
+						</tr>
+						<tr>
+						<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
+						<td><html:text property="docTitle" size="30" /></td>
+						</tr>
+						<tr>
+						<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
+						<td><html:textarea property="docDescription" cols="28"/></td>
+						</tr>
+						<tr>
+						<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
+						<td><html:textarea property="docNotes" cols="28" /></td>
+						</tr>
+						<tr>
+						<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
+						<td>
+							<c:set var="translation">
+								<digi:trn key="contentrepository:doctype:firstline">Please select a type from below</digi:trn>
+							</c:set>
+							<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+						</td>
+						</tr>
+						<tr id="tr_path">
+						<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
+						<td>
+			                             <!-- <html:file property="fileData"></html:file> -->
+			                             <div class="fileinputs"> 
+							
+						<input id="fileData" name="fileData" type="file" class="file">
+			                        </div></td>
+						</tr>
+						<tr style="display: none" id="tr_url">
+						<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
+						<td><html:text property="webLink" size="32"></html:text></td>
+						</tr>
+						<tr>
+							<td align="right">
+								<html:submit styleClass="dr-menu" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
+							</td>
+							<td align="left">
+								&nbsp;<button class="dr-menu" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
+							</td>
+						</tr>
+					</table>
+				</digi:form>
+				</div>			        
+		    </div>		
 		</td></tr></table>
 		<%-- END -- Table for "My Documents" --%>
         <br />

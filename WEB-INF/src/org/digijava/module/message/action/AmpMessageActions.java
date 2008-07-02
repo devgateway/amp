@@ -483,12 +483,12 @@ public class AmpMessageActions extends DispatchAction {
 			//remove message
 			AmpMessageUtil.removeMessage(messageForm.getMessageId());
     	}
-        if(message instanceof AmpAlert){
+        /*if(message instanceof AmpAlert){
              messageForm.setTabIndex(2); // to navigate to the Alert Tab
         }
         else{
              messageForm.setTabIndex(1);// to navigate to the Message Tab
-        }
+        }*/
     	message.setName(messageForm.getMessageName());
     	message.setDescription(messageForm.getDescription());
     	message.setMessageType(messageForm.getMessageType());  
@@ -600,7 +600,7 @@ public class AmpMessageActions extends DispatchAction {
 		
     	//cleaning form values
     	setDefaultValues(messageForm);
-   	    if (request.getParameter("toDo")!=null&&request.getParameter("toDo").equals("draft")) {
+   	    if ((request.getParameter("toDo")!=null&&request.getParameter("toDo").equals("draft"))||message.getForwardedMessage()!=null) {
               //  messageForm.setChildTab("draft");
             return mapping.findForward("showAllMessages");
         }

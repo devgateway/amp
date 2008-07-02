@@ -737,31 +737,18 @@ background-color:yellow;
 	
 	}
     
- $(document).ready(function() {
-   $("#show").click(function () {
-      				var Str = "Hidde more information <<";
-      				$(this).text(Str);
-    				});
- });
- 
+
 $(document).ready(function(){
 	   $("#displaySettingsButton").toggle(function(){
 	     	$("#currentDisplaySettings").show('fast');
-	     	$("#show").css("background", "#FFFFCC" );
-	     	$("#show").click(function () {
-      				var Str = "Show more information >>";
-      				$(this).text(Str);
-    				});
-	     	
-	     	
+	     	$("#show").hide('fast');
+	     	$("#hidde").css("background", "#FFFFCC" );
+	     	$("#hidde").show('fast');
 	   },function(){
 	     	$("#currentDisplaySettings").hide('fast');
+	     	$("#hidde").hide('fast');
 	     	$("#show").css("background", "#CCDBFF" );
-	     	$("#show").click(function () {
-      				var Str = "Hidde more information <<";
-      				$(this).text(Str);
-    				});
-	     	
+	     	$("#show").show('fast');
 	   	});
 });
         
@@ -1010,11 +997,19 @@ $(document).ready(function(){
                                                                                                 </LI>
 												
 											</c:if>
-											<span id="displaySettingsButton"  style="cursor: pointer; font-style: italic; float: right"><li id="show">Show more information &gt;&gt;</li></span>
-											
+											 <LI>
+                                           <div>
+												
+													<span id="displaySettingsButton"  style="cursor: pointer; font-style: italic;">
+														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;">Show more information &gt;&gt;</div>
+														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;">Hidde more information<< </div>
+													</span>
+												
+											  </div>	
+                                           </LI>
 											</UL>
 											</div>
-									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
+									            <div id="currentDisplaySettings" style="clear:both; padding: 2px; display:none; background-color: rgb(255, 255, 204);">
 			                                        <table  cellpadding="4" cellspacing="4" style="clear:both; padding:4px; border:silver dotted 1px; " >
 														<tr>
 															<td colspan="4">

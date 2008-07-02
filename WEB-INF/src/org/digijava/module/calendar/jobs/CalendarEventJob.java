@@ -15,6 +15,7 @@ import org.quartz.StatefulJob;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 
 public class CalendarEventJob implements StatefulJob{
     private static Logger logger = Logger.getLogger(CalendarEventJob.class);
@@ -39,10 +40,11 @@ public class CalendarEventJob implements StatefulJob{
         java.util.Calendar cl=java.util.Calendar.getInstance();
         cl.setTime(curDate);
 
-        List<Calendar> eventList=AmpDbUtil.getAmpCalendarsByStartDate(dateBeforeDays);
-
-        for (Calendar cal: eventList){
-            new CalendarEventTrigger(cal);
+        List<AmpCalendar> eventList=AmpDbUtil.getAmpCalendarsByStartDate(dateBeforeDays);
+        if(eventList!=null && !eventList.isEmpty()){
+            for (AmpCalendar cal: eventList){
+                new CalendarEventTrigger(cal);
+            }
         }
         try {
             PersistenceManager.closeRequestDBSessionIfNeeded();

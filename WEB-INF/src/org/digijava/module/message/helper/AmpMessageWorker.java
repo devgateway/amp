@@ -1,21 +1,26 @@
 package org.digijava.module.message.helper;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
+import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
+import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
+import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.message.dbentity.Approval;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.dbentity.Approval;
-import java.util.Date;
-import org.digijava.module.message.dbentity.AmpMessage;
 
 public class AmpMessageWorker {
 
@@ -62,7 +67,6 @@ public class AmpMessageWorker {
      *	Calendar Event Event processing
      */
     private static AmpAlert proccessCalendarEvent(Event e, AmpAlert alert,TemplateAlert template){
-        //url
         String partialURL=null;
         if(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)!=null){
             partialURL=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)+"/";
@@ -75,8 +79,24 @@ public class AmpMessageWorker {
             alert.setObjectURL(partialURL+e.getParameters().get(CalendarEventTrigger.PARAM_URL));
         }
         alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
+        AmpAlert newAlert=createAlertFromTemplate(template, myHashMap,alert);
 
-        return createAlertFromTemplate(template, myHashMap,alert);
+        String receivers=newAlert.getReceivers();
+
+        Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_URL).toString());
+        AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
+        Set<AmpCalendarAttendee> att = ampCal.getAttendees();
+        if (att != null && !att.isEmpty()) {
+            for (AmpCalendarAttendee ampAtt : att) {
+                User user=ampAtt.getUser();
+                if (user != null && receivers.indexOf(user.getEmail())<0){
+                    receivers+=", "+user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
+                }
+            }
+        }
+        newAlert.setReceivers(receivers);
+
+        return newAlert;
     }
     /**
      *	Not Approved Activity Event processing
@@ -90,6 +110,7 @@ public class AmpMessageWorker {
         myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(NotApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ((AmpTeamMember)e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
         //url
+
         if(partialURL!=null){
             myHashMap.put(MessageConstants.OBJECT_URL,"<a href=\""+partialURL+e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL)+"\">activity URL</a>");
             approval.setObjectURL(partialURL+e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL));

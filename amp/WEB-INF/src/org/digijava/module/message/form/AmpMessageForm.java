@@ -37,6 +37,7 @@ public class AmpMessageForm extends ActionForm {
 	private String childTab; //child tab on tabIndex. used to separate received messages from sent of draft 
 	private MessageHelper forwardedMsg;
 	private String objectURL;
+	private int allmsg;
 	
 	private int setAsAlert;
 	private boolean deleteActionWasCalled;
@@ -50,9 +51,11 @@ public class AmpMessageForm extends ActionForm {
 	private int pagesToShow;
 	private int offset;
 	
+	
 	/**
 	 * used to separate different kinds of messages
 	 */
+	
 	private int msgType=0; 								//holds amount of messages
 	private int approvalType=0;							//holds amount of approvals
 	private int calendarEventType=0;					//holds amount of calendar events
@@ -64,6 +67,7 @@ public class AmpMessageForm extends ActionForm {
 	private Map<String,Team> teamsMap;	
 	private List<AmpMessageState> messagesForTm;
 	private List<AmpMessageState> pagedMessagesForTm; //used for pagination
+	
 	
 	private String className;
 	
@@ -510,4 +514,13 @@ public class AmpMessageForm extends ActionForm {
 			this.inboxFull = inboxFull;
 		}
 
+		public int getAllmsg() {
+			return allmsg;
+		}
+
+		public void setAllmsg(int allmsg) {
+			this.allmsg = allmsg;
+		}
+
+	
 	}

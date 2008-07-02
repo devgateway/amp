@@ -258,7 +258,7 @@
 																		<td align="left">
 																			<div id="statesautocomplete"> 
 																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
-																				<div id="statescontainer" style="width:485px"></div> 
+																				<div id="statescontainer" style="width:320px"></div> 
 																			</div>																		
 																		</td>																					
 																	</tr>	

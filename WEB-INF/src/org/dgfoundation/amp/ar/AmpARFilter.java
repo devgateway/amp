@@ -165,6 +165,7 @@ public class AmpARFilter extends PropertyListable {
 	private Integer toMonth;
 	private Integer yearTo;
 	private Long regionSelected = null;
+	private Long approvalStatusSelected=null;
 	private boolean approved = false;
 	private boolean draft = false;
 
@@ -409,6 +410,22 @@ public class AmpARFilter extends PropertyListable {
 				+ planMinRank;
 		String REGION_SELECTED_FILTER = "SELECT amp_activity_id FROM v_regions WHERE region_id ="
 				+ regionSelected;
+		String actStatusValue="";
+		if(approvalStatusSelected!=null)
+		switch (approvalStatusSelected.intValue()) {
+		case -1:
+			actStatusValue="1";
+			break;
+		case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
+			actStatusValue=" approval_status='edited' ";break;
+		case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
+			actStatusValue=" approval_status='started' and draft=true ";break;
+		case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
+			actStatusValue=" approval_status='started' ";break;
+
+		default:actStatusValue="1";	break;
+		}
+		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue;
 		String APPROVED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
 				+ Constants.APPROVED_STATUS + "'";
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
@@ -630,6 +647,8 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(PLAN_MIN_RANK_FILTER);
 		if (regionSelected != null)
 			queryAppend(REGION_SELECTED_FILTER);
+		if(approvalStatusSelected!=null)
+			queryAppend(ACTIVITY_STATUS);
 		if (approved == true)
 			queryAppend(APPROVED_FILTER);
 		if (draft == true)
@@ -1145,6 +1164,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setToDate(String toDate) {
 		this.toDate = toDate;
+	}
+
+	public Long getApprovalStatusSelected() {
+		return approvalStatusSelected;
+	}
+
+	public void setApprovalStatusSelected(Long approvalStatusSelected) {
+		this.approvalStatusSelected = approvalStatusSelected;
 	}
 
 }

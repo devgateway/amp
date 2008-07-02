@@ -42,6 +42,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection implementingAgency;
 	private Collection beneficiaryAgency;
 	private Long regionSelected;
+	private Long approvalStatusSelected; //AMP-3386
 
 	private Object[] selectedSectors;
 	private Object[] selectedSecondarySectors;
@@ -57,6 +58,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedBeneficiaryAgency;
 
 	private Collection regionSelectedCollection;
+	private Collection approvalStatusSelectedCollection;//AMP-3386
 
 	private Long fromYear;
 	private Long toYear;
@@ -723,6 +725,23 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setToDate(String toDate) {
 		this.toDate = toDate;
+	}
+
+	public Long getApprovalStatusSelected() {
+		return approvalStatusSelected;
+	}
+
+	public void setApprovalStatusSelected(Long approvalStatusSelected) {
+		this.approvalStatusSelected = approvalStatusSelected;
+	}
+
+	public Collection getApprovalStatusSelectedCollection() {
+		return approvalStatusSelectedCollection;
+	}
+
+	public void setApprovalStatusSelectedCollection(
+			Collection approvalStatusSelectedCollection) {
+		this.approvalStatusSelectedCollection = approvalStatusSelectedCollection;
 	}
 
 	

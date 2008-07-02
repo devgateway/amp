@@ -77,13 +77,28 @@ public class AmpMessageActions extends DispatchAction {
     }
     
     public ActionForward gotoMessagesPage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+    	HttpSession session = request.getSession();
+    	
+    	TeamMember teamMember = new TeamMember();        	  
+    	 // Get the current team member 
+    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);   	
+    	
     	AmpMessageForm messageForm=(AmpMessageForm)form;
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
     	if(settings!=null && settings.getMsgRefreshTime()!=null && settings.getMsgRefreshTime().longValue()>0){
+    	
     		messageForm.setMsgRefreshTimeCurr(settings.getMsgRefreshTime());
+    		messageForm.setMsgStoragePerMsgTypeCurr(settings.getMsgStoragePerMsgType());
+			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());
+			messageForm.setMaxValidityOfMsgCurr(settings.getMaxValidityOfMsg());
+			messageForm.setEmailMsgsCurrent(settings.getEmailMsgs());
+			messageForm.setAllmsg(AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId()));
+			
+			
     	}  else{
     		messageForm.setMsgRefreshTimeCurr(new Long(-1));
     	}
+    	
     	int tabIndex=0;
     	if(request.getParameter("tabIndex")!=null){
     		tabIndex=Integer.parseInt(request.getParameter("tabIndex"));
@@ -102,7 +117,7 @@ public class AmpMessageActions extends DispatchAction {
     		childTab="inbox";
     	}
     	messageForm.setChildTab(childTab);
-    	
+   
     	return mapping.findForward("showAllMessages");
     }
     
@@ -118,6 +133,10 @@ public class AmpMessageActions extends DispatchAction {
     	TeamMember teamMember = new TeamMember();        	  
     	 // Get the current team member 
     	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);   	
+    	
+    	
+    	
+    	
     	
     	int tabIndex=0;
     	if(request.getParameter("tabIndex")!=null){
@@ -183,7 +202,7 @@ public class AmpMessageActions extends DispatchAction {
     	}
     	Collections.reverse(allMessages);
     	messageForm.setMessagesForTm(allMessages);
-    	messageForm.setAllmsg(allMessages.size());
+    	
     	
     	messageForm.setTabIndex(tabIndex);
     	
@@ -483,12 +502,12 @@ public class AmpMessageActions extends DispatchAction {
 			//remove message
 			AmpMessageUtil.removeMessage(messageForm.getMessageId());
     	}
-        /*if(message instanceof AmpAlert){
+        if(message instanceof AmpAlert){
              messageForm.setTabIndex(2); // to navigate to the Alert Tab
         }
         else{
              messageForm.setTabIndex(1);// to navigate to the Message Tab
-        }*/
+        }
     	message.setName(messageForm.getMessageName());
     	message.setDescription(messageForm.getDescription());
     	message.setMessageType(messageForm.getMessageType());  
@@ -600,7 +619,7 @@ public class AmpMessageActions extends DispatchAction {
 		
     	//cleaning form values
     	setDefaultValues(messageForm);
-   	    if ((request.getParameter("toDo")!=null&&request.getParameter("toDo").equals("draft"))||message.getForwardedMessage()!=null) {
+   	    if (request.getParameter("toDo")!=null&&request.getParameter("toDo").equals("draft")) {
               //  messageForm.setChildTab("draft");
             return mapping.findForward("showAllMessages");
         }

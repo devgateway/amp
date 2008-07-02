@@ -997,16 +997,14 @@ $(document).ready(function(){
                                                                                                 </LI>
 												
 											</c:if>
-											 <LI>
-                                           <div>
-												
-													<span id="displaySettingsButton"  style="cursor: pointer; font-style: italic;">
+												 <LI style="float: right;">
+									               <div>
+													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
 														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;">Show more information &gt;&gt;</div>
 														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;">Hidde more information<< </div>
 													</span>
-												
-											  </div>	
-                                           </LI>
+												   </div>	
+									           </LI>
 											</UL>
 											</div>
 									            <div id="currentDisplaySettings" style="clear:both; padding: 2px; display:none; background-color: rgb(255, 255, 204);">

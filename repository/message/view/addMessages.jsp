@@ -243,18 +243,18 @@
 																	
 																	<tr>
 																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-                                                                                                                                                <td align="left"><html:text property="messageName" style="width:400px;" styleClass="inp-text" styleId="titleMax"/></td>
+                                                                                                                                                <td align="left"><html:text property="messageName" style="width:320px;" styleClass="inp-text" styleId="titleMax"/></td>
 																	</tr>																																					
 																	<tr>
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-                                                                                                                                                <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:400px;"  styleId="descMax"/></td>
+                                                                                                                                                <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax"/></td>
 																	</tr>																				
 																	
 																	<tr>
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 
-																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:400px;font-size:100%"></html:text>																			    
+																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
 																				<div id="statescontainer" style="width:485px"></div> 
 																			</div>																		
 																		</td>																					

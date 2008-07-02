@@ -97,6 +97,18 @@ public class TabManagerAction extends Action {
 				}
 			);
 		
+		AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
+		AmpReports defaultTeamTab	 			= ampAppSettings.getDefaultTeamReport();
+		
+		myForm.setDefaultTeamTab( defaultTeamTab );
+		
+		if ( defaultTeamTab != null ) {
+			Iterator<AmpReports> repIter		= reports.iterator();
+			while ( repIter.hasNext() ) {
+				if ( defaultTeamTab.getAmpReportId().equals( repIter.next().getAmpReportId() ) ) 
+					repIter.remove();
+			}
+		}
 		
 		if ( teamMember == null )
 			throw new Exception( "TeamMember not found in session" );
@@ -189,16 +201,20 @@ public class TabManagerAction extends Action {
 			}
 		}
 		Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
+		AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
+		AmpReports defaultTeamReport 			= ampAppSettings.getDefaultTeamReport();
+		boolean defaultTeamReportAdded			= false;
 		
 		if ( selection.size() > 0 ){
 			Iterator<AmpDesktopTabSelection> iter	= selection.iterator();
 			while ( iter.hasNext() ) {
-				tabs.add( iter.next().getReport() );
+				AmpReports rep 		= iter.next().getReport();
+				tabs.add( rep );
+				if ( defaultTeamReport!=null && defaultTeamReport.getAmpReportId().equals(rep.getAmpReportId()) )
+    				defaultTeamReportAdded	= true;
 			}
 		}
-		AmpApplicationSettings ampAppSettings 	= DbUtil.getTeamAppSettings(teamMember.getTeamId());
-		AmpReports defaultTeamReport 			= ampAppSettings.getDefaultTeamReport();
-		if ( defaultTeamReport != null )
+		if ( defaultTeamReport!=null && !defaultTeamReportAdded)
 			tabs.add( defaultTeamReport );
 		request.getSession().setAttribute(Constants.MY_TABS, tabs);	
 		

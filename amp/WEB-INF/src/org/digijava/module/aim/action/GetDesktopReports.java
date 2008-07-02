@@ -26,7 +26,6 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class GetDesktopReports extends TilesAction {
@@ -77,16 +76,20 @@ public class GetDesktopReports extends TilesAction {
                 /* Setting Team Members tabs */
                 AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(tm.getMemberId());
                 Collection<AmpReports> tabs				= new ArrayList<AmpReports>();
+                boolean defaultTeamReportAdded			= false;
                 if ( ampTeamMember.getDesktopTabSelections()!=null && ampTeamMember.getDesktopTabSelections().size() > 0 ) {
                 		TreeSet<AmpDesktopTabSelection> sortedSelection	= 
                 			new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator);
                 		sortedSelection.addAll( ampTeamMember.getDesktopTabSelections() );
                 		Iterator<AmpDesktopTabSelection> iter	= sortedSelection.iterator();
                 		while ( iter.hasNext() ) {
-                			tabs.add( iter.next().getReport() );
+                			AmpReports rep 	= iter.next().getReport();
+                			tabs.add( rep );
+                			if ( defaultTeamReport!=null && defaultTeamReport.getAmpReportId().equals(rep.getAmpReportId()) )
+                				defaultTeamReportAdded	= true;
                 		}
                 }
-                if ( defaultTeamReport != null )
+                if ( defaultTeamReport!=null && !defaultTeamReportAdded )
             		tabs.add( defaultTeamReport );
                 session.setAttribute( Constants.MY_TABS , tabs);
 

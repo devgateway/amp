@@ -17,6 +17,8 @@ public class TabManagerForm extends ActionForm {
 	private Long [] tabsId;
 	private Collection<AmpReports> tabs;
 	
+	private AmpReports defaultTeamTab	= null;
+	
 	private Boolean exceptionOccurred	= false;
 	private Boolean dataException		= false;
 	private Boolean saveException		= false;
@@ -35,6 +37,13 @@ public class TabManagerForm extends ActionForm {
 	}
 	public void setTabsId(Long[] tabsId) {
 		this.tabsId = tabsId;
+	}
+	
+	public AmpReports getDefaultTeamTab() {
+		return defaultTeamTab;
+	}
+	public void setDefaultTeamTab(AmpReports defaultTeamTab) {
+		this.defaultTeamTab = defaultTeamTab;
 	}
 	public Boolean getDataException() {
 		return dataException;

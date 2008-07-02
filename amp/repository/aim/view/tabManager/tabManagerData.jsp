@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@page import="org.digijava.module.aim.action.TabManagerAction" %>
 
 <digi:instance property="aimTabManagerForm" />
 <bean:define name="aimTabManagerForm" id="myForm" type="org.digijava.module.aim.form.TabManagerForm" toScope="request"/>
@@ -29,19 +30,30 @@
 		<div id="dataSuccessful" style="display: none;" />dataSuccessful</div>
 		<br />
 		<table cellspacing="5px" cellpadding="3px">
-			<c:forEach var="k" begin="1" end="<%=org.digijava.module.aim.action.TabManagerAction.MAX_NUM_OF_TABS %>" step="1" >
+			<c:forEach var="k" begin="1" end="<%=TabManagerAction.MAX_NUM_OF_TABS %>" step="1" >
 				<tr>
 					<td>
 						<digi:trn key="aim:tabmanager:tabPosition">Tab Position</digi:trn> ${k}:
 					</td>
 					<td>
-						<html:select name="aimTabManagerForm" property="tabsId" value="${myForm.tabsId[k-1]}" >
+						<html:select name="aimTabManagerForm" property="tabsId" value="${myForm.tabsId[k-1]}" onchange="tabManager.check();">
 							<html:option value="0">-- <digi:trn key="aim:tabmanager:selectNone">None</digi:trn> --</html:option>
 							<html:optionsCollection name="aimTabManagerForm" property="tabs" label="name" value="ampReportId"/>
 						</html:select>
 					</td>
 				</tr>
 			</c:forEach>
+			<c:if test="${aimTabManagerForm.defaultTeamTab != null}">
+				<tr>
+					<td>
+						<digi:trn key="aim:tabmanager:tabPosition">Tab Position</digi:trn> <%=TabManagerAction.MAX_NUM_OF_TABS+1%>:
+					</td>
+					<td align="center" style="font-weight:normal;">
+						${aimTabManagerForm.defaultTeamTab.name} 
+						<span style="font-style: italic; font-weight: normal;">( <digi:trn key="aim:defaultTeamTab">Default Team Tab</digi:trn> )</span>
+					</td>
+				</tr>
+			</c:if>
 		</table>
 	</digi:form>
 </c:if>

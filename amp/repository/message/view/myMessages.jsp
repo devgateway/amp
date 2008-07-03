@@ -13,7 +13,7 @@
 
 <module:display name="Messaging System">
 
-  <digi:instance property="messageForm"/>
+  <digi:instance property="messageForm"/> 
   <digi:form action="/messageActions.do" style="margin-bottom:0;">
     <html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
     <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
@@ -22,8 +22,12 @@
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
+    var inboxFull='<digi:trn key="message:fullInbox">Your Inbox Is Full</digi:trn>';
+    var deleteData='<digi:trn key="message:plzDeleteData">Please delete messages or you will not get newer ones</digi:trn>' ;
     var newCount=0;
     var prevCount=0;
+    var isInboxFull='false';
+    var firstEntry=0;
 
     function initMsgDiv(){
 
@@ -61,14 +65,23 @@
       return interval;
     }
 
-    function showMessage(){
+    function showMessage(fullInbox){   
+    	var titleTD=document.getElementById('titleTD');
+    	var textTD=document.getElementById('textTD');
+    	if(fullInbox==true){    	 
+    		titleTD.innerHTML=inboxFull; 
+    		textTD.innerHTML=deleteData; 
+    	}else{    	 
+    		titleTD.innerHTML='New Message'; 
+    		textTD.innerHTML='You have a new Message'; 
+    	}
       $('#msgDiv').show("slow");
       window.setTimeout("hideMessage()",4000,"JavaScript");
     }
 
     function hideMessage(){
-      $('#msgDiv').hide("slow");
-      id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
+		$('#msgDiv').hide("slow");
+    	id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
     }
 
     var clickToViewMsg='<digi:trn key="message:clickToEditAlert">Click here to view Message</digi:trn>';
@@ -86,7 +99,7 @@
       async.complete=getNewMessagesAmount;
       async.call(url);
       if(newCount!=prevCount){
-        showMessage();
+        showMessage(false);
         prevCount=newCount;
       }else{
         id=window.setTimeout("checkForNewMessages()",getInterval(),"JavaScript");
@@ -105,6 +118,12 @@
       var alertsAmount=root.getAttribute('alerts');
       var approvalsAmount=root.getAttribute('approvals');
       var calEventsAmount=root.getAttribute('calEvents');
+      
+      isInboxFull=root.getAttribute('inboxFull');
+      if(isInboxFull=='true' && firstEntry==0){
+      	showMessage(true);
+      	firstEntry=1;
+      }
 
       newCount=msgsAmount+alertsAmount+approvalsAmount+calEventsAmount;
 
@@ -171,21 +190,20 @@
             <div>
               <digi:trn key="message:myMessages">My Messages</digi:trn>
             </div>
-</a>
+			</a>
           </li>
         </ul>
         <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
           <TABLE id="msgLinks" border="0" cellPadding="0" cellSpacing="0" width="100%" >
-
           </TABLE>
         </div>
       </div>
-    </div>
+    </div>   
     <div id="msgDiv" name="msgDiv" style="display : none; position: absolute;width: 250px; background-color: #317082;">
       <table style="width: 250px;">
         <tr>
-          <td style="font-family: Tahoma; font-size: 12px; color: White; font-weight: bold;background-color: #317082; padding: 5px 2px 2px 2px;">
-          New message
+          <td id="titleTD" style="font-family: Tahoma; font-size: 12px; color: White; font-weight: bold;background-color: #317082; padding: 5px 2px 2px 2px;">
+         
           </td>
           <!--
           <td style="font-size: 11px; color: Red; text-align: right; font-weight: bold;" onclick="hideMessage();">
@@ -193,8 +211,8 @@
           </td>-->
         </tr>
         <tr>
-          <td colspan="2" style="font-family: Verdana; font-size: 10px; font-weight:bold;color: Black; background-color: #DBF0E6; margin-top: 2px; padding: 35px 35px 35px 35px;">
-          You have new message
+          <td id="textTD" colspan="2" style="font-family: Verdana; font-size: 10px; font-weight:bold;color: Black; background-color: #DBF0E6; margin-top: 2px; padding: 35px 35px 35px 35px;">
+          
           </td>
         </tr>
       </table>

@@ -218,15 +218,14 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.read="+false+" order by msg.creationDate desc";
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.read="+false+" and state.messageHidden="+false+" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);			
 			retValue=((Integer)query.uniqueResult()).intValue();			
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
 			ex.printStackTrace();
-			throw new AimException("Unable to Load Messages", ex);
-			
+			throw new AimException("Unable to Load Messages", ex);			
 		}
 		return retValue;
 	}
@@ -239,7 +238,7 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" order by msg.creationDate desc";
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.messageHidden="+false+" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);			
 			retValue=((Integer)query.uniqueResult()).intValue();			
@@ -259,14 +258,13 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" order by msg.creationDate desc";
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);			
 			retValue=((Integer)query.uniqueResult()).intValue();			
 		}catch(Exception ex) {			
 			ex.printStackTrace();
-			throw new AimException("Unable to Load Messages", ex);
-			
+			throw new AimException("Unable to Load Messages", ex);			
 		}
 		return retValue;
 	}
@@ -281,8 +279,17 @@ public class AmpMessageUtil {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false;	
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.messageHidden="+false;	
 			query=session.createQuery(queryString);
+			
+			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.
+//			AmpMessageSettings settings=getMessageSettings();
+//			if(settings!=null && settings.getMsgStoragePerMsgType()!=null){
+//				int storage=settings.getMsgStoragePerMsgType().intValue();
+//				if(storage<messagesAmount){
+//					messagesAmount=messagesAmount-storage;
+//				}
+//			}
 			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
 				fromIndex=0;				
@@ -293,6 +300,7 @@ public class AmpMessageUtil {
 			}else{
 				toIndex=MessageConstants.MESSAGES_PER_PAGE;
 			}
+
 			query.setFirstResult(fromIndex);
 			query.setMaxResults(toIndex);
 			query.setParameter("tmId", teamMemberId);			
@@ -316,7 +324,7 @@ public class AmpMessageUtil {
 			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" ";
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
@@ -360,7 +368,7 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	public static void saveOrUpdateSettings(AmpMessageSettings setting) throws Exception{
+	public static boolean saveOrUpdateSettings(AmpMessageSettings setting) throws Exception{
 		Session session= null;
 		Transaction tx=null;
 		try {
@@ -379,6 +387,7 @@ public class AmpMessageUtil {
 			}
 			throw new AimException("update failed",ex);
 		}
+		return true;
 	}
 
 	/**
@@ -390,5 +399,240 @@ public class AmpMessageUtil {
 			partialURL+="/";
 		}
 		return partialURL;
+	}
+	
+	/**
+	 * checks if any of the inbox is full
+	 */
+	public static <E extends AmpMessage> boolean isInboxFull(Class<E> clazz, Long tmId) throws Exception{
+		boolean full=false;
+		int hiddenMsgs=0;
+		Session session=null;
+		String queryString =null;
+		Query query=null;	
+		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.messageHidden="+true;	
+			query=session.createQuery(queryString);			
+			query.setParameter("tmId", tmId);			
+			hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+			if(hiddenMsgs>0){
+				full=true;
+			}
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);			
+		}
+		return full;
+	}	
+	
+	
+	public static <E extends AmpMessage> boolean isSentOrDraftFull(Class<E> clazz, Long tmId,boolean draft) throws Exception{
+		boolean full=false;
+		int hiddenMsgs=0;	
+		Session session=null;
+		String queryString =null;
+		Query query=null;			
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.sender=:tmId and msg.draft="+draft+" and state.messageHidden=true";	
+			query=session.createQuery(queryString);			
+			query.setParameter("tmId", tmId);			
+			hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+			if(hiddenMsgs>0){
+				full=true;
+			}
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);			
+		}
+		return full;
+	}
+	
+	
+	
+	/**
+	 * Gets Members Ids whos Inbox messages are more then allowed max.Storage and have to be filtered	 
+	 * @return members Ids
+	 */
+	public static <E extends AmpMessage> List<Long> getOverflowedMembersIdsForInbox(int limit,Class<E> clazz){
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<Long> memIds=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();			
+			queryString= "select s.memberId from " + AmpMessageState.class.getName()+ " s, msg from "+clazz.getName()+
+			" msg  where msg.id=s.message.id group by s.memberId having count(s.id)>"+limit;
+			query=session.createQuery(queryString);
+			memIds=query.list();
+		}catch(Exception ex) {
+			logger.error("couldn't load member ids" + ex.getMessage());			
+		}
+		return memIds;
+	}
+	
+	/**
+	 * Gets Senders Ids whos Sent or draft messages are more then allowed max.Storage and have to be filtered
+	 * @return senders ids
+	 */
+	public static <E extends AmpMessage> List<Long> getOverflowedMembersIdsForSentOrDraft(int limit,Class<E> clazz,Boolean draft){
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<Long> senderIds=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();			
+			queryString= "select s.senderId from " + AmpMessageState.class.getName()+ " s, msg from "+clazz.getName()+
+			" msg  where msg.id=s.message.id and msg.draft="+draft+" group by s.senderId having count(s.id)>"+limit;
+			query=session.createQuery(queryString);
+			senderIds=query.list();
+		}catch(Exception ex) {
+			logger.error("couldn't load sender ids" + ex.getMessage());			
+		}
+		return senderIds;
+	}
+	
+	/**
+	 * returns list of inbox messages that should be changed to Hidden
+	 */
+	public static <E extends AmpMessage> List<AmpMessageState> getHiddenInboxMsgs(Class<E> clazz,Long tmId,int limit) throws Exception{
+		List<AmpMessageState> hiddenMsgs=null;	
+		Session session=null;
+		String queryString =null;
+		Query query=null;		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false;	
+			query=session.createQuery(queryString);
+			query.setFirstResult(limit);			
+			query.setParameter("tmId", tmId);			
+			hiddenMsgs=query.list();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);			
+		}
+		return hiddenMsgs;
+	}
+	
+	/**
+	 * returns list of sent or draft messages that should be changed to Hidden
+	 */
+	public static <E extends AmpMessage> List<AmpMessageState> getHiddenSentOrDraftMsgs(Class<E> clazz,Long tmId,Boolean draft,int limit) throws Exception{
+		List<AmpMessageState> hiddenMsgs=null;	
+		Session session=null;
+		String queryString =null;
+		Query query=null;		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft;	
+			query=session.createQuery(queryString);
+			query.setFirstResult(limit);			
+			query.setParameter("tmId", tmId);			
+			hiddenMsgs=query.list();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);			
+		}
+		return hiddenMsgs;
+	}
+	
+	public static <E extends AmpMessage> List<AmpMessageState> getVisibleInboxMsgs(Class<E> clazz,Long tmId,int limit) throws Exception{
+		List<AmpMessageState> visibleMsgs=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false";	
+			query=session.createQuery(queryString);
+			query.setMaxResults(limit);			
+			query.setParameter("tmId", tmId);			
+			visibleMsgs=query.list();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);			
+		}
+		return visibleMsgs;
+	}
+	
+	public static <E extends AmpMessage> List<AmpMessageState> getVisibleSentOrDraftMsgs(Class<E> clazz,Long tmId,Boolean draft,int limit) throws Exception{
+		List<AmpMessageState> visibleMsgs=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft;	
+			query=session.createQuery(queryString);
+			query.setMaxResults(limit);			
+			query.setParameter("tmId", tmId);			
+			visibleMsgs=query.list();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);			
+		}
+		return visibleMsgs;
+	}
+	
+	/**
+	 * Returns first message ,which is hidden. Used to then change it's state to visible if someone deleted visible message in inbox  
+	 */
+	public static <E extends AmpMessage> AmpMessageState getFirstHiddenInboxMessage(Class<E> clazz,Long tmId) throws Exception{
+		AmpMessageState state=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=true order by msg.creationDate";	
+			query=session.createQuery(queryString);
+			query.setMaxResults(1);			
+			query.setParameter("tmId", tmId);			
+			state=(AmpMessageState)query.uniqueResult();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Message" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Message", ex);			
+		}
+		return state;
+	}
+	
+	/**
+	 * Returns first message ,which is hidden. Used to then change it's state to visible if someone deleted visible message in inbox  
+	 */
+	public static <E extends AmpMessage> AmpMessageState getFirstHiddenSentOrDraftMessage(Class<E> clazz,Long tmId,boolean draft) throws Exception{
+		AmpMessageState state=null;
+		Session session=null;
+		String queryString =null;
+		Query query=null;		
+		try {			
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" state.messageHidden=true order by msg.creationDate";	
+			query=session.createQuery(queryString);
+			query.setMaxResults(1);			
+			query.setParameter("tmId", tmId);			
+			state=(AmpMessageState)query.uniqueResult();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Message" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Message", ex);			
+		}
+		return state;
 	}
 }

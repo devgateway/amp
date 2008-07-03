@@ -1,5 +1,8 @@
 package org.digijava.module.message.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -7,7 +10,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.tools.ant.types.selectors.ExtendSelector;
+import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.message.dbentity.AmpAlert;
+import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.message.dbentity.Approval;
+import org.digijava.module.message.dbentity.CalendarEvent;
+import org.digijava.module.message.dbentity.UserMessage;
 import org.digijava.module.message.form.AmpMessageForm;
 import org.digijava.module.message.util.AmpMessageUtil;
 
@@ -29,7 +40,7 @@ public class MsgSettingsAction extends DispatchAction {
 	
 	public ActionForward saveSettings (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		AmpMessageForm msgForm=(AmpMessageForm)form;
-		
+		boolean runMessagesFilter=false;
 		AmpMessageSettings setting;
 		if(AmpMessageUtil.getMessageSettings()!=null){
 			setting=AmpMessageUtil.getMessageSettings();
@@ -39,10 +50,12 @@ public class MsgSettingsAction extends DispatchAction {
 			
 		String settingType=request.getParameter("settingType");
 		if(settingType!=null){
+			
 			if(settingType.equals("refreshTime")){
 				setting.setMsgRefreshTime(new Long(msgForm.getMsgRefreshTimeNew())); 
 			}else if(settingType.equals("storage")){
 				setting.setMsgStoragePerMsgType(new Long(msgForm.getMsgStoragePerMsgTypeNew()));
+				runMessagesFilter=true;				
 			}else if(settingType.equals("warning")){
 				setting.setDaysForAdvanceAlertsWarnings(new Long(msgForm.getDaysForAdvanceAlertsWarningsNew()));
 			}else if(settingType.equals("maxValidity")){
@@ -55,6 +68,7 @@ public class MsgSettingsAction extends DispatchAction {
 				}
 				if(msgForm.getMsgStoragePerMsgTypeNew()!=null && !msgForm.getMsgStoragePerMsgTypeNew().equals("")){
 					setting.setMsgStoragePerMsgType(new Long(msgForm.getMsgStoragePerMsgTypeNew()));
+					runMessagesFilter=true;					
 				}
 				if(msgForm.getDaysForAdvanceAlertsWarningsNew()!=null && !msgForm.getDaysForAdvanceAlertsWarningsNew().equals("")){
 					setting.setDaysForAdvanceAlertsWarnings(new Long(msgForm.getDaysForAdvanceAlertsWarningsNew()));
@@ -68,8 +82,73 @@ public class MsgSettingsAction extends DispatchAction {
 			}
 		}
 		
-		AmpMessageUtil.saveOrUpdateSettings(setting);
+		boolean successfullySaved=AmpMessageUtil.saveOrUpdateSettings(setting);
+		if(successfullySaved && runMessagesFilter){
+			filterMessages(setting.getMsgStoragePerMsgType().intValue());
+		}
 		return getSettings(mapping, msgForm, request, response);
+	}
+	
+	private void filterMessages(int limit) throws Exception{
+		List<AmpMessageState> messagesToBeHidden=new ArrayList<AmpMessageState> ();
+		List<AmpMessageState> messagesToBeShown=new ArrayList<AmpMessageState> ();
+		List<Long> membersIds=new ArrayList<Long>();
+		//get members whos inboxes(all of them) are full
+		Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
+		for (Class<AmpMessage> clazz : allTypesOfMessages) {
+			//INBOX
+			membersIds=AmpMessageUtil.getOverflowedMembersIdsForInbox(limit, clazz);
+			if(membersIds!=null && membersIds.size()>0){
+				for (Long id : membersIds) {
+					//load hidden messages list for inbox
+					messagesToBeHidden.addAll(AmpMessageUtil.getHiddenInboxMsgs(clazz, id,limit)); // returned list won't be empty,because we have list of users which have extra messages in inbox
+					//load visible messages list for inbox
+					messagesToBeShown.addAll(AmpMessageUtil.getVisibleInboxMsgs(clazz, id,limit));
+				}
+			}
+			
+			//only UserMessage and AmpAlert have sent/draft tabs
+			if(clazz.equals(UserMessage.class)||clazz.equals(AmpAlert.class)){
+				//SENT
+				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, false);
+				if(membersIds!=null && membersIds.size()>0){
+					for (Long id : membersIds) {
+						//load hidden messages list for inbox
+						messagesToBeHidden.addAll(AmpMessageUtil.getHiddenSentOrDraftMsgs(clazz, id,false,limit)); // returned list won't be empty,because we have list of users which have extra messages in inbox
+						//load visible messages list for inbox
+						messagesToBeShown.addAll(AmpMessageUtil.getVisibleSentOrDraftMsgs(clazz, id, false,limit));
+					}
+				}
+				
+				//DRAFT
+				membersIds=AmpMessageUtil.getOverflowedMembersIdsForSentOrDraft(limit, clazz, true);
+				if(membersIds!=null && membersIds.size()>0){
+					for (Long id : membersIds) {
+						//load hidden messages list for inbox
+						messagesToBeHidden.addAll(AmpMessageUtil.getHiddenSentOrDraftMsgs(clazz, id,true,limit));
+						//load visible messages list for inbox
+						messagesToBeShown.addAll(AmpMessageUtil.getVisibleSentOrDraftMsgs(clazz, id, true,limit));
+					}
+				}				
+			}					
+		}
+		
+		//now update hidden messages
+		if(!messagesToBeHidden.isEmpty()){
+			for (AmpMessageState state : messagesToBeHidden) {
+				state.setMessageHidden(true);
+				AmpMessageUtil.saveOrUpdateMessageState(state);			
+			}
+		}
+		
+		//now update visible messages
+		if(!messagesToBeShown.isEmpty()){
+			for (AmpMessageState state : messagesToBeShown) {
+				state.setMessageHidden(false);
+				AmpMessageUtil.saveOrUpdateMessageState(state);			
+			}
+		}		
+		 
 	}
 	
 	private AmpMessageForm clearForm(AmpMessageForm form){

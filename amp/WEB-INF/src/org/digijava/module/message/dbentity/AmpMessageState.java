@@ -28,6 +28,10 @@ public class AmpMessageState {
 	 * this field is used to see sent messages
 	 */
 	private Long senderId;
+	/**
+	 * defines whether a message should appear in inbox or not. if the inbox is full, message should be hidden
+	 */
+	private Boolean messageHidden;
 
 	public Long getSenderId() {
 		return senderId;
@@ -76,5 +80,12 @@ public class AmpMessageState {
 	public void setRead(Boolean read) {
 		this.read = read;
 	}
-	
+
+	public Boolean getMessageHidden() {
+		return messageHidden;
+	}
+
+	public void setMessageHidden(Boolean messageHidden) {
+		this.messageHidden = messageHidden;
+	}
 }

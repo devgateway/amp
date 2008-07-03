@@ -183,8 +183,8 @@
 							</logic:notEqual>
 						</field:display >
 						
-							<feature:display name="Funding Organizations" module="Funding"></feature:display>
-								<field:display name="Funding Organizations Tab" feature="Funding Organizations">
+							<feature:display name="Funding Information" module="Funding"></feature:display>
+								<field:display name="Funding Organizations Tab" feature="Funding Information">
 									<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
 									   <LI class="selected">
 											:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  

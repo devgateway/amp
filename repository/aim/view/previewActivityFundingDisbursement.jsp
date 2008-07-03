@@ -36,7 +36,7 @@
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<digi:trn
 									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
@@ -44,19 +44,19 @@
 							</field:display></td>
 
 							<td align="right"><field:display name="Date Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<bean:write name="fundingDetail" property="transactionDate" />
 							</field:display></td>
 							<td align="right"><field:display
-								name="Amount Disbursement" feature="Funding Organizations">
+								name="Amount Disbursement" feature="Funding Information">
 								<!--<FONT color=blue>*</FONT>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<bean:write name="fundingDetail" property="currencyCode" />
 							</field:display></td>
 							<td height="18"><field:display
-								name="Exchange Rate" feature="Funding Organizations">
+								name="Exchange Rate" feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display></td>
 						</tr>
@@ -95,7 +95,7 @@
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<digi:trn
 									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
@@ -103,19 +103,19 @@
 							</field:display></td>
 
 							<td align="right" align="right"><field:display name="Date Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<bean:write name="fundingDetail" property="transactionDate" />
 							</field:display></td>
 							<td align="right"><field:display name="Amount Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<!--<FONT color=blue>*</FONT>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Disbursement"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<bean:write name="fundingDetail" property="currencyCode" />
 							</field:display></td>
 							<td height="18"><field:display name="Exchange Rate"
-								feature="Funding Organizations">
+								feature="Funding Information">
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display></td>
 						</tr>

@@ -339,7 +339,7 @@ function fnGetSurvey() {
 				</tr>
 				</module:display>
 			
-				<feature:display name="Funding Organizations"  module="Funding">
+				<feature:display name="Funding Information"  module="Funding">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 3}">
 					<td nowrap="nowrap">

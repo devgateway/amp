@@ -60,7 +60,7 @@
 															<table width="100%" border="0" cellpadding="1"
 																bgcolor="#ffffff" cellspacing="1">
 																<field:display name="Funding Organization Id"
-																	feature="Funding Organizations">
+																	feature="Funding Information">
 																	<tr>
 																		<td bgcolor="#FFFFFF" align="left" width="150"><a
 																			title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
@@ -74,7 +74,7 @@
 																	</tr>
 																</field:display>
 																<field:display name="Funding Organization Name"
-																	feature="Funding Organizations">
+																	feature="Funding Information">
 																	<tr>
 																		<td bgcolor="#FFFFFF" align="left" width="150"><a
 																			title='<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>'>
@@ -88,7 +88,7 @@
 
 																<!-- type of assistance -->
 																<field:display name="Type Of Assistance"
-																	feature="Funding Organizations">
+																	feature="Funding Information">
 																	<tr>
 																		<td bgcolor="#FFFFFF" align="left" width="150"><a
 																			title='<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
@@ -104,7 +104,7 @@
 																	</tr>
 																</field:display>
 																<field:display name="Type Of Assistance"
-																	feature="Funding Organizations">
+																	feature="Funding Information">
 																	<tr>
 																		<td bgcolor="#FFFFFF" align="left" width="150"><a
 																			title='<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>'>

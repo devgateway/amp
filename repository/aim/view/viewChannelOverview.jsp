@@ -1213,7 +1213,7 @@ function commentWin(val) {
 																	<module:display name="Funding"
 																		parentModule="PROJECT MANAGEMENT">
 																		<feature:display module="Funding"
-																			name="Funding Organizations">
+																			name="Funding Information">
 																			<TR>
 																				<TD>
 																				<TABLE cellSpacing="1" cellPadding="2" vAlign="top"
@@ -1591,9 +1591,9 @@ function commentWin(val) {
 
 													<module:display name="Funding"
 														parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Funding Organizations"
+														<feature:display name="Funding Information"
 															module="Funding">
-															<field:display feature="Funding Organizations"
+															<field:display feature="Funding Information"
 																name="Type Of Assistance">
 																<TR>
 																	<TD>
@@ -1624,9 +1624,9 @@ function commentWin(val) {
 													</module:display>
 													<module:display name="Funding"
 														parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Funding Organizations"
+														<feature:display name="Funding Information"
 															module="Funding">
-															<field:display name="Financing Instrument" feature="Funding Organizations">
+															<field:display name="Financing Instrument" feature="Funding Information">
 																<TR>
 																	<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1

@@ -95,7 +95,7 @@ session.setAttribute("progressValue", counter);
     			<td align="left">
     				<img src="images/tableftcorner.gif"/>
     			</td>
-    			<td align="center" nowrap="nowrap" style="font-family: Arial;color: white;font-weight: bold;">
+    			<td align="center" nowrap="nowrap" style="background:#222E5D; font-family: Arial;color:white;font-weight: bold;">
     				<bean:write scope="session" name="reportMeta" property="name" />
     			</td>
     			<td align="right">

@@ -138,8 +138,8 @@ public class SaveActivity extends Action {
 		if (session.getAttribute("currentMember") == null) {
 			return mapping.findForward("index");
 		}
-		
-		
+
+
 		session.removeAttribute("report");
 		session.removeAttribute("reportMeta");
 		session.removeAttribute("forStep9");
@@ -150,10 +150,10 @@ public class SaveActivity extends Action {
 			TeamMember tm = null;
 			if (session.getAttribute("currentMember") != null)
 				tm = (TeamMember) session.getAttribute("currentMember");
-			
+
 			EditActivityForm eaForm = (EditActivityForm) form;
 			//if(eaForm!=null) return mapping.findForward("addActivityStepX");
-			
+
 			AmpActivity activity = new AmpActivity();
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
@@ -317,7 +317,7 @@ public class SaveActivity extends Action {
 						statusFlag = true;
 					}
                 }
-				
+
 				if (titleFlag) {
 					eaForm.setStep("1");
 					return mapping.findForward("addActivity");
@@ -421,7 +421,7 @@ public class SaveActivity extends Action {
 	                        eaForm.setStep("2");
 	                        return mapping.findForward("addActivityStep2");
 	                    }
-	                    
+
                     }
                 }
 				// end of Modified code
@@ -1454,16 +1454,22 @@ public class SaveActivity extends Action {
 					//if an approved activity is edited and the appsettins is set to newOnly then the activity
 					//doesn't need to be approved again!
 					AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
-					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) )
-						activity.setApprovalStatus(Constants.STARTED_STATUS);
-					if("newOnly".equals(tm.getAppSettings().getValidation()) && Constants.APPROVED_STATUS.equals(eaForm.getApprovalStatus()))
-								activity.setApprovalStatus(Constants.APPROVED_STATUS);
-					if(tm.getTeamHead())
-						activity.setApprovalStatus(Constants.APPROVED_STATUS);
+					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) ){
+                        activity.setApprovalStatus(Constants.STARTED_STATUS);
+                    }
+					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
+                       Constants.APPROVED_STATUS.equals(eaForm.getApprovalStatus())){
+                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
+                    }
+					if(tm.getTeamHead()){
+                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
+                    }
 					if(eaForm.getDraft()==true){
-						if(tm.getTeamHead())
-							activity.setApprovalStatus(Constants.APPROVED_STATUS);
-						else activity.setApprovalStatus(aAct.getApprovalStatus());
+						if(tm.getTeamHead()){
+                            activity.setApprovalStatus(Constants.APPROVED_STATUS);
+                        }else{
+                            activity.setApprovalStatus(aAct.getApprovalStatus());
+                        }
 					}
 
 					activity.setActivityCreator(eaForm.getCreatedBy());
@@ -1495,7 +1501,7 @@ public class SaveActivity extends Action {
 							ampContext.setAttribute(Constants.EDIT_ACT_LIST,
 									activityMap);
 							ampContext.setAttribute(Constants.SESSION_LIST,
-									sessList); 
+									sessList);
 
 							HashMap tsList = (HashMap) ampContext
 									.getAttribute(Constants.TS_ACT_LIST);
@@ -1537,16 +1543,36 @@ public class SaveActivity extends Action {
 				ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 			}
 
-            String logframepr = (String) session.getAttribute("logframepr");
-            if ("true".equals(logframepr)) {
-                if (activity.getApprovalStatus() != null && activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
-                    new ApprovedActivityTrigger(activity);
+            boolean needApproval=false;
+            boolean approved=false;
+
+            if(eaForm.isEditAct()){
+                if(tm.getTeamHead()){
+                    needApproval = false;
+                    approved=true;
+                }else if("newOnly".equals(tm.getAppSettings().getValidation())){
+                    approved=true;
+                    needApproval = false;
+                }else{
+                    needApproval = true;
+                    approved=false;
                 }
             }else{
-                new NotApprovedActivityTrigger(activity);
+                if(tm.getTeamHead()){
+                    needApproval=false;
+                    approved=true;
+                }else{
+                    approved=false;
+                    needApproval=true;
+                }
             }
 
-
+            if(approved){
+                new ApprovedActivityTrigger(activity);
+            }
+            if(needApproval){
+                new NotApprovedActivityTrigger(activity);
+            }
 
             if(DocumentUtil.isDMEnabled()) {
                 Site currentSite = RequestUtils.getSite(request);
@@ -1643,42 +1669,42 @@ public class SaveActivity extends Action {
 
 		}
 	}
-	
+
 
 	private boolean isSectorEnabled() {
  	    ServletContext ampContext = getServlet().getServletContext();
-	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+	    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
 			if(currentTemplate.getFeatures()!=null)
 				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
 				{
 					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
-					if(feature.getName().compareTo("Sectors")==0) 
+					if(feature.getName().compareTo("Sectors")==0)
 					{
 						return true;
-					}	
-					
+					}
+
 				}
 		return false;
 	}
 
 	private boolean isStatusEnabled() {
  	   ServletContext ampContext = getServlet().getServletContext();
- 	   
+
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
- 	   
+
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
 			if(currentTemplate.getFeatures()!=null)
 				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
 				{
 					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
-					if(feature.getName().compareTo("Status")==0) 
+					if(feature.getName().compareTo("Status")==0)
 					{
 						return true;
-					}	
-					
+					}
+
 				}
 		return false;
 	}
@@ -1879,35 +1905,35 @@ public class SaveActivity extends Action {
 	}
 	  private boolean isPrimarySectorEnabled() {
 	 	    ServletContext ampContext = getServlet().getServletContext();
-		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 			if(currentTemplate!=null)
 				if(currentTemplate.getFeatures()!=null)
 					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 					{
 						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-						if(field.getName().compareTo("Primary Sector")==0) 
-						{	
+						if(field.getName().compareTo("Primary Sector")==0)
+						{
 							return true;
 						}
-				
+
 					}
 			return false;
-	  }	  
+	  }
 	  private boolean isSecondarySectorEnabled() {
 	 	    ServletContext ampContext = getServlet().getServletContext();
-		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");		
+		    AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 			AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 			if(currentTemplate!=null)
 				if(currentTemplate.getFeatures()!=null)
 					for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 					{
 						AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-						if(field.getName().compareTo("Secondary Sector")==0) 
-						{	
+						if(field.getName().compareTo("Secondary Sector")==0)
+						{
 							return true;
 						}
-				
+
 					}
 			return false;
 	  }

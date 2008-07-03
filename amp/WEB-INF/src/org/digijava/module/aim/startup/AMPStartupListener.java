@@ -42,13 +42,6 @@ public class AMPStartupListener extends HttpServlet
     private static Logger logger = Logger.getLogger(
             AMPStartupListener.class);
     
-    protected Session session;
-
-    public Session createSession() throws HibernateException, SQLException {
-    	if(session!=null) return session;
-    	session = PersistenceManager.getSession();
-    	return session;
-    }
 
     public void contextDestroyed(ServletContextEvent sce) {
 
@@ -78,8 +71,13 @@ public class AMPStartupListener extends HttpServlet
         	//get the default amp template!!!
         	AmpTreeVisibility ampTreeVisibilityAux=new AmpTreeVisibility();
         	AmpTreeVisibility ampTreeVisibilityAux2=new AmpTreeVisibility();
-        	Session session=this.createSession();
-        	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
+        	Session session=PersistenceManager.getSession();
+        	AmpTemplatesVisibility currentTemplate=null;
+        	try {
+				currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
+        	} finally {
+        		PersistenceManager.releaseSession(session);
+        	}
         	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
         	ampContext.setAttribute("FMcache", "read");

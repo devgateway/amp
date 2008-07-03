@@ -265,7 +265,7 @@ function checkUncheckAll2() {
 											<feature:display name="Identification" module="Project ID and Planning"></feature:display>
 											<feature:display name="Planning" module="Project ID and Planning"></feature:display>
 											<feature:display name="Location" module="Project ID and Planning"></feature:display>
-											<feature:display  name="Funding Organizations" module="Funding"></feature:display>
+											<feature:display  name="Funding Information" module="Funding"></feature:display>
 											<feature:display name="Issues" module="Issues"></feature:display>
 											<feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
 											<feature:display name="Activity" module="M & E"></feature:display>
@@ -280,44 +280,44 @@ function checkUncheckAll2() {
 											<field:display name="Creation Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Changed Date" feature="Planning">&nbsp;</field:display>
 											
-											<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Donor Type" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Donor Agency" feature="Funding Information">&nbsp;</field:display>
+											<field:display name="Donor Type" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
 											<field:display name="Activity Creator" feature="Identification">&nbsp;</field:display>
 											<field:display name="Last changed by" feature="Identification">&nbsp;</field:display>
 											
-											<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Type Of Assistance" feature="Funding Information">&nbsp;</field:display>
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Primary Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Secondary Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Componente" feature="Planning">&nbsp;</field:display>											
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
-											<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Financing Instrument" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Objective" feature="Identification">&nbsp;</field:display>
 											
 											<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
 											<field:display name="AMP ID" feature="Identification">&nbsp;</field:display>
 											<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
 											<field:display name="Description" feature="Identification">&nbsp;</field:display>
-												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Cumulative Commitment" feature="Funding Information">&nbsp;</field:display>
+												<field:display name="Cumulative Disbursement" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Component Name" feature="Activity - Component Step">&nbsp;</field:display>
-											<field:display name="Undisbursed Cumulative Balance" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Uncommitted Cumulative Balance" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Undisbursed Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
+											<field:display name="Uncommitted Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Team" feature="Identification">&nbsp;</field:display>
 											<field:display name="Issues" feature="Issues">&nbsp;</field:display>
 											<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
 											<field:display name="Actors" feature="Issues">&nbsp;</field:display>
 											<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
-												<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Donor Commitment Date" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Physical Progress" feature="Physical Progress">&nbsp;</field:display>
 											<field:display name="Grand Total Cost" feature="Costing"></field:display>
 											<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 											<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
 											<field:display name="Costing Donor" feature="Costing"></field:display>
-												<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Donor Group" feature="Funding Information">&nbsp;</field:display>
 												<field:display name="Component description" feature="Activity - Component Step">&nbsp;</field:display>
 											<field:display name="Physical progress title" feature="Physical Progress">&nbsp;</field:display>
 												<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>

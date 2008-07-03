@@ -3510,7 +3510,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             AmpFeaturesVisibility step3=FeaturesUtil.getFeatureByName("Location", "Project ID and Planning", templId);
             AmpFeaturesVisibility step3_2=FeaturesUtil.getFeatureByName("Sectors", "Project ID and Planning", templId);
             AmpModulesVisibility step3_3=FeaturesUtil.getModuleByName("National Planning Dashboard", "NATIONAL PLAN DASHBOARD", templId);
-            AmpFeaturesVisibility step4=FeaturesUtil.getFeatureByName("Funding Organizations", "Funding", templId);
+            AmpFeaturesVisibility step4=FeaturesUtil.getFeatureByName("Funding Information", "Funding", templId);
             AmpFeaturesVisibility step5=FeaturesUtil.getFeatureByName("Regional Funding", "Funding", templId);
             AmpFeaturesVisibility step6=FeaturesUtil.getFeatureByName("Components", "Components", templId);
             AmpFeaturesVisibility step6_2=FeaturesUtil.getFeatureByName("Issues", "Issues", templId);

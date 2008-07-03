@@ -488,7 +488,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                           </tr>
                                         </table>
                                       </feature:display>
-                                      <feature:display name="Funding Organizations" module="Funding">
+                                      <feature:display name="Funding Information" module="Funding">
                                       <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0 >
                                         <tr>
                                           <td>
@@ -497,7 +497,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                             <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
                                               <a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
                                               <b>
-                                                <digi:trn key="aim:fundingOrganizations">Funding Organizations</digi:trn>
+                                                <digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>
                                               </b>
 </a><br /><br />
                                           </td>
@@ -513,7 +513,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                       <logic:iterate name="aimEditActivityForm" property="fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
                                                         <tr>
                                                           <td>
-                                                          	<field:display name="Organizations Selector" feature="Funding Organizations">
+                                                          	<field:display name="Organizations Selector" feature="Funding Information">
                                                           	<table>
                                                           	<tr>
                                                           		<td colspan="3">
@@ -526,7 +526,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</html:button>
                                                             </td>
 
-                                                            <field:display name="Active Funding Organization" feature="Funding Organizations">
+                                                            <field:display name="Active Funding Organization" feature="Funding Information">
                                                             <td> &nbsp;&nbsp;
                           										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
                           											<html:option value="true">Active</html:option>
@@ -534,14 +534,14 @@ ${fn:replace(message,quote,escapedQuote)}
                           										</html:select>
                                                             </td>
                                                             </field:display>
-                                                            <field:display name="Delegated Cooperation" feature="Funding Organizations">
+                                                            <field:display name="Delegated Cooperation" feature="Funding Information">
                                                             <td>
 
                           									Delegated Cooperation<html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
                           									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
                                                             </td>
                                                             </field:display>
-                                                            <field:display name="Delegated Partner" feature="Funding Organizations">
+                                                            <field:display name="Delegated Partner" feature="Funding Information">
                                                             <td>
                           									Delegated Partner<html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
                           									<html:hidden name="fundingOrganization" property="delegatedPartnerString" indexed="true"/>
@@ -564,7 +564,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                         <tr>
                                                                           <td>
                                                                             <table width="100%" border="0" cellpadding="1" bgcolor="#ffffff" cellspacing="1">
-                                                                            <field:display name="Funding Organization Id" feature="Funding Organizations">
+                                                                            <field:display name="Funding Organization Id" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																<digi:trn key="aim:fundingOrgId">
@@ -577,7 +577,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                               </tr>
                                                                               </field:display>
                                                                               <!-- type of assistance -->
-                                                                              <field:display name="Type Of Assistance" feature="Funding Organizations">
+                                                                              <field:display name="Type Of Assistance" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
@@ -593,7 +593,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                               </tr>
 																			</field:display>
-																			<field:display name="Financing Instrument" feature="Funding Organizations">
+																			<field:display name="Financing Instrument" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
@@ -609,7 +609,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                               </tr>
 																			</field:display>
-																			<field:display name="Conditions for Fund Release" feature="Funding Organizations">
+																			<field:display name="Conditions for Fund Release" feature="Funding Information">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 <digi:trn key="aim:conditions"> Conditions
@@ -686,25 +686,25 @@ ${fn:replace(message,quote,escapedQuote)}
 
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
-                                                                                        <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
+                                                                                        <field:display name="Adjustment Type Commitment" feature="Funding Information">
                                                                                           <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
 																							</field:display>
                                                                                         </td>
                                                                                         <td width="120" align="right">
-                                                                                        <field:display name="Amount Commitment" feature="Funding Organizations">
+                                                                                        <field:display name="Amount Commitment" feature="Funding Information">
                                                                                           <FONT color=blue>*</FONT>
                                                                                           <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
                                                                                           </field:display>
                                                                                         </td>
                                                                                         <td width="150">
-                                                                                        <field:display name="Currency Commitment" feature="Funding Organizations">
+                                                                                        <field:display name="Currency Commitment" feature="Funding Information">
                                                                                           <bean:write name="fundingDetail" property="currencyCode"/>
                                                                                           </field:display>
                                                                                         </td>
                                                                                         <td width="70">
-                                                                                       	 	<field:display name="Date Commitment" feature="Funding Organizations">
+                                                                                       	 	<field:display name="Date Commitment" feature="Funding Information">
                                                                                           		<bean:write name="fundingDetail" property="transactionDate"/>
                                                                                           	</field:display>
                                                                                         </td>
@@ -846,32 +846,32 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																								<tr bgcolor="#ffffff">
 																									<td width="50">
-																									<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
+																									<field:display name="Adjustment Type Expenditure" feature="Funding Information">
 																										<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																											<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																										</digi:trn>
 																									</field:display>
 																									</td>
 																									<td width="120" align="right">
-																										<field:display name="Amount Expenditure" feature="Funding Organizations">
+																										<field:display name="Amount Expenditure" feature="Funding Information">
 																											<FONT color=blue>*</FONT>
 																											<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																										</field:display>
 																									</td>
 																									<td width="150">
-																										<field:display name="Currency Expenditure" feature="Funding Organizations">
+																										<field:display name="Currency Expenditure" feature="Funding Information">
 																											<bean:write name="fundingDetail" property="currencyCode"/>
 																										</field:display>
 																									</td>
 																									<td width="70">
-																										<field:display name="Date Expenditure" feature="Funding Organizations">
+																										<field:display name="Date Expenditure" feature="Funding Information">
 																											<bean:write name="fundingDetail" property="transactionDate"/>
 																										</field:display>
 																									</td>
 																								</tr>
 																								<tr>
 																									<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
-																										<field:display name="Classification Expenditure" feature="Funding Organizations">
+																										<field:display name="Classification Expenditure" feature="Funding Information">
 																											<bean:write name="fundingDetail" property="classification"/>
 																										</field:display>
 																									</td>

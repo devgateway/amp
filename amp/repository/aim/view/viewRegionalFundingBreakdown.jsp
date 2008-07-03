@@ -182,27 +182,27 @@ function projectFiche(id)
 	            						            	<TD>
 	            						            		<digi:trn key="aim:region">Region</digi:trn>
 	            						            	</TD>
-	            						            	<field:display name="Total Committed" feature="Funding Organizations">
+	            						            	<field:display name="Total Committed" feature="Funding Information">
 															<TD>
 																<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>
 															</TD>
 														</field:display>
-														<field:display name="Total Disbursed" feature="Funding Organizations">
+														<field:display name="Total Disbursed" feature="Funding Information">
 								                         	<TD>
 								                         		<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>
 								                         	</TD>
 														</field:display>
-														<field:display name="Undisbursed Funds" feature="Funding Organizations">
+														<field:display name="Undisbursed Funds" feature="Funding Information">
 															<TD>
 																<digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn>
 															</TD>
 														</field:display>
-														<field:display name="Total Expended" feature="Funding Organizations">
+														<field:display name="Total Expended" feature="Funding Information">
 								                         	<TD>
 								                         		<digi:trn key="aim:totalExpended">Total Expended</digi:trn>
 								                         	</TD>
 														</field:display>
-														<field:display name="Unexpended Funds" feature="Funding Organizations">
+														<field:display name="Unexpended Funds" feature="Funding Information">
 															<TD>
 																<digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn>
 															</TD>
@@ -219,30 +219,30 @@ function projectFiche(id)
 																	<digi:link href="/viewRegFundDetails.do" name="url">
 																	<bean:write name="fd" property="regionName"/></digi:link>
 																</TD>
-																<field:display name="Total Committed" feature="Funding Organizations">
+																<field:display name="Total Committed" feature="Funding Information">
 													                <TD align="right">
 													                <%=FormatHelper.formatNumber(fd.getTotCommitments())  %>
 													                </TD>
 													            </field:display>
-																<field:display name="Total Disbursed" feature="Funding Organizations">
+																<field:display name="Total Disbursed" feature="Funding Information">
 													                <TD align="right">
 													                	<%=FormatHelper.formatNumber(fd.getTotDisbursements())  %>
 												
 													                </TD>
 													            </field:display>
-																<field:display name="Undisbursed Funds" feature="Funding Organizations">
+																<field:display name="Undisbursed Funds" feature="Funding Information">
 											      			        <TD align="right">
 											      			        <%=FormatHelper.formatNumber(fd.getTotUnDisbursed())  %>
 											      			        	
 											      			        </TD>
 											      			    </field:display>
-																<field:display name="Total Expended" feature="Funding Organizations">
+																<field:display name="Total Expended" feature="Funding Information">
 														            <TD align="right">
 														            	<bean:write name="fd" property="totExpenditures"/>
 														            <%=FormatHelper.formatNumber(fd.getTotExpenditures())  %>
 														            </TD>
 														        </field:display>
-																<field:display name="Unexpended Funds" feature="Funding Organizations">
+																<field:display name="Unexpended Funds" feature="Funding Information">
 											            		    <TD align="right">
 											            		    	
 											            		    	 <%=FormatHelper.formatNumber(fd.getTotUnExpended())  %>
@@ -255,29 +255,29 @@ function projectFiche(id)
 														<TD>
 															<digi:trn key="aim:total">Total</digi:trn>
 														</TD>
-														<field:display name="Total Committed" feature="Funding Organizations">
+														<field:display name="Total Committed" feature="Funding Information">
 															<TD align="right">
 															<% %>
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotCommitments())%>
 															</TD>
 														</field:display>
-														<field:display name="Total Disbursed" feature="Funding Organizations">
+														<field:display name="Total Disbursed" feature="Funding Information">
 															<TD align="right">
 																<%//=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotDisbursements())%>
 															</TD>
 														</field:display>
-														<field:display name="Undisbursed Funds" feature="Funding Organizations">
+														<field:display name="Undisbursed Funds" feature="Funding Information">
 															<TD align="right">
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotUnDisbursed())%>
 														</TD>
 														</field:display>
-														<field:display name="Total Expended" feature="Funding Organizations">
+														<field:display name="Total Expended" feature="Funding Information">
 															<TD align="right">
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotExpenditures())%>
 									
 															</TD>
 														</field:display>
-														<field:display name="Unexpended Funds" feature="Funding Organizations">
+														<field:display name="Unexpended Funds" feature="Funding Information">
 															<TD align="right">
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotUnExpended())%>
 															</TD>

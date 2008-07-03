@@ -13,6 +13,7 @@
 		<property name="sender" column="sender"  type="java.lang.String"/>
 		<property name="senderId" column="sender_Id"  type="java.lang.Long"/>	
 		<property name="read" column="is_read"  type="java.lang.Boolean"/>		
+		<property name="messageHidden" column="is_message_hidden"  type="java.lang.Boolean"/>
 		
 		<many-to-one name="message" column="message_id" class="org.digijava.module.message.dbentity.AmpMessage" cascade="none"/>
 		

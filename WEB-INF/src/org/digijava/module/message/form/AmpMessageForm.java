@@ -62,6 +62,7 @@ public class AmpMessageForm extends ActionForm {
 	private int alertType=0;							//holds amount of alerts
 	
 	private boolean inboxFull=false;
+	private boolean addAtTop=false;
 	
 	
 	private Map<String,Team> teamsMap;	
@@ -520,6 +521,14 @@ public class AmpMessageForm extends ActionForm {
 
 		public void setAllmsg(int allmsg) {
 			this.allmsg = allmsg;
+		}
+
+		public boolean isAddAtTop() {
+			return addAtTop;
+		}
+
+		public void setAddAtTop(boolean addAtTop) {
+			this.addAtTop = addAtTop;
 		}
 
 	

@@ -86,7 +86,6 @@ public class AmpMessageActions extends DispatchAction {
     	AmpMessageForm messageForm=(AmpMessageForm)form;
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
     	if(settings!=null && settings.getMsgRefreshTime()!=null && settings.getMsgRefreshTime().longValue()>0){
-    	
     		messageForm.setMsgRefreshTimeCurr(settings.getMsgRefreshTime());
     		messageForm.setMsgStoragePerMsgTypeCurr(settings.getMsgStoragePerMsgType());
 			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());
@@ -98,7 +97,6 @@ public class AmpMessageActions extends DispatchAction {
     	}  else{
     		messageForm.setMsgRefreshTimeCurr(new Long(-1));
     	}
-    	
     	int tabIndex=0;
     	if(request.getParameter("tabIndex")!=null){
     		tabIndex=Integer.parseInt(request.getParameter("tabIndex"));
@@ -117,7 +115,7 @@ public class AmpMessageActions extends DispatchAction {
     		childTab="inbox";
     	}
     	messageForm.setChildTab(childTab);
-   
+    	
     	return mapping.findForward("showAllMessages");
     }
     
@@ -133,10 +131,6 @@ public class AmpMessageActions extends DispatchAction {
     	TeamMember teamMember = new TeamMember();        	  
     	 // Get the current team member 
     	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);   	
-    	
-    	
-    	
-    	
     	
     	int tabIndex=0;
     	if(request.getParameter("tabIndex")!=null){
@@ -203,6 +197,7 @@ public class AmpMessageActions extends DispatchAction {
     	Collections.reverse(allMessages);
     	messageForm.setMessagesForTm(allMessages);
     	
+    	messageForm.setAllmsg(allMessages.size());
     	
     	messageForm.setTabIndex(tabIndex);
     	
@@ -359,17 +354,16 @@ public class AmpMessageActions extends DispatchAction {
 		approvalType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(Approval.class, teamMember.getMemberId());
 		calEventType=AmpMessageUtil.getUnreadMessagesAmountPerMsgType(CalendarEvent.class, teamMember.getMemberId());
 		
-		//checking if inbox is full
-		AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
-		if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()>0){
-			int maxStorage=settings.getMsgStoragePerMsgType().intValue();
-			if(msgType<=maxStorage || alertType<=maxStorage|| approvalType<=maxStorage ||calEventType<=maxStorage){
+		//checking if Any of the inbox is full
+		Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
+		for (Class<AmpMessage> clazz : allTypesOfMessages) {				
+			if(AmpMessageUtil.isInboxFull(clazz, teamMember.getMemberId())){
 				messagesForm.setInboxFull(true);
+				break;
 			}
-		}		
+		}				
 		
-		//creating xml that will be returned   		
-		
+		//creating xml that will be returned	
 		response.setContentType("text/xml");
 		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
 		PrintWriter out = new PrintWriter(outputStream, true);
@@ -429,10 +423,52 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward removeSelectedMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {    	
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
     	messagesForm.setDeleteActionWasCalled(true);
-    	//remove from db
+    	//getting message which will become visible instead of deleted one
+    	HttpSession session = request.getSession();
+    	TeamMember teamMember =(TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	boolean addAtTop=getNextMessage(teamMember.getMemberId(),messagesForm.getTabIndex(),messagesForm.getChildTab());
+    	messagesForm.setAddAtTop(addAtTop);
+    	//remove message from db
     	AmpMessageUtil.removeMessageState(messagesForm.getMsgStateId());	
     	return viewAllMessages(mapping, messagesForm, request, response);
-    }    
+    }  
+    
+    /**
+     * Used to define whether User has hidden messages in her inbox/sent/draft tabs of specified Message Type
+     * If he/she does, then after deleting one message, the first hidden one should become visible.this mean should be delivered to user.
+     */
+    private boolean getNextMessage(Long tmId,int tabIndex,String childTab) throws Exception{
+    	boolean addAtTop=false;
+    	boolean isFull=false;
+    	Class  clazz=null;
+    	AmpMessageState state=null;
+    	if(tabIndex==1){ //<-----messages    
+    		clazz=UserMessage.class;
+    	}else if(tabIndex==2){// <--alerts
+    		clazz=AmpAlert.class;
+    	}else if(tabIndex==3){// <---approvals.
+    		clazz=Approval.class;    		
+    	}else if(tabIndex==4){// <--calendar events
+    		clazz=CalendarEvent.class;    		
+    	}
+    	
+    	if(childTab!=null && (childTab.equalsIgnoreCase("inbox"))){
+    		isFull=AmpMessageUtil.isInboxFull(clazz, tmId);
+    		state=AmpMessageUtil.getFirstHiddenInboxMessage(clazz, tmId);
+    	}else if(childTab!=null && (childTab.equalsIgnoreCase("sent"))){
+    		isFull=AmpMessageUtil.isSentOrDraftFull(clazz, tmId, false);
+			state=AmpMessageUtil.getFirstHiddenSentOrDraftMessage(clazz, tmId, false);
+    	}else if(childTab!=null && (childTab.equalsIgnoreCase("draft"))){
+    		isFull=AmpMessageUtil.isSentOrDraftFull(clazz, tmId, true);
+			state=AmpMessageUtil.getFirstHiddenSentOrDraftMessage(clazz, tmId, true);
+    	}    	
+    	if(isFull){
+    		addAtTop=true;
+    		state.setMessageHidden(false);
+			AmpMessageUtil.saveOrUpdateMessageState(state);
+    	} 
+    	return addAtTop;
+    }
  
     
     /**
@@ -486,13 +522,13 @@ public class AmpMessageActions extends DispatchAction {
     		if(messageForm.getSetAsAlert()==0){
     			message=new UserMessage();
     		}else {
-    			message=new AmpAlert(); 
+    			message=new AmpAlert();    			
     		}    		    		
     	}else {
     		if(messageForm.getSetAsAlert()==0){
     			message=new UserMessage();
     		}else {    			
-    			message=new AmpAlert();  
+    			message=new AmpAlert();     			
     		}
     		//remove all States that were associated to this message
 			List<AmpMessageState> statesAssociatedWithMsg=AmpMessageUtil.loadMessageStates(messageForm.getMessageId());
@@ -501,7 +537,7 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			//remove message
 			AmpMessageUtil.removeMessage(messageForm.getMessageId());
-    	}
+    	}    	
         if(message instanceof AmpAlert){
              messageForm.setTabIndex(2); // to navigate to the Alert Tab
         }
@@ -625,8 +661,8 @@ public class AmpMessageActions extends DispatchAction {
         }
             else{
     	
-		return mapping.findForward("viewMyDesktop");
-            }
+		return mapping.findForward("viewMyDesktop");		
+	}   
 	}   
     
     
@@ -635,18 +671,30 @@ public class AmpMessageActions extends DispatchAction {
 		newMessageState.setMessage(message);
 		newMessageState.setSender(senderName);
 		newMessageState.setMemberId(memberId);	
-                String receivers = message.getReceivers();
-                if (receivers == null) {
-                    receivers = "";
-                } else {
-                    if (receivers.length() > 0) {
-                        receivers += ", ";
-                    }
-                }
-                User user=TeamMemberUtil.getAmpTeamMember(memberId).getUser();
-                receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
-                message.setReceivers(receivers);
-		newMessageState.setRead(false);
+        String receivers = message.getReceivers();
+        if (receivers == null) {
+        	receivers = "";
+        } else {
+          	if (receivers.length() > 0) {
+           		receivers += ", ";
+            }
+        }
+        User user=TeamMemberUtil.getAmpTeamMember(memberId).getUser();
+        receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
+        message.setReceivers(receivers);
+		newMessageState.setRead(false);	
+		//check if user's inbox is already full
+		Class clazz=null;
+		if(message.getClassName().equalsIgnoreCase("u")){
+			clazz=UserMessage.class;			
+		}else if(message.getClassName().equalsIgnoreCase("a")){
+			clazz=AmpAlert.class;
+		}		
+		if(AmpMessageUtil.isInboxFull(clazz, memberId)){
+			newMessageState.setMessageHidden(true);
+		}else{
+			newMessageState.setMessageHidden(false);
+		}		
 		//saving current state in db
 		AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
     }

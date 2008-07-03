@@ -46,6 +46,7 @@
 }
 </style>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <div id="mySorter" style="display: none">
 
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />

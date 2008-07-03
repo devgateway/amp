@@ -185,20 +185,15 @@ public class getNPDgraph extends Action {
                             }
                         }
                        
-                        List<Integer> targetKeys = new ArrayList(actualValues.keySet());
-                        List<Integer> baseKeys = new ArrayList(actualValues.keySet());
+                        List<Integer> targetKeys = new ArrayList(targetValues.keySet());
+                        List<Integer> baseKeys = new ArrayList(baseValues.keySet());
                         Collections.sort(targetKeys); // sort target years asc
                         Collections.sort(baseKeys); // sort base years
                         
                         for (String selectedYear : selectedYears) {
                             Integer selYear = Integer.parseInt(selectedYear);
                              Double realActual = actualValues.get(selYear);
-                               if(realActual==null){
-                                   dataset.addValue(0, selectedYear, displayLabel);
-                                   dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), "", "", formatValue(targetValue)});
-                               }
-                               else{
-                                Integer baseKey = null;
+                             Integer baseKey = null;
                                 Integer targetKey = null;
                                 for (Integer basKey : baseKeys) {
                                     if (selYear >= basKey) {
@@ -208,15 +203,22 @@ public class getNPDgraph extends Action {
                                     }
                                 }
                                 for (Integer targKey : targetKeys) {
-                                    if (selYear >= targKey) {
+                                    if (selYear <= targKey) {
                                         targetKey = targKey;
-                                    } else {
                                         break;
                                     }
                                 }
-                              
-                                targetValue = targetValues.get(targetKey);
-                                baseValue = baseValues.get(baseKey);
+                                 if (targetKey != null) {
+                                    targetValue = targetValues.get(targetKey);
+                                }
+                                if (baseKey != null) {
+                                    baseValue = baseValues.get(baseKey);
+                                }
+                               if(realActual==null){
+                                   dataset.addValue(0, selectedYear, displayLabel);
+                                   dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), "", "", formatValue(targetValue)});
+                               }
+                               else{
                                 dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(realActual), formatValue(realActual), formatValue(targetValue)});
                                 realActual = computePercent(indicator, targetValue, realActual, baseValue);
                                 dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);

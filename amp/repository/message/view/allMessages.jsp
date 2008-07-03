@@ -976,7 +976,7 @@ $(document).ready(function(){
                                                     
 								<c:if test="${messageForm.tabIndex==3}">
                                                     <LI>
-                                                        <a name="node"	>show
+                                                        <a name="node">
                                                             <div>
 									<digi:trn key="message:approvals">Approvals</digi:trn>
                                                         </div>

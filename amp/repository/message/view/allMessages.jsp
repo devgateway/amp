@@ -244,7 +244,8 @@ background-color:yellow;
                                 var trs=tbl.tBodies[0].rows;
                                 
                                 for(var i=1;i<trs.length;i++){
-                                var className;
+                                
+                                var className='';
                                 if(i!=1&&i%2==0){
                                     trs[i].className = 'trOdd';
                                     className="this.className='trOdd'";
@@ -255,7 +256,6 @@ background-color:yellow;
                                        className="this.className='trEven'";
                                     }
                                        var setBGColor = new Function(className);
-                                       trs[i].onmouseover=hoverTr;
                                        trs[i].onmouseout=setBGColor;
                                 }
                                 
@@ -470,7 +470,7 @@ background-color:yellow;
 												if(browser=="Microsoft Internet Explorer"){
 							
 										   				var msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-										   				
+										   				msgTr=paintTr(msgTr,i);
 										   				
 													}else{
 										            
@@ -488,7 +488,7 @@ background-color:yellow;
 												if(browser=="Microsoft Internet Explorer"){
 							
 										   				var msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-															
+														msgTr=paintTr(msgTr,i);	
 							
 												}else{
                                                         msgTR=paintTr(msgTR,i);
@@ -517,9 +517,8 @@ background-color:yellow;
                             var browser=navigator.appName;
 												
 							if(browser=="Microsoft Internet Explorer"){
-							
 								   		var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-										
+										msgTr=paintTr(msgTr,i);
 										
 							
 								}else{

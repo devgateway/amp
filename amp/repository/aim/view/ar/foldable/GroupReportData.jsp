@@ -21,7 +21,7 @@
 	<jsp:include page="TrailCells.jsp"/>
 </logic:present>
 
-<tr><td>
+
 
 
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
@@ -31,5 +31,4 @@
 		</logic:equal>
 </logic:iterate>
 
-</td></tr>
 

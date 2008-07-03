@@ -24,10 +24,7 @@
 //  		window.close();  					
 //	}
 	
-	function closeWindow() {	
-		window.close();	
-	}
-
+	
 </script>
 
 <digi:form action="/messageActions.do">

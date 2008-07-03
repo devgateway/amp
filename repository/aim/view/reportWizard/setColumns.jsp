@@ -34,7 +34,7 @@
 																								<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
 																									<script type="text/javascript" >
-																										<!-- insertColInfo('${ampColumnFromTree.columnId}', '${ampColumnFromTree.columnName}'); -->
+																										insertColInfo('${ampColumnFromTree.columnId}', '${ampColumnFromTree.columnName}');
 																									</script>
 																								</logic:iterate>
 																							</logic:iterate>

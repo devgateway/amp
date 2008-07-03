@@ -7,9 +7,35 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
+
+<!-- Yahoo Panel --> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>"></script>
+
 <style>
 <!--
+
+#selectedMessagePanel .bd { 
+    height: 500px; 
+    /* Apply scrollbars for all browsers. */ 
+    overflow: auto; 
+} 
+.yui-panel-container.hide-scrollbars #selectedMessagePanel .bd { 
+	    /* Hide scrollbars by default for Gecko on OS X */ 
+	    overflow: hidden; 
+	} 
+	
+	.yui-panel-container.show-scrollbars #selectedMessagePanel .bd { 
+	    /* Show scrollbars for Gecko on OS X when the Panel is visible  */ 
+	    overflow: auto; 
+} 
+	
+
+
 .my-border-style {
       border-top: 1px solid  #f4f4f2;
 }
@@ -53,7 +79,8 @@ background-color:yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script langauage="JavaScript">
-
+    
+        var  selectedMessagePanel;
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
         var noAlerts='<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>';
         var noApprovals='<digi:trn key="message:noPendingApprovals">No Pending Approvals</digi:trn>';
@@ -98,6 +125,10 @@ background-color:yellow;
         }   
     }
     
+    function closeWindow() {	
+       selectedMessagePanel.destroy();
+    }
+    
     /*code below doesn't look good... but still
      *  its attachs events to rows: mouse over(makes row color darker) 
      *  and mouse out(returns to row it basic color)
@@ -132,23 +163,61 @@ background-color:yellow;
 		async.call(url);
 		id=window.setTimeout("checkForNewMessages()",60000*document.getElementsByName('msgRefreshTimeCurr')[0].value,"JavaScript");
 	}
-	
-	function openObjectURL(url){
-		window.open(url,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes')
-		//openURLinWindow(url,600,550);
-	}
-	
-    function viewMsg(id) {
+        
+    function loadSelectedMessage(id){
+        /* 
+         * some messages need long time to load, 
+         * that is why we create blank panel here, so user will see blank panel
+         * before function call is completed
+         */
+        
+        //create div to hold selected message
+        var div=document.createElement('DIV');
+        div.id="selectedMessagePanel";
+        document.body.appendChild(div);
+        
+        // create body div to hold selected message
+        var divBody=document.createElement('DIV');
+        divBody.className="bd";
+        divBody.id="msg_bd";
+        divBody.innerHTML='';
+        div.appendChild(divBody);
+        selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
+            width:"600px", 
+            height:"510px",
+            fixedcenter: true, 
+            constraintoviewport: true, 
+            underlay:"shadow", 
+            modal: true,
+            close:true, 
+            visible:true, 
+            draggable:true} );
+        selectedMessagePanel.render();
+        var url;
         var ind=id.indexOf('_fId');
         if(ind!=-1){
             var msgId=id.substring(0,ind);
-            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');          
-            //openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgId='+msgId,600,430);
-        }else{   
-            window.open('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,'','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');            
-           // openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,600,430);
-            markMsgeAsRead(id);
+            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId='+msgId); 
         }
+        else{
+            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgStateId='+id);  
+        }			
+        var async=new Asynchronous();
+        async.complete=viewMsg;
+        async.call(url);
+        
+    }
+	
+	function openObjectURL(url){
+            window.open(url,'','channelmode=no,directories=no,menubar=yes,resizable=yes,status=yes,toolbar=yes,scrollbars=yes,location=yes');
+            //openURLinWindow(url,600,550);
+	
+	}
+	
+    function viewMsg(status, statusText, responseText, responseXML) {
+        var divBody=document.getElementById("msg_bd");
+        divBody.setAttribute("visibility","visible");
+        divBody.innerHTML=responseText;
 	}
 	
 	function deleteMessage(msgId) {
@@ -561,9 +630,9 @@ background-color:yellow;
 		var sp=document.createElement('SPAN');
 		var isMsgRead=message.getAttribute('read');
 		if(isMsgRead=='false'){
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMsg(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
 		}else {
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:viewMsg(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
+			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);

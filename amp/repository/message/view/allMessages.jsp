@@ -173,7 +173,7 @@ background-color:yellow;
          * that is why we create blank panel here, so user will see blank panel
          * before function call is completed
          */
-        
+       
         //create div to hold selected message
         var div=document.createElement('DIV');
         div.id="selectedMessagePanel";
@@ -183,7 +183,7 @@ background-color:yellow;
         var divBody=document.createElement('DIV');
         divBody.className="bd";
         divBody.id="msg_bd";
-        divBody.innerHTML='';
+        divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
             width:"600px", 
@@ -242,24 +242,24 @@ background-color:yellow;
                                  *  and mouse out(returns to row it basic (new) color)
                                  */
                                 var trs=tbl.tBodies[0].rows;
-                                
+                               
                                 for(var i=1;i<trs.length;i++){
                                 
-                                var className='';
-                                if(i!=1&&i%2==0){
-                                    trs[i].className = 'trOdd';
-                                    className="this.className='trOdd'";
-                                                                                               
-                                }
-                                else{
-                                       trs[i].className='trEven';
-                                       className="this.className='trEven'";
+                                        var className='';
+                                        if(i!=1&&i%2==0){
+                                            trs[i].className = 'trOdd';
+                                            className="this.className='trOdd'";
+
+                                        }
+                                        else{
+                                            trs[i].className='trEven';
+                                            className="this.className='trEven'";
+                                        }
+                                        var setBGColor = new Function(className);
+                                        trs[i].onmouseout=setBGColor;
                                     }
-                                       var setBGColor = new Function(className);
-                                       trs[i].onmouseout=setBGColor;
-                                }
-                                
-                              
+
+                               
 				//removing record from db
 				var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';

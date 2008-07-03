@@ -135,6 +135,7 @@ background-color:yellow;
      */
 
     function paintTr(msgTR,i){
+    
         var className='';
         if(i!=1&&i%2==0){
             msgTR.className = 'trEven';
@@ -150,7 +151,9 @@ background-color:yellow;
         /*msgTR.onmouseover=hoverTr;*/
         msgTR.onmouseout=setBGColor;
       
+       
         return msgTR;
+       
     }
     
     
@@ -461,19 +464,37 @@ background-color:yellow;
 											var pagParams=paginationTag.childNodes[0];
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
-												var msgTR=document.createElement('TR');												
-                                                                                                msgTR=paintTr(msgTR,i);
-                                                                                                msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                                                                                
+												var msgTR=document.createElement('TR');
+												var browser=navigator.appName;
+												
+												if(browser=="Microsoft Internet Explorer"){
+							
+										   				var msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
+										   				
+										   				
+													}else{
+										            
+										                msgTR=paintTr(msgTR,i);
+                                                        msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                               		}
+                                               		                                              
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
 												myArray[myArray.length]=msgId;										
 											}else{
 												tbl.tBodies[0].insertRow(whereToInsertRow);
 												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
-                              
-                                                                                                msgTR=paintTr(msgTR,i);
-                                                                                                msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+												var browser=navigator.appName;
 												
+												if(browser=="Microsoft Internet Explorer"){
+							
+										   				var msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
+															
+							
+												}else{
+                                                        msgTR=paintTr(msgTR,i);
+                                                        msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+												}
+								
 												createTableRow(tbl,msgTR,messages[i],true);
 												myArray[myArray.length]=msgId;
 												whereToInsertRow++;										
@@ -493,11 +514,19 @@ background-color:yellow;
 							//creating tr
 							var msgTr=document.createElement('TR');	
 							var isMsgRead=messages[i].getAttribute('read');					
+                            var browser=navigator.appName;
+												
+							if(browser=="Microsoft Internet Explorer"){
+							
+								   		var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
+										
+										
+							
+								}else{
                                                        
-                                                       
-                                                        msgTr=paintTr(msgTr,i);
-                      			 						msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                        
+                                        msgTr=paintTr(msgTr,i);
+                      					msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                        	}
 								
 							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
                                                 var tablBody= tbl.getElementsByTagName("tbody");

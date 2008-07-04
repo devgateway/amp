@@ -119,7 +119,7 @@ function deleteComponent(id){
                                 <c:set var="ToEditComponents">
                                   <digi:trn key="aim:clickToEditComponents">Click here to Edit</digi:trn>
                                 </c:set>
-                                <a href="javascript:editComponent(<bean:write name="componentlist" property="ampComponentId"/>)">
+                                <a title="<bean:write name="componentlist" property="title"/>" href="javascript:editComponent(<bean:write name="componentlist" property="ampComponentId"/>)">
                                 <bean:write name="componentlist" property="title"/>
 </a>
                               </td>

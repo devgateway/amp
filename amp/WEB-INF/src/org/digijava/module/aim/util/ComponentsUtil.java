@@ -3,16 +3,32 @@ package org.digijava.module.aim.util;
 /*
  * @author Govind G Dalwani
  */
-import java.util.*;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import org.apache.log4j.*;
-import org.digijava.kernel.persistence.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.AmpMEIndicatorList;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FundingDetail;
-
-import net.sf.hibernate.*;
 
 public class ComponentsUtil {
 
@@ -532,5 +548,80 @@ public class ComponentsUtil {
             yearInfo.put("MontoEjecutado", montoEjecutado);
         }
         tempComp.setFinanceByYearInfo(fbyi);
+    }
+    
+    /**
+     * @author Diego Dimunzio
+     * Compare components by Tittle
+     */
+    public static class HelperComponetTitleComparator implements Comparator<AmpComponent> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperComponetTitleComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperComponetTitleComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+		public int compare(AmpComponent o1, AmpComponent o2) {
+			collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getTitle()==null || o2.getTitle()==null)?0:collator.compare(o1.getTitle().toLowerCase(), o2.getTitle().toLowerCase());
+            return result;
+		}
+    }
+    
+    /**
+     * @author Diego Dimunzio
+     * Compare components by code
+     */
+    public static class HelperComponetCodeComparator implements Comparator<AmpComponent> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperComponetCodeComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperComponetCodeComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+		public int compare(AmpComponent o1, AmpComponent o2) {
+			collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getCode()==null || o2.getCode()==null)?0:collator.compare(o1.getCode().toLowerCase(), o2.getCode().toLowerCase());
+            return result;
+		}
+    }
+    
+    /**
+     * @author Diego Dimunzio
+     * Compare components by type
+     */
+    public static class HelperComponetTypeComparator implements Comparator<AmpComponent> {
+    	Locale locale;
+        Collator collator;
+
+        public HelperComponetTypeComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperComponetTypeComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+		public int compare(AmpComponent o1, AmpComponent o2) {
+			collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            
+            int result = (o1.getType().getName()==null || o2.getType().getName()==null)?0:collator.compare(o1.getType().getName(), o2.getType().getName());
+            return result;
+		}
     }
 }

@@ -1,24 +1,22 @@
 package org.digijava.module.aim.action;
 
-import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UserDetailForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.um.util.AmpUserUtil;
-import org.digijava.kernel.user.User;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
 
 public class ViewUserProfile
         extends Action {

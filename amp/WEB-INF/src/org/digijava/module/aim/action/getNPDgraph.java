@@ -150,16 +150,17 @@ public class getNPDgraph extends Action {
                         Double targetValue = null;
                         Double baseValue = null;
                         for (AmpIndicatorValue valueItem : indValues) {
-                            if (isInSelectedYears(valueItem, selectedYears)) {
                                 if (valueItem.getValueType() == 1) {
-                                    Date actualDate = valueItem.getValueDate();
-                                    Integer year = extractYearInt(actualDate);
-                                    if (actualValues.containsKey(year)) {
-                                        Double value = actualValues.get(year);
-                                        value += valueItem.getValue();
-                                        actualValues.put(year, value);
-                                    } else {
-                                        actualValues.put(year, valueItem.getValue());
+                                    if (isInSelectedYears(valueItem, selectedYears)) {
+                                        Date actualDate = valueItem.getValueDate();
+                                        Integer year = extractYearInt(actualDate);
+                                        if (actualValues.containsKey(year)) {
+                                            Double value = actualValues.get(year);
+                                            value += valueItem.getValue();
+                                            actualValues.put(year, value);
+                                        } else {
+                                            actualValues.put(year, valueItem.getValue());
+                                        }
                                     }
                                 } else if (valueItem.getValueType() == 0) {
                                     Date targetDate = valueItem.getValueDate();
@@ -182,7 +183,7 @@ public class getNPDgraph extends Action {
                                         baseValues.put(year, value);
                                     }
                                 }
-                            }
+                            
                         }
                        
                         List<Integer> targetKeys = new ArrayList(targetValues.keySet());

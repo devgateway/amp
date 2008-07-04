@@ -31,6 +31,8 @@
 
 <xs:complexType name="moduleType">
 		<xs:sequence>
+			<xs:element name="module" type="fm:moduleType" minOccurs="0"
+				maxOccurs="unbounded" />
 			<xs:element name="feature" type="fm:featureType" minOccurs="0"
 				maxOccurs="unbounded" />
 		</xs:sequence>

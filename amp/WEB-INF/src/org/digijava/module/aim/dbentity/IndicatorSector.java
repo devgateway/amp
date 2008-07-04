@@ -10,7 +10,14 @@ public class IndicatorSector extends IndicatorConnection {
 
 	private static final long serialVersionUID = 1L;
 	private AmpSector sector;
+	private AmpLocation location;
 	
+	public AmpLocation getLocation() {
+		return location;
+	}
+	public void setLocation(AmpLocation location) {
+		this.location = location;
+	}
 	public AmpSector getSector() {
 		return sector;
 	}

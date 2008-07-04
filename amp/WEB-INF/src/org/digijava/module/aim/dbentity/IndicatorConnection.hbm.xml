@@ -27,8 +27,10 @@
 			</subclass>			
 
 			<subclass name="org.digijava.module.aim.dbentity.IndicatorSector" discriminator-value="s">
-				<many-to-one name="sector" column="sector_id" class="org.digijava.module.aim.dbentity.AmpSector" cascade="none"/> 
-			</subclass>			
+				<many-to-one name="sector" column="sector_id" class="org.digijava.module.aim.dbentity.AmpSector" cascade="none"/>
+				<many-to-one name="location" column="location_id" class="org.digijava.module.aim.dbentity.AmpLocation"/> 
+			</subclass>
+			
 				
 	</class>
 </hibernate-mapping>

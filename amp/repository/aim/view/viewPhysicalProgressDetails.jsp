@@ -48,7 +48,7 @@ method="post">
 								<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
 							</digi:link>
 							&gt; Details &gt; 
-							<bean:write name="aimPhysicalProgressForm" property="perspective"/> 
+							<!-- bean:write name="aimPhysicalProgressForm" property="perspective"/-->
 							Perspective
 						</SPAN>
 					</TD></TR>
@@ -120,7 +120,7 @@ method="post">
 																			<bean:write name="comm" property="currencyCode"/>
 																		</TD>
 																		<TD width="100">
-																			<bean:write name="comm" property="perspectiveName"/>
+																			<!-- bean:write name="comm" property="perspectiveName"/-->
 																		</TD>
 																	</TR>
 																	</logic:iterate>
@@ -151,8 +151,9 @@ method="post">
 																			<bean:write name="disb" property="currencyCode"/>
 																		</TD>
 																		<TD width="100">
-																			<bean:write name="disb" property="perspectiveName"/>
+																			<!-- bean:write name="disb" property="perspectiveName"/-->
 																		</TD>
+																		
 																	</TR>
 																	</logic:iterate>
 																</TABLE>
@@ -182,7 +183,7 @@ method="post">
 																			<bean:write name="exp" property="currencyCode"/>
 																		</TD>
 																		<TD width="100">
-																			<bean:write name="exp" property="perspectiveName"/>
+																		<!-- bean:write name="exp" property="perspectiveName"/-->
 																		</TD>
 																	</TR>
 																	</logic:iterate>

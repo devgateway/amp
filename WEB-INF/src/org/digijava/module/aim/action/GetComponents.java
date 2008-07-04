@@ -1,18 +1,22 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-
-import javax.servlet.http.*;
-
-import org.digijava.module.aim.util.ComponentsUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.form.ComponentsForm;
+import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 
 public class GetComponents extends Action{
@@ -34,8 +38,19 @@ public class GetComponents extends Action{
 							}
 							logger.info("came into the components manager");
 							List<AmpComponent> com = new ArrayList<AmpComponent>(ComponentsUtil.getAmpComponents());
+							if (FeaturesUtil.getGlobalSettingValue("Components Sort Order").equalsIgnoreCase("code")){
+								Collections.sort((List<AmpComponent>)com, new ComponentsUtil.HelperComponetCodeComparator());
+							}
+							else if(FeaturesUtil.getGlobalSettingValue("Components Sort Order").equalsIgnoreCase("type")){
+								Collections.sort((List<AmpComponent>)com, new ComponentsUtil.HelperComponetTypeComparator());
+							}
+							else if(FeaturesUtil.getGlobalSettingValue("Components Sort Order").equalsIgnoreCase("tittle")){
+								Collections.sort((List<AmpComponent>)com, new ComponentsUtil.HelperComponetTypeComparator());
+							}
+							else{
+								Collections.sort((List<AmpComponent>)com);
+							}
 							ComponentsForm compForm = (ComponentsForm) form;
-							Collections.sort(com);
 							compForm.setComponents(com);
 		return mapping.findForward("default");
 	  }

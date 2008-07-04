@@ -521,6 +521,14 @@ function saveAllSettings(){
 												<%}%>
 											</c:when>
 	                                    	
+											<c:when test='${type == "t_components_sort"}'>
+												<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
+													<option value="default"><digi:trn key="aim:globalSettings:default">Default</digi:trn></option>
+													<option value="code"><digi:trn key="aim:globalsettings:components_sort_order:by_code">Code</digi:trn></option>
+													<option value="title"><digi:trn key="aim:globalsettings:components_sort_order:by_title">Title</digi:trn></option>
+													<option value="type"><digi:trn key="aim:globalsettings:components_sort_order:by_type">Type</digi:trn></option>
+												</html:select>
+											</c:when>
 											
 	                                    	<c:when test='${type == "t_Boolean"}'>
 	                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>

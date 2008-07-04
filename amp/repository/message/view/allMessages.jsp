@@ -130,7 +130,7 @@ background-color:yellow;
     }
     
     /*code below doesn't look good... but still
-     *  its attachs events to rows: mouse over(makes row color darker) 
+     *  it attachs events to rows: mouse over(makes row color darker) 
      *  and mouse out(returns to row it basic color)
      */
 
@@ -164,6 +164,9 @@ background-color:yellow;
 	}
 	
     function loadSelectedMessage(id){
+        if(selectedMessagePanel!=null){
+            selectedMessagePanel.destroy();
+        }
         /* 
          * some messages need long time to load, 
          * that is why we create blank panel here, so user will see blank panel
@@ -199,7 +202,8 @@ background-color:yellow;
             url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgId='+msgId); 
         }
         else{
-            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgStateId='+id);  
+            url=addActionToURL('messageActions.do?actionType=viewSelectedMessage&msgStateId='+id); 
+            markMsgeAsRead(id);            
         }			
         var async=new Asynchronous();
         async.complete=viewMsg;
@@ -234,28 +238,35 @@ background-color:yellow;
                                 
                                 /* 
                                  * after we delete row we need to repaint remain rows
-                                 *  its also reattachs events to rows: mouse over(makes row color darker) 
-                                 *  and mouse out(returns to row it basic (new) color)
+                                 *  its also reattachs mouse out event to rows: 
+                                 * (returns to row it basic (new) color)
                                  */
                                 var trs=tbl.tBodies[0].rows;
-                                
-                                for(var i=1;i<trs.length;i++){
-                                
-                                var className='';
-                                if(i!=1&&i%2==0){
-                                    trs[i].className = 'trOdd';
-                                    className="this.className='trOdd'";
-                                                                                               
+                                var startIndex=0;
+                                if(trs[0].id=='blankRow'){
+                                    startIndex=1;
                                 }
-                                else{
-                                       trs[i].className='trEven';
-                                       className="this.className='trEven'";
+                                for(var i=startIndex;i<trs.length;i++){
+                                    if(startIndex==1){
+                                        var className='';
+                                        if(i!=1&&i%2==0){
+                                            trs[i].className = 'trOdd';
+                                            className="this.className='trOdd'";
+
+                                        }
+                                        else{
+                                            trs[i].className='trEven';
+                                            className="this.className='trEven'";
+                                        }
+                                        var setBGColor = new Function(className);
+                                        trs[i].onmouseout=setBGColor;
                                     }
-                                       var setBGColor = new Function(className);
-                                       trs[i].onmouseout=setBGColor;
+                                    else{
+                                        trs[i]=paintTr(trs[i],i);
+                                    }
+                                    
                                 }
-                                
-                              
+                               
 				//removing record from db
 				var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
@@ -1007,7 +1018,6 @@ $(document).ready(function(){
                                                                 <DIV id="subtabs">
                                                                  <div style="pa">
                                                                     <UL>
-								
 											<c:if test="${messageForm.childTab=='inbox'}">
                                                                                             <LI>
                                                                                                 <span>
@@ -1079,9 +1089,9 @@ $(document).ready(function(){
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
 														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;">Show more information &gt;&gt;</div>
 														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;">Hidde more information<< </div>
-													</span>
+                                                                                                </span>
 												   </div>	
-									           </LI>
+                                                                                            </LI>
                                                                                 </UL>
 											</div>
 									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
@@ -1139,7 +1149,7 @@ $(document).ready(function(){
                         
 							<TD bgColor="#ffffff" class="contentbox_border" align="left">
 								<TABLE id="msgsList" border="1">
-									<TR class="usersg">
+									<TR class="usersg" id="blankRow">
 										<TD colspan="4">
 										
 										</TD>

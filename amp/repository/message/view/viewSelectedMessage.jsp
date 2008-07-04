@@ -64,7 +64,7 @@
 																	<tr>
 																		<td>
 																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#eeeeee">
-																				<tr><td></td></tr>
+																				<tr><td colspan="4"></td></tr>
 																				<tr>
 																					<td colspan="3" align="right">priority</td>
 																					<td align="left" bgcolor="#ffffff">
@@ -74,37 +74,41 @@
 																						<logic:equal name="messageForm" property="priorityLevel" value="3">Critical</logic:equal>
 																						
 																					</td>
-																					<td></td>
+																					
 																				</tr>
-																				<tr><td></td></tr>
+																				<tr><td colspan="4"></td></tr>
 																				<tr>
-																					<td align="right"><b><digi:trn key="message:from">From</digi:trn></b></td>
+																					<td align="left"><b><digi:trn key="message:from">From</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff" ><c:out value="${messageForm.sender}"/></td>
-																					<td colspan="3"></td>
+																					<td colspan="2"></td>
 																				</tr>
                                                                                 <tr><td colspan="5"></td></tr>	
                                                                                 <tr>
-																					<td align="right"><b><digi:trn key="message:to">to</digi:trn></b></td>
+																					<td align="left"><b><digi:trn key="message:to">to</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff" ><c:out value="${messageForm.receiver}"/></td>
-																					<td colspan="3"></td>
+																					<td colspan="2"></td>
 																				</tr>
-																				<tr><td colspan="5"></td></tr>		
+																				<tr><td colspan="4"></td></tr>		
 																				<tr>
-																					<td align="right"><b><digi:trn key="message:date">Date</digi:trn></b></td>
+																					<td align="left"><b><digi:trn key="message:date">Date</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff">${messageForm.creationDate}</td>
+                                                                                                                                                                        <td colspan="2"></td>
 																				</tr>
-																				<tr><td></td></tr>
+																				<tr><td colspan="5"></td></tr>
 																				<c:if test="${not empty messageForm.objectURL}">
 																					<tr>
-																						<td align="right"><b><digi:trn key="message:objURL">object URL</digi:trn></b></td>
-																						<td align="left" bgcolor="#ffffff"><a href="${messageForm.objectURL}">click here to view details</a></td>
+																						<td align="left" nowrap width="10%"><b><digi:trn key="message:objURL">object URL</digi:trn></b></td>
+																						<td align="left"><a href="${messageForm.objectURL}">click here to view details</a></td>
+                                                                                                                                                                                <td colspan="2"></td>
 																					</tr>	
-																					<tr><td></td></tr>
+																					<tr><td colspan="4"></td></tr>
 																				</c:if>																					
-																				<tr>																					
-																					<td align="center" colspan="4" >
-																					<div>${messageForm.description}</div>																																										
-																				</tr>
+                                                                                                                                                                <tr>																					
+                                                                                                                                                                    <td align="center" colspan="4" >
+                                                                                                                                                                        <div>${messageForm.description}</div>
+                                                                                                                                                                    </td>
+                                                                                                                                                                        
+                                                                                                                                                                </tr>
 																				<tr>
 																					<td colspan="4" align="center">
 																						<!-- <c:if test="${messageForm.className=='m'}">
@@ -118,6 +122,7 @@
 																						<c:set var="trnCloseBtn"><digi:trn key="aim:btn:close">Close</digi:trn>	</c:set>
 																						<input type="button" value="${trnCloseBtn }" onclick="closeWindow()" />
 																					</td>
+                                                                                                                                                                       
 																				</tr>
 																				
 																			</table>

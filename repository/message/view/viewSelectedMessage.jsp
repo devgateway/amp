@@ -98,7 +98,7 @@
 																				<c:if test="${not empty messageForm.objectURL}">
 																					<tr>
 																						<td align="left" nowrap width="10%"><b><digi:trn key="message:objURL">object URL</digi:trn></b></td>
-																						<td align="left"><a href="${messageForm.objectURL}">click here to view details</a></td>
+																						<td align="left" bgcolor="#ffffff"><a href="${messageForm.objectURL}">click here to view details</a></td>
                                                                                                                                                                                 <td colspan="2"></td>
 																					</tr>	
 																					<tr><td colspan="4"></td></tr>

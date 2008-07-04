@@ -19,6 +19,13 @@
 <style>
 <!--
 
+#selectedMessagePanel a:link{
+     color: #05528B;
+}
+#selectedMessagePanel a:hover{
+      color: #FFFFFF;
+}
+
 #selectedMessagePanel .bd { 
     height: 500px; 
     /* Apply scrollbars for all browsers. */ 

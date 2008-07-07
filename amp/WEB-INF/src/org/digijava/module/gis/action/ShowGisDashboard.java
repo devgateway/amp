@@ -28,7 +28,9 @@ public class ShowGisDashboard extends Action {
 			throws Exception {
 		GisDashboardForm gisForm=(GisDashboardForm)form;
 
-    List secData = DbUtil.getUsedSectors();
+        List secData = DbUtil.getUsedSectors();
+
+        filterUsedSecData(secData);
 
         List usedSectors = new ArrayList();
         Iterator it = secData.iterator();
@@ -43,5 +45,10 @@ public class ShowGisDashboard extends Action {
 
 		return mapping.findForward("forward");
 	}
+
+        private void filterUsedSecData (List secData) {
+            Iterator it = secData.iterator();
+
+        }
 
 }

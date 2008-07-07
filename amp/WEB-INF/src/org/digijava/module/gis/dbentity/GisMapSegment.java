@@ -3,6 +3,8 @@ package org.digijava.module.gis.dbentity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.digijava.module.gis.util.CoordinateRect;
+
 /**
  * <p>Title: </p>
  *
@@ -30,6 +32,11 @@ public class GisMapSegment {
     private String segmentDescription;
     private String parentSegmentCode;
     private List <GisMapShape> shapes;
+
+
+    //Non persistent fields
+    private CoordinateRect segmentRect;
+
 
     public GisMapSegment() {
 
@@ -76,6 +83,10 @@ public class GisMapSegment {
         return parentSegmentCode;
     }
 
+    public CoordinateRect getSegmentRect() {
+        return segmentRect;
+    }
+
     public void setSegmentId(long segmentId) {
         this.segmentId = segmentId;
     }
@@ -111,5 +122,10 @@ public class GisMapSegment {
     public void setParentSegmentCode(String parentSegmentCode) {
         this.parentSegmentCode = parentSegmentCode;
     }
+
+    public void setSegmentRect(CoordinateRect segmentRect) {
+        this.segmentRect = segmentRect;
+    }
+
 
 }

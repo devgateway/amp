@@ -15,6 +15,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.aim.dbentity.IndicatorConnection;
+import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 
 /**
  * <p>Title: </p>
@@ -109,15 +112,15 @@ public class DbUtil {
     public static List getUsedSectors() {
         List retVal = null;
         Session session = null;
-        GisMap map = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
                                           AmpActivitySector.class.getName() +
+                                          " where size(sec.activityId.locations)>0" +
                                           " group by sec.sectorId");
             retVal = q.list();
         } catch (Exception ex) {
-            logger.debug("Unable to get map from DB", ex);
+            logger.debug("Unable to used sectors from DB", ex);
         }
         return retVal;
     }
@@ -126,7 +129,6 @@ public class DbUtil {
     public static List getSectorFoundings(Long sectorId) {
         List retVal = null;
         Session session = null;
-        GisMap map = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
@@ -139,6 +141,47 @@ public class DbUtil {
         }
         return retVal;
     }
+
+    public static List getIndicatorsForSector(Long sectorId) {
+       List retVal = null;
+       Session session = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from ds in class " +
+                                         IndicatorSector.class.getName() +
+                                         " where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId");
+           q.setParameter("sectorId", sectorId, Hibernate.LONG);
+           retVal = q.list();
+       } catch (Exception ex) {
+           logger.debug("Unable to get indicators from DB", ex);
+       }
+       return retVal;
+   }
+
+   public static List getIndicatorValuesForSectorIndicator(Long sectorId,
+           Long indicatorId) {
+       List retVal = null;
+       Session session = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+//
+
+           Query q = session.createQuery("select indVal.value, indConn.location.region from indVal in class " +
+                                         AmpIndicatorValue.class.getName() +
+                                         " , indConn in class " +
+                                         IndicatorSector.class.getName() +
+                                         " where indConn.sector.ampSectorId=:sectorId" +
+                                         " and indConn.indicator.indicatorId=:indicatorId " +
+                                         " and indConn.id=indVal.indicatorConnection.id");
+           q.setParameter("sectorId", sectorId, Hibernate.LONG);
+           q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+           retVal = q.list();
+       } catch (Exception ex) {
+           logger.debug("Unable to get indicators from DB", ex);
+       }
+       return retVal;
+   }
+
 
 
     public static Double getActivityFoundings(Long activityId) {

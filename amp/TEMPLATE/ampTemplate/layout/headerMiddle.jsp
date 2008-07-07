@@ -293,15 +293,13 @@ border-right:1px solid white;
                                             		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
                                             		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
                                             		       <li class="yuiampmenuitem yuiampmenuitem-checked ">
-                                            		   	  	 <digi:context name="URL" property="context/module/moduleinstance/selectTeam.do" />
                                                             	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:equal>
                                             		    
                                             		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
                                             		   	   <li class="yuiampmenuitem ">
-                                            		   	  	 <digi:context name="URL" property="context/module/moduleinstance/selectTeam.do" />
-                                                            	 <a class="yuiampmenuitemlabel" href='<%=URL%>~id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
+                                                            	 <a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:notEqual>
                                             		</logic:iterate>

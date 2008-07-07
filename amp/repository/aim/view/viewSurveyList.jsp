@@ -122,7 +122,7 @@ function projectFiche(id)
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="760">
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 
 	<TR>
 
@@ -175,9 +175,9 @@ function projectFiche(id)
 
 											</TD>
 
-											<TD align="right">
+											<TD align="right">&nbsp;
 
-												&nbsp;
+												
 
 											</TD>
 
@@ -247,9 +247,9 @@ function projectFiche(id)
 
 							  							</TD>
 
-	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>
+	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>&nbsp;
 
-                                						 &nbsp;
+                                						 
 
 							  							</TD>
 
@@ -265,7 +265,7 @@ function projectFiche(id)
 
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 
-												<TABLE width="756"  border="0" cellpadding="4" cellspacing="1">
+												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1">
 
                  									<TR bgcolor="#DDDDDB" >
 

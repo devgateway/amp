@@ -24,7 +24,157 @@
 
 -->
 </script>
+<style type="text/css">
 
+
+#tabs {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;
+	clear: both;
+	text-align: center;
+}
+
+#tabs ul {
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#tabs li { 
+	 float: left;
+}
+
+
+
+#tabs a, #tabs span { 
+	font-size: 8pt;
+}
+
+#tabs ul li a { 
+	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	float:left;
+	margin:0pt 0px 0pt 0pt;
+	position:relative;
+	text-decoration:none;
+	top:0pt;
+
+}
+
+#tabs ul li a div { 
+	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
+	padding: 4px 10px 4px 10px;
+}
+
+#tabs ul li span a { 
+	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	float:left;
+	margin:0pt 0px 0pt 0pt;
+	position:relative;
+	text-decoration:none;
+	top:0pt;
+
+}
+
+#tabs ul li span a div { 
+	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
+	padding: 4px 10px 4px 10px;
+}
+
+#tabs a:hover {
+    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+}
+
+#tabs a:hover span {
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+}
+#tabs a:hover div {
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+}
+
+#tabs a.active {
+	position: relative;
+	top: 0;
+	margin: 0 2px 0 0;
+	float: left;
+	background: #FFF3B3;
+	padding: 4px 10px 4px 10px;
+	text-decoration: none;
+	color: #333;
+}
+
+#tabs a.active:hover {
+	position: relative;
+	top: 0;
+	margin: 0 2px 0 0;
+	float: left;
+	background: #FFF3B3;
+	padding: 6px 10px 6px 10px;
+	text-decoration: none;
+	color: #333;
+}
+
+
+#subtabs ul {
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#subtabs li {
+	float: left;
+	padding: 0px 4px 0px 4px;
+}
+
+#subtabs a, #subtabs span { 
+	font-size: 8pt; 
+}
+
+#subtabs a {
+}
+
+#subtabs ul li span {
+	text-decoration: none;
+}
+
+#subtabs ul li div span {
+	text-decoration: none;
+}
+
+#subtabs {
+	text-align: center;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size: 8pt;
+	padding: 2px 4px 2px 4px;
+	background-color:#CCDBFF;
+}
+
+#main {
+	clear:both;
+	text-align: left;
+	border-top: 2px solid #222E5D;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	padding: 2px 4px 2px 4px;
+}
+html>body #main {
+	width:742px;
+}
+
+#mainEmpty {
+	border-top: 2px solid #222E5D;
+	width: 750px;
+	clear:both;
+}
+html>body #mainEmpty {
+	clear:both;
+	width:752px;
+}
+
+</style>
 <%--
 <digi:errors/>
 --%>
@@ -129,38 +279,53 @@
 	<TR>
 		<TD width="100%" nowrap align="left" vAlign="bottom" height="20">
 			<TABLE width="100%" cellspacing="1" cellpadding=0 border="0">
-			  	<TR><TD bgcolor="#3754a1">
-				<DIV id="navlinks">
+			  	<TR><TD>
+                <br />
+				<div style="padding-left:5px;width:900px;">
+				<DIV id="tabs">
 					<UL>
 						<field:display name="Channel Overview Tab" feature="Channel Overview">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="0">
-							   <LI class="selected">
-									:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
+							   <LI>
+                               		<a name="node">
+                               		<div>
+									<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
+                                    </div>
+                                    </a>
 								</LI>
 							</logic:equal>
 							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="0">
 								<LI>
-								<div id="gen" title='<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>'>
+                                <span>
 								<digi:link href="/viewChannelOverview.do" name="urlTabs">
-									:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-								</digi:link></div>
+								<div title='<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>'>
+									<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
+                                </div>
+								</digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</field:display>
-						
 						<field:display name="References Tab" feature="References">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
-							   <LI class="selected">
-									:: <digi:trn key="aim:references">References</digi:trn>
+							   <LI>
+                               		<a name="node">
+                               		<div>
+									<digi:trn key="aim:references">References</digi:trn>
+                                    </div>
+                                    </a>
 								</LI>
 							</logic:equal>
 							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
 								<c:set target="${urlTabs}" property="tabIndex" value="1"/>
 								<LI>
-								<div id="gen" title='<digi:trn key="aim:clickToViewReferences">Click here to view References</digi:trn>'>
+                                <span>
 								<digi:link href="/viewReferences.do" name="urlTabs">
-									:: <digi:trn key="aim:references">references</digi:trn>
-								</digi:link></div>
+								<div title='<digi:trn key="aim:clickToViewReferences">Click here to view References</digi:trn>'>
+									<digi:trn key="aim:references">references</digi:trn>
+                                </div>
+								</digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</field:display>
@@ -168,17 +333,24 @@
 						<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 						<field:display name="Financial Progress Tab" feature="Financial Progress">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
-							   <LI class="selected">
-									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
+							   <LI>
+                               		<a name="node">
+                               		<div>
+									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
+                                    </div>
+                                    </a>
 								</LI>
 							</logic:equal>
 							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 		     					<c:set target="${urlTabs}" property="tabIndex" value="2"/>
 								<LI>
-								<div id="gen" title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
+                                <span>
 		              			<digi:link href="/viewFinancingBreakdown.do" name="urlTabs">
-									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
-								</digi:link></div>
+								<div title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
+									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
+                                </div>
+								</digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</field:display >
@@ -186,66 +358,85 @@
 							<feature:display name="Funding Information" module="Funding"></feature:display>
 								<field:display name="Funding Organizations Tab" feature="Funding Information">
 									<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-									   <LI class="selected">
-											:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
+									   <LI>
+                                        <a name="node">
+                                        <div>
+											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
+                                        </div>
+                                        </a>
 										</LI>
 										</logic:equal>
 										<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
 				                  <c:set target="${urlTabs}" property="tabIndex" value="3"/>
 										<LI>
-										<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
-				                 	<digi:link href="/viewPhysicalProgress.do" name="urlTabs">
-				                 		:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
-				                 	</digi:link></div>
+                                        <span>
+                                            <digi:link href="/viewPhysicalProgress.do" name="urlTabs">
+                                            <div title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
+                                            <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
+                                            </div>
+	                                        </digi:link>
+    		                            </span>
 										</LI>
 									</logic:notEqual>
 								</field:display>
 							
 						<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-							   <LI class="selected">
-									:: <digi:trn key="aim:documents">Documents</digi:trn>
+							   <LI>
+                               		<a name="node">
+                               		<div>
+									<digi:trn key="aim:documents">Documents</digi:trn>
+                                    </div>
+                                    </a>
 							    </LI>
 						  	</logic:equal>
 							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-	     					<c:set target="${urlTabs}" property="tabIndex" value="4"/>
-							<LI>
-							<div id="gen" title='<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
-	           				<digi:link href="/viewKnowledge.do" name="urlTabs">
-								:: <digi:trn key="aim:documents">Documents</digi:trn>	
-							</digi:link></div>
-							</LI>
+                                        <c:set target="${urlTabs}" property="tabIndex" value="4"/>
+										<LI>
+                                        <span>
+                                            <digi:link href="/viewKnowledge.do" name="urlTabs">
+                                            <div title='<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
+                                            <digi:trn key="aim:documents">Documents</digi:trn>
+                                            </div>
+	                                        </digi:link>
+    		                            </span>
+										</LI>
 							</logic:notEqual>
-						</module:display>
-					</UL>
-				</DIV>
-				</TD></TR>
-			  	<TR><TD bgcolor="#3754a1" >
-				<DIV id="navlinks">
-					<UL>
+							</module:display>
 							<feature:display name="Regional Funding" module="Funding"></feature:display>
 							 <field:display name="Regional Funding Tab" feature="Regional Funding">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-								   <LI class="selected">
-										:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
+								   <LI>
+                               		<a name="node">
+	                                   <div>
+										<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
+                                       </div>
+                                    </a>
 									</LI>
 									</logic:equal>
 									<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 									<c:set target="${urlTabs}" property="tabIndex" value="5"/>
 									<c:set target="${urlTabs}" property="regionId" value="-1"/>
 									<LI>
-									<div id="gen" title='<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
+                                    <span>
 									<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs">
-										:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
-									</digi:link></div>
+										<div title='<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
+										<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
+                                        </div>
+									</digi:link>
+                                    </span>
 									</LI>
 								</logic:notEqual>
 							 </field:display>
 						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
-								   <LI class="selected">						
-									:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
+								   <LI>						
+                               		<a name="node">
+                                    <div>
+ 									<digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
+                                    </div>
+                                    </a>
 									</LI>
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
@@ -255,68 +446,91 @@
 								</c:set>
 								<c:set target="${survey}" property="tabIndex" value="6"/>
 								<LI>	
-								<div id="gen" 
-								title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
+                                <span>
 								<digi:link href="/viewSurveyList.do" name="survey">
-									:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn> 	
-								</digi:link></div>
+								<div title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
+									<digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn> 	
+                                </div>
+								</digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</field:display>
 						<feature:display name="Activity Dashboard" module="M & E">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
-									<LI class="selected">
-									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
+									<LI>
+                               		<a name="node">
+                                    <div>
+									<digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
+                                    </div>
+                                    </a>
 									</LI>
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 								<c:set target="${urlTabs}" property="tabIndex" value="7"/>
 								<LI>
-								<div id="gen" title='<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
+                                <span>
 								<digi:link href="/viewActivityDashboard.do" name="urlTabs">
-									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
-								</digi:link></div>
+								<div title='<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
+									<digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
+                                </div>
+								</digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</feature:display>						
 						
 						<field:display name="Costing Tab" feature="Costing">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
-							   <LI class="selected">
-									:: <digi:trn key="aim:projectCosting">Costing</digi:trn>								
+							   <LI>
+                               		<a name="node">
+                                    <div>
+									<digi:trn key="aim:projectCosting">Costing</digi:trn>								
+                                    </div>
+                                    </a>
 								</LI>
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="8">
 									
 										<c:set target="${urlTabs}" property="tabIndex" value="8"/>
 										<LI>
-										<div id="gen" title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
-				              		<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">
-											:: <digi:trn key="aim:projectCosting">Costing</digi:trn>
-										</digi:link></div>
+                                <span>
+				              			<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">
+										<div title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
+											<digi:trn key="aim:projectCosting">Costing</digi:trn>
+                                        </div>
+										</digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</field:display>
 						
 						<field:display name="Contracting Tab" feature="Contracting">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
-							   <LI class="selected">
-									:: <digi:trn key="aim:projectContracting"> Contracting </digi:trn>								
+							   <LI>
+                               		<a name="node">
+                                    <div>
+									<digi:trn key="aim:projectContracting"> Contracting </digi:trn>								
+                                    </div>
+                                    </a>
 								</LI>
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="9">
-									
-										<c:set target="${urlTabs}" property="tabIndex" value="9"/>
-										<LI>
-										<div id="gen" title='<digi:trn key="aim:clickToViewContracting">Click here to view Contracting</digi:trn>'>
-				              		<digi:link href="/viewIPAContracting.do" name="urlTabs">
-											:: <digi:trn key="aim:projectContracting">Contracting</digi:trn>
-										</digi:link></div>
+                                <c:set target="${urlTabs}" property="tabIndex" value="9"/>
+                                <LI>
+                                <span>
+                                <digi:link href="/viewIPAContracting.do" name="urlTabs">
+                                <div title='<digi:trn key="aim:clickToViewContracting">Click here to view Contracting</digi:trn>'>
+                                    <digi:trn key="aim:projectContracting">Contracting</digi:trn>
+                                </div>
+                                </digi:link>
+                                </span>
 								</LI>
 							</logic:notEqual>
 						</field:display>
 					</UL>		
 				</DIV>	
+            	</DIV>
 				</TD></TR>
 			</TABLE>
 		</TD>

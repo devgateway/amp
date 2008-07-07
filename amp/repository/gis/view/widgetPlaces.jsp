@@ -33,25 +33,25 @@
 		
 			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">
-					<td>
+					<td nowrap="nowrap">
 						<strong><digi:trn key="gis:widgetPlacesTable:lastRenderTime">Last render time</digi:trn></strong>
 					</td>
-					<td>
+					<td nowrap="nowrap">
 						<strong><digi:trn key="gis:widgetPlacesTable:placeName">Place Name (parameter for teaser)</digi:trn></strong>
 					</td>
-					<td>
+					<td nowrap="nowrap">
 						<strong><digi:trn key="gis:widgetPlacesTable:assignedWidgetName">Assigned widget name</digi:trn></strong>
 					</td>
-					<td>
+					<td nowrap="nowrap">
 						<strong><digi:trn key="gis:widgetPlacesTable:assignedWidgetType">Assigned widget type</digi:trn></strong>
 					</td>
-					<td>
+					<td nowrap="nowrap">
 						<strong><digi:trn key="gis:widgetPlacesTable:operations">Operation</digi:trn></strong>
 					</td>
 				</tr>
 				<c:forEach var="pl" items="${gisWidgetPlacesForm.places}" varStatus="stat">
 					<tr>
-						<td>
+						<td nowrap="nowrap">
 							<bean:write name="pl" property="placeLastRenderTime" format="dd MMMM yyyy - hh:mm:ss"/>
 						</td>
 						<td nowrap="nowrap">
@@ -63,7 +63,7 @@
 						<td nowrap="nowrap">
 						 	${pl.widgetTypeName}
 						</td>
-						<td>
+						<td nowrap="nowrap">
 							<digi:link href="/widgetplaces.do~actType=assignWidgt~placeId=${pl.placeId}"><digi:trn key="gis:widgetPlacesTable:assignWidgetLink">Assign widget</digi:trn></digi:link>
 							&nbsp;
 							<digi:link href="/widgetplaces.do~actType=delete~placeId=${pl.placeId}" onclick="return confirm('Are you sure?')"><digi:trn key="gis:widgetPlaceTable:deleteLink">Delete</digi:trn></digi:link>

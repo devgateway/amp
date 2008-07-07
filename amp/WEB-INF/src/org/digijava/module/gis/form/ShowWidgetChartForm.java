@@ -15,7 +15,21 @@ public class ShowWidgetChartForm extends ActionForm {
 	private Integer imageHeight;
 	private Long widgetId;
 	private Long objectId; 
+	private Long donorId;
+	private String selectedYear;
 	
+	public String getSelectedYear() {
+		return selectedYear;
+	}
+	public void setSelectedYear(String selectedYear) {
+		this.selectedYear = selectedYear;
+	}
+	public Long getDonorId() {
+		return donorId;
+	}
+	public void setDonorId(Long donorId) {
+		this.donorId = donorId;
+	}
 	public Long getObjectId() {
 		return objectId;
 	}

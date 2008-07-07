@@ -5,7 +5,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Utility class for collections.
@@ -34,6 +36,7 @@ public class AmpCollectionUtils {
 	
 	/**
 	 * Creates Map object from Collection.
+	 * Uses {@link HashMap} implementation of Map
 	 * @param <K> type of the key of elements..
 	 * @param <E> type of element in collection and map
 	 * @param col collection of E's
@@ -47,6 +50,39 @@ public class AmpCollectionUtils {
 		}
 		return result;
 	}
+
+	/**
+	 * Creates set of keys.
+	 * First creates map using createMap() method in this util and then returns set of keys from that map.
+	 * @param <K> key or ID type of the element
+	 * @param <E> element type
+	 * @param col collection of E elements
+	 * @param resolver key resolver interface implementation
+	 * @return
+	 */
+	public static <K,E> Set<K> getKeys(Collection<E> col,KeyResolver<K, E> resolver){
+		return createMap(col, resolver).keySet();
+	}
+	
+	/**
+	 * Returns array of keys of all elements.
+	 * This on does not use Map to get keys. 
+	 * @param <K> key or ID type of the element
+	 * @param <E> element type
+	 * @param col collection of E elements
+	 * @param resolver key resolver interface implementation
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,E> K[] getIdsArray(Collection<E> col,KeyResolver<K, E> resolver){
+		List<K> result=new ArrayList<K>(col.size());
+		for (E element : col) {
+			K key=resolver.resolveKey(element);
+			result.add(key);
+		}
+		return (K[])result.toArray();
+	}
+
 	
 	/**
 	 * Return new collection based on comparing elements in two other collections.

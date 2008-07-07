@@ -60,10 +60,12 @@ public class AdminTableWidgets extends DispatchAction {
 
 		tableForm.setId(null);
 		tableForm.setName(null);
+		tableForm.setNameAsTitle(null);
+		tableForm.setShouldClose(false);
 		tableForm.setCode(null);
 		tableForm.setCssClass(null);
 		tableForm.setHtmlStyle(null);
-		tableForm.setWidth("100%");
+		tableForm.setWidth(null);
 		tableForm.setColumns(null);
 		setPlaces(tableForm);
 		
@@ -140,19 +142,36 @@ public class AdminTableWidgets extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 		
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
+		setPlaces(wForm);
 		AmpDaTable widget = getWidgetFromSession(request);
 		if (wForm.getId()!=null && wForm.getId().longValue()==0){
 			wForm.setId(null);
 		}
-		widget = formToWidgetSimpleFileds(wForm,widget);
+		//widget = formToWidgetSimpleFileds(wForm,widget);
 		wForm = widgetToForm(wForm, widget);
 		//set columns
 		List<AmpDaColumn> columns = getClumnsFromSession(request);
 		Collections.sort(columns,new TableWidgetUtil.ColumnOrderNoComparator());
 		wForm.setColumns(columns);
-		//widgetToForm(wForm, widget);
-		//setPlaces(wForm);
 		return mapping.findForward("showEdit");
+	}
+
+	/**
+	 * This method just saves changes in fields when page is refreshed.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward redraw(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
+		AmpDaTable widget = getWidgetFromSession(request);
+		widget = formToWidgetSimpleFileds(wForm,widget);
+		return mapping.findForward("returnToEdit");
 	}
 
 	/**
@@ -166,7 +185,8 @@ public class AdminTableWidgets extends DispatchAction {
 	 */
 	public ActionForward save(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
-
+		String checked=request.getParameter("widgetTitleIsName");
+		System.out.println(checked);
 		AmpDaTable dbWidget = null;
 		List<AmpDaWidgetPlace> oldPlaces = null;
 		List<AmpDaWidgetPlace> newPlaces = null;
@@ -216,23 +236,10 @@ public class AdminTableWidgets extends DispatchAction {
 				Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
 				WidgetUtil.updatePlacesWithWidget(deleted, null);
 				WidgetUtil.updatePlacesWithWidget(oldPlaces, dbWidget);
-			}else if((oldPlaces==null || oldPlaces.size()>0) && newPlaces!=null && newPlaces.size()>0){
+			}else if((oldPlaces==null || oldPlaces.size()==0) && newPlaces!=null && newPlaces.size()>0){
 				WidgetUtil.updatePlacesWithWidget(newPlaces, dbWidget);
 			}
 		}
-		
-		//==old places
-//		AmpDaWidgetPlace place =null;
-//		if ( ! "-1".equals(wForm.getSelectedPlaceCode())){
-//			place = WidgetUtil.getPlace(wForm.getSelectedPlaceCode());
-//			place.setWidget(dbWidget);
-//			if (null == dbWidget.getPlaces()){
-//				dbWidget.setPlaces(new HashSet<AmpDaWidgetPlace>());
-//			}
-//			dbWidget.getPlaces().add(place);
-//		}
- 		
-		//save or update widget with columns.
 		
 		stopEditing(request);
 		
@@ -422,6 +429,7 @@ public class AdminTableWidgets extends DispatchAction {
 	private TableWidgetCreationForm widgetToForm(TableWidgetCreationForm form,AmpDaTable widget) throws DgException {
 		form.setId(widget.getId());
 		form.setName(widget.getName());
+		form.setNameAsTitle(widget.getNameAsTitle());
 		form.setCode(widget.getCode());
 		form.setCssClass(widget.getCssClass());
 		form.setHtmlStyle(widget.getHtmlStyle());
@@ -568,6 +576,7 @@ public class AdminTableWidgets extends DispatchAction {
 	private AmpDaTable formToWidgetSimpleFileds(TableWidgetCreationForm form, AmpDaTable widget) throws DgException{
 		
 		widget.setName(form.getName());
+		widget.setNameAsTitle((form.getNameAsTitle()==null)?false:form.getNameAsTitle());
 		widget.setCode(form.getCode());
 		widget.setCssClass(form.getCssClass());
 		widget.setHtmlStyle(form.getHtmlStyle());
@@ -647,7 +656,7 @@ public class AdminTableWidgets extends DispatchAction {
 		tableForm.setColPattern(null);
 		tableForm.setColumnTypes(getColumnTypes());
 		tableForm.setColWidth(null);
-		
+		tableForm.setShouldClose(false);
 		return mapping.findForward("showAddColumnPopup");
 	}
 	
@@ -669,8 +678,9 @@ public class AdminTableWidgets extends DispatchAction {
 		AmpDaTable sessionWidget=getWidgetFromSession(request);
 		//retrieve columns from session
 		List<AmpDaColumn> columns = getClumnsFromSession(request);
+		widgetToForm(tableForm, sessionWidget);
 		//update session widget with new data from submitted form
-		sessionWidget=formToWidgetSimpleFileds(tableForm,sessionWidget);
+		//sessionWidget=formToWidgetSimpleFileds(tableForm,sessionWidget);
 		
 		//Create new column
 		AmpDaColumn newColumn = formToColumn(tableForm);
@@ -682,7 +692,8 @@ public class AdminTableWidgets extends DispatchAction {
 		columns.add(newColumn);
 		//sort
 		Collections.sort(columns,new ColumnOrderNoComparator());
-		
+		tableForm.setShouldClose(true);
+//		return mapping.findForward("showAddColumnPopup");
 		return mapping.findForward("returnToEdit");
 	}
 

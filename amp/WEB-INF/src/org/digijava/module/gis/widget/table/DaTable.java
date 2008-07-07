@@ -23,6 +23,7 @@ public class DaTable implements HtmlGenerator{
 	private String cssClass;
 	private String htmlStyle;
 	private String width;
+	private boolean nameAsTitle;
 	private Collection<DaRow> headerRows;
 	private Collection<DaRow> dataRows;
 	
@@ -44,6 +45,10 @@ public class DaTable implements HtmlGenerator{
 			this.cssClass=entity.getCssClass();
 			this.htmlStyle=entity.getHtmlStyle();
 			this.width = entity.getWidth();
+			this.nameAsTitle = false;
+			if (entity.getNameAsTitle()!=null){
+				this.nameAsTitle = entity.getNameAsTitle().booleanValue();
+			}
 			if (null != entity.getColumns() && entity.getColumns().size() > 1){
 				headerRows = new HashSet<DaRow>();
 				headerRows.add(new DaRow(entity.getColumns()));
@@ -141,6 +146,14 @@ public class DaTable implements HtmlGenerator{
 
 	public void setDataRows(Collection<DaRow> dataRows) {
 		this.dataRows = dataRows;
+	}
+
+	public boolean isNameAsTitle() {
+		return nameAsTitle;
+	}
+
+	public void setNameAsTitle(boolean nameAsTitle) {
+		this.nameAsTitle = nameAsTitle;
 	}
 
 	

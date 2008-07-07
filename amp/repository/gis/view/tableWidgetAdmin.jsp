@@ -35,12 +35,12 @@
 	</tr>
 	<tr>
 		<td>
-			<span class="subtitle-blue">Table Widget Manager</span>
+			<span class="subtitle-blue"><digi:trn key="gis:tableWidgetList:pageTitle">Table Widget Manager</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<digi:link  href="/adminTableWidgets.do?actType=create">Add new table widget</digi:link>
+			<digi:link  href="/adminTableWidgets.do?actType=create"><digi:trn key="gis:tableWidgetList:addNeLink">Add new table widget</digi:trn></digi:link>
 		</td>
 	</tr>
 	<tr>
@@ -49,13 +49,13 @@
 			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">
 					<td width="70%">
-						<strong>Name</strong>
+						<strong><digi:trn key="gis:tableWidgetList:nameCol">Name</digi:trn></strong>
 					</td>
 					<td width="30%">
-						<strong>Code</strong>
+						<strong><digi:trn key="gis:tableWidgetList:codeCol">Code</digi:trn></strong>
 					</td>
 					<td>
-						<strong>Operations</strong>
+						<strong><digi:trn key="gis:tableWidgetList:opersCol">Operations</digi:trn></strong>
 					</td>
 				</tr>
 				<c:forEach var="widgetTable" items="${gisTableWidgetCreationForm.tables}" varStatus="stat">
@@ -67,9 +67,13 @@
 						 	${widgetTable.code}
 						</td>
 						<td nowrap="nowrap">
-						 	<digi:link href="/adminTableWidgets.do~actType=startEdit~id=${widgetTable.id}">Edit</digi:link>
+						 	<digi:link href="/adminTableWidgets.do~actType=startEdit~id=${widgetTable.id}">
+						 		<digi:trn key="gis:tableWidgetList:editLink">Edit</digi:trn>
+						 	</digi:link>
 						 	&nbsp;&nbsp;
-						 	<digi:link onclick="return askToDelete()" href="/adminTableWidgets.do~actType=delete~id=${widgetTable.id}">Delete</digi:link>
+						 	<digi:link onclick="return askToDelete()" href="/adminTableWidgets.do~actType=delete~id=${widgetTable.id}">
+						 		<digi:trn key="gis:tableWidgetList:deleteLink">Delete</digi:trn>
+						 	</digi:link>
 						</td>
 					</tr>
 				</c:forEach>

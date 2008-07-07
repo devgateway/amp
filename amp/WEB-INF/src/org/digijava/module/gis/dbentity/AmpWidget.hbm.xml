@@ -12,7 +12,7 @@
 		<discriminator column="widget_type"/>
         <property name="name" column="widget_name" type="java.lang.String"/>
 		<property name="code" column="widget_code" type="java.lang.String"/>
-		
+		<property name="nameAsTitle" column="name_as_title" type="java.lang.Boolean"/>		
 
 		<subclass name="org.digijava.module.gis.dbentity.AmpWidgetIndicatorChart" discriminator-value="indsecchart">
 			<many-to-one name="indicator" column="ind_connect_id" class="org.digijava.module.aim.dbentity.IndicatorSector" cascade="none"/> 

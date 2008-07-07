@@ -55,7 +55,7 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			<span class="subtitle-blue">Table widget data</span>
+			<span class="subtitle-blue"><digi:trn key="gis:tableWidgetData:pageTitle">Table widget data</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
@@ -71,7 +71,7 @@
 					</c:forEach>
 					<td>
 						<strong>
-							Operations
+							<digi:trn key="gis:tableWidgetData:operationsCol">Operations</digi:trn>
 						</strong>
 					</td>
 				</tr>
@@ -83,8 +83,10 @@
 							</td>
 						</c:forEach>
 						<td>
-							<input type="button" value="Add" onclick="addRow(this.form,${statRow.index})">
-							<input type="button" value="Remove" onclick="removeRow(this.form,${statRow.index})">
+							<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn></c:set>
+							<c:set var="removeButton"><digi:trn key="gis:removeButton">Remove</digi:trn></c:set>
+							<input type="button" value="${addButton}" onclick="addRow(this.form,${statRow.index})">
+							<input type="button" value="${removeButton}" onclick="removeRow(this.form,${statRow.index})">
 						</td>
 					</tr>
 				</c:forEach>
@@ -97,10 +99,12 @@
 			<table>
 				<tr>
 					<td>
-						<input type="button" value="Cancel" title="Cancel and return to list" onclick="cancelEdit(this.form)">
+						<c:set var="cancelButton"><digi:trn key="gis:cancelButton">Cancel</digi:trn></c:set>
+						<input type="button" value="${cancelButton}" title="Cancel and return to list" onclick="cancelEdit(this.form)">
 					</td>
 					<td>
-						<html:submit title="Submit all moidications" value="Save"/>
+						<c:set var="saveButton"><digi:trn key="gis:saveButton">Save</digi:trn></c:set>
+						<html:submit title="Submit all moidications" value="${saveButton}"/>
 					</td>
 				</tr>
 			</table>

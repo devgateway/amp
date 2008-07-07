@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <digi:instance property="gisWidgetTeaserForm" />
 
@@ -23,6 +24,13 @@
 			</c:if>
 			style="border : 1px solid silver"
 			>
+			<c:if test="${gisWidgetTeaserForm.table.nameAsTitle == true}">
+				<tr>
+					<td colspan="${fn:length(gisWidgetTeaserForm.table.headerRows)}">
+						${gisWidgetTeaserForm.table.name}
+					</td>
+				</tr>
+			</c:if>
 			<c:forEach var="theader" items="${gisWidgetTeaserForm.table.headerRows}" varStatus="hstat">
 				<tr>
 					<c:forEach var="cell" items="${theader.cells}">

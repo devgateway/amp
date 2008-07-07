@@ -12,7 +12,6 @@ import org.digijava.module.gis.util.ChartWidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
 
 public class ShowSectorByDonorChart extends Action {
 
@@ -22,6 +21,8 @@ public class ShowSectorByDonorChart extends Action {
 			throws Exception {
 		SectorByDonorTeaserForm cForm = (SectorByDonorTeaserForm)form;
         response.setContentType("image/png");
+        Integer year = null;
+        Long[] donorIDs = null;
 
         if (cForm.getImageHeight() == null || cForm.getImageHeight().intValue()<=0){
         	cForm.setImageHeight(new Integer(260));
@@ -29,8 +30,17 @@ public class ShowSectorByDonorChart extends Action {
         if (cForm.getImageWidth() == null || cForm.getImageWidth().intValue()<=0){
         	cForm.setImageWidth(new Integer(420));
         }
+        if (cForm.getSelectedYear()!=null && cForm.getSelectedYear()!="-1"){
+        	year = new Integer(cForm.getSelectedYear());
+        }
+        if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){
+        	donorIDs = new Long[1];
+        	donorIDs[0] = cForm.getSelectedDonor();
+        }
+        
+        
         //generate chart
-        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(null, cForm.getSelectedYear());
+        JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, year);
         ChartRenderingInfo info = new ChartRenderingInfo();
         
         //write image in response

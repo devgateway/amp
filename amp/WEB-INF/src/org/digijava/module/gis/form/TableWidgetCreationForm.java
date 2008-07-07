@@ -23,6 +23,8 @@ public class TableWidgetCreationForm extends ActionForm {
 	private String cssClass;
 	private String htmlStyle;
 	private String width;
+	private Boolean nameAsTitle;
+	private boolean shouldClose;
 	
 	private Collection<AmpDaTable> tables;
 	private List<AmpDaColumn> columns;
@@ -202,5 +204,21 @@ public class TableWidgetCreationForm extends ActionForm {
 	public void setSelPlaces(Long[] selPlaces) {
 		this.selPlaces = selPlaces;
 	}
-	
+
+	public Boolean getNameAsTitle() {
+		return nameAsTitle;
+	}
+
+	public void setNameAsTitle(Boolean nameAsTitle) {
+		this.nameAsTitle = nameAsTitle;
+	}
+
+	public boolean isShouldClose() {
+		return shouldClose;
+	}
+
+	public void setShouldClose(boolean shouldClose) {
+		this.shouldClose = shouldClose;
+	}
+
 }

@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -143,153 +144,168 @@ public class getNPDgraph extends Action {
                     try {
                         Collection<AmpIndicatorValue> indValues = item.getValues();  // ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
                        
-                        Map<Integer, Double> actualValues = new HashMap<Integer, Double>();
-                        Map<Integer, Double> targetValues = new HashMap<Integer, Double>();
-                        Map<Integer, Double> baseValues = new HashMap<Integer, Double>();
+                        Map<String, AmpIndicatorValue> actualValues = new HashMap<String, AmpIndicatorValue>(); // map to store latest actual values group by year
+                        Map<Integer, ArrayList<AmpIndicatorValue>> targetVals = new HashMap<Integer, ArrayList<AmpIndicatorValue>>(); // map to save target values group by year
+                        Map<Integer, ArrayList<AmpIndicatorValue>> baseVals = new HashMap<Integer, ArrayList<AmpIndicatorValue>>(); // map to save base values group by year
+                       
+                       
+                        Date latestActualDate = null;
 
                         Double targetValue = null;
                         Double baseValue = null;
-                        for (AmpIndicatorValue valueItem : indValues) {
+                        Double actualValue = null;
+                           for (AmpIndicatorValue valueItem : indValues) {
                                 if (valueItem.getValueType() == 1) {
+                                    // actual value's year must be in the selected years range
                                     if (isInSelectedYears(valueItem, selectedYears)) {
+                                        // we should store latest actual value
                                         Date actualDate = valueItem.getValueDate();
-                                        Integer year = extractYearInt(actualDate);
-                                        if (actualValues.containsKey(year)) {
-                                            Double value = actualValues.get(year);
-                                            value += valueItem.getValue();
-                                            actualValues.put(year, value);
-                                        } else {
-                                            actualValues.put(year, valueItem.getValue());
+                                        if (latestActualDate == null) {
+                                            latestActualDate = actualDate;
+                                        }
+                                        String year = extractYearString(actualDate);
+                                        if (!actualValues.containsKey(year) || latestActualDate.before(actualDate)) {
+                                            actualValues.put(year, valueItem);
                                         }
                                     }
-                                } else if (valueItem.getValueType() == 0) {
-                                    Date targetDate = valueItem.getValueDate();
-                                    Integer year = extractYearInt(targetDate);
-                                    if (!targetValues.containsKey(year)) {
-                                        targetValues.put(year, valueItem.getValue());
-                                    } else {
-                                        Double value = targetValues.get(year);
-                                        value += valueItem.getValue();
-                                        targetValues.put(year, value);
-                                    }
-                                } else {
-                                    Date baseDate = valueItem.getValueDate();
-                                    Integer year = extractYearInt(baseDate);
-                                    if (!baseValues.containsKey(year)) {
-                                        baseValues.put(year, valueItem.getValue());
-                                    } else {
-                                        Double value = baseValues.get(year);
-                                        value += valueItem.getValue();
-                                        baseValues.put(year, value);
-                                    }
                                 }
-                            
-                        }
-                       
-                        List<Integer> targetKeys = new ArrayList(targetValues.keySet());
-                        List<Integer> baseKeys = new ArrayList(baseValues.keySet());
-                        Collections.sort(targetKeys); // sort target years asc
-                        Collections.sort(baseKeys); // sort base years
-                        
-                        for (String selectedYear : selectedYears) {
-                            Integer selYear = Integer.parseInt(selectedYear);
-                             Double realActual = actualValues.get(selYear);
-                             Integer baseKey = null;
-                                Integer targetKey = null;
-                                for (Integer basKey : baseKeys) {
-                                    if (selYear >= basKey) {
-                                        baseKey = basKey;
-                                    } else {
-                                        break;
-                                    }
+                                else{
+                                     if (valueItem.getValueType() == 0) {
+                                        // store target values
+                                        Date targetDate = valueItem.getValueDate();
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(targetDate);
+                                        int tarYear = cal.get(Calendar.YEAR);
+                                        if(!targetVals.containsKey(tarYear)){
+                                            ArrayList<AmpIndicatorValue> targets=new ArrayList();
+                                            targets.add(valueItem);
+                                            targetVals.put(tarYear, targets);
+                                        }
+                                        else{
+                                            ArrayList<AmpIndicatorValue> targets=targetVals.get(tarYear);
+                                             targets.add(valueItem);
+                                             targetVals.put(tarYear, targets);
+                                        }
+                                      
+                                     }
+                                     else{
+                                        // store base values
+                                        Date baseDate = valueItem.getValueDate();
+                                        Calendar cal = Calendar.getInstance();
+                                        cal.setTime(baseDate);
+                                        int baseYear = cal.get(Calendar.YEAR);
+                                        if(!baseVals.containsKey(baseYear)){
+                                            ArrayList<AmpIndicatorValue> bases=new ArrayList();
+                                            bases.add(valueItem);
+                                            baseVals.put(baseYear, bases);
+                                        }
+                                        else{
+                                            ArrayList<AmpIndicatorValue> bases=baseVals.get(baseYear);
+                                             bases.add(valueItem);
+                                             baseVals.put(baseYear, bases);
+                                        }
+                                         
+                                     }
                                 }
-                                for (Integer targKey : targetKeys) {
-                                    if (selYear <= targKey) {
-                                        targetKey = targKey;
-                                        break;
-                                    }
-                                }
-                                 if (targetKey != null) {
-                                    targetValue = targetValues.get(targetKey);
-                                }
-                                if (baseKey != null) {
-                                    baseValue = baseValues.get(baseKey);
-                                }
-                               if(realActual==null){
-                                   dataset.addValue(0, selectedYear, displayLabel);
-                                   dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), "", "", formatValue(targetValue)});
-                               }
-                               else{
-                                dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(realActual), formatValue(realActual), formatValue(targetValue)});
-                                realActual = computePercent(indicator, targetValue, realActual, baseValue);
-                                dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
                                
+                           }
+                         
+                           // show data restrict to selected date range, here we choose target and base values.
+                        for (String selectedYear : selectedYears) {
+                          
+                            AmpIndicatorValue actValue = actualValues.get(selectedYear);
+                            AmpIndicatorValue targValue = null;
+                            AmpIndicatorValue basValue = null;
+                            List<Integer> years = new ArrayList(targetVals.keySet());
+                            // sort target years
+                            Collections.sort(years);
+                            
+                            List<Integer> baseYears = new ArrayList(baseVals.keySet());
+                            // sort base years
+                            Collections.sort(baseYears);
+                         
+                            /* to select target value for selected year we must remember:
+                             * 1) if actual value in selected year exists: 
+                             * target value's date must be equal or greater than actual value's date in selected year.
+                             * 2) if there is no actual value in 
+                             * this year the year of target value must be equal or greater than selected year.
+                             */
+                            
+                            for (Integer year : years) {
+                                if(targValue !=null){
+                                    break;
+                                }
+                                if (Integer.parseInt(selectedYear) <= year) {
+                                    ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
+                                    for (AmpIndicatorValue value : targValues) {
+                                        if (targValue == null || targValue.getValueDate().after(value.getValueDate())) {
+                                            if (actValue == null) {
+                                                targValue = value;
+                                                actualValue = new Double(0);
+                                            } else {
+                                                if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
+                                                    targValue = value;
+                                                    actualValue = actValue.getValue();
+                                                }
+                                            }
+                                        }
 
+
+                                    }
+                                }
                             }
                             
-                        }
+                             /* to select base value for selected year we must remember:
+                             * 1) if actual value in selected year exists: 
+                             * base value's date must be equal or less than actual value's date in selected year.
+                             * 2) if there is no actual value in 
+                             * this year the year of base value must be equal or less than selected year.
+                             */
+                            for (Integer year : baseYears) {
+                                if(basValue !=null){
+                                    break;
+                                }
+                                if (Integer.parseInt(selectedYear) >= year) {
+                                   
+                                    ArrayList<AmpIndicatorValue> basValues = baseVals.get(year);
+                                    if (basValues != null) {
+                                        for (AmpIndicatorValue value : basValues) {
+                                            if (basValue == null || basValue.getValueDate().before(value.getValueDate())) {
+                                                if (actValue == null) {
+                                                    basValue = value;
+                                                } else {
+                                                    if (value.getValueDate().before(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
+                                                        basValue = value;
+                                                    }
+                                                }
+                                            }
 
-                       
-                       // TODO remove code below if the code above is correct
-                        // Arrange all values by types
-//                        for (Iterator valueIter = indValues.iterator(); valueIter.hasNext();) {
-                       /* for (AmpIndicatorValue valueItem :indValues) {
-                            //AmpThemeIndicatorValue valueItem = (AmpThemeIndicatorValue) valueIter.next();
 
-                            // target value
-                            if (valueItem.getValueType() == 0) {
-                                targetValue = valueItem.getValue();
-                            }
-                            // actual Value
-                            if (valueItem.getValueType() == 1 && isInSelectedYears(valueItem, selectedYears)) {
-                                Date actualDate = valueItem.getValueDate();
-                                String year = extractYearString(actualDate);
-                                // for every year we should have only latest actual value
-                                // so check if we already have actual value for this year
-                                AmpIndicatorValue v = actualValues.get(year);
-                                if (v == null) {
-                                    // if not then store this actual value
-                                    actualValues.put(year, valueItem);
-                                } else {
-                                    // if we have value, check and store latest value
-                                    Date crDate = v.getValueDate();
-                                    if (crDate != null && crDate.compareTo(actualDate) < 0) {
-                                        actualValues.put(year, valueItem);
+                                        }
+
                                     }
                                 }
                             }
-                            // base value - not used
-                            if (valueItem.getValueType() == 2) {
-                                baseValue = valueItem.getValue();
+                         
+                        
+                            if(basValue==null){
+                                baseValue=new Double(0);
                             }
-                        }
-                        if (targetValue == null) {
-                            targetValue = new Double(1.0);
-                        }
-                        if (baseValue == null) {
-
-                        }*/
-
-                        // now put all values in the dataset
-                        // they will appear on the chart in same order as added in dataset
-                        // so years should be ordered (done outside of this method) because we are adding data by year. 
-                        /*if (selectedYears != null) {
-                            for (int i = 0; i < selectedYears.length; i++) {
-                                AmpIndicatorValue actualValue = actualValues.get(selectedYears[i]);
-                                if (actualValue != null) {
-                                    Double realActual = actualValue.getValue();
-                                    if (realActual != null) {
-//										realActual = new Double(realActual.doubleValue() / targetValue.doubleValue());
-                                        dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(realActual), formatActualDate(actualValue), formatValue(targetValue)});
-                                        realActual = computePercent(indicator, targetValue, realActual, baseValue);
-                                        dataset.addValue(realActual.doubleValue(), selectedYears[i], displayLabel);
-                                    }
-                                } else {
-                                    dataset.addValue(0, selectedYears[i], displayLabel);
-                                    dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), "", "", formatValue(targetValue)});
-                                }
+                            else{
+                                baseValue=basValue.getValue();
                             }
-                        }*/
+                               if(targValue==null){
+                                targetValue=new Double(0);
+                            }
+                            else{
+                                targetValue=targValue.getValue();
+                            }
+                         // create dataset for graph
+                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(actualValue), formatValue(actualValue), formatValue(targetValue)});
+                             Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
+                             dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
+
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         throw new AimException("Error creating dataset for graph.", ex);

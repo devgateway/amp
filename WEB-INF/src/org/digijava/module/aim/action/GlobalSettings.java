@@ -192,7 +192,7 @@ public class GlobalSettings extends Action {
 			name = ampGls.getGlobalSettingsName();
 			value = ampGls.getGlobalSettingsValue();
 			if (name.equalsIgnoreCase("Automatic Audit Logger Cleanup")) {
-				if ("-1".equalsIgnoreCase(value)) {
+				if ("-1".equalsIgnoreCase(value)&& AuditCleaner.getInstance().isRunning()) {
 					AuditCleaner.getInstance().stop();
 				} else {
 					if (!AuditCleaner.getInstance().isRunning()) {

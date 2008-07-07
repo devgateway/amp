@@ -1111,7 +1111,32 @@ public class CurrencyUtil {
 		}
 	}
 
-	
+	public static String getCurrencyName(Long currencyId) {
+		Session session = null;
+		String queryString = null;
+		Query q = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			queryString = "select a.currencyCode from "+AmpCurrency.class.getName()+" a where a.ampCurrencyId=:currencyId";
+			q = session.createQuery(queryString);
+			q.setLong("currencyId", currencyId);
+			logger.info("Got currency name : "+q.list().get(0).toString());
+			return q.list().get(0).toString();
+		}
+		catch (Exception ex) {
+			logger.error("Unable to get currency name", ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return null;
+	}
 
 	public static List getAmpCurrency(Long ampActivityId) {
 		List currency = null;

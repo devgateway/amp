@@ -52,7 +52,7 @@ import com.lowagie.text.rtf.style.RtfFont;
  */
 public class ProjectFicheExport extends Action {
 	protected static Logger logger = Logger.getLogger(ProjectFicheExport.class);
-
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -69,6 +69,7 @@ public class ProjectFicheExport extends Action {
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		
 		AmpActivity act = ActivityUtil.getAmpActivity(id);
+		String currencyName = CurrencyUtil.getCurrencyName(tm.getAppSettings().getCurrencyId());
 		
 		HashMap allComments=new HashMap();		
 		Collection ampFields=DbUtil.getAmpFields();
@@ -127,8 +128,8 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("1.7 Beneficiary: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"BA")),regularFont,1));
 		
 		document.add(newParagraph("Costs:",subSectionFont,1));
-		document.add(newParagraph("1.8 Overall Cost: "+CurrencyUtil.df.format(EUActivityUtil.getTotalCostConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()),regularFont,1));
-		document.add(newParagraph("1.9 EU Contribution: "+CurrencyUtil.df.format(EUActivityUtil.getTotalContributionsConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()),regularFont,1));
+		document.add(newParagraph("1.8 Overall Cost: "+CurrencyUtil.df.format(convertToThousands(EUActivityUtil.getTotalCostConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()))+" "+currencyName,regularFont,1));
+		document.add(newParagraph("1.9 EU Contribution: "+CurrencyUtil.df.format(convertToThousands(EUActivityUtil.getTotalContributionsConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()))+" "+currencyName,regularFont,1));
 		document.add(newParagraph("1.10 Final date for contracting: "+(act.getContractingDate()==null?"":act.getContractingDate().toString()),regularFont,1));
 		//TODO: check here, this is same as 1.12!!
 		//document.add(newParagraph("1.11 Final date for execution of contracts: "+(act.getDisbursmentsDate()==null?"":act.getDisbursmentsDate().toString()),regularFont,1));
@@ -252,8 +253,8 @@ public class ProjectFicheExport extends Action {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(tm.getAppSettings().getCurrencyId());
 			tbl.addCell(new Cell(element.getName()));
-			tbl.addCell(new Cell(CurrencyUtil.df.format(element.getTotalContributionsConverted())));
-			tbl.addCell(new Cell(CurrencyUtil.df.format(element.getTotalCostConverted())));
+			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalContributionsConverted()))+" "+currencyName));
+			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalCostConverted()))+" "+currencyName));
 			tbl.addCell(new Cell(element.getAssumptions()));
 		}
 		
@@ -362,5 +363,7 @@ public class ProjectFicheExport extends Action {
 		return new RtfFont("Times New Roman",12);
 	}
 	
-	
+	public static double convertToThousands(double amount) {
+		return amount*1000;
+	}
 }

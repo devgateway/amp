@@ -209,8 +209,10 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	
-	public static <E extends AmpMessage> int getUnreadMessagesAmountPerMsgType(Class<E> clazz,Long tmId) throws Exception{
+	/**
+	 * return inbox messages amount for each type of message. if onlyUnred is true, then returns only unread messages amount
+	 */
+	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId,boolean onlyUnread) throws Exception {
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
@@ -218,27 +220,11 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.read="+false+" and state.messageHidden="+false+" order by msg.creationDate desc";
-			query=session.createQuery(queryString);			 				
-			query.setParameter("tmId", tmId);			
-			retValue=((Integer)query.uniqueResult()).intValue();			
-		}catch(Exception ex) {
-			logger.error("couldn't load Messages" + ex.getMessage());	
-			ex.printStackTrace();
-			throw new AimException("Unable to Load Messages", ex);			
-		}
-		return retValue;
-	}
-	
-	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId) throws Exception {
-		int retValue=0;
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.messageHidden="+false+" order by msg.creationDate desc";
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=false";
+			if(onlyUnread){
+				queryString+=" and state.read=false";
+			}
+			queryString+=" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);			
 			retValue=((Integer)query.uniqueResult()).intValue();			
@@ -258,7 +244,7 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false+" order by msg.creationDate desc";
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=false order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);			
 			retValue=((Integer)query.uniqueResult()).intValue();			
@@ -276,10 +262,10 @@ public class AmpMessageUtil {
 		List<AmpMessageState> returnValue=null;	
 		int messagesAmount=0;
 		try {
-			messagesAmount=getInboxMessagesCount(clazz,teamMemberId);
+			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.messageHidden="+false;	
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=false";	
 			query=session.createQuery(queryString);
 			
 			//if max.storage is less then amount ,then we should not show extra messages. We must show the oldest(not newest) max.storage amount messages.

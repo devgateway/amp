@@ -12,6 +12,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
@@ -52,13 +53,29 @@ public class AmpMessageWorker {
     			AmpMessageUtil.saveOrUpdateMessage(newMsg);
 
     			//getting states according to tempalteId
-    			List<AmpMessageState> statesRelatedToTemplate=null;
-    			statesRelatedToTemplate=AmpMessageUtil.loadMessageStates(template.getId());
-    			if(statesRelatedToTemplate!=null && statesRelatedToTemplate.size()>0){
-    				for (AmpMessageState state : statesRelatedToTemplate) {
-    					createMsgState(state,newMsg);
-    				}
-    			}
+    			//New Requirement for ApprovedActiviti and Activity waiting approval.
+				//only teamLeader(in case approval is needed) and activity creator/updater should get an alert regardless of receivers list in template    		
+				if(e.getTrigger().equals(ApprovedActivityTrigger.class)||e.getTrigger().equals(NotApprovedActivityTrigger.class)){
+    				AmpMessageState state=new AmpMessageState();
+    				state.setMemberId(newMsg.getSenderId());
+    				createMsgState(state,newMsg);
+    				if(e.getTrigger().equals(NotApprovedActivityTrigger.class)){        					
+    					AmpTeamMember tm= TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
+    					if(tm.getAmpTeam().getTeamLead()!=null){
+    						Long teamLeaderId=tm.getAmpTeam().getTeamLead().getAmpTeamMemId();
+        					state=new AmpMessageState();      
+            				state.setMemberId(teamLeaderId);
+            				createMsgState(state,newMsg);      
+    					}          					      				}
+    			}else{
+    				List<AmpMessageState> statesRelatedToTemplate=null;    			
+        			statesRelatedToTemplate=AmpMessageUtil.loadMessageStates(template.getId());    			
+        			if(statesRelatedToTemplate!=null && statesRelatedToTemplate.size()>0){
+            			for (AmpMessageState state : statesRelatedToTemplate) {
+            				createMsgState(state,newMsg);
+            			}    				
+        			}
+    			}    			
 			}
     	}
     }
@@ -110,7 +127,6 @@ public class AmpMessageWorker {
         myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(NotApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ((AmpTeamMember)e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
         //url
-
         if(partialURL!=null){
             myHashMap.put(MessageConstants.OBJECT_URL,"<a href=\""+partialURL+e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL)+"\">activity URL</a>");
             approval.setObjectURL(partialURL+e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL));
@@ -129,7 +145,7 @@ public class AmpMessageWorker {
             partialURL=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN)+"/";
         }
         HashMap<String, String> myHashMap=new HashMap<String, String>();
-        myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(ApprovedActivityTrigger.PARAM_NAME));
+        myHashMap.put(MessageConstants.OBJECT_NAME,(String)e.getParameters().get(ApprovedActivityTrigger.PARAM_NAME));      
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ((AmpTeamMember)e.getParameters().get(ApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
         //url
         if(partialURL!=null){
@@ -139,8 +155,8 @@ public class AmpMessageWorker {
         approval.setSenderId(((AmpTeamMember)e.getParameters().get(ApprovedActivityTrigger.PARAM_SAVED_BY)).getAmpTeamMemId());
         approval.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
         return createApprovalFromTemplate(template, myHashMap,approval);
-    }
-
+    }    
+   
     /**
 	 *	Save Activity Event processing
 	 */
@@ -223,16 +239,22 @@ public class AmpMessageWorker {
 	}
 
 
-	private static void createMsgState(AmpMessageState state,AmpMessage newMsg){
+	private static void createMsgState(AmpMessageState state,AmpMessage newMsg) throws Exception{
 		AmpMessageState newState=new AmpMessageState();
 		newState.setMessage(newMsg);
 		newState.setMemberId(state.getMemberId());
 		newState.setRead(false);
+		//will this message be visible in user's mailbox
+		if(AmpMessageUtil.isInboxFull(Approval.class, state.getMemberId())){
+			newState.setMessageHidden(true);
+		}else{
+			newState.setMessageHidden(false);
+		}
 		try {
 			AmpMessageUtil.saveOrUpdateMessageState(newState);
 		} catch (AimException e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 
 }

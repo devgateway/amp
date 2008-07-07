@@ -227,7 +227,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 							</logic:equal>
 							</feature:display>
 							<TR bgColor=#f4f4f2>
-								<TD vAlign="top" align="center" width="750">
+								<TD vAlign="top" align="center" width="100%">
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" height="17">
@@ -244,8 +244,8 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											</TD>
 										</TR>
 										<TR>
-											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
-												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
+											<TD width="100%" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
+												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1">
                  					<TR bgcolor="#DDDDDB" >
  
 		    	                    	<field:display name="Funding Organization Id" feature="Funding Information">

@@ -46,11 +46,11 @@
 	}
 	
     function doSubmit() {
-        if (document.forms[0].categoryName.value.length == 0) {
+        if (document.aimCategoryManagerForm.categoryName.value.length == 0) {
             alert ("${translation1}");
             return false;
         }
-        if (document.forms[0].keyName.value.length == 0) {
+        if (document.aimCategoryManagerForm.keyName.value.length == 0) {
             alert ("${translation2}");
             return false;
         } 
@@ -83,7 +83,7 @@
 	
 	
         
-        document.forms[0].submit();
+        document.aimCategoryManagerForm.submit();
     }
 	function deleteField(id, deleteId, undoId,disabeledId) {
 		field						= document.getElementById(id) ;

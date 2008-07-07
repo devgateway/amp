@@ -1,5 +1,8 @@
 package org.digijava.module.gis.action;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,13 +28,16 @@ public class ShowSectorByDonorChart extends Action {
         Long[] donorIDs = null;
 
         if (cForm.getImageHeight() == null || cForm.getImageHeight().intValue()<=0){
-        	cForm.setImageHeight(new Integer(460));
+        	cForm.setImageHeight(new Integer(660));
         }
         if (cForm.getImageWidth() == null || cForm.getImageWidth().intValue()<=0){
         	cForm.setImageWidth(new Integer(420));
         }
         if (cForm.getSelectedYear()!=null && !cForm.getSelectedYear().equals("-1")){
         	year = new Integer(cForm.getSelectedYear());
+        }else{
+        	GregorianCalendar cal = new GregorianCalendar();
+        	year = new Integer(cal.get(Calendar.YEAR));
         }
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){
         	donorIDs = new Long[1];

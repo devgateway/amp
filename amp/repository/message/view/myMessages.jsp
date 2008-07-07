@@ -22,7 +22,7 @@
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
-    var inboxFull='<digi:trn key="message:fullInbox">Your Inbox Is Full</digi:trn>';
+    var inboxFull='<digi:trn key="message:fullMailBox">Your MailBox Is Full</digi:trn>';
     var deleteData='<digi:trn key="message:plzDeleteData">Please delete messages or you will not get newer ones</digi:trn>' ;
     var newCount=0;
     var prevCount=0;
@@ -119,11 +119,14 @@
       var approvalsAmount=root.getAttribute('approvals');
       var calEventsAmount=root.getAttribute('calEvents');
       
-      isInboxFull=root.getAttribute('inboxFull');
-      if(isInboxFull=='true' && firstEntry==0){
-      	showMessage(true);
-      	firstEntry=1;
+      if(isInboxFull=='false'){
+      	  isInboxFull=root.getAttribute('inboxFull');
+	      if(isInboxFull=='true' && firstEntry==0){
+	      	showMessage(true);
+	      	firstEntry=1;
+	      }
       }
+      
 
       newCount=msgsAmount+alertsAmount+approvalsAmount+calEventsAmount;
 

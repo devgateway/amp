@@ -1545,12 +1545,15 @@ public class SaveActivity extends Action {
 
             boolean needApproval=false;
             boolean approved=false;
+            //this field is used to define if "activity approved" approval has to be created
+            boolean needNewAppForApproved=true;
 
             if(eaForm.isEditAct()){
                 if(tm.getTeamHead()){
                     needApproval = false;
                     approved=true;
                 }else if("newOnly".equals(tm.getAppSettings().getValidation())){
+                	needNewAppForApproved=false;
                     approved=true;
                     needApproval = false;
                 }else{
@@ -1559,6 +1562,7 @@ public class SaveActivity extends Action {
                 }
             }else{
                 if(tm.getTeamHead()){
+                	needNewAppForApproved=false;
                     needApproval=false;
                     approved=true;
                 }else{
@@ -1566,13 +1570,19 @@ public class SaveActivity extends Action {
                     needApproval=true;
                 }
             }
-
-            if(approved){
-                new ApprovedActivityTrigger(activity);
+            //if workspace has no manager, then there is no need to approve any activity.
+            AmpTeamMember teamMem=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+            if(teamMem.getAmpTeam().getTeamLead()!=null){
+            	//check whether Activity is approved or needs Approval
+            	if(approved && needNewAppForApproved){
+                    new ApprovedActivityTrigger(activity);
+                }
+                if(needApproval){
+                    new NotApprovedActivityTrigger(activity);
+                }
             }
-            if(needApproval){
-                new NotApprovedActivityTrigger(activity);
-            }
+            
+            
 
             if(DocumentUtil.isDMEnabled()) {
                 Site currentSite = RequestUtils.getSite(request);

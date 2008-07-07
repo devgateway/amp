@@ -14,7 +14,14 @@ public class AmpWidget implements Serializable {
 	private Long id;
 	private String name;
 	private String code;
+	private Boolean nameAsTitle;
 	
+	public Boolean getNameAsTitle() {
+		return nameAsTitle;
+	}
+	public void setNameAsTitle(Boolean nameAsTitle) {
+		this.nameAsTitle = nameAsTitle;
+	}
 	public Long getId() {
 		return id;
 	}

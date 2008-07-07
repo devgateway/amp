@@ -333,7 +333,7 @@ public class TableWidgetUtil {
 	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getWidgetPlaces(Long id) throws DgException{
 		List<AmpDaWidgetPlace> places = null;
-		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where p.widget = :widId";
+		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where p.assignedWidget = :widId";
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			Query query = session.createQuery(oql);

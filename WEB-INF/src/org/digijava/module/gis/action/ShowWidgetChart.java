@@ -35,7 +35,6 @@ public class ShowWidgetChart extends Action {
         if (wForm.getImageWidth() == null || wForm.getImageWidth().intValue()<=0){
         	wForm.setImageWidth(new Integer(220));
         }
-
         
         AmpWidgetIndicatorChart widget = null;
         if (wForm.getWidgetId()!=null){

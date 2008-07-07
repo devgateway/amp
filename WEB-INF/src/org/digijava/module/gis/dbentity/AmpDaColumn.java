@@ -1,6 +1,7 @@
 package org.digijava.module.gis.dbentity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Table widget column entity class.
@@ -21,7 +22,14 @@ public class AmpDaColumn implements Serializable, Comparable<AmpDaColumn>{
 	private Integer orderNo;
 	private AmpDaTable widget;
 	private Integer columnType;
+	private Set<AmpDaValue> values;
 	
+	public Set<AmpDaValue> getValues() {
+		return values;
+	}
+	public void setValues(Set<AmpDaValue> values) {
+		this.values = values;
+	}
 	public AmpDaTable getWidget() {
 		return widget;
 	}

@@ -19,6 +19,10 @@
 		<property name="columnType" column="column_type_no" type="java.lang.Integer"/>
 
 		<many-to-one name="widget" column="table_widget_id" class="org.digijava.module.gis.dbentity.AmpDaTable" cascade="none"/>		
+		<set name="values" lazy="true" inverse="true" order-by="row_pk asc" cascade="all-delete-orphan">
+			<key column="column_id"/>
+			<one-to-many class="org.digijava.module.gis.dbentity.AmpDaValue"/>
+		</set>
 		
 	</class>
 </hibernate-mapping>

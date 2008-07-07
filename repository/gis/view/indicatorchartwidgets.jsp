@@ -54,14 +54,11 @@
 			
 			<table border="0" width="100%" align="center" style="font-family:verdana;font-size:11px;">
 				<tr bgColor="#d7eafd">
-					<td>
+					<td nowrap="nowrap" width="40%">
 						<strong><digi:trn key="gis:indicatorChartWidget:widgetName">Widget Name</digi:trn></strong>
 					</td>
-					<td>
+					<td nowrap="nowrap" width="40%">
 						<strong><digi:trn key="gis:indicatorChartWidget:indicatorName">Indicator Name</digi:trn></strong>
-					</td>
-					<td>
-						<strong><digi:trn key="gis:indicatorChartWidget:placeName">Place name</digi:trn></strong>
 					</td>
 					<td>
 						<strong><digi:trn key="gis:indicatorChartWidget:oeprations">Operation</digi:trn></strong>
@@ -73,18 +70,15 @@
 							${wi.name}
 						</td>
 						<td nowrap="nowrap">
-						 	${wi.name}
+						 	${wi.indicator.indicator.name}
 						</td>
-						<td>
-							${wi.name}
-						</td>
-						<td>
+						<td nowrap="nowrap">
 							<a href="/gis/indicatorchartwidgets.do~actType=edit~widgetId=${wi.id}">
-								<digi:trn key="gis:indicatorChartWidget:lnkEdit">Edit</digi:trn>
+								<digi:trn key="gis:editLink">Edit</digi:trn>
 							</a>
 							&nbsp;
 							<a href="/gis/indicatorchartwidgets.do~actType=delete~widgetId=${wi.id}">
-								<digi:trn key="gis:indicatorChartWidget:lnkDelete">Delete</digi:trn>
+								<digi:trn key="gis:deleteLink">Delete</digi:trn>
 							</a>
 						</td>
 					</tr>

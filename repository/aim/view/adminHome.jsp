@@ -343,6 +343,7 @@
                             </td>
                           </tr>
                           </feature:display>
+                          <feature:display  name="Indicator chart Widgets" module="GIS DASHBOARD">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -354,6 +355,8 @@
                               </a>
                             </td>
                           </tr>
+                          </feature:display>
+                          <feature:display  name="Widget Places" module="GIS DASHBOARD">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -365,6 +368,7 @@
                               </a>
                             </td>
                           </tr>
+                          </feature:display>
                           <!-- Satus Manager is deprecated. Use Category Manager instead. <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

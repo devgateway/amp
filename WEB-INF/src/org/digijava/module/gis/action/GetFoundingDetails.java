@@ -85,6 +85,13 @@ public class GetFoundingDetails extends Action {
                                    rect.getLeft(), rect.getRight(),
                                    rect.getTop(), rect.getBottom(), true);
 
+            gisUtil.addCaptionsToImage(g2d,
+                                       map.getSegments(),
+                                       canvasWidth, canvasHeight,
+                                       rect.getLeft(), rect.getRight(),
+                                       rect.getTop(), rect.getBottom());
+
+
             g2d.dispose();
 
             RenderedImage ri = graph;
@@ -113,7 +120,10 @@ public class GetFoundingDetails extends Action {
 
             String secIdStr = request.getParameter("sectorId");
 
-            List secFundings = DbUtil.getSectorFoundings(new Long(secIdStr));
+            Long secId = new Long(secIdStr);
+
+            List secFundings = DbUtil.getSectorFoundings(secId);
+
             Iterator it = secFundings.iterator();
 
             Map locationIdObjectMap = new HashMap();
@@ -201,6 +211,12 @@ public class GetFoundingDetails extends Action {
                                    rect.getLeft(), rect.getRight(),
                                    rect.getTop(), rect.getBottom(), true);
 
+            gisUtil.addCaptionsToImage(g2d,
+                                       map.getSegments(),
+                                       canvasWidth, canvasHeight,
+                                       rect.getLeft(), rect.getRight(),
+                                       rect.getTop(), rect.getBottom());
+
             g2d.dispose();
 
             RenderedImage ri = graph;
@@ -209,11 +225,70 @@ public class GetFoundingDetails extends Action {
 
             graph.flush();
 
+        } else if (action.equalsIgnoreCase("getDataForIndicator")) {
+
+            response.setContentType("image/png");
+
+            String secIdStr = request.getParameter("sectorId");
+            Long secId = new Long(secIdStr);
+
+            String indIdStr = request.getParameter("indicatorId");
+            Long indId = new Long(indIdStr);
+
+            List inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId);
+
+            List segmentDataList = new ArrayList();
+            Iterator indsIt = inds.iterator();
+            while (indsIt.hasNext()) {
+                Object[] indData = (Object[]) indsIt.next();
+                SegmentData indHilightData = new SegmentData();
+                indHilightData.setSegmentCode((String)indData[1]);
+                indHilightData.setSegmentValue(((Double)indData[0]).toString());
+                segmentDataList.add(indHilightData);
+            }
+
+
+            List hilightData = prepareHilightSegments(segmentDataList, map);
+
+            BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
+                    BufferedImage.TYPE_INT_ARGB);
+
+            Graphics2D g2d = graph.createGraphics();
+
+            g2d.setBackground(new Color(0, 0, 100, 255));
+
+            g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            gisUtil.addDataToImage(g2d,
+                                   map.getSegments(),
+                                   hilightData,
+                                   canvasWidth, canvasHeight,
+                                   rect.getLeft(), rect.getRight(),
+                                   rect.getTop(), rect.getBottom(), true);
+
+            gisUtil.addCaptionsToImage(g2d,
+                                       map.getSegments(),
+                                       canvasWidth, canvasHeight,
+                                       rect.getLeft(), rect.getRight(),
+                                       rect.getTop(), rect.getBottom());
+
+            g2d.dispose();
+
+            RenderedImage ri = graph;
+
+            ImageIO.write(ri, "png", sos);
+
+            graph.flush();
+
+
         } else if (action.equalsIgnoreCase("getSectorDataXML")) {
             response.setContentType("text/xml");
             String secIdStr = request.getParameter("sectorId");
 
-            List secFundings = DbUtil.getSectorFoundings(new Long(secIdStr));
+            Long secId = new Long(secIdStr);
+
+            List secFundings = DbUtil.getSectorFoundings(secId);
+
             Iterator it = secFundings.iterator();
 
             Map locationIdObjectMap = new HashMap();
@@ -259,7 +334,7 @@ public class GetFoundingDetails extends Action {
                     }
                 }
 
-            }
+             }
 
             XMLDocument segmendDataInfo = new XMLDocument();
             XML root = new XML("funding");
@@ -278,9 +353,38 @@ public class GetFoundingDetails extends Action {
                 }
             }
 
+
+
             sos.print(segmendDataInfo.toString());
+        } else if (action.equalsIgnoreCase("getIndicatorNamesXML")) {
+
+            response.setContentType("text/xml");
+            String secIdStr = request.getParameter("sectorId");
+            Long secId = new Long(secIdStr);
+
+
+            XMLDocument sectorIndicators = new XMLDocument();
+            XML root = new XML("indicators");
+            sectorIndicators.addElement(root);
+
+            //Add indicators
+            List secIndicatorList = DbUtil.getIndicatorsForSector(secId);
+            Iterator indNameIterator = secIndicatorList.iterator();
+
+
+
+            while (indNameIterator.hasNext()) {
+                Object[] indName = (Object[]) indNameIterator.next();
+                XML ind = new XML("indicator");
+                ind.addAttribute("name", (String)indName[1]);
+                ind.addAttribute("id", (Long)indName[0]);
+                root.addElement(ind);
+
+            }
+            sos.print(sectorIndicators.toString());
         }
 
+        sos.flush();
         sos.close();
         return null;
 

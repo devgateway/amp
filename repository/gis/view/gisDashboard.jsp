@@ -31,6 +31,7 @@
 
 		</td>
 	</tr>
+	<tr><td><img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif"></td></tr>
 	<tr>
 		<td>
 		<select onChange="sectorSelected(this)">
@@ -39,6 +40,13 @@
 			</logic:iterate>
 		</select>
 		<div id="imageMapContainer" style="visibility:hidden;"></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<select id="indicatorsCombo" onchange="indicatorSelected(this)">
+			<option value=-1>None</option>
+		</select>
 		</td>
 	</tr>
 </table>
@@ -88,11 +96,20 @@
 	
 	var fundingDataByRegion = new Array();
 	var totalFund = "0";
+	var selSector = 0;
+	
 	
 	function sectorSelected(sec) {
+		setBusy(true);
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForSector&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr;
 		getDataForSector(sec);
+	}
+	
+	function indicatorSelected(ind) {
+		setBusy(true);
+		var uniqueStr = (new Date()).getTime();
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr;
 	}
 
 	
@@ -102,6 +119,8 @@
 			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&uniqueStr=" + uniqueStr, true);
 			xmlhttp.onreadystatechange = addImageMap;
 			xmlhttp.send(null);
+		} else {
+			setBusy(false);
 		}
 	}
 	
@@ -114,6 +133,7 @@
 	}
 	
 	function getDataForSector(sec) {
+			selSector = sec.value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr, true);
 			xmlhttp.onreadystatechange = dataForSectorReady;
@@ -134,25 +154,55 @@
 				fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
 			}
 			
+			window.setTimeout(getSectorIndicators, 100);
+		}
+		
+	}
+
+	function getSectorIndicators(sec) {
+			var uniqueStr = (new Date()).getTime();
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
+			xmlhttp.onreadystatechange = SectorIndicatorsReady;
+			xmlhttp.send(null);
+	}
+
+	function SectorIndicatorsReady () {
+		if (xmlhttp.readyState == 4) {
+			var indicators = xmlhttp.responseXML.getElementsByTagName('indicator');
+			var indIndex = 0;
+			
+			var selectCmb = document.getElementById("indicatorsCombo");
+			
+			
+			var innerHtmlText = "<option value=\"-1\">None</option>";
+			/*			
+			var innerHtmlText = ""
+			if (indicators.length == 0) {
+				innerHtmlText = "<option value=\"-1\">None</option>";
+			}
+			*/
+			
+			for (indIndex = 0; indIndex < indicators.length; indIndex ++) {
+				var indicatorData = indicators[indIndex];
+				innerHtmlText += "<option value=\"" + indicatorData.attributes.getNamedItem("id").value + "\">" + indicatorData.attributes.getNamedItem("name").value + "</option>";
+				
+				//alert (indicatorData.attributes.getNamedItem("name").value + " - " + indicatorData.attributes.getNamedItem("id").value)
+			}
+			
+			selectCmb.innerHTML = innerHtmlText;
+			setBusy(false);
 		}
 	}
 	
 	function generateImageMap (XmlObj) {
 		var retVal = "<map name=\"areaMap\">";
-		
 		var segments = XmlObj.getElementsByTagName('segment');
-				
 		var segmentIndex = 0;
-		
-		
-		
 		for (segmentIndex = 0; segmentIndex < segments.length; segmentIndex ++) {
 			var segment = segments[segmentIndex];
 			var shapeIndex = 0;
-
 			for (shapeIndex = 0; shapeIndex < segment.childNodes.length; shapeIndex ++) {
 				var shape = segment.childNodes[shapeIndex];
-				
 				retVal += "<area shape=\"polygon\" coords=\""
 				var pointIndex = 0;
 				for (pointIndex = 0; pointIndex < shape.childNodes.length; pointIndex ++) {
@@ -199,6 +249,13 @@
 		return retVal;
 	}
 	
+	function setBusy(busy) {
+		if (busy) {
+			document.getElementById("busyIndicator").style.visibility = "visible";
+		} else {
+			document.getElementById("busyIndicator").style.visibility = "hidden";
+		}
+	}
 	
 </script>
 

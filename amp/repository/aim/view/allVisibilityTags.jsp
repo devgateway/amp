@@ -151,6 +151,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Measures" module="Reports"></feature:display>
 <feature:display name="Messages" module="Messaging System"></feature:display>
 <feature:display name="Table Widgets" module="GIS DASHBOARD"></feature:display>
+<feature:display name="Indicator chart Widgets" module="GIS DASHBOARD"></feature:display>
+<feature:display name="Widget Places" module="GIS DASHBOARD"></feature:display>
 
 <feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display module="Funding" name="Disbursements"></feature:display>

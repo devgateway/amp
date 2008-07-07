@@ -25,12 +25,12 @@ public class ShowSectorByDonorChart extends Action {
         Long[] donorIDs = null;
 
         if (cForm.getImageHeight() == null || cForm.getImageHeight().intValue()<=0){
-        	cForm.setImageHeight(new Integer(260));
+        	cForm.setImageHeight(new Integer(460));
         }
         if (cForm.getImageWidth() == null || cForm.getImageWidth().intValue()<=0){
         	cForm.setImageWidth(new Integer(420));
         }
-        if (cForm.getSelectedYear()!=null && cForm.getSelectedYear()!="-1"){
+        if (cForm.getSelectedYear()!=null && !cForm.getSelectedYear().equals("-1")){
         	year = new Integer(cForm.getSelectedYear());
         }
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){

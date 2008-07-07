@@ -237,7 +237,7 @@ public class ChartWidgetUtil {
 			Query query = session.createQuery(oql);
 			if (fromDate!=null && toDate!=null){
 				query.setDate("fDate", fromDate);
-				query.setDate("eDate", fromDate);
+				query.setDate("eDate", toDate);
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MMMM-dd hh:mm:ss");
 				logger.debug("Filtering from "+df.format(fromDate)+" to "+df.format(toDate));
 			}

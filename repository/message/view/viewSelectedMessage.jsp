@@ -6,9 +6,26 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
+
+
+
 
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
+
+<style type="text/css">
+<!--
+.blue {
+background: #a5bcf2;
+}
+.whiteThing {
+background: #FFF;
+}
+-->
+</style>
+
 
 <script langauage="JavaScript">
 //	function edit(id) {	
@@ -23,9 +40,11 @@
 //  		window.opener.location.reload();
 //  		window.close();  					
 //	}
-	
-	
+
+
 </script>
+
+
 
 <digi:form action="/messageActions.do">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
@@ -79,13 +98,23 @@
 																				<tr><td colspan="4"></td></tr>
 																				<tr>
 																					<td align="left"><b><digi:trn key="message:from">From</digi:trn></b></td>
-																					<td align="left" bgcolor="#ffffff" ><c:out value="${messageForm.sender}"/></td>
+																					<td align="left" bgcolor="#ffffff" >
+																					<c:set var="senderInfo" value="${fn:split(messageForm.sender,';')}"/>
+																								<a  title='<c:out value="${senderInfo[1]}"/>' style="color: #05528B; text-decoration:underline;"><c:out value="${senderInfo[0]}"/></a>
+																					</td>
 																					<td colspan="2"></td>
 																				</tr>
                                                                                 <tr><td colspan="5"></td></tr>	
                                                                                 <tr>
 																					<td align="left"><b><digi:trn key="message:to">to</digi:trn></b></td>
-																					<td align="left" bgcolor="#ffffff" ><c:out value="${messageForm.receiver}"/></td>
+																					<td align="left" bgcolor="#ffffff">
+																			
+																					<logic:iterate id="nameMail"  name="messageForm" property="receivesrsNameMail" >
+																													
+																								<a title="${nameMail.teamName}" style="color: #05528B; text-decoration:underline;"><c:out value="${nameMail.userNeme}"/></a>
+																										
+																					</logic:iterate>
+																					</td>
 																					<td colspan="2"></td>
 																				</tr>
 																				<tr><td colspan="4"></td></tr>		

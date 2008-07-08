@@ -329,6 +329,7 @@ public class TeamMemberUtil {
 				TeamMember tm = new TeamMember();
 				tm.setMemberId(id);
 				tm.setMemberName(name);
+				tm.setTeamName(ampMem.getAmpTeam().getName());
 				tm.setRoleName(role);
 				tm.setEmail(user.getEmail());
 				tm.setTeamId(teamId);

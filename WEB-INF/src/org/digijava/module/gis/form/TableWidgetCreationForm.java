@@ -34,7 +34,7 @@ public class TableWidgetCreationForm extends ActionForm {
 	
 	private AmpDaTable dbEntity;
 	
-	//======= Column properies===========
+	//======= Column properties===========
 	private Long colId;
 	private String colName;
 	private String colCode;
@@ -42,6 +42,7 @@ public class TableWidgetCreationForm extends ActionForm {
 	private String colHtmlStyle;
 	private String colPattern;
 	private String colWidth;
+	private Boolean colColumnEdit;
 	
 	private Collection<LabelValueBean> columnTypes;
 
@@ -219,6 +220,14 @@ public class TableWidgetCreationForm extends ActionForm {
 
 	public void setShouldClose(boolean shouldClose) {
 		this.shouldClose = shouldClose;
+	}
+
+	public Boolean getColColumnEdit() {
+		return colColumnEdit;
+	}
+
+	public void setColColumnEdit(Boolean colColumnEdit) {
+		this.colColumnEdit = colColumnEdit;
 	}
 
 }

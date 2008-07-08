@@ -56,16 +56,12 @@ public class ChartWidgetUtil {
 
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
 
-    public static JFreeChart getIndicatorChart(IndicatorSector indicatorCon) throws DgException{
+    public static JFreeChart getIndicatorChart(IndicatorSector indicatorCon,ChartOption opt) throws DgException{
 		JFreeChart result = null;
 		TimeSeriesCollection ds = getIndicatorChartDataset(indicatorCon);
-		String valuesAxisLabel = indicatorCon.getIndicator().getName();
-		String categAxisLabel = "Date";
-		String title = indicatorCon.getIndicator().getName();
-		boolean legend = false;
 		boolean tooltips = false;
 		boolean urls = false;
-		result = ChartFactory.createTimeSeriesChart(title, null, null, ds, legend, tooltips, urls);
+		result = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
 		Font font = new Font(null,0,12);
 		result.getTitle().setFont(font);
 		return result;

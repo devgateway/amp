@@ -21,7 +21,11 @@
 </script>
 
 <digi:instance id="cForm" property="gisTableWidgetCreationForm"/>
+
 <digi:form action="/adminTableWidgets.do?actType=addColumn">
+	<html:hidden name="cForm" property="colId"/>
+	<html:hidden name="cForm" property="colColumnEdit"/>
+	
 	<table width="100%" cellpadding="5">
 		<tr bgcolor="#d7eafd">
 			<td colspan="2" align="center">
@@ -71,4 +75,6 @@
 			</td>
 		</tr>
 	</table>
+
 </digi:form>
+

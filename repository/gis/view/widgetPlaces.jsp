@@ -66,7 +66,7 @@
 						<td nowrap="nowrap">
 							<digi:link href="/widgetplaces.do~actType=assignWidgt~placeId=${pl.placeId}"><digi:trn key="gis:widgetPlacesTable:assignWidgetLink">Assign widget</digi:trn></digi:link>
 							&nbsp;
-							<digi:link href="/widgetplaces.do~actType=delete~placeId=${pl.placeId}" onclick="return confirm('Are you sure?')"><digi:trn key="gis:widgetPlaceTable:deleteLink">Delete</digi:trn></digi:link>
+							<digi:link href="/widgetplaces.do~actType=delete~placeId=${pl.placeId}" onclick="return confirm('Are you sure?')"><img border="0" src='<digi:file src="images/deleteIcon.gif"/>'></digi:link>
 						</td>
 					</tr>
 				</c:forEach>

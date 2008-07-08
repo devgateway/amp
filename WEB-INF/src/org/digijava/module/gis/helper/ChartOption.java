@@ -13,6 +13,7 @@ public class ChartOption {
 	private Integer width;
 	private Integer height;
 	private boolean createMap;
+	private String title;
 	
 	public boolean isShowLegend() {
 		return showLegend;
@@ -55,5 +56,11 @@ public class ChartOption {
 	}
 	public void setCreateMap(boolean createMap) {
 		this.createMap = createMap;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

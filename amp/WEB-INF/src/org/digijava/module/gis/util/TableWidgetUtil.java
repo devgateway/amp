@@ -354,9 +354,24 @@ public class TableWidgetUtil {
 		return null;
 	}
 	
-	
 	//=======COLUMNS====================
-	
+
+	/**
+	 * Returns table columns with ID.
+	 * @param id
+	 * @return
+	 * @throws DgException
+	 */
+	public static AmpDaColumn getColumn(Long id)throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		AmpDaColumn result=null;
+		try {
+			result=(AmpDaColumn)session.load(AmpDaColumn.class, id);
+		} catch (Exception e) {
+			throw new DgException("Cannot get Column Widget!",e);
+		}
+    	return result;
+	}
 	
 	//=======key resolvers==============
 	public static class TableWidgetKeyResolver implements KeyResolver<Long, AmpDaTable>{
@@ -403,7 +418,7 @@ public class TableWidgetUtil {
 			return col1.getOrderNo().compareTo(col2.getOrderNo());
 		}
 	}
-	
+
 	public static class RowPkComparator implements Comparator<DaRow>{
 		public int compare(DaRow r1, DaRow r2) {
 			return r1.getPk().compareTo(r2.getPk());

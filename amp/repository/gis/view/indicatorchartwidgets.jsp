@@ -78,7 +78,7 @@
 							</a>
 							&nbsp;
 							<a href="/gis/indicatorchartwidgets.do~actType=delete~widgetId=${wi.id}">
-								<digi:trn key="gis:deleteLink">Delete</digi:trn>
+								<img border="0" src='<digi:file src="images/deleteIcon.gif"/>'>
 							</a>
 						</td>
 					</tr>

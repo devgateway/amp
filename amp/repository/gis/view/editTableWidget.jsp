@@ -30,6 +30,11 @@
 		myForm.action="<%=justSubmit%>&id="+id;  
 		myForm.submit();
 	}
+	function editCol(colId,id){
+		var myForm = document.getElementById('tableId').form;
+		refreshThis(myForm,id);
+		openURLinWindow('${contextPath}/gis/adminTableWidgets.do~actType=showColumnEditPopup~colId='+colId);
+	}
 	function deleteCol(colId){
 		var myForm = document.getElementById('tableId').form;
 		if ( confirm(reallyDeleteColumn) ){
@@ -37,7 +42,6 @@
 			myForm.action="<%=justSubmit%>&colId="+colId;  
 			myForm.submit();
 		}
-	
 	}
 	function moveUp(colId){
 		var myForm = document.getElementById('tableId').form;
@@ -148,7 +152,7 @@
 					<td><strong><digi:trn key="gis:editTableWidget:colCode">Code</digi:trn></strong></td>
 					<td><strong><digi:trn key="gis:editTableWidget:colCssClass">CSS class</digi:trn></strong></td>
 					<td><strong><digi:trn key="gis:editTableWidget:colPate">Pattern</digi:trn></strong></td>
-					<td colspan="3"><strong><digi:trn key="gis:editTableWidget:colOps">Operations</digi:trn></strong></td>
+					<td colspan="4"><strong><digi:trn key="gis:editTableWidget:colOps">Operations</digi:trn></strong></td>
 				</tr>
 				<c:forEach var="column" items="${wform.columns}" varStatus="varStat">
 					<tr>
@@ -164,17 +168,25 @@
 						<td>
 							${column.pattern}
 						</td>
-						<td nowrap="nowrap">
-							<a href="javascript:deleteCol(${column.id})"><digi:trn key="gis:removeLink">Remove</digi:trn></a>
+						<td>
+							<c:if test="${not empty wform.id}">
+								<a href="javascript:editCol(${column.id},${wform.id})"><digi:trn key="gis:editLink">Edit</digi:trn></a>
+							</c:if>			
+							<c:if test="${empty wform.id}">
+								<a href="javascript:editCol(${column.id},null)"><digi:trn key="gis:editLink">Edit</digi:trn></a>
+							</c:if>			
+						</td>
+						<td>
+							<a href="javascript:deleteCol(${column.id})"><img border="0" src='<digi:file src="images/deleteIcon.gif"/>'></a>
 						</td>
 						<td>
 							<c:if test="${varStat.first != true}">
-								<a href="javascript:moveUp(${column.id})"><digi:trn key="gis:upLink">Up</digi:trn></a>
+								<a href="javascript:moveUp(${column.id})"><img border="0" src='<digi:file src="images/up.gif"/>'></a>
 							</c:if>
 						</td>
 						<td>
 							<c:if test="${varStat.last != true}">
-								<a href="javascript:moveDown(${column.id})"><digi:trn key="gis:downLink">Down</digi:trn></a>
+								<a href="javascript:moveDown(${column.id})"><img border="0" src='<digi:file src="images/down.gif"/>'></a>
 							</c:if>
 						</td>
 					</tr>

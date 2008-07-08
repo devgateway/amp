@@ -83,6 +83,23 @@ public class AmpCollectionUtils {
 		return (K[])result.toArray();
 	}
 
+	/**
+	 * Search for element with key.
+	 * K should implement equals() method correctly.
+	 * @param <K>
+	 * @param <E>
+	 * @param col
+	 * @param key
+	 * @param resolver
+	 * @return
+	 */
+	public static <K,E> E searchByKey(Collection<E> col,K key,KeyResolver<K, E> resolver){
+		for (E element : col) {
+			K elementKey=resolver.resolveKey(element);
+			if (key.equals(elementKey)) return element;
+		}
+		return null;
+	}
 	
 	/**
 	 * Return new collection based on comparing elements in two other collections.

@@ -628,7 +628,7 @@ public class AdminTableWidgets extends DispatchAction {
 	}
 	
 	/**
-	 * Dummymetod yet.
+	 * Dummy method yet.
 	 * @return
 	 * @throws DgException
 	 */
@@ -657,6 +657,34 @@ public class AdminTableWidgets extends DispatchAction {
 		tableForm.setColumnTypes(getColumnTypes());
 		tableForm.setColWidth(null);
 		tableForm.setShouldClose(false);
+		tableForm.setColColumnEdit(false);
+		return mapping.findForward("showAddColumnPopup");
+	}
+
+	/**
+	 * Show column edit dialog.
+	 * Only name can be edited.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward showColumnEditPopup(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		TableWidgetCreationForm cForm=(TableWidgetCreationForm)form;
+		List<AmpDaColumn> columns = getClumnsFromSession(request);
+		AmpDaColumn col = AmpCollectionUtils.searchByKey(columns, cForm.getColId(), new TableWidgetColumnKeyResolver());
+		cForm.setColId(col.getId());
+		cForm.setColName(col.getName());
+		cForm.setColCode(col.getCode());
+		cForm.setColCssClass(col.getCssClass());
+		cForm.setHtmlStyle(col.getHtmlStyle());
+		cForm.setColWidth(col.getWidth());
+		cForm.setColPattern(col.getPattern());
+		cForm.setColColumnEdit(true);
 		return mapping.findForward("showAddColumnPopup");
 	}
 	
@@ -674,6 +702,9 @@ public class AdminTableWidgets extends DispatchAction {
 			HttpServletResponse response) throws Exception {
 
 		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
+		if(tableForm.getColColumnEdit()!=null && tableForm.getColColumnEdit().booleanValue()){
+			return editColumn(mapping, form, request, response);
+		}
 		//retrieve widget from session
 		AmpDaTable sessionWidget=getWidgetFromSession(request);
 		//retrieve columns from session
@@ -694,6 +725,33 @@ public class AdminTableWidgets extends DispatchAction {
 		Collections.sort(columns,new ColumnOrderNoComparator());
 		tableForm.setShouldClose(true);
 //		return mapping.findForward("showAddColumnPopup");
+		return mapping.findForward("returnToEdit");
+	}
+
+	/**
+	 * Stores column changes in session.
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward editColumn(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+
+		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
+		//retrieve widget from session
+		AmpDaTable sessionWidget=getWidgetFromSession(request);
+		//retrieve columns from session
+		List<AmpDaColumn> columns = getClumnsFromSession(request);
+		widgetToForm(tableForm, sessionWidget);
+		//find column we want to edit
+		AmpDaColumn column = AmpCollectionUtils.searchByKey(columns, tableForm.getColId(), new TableWidgetColumnKeyResolver());
+		//change field
+		column.setName(tableForm.getColName());
+		//return to edit
 		return mapping.findForward("returnToEdit");
 	}
 

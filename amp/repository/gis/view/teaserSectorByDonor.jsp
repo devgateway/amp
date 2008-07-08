@@ -22,12 +22,13 @@
 		rechart()
 	}
 	function rechart(){
+		var chartImage=document.getElementById('sectorByDonorChartImage');
+		chartImage.src = '<digi:file src="images/amploading.gif"/>';
 		var y=document.getElementsByName('selectedYear')[0].value;
 		var d=document.getElementsByName('selectedDonor')[0].value;
 		var myUrl = chartURL+'~selectedYear='+y+'~selectedDonor='+d;
 		myUrl+=getLegendState();
 		myUrl+=getLabelState();
-		var chartImage=document.getElementById('sectorByDonorChartImage');
 		chartImage.src=myUrl;
 		//alert(myUrl);
 	}

@@ -14,7 +14,7 @@ public class CalendarEventTrigger extends Trigger {
     public static final String [] parameterNames=new String[]{PARAM_ID,PARAM_NAME,PARAM_URL};
 
     public CalendarEventTrigger(Object source) {
-        if(!(source instanceof Calendar)) throw new RuntimeException("Incompatible object. Source must be an AmpCalendar!");
+        if(!(source instanceof AmpCalendar)) throw new RuntimeException("Incompatible object. Source must be an AmpCalendar!");
         this.source=source;
         forwardEvent();
     }

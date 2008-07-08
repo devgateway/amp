@@ -15,7 +15,7 @@ public class QuartzJobUtils {
     public static ArrayList<QuartzJobForm> getAllJobs(){
         Scheduler sched=getScheduler();
         try{
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             ArrayList<QuartzJobForm> qrtzCol = new ArrayList<QuartzJobForm> ();
 
             String[] trgGroupNames = sched.getTriggerGroupNames();
@@ -113,7 +113,7 @@ public class QuartzJobUtils {
             }
             trg.setName(job.getName() + "Trigger");
 
-            SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
             trg.setStartTime(sdf.parse(job.getStartDateTime()));
             if(job.getEndDateTime()!=null && job.getEndDateTime().equals(""))trg.setEndTime(sdf.parse(job.getEndDateTime()));

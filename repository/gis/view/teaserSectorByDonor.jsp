@@ -25,9 +25,27 @@
 		var y=document.getElementsByName('selectedYear')[0].value;
 		var d=document.getElementsByName('selectedDonor')[0].value;
 		var myUrl = chartURL+'~selectedYear='+y+'~selectedDonor='+d;
+		myUrl+=getLegendState();
+		myUrl+=getLabelState();
 		var chartImage=document.getElementById('sectorByDonorChartImage');
 		chartImage.src=myUrl;
 		//alert(myUrl);
+	}
+	function getLegendState(){
+		var chkLegend = document.getElementsByName('showLegends')[0];
+		if (chkLegend.checked){
+			return '~showLegend=true'
+		}else{
+			return '~showLegend=false'
+		}
+	}
+	function getLabelState(){
+		var chkLabel = document.getElementsByName('showLabels')[0];
+		if (chkLabel.checked){
+			return '~showLabel=true'
+		}else{
+			return '~showLabel=false'
+		}
 	}
 	
 //-->
@@ -57,7 +75,9 @@
 			</html:select>
 		</td>
 		<td nowrap="nowrap">
-			<a href="#">Time Series Report</a>
+			<input type="checkbox" title="Show Labels" name="showLabels" onchange="rechart()" checked="checked">
+			&nbsp;
+			<input type="checkbox" title="Show Legends" name="showLegends" onchange="rechart()" checked="checked">
 		</td>
 	</tr>
 	<tr>

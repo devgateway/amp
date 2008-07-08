@@ -18,6 +18,11 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	private String selectedYear;
 	private Long selectedDonor;
 	private Collection<AmpOrganisation> donors;
+	private Boolean showLegend;
+	private Boolean showLabel;
+	private Boolean showTitle;
+	private Boolean showPercentage;
+	private Boolean showAmount;
 	
 	public Collection<AmpOrganisation> getDonors() {
 		return donors;
@@ -48,5 +53,35 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	}
 	public void setImageWidth(Integer imageWidth) {
 		this.imageWidth = imageWidth;
+	}
+	public Boolean getShowLegend() {
+		return showLegend;
+	}
+	public void setShowLegend(Boolean showLegend) {
+		this.showLegend = showLegend;
+	}
+	public Boolean getShowLabel() {
+		return showLabel;
+	}
+	public void setShowLabel(Boolean showLebel) {
+		this.showLabel = showLebel;
+	}
+	public Boolean getShowTitle() {
+		return showTitle;
+	}
+	public void setShowTitle(Boolean showTitle) {
+		this.showTitle = showTitle;
+	}
+	public Boolean getShowPercentage() {
+		return showPercentage;
+	}
+	public void setShowPercentage(Boolean showPercentage) {
+		this.showPercentage = showPercentage;
+	}
+	public Boolean getShowAmount() {
+		return showAmount;
+	}
+	public void setShowAmount(Boolean showAmount) {
+		this.showAmount = showAmount;
 	}
 }

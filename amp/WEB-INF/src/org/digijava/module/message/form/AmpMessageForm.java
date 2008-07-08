@@ -11,6 +11,7 @@ import org.digijava.module.aim.helper.Team;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageHelper;
+import org.digijava.module.message.helper.ReciverName;
 
 public class AmpMessageForm extends ActionForm {
 	/**
@@ -38,6 +39,8 @@ public class AmpMessageForm extends ActionForm {
 	private MessageHelper forwardedMsg;
 	private String objectURL;
 	private int allmsg;
+	private List<ReciverName> receivesrsNameMail;
+	private List<ReciverName> receivesrsTheamName;
 	
 	private int setAsAlert;
 	private boolean deleteActionWasCalled;
@@ -529,6 +532,22 @@ public class AmpMessageForm extends ActionForm {
 
 		public void setAddAtTop(boolean addAtTop) {
 			this.addAtTop = addAtTop;
+		}
+
+		public List<ReciverName> getReceivesrsNameMail() {
+			return receivesrsNameMail;
+		}
+
+		public void setReceivesrsNameMail(List<ReciverName> receivesrsNameMail) {
+			this.receivesrsNameMail = receivesrsNameMail;
+		}
+
+		public List getReceivesrsTheamName() {
+			return receivesrsTheamName;
+		}
+
+		public void setReceivesrsTheamName(List<ReciverName> receivesrsTheamName) {
+			this.receivesrsTheamName = receivesrsTheamName;
 		}
 
 	

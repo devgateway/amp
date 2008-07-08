@@ -21,10 +21,15 @@
 
 #selectedMessagePanel a:link{
      color: #05528B;
+     text-decoration:line-through;
+    
 }
 #selectedMessagePanel a:hover{
-      color: #FFFFFF;
+      color: #05528B;
+      background-color:#FFFFFF;
+  
 }
+
 
 #selectedMessagePanel .bd { 
     height: 500px; 

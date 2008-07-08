@@ -59,7 +59,7 @@
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><b><digi:trn
-						key="rep:filter:ActivityStatus">Activity Status</digi:trn></b><br/>
+						key="rep:filter:ApprovalStatus">Approval Status</digi:trn></b><br/>
 					</td>
 				</tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
@@ -72,6 +72,9 @@
 						</html:option>
 						<html:option value="0">
 							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
+						</html:option>
+						<html:option value="3">
+							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
 						<html:option value="1">
 							<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>

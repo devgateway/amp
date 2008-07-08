@@ -91,6 +91,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Long ampTeamId = null;
 		
 		if(teamMember!=null) ampTeamId=teamMember.getTeamId();
+		filterForm.setTeamAccessType(teamMember.getTeamAccessType());
 	
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();

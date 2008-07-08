@@ -44,6 +44,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long regionSelected;
 	private Long approvalStatusSelected; //AMP-3386
 
+	private String teamAccessType;
+	
 	private Object[] selectedSectors;
 	private Object[] selectedSecondarySectors;
 	private Object[] selectedStatuses;
@@ -742,6 +744,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setApprovalStatusSelectedCollection(
 			Collection approvalStatusSelectedCollection) {
 		this.approvalStatusSelectedCollection = approvalStatusSelectedCollection;
+	}
+
+	public String getTeamAccessType() {
+		return teamAccessType;
+	}
+
+	public void setTeamAccessType(String teamAccessType) {
+		this.teamAccessType = teamAccessType;
 	}
 
 	

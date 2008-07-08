@@ -279,6 +279,41 @@ public final class Util {
 	}
 	
 
+	/**
+	 * Returns comma separated view string representation of the collection
+	 * items of toString
+	 * 
+	 * @param col
+	 *            the collectoin
+	 * @return the comma separated string
+	 * @author dan 08.07.2007
+	 */
+	//AMP-3372
+	public static String collectionAsString(Collection col) {
+		String ret = "";
+		if (col == null || col.size() == 0)
+			return ret;
+		Iterator i = col.iterator();
+		while (i.hasNext()) {
+			Object element = (Object) i.next();
+			if (element == null)
+				continue;			
+			Object item=element;
+//			if(element instanceof Identifiable) item=((String)element).toString();
+			
+//			if (item instanceof String)
+//				ret += "'" + (String) item + "'"; else
+//			if (item instanceof PropertyListable)
+//				ret += ((PropertyListable)item).getBeanName();
+			
+//			else
+				ret += item.toString();
+			if (i.hasNext())
+				ret += ", ";
+		}
+		return ret;
+	}
+	
 
 	/**
 	 * QUICK access to exchange rates. Gets the exchange rate for the given

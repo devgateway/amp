@@ -202,10 +202,10 @@ session.setAttribute("progressValue", counter);
 			<strong>
 			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
                 <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
-                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
-                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
-                    <jsp:include page="${listable.jspFile}" flush="true"/>
+	                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
+	                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+	                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+	                    <jsp:include page="${listable.jspFile}" flush="true"/>
                 </logic:present>
              </td>
              </tr>

@@ -417,12 +417,13 @@ public class AmpARFilter extends PropertyListable {
 			actStatusValue="1";
 			break;
 		case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-			actStatusValue=" approval_status='edited' ";break;
+			actStatusValue=" approval_status='edited' and draft !=true";break;
 		case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
 			actStatusValue=" approval_status='started' and draft=true ";break;
 		case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
 			actStatusValue=" approval_status='started' ";break;
-
+		case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
+			actStatusValue=" approval_status='edited' and draft= true ";break;
 		default:actStatusValue="1";	break;
 		}
 		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue;

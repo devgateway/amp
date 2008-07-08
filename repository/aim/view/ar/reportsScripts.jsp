@@ -456,8 +456,13 @@ background-color: yellow;
 		if (aimReportsFilterPickerForm.regionSelected)
 			aimReportsFilterPickerForm.regionSelected.selectedIndex=0;
 		
+		if(aimReportsFilterPickerForm.approvalStatusSelected)
+			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=0;
+		
 		if (aimReportsFilterPickerForm.lineMinRank)
 			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
+			
+
 
 		if (aimReportsFilterPickerForm.planMinRank)
 			aimReportsFilterPickerForm.planMinRank.selectedIndex=0;

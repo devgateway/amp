@@ -45,7 +45,7 @@
 <!-- Display the bean in a comma separated list style -->
 <logic:equal name="style" value="list">
 	<I>${listable.beanName}</I>
-	<logic:iterate id="prop" name="bean" property="propertiesMap">
+	<logic:iterate id="prop" name="bean" property="	">
 		<B> <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn> :</B>
 		<logic:equal name="prop" property="value.class.simpleName"
 			value="Boolean">
@@ -64,13 +64,13 @@
 	<logic:iterate id="prop" name="bean" property="propertiesMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
             <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>:
-            <logic:equal name="prop" property="value.class.simpleName" value="Boolean">
-                <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-            </logic:equal>
-            <logic:notEqual name="prop" property="value.class.simpleName"
-                value="Boolean">
-                <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
-            </logic:notEqual>|
+            <c:if test="${prop.key == 'teamAssignedOrgs'}">
+            	${prop.value}
+            </c:if>
+            <c:if test="${prop.key != 'teamAssignedOrgs'}">
+            <digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+            </c:if>
+            |
         </c:if>
 	</logic:iterate>
 </logic:equal>

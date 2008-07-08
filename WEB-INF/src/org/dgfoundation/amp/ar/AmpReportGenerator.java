@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
@@ -28,6 +30,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpColumnsFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -239,8 +242,11 @@ public class AmpReportGenerator extends ReportGenerator {
 	/**
 	 * from the extractable list, we get the columns that are filter retrievable
 	 * and we apply percentages
+	 * @throws NoSuchMethodException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
 	 */
-	protected void applyPercentagesToFilterColumns() {
+	protected void applyPercentagesToFilterColumns() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Iterator<AmpReportColumn> i = extractable.iterator();
 		TextCell fakeMc = new TextCell();
 		Set<String> hierarchyNames=new TreeSet<String>();
@@ -250,9 +256,20 @@ public class AmpReportGenerator extends ReportGenerator {
 			hierarchyNames.add(h.getColumn().getColumnName());
 		}
 		
+		
 		while (i.hasNext()) {
 			AmpReportColumn elem = (AmpReportColumn) i.next();
-			if(hierarchyNames.contains(elem.getColumn().getColumnName())) continue;
+			Iterator it = elem.getColumn().getFilters().iterator();
+			boolean filterSelected=false;
+			while (it.hasNext()) {
+				AmpColumnsFilters acf = (AmpColumnsFilters) it.next();
+				Object property = PropertyUtils.getSimpleProperty(filter, acf
+						.getBeanFieldName());
+				if(property!=null) filterSelected=true;
+			}
+			
+			//do not apply percentage for columns that were not selected in filters or for columns that are actually hierarchies
+			if(!filterSelected || hierarchyNames.contains(elem.getColumn().getColumnName())) continue;
 			
 			if (elem.getColumn().getFilterRetrievable()!=null && elem.getColumn().getFilterRetrievable().booleanValue()) {
 				CellColumn c = rawColumnsByName.get(elem.getColumn()
@@ -495,7 +512,21 @@ public class AmpReportGenerator extends ReportGenerator {
 
 	protected void prepareData() {
 
-		applyPercentagesToFilterColumns();
+		try {
+			applyPercentagesToFilterColumns();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e);
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e);
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e);
+		}
 		
 		applyExchangeRate();
 

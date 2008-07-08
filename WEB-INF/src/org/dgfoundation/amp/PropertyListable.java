@@ -71,7 +71,8 @@ public abstract class PropertyListable implements Cloneable {
 		
 		if ((object == null) || (object instanceof String)
 						&& ("".equalsIgnoreCase((String) object))) continue;
-		ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.toCSString(
+		//AMP-3372
+		ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.collectionAsString(
 			(Collection) object) : object);
 	    }
 	} catch (IntrospectionException e) {

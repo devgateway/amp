@@ -213,6 +213,7 @@ public class AmpARFilter extends PropertyListable {
 		if (tm != null) {
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
 			// set the computed workspace orgs
+			//Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
 			Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
 
 			if (teamAO != null && teamAO.size() > 0)

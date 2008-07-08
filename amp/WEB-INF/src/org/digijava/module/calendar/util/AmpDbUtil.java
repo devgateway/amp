@@ -19,6 +19,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 import java.util.Collection;
 import java.util.*;
+import java.text.SimpleDateFormat;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -223,13 +224,21 @@ public class AmpDbUtil {
     }
     try{
       Session session = PersistenceManager.getRequestDBSession();
-
-      String queryString = "select c from "+Calendar.class.getName()+" c where :startDate = c.startDate";
-
+      String queryString = "select c from "+Calendar.class.getName()+" c";
       Query query = session.createQuery(queryString);
-      query.setDate("startDate", startDate);
 
-      return query.list();
+      List<Calendar> exList=query.list();
+      List<Calendar> rList=new ArrayList<Calendar>();
+
+      SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+      String strStartDate=sdf.format(startDate);
+      for(Calendar exCal:exList){
+          String exStrStartDate=sdf.format(exCal.getStartDate());
+          if(strStartDate.equals(exStrStartDate)){
+              rList.add(exCal);
+          }
+      }
+      return rList;
     }catch (Exception e) {
       logger.debug("Unable to get AmpCalendars by Start Date", e);
       return null;
@@ -241,14 +250,22 @@ public class AmpDbUtil {
       return null;
     }
     try{
-      Session session = PersistenceManager.getRequestDBSession();
+        Session session = PersistenceManager.getRequestDBSession();
+        String queryString = "select c from "+Calendar.class.getName()+" c";
+        Query query = session.createQuery(queryString);
 
-      String queryString = "select c from "+Calendar.class.getName()+" c where :endDate = c.endDate";
+        List<Calendar> exList=query.list();
+        List<Calendar> rList=new ArrayList<Calendar>();
 
-      Query query = session.createQuery(queryString);
-      query.setDate("endDate", endDate);
-
-      return query.list();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String strEndDate=sdf.format(endDate);
+        for(Calendar exCal:exList){
+            String exStrEndDate=sdf.format(exCal.getEndDate());
+            if(strEndDate.equals(exStrEndDate)){
+                rList.add(exCal);
+            }
+        }
+      return rList;
     }catch (Exception e) {
       logger.debug("Unable to get AmpCalendars by Start Date", e);
       return null;

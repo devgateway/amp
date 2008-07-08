@@ -186,7 +186,7 @@ function typeChanged(value){
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <b><digi:trn key="aim:job:startEndDateTimeNote">(All date/time format should be like MM/dd/yyyy HH:mm:ss)</digi:trn></b>
+                    <b><digi:trn key="aim:job:startEndDateTimeFormatNote">(All date/time format should be like dd/MM/yyyy HH:mm:ss)</digi:trn></b>
                   </td>
                 </tr>
               </table>

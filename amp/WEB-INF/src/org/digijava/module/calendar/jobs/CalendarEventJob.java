@@ -23,24 +23,24 @@ public class CalendarEventJob implements StatefulJob{
     public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
-        Date dateBeforeDays;
+        Date dateAfterDays;
         try{
             AmpMessageSettings as=AmpMessageUtil.getMessageSettings();
             if(as!=null &&
                as.getDaysForAdvanceAlertsWarnings()!=null &&
                as.getDaysForAdvanceAlertsWarnings().intValue()>0){
-                dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,as.getDaysForAdvanceAlertsWarnings().intValue());
+                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,as.getDaysForAdvanceAlertsWarnings().intValue());
             }else{
-                dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,3);
+                dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
             }
         }catch(Exception ex){
-            dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,3);
+            dateAfterDays=AmpDateUtils.getDateAfterDays(curDate,3);
         }
 
         java.util.Calendar cl=java.util.Calendar.getInstance();
         cl.setTime(curDate);
 
-        List<AmpCalendar> eventList=AmpDbUtil.getAmpCalendarsByStartDate(dateBeforeDays);
+        List<AmpCalendar> eventList=AmpDbUtil.getAmpCalendarsByStartDate(dateAfterDays);
         if(eventList!=null && !eventList.isEmpty()){
             for (AmpCalendar cal: eventList){
                 new CalendarEventTrigger(cal);

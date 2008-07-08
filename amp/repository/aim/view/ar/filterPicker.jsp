@@ -64,9 +64,15 @@
 				</tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr  bgcolor="#EEEEEE">
+				<logic:equal name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
+					<c:set var="accessType">true</c:set>
+				</logic:equal>
+				<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
+					<c:set var="accessType">false</c:set>
+				</logic:notEqual>
 				<td colspan="5">
 					<html:select property="approvalStatusSelected"
-						style="width: 300px" styleClass="inp-text">
+						style="width: 300px" styleClass="inp-text" disabled="${accessType}">
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>

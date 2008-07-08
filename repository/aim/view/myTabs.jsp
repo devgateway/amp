@@ -132,7 +132,10 @@ function toggleSettings(){
 		</logic:iterate>
 	</logic:present>
 </logic:present>
-</ul>
+	<li>
+		<a href="/viewTeamReports.do?tabs=true" style="background:none;!important;color:blue;text-decoration:underline;"><digi:trn key="aim:viewallmydesktoptabs">View all of My Desktop Tabs</digi:trn></a>					
+	</li>
+</ul>									
 </div>
 <div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
 <digi:trn key="aim:addATab">

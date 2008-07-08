@@ -1,6 +1,7 @@
 package org.digijava.module.gis.util;
 
 import java.awt.Font;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -32,9 +33,12 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.gis.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.gis.dbentity.AmpWidget;
 import org.digijava.module.gis.dbentity.AmpWidgetIndicatorChart;
+import org.digijava.module.gis.helper.ChartOption;
 import org.digijava.module.gis.helper.DonorSectorFundingHelper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
@@ -165,21 +169,33 @@ public class ChartWidgetUtil {
 		}
 	}
 	
-	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year)throws DgException{
+	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year,ChartOption opt)throws DgException{
 		JFreeChart result = null;
 		PieDataset ds = getSectorByDonorDataset(donors,year);
 		String selYear = (year==null)?"All years":year.toString();
-		String title = "Breackdown by sector ("+selYear+")";
-		boolean legend = true;
+		String title = (opt.isShowTitle())?"Breackdown by sector ("+selYear+")":null;
 		boolean tooltips = false;
 		boolean urls = false;
-		result = ChartFactory.createPieChart(title, ds, legend, tooltips, urls);
-		Font font = new Font(null,0,12);
-		result.getTitle().setFont(font);
-		
+		result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
 		PiePlot plot = (PiePlot)result.getPlot();
+
+		if (opt.isShowTitle()){
+			Font font = new Font(null,0,12);
+			result.getTitle().setFont(font);
+		}
 		
-		plot.setSectionOutlinesVisible(false);
+		if (opt.isShowLabels()){
+			String pattern = "{0} = {1} ({2})";
+			if (opt.getLabelPattern()!=null){
+				pattern=opt.getLabelPattern();
+			}
+			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,new DecimalFormat("0"),new DecimalFormat("0.00%"));
+			plot.setLabelGenerator(gen);
+		}else{
+			plot.setLabelGenerator(null);
+		}
+		
+		//plot.setSectionOutlinesVisible(false);
 		plot.setIgnoreNullValues(true);
 		plot.setIgnoreZeroValues(true);
 		return result;

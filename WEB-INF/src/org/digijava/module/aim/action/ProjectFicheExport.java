@@ -296,7 +296,7 @@ public class ProjectFicheExport extends Action {
 		tbl.addCell(c);
 		c=getLogframeHeadingCell("Verification");
 		tbl.addCell(c);
-		c=category.equals("Objective")?new Cell("Amounts are in 000s"):getLogframeHeadingCell("Assumptions");
+		c=category.equals("Objective")?new Cell(""):getLogframeHeadingCell("Assumptions");
 		tbl.addCell(c);
 
 		//fische objectives:

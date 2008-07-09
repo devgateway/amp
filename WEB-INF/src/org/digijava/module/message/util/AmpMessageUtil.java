@@ -542,6 +542,9 @@ public class AmpMessageUtil {
 		return hiddenMsgs;
 	}
 	
+	/**
+	 * returns list of inbox messages that should be changed to visible
+	 */
 	public static <E extends AmpMessage> List<AmpMessageState> getVisibleInboxMsgs(Class<E> clazz,Long tmId,int limit) throws Exception{
 		List<AmpMessageState> visibleMsgs=null;
 		Session session=null;
@@ -563,6 +566,9 @@ public class AmpMessageUtil {
 		return visibleMsgs;
 	}
 	
+	/**
+	 * returns list of sent or draft messages that should be changed to visible
+	 */
 	public static <E extends AmpMessage> List<AmpMessageState> getVisibleSentOrDraftMsgs(Class<E> clazz,Long tmId,Boolean draft,int limit) throws Exception{
 		List<AmpMessageState> visibleMsgs=null;
 		Session session=null;

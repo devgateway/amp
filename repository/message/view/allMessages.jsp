@@ -30,7 +30,6 @@
   
 }
 
-
 #selectedMessagePanel .bd { 
     height: 500px; 
     /* Apply scrollbars for all browsers. */ 
@@ -94,11 +93,11 @@ background-color:yellow;
 
         var  selectedMessagePanel;
 	var noMsgs='<digi:trn key="message:noMessages">No Messages Present</digi:trn>';
-        var noAlerts='<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>';
-        var noApprovals='<digi:trn key="message:noPendingApprovals">No Pending Approvals</digi:trn>';
-        var noEvents='<digi:trn key="message:noUpcomingEvents">No Upcoming Events</digi:trn>';
+    var noAlerts='<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>';
+    var noApprovals='<digi:trn key="message:noPendingApprovals">No Pending Approvals</digi:trn>';
+    var noEvents='<digi:trn key="message:noUpcomingEvents">No Upcoming Events</digi:trn>';
 	var from='<digi:trn key="message:from">From</digi:trn>';
-        var to='<digi:trn key="message:to">To</digi:trn>';
+    var to='<digi:trn key="message:to">To</digi:trn>';
 	var date='<digi:trn key="message:date">Date</digi:trn>';
 	var prLevel='<digi:trn key="message:priority">Priority</digi:trn>';
 	var desc='<digi:trn key="message:msgDetails">Message Details</digi:trn>';
@@ -334,59 +333,51 @@ background-color:yellow;
    
         
     function toggleGroup(group_id){
-    
-    
-    if(group_id==slMsgId){
-    	slMsgId='';
-    	
-    }else{
-    		slMsgId=group_id;
-    		 
-    		 var ind=group_id.indexOf('_fId');
-        	 var stateId;
-    	
-    			if(ind!=-1){
-    				stateId = group_id.slice(ind+4);
-    				slMsgId = stateId;
-    			
-    	}
-    }
-    
-                var strId='#'+group_id;
-                $(strId+'_minus').toggle();
-                $(strId+'_plus').toggle();
-        var ind=group_id.indexOf('_fId');
-        var stateId;
-       
-        if(ind!=-1){
-            ind=group_id.indexOf('_fId');
-            stateId=group_id.slice(ind+4);   
-        }
-        else{
-            stateId=group_id;
-            markMsgeAsRead( stateId);
-          
-        }
-       
-        for(var j=0;j<messages.length;j++){ 
-            var stId= messages[j].getAttribute('id');
-            if(stateId!=stId){
-                toggleGr(stId);
-            }  
-            for(var i=0;i<messages[j].childNodes.length;i++){
-                var forwardedMsg=messages[j].childNodes[i];
-                var parStId=forwardedMsg.getAttribute('parentStateId');
-                if(stateId!=parStId){
-                    var lastMsgId=forwardedMsg.getAttribute('msgId');
-                    var fId=lastMsgId+'_fId'+parStId;
-                    toggleGr(fId);
-                }
-                
-            }
-            
-        }
-                $('#msg_'+group_id).toggle('fast');
-                
+	    if(group_id==slMsgId){
+	    	slMsgId='';    	
+	    }else{
+	    	slMsgId=group_id;
+	    	 
+	    	var ind=group_id.indexOf('_fId');
+	        var stateId;
+	    	
+	    	if(ind!=-1){
+	    		stateId = group_id.slice(ind+4);
+	    		slMsgId = stateId;    			
+	    	}
+	    }
+	    
+	    var strId='#'+group_id;
+	    $(strId+'_minus').toggle();
+	    $(strId+'_plus').toggle();
+	    var ind=group_id.indexOf('_fId');
+	    var stateId;
+	       
+	    if(ind!=-1){
+	    	ind=group_id.indexOf('_fId');
+	        stateId=group_id.slice(ind+4);   
+	    }else{
+	     	stateId=group_id;
+	        markMsgeAsRead( stateId);          
+	    }
+	       
+	    for(var j=0;j<messages.length;j++){ 
+	    	var stId= messages[j].getAttribute('id');
+	        if(stateId!=stId){
+	        	toggleGr(stId);
+	        }  
+	        for(var i=0;i<messages[j].childNodes.length;i++){
+	        	var forwardedMsg=messages[j].childNodes[i];
+	            var parStId=forwardedMsg.getAttribute('parentStateId');
+	            if(stateId!=parStId){
+	            	var lastMsgId=forwardedMsg.getAttribute('msgId');
+	                var fId=lastMsgId+'_fId'+parStId;
+	                toggleGr(fId);
+	            }
+	                
+	        }            
+	    }
+	    $('#msg_'+group_id).toggle('fast');                
 	}
                   
 	function markMsgeAsRead(group_id){
@@ -434,7 +425,7 @@ background-color:yellow;
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
-			//messages start
+			//messages start	
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
                            if(!root.hasChildNodes()&& firstEntry==0){
@@ -492,12 +483,11 @@ background-color:yellow;
 										   			
 												}else{
                                                                                                 msgTR=document.createElement('TR');      	
-                                                                                                msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                                                                                }   
+                                                    msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                               	}                                                                                                
                                                                                                 msgTR=paintTr(msgTR,i);                                                                                                
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
-												myArray[myArray.length]=msgId;	
-                                                                                                
+												myArray[myArray.length]=msgId;										
 											}else{
 												tbl.tBodies[0].insertRow(whereToInsertRow);
 												var msgTr=tbl.tBodies[0].rows[whereToInsertRow];
@@ -509,7 +499,7 @@ background-color:yellow;
 												}
 												msgTr=paintTr(msgTr,i);
 												createTableRow(tbl,msgTR,messages[i],true);
-												myArray[myArray.length]=msgId;										
+												myArray[myArray.length]=msgId;
 												whereToInsertRow++;										
 												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
 											}
@@ -519,24 +509,24 @@ background-color:yellow;
 							}
 						}		
 					}else {
-                                        for(var i=0;i<messages.length;i++){				
-                                        var msgId=messages[i].getAttribute('id');
-                                        myArray[i]=msgId;							
-                                        //creating tr
+						for(var i=0;i<messages.length;i++){				
+							var msgId=messages[i].getAttribute('id');
+							myArray[i]=msgId;							
+							//creating tr
                                        
-                                        var isMsgRead=messages[i].getAttribute('read');					
-                                        if(browser=="Microsoft Internet Explorer"){
-                                            var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');              
-                                        }else{
+							var isMsgRead=messages[i].getAttribute('read');					
+							if(browser=="Microsoft Internet Explorer"){
+								var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
+							}else{
                                             var msgTr=document.createElement('TR');	
-                                            msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                        }
+ 		 						msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                        	}
                                          msgTr=paintTr(msgTr,i);
-                                        var myTR=createTableRow(tbl,msgTr,messages[i],true);													
-                                        var tablBody= tbl.getElementsByTagName("tbody");
-                                        tablBody[0].appendChild(myTR);            																				
-                                    }//end of for loop
-                                }			
+							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
+        	                var tablBody= tbl.getElementsByTagName("tbody");
+                            tablBody[0].appendChild(myTR);            																				
+						}//end of for loop
+					}			
 				}//messages end
 				
 				//pagination start			
@@ -746,7 +736,7 @@ background-color:yellow;
 					if(priority==1){priorityTD2.innerHTML='low';}
 					else if(priority==2){priorityTD2.innerHTML='Medium';}
 					else if(priority==3){priorityTD2.innerHTML='Critical';}
-					else if(priority==-1){priorityTD2.innerHTML='None';}
+					else if(priority==0){priorityTD2.innerHTML='None';}
 				priorityTR.appendChild(priorityTD2);
 			divTblBody.appendChild(priorityTR);	
 				
@@ -758,7 +748,7 @@ background-color:yellow;
                                         objURLTD1.innerHTML='<strong>'+referenceURL+'</strong>';
 				objURLTR.appendChild(objURLTD1);
 					var objURLTD2=document.createElement('TD');
-                        	objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
+                    objURLTD2.innerHTML='<A href="javascript:openObjectURL(\''+objectURL+'\')";> '+'click here to view details</A>';
 
 				objURLTR.appendChild(objURLTD2);
 			divTblBody.appendChild(objURLTR);
@@ -879,36 +869,34 @@ $(document).ready(function(){
 						</digi:trn>
                                                 &nbsp;&gt;&nbsp;
                                                  <c:choose>
-                                                <c:when test="${messageForm.tabIndex==1}">
-                                                   <digi:trn key="message:Messages">Messages</digi:trn>
-                                                </c:when>
-                                                <c:when test="${messageForm.tabIndex==2}">
-                                                  <digi:trn key="message:Alerts">Alerts</digi:trn>
-                                                </c:when>
-                                                <c:when test="${messageForm.tabIndex==3}">
-                                                  <digi:trn key="message:approvals">Approvals</digi:trn>
-                                                </c:when>
-                                                <c:otherwise>
-                                                   <digi:trn key="message:ebents">Calendar Events</digi:trn>
-                                                </c:otherwise>
+	                                                <c:when test="${messageForm.tabIndex==1}">
+	                                                   <digi:trn key="message:Messages">Messages</digi:trn>
+	                                                </c:when>
+	                                                <c:when test="${messageForm.tabIndex==2}">
+	                                                  <digi:trn key="message:Alerts">Alerts</digi:trn>
+	                                                </c:when>
+	                                                <c:when test="${messageForm.tabIndex==3}">
+	                                                  <digi:trn key="message:approvals">Approvals</digi:trn>
+	                                                </c:when>
+	                                                <c:otherwise>
+	                                                   <digi:trn key="message:ebents">Calendar Events</digi:trn>
+	                                                </c:otherwise>
                                                 </c:choose>
                                                 <c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
-                                                &nbsp;&gt;&nbsp;
-                                                <c:choose>
-                                                 <c:when test="${messageForm.childTab=='inbox'}">
-                                                    <digi:trn key="message:inbox">Inbox</digi:trn>
-                                                </c:when>
-                                                <c:when test="${messageForm.childTab=='sent'}">
-                                                  <digi:trn key="message:sent">Sent</digi:trn>
-                                                </c:when>
-                                                <c:otherwise>
-                                                     <digi:trn key="message:draft">Draft</digi:trn>	
-                                                </c:otherwise>
-                                                </c:choose>
-                                                    
+	                                                &nbsp;&gt;&nbsp;
+	                                                <c:choose>
+		                                                 <c:when test="${messageForm.childTab=='inbox'}">
+		                                                    <digi:trn key="message:inbox">Inbox</digi:trn>
+		                                                </c:when>
+		                                                <c:when test="${messageForm.childTab=='sent'}">
+		                                                  <digi:trn key="message:sent">Sent</digi:trn>
+		                                                </c:when>
+		                                                <c:otherwise>
+		                                                     <digi:trn key="message:draft">Draft</digi:trn>	
+		                                                </c:otherwise>
+	                                                </c:choose>                                                    
                                                 </c:if>
-
-                                                </span>
+                                             </span>
 					</td>
 				</tr>
 				<tr>
@@ -921,9 +909,9 @@ $(document).ready(function(){
 					</td>
 				</tr>
 				<tr>
-                            <td noWrap vAlign="top">
-				<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" border="0" >
-	        		<TR>
+                	<td noWrap vAlign="top">
+						<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" border="0" >
+	        				<TR>
                                     <TD STYLE="width:750">
                                         <DIV id="tabs">
                                             <UL>

@@ -423,6 +423,23 @@ public class SaveActivity extends Action {
 	                    }
 
                     }
+                    
+                    if(eaForm.getSelectedLocs() != null && eaForm.getSelectedLocs().size()>0){
+    					Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
+    					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
+    					Double totalPercentage = 0d;
+    					while (itr.hasNext()) {
+    						Location loc = itr.next();
+    						Double percentage=FormatHelper.parseDouble(loc.getPercent());
+    						totalPercentage += percentage;
+    					}
+    					if (totalPercentage != 100) {
+	                        errors.add("locationPercentageSumWrong",
+	                                   new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
+	                        saveErrors(request, errors);    						
+    						return mapping.findForward("addActivityStep2");
+    					}
+                    }
                 }
 				// end of Modified code
 

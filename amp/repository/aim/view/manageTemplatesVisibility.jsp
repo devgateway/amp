@@ -37,7 +37,7 @@
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>
-	<digi:form action="/visibilityManager.do" method="post" >
+	<digi:form action="/visibilityManager.do" method="post" enctype="multipart/form-data">
 	<tr>
 		<th><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
 		
@@ -83,15 +83,27 @@
 			</td>
 		</tr>
 	</logic:iterate>
+	<tr>
+		<td>
+			<br/>
+			<br/>
+			<br/>
+		</td>
+	</tr>
+	<tr>
+		<td align="left" colspan="3">
+			<c:set var="translation">
+				<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>
+			</c:set>
+			<html:submit style="dr-menu" value="${translation}" property="exportTreeVisibility" />
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<html:file property="uploadFile" size="20"/>
+			
+			<c:set var="translation">
+				<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>
+			</c:set>
+			<html:submit style="dr-menu" value="${translation}" property="importTreeVisibility" />
+		</td>
+	</tr>
 	</digi:form>
-	<tr>
-		<td><br/>
-		</td>
-	</tr>
-	<tr>
-		<td><br/>
-		</td>
-	</tr>
-	
-	
 </table>

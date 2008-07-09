@@ -73,7 +73,10 @@ public class UpdateWorkspace extends Action {
 	            }
             	uwForm.setChildWorkspaces(new ArrayList());
             	if(uwForm.getComputation()==null || uwForm.getComputation()==false) 
-            		uwForm.setAddActivity(true);
+            		{
+            			uwForm.setAddActivity(true);
+            			uwForm.setOrganizations(null);
+            		}
 			}
             if(uwForm.getWorkspaceType()!=null && "Management".compareTo(uwForm.getWorkspaceType()) == 0 )
            	{

@@ -108,8 +108,10 @@ public class ViewChannelOverview extends TilesAction {
 			Activity activity = ActivityUtil.getChannelOverview(id);
 
 			formBean.clearMessages();
-
-			createWarnings(activity,teamMember.getTeamHead(), formBean);
+			AmpTeam ampTeam=TeamUtil.getAmpTeam(teamMember.getTeamId());
+			boolean hasTeamLead=true;
+			if(ampTeam.getTeamLead()==null) hasTeamLead=false;
+			createWarnings(activity,teamMember.getTeamHead(), formBean,hasTeamLead);
 
 			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
 			
@@ -260,7 +262,7 @@ public class ViewChannelOverview extends TilesAction {
 		return null;
 	}
 
-	private void createWarnings (Activity activity, boolean isTeamHead, ChannelOverviewForm formBean) {
+	private void createWarnings (Activity activity, boolean isTeamHead, ChannelOverviewForm formBean, boolean hasTeamLead) {
 		if (activity.getDraft()!=null && activity.getDraft()) {
 			formBean.addError("error.aim.draftActivity", 
 					"This is a draft activity");
@@ -270,8 +272,8 @@ public class ViewChannelOverview extends TilesAction {
 		{
 			////System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
 			if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
-				formBean.addError("error.aim.activityAwaitingApproval", 
-						"The activity is awaiting approval");
+				if(hasTeamLead)	formBean.addError("error.aim.activityAwaitingApproval",	"The activity is awaiting approval.");
+					else formBean.addError("error.aim.activityAwaitingApprovalNoWorkspaceManager",	"This activity cannot be validated because there is no Workspace Manager.");
 			}
 		}
 	}

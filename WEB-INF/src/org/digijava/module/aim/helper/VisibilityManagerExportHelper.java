@@ -1,7 +1,10 @@
 package org.digijava.module.aim.helper;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -164,16 +167,14 @@ public class VisibilityManagerExportHelper {
 			TreeSet<AmpModulesVisibility> modules=new TreeSet<AmpModulesVisibility>();
 			TreeSet<AmpFeaturesVisibility> features=new TreeSet<AmpFeaturesVisibility>();
 			TreeSet<AmpFieldsVisibility> fields= new TreeSet<AmpFieldsVisibility>();
+			SimpleDateFormat myFormatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			
 			for (Iterator vtemplateiter = vtemplate.getTemplate().iterator(); vtemplateiter.hasNext();) {
 				TemplateType xmltemplate = (TemplateType) vtemplateiter.next();
-				FeaturesUtil.insertTemplate(xmltemplate.getName(),hbsession );
-				for (Iterator tvisibilityiter = FeaturesUtil.getAMPTemplatesVisibility().iterator(); tvisibilityiter.hasNext();) {
-					AmpTemplatesVisibility amptemplate = (AmpTemplatesVisibility) tvisibilityiter.next();
-					if(amptemplate.getName().equalsIgnoreCase(xmltemplate.getName()) && amptemplate.getItems()==null){
-						currenttemplate = amptemplate;
-					}
-				}
+				String templatename = xmltemplate.getName()+"-"+ myFormatter.format(new Date());
+				currenttemplate = FeaturesUtil.getTemplateById(FeaturesUtil.insertreturnTemplate(templatename,hbsession));
+				
+				
 				AmpTreeVisibility modeltree = new AmpTreeVisibility();
 				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession));
 				currenttemplate.setItems(new TreeSet());
@@ -246,6 +247,7 @@ public class VisibilityManagerExportHelper {
 					}
 				}
 
+				
 				FeaturesUtil.updateAmpTemplateNameTreeVisibility(currenttemplate.getName(), currenttemplate.getId(), hbsession);
 				FeaturesUtil.updateAmpModulesTreeVisibility(modules, currenttemplate.getId(), hbsession);
 				FeaturesUtil.updateAmpFeaturesTreeVisibility(features, currenttemplate.getId(), hbsession);

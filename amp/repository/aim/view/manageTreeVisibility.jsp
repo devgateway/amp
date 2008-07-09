@@ -430,6 +430,7 @@ function setSearchMessage(stringMessage){
 	} 
 
 	function sortUL(tableid, desc) { 
+		exchangeEvent = false;
 		parent = tableid; 
 		if(parent.nodeName != "UL") return false; 
 		items = new Array();
@@ -449,10 +450,14 @@ function setSearchMessage(stringMessage){
 		for(k=7; k > 0; k -= 2) { 
 			for(var m=0; m < k; m++) isort(m, k, desc); 
 		} 
+		if(exchangeEvent)
+			sortUL(tableid, desc);
+		
 		return false;
 	}
-
+	var exchangeEvent = false;
 	function exchange(i, j) { 
+		exchangeEvent = true;
 		if(i == j+1) { 
 			parent.insertBefore(items[i], items[j]); 
 		} else if(j == i+1) { 

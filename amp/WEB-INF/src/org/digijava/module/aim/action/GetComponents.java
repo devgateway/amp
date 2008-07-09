@@ -47,6 +47,9 @@ public class GetComponents extends Action{
 							else if(FeaturesUtil.getGlobalSettingValue("Components Sort Order").equalsIgnoreCase("tittle")){
 								Collections.sort((List<AmpComponent>)com, new ComponentsUtil.HelperComponetTypeComparator());
 							}
+							else if(FeaturesUtil.getGlobalSettingValue("Components Sort Order").equalsIgnoreCase("date")){
+								Collections.sort((List<AmpComponent>)com, new ComponentsUtil.HelperComponetDateComparator());
+							}
 							else{
 								Collections.sort((List<AmpComponent>)com);
 							}

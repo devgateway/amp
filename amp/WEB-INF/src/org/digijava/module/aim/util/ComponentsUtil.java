@@ -624,4 +624,15 @@ public class ComponentsUtil {
             return result;
 		}
     }
+    
+    /**
+     * @author Diego Dimunzio
+     * Compare components by date 
+     */
+    public static class HelperComponetDateComparator implements Comparator<AmpComponent> {
+		public int compare(AmpComponent o1, AmpComponent o2) {
+			int result = (o1.getCreationdate()==null || o2.getCreationdate()==null)?0:o1.getCreationdate().compareTo(o2.getCreationdate());
+            return result;
+		}
+    }
 }

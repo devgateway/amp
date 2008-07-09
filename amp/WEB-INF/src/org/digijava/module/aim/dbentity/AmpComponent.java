@@ -20,8 +20,9 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	private Long ampComponentId;
 	private String title;
 	private String description;
-
+	private java.sql.Timestamp creationdate;
 	private String code;
+	
 	//private String type;
 	private AmpComponentType type;
 	
@@ -103,5 +104,11 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	@Override
 	public int hashCode() {
 		return this.ampComponentId.hashCode();
+	}
+	public java.sql.Timestamp getCreationdate() {
+		return creationdate;
+	}
+	public void setCreationdate(java.sql.Timestamp creationdate) {
+		this.creationdate = creationdate;
 	}
 }

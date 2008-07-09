@@ -16,7 +16,7 @@
 		<property column="description" name="description"
 			type="org.digijava.kernel.db.SafeClobType" />
 		<property column="code" name="code" type="java.lang.String" />
-
+		<property column="creation_date" name="creationdate" type="java.sql.Timestamp"/>
 
 		<set name="activities" table="AMP_ACTIVITY_COMPONENTS"
 			lazy="true" cascade="none">

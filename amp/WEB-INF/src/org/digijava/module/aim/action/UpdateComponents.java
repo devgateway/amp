@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
@@ -90,10 +91,12 @@ public class UpdateComponents extends Action {
 				AmpComponent ampComp = new AmpComponent();
 				if (compId == null || compId.equalsIgnoreCase("") || compId.trim().length() == 0) {
 					logger.debug("just born");
-					ampComp.setTitle(updCompForm.getCompTitle());
+					java.util.Date today = new java.util.Date();
+				    ampComp.setTitle(updCompForm.getCompTitle());
 					ampComp.setCode(updCompForm.getCompCode());
 					ampComp.setType(ComponentsUtil.getComponentTypeById(updCompForm.getCompType()));
 					ampComp.setDescription(updCompForm.getCompDes());
+					ampComp.setCreationdate(new java.sql.Timestamp(today.getTime()));
 				} else {
 					logger.debug("not new");
 					ampComp.setAmpComponentId(new Long(compId));

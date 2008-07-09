@@ -149,11 +149,12 @@ public class AmpCollectionUtils {
 		Iterator<E> iterEmain = mainCol.iterator();
 		while (iterEmain.hasNext()) {
 			E mainE = (E) iterEmain.next();
-			E refE = mapEref.get(keyResolver.resolveKey(mainE));
+			K mainK = keyResolver.resolveKey(mainE);
+			E refE = mapEref.get(mainK);
 			if (refE == null){
 				iterEmain.remove();
 			}else{
-				mapEref.remove(keyResolver.resolveKey(mainE));
+				mapEref.remove(mainK);
 			}
 		}
 		mainCol.addAll(mapEref.values());
@@ -167,7 +168,6 @@ public class AmpCollectionUtils {
 		
 		return mainCol;
 	}
-	
 
 	/**
 	 * Joins two collections in mainCol marking elements that exists only in mainCol for removal.

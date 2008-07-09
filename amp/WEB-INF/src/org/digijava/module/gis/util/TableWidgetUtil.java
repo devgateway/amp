@@ -130,11 +130,16 @@ public class TableWidgetUtil {
 	 * @param widget table widget together with columns. 
 	 * @throws DgException
 	 */
-	public static void saveOrUpdateWidget(AmpDaTable widget) throws DgException{
+	public static void saveOrUpdateWidget(AmpDaTable widget,List<AmpDaColumn> deletedColumns) throws DgException{
 		Session session=PersistenceManager.getRequestDBSession();
 		Transaction tx=null;
 		try {
 			tx=session.beginTransaction();
+			if (deletedColumns!= null && deletedColumns.size()>0){
+				for (AmpDaColumn col : deletedColumns) {
+					session.delete(col);
+				}
+			}
 			session.saveOrUpdate(widget);
 			tx.commit();
 		} catch (Exception e) {

@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.xhtml.col;
+import org.apache.ecs.xhtml.del;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -40,6 +42,7 @@ public class AdminTableWidgets extends DispatchAction {
     private static Logger logger = Logger.getLogger(AdminTableWidgets.class);
     public static final String EDITING_WIDGET = "EditingWidget";
     public static final String EDITING_COLUMNS = "EditingColumns";
+    public static final String DELETING_COLUMNS = "DeletingColumns";
 
     /**
      * Show create table widget page.
@@ -173,7 +176,7 @@ public class AdminTableWidgets extends DispatchAction {
 		widget = formToWidgetSimpleFileds(wForm,widget);
 		return mapping.findForward("returnToEdit");
 	}
-
+	
 	/**
 	 * Saves widget after edit or add page.
 	 * @param mapping
@@ -185,69 +188,30 @@ public class AdminTableWidgets extends DispatchAction {
 	 */
 	public ActionForward save(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
 		TableWidgetCreationForm wForm=(TableWidgetCreationForm)form;
-		String checked=request.getParameter("widgetTitleIsName");
-		System.out.println(checked);
-		AmpDaTable dbWidget = null;
-		List<AmpDaWidgetPlace> oldPlaces = null;
-		List<AmpDaWidgetPlace> newPlaces = null;
-		
-		Long id = wForm.getId();
-		if (id==null || id.longValue()<=0){
-			dbWidget = new AmpDaTable();
-			logger.debug("creating new table widget");
-		}else{
-			logger.debug("loading table widget to update");
-			dbWidget = TableWidgetUtil.getTableWidget(id);
-			oldPlaces = WidgetUtil.getWidgetPlaces(dbWidget.getId());
-		}
-		
-		//update db widgets simple fields from the action form.
-		dbWidget = formToWidgetSimpleFileds(wForm, dbWidget);
-		//get session widget
-		AmpDaTable sessionWidget = getWidgetFromSession(request);
-		//get columns from both db and session to join them
-		Set<AmpDaColumn> dbColumns = dbWidget.getColumns();
-		if (dbColumns == null){
-			dbColumns = new  HashSet<AmpDaColumn>();
-			dbWidget.setColumns(dbColumns);
-		}
-		List<AmpDaColumn> sessionColumnsList = getClumnsFromSession(request);
-		if (sessionColumnsList == null){
-			sessionColumnsList = new ArrayList<AmpDaColumn>();
-		}
-		Set<AmpDaColumn> sessionColumns = new HashSet<AmpDaColumn>(sessionColumnsList);
-		//join columns to get list of columns ready to just save. 
-		AmpCollectionUtils.join(dbColumns, sessionColumns, new TableWidgetColumnKeyResolver());
-		
-		//correct new columns ID's to make hibernate persist them and not try update.
-		for (AmpDaColumn col : dbColumns) {
-			col.setWidget(dbWidget);
-			if (col.getId() <= 0 ){
-				col.setId(null);
+
+		AmpDaTable dbWidget = getWidgetFromSession(request);
+		dbWidget = formToWidgetSimpleFileds(wForm);
+		List<AmpDaColumn> newColumns = getClumnsFromSession(request);
+		for (AmpDaColumn column : newColumns) {
+			column.setWidget(dbWidget);
+			if (column.getId().longValue() <=0){
+				column.setId(null);
 			}
 		}
-		//save widget
-		TableWidgetUtil.saveOrUpdateWidget(dbWidget);
+		Set<AmpDaColumn> columns = new HashSet<AmpDaColumn>(newColumns);
+		dbWidget.setColumns(columns);
 		
-		//assign to the place if selected.
-		if (wForm.getSelPlaces()!=null && wForm.getSelPlaces().length>0){
-			newPlaces = WidgetUtil.getPlacesWithIDs(wForm.getSelPlaces());
-			if (newPlaces!=null && newPlaces.size()>0 && oldPlaces!=null && oldPlaces.size()>0){
-				Collection<AmpDaWidgetPlace> deleted = AmpCollectionUtils.split(oldPlaces, newPlaces, new WidgetUtil.PlaceKeyWorker());
-				WidgetUtil.updatePlacesWithWidget(deleted, null);
-				WidgetUtil.updatePlacesWithWidget(oldPlaces, dbWidget);
-			}else if((oldPlaces==null || oldPlaces.size()==0) && newPlaces!=null && newPlaces.size()>0){
-				WidgetUtil.updatePlacesWithWidget(newPlaces, dbWidget);
-			}
+		List<AmpDaColumn> deletedColumns = getDeletedColumns(request);
+		if (dbWidget.getId()!=null && dbWidget.getId().longValue()<=0){
+			dbWidget.setId(null);
 		}
+		TableWidgetUtil.saveOrUpdateWidget(dbWidget,deletedColumns);
 		
 		stopEditing(request);
 		
-		logger.debug("Table widget saved");
-		
 		return mapping.findForward("listTableWidgets");
 	}
-	
+		
 	/**
 	 * Removes table widget from database.
 	 * @param mapping
@@ -528,11 +492,13 @@ public class AdminTableWidgets extends DispatchAction {
 		if (isEditing(request)) throw new DgException("some widget is already in edit state");
 		saveToSession(widget, request);
 		saveToSession(columns, request); 
+		resetDeletedColumns(request);
 	}
 	
 	
 	/**
 	 * Stops editing mode by removing widget from session.
+	 * Also removes columns and deleted columns from session.
 	 * @param request
 	 * @throws DgException if not in editing mode. should be in editing mode to stop this mode.
 	 */
@@ -542,6 +508,7 @@ public class AdminTableWidgets extends DispatchAction {
 		if (old==null) throw new DgException("No widget is in edit state");
 		session.removeAttribute(EDITING_WIDGET);
 		session.removeAttribute(EDITING_COLUMNS);
+		resetDeletedColumns(request);
 	}
 	
 	/**
@@ -574,7 +541,7 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @throws DgException
 	 */
 	private AmpDaTable formToWidgetSimpleFileds(TableWidgetCreationForm form, AmpDaTable widget) throws DgException{
-		
+		widget.setId(form.getId());
 		widget.setName(form.getName());
 		widget.setNameAsTitle((form.getNameAsTitle()==null)?false:form.getNameAsTitle());
 		widget.setCode(form.getCode());
@@ -781,6 +748,7 @@ public class AdminTableWidgets extends DispatchAction {
 			AmpDaColumn col = colIter.next();
 			if (col.getId().equals(tableForm.getColId())){
 				colIter.remove();
+				addDeletedColumn(col, request);
 				break;
 			}
 		}
@@ -796,5 +764,23 @@ public class AdminTableWidgets extends DispatchAction {
 		return mapping.findForward("returnToEdit");
 	}
 
-	
+	private static void resetDeletedColumns(HttpServletRequest request){
+		HttpSession session=request.getSession();
+		session.removeAttribute(DELETING_COLUMNS);
+	}
+	@SuppressWarnings("unchecked")
+	private static List<AmpDaColumn> getDeletedColumns(HttpServletRequest request){
+		HttpSession session=request.getSession();
+		return (List<AmpDaColumn>)session.getAttribute(DELETING_COLUMNS);
+	}
+	@SuppressWarnings("unchecked")
+	private static void addDeletedColumn(AmpDaColumn col,HttpServletRequest request){
+		HttpSession session=request.getSession();
+		List<AmpDaColumn> deletedColumns = (List<AmpDaColumn>)session.getAttribute(DELETING_COLUMNS);
+		if (deletedColumns == null){
+			deletedColumns = new ArrayList<AmpDaColumn>();
+			session.setAttribute(DELETING_COLUMNS, deletedColumns);
+		}
+		deletedColumns.add(col);
+	}
 }

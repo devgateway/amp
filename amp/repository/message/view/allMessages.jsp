@@ -254,6 +254,7 @@ background-color:yellow;
                                  * (returns to row it basic (new) color)
                                  */
                                 var trs=tbl.tBodies[0].rows;
+                                if(trs.length>0){
                                 var startIndex=0;
                                 if(trs[0].id=='blankRow'){
                                     startIndex=1;
@@ -277,6 +278,7 @@ background-color:yellow;
                                         trs[i]=paintTr(trs[i],i);
                                     }
                                     
+                                }
                                 }
                                
 				//removing record from db
@@ -428,11 +430,11 @@ background-color:yellow;
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
-				
+                var browser=navigator.appName;
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
-			//messages start	
+			//messages start
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
                            if(!root.hasChildNodes()&& firstEntry==0){
@@ -483,32 +485,31 @@ background-color:yellow;
 											var pagParams=paginationTag.childNodes[0];
 											var wasDelteActionCalled=pagParams.getAttribute('deleteWasCalled');
 											if(wasDelteActionCalled=='true'){
-												var msgTR=document.createElement('TR');												
-												var browser=navigator.appName;
+                                                                                                var msgTR;
+												
 												if(browser=="Microsoft Internet Explorer"){
-										   			var msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-										   			msgTr=paintTr(msgTr,i);
+										   			msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
+										   			
 												}else{
-										           	msgTR=paintTr(msgTR,i);
-                                                    msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                               	}                                                                                                
+                                                                                                msgTR=document.createElement('TR');      	
+                                                                                                msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                                                                                }   
+                                                                                                msgTR=paintTr(msgTR,i);                                                                                                
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
-												myArray[myArray.length]=msgId;										
+												myArray[myArray.length]=msgId;	
+                                                                                                
 											}else{
 												tbl.tBodies[0].insertRow(whereToInsertRow);
-												var msgTR=tbl.tBodies[0].rows[whereToInsertRow];
-												var browser=navigator.appName;
-												
+												var msgTr=tbl.tBodies[0].rows[whereToInsertRow];
 												if(browser=="Microsoft Internet Explorer"){
-									   				var msgTR=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-													msgTr=paintTr(msgTr,i);	
+									   				msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');	
 												}else{
-                                                    msgTR=paintTr(msgTR,i);
-                                                    msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                                                                                        
+                                                                                                        msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
 												}
-												
+												msgTr=paintTr(msgTr,i);
 												createTableRow(tbl,msgTR,messages[i],true);
-												myArray[myArray.length]=msgId;
+												myArray[myArray.length]=msgId;										
 												whereToInsertRow++;										
 												tbl.tBodies[0].removeChild(tbl.tBodies[0].lastChild);
 											}
@@ -518,27 +519,24 @@ background-color:yellow;
 							}
 						}		
 					}else {
-						for(var i=0;i<messages.length;i++){				
-							var msgId=messages[i].getAttribute('id');
-							myArray[i]=msgId;							
-							//creating tr
-							var msgTr=document.createElement('TR');	
-							var isMsgRead=messages[i].getAttribute('read');					
-                            var browser=navigator.appName;
-												
-							if(browser=="Microsoft Internet Explorer"){
-								var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');
-								msgTr=paintTr(msgTr,i);
-							}else{
-                                msgTr=paintTr(msgTr,i);
- 		 						msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                        	}
-        								
-							var myTR=createTableRow(tbl,msgTr,messages[i],true);													
-        	                var tablBody= tbl.getElementsByTagName("tbody");
-                            tablBody[0].appendChild(myTR);            																				
-						}//end of for loop
-					}			
+                                        for(var i=0;i<messages.length;i++){				
+                                        var msgId=messages[i].getAttribute('id');
+                                        myArray[i]=msgId;							
+                                        //creating tr
+                                       
+                                        var isMsgRead=messages[i].getAttribute('read');					
+                                        if(browser=="Microsoft Internet Explorer"){
+                                            var msgTr=document.createElement('<tr onmouseover="hoverTr('+msgId+',this);" onmouseout="paintTr(this,'+i+');"></tr>');              
+                                        }else{
+                                            var msgTr=document.createElement('TR');	
+                                            msgTr.setAttribute('onmouseover','hoverTr('+msgId+',this)');
+                                        }
+                                         msgTr=paintTr(msgTr,i);
+                                        var myTR=createTableRow(tbl,msgTr,messages[i],true);													
+                                        var tablBody= tbl.getElementsByTagName("tbody");
+                                        tablBody[0].appendChild(myTR);            																				
+                                    }//end of for loop
+                                }			
 				}//messages end
 				
 				//pagination start			

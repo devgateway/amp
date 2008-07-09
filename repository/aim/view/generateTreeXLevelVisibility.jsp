@@ -45,9 +45,16 @@
                             <%= moduleAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
                         />
                         </logic:equal>
+                        <c:if test="${currentLevel == 1}">
+                        <a id="module:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
+                            <digi:trn key="<%="fm:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>
+                        </a>
+                        </c:if>
+                        <c:if test="${currentLevel != 1}">
                         <a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
                             <digi:trn key="<%="fm:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>
                         </a>
+                        </c:if>
 
 <c:if test="${currentLevel == 1}">
 					<div style="padding-left:15px">

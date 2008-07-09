@@ -39,6 +39,8 @@ public class AdminWidgetPlaces extends DispatchAction {
 				helpers.add(new WidgetPlaceHelper(place));
 			}
 			pform.setPlaces(helpers);
+		}else{
+			pform.setPlaces(null);
 		}
 		return mapping.findForward("forward");
 	}

@@ -19,6 +19,8 @@ public class DaCell implements HtmlGenerator {
 	private String value;
 	private String cssClass;
 	private String htmlStyle;
+	private String colorCodeText;
+	private String colorCodeBackground;
 	private boolean isHeader;
 	
 	/**
@@ -151,6 +153,22 @@ public class DaCell implements HtmlGenerator {
 
 	public void setRowPk(Long rowPk) {
 		this.rowPk = rowPk;
+	}
+
+	public String getColorCodeText() {
+		return colorCodeText;
+	}
+
+	public void setColorCodeText(String colorCodeText) {
+		this.colorCodeText = colorCodeText;
+	}
+
+	public String getColorCodeBackground() {
+		return colorCodeBackground;
+	}
+
+	public void setColorCodeBackground(String colorCodeBackground) {
+		this.colorCodeBackground = colorCodeBackground;
 	}
 
 }

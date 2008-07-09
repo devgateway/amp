@@ -1458,7 +1458,7 @@ public class SaveActivity extends Action {
                         activity.setApprovalStatus(Constants.STARTED_STATUS);
                     }
 					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
-                       Constants.APPROVED_STATUS.equals(eaForm.getApprovalStatus())){
+                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
                         activity.setApprovalStatus(Constants.APPROVED_STATUS);
                     }
 					if(tm.getTeamHead()){
@@ -1552,14 +1552,15 @@ public class SaveActivity extends Action {
                 if(tm.getTeamHead()){
                     needApproval = false;
                     approved=true;
-                }else if("newOnly".equals(tm.getAppSettings().getValidation())){
-                	needNewAppForApproved=false;
-                    approved=true;
-                    needApproval = false;
-                }else{
-                    needApproval = true;
-                    approved=false;
-                }
+                }else 
+                	if("newOnly".equals(tm.getAppSettings().getValidation())){
+		                	needNewAppForApproved=false;
+		                    approved=true;
+		                    needApproval = false;
+		                }else{
+		                    needApproval = true;
+		                    approved=false;
+		                }
             }else{
                 if(tm.getTeamHead()){
                 	needNewAppForApproved=false;

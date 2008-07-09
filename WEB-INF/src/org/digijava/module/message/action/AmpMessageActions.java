@@ -151,9 +151,9 @@ public class AmpMessageActions extends DispatchAction {
     	List<AmpMessageState> allMessages=null; //all messages
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
     	
-    	int page=1;
+    	Integer[] page={1};
     	if(request.getParameter("page")!=null){
-    		page=Integer.parseInt(request.getParameter("page"));
+            page[0] =Integer.parseInt(request.getParameter("page"));
     	}
     	
     	int howManyPages=0;
@@ -218,12 +218,12 @@ public class AmpMessageActions extends DispatchAction {
     	if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()<=count){
     		count=settings.getMsgStoragePerMsgType().intValue();
     		//if(count<messages.size()){
-    			if(page==1){
+    			if(page[0]==1){
     				if(count<messages.size()){
     					messageForm.setMessagesForTm(messages.subList(0,count));
     				}    				
-    			}else if(page>1){
-    				int toIndex=count-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
+    			}else if(page[0]>1){
+    				int toIndex=count-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE;
     				if(toIndex<messages.size()){    
     					messageForm.setMessagesForTm(null);
     					msgs=new ArrayList<AmpMessageState>();    					
@@ -251,14 +251,14 @@ public class AmpMessageActions extends DispatchAction {
 			}
     		
     		messageForm.setAllPages(allPages);
-    		
-    		if(messageForm.getPage()==null){
+    		messageForm.setPage(String.valueOf(page[0]));
+    		/*if(messageForm.getPage()==null){
     			if(request.getParameter("page")!=null){
     				messageForm.setPage(request.getParameter("page"));
     			}else{
     				messageForm.setPage("1");
     			}    			
-    		}
+    		}*/
 
     		messageForm.setLastPage(Integer.toString(howManyPages));
     		messageForm.setPagesToShow(MessageConstants.PAGES_TO_SHOW);

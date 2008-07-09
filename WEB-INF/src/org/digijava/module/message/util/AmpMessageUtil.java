@@ -255,7 +255,7 @@ public class AmpMessageUtil {
 		return retValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,int page) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -276,13 +276,13 @@ public class AmpMessageUtil {
 //					messagesAmount=messagesAmount-storage;
 //				}
 //			}
-			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;			
+			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
 				fromIndex=0;				
 			}	
 			int toIndex;
-			if(messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE< MessageConstants.MESSAGES_PER_PAGE){
-				toIndex=messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
+			if(messagesAmount-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE< MessageConstants.MESSAGES_PER_PAGE){
+				toIndex=messagesAmount-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE;
 			}else{
 				toIndex=MessageConstants.MESSAGES_PER_PAGE;
 			}
@@ -290,7 +290,12 @@ public class AmpMessageUtil {
 			query.setFirstResult(fromIndex);
 			query.setMaxResults(toIndex);
 			query.setParameter("tmId", teamMemberId);			
-			returnValue=query.list();			
+			returnValue=query.list();
+                        // after we delete the all rows we need to move to previous page
+                        if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
+                            page[0]--;
+                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page);
+                        }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
 			ex.printStackTrace();
@@ -300,7 +305,7 @@ public class AmpMessageUtil {
 		return returnValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,int page) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft,Integer[] page) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
@@ -312,20 +317,25 @@ public class AmpMessageUtil {
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;
 			query=session.createQuery(queryString);
-			int fromIndex=messagesAmount-page*MessageConstants.MESSAGES_PER_PAGE;			
+			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
 				fromIndex=0;				
 			}	
 			int toIndex;
-			if(messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE< MessageConstants.MESSAGES_PER_PAGE){
-				toIndex=messagesAmount-(page-1)*MessageConstants.MESSAGES_PER_PAGE;
+			if(messagesAmount-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE< MessageConstants.MESSAGES_PER_PAGE){
+				toIndex=messagesAmount-(page[0]-1)*MessageConstants.MESSAGES_PER_PAGE;
 			}else{
 				toIndex=MessageConstants.MESSAGES_PER_PAGE;
 			}
 			query.setFirstResult(fromIndex);
 			query.setMaxResults(toIndex);
 			query.setParameter("tmId", teamMemberId);			
-			returnValue=query.list();			
+			returnValue=query.list();
+                         // after we delete the all rows we need to move to previous page
+                        if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
+                            page[0]--;
+                            returnValue=loadAllSentOrDraftMessagesStates(clazz,teamMemberId,maxStorage,draft,page);
+                        }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
 			ex.printStackTrace();
@@ -609,7 +619,7 @@ public class AmpMessageUtil {
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" state.messageHidden=true order by msg.creationDate";	
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=true order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			query.setMaxResults(1);			
 			query.setParameter("tmId", tmId);			

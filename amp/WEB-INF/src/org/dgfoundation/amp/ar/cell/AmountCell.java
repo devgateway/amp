@@ -7,8 +7,10 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -33,6 +35,14 @@ public class AmountCell extends Cell {
 
 	protected Set mergedCells;
 
+	public Map<String, Double> getColumnPercent() {
+		return columnPercent;
+	}
+
+	public void setColumnPercent(Map<String, Double> columnPercent) {
+		this.columnPercent = columnPercent;
+	}
+
 	public int compareTo(Object o) {
 		AmountCell ac = (AmountCell) o;
 		return this.getId().compareTo(ac.getId());
@@ -49,12 +59,8 @@ public class AmountCell extends Cell {
 	/**
 	 * We apply percentage only if there were no other percentages applied
 	 */
-	protected Set<String> percentageSourceColumnName;
+	protected Map<String,Double> columnPercent;
 	
-	
-		public Set<String> getPercentageSourceColumnName() {
-		return percentageSourceColumnName;
-	}
 
 		/**
 	 * @return Returns the toExchangeRate.
@@ -76,14 +82,14 @@ public class AmountCell extends Cell {
 	public AmountCell() {
 		super();
 		mergedCells = new HashSet();
-		percentageSourceColumnName=new TreeSet<String>();
+		columnPercent=new HashMap<String, Double>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public AmountCell(int ensureCapacity) {
 		super();
 		mergedCells = new HashSet(ensureCapacity);
-		percentageSourceColumnName=new TreeSet<String>();
+		columnPercent=new HashMap<String, Double>();
 	}
 
 	
@@ -93,7 +99,7 @@ public class AmountCell extends Cell {
 	public AmountCell(Long id) {
 		super(id);
 		mergedCells = new HashSet();
-		percentageSourceColumnName=new TreeSet<String>();
+		columnPercent=new HashMap<String, Double>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -170,7 +176,7 @@ public class AmountCell extends Cell {
 	public double getAmount() {
 		double ret = 0;
 		if (id != null)
-			return convert()*percentage/100;
+			return convert()*getPercentage()/100;
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
@@ -183,7 +189,7 @@ public class AmountCell extends Cell {
 
     public String getWrappedAmount() {
 	if (id != null)
-	    return FormatHelper.formatNumberUsingCustomFormat(convert() * percentage / 100);
+	    return FormatHelper.formatNumberUsingCustomFormat(convert() * getPercentage() / 100);
 	else
 	    return "";
 	}
@@ -291,24 +297,31 @@ public class AmountCell extends Cell {
 	}
 
 	public double getPercentage() {
-		return percentage;
+		double ret=100;
+		for (Double perc : columnPercent.values()) {
+			ret*=perc/100;
+		}
+		return ret;
 	}
 
 	public void setPercentage(double percentage, CellColumn source) {
 		//never apply percentage coming from a column twice
 	//	if(percentageSourceColumnName.contains(source.getName())) return;
-		percentageSourceColumnName.add(source.getName());
 		
-		
-		if(percentageSourceColumnName.contains(ArConstants.COLUMN_ANY_SECTOR) && source.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
-			//we forget the sector percentage, and apply the sub-sector percentage:
-			this.percentage=percentage;
+		//we search if there is another percentage of the same column, if so, we add it
+		if(columnPercent.containsKey(source.getName())) {
+			columnPercent.put(source.getName(),columnPercent.get(source.getName())+percentage);
 			return;
 		}
-		if(this.percentage>0){
-			this.percentage = this.percentage * percentage / 100;
+	
+		if(columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR) && source.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
+			//we forget the sector percentage, and apply the sub-sector percentage:
+			columnPercent.remove(ArConstants.COLUMN_ANY_SECTOR);
+			columnPercent.put(ArConstants.COLUMN_SUB_SECTOR, percentage);
+			return;
 		}
-		else this.percentage = percentage;
+		
+		columnPercent.put(source.getName(), percentage);
 	}
 
 	
@@ -336,6 +349,7 @@ public class AmountCell extends Cell {
 		}
 
 	    }
+
 
 	
 }

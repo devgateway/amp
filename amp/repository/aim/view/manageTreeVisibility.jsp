@@ -25,9 +25,6 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-folder-tree-static.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-context-menu.js"/>"></script>
 
-	<script type="text/javascript">
-		var idOfFolderTrees = ['dhtmlgoodies_tree'];
-	</script>
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
 <link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
 
@@ -38,8 +35,21 @@ function openFieldPermissionsPopup(fieldId) {
 }
 </script>
 
-
-
+<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+<style type="text/css"> 
+	#demo .yui-nav li {
+		margin-right:0;
+		margin-top:2pt;
+ 	}
+	#demo .yui-content {
+	min-height:200px;
+	_height:200px;
+	padding:10px 10px 10px 10px;
+ 	background-color: #EEEEEE;
+	border:1px solid black;
+}
+	</style>
 <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
@@ -62,8 +72,8 @@ function openFieldPermissionsPopup(fieldId) {
 <input type="submit" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
 <input type="button" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
 
-<input type="button" id="prevSearchButton" onclick="prevResult()" value="<<" disabled="disabled" style="display:none;"/>
-<input type="button" id="nextSearchButton" onclick="nextResult()" value=">>" disabled="disabled"  style="display:none;"/>
+<input type="button" id="prevSearchButton" onclick="prevResult()" value="<<" disabled="true" style="display:none;"/>
+<input type="button" id="nextSearchButton" onclick="nextResult()" value=">>" disabled="true"  style="display:none;"/>
 <span id="spanSearchMessage" style="color:red;font-weight:bold;"></span>
 </form>
 </div>
@@ -92,14 +102,23 @@ function openFieldPermissionsPopup(fieldId) {
 
 var arrayLI = new Array();
 var scrollArray = new Array();
+var scrollTreeArray = new Array();
 var currentScrollItem = 0;
 
 
 function resetSearch(){
 	disableSearchButtons();
-	treeCollapseAll("dhtmlgoodies_tree");
-	resetHighlight("dhtmlgoodies_tree");
-	showNodeObject(false,"dhtmlgoodies_tree");
+
+	var dhtmlArray = document.getElementsByName("dhtmltreeArray");
+	for(index=0; index < dhtmlArray.length;index++)
+	{
+		treeCollapseAll(dhtmlArray[index].id);
+	}
+	for(index=0; index < dhtmlArray.length;index++)
+	{
+		resetHighlight(dhtmlArray[index].id);
+	}
+
 	document.getElementById("searchCriteria").value = "";
 	document.getElementById("spanSearchMessage").innerHTML = "";
 }
@@ -113,19 +132,21 @@ function nextResult()
 		currentScrollItem = 0;
 
 	highlightResult(scrollArray[currentScrollItem])
-	scrollArray[currentScrollItem].scrollIntoView(false);
+	scrollArray[currentScrollItem].scrollIntoView(true);
+	showTree(scrollTreeArray[currentScrollItem]);
+
 }
 
 function highlightResultReset(linkObject)
 {
-	linkObject.style.backgroundColor = '#FFFFFF';
+	linkObject.style.backgroundColor = '#EEEEEE';
 	linkObject.style.color = '#0E69B3';
 }
 
 function highlightResult(linkObject)
 {
 	linkObject.style.backgroundColor = '#FF0000';
-	linkObject.style.color = '#FFFFFF';
+	linkObject.style.color = '#EEEEEE';
 }
 
 function prevResult()
@@ -135,17 +156,18 @@ function prevResult()
 	currentScrollItem--;
 	if(currentScrollItem == -1)
 		currentScrollItem = scrollArray.length-1;
-	scrollArray[currentScrollItem].scrollIntoView(false);
+	scrollArray[currentScrollItem].scrollIntoView(true);
+	showTree(scrollTreeArray[currentScrollItem]);
 	highlightResult(scrollArray[currentScrollItem]);
 
 }
 
-function setBranch(objectLI)
+function setBranch(objectLI, treeLI)
 {
 	var tempObject = objectLI;
 	var tempString = "";
-	var segui = 0;
-	while(tempObject.parentNode.id != "dhtmlgoodies_tree")
+
+	while(tempObject.id != treeLI)
 	{
 		if(tempObject.tagName == "LI")
 		{
@@ -187,7 +209,7 @@ function treeCollapseAll(treeId)
 }
 function enableSearchButtons()
 {
-	if(document.getElementById("prevSearchButton").disabled && document.getElementById("prevSearchButton").disabled )
+	if(document.getElementById("prevSearchButton").style.display == 'none' && document.getElementById("nextSearchButton").style.display == 'none' )
 	{
 		document.getElementById("prevSearchButton").style.display = '';
 		document.getElementById("nextSearchButton").style.display = '';
@@ -197,7 +219,8 @@ function enableSearchButtons()
 }
 function disableSearchButtons()
 {
-	if(!document.getElementById("prevSearchButton").disabled && !document.getElementById("prevSearchButton").disabled )
+
+	if(!document.getElementById("prevSearchButton").disabled && !document.getElementById("nextSearchButton").disabled )
 	{
 		document.getElementById("prevSearchButton").style.display = 'none';
 		document.getElementById("nextSearchButton").style.display = 'none';
@@ -210,50 +233,76 @@ function searchFunction()
 {
 
 	var searchCriteria = document.getElementById("searchCriteria").value;
-	var searchableObjectsLI = document.getElementById("dhtmlgoodies_tree").getElementsByTagName("LI");
+
+	var dhtmlArray = document.getElementsByName("dhtmltreeArray");
+	
+	var idOfFolderTrees = new Array();
+	var searchableObjectsLIObject = new Array();
+	var searchableObjectsLITree = new Array();
+	var contador = 0;
+	for(index=0; index < dhtmlArray.length;index++)
+	{
+		var liArray = document.getElementById(dhtmlArray[index].id).getElementsByTagName("LI");
+		for(index2 = 0; index2 < liArray.length; index2++)
+		{
+			searchableObjectsLIObject[contador] = liArray[index2];
+			searchableObjectsLITree[contador] = dhtmlArray[index].id;
+			contador++;
+		}
+	}
+	
 	isKeycaptureOn = true;
 	if(searchCriteria.length < 3) {
 		alert("<digi:trn key="fm:search:searchQuestion">Please, enter a search of more than 2 characters.</digi:trn>");
 		return;
 	}
 	
-	treeCollapseAll("dhtmlgoodies_tree");
-	resetHighlight("dhtmlgoodies_tree");
+	for(index=0; index < dhtmlArray.length;index++)
+	{
+		treeCollapseAll(dhtmlArray[index].id);
+	}
+	for(index=0; index < dhtmlArray.length;index++)
+	{
+		resetHighlight(dhtmlArray[index].id);
+	}
     currentScrollItem = 0;
 	scrollArray = new Array();
+	scrollTreeArray = new Array();
 	
-	searchExpandedNodes = "dhtmlgoodies_tree";
+	searchExpandedNodes = "";
 	var countMatches = 0;
-	for(a=0; a< searchableObjectsLI.length; a++){
-		var text = searchableObjectsLI[a].title;
+	for(a=0; a< searchableObjectsLIObject.length; a++){
+		var text = searchableObjectsLIObject[a].title;
 		if(text.toLowerCase().search(searchCriteria.toLowerCase()) != -1)
 		{
 			countMatches++;
 			enableSearchButtons();
 
-			var objectLI = searchableObjectsLI[a];
+			var objectLI = searchableObjectsLIObject[a];
+			var treeLI = searchableObjectsLITree[a];
 			
 			arrayLI = new Array();
-			setBranch(objectLI);
-
-			searchExpandedNodes = "dhtmlgoodies_tree";
+			setBranch(objectLI, treeLI);
+			searchExpandedNodes = treeLI;
+			
 
 			for(b=1;b<arrayLI.length;b++){
 				searchExpandedNodes += "," + arrayLI[b];
 			}
-			//alert(searchExpandedNodes);
 //			Set_Cookie('dhtmlgoodies_expandedNodes',initExpandedNodes,500);
 			
+
 			if(searchExpandedNodes){
 				var nodes = searchExpandedNodes.split(',');
 				for(var no=0;no<nodes.length;no++){
-					if(nodes[no])showNodeObject(false,nodes[no]);	
+					if(nodes[no])showNodeObject(false,nodes[no], treeLI);	
 				}		
 			}
 		
 			if(objectLI.getElementsByTagName("A")[0]){
 				objectLI.getElementsByTagName("A")[0].style.fontWeight = "bold";
 				scrollArray[scrollArray.length] = objectLI.getElementsByTagName("A")[0];
+				scrollTreeArray[scrollTreeArray.length] = treeLI;
 			}
 
 		}
@@ -261,14 +310,15 @@ function searchFunction()
 	document.getElementById('nextSearchButton').focus();
 
 	if(countMatches > 0){
-		scrollArray[0].scrollIntoView(false);
 		scrollArray[0].style.backgroundColor = '#FF0000';
-		scrollArray[0].style.color = '#FFFFFF';
+		scrollArray[0].style.color = '#EEEEEE';
+		showTree(scrollTreeArray[0]);
+		scrollArray[0].scrollIntoView(true);
 		setSearchMessage( countMatches + " <digi:trn key="fm:search:matchesFound">items found</digi:trn>.");
 	}
 	else
 	{
-		showNodeObject(false,"dhtmlgoodies_tree");
+//		showNodeObject(false,"dhtmlgoodies_tree");
 		setSearchMessage("<digi:trn key="fm:search:noMatches">No matches found</digi:trn>.");
 	}	
 	
@@ -277,11 +327,11 @@ function setSearchMessage(stringMessage){
 	var spanSearchMessage = document.getElementById("spanSearchMessage");
 	spanSearchMessage.innerHTML = stringMessage;
 }
-	function showNodeObject(e,inputId)
+	function showNodeObject(e,inputId, treeLI)
 	{
 		thisNode = document.getElementById(inputId);
 		if(!thisNode){
-			thisNode = document.getElementById("dhtmlgoodies_tree");
+			thisNode = document.getElementById(treeLI);
 		}
 		var ul = thisNode.getElementsByTagName('UL')[0];
 		ul.style.display='block';
@@ -290,29 +340,164 @@ function setSearchMessage(stringMessage){
 		return;
 	}
 
--->
+	function showTree(treeLI)
+	{
+		idNode = treeLI.split(":")[1];
+		if(idNode)
+		{
+			var indexTab = document.getElementById("treeId" + idNode).getAttribute("indextab")
+			myTabs.set('activeIndex', indexTab);
+		}
+	}
+	
+	function sortTree(objectId, desc)
+	{
+		var oUl = document.getElementById("dhtmltree:" + objectId)
+		sortUL(oUl, desc);
+	
+		for(i=0; i < oUl.getElementsByTagName("UL").length; i++)
+		{
+			if(oUl.getElementsByTagName("UL")[i].getElementsByTagName("LI").length > 0)
+				sortUL(oUl.getElementsByTagName("UL")[i], desc);
+		}
+	}
+
+
+
+  
+/*
+   var items = new Array();
+
+   function sortUL(listid, desc) { 
+   		//Change this bubble sort for quicksort or a better algorithm
+
+		if(listid.nodeName != "UL") return false; 
+
+		items = new Array();
+		for(var index in listid.childNodes)
+		{
+			if(listid.childNodes[index].nodeName == "LI")
+				items[items.length] = listid.childNodes[index];
+		}
+
+		var N = items.length; 
+		var exchangeEvent = false;
+		for(var j=N-1; j > 0; j--) { 
+			for(var i=0; i < j; i++) { 
+				if(compare(get(i+1), get(i), desc)) 
+				{
+					exchange(i+1, i, listid);
+					exchangeEvent = true;
+				}
+			} 
+		} 
+		if(exchangeEvent)
+			sortUL(listid, desc);
+		return true; 
+	}
+	function exchange2(i, j, listObject) { 
+		// exchange adjacent items 
+		listObject.insertBefore(items[i], items[j]); 
+	}
+
+	*/
+
+	function get(i) {
+		var node = items[i]; 
+		if(node.childNodes.length == 0) return ""; 
+		var retval =node.title; 
+		return retval; 
+	}  
+	
+	function compare(val1, val2, desc) { 
+		return (desc) ? val1 > val2 : val1 < val2; 
+	}
+
+	 // global variables 
+	 var col = 0; 
+	 var parent = null; 
+	 var items = new Array(); 
+	 var N = 0;
+	
+	function isort(m, k, desc) { 
+		for(var j=m+k; j < N; j+= k) 
+		{ 
+			for(var i=j; i >= k && compare(get(i), get(i-k), desc); i-= k) 
+			{ 
+				exchange(i, i-k); 
+			} 
+		} 
+	} 
+
+	function sortUL(tableid, desc) { 
+		parent = tableid; 
+		if(parent.nodeName != "UL") return false; 
+		items = new Array();
+		for(var index in parent.childNodes)
+		{
+			if(parent.childNodes[index].nodeName == "LI")
+				items[items.length] = parent.childNodes[index];
+		}
+		N = items.length; 
+
+		if((k = Math.floor(N/5)) > 7) { 
+			for(var m=0; m < k; m++) isort(m, k, desc); 
+		} 
+		if((k = Math.floor(N/7)) > 7) { 
+			for(var m=0; m < k; m++) isort(m, k, desc); 
+		} 
+		for(k=7; k > 0; k -= 2) { 
+			for(var m=0; m < k; m++) isort(m, k, desc); 
+		} 
+		return false;
+	}
+
+	function exchange(i, j) { 
+		if(i == j+1) { 
+			parent.insertBefore(items[i], items[j]); 
+		} else if(j == i+1) { 
+			parent.insertBefore(items[j], items[i]); 
+		} else { 
+			var tmpNode = parent.replaceChild(items[i], items[j]); 
+			if(typeof(items[i]) == "undefined") { 
+				parent.appendChild(tmpNode); 
+			} else { 
+				parent.insertBefore(tmpNode, items[i]); 
+			} 
+		} 
+	}
+ 	 
+	-->
 
 </script>
+<style>
+
+</style>
 	</p>
-	<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
-	<li><a href="#" id="<bean:write name="template" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none" ><bean:write name="template" property="root.name"/></a>
-			<ul id="liRoot">
-				<logic:iterate name="modules" id="module" type="java.util.Map.Entry" >
-					<bean:define id="moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
-					<bean:define id="_moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
-					<bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
-					<bean:define id="size" name="_moduleAux2" property="submodules"/>
-					<logic:equal name="aimVisibilityManagerForm" property="existSubmodules" value="false">
-						<jsp:include page="generateTreeXLevelVisibility.jsp" />
-					</logic:equal>
-					<logic:equal name="aimVisibilityManagerForm" property="existSubmodules" value="true">
-							<jsp:include page="generateTreeXLevelVisibility.jsp" />
-					</logic:equal>
-				</logic:iterate>
-				
-			</ul>
-		</li>
-	</ul>
+    <c:set scope="session" var="currentLevel">0</c:set>
+    <c:set scope="session" var="firstSelected">false</c:set>
+            <div id="demo" class="yui-navset" style="width:800px">
+                <ul class="yui-nav">
+                    <logic:iterate name="modules" id="module" type="java.util.Map.Entry" indexId="counter">
+                    	
+                        <bean:define id="counter" name="counter" type="Integer" scope="page" toScope="request"/>
+                        <bean:define id="moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
+                        <bean:define id="_moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
+                        <bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
+                        <bean:define id="size" name="_moduleAux2" property="submodules"/>
+                        <jsp:include page="generateTreeXLevelVisibilityTabs.jsp" />
+                    </logic:iterate>
+                </ul>
+                <div class="yui-content"> 
+                    <logic:iterate name="modules" id="module" type="java.util.Map.Entry" >
+                        <bean:define id="moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
+                        <bean:define id="_moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility"/>
+                        <bean:define id="_moduleAux2" name="_moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
+                        <bean:define id="size" name="_moduleAux2" property="submodules"/>
+                        <jsp:include page="generateTreeXLevelVisibility.jsp" />
+                    </logic:iterate>
+                </div>
+        </div>
 	<c:set var="translation">
 		<digi:trn key="aim:treeVisibilitiSaveChanges">Save Changes</digi:trn>
 	</c:set>
@@ -321,6 +506,34 @@ function setSearchMessage(stringMessage){
 		</td>
 	</tr>
 </table>
+<!--[if IE]>
+<script type="text/javascript">
+document.getElementById=function(str){
+str=new String(str);
+var allEls=document.getElementsByTagName("*"),l=allEls.length;
+for(var i=0;i<l;i++)if(allEls[i].id==str || allEls[i].getAttribute("id")==str)return allEls[i];
+return null;
+}
 
+document.getElementsByName=function(str){
+str=new String(str);
+var myMatches=new Array();
+var allEls=document.getElementsByTagName("*"),l=allEls.length;
+for(var i=0;i<l;i++)if(allEls[i].name==str || allEls[i].getAttribute("name")==str)myMatches[myMatches.length]=allEls[i];
+return myMatches;
+}
+</script>
+<![endif]-->
+<script type="text/javascript">
+	var dhtmlArray = document.getElementsByName("dhtmltreeArray");
+	var idOfFolderTrees = new Array();
+	for(index=0; index < dhtmlArray.length;index++)
+	{
+		idOfFolderTrees[index] = dhtmlArray[index].id;
+	}
+
+	var myTabs = new YAHOOAmp.widget.TabView("demo");
+	myTabs.set('activeIndex', 0);
+</script>
 
 

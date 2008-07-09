@@ -14,6 +14,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import net.sf.hibernate.Session;
 
@@ -23,6 +27,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -30,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class VisibilityManager extends MultiAction {
@@ -74,10 +80,37 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("newTemplate")!=null) return modeSaveTemplate(mapping, form, request, response);
 		if(request.getParameter("saveEditTemplate")!=null) return modeSaveEditTemplate(mapping, form, request, response);
 		if(request.getParameter("saveTreeVisibility")!=null) return modeSaveTreeVisibility(mapping, form, request, response);
+		if(request.getParameter("exportTreeVisibility")!=null) return modeExportTreeVisibility(mapping, form, request, response);
+		if(request.getParameter("importTreeVisibility")!=null) return modeImportTreeVisibility(mapping, form, request, response);
 		return mapping.findForward("forward");
 	}
-
-
+	
+	public ActionForward modeImportTreeVisibility(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
+		JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
+		Unmarshaller um = jc.createUnmarshaller();
+		try {
+			VisibilityTemplates  vtemplate = (VisibilityTemplates) um.unmarshal(vForm.getUploadFile().getInputStream());
+			VisibilityManagerExportHelper vhelper = new VisibilityManagerExportHelper();
+			vhelper.InportFm(vtemplate);
+		} catch (JAXBException je) {
+			logger.error(je);
+		}
+		return modeManageTemplates(mapping, form, request, response);
+	}
+	
+	public ActionForward modeExportTreeVisibility(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
+		JAXBContext jc = JAXBContext.newInstance("org.dgfoundation.amp.visibility.feed.fm.schema");
+		Marshaller m = jc.createMarshaller();
+		VisibilityManagerExportHelper vhelper = new VisibilityManagerExportHelper();
+		if (vhelper.BuildVisibility()!=null){
+			response.setContentType("text/xml");
+			response.setHeader("content-disposition","attachment; filename=FmBackUp.xml");
+			m.marshal(vhelper.BuildVisibility(), response.getOutputStream());
+		}
+		return null;
+}
+	
 	public ActionForward modeManageTemplates(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 
 public class VisibilityManagerForm extends ActionForm implements Serializable{
@@ -38,6 +39,15 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	private Collection allFields;
 	private Collection allFeatures;
 	private Collection allModules;
+	private FormFile uploadFile = null;
+	
+	public FormFile getUploadFile() {
+		return uploadFile;
+	}
+
+	public void setUploadFile(FormFile uploadFile) {
+		this.uploadFile = uploadFile;
+	}
 	
 	public String getTemplateName() {
 		return templateName;

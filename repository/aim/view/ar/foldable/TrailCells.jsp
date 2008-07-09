@@ -6,12 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>' style="<%=display%>">
+
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>' style="<%=display%>;border-bottom:1px solid white;">
 	<% if (reportData.getLevelDepth() < 3) { %>
 		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#BFD2DF" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
 	<% } else { %>	

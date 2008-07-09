@@ -115,14 +115,15 @@ public class TemplateAlertActions extends DispatchAction {
 						if(teamMembers!=null && teamMembers.size()>0){
 							for (TeamMember tm : teamMembers) {
 								if(! statesMemberIds.contains(tm.getMemberId())){
-									createMessageState(newTemplate,tm.getMemberId());									
+									createMessageState(newTemplate,tm.getMemberId(),tm.getTeamName());									
 								}
 							}
 						}						
 					}else {//<--receiver is team member
 						if(! statesMemberIds.contains(new Long(receiver.substring(2)))){
 							Long memId=new Long(receiver.substring(2));
-							createMessageState(newTemplate,memId);							
+							String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
+							createMessageState(newTemplate,memId,teamName);							
 						}
 					}				
 				}		
@@ -204,7 +205,7 @@ public class TemplateAlertActions extends DispatchAction {
 			return members;
 	 }
 	 
-	 private void createMessageState(TemplateAlert tempAlert,Long memberId){
+	 private void createMessageState(TemplateAlert tempAlert,Long memberId,String teamName){
 	    	AmpMessageState newMessageState=new AmpMessageState();
 			newMessageState.setMessage(tempAlert);			
 			newMessageState.setMemberId(memberId);
@@ -218,7 +219,7 @@ public class TemplateAlertActions extends DispatchAction {
                 }
             }
             User user=TeamMemberUtil.getAmpTeamMember(memberId).getUser();
-            receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
+            receivers+=user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">;"+teamName+";";
             tempAlert.setReceivers(receivers);
             
 			//saving current state in db

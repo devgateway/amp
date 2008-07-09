@@ -730,7 +730,7 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setMessageId(null);
 		 form.setMessageName(null);
 		 form.setDescription(null);
-		 form.setPriorityLevel(new Long(0));
+		 form.setPriorityLevel(new Long(2));
 		 form.setMessageType(new Long(0));
 		 form.setSenderType(null);
 		 form.setSenderId(null);		
@@ -828,7 +828,7 @@ public class AmpMessageActions extends DispatchAction {
         result+="<" + MESSAGES_TAG +">";
         if (states != null && states.size() > 0) {
             for (AmpMessageState state : states) {
-                result += "<" + "message name=\"" + state.getMessage().getName() + "\" ";
+                result += "<" + "message name=\"" + org.digijava.module.aim.util.DbUtil.filter(state.getMessage().getName()) + "\" ";
                 result += " id=\"" + state.getId() + "\"";
                 result += " msgId=\"" + state.getMessage().getId() + "\"";
                 if(state.getMessage().getSenderType()!=null && state.getMessage().getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
@@ -879,7 +879,7 @@ public class AmpMessageActions extends DispatchAction {
     private String messages2XML(AmpMessage forwardedMessage, Long parentStateId) throws AimException {
 
         String result = "";
-        result += "<" + "forwarded name=\"" + forwardedMessage.getName() + "\" ";
+        result += "<" + "forwarded name=\"" + org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getName()) + "\" ";
         result += " msgId=\"" + forwardedMessage.getId() + "\"";
         if(forwardedMessage.getSenderType()!=null && forwardedMessage.getSenderType().equalsIgnoreCase(MessageConstants.SENDER_TYPE_USER)){
         result += " from=\"" +org.digijava.module.aim.util.DbUtil.filter(forwardedMessage.getSenderName())+ "\"";

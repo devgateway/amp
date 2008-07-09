@@ -111,19 +111,18 @@ public class DbUtil {
 		String result = null;
 
 		if (text != null) {
-
+			result=text.replaceAll("&", "&amp;");
 			result = text.replaceAll(">", "&gt;");
-
 			result = result.replaceAll("<", "&lt;");
-
 			result = result.replaceAll("'", "\'");//"&acute;");
 			result = result.replaceAll("\"", "&quot;");
+			
 		}
 
 		return result;
 
 	}
-	public static String getDescParsed(String str)
+	public static String getDescParsed(String str) 
 	{
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];

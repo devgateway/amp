@@ -42,7 +42,7 @@ public class ActivitySaveTrigger extends Trigger {
 	e.getParameters().put(PARAM_NAME,act.getName());
 	e.getParameters().put(PARAM_CREATED_DATE, act.getCreatedDate());
 	e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator()); 
-	e.getParameters().put(PARAM_URL,"aim/viewChannelOverview.do~tabIndex=0~ampActivityId="+act.getAmpActivityId());
+	e.getParameters().put(PARAM_URL,"aim/selectActivityTabs.do~ampActivityId="+act.getAmpActivityId());
 	return e;
     }
 

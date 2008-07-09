@@ -32,7 +32,7 @@ public class NotApprovedActivityTrigger extends Trigger {
         }
 
         e.getParameters().put(PARAM_SAVE_DATE, new Date());
-        e.getParameters().put(PARAM_URL,"aim/viewChannelOverview.do~tabIndex=0~ampActivityId="+act.getAmpActivityId());
+        e.getParameters().put(PARAM_URL,"aim/selectActivityTabs.do~ampActivityId="+act.getAmpActivityId());
     return e;
     }
 

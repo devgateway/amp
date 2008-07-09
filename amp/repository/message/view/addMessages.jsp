@@ -223,36 +223,34 @@
 							</tr>
 							<tr>
 								<td noWrap vAlign="top">
-                                                                    <table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
-                                                                        <tr>				
-                                                                            <td align="center" style="padding: 0px 3px 0px 3px;">
-                                                                                <table width="100%">
-                                                                                    <tr>
-                                                                                        <td  style="height: 5px;"/>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td style="background-color: #CCDBFF;height: 18px;"/>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                       
-                                                                                  <tr>				
-                                                                                      <td>
-													<table width="100%" cellspacing="1" cellpadding="0"   valign="top">
-                                                                                                            <tr>
+                                   <table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
+                                      <tr>				
+                                         <td align="center" style="padding: 0px 3px 0px 3px;">
+                                         	<table width="100%">
+                                            	<tr>
+                                                	<td  style="height: 5px;"/>
+                                                </tr>
+                                                <tr>
+                                                	<td style="background-color: #CCDBFF;height: 18px;"/>
+                                                </tr>
+                                            </table>
+                                         </td>
+                                      </tr>
+                                      <tr>				
+										<td>
+											<table width="100%" cellspacing="1" cellpadding="0"   valign="top">
+                                        		 <tr>
 															<td valign="top" bgcolor="#f4f4f2" align="center">
 																<table width="100%" cellspacing="0" cellpadding="3" >																				
 																	
 																	<tr>
 																		<td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
-                                                                                                                                                <td align="left"><html:text property="messageName" style="width:320px;" styleClass="inp-text" styleId="titleMax"/></td>
+                                                                        <td align="left"><html:text property="messageName" style="width:320px;" styleClass="inp-text" styleId="titleMax"/></td>
 																	</tr>																																					
 																	<tr>
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
-                                                                                                                                                <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax"/></td>
-																	</tr>																				
-																	
+                                                                        <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax"/></td>
+																	</tr>
 																	<tr>
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
@@ -262,43 +260,42 @@
 																			</div>																		
 																		</td>																					
 																	</tr>	
-                                                                                                                                        <tr>
-                                                                                                                                            <td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
-                                                                                                                                            <td align="left"> 
-                                                                                                                                                <html:select property="priorityLevel" styleClass="inp-text" style="width:140px">
-                                                                                                                                                    <html:option value="-1"><digi:trn key="message:selectPriorityLevel">Select Priority level </digi:trn></html:option>
-                                                                                                                                                    <html:option value="1"><digi:trn key="message:priorityLeel:low">low</digi:trn> </html:option>
-                                                                                                                                                    <html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
-                                                                                                                                                    <html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
-                                                                                                                                                </html:select>																												                                                																																												
-                                                                                                                                            </td>
-                                                                                                                                        </tr> 
+                                                                    <tr>
+                                                                    	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
+                                                                        <td align="left"> 
+                                                                        	<html:select property="priorityLevel" styleClass="inp-text" style="width:140px">                                         
+                                                                        		<html:option value="0"><digi:trn key="message:priorityLevel:none">none</digi:trn> </html:option>                                       
+                                                                                <html:option value="1"><digi:trn key="message:priorityLevel:low">low</digi:trn> </html:option>
+                                                                                <html:option value="2"><digi:trn key="message:priorityLevel:medium">Medium</digi:trn> </html:option>
+                                                                                <html:option value="3"><digi:trn key="message:priorityLevel:critical">Critical</digi:trn> </html:option>																							
+                                                                            </html:select>																												                                                																																												
+                                                                         </td>
+                                                                    </tr> 
 																	<tr>
 																		<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																		<td align="left"> 
-                                                                                                                                                    <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
-																							<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
-																							<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
-																						</html:select>																												                                                																																												
-																					</td>
-																				<tr>
-																				</tr>	
-                                                                                                                                                               
-																				<tr>
-																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
-																                    <td>
-																                        <table border="0" >
-																                            <tr>
-																                                <td valign="top">
-																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
-																										<logic:empty name="messageForm" property="teamMapValues">
-																											<option value="-1">No receivers</option>
-																										</logic:empty>
-																										<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
-                                                                                                    	    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
-                                                                                                               	<c:forEach var="team" items="${messageForm.teamMapValues}">
-                                                                                                                   	<logic:notEmpty name="team" property="members">
-                                                                                                                       	<option title="${team.name}" value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">${team.name}</option>
+                                                                        	<html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
+																				<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
+																				<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
+																			</html:select>																												                                                																																												
+																		</td>
+																	<tr>
+																	</tr>	
+																	<tr>
+																		<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+													                    <td>
+													                        <table border="0" >
+													                            <tr>
+													                                <td valign="top">
+													                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
+																							<logic:empty name="messageForm" property="teamMapValues">
+																								<option value="-1">No receivers</option>
+																							</logic:empty>
+																							<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+	                                                                                      	    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
+    `                                                                                           	<c:forEach var="team" items="${messageForm.teamMapValues}">
+                                                                                                    	<logic:notEmpty name="team" property="members">
+     ```	                                                                                              	<option title="${team.name}" value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">${team.name}</option>
                                                                                                                         <c:forEach var="tm" items="${team.members}">
                                                                                                                        		<option title="${tm.memberName}" value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
                                                                                                                          </c:forEach>

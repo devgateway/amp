@@ -8,10 +8,6 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-
-
-
-
 <digi:instance property="messageForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
@@ -40,11 +36,9 @@ background: #FFF;
 //  		window.opener.location.reload();
 //  		window.close();  					
 //	}
-
-
+	
+	
 </script>
-
-
 
 <digi:form action="/messageActions.do">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
@@ -87,13 +81,11 @@ background: #FFF;
 																				<tr>
 																					<td colspan="3" align="right">priority</td>
 																					<td align="left" bgcolor="#ffffff">
-																						<logic:equal name="messageForm" property="priorityLevel" value="-1">None</logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="0">None</logic:equal>
 																						<logic:equal name="messageForm" property="priorityLevel" value="1">low</logic:equal>
 																						<logic:equal name="messageForm" property="priorityLevel" value="2">medium</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="3">Critical</logic:equal>
-																						
-																					</td>
-																					
+																						<logic:equal name="messageForm" property="priorityLevel" value="3">Critical</logic:equal>																						
+																					</td>																					
 																				</tr>
 																				<tr><td colspan="4"></td></tr>
 																				<tr>
@@ -121,23 +113,22 @@ background: #FFF;
 																				<tr>
 																					<td align="left"><b><digi:trn key="message:date">Date</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff">${messageForm.creationDate}</td>
-                                                                                                                                                                        <td colspan="2"></td>
+                                                                                    <td colspan="2"></td>
 																				</tr>
 																				<tr><td colspan="5"></td></tr>
 																				<c:if test="${not empty messageForm.objectURL}">
 																					<tr>
 																						<td align="left" nowrap width="10%"><b><digi:trn key="message:objURL">object URL</digi:trn></b></td>
 																						<td align="left" bgcolor="#ffffff"><a href="${messageForm.objectURL}">click here to view details</a></td>
-                                                                                                                                                                                <td colspan="2"></td>
+                                                                                        <td colspan="2"></td>
 																					</tr>	
 																					<tr><td colspan="4"></td></tr>
 																				</c:if>																					
-                                                                                                                                                                <tr>																					
-                                                                                                                                                                    <td align="center" colspan="4" >
-                                                                                                                                                                        <div>${messageForm.description}</div>
-                                                                                                                                                                    </td>
-                                                                                                                                                                        
-                                                                                                                                                                </tr>
+                                                                                <tr>																					
+                                                                                	<td align="center" colspan="4" >
+                                                                                    	<div>${messageForm.description}</div>
+                                                                                    </td>
+                                                                                </tr>
 																				<tr>
 																					<td colspan="4" align="center">
 																						<!-- <c:if test="${messageForm.className=='m'}">
@@ -150,10 +141,8 @@ background: #FFF;
 																						</c:if>  --> 																						
 																						<c:set var="trnCloseBtn"><digi:trn key="aim:btn:close">Close</digi:trn>	</c:set>
 																						<input type="button" value="${trnCloseBtn }" onclick="closeWindow()" />
-																					</td>
-                                                                                                                                                                       
-																				</tr>
-																				
+																					</td>                                                                                                                                                                       
+																				</tr>																				
 																			</table>
 																		</td>
 																	</tr>

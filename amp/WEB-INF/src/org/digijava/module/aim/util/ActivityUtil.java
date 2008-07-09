@@ -1330,6 +1330,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		AmpActivity result = null;
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
+			session.flush();
+			result = (AmpActivity) session.load(AmpActivity.class, id);
+			session.evict(result);
 			result = (AmpActivity) session.load(AmpActivity.class, id);
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivity with id=" + id + " not found");

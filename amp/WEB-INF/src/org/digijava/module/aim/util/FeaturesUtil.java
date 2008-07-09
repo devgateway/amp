@@ -1148,6 +1148,23 @@ public class FeaturesUtil {
 		}    
 		return;
 	}
+	
+	public static Long insertreturnTemplate(String templateName, Session session) {
+		Transaction tx = null;
+		Long id =null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+			AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
+			ampTemplate.setName(templateName);
+			id = (Long)session.save(ampTemplate);
+			tx.commit();
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}    
+		return id;
+	}
 
 	/**
 	 * @author dan
@@ -1760,8 +1777,13 @@ public class FeaturesUtil {
 		tx = session.beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
-		ampTemplate.getItems().retainAll(modules);
-		ampTemplate.getItems().addAll(modules);
+		if (ampTemplate.getItems()!=null){
+			ampTemplate.getItems().retainAll(modules);
+			ampTemplate.getItems().addAll(modules);
+		}else{
+			ampTemplate.setItems(new TreeSet<AmpModulesVisibility>());
+			ampTemplate.getItems().addAll(modules);
+		}
 		tx.commit();
 		return;
 	}
@@ -1801,8 +1823,14 @@ public class FeaturesUtil {
 		tx = session.beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
-		ampTemplate.getFeatures().retainAll(features);
-		ampTemplate.getFeatures().addAll(features);
+		if (ampTemplate.getFeatures()!=null){
+			ampTemplate.getFeatures().retainAll(features);
+			ampTemplate.getFeatures().addAll(features);
+		}else{
+			ampTemplate.setFeatures(new TreeSet<AmpFeaturesVisibility>());
+			ampTemplate.getFeatures().addAll(features);
+		}
+		
 		tx.commit();
 		return;
 	}
@@ -1822,8 +1850,13 @@ public class FeaturesUtil {
 		tx = session.beginTransaction();
 		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
 				templateId);
-		ampTemplate.getFields().retainAll(fields);
-		ampTemplate.getFields().addAll(fields);
+		if (ampTemplate.getFields()!=null){
+			ampTemplate.getFields().retainAll(fields);
+			ampTemplate.getFields().addAll(fields);
+		}else{
+			ampTemplate.setFields(new TreeSet<AmpFieldsVisibility>());
+			ampTemplate.getFields().addAll(fields);
+		}
 		tx.commit();
 		return;
 	}

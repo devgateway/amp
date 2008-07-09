@@ -467,18 +467,6 @@
 
 											<td>
 
-												<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-
-													<html:option value="MA"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
-
-													<html:option value="DN"><digi:trn key="aim:DONOR">DONOR</digi:trn></html:option>
-
-												</html:select>
-
-											</td>
-
-											<td>
-
 												<html:select property="currency" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="currencyColl">

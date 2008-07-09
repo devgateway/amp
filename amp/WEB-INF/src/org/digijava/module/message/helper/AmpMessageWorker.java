@@ -22,62 +22,92 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.Approval;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.util.AmpMessageUtil;
+import java.util.Collection;
+import java.util.ArrayList;
 
 public class AmpMessageWorker {
 
-    public static void processEvent(Event e) throws Exception{
-    	String triggerClassName=e.getTrigger().getName();
-    	List<TemplateAlert> tempAlerts=AmpMessageUtil.getTemplateAlerts(triggerClassName);
-    	if(tempAlerts!=null && !tempAlerts.isEmpty()){
-    		for (TemplateAlert template : tempAlerts) {
-    			//AmpAlert newAlert=createAlertFromTemplate(template);
-                AmpMessage newMsg=null;
+    public static void processEvent(Event e) throws Exception {
+        String triggerClassName = e.getTrigger().getName();
+        List<TemplateAlert> tempAlerts = AmpMessageUtil.getTemplateAlerts(triggerClassName);
+        if (tempAlerts != null) {
+            for (TemplateAlert template : tempAlerts) {
+                //AmpAlert newAlert=createAlertFromTemplate(template);
+                AmpMessage newMsg = null;
 
-    			AmpAlert newAlert=new AmpAlert();
-                Approval newApproval=new Approval();
+                AmpAlert newAlert = new AmpAlert();
+                Approval newApproval = new Approval();
 
-    			if(e.getTrigger().equals(ActivitySaveTrigger.class)){//<------ Someone created new Activity
-    				newMsg=processActivitySaveEvent(e,newAlert,template);
-    			}else if(e.getTrigger().equals(UserRegistrationTrigger.class)){//<----- Registered New User
-    				newMsg=proccessUserRegistrationEvent(e,newAlert,template);
-    			}else if(e.getTrigger().equals(ActivityDisbursementDateTrigger.class)){
-    				newMsg=processActivityDisbursementDateComingEvent(e,newAlert,template);
-                }else if(e.getTrigger().equals(CalendarEventTrigger.class)){
-    				newMsg=proccessCalendarEvent(e,newAlert,template);
-    			}else if(e.getTrigger().equals(ApprovedActivityTrigger.class)){
-                    newMsg=processApprovedActivityEvent(e,newApproval,template);
-                }else if(e.getTrigger().equals(NotApprovedActivityTrigger.class)){
-                    newMsg=processNotApprovedActivityEvent(e,newApproval,template);
+                if (e.getTrigger().equals(ActivitySaveTrigger.class)) { //<------ Someone created new Activity
+                    newMsg = processActivitySaveEvent(e, newAlert, template);
+                } else if (e.getTrigger().equals(UserRegistrationTrigger.class)) { //<----- Registered New User
+                    newMsg = proccessUserRegistrationEvent(e, newAlert, template);
+                } else if (e.getTrigger().equals(ActivityDisbursementDateTrigger.class)) {
+                    newMsg = processActivityDisbursementDateComingEvent(e, newAlert, template);
+                } else if (e.getTrigger().equals(CalendarEventTrigger.class)) {
+                    newMsg = proccessCalendarEvent(e, newAlert, template);
+                } else if (e.getTrigger().equals(ApprovedActivityTrigger.class)) {
+                    newMsg = processApprovedActivityEvent(e, newApproval, template);
+                } else if (e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
+                    newMsg = processNotApprovedActivityEvent(e, newApproval, template);
                 }
 
-    			AmpMessageUtil.saveOrUpdateMessage(newMsg);
+                AmpMessageUtil.saveOrUpdateMessage(newMsg);
 
-    			//getting states according to tempalteId
-    			//New Requirement for ApprovedActiviti and Activity waiting approval.
-				//only teamLeader(in case approval is needed) and activity creator/updater should get an alert regardless of receivers list in template
-				if(e.getTrigger().equals(ApprovedActivityTrigger.class)||e.getTrigger().equals(NotApprovedActivityTrigger.class)){
-    				AmpMessageState state=new AmpMessageState();
-    				state.setMemberId(newMsg.getSenderId());
-    				createMsgState(state,newMsg);
-    				if(e.getTrigger().equals(NotApprovedActivityTrigger.class)){
-    					AmpTeamMember tm= TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
-    					if(tm.getAmpTeam().getTeamLead()!=null){
-    						Long teamLeaderId=tm.getAmpTeam().getTeamLead().getAmpTeamMemId();
-        					state=new AmpMessageState();
-            				state.setMemberId(teamLeaderId);
-            				createMsgState(state,newMsg);
-    					}          					      				}
-    			}else{
-    				List<AmpMessageState> statesRelatedToTemplate=null;
-        			statesRelatedToTemplate=AmpMessageUtil.loadMessageStates(template.getId());
-        			if(statesRelatedToTemplate!=null && statesRelatedToTemplate.size()>0){
-            			for (AmpMessageState state : statesRelatedToTemplate) {
-            				createMsgState(state,newMsg);
-            			}
-        			}
-    			}
-			}
-    	}
+                //getting states according to tempalteId
+                //New Requirement for ApprovedActiviti and Activity waiting approval.
+                //only teamLeader(in case approval is needed) and activity creator/updater should get an alert regardless of receivers list in template
+                if (e.getTrigger().equals(ApprovedActivityTrigger.class) || e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
+                    AmpMessageState state = new AmpMessageState();
+                    state.setMemberId(newMsg.getSenderId());
+                    createMsgState(state, newMsg);
+                    if (e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
+                        AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(newMsg.getSenderId());
+                        if (tm.getAmpTeam().getTeamLead() != null) {
+                            Long teamLeaderId = tm.getAmpTeam().getTeamLead().getAmpTeamMemId();
+                            state = new AmpMessageState();
+                            state.setMemberId(teamLeaderId);
+                            createMsgState(state, newMsg);
+                        }
+                    }
+                } else if (e.getTrigger().equals(CalendarEventTrigger.class)) {
+                    List<AmpMessageState> statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
+                    if (statesRelatedToTemplate != null) {
+                        for (AmpMessageState state : statesRelatedToTemplate) {
+                            createMsgState(state, newMsg);
+                        }
+                    }
+
+                    Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
+                    AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
+                    Set<AmpCalendarAttendee> att = ampCal.getAttendees();
+                    if (att != null && !att.isEmpty()) {
+                        for (AmpCalendarAttendee ampAtt : att) {
+                            User user=ampAtt.getUser();
+                            if (user != null){
+                                Collection<AmpTeamMember> members=TeamMemberUtil.getTeamMembers(user.getEmail());
+                                if(members!=null){
+                                    for (AmpTeamMember mem : members) {
+                                        AmpMessageState state = new AmpMessageState();
+                                        state.setMemberId(mem.getAmpTeamMemId());
+                                        state.setSenderId(newMsg.getSenderId());
+                                        createMsgState(state, newMsg);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    List<AmpMessageState> statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
+                    if (statesRelatedToTemplate != null) {
+                        for (AmpMessageState state : statesRelatedToTemplate) {
+                            createMsgState(state, newMsg);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -98,7 +128,7 @@ public class AmpMessageWorker {
         alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
         AmpAlert newAlert=createAlertFromTemplate(template, myHashMap,alert);
 
-        String receivers=newAlert.getReceivers();
+        String receivers=new String();
 
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
@@ -106,12 +136,12 @@ public class AmpMessageWorker {
         if (att != null && !att.isEmpty()) {
             for (AmpCalendarAttendee ampAtt : att) {
                 User user=ampAtt.getUser();
-                if (user != null && receivers.indexOf(user.getEmail())<0){
+                if (user != null && newAlert.getReceivers().indexOf(user.getEmail())>-1){
                     receivers+=", "+user.getFirstNames()+" "+user.getLastName()+"<"+user.getEmail()+">";
                 }
             }
         }
-        newAlert.setReceivers(receivers);
+        newAlert.setReceivers(receivers.substring(", ".length()));
 
         return newAlert;
     }

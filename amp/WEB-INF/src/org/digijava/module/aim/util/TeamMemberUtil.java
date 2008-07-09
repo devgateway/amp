@@ -665,7 +665,7 @@ public class TeamMemberUtil {
 		AmpTeamMember member = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select tm from "
 					+ AmpTeamMember.class.getName()
 					+ " tm where (tm.user=:user)";
@@ -678,14 +678,6 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get team Member");
 			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 		return member;
 	}

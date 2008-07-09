@@ -112,7 +112,7 @@ public class DbUtil {
              
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
-			result = text.replaceAll(">", "&gt;");
+			result = result.replaceAll(">", "&gt;");
 			result = result.replaceAll("<", "&lt;");
 			result = result.replaceAll("'", "\'");//"&acute;");
 			result = result.replaceAll("\"", "&quot;");

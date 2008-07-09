@@ -26,9 +26,9 @@
 			</logic:notPresent>
 		</li>
 		
-		<li>
 		
 			<logic:notEmpty name="ampTeam" property="organizations">
+			<li>
 				<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
 				<ul>
 				<logic:iterate id="org" name="ampTeam" property="organizations" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -37,9 +37,11 @@
 					</li>
 				</logic:iterate>
 				</ul>
+			</li>
 			</logic:notEmpty>
 			
 			<logic:notEmpty name="ampTeam" property="childrenWorkspaces">
+			<li>
 				<digi:trn key="aim:childrenWorkspaces">Children (Workspaces)</digi:trn>
 				<ul>
 				<logic:iterate id="team" name="ampTeam" property="childrenWorkspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
@@ -48,10 +50,8 @@
 					</li>
 				</logic:iterate>
 				</ul>
+			</li>
 			</logic:notEmpty>
-			
-		</li>
-		
 		<li><digi:trn key="aim:computation">Computation</digi:trn> : 
 			<logic:present name="ampTeam" property="computation">
 					<logic:equal name="ampTeam" property="computation" value="true">

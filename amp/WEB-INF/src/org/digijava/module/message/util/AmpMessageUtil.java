@@ -212,7 +212,7 @@ public class AmpMessageUtil {
 	/**
 	 * return inbox messages amount for each type of message. if onlyUnred is true, then returns only unread messages amount
 	 */
-	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId,boolean onlyUnread) throws Exception {
+	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId,boolean onlyUnread,boolean hidden) throws Exception {
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
@@ -220,13 +220,14 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=false";
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=:hidden";
 			if(onlyUnread){
 				queryString+=" and state.read=false";
 			}
 			queryString+=" order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
-			query.setParameter("tmId", tmId);			
+			query.setParameter("tmId", tmId);
+                        query.setParameter("hidden", hidden);
 			retValue=((Integer)query.uniqueResult()).intValue();			
 		}catch(Exception ex) {			
 			ex.printStackTrace();
@@ -236,7 +237,7 @@ public class AmpMessageUtil {
 		return retValue;
 	}
 	
-	public static <E extends AmpMessage> int getSentOrDraftMessagesCount(Class<E> clazz,Long tmId,Boolean draft) throws Exception {
+	public static <E extends AmpMessage> int getSentOrDraftMessagesCount(Class<E> clazz,Long tmId,Boolean draft,boolean hidden) throws Exception {
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
@@ -244,9 +245,10 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=false order by msg.creationDate desc";
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=:hidden order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
-			query.setParameter("tmId", tmId);			
+			query.setParameter("tmId", tmId);
+                        query.setParameter("hidden", hidden);
 			retValue=((Integer)query.uniqueResult()).intValue();			
 		}catch(Exception ex) {			
 			ex.printStackTrace();
@@ -262,7 +264,7 @@ public class AmpMessageUtil {
 		List<AmpMessageState> returnValue=null;	
 		int messagesAmount=0;
 		try {
-			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false);
+			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=false";	
@@ -312,7 +314,7 @@ public class AmpMessageUtil {
 		List<AmpMessageState> returnValue=null;	
 		int messagesAmount=0;
 		try {
-			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft);
+			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft,false);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;

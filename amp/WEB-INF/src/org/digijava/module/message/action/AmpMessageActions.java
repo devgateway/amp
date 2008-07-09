@@ -93,31 +93,66 @@ public class AmpMessageActions extends DispatchAction {
 			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());
 			messageForm.setMaxValidityOfMsgCurr(settings.getMaxValidityOfMsg());
 			messageForm.setEmailMsgsCurrent(settings.getEmailMsgs());
-			messageForm.setAllmsg(AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false));
-			
-			
-    	}  else{
-    		messageForm.setMsgRefreshTimeCurr(new Long(-1));
-    	}
-    	int tabIndex=0;
-    	if(request.getParameter("tabIndex")!=null){
-    		tabIndex=Integer.parseInt(request.getParameter("tabIndex"));
-    	}else {
-    		tabIndex=messageForm.getTabIndex();
-    	}  
-    	messageForm.setTabIndex(tabIndex);
-    	
-    	String childTab=null;
-    	if(request.getParameter("childTab")!=null){
-    		childTab=request.getParameter("childTab");
-    	}else {
-    		childTab=messageForm.getChildTab();
-    	}
-    	if(childTab==null){
-    		childTab="inbox";
-    	}
-    	messageForm.setChildTab(childTab);
-    	
+                 int tabIndex = 0;
+                if (request.getParameter("tabIndex") != null) {
+                    tabIndex = Integer.parseInt(request.getParameter("tabIndex"));
+                } else {
+                    tabIndex = messageForm.getTabIndex();
+                }
+                messageForm.setTabIndex(tabIndex);
+
+                String childTab = null;
+                if (request.getParameter("childTab") != null) {
+                    childTab = request.getParameter("childTab");
+                } else {
+                    childTab = messageForm.getChildTab();
+                }
+                if (childTab == null) {
+                    childTab = "inbox";
+                }
+            int count = 0;
+            int hiddenCount = 0;
+            messageForm.setChildTab(childTab);
+            if (tabIndex == 1) { //<-----messages    
+                if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
+                    //how many messages are in db. used for pagination
+                    count = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false);
+                    hiddenCount=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true);
+                } else if (childTab.equalsIgnoreCase("sent")) {
+                    //how many messages are in db. used for pagination
+                    count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false);
+                     hiddenCount = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true);
+
+                } else if (childTab.equalsIgnoreCase("draft")) {
+                    //how many messages are in db. used for pagination
+                    count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,false);
+                    hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), true,true);
+
+                }
+            } else if (tabIndex == 2) {// <--alerts
+                if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
+                    //how many messages are in db. used for pagination
+                    count = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false);
+                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true);
+
+                } else if (childTab.equalsIgnoreCase("sent")) {
+                    //how many messages are in db. used for pagination
+                    count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false);
+                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true);
+
+                } else if (childTab.equalsIgnoreCase("draft")) {
+                    //how many messages are in db. used for pagination
+                    count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,false);
+                    hiddenCount= AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), true,true);
+
+                } else {
+                    messageForm.setMsgRefreshTimeCurr(new Long(-1));
+                }
+
+            }
+            messageForm.setAllmsg(count);
+            messageForm.setHiddenMsgCount(hiddenCount);
+        }
     	return mapping.findForward("showAllMessages");
     }
     
@@ -162,44 +197,44 @@ public class AmpMessageActions extends DispatchAction {
     	if(tabIndex==1){ //<-----messages    
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false);
+    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
     			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page);        		
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),false);
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
     			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(UserMessage.class,teamMember.getMemberId(),-1, false,page);
     		}else if(childTab.equalsIgnoreCase("draft")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),true);
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),true,false);
     			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(UserMessage.class,teamMember.getMemberId(),-1, true,page);
     		}    		
     	}else if(tabIndex==2){// <--alerts
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false);
+    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
     			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page);        		
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),false);
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
     			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1, false,page);
     		}else if(childTab.equalsIgnoreCase("draft")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),true);
+    			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),true,false);
     			allMessages=AmpMessageUtil.loadAllSentOrDraftMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1, true,page);
     		}    		
     	}else if(tabIndex==3){// <---approvals
     		//how many messages are in db. used for pagination
-			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false);
+			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false,false);
     		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(Approval.class,teamMember.getMemberId(),-1,page);    		
     	}else if(tabIndex==4){// <--calendar events
     		//how many messages are in db. used for pagination
-			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false);
+			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false);
     		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page);    		
     	}
     	Collections.reverse(allMessages);
     	messageForm.setMessagesForTm(allMessages);
     	
-    	messageForm.setAllmsg(allMessages.size());
+    	messageForm.setAllmsg(count);
     	
     	messageForm.setTabIndex(tabIndex);
     	
@@ -370,10 +405,10 @@ public class AmpMessageActions extends DispatchAction {
 		int msgType=0;
 		int approvalType=0;
 		int calEventType=0;
-		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true);
-		alertType=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true);
-		approvalType=AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true);
-		calEventType=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(),true);
+		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false);
+		alertType=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false);
+		approvalType=AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true,false);
+		calEventType=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(),true,false);
 		
 		//checking if Any of the inbox is full
 		Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
@@ -443,14 +478,19 @@ public class AmpMessageActions extends DispatchAction {
     */
     public ActionForward removeSelectedMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {    	
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
-    	messagesForm.setDeleteActionWasCalled(true);
+        messagesForm.setDeleteActionWasCalled(true);
+        String[] stateIds = messagesForm.getRemoveStateIds().split(",");
+        for (String id : stateIds) {
+            HttpSession session = request.getSession();
+            TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+            boolean addAtTop = getNextMessage(teamMember.getMemberId(), messagesForm.getTabIndex(), messagesForm.getChildTab());
+            messagesForm.setAddAtTop(addAtTop);
+            //remove message from db
+            AmpMessageUtil.removeMessageState(Long.parseLong(id));
+            
+        }
     	//getting message which will become visible instead of deleted one
-    	HttpSession session = request.getSession();
-    	TeamMember teamMember =(TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-    	boolean addAtTop=getNextMessage(teamMember.getMemberId(),messagesForm.getTabIndex(),messagesForm.getChildTab());
-    	messagesForm.setAddAtTop(addAtTop);
-    	//remove message from db
-    	AmpMessageUtil.removeMessageState(messagesForm.getMsgStateId());	
+    	messagesForm.setRemoveStateIds(null);	
     	return viewAllMessages(mapping, messagesForm, request, response);
     }  
     

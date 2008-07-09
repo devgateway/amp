@@ -18,7 +18,9 @@
 
 <style>
 <!--
-
+.settings{
+    font-size:11px;font-family:Arial,Helvetica,sans-serif;
+}
 #selectedMessagePanel a:link{
      color: #05528B;
      text-decoration:line-through;
@@ -233,27 +235,71 @@ background-color:yellow;
         divBody.setAttribute("visibility","visible");
         divBody.innerHTML=responseText;
 	}
+        function deleteMessageIds() {
+            var chk=document.messageForm.getElementsByTagName('input');
+            var msgIds='';
+            for(var i=0;i<chk.length;i++){
+                if(chk[i].type == 'checkbox'&&chk[i].checked){
+                    msgIds+=chk[i].value+',';
+                }
+            }
+           if(msgIds.length>0){
+               msgIds=msgIds.substring(0,msgIds.length-1);
+           }
+            return msgIds;
+        }
 	
 	function deleteMessage(msgId) {
-		if(deleteMsg()){
+            var flag=false;
+             if(msgId!=null&&deleteMsg()){
+                flag=true;
+            }
+            if(msgId==null){
+                msgId=deleteMessageIds();
+                if(msgId.length==0){
+                    alert("Please select messages");
+                     flag=false;  
+                }
+                else{
+                    if(deleteMsgs()){                                                         
+                         flag=true;  
+                   }
+                }
+                
+            }
+                    
+            
+           
+		if(flag){
 			//remove current element from array
-			var index=getIndexOfElement(msgId);
+                        var idsArray=msgId.split(',');
+                        var tbl=document.getElementById('msgsList');
+                        for(var i=0;i<idsArray.length;i++){
+			var index=getIndexOfElement(idsArray[i]);
 			if(index!=-1){
 				myArray.splice(index,1);	
 				//removing TR from rendered messages list
-				var tbl=document.getElementById('msgsList');			
-				var img=document.getElementById(msgId+'_plus');
+							
+				var img=document.getElementById(idsArray[i]+'_plus');
 				var imgTD=img.parentNode;
 				var msgTR=imgTD.parentNode;
 				tbl.tBodies[0].removeChild(msgTR);
+                        }
+                        }
+                
                                 
                                 /* 
                                  * after we delete row we need to repaint remain rows
                                  *  its also reattachs mouse out event to rows: 
                                  * (returns to row it basic (new) color)
                                  */
-                                var trs=tbl.tBodies[0].rows;
-                                if(trs.length>0){
+                                var trs;
+                               if(tbl.tBodies.length>0){
+                                   trs=tbl.tBodies[0].rows;
+                               }
+                                
+                                if(trs!=null&&trs.length>0){
+                               
                                 var startIndex=0;
                                 if(trs[0].id=='blankRow'){
                                     startIndex=1;
@@ -277,26 +323,30 @@ background-color:yellow;
                                         trs[i]=paintTr(trs[i],i);
                                     }
                                     
+                                
                                 }
                                 }
-                               
 				//removing record from db
 				var url=addActionToURL('messageActions.do');	
 				url+='~actionType=removeSelectedMessage';
 				url+='~editingMessage=false';
-				url+='~msgStateId='+msgId;
+				url+='~removeStateIds='+msgId;
 				url+='~page='+currentPage;			
 				var async=new Asynchronous();
 				async.complete=buildMessagesList;
 				async.call(url);		
-			}	
+				
 		}
 	}
 	
 	function deleteMsg(){
 		return confirm("Are You Sure You Want To Remove This Message ?");
 	}
-	
+        
+        function deleteMsgs(){
+		return confirm("Are You Sure You Want To Remove Selected Messages ?");
+	}
+        
 	function getIndexOfElement(elemId){
 		var index=-1;
 		for(var i=0;i<myArray.length;i++){
@@ -630,7 +680,7 @@ background-color:yellow;
                       msgName=message.getAttribute('name');
                  }
                 if(fwdOrEditDel){
-                    nameTD.width='80%';}
+                    nameTD.width='70%';}
                 else{
                     nameTD.width='95%';
                 }
@@ -819,6 +869,16 @@ background-color:yellow;
 		//deleteTD.innerHTML='<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId='+msgId+'">'+deleteBtn+'</digi:link>';
 		deleteTD.innerHTML='<a href="javascript:deleteMessage(\''+msgId+'\')" style="cursor:pointer; text-decoration:underline; color: blue" title="'+deleteClick+'" ><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>';
 		msgTr.appendChild(deleteTD);
+                //delete link
+		var deleteTDCheckbox=document.createElement('TD');
+		deleteTDCheckbox.width='10%';
+		deleteTDCheckbox.align='center';
+                deleteTDCheckbox.vAlign="top";
+                var deleteCheckbox=document.createElement('input');
+                deleteCheckbox.type='checkbox';
+		deleteCheckbox.value=msgId;
+                deleteTDCheckbox.appendChild(deleteCheckbox);
+		msgTr.appendChild(deleteTDCheckbox);
                 }
 					
 		return msgTr;			
@@ -1093,35 +1153,42 @@ $(document).ready(function(){
                                                                                 </UL>
 											</div>
 									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
-			                                        <table  cellpadding="4" cellspacing="4" style="clear:both; padding:4px; border:silver dotted 1px; " >
+			                                        <table  cellpadding="4" cellspacing="4" style="clear:both; padding:4px; border:silver dotted 1px; ">
 														<tr>
-															<td colspan="4">
-																<b>Total of Massages</b>:		
+															<td colspan="4" class="settings" nowrap>
+																<strong>Total Number</strong>:		
 															</td>
-															<td colspan="4">
-																<c:if test="${messageForm.allmsg != 0}">
+															<td colspan="4" class="settings" id="totalNumber">
+																
 																	${messageForm.allmsg}
-																</c:if>
-																<c:if test="${messageForm.allmsg == 0}">
-																	(No of messages)
-																</c:if>		
+																
+															</td>
+														</tr>
+                                                                                                                <tr>
+															<td colspan="4" class="settings" nowrap>
+																<strong>Total Number Of Hidden </strong>:		
+															</td>
+															<td colspan="4" class="settings">
+																
+																	${messageForm.hiddenMsgCount}
+																
+																
+																	
 															</td>
 														</tr>
 														<tr>
-															<td colspan="4">
-																<b>Admin Settings</b>:
+															<td colspan="4" class="settings" nowrap>
+																<strong>Admin Settings</strong>:
 														
 															</td>
-															<td colspan="4">
-																	<b>Message Refresh Time(minutes)</b>: ${messageForm.msgRefreshTimeCurr}|
-																	<b>Message Storage Per Message Type</b>: ${messageForm.msgStoragePerMsgTypeCurr}|
-																	<b>Days of Advance Alert Warnings</b>: ${messageForm.daysForAdvanceAlertsWarningsCurr}|
-																	<b>Maximum validate</b>: ${messageForm.maxValidityOfMsgCurr}|
-																	<b>Email Alerts</b>:
-																	<c:if test="${messageForm.emailMsgsCurrent==-1}">
-                                                                                &nbsp;
-																	</c:if>
-																	<c:if test="${messageForm.emailMsgsCurrent==0}">
+															<td colspan="4" class="settings" id="adimSettings">
+																	Message Refresh Time(minutes): ${messageForm.msgRefreshTimeCurr}|
+																	Message Storage Per Message Type: ${messageForm.msgStoragePerMsgTypeCurr}|
+																	Days of Advance Alert Warnings: ${messageForm.daysForAdvanceAlertsWarningsCurr}|
+																	Maximum validate: ${messageForm.maxValidityOfMsgCurr}|
+																	Email Alerts:
+																	
+																	<c:if test="${empty messageForm.emailMsgsCurrent ||messageForm.emailMsgsCurrent==0}">
 																		<digi:trn key="message:No">No</digi:trn>
 																	</c:if>
 																	<c:if test="${messageForm.emailMsgsCurrent==1}">
@@ -1163,6 +1230,9 @@ $(document).ready(function(){
 									<TR id="paginationPlace"><TD colspan="4"></TD></TR>			
 								</TABLE>
 							</TD>
+                                                        </TR>
+                                                          <TR >
+                                                              <TD><input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>"/></TD>
                                                         </TR>
                                                         <TR >
                                                             <TD>&nbsp;</TD>

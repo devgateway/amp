@@ -49,11 +49,17 @@ public class AmpMessageForm extends ActionForm {
 	private String selectedAct;
 	
 	private String [] allPages;
+
+  
 	private String page;
 	private String lastPage;
 	private int pagesToShow;
 	private int offset;
-	
+        private String removeStateIds;
+        
+        private int hiddenMsgCount;
+
+      
 	
 	/**
 	 * used to separate different kinds of messages
@@ -549,6 +555,23 @@ public class AmpMessageForm extends ActionForm {
 		public void setReceivesrsTheamName(List<ReciverName> receivesrsTheamName) {
 			this.receivesrsTheamName = receivesrsTheamName;
 		}
+                
+                public int getHiddenMsgCount() {
+                    return hiddenMsgCount;
+                }
+
+                public void setHiddenMsgCount(int hiddenMsgCount) {
+                    this.hiddenMsgCount = hiddenMsgCount;
+                }
+                
+               public String getRemoveStateIds() {
+                    return removeStateIds;
+                }
+
+                public void setRemoveStateIds(String removeStateIds) {
+                    this.removeStateIds = removeStateIds;
+                }
+
 
 	
 	}

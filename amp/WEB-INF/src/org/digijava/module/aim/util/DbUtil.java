@@ -109,7 +109,7 @@ public class DbUtil {
            public static String filter(String text) {
 
 		String result = null;
-
+             
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = text.replaceAll(">", "&gt;");
@@ -118,6 +118,7 @@ public class DbUtil {
 			result = result.replaceAll("\"", "&quot;");
 			
 		}
+                
 
 		return result;
 

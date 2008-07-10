@@ -8,6 +8,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %> 
+            
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -32,6 +34,7 @@
 </logic:present>
 
 <script type="text/javascript">
+<!--
 function clearDefault(editBox)
 {
 		if(editBox.value=='Amount') editBox.value='';
@@ -79,6 +82,7 @@ function validate(){
         alert("${errMsgSelectCurrency}");
             return false;
         }
+        mySaveReportEngine.saveContract();
         return true;
     }
 
@@ -90,18 +94,167 @@ function selectOrganisation1() {
 		document.aimEditActivityForm.submit();
 }
 
+
+
+var responseSuccess = function(o){ 
+/* Please see the Success Case section for more
+ * details on the response object's properties.
+ * o.tId
+ * o.status
+ * o.statusText
+ * o.getResponseHeader[ ]
+ * o.getAllResponseHeaders
+ * o.responseText
+ * o.responseXML
+ * o.argument
+ */
+	var response = o.responseText; 
+	var content = document.getElementById("myContractContent");
+    //response = response.split("<!")[0];
+	content.innerHTML = response;
+	showAddContract();
+}
+	 
+var responseFailure = function(o){ 
+// Access the response object's properties in the 
+// same manner as listed in responseSuccess( ). 
+// Please see the Failure Case section and 
+// Communication Error sub-section for more details on the 
+// response object's properties.
+	alert("Connection Failure!"); 
+}  
+var callback = 
+{ 
+	success:responseSuccess, 
+	failure:responseFailure 
+};
+
+
+function getContractDisbursments(){
+	var divId = document.getElementById("ContractDisbursmentsList");
+	var ret = "";
+	if (divId != null){
+		var elems = divId.getElementsByTagName("input");
+		
+		for (var i=0; i<elems.length; i++) {
+			if (elems[i].type != "checkbox"){
+				ret += elems[i].name + "=" + elems[i].value + "&";
+			}
+		}
+		elems = divId.getElementsByTagName("select");
+		for (var i=0; i<elems.length; i++) {
+			ret += elems[i].name + "=" + elems[i].selectedIndex;
+		}	
+	}
+	return ret;
+}
+
+function generateFields(){
+	var ret = "";
+	ret =			    "contractName="+document.getElementsByName("contractName")[0].value+"&"
+						+ "description="+document.getElementsByName("description")[0].value+"&"
+						+ "activityCategoryId="+document.getElementsByName("activityCategoryId")[0].value+"&"
+						+ "typeId="+document.getElementsByName("typeId")[0].value+"&"
+						+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
+						+ "contractValidity="+document.getElementsByName("contractValidity")[0].value+"&"
+						+ "statusId="+document.getElementsByName("statusId")[0].value+"&"
+						+ "signatureOfContract="+document.getElementsByName("signatureOfContract")[0].value+"&"
+						+ "contractCompletion="+document.getElementsByName("contractCompletion")[0].value+"&"
+						+ "contractingOrganizationText="+document.getElementsByName("contractingOrganizationText")[0].value+"&"
+						+ "totalAmount="+document.getElementsByName("totalAmount")[0].value+"&"
+						+ "totalAmountCurrency="+document.getElementsByName("totalAmountCurrency")[0].value+"&"
+						+ "totalECContribIBAmount="+document.getElementsByName("totalECContribIBAmount")[0].value+"&"
+						+ "totalECContribIBCurrency="+document.getElementsByName("totalECContribIBCurrency")[0].value+"&"
+						+ "totalECContribINVAmount="+document.getElementsByName("totalECContribINVAmount")[0].value+"&"
+						+ "totalECContribINVCurrency="+document.getElementsByName("totalECContribINVCurrency")[0].value+"&"
+						+ "totalNationalContribCentralAmount="+document.getElementsByName("totalNationalContribCentralAmount")[0].value+"&"
+						+ "totalNationalContribCentralCurrency="+document.getElementsByName("totalNationalContribCentralCurrency")[0].value+"&"
+						+ "totalNationalContribIFIAmount="+document.getElementsByName("totalNationalContribIFIAmount")[0].value+"&"
+						+ "totalNationalContribIFICurrency="+document.getElementsByName("totalNationalContribIFICurrency")[0].value+"&"
+						+ "totalNationalContribRegionalAmount="+document.getElementsByName("totalNationalContribRegionalAmount")[0].value+"&"
+						+ "totalNationalContribRegionalCurrency="+document.getElementsByName("totalNationalContribRegionalCurrency")[0].value+"&"
+						+ "totalPrivateContribAmount="+document.getElementsByName("totalPrivateContribAmount")[0].value+"&"
+						+ "totalPrivateContribCurrency="+document.getElementsByName("totalPrivateContribCurrency")[0].value+"&"
+						+ "dibusrsementsGlobalCurrency="+document.getElementsByName("dibusrsementsGlobalCurrency")[0].value
+						+ "&" + getContractDisbursments()
+						;
+	
+	return ret;
+}
+
 function addDisb() {
-	<digi:context name="addFields" property="context/module/moduleinstance/editIPAContract.do?addFields=true" />
-	document.aimIPAContractForm.action = "<%=addFields%>";
-	document.aimIPAContractForm.target = "_self";
-	document.aimIPAContractForm.submit();
+	var postString		= "addFields=true&"+generateFields();
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
+
+function orgsAdded() {
+	var postString		= generateFields();
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+}
+
+function delOrgs() {
+	var postString		= "removeOrgs=true&" + getCheckedFields("selOrgs")+"&"+generateFields();
+	alert(getCheckedFields("selOrgs"));
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
+}
+
+function getCheckedFields(name) {
+	var ret			= "";
+	//var ulEl		= document.getElementById( ulId );
+	//var fields		= ulEl.getElementsByTagName( "input" );
+	
+	var elems = document.getElementsByName(name);
+	
+	for ( var i=0; i<elems.length; i++ ) {
+		if (elems[i].checked){
+			ret += name+"=";
+			ret +=elems[i].value;//"true";
+			if ( i < elems.length-1 )
+				ret += "&";
+		}
+		//else
+		//    ret +="false";
+	}
+	return ret;	
+}
+
 function delDisb() {
-	<digi:context name="addFields" property="context/module/moduleinstance/editIPAContract.do?removeFields=true" />
-	document.aimIPAContractForm.action = "<%=addFields%>";
-	document.aimIPAContractForm.target = "_self";
-	document.aimIPAContractForm.submit();
+	var postString		= "removeFields=true&" + getCheckedFields("selContractDisbursements")+"&"+generateFields();
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
 }
+
+
+
+
+function getContractActivityCategoryId() {
+	return aimIPAContractForm.activityCategoryId.value;
+}
+
+function getContractActivityCategoryId() {
+	return aimIPAContractForm.activityCategoryId.value;
+}
+
+
+function SaveReportEngine ( savingMessage, failureMessage ) {
+;
+}
+
+SaveReportEngine.prototype.success		= function (o) {
+	window.location.replace(window.location.href);
+}
+SaveReportEngine.prototype.failure			= function(o) {
+	alert("Could not connect!");
+}
+
+SaveReportEngine.prototype.saveContract	= function () {
+	var postString		= "save=true&"+generateFields();
+	//alert (postString);
+	
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
+}
+
+mySaveReportEngine = new SaveReportEngine();
+-->
 </script>
 
 <!-- code for rendering that nice calendar -->
@@ -194,7 +347,7 @@ function delDisb() {
          </field:display>
          
          
-	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
+	<tr><td id="calendarPosition" colspan="2" bgcolor="#006699" class="textalb" align="center">
 		<b><digi:trn key="aim:IPA:newPopup:details">Details</digi:trn></b>
 	</td></tr>
          
@@ -208,7 +361,7 @@ function delDisb() {
 			</td>
 			<td align="left">
 				<html:text readonly="true" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
-				<a id ="startOfTenderingDate" href='javascript:pickDateById("startOfTenderingDate","startOfTendering")'>
+				<a id ="startOfTenderingDate" href='javascript:pickDateByIdDxDy("calendarPosition","startOfTendering",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 				&nbsp;&nbsp;
@@ -221,7 +374,7 @@ function delDisb() {
 			</td>
 			<td align="left">
 				<html:text readonly="true" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
-				<a id="contractValidityDate" href='javascript:pickDateById("contractValidityDate","contractValidity")'>
+				<a id="contractValidityDate" href='javascript:pickDateByIdDxDy("calendarPosition","contractValidity",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 				&nbsp;&nbsp;
@@ -253,7 +406,7 @@ function delDisb() {
 			</td>
 			<td align="left">
 				<html:text readonly="true" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
-				<a id="signatureOfContractDate" href='javascript:pickDateById("signatureOfContractDate","signatureOfContract")'>
+				<a id="signatureOfContractDate" href='javascript:pickDateByIdDxDy("calendarPosition","signatureOfContract",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
@@ -264,7 +417,7 @@ function delDisb() {
 			</td>
 			<td align="left">
 				<html:text readonly="true" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
-				<a id="contractCompletionDate" href='javascript:pickDateById("contractCompletionDate","contractCompletion")'>
+				<a id="contractCompletionDate" href='javascript:pickDateByIdDxDy("calendarPosition","contractCompletion",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
@@ -273,26 +426,40 @@ function delDisb() {
 	<tr>
 		<td colspan="6" align="left">
 			<field:display name="Contract Organization" feature="Contracting">
-			<a style="cursor:pointer; color: blue; font-size: x-small;" onClick="addOrg()" /> 
-				<digi:trn key="aim:IPA:newPopup:addOrganization">Add Organization</digi:trn>
-			</a>
-			&nbsp;	
-			<a style="cursor:pointer; color: blue; font-size: x-small;" onClick="delOrg()" /> 
-				<digi:trn key="aim:IPA:newPopup:deleteSelected">Delete Selected</digi:trn>
-			</a>
-			<!-- 
-				<b><digi:trn key="aim:IPA:popup:contractingOrg">Contracting Organisation:</digi:trn></b>
-		         <html:select property="contrOrg" styleClass="inp-text">
-					<option value="-1"><digi:trn key="aim:selectOrganisation">Select Organisation</digi:trn></option>
-					<logic:iterate id="actOrg" name="aimIPAContractForm" property="organisations">
-						<html:option value="${actOrg.ampOrgId}">${actOrg.name}</html:option>			
-					</logic:iterate>
-					</html:select>
-			 -->
+				<aim:addOrganizationButton form="${aimIPAContractForm}" collection="organisations"
+										   refreshParentDocument="false" callBackFunction="orgsAdded()" useClient="false">
+					<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
+				</aim:addOrganizationButton>
+
+				&nbsp;
+				<html:button styleClass="dr-menu" property="deleteOrgs" onclick="delOrgs();">
+					<digi:trn key="aim:IPA:newPopup:deleteSelected">Delete Selected</digi:trn>
+				</html:button>	
 			</field:display>
-		    
 		</td>
 	</tr>
+	<tr>
+		<td colspan="6" align="left">
+			<table>
+				<c:forEach items="${aimIPAContractForm.organisations}" var="selectedOrganizations" varStatus="selIdx">
+					<c:if test="${!empty selectedOrganizations.ampOrgId}">
+						<tr>
+							<td align="left" width=3>
+								<html:multibox property="selOrgs" >
+									<c:out value="${selIdx.count}"/>
+								</html:multibox>
+							</td>
+							<td align="left" width="367">
+								<c:out value="${selectedOrganizations.name}"/>
+							</td>
+						</tr>
+					</c:if>	
+				</c:forEach>
+			</table>
+		</td>
+	</tr>
+	
+	
 	<field:display name="Contracting Organization Text" feature="Contracting">
 		<tr>
 			<td align="left">
@@ -458,15 +625,15 @@ function delDisb() {
 	<tr>
 		<td colspan="2" align="left">
 			<field:display name="Contracting Add Disbursement" feature="Contracting">
-				<a style="cursor:pointer; color: blue; font-size: x-small;" onClick="addDisb()" /> 
+				<html:button styleClass="dr-menu" property="adddisb" onclick="addDisb()">
 					<digi:trn key="aim:IPA:newPopup:addDisbursement">Add Disbursement</digi:trn>
-				</a>
+				</html:button>
 			</field:display>
 			&nbsp;	
 			<field:display name="Delete Selected" feature="Contracting">
-				<a style="cursor:pointer; color: blue; font-size: x-small;" onClick="delDisb()" /> 
+				<html:button styleClass="dr-menu" property="delDisb" onclick="delDisb()">
 					<digi:trn key="aim:IPA:newPopup:deleteSelected">Delete Selected</digi:trn>
-				</a>
+				</html:button>			
 			</field:display>				
 		</td>
 	</tr>
@@ -486,41 +653,47 @@ function delDisb() {
 	</field:display>
 
 	<logic:notEmpty name="aimIPAContractForm" property="contractDisbursements">
-		<c:forEach  items="${aimIPAContractForm.contractDisbursements}" var="contractDisbursement"  varStatus="idx" >
-			<tr>
-			<td align="left" colspan="2">
-				<html:hidden property="${contractDisbursement}" value="${id}"/>
-				<html:multibox property="selContractDisbursements" value="${idx.count}"/>
-				&nbsp;
-				<html:select indexed="true" name="contractDisbursement" property="adjustmentType">
-					<html:option value="0"><digi:trn key="aim:ipa:popup:actual"> Actual</digi:trn></html:option>
-					<html:option value="1"><digi:trn key="aim:ipa:popup:planned">Planned</digi:trn></html:option>							
-				</html:select>
-				&nbsp;
-				<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
-				&nbsp;
-				<html:select name="contractDisbursement" indexed="true" property="currCode" styleClass="inp-text">
-					<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
-				</html:select>
-				&nbsp;
-				<html:text readonly="true" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
-				<a id="image${idx.count}" href='javascript:pickDateById("image${idx.count}","date${idx.count}")'>
-					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-				</a>
+		<tr>
+			<td colspan="2">
+				<table id="ContractDisbursmentsList">
+					<c:forEach  items="${aimIPAContractForm.contractDisbursements}" var="contractDisbursement"  varStatus="idx" >
+						<tr>
+						<td align="left" colspan="2">
+							<html:hidden property="${contractDisbursement}" value="${id}"/>
+							&nbsp;
+							<html:multibox property="selContractDisbursements" value="${idx.count}"/>
+							<html:select indexed="true" name="contractDisbursement" property="adjustmentType">
+								<html:option value="0"><digi:trn key="aim:ipa:popup:actual"> Actual</digi:trn></html:option>
+								<html:option value="1"><digi:trn key="aim:ipa:popup:planned">Planned</digi:trn></html:option>							
+							</html:select>
+							&nbsp;
+							<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
+							&nbsp;
+							<html:select name="contractDisbursement" indexed="true" property="currCode" styleClass="inp-text">
+								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
+							</html:select>
+							&nbsp;
+							<html:text readonly="true" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
+							<a id="image${idx.count}" href='javascript:pickDateByIdDxDy("calendarPosition","date${idx.count}",-250,80)'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+							</a>
+						</td>
+						</tr>
+					</c:forEach>
+				</table>
 			</td>
-			</tr>
-		</c:forEach>
+		</tr>
 	</logic:notEmpty>						
 	</field:display>
 	
 	<tr>
-		<td colspan="2" align="left">
+		<td colspan="2" align="center">
 			<field:display name="Contracting Save Button" feature="Contracting">
-				<html:submit styleClass="dr-menu" property="save" onclick="return validate()"><digi:trn key="aim:save">Save</digi:trn></html:submit>
+				<html:button property="submit" styleClass="dr-menu" onclick="validate()"><digi:trn key="aim:save">Save</digi:trn></html:button>
 			</field:display>
 			&nbsp;&nbsp;
 			<field:display name="Contracting Cancel Saving" feature="Contracting">
-				<html:button styleClass="dr-menu" property="cancel" onclick="window.close();">
+				<html:button styleClass="dr-menu" property="cancel" onclick="hideAddContract()">
 					<digi:trn key="aim:addEditActivityCancel">Cancel</digi:trn>
 				</html:button>
 			</field:display>

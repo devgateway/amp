@@ -18,27 +18,35 @@ public class IPAContractForm extends ActionForm  {
 	
 	private List<IPAContractDisbursement> contractDisbursements;
 	private Collection<AmpCategoryValue> activitiyCategories;
-        private Collection<AmpCategoryValue> statuses;
-        private Collection<AmpCategoryValue> types;
-        private Long statusId;
-        private Long typeId;
+    private Collection<AmpCategoryValue> statuses;
+    private Collection<AmpCategoryValue> types;
+    private Long statusId;
+    private Long typeId;
 
-        public Long getStatusId() {
-            return statusId;
-        }
+    public Long getStatusId() {
+        return statusId;
+    }
 
-        public void setStatusId(Long statusId) {
-            this.statusId = statusId;
-        }
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
+    }
 
-        public Collection<AmpCategoryValue> getStatuses() {
-            return statuses;
-        }
+    public Collection<AmpCategoryValue> getStatuses() {
+        return statuses;
+    }
 
-        public void setStatuses(Collection<AmpCategoryValue> statuses) {
-            this.statuses = statuses;
-        }
-	
+    public void setStatuses(Collection<AmpCategoryValue> statuses) {
+        this.statuses = statuses;
+    }
+
+	public Long[] getSelOrgs() {
+		return selOrgs;
+	}
+
+	public void setSelOrgs(Long[] selOrgs) {
+		this.selOrgs = selOrgs;
+	}
+
 	public Collection<AmpCategoryValue> getActivitiyCategories() {
 		return activitiyCategories;
 	}
@@ -47,7 +55,7 @@ public class IPAContractForm extends ActionForm  {
 		this.activitiyCategories = activitiyCategories;
 	}
 
-	 public IPAContractDisbursement getContractDisbursement(int index) {
+	public IPAContractDisbursement getContractDisbursement(int index) {
 		int currentSize = contractDisbursements.size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {
@@ -100,45 +108,58 @@ public class IPAContractForm extends ActionForm  {
     private Double executionRate;
 	
 	private List disbursements;
-        private List<AmpOrganisation> organisations;
-        private Long contrOrg;
-        private Integer indexId;
-        private Long selContractDisbursements[];
+    private List<AmpOrganisation> organisations;
+	private Long selOrgs[] = null;
 
-        public Long[] getSelContractDisbursements() {
-            return selContractDisbursements;
-        }
+    private Long contrOrg;
+    private Integer indexId;
+    private Long selContractDisbursements[];
 
-        public void setSelContractDisbursements(Long[] selContractDisbursements) {
-            this.selContractDisbursements = selContractDisbursements;
-        }
-        
+    public Long[] getSelContractDisbursements() {
+        return selContractDisbursements;
+    }
 
-        public Integer  getIndexId() {
-            return indexId;
-        }
+    public void setSelContractDisbursements(Long[] selContractDisbursements) {
+        this.selContractDisbursements = selContractDisbursements;
+    }
+    
 
-        public void setIndexId(Integer indexId) {
-            this.indexId = indexId;
-        }
-        
-       
+    public Integer  getIndexId() {
+        return indexId;
+    }
 
-        public Long getContrOrg() {
-            return contrOrg;
-        }
+    public void setIndexId(Integer indexId) {
+        this.indexId = indexId;
+    }
+    
+   
 
-        public void setContrOrg(Long contrOrg) {
-            this.contrOrg = contrOrg;
-        }
+    public Long getContrOrg() {
+        return contrOrg;
+    }
 
-        public List getOrganisations() {
-            return organisations;
-        }
+    public void setContrOrg(Long contrOrg) {
+        this.contrOrg = contrOrg;
+    }
 
-        public void setOrganisations(List organisations) {
-            this.organisations = organisations;
-        }
+    public List getOrganisations() {
+        return organisations;
+    }
+    
+	public AmpOrganisation getOrganisation(int index) {
+		int currentSize = organisations.size();
+		if (index >= currentSize) {
+			for (int i = 0; i <= index - currentSize; i++) {
+				organisations.add(new AmpOrganisation());
+			}
+		}
+		return organisations.get(index);
+	}
+
+
+    public void setOrganisations(List organisations) {
+        this.organisations = organisations;
+    }
 
 	public String getContractCompletion() {
 		return contractCompletion;
@@ -324,126 +345,127 @@ public class IPAContractForm extends ActionForm  {
 		this.activityCategoryId = activityCategoryId;
 	}
         
-        public Collection<AmpCategoryValue> getTypes() {
-            return types;
-        }
+    public Collection<AmpCategoryValue> getTypes() {
+        return types;
+    }
 
-        public void setTypes(Collection<AmpCategoryValue> types) {
-            this.types = types;
-        }
+    public void setTypes(Collection<AmpCategoryValue> types) {
+        this.types = types;
+    }
+    
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        if (request.getParameter("new")!=null && request.getParameter("addFields")==null){
+        contractDisbursements=null;
+        activityCategoryId = null;
+        contractingOrganizationText = null;
+        contractName = null;
+        description = null;
         
-        public Long getTypeId() {
-            return typeId;
-        }
+        contractValidity = null;
+        startOfTendering = null;
 
-        public void setTypeId(Long typeId) {
-            this.typeId = typeId;
+        signatureOfContract = null;
+        contractCompletion = null;
+
+        totalECContribIBAmount = null;
+        totalECContribIBCurrency = null;
+        
+        totalAmount = null;
+        totalAmountCurrency = null;
+        dibusrsementsGlobalCurrency=null;
+        executionRate=null;
+
+        totalECContribINVAmount = null;
+        totalECContribINVCurrency = null;
+
+        totalNationalContribCentralAmount = null;
+        totalNationalContribCentralCurrency = null;
+
+        totalNationalContribRegionalAmount = null;
+        totalNationalContribRegionalCurrency = null;
+
+        totalNationalContribIFIAmount = null;
+        totalNationalContribIFICurrency = null;
+
+        totalPrivateContribAmount = null;
+        totalPrivateContribCurrency = null;
+        indexId=null;
+        id=null;
+        statusId=null;
+        activityCategoryId=null;
+        selContractDisbursements=null;
+        contrOrg=null;
+        types=null;
+        typeId=null;
         }
 
         
-        public void reset(ActionMapping mapping, HttpServletRequest request) {
-            if (request.getParameter("new")!=null){
-            contractDisbursements=null;
-	    activityCategoryId = null;
-            contractName = null;
-            description = null;
+    }
 
+	public String getContractValidity() {
+		return contractValidity;
+	}
 
-            startOfTendering = null;
+	public void setContractValidity(String contractValidity) {
+		this.contractValidity = contractValidity;
+	}
 
-            signatureOfContract = null;
-            contractCompletion = null;
+	public String getTotalAmount() {
+		return totalAmount;
+	}
 
-            totalECContribIBAmount = null;
-            totalECContribIBCurrency = null;
-            
-            totalAmount = null;
-            totalAmountCurrency = null;
-            dibusrsementsGlobalCurrency=null;
-            executionRate=null;
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
+	}
 
-            totalECContribINVAmount = null;
-            totalECContribINVCurrency = null;
+	public Long getTotalAmountCurrency() {
+		return totalAmountCurrency;
+	}
 
-            totalNationalContribCentralAmount = null;
-            totalNationalContribCentralCurrency = null;
+	public void setTotalAmountCurrency(Long totalAmountCurrency) {
+		this.totalAmountCurrency = totalAmountCurrency;
+	}
 
-            totalNationalContribRegionalAmount = null;
-            totalNationalContribRegionalCurrency = null;
+	public Long getDibusrsementsGlobalCurrency() {
+		return dibusrsementsGlobalCurrency;
+	}
 
-            totalNationalContribIFIAmount = null;
-            totalNationalContribIFICurrency = null;
+	public void setDibusrsementsGlobalCurrency(Long dibusrsementsGlobalCurrency) {
+		this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
+	}
 
-            totalPrivateContribAmount = null;
-            totalPrivateContribCurrency = null;
-            indexId=null;
-            id=null;
-            statusId=null;
-            activityCategoryId=null;
-            selContractDisbursements=null;
-            contrOrg=null;
-            types=null;
-            typeId=null;
-            }
-	
-            
-        }
+	public Double getTotalDisbursements() {
+		return totalDisbursements;
+	}
 
-		public String getContractValidity() {
-			return contractValidity;
-		}
+	public void setTotalDisbursements(Double totalDisbursements) {
+		this.totalDisbursements = totalDisbursements;
+	}
 
-		public void setContractValidity(String contractValidity) {
-			this.contractValidity = contractValidity;
-		}
+	public Double getExecutionRate() {
+		return executionRate;
+	}
 
-		public String getTotalAmount() {
-			return totalAmount;
-		}
+	public void setExecutionRate(Double executionRate) {
+		this.executionRate = executionRate;
+	}
 
-		public void setTotalAmount(String totalAmount) {
-			this.totalAmount = totalAmount;
-		}
+	public String getContractingOrganizationText() {
+		return contractingOrganizationText;
+	}
 
-		public Long getTotalAmountCurrency() {
-			return totalAmountCurrency;
-		}
-
-		public void setTotalAmountCurrency(Long totalAmountCurrency) {
-			this.totalAmountCurrency = totalAmountCurrency;
-		}
-
-		public Long getDibusrsementsGlobalCurrency() {
-			return dibusrsementsGlobalCurrency;
-		}
-
-		public void setDibusrsementsGlobalCurrency(Long dibusrsementsGlobalCurrency) {
-			this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
-		}
-
-		public Double getTotalDisbursements() {
-			return totalDisbursements;
-		}
-
-		public void setTotalDisbursements(Double totalDisbursements) {
-			this.totalDisbursements = totalDisbursements;
-		}
-
-		public Double getExecutionRate() {
-			return executionRate;
-		}
-
-		public void setExecutionRate(Double executionRate) {
-			this.executionRate = executionRate;
-		}
-
-		public String getContractingOrganizationText() {
-			return contractingOrganizationText;
-		}
-
-		public void setContractingOrganizationText(String contractingOrganizationText) {
-			this.contractingOrganizationText = contractingOrganizationText;
-		}
+	public void setContractingOrganizationText(String contractingOrganizationText) {
+		this.contractingOrganizationText = contractingOrganizationText;
+	}
 
 
 }

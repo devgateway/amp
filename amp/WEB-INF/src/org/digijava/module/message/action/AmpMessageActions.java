@@ -52,6 +52,7 @@ public class AmpMessageActions extends DispatchAction {
 	public static final String ROOT_TAG = "Messaging";
 	public static final String MESSAGES_TAG = "MessagesList";
 	public static final String PAGINATION_TAG = "Pagination";
+        public static final String INFORMATION_TAG = "Information";
 	
     
     public ActionForward fillTypesAndLevels (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {        		
@@ -905,6 +906,10 @@ public class AmpMessageActions extends DispatchAction {
 		result+=" deleteWasCalled=\""+form.isDeleteActionWasCalled()+"\"";
 		result+="/>";
 		result+="</" + PAGINATION_TAG +">";
+                // general information such as hidden message number and inbox message number
+                result+="<" + INFORMATION_TAG + " total=\""+form.getAllmsg()+"\"";
+                result+=" totalHidden=\""+form.getHiddenMsgCount()+"\""+"/>";
+		
         result += "</" + ROOT_TAG + ">";
         return result;
     }

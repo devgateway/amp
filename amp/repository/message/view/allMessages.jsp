@@ -112,10 +112,10 @@ background-color:yellow;
 	var nextPage='<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>';
 	var lastPg='<digi:trn key="message:firstPage">click here to go to last page</digi:trn>';
 	var referenceURL='<digi:trn key="message:referenceURL">Reference URL</digi:trn>';
-    var forwardClick="<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>";
-    var editClick="<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>";
-    var deleteClick="<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>";
-    var viewMessage="<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>";
+    var forwardClick='<digi:trn key="message:ClickForwardMessage"> Click on this icon to forward message&nbsp;</digi:trn>';
+    var editClick='<digi:trn key="message:ClickEditMessage"> Click on this icon to edit message&nbsp;</digi:trn>';
+    var deleteClick='<digi:trn key="message:ClickDeleteMessage"> Click on this icon to delete message&nbsp;</digi:trn>';
+    var viewMessage='<digi:trn key="message:ClickViewMessage"> Click here to view the message</digi:trn>';
 	//used to define whether we just entered page from desktop
 	var firstEntry=0;
 	var currentPage=1;
@@ -475,6 +475,11 @@ background-color:yellow;
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
+                        var informationTag=mainTag.getElementsByTagName('Information')[0];
+                        var totalNumber=document.getElementById('totalNumber');
+                        totalNumber.innerHTML=informationTag.getAttribute("total");
+                        var totalHidden=document.getElementById('totalHidden');
+                        totalHidden.innerHTML=informationTag.getAttribute("totalHidden");
 			//messages start	
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
@@ -1168,7 +1173,7 @@ $(document).ready(function(){
 															<td colspan="4" class="settings" nowrap>
 																<strong>Total Number Of Hidden </strong>:		
 															</td>
-															<td colspan="4" class="settings">
+															<td colspan="4" class="settings" id="totalHidden">
 																
 																	${messageForm.hiddenMsgCount}
 																

@@ -23,7 +23,7 @@
 }
 #selectedMessagePanel a:link{
      color: #05528B;
-     text-decoration:line-through;
+     text-decoration:underline;
     
 }
 #selectedMessagePanel a:hover{
@@ -33,7 +33,7 @@
 }
 
 #selectedMessagePanel .bd { 
-    height: 500px; 
+    height: 600px; 
     /* Apply scrollbars for all browsers. */ 
     overflow: auto; 
 } 
@@ -199,7 +199,7 @@ background-color:yellow;
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
             width:"600px", 
-            height:"510px",
+           
             fixedcenter: true, 
             constraintoviewport: true, 
             underlay:"shadow", 
@@ -920,7 +920,7 @@ $(document).ready(function(){
 	   $("#displaySettingsButton").toggle(function(){
 	     	$("#currentDisplaySettings").show('fast');
 	     	$("#show").hide('fast');
-	     	$("#hidde").css("background", "#FFFFCC" );
+	     	$("#hidde").css("background", "#CCDBFF" );
 	     	$("#hidde").show('fast');
 	   },function(){
 	     	$("#currentDisplaySettings").hide('fast');
@@ -1176,7 +1176,7 @@ $(document).ready(function(){
 									               <div>
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
 														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;">Show more information &gt;&gt;</div>
-														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;">Hidde more information<< </div>
+														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;">Hide more information<< </div>
                                                                                                 </span>
 												   </div>	
                                                                                             </LI>
@@ -1261,8 +1261,8 @@ $(document).ready(function(){
 								</TABLE>
 							</TD>
                                                         </TR>
-                                                          <TR >
-                                                              <TD><input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>"/></TD>
+                                                          <TR>
+                                                              <TD ALIGN="RIGHT"><input type="button" onclick="deleteMessage()" value="<digi:trn key='message:deleteSelMsgs'>Delete Selected Messages</digi:trn>" class="dr-menu" /></TD>
                                                         </TR>
                                                         <TR >
                                                             <TD>&nbsp;</TD>

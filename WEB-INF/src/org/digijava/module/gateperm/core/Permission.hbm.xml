@@ -47,10 +47,13 @@
 			name="org.digijava.module.gateperm.core.CompositePermission"
 			table="PERM_COMP_PERMISSION">
 			<key column="perm_id" />
+			<property name="intersection" column="intersection"
+				type="java.lang.Boolean" />
 			<set name="permissions" table="PERM_COMP_PERMISSION_MAP"
 				cascade="save-update">
 				<cache usage="read-write" />
 				<key column="perm_id" />
+				
 				<many-to-many
 					class="org.digijava.module.gateperm.core.Permission"
 					column="linked_perm_id" />

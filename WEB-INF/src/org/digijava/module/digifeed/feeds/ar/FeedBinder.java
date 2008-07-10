@@ -8,20 +8,18 @@ package org.digijava.module.digifeed.feeds.ar;
 
 import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.digifeed.core.GenericFeedBinder;
-import org.digijava.module.digifeed.feeds.ar.schema.MeasureType;
 import org.digijava.module.digifeed.feeds.ar.schema.ColumnType;
+import org.digijava.module.digifeed.feeds.ar.schema.MeasureType;
 import org.digijava.module.digifeed.feeds.ar.schema.ObjectFactory;
 import org.digijava.module.digifeed.feeds.ar.schema.ReportType;
 import org.digijava.module.digifeed.feeds.ar.schema.Reports;
@@ -66,10 +64,10 @@ public class FeedBinder extends GenericFeedBinder {
 		
 		Iterator i=dbr.getMeasures().iterator();
 		while (i.hasNext()) {
-			AmpMeasures element = (AmpMeasures) i.next();
+			AmpReportMeasures element = (AmpReportMeasures) i.next();
 			MeasureType xmlm=fact.createMeasureType();
-			xmlm.setId(BigInteger.valueOf(element.getMeasureId().longValue()));
-			xmlm.setValue(element.getMeasureName());
+			xmlm.setId(BigInteger.valueOf(element.getMeasure().getMeasureId().longValue()));
+			xmlm.setValue(element.getMeasure().getMeasureName());
 			xmlr.getMeasure().add(xmlm);
 		}
 		

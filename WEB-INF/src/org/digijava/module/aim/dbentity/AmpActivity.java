@@ -31,12 +31,12 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     private Boolean budget;
     private String govAgreementNumber;
 
-    @PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)
+    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     private Long ampActivityId ;
 
 	private String ampId ;
 
-	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL)
+	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL})
 	private String name ;
 	private String description ;
 	private String lessonsLearned;

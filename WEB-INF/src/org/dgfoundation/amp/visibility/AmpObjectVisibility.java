@@ -21,10 +21,10 @@ import org.digijava.module.gateperm.core.Permissible;
  */
 public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable,ClusterIdentifiable {
 
-    	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)
+    @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
 	protected Long id;
 	
-	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL)
+	@PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL,Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID})
 	protected String name;
 	
 	protected Set items;

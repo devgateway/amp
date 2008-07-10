@@ -8,6 +8,7 @@ import java.io.FileFilter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,9 @@ import net.sf.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.gateperm.core.ClusterIdentifiable;
+import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
@@ -55,6 +59,13 @@ public final class PermissionUtil {
 		session.setAttribute(GatePermConst.SCOPE, scope); 
 	    } else scope.clear();
 	    return scope;
+	}
+	
+	public static boolean arrayContains(Object[] a,Object o) {
+		for (int i = 0; i < a.length; i++) {
+			if(o.equals(a[i])) return true;
+		}
+		return false;
 	}
 	
 	public static void putInScope(HttpSession session ,MetaInfo key, Object value) {
@@ -100,6 +111,10 @@ public final class PermissionUtil {
 			}
 		}
 		GatePermConst.availableGatesSingleton=gateFiles.toArray(new Class[0]);
+		GatePermConst.availableGatesBySimpleNames=new Hashtable<String, Class>();
+		for (Class c : gateFiles) 
+			GatePermConst.availableGatesBySimpleNames.put(c.getSimpleName(), c);
+		
 		return GatePermConst.availableGatesSingleton;
 	}
     
@@ -136,6 +151,37 @@ public final class PermissionUtil {
 
     }
 
+    public static Permission findPermissionByName(String name) {
+    	Session session = null;
+
+    	try {
+    	    session = PersistenceManager.getSession();
+    	    Query query = session.createQuery(" from " + Permission.class.getName()+" p WHERE p.name=:permissionName");
+    	    query.setParameter("permissionName", name);
+    	    List list = query.list();
+
+    	    if(list.size()>0) return (Permission) list.get(0);
+    	    return null;
+    	} catch (HibernateException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("HibernateException Exception encountered", e);
+    	} catch (SQLException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("SQLException Exception encountered", e);
+    	} finally { 
+    	    try {
+    		PersistenceManager.releaseSession(session);
+    	    } catch (HibernateException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "HibernateException Exception encountered", e);
+    	    } catch (SQLException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "SQLException Exception encountered", e);
+    	    }
+    	}
+
+        }
+
     
     
     public static List<Permission> getAllUnDedicatedPermissions() {
@@ -167,6 +213,35 @@ public final class PermissionUtil {
 
     }
 
+    
+    public static List<Permission> getAllDedicatedCompositePermissions() {
+    	Session session = null;
+
+    	try {
+    	    session = PersistenceManager.getSession();
+    	    Query query = session.createQuery(" from " + CompositePermission.class.getName() +" p WHERE p.dedicated=true");
+    	    List list = query.list();
+
+    	    return list;
+    	} catch (HibernateException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("HibernateException Exception encountered", e);
+    	} catch (SQLException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("SQLException Exception encountered", e);
+    	} finally { 
+    	    try {
+    		PersistenceManager.releaseSession(session);
+    	    } catch (HibernateException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "HibernateException Exception encountered", e);
+    	    } catch (SQLException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "SQLException Exception encountered", e);
+    	    }
+    	}
+
+        }
     
     
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
@@ -415,6 +490,61 @@ public final class PermissionUtil {
     }
 
     
+    
+    public static Identifiable getIdentifiableByClusterIdentifier(String clusterIdentifier,Class permissibleClass) {
+    	Session session = null;
+    	try {
+    	    session = PersistenceManager.getSession();
+
+    	    //get the cluster identifier (if any) from the db. if the cluster id is not available in the db then instantiating all
+    	    //objects is the only way to get it
+    	    String clusterPropertyName = Permissible.getPermissiblePropertyName(permissibleClass, Permissible.PermissibleProperty.PROPERTY_TYPE_CLUSTER_ID);
+    
+    	    if(clusterPropertyName==null) {
+    	    	 Query query = session.createQuery("SELECT p from " + permissibleClass.getName());
+    	     	 List<ClusterIdentifiable> col = query.list();
+    	     	 for (ClusterIdentifiable clusterIdentifiable : col) {
+					if(clusterIdentifiable.getClusterIdentifier().equals(clusterIdentifier)) return clusterIdentifiable;
+				}
+    	     	return null;
+    	    }
+    	    
+    	    Query query = session.createQuery("SELECT p from " + permissibleClass.getName()
+    		    + " p WHERE p."+clusterPropertyName+"=:objectId");
+    	    query.setParameter("objectId", clusterIdentifier);
+    	  
+    	    List col = query.list();
+
+    	    if (col.size() == 0)
+    		return null;
+
+    	    if (col.size() > 1) {
+    	    	logger.error("Non Unique Cluster Identifier !");
+    	    	throw new RuntimeException("Cluster Identifier "+clusterIdentifier+" identified more than one local object for class "+permissibleClass);
+    	    }
+    	    
+    	    return  (Identifiable) col.get(0);
+
+    	} catch (HibernateException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("HibernateException Exception encountered", e);
+    	} catch (SQLException e) {
+    	    logger.error(e);
+    	    throw new RuntimeException("SQLException Exception encountered", e);
+    	} finally  {
+    	    try {
+    		PersistenceManager.releaseSession(session);
+    	    } catch (HibernateException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "HibernateException Exception encountered", e);
+    	    } catch (SQLException e) {
+    		// TODO Auto-generated catch block
+    		throw new RuntimeException( "SQLException Exception encountered", e);
+    	    }
+    	}
+
+        }
+
     
     
     public static Map<Long, String> getAllPermissibleObjectLabelsForPermissibleClass(Class permClass) {

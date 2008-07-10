@@ -19,7 +19,7 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 public final class GatePermConst {
 	
 	public static Class[] availableGatesSingleton=null;
-	
+	public static Hashtable<String,Class> availableGatesBySimpleNames = null;
 
 	/**
 	 * list here all the available permissibles in the system. Since subclass search

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 import java.util.logging.Level;
@@ -42,6 +43,7 @@ public class IPAContract implements Serializable {
     private Set disbursements;
     private AmpActivity activity;
     private AmpOrganisation organization;
+    private Set<AmpOrganisation> organizations;
     private AmpCategoryValue status;
     private Double totalDisbursements;
     private Double executionRate;
@@ -355,5 +357,13 @@ public class IPAContract implements Serializable {
 
 	public void setContractingOrganizationText(String contractingOrganizationText) {
 		this.contractingOrganizationText = contractingOrganizationText;
+	}
+
+	public Set<AmpOrganisation> getOrganizations() {
+		return organizations;
+	}
+
+	public void setOrganizations(Set<AmpOrganisation> organizations) {
+		this.organizations = organizations;
 	}
 }

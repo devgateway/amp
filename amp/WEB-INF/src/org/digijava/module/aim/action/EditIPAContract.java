@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -239,6 +240,11 @@ public class EditIPAContract extends MultiAction {
             euaf.setTotalPrivateContribCurrency(contract.getTotalPrivateContribCurrency().getAmpCurrencyId());
         }
         else  euaf.setTotalPrivateContribCurrency((long)0);
+        
+        if (contract.getOrganizations() != null){
+        	ArrayList<AmpOrganisation> corgs = new ArrayList<AmpOrganisation>(contract.getOrganizations());
+        	euaf.setOrganisations(corgs);
+        }
         
         String cc=eaf.getCurrCode();
         if (contract.getDisbursements() != null) {
@@ -491,10 +497,6 @@ public class EditIPAContract extends MultiAction {
         eua.setContractName(euaf.getContractName());
         eua.setDescription(euaf.getDescription());
         eua.setContractingOrganizationText(euaf.getContractingOrganizationText());
-        Long orgId = euaf.getContrOrg();
-        if (orgId != null && orgId != -1) {
-            eua.setOrganization(DbUtil.getOrganisation(orgId));
-        }
         if (euaf.getActivityCategoryId() != null) {
             eua.setActivityCategory(CategoryManagerUtil.getAmpCategoryValueFromDb(euaf.getActivityCategoryId()));
         }
@@ -573,6 +575,14 @@ public class EditIPAContract extends MultiAction {
          if (eaf.getContracts() == null) {
                 eaf.setContracts(new ArrayList());
         }
+         
+		
+		if (euaf.getOrganisations() != null){
+			Set<AmpOrganisation> orgs = new HashSet<AmpOrganisation>(euaf.getOrganisations());
+			eua.setOrganizations(orgs);
+		}
+         
+         
         if (euaf.getContractDisbursements() != null) {
             HashSet disbs = new HashSet(euaf.getContractDisbursements());
             eua.setDisbursements(disbs);

@@ -67,6 +67,11 @@
 		<property name="totalPrivateContribAmount" column="total_private_contrib_amount" type="java.lang.Double" />		
 		<many-to-one name="totalPrivateContribCurrency" column="total_private_contrib_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
 
+		
+		<set name="organizations" cascade="none" table="amp_ipa_contracting_organizations">
+			<key column="ipa_contract_id" />
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="organization" />
+		</set>
 			
 		<set name="disbursements" cascade="all-delete-orphan">
 			<key column="ipa_contract_id" />

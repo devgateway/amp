@@ -395,7 +395,7 @@
 					                          <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
 					                               <field:display name="Contract Name" feature="Contracting">
 					                               <tr>
-					                                   <td align="left">
+					                                   <td align="left" width="25%">
 					                                       <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
 					                                   </td>
 					                                   <td>
@@ -472,14 +472,13 @@
 		                                         </field:display>
 		                                        <field:display name="Contract Organization" feature="Contracting">
 			                                         <tr>
-			                                            <td align="left">
+			                                            <td align="left" valign="top">
 			                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
 			                                            </td>
 			                                            <td>
-			                                                <c:if test="${not empty contract.organization}">
-			                                                     ${contract.organization.name}
-			                                                </c:if>
-			                                                
+															<c:forEach items="${contract.organizations}" var="org">
+																<c:out value="${org.name}"/><br/>
+															</c:forEach>			                                                
 			                                            </td>
 			                                        </tr>	
 		                                         </field:display>

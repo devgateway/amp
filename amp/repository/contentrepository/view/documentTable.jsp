@@ -100,70 +100,68 @@
 									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
 								</c:when>
 								<c:otherwise>
-									<c:set var="translation">
-										<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn>
-									</c:set> 
+<!--									<c:set var="translation">-->
+<!--										<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn>-->
+<!--									</c:set> -->
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 									onclick="window.open('${documentData.webLink }')" 
-									onmouseover="Tip('${translation} ${documentData.webLink}')"><img hspace="2" src= "/repository/contentrepository/view/images/link_go.gif" border=0/></a>
+									onmouseover="Tip('<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn> ${documentData.webLink}')"><img hspace="2" src= "/repository/contentrepository/view/images/link_go.gif" border=0/></a>
 								</c:otherwise>
 								</c:choose>
 								
 
-								<c:set var="translation">
-									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>
-								</c:set>
+<!--								<c:set var="translation">-->
+<!--									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>-->
+<!--								</c:set>-->
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>', '<%=documentData.getCmDocType() %>' ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
-								title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
+								title="<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
 								
 								</logic:equal>
 								
 								<c:set var="translationForWindowTitle">
 									<digi:trn key="contentrepository:versionHistoryWindowTitle">Version History</digi:trn>
 								</c:set> 
-								<c:set var="translation">
-									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
-								</c:set> 
+<!--								<c:set var="translation">-->
+<!--									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>-->
+<!--								</c:set> -->
 								<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
-								title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
+								title="<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
 								</logic:equal>
-								
-								
-								<c:set var="translation">
-									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
-								</c:set>
+<!--								<c:set var="translation">-->
+<!--									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>-->
+<!--								</c:set>-->
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
 									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/make_public.gif" border=0></a>
+									title="<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/make_public.gif" border=0></a>
 									</c:if>
 								</logic:equal>
 								
 								
 								<logic:equal name="documentData" property="isPublic" value="true">
-								<c:set var="translation">
-									<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>
-								</c:set>
+<!--								<c:set var="translation">-->
+<!--									<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>-->
+<!--								</c:set>-->
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/make_private.gif" border=0></a>
+									title="<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/make_private.gif" border=0></a>
 								</logic:equal>
 								
 								</logic:equal>
 								
-								<c:set var="translation">
-									<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>
-								</c:set>
+<!--								<c:set var="translation">-->
+<!--									<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>-->
+<!--								</c:set>-->
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
+									title="<digi:trn key="contentrepository:documentManagerDeleteHint">Click here to delete this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
 								</logic:equal>
 								</td>
 							</tr>

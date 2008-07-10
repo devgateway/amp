@@ -309,9 +309,8 @@
 													<c:if test="${aimActivityForm.totalPages  > aimActivityForm.pagesToShow}">
 														<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-aimOrgManagerForm.pagesToShow}"/>
 														</c:if>
-													<c:if test="${aimActivityForm.totalPages < aimActivityForm.pagesToShow}">
-														<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-1}"/>
-													</c:if>
+													
+													<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-1}"/>
 													<c:set target="${urlParamsLast}" property="action" value="getPage"/>
 													<c:set var="translation">
 														<digi:trn key="aim:lastpage">Last Page</digi:trn>
@@ -319,7 +318,7 @@
 													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
 														&gt;&gt; 
 													</digi:link>
-													&nbsp;&nbsp; 
+													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
 												</c:if>
 												<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
 											</td>											

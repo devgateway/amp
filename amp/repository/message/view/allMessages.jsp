@@ -732,10 +732,19 @@ background-color:yellow;
 					var fromTD2=document.createElement('TD');
 					var msgSender=message.getAttribute('from');
                                         if(fromTD2.textContent==undefined){
-                                            fromTD2.innerText=msgSender;
+                                            var mytool=msgSender;
+											var temp_array=mytool.split(";");
+											fromTD2.innerText = temp_array[0];
+                                            
+                                            
                                         }
                                         else{
-                                            fromTD2.textContent=msgSender;
+                                            var mytool=msgSender;
+											var temp_array=mytool.split(";");
+											fromTD2.textContent = temp_array[0];
+                                            
+                                            
+                                            
                                         }
 				fromTR.appendChild(fromTD2);
 			divTblBody.appendChild(fromTR);
@@ -747,13 +756,15 @@ background-color:yellow;
                                 //getting receives
                                 var toTD2=document.createElement('TD');
                                 var msgReceiver=message.getAttribute('to');
-                                var receiver_array=msgReceiver.split(",");
+                                var receiver_array=msgReceiver.split(";");
                                 if(receiver_array.length>5){
                                  msgReceiver="";
                                  for(var j=0;j<5;j++){
-                                    msgReceiver+=receiver_array[j];
+                                   if(receiver_array[j].indexOf("@") != -1){
+                                    	msgReceiver+=receiver_array[j];
+                                    }
                                     if(j!=4){
-                                        msgReceiver+=",";
+                                        msgReceiver+="";
                                     }
                                     else{
                                          msgReceiver+="......";

@@ -477,9 +477,12 @@ background-color:yellow;
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
                         var informationTag=mainTag.getElementsByTagName('Information')[0];
                         var totalNumber=document.getElementById('totalNumber');
-                        totalNumber.innerHTML=informationTag.getAttribute("total");
-                        var totalHidden=document.getElementById('totalHidden');
-                        totalHidden.innerHTML=informationTag.getAttribute("totalHidden");
+                         var totalHidden=document.getElementById('totalHidden');
+                        if(totalNumber!=null&&totalHidden!=null){
+                             totalNumber.innerHTML=informationTag.getAttribute("total");
+                              totalHidden.innerHTML=informationTag.getAttribute("totalHidden");
+                        }
+                       
 			//messages start	
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){

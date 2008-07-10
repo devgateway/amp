@@ -755,7 +755,7 @@
 				var actTDname = document.createElement('TD');
 				var actAname = document.createElement('a');
 				actAname.innerHTML=actList[i].getAttribute('name');
-				var actURL = addActionToURL('showPrinterFriendlyPage.do~edit=true~activityid=');
+				var actURL = addActionToURL('showPrinterFriendlyPage.do?edit=true~activityid=');
 				actURL+=actList[i].getAttribute('id');
 				actAname.href=actURL;
 				actAname.target='_blank';
@@ -1015,7 +1015,7 @@
 		tr.innerHTML=str;
 		par.appendChild(tr);
 	}
-
+        
 	function filterStatus(){
 		var stat = document.getElementsByName('selectedStatuses')[0];
 		selActStatus = stat.value;
@@ -1309,7 +1309,7 @@
 			<table width="100%" border="0" cellpadding="5" cellspacing="0">
 				<tr id="activityListPlace" bgcolor="silver">
 					<td width="100%">
-						<digi:trn key="aim:npd:plannedFor">Planned and Ongoing Activites for:</digi:trn>
+						<digi:trn key="aim:npd:activitesFor">Activites for:</digi:trn>
 						&nbsp;<span id="actListProgname">&nbsp</span>
 					</td>
 					<td>

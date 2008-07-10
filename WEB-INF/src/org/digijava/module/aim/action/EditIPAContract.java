@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.exception.AimException;
@@ -89,7 +90,6 @@ public class EditIPAContract extends MultiAction {
         eaf.setActivitiyCategories(catValues);
         eaf.setStatuses(statuses);
         eaf.setTypes(types);
-        eaf.setOrganisations(DbUtil.getAmpOrganisations());
 
         return modeSelect(mapping, form, request, response);
     }
@@ -329,6 +329,9 @@ public class EditIPAContract extends MultiAction {
         if (request.getParameter("removeFields") != null) {
             return modeRemoveFields(mapping, form, request, response);
         }
+        if (request.getParameter("removeOrgs") != null) {
+            return modeRemoveOrgs(mapping, form, request, response);
+        }
         if (request.getParameter("deleteEU") != null) {
             return modeDelete(mapping, form, request, response);
         }
@@ -339,6 +342,7 @@ public class EditIPAContract extends MultiAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
+        //eaf.reset(mapping, request);
         eaf.setContractDisbursements(new ArrayList<IPAContractDisbursement>());
         eaf.setIndexId(-1);
         Long currId=new Long(-1);
@@ -363,8 +367,10 @@ public class EditIPAContract extends MultiAction {
         eaf.setTotalNationalContribIFICurrency(currId);
         eaf.setTotalNationalContribRegionalCurrency(currId);
         eaf.setTotalPrivateContribCurrency(currId);
-              
-
+        eaf.setOrganisations(new ArrayList());
+        
+        request.setAttribute("editingNew", "editingNew");
+        
         return modeFinalize(mapping, form, request, response);
     }
 
@@ -429,8 +435,6 @@ public class EditIPAContract extends MultiAction {
               icd.setCurrency(curr);
  
           }
-       
-        
 
         return modeFinalize(mapping, form, request, response);
     }
@@ -448,6 +452,24 @@ public class EditIPAContract extends MultiAction {
             }
             eaf.getContractDisbursements().removeAll(toRemove);
             eaf.setSelContractDisbursements(null);
+        }
+
+        return modeFinalize(mapping, form, request, response);
+    }
+
+    public ActionForward modeRemoveOrgs(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception {
+        IPAContractForm eaf = (IPAContractForm) form;
+        Long[] idx=eaf.getSelOrgs();
+        List toRemove=new ArrayList();
+        if(idx!=null&&idx.length>0){
+            for(int i=0; i<idx.length;i++){
+               AmpOrganisation org = eaf.getOrganisation(idx[i].intValue() - 1);
+               toRemove.add(org);
+            }
+            eaf.getOrganisations().removeAll(toRemove);
+            eaf.setSelOrgs(null);
         }
 
         return modeFinalize(mapping, form, request, response);
@@ -612,14 +634,19 @@ public class EditIPAContract extends MultiAction {
   				e.printStackTrace();
   			}	
   		 
-  		 double amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;	
+  		 double amountRate;
+  		 if (eua.getTotalDisbursements() != null)
+  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
+  		 else
+  			 amountRate=0;
+  		 
         	// double amountRate=eua.getTotalDisbursements().doubleValue()/eua.getTotalAmount().doubleValue();
     	  		eua.setExecutionRate(amountRate);
     	  		//System.out.println("3 execution rate: "+amountRate);
     	  	}
     	  	else eua.setExecutionRate(new Double(0));
          
-         if (euaf.getIndexId() != null && euaf.getIndexId() != -1) {
+         if (eaf.getContracts() != null && euaf.getIndexId() != null && euaf.getIndexId() != -1) {
              eaf.getContracts().set(euaf.getIndexId(), eua);
          }
          else {
@@ -627,6 +654,6 @@ public class EditIPAContract extends MultiAction {
          	}
          
         request.setAttribute("close", "close");
-        return modeFinalize(mapping, form, request, response);
+        return null;//mapping.findForward("newforward");
     }
     }

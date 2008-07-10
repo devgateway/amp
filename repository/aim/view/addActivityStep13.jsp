@@ -24,22 +24,123 @@
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
+<!-- Stylesheet of AMP -->
+        <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
+<!--  -->
+
+
+<div id="myContract" style="display: none">
+	<div id="myContractContent" class="content">
+		<jsp:include page="/aim/editIPAContract.do?new=true" />
+	</div>
+</div>
+
+
+<script type="text/javascript">
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+		YAHOOAmp.amptab.init = function() {
+		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+		};
+		
+		/*
+		YAHOOAmp.amptab.handleClose = function() {
+			var wrapper			= document.getElementById('myFilterWrapper');
+			var filter			= document.getElementById('myFilter');
+			if (filter.parent != null)
+					filter.parent.removeChild(filter);
+			wrapper.appendChild(filter);
+		};
+		*/
+		    
+	    var myPanel5 = new YAHOOAmp.widget.Panel("newmyContract", {
+			width:"720px",
+			height:"500px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true,
+		    context: ["showbtn", "tl", "bl"] 
+		    }
+		     );
+	
+	//myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+		    
+	function initScripts() {
+		var msgP5='\n<digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn>';
+		myPanel5.setHeader(msgP5);
+		myPanel5.setBody("");
+		myPanel5.render(document.body);
+	}
+	
+	function showAddContract() {
+		var element5 = document.getElementById("myContract");
+		element5.style.display = "inline";
+		myPanel5.setBody(element5);
+		myPanel5.show();
+	}
+	function hideAddContract() {
+		myPanel5.hide();
+	}
+	
+	function resetFilter(){
+		if (aimReportsFilterPickerForm.text)
+			aimReportsFilterPickerForm.text.value="";
+
+		if (aimReportsFilterPickerForm.selectedDonorGroups)
+			aimReportsFilterPickerForm.selectedDonorGroups.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
+			aimReportsFilterPickerForm.governmentApprovalProcedures[0].checked=false;
+			aimReportsFilterPickerForm.governmentApprovalProcedures[1].checked=false;
+		}
+	}
+
+
+	window.onload=initScripts;
+	
+	
+	<logic:present parameter="displayAdd" >
+			var current = window.onload;
+			window.onload = function() {
+	            current.apply(current);
+				showAddContract();
+        	};
+	</logic:present>
+	
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#myContract .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	
+</style>
+
+
 
 <script language="JavaScript">
     <!--
     
     function mapCallBack(status, statusText, responseText, responseXML){
          window.location.reload();
-         
-     
     }
 
     function callUrl(indexId){
-    var async=new Asynchronous();
-    async.complete=mapCallBack;
-    async.call("/aim/editIPAContract.do?deleteEU&indexId="+indexId);
-    
-    
+	    var async=new Asynchronous();
+	    async.complete=mapCallBack;
+	    async.call("/aim/editIPAContract.do?deleteEU&indexId="+indexId);
     }
     
     
@@ -52,12 +153,47 @@
         document.aimEditActivityForm.submit();
     }
     
+    var responseSuccess = function(o){ 
+	/* Please see the Success Case section for more
+	 * details on the response object's properties.
+	 * o.tId
+	 * o.status
+	 * o.statusText
+	 * o.getResponseHeader[ ]
+	 * o.getAllResponseHeaders
+	 * o.responseText
+	 * o.responseXML
+	 * o.argument
+	 */
+		var response = o.responseText; 
+		var content = document.getElementById("myContractContent");
+	    //response = response.split("<!")[0];
+		content.innerHTML = response;
+		showAddContract();
+	}
+		 
+	var responseFailure = function(o){ 
+	// Access the response object's properties in the 
+	// same manner as listed in responseSuccess( ). 
+	// Please see the Failure Case section and 
+	// Communication Error sub-section for more details on the 
+	// response object's properties.
+		alert("Connection Failure!"); 
+	}  
+	var callback = 
+	{ 
+		success:responseSuccess, 
+		failure:responseFailure 
+	};
+    
+	function addContract(){
+        var postString		= "new=true";
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
+	}
+    
     function editContract(indexId) {
-        openNewWindow(900, 600);
-        <digi:context name="editIPAContract" property="context/module/moduleinstance/editIPAContract.do?editEU&indexId=" />
-        document.aimEditActivityForm.action = "<%=editIPAContract%>"+indexId;
-        document.aimEditActivityForm.target = popupPointer.name;
-        document.aimEditActivityForm.submit();
+        var postString		= "editEU=true&indexId="+indexId;
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
     }
     
     function deleteContract(indexId) {
@@ -123,120 +259,81 @@
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
 									</c:set>
-
-
-
-
-
-<c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
+									<c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<c:set var="quote">'</c:set>
+									<c:set var="escapedQuote">\'</c:set>
+									<c:set var="msg">
+										${fn:replace(message,quote,escapedQuote)}
+									</c:set>
 
 									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot1('${msg}')" title="${translation}">
 
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-                                                                  <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
-                                                                     
-                                                                     <c:set property="translation" var="trans">
-                                                                         <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
-                                                                             Click here to goto Add Activity Step ${step.stepActualNumber}
-                                                                         </digi:trn>
-                                                                     </c:set>
-                                                                      
-                                                                      <c:set var="link">
-                                                                          <c:if test="${step.stepNumber==9}">
-                                                                              /editSurveyList.do?edit=true
-                                                                              
-                                                                          </c:if>
-                                                                          
-                                                                          <c:if test="${step.stepNumber!=9}">
-                                                                          
-                                                                              /addActivity.do?step=${step.stepNumber}&edit=true
-                                                                              
-                                                                          </c:if>
-                                                                      </c:set>
-                                                                           
-                                                                         
-                                                                         
-                                                                     
-                                                                     
-                                                                     
-                                                                     <c:if test="${!index.last}">
-                                                                        
-                                                                         <c:if test="${index.first}">
-                                                                            
-                                                                             <digi:link href=" ${link}" styleClass="comment" title="${trans}">
-                                                                                 
-                                                                                 
-                                                                                 <c:if test="${aimEditActivityForm.editAct == true}">
-                                                                                     <digi:trn key="aim:editActivityStep1">
-                                                                                         Edit Activity - Step 1
-                                                                                     </digi:trn>
-                                                                                 </c:if>
-                                                                                 <c:if test="${aimEditActivityForm.editAct == false}">
-                                                                                     <digi:trn key="aim:addActivityStep1">
-                                                                                         Add Activity - Step 1
-                                                                                     </digi:trn>
-                                                                                 </c:if>
-                                                                                 
-                                                                             </digi:link>
-                                                                             &nbsp;&gt;&nbsp;
-                                                                         </c:if>
-                                                                         <c:if test="${!index.first}">
-                                                                             <digi:link href="${link}" styleClass="comment" title="${trans}">
-                                                                                 <digi:trn key="aim:addActivityStep${step.stepActualNumber}">
-                                                                                 Step ${step.stepActualNumber}
-                                                                             </digi:trn>
-                                                                             </digi:link>
-                                                                             &nbsp;&gt;&nbsp;
-                                                                         </c:if>
-                                                                     </c:if>
-                                                                     
-                                                                     
-                                                                     
-                                                                     <c:if test="${index.last}">
-                                                                         
-                                                                         <c:if test="${index.first}">
-                                                                             
-                                                                             
-                                                                             
-                                                                             <c:if test="${aimEditActivityForm.editAct == true}">
-                                                                                 <digi:trn key="aim:editActivityStep1">
-                                                                                     Edit Activity - Step 1
-                                                                                 </digi:trn>
-                                                                             </c:if>
-                                                                             <c:if test="${aimEditActivityForm.editAct == false}">
-                                                                                 <digi:trn key="aim:addActivityStep1">
-                                                                                     Add Activity - Step 1
-                                                                                 </digi:trn>
-                                                                             </c:if>
-                                                                         </c:if>
-                                                                         
-                                                                         
-                                                                         <c:if test="${!index.first}">
-                                                                             <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
-                                                                         </c:if>
-                                                                         
-                                                                         
-                                                                         
-                                                                     </c:if>
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                 </c:forEach>
-                                                                 
-								</span>
+
+                                <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+                                   <c:set property="translation" var="trans">
+                                       <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
+                                           Click here to goto Add Activity Step ${step.stepActualNumber}
+                                       </digi:trn>
+                                   </c:set>
+                                   <c:set var="link">
+										<c:if test="${step.stepNumber==9}">
+										  /editSurveyList.do?edit=true
+										</c:if>
+                                        <c:if test="${step.stepNumber!=9}">
+                                        
+                                            /addActivity.do?step=${step.stepNumber}&edit=true
+                                            
+                                        </c:if>
+                                   </c:set>
+                                   <c:if test="${!index.last}">
+                                       <c:if test="${index.first}">
+                                           <digi:link href=" ${link}" styleClass="comment" title="${trans}">
+                                               <c:if test="${aimEditActivityForm.editAct == true}">
+                                                   <digi:trn key="aim:editActivityStep1">
+                                                       Edit Activity - Step 1
+                                                   </digi:trn>
+                                               </c:if>
+                                               <c:if test="${aimEditActivityForm.editAct == false}">
+                                                   <digi:trn key="aim:addActivityStep1">
+                                                       Add Activity - Step 1
+                                                   </digi:trn>
+                                               </c:if>
+                                           </digi:link>
+                                           &nbsp;&gt;&nbsp;
+                                       </c:if>
+                                       <c:if test="${!index.first}">
+                                           <digi:link href="${link}" styleClass="comment" title="${trans}">
+                                               <digi:trn key="aim:addActivityStep${step.stepActualNumber}">
+    	                                           Step ${step.stepActualNumber}
+	                                           </digi:trn>
+                                           </digi:link>
+                                           &nbsp;&gt;&nbsp;
+                                       </c:if>
+                                   </c:if>
+                                   <c:if test="${index.last}">
+                                       <c:if test="${index.first}">
+                                           <c:if test="${aimEditActivityForm.editAct == true}">
+                                               <digi:trn key="aim:editActivityStep1">
+                                                   Edit Activity - Step 1
+                                               </digi:trn>
+                                           </c:if>
+                                           <c:if test="${aimEditActivityForm.editAct == false}">
+                                               <digi:trn key="aim:addActivityStep1">
+                                                   Add Activity - Step 1
+                                               </digi:trn>
+                                           </c:if>
+                                       </c:if>
+                                       <c:if test="${!index.first}">
+                                           <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
+                                       </c:if>
+                                   </c:if>
+                               </c:forEach>
+							   </span>
 							</td>
 						</tr>
 					</table>
@@ -250,14 +347,13 @@ ${fn:replace(message,quote,escapedQuote)}
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
-:
-										<bean:write name="aimEditActivityForm" property="title"/>
+									<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>
 							</td>
 						</tr>
 					</table>
 				</td></tr>
-				<tr> <td>
+				<tr><td>
 					<digi:errors/>
 				</td></tr>
 				<tr><td>
@@ -279,368 +375,340 @@ ${fn:replace(message,quote,escapedQuote)}
 									</table>
 								</td>
 							</tr>
+							<tr><td>
+							<field:display name="Add IPA Contract" feature="Contracting">
+								<div style="width:99.5%;height:12px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+						            <span style="cursor:pointer;float:left;">
+						                <a class="settingsLink" onClick="addContract();">
+						                	<digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn>
+						                </a>
+					                </span>
+				                </div> 
+							</field:display>
+                            </td></tr>
 							<tr><td bgcolor="#f4f4f2" width="100%">
-							
-							
 								<!-- contents -->
-
 								 <logic:notEmpty name="aimEditActivityForm" property="contracts">
-                                                                                <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-                                                                                <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
-                                                                                
-                                                                                <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-                                                                                
-                                                                                    <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
-                                                                                        <field:display name="Contract Name" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                               
-                                                                                                ${contract.contractName}
-                                                                                                
-                                                                                               
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>
-                                                                                    </field:display>
-                                                                                        <field:display name="Contract Description" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                               ${contract.description}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting Activity Category" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                  <c:if test ="${not empty contract.activityCategory}">
-                                                                                                    ${contract.activityCategory.value}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                         <field:display name="Contracting Type" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:type">type</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                  <c:if test ="${not empty contract.type}">
-                                                                                                    ${contract.type.value}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                         <field:display name="Contracting Start of Tendering" feature="Contracting">
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.formattedStartOfTendering}
-                                                                                           </td>
-                                                                                            
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Signature of Contract" feature="Contracting">
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.formattedSignatureOfContract}
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                         </field:display>
-                                                                                         <field:display name="Contract Validity" feature="Contracting">
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractValidityDate">Contract Validity Date</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.formattedContractValidity}
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                         </field:display>
-                                                                                        <field:display name="Contract Organization" feature="Contracting">
-                                                                                         <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <c:if test="${not empty contract.organization}">
-                                                                                                     ${contract.organization.name}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                         </field:display>
-                                                                                        
-                                                                                        <field:display name="Contracting Organization Text" feature="Contracting">
-                                                                                         <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                     ${contract.contractingOrganizationText}
-                                                                                                
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>	
-                                                                                         </field:display>
-                                                                                        
-                                                                                        <field:display name="Contract Completion" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.formattedContractCompletion}
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting Status" feature="Contracting">
-                                                                                         <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                
-                                                                                                <c:if test ="${not empty contract.status}">
-                                                                                 
-                                                                                                    ${contract.status.value}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting Total Amount" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.totalAmount}
-                                                                                                ${contract.totalAmountCurrency} 
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Total EC Contribution" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left" colspan="2">
-                                                                                                <b><digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting IB" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                 ${contract.totalECContribIBAmount}
-                                                                                                ${contract.totalECContribIBCurrency} 
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting INV" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.totalECContribINVAmount}
-                                                                                               ${contract.totalECContribINVCurrency}
-                                                                                            </td>
-                                                                                        </tr>   
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting Total National Contribution" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left" colspan="2">
-                                                                                                <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting Central Amount" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.totalNationalContribCentralAmount}
-                                                                                                ${contract.totalNationalContribCentralCurrency} 
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting Regional Amount" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.totalNationalContribRegionalAmount} 
-                                                                                              ${contract.totalNationalContribRegionalCurrency}
-                                                                                   
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Contracting IFIs" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.totalNationalContribIFIAmount}
-                                                                                               ${contract.totalNationalContribIFICurrency}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Total Private Contribution" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left" colspan="2">
-                                                                                                <b><digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                       
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                ${contract.totalPrivateContribAmount}
-                                                                                                ${contract.totalPrivateContribCurrency}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                         
-                                                                                    <field:display name="Total Disbursements of Contract" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                            									${contract.totalDisbursements} &nbsp;
-                                                            									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-                                                            										&nbsp; ${aimEditActivityForm.currCode}
-                                                            									</logic:empty>
-                                                            									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
-                                                            										&nbsp; ${contract.dibusrsementsGlobalCurrency}
-                                                            									</logic:notEmpty>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </field:display>    
-                                                                                    <field:display name="Contract Execution Rate" feature="Contracting">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:contractExecutionRate">Contract Execution Rate</digi:trn>:</b>
-                                                                                            </td>
-                                                                                            <td>
-                                                            										&nbsp; ${contract.executionRate}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </field:display>    
-                                                                                         
-                                                                                        <field:display name="Contracting Disbursements" feature="Contracting">
-                                                                                        <tr>
-                                                                                    
-                                                                                            <td colspan="2">
-                                                                                                <b><digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn></b>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <tr>
-                                                                                            <td>&nbsp;
-                                                                                            </td>
-                                                                                            <td>
-                                                                                               
-                                                                                    
-                                                                                                    <logic:notEmpty name="contract" property="disbursements">
-                                                                                                         <table>
-                                                                                              
-                                                                                                        <c:forEach  items="${contract.disbursements}" var="disbursement" >
-                                                                                                            <tr>
-                                                                                          
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    <c:if test="${disbursement.adjustmentType==0}">
-                                                                                                                          <digi:trn key="aim:actual">Actual</digi:trn>
-                                                                                                                   </c:if>
-                                                                                                                    <c:if test="${disbursement.adjustmentType==1}">
-                                                                                                                          <digi:trn key="aim:planned">Planned</digi:trn>
-                                                                                                                   </c:if>
-                                                                                                    
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    ${disbursement.amount}
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                   ${disbursement.currency.currencyName} 
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    ${disbursement.disbDate}
-                                                                                                                    
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        </c:forEach>
-                                                                                                        </table>
-                                                                                                    </logic:notEmpty>						
-                                                                                                		
-                                                                                            </td>		
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                         <tr><td>  <field:display name="Edit Contract" feature="Contracting"><a style="cursor:pointer;color:#006699; text-decoration: underline" title="Click to edit the contract" onClick='editContract(${idx.count})'><b><digi:trn key="aim:editThisItem">Edit this item</b></digi:trn></a> </field:display>
-                                                                                        <field:display name="Delete Contract" feature="Contracting">
-                                                                               &nbsp;&nbsp;&nbsp; <a style="cursor:pointer;color:#006699;text-decoration: underline"
-                                                                                                title="Click to remove the contract"
-                                                                                                onClick='callUrl(${idx.count})'><b><digi:trn key="aim:deleteThisItem">Delete this item</digi:trn></b></a></field:display>
-                                                                                       </td></tr>
-                                                                                        
-                                                                                    </table>
-                                                                                    
-                                                                             
-                                                                                   </td></tr>
-                                                                                    
-                                                                                  
-                                                                                </c:forEach>
-                                                                               
-                                                                                </table>
-                                                                                
-                                                                            </logic:notEmpty>
-								<!-- end contents -->
-							
-							
-							</td></tr>
-                                                         <tr><td>
-                                                             &nbsp;
-                                                         </td></tr>
-                                                        
-                                                         <tr><td>
-                                                              <field:display name="Add IPA Contract" feature="Contracting">
-                                                         		<c:set var="trn"> <digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn></c:set>
-                                                                 <input type="button" value="${trn}" class="dr-menu" onclick="addIPAContract()"/>
-                                                             </field:display>
-                                                         </td></tr>
+				                      <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+					                      <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
+						                      <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+					                          <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
+					                               <field:display name="Contract Name" feature="Contracting">
+					                               <tr>
+					                                   <td align="left">
+					                                       <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
+					                                   </td>
+					                                   <td>
+					                                        ${contract.contractName}
+				                                       </td>
+					                               </tr>
+					                               </field:display>
+				                                  <field:display name="Contract Description" feature="Contracting">
+					                                  <tr>
+					                                      <td align="left">
+					                                          <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
+					                                      </td>
+					                                      <td>
+					                                         ${contract.description}
+					                                      </td>
+					                                  </tr>
+				                                  </field:display>
+				                                  <field:display name="Contracting Activity Category" feature="Contracting">
+					                                <tr>
+				                                         <td align="left">
+				                                              <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
+				                                          </td>
+				                                          <td>
+				                                                <c:if test ="${not empty contract.activityCategory}">
+				                                                  ${contract.activityCategory.value}
+				                                              </c:if>
+				                                              
+				                                          </td>
+					                              	</tr>
+					                              </field:display>
+					                              <field:display name="Contracting Type" feature="Contracting">
+				                                      <tr>
+				                                          <td align="left">
+				                                              <b><digi:trn key="aim:IPA:popup:type">type</digi:trn>:</b>
+				                                          </td>
+				                                          <td>
+			                                                <c:if test ="${not empty contract.type}">
+			                                                  ${contract.type.value}
+			                                                </c:if>
+				                                          </td>
+				                                      </tr>
+					                              </field:display>
+			                                       <field:display name="Contracting Start of Tendering" feature="Contracting">
+				                                      <tr>
+				                                          <td align="left">
+				                                              <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
+				                                          </td>
+				                                          <td>
+				                                              ${contract.formattedStartOfTendering}
+				                                         </td>
+				                                          
+				                                      </tr>
+			                                       </field:display>
+			                                     <field:display name="Signature of Contract" feature="Contracting">
+			                                     	<tr>
+			                                           <td align="left">
+			                                                <b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
+			                                            </td>
+			                                            <td>
+			                                                 ${contract.formattedSignatureOfContract}
+			                                            </td>
+			                                        </tr>	
+		                                         </field:display>
+			                                     <field:display name="Contract Validity" feature="Contracting">
+			                                        <tr>
+			                                            <td align="left">
+			                                                <b><digi:trn key="aim:IPA:popup:contractValidityDate">Contract Validity Date</digi:trn>:</b>
+			                                            </td>
+			                                            <td>
+			                                                 ${contract.formattedContractValidity}
+			                                            </td>
+			                                            
+			                                        </tr>	
+		                                         </field:display>
+		                                        <field:display name="Contract Organization" feature="Contracting">
+			                                         <tr>
+			                                            <td align="left">
+			                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
+			                                            </td>
+			                                            <td>
+			                                                <c:if test="${not empty contract.organization}">
+			                                                     ${contract.organization.name}
+			                                                </c:if>
+			                                                
+			                                            </td>
+			                                        </tr>	
+		                                         </field:display>
+		                                        <field:display name="Contracting Organization Text" feature="Contracting">
+			                                         <tr>
+			                                            <td align="left">
+			                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                      ${contract.contractingOrganizationText}
+			                                                 
+			                                             </td>
+			                                             
+			                                         </tr>	
+		                                          </field:display>
+		                                         <field:display name="Contract Completion" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
+			                                             </td>
+			                                             <td>
+			                                                  ${contract.formattedContractCompletion}
+			                                             </td>
+			                                         </tr>
+		                                          </field:display>
+		                                         <field:display name="Contracting Status" feature="Contracting">
+		                                             <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>
+			                                             </td>
+			                                             <td>
+			                                                 <c:if test ="${not empty contract.status}">
+			                                                     ${contract.status.value}
+			                                                 </c:if>
+			                                             </td>
+			                                         </tr>
+												  </field:display>
+		                                         <field:display name="Contracting Total Amount" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                 ${contract.totalAmount}
+			                                                 ${contract.totalAmountCurrency} 
+			                                             </td>
+			                                         </tr>
+		                                         </field:display>
+		                                         <field:display name="Total EC Contribution" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left" colspan="2">
+			                                                 <b><digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn></b>
+			                                             </td>
+			                                         </tr>
+		                                         </field:display>
+		                                         <field:display name="Contracting IB" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                  ${contract.totalECContribIBAmount}
+			                                                 ${contract.totalECContribIBCurrency} 
+			                                             </td>
+			                                         </tr>
+		                                         </field:display>
+		                                         <field:display name="Contracting INV" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                 ${contract.totalECContribINVAmount}
+			                                                ${contract.totalECContribINVCurrency}
+			                                             </td>
+			                                         </tr>   
+		                                         </field:display>
+		                                         <field:display name="Contracting Total National Contribution" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left" colspan="2">
+			                                                 <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
+			                                             </td>
+			                                         </tr>
+		                                         </field:display>
+		                                         <field:display name="Contracting Central Amount" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                 ${contract.totalNationalContribCentralAmount}
+			                                                 ${contract.totalNationalContribCentralCurrency} 
+			                                             </td>
+			                                         </tr>
+		                                         </field:display>
+		                                         <field:display name="Contracting Regional Amount" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                 ${contract.totalNationalContribRegionalAmount} 
+				                                               ${contract.totalNationalContribRegionalCurrency}
+			                                              </td>
+			                                          </tr>
+		                                           </field:display>
+		                                          <field:display name="Contracting IFIs" feature="Contracting">
+			                                          <tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			                                                  ${contract.totalNationalContribIFIAmount}
+			                                                 ${contract.totalNationalContribIFICurrency}
+			                                              </td>
+			                                          </tr>
+		                                           </field:display>
+		                                          <field:display name="Total Private Contribution" feature="Contracting">
+			                                          <tr>
+			                                              <td align="left" colspan="2">
+			                                                  <b><digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn></b>
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			                                                  ${contract.totalPrivateContribAmount}
+			                                                  ${contract.totalPrivateContribCurrency}
+			                                              </td>
+			                                          </tr>
+		                                           </field:display>
+						                                           
+			                                      <field:display name="Total Disbursements of Contract" feature="Contracting">
+			                                          <tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              									${contract.totalDisbursements} &nbsp;
+			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
+			              										&nbsp; ${aimEditActivityForm.currCode}
+			              									</logic:empty>
+			              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
+			              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
+			              									</logic:notEmpty>
+			                                              </td>
+			                                          </tr>
+			                                      </field:display>    
+			                                      <field:display name="Contract Execution Rate" feature="Contracting">
+			                                          <tr>
+			                                              <td align="left">
+			                                                  <b><digi:trn key="aim:IPA:popup:contractExecutionRate">Contract Execution Rate</digi:trn>:</b>
+			                                              </td>
+			                                              <td>
+			              										&nbsp; ${contract.executionRate}
+			                                              </td>
+			                                          </tr>
+			                                      </field:display>    
+		                                          <field:display name="Contracting Disbursements" feature="Contracting">
+			                                          <tr>
+			                                              <td colspan="2">
+			                                                  <b><digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn></b>
+			                                              </td>
+			                                          </tr>
+			                                          <tr>
+			                                              <td>&nbsp;
+			                                              </td>
+			                                              <td>
+		                                                      <logic:notEmpty name="contract" property="disbursements">
+		                                                           <table>
+			                                                           <c:forEach  items="${contract.disbursements}" var="disbursement" >
+			                                                               <tr>
+			                                                                   <td align="left" valign="top">
+			                                                                       <c:if test="${disbursement.adjustmentType==0}">
+		                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
+			                                                                       </c:if>
+			                                                                       <c:if test="${disbursement.adjustmentType==1}">
+		                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
+			                                                                       </c:if>
+			                                                                   </td>
+			                                                                   <td align="left" valign="top">
+			                                                                       ${disbursement.amount}
+			                                                                   </td>
+			                                                                   <td align="left" valign="top">
+			                                                                      ${disbursement.currency.currencyName} 
+			                                                                   </td>
+			                                                                   <td align="left" valign="top">
+			                                                                       ${disbursement.disbDate}
+			                                                                   </td>
+			                                                               </tr>
+			                                                           </c:forEach>
+		                                                           </table>
+		                                                       </logic:notEmpty>						
+			                                               </td>		
+			                                           </tr>
+		                                            </field:display>
+		                                            <tr><td>  
+			                                            <field:display name="Edit Contract" feature="Contracting">
+			                                            		<a style="cursor:pointer;color:#006699; text-decoration: underline" title="Click to edit the contract" onClick='editContract(${idx.count})'><b><digi:trn key="aim:editThisItem">Edit this item</b></digi:trn></a> 
+			                                            </field:display>
+			                                           <field:display name="Delete Contract" feature="Contracting">
+			                                  				&nbsp;&nbsp;&nbsp; 
+			                                  				<a style="cursor:pointer;color:#006699;text-decoration: underline" title="Click to remove the contract" onClick='callUrl(${idx.count})'><b><digi:trn key="aim:deleteThisItem">Delete this item</digi:trn></b></a>
+			                                           </field:display>
+		                                          	</td></tr>
+		                                       </table>
+		                                      </td></tr>
+		                                   </c:forEach>
+	                                   </table>
+	                               </logic:notEmpty>
+								  <!-- end contents -->
+								</td></tr>
+                                <tr><td>
+                                    &nbsp;
+                                </td></tr>
+                                <tr><td>
+                                     <field:display name="Add IPA Contract" feature="Contracting">
+                                		<c:set var="trn"> <digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn></c:set>
+                                        <input type="button" value="${trn}" class="dr-menu" onclick="addIPAContract()"/>
+                                    </field:display>
+                                </td></tr>
 						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">
-						<!-- edit activity form menu -->
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->
+							<!-- edit activity form menu -->
+								<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<!-- end of activity form menu -->
 						</td></tr>
 					</table>
 				</td></tr>

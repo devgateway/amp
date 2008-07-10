@@ -243,7 +243,7 @@ border-right:1px solid white;
                       <ul class="first-of-type">
                     	 <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="border-right:1px solid white;">
-                                  My Desktop
+                                 <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
@@ -282,7 +282,7 @@ border-right:1px solid white;
 												</li>
 	                                        </feature:display>
                                         <li class="yuiampmenuitem" style="_width:100px">
-                                        	<a class="yuiampmenuitemlabel" href="#">
+                                        	<a class="yuiampmenuitemlabel" href="">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
                                             </a>
                                             <div id="workspaceSubmenu" class="yuiampmenu">
@@ -406,7 +406,7 @@ border-right:1px solid white;
                                   <div class="bd">                    
                                       <ul>
                                         <li class="yuiampmenuitem">
-                                        <a class="yuiampmenuitemlabel" onclick="return addMessage('fillTypesAndLevels')" href="#">
+                                        <a class="yuiampmenuitemlabel" href="/message/messageActions.do?editingMessage=false&actionType=fillTypesAndLevels">
                                         	<digi:trn key="aim:createmessage">Create Message</digi:trn>
                                         </a>
                                         </li>
@@ -422,6 +422,7 @@ border-right:1px solid white;
                               </div>                    
                           </li>
                           </feature:display>
+                          
                           <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>

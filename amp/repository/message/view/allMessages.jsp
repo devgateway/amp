@@ -235,6 +235,17 @@ background-color:yellow;
         divBody.setAttribute("visibility","visible");
         divBody.innerHTML=responseText;
 	}
+        
+       function unCheckMessages() {
+            var chk=document.messageForm.getElementsByTagName('input');
+            for(var i=0;i<chk.length;i++){
+                if(chk[i].type == 'checkbox'&&chk[i].checked){
+                    alert("Please uncheck or delete selected message(s)");
+                    return false;
+                }
+            }
+            return true;
+        }
         function deleteMessageIds() {
             var chk=document.messageForm.getElementsByTagName('input');
             var msgIds='';
@@ -874,9 +885,9 @@ background-color:yellow;
                 fwdOrEditTD.vAlign="top";
 		var isDraft=message.getAttribute('isDraft');
 		if(isDraft=='true'){
-                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
+                    fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
 		}else{
-			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" ><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
+			fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+forwardClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/finalForward.gif" border=0  hspace="2" /></digi:link>';
 		}
 		msgTr.appendChild(fwdOrEditTD);	
 					
@@ -938,7 +949,7 @@ $(document).ready(function(){
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 						</c:set>
-						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
+						<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" onclick="return unCheckMessages()">
 						<digi:trn key="aim:portfolio">
 						Portfolio
 						</digi:trn>
@@ -1008,7 +1019,7 @@ $(document).ready(function(){
                                                     <LI>
                                                         <span>
                                                            
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
+									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
                                                              <div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
 	                 					<digi:trn key="message:Messages">Messages</digi:trn>
                                                             </div>
@@ -1031,7 +1042,7 @@ $(document).ready(function(){
 								<c:if test="${messageForm.tabIndex!=2}">
                                                     <LI>
                                                         <span>
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
+									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
                                                             <div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
 										<digi:trn key="message:Alerts">Alerts</digi:trn>
                                                                 </div>
@@ -1054,7 +1065,7 @@ $(document).ready(function(){
 								<c:if test="${messageForm.tabIndex!=3}">
                                                     <LI>
                                                         <span>
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
+									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
                                                             <div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
 										<digi:trn key="message:approvals">Approvals</digi:trn>
                                                             </div>
@@ -1077,7 +1088,7 @@ $(document).ready(function(){
 								<c:if test="${messageForm.tabIndex!=4}">
                                                     <LI>
                                                         <span>
-									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
+									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
                                                              <div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
 										<digi:trn key="message:ebents">Calendar Events</digi:trn>
                                                             </div>
@@ -1109,7 +1120,7 @@ $(document).ready(function(){
                                                                                                     <div>
                                                                                                         <span>
                                                                                                             
-                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}">
+                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
                                                                                                                 <digi:trn key="message:inbox">Inbox</digi:trn>
                                                                                                             </a>&nbsp;&nbsp;|							
                                                                                                         </span>
@@ -1131,7 +1142,7 @@ $(document).ready(function(){
                                                                                              <LI>
                                                                                                     <div>
                                                                                                         <span>
-                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}">
+                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
                                                                                                                 <digi:trn key="message:sent">Sent</digi:trn>
                                                                                                             </a>&nbsp;&nbsp;|							
                                                                                                         </span>
@@ -1153,7 +1164,7 @@ $(document).ready(function(){
                                                                                               <LI>
                                                                                                     <div>
                                                                                                         <span>
-                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}">
+                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
                                                                                                                 <digi:trn key="message:draft">Draft</digi:trn>
                                                                                                             </a>							
                                                                                                         </span>

@@ -5,7 +5,8 @@
 <security>
 		<!-- GatePerm administration -->
 		<action login-required="true" pattern="/managePerm">ADMIN</action>
-		<action login-required="true" pattern="/managePermMap">ADMIN</action>		
+		<action login-required="true" pattern="/managePermMap">ADMIN</action>
+		<action login-required="true" pattern="/exchangePermission">ADMIN</action>		
 </security>		
 
 	<hibernate-classes required="true">

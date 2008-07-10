@@ -8,6 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,11 +29,13 @@ public abstract class Permissible implements Identifiable {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface PermissibleProperty {
-		String type();
+		String[] type();
 
 		public final static String PROPERTY_TYPE_ID = "ID";
 
 		public final static String PROPERTY_TYPE_LABEL = "LABEL";
+		
+		public final static String PROPERTY_TYPE_CLUSTER_ID="CLUSTER_ID";
 	}
 
 	public static String getPermissiblePropertyName(Class permClass, String type) {
@@ -44,7 +47,7 @@ public abstract class Permissible implements Identifiable {
 						.isAnnotationPresent(PermissibleProperty.class)) {
 					PermissibleProperty annotation = declaredFields[i]
 							.getAnnotation(PermissibleProperty.class);
-					if (type.equals(annotation.type()))
+					if (PermissionUtil.arrayContains(annotation.type(), type))
 						return declaredFields[i].getName();
 				}
 			}

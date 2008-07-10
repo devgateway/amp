@@ -3,7 +3,6 @@
  */
 package org.digijava.module.aim.startup;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 
@@ -12,7 +11,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
-import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
@@ -25,7 +23,7 @@ import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.core.Permissible;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 
@@ -99,6 +97,8 @@ public class AMPStartupListener extends HttpServlet
         	Directory idx = LuceneUtil.createIndex();
 			ampContext.setAttribute(Constants.LUCENE_INDEX, idx);
         	
+			
+			PermissionUtil.getAvailableGates(ampContext);
 			
 			//initialize permissible simple name singleton
 			GatePermConst.availablePermissiblesBySimpleNames=new Hashtable<String, Class>();

@@ -49,8 +49,13 @@ public abstract class MultiAction extends Action {
 			ActionForm form,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-
+		try {
 		return modePrepare(mapping, form, request, response);
+		} catch(Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			return mapping.findForward("error");
+		}
 	}
 
 	/**

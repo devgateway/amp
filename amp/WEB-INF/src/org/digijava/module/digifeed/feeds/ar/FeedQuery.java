@@ -65,6 +65,7 @@ public class FeedQuery extends GenericFeedQuery {
 			}
 		}
 
+		
 		return ret;
 	}
 

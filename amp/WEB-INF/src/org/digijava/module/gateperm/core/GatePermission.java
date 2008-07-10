@@ -112,11 +112,18 @@ public class GatePermission extends Permission {
     public String getGateTypeName() {
 	return gateTypeName;
     }
-
+    
+    public String getGateSimpleName() {
+    	return gateTypeName.substring(gateTypeName.lastIndexOf('.')+1);
+    }
+    
     public void setGateTypeName(String gateTypeName) {
 	this.gateTypeName = gateTypeName;
     }
 
+    public String toString() {
+    	return "{"+getGateSimpleName()+"("+gateParameters+")"+actions+"}";
+        }
 
 
 }

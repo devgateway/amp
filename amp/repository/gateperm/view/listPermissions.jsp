@@ -89,7 +89,7 @@ ${fn:replace(message,quote,escapedQuote)}
 var tableWidgetObj = new DHTMLSuite.tableWidget();
 tableWidgetObj.setTableId('permissionsList');
 tableWidgetObj.setTableWidth('100%');
-tableWidgetObj.setTableHeight(300);
+tableWidgetObj.setTableHeight(800);
 //tableWidgetObjsetNoCssLayout();
 tableWidgetObj.setColumnSort(Array('S','S','S'));
 tableWidgetObj.init();

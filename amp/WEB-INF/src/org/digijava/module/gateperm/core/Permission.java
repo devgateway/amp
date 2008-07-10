@@ -16,7 +16,7 @@ import org.dgfoundation.amp.PropertyListable;
  * @package org.digijava.module.gateperm.core
  * @since 25.08.2007
  */
-public abstract class Permission extends PropertyListable implements Serializable, Comparable {
+public abstract class Permission extends PropertyListable implements Serializable, Comparable, ClusterIdentifiable {
 
     private static final long serialVersionUID = -1450990323894485519L;
 
@@ -36,6 +36,16 @@ public abstract class Permission extends PropertyListable implements Serializabl
 
     public Permission() {	
     }
+    
+    public String getClusterIdentifier() {
+    	return name;
+    }
+    
+    public Object getIdentifier() {
+    	return id;
+    }
+    
+    
     
     public Permission(Boolean dedicated) {
 	this.dedicated=dedicated;

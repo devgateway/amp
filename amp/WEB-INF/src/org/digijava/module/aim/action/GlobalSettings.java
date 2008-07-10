@@ -192,8 +192,10 @@ public class GlobalSettings extends Action {
 			name = ampGls.getGlobalSettingsName();
 			value = ampGls.getGlobalSettingsValue();
 			if (name.equalsIgnoreCase("Automatic Audit Logger Cleanup")) {
-				if ("-1".equalsIgnoreCase(value)&& AuditCleaner.getInstance().isRunning()) {
-					AuditCleaner.getInstance().stop();
+				if ("-1".equalsIgnoreCase(value)) {
+					if ( AuditCleaner.getInstance().isRunning()){
+						AuditCleaner.getInstance().stop();
+					}
 				} else {
 					if (!AuditCleaner.getInstance().isRunning()) {
 						AuditCleaner.getInstance().start();
@@ -210,7 +212,9 @@ public class GlobalSettings extends Action {
 	private void auditTrialCleanerChanges(GlobalSettingsForm gsForm){
 		if (gsForm.getGlobalSettingsName().compareTo("Automatic Audit Logger Cleanup") ==0){
 			if ("-1".equalsIgnoreCase(gsForm.getGsfValue())){
-				AuditCleaner.getInstance().stop();
+				if (AuditCleaner.getInstance().isRunning()){
+					AuditCleaner.getInstance().stop();
+				}
 			}else{
 				if(!AuditCleaner.getInstance().isRunning()){
 					AuditCleaner.getInstance().start();

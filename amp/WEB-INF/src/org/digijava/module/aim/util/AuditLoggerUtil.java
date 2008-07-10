@@ -503,22 +503,8 @@ public class AuditLoggerUtil {
      *
      */
     public static class HelperAuditloggerCreationDateComparator implements Comparator<AmpAuditLogger> {
-    	Locale locale;
-        Collator collator;
-
-        public HelperAuditloggerCreationDateComparator(){
-            this.locale=new Locale("en", "EN");
-        }
-
-        public HelperAuditloggerCreationDateComparator(String iso) {
-            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-        }
-
-        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
-            collator = Collator.getInstance(locale);
-            collator.setStrength(Collator.TERTIARY);
-            
-            int result = (o1.getLoggedDate()==null || o2.getLoggedDate()==null)?0:collator.compare(o1.getLoggedDate().toString(), o2.getLoggedDate().toString());
+    	public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            int result = (o1.getLoggedDate()==null || o2.getLoggedDate()==null)?0:o1.getLoggedDate().compareTo(o1.getLoggedDate());
             return result;
         }
     }
@@ -529,22 +515,8 @@ public class AuditLoggerUtil {
      *
      */
     public static class HelperAuditloggerChangeDateComparator implements Comparator<AmpAuditLogger> {
-    	Locale locale;
-        Collator collator;
-
-        public HelperAuditloggerChangeDateComparator(){
-            this.locale=new Locale("en", "EN");
-        }
-
-        public HelperAuditloggerChangeDateComparator(String iso) {
-            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
-        }
-
-        public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
-            collator = Collator.getInstance(locale);
-            collator.setStrength(Collator.TERTIARY);
-            
-            int result = (o1.getModifyDate()==null || o2.getModifyDate()==null)?0:collator.compare(o1.getModifyDate().toString(), o2.getModifyDate().toString());
+    	   public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
+            int result = (o1.getModifyDate()==null || o2.getModifyDate()==null)?0:o1.getModifyDate().compareTo(o2.getModifyDate());
             return result;
         }
     }

@@ -848,7 +848,34 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setType(contract.getType());
                     //oldContract.getDisbursements().clear();
                     Set toRetain=new HashSet();
-                   
+
+                    Set newOrgs = contract.getOrganizations();
+                    if (newOrgs != null && newOrgs.size() > 0) {
+                        Iterator<AmpOrganisation> iter = newOrgs.iterator();
+                        while (iter.hasNext()) {
+                            AmpOrganisation newOrg = iter.next();
+                            if (newOrg.getAmpOrgId() != null) {
+                                AmpOrganisation oldDisb = (AmpOrganisation) session.load(AmpOrganisation.class,
+                                        newOrg.getAmpOrgId());
+                                toRetain.add(oldDisb);
+                            } else {
+                                if (oldContract.getOrganization() == null) {
+                                    oldContract.setOrganizations(new HashSet());
+                                }
+                                oldContract.getOrganizations().add(newOrg);
+                                toRetain.add(newOrg);
+                                
+                            }
+                        }
+                        oldContract.getOrganizations().addAll(toRetain);
+                    }
+                    else{
+                        if(oldContract.getOrganizations()!=null){
+                        oldContract.getOrganizations().clear();
+                        }
+                    }
+                    
+                    
                     Set newDisbs = contract.getDisbursements();
                     if (newDisbs != null && newDisbs.size() > 0) {
                         Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();

@@ -1478,10 +1478,17 @@ public class SaveActivity extends Action {
 					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) ){
                         activity.setApprovalStatus(Constants.STARTED_STATUS);
                     }
-					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
-                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
-                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
-                    }
+//					
+//					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
+//                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
+//                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
+//                    }
+					//AMP-3464
+					if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()) &&
+	                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
+	                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
+	                    }
+					
 					if(tm.getTeamHead()){
                         activity.setApprovalStatus(Constants.APPROVED_STATUS);
                     }

@@ -1571,6 +1571,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setLinkedActivities(ampAct.getLinkedActivities());
         activity.setConditionality(ampAct.getConditionality());
         activity.setProjectManagement(ampAct.getProjectManagement());
+        activity.setTeam(ampAct.getTeam());
       
         
         activity.setCurrCompDate(DateConversion.

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ProposedProjCost;
 
@@ -16,6 +17,7 @@ public class Activity
   private String ampId;
   private Boolean budget;
 
+  	private AmpTeam team;
   
     //montenegro mission:
 	private String projectImpact=null;
@@ -1111,6 +1113,14 @@ public class Activity
 
 	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
 		this.secMiCntFaxNumber = secMiCntFaxNumber;
+	}
+
+	public AmpTeam getTeam() {
+		return team;
+	}
+
+	public void setTeam(AmpTeam team) {
+		this.team = team;
 	}
   
   

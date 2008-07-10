@@ -1536,6 +1536,32 @@ public class DbUtil {
         return ampAppSettings;
     }
 
+    public static AmpApplicationSettings getTeamAppSettingsMemberNotNull(Long teamId) {
+        Session session = null;
+        Query qry = null;
+        AmpApplicationSettings ampAppSettings = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select a from "
+                + AmpApplicationSettings.class.getName()
+                + " a where (a.team=:teamId) ";
+            qry = session.createQuery(queryString);
+            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                ampAppSettings = (AmpApplicationSettings) itr.next();
+                if(ampAppSettings!=null) break;
+            }
+            
+        } catch (Exception e) {
+        	e.printStackTrace();
+            logger.error("Unable to get TeamAppSettings");
+            logger.debug("Exceptiion " + e);
+        }
+        return ampAppSettings;
+    }
+    
     public static boolean isUserTranslator(Long userId) {
 
         logger.debug("In isUserTranslator()");
@@ -1601,6 +1627,9 @@ public class DbUtil {
         return ampAppSettings;
     }
 
+    
+    
+    
     public static Collection getAllReports() {
         Session session = null;
         Query qry = null;

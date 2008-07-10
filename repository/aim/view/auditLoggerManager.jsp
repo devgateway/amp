@@ -158,11 +158,13 @@ function toggleSettings(){
 				  <td valign="top">
 				  <div style="padding: 3px; width: 100%; background-color: rgb(204, 219, 255); font-size: 8pt;">
 				  <span style="cursor:pointer; font-style: italic;float:left;color: red;">
+				  	<%if(AuditCleaner.getInstance().isRunning()){%>
 				  	<%if (AuditCleaner.getInstance().getRemainingdays()!= null){%>
 				  		<digi:trn key="aim:auditautocleanup">The automatic cleanup of the audit trail will occur in</digi:trn> 
 				  		<%=AuditCleaner.getInstance().getRemainingdays()%>
 				  		<digi:trn key="aim:days">Days</digi:trn>
-				  	<%}%>
+				  	<%}
+				  	}%>
 				  </span>
 				  <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
                                 &nbsp;<br>

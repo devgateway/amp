@@ -18,6 +18,7 @@ import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 
 /**
  * <p>Title: </p>
@@ -114,10 +115,26 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
+            /*
             Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
                                           AmpActivitySector.class.getName() +
-                                          " where size(sec.activityId.locations)>0" +
+                                          ", loc in class " +
+                                          AmpActivityLocation.class.getName() +
+                                          " where sec.activityId.ampActivityId=loc.activity.ampActivityId and" +
+                                          " loc.location.region is not null and size(sec.activityId.locations)>0" +
                                           " group by sec.sectorId");
+*/
+
+            Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
+                                          AmpActivitySector.class.getName() +
+                                          " where not exists (from loc in class " +
+                                          AmpActivityLocation.class.getName() +
+                                          " where loc.activity.ampActivityId=sec.activityId.ampActivityId" +
+                                          " and loc.location.region is null)" +
+                                          " and size(sec.activityId.locations)>0" +
+                                          " group by sec.sectorId");
+
+
             retVal = q.list();
         } catch (Exception ex) {
             logger.debug("Unable to used sectors from DB", ex);

@@ -18,6 +18,12 @@ import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapPoint;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.dbentity.GisMapShape;
+import java.awt.BasicStroke;
+import java.awt.image.BufferedImage;
+import java.awt.Graphics;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.Rectangle;
 
 /**
  *
@@ -136,12 +142,36 @@ public class GisUtil {
 
     }
 
-
     public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
                                int canvasWidth, int canvasHeight,
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
                                boolean fill) {
+
+        addDataToImage(g2d, mapData, hDataList,
+                               null, canvasWidth,
+                               canvasHeight,
+                               mapLeftX,
+                               mapRightX, mapTopY,
+                               mapLowY,
+                               fill);
+    }
+
+
+    public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
+                               List dashedPaintList,
+                               int canvasWidth, int canvasHeight,
+                               float mapLeftX,
+                               float mapRightX, float mapTopY, float mapLowY,
+                               boolean fill) {
+
+        BufferedImage txtImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
+        Graphics txtGraph = txtImage.getGraphics();
+        txtGraph.setColor(new Color(0,0,0,80));
+        txtGraph.drawLine(0,0,3,3);
+
+        TexturePaint tp = new TexturePaint(txtImage, new Rectangle(0,0,3,3));
+
 
         float scale = 1f; //Pixels per degree
 
@@ -165,11 +195,14 @@ public class GisUtil {
             Color paintColor = new Color(201, 153, 113);
             Color fillColor = null;
 
+            boolean addDashPaint = false;
+
             for (int segmentId = 0; segmentId < mapData.size();
                                  segmentId++) {
 
                 GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
 
+                //Get hilight color
                 if (hDataList != null && hDataList.size() > 0) {
                     ColorRGB cRGB = getColorForSegment((int) gms.getSegmentId(),
                             hDataList);
@@ -182,6 +215,24 @@ public class GisUtil {
                 } else if (fill && fillColor == null) {
                     fillColor = paintColor;
                 }
+
+                //Get dashpaint color
+                if (dashedPaintList != null && dashedPaintList.size() > 0) {
+                    ColorRGB cRGB = getColorForSegment((int) gms.getSegmentId(),
+                           dashedPaintList);
+                   if (cRGB != null) {
+                       addDashPaint = true;
+                       //txtGraph.clearRect(0,0,3,3);
+                       txtGraph.setColor(new Color(cRGB.getRed(),
+                               cRGB.getGreen(),
+                               cRGB.getBlue(), 80));
+                       txtGraph.drawLine(0,0,3,3);
+                   } else {
+                      addDashPaint = false;
+                   }
+               }
+
+
 
                 for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
 
@@ -210,14 +261,26 @@ public class GisUtil {
 
                     if (fill) {
                         Color gg = fillColor;
-                        g2d.setColor(gg);
 
+                        g2d.setColor(gg);
                         g2d.fillPolygon(xCoords, yCoords,
                                         shape.getShapePoints().size());
+
+                        //Dash
+                        if (addDashPaint) {
+                            g2d.setPaint(tp);
+                            g2d.fillPolygon(xCoords, yCoords,
+                                            shape.getShapePoints().size());
+                            g2d.setPaint(null);
+                        }
+
+
 
                         g2d.setColor(new Color(0, 0, 0, 70));
                         g2d.drawPolygon(xCoords, yCoords,
                                         shape.getShapePoints().size());
+
+
 
                     } else {
                         /*

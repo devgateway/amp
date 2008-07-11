@@ -235,6 +235,59 @@ public class GetFoundingDetails extends Action {
             String indIdStr = request.getParameter("indicatorId");
             Long indId = new Long(indIdStr);
 
+
+            //Get segments with funding for dashed paint map
+            List secFundings = DbUtil.getSectorFoundings(secId);
+            Iterator it = secFundings.iterator();
+
+            Map locationIdObjectMap = new HashMap();
+            Map locationFoundMap = new HashMap();
+
+
+            while (it.hasNext()) {
+                Object[] secFounding = (Object[]) it.next();
+                AmpActivity ampActivity = (AmpActivity) secFounding[0];
+
+                Iterator locIt = ampActivity.getLocations().iterator();
+                while (locIt.hasNext()) {
+
+                    AmpActivityLocation loc = (AmpActivityLocation) locIt.next();
+
+                    locationIdObjectMap.put(loc.getLocation().getAmpLocationId(),
+                                            loc.getLocation());
+
+                    if (locationFoundMap.containsKey(loc.getLocation().
+                            getAmpLocationId())) {
+                        locationFoundMap.put(loc.getLocation().getAmpLocationId(),1);
+                    } else {
+                        locationFoundMap.put(loc.getLocation().getAmpLocationId(),1);
+                    }
+                }
+
+            }
+
+            List segmentDataDasheList = new ArrayList();
+            Iterator locFoundingMapIt = locationFoundMap.keySet().iterator();
+            while (locFoundingMapIt.hasNext()) {
+                Long key = (Long) locFoundingMapIt.next();
+                AmpLocation loc = (AmpLocation) locationIdObjectMap.get(key);
+                if (loc.getRegion() != null) {
+                    SegmentData segmentData = new SegmentData();
+                    segmentData.setSegmentCode(loc.getRegion());
+                    segmentData.setSegmentValue("100");
+                    segmentDataDasheList.add(segmentData);
+                }
+            }
+
+            List hilightDashData = prepareDashSegments(segmentDataDasheList,new ColorRGB (0,0,0), map);
+            //
+
+
+
+
+
+
+
             List inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId);
 
             List segmentDataList = new ArrayList();
@@ -262,6 +315,7 @@ public class GetFoundingDetails extends Action {
             gisUtil.addDataToImage(g2d,
                                    map.getSegments(),
                                    hilightData,
+                                   hilightDashData,
                                    canvasWidth, canvasHeight,
                                    rect.getLeft(), rect.getRight(),
                                    rect.getTop(), rect.getBottom(), true);
@@ -411,6 +465,26 @@ public class GetFoundingDetails extends Action {
         }
         return retVal;
     }
+
+    private List prepareDashSegments(List segmentData, ColorRGB dashColor, GisMap map) {
+        List retVal = new ArrayList();
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            for (int idx = (int) 0; idx < segmentData.size(); idx++) {
+                SegmentData sd = (SegmentData) segmentData.get(idx);
+                if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
+                    HilightData hData = new HilightData();
+                    hData.setSegmentId((int) segment.getSegmentId());
+                    hData.setColor(dashColor);
+                    retVal.add(hData);
+                }
+            }
+        }
+        return retVal;
+    }
+
 
     private List getSegmentsForParent(String parentCode, GisMap map) {
         List retVal = new ArrayList();

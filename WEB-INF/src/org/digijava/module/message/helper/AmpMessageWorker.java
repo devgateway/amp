@@ -26,6 +26,8 @@ import org.digijava.module.message.dbentity.Approval;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.message.dbentity.CalendarEvent;
+import java.util.ArrayList;
+import java.util.*;
 
 public class AmpMessageWorker {
 
@@ -285,12 +287,17 @@ public class AmpMessageWorker {
      * this method defines calendar event receivers and creates corresponding AmpMessageStates.
      */
     private static void defineReceiversForCalendarEvents(Event e,TemplateAlert template, AmpMessage calEvent) throws Exception{
-    	List<AmpMessageState> statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
-        if (statesRelatedToTemplate != null) {
-            for (AmpMessageState state : statesRelatedToTemplate) {
-                createMsgState(state, calEvent);
+        HashMap<Long, AmpMessageState> msgStateMap=new HashMap<Long,AmpMessageState>();
+
+        List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
+        if (lstMsgStates != null) {
+            for (AmpMessageState state : lstMsgStates) {
+                if(!msgStateMap.containsKey(state.getMemberId())){
+                    msgStateMap.put(state.getMemberId(),state);
+                }
             }
         }
+
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
@@ -301,14 +308,20 @@ public class AmpMessageWorker {
                     Collection<AmpTeamMember> members=TeamMemberUtil.getTeamMembers(user.getEmail());
                     if(members!=null){
                         for (AmpTeamMember mem : members) {
-                            AmpMessageState state = new AmpMessageState();
-                            state.setMemberId(mem.getAmpTeamMemId());
-                            state.setSenderId(calEvent.getSenderId());
-                            createMsgState(state, calEvent);
+                            if(!msgStateMap.containsKey(mem.getAmpTeamMemId())){
+                                AmpMessageState state = new AmpMessageState();
+                                state.setMemberId(mem.getAmpTeamMemId());
+                                state.setSenderId(calEvent.getSenderId());
+                                msgStateMap.put(state.getMemberId(),state);
+                            }
                         }
                     }
                 }
             }
+        }
+
+        for (AmpMessageState state : msgStateMap.values()) {
+            createMsgState(state, calEvent);
         }
     }
 

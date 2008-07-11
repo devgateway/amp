@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %> 
+<%@ taglib uri="/taglib/category" prefix="category" %>
             
 
 
@@ -164,17 +165,23 @@ function generateFields(){
 						+ "totalAmount="+document.getElementsByName("totalAmount")[0].value+"&"
 						+ "totalAmountCurrency="+document.getElementsByName("totalAmountCurrency")[0].value+"&"
 						+ "totalECContribIBAmount="+document.getElementsByName("totalECContribIBAmount")[0].value+"&"
-						+ "totalECContribIBCurrency="+document.getElementsByName("totalECContribIBCurrency")[0].value+"&"
+						+ "totalECContribIBAmountDate="+document.getElementsByName("totalECContribIBAmountDate")[0].value+"&"
+						//+ "totalECContribIBCurrency="+document.getElementsByName("totalECContribIBCurrency")[0].value+"&"
 						+ "totalECContribINVAmount="+document.getElementsByName("totalECContribINVAmount")[0].value+"&"
-						+ "totalECContribINVCurrency="+document.getElementsByName("totalECContribINVCurrency")[0].value+"&"
+						+ "totalECContribINVAmountDate="+document.getElementsByName("totalECContribINVAmountDate")[0].value+"&"
+						//+ "totalECContribINVCurrency="+document.getElementsByName("totalECContribINVCurrency")[0].value+"&"
 						+ "totalNationalContribCentralAmount="+document.getElementsByName("totalNationalContribCentralAmount")[0].value+"&"
-						+ "totalNationalContribCentralCurrency="+document.getElementsByName("totalNationalContribCentralCurrency")[0].value+"&"
+						+ "totalNationalContribCentralAmountDate="+document.getElementsByName("totalNationalContribCentralAmountDate")[0].value+"&"
+						//+ "totalNationalContribCentralCurrency="+document.getElementsByName("totalNationalContribCentralCurrency")[0].value+"&"
 						+ "totalNationalContribIFIAmount="+document.getElementsByName("totalNationalContribIFIAmount")[0].value+"&"
-						+ "totalNationalContribIFICurrency="+document.getElementsByName("totalNationalContribIFICurrency")[0].value+"&"
+						+ "totalNationalContribIFIAmountDate="+document.getElementsByName("totalNationalContribIFIAmountDate")[0].value+"&"
+						//+ "totalNationalContribIFICurrency="+document.getElementsByName("totalNationalContribIFICurrency")[0].value+"&"
 						+ "totalNationalContribRegionalAmount="+document.getElementsByName("totalNationalContribRegionalAmount")[0].value+"&"
-						+ "totalNationalContribRegionalCurrency="+document.getElementsByName("totalNationalContribRegionalCurrency")[0].value+"&"
+						+ "totalNationalContribRegionalAmountDate="+document.getElementsByName("totalNationalContribRegionalAmountDate")[0].value+"&"
+						//+ "totalNationalContribRegionalCurrency="+document.getElementsByName("totalNationalContribRegionalCurrency")[0].value+"&"
 						+ "totalPrivateContribAmount="+document.getElementsByName("totalPrivateContribAmount")[0].value+"&"
-						+ "totalPrivateContribCurrency="+document.getElementsByName("totalPrivateContribCurrency")[0].value+"&"
+						+ "totalPrivateContribAmountDate="+document.getElementsByName("totalPrivateContribAmountDate")[0].value+"&"
+						//+ "totalPrivateContribCurrency="+document.getElementsByName("totalPrivateContribCurrency")[0].value+"&"
 						+ "dibusrsementsGlobalCurrency="+document.getElementsByName("dibusrsementsGlobalCurrency")[0].value
 						+ "&" + getContractDisbursments()
 						;
@@ -291,60 +298,39 @@ mySaveReportEngine = new SaveReportEngine();
 			<digi:trn key="aim:IPA:newPopup:description">Contract Description</digi:trn>
 		</td>
 		<td>
-			<html:textarea property="description" rows="8" cols="87" styleClass="inp-text"/>
+			<html:textarea property="description" rows="5" cols="87" styleClass="inp-text"/>
 		</td>
 	</tr>
 </field:display>
-	<field:display name="Contracting Activity Category" feature="Contracting">
+<field:display name="Contracting Activity Category" feature="Contracting">
 	<tr>
 		<td align="left"  nowrap>
 			<digi:trn key="aim:IPA:newPopup:actCat">Activity Category</digi:trn>
 		</td>
 		<td>
-			<html:select property="activityCategoryId" styleClass="inp-text">
-			<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
-			<logic:iterate id="actCat" name="aimIPAContractForm" property="activitiyCategories">
-				<c:set var="trn">
-					<digi:trn key="aim:ipa:popup:${actCat.id}">${actCat.value}</digi:trn>
-				</c:set>
-			</logic:iterate>			
-				<html:option value="${actCat.id}">${trn}</html:option>			
-			</html:select>
+			<category:showoptions name="aimIPAContractForm" property="activityCategoryId"  
+								  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY %>" 
+								  styleClass="inp-text" />
 			
 			&nbsp;&nbsp;&nbsp;
-			!!!<digi:trn key="aim:IPA:newPopup:contractType">Contract Type</digi:trn>
+			<digi:trn key="aim:IPA:newPopup:contractType">Contract Type</digi:trn>
 			&nbsp;&nbsp;
-			<html:select property="activityCategoryId" styleClass="inp-text">
-			<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
-			<logic:iterate id="actCat" name="aimIPAContractForm" property="activitiyCategories">
-				<c:set var="trn">
-					<digi:trn key="aim:ipa:popup:${actCat.id}">${actCat.value}</digi:trn>
-				</c:set>
-			</logic:iterate>			
-				<html:option value="${actCat.id}">${trn}</html:option>			
-			</html:select>
-		</td>
-	</tr>
-         </field:display>
-         
-         <field:display name="Contracting Type" feature="Contracting">
-	<tr>
-		<td align="left"  nowrap>
+
+			<category:showoptions name="aimIPAContractForm" property="contractTypeId"  
+								  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_TYPE_KEY %>" 
+								  styleClass="inp-text" />
+
+			&nbsp;&nbsp;&nbsp;
 			<digi:trn key="aim:IPA:newPopup:actType">Activity Type</digi:trn>
-		</td>
-		<td>
-			<html:select property="typeId" styleClass="inp-text">
-			<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
-			<logic:iterate id="type" name="aimIPAContractForm" property="types">
-				<c:set var="trn">
-					<digi:trn key="aim:ipa:popup:${type.id}">${type.value}</digi:trn>
-				</c:set>
-				<html:option value="${type.id}">${trn}</html:option>			
-			</logic:iterate>			
-			</html:select>
+			&nbsp;&nbsp;
+			
+			<category:showoptions name="aimIPAContractForm" property="typeId"  
+								  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_TYPE_KEY %>" 
+								  styleClass="inp-text" />
+			
 		</td>
 	</tr>
-         </field:display>
+</field:display>
          
          
 	<tr><td id="calendarPosition" colspan="2" bgcolor="#006699" class="textalb" align="center">
@@ -386,15 +372,10 @@ mySaveReportEngine = new SaveReportEngine();
 				<digi:trn key="aim:IPA:newPopup:status">Status</digi:trn>
 			</td>
 			<td align="left">
-				<html:select property="statusId" styleClass="inp-text">
-				<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
-				<logic:iterate id="actstat" name="aimIPAContractForm" property="statuses">
-				<c:set var="trn">
-				<digi:trn key="aim:ipa:popup:${actstat.id}">${actstat.value}</digi:trn>
-				</c:set>
-				<html:option value="${actstat.id}">${trn}</html:option>			
-				</logic:iterate>			
-				</html:select>
+				<category:showoptions name="aimIPAContractForm" property="statusId"  
+					  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_STATUS_KEY %>" 
+					  styleClass="inp-text" />
+				
 				&nbsp;&nbsp;
 			</td>
 		</field:display>
@@ -423,6 +404,27 @@ mySaveReportEngine = new SaveReportEngine();
 			</td>
 		</field:display>
 	</tr>
+
+	
+	<field:display name="Contracting Organization Text" feature="Contracting">
+		<tr>
+			<td align="left">
+				<digi:trn key="aim:IPA:newPopup:contractingOrganizationDescription">Description</digi:trn>
+			</td>
+			<td colspan="5" align="left">
+				<html:textarea property="contractingOrganizationText" rows="5" cols="95" styleClass="inp-text"/>
+			</td>
+		</tr>				
+	</field:display>
+	</table>
+	</td>
+	</tr>	
+
+
+	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
+		<b><digi:trn key="aim:IPA:newPopup:organizations">Organization(s)</digi:trn></b>
+	</td></tr>
+
 	<tr>
 		<td colspan="6" align="left">
 			<field:display name="Contract Organization" feature="Contracting">
@@ -433,7 +435,7 @@ mySaveReportEngine = new SaveReportEngine();
 
 				&nbsp;
 				<html:button styleClass="dr-menu" property="deleteOrgs" onclick="delOrgs();">
-					<digi:trn key="aim:IPA:newPopup:deleteSelected">Delete Selected</digi:trn>
+					<digi:trn key="aim:IPA:newPopup:removeOrganizations">Remove Organizations</digi:trn>
 				</html:button>	
 			</field:display>
 		</td>
@@ -459,20 +461,6 @@ mySaveReportEngine = new SaveReportEngine();
 		</td>
 	</tr>
 	
-	
-	<field:display name="Contracting Organization Text" feature="Contracting">
-		<tr>
-			<td align="left">
-				<digi:trn key="aim:IPA:newPopup:contractingOrganizationDescription">Description</digi:trn>
-			</td>
-			<td colspan="5" align="left">
-				<html:textarea property="contractingOrganizationText" rows="5" cols="95" styleClass="inp-text"/>
-			</td>
-		</tr>				
-	</field:display>
-	</table>
-	</td>
-	</tr>	
 
 	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
 		<b><digi:trn key="aim:IPA:newPopup:fundingAllocation">Funding Allocation</digi:trn></b>
@@ -489,14 +477,16 @@ mySaveReportEngine = new SaveReportEngine();
 				<td align="left">
 					<html:text property="totalAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 				</td>
-				<td align="left">
+				<td align="left" colspan="4">
+					<digi:trn key="aim:ipa:newPopup:currencyType">Currency Type</digi:trn>
+					&nbsp;&nbsp;
 					<html:select property="totalAmountCurrency" styleClass="inp-text">
 						<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
 					</html:select>
 				</td>
-			</field:display>
 		</tr>
+			</field:display>
 		<field:display name="Total EC Contribution" feature="Contracting">
 			<tr>
 				<td colspan="6" align="center">
@@ -512,10 +502,10 @@ mySaveReportEngine = new SaveReportEngine();
 					<html:text property="totalECContribIBAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 				</td>
 				<td align="left">
-					<html:select property="totalECContribIBCurrency" styleClass="inp-text">
-						<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-					</html:select>
+					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate1" property="totalECContribIBAmountDate"/>
+					<a id="fimage1" href='javascript:pickDateByIdDxDy("calendarPosition","fdate1",-250,80)'>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					</a>
 				</td>
 		    </field:display>
 		     
@@ -527,10 +517,10 @@ mySaveReportEngine = new SaveReportEngine();
 					<html:text property="totalECContribINVAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 				</td>
 				<td align="left">
-					<html:select property="totalECContribINVCurrency" styleClass="inp-text">
-						<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-					</html:select>
+					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate2" property="totalECContribINVAmountDate"/>
+					<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate2",-250,80)'>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					</a>
 				</td>
 			</field:display>
 			</tr>
@@ -550,10 +540,10 @@ mySaveReportEngine = new SaveReportEngine();
 						<html:text property="totalNationalContribCentralAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 					</td>
 					<td align="left">
-						<html:select property="totalNationalContribCentralCurrency" styleClass="inp-text">
-							<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-							<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-						</html:select>
+						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate3" property="totalNationalContribCentralAmountDate"/>
+						<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate3",-250,80)'>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						</a>
 					</td>
  				</field:display>
 
@@ -565,10 +555,10 @@ mySaveReportEngine = new SaveReportEngine();
 						<html:text property="totalNationalContribIFIAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 					</td>
 					<td align="left">
-						<html:select property="totalNationalContribIFICurrency" styleClass="inp-text">
-							<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-							<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-						</html:select>
+						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate4" property="totalNationalContribIFIAmountDate"/>
+						<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate4",-250,80)'>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						</a>
 					</td>
 				</field:display>
 			</tr>
@@ -582,10 +572,10 @@ mySaveReportEngine = new SaveReportEngine();
 						<html:text property="totalNationalContribRegionalAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 					</td>
 					<td align="left">
-						<html:select property="totalNationalContribRegionalCurrency" styleClass="inp-text">
-							<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-							<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-						</html:select>
+						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate5" property="totalNationalContribRegionalAmountDate"/>
+						<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate5",-250,80)'>
+							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+						</a>
 					</td>
 				</field:display>
 			</tr>
@@ -605,10 +595,10 @@ mySaveReportEngine = new SaveReportEngine();
 					<html:text property="totalPrivateContribAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 				</td>
 				<td align="left">
-					<html:select property="totalPrivateContribCurrency" styleClass="inp-text">
-						<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-					</html:select>
+					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate6" property="totalPrivateContribAmountDate"/>
+					<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate6",-250,80)'>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					</a>
 				</td>
 			</tr>
 		</field:display>

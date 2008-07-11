@@ -54,7 +54,6 @@
 		    
 	    var myPanel5 = new YAHOOAmp.widget.Panel("newmyContract", {
 			width:"720px",
-			height:"500px",
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
@@ -69,7 +68,7 @@
 	//myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 		    
 	function initScripts() {
-		var msgP5='\n<digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn>';
+		var msgP5='\n<digi:trn key="aim:addeditContracting">Add/Edit Contracting</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
 		myPanel5.render(document.body);

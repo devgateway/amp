@@ -25,6 +25,16 @@ public class IPAContract implements Serializable {
     private Date signatureOfContract;
     private Date contractValidity;
     private Date contractCompletion;
+    
+    
+    
+    private Date totalPrivateContribAmountDate;
+    private Date totalNationalContribRegionalAmountDate;
+    private Date totalNationalContribIFIAmountDate;
+    private Date totalNationalContribCentralAmountDate;
+    private Date totalECContribINVAmountDate;
+    private Date totalECContribIBAmountDate;
+    
     private Double totalECContribIBAmount;
     private AmpCurrency totalECContribIBCurrency;
     private Double totalAmount;
@@ -48,7 +58,8 @@ public class IPAContract implements Serializable {
     private Double totalDisbursements;
     private Double executionRate;
     private AmpCategoryValue type;
-
+    private AmpCategoryValue contractType;
+    
     public AmpCategoryValue getType() {
         return type;
     }
@@ -365,5 +376,64 @@ public class IPAContract implements Serializable {
 
 	public void setOrganizations(Set<AmpOrganisation> organizations) {
 		this.organizations = organizations;
+	}
+
+	public Date getTotalPrivateContribAmountDate() {
+		return totalPrivateContribAmountDate;
+	}
+
+	public void setTotalPrivateContribAmountDate(Date totalPrivateContribAmountDate) {
+		this.totalPrivateContribAmountDate = totalPrivateContribAmountDate;
+	}
+
+	public Date getTotalNationalContribRegionalAmountDate() {
+		return totalNationalContribRegionalAmountDate;
+	}
+
+	public void setTotalNationalContribRegionalAmountDate(
+			Date totalNationalContribRegionalAmountDate) {
+		this.totalNationalContribRegionalAmountDate = totalNationalContribRegionalAmountDate;
+	}
+
+	public Date getTotalNationalContribIFIAmountDate() {
+		return totalNationalContribIFIAmountDate;
+	}
+
+	public void setTotalNationalContribIFIAmountDate(
+			Date totalNationalContribIFIAmountDate) {
+		this.totalNationalContribIFIAmountDate = totalNationalContribIFIAmountDate;
+	}
+
+	public Date getTotalNationalContribCentralAmountDate() {
+		return totalNationalContribCentralAmountDate;
+	}
+
+	public void setTotalNationalContribCentralAmountDate(
+			Date totalNationalContribCentralAmountDate) {
+		this.totalNationalContribCentralAmountDate = totalNationalContribCentralAmountDate;
+	}
+
+	public Date getTotalECContribINVAmountDate() {
+		return totalECContribINVAmountDate;
+	}
+
+	public void setTotalECContribINVAmountDate(Date totalECContribINVAmountDate) {
+		this.totalECContribINVAmountDate = totalECContribINVAmountDate;
+	}
+
+	public Date getTotalECContribIBAmountDate() {
+		return totalECContribIBAmountDate;
+	}
+
+	public void setTotalECContribIBAmountDate(Date totalECContribIBAmountDate) {
+		this.totalECContribIBAmountDate = totalECContribIBAmountDate;
+	}
+
+	public AmpCategoryValue getContractType() {
+		return contractType;
+	}
+
+	public void setContractType(AmpCategoryValue contractType) {
+		this.contractType = contractType;
 	}
 }

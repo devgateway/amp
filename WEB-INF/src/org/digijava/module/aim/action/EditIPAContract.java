@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +41,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 public class EditIPAContract extends MultiAction {
 
     /**
-     * 
+     *
      */
     public EditIPAContract() {
         super();
@@ -85,12 +86,6 @@ public class EditIPAContract extends MultiAction {
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
         eaf.setCurrencies(CurrencyUtil.getAmpCurrency());
-        Collection<AmpCategoryValue> catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY, true);
-        Collection<AmpCategoryValue> statuses = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IPA_STATUS_KEY, true);
-        Collection<AmpCategoryValue> types = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IPA_TYPE_KEY, true);
-        eaf.setActivitiyCategories(catValues);
-        eaf.setStatuses(statuses);
-        eaf.setTypes(types);
 
         return modeSelect(mapping, form, request, response);
     }
@@ -139,6 +134,11 @@ public class EditIPAContract extends MultiAction {
         }
         else euaf.setTypeId((long)0);
         
+        if (contract.getContractType()!= null) {
+            euaf.setContractTypeId(contract.getContractType().getId());
+        }
+        else euaf.setContractTypeId((long)0);
+        
         if (contract.getOrganization() != null) {
             euaf.setContrOrg(contract.getOrganization().getAmpOrgId());
         }
@@ -158,7 +158,42 @@ public class EditIPAContract extends MultiAction {
             euaf.setContractValidity(DateTimeUtil.parseDateForPicker2(contract.getContractValidity()));
         }
         else euaf.setContractValidity("");
+
         
+        
+        
+        if (contract.getTotalPrivateContribAmountDate() != null) {
+            euaf.setTotalPrivateContribAmountDate(DateTimeUtil.parseDateForPicker2(contract.getTotalPrivateContribAmountDate()));
+        }
+        else euaf.setTotalPrivateContribAmountDate("");
+        
+        if (contract.getTotalNationalContribRegionalAmountDate() != null) {
+            euaf.setTotalNationalContribRegionalAmountDate(DateTimeUtil.parseDateForPicker2(contract.getTotalNationalContribRegionalAmountDate()));
+        }
+        else euaf.setTotalNationalContribRegionalAmountDate("");
+
+        if (contract.getTotalNationalContribIFIAmountDate() != null) {
+            euaf.setTotalNationalContribIFIAmountDate(DateTimeUtil.parseDateForPicker2(contract.getTotalNationalContribIFIAmountDate()));
+        }
+        else euaf.setTotalNationalContribIFIAmountDate("");
+
+        if (contract.getTotalNationalContribCentralAmountDate() != null) {
+            euaf.setTotalNationalContribCentralAmountDate(DateTimeUtil.parseDateForPicker2(contract.getTotalNationalContribCentralAmountDate()));
+        }
+        else euaf.setTotalNationalContribCentralAmountDate("");
+
+        if (contract.getTotalECContribINVAmountDate() != null) {
+            euaf.setTotalECContribINVAmountDate(DateTimeUtil.parseDateForPicker2(contract.getTotalECContribINVAmountDate()));
+        }
+        else euaf.setTotalECContribINVAmountDate("");
+        
+        if (contract.getTotalECContribIBAmountDate() != null) {
+            euaf.setTotalECContribIBAmountDate(DateTimeUtil.parseDateForPicker2(contract.getTotalECContribIBAmountDate()));
+        }
+        else euaf.setTotalECContribIBAmountDate("");
+        
+        
+
         //contractValidity
         if (contract.getContractCompletion() != null) {
             euaf.setContractCompletion(DateTimeUtil.parseDateForPicker2(contract.getContractCompletion()));
@@ -506,6 +541,9 @@ public class EditIPAContract extends MultiAction {
         if (euaf.getTypeId() != null) {
             eua.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(euaf.getTypeId()));
         }
+        if (euaf.getContractTypeId() != null) {
+            eua.setContractType(CategoryManagerUtil.getAmpCategoryValueFromDb(euaf.getContractTypeId()));
+        }
         if (euaf.getStartOfTendering() != null&&!euaf.getStartOfTendering().equals("")) {
             eua.setStartOfTendering(DateTimeUtil.parseDateForPicker(euaf.getStartOfTendering()));
         }
@@ -518,6 +556,31 @@ public class EditIPAContract extends MultiAction {
         if (euaf.getContractCompletion() != null&&!euaf.getContractCompletion().equals("")) {
             eua.setContractCompletion(DateTimeUtil.parseDateForPicker(euaf.getContractCompletion()));
         }
+        
+        if (euaf.getTotalPrivateContribAmountDate() != null && !euaf.getTotalPrivateContribAmountDate().equals("")){
+        	eua.setTotalPrivateContribAmountDate(DateTimeUtil.parseDateForPicker(euaf.getTotalPrivateContribAmountDate()));
+        }
+
+        if (euaf.getTotalNationalContribRegionalAmountDate() != null && !euaf.getTotalNationalContribRegionalAmountDate().equals("")){
+        	eua.setTotalNationalContribRegionalAmountDate(DateTimeUtil.parseDateForPicker(euaf.getTotalNationalContribRegionalAmountDate()));
+        }
+
+        if (euaf.getTotalNationalContribIFIAmountDate() != null && !euaf.getTotalNationalContribIFIAmountDate().equals("")){
+        	eua.setTotalNationalContribIFIAmountDate(DateTimeUtil.parseDateForPicker(euaf.getTotalNationalContribIFIAmountDate()));
+        }
+        
+        if (euaf.getTotalNationalContribCentralAmountDate() != null && !euaf.getTotalNationalContribCentralAmountDate().equals("")){
+        	eua.setTotalNationalContribCentralAmountDate(DateTimeUtil.parseDateForPicker(euaf.getTotalNationalContribCentralAmountDate()));
+        }
+        
+        if (euaf.getTotalECContribIBAmountDate() != null && !euaf.getTotalECContribIBAmountDate().equals("")){
+        	eua.setTotalECContribIBAmountDate(DateTimeUtil.parseDateForPicker(euaf.getTotalECContribIBAmountDate()));
+        }
+
+        if (euaf.getTotalECContribINVAmountDate() != null && !euaf.getTotalECContribINVAmountDate().equals("")){
+        	eua.setTotalECContribINVAmountDate(DateTimeUtil.parseDateForPicker(euaf.getTotalECContribINVAmountDate()));
+        }
+        
         if (euaf.getTotalECContribIBAmount() != null&&!euaf.getTotalECContribIBAmount().equals("")) {
             eua.setTotalECContribIBAmount(Double.parseDouble(euaf.getTotalECContribIBAmount()));
             if (euaf.getTotalECContribIBCurrency() != null&&!euaf.getTotalECContribIBCurrency().equals("")) {

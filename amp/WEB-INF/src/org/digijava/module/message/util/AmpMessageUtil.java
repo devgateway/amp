@@ -316,8 +316,8 @@ public class AmpMessageUtil {
 		try {
 			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft,false);
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where "+
+			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
 			if(fromIndex<0){
@@ -439,10 +439,12 @@ public class AmpMessageUtil {
 			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.sender=:tmId and msg.draft="+draft+" and state.messageHidden=true";	
 			query=session.createQuery(queryString);			
-			query.setParameter("tmId", tmId);			
-			hiddenMsgs=((Integer)query.uniqueResult()).intValue();
-			if(hiddenMsgs>0){
-				full=true;
+			query.setParameter("tmId", tmId);	
+			if(query.list().size()>0){
+				hiddenMsgs=((Integer)query.uniqueResult()).intValue();
+				if(hiddenMsgs>0){
+					full=true;
+				}
 			}
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	

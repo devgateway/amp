@@ -153,9 +153,9 @@
 
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
 
-				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20">
+				<TR height="20"><TD height="20">
 
-				&nbsp;&nbsp;&nbsp;
+				<div id="subtabsFinancial">
 
 					<c:set var="translation">
 
@@ -163,7 +163,7 @@
 
 					</c:set>
 
-					<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
+					<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="${translation}" >
 
               		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 
@@ -177,7 +177,7 @@
 
 </c:set>
 
-              		<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+              		<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 
@@ -187,7 +187,7 @@
 
 					<logic:equal name="aimYearlyInfoForm" property="transactionType" value="0">
 
-	            	<span class="sub-nav2-selected">
+	            	<span >
 
 	              		<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 
@@ -205,7 +205,7 @@
 
 						</c:set>
 
-			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  				<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
 
@@ -215,7 +215,7 @@
 
               	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
 
-	            	<span class="sub-nav2-selected">
+	            	<span>
 
 	              		<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
 
@@ -234,7 +234,7 @@
 
 						</c:set>
 
-			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  				<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
@@ -244,7 +244,7 @@
 
               	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
 
-	            	<span class="sub-nav2-selected">
+	            	<span>
 
 	              		<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
@@ -262,7 +262,7 @@
 
 			</c:set>
 <feature:display module="Funding" name="Expenditures">
-			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
@@ -362,9 +362,9 @@
 
 								</TD>
 
-								<TD align="right">
+								<TD align="right">&nbsp;
 
-									&nbsp;
+									
 
 								</TD>
 

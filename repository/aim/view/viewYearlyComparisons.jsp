@@ -135,9 +135,9 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
 
-				<TR bgColor=#222e5d><TD style="COLOR: #c9c9c7">
+				<TR><TD>
 
-					&nbsp;&nbsp;&nbsp;
+                <div id="subtabsFinancial">
 
 					<c:set var="translation">
 
@@ -145,7 +145,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 					</c:set>
 
-					<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
+					<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="${translation}" >
 
               		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 
@@ -157,7 +157,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 </c:set>
 
-              	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+              	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  			<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 
@@ -172,7 +172,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 		</c:set>
 
-		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 		  				<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
 
@@ -187,7 +187,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 		</c:set>
 
-		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 		  				<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
@@ -202,19 +202,19 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 		</c:set>
 		<feature:display module="Funding" name="Expenditures">
 					  			
-		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 		  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
 		  			</digi:link>|
 		</feature:display>
 
-              	<span class="sub-nav2-selected">
+              	<span>
 
               		<digi:trn key="aim:all">ALL</digi:trn>
 
               	</span>
-
+</div>
 				</TD></TR>
 
 				<TR bgColor=#f4f4f2>

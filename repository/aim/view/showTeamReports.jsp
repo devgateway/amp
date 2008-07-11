@@ -291,8 +291,8 @@ function confirmFunc() {
                              if(tm!=null)
                               {
                             %>
-                              <td bgColor=#999999 align="center" height="20">
-                              &nbsp;
+                              <td bgColor=#999999 align="center" height="20">&nbsp;
+                              
                               </td>
                               <td bgColor=#999999 align="center" height="20">
                                 <b>
@@ -427,7 +427,7 @@ function confirmFunc() {
                                 if(tm!=null){
                               %>
 
-                              <td width="100">  
+                              <td width="200">  
 	                                <div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
 	                                  <logic:iterate name="report" property="columns" id="column" indexId="index"  >
 	                                    <%if (index.intValue()%2==0){ %>
@@ -442,8 +442,8 @@ function confirmFunc() {
 	                                  </logic:iterate>
 	                                </div>
 	                                                                
-	                                <div align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]<br />
-	                                </div>
+	                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
+	                                </span>
                                 
 	                                <div style='position:relative;display:none;' id='measure-<bean:write name="report" property="measures"/>'> 
 	                                  <logic:iterate name="report" property="measures" id="measure" indexId="index"  >
@@ -453,8 +453,8 @@ function confirmFunc() {
 	                                  </logic:iterate>
 	                                </div>
 	                                
-	                                <div align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
-	                                </div>
+	                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="report" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
+	                                </span>
                                 </td>
                                 <td align="center">
 	                                <p style="white-space: nowrap">

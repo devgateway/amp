@@ -100,6 +100,7 @@
 	
 	
 	function sectorSelected(sec) {
+		selSector = sec.value;
 		setBusy(true);
 		var uniqueStr = (new Date()).getTime();
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr;

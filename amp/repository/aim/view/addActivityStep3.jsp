@@ -890,18 +890,22 @@ ${fn:replace(message,quote,escapedQuote)}
 																		bgcolor="#ffffff" cellspacing="1">
 																		<tr>
 																			<td>
-																				<a href='javascript:fnOnEditItem(<%= index %>,
-																									 <bean:write name="fundingOrganization" property="ampOrgId"/>,
-																								<bean:write name="funding" property="fundingId"/>)'>
-																				<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
-																				</a>
+																				<field:display name="Edit Funding Link" feature="Funding Information">
+																					<a href='javascript:fnOnEditItem(<%= index %>,
+																										 <bean:write name="fundingOrganization" property="ampOrgId"/>,
+																									<bean:write name="funding" property="fundingId"/>)'>
+																					<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
+																					</a>
+																				</field:display>
 																			</td>
 																			<td>
-																				<a href='javascript:fnOnDeleteItem(<bean:write name="fundingOrganization"
-																									 property="ampOrgId"/>,<bean:write name="funding"
-																									 property="fundingId"/>)'>
-																				<B><digi:trn key="aim:deleteFundingItem">Delete Item</digi:trn></B>
-																				</a>
+																				<field:display name="Delete Funding Link" feature="Funding Information">
+																					<a href='javascript:fnOnDeleteItem(<bean:write name="fundingOrganization"
+																										 property="ampOrgId"/>,<bean:write name="funding"
+																										 property="fundingId"/>)'>
+																					<B><digi:trn key="aim:deleteFundingItem">Delete Item</digi:trn></B>
+																					</a>
+																				</field:display>
 																			</td>
 																		</tr>
 																		</table>
@@ -921,7 +925,9 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																<tr>
 																	<td>
-																	<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
+																		<field:display name="Add Donor Funding Button" feature="Funding Information">
+																			<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
+																		</field:display>
 																	</td>
 																</tr>
 
@@ -933,15 +939,18 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<table cellSpacing=2 cellPadding=2>
 																			<tr>
 																				<td>
-
-																				   <html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
-																						<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																					</html:button>
+																					<field:display name="Add Donor Organization" feature="Funding Information">
+																				   		<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
+																							<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
+																						</html:button>
+																					</field:display>
 																				</td>
 																				<td>
-																				   <html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrganisations()">
-																						<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>
-																				   </html:button>
+																					<field:display name="Remove Donor Organization" feature="Funding Information">
+																					   <html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrganisations()">
+																							<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>
+																					   </html:button>
+																					</field:display>
 																				</td>
 																			</tr>
 																		</table>
@@ -953,9 +962,11 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																<tr>
 																	<td>
-																		<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
-																				<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																		</html:button>
+																		<field:display name="Add Donor Organization" feature="Funding Information">
+																			<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
+																					<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
+																			</html:button>
+																		</field:display>
 																	</td>
 																</tr>
 

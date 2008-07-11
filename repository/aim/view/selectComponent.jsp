@@ -35,6 +35,11 @@
 
 
 <script type="text/javascript">
+
+function closeWindow() {
+	window.close();
+}
+
 function switchType(){
 
   <digi:context name="switchType" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=switchType" />

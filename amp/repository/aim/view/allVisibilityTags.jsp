@@ -206,6 +206,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display>
 <field:display name="Add Disbursement Button" feature="Funding Information"></field:display>
 <field:display name="Add Documents Button" feature="Related Documents"></field:display>
+<field:display name="Add Donor Funding Button" feature="Funding Information"></field:display>
+<field:display name="Add Donor Organization" feature="Funding Information"></field:display>
 <field:display name="Add Expenditure Button" feature="Expenditures"></field:display>
 <field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Add Indicator Button" feature="Activity"></field:display>
@@ -300,6 +302,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Date Revised Target Value" feature="Activity"></field:display>
 <field:display name="Date Target Value" feature="Activity"></field:display>
 <field:display name="Date Team Leader" feature="Identification"></field:display>
+<field:display name="Delete Funding Link - Donor Organization" feature="Funding Information"></field:display>
 <field:display name="Delegated Cooperation" feature="Funding Information"></field:display>
 <field:display name="Delegated Partner" feature="Funding Information"></field:display>
 <field:display name="Description" feature="Identification"></field:display>
@@ -324,6 +327,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Edit Components Link" feature="Activity - Component Step"></field:display>
 <field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Edit Funding Link" feature="Regional Funding"></field:display>
+<field:display name="Edit Funding Link - Donor Organization" feature="Funding Information"></field:display>
 <field:display name="Environment" feature="Cross Cutting Issues"></field:display>
 <field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display>
 <field:display name="Exchange Rate" feature="Funding Information"></field:display>
@@ -436,6 +440,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Actors Button" feature="Issues"></field:display>
 <field:display name="Remove Components Button" feature="Activity - Component Step"></field:display>
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display>
+<field:display name="Remove Donor Organization" feature="Funding Information"></field:display>
 <field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Remove Fundings" feature="Regional Funding"></field:display>
 <field:display name="Remove Issues Button" feature="Issues"></field:display>

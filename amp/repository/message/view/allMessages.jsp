@@ -784,10 +784,19 @@ background-color:yellow;
                                  
                                 }
                                 if(toTD2.textContent==undefined){
-                                     toTD2.innerText=msgReceiver;
+                                
+                                            var mytool=msgReceiver;
+											var temp_array=mytool.split(";");
+											toTD2.innerText = temp_array[0];
+                                
+	                                     //toTD2.innerText=msgReceiver;
                                 }
                                 else{
-                                    toTD2.textContent=msgReceiver;
+                                	       var mytool=msgReceiver;
+											var temp_array=mytool.split(";");
+											toTD2.textContent = temp_array[0];
+                                	
+                                    		//toTD2.textContent=msgReceiver;
                                 }
                                   
                                

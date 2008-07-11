@@ -182,7 +182,7 @@
 <field:display name="Actual Commitments" feature="Measures"></field:display> 
 <field:display name="Actual Completion Date" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
-<field:display name="Actual Disbursement Orders" feature="Measures"></field:display> 
+<field:display name="Actual Disbursement Orders Measure" feature="Measures"></field:display> 
 <field:display name="Actual Disbursements" feature="Measures"></field:display> 
 <field:display name="Actual Expenditures" feature="Measures"></field:display> 
 <field:display name="Actual Start Date" feature="Planning"></field:display> 

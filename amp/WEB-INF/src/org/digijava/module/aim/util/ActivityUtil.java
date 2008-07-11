@@ -827,6 +827,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setSignatureOfContract(contract.getSignatureOfContract());
                     oldContract.setContractValidity(contract.getContractValidity());
                     oldContract.setContractCompletion(contract.getContractCompletion());
+
+                    oldContract.setTotalPrivateContribAmountDate(contract.getTotalPrivateContribAmountDate());
+                    oldContract.setTotalNationalContribIFIAmountDate(contract.getTotalNationalContribIFIAmountDate());
+                    oldContract.setTotalNationalContribRegionalAmountDate(contract.getTotalNationalContribRegionalAmountDate());
+                    oldContract.setTotalNationalContribCentralAmountDate(contract.getTotalNationalContribCentralAmountDate());
+                    oldContract.setTotalECContribINVAmountDate(contract.getTotalECContribINVAmountDate());
+                    oldContract.setTotalECContribIBAmountDate(contract.getTotalECContribIBAmountDate());
+                    
                     oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
                     oldContract.setTotalECContribIBCurrency(contract.getTotalECContribIBCurrency());
                     oldContract.setTotalAmount(contract.getTotalAmount());

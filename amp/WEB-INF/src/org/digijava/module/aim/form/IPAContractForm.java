@@ -17,11 +17,11 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 public class IPAContractForm extends ActionForm  {
 	
 	private List<IPAContractDisbursement> contractDisbursements;
-	private Collection<AmpCategoryValue> activitiyCategories;
-    private Collection<AmpCategoryValue> statuses;
-    private Collection<AmpCategoryValue> types;
-    private Long statusId;
-    private Long typeId;
+	
+    private Long contractTypeId = new Long(0);
+    private Long activityCategoryId = new Long(0);
+    private Long statusId = new Long(0);
+    private Long typeId = new Long(0);
 
     public Long getStatusId() {
         return statusId;
@@ -31,28 +31,12 @@ public class IPAContractForm extends ActionForm  {
         this.statusId = statusId;
     }
 
-    public Collection<AmpCategoryValue> getStatuses() {
-        return statuses;
-    }
-
-    public void setStatuses(Collection<AmpCategoryValue> statuses) {
-        this.statuses = statuses;
-    }
-
 	public Long[] getSelOrgs() {
 		return selOrgs;
 	}
 
 	public void setSelOrgs(Long[] selOrgs) {
 		this.selOrgs = selOrgs;
-	}
-
-	public Collection<AmpCategoryValue> getActivitiyCategories() {
-		return activitiyCategories;
-	}
-
-	public void setActivitiyCategories(Collection<AmpCategoryValue> activitiyCategories) {
-		this.activitiyCategories = activitiyCategories;
 	}
 
 	public IPAContractDisbursement getContractDisbursement(int index) {
@@ -69,7 +53,6 @@ public class IPAContractForm extends ActionForm  {
 
 	
 	private List currencies;
-	private Long activityCategoryId;
 	
 	
 	private Long id;
@@ -84,6 +67,7 @@ public class IPAContractForm extends ActionForm  {
 	private String contractCompletion;
 	
 	private String totalECContribIBAmount;
+	private String totalECContribIBAmountDate;
 	private Long totalECContribIBCurrency;
 	
 	private String totalAmount;
@@ -91,18 +75,23 @@ public class IPAContractForm extends ActionForm  {
 	private Long dibusrsementsGlobalCurrency;
 	
 	private String totalECContribINVAmount;
+	private String totalECContribINVAmountDate;
 	private Long totalECContribINVCurrency;
 	
 	private String totalNationalContribCentralAmount;
+	private String totalNationalContribCentralAmountDate;
 	private Long totalNationalContribCentralCurrency;
 	
 	private String totalNationalContribRegionalAmount;
+	private String totalNationalContribRegionalAmountDate;
 	private Long totalNationalContribRegionalCurrency;
 	
 	private String totalNationalContribIFIAmount;
+	private String totalNationalContribIFIAmountDate;
 	private Long totalNationalContribIFICurrency;
 	
 	private String totalPrivateContribAmount;
+	private String totalPrivateContribAmountDate;
 	private Long totalPrivateContribCurrency;
 	private Double totalDisbursements;
     private Double executionRate;
@@ -345,14 +334,6 @@ public class IPAContractForm extends ActionForm  {
 		this.activityCategoryId = activityCategoryId;
 	}
         
-    public Collection<AmpCategoryValue> getTypes() {
-        return types;
-    }
-
-    public void setTypes(Collection<AmpCategoryValue> types) {
-        this.types = types;
-    }
-    
     public Long getTypeId() {
         return typeId;
     }
@@ -400,12 +381,13 @@ public class IPAContractForm extends ActionForm  {
         totalPrivateContribCurrency = null;
         indexId=null;
         id=null;
-        statusId=null;
-        activityCategoryId=null;
         selContractDisbursements=null;
         contrOrg=null;
-        types=null;
-        typeId=null;
+        
+        activityCategoryId = new Long(0);
+        statusId = new Long(0);
+        typeId = new Long(0);
+        contractTypeId = new Long(0);
         }
 
         
@@ -465,6 +447,66 @@ public class IPAContractForm extends ActionForm  {
 
 	public void setContractingOrganizationText(String contractingOrganizationText) {
 		this.contractingOrganizationText = contractingOrganizationText;
+	}
+
+	public String getTotalECContribIBAmountDate() {
+		return totalECContribIBAmountDate;
+	}
+
+	public void setTotalECContribIBAmountDate(String totalECContribIBAmountDate) {
+		this.totalECContribIBAmountDate = totalECContribIBAmountDate;
+	}
+
+	public String getTotalECContribINVAmountDate() {
+		return totalECContribINVAmountDate;
+	}
+
+	public void setTotalECContribINVAmountDate(String totalECContribINVAmountDate) {
+		this.totalECContribINVAmountDate = totalECContribINVAmountDate;
+	}
+
+	public String getTotalNationalContribCentralAmountDate() {
+		return totalNationalContribCentralAmountDate;
+	}
+
+	public void setTotalNationalContribCentralAmountDate(
+			String totalNationalContribCentralAmountDate) {
+		this.totalNationalContribCentralAmountDate = totalNationalContribCentralAmountDate;
+	}
+
+	public String getTotalNationalContribRegionalAmountDate() {
+		return totalNationalContribRegionalAmountDate;
+	}
+
+	public void setTotalNationalContribRegionalAmountDate(
+			String totalNationalContribRegionalAmountDate) {
+		this.totalNationalContribRegionalAmountDate = totalNationalContribRegionalAmountDate;
+	}
+
+	public String getTotalNationalContribIFIAmountDate() {
+		return totalNationalContribIFIAmountDate;
+	}
+
+	public void setTotalNationalContribIFIAmountDate(
+			String totalNationalContribIFIAmountDate) {
+		this.totalNationalContribIFIAmountDate = totalNationalContribIFIAmountDate;
+	}
+
+	public String getTotalPrivateContribAmountDate() {
+		return totalPrivateContribAmountDate;
+	}
+
+	public void setTotalPrivateContribAmountDate(
+			String totalPrivateContribAmountDate) {
+		this.totalPrivateContribAmountDate = totalPrivateContribAmountDate;
+	}
+
+	public Long getContractTypeId() {
+		return contractTypeId;
+	}
+
+	public void setContractTypeId(Long contractTypeId) {
+		this.contractTypeId = contractTypeId;
 	}
 
 

@@ -27,6 +27,11 @@
 			column="type" 
 			class="org.digijava.module.aim.dbentity.AmpCategoryValue" 
 			cascade="none"/>
+			
+				<many-to-one name="contractType" 
+			column="contractType" 
+			class="org.digijava.module.aim.dbentity.AmpCategoryValue" 
+			cascade="none"/>
                  
                 <many-to-one name="organization" 
 			column="contracting_org" 
@@ -50,6 +55,13 @@
 		<property name="totalAmount" column="total_amount" type="java.lang.Double" />		
 		<many-to-one name="totalAmountCurrency" column="total_amount_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
 		<many-to-one name="dibusrsementsGlobalCurrency" column="disbursements_global_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
+		
+		<property name="totalPrivateContribAmountDate" column="total_private_contrib_amount_date" type="java.util.Date" />
+		<property name="totalNationalContribRegionalAmountDate" column="total_national_contrib_regional_amount_date" type="java.util.Date" />
+		<property name="totalNationalContribIFIAmountDate" column="total_national_contrib_IFI_amount_date" type="java.util.Date" />
+		<property name="totalNationalContribCentralAmountDate" column="total_national_contrib_central_amount_date" type="java.util.Date" />
+		<property name="totalECContribINVAmountDate" column="total_EC_contrib_INV_amount_date" type="java.util.Date" />
+		<property name="totalECContribIBAmountDate" column="total_EC_contrib_IB_amount_date" type="java.util.Date" />
 		
 		<property name="totalECContribINVAmount" column="total_ec_contrib_inv_amount" type="java.lang.Double" />		
 		<many-to-one name="totalECContribINVCurrency" column="total_ec_contrib_inv_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		

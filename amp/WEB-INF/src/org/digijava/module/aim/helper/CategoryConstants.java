@@ -45,17 +45,21 @@ public class CategoryConstants {
 	public static final String ACTIVITY_LEVEL_NAME					="Activity Level";
 	public static final String ACTIVITY_LEVEL_KEY					="activity_level";
         
-        public static final String IPA_ACTIVITY_CATEGORY_NAME="IPA Activity Category";
+	public static final String IPA_ACTIVITY_CATEGORY_NAME="IPA Activity Category";
 	public static final String IPA_ACTIVITY_CATEGORY_KEY="ipa_act_cat";
-        
-        public static final String IPA_STATUS_NAME="IPA Status";
+
+	public static final String IPA_STATUS_NAME="IPA Status";
 	public static final String IPA_STATUS_KEY="ipa_cat_stat";
-        
-        public static final String IPA_TYPE_NAME="IPA Type";
+
+	public static final String IPA_TYPE_NAME="IPA Type";
 	public static final String IPA_TYPE_KEY="ipa_type";
-        
-        public static final long NONE_TYPE=0;
-        public static final long COUNTRY_TYPE=1;
-        public static final long REGION_TYPE=2;
+	
+	public static final String IPA_ACTIVITY_TYPE_NAME="IPA Activity Type";
+	public static final String IPA_ACTIVITY_TYPE_KEY="ipa_activity_type";
+	
+
+	public static final long NONE_TYPE=0;
+	public static final long COUNTRY_TYPE=1;
+	public static final long REGION_TYPE=2;
 }
 

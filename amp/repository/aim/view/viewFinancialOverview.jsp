@@ -57,57 +57,56 @@
 <TR>
 	<TD vAlign="top" align="center">
 		<!-- contents -->
-
 			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
-
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
-				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20">
-				&nbsp;&nbsp;&nbsp;
+				<TR height="20"><TD height="20">
+				<div id="subtabsFinancial">
 				<!-- logic:notEqual name="aimFinancialOverviewForm" property="ampActivityId" value="0"-->
-	            	<span class="sub-nav2-selected">
+	            	<span>
 	              		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 	              	</span>
-	              	<!-- /logic:notEqual--> |
+	              	<!-- /logic:notEqual--> 
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
 					</c:set>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 					<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
-					</digi:link>|
+					</digi:link>
                                         <field:display feature="Disbursement Orders" name="Disbursement Orders Tab">
                                         <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewDisbursementOrders">Click here to view Disbursement Orders</digi:trn>
 					</c:set>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 					<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
-					</digi:link>|
+					</digi:link>
                                         </field:display>
 					<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewDisbursements">Click here to view Disbursements</digi:trn>
 					</c:set>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
-					</digi:link>|
+					</digi:link>
 					<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 					</c:set>
 					
                     <feature:display module="Funding" name="Expenditures">
-                    	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+                    	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 							<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
-						</digi:link>|
+						</digi:link>
 					</feature:display>
-
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
 					</c:set>
-					<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="${translation}" >
+					<digi:link href="/viewYearlyComparisons.do" name="urlAll" title="${translation}" >
 					<digi:trn key="aim:all">ALL</digi:trn>
 					</digi:link>
+                    
+                    </div>
 				</TD></TR>
 				<TR bgColor=#f4f4f2>
             	<TD align=left><html:hidden property="tabIndex" />
@@ -219,7 +218,7 @@
 					</TD>
 				</TR>
 			</TABLE>
-
+			</div>
 			</TD></TR>
 
 			</TABLE>

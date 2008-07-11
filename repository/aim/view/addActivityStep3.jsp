@@ -890,7 +890,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																		bgcolor="#ffffff" cellspacing="1">
 																		<tr>
 																			<td>
-																				<field:display name="Edit Funding Link" feature="Funding Information">
+																				<field:display name="Edit Funding Link - Donor Organization" feature="Funding Information">
 																					<a href='javascript:fnOnEditItem(<%= index %>,
 																										 <bean:write name="fundingOrganization" property="ampOrgId"/>,
 																									<bean:write name="funding" property="fundingId"/>)'>
@@ -899,7 +899,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</field:display>
 																			</td>
 																			<td>
-																				<field:display name="Delete Funding Link" feature="Funding Information">
+																				<field:display name="Delete Funding Link - Donor Organization" feature="Funding Information">
 																					<a href='javascript:fnOnDeleteItem(<bean:write name="fundingOrganization"
 																										 property="ampOrgId"/>,<bean:write name="funding"
 																										 property="fundingId"/>)'>

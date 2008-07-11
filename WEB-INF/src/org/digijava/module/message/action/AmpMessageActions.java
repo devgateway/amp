@@ -733,7 +733,8 @@ public class AmpMessageActions extends DispatchAction {
     	AmpMessageState newMessageState=new AmpMessageState();
 		newMessageState.setMessage(message);
 		newMessageState.setSender(senderName);
-		newMessageState.setMemberId(memberId);	
+		newMessageState.setMemberId(memberId);
+		newMessageState.setSenderId(message.getSenderId());
         String receivers = message.getReceivers();
         if (receivers == null) {
         	receivers = "";

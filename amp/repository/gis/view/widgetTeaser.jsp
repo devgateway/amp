@@ -34,7 +34,7 @@
 			<c:forEach var="theader" items="${gisWidgetTeaserForm.table.headerRows}" varStatus="hstat">
 				<tr>
 					<c:forEach var="cell" items="${theader.cells}">
-						<td nowrap="nowrap" style="border : 1px solid silver">
+						<td nowrap="nowrap" style="border : 1px solid silver;${cell.htmlStyle}">
 							<strong>${cell.value}</strong>
 						</td>
 					</c:forEach>

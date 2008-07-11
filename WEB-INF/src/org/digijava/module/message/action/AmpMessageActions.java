@@ -652,6 +652,12 @@ public class AmpMessageActions extends DispatchAction {
        	state.setMessage(message);
        	state.setSender(teamMember.getMemberName()+";"+teamMember.getTeamName());
        	state.setSenderId(teamMember.getMemberId());
+       	
+    	if(AmpMessageUtil.isSentOrDraftFull(clazz,teamMember.getMemberId(),message.getDraft())){
+    		state.setMessageHidden(true);
+		}else{
+			state.setMessageHidden(false);
+		}
        	AmpMessageUtil.saveOrUpdateMessageState(state);        	
     	    	
     	
@@ -708,7 +714,7 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			
 			if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
-				if(request.getParameter("toDo")!=null && !request.getParameter("toDo").equals("draft")){
+				if(request.getParameter("toDo") != null && !request.getParameter("toDo").equals("draft")){
 		    		DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(), message.getDescription());
 		    	}
 			}
@@ -734,7 +740,8 @@ public class AmpMessageActions extends DispatchAction {
 		newMessageState.setMessage(message);
 		newMessageState.setSender(senderName);
 		newMessageState.setMemberId(memberId);
-	    String receivers = message.getReceivers();
+		
+        String receivers = message.getReceivers();
         if (receivers == null) {
         	receivers = "";
         } else {

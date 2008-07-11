@@ -618,7 +618,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Planned Expenditures" feature="Measures"></field:display>
 <field:display name="Undisbursed Balance" feature="Measures"></field:display>
 <field:display name="Total Commitments" feature="Measures"></field:display>
-<field:display name="Actual Disbursement Orders" feature="Measures"></field:display>
+<field:display name="Actual Disbursement Orders Measure" feature="Measures"></field:display>
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display>
 <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>

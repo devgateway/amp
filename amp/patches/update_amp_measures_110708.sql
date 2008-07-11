@@ -1,0 +1,1 @@
+UPDATE `amp_measures` SET `measureName` = 'Actual Disbursement Orders Measure', `aliasName` = 'Actual Disbursement Orders Measure' WHERE (`measureId` = 9) AND (`measureName` = 'Actual Disbursement Orders') AND (`aliasName` = 'Actual Disbursement Orders');

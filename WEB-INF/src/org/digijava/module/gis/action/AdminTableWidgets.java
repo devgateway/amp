@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ecs.html.TT;
 import org.apache.ecs.xhtml.col;
 import org.apache.ecs.xhtml.del;
 import org.apache.log4j.Logger;
@@ -708,16 +709,21 @@ public class AdminTableWidgets extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		TableWidgetCreationForm tableForm=(TableWidgetCreationForm)form;
+		TableWidgetCreationForm tForm=(TableWidgetCreationForm)form;
 		//retrieve widget from session
 		AmpDaTable sessionWidget=getWidgetFromSession(request);
 		//retrieve columns from session
 		List<AmpDaColumn> columns = getClumnsFromSession(request);
-		widgetToForm(tableForm, sessionWidget);
+		widgetToForm(tForm, sessionWidget);
 		//find column we want to edit
-		AmpDaColumn column = AmpCollectionUtils.searchByKey(columns, tableForm.getColId(), new TableWidgetColumnKeyResolver());
+		AmpDaColumn column = AmpCollectionUtils.searchByKey(columns, tForm.getColId(), new TableWidgetColumnKeyResolver());
 		//change field
-		column.setName(tableForm.getColName());
+		column.setName(tForm.getColName());
+		column.setCode(tForm.getColCode());
+		column.setCssClass(tForm.getColCssClass());
+		column.setHtmlStyle(tForm.getColHtmlStyle());
+		column.setPattern(tForm.getColPattern());
+		column.setWidth(tForm.getColWidth());
 		//return to edit
 		return mapping.findForward("returnToEdit");
 	}

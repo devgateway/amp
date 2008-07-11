@@ -1,5 +1,6 @@
 package org.digijava.module.gis.util;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -39,7 +40,11 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
@@ -61,9 +66,21 @@ public class ChartWidgetUtil {
 		TimeSeriesCollection ds = getIndicatorChartDataset(indicatorCon);
 		boolean tooltips = false;
 		boolean urls = false;
+		opt.setShowLegend(true);
 		result = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
 		Font font = new Font(null,0,12);
 		result.getTitle().setFont(font);
+		XYPlot plot =(XYPlot) result.getPlot();
+		XYItemRenderer renderer = plot.getRenderer();
+		System.out.println(renderer.getClass().getName());
+		renderer.setSeriesPaint(0, Color.blue);
+		renderer.setSeriesPaint(1, Color.red);
+		if (renderer instanceof XYLineAndShapeRenderer){
+			XYLineAndShapeRenderer r = (XYLineAndShapeRenderer)renderer;
+			r.setBaseShapesVisible(false);
+			r.setBaseShapesFilled(true);
+//			r.setItemLabelsVisible(true);
+		}
 		return result;
 	}
     

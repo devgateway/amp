@@ -1775,29 +1775,32 @@ public class TeamUtil {
             col = new ArrayList();
             while(itr.hasNext()) {
                 AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
-                // modified by Priyajith
-                // desc:used select query instead of session.load
-                // start
-                queryString = "select r from " + AmpReports.class.getName()
-                    + " r " + "where (r.ampReportId=:id) order by r.name";
-                qry = session.createQuery(queryString);
-                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
-                                 Hibernate.LONG);
-                Iterator itrTemp = qry.list().iterator();
-                AmpReports ampReport = null;
-                while(itrTemp.hasNext()) {
-                    ampReport = (AmpReports) itrTemp.next();
+                
+                if(ampTeamRep.getReport()!=null){
+	                // modified by Priyajith
+	                // desc:used select query instead of session.load
+	                // start
+	                queryString = "select r from " + AmpReports.class.getName()
+	                    + " r " + "where (r.ampReportId=:id) order by r.name";
+	                qry = session.createQuery(queryString);
+	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
+	                                 Hibernate.LONG);
+	                Iterator itrTemp = qry.list().iterator();
+	                AmpReports ampReport = null;
+	                while(itrTemp.hasNext()) {
+	                    ampReport = (AmpReports) itrTemp.next();
+	                }
+	                // end
+	                ReportsCollection rc = new ReportsCollection();
+	                rc.setReport(ampReport);
+	                if(ampTeamRep.getTeamView() == false) {
+	                    rc.setTeamView(false);
+	                } else {
+	                    rc.setTeamView(true);
+	                }
+	
+	                col.add(rc);
                 }
-                // end
-                ReportsCollection rc = new ReportsCollection();
-                rc.setReport(ampReport);
-                if(ampTeamRep.getTeamView() == false) {
-                    rc.setTeamView(false);
-                } else {
-                    rc.setTeamView(true);
-                }
-
-                col.add(rc);
 
             }
             Collections.sort(col);
@@ -2193,21 +2196,23 @@ public class TeamUtil {
             col1 = new ArrayList();
             while(itr.hasNext()) {
                 AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
-                // modified by Priyajith
-                // desc:used select query instead of session.load
-                // start
-                queryString = "select r from " + AmpReports.class.getName()
-                    + " r " + "where (r.ampReportId=:id)";
-                qry = session.createQuery(queryString);
-                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
-                                 Hibernate.LONG);
-                Iterator itrTemp = qry.list().iterator();
-                AmpReports ampReport = null;
-                while(itrTemp.hasNext()) {
-                    ampReport = (AmpReports) itrTemp.next();
-                }
-                // end
-                col1.add(ampReport);
+                if(ampTeamRep.getReport()!=null){
+	                // modified by Priyajith
+	                // desc:used select query instead of session.load
+	                // start
+	                queryString = "select r from " + AmpReports.class.getName()
+	                    + " r " + "where (r.ampReportId=:id)";
+	                qry = session.createQuery(queryString);
+	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
+	                                 Hibernate.LONG);
+	                Iterator itrTemp = qry.list().iterator();
+	                AmpReports ampReport = null;
+	                while(itrTemp.hasNext()) {
+	                    ampReport = (AmpReports) itrTemp.next();
+	                }
+	                // end
+	                col1.add(ampReport);
+            	}
             }
 
             Iterator itr2 = col1.iterator();

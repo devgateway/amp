@@ -717,7 +717,8 @@ public class AmpMessageActions extends DispatchAction {
 		
     	//cleaning form values
     	setDefaultValues(messageForm);
-   	    if (request.getParameter("toDo")!=null&&request.getParameter("toDo").equals("draft")) {
+   	    if (request.getParameter("toDo") != null && request.getParameter("toDo").equals("draft") 
+            || message.getForwardedMessage() != null) {
               //  messageForm.setChildTab("draft");
             return mapping.findForward("showAllMessages");
         }

@@ -358,11 +358,10 @@ window.onload=autosum;
 				<digi:trn key="aim:IPA:newPopup">Start of Tendering</digi:trn>
 			</td>
 			<td align="left">
-				<html:text readonly="true" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
+				<html:text readonly="true" size="9" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
 				<a id ="startOfTenderingDate" href='javascript:pickDateByIdDxDy("calendarPosition","startOfTendering",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
-				&nbsp;&nbsp;
 			</td>
 		</field:display>
 
@@ -371,11 +370,10 @@ window.onload=autosum;
 				<digi:trn key="aim:IPA:newPopup:contractValidityDate">Contract Validity Date</digi:trn>
 			</td>
 			<td align="left">
-				<html:text readonly="true" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
+				<html:text readonly="true" size="9" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
 				<a id="contractValidityDate" href='javascript:pickDateByIdDxDy("calendarPosition","contractValidity",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
-				&nbsp;&nbsp;
 			</td>
 		</field:display>
 		
@@ -387,8 +385,6 @@ window.onload=autosum;
 				<category:showoptions name="aimIPAContractForm" property="statusId"  
 					  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_STATUS_KEY %>" 
 					  styleClass="inp-text" />
-				
-				&nbsp;&nbsp;
 			</td>
 		</field:display>
 	</tr>
@@ -398,7 +394,7 @@ window.onload=autosum;
 				<digi:trn key="aim:IPA:newPopup:signatureOfContract">Signature of Contract</digi:trn>
 			</td>
 			<td align="left">
-				<html:text readonly="true" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
+				<html:text readonly="true" size="9" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
 				<a id="signatureOfContractDate" href='javascript:pickDateByIdDxDy("calendarPosition","signatureOfContract",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
@@ -409,7 +405,7 @@ window.onload=autosum;
 				<digi:trn key="aim:IPA:newPopup:contractCompletion">Contract Completion</digi:trn>
 			</td>
 			<td align="left">
-				<html:text readonly="true" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
+				<html:text readonly="true" size="9" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
 				<a id="contractCompletionDate" href='javascript:pickDateByIdDxDy("calendarPosition","contractCompletion",-250,80)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
@@ -424,7 +420,7 @@ window.onload=autosum;
 				<digi:trn key="aim:IPA:newPopup:contractingOrganizationDescription">Description</digi:trn>
 			</td>
 			<td colspan="5" align="left">
-				<html:textarea property="contractingOrganizationText" rows="5" cols="95" styleClass="inp-text"/>
+				<html:textarea property="contractingOrganizationText" rows="5" cols="85" styleClass="inp-text"/>
 			</td>
 		</tr>				
 	</field:display>
@@ -680,7 +676,7 @@ window.onload=autosum;
 								<html:optionsCollection name="aimIPAContractForm" property="currencies" value="currencyCode" label="currencyName"/>
 							</html:select>
 							&nbsp;
-							<html:text readonly="true" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
+							<html:text readonly="true" size="9" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
 							<a id="image${idx.count}" href='javascript:pickDateByIdDxDy("calendarPosition","date${idx.count}",-250,80)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>

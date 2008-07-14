@@ -83,10 +83,10 @@
 							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
 						<html:option value="1" style="color:red">
-							<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
+							*&nbsp;<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
 						<html:option value="2" style="color:green">
-							<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
+							*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 						</html:option>
 					</html:select>
 					</td>

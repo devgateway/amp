@@ -19,11 +19,7 @@
 <div style='position:relative;display:none;' id='<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>'> 
 	<bean:write name="textCell" filter="false"/>
 </div>
-<div align="left">
-......
-</div>
-<div align="center" onMouseOver="stm(['<bean:write name="textCell" property="column.name"/> 
-	Full Text',document.getElementById('<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>full text</u>]
+<div align="center" onMouseOver="stm(['<bean:write name="textCell" property="column.name"/> Full Text',document.getElementById('<bean:write name="textCell" property="column.name"/>-<bean:write name="textCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>full text</u>]
 </div>
 </logic:equal>
 </logic:notEqual>

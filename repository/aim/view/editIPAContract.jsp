@@ -1,4 +1,3 @@
-<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -152,7 +151,7 @@ function getContractDisbursments(){
 		}
 		elems = divId.getElementsByTagName("select");
 		for (var i=0; i<elems.length; i++) {
-			ret += elems[i].name + "=" + elems[i].selectedIndex;
+			ret += elems[i].name + "=" + elems[i].selectedIndex + "&";
 		}	
 	}
 	return ret;
@@ -167,6 +166,7 @@ function generateFields(){
 						+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
 						+ "contractValidity="+document.getElementsByName("contractValidity")[0].value+"&"
 						+ "statusId="+document.getElementsByName("statusId")[0].value+"&"
+						+ "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
 						+ "signatureOfContract="+document.getElementsByName("signatureOfContract")[0].value+"&"
 						+ "contractCompletion="+document.getElementsByName("contractCompletion")[0].value+"&"
 						+ "contractingOrganizationText="+document.getElementsByName("contractingOrganizationText")[0].value+"&"
@@ -209,7 +209,6 @@ function orgsAdded() {
 
 function delOrgs() {
 	var postString		= "removeOrgs=true&" + getCheckedFields("selOrgs")+"&"+generateFields();
-	alert(getCheckedFields("selOrgs"));
 	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
 }
 
@@ -235,7 +234,7 @@ function getCheckedFields(name) {
 
 function delDisb() {
 	var postString		= "removeFields=true&" + getCheckedFields("selContractDisbursements")+"&"+generateFields();
-	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);	
+	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
 }
 
 
@@ -639,7 +638,7 @@ window.onload=autosum;
 			</field:display>
 			&nbsp;	
 			<field:display name="Remove Disbursements" feature="Contracting">
-				<html:button styleClass="dr-menu" property="delDisb" onclick="delDisb()">
+				<html:button styleClass="dr-menu" property="deldisbursement" onclick="delDisb();">
 					<digi:trn key="aim:IPA:newPopup:removeDisbursements">Remove Disbursements</digi:trn>
 				</html:button>			
 			</field:display>				

@@ -323,8 +323,15 @@ public class IPAContractForm extends ActionForm  {
         
         activityCategoryId = new Long(0);
         statusId = new Long(0);
-        typeId = new Long(0);
+        typeId = new Long(0);	
         contractTypeId = new Long(0);
+        
+        totalECContribIBAmountDate = null;
+        totalECContribINVAmountDate = null;
+        totalNationalContribCentralAmountDate = null;
+        totalNationalContribIFIAmountDate = null;
+        totalNationalContribRegionalAmountDate = null;
+        totalPrivateContribAmountDate = null;
         }
 
         

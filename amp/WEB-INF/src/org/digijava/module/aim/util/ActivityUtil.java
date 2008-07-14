@@ -848,6 +848,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setOrganization(contract.getOrganization());
                     oldContract.setStatus(contract.getStatus());
                     oldContract.setType(contract.getType());
+                    oldContract.setContractType(contract.getContractType());
                     //oldContract.getDisbursements().clear();
                     Set toRetain=new HashSet();
 

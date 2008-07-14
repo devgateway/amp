@@ -78,7 +78,7 @@ function addJob(){
   <table>
     <tr>
       <td>
-      &nbsp;&nbsp;&nbsp;
+      &nbsp;
       </td>
       <td>
         <table>
@@ -113,34 +113,29 @@ function addJob(){
             </td>
           </tr>
           <tr>
-            <td colspan="6">
-            &nbsp;
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:250px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmName">Name</digi:trn></b>
             </td>
-          </tr>
-          <tr>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:150px;">
-              <digi:trn key="aim:job:clmName">Name</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmStartDate">Start date</digi:trn></b>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
-              <digi:trn key="aim:job:clmStartDate">Start date</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmEndDate">End date</digi:trn></b>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
-              <digi:trn key="aim:job:clmEndDate">End date</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmPrevFireDate">Previus fire date</digi:trn></b>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
-              <digi:trn key="aim:job:clmNextFiredate">Next fire date</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmNextFiredate">Next fire date</digi:trn></b>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
-              <digi:trn key="aim:job:clmPrevFireDate">Previus fire date</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:120px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmFinalFireDate">Final fire date</digi:trn></b>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
-              <digi:trn key="aim:job:clmFinalFireDate">Final fire date</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:60px;border-left:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmStatus">Status</digi:trn></b>
             </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:110px;">
-              <digi:trn key="aim:job:clmStatus">Status</digi:trn>
-            </td>
-            <td style="background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:165px;">
-              <digi:trn key="aim:job:clmCommands">Commands</digi:trn>
+            <td style="white-space:nowrap;background-color:#CCCCCC;padding: 5px 5px 5px 5px;width:160px;border-left:solid 1px #000000;border-right:solid 1px #000000;">
+              <b><digi:trn key="aim:job:clmCommands">Commands</digi:trn></b>
             </td>
           </tr>
           <c:if test="${empty quartzJobManagerForm.jobs}">
@@ -153,25 +148,26 @@ function addJob(){
           </c:if>
           <c:forEach var="job" items="${quartzJobManagerForm.jobs}">
             <tr>
-              <td>
-              ${job.name}
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;${job.name}
               </td>
-              <td>
-              ${job.startDateTime}
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;${job.startDateTime}
               </td>
-              <td>
-              ${job.endDateTime}
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;${job.endDateTime}
               </td>
-              <td>
-              ${job.nextFireDateTime}
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;${job.prevFireDateTime}
               </td>
-              <td>
-              ${job.prevFireDateTime}
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;${job.nextFireDateTime}
               </td>
-              <td>
-              ${job.finalFireDateTime}
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;${job.finalFireDateTime}
               </td>
-              <td>
+              <td style="border-left:solid 1px #000000;white-space:nowrap;">
+              &nbsp;
                 <c:if test="${job.paused}">
                   <b><digi:trn key="aim:job:stPaused">Paused</digi:trn></b>
                 </c:if>
@@ -179,18 +175,16 @@ function addJob(){
                   <b><digi:trn key="aim:job:stWorking">Working</digi:trn></b>
                 </c:if>
               </td>
-              <td>
+              <td style="border-left:solid 1px #000000;border-right:solid 1px #000000;white-space:nowrap;">
+              &nbsp;
                 <c:if test="${job.paused}">
                   [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
-                  &nbsp;
                   [<a href="javaScript:resumeJob('${job.name}');"><digi:trn key="aim:job:lnkResume">Resume</digi:trn></a>]
                 </c:if>
                 <c:if test="${!job.paused}">
                   [<a href="javaScript:pauseJob('${job.name}');"><digi:trn key="aim:job:lnkPause">Pause</digi:trn></a>]
-                  &nbsp;
                   [<digi:trn key="aim:job:lnkResume">Resume</digi:trn>]
                 </c:if>
-                &nbsp;
                 [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
               </td>
             </tr>

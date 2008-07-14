@@ -178,7 +178,9 @@ public class AmpARFilter extends PropertyListable {
 	private DecimalFormat currentFormat = null;
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
-
+	private String accessType=null;
+	
+	
 	private String pageSize; // to be used for exporting reports
 
 	private String text;
@@ -210,7 +212,9 @@ public class AmpARFilter extends PropertyListable {
 		}
 		
 		AmpApplicationSettings tempSettings = null;
+		
 		if (tm != null) {
+			this.setAccessType(tm.getTeamAccessType());
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));
 			// set the computed workspace orgs
 			//Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
@@ -303,50 +307,28 @@ public class AmpARFilter extends PropertyListable {
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
 						: "");
 		String TEAM_FILTER = "";
-		/*
-		if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0){
-			Set<String> activityStatus = new HashSet<String>();
-			activityStatus.add(Constants.APPROVED_STATUS);
-			activityStatus.add(Constants.EDITED_STATUS);
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND draft=false AND approval_status IN (" +
-				Util.toCSString(activityStatus)
-				+")" +
-				"AND ( amp_team_id IN ("
+
+		//new computed filter - after permissions #3167
+		//AMP-3726
+		Set<String> activityStatus = new HashSet<String>();
+		activityStatus.add(Constants.APPROVED_STATUS);
+		activityStatus.add(Constants.EDITED_STATUS);
+		if("Management".equals(this.getAccessType()))
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
+				+ Util.toCSString(ampTeams)
+				+ ") " ;
+		else
+			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") "
-				+ "OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )";
-		}
-		else 
-			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("
-			+ Util.toCSString(ampTeams)
-			+ ") "
-			+ "OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			+ Util.toCSString(ampTeams) + ") )";
-		// computed workspace filter -- append it to the team filter so normal
-		// team activities are also possible
-		if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
-			TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ("
-					+ Util.toCSString(teamAssignedOrgs) + ") )";
-			TEAM_FILTER += "OR amp_activity_id IN (SELECT distinct(amp_activity_id) FROM amp_funding WHERE amp_donor_org_id IN ("
-					+ Util.toCSString(teamAssignedOrgs) + ")) )";
-
-		}
-		*/
-		//new computed filter - after permissions #3167
-		TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
-			+ Util.toCSString(ampTeams)
-			+ ") "
-			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
-			+ Util.toCSString(ampTeams) + ") )";
+			
 
 	// computed workspace filter -- append it to the team filter so normal
 	// team activities are also possible
 			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
 				
-				Set<String> activityStatus = new HashSet<String>();
-				activityStatus.add(Constants.APPROVED_STATUS);
-				activityStatus.add(Constants.EDITED_STATUS);
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
 						Util.toCSString(activityStatus)	+") )";
@@ -422,7 +404,7 @@ public class AmpARFilter extends PropertyListable {
 		case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
 			actStatusValue=" approval_status='started' and draft=true ";break;
 		case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
-			actStatusValue=" approval_status='started' ";break;
+			actStatusValue=" approval_status='started' and draft<>true";break;
 		case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
 			actStatusValue=" approval_status='edited' and draft= true ";break;
 		default:actStatusValue="1";	break;
@@ -1174,6 +1156,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setApprovalStatusSelected(Long approvalStatusSelected) {
 		this.approvalStatusSelected = approvalStatusSelected;
+	}
+
+	public String getAccessType() {
+		return accessType;
+	}
+
+	public void setAccessType(String accessType) {
+		this.accessType = accessType;
 	}
 
 }

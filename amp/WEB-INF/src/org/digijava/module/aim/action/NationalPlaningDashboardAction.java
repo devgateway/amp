@@ -126,10 +126,10 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 				toDateActivities = cal.getTime();
 			}
 
-			Long donorOrgId = null;
+			String donorOrgId = null;
 			if (npdForm.getSelectedDonors() != null
 					&& npdForm.getSelectedDonors()[0] > 0) {
-				donorOrgId = new Long(npdForm.getSelectedDonors()[0]);
+				donorOrgId = String.valueOf(npdForm.getSelectedDonors()[0]);
 			}
 
 			// retrive activities

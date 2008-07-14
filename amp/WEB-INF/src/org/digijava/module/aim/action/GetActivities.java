@@ -85,7 +85,7 @@ public class GetActivities extends Action {
 
 			//count activities with same filter but without pagination. this should be fast.
 			logger.debug("counting activities");
-			Integer count=getActivitiesCount(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, tm, false);
+			Integer count=getActivitiesCount(actForm.getProgramId(),actForm.getStatusId(),actForm.getDonorIds(), fromYear,toYear, null, tm, false);
 			//calculate pagination
 			Integer pageStart=null;
 			Integer rowCount=null;
@@ -99,7 +99,7 @@ public class GetActivities extends Action {
 			}
 
 			logger.debug("retriving activities");
-			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, tm, pageStart,rowCount, false);
+			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorIds(), fromYear,toYear, null, tm, pageStart,rowCount, false);
 
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
             AmpCurrency curr=ampAppSettings.getCurrency();
@@ -146,7 +146,7 @@ public class GetActivities extends Action {
 	 */
 	private Collection<AmpActivity> getActivities(Long ampThemeId,
 			String statusCode,
-			Long donorOrgId,
+			String donorOrgId,
 			Date fromDate,
 			Date toDate,
 			Long locationId,
@@ -203,7 +203,7 @@ public class GetActivities extends Action {
 
 	private Integer getActivitiesCount(Long ampThemeId,
 			String statusCode,
-			Long donorOrgId,
+			String donorOrgId,
 			Date fromDate,
 			Date toDate,
 			Long locationId,

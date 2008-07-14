@@ -180,6 +180,11 @@ border-right:1px solid white;
                                   <div class="bd">                    
                                       <ul>
                                         <li>
+                                        <a class="yuiampmenuitemlabel" href="/help/admin/help.do~blankPage=true">
+                                        <digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
+                                        </a>
+                                        </li>
+                                        <li>
                                         <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
                                         <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>

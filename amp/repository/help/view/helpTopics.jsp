@@ -18,6 +18,7 @@
 	}
 </script>
 <digi:instance property="helpForm" />
+<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                <ul class="yui-nav">
@@ -42,7 +43,8 @@
                                       <c:if test="${curTopicParentId!=parent.helpTopicId}">
                                            <div id="collapse${parent.helpTopicId}" style="display:block; padding:3px">
                                             <digi:img  src="images/arrow_right.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},true);"/>
-                                                <a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&amp;topicKey=${parent.topicKey}">
+                                            
+                                                <a href="${url}&amp;topicKey=${parent.topicKey}" onclick="alert(${url})">
                                                     <digi:trn key="${parent.titleTrnKey}"></digi:trn>
                                                   </a> 
                                             </div>
@@ -50,13 +52,13 @@
                                                                                         
                                           <div id="uncollapse${parent.helpTopicId}" style="display: none;padding:3px">
                                           	<digi:img src="images/arrow_down.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},false);"/>
-                                                	<a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&amp;topicKey=${parent.topicKey}">
+                                                	<a href="${url}&amp;topicKey=${parent.topicKey}">
                                                     	<digi:trn key="${parent.titleTrnKey}"></digi:trn>
                                                     </a>                                                   
                                                       <c:if test="${not empty parent.children}">
                                                        	<c:forEach var="child" items="${parent.children}">
                                                             <div id="item" style="padding-left:15px;padding-top:2px;padding-bottom:2px;">
-                                                            <a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&amp;topicKey=${child.topicKey}">
+                                                              <a href="${url}&amp;topicKey=${child.topicKey}">
                                                                 <digi:trn key="${child.titleTrnKey}"></digi:trn></a>
                                                               </div>
                                                           </c:forEach>
@@ -69,21 +71,21 @@
                                             <c:if test="${curTopicParentId==parent.helpTopicId}">
                                              <div id="collapse${parent.helpTopicId}" style="display:none;padding:3px">
                                               		<digi:img src="images/arrow_right.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},true);"/>
-                                                   <a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&amp;topicKey=${parent.topicKey}">
+                                                   <a href="${url}&amp;topicKey=${parent.topicKey}">
                                                       <digi:trn key="${parent.titleTrnKey}"></digi:trn>
                                                     </a> 
                                                    
                                               </div>
                                               <div id="uncollapse${parent.helpTopicId}" style="display: block;padding:3px">
                                                 <digi:img src="images/arrow_down.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},false);"/>
-                                                      <a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&amp;topicKey=${parent.topicKey}">
+                                                      <a href="${url}&amp;topicKey=${parent.topicKey}">
 														<digi:trn key="${parent.titleTrnKey}"></digi:trn>
                                                       </a>
                                                      
                                                         <c:if test="${not empty parent.children}">
                                                           <c:forEach var="child" items="${parent.children}">
                                                             <div id="item" style="padding-left:15px;padding-top:2px;padding-bottom:2px;">
-                                                              <a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&amp;topicKey=${child.topicKey}">
+                                                               <a href="${url}&amp;topicKey=${child.topicKey}">
                                                                   <digi:trn key="${child.titleTrnKey}"></digi:trn>
                                                                 </a> 
                                                             </div>

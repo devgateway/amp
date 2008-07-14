@@ -33,6 +33,7 @@
 		</layout>
 		<layout name="helpBodyLayout" file="helpBodyLayout.jsp">
 			<put-item name="helpTopics" module="help" instance="default" teaser="helpTopics"/>
+                        <put-item name="adminHelpTopics" module="help" instance="admin" teaser="helpTopics"/>
 			<put-item name="helpBody" module="help" page="helpBody"/>
 			<put-item name="rightColumn" layout="helpRightColumnLayout"/>
 		</layout>

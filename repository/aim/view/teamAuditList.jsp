@@ -33,6 +33,17 @@
 
 </style>
 <script language="javascript">
+function showUser(email){
+	if (email != ""){
+		<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
+		openURLinWindow("<%= information %>~edit=true~email="+email,480, 350);
+	}
+	else{
+		var trasnlation = '<digi:trn key="aim:userblankmail">The user does not have a valid email address</digi:trn>'
+		alert (trasnlation);
+	}
+}
+
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
 	rows = tableElement.getElementsByTagName('tr');

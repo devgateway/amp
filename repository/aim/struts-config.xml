@@ -217,6 +217,7 @@
     <action name="aimReportsFilterPickerForm" path="/aim/reportsFilterPicker" scope="session" type="org.digijava.module.aim.action.ReportsFilterPicker" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_filterPicker" />
       <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />
+      <forward name="publicView" path="/aim/reportsPublicView.do" redirect="true" />
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
     </action>
 

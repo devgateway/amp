@@ -48,17 +48,19 @@
 	%>
 	</logic:notPresent>
 </logic:present>
+<div id="content"  class="yui-skin-sam" style="padding-left:10px;width:98%;min-width:680px;"> 
+<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;font-size:10px;">
 
-<ul id="PublicTabs" class="shadeTabs">
+<ul id="PublicTabs" class="yui-nav">
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 			<logic:equal name="report" property="publicReport" value="true">
 				<logic:equal name="report" property="drilldownTab" value="true">
-					<li><a id='Tab-<bean:write name="report" property="name"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><bean:write name="report" property="name"/></a></li>
+					<li><a id='Tab-<bean:write name="report" property="name"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><div><bean:write name="report" property="name"/></div></a></li>
 				</logic:equal>
 			</logic:equal>
 </logic:iterate>
 </ul>
-
+</div>
 
 <logic:notPresent name="firstReportName">
 <digi:trn key="aim:noPublicTabs">
@@ -66,7 +68,8 @@ No Public Tabs
 </digi:trn>
 </logic:notPresent>
 
-<div id="ajaxcontentarea" class="contentstyle">
+<div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
+</div>
 </div>	
 <logic:present name="firstReportName">
 	<script type="text/javascript">

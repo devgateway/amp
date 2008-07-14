@@ -17,6 +17,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
@@ -67,6 +69,7 @@ public class ViewAmp
         HttpSession session = request.getSession();
         session.setAttribute("isUserLogged",
                 new String("true"));
+        
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         
@@ -113,6 +116,12 @@ public class ViewAmp
         if (session.getAttribute(Constants.TEAM_ID) != null) {
             session.removeAttribute(Constants.TEAM_ID);
         }
+
+        //Reset public filter just in case the user comes from Public View
+        AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+		if(arf==null) arf=new AmpARFilter();		
+		arf.setPublicView(false);
+		session.setAttribute(ArConstants.REPORTS_FILTER,arf);
 
         ServletContext ampContext = session.getServletContext();
 

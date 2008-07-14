@@ -123,9 +123,20 @@ public class ViewNewAdvancedReport extends Action {
 		
 		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
-			filter=new AmpARFilter();
-			httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
-			filter.readRequestData(request);
+			if(filter != null && filter.isPublicView())
+			{
+				//This is to avoid resetting the publicView status to allow the right redirection on Public Views
+				filter=new AmpARFilter();
+				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
+				filter.readRequestData(request);
+				filter.setPublicView(true);
+			}
+			else
+			{
+				filter=new AmpARFilter();
+				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
+				filter.readRequestData(request);
+			}
 		}
 
 		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||

@@ -76,17 +76,17 @@
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
-						<html:option value="0">
+						<html:option value="0" style="color:green">
 							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 						</html:option>
-						<html:option value="3">
+						<html:option value="3" style="color:red">
 							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
-						<html:option value="1">
+						<html:option value="1" style="color:red">
 							<digi:trn key="rep:filter:NewDraft">New Draft</digi:trn>
 						</html:option>
-						<html:option value="2">
-							<digi:trn key="rep:filter:NewUnvalidated">New Un-validated</digi:trn>
+						<html:option value="2" style="color:green">
+							<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 						</html:option>
 					</html:select>
 					</td>

@@ -341,6 +341,7 @@ public class VisibilityManager extends MultiAction {
 			VisibilityManagerForm vForm = (VisibilityManagerForm) form;
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
+			vForm.setMode("manageTemplates");
 		}
 		((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 

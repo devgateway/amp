@@ -131,7 +131,6 @@
 										</TD>
 
 										<TD vAlign="top" align="left" width="15%">
-
 											<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 
 												<TR><TD vAlign="top" align="left">
@@ -140,6 +139,7 @@
 
 												</TD></TR>
 											
+												<logic:present name="currentMember">
 
 												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
 												
@@ -150,6 +150,8 @@
 														<TD vAlign="top" align="left">
 															<digi:insert attribute="myLinks" />
 														</TD>
+		
+												</logic:present>
 												</TR>
 										</TABLE>
 

@@ -224,6 +224,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setDonorGroups(donorGroups);
 		
 		filterForm.setExecutingAgency( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_EXECUTING_AGENCY) );
+		filterForm.setDonnorAgency(( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_DONOR) )); 
 		filterForm.setBeneficiaryAgency( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_BENEFICIARY_AGENCY) );
 		filterForm.setImplementingAgency( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_IMPLEMENTING_AGENCY) );
 		
@@ -393,7 +394,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setExecutingAgency(null);
 		filterForm.setBeneficiaryAgency(null);
 		filterForm.setImplementingAgency(null);
-	
+		filterForm.setDonnorAgency(null);
 		if (tempSettings!=null){
 		    filterForm.setRenderStartYear(tempSettings.getReportStartYear());   
 		    filterForm.setRenderStartYear(tempSettings.getReportEndYear()); 
@@ -636,6 +637,8 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		
 		arf.setBeneficiaryAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedBeneficiaryAgency() , AmpOrganisation.class ) );
+		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters( filterForm.getSelectedDonnorAgency() , AmpOrganisation.class ) );
+		
 		arf.setImplementingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedImplementingAgency() , AmpOrganisation.class ) );
 		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );
 		
@@ -687,6 +690,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setDonorTypes(null);
 		filterForm.setExecutingAgency(null);
 		filterForm.setBeneficiaryAgency(null);
+		filterForm.setDonnorAgency(null);
 		filterForm.setImplementingAgency(null);
 		filterForm.reset(mapping, request);
 		}

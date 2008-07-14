@@ -521,6 +521,24 @@
 							</td>
 						</tr>
 					   </feature:display>
+					   
+					   <feature:display name="Donnor Agency" module="Organizations">
+						<tr>
+								<td>
+									<digi:trn key="rep:filer:donnorAgency">Donnor Agency</digi:trn>
+								</td>
+						</tr>
+						<tr>
+  							<td>	
+  									<html:select style="width: 300px" multiple="true"
+									property="selectedDonnorAgency" size="3"
+									styleClass="inp-text">
+									<html:optionsCollection property="donnorAgency" label="acronymAndName"
+										value="ampOrgId" />
+									</html:select>
+							</td>
+						</tr>
+					   </feature:display>
 				</table>
           </td></tr>
           </table>

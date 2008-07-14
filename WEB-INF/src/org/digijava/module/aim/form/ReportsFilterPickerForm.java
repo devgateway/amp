@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -39,6 +40,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 									// Governament
 	private Collection donorGroups;
 	private Collection executingAgency;
+	private Collection<AmpOrganisation> donnorAgency;
+	
 	private Collection implementingAgency;
 	private Collection beneficiaryAgency;
 	private Long regionSelected;
@@ -58,7 +61,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedExecutingAgency;
 	private Object[] selectedImplementingAgency;
 	private Object[] selectedBeneficiaryAgency;
-
+	private Object[] selectedDonnorAgency;
 	private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
 
@@ -752,6 +755,24 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setTeamAccessType(String teamAccessType) {
 		this.teamAccessType = teamAccessType;
+	}
+
+	
+
+	public Object[] getSelectedDonnorAgency() {
+		return selectedDonnorAgency;
+	}
+
+	public void setSelectedDonnorAgency(Object[] selectedDonnorAgency) {
+		this.selectedDonnorAgency = selectedDonnorAgency;
+	}
+
+	public Collection<AmpOrganisation> getDonnorAgency() {
+		return donnorAgency;
+	}
+
+	public void setDonnorAgency(Collection<AmpOrganisation> donnorAgency) {
+		this.donnorAgency = donnorAgency;
 	}
 
 	

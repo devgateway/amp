@@ -17,9 +17,10 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 public class ReportsUtil {
 	private static Logger logger	= Logger.getLogger(ReportsUtil.class);
 	
-	public static Collection getAllOrgByRole(String roleCode ){
+	@SuppressWarnings("unchecked")
+	public static Collection<AmpOrganisation> getAllOrgByRole(String roleCode ){
         Session session = null;
-        Collection col 	= null;
+        Collection<AmpOrganisation> col 	= null;
 
         try {
             session = PersistenceManager.getRequestDBSession();

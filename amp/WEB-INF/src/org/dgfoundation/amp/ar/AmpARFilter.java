@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -143,6 +144,7 @@ public class AmpARFilter extends PropertyListable {
 	private Set executingAgency;
 	private Set implementingAgency;
 	private Set beneficiaryAgency;
+	private Set<AmpOrganisation> donnorgAgency;
 
 	private Set teamAssignedOrgs = null;
 
@@ -440,6 +442,10 @@ public class AmpARFilter extends PropertyListable {
 				+ "WHERE v.amp_org_id IN ("
 				+ Util.toCSString(implementingAgency) + ")";
 
+
+		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
+			+ Util.toCSString(donnorgAgency) + ")";
+
 		/*
 		 * if(fromYear!=null) { AmpARFilterHelper filterHelper =
 		 * Logic.getInstance().getAmpARFilterHelper(); String
@@ -651,6 +657,9 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(BENEFICIARY_AGENCY_FILTER);
 		if (implementingAgency != null && implementingAgency.size() > 0)
 			queryAppend(IMPLEMENTING_AGENCY_FILTER);
+
+		if (donnorgAgency != null && donnorgAgency.size() > 0)
+			queryAppend(DONNOR_AGENCY_FILTER);
 
 		if (governmentApprovalProcedures != null) {
 			String GOVERNMENT_APPROVAL_FILTER = "SELECT a.amp_activity_id from amp_activity a where governmentApprovalProcedures="
@@ -1158,7 +1167,14 @@ public class AmpARFilter extends PropertyListable {
 		this.approvalStatusSelected = approvalStatusSelected;
 	}
 
-	public String getAccessType() {
+	public Set<AmpOrganisation> getDonnorgAgency() {
+		return donnorgAgency;
+	}
+
+	public void setDonnorgAgency(Set<AmpOrganisation> donnorgAgency) {
+		this.donnorgAgency = donnorgAgency;
+	}
+		public String getAccessType() {
 		return accessType;
 	}
 

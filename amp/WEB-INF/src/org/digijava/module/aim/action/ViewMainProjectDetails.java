@@ -21,6 +21,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewMainProjectDetails extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewMainProjectDetails.class);
@@ -31,7 +32,7 @@ public class ViewMainProjectDetails extends TilesAction {
 		
 		MainProjectDetailsForm formBean = (MainProjectDetailsForm) form;
 		HttpSession session = request.getSession();
-		
+		request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.VIEW);
 		try {
 		
 		if (session.getAttribute("currentMember") == null) {

@@ -665,6 +665,7 @@ background-color:yellow;
 	    
 		var msgId=message.getAttribute('id');	//message state id
                 var messageId=message.getAttribute('msgId');
+                var isDraft=message.getAttribute('isDraft');
                 var sateId;
                 if(msgId==null){
                     msgId=messageId;
@@ -720,7 +721,13 @@ background-color:yellow;
 		if(isMsgRead=='false'){
 			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; style="color:red;" title="'+viewMessage+'">'+msgName+'</A>';   
 		}else {
-			sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
+                    if(isDraft==null||isDraft=='false'){
+                        sp.innerHTML='<A id="'+msgId+'_unreadLink" href="javascript:loadSelectedMessage(\''+msgId+'\')"; title="'+viewMessage+'">'+msgName+'</A>';
+                    }
+                    else{
+                        sp.innerHTML=msgName;
+                    }
+			
 		}
 		nameDiv.appendChild(sp);
 		nameTD.appendChild(nameDiv);
@@ -892,7 +899,7 @@ background-color:yellow;
 		fwdOrEditTD.width='10%';
 		fwdOrEditTD.align='center';
                 fwdOrEditTD.vAlign="top";
-		var isDraft=message.getAttribute('isDraft');
+		
 		if(isDraft=='true'){
                     fwdOrEditTD.innerHTML='<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+sateId+'" style="cursor:pointer; text-decoration:underline; color: blue" title="'+editClick+'" onclick="return unCheckMessages()"><img  src="/repository/message/view/images/edit.gif" border=0 hspace="2" /></digi:link>';									
 		}else{

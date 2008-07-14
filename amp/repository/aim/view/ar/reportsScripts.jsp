@@ -486,6 +486,10 @@ background-color: yellow;
 		if (aimReportsFilterPickerForm.selectedImplementingAgency)
 			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
 		
+		if (aimReportsFilterPickerForm.selectedDonnorAgency)
+			aimReportsFilterPickerForm.selectedDonnorAgency.selectedIndex=-1;
+		
+		
 		if (aimReportsFilterPickerForm.jointCriteria){
 			aimReportsFilterPickerForm.jointCriteria.checked=false;
 		}

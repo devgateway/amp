@@ -46,7 +46,7 @@
 <%if (rowIdx%2==0){ %>
 	<tr bgcolor="#FFFFFF" height="16px"  onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#FFFFFF'">
 <%}else{%>
-	<tr bgcolor="#ECECEC" height="16px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#ECECEC', '#ECECEC', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#ECECEC'">
+	<tr bgcolor="#DBE5F1" height="16px" onmousedown="setPointerhtml(this, <%=rowIdx%>, 'click', '#DBE5F1', '#DBE5F1', '#A5BCF2');" onMouseover="this.style.backgroundColor='#A5BCF2'" onMouseout="this.style.background='#DBE5F1'">
 <%}%>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

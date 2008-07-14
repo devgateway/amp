@@ -14,86 +14,76 @@
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
   <%int maxDepth = columnReport.getMaxColumnDepth();
-  columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+  	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
   %>
-  <%for (int curDepth = 0; curDepth <= columnReport
-  .getMaxColumnDepth(); curDepth++, rowIdx++) {%>
+  <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
   <tr title="Report Headings">
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
       <%
       	column.setCurrentDepth(curDepth);
       	int rowsp = column.getCurrentRowSpan();
       %>
-
+		
 		<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
         <c:set var="reportHeading">
           <%=subColumn.getName(reportMeta.getHideActivities())%>
         </c:set>
-        <td style="padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-            <logic:equal name="column" property="columnDepth" value="1">          
-	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
-		              <c:set var="portfTitle">
-		                <%=subColumn.getName(reportMeta.getHideActivities())%>
-		              </c:set>
-		              <digi:trn key="aim:protfilio:${portfTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
-				  </a>
-	            </logic:equal>
-            
-	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-	              	<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
-	              </html:link>
+        
+        <logic:equal name="column" property="columnDepth" value="1">
+        	<td style="padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>          
+	        	<logic:notEqual name="widget" scope="request" value="true">
+	            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+	              		<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+	              	</html:link>
 	            </logic:notEqual>
             
 	            <c:if test="${column.name == columnReport.sorterColumn}">
-	              <logic:equal name="columnReport" property="sortAscending" value="false">
-	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
-	              </logic:equal>
-	              <logic:equal name="columnReport" property="sortAscending" value="true">
-	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
-	              </logic:equal>
+	            	<logic:equal name="columnReport" property="sortAscending" value="false">
+	                	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	              	</logic:equal>
+	              	<logic:equal name="columnReport" property="sortAscending" value="true">
+	                	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	              	</logic:equal>
 	            </c:if>
+	         </td>
           </logic:equal>
-            
-          <logic:notEqual name="column" property="columnDepth" value="1">
-			<logic:notEqual name="subColumn" property="width" value="1">
-				<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
-          	</logic:notEqual>
-          	<logic:equal name="subColumn" property="width" value="1"> 
-	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
-		              <c:set var="portfTitle">
-		                <%=subColumn.getName(reportMeta.getHideActivities())%>
-		              </c:set>
-		              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
-				  </a>
-	            </logic:equal>
-	            <logic:notEqual name="widget" scope="request" value="true">
-	            	<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: white;cursor:pointer;background: #376091;padding: 1px" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
-	              		<digi:trn key="aim:reportBuilder:${reportHeading}">
-	              			<c:out value="${reportHeading}"/>
-	              		</digi:trn>
-	             	</html:link>
-	            </logic:notEqual>  
-	            
-				<c:if test="${subColumn.name == columnReport.sorterColumn}">
-	              <logic:equal name="columnReport" property="sortAscending" value="false">
-	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
-	              </logic:equal>
-	              <logic:equal name="columnReport" property="sortAscending" value="true">
-	                <img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
-	              </logic:equal>
-	            </c:if>
-	                    		
-          	</logic:equal>            
-          </logic:notEqual>
           
-        </td>
+        <logic:notEqual name="column" property="columnDepth" value="1">
+        	<logic:notEqual name="subColumn" property="width" value="1">
+        		<%if (!subColumn.getName().equalsIgnoreCase("Total Costs") && !subColumn.getName().equalsIgnoreCase("Funding")){
+        			if(subColumn.getName().length()<5){%>
+        				<td style="padding-left: 2px; padding-right: 2px;" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
+					<%}else{%>
+						<td style="font-family: Arial;font-size: 11px;text-decoration: none;color: white;padding-left: 2px; padding-right: 2px; background: #376091;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>		
+          		<%	}
+        		}
+          		%>
+          		</logic:notEqual>
+       			<logic:equal name="subColumn" property="width" value="1"> 
+	      			<td style="padding-left: 2px; padding-right: 2px; background: #376091;border-right: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+	      				<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: white;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
+	            				<c:out value="${reportHeading}"/>
+	            			</digi:trn>
+						</html:link>
+		  			  
+	            
+					<c:if test="${subColumn.name == columnReport.sorterColumn}">
+	        			<logic:equal name="columnReport" property="sortAscending" value="false">
+	                		<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	            		</logic:equal>
+	            		<logic:equal name="columnReport" property="sortAscending" value="true">
+	                		<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	            		</logic:equal>
+	       			</c:if>
+	     		</logic:equal>
+	     	</td>	            
+        	</logic:notEqual>
+    	
 	</logic:iterate>
    </logic:iterate>
   </tr>
-
-  <%}
-  %>
+  <%} %>
   </logic:equal>

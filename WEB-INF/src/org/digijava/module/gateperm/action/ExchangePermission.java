@@ -7,7 +7,9 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +24,7 @@ import javax.xml.bind.Unmarshaller;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
@@ -31,13 +34,11 @@ import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.action.TranslatorManager;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
-import org.digijava.module.gateperm.core.Permissible;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.feed.schema.AssignedObjIdType;
@@ -47,7 +48,6 @@ import org.digijava.module.gateperm.feed.schema.ObjectFactory;
 import org.digijava.module.gateperm.feed.schema.Permissions;
 import org.digijava.module.gateperm.form.ExchangePermissionForm;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.eclipse.jdt.internal.compiler.ast.WhileStatement;
 
 /**
  * @author mihai
@@ -101,6 +101,10 @@ public class ExchangePermission extends MultiAction {
 		FormFile xmlFile = epf.getFileUploaded();
 	    byte[] fileData;
 		try {
+		    	List<Permission> added=new ArrayList<Permission>();
+		    	List<Permission> updated=new ArrayList<Permission>();
+		    	request.setAttribute(GatePermConst.ADDED_PERMISSIONS,added);
+		    	request.setAttribute(GatePermConst.UPDATED_PERMISSIONS,updated);
 			fileData = xmlFile.getFileData();
 			InputStream inputStream= new ByteArrayInputStream(fileData);
 		
@@ -110,10 +114,26 @@ public class ExchangePermission extends MultiAction {
 			List gatePerm = xmlPermissions.getGatePerm();
 			Iterator i=gatePerm.iterator();
 			while (i.hasNext()) {
+			    	Session session=PersistenceManager.getSession();
+			    	Transaction transaction = session.beginTransaction();
 				GatePermType gp = (GatePermType) i.next();
-				xmlToDbGatePermission(gp);
+				GatePermission xmlToDbGatePermission = xmlToDbGatePermission(gp, added, updated);
+				session.saveOrUpdate(xmlToDbGatePermission);			
+				transaction.commit();
+				PersistenceManager.releaseSession(session);
 			}
 			
+			List compPerm = xmlPermissions.getCompositePerm();
+			i=compPerm.iterator();
+			while (i.hasNext()) {
+			    	Session session=PersistenceManager.getSession();
+			    	Transaction transaction = session.beginTransaction();
+			    	CompositePermType gp = (CompositePermType) i.next();
+				CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(gp, added, updated);
+				session.saveOrUpdate(xmlToDbCompositePermission);
+				transaction.commit();
+				PersistenceManager.releaseSession(session);
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,22 +154,72 @@ public class ExchangePermission extends MultiAction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			logger.error(e);
+		} catch (SQLException e) {
+		    // TODO Auto-generated catch block
+		    throw new RuntimeException( "SQLException Exception encountered", e);
 		}
         
-    
-		return null;
+		return mapping.findForward("importResult");
+	}
+	
+	private CompositePermission xmlToDbCompositePermission(CompositePermType elem, List<Permission> added, List<Permission> updated) throws DgException, HibernateException, SQLException {
+//	    Session requestDBSession = PersistenceManager.getRequestDBSession();
+	    Permission dbp=PermissionUtil.findPermissionByName(elem.getName());
+		if(dbp!=null) {
+			if(dbp instanceof GatePermission) {
+			    Session session = PersistenceManager.getSession();			    
+			    session.delete(dbp);dbp=null;
+			    PersistenceManager.releaseSession(session);
+		    }
+		}
+				
+		if(dbp==null) {dbp=new CompositePermission();added.add(dbp);} else updated.add(dbp);
+		CompositePermission dbCp=(CompositePermission) dbp;
+		dbCp.setName(elem.getName());
+		dbCp.setDescription(elem.getDescription());
+		dbCp.setDedicated(elem.isDedicated());
+		dbCp.setIntersection(elem.isIntersection());
+		dbCp.getPermissions().clear();
+		Iterator iterator = elem.getGatePerm().iterator();
+		while (iterator.hasNext()) {
+		    GatePermType xmlGp = (GatePermType) iterator.next();
+		    GatePermission xmlToDbGatePermission = xmlToDbGatePermission(xmlGp, added, updated);
+		    //Transaction transaction = requestDBSession.beginTransaction();
+		    //requestDBSession.saveOrUpdate(xmlToDbGatePermission);
+		    //transaction.commit();
+		    dbCp.getPermissions().add(xmlToDbGatePermission);
+		}
+		iterator = elem.getCompositePerm().iterator();
+		while (iterator.hasNext()) {
+		    CompositePermType xmlGp = (CompositePermType) iterator.next();
+		    CompositePermission xmlToDbCompositePermission = xmlToDbCompositePermission(xmlGp, added, updated);
+//		    Transaction transaction = requestDBSession.beginTransaction();
+//		    requestDBSession.saveOrUpdate(xmlToDbCompositePermission);
+//		    transaction.commit();
+		    dbCp.getPermissions().add(xmlToDbCompositePermission);
+		}
+		
+		//if(dbCp.getPermissibleObjects()==null) 
+		    dbCp.setPermissibleObjects(new TreeSet());
+		dbCp.getPermissibleObjects().addAll(getAssignedLocalIds(elem.getAssignedObjId(),dbCp));
+		
+		return dbCp;
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void xmlToDbGatePermission(GatePermType xmlGp) throws DgException, HibernateException {
+	private GatePermission xmlToDbGatePermission(GatePermType xmlGp,List<Permission> added,List<Permission> updated) throws DgException, HibernateException, SQLException {
 		//try to fetch an existing gate permission or create a fresh one
-		Session requestDBSession = PersistenceManager.getRequestDBSession();
 		Permission dbp=PermissionUtil.findPermissionByName(xmlGp.getName());
 		if(dbp!=null) {
-			if(dbp instanceof CompositePermission) {requestDBSession.delete(dbp);dbp=null;}
+		    
+			if(dbp instanceof CompositePermission) {
+			    Session session = PersistenceManager.getSession();
+			    session.delete(dbp);dbp=null;
+			    PersistenceManager.releaseSession(session);
+			    }
 		}
 		
-		if(dbp==null) dbp=new GatePermission();
+		if(dbp==null) {dbp=new GatePermission();added.add(dbp);} else updated.add(dbp);
 		GatePermission dbGp=(GatePermission) dbp;
 		
 		dbGp.setName(xmlGp.getName());
@@ -161,10 +231,12 @@ public class ExchangePermission extends MultiAction {
 		dbGp.getGateParameters().addAll(xmlGp.getParam());
 		dbGp.setGateTypeName(GatePermConst.availableGatesBySimpleNames.get(xmlGp.getGateClass()).getName());
 		
-		dbGp.getPermissibleObjects().clear();
-		dbGp.getPermissibleObjects().addAll(getAssignedLocalIds(xmlGp.getAssignedObjId()));
+		//if(dbGp.getPermissibleObjects()==null)
+		    dbGp.setPermissibleObjects(new TreeSet());
 		
-		requestDBSession.saveOrUpdate(dbGp);
+		dbGp.getPermissibleObjects().addAll(getAssignedLocalIds(xmlGp.getAssignedObjId(),dbGp));
+			
+		return dbGp;
 	}
 
 	private ActionForward modeImportForm(ActionMapping mapping,
@@ -180,17 +252,19 @@ public class ExchangePermission extends MultiAction {
 		return mapping.findForward("option");
 	}
 
-	private List<PermissionMap> getAssignedLocalIds(List<AssignedObjIdType> localIds) throws DgException {
+	private List<PermissionMap> getAssignedLocalIds(List<AssignedObjIdType> localIds,Permission p) throws DgException {
 		List<PermissionMap> ret=new ArrayList<PermissionMap>();
 		for (AssignedObjIdType assignedObjIdType : localIds) {
 			PermissionMap pm=new PermissionMap();
+			ret.add(pm);
 			pm.setPermissibleCategory(assignedObjIdType.getPermissibleClass());
 			String clusterId=assignedObjIdType.getValue();
-			if(clusterId!=null) {
+			if(clusterId!=null && !clusterId.equals("")) {
 				Identifiable ident = PermissionUtil.getIdentifiableByClusterIdentifier(clusterId, GatePermConst.availablePermissiblesBySimpleNames
 						.get(pm.getPermissibleCategory()));
 				pm.setObjectIdentifier((Long) ident.getIdentifier());
 			}
+			pm.setPermission(p);
 		}
 		return ret;
 		
@@ -203,30 +277,24 @@ public class ExchangePermission extends MultiAction {
 		Session requestDBSession = PersistenceManager.getRequestDBSession();
 		// assign cluster identifiable and permissible class, this will require
 		// the loading of the permissible object itself!:
-		Iterator<PermissionMap> iterator = p.getPermissibleObjects().iterator();
+		List<PermissionMap> allPermissionMapsForPermission = PermissionUtil.getAllPermissionMapsForPermission(p.getId());
+		Iterator<PermissionMap> iterator = allPermissionMapsForPermission.iterator();
 		while (iterator.hasNext()) {
 			PermissionMap permissionMap = (PermissionMap) iterator.next();
 
 			// try to load the obj as a cluster identifiable to get harmonized
 			// id:
 			ClusterIdentifiable ci = null;
-			if (permissionMap.getObjectIdentifier() != null)
-				try {
+			if (permissionMap.getObjectIdentifier() != null) {
 					ci = (ClusterIdentifiable) requestDBSession
 							.get(
 									GatePermConst.availablePermissiblesBySimpleNames
 											.get(permissionMap
 													.getPermissibleCategory()),
 									permissionMap.getObjectIdentifier());
-					if (ci == null) {
-						requestDBSession.delete(permissionMap);
+					if (ci == null) 					    	
 						continue;
-					}
-				} catch (net.sf.hibernate.ObjectNotFoundException e) {
-					// delete garbage data
-					requestDBSession.delete(permissionMap);
-					continue;
-				}
+			}
 			AssignedObjIdType clusterId = objFactory.createAssignedObjIdType();
 			clusterId.setPermissibleClass(permissionMap
 					.getPermissibleCategory());

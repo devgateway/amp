@@ -19,6 +19,10 @@
 		<page page="option" name="gateperm_exchangeOption"
 			title="Permission Exchange Option"
 		/>
+		<page page="importResult" name="gateperm_importResult"
+			title="Import Results"
+		/>
+
 		<page page="importPermission"
 			name="gateperm_exchangeImportPermission"
 			title="Permission Exchange Import"

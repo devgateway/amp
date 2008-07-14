@@ -22,6 +22,7 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.gateperm.core.ClusterIdentifiable;
@@ -443,6 +444,9 @@ public final class PermissionUtil {
 
     }
 
+    
+    
+    
 
     public static PermissionMap getPermissionMapForPermissible(Object permissibleIdentifier,Class permissibleClass) {
 	Session session = null;
@@ -545,6 +549,16 @@ public final class PermissionUtil {
 
         }
 
+    
+
+    
+    public static List<PermissionMap> getAllPermissionMapsForPermission(Long permissionId) throws DgException, HibernateException {	
+	    Session session = PersistenceManager.getRequestDBSession();
+	    Query q = session.createQuery("SELECT elements(p.permissibleObjects) from "+Permission.class.getName()+" p WHERE p.id=:permissionId");
+	    q.setParameter("permissionId", permissionId);
+	    List list = q.list();
+	    return list;
+    }
     
     
     public static Map<Long, String> getAllPermissibleObjectLabelsForPermissibleClass(Class permClass) {

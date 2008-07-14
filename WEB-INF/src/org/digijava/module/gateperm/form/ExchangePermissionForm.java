@@ -3,6 +3,8 @@
  */
 package org.digijava.module.gateperm.form;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -41,7 +43,6 @@ public class ExchangePermissionForm extends ActionForm {
 	public void setFileUploaded(FormFile fileUploaded) {
 		this.fileUploaded = fileUploaded;
 	}
-	
-	
+
 
 }

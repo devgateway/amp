@@ -18,10 +18,10 @@
 	<xs:element name="permissions" msdata:IsDataSet="true">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="gatePerm" type="gateperm:gatePermType"
+				<xs:element name="gatePerm" type="gateperm:gatePermType" minOccurs="0"
 					maxOccurs="unbounded"/>
 				<xs:element name="compositePerm" type="gateperm:compositePermType"
-					maxOccurs="unbounded"
+					minOccurs="0" maxOccurs="unbounded"
 				/>
 			</xs:sequence>
 		</xs:complexType>

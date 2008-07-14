@@ -60,4 +60,7 @@ public final class GatePermConst {
 	public static final String SCOPE="GATEPERM_SCOPE";
 	
 	public static final String ACTION_MODE="ACTION_MODE";
+	
+	public static final String UPDATED_PERMISSIONS="updatedPermissions";
+	public static final String ADDED_PERMISSIONS="addedPermissions";
 }

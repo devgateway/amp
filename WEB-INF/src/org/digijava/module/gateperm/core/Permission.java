@@ -53,7 +53,7 @@ public abstract class Permission extends PropertyListable implements Serializabl
 
     public int compareTo(Object o) {
 	Permission p = (Permission) o;
-	return this.getId().compareTo(p.getId());
+	return this.getName().compareTo(p.getName());
     }
 
     public abstract Set<String> getAllowedActions(Map scope);

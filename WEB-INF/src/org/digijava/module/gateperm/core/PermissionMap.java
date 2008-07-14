@@ -71,6 +71,7 @@ public class PermissionMap implements Serializable,Comparable {
 	public int compareTo(Object o) {
 	    PermissionMap pm=(PermissionMap) o;
 	    if(this.getObjectLabel()!=null && pm.getObjectLabel()!=null) return this.getObjectLabel().compareTo(pm.getObjectLabel());
-	    return this.getObjectIdentifier().compareTo(pm.getObjectIdentifier());
+	    if(this.getObjectIdentifier()!=null && pm.getObjectIdentifier()!=null) return this.getObjectIdentifier().compareTo(pm.getObjectIdentifier());
+	    return this.getPermissibleCategory().compareTo(pm.getPermissibleCategory());
 	}
 }

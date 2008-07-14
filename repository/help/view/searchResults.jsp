@@ -58,7 +58,8 @@
 																					</c:choose>
 																					<tr height="20px" style="background-color: ${backGround};" >
 																						<td width="100%" nowrap>
-																							<a href="/help/helpActions.do?actionType=viewSelectedHelpTopic&topicKey=${helpTopic.topicKey}">
+                                                                                                                                                                                    <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
+																							<a href="${url}&topicKey=${helpTopic.topicKey}">
 																								<digi:trn key="${helpTopic.titleTrnKey}"></digi:trn>
 																							</a>
 																						</td>																

@@ -8,17 +8,19 @@
 
 <digi:instance property="helpForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
-
+   
 <script langauage="JavaScript">
 	function next(){
-			helpForm.action="${contextPath}/help/helpActions.do?actionType=createHelpTopic";
+             <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
+			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();	
 		 		
 	}
 	
 	function cancel(){
-		helpForm.action="${contextPath}/help/helpActions.do?actionType=cancelHelpTopic";
+                <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=cancelHelpTopic" />
+		helpForm.action="${url}";
   		helpForm.target = "_self";
   		helpForm.submit();	
 	}
@@ -26,13 +28,15 @@
 	function finish (edit){
 		if(edit=='true'){
 			document.getElementsByName('wizardStep')[0].value=2;
-			helpForm.action="${contextPath}/help/helpActions.do?actionType=editHelpTopic";
+                        <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=editHelpTopic" />
+			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();	
 		}
 		if(edit=='false'){
 			document.getElementsByName('wizardStep')[0].value=3;
-			helpForm.action="${contextPath}/help/helpActions.do?actionType=createHelpTopic";
+                        <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
+			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();	
 		} 		
@@ -41,7 +45,8 @@
 		function back(){
 			document.getElementsByName('actionBack')[0].value=true;
 			document.getElementsByName('wizardStep')[0].value=0;
-			helpForm.action="${contextPath}/help/helpActions.do?actionType=createHelpTopic";
+			<digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=createHelpTopic" />
+			helpForm.action="${url}";
   			helpForm.target = "_self";
   			helpForm.submit();			 		
 	}

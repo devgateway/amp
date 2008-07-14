@@ -487,13 +487,11 @@ background-color: yellow;
 			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
 		
 		if (aimReportsFilterPickerForm.jointCriteria){
-			aimReportsFilterPickerForm.jointCriteria[0].checked=false;
-			aimReportsFilterPickerForm.jointCriteria[1].checked=false;
+			aimReportsFilterPickerForm.jointCriteria.checked=false;
 		}
 
 		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
-			aimReportsFilterPickerForm.governmentApprovalProcedures[0].checked=false;
-			aimReportsFilterPickerForm.governmentApprovalProcedures[1].checked=false;
+			aimReportsFilterPickerForm.governmentApprovalProcedures.checked=false;
 		}
 	}
 	

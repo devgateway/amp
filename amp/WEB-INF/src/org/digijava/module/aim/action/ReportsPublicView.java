@@ -12,6 +12,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 
 /**
  * @author mihai
@@ -25,7 +27,10 @@ public class ReportsPublicView extends TilesAction {
 		HttpSession session = request.getSession();
 		
 		session.setAttribute("publicReports",ARUtil.getAllPublicReports());
-		
+		AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+		if(arf==null) arf=new AmpARFilter();		
+		arf.setPublicView(true);
+		session.setAttribute(ArConstants.REPORTS_FILTER,arf);
 		return mapping.findForward("forward");
 
 	}

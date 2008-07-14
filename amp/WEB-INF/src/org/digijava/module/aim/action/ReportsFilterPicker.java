@@ -91,7 +91,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Long ampTeamId = null;
 		
 		if(teamMember!=null) ampTeamId=teamMember.getTeamId();
-		filterForm.setTeamAccessType(teamMember.getTeamAccessType());
+		if(teamMember!=null) filterForm.setTeamAccessType(teamMember.getTeamAccessType());
 	
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();
@@ -640,6 +640,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );
 		
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
+		if(arf.isPublicView()) return mapping.findForward("publicView");
 		return mapping.findForward(arf.isWidget()?"mydesktop":"reportView");
 	}
 	

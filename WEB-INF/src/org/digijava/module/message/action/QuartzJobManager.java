@@ -11,6 +11,10 @@ import org.digijava.module.message.util.QuartzJobUtils;
 import org.digijava.module.message.helper.QuartzJobForm;
 import org.digijava.module.message.form.QuartzJobManagerForm;
 import org.digijava.module.message.util.QuartzJobClassUtils;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class QuartzJobManager extends Action {
 
@@ -66,6 +70,16 @@ public class QuartzJobManager extends Action {
             QuartzJobUtils.resumeJob(qmform.getName());
         } else if ("deleteJob".equals(qmform.getAction())) {
             QuartzJobUtils.deleteJob(qmform.getName());
+        }else if("serverTime".equals(qmform.getAction())){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            String dt=sdf.format(new Date());
+            OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+            PrintWriter out = new PrintWriter(outputStream, true);
+            out.print(dt);
+            out.close();
+            outputStream.close();
+            qmform.setAction(null);
+            return null;
         }
 
         qmform.setJcCol(QuartzJobClassUtils.getAllJobClasses());

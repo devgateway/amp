@@ -57,7 +57,7 @@
 		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
-		    close:true,
+		    close:false,
 		    visible:false,
 		    modal:true,
 		    draggable:true,
@@ -72,15 +72,23 @@
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
 		myPanel5.render(document.body);
+		panelStart = 0;
 	}
 	
 	function showAddContract() {
 		var element5 = document.getElementById("myContract");
 		element5.style.display = "inline";
-		myPanel5.setBody(element5);
-		myPanel5.show();
+		if (panelStart < 1){
+			myPanel5.setBody(element5);
+		}
+		if (panelStart < 2){
+			document.getElementById("myContractContent").scrollTop=0;
+			myPanel5.show();
+			panelStart = 2;
+		}
 	}
 	function hideAddContract() {
+		panelStart = 1;
 		myPanel5.hide();
 	}
 	
@@ -168,6 +176,7 @@
 		var content = document.getElementById("myContractContent");
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
+	    //content.style.visibility = "visible";
 		showAddContract();
 	}
 		 

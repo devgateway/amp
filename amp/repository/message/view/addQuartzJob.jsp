@@ -205,8 +205,8 @@ function typeChanged(value){
               <tr>
                 <td colspan="2">
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="0" onclick="typeChanged(0);" />Secondly
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(1);" />Hourly
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(2);" />Minutely
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(1);" />Minutely
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(2);" />Hourly
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" />Daily
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" />Weekly
                 </td>

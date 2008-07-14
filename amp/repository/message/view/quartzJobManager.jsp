@@ -13,6 +13,8 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script type="text/javascript">
@@ -69,6 +71,29 @@ function editJob(name){
 function addJob(){
   if(setNameAndAction(null,"addJob")){
       quartzJobManagerForm.submit();
+  }
+}
+
+function addActionToURL(actionName){
+  var fullURL=document.URL;
+  var urlPath=location.pathname;
+  var contextPart=fullURL.length-urlPath.length;
+  var partialURL=fullURL.substring(0,contextPart);
+  return partialURL+"/"+actionName;
+}
+
+function getServerTime(){
+  var url=addActionToURL('message/quartzJobManager.do?action=serverTime');
+  var async=new Asynchronous();
+  async.complete=displayServerTime;
+  async.call(url);
+  window.setTimeout("getServerTime()",10000,"JavaScript");
+}
+
+function displayServerTime(status, statusText, responseText, responseXML){
+  var dv=document.getElementById("divServerTime");
+  if(dv!=null){
+    dv.innerHTML=responseText;
   }
 }
 </script>
@@ -192,7 +217,7 @@ function addJob(){
         </table>
         <table style="text-align:right;width:100%;">
           <tr>
-            <td style="height:50px;">
+            <td style="height:70px;white-space:nowrap;">
               <a href="javaScript:addJob();"><digi:trn key="aim:job:lnkAddNewJob">Add new job</digi:trn></a>
               &nbsp;
               <a href="javaScript:pauseAllJobs();"><digi:trn key="aim:job:lnkPauseAllJobs">Pause all jobs</digi:trn></a>
@@ -200,8 +225,17 @@ function addJob(){
               <a href="javaScript:resumeAllJobs();"><digi:trn key="aim:job:lnkResumeAllJobs">Resume all jobs</digi:trn></a>
             </td>
           </tr>
+          <tr>
+            <td style="white-space:nowrap;">
+              <digi:trn key="aim:job:serverTime">Server date and time:</digi:trn>
+              <span id="divServerTime"></span>
+            </td>
+          </tr>
         </table>
       </td>
     </tr>
   </table>
 </digi:form>
+<script type="text/javascript">
+getServerTime();
+</script>

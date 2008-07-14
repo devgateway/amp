@@ -1310,27 +1310,21 @@ public class FeaturesUtil {
 		Transaction tx = null;
 
 		try {
-			//tx=session.beginTransaction();
+			tx=session.beginTransaction();
 			AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
-			ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
-					id);
+			ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,id);
+			ft.getFields().clear();
+			ft.getFeatures().clear();
+			ft.getItems().clear();
 			session.delete(ft);
-			session.flush();
-			//tx.commit();
+			
+			//session.flush();
+			tx.commit();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
+		
 		return true;
 	}
 

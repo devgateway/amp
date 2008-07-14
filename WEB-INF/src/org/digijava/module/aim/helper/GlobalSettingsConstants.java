@@ -38,4 +38,6 @@ public class GlobalSettingsConstants {
     public static final String DEFAULT_DATE_FORMAT = "Default Date Format";
     
     public static final String SITE_DOMAIN = "Site Domain";
+    
+    public static final String AMOUNTS_IN_THOUSANDS = "Amounts in Thousands";
 }

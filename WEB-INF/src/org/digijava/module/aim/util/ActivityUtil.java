@@ -1095,7 +1095,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
    */
   public static Collection<AmpActivity> searchActivities(Long ampThemeId,
       String statusCode,
-      Long donorOrgId,
+      String donorOrgId,
       Date fromDate,
       Date toDate,
       Long locationId,
@@ -1142,7 +1142,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
    */
   public static Integer searchActivitiesCount(Long ampThemeId,
 	      String statusCode,
-	      Long donorOrgId,
+	      String donorOrgId,
 	      Date fromDate,
 	      Date toDate,
 	      Long locationId,
@@ -1182,7 +1182,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
    */
   public static String getSearchActivitiesWhereClause(Long ampThemeId,
 	      String statusCode,
-	      Long donorOrgId,
+	      String donorOrgId,
 	      Date fromDate,
 	      Date toDate,
 	      Long locationId,
@@ -1204,14 +1204,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       if (ampThemeId != null) {
           oql += " and ( theme.ampThemeId = :ampThemeId) ";
         }
-      if (donorOrgId != null) {
+      if (donorOrgId != null&&!donorOrgId.trim().equals("")) {
         String s = " and act in (select rol.activity from " +
             AmpOrgRole.class.getName() + " rol, " +
-            "where rol.organisation.ampOrgId=:DonorId  )";
+            "where rol.organisation.ampOrgId in ("+donorOrgId+")  )";
         oql += s;
       }
       if (statusCode != null) {
-        oql += " and categories.id=:statusCode ";
+        oql += " and categories.id in ("+statusCode+") ";
       }
       if (fromDate != null) {
         oql += " and act.createdDate >= :FromDate";
@@ -1230,7 +1230,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
   public static void setSearchActivitiesQueryParams(Query query, Long ampThemeId,
 	      String statusCode,
-	      Long donorOrgId,
+	      String donorOrgId,
 	      Date fromDate,
 	      Date toDate,
 	      Long locationId,
@@ -1239,12 +1239,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       if (ampThemeId != null) {
           query.setLong("ampThemeId", ampThemeId.longValue());
         }
-        if (donorOrgId != null) {
-          query.setLong("DonorId", donorOrgId.longValue());
-        }
-        if (statusCode != null) {
-          query.setString("statusCode", statusCode);
-        }
+      
         if (fromDate != null) {
           query.setDate("FromDate", fromDate);
         }

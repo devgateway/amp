@@ -654,8 +654,8 @@
 		if (selActStatus != null && selActStatus != '0'){
 			result += pd + 'statusId='+ selActStatus;
 		}
-		if(selActDonors !=null && selActDonors != -1){
-			result+= pd+ 'donorId='+selActDonors;
+		if(selActDonors !=null && selActDonors.match('-1') == null){
+			result+= pd+ 'donorIds='+selActDonors;
 		}
 		if (selActYearTo != null && selActYearTo != -1){
 			result+= pd + 'endYear='+selActYearTo;
@@ -731,6 +731,11 @@
 		labelsTD0.align='left';
 		labelsTD0.innerHTML='&nbsp;';
 		labelsTR1.appendChild(labelsTD0);
+                
+                //apply filter blank td
+                var applyFilterLabelTD = document.createElement('TD');
+                applyFilterLabelTD.innerHTML = '&nbsp;';
+                labelsTR1.appendChild(applyFilterLabelTD);
 
 		var labelTD1 = document.createElement('TD');
 		labelTD1.innerHTML='<b>'+strProposed+' </b>';
@@ -774,6 +779,12 @@
 				actTDfromYear.colSpan=2;
 				actTDfromYear.innerHTML=actList[i].getAttribute('date');
 				actTR.appendChild(actTDfromYear);
+                                
+                                //apply filter blank td
+                                var applyFilterTD = document.createElement('TD');
+				applyFilterTD.innerHTML = '&nbsp;';
+				actTR.appendChild(applyFilterTD);
+                            
 				//amount
 				var actTDproposedAmount = document.createElement('TD');
 				actTDproposedAmount.innerHTML = actList[i].getAttribute('proposedAmount');
@@ -804,7 +815,7 @@
 		var lastTR = document.createElement('TR');
 
 		var lastTD = document.createElement('TD');
-		lastTD.colSpan=5;
+		lastTD.colSpan=6;
 		lastTD.align='right';
 		lastTD.innerHTML='<strong>'+strTotal+' </strong>';
 		lastTR.appendChild(lastTD);
@@ -1027,6 +1038,38 @@
 		selActDonors = donors.value;
 		getActivities();
 	}
+        function applyFilter(){
+            selActStatus="";
+            selActDonors="";
+            var stat = document.getElementsByName('selectedStatuses')[0];
+            var donors = document.getElementsByName('selectedDonors')[0];
+            var from = document.getElementsByName('yearFrom')[0];
+            selActYearFrom = from.value;
+            var to= document.getElementsByName('yearTo')[0];
+            selActYearTo = to.value;
+            for (var i=0; i<stat.length; i++) {
+                       if(stat.options[i].selected ){
+                           if(stat.options[i].value=='0'){
+                               selActStatus='0'+',';
+                               break;
+                           }
+                           selActStatus+=stat.options[i].value+',';
+                       }
+             } 
+              for (var j=0; j<donors.length; j++) {
+               
+                       if(donors.options[j].selected ){
+                           selActDonors+=donors.options[j].value+',';
+                       }
+             } 
+             if(selActStatus.length>1){
+                 selActStatus=selActStatus.substring(0,selActStatus.length-1)
+             }
+              if(selActDonors.length>1){
+                 selActDonors=selActDonors.substring(0,selActDonors.length-1)
+             }
+             getActivities();
+        }
 
 	function filterFromYear(){
 		var stat = document.getElementsByName('yearFrom')[0];
@@ -1316,26 +1359,29 @@
 						<c:set var="translation">
 							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
 						</c:set>
-						<category:showoptions outeronchange="filterStatus()" firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  />
+						<category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  multiselect="true" size="5"/>
 
 					</td>
 					<td>
-						<html:select property="selectedDonors" onchange="filterDonor()">
+                                            <html:select multiple="true" size="5" property="selectedDonors" >
 							<option value="-1"><digi:trn key="aim:npd:dropDownAnyDonor">Any Donor</digi:trn></option>
 							<html:optionsCollection name="aimNPDForm" property="donors" value="value" label="label" />
 						</html:select>
 					</td>
 					<td>
-						<html:select property="yearFrom" onchange="filterFromYear()">
+						<html:select property="yearFrom">
 							<option value="-1"><digi:trn key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
 							<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
 						</html:select>
 					</td>
 					<td>
-						<html:select property="yearTo" onchange="filterToYear()">
+						<html:select property="yearTo">
 							<option value="-1"><digi:trn key="aim:npd:dropDownToYear">To Year</digi:trn></option>
 							<html:optionsCollection name="aimNPDForm" property="years" value="value" label="label" />
 						</html:select>
+					</td>
+                                        <td nowrap="nowrap">
+                                        <input type="button" onclick="applyFilter()" value="<digi:trn key='aim:npd:applyFilter'>Apply Filter</digi:trn>"/>
 					</td>
 					<td nowrap="nowrap" colspan="3">
 						<digi:trn key="aim:NPD:Funding">Funding</digi:trn>

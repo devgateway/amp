@@ -18,6 +18,15 @@ public class ActivitiesForm extends ActionForm {
 	private String endYear;
 	private Long donorId;
 	private Integer currentPage;
+        private String donorIds;
+
+        public String getDonorIds() {
+            return donorIds;
+        }
+
+        public void setDonorIds(String donorIds) {
+            this.donorIds = donorIds;
+        }
 	
 	public Integer getCurrentPage() {
 		return currentPage;

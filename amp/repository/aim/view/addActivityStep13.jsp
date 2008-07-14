@@ -695,13 +695,6 @@
                                 <tr><td>
                                     &nbsp;
                                 </td></tr>
-                                <tr><td>
-                                     <field:display name="Add IPA Contract" feature="Contracting">
-                                		<c:set var="trn"> <digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn></c:set>
-                                        
-                                        <input type="button" value="${trn}" class="dr-menu" onclick="addContract()"/>
-                                    </field:display>
-                                </td></tr>
 						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">

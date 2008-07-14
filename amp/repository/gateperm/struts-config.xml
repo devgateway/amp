@@ -42,6 +42,9 @@
 			<forward name="importForm"
 				path="/showLayout.do?layout=gateperm_exchangeImportPermission"
 			/>
+			<forward name="importResult"
+				path="/showLayout.do?layout=gateperm_importResult"
+			/>
 		</action>
 	</action-mappings>
 </struts-config>

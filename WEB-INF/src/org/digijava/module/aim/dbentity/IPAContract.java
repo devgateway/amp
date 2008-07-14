@@ -36,20 +36,14 @@ public class IPAContract implements Serializable {
     private Date totalECContribIBAmountDate;
     
     private Double totalECContribIBAmount;
-    private AmpCurrency totalECContribIBCurrency;
     private Double totalAmount;
     private AmpCurrency totalAmountCurrency;
     private AmpCurrency dibusrsementsGlobalCurrency;
     private Double totalECContribINVAmount;
-    private AmpCurrency totalECContribINVCurrency;
     private Double totalNationalContribCentralAmount;
-    private AmpCurrency totalNationalContribCentralCurrency;
     private Double totalNationalContribRegionalAmount;
-    private AmpCurrency totalNationalContribRegionalCurrency;
     private Double totalNationalContribIFIAmount;
-    private AmpCurrency totalNationalContribIFICurrency;
     private Double totalPrivateContribAmount;
-    private AmpCurrency totalPrivateContribCurrency;
     private Set disbursements;
     private AmpActivity activity;
     private AmpOrganisation organization;
@@ -217,29 +211,13 @@ public class IPAContract implements Serializable {
     public void setTotalECContribIBAmount(Double totalECContribIBAmount) {
         this.totalECContribIBAmount = totalECContribIBAmount;
     }
-
-    public AmpCurrency getTotalECContribIBCurrency() {
-        return totalECContribIBCurrency;
-    }
-
-    public void setTotalECContribIBCurrency(AmpCurrency totalECContribIBCurrency) {
-        this.totalECContribIBCurrency = totalECContribIBCurrency;
-    }
-
+    
     public Double getTotalECContribINVAmount() {
         return totalECContribINVAmount;
     }
 
     public void setTotalECContribINVAmount(Double totalECContribINVAmount) {
         this.totalECContribINVAmount = totalECContribINVAmount;
-    }
-
-    public AmpCurrency getTotalECContribINVCurrency() {
-        return totalECContribINVCurrency;
-    }
-
-    public void setTotalECContribINVCurrency(AmpCurrency totalECContribINVCurrency) {
-        this.totalECContribINVCurrency = totalECContribINVCurrency;
     }
 
     public Double getTotalNationalContribCentralAmount() {
@@ -251,15 +229,6 @@ public class IPAContract implements Serializable {
         this.totalNationalContribCentralAmount = totalNationalContribCentralAmount;
     }
 
-    public AmpCurrency getTotalNationalContribCentralCurrency() {
-        return totalNationalContribCentralCurrency;
-    }
-
-    public void setTotalNationalContribCentralCurrency(
-            AmpCurrency totalNationalContribCentralCurrency) {
-        this.totalNationalContribCentralCurrency = totalNationalContribCentralCurrency;
-    }
-
     public Double getTotalNationalContribIFIAmount() {
         return totalNationalContribIFIAmount;
     }
@@ -267,15 +236,6 @@ public class IPAContract implements Serializable {
     public void setTotalNationalContribIFIAmount(
             Double totalNationalContribIFIAmount) {
         this.totalNationalContribIFIAmount = totalNationalContribIFIAmount;
-    }
-
-    public AmpCurrency getTotalNationalContribIFICurrency() {
-        return totalNationalContribIFICurrency;
-    }
-
-    public void setTotalNationalContribIFICurrency(
-            AmpCurrency totalNationalContribIFICurrency) {
-        this.totalNationalContribIFICurrency = totalNationalContribIFICurrency;
     }
 
     public Double getTotalNationalContribRegionalAmount() {
@@ -287,30 +247,12 @@ public class IPAContract implements Serializable {
         this.totalNationalContribRegionalAmount = totalNationalContribRegionalAmount;
     }
 
-    public AmpCurrency getTotalNationalContribRegionalCurrency() {
-        return totalNationalContribRegionalCurrency;
-    }
-
-    public void setTotalNationalContribRegionalCurrency(
-            AmpCurrency totalNationalContribRegionalCurrency) {
-        this.totalNationalContribRegionalCurrency = totalNationalContribRegionalCurrency;
-    }
-
     public Double getTotalPrivateContribAmount() {
         return totalPrivateContribAmount;
     }
 
     public void setTotalPrivateContribAmount(Double totalPrivateContribAmount) {
         this.totalPrivateContribAmount = totalPrivateContribAmount;
-    }
-
-    public AmpCurrency getTotalPrivateContribCurrency() {
-        return totalPrivateContribCurrency;
-    }
-
-    public void setTotalPrivateContribCurrency(
-            AmpCurrency totalPrivateContribCurrency) {
-        this.totalPrivateContribCurrency = totalPrivateContribCurrency;
     }
 
 	public Date getContractValidity() {

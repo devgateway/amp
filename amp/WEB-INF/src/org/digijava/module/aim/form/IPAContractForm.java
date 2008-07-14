@@ -68,7 +68,6 @@ public class IPAContractForm extends ActionForm  {
 	
 	private String totalECContribIBAmount;
 	private String totalECContribIBAmountDate;
-	private Long totalECContribIBCurrency;
 	
 	private String totalAmount;
 	private Long totalAmountCurrency;
@@ -76,23 +75,19 @@ public class IPAContractForm extends ActionForm  {
 	
 	private String totalECContribINVAmount;
 	private String totalECContribINVAmountDate;
-	private Long totalECContribINVCurrency;
 	
 	private String totalNationalContribCentralAmount;
 	private String totalNationalContribCentralAmountDate;
-	private Long totalNationalContribCentralCurrency;
 	
 	private String totalNationalContribRegionalAmount;
 	private String totalNationalContribRegionalAmountDate;
-	private Long totalNationalContribRegionalCurrency;
 	
 	private String totalNationalContribIFIAmount;
 	private String totalNationalContribIFIAmountDate;
-	private Long totalNationalContribIFICurrency;
 	
 	private String totalPrivateContribAmount;
 	private String totalPrivateContribAmountDate;
-	private Long totalPrivateContribCurrency;
+
 	private Double totalDisbursements;
     private Double executionRate;
 	
@@ -231,28 +226,12 @@ public class IPAContractForm extends ActionForm  {
 		this.totalECContribIBAmount = totalECContribIBAmount;
 	}
 
-	public Long getTotalECContribIBCurrency() {
-		return totalECContribIBCurrency;
-	}
-
-	public void setTotalECContribIBCurrency(Long totalECContribIBCurrency) {
-		this.totalECContribIBCurrency = totalECContribIBCurrency;
-	}
-
 	public String getTotalECContribINVAmount() {
 		return totalECContribINVAmount;
 	}
 
 	public void setTotalECContribINVAmount(String totalECContribINVAmount) {
 		this.totalECContribINVAmount = totalECContribINVAmount;
-	}
-
-	public Long getTotalECContribINVCurrency() {
-		return totalECContribINVCurrency;
-	}
-
-	public void setTotalECContribINVCurrency(Long totalECContribINVCurrency) {
-		this.totalECContribINVCurrency = totalECContribINVCurrency;
 	}
 
 	public String getTotalNationalContribCentralAmount() {
@@ -264,15 +243,6 @@ public class IPAContractForm extends ActionForm  {
 		this.totalNationalContribCentralAmount = totalNationalContribCentralAmount;
 	}
 
-	public Long getTotalNationalContribCentralCurrency() {
-		return totalNationalContribCentralCurrency;
-	}
-
-	public void setTotalNationalContribCentralCurrency(
-			Long totalNationalContribCentralCurrency) {
-		this.totalNationalContribCentralCurrency = totalNationalContribCentralCurrency;
-	}
-
 	public String getTotalNationalContribIFIAmount() {
 		return totalNationalContribIFIAmount;
 	}
@@ -280,15 +250,6 @@ public class IPAContractForm extends ActionForm  {
 	public void setTotalNationalContribIFIAmount(
 			String totalNationalContribIFIAmount) {
 		this.totalNationalContribIFIAmount = totalNationalContribIFIAmount;
-	}
-
-	public Long getTotalNationalContribIFICurrency() {
-		return totalNationalContribIFICurrency;
-	}
-
-	public void setTotalNationalContribIFICurrency(
-			Long totalNationalContribIFICurrency) {
-		this.totalNationalContribIFICurrency = totalNationalContribIFICurrency;
 	}
 
 	public String getTotalNationalContribRegionalAmount() {
@@ -300,30 +261,12 @@ public class IPAContractForm extends ActionForm  {
 		this.totalNationalContribRegionalAmount = totalNationalContribRegionalAmount;
 	}
 
-	public Long getTotalNationalContribRegionalCurrency() {
-		return totalNationalContribRegionalCurrency;
-	}
-
-	public void setTotalNationalContribRegionalCurrency(
-			Long totalNationalContribRegionalCurrency) {
-		this.totalNationalContribRegionalCurrency = totalNationalContribRegionalCurrency;
-	}
-
 	public String getTotalPrivateContribAmount() {
 		return totalPrivateContribAmount;
 	}
 
 	public void setTotalPrivateContribAmount(String totalPrivateContribAmount) {
 		this.totalPrivateContribAmount = totalPrivateContribAmount;
-	}
-
-	public Long getTotalPrivateContribCurrency() {
-		return totalPrivateContribCurrency;
-	}
-
-	public void setTotalPrivateContribCurrency(
-			Long totalPrivateContribCurrency) {
-		this.totalPrivateContribCurrency = totalPrivateContribCurrency;
 	}
 
 	public Long getActivityCategoryId() {
@@ -358,7 +301,6 @@ public class IPAContractForm extends ActionForm  {
         contractCompletion = null;
 
         totalECContribIBAmount = null;
-        totalECContribIBCurrency = null;
         
         totalAmount = null;
         totalAmountCurrency = null;
@@ -366,19 +308,14 @@ public class IPAContractForm extends ActionForm  {
         executionRate=null;
 
         totalECContribINVAmount = null;
-        totalECContribINVCurrency = null;
 
         totalNationalContribCentralAmount = null;
-        totalNationalContribCentralCurrency = null;
 
         totalNationalContribRegionalAmount = null;
-        totalNationalContribRegionalCurrency = null;
 
         totalNationalContribIFIAmount = null;
-        totalNationalContribIFICurrency = null;
 
         totalPrivateContribAmount = null;
-        totalPrivateContribCurrency = null;
         indexId=null;
         id=null;
         selContractDisbursements=null;

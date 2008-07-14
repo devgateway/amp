@@ -51,7 +51,20 @@ function fnChk(frmContrl){
     frmContrl.value = "";
     return false;
   }
-  return true;
+  return autosum();
+}
+
+function autosum(){
+	var v1 = document.aimIPAContractForm.totalECContribIBAmount.value;
+	var v2 = document.aimIPAContractForm.totalECContribINVAmount.value;
+	var v3 = document.aimIPAContractForm.totalNationalContribCentralAmount.value;
+	var v4 = document.aimIPAContractForm.totalNationalContribIFIAmount.value;
+	var v5 = document.aimIPAContractForm.totalNationalContribRegionalAmount.value;
+	var v6 = document.aimIPAContractForm.totalPrivateContribAmount.value;
+	
+	
+	document.aimIPAContractForm.totalAmount.value = (v1*1)+(v2*1)+(v3*1)+(v4*1)+(v5*1)+(v6*1);
+	return true; 
 }
 
 function validate(){
@@ -68,18 +81,13 @@ function validate(){
     Please Select Currency
     </digi:trn>
     </c:set>
-    if((document.aimIPAContractForm.totalECContribIBAmount.value!=''
-        &&document.aimIPAContractForm.totalECContribIBCurrency.value==-1)||
-    (document.aimIPAContractForm.totalECContribINVAmount.value!=''
-        &&document.aimIPAContractForm.totalECContribINVCurrency.value==-1)||
-    (document.aimIPAContractForm.totalNationalContribIFIAmount.value!=''
-        &&document.aimIPAContractForm.totalNationalContribIFICurrency.value==-1)||
-    (document.aimIPAContractForm.totalNationalContribCentralAmount.value!=''
-        &&document.aimIPAContractForm.totalNationalContribCentralCurrency.value==-1)||
-    (document.aimIPAContractForm.totalNationalContribRegionalAmount.value!=''
-        &&document.aimIPAContractForm.totalNationalContribRegionalCurrency.value==-1)||
-    (document.aimIPAContractForm.totalPrivateContribAmount.value!=''
-        &&document.aimIPAContractForm.totalPrivateContribCurrency.value==-1)){
+    if((document.aimIPAContractForm.totalECContribIBAmount.value!='' ||
+   		document.aimIPAContractForm.totalECContribINVAmount.value!='' ||
+    	document.aimIPAContractForm.totalNationalContribIFIAmount.value!='' ||
+    	document.aimIPAContractForm.totalNationalContribCentralAmount.value!='' ||
+    	document.aimIPAContractForm.totalNationalContribRegionalAmount.value!='' ||
+    	document.aimIPAContractForm.totalPrivateContribAmount.value!='') &&
+        (document.aimIPAContractForm.totalAmountCurrency.value==-1)){
         alert("${errMsgSelectCurrency}");
             return false;
         }
@@ -246,6 +254,10 @@ function SaveReportEngine ( savingMessage, failureMessage ) {
 ;
 }
 
+function initScripts(){
+	autosum();
+}
+
 SaveReportEngine.prototype.success		= function (o) {
 	window.location.replace(window.location.href);
 }
@@ -261,6 +273,7 @@ SaveReportEngine.prototype.saveContract	= function () {
 }
 
 mySaveReportEngine = new SaveReportEngine();
+window.onload=autosum;
 -->
 </script>
 
@@ -475,7 +488,12 @@ mySaveReportEngine = new SaveReportEngine();
 					<digi:trn key="aim:ipa:newPopup:totalAmount">Total Amount</digi:trn>
 				</td>
 				<td align="left">
-					<html:text property="totalAmount" style="text-align:right" onkeyup="fnChk(this)"/>
+					<c:set var="trnAutosum">
+						<digi:trn key="aim:addNumericValueErrorMessage">
+							This amount will auto-calculate!
+						</digi:trn>
+					</c:set>
+					<html:text readonly="true" title="${trnAutosum}" property="totalAmount" style="text-align:right" onkeyup="fnChk(this)" />
 				</td>
 				<td align="left" colspan="4">
 					<digi:trn key="aim:ipa:newPopup:currencyType">Currency Type</digi:trn>
@@ -620,9 +638,9 @@ mySaveReportEngine = new SaveReportEngine();
 				</html:button>
 			</field:display>
 			&nbsp;	
-			<field:display name="Delete Selected" feature="Contracting">
+			<field:display name="Remove Disbursements" feature="Contracting">
 				<html:button styleClass="dr-menu" property="delDisb" onclick="delDisb()">
-					<digi:trn key="aim:IPA:newPopup:deleteSelected">Delete Selected</digi:trn>
+					<digi:trn key="aim:IPA:newPopup:removeDisbursements">Remove Disbursements</digi:trn>
 				</html:button>			
 			</field:display>				
 		</td>

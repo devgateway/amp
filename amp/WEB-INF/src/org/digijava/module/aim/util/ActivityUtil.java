@@ -836,21 +836,15 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setTotalECContribIBAmountDate(contract.getTotalECContribIBAmountDate());
                     
                     oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
-                    oldContract.setTotalECContribIBCurrency(contract.getTotalECContribIBCurrency());
                     oldContract.setTotalAmount(contract.getTotalAmount());
                     oldContract.setTotalAmountCurrency(contract.getTotalAmountCurrency());
                     oldContract.setDibusrsementsGlobalCurrency(contract.getDibusrsementsGlobalCurrency());
                     oldContract.setExecutionRate(contract.getExecutionRate());
                     oldContract.setTotalECContribINVAmount(contract.getTotalECContribINVAmount());
-                    oldContract.setTotalECContribINVCurrency(contract.getTotalECContribINVCurrency());
                     oldContract.setTotalNationalContribCentralAmount(contract.getTotalNationalContribCentralAmount());
-                    oldContract.setTotalNationalContribCentralCurrency(contract.getTotalNationalContribCentralCurrency());
                     oldContract.setTotalNationalContribRegionalAmount(contract.getTotalNationalContribRegionalAmount());
-                    oldContract.setTotalNationalContribRegionalCurrency(contract.getTotalNationalContribRegionalCurrency());
                     oldContract.setTotalNationalContribIFIAmount(contract.getTotalNationalContribIFIAmount());
-                    oldContract.setTotalNationalContribIFICurrency(contract.getTotalNationalContribIFICurrency());
                     oldContract.setTotalPrivateContribAmount(contract.getTotalPrivateContribAmount());
-                    oldContract.setTotalPrivateContribCurrency(contract.getTotalPrivateContribCurrency());
                     oldContract.setOrganization(contract.getOrganization());
                     oldContract.setStatus(contract.getStatus());
                     oldContract.setType(contract.getType());

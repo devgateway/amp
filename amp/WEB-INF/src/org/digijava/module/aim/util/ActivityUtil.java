@@ -1206,11 +1206,11 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
       if (donorOrgId != null&&!donorOrgId.trim().equals("")) {
         String s = " and act in (select rol.activity from " +
-            AmpOrgRole.class.getName() + " rol, " +
+            AmpOrgRole.class.getName() + " rol " +
             "where rol.organisation.ampOrgId in ("+donorOrgId+")  )";
         oql += s;
       }
-      if (statusCode != null) {
+      if (statusCode != null&&!"".equals(statusCode.trim())) {
         oql += " and categories.id in ("+statusCode+") ";
       }
       if (fromDate != null) {

@@ -44,6 +44,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private boolean updateFlag = false;
 	
 	private String workspaceType = null;		// 'Team' or 'Management'
+	private String teamAccessType=null;
 	private Collection childWorkspaces;
 
 	private boolean addFlag = false;
@@ -654,6 +655,14 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
 	public void setComputation(Boolean computation) {
 		this.computation = computation;
+	}
+
+	public String getTeamAccessType() {
+		return teamAccessType;
+	}
+
+	public void setTeamAccessType(String teamAccessType) {
+		this.teamAccessType = teamAccessType;
 	}
 
 

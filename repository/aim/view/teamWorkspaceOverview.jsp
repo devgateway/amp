@@ -154,6 +154,8 @@ function updateChild(action) {
 											<c:set var="childWorkspaces" value="enabled" scope="request" />
 										</c:otherwise>
 									</c:choose>
+									<c:set var="teamAccessTypeLocal" scope="request"><bean:write name="aimUpdateWorkspaceForm" property="teamAccessType"/>
+									</c:set>
 									<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 								</td>
 							</tr>

@@ -222,4 +222,21 @@
 			calendarObjForForm.display();
 		}		
 	}
+	function pickDateByIdDxDyWOScroll(buttonObj,objectId,dx,dy)
+	{
+		var butt = document.getElementById(buttonObj);
+		var inputObject = document.getElementById(objectId);
+		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
+		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-dx,-dy);	// Position the calendar right below the form input
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
+		
+		if(calendarObjForForm.isVisible()){
+			calendarObjForForm.hide();
+		}else{
+			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
+			calendarObjForForm.display();
+		}		
+	}
+	
 </script>		

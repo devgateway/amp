@@ -113,6 +113,7 @@ public class GetWorkspace extends Action {
 			uwForm.setAddActivity(workspace.getAddActivity());
 			uwForm.setComputation(workspace.getComputation());
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());
+			uwForm.setTeamAccessType(tmember.getTeamAccessType());
 			if (null == uwForm.getRelatedTeam()) {
 				if ("DONOR".equalsIgnoreCase(uwForm.getCategory()) && "Donor".equalsIgnoreCase(uwForm.getWorkspaceType())) {
 					//Collection col = TeamUtil.getAllRelatedTeamsByType(uwForm.getType());

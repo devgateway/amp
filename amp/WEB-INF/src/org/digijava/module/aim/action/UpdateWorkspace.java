@@ -123,7 +123,7 @@ public class UpdateWorkspace extends Action {
                 uwForm.setCategory("");
                 uwForm.setTypeId(new Long(0));
                 uwForm.setDescription("");
-                uwForm.setWorkspaceType("");
+               // uwForm.setWorkspaceType("");
                 uwForm.setRelatedTeamFlag("no");
                 uwForm.setRelatedTeamName("");
                 uwForm.setAddActivity(null);

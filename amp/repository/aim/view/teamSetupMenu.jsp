@@ -214,7 +214,7 @@ html>body #mainEmpty {
 						   		</span>
 							</LI>							
 						</c:if>						
-
+						<c:if test="${teamAccessTypeLocal != 'Management' }">
 						<c:if test="${selectedTab == '2'}">
 							<LI>
 						   		<a name="node">
@@ -234,6 +234,7 @@ html>body #mainEmpty {
 								</digi:link>
 								</span>
 							</LI>
+						</c:if>
 						</c:if>
 						<c:if test="${selectedTab == '3'}">
 							<LI>

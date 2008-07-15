@@ -15,19 +15,17 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
-import org.digijava.module.forum.action.AlertNewPm;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.Approval;
+import org.digijava.module.message.dbentity.CalendarEvent;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.dbentity.CalendarEvent;
-import java.util.ArrayList;
-import java.util.*;
 
 public class AmpMessageWorker {
 
@@ -330,17 +328,24 @@ public class AmpMessageWorker {
      */
     private static void defineActivityCreationReceievrs(TemplateAlert template,AmpMessage alert) throws Exception{
     	List<AmpMessageState> statesRelatedToTemplate=null;
+		//get the member who created an activity. it's the current member
+		AmpTeamMember activityCreator=TeamMemberUtil.getAmpTeamMember(alert.getSenderId());
+		
 		statesRelatedToTemplate=AmpMessageUtil.loadMessageStates(template.getId());
 		if(statesRelatedToTemplate!=null && statesRelatedToTemplate.size()>0){
+			//create receivers list for activity
+	        String receivers;
+	        Collection<TeamMember> teamMembers=TeamMemberUtil.getTeamMembers(activityCreator.getAmpTeam().getAmpTeamId());
+	        receivers=fillTOfieldForReceivers(teamMembers, statesRelatedToTemplate);
+	        alert.setReceivers(receivers);			
+			
 			for (AmpMessageState state : statesRelatedToTemplate) {
-				//get the member who created an activity. it's the current member
-				AmpTeamMember activityCreator=TeamMemberUtil.getAmpTeamMember(alert.getSenderId());
 				//get receiver Team Member.
 				AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
 				/**
 				 * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
 				 */
-				if(teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())){
+				if(teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())){					
 					createMsgState(state,alert);
 				}
 			}
@@ -363,6 +368,20 @@ public class AmpMessageWorker {
 		} catch (AimException e) {
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * This function is used to create receivers String, which will be shown on view message page in TO: section 
+	 */
+	private static String fillTOfieldForReceivers(Collection<TeamMember> teamMembers, List<AmpMessageState> states){
+		String receivers="";
+		for (AmpMessageState state : states) {
+			for (TeamMember tm : teamMembers) {
+				if (state.getMemberId().equals(tm.getMemberId())){
+					receivers+=tm.getMemberName()+" "+"<"+tm.getEmail()+">;"+tm.getTeamName()+";"+", ";
+				}
+			}
+		}
+		return receivers;
 	}
 
 }

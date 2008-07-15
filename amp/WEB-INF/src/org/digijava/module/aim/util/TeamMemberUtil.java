@@ -702,10 +702,14 @@ public class TeamMemberUtil {
 				User user = UserUtils.getUser(ampMem.getUser().getId());
 				String name = user.getName();
 				String role = ampMem.getAmpMemberRole().getRole();
+				String email=user.getEmail();
+				String teamName=ampMem.getAmpTeam().getName();
 				TeamMember tm = new TeamMember();
 				tm.setMemberId(id);
 				tm.setMemberName(name);
 				tm.setRoleName(role);
+				tm.setEmail(email);
+				tm.setTeamName(teamName);
 				col.add(tm);
 			}
 		} catch (Exception e) {

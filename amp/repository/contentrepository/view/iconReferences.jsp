@@ -1,4 +1,6 @@
-<%@ page pageEncoding="UTF-8"%> 
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+ 
 <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
    <tr>
      <td colspan="3"><strong><digi:trn key="contentrepository:documentManagerReferece">Icons Reference</digi:trn></strong>
@@ -30,6 +32,7 @@
          <digi:trn key="contentrepository:documentManagerUnpublishHint"> Click here to unpublish this document</digi:trn>
      </td>
      <td nowrap="nowrap">&nbsp;</td>
+     
      <td nowrap="nowrap"><img src= "/repository/contentrepository/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
          <digi:trn key="contentrepository:documentManagerDeleteHint"> Click here to delete this document</digi:trn>
      </td>

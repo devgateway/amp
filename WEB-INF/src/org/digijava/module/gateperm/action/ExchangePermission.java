@@ -199,8 +199,7 @@ public class ExchangePermission extends MultiAction {
 		    dbCp.getPermissions().add(xmlToDbCompositePermission);
 		}
 		
-		//if(dbCp.getPermissibleObjects()==null) 
-		    dbCp.setPermissibleObjects(new TreeSet());
+		dbCp.getPermissibleObjects().clear();
 		dbCp.getPermissibleObjects().addAll(getAssignedLocalIds(elem.getAssignedObjId(),dbCp));
 		
 		return dbCp;

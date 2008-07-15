@@ -48,7 +48,9 @@ public class RegisterUser extends Action {
 		UserRegisterForm userRegisterForm = (UserRegisterForm) form;
 
 		logger.debug("In UserRegisterAction");
-
+		
+		if(!userRegisterForm.getErrors().isEmpty())
+			return (mapping.getInputForward());
 		try {
 
 			User user = new User(userRegisterForm.getEmail().toLowerCase(),
@@ -119,9 +121,7 @@ public class RegisterUser extends Action {
 			// if email register get error message
 
 			if (DbUtil.isRegisteredEmail(user.getEmail())) {
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.registration.emailexits"));
-				saveErrors(request, errors);
+				userRegisterForm.addError("error.registration.emailexits", "Email already exits");
 				//return (new ActionForward(mapping.getInput()));
 				return (mapping.getInputForward());
 			} else {

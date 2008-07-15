@@ -139,8 +139,19 @@
 
 					<td align=left class=title noWrap colspan="2">
 
-						<digi:errors />
-
+						<!-- digi:errors /-->
+						<logic:notEmpty name="aimUserRegisterForm" property="errors" >
+                        <font color="red">
+							<ul>
+							
+                            <logic:iterate id="element"	name="aimUserRegisterForm" property="errors">
+                               <li><digi:trn key="${element.key}">
+                                   <bean:write name="element" property="value"/>
+                               </digi:trn></li>
+                           </logic:iterate>
+                           </ul>
+                        </font>
+                        </logic:notEmpty>
 					</td>
 
 				</tr>

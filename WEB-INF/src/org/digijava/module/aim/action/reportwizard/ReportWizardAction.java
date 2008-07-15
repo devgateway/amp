@@ -123,6 +123,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setAmpTeamMember( null );
 		myForm.setDesktopTab( false );
 		myForm.setDuplicateName(false);
+		myForm.setPublicReport(false);
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
@@ -199,7 +200,6 @@ public class ReportWizardAction extends MultiAction {
 			throw new Exception("The name " + myForm.getReportTitle() + " is already used by another report");
 		}
 			
-		
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();		
 		
@@ -219,6 +219,7 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setReportDescription( myForm.getReportDescription() );
 		ampReport.setName( myForm.getReportTitle().trim() );
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
+		ampReport.setPublicReport(myForm.getPublicReport());
 		
 		if ( myForm.getReportId() != null ) {
 				if ( myForm.getOriginalTitle()!=null && myForm.getOriginalTitle().equals(myForm.getReportTitle()) )

@@ -318,7 +318,8 @@ public class AmpARFilter extends PropertyListable {
 		if("Management".equals(this.getAccessType()))
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
-				+ ") " ;
+				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+				+ Util.toCSString(ampTeams) + ") )";
 		else
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
@@ -412,8 +413,13 @@ public class AmpARFilter extends PropertyListable {
 		default:actStatusValue="1";	break;
 		}
 		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue;
-		String APPROVED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
+		String APPROVED_FILTER = "";
+			if("Management".equals(this.getAccessType()))
+				APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("
+					+ Util.toCSString(activityStatus) + ")";
+			else APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '"
 				+ Constants.APPROVED_STATUS + "'";
+		
 		String DRAFT_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 				+ Util.toCSString(typeOfAssistance) + ")";

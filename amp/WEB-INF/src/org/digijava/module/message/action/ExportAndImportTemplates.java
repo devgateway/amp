@@ -5,23 +5,19 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.upload.FormFile;
-import org.dgfoundation.amp.te.ampte.Translations;
-import org.dgfoundation.amp.te.ampte.Trn;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.form.AmpMessageForm;
@@ -29,15 +25,6 @@ import org.digijava.module.message.jaxb.AlertTemplateType;
 import org.digijava.module.message.jaxb.Messaging;
 import org.digijava.module.message.jaxb.TemplatesList;
 import org.digijava.module.message.util.AmpMessageUtil;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 public class ExportAndImportTemplates extends DispatchAction {
@@ -81,7 +68,7 @@ public class ExportAndImportTemplates extends DispatchAction {
 	}
 	
 	public ActionForward importTemplates (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
-		//http://www.java-tips.org/java-se-tips/javax.xml.parsers/how-to-read-xml-file-in-java.html
+		
 		AmpMessageForm msgForm=(AmpMessageForm)form;		
 		
 		FormFile myFile=msgForm.getFileUploaded();
@@ -111,29 +98,6 @@ public class ExportAndImportTemplates extends DispatchAction {
 				ex.printStackTrace(System.out);
 			}			
 		}	
-		
-//		File file=new File("/home/skvisha/Desktop/"+msgForm.getFileName());
-//		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-//		DocumentBuilder db = dbf.newDocumentBuilder();
-//		Document doc = db.parse(file);
-//		
-//		NodeList nodeList=doc.getElementsByTagName("template");
-//		for (int i = 0; i < nodeList.getLength(); i++) {
-//			Node node=nodeList.item(i);
-//			if(node.getNodeType()==Node.ELEMENT_NODE){
-//				Element el=(Element)node;
-//				String name=el.getAttribute("name");
-//				String details=el.getAttribute("msgDetails");
-//				String receivedDate=el.getAttribute("received");
-//				String relTrigger=el.getAttribute("relatedTrigger");
-//				//creating template
-//				template.setName(name);
-//				template.setDescription(details);
-//				template.setCreationDate(DateConversion.getDate(receivedDate));
-//				template.setRelatedTriggerName(relTrigger);
-//				AmpMessageUtil.saveOrUpdateMessage(template);
-//			}
-//		}
 		return mapping.findForward("viewTemplates");
 	}
 	

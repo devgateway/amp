@@ -981,18 +981,38 @@ public class FeaturesUtil {
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			session.beginTransaction().commit();
 			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
 			" f order by f.name asc";
 			qry = session.createQuery(qryStr);
 			col = qry.list();
-
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}    
+			logger.error("Exception ::: " + ex.getMessage());
+		}
 		return col;
 	}
 
+	public static Collection getAMPTemplatesVisibilityWithSession(Session session) {
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+
+		try {
+			session.beginTransaction().commit();
+			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
+			" f ";
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+		}
+		catch (Exception ex) {
+			logger.error("Exception ... " + ex.getMessage());
+		}
+		return col;
+	}
+
+	
+	
 	/**
 	 *
 	 * @author dan
@@ -1308,21 +1328,23 @@ public class FeaturesUtil {
 	 */
 	public static boolean deleteTemplateVisibility(Long id, Session session) {
 		Transaction tx = null;
-
 		try {
 			tx=session.beginTransaction();
 			AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
 			ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,id);
-			ft.getFields().clear();
-			ft.getFeatures().clear();
-			ft.getItems().clear();
+			ft.setItems(null);
+			ft.setFeatures(null);
+			ft.setFields(null);
+//			ft.getFields().clear();
+//			ft.getFeatures().clear();
+//			ft.getItems().clear();
 			session.delete(ft);
 			
-			//session.flush();
 			tx.commit();
+			session.flush();
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
+			logger.error("Exception ; " + ex.getMessage());
 		}
 		
 		return true;

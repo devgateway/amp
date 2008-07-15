@@ -45,7 +45,8 @@ public class VisibilityManager extends MultiAction {
 	private ServletContext ampContext = null;
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
+		Session hbsession = PersistenceManager.getRequestDBSession();
+		Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession(hbsession);
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		vForm.setTemplates(templates);
 		vForm.setMode("manageTemplates");
@@ -337,13 +338,16 @@ public class VisibilityManager extends MultiAction {
 	public ActionForward modeDeleteTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Session hbsession = PersistenceManager.getRequestDBSession();
 		FeaturesUtil.deleteTemplateVisibility(new Long(Long.parseLong(request.getParameter("templateId"))),hbsession);
+		
+		((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
+//		return modeManageTemplates(mapping, form, request, response);
+		
 		{//for refreshing the page
 			VisibilityManagerForm vForm = (VisibilityManagerForm) form;
-			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
+			Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession(hbsession);
 			vForm.setTemplates(templates);
 			vForm.setMode("manageTemplates");
 		}
-		((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 
 		return mapping.findForward("forward");
 	}

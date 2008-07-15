@@ -1117,12 +1117,13 @@ $(document).ready(function(){
                                         </DIV>
                                         
 					<div id="main">
-					<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">
+					
 					
 						
                                                                 <DIV id="subtabs">
                                                                  <div style="pa">
                                                                     <UL>
+						<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">                                                                    
 											<c:if test="${messageForm.childTab=='inbox'}">
                                                                                             <LI>
                                                                                                 <span>
@@ -1189,6 +1190,7 @@ $(document).ready(function(){
                                                                                                 </LI>
 												
 											</c:if>
+										</c:if>
 												 <LI style="float: right;">
 									               <div>
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
@@ -1200,27 +1202,23 @@ $(document).ready(function(){
                                                                                 </UL>
 											</div>
 									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
-			                                        <table  cellpadding="4" cellspacing="4" style="clear:both; padding:4px; border:silver dotted 1px; ">
+			                                        <table  cellpadding="1" cellspacing="1" style="clear:both; padding:4px; border:silver dotted 1px;">
 														<tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong>Total Number</strong>:		
+																<strong>Total Number</strong> :		
 															</td>
 															<td colspan="4" class="settings" id="totalNumber">
-																
 																	${messageForm.allmsg}
-																
 															</td>
 														</tr>
-                                                                                                                <tr>
+                                                        <tr>
 															<td colspan="4" class="settings" nowrap>
 																<strong>Total Number Of Hidden </strong>:		
 															</td>
-															<td colspan="4" class="settings" id="totalHidden">
+															<td colspan="4"  class="settings" id="totalHidden">
 																
 																	${messageForm.hiddenMsgCount}
 																
-																
-																	
 															</td>
 														</tr>
 														<tr>
@@ -1229,10 +1227,10 @@ $(document).ready(function(){
 														
 															</td>
 															<td colspan="4" class="settings" id="adimSettings">
-																	Message Refresh Time(minutes): ${messageForm.msgRefreshTimeCurr}|
-																	Message Storage Per Message Type: ${messageForm.msgStoragePerMsgTypeCurr}|
-																	Days of Advance Alert Warnings: ${messageForm.daysForAdvanceAlertsWarningsCurr}|
-																	Maximum validate: ${messageForm.maxValidityOfMsgCurr}|
+																	Message Refresh Time(minutes):  ${messageForm.msgRefreshTimeCurr} |
+																	Message Storage Per Message Type:  ${messageForm.msgStoragePerMsgTypeCurr} |
+																	Days of Advance Alert Warnings:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |
+																	Maximum validate:  ${messageForm.maxValidityOfMsgCurr} |
 																	Email Alerts:
 																	
 																	<c:if test="${empty messageForm.emailMsgsCurrent ||messageForm.emailMsgsCurrent==0}">
@@ -1252,7 +1250,7 @@ $(document).ready(function(){
 											   </div>   
                                                 &nbsp;
                                              </DIV>
-					</c:if>
+					
                                         </div>
                                         	</TD>					
 						</TR>

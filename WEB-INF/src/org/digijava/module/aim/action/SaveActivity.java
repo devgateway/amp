@@ -38,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -425,7 +426,6 @@ public class SaveActivity extends Action {
                     }
                     
                     if(eaForm.getSelectedLocs() != null && eaForm.getSelectedLocs().size()>0){
-    					Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
     					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
     					Double totalPercentage = 0d;
     					while (itr.hasNext()) {
@@ -440,6 +440,56 @@ public class SaveActivity extends Action {
     						return mapping.findForward("addActivityStep2");
     					}
                     }
+                    
+                    
+                    if (eaForm.getNationalPlanObjectivePrograms() != null
+    						&& eaForm.getNationalPlanObjectivePrograms().size() > 0) {
+                        	Iterator<AmpActivityProgram> npoIt = eaForm.getNationalPlanObjectivePrograms().iterator();
+        					Double totalPercentage = 0d;
+        					while (npoIt.hasNext()) {
+        						AmpActivityProgram activityProgram = npoIt.next();    						
+        						totalPercentage += activityProgram.getProgramPercentage();
+        					}
+        					if (totalPercentage != 100) {
+    	                        errors.add("nationalPlanProgramsPercentageSumWrong",
+    	                                   new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong"));
+    	                        saveErrors(request, errors);    						
+        						return mapping.findForward("addActivityStep2");
+        					}    					
+                    }
+                    
+                    if (eaForm.getPrimaryPrograms()!= null
+						&& eaForm.getPrimaryPrograms().size() > 0) {
+                    	Iterator<AmpActivityProgram> ppIt = eaForm.getPrimaryPrograms().iterator();
+    					Double totalPercentage = 0d;
+    					while (ppIt.hasNext()) {
+    						AmpActivityProgram activityProgram = ppIt.next();    						
+    						totalPercentage += activityProgram.getProgramPercentage();
+    					}
+    					if (totalPercentage != 100) {
+	                        errors.add("primaryProgramsPercentageSumWrong",
+	                                   new ActionError("error.aim.addActivity.primaryProgramsPercentageSumWrong"));
+	                        saveErrors(request, errors);    						
+    						return mapping.findForward("addActivityStep2");
+    					}    					
+                    }
+                    
+                    if (eaForm.getSecondaryPrograms()!= null
+    						&& eaForm.getSecondaryPrograms().size() > 0) {
+                        	Iterator<AmpActivityProgram> spIt = eaForm.getSecondaryPrograms().iterator();
+        					Double totalPercentage = 0d;
+        					while (spIt.hasNext()) {
+        						AmpActivityProgram activityProgram = spIt.next();    						
+        						totalPercentage += activityProgram.getProgramPercentage();
+        					}
+        					if (totalPercentage != 100) {
+    	                        errors.add("secondaryProgramsPercentageSumWrong",
+    	                                   new ActionError("error.aim.addActivity.secondaryProgramsPercentageSumWrong"));
+    	                        saveErrors(request, errors);    						
+        						return mapping.findForward("addActivityStep2");
+        					}    					
+                    }                    
+                    
                 }
 				// end of Modified code
 

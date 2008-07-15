@@ -151,7 +151,7 @@ function getContractDisbursments(){
 		}
 		elems = divId.getElementsByTagName("select");
 		for (var i=0; i<elems.length; i++) {
-			ret += elems[i].name + "=" + elems[i].selectedIndex + "&";
+			ret += elems[i].name + "=" + elems[i].value + "&";
 		}	
 	}
 	return ret;
@@ -359,7 +359,7 @@ window.onload=autosum;
 			</td>
 			<td align="left">
 				<html:text readonly="true" size="9" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
-				<a id ="startOfTenderingDate" href='javascript:pickDateByIdDxDy("calendarPosition","startOfTendering",-250,80)'>
+				<a id ="startOfTenderingDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","startOfTendering",-250,-230)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
@@ -371,7 +371,7 @@ window.onload=autosum;
 			</td>
 			<td align="left">
 				<html:text readonly="true" size="9" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
-				<a id="contractValidityDate" href='javascript:pickDateByIdDxDy("calendarPosition","contractValidity",-250,80)'>
+				<a id="contractValidityDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","contractValidity",-250,-230)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
@@ -395,7 +395,7 @@ window.onload=autosum;
 			</td>
 			<td align="left">
 				<html:text readonly="true" size="9" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
-				<a id="signatureOfContractDate" href='javascript:pickDateByIdDxDy("calendarPosition","signatureOfContract",-250,80)'>
+				<a id="signatureOfContractDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","signatureOfContract",-250,-230)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
@@ -406,7 +406,7 @@ window.onload=autosum;
 			</td>
 			<td align="left">
 				<html:text readonly="true" size="9" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
-				<a id="contractCompletionDate" href='javascript:pickDateByIdDxDy("calendarPosition","contractCompletion",-250,80)'>
+				<a id="contractCompletionDate" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","contractCompletion",-250,-230)'>
 					<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 				</a>
 			</td>
@@ -512,7 +512,7 @@ window.onload=autosum;
 				</td>
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate1" property="totalECContribIBAmountDate"/>
-					<a id="fimage1" href='javascript:pickDateByIdDxDy("calendarPosition","fdate1",-250,80)'>
+					<a id="fimage1" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate1",-250,-230)'>
 						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 				</td>
@@ -527,7 +527,7 @@ window.onload=autosum;
 				</td>
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate2" property="totalECContribINVAmountDate"/>
-					<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate2",-250,80)'>
+					<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate2",-250,-230)'>
 						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 				</td>
@@ -550,7 +550,7 @@ window.onload=autosum;
 					</td>
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate3" property="totalNationalContribCentralAmountDate"/>
-						<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate3",-250,80)'>
+						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate3",-250,-230)'>
 							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 						</a>
 					</td>
@@ -565,7 +565,7 @@ window.onload=autosum;
 					</td>
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate4" property="totalNationalContribIFIAmountDate"/>
-						<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate4",-250,80)'>
+						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate4",-250,-230)'>
 							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 						</a>
 					</td>
@@ -582,7 +582,7 @@ window.onload=autosum;
 					</td>
 					<td align="left">
 						<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate5" property="totalNationalContribRegionalAmountDate"/>
-						<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate5",-250,80)'>
+						<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate5",-250,-230)'>
 							<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 						</a>
 					</td>
@@ -605,7 +605,7 @@ window.onload=autosum;
 				</td>
 				<td align="left">
 					<html:text readonly="true" size="9" styleClass="inp-text" styleId="fdate6" property="totalPrivateContribAmountDate"/>
-					<a href='javascript:pickDateByIdDxDy("calendarPosition","fdate6",-250,80)'>
+					<a href='javascript:pickDateByIdDxDyWOScroll("newmyContract","fdate6",-250,-230)'>
 						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 					</a>
 				</td>
@@ -673,7 +673,7 @@ window.onload=autosum;
 							</html:select>
 							&nbsp;
 							<html:text readonly="true" size="9" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
-							<a id="image${idx.count}" href='javascript:pickDateByIdDxDy("calendarPosition","date${idx.count}",-250,80)'>
+							<a id="image${idx.count}" href='javascript:pickDateByIdDxDyWOScroll("newmyContract","date${idx.count}",-250,-230)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
 						</td>

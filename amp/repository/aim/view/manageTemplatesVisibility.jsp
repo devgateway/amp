@@ -78,8 +78,16 @@
 			<c:set var="translation">
 				<digi:trn key="aim:clickToDeleteTemplate">Click here to Delete Template</digi:trn>
 			</c:set>
+			<%if (!template.isDefault()){%>
+					
 			[ <digi:link href="/visibilityManager.do" name="urlParams11"  
 				title="${translation}" onclick="return onDelete()"><digi:trn key="aim:featureManagerDeleteLink">Delete</digi:trn></digi:link> ]
+				<%}
+				else{%>
+				[ <digi:trn key="aim:featureManagerDeleteLink">Delete</digi:trn>]
+				<%}
+				%>
+				
 			</td>
 		</tr>
 	</logic:iterate>

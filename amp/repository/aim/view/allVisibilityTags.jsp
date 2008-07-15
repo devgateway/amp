@@ -190,6 +190,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display>
 <field:display name="Activity Budget" feature="Identification"></field:display>
 <field:display name="Activity Created By" feature="Identification"></field:display>
+<field:display name="Date Of Last Activity Change" feature="Identification"></field:display>
 <field:display name="Activity Created On" feature="Identification"></field:display>
 <field:display name="Activity Updated By" feature="Identification"></field:display>
 <field:display name="Activity Updated On" feature="Identification"></field:display>

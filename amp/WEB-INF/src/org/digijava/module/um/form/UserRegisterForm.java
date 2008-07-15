@@ -19,6 +19,7 @@
 package org.digijava.module.um.form;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,7 +73,7 @@ public class UserRegisterForm
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
     private Long selectedOrganizationId;
-
+    private HashMap<String,String> errors=null;
 //FocusBoxes
     private String[] selectedItems = {};
     // private String[] items ;
@@ -420,125 +421,53 @@ public class UserRegisterForm
     public ActionErrors validate(ActionMapping actionMapping,
                                  HttpServletRequest httpServletRequest) {
 
-        ActionErrors errors = null;
-        errors=new ActionErrors();
+        ActionErrors olderrors = new ActionErrors();
+        errors = new HashMap<String, String>();
 
-
-     /*   if ( (this.getSelectedCountryResidence() == null) ||
-                (this.getSelectedCountryResidence().trim().length() <= 0) ||
-                this.getSelectedCountryResidence().trim().equals("-1")) {
-                ActionError error = new ActionError(
-                    "error.registration.noresidence");
-                errors.add(null, error);
-                }
-
-
-                if (this.selectedOrganizationType != null &&
-                    this.selectedOrganizationType.equals("other") &&
-                    (this.organizationTypeOther == null ||
-                     this.organizationTypeOther.trim().length() <= 0)) {
-
-                    ActionError error = new ActionError(
-                        "error.registration.enterorganizationother");
-                    errors.add(null, error);
-                }*/
-        /*        if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
-             ActionError error = new ActionError("error.registration.noemail");
-                    errors.add(null, error);
-                }
-         else if (! (this.getEmail().equals(this.getEmailConfirmation()))) {
-                    ActionError error = new ActionError(
-                        "error.registration.noemailmatch");
-                    errors.add(null, error);
-                }
-                if ( (this.getFirstNames() == null) ||
-                    this.getFirstNames().trim().length() == 0) {
-                    ActionError error = new ActionError(
-                        "error.registration.FirstNameBlank");
-                    errors.add(null, error);
-                }
-                if ( (this.getLastName() == null) ||
-                    this.getLastName().trim().length() == 0) {
-                    ActionError error = new ActionError(
-                        "error.registration.LastNameBlank");
-                    errors.add(null, error);
-                }
-                if ( (this.getSelectedCountryResidence() == null) ||
-             (this.getSelectedCountryResidence().trim().length() <= 0)) {
-         ActionError error = new ActionError("error.registration.noresidence");
-                    errors.add(null, error);
-                }
-                if ( (this.getPassword() == null) ||
-                    this.getPassword().trim().length() == 0) {
-                    ActionError error = new ActionError(
-                        "error.registration.passwordBlank");
-                    errors.add(null, error);
-                }
-         else if (! (this.getPassword().equals(this.getPasswordConfirmation()))) {
-                    ActionError error = new ActionError(
-                        "error.registration.NoPasswordMatch");
-                    errors.add(null, error);
-                }*/
-        
-        
         	if ( (this.getFirstNames() == null) ||
                 this.getFirstNames().trim().length() == 0) {
         		this.setFirstNames("");
-                /*ActionError error = new ActionError(
-                    "error.registration.FirstNameBlank");
-                errors.add(null, error);*/
             }
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {
-                ActionError error = new ActionError(
-                    "error.registration.LastNameBlank");
-                errors.add(null, error);
+            	
+            	errors.put("error.registration.LastNameBlank", "Password field is Blank");
             }
             if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
-                ActionError error = new ActionError("error.registration.noemail");
-                       errors.add(null, error);
+            	errors.put("error.registration.noemail", "you must enter Valid email please check in");
                    }
             if ( (this.getPassword() == null) ||
                     this.getPassword().trim().length() == 0) {
-                    ActionError error = new ActionError(
-                        "error.registration.passwordBlank");
-                    errors.add(null, error);
+                    errors.put("error.registration.passwordBlank", "Password field is Blank");
                 }            
             
 
         if ( (this.getEmail() != null) && this.getEmail().trim().length() != 0) {
             if (! (this.getEmail().equals(this.getEmailConfirmation()))) {
-                ActionError error = new ActionError(
-                    "error.registration.noemailmatch");
-                errors.add(null, error);
+                errors.put("error.registration.noemailmatch", "Emails in both fields must be the same");
             }
         }
 
         if ( (this.getPassword() != null) &&
             this.getPassword().trim().length() != 0) {
             if (! (this.getPassword().equals(this.getPasswordConfirmation()))) {
-                ActionError error = new ActionError(
-                    "error.registration.NoPasswordMatch");
-                errors.add(null, error);
+                errors.put("error.registration.NoPasswordMatch", "Passwords in both fields must be the same");
             }
         }      
        if(selectedOrgType==null||selectedOrgType.equals(-1l)){
-           ActionError error = new ActionError("error.registration.enterorganizationother");
-           errors.add(null, error);
+           errors.put("error.registration.enterorganizationother", "Please enter Organization Type");
        }
        
         
         if (null == selectedOrgGroup || selectedOrgGroup .equals(-1l)) {
-        	ActionError error = new ActionError("error.registration.NoOrgGroup");
-        	errors.add(null, error);
+        	errors.put("error.registration.NoOrgGroup", "Please Select Organization Group");
         }
 
         if ( selectedOrganizationId==null || selectedOrganizationId .equals(-1l)) {
-        	ActionError error = new ActionError("error.registration.NoOrganization");
-        	errors.add(null, error);
+        	errors.put("error.registration.NoOrganization", "Please Select Organization");
         }
         
-        return errors.isEmpty() ? null : errors;
+        return errors.isEmpty()? null : olderrors ;
     }
 
     public Long getSiteId() {
@@ -563,5 +492,20 @@ public class UserRegisterForm
 
 	public void setSelectedOrganizationId(Long selectedOrganizationId) {
 		this.selectedOrganizationId = selectedOrganizationId;
+	}
+
+	public HashMap<String, String> getErrors() {
+		return errors;
+	}
+
+	public void setErrors(HashMap<String, String> errors) {
+		this.errors = errors;
+	}
+	public void addError(String key, String value) {
+	    this.errors.put(key, value) ;
+	}
+
+	public void clearMessages(){
+	    this.errors.clear();
 	}
 }

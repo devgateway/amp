@@ -1,0 +1,2 @@
+update amp_funding_detail set transaction_amount=transaction_amount*1000;
+update amp_component_funding set transaction_amount=transaction_amount*1000;

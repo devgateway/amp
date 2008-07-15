@@ -474,7 +474,7 @@
 				    	</tr>
 				        <tr>
 				                  	<td>
-					                  	<html:select style="width: 300px"
+					                  	<html:select style="width: 350px"
 											multiple="true" property="selectedBeneficiaryAgency" size="3"
 											styleClass="inp-text">
 										<html:optionsCollection property="beneficiaryAgency" label="acronymAndName"
@@ -493,7 +493,7 @@
 						</tr>
 				        <tr>
 				                <td>
-					                  <html:select style="width: 300px"
+					                  <html:select style="width: 350px"
 									multiple="true" property="selectedExecutingAgency" size="3"
 									styleClass="inp-text">
 								
@@ -511,10 +511,8 @@
 								</td>
 						</tr>
 						<tr>
-  							<td>	
-  									<html:select style="width: 300px" multiple="true"
-									property="selectedImplementingAgency" size="3"
-									styleClass="inp-text">
+  							<td>
+  								<html:select style="width:350px" multiple="true" property="selectedImplementingAgency" size="3" styleClass="inp-text">
 									<html:optionsCollection property="implementingAgency" label="acronymAndName"
 										value="ampOrgId" />
 									</html:select>
@@ -530,7 +528,7 @@
 						</tr>
 						<tr>
   							<td>	
-  									<html:select style="width: 300px" multiple="true"
+  									<html:select style="width: 350px" multiple="true"
 									property="selectedDonnorAgency" size="3"
 									styleClass="inp-text">
 									<html:optionsCollection property="donnorAgency" label="acronymAndName"

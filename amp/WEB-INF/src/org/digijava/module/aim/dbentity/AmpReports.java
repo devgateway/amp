@@ -13,6 +13,8 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -97,7 +99,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	}
 
 	public static String getNote(HttpSession session) {
-		return "Amounts are in thousands (000)";
+		boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
+		if(returnString)
+			return "Amounts are in thousands (000)";
+		else
+			return "";
 	}
 
 	public Set<AmpReportMeasures> getMeasures() {

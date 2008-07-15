@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script type="text/javascript">
 function login()
@@ -192,9 +193,11 @@ method="post">
 														</TR>														
 														<TR><TD>
 															<FONT color=blue>*
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 																<digi:trn key="aim:allTheAmountsInThousands">	
 																	All the amounts are in thousands (000)
 		  														</digi:trn>
+</gs:test>
 															</FONT>								
 														</TD></TR>
 													</TABLE>

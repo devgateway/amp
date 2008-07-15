@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.form.RegionalFundingForm"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 
@@ -288,12 +290,13 @@ function projectFiche(id)
 										</TR>
 										<TR>
 											<TD>
-												<FONT color=blue>*
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+													<FONT color=blue>*
 													<digi:trn key="aim:allTheAmountsInThousands">
-														All the amounts are in thousands (000)
-													</digi:trn>
 
-												</FONT>
+													All the amounts are in thousands (000)</digi:trn>
+													</FONT>
+</gs:test>
 											</TD>
 										</TR>
 									</TABLE>

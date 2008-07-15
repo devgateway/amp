@@ -20,6 +20,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
 
@@ -871,6 +872,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 												</TD></TR>
 
 												<TR><TD>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 
 													<FONT color=blue>*
 
@@ -878,6 +880,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 													All the amounts are in thousands (000)</digi:trn>
 													</FONT>
+</gs:test>
 
 												</TD></TR>
 

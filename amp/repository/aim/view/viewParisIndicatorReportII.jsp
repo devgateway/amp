@@ -20,7 +20,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
 
@@ -1004,7 +1004,10 @@
 
 				<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
 
-					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn>
+					<tr><td><font color="blue">* 
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+					<digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn>
+</gs:test>
                                                                     <c:set var="selCurrency">
                                                                       ${aimParisIndicatorReportForm.currency}
                                                                     </c:set>

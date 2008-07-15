@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -450,11 +451,13 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</td></tr>
 																				</logic:iterate>	<!-- L1 END-->
 																				<TR><TD>
+																				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 																					<FONT color=blue>*
 																						<digi:trn key="aim:allTheAmountsInThousands">
 																							All the amounts are in thousands (000)
 				  																		</digi:trn>
 																					</FONT>
+																				</gs:test>
 																				</TD></TR>
 																			</logic:notEmpty>
 																			<logic:notEmpty name="aimEditActivityForm" property="fundingRegions">

@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -49,10 +50,16 @@
 		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
         var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
 		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 		var msgConfirmFunding="<digi:trn key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
+</gs:test>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+		var msgConfirmFunding="";
+</gs:test>
 		//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 		//var msgEnterDate="qsfgqsg";
+
 		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
 		
 		if (flag == false) return false;
@@ -293,9 +300,11 @@
 		</td>
 	</tr>
 	<tr><td>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 		<FONT color=blue><B><BIG>*</BIG>
 			<digi:trn key="aim:pleaseEnterTheAmountInThousands">
 			Please enter amount in thousands (000)</digi:trn>
+</gs:test>
 	</td></tr>
 	<% int tempIndex = 0; %>
 	<% String tempIndexStr = ""; %>
@@ -453,8 +462,14 @@
 								</field:display>
 								<field:display name="Amount Commitment" feature="Funding Information">
 								<td align="center" valign="middle" width="120">
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
 								</td>
 								</field:display>
 								<field:display name="Currency Commitment" feature="Funding Information">
@@ -624,8 +639,14 @@
 								</field:display>
 								<field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
 								<td align="center" valign="middle" width="120">
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
 								</td>
 								</field:display>
 								<field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
@@ -789,8 +810,14 @@
                                 </field:display>
 								<field:display name="Amount Disbursement" feature="Disbursement">
 								<td align="center" valign="middle" width="120">
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
 								</td>
                                 </field:display>
 								<field:display name="Currency Disbursement" feature="Disbursement">
@@ -979,8 +1006,14 @@
 								</field:display>
 								<field:display name="Amount Expenditure" feature="Funding Information">
 								<td align="center" valign="middle" width="120">
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
+									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+									<a title="<digi:trn key="aim:AmountCommittedNoThousand">Full amount of expected transfer, irrespective of the time required for the completion of disbursements.</digi:trn>">
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+									</gs:test>
 								</td>
 								</field:display>
 								

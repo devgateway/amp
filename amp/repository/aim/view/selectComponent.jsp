@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
@@ -177,9 +178,15 @@ function addComponent(){
 						<tr>
 
 
-							<td colspan=2><FONT color=blue><BIG>*</BIG> <digi:trn
+							<td colspan=2>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+							<FONT color=blue>
+							<BIG>*</BIG> <digi:trn
 								key="aim:pleaseEnterTheAmountInThousands">
-												Please enter amount in thousands (000)		  									</digi:trn> </FONT></td>
+												Please enter amount in thousands (000)
+		  									</digi:trn> </FONT>
+</gs:test>
+							</td>
 						</tr>
 						<tr bgcolor="#f4f4f2">
 							<td colspan="2" class="box-border-alt1"><span

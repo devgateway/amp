@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ page import="org.digijava.module.aim.helper.CategoryConstants" %>
-
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -301,9 +301,14 @@ function commentWin(val) {
 											<b><digi:trn key="aim:totalCommitmentsActual">
 										Total Commitments(Actual)</digi:trn> : </b>
 										</c:if> ${aimChannelOverviewForm.grandTotal}
-										${aimChannelOverviewForm.currCode} <FONT color="blue">
+										${aimChannelOverviewForm.currCode} 
+
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+										<FONT color="blue">
 										( <digi:trn key="aim:enteredInThousands">Entered in thousands 000</digi:trn>)
-										</FONT></TD>
+										</FONT>
+</gs:test>
+										</TD>
 									</TR>
 								</TABLE>
 								</TD>

@@ -513,7 +513,7 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 				}
 				
-				if (checkAmountLen(temp[i].value,msgConfirmFunding) == false) {
+				if (msgConfirmFunding != "" && checkAmountLen(temp[i].value,msgConfirmFunding) == false) {
 
 					temp[i].focus();
 

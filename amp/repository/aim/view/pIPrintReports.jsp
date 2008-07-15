@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -373,7 +374,14 @@ function load()
 					</td>
 					 
 				</tr>
-					<tr><td><font color="black">* All the amounts are in thousands (000)  <bean:write name="aimParisIndicatorReportForm" property="currency"/></font></td></tr>
+					<tr><td>
+					<font color="black">
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+					* All the amounts are in thousands (000)  
+</gs:test>
+						<bean:write name="aimParisIndicatorReportForm" property="currency"/>
+					</font>
+					</td></tr>
 <%-----------------------------------------------------------------------------------------------------------------------------------------------------%>
 						<!--</table>
 					</td>

@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+
+
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
   <!-- Dependencies --> 
         <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
@@ -126,12 +129,14 @@ session.setAttribute("progressValue", counter);
 	</logic:notEmpty> 
 		<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
 			<span  style="color: red;font-family: Arial;font-size: 12px;">
-				<c:set var="AllAmount">
-					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-				</c:set>
-				<digi:trn key="rep:pop:AllAmount">
-					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-				</digi:trn>
+				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+					<c:set var="AllAmount">
+						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+					</c:set>
+					<digi:trn key="rep:pop:AllAmount">
+						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+					</digi:trn>
+				</gs:test>			
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
@@ -228,12 +233,14 @@ session.setAttribute("progressValue", counter);
 	<tr>
 		<td align="right">
 			<span style="color: red;font-family: Arial;padding-right: 5px">
+				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 				<c:set var="AllAmount">
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
 				</c:set>
 				<digi:trn key="rep:pop:AllAmount">
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
 				</digi:trn>
+				</gs:test>
 				<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>

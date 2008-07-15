@@ -14,6 +14,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@ taglib uri="/taglib/aim" prefix="aim"%>
 		<tr>
@@ -161,10 +162,13 @@
 												<tr>
 
 													<td bgcolor="#ffffff">
-													<!-- <FONT color=blue>* <digi:trn
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+													<FONT color=blue>* <digi:trn
 														key="aim:theAmountEnteredAreInThousands">
-																				The amount entered are in thousands (000)		  																	</digi:trn>
-													</FONT>-->
+																				The amount entered are in thousands (000)
+		  												</digi:trn>
+													</FONT>
+</gs:test>
 													</td>
 												</tr>
 											</table>

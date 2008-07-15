@@ -12,6 +12,8 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -707,12 +709,11 @@
 			<TR>
 
 				<TD>
-
 					<FONT color=blue>*
-
+					<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 					<digi:trn key="aim:allTheAmountsInThousands">
-
 					All the amounts are in thousands (000)</digi:trn>
+					</gs:test>
 					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
 						<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 						<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 

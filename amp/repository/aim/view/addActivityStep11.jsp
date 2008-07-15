@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -287,7 +288,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<c:if test="${!empty aimEditActivityForm.costs}">
 																		<bean:define id="costs" name="aimEditActivityForm" property="costs" toScope="request"/>
 																		<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
+																		<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 		                                                                  <digi:trn key="aim:amountsinthousands">Amounts in thousands (000) -</digi:trn>
+		                                                                </gs:test>
 		                                                                  <c:out value="${aimEditActivityForm.currCode}"/>
 																		<jsp:include page="viewCostsSummary.jsp"/>
 																		</c:if>

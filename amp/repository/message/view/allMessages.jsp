@@ -34,6 +34,7 @@
 
 #selectedMessagePanel .bd { 
     height: 600px; 
+    width: 600px;
     /* Apply scrollbars for all browsers. */ 
     overflow: auto; 
 } 
@@ -198,7 +199,7 @@ background-color:yellow;
         divBody.innerHTML='<digi:img src="images/amploading.gif"/><digi:trn key="aim:NPD:loadingGraph">Loading...</digi:trn>';
         div.appendChild(divBody);
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
-            width:"600px", 
+             
            
             fixedcenter: true, 
             constraintoviewport: true, 

@@ -34,19 +34,21 @@
 				<!-- End navigation -->
 			</tr>
 		</table>
-		<h2>Import Results</h2>
-		<h3>Updated Permissions:</h3>
-		<logic:iterate name="updatedPermissions" id="permission">
-		<bean:write name="permission"/>&nbsp; ;
-		</logic:iterate>
-		<h3>Added Permissions:</h3>
-		<logic:iterate name="addedPermissions"  id="permission">
-		<bean:write name="permission"/>&nbsp; ;
-		</logic:iterate>
+		
 		<h2><digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></h2>
 		<input type="button" name="export" value="EXPORT"
 			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
 			type="button" name="import" value="IMPORT"
-			onclick="javascript:window.location.href='<%=importperm%>'" /></td>
+			onclick="javascript:window.location.href='<%=importperm%>'" />
+		<h2>Import Results</h2>
+		<h3>Updated Permissions:</h3>
+		<logic:iterate name="updatedPermissions" id="permission">
+		<bean:write name="permission"/><p/>
+		</logic:iterate>
+		<h3>Added Permissions:</h3>
+		<logic:iterate name="addedPermissions"  id="permission">
+		<bean:write name="permission"/><p/>
+		</logic:iterate>
+		</td>
 	</tr>
 </table>

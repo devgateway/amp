@@ -198,7 +198,7 @@ public class ExchangePermission extends MultiAction {
 //		    transaction.commit();
 		    dbCp.getPermissions().add(xmlToDbCompositePermission);
 		}
-		
+		if(dbCp.getPermissibleObjects()==null) dbCp.setPermissibleObjects(new TreeSet());
 		dbCp.getPermissibleObjects().clear();
 		dbCp.getPermissibleObjects().addAll(getAssignedLocalIds(elem.getAssignedObjId(),dbCp));
 		
@@ -230,8 +230,7 @@ public class ExchangePermission extends MultiAction {
 		dbGp.getGateParameters().addAll(xmlGp.getParam());
 		dbGp.setGateTypeName(GatePermConst.availableGatesBySimpleNames.get(xmlGp.getGateClass()).getName());
 		
-		//if(dbGp.getPermissibleObjects()==null)
-		    dbGp.setPermissibleObjects(new TreeSet());
+		if(dbGp.getPermissibleObjects()==null) dbGp.setPermissibleObjects(new TreeSet());
 		
 		dbGp.getPermissibleObjects().addAll(getAssignedLocalIds(xmlGp.getAssignedObjId(),dbGp));
 			

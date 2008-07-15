@@ -431,7 +431,7 @@ public class UserRegisterForm
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {
             	
-            	errors.put("error.registration.LastNameBlank", "Password field is Blank");
+            	errors.put("error.registration.LastNameBlank", "LastName is Blank");
             }
             if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
             	errors.put("error.registration.noemail", "you must enter Valid email please check in");

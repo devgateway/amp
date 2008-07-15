@@ -224,9 +224,10 @@
 					</div>
 					<div style="height: 355px;">
 					<br />
-					<table cellpadding="15px" width="100%" align="center" >
+					<table cellpadding="15px" width="100%" align="center" border="0" >
 						<tr>
 							<td width="46%" style="vertical-align: top;">
+
 								<span class="list_header">
 									<digi:trn key="rep:wizard:fundingGrouping"> Funding Grouping </digi:trn>
 								</span>
@@ -280,17 +281,7 @@
                                      </table>
 									<br />
 								</div>
-							</td>
-							<td width="47%" rowspan="2">
-								<span class="list_header">
-									${descriptionName}
-								</span>
-								<br/>
-								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%; height: 250px;" />
-							</td>
-						</tr>
-						<tr>
-							<td colspan="1">
+
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
 								</span>
@@ -319,6 +310,32 @@
 									</html:radio>
 									<br /><br />
 								</div>
+								<bean:define id="lead" property="teamHead" name="currentMember" scope="session" />
+                  				<c:if test="${lead != true}">
+                                    <html:hidden property="publicReport" value="false"/>
+								</c:if>
+                  				<c:if test="${lead == true}">
+
+								<span class="list_header">
+									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>
+								</span>
+								<div align="center" id="optionsDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
+									<br />
+                                    <html:checkbox property="publicReport" value="true"/>
+                                    <digi:trn key="aim:makePublic">
+                                        Make public
+                                    </digi:trn>
+                                </div>
+
+								</c:if>
+
+							</td>
+							<td width="47%">
+								<span class="list_header">
+									${descriptionName}
+								</span>
+								<br/>
+								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%; height: 250px;" />
 							</td>
 						</tr>
 					</table>

@@ -8,6 +8,11 @@ function getReportType() {
 	}
 }
 
+function getPublicReport() {
+	var checkboxObject		= aimReportWizardForm.publicReport;
+	return checkboxObject.value;
+}
+
 function getReportTitleEl() {
 	var divEl	= document.getElementById("titlePanelBody");
 	var titleEl	= divEl.getElementsByTagName("input")[0];
@@ -113,6 +118,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 	var postString		= "reportTitle="+getReportTitle() + "&reportDescription="+getReportDescription() + "&reportPeriod="+getReportPeriod() + 
 						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 						"&desktopTab="+getDesktopTab() +
+						"&publicReport="+getPublicReport() +
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 	//alert (postString);
 	

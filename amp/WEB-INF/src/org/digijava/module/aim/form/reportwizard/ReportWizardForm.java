@@ -35,6 +35,8 @@ public class ReportWizardForm extends ActionForm {
 
 	private Boolean duplicateName		= false;
 	
+	private Boolean publicReport = false;
+	
 	public Long getReportId() {
 		return reportId;
 	}
@@ -155,6 +157,14 @@ public class ReportWizardForm extends ActionForm {
 
 	public void setDuplicateName(Boolean duplicateName) {
 		this.duplicateName = duplicateName;
+	}
+
+	public void setPublicReport(Boolean publicReport) {
+		this.publicReport = publicReport;
+	}
+
+	public Boolean getPublicReport() {
+		return publicReport;
 	}
 	
 	

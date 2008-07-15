@@ -27,7 +27,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 
 public class UpdateWorkspace extends Action {
 
-	private static Logger logger = Logger.getLogger(Copy_2_of_UpdateWorkspace.class);
+	private static Logger logger = Logger.getLogger(UpdateWorkspace.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)

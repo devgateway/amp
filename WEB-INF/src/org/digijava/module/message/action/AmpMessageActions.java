@@ -51,21 +51,21 @@ public class AmpMessageActions extends DispatchAction {
 	public static final String ROOT_TAG = "Messaging";
 	public static final String MESSAGES_TAG = "MessagesList";
 	public static final String PAGINATION_TAG = "Pagination";
-        public static final String INFORMATION_TAG = "Information";
+    public static final String INFORMATION_TAG = "Information";
 	
     
     public ActionForward fillTypesAndLevels (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {        		
-    		AmpMessageForm messageForm=(AmpMessageForm)form;    		
-    		if(request.getParameter("editingMessage").equals("false")){
-    			//load activities
-    	    	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds());
-    			setDefaultValues(messageForm);
-    		}else {
-    			Long id=new Long(request.getParameter("msgStateId"));    			
-    	    	AmpMessageState state=AmpMessageUtil.getMessageState(id);
-    	    	fillFormFields(state.getMessage(),messageForm,id,true);    	
-    		}
-		 return loadReceiversList(mapping,form,request,response);	
+    	AmpMessageForm messageForm=(AmpMessageForm)form;    		
+    	if(request.getParameter("editingMessage").equals("false")){
+    		//load activities
+        	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds());
+    		setDefaultValues(messageForm);
+    	}else {
+    		Long id=new Long(request.getParameter("msgStateId"));    			
+        	AmpMessageState state=AmpMessageUtil.getMessageState(id);
+        	fillFormFields(state.getMessage(),messageForm,id,true);    	
+    	}
+	 return loadReceiversList(mapping,form,request,response);	
 	}
     
    /**
@@ -74,8 +74,7 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward cancelMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {    	
     	//AmpMessageForm alertsForm=(AmpMessageForm)form;
     	//setDefaultValues(alertsForm);
-        return mapping.findForward("showAllMessages");
-    	
+        return mapping.findForward("showAllMessages");    	
     }
     
     public ActionForward gotoMessagesPage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -714,7 +713,7 @@ public class AmpMessageActions extends DispatchAction {
 			}
 			
 			if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
-				if(request.getParameter("toDo") != null && !request.getParameter("toDo").equals("draft")){
+				if(request.getParameter("toDo")!=null && !request.getParameter("toDo").equals("draft")){
 		    		DgEmailManager.sendMail(addresses, teamMember.getEmail(), message.getName(), message.getDescription());
 		    	}
 			}
@@ -739,8 +738,7 @@ public class AmpMessageActions extends DispatchAction {
     	AmpMessageState newMessageState=new AmpMessageState();
 		newMessageState.setMessage(message);
 		newMessageState.setSender(senderName);
-		newMessageState.setMemberId(memberId);
-		
+		newMessageState.setMemberId(memberId);	
         String receivers = message.getReceivers();
         if (receivers == null) {
         	receivers = "";

@@ -6,13 +6,76 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 10px;
+	width: 300px;
+}
+
+input.file {
+	width: 300px;
+	margin: 0;
+}
+
+input.file.hidden {
+	position: relative;
+	text-align: right;		
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+	height:10px;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+
+div.fakefile input {
+	margin-bottom: 2px;
+	margin-left: 0;
+	width: 217px;
+	height:20px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
+
+<!-- Yahoo Panel --> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>"></script>
+
 
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this workspace?");
 		return flag;
-	}
-
+	}	
+	
 </script>
 <DIV id="TipLayer"	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 	
@@ -69,7 +132,7 @@
 											<!-- Table title -->
 											<digi:trn key="message:templates">Templates	</digi:trn>
 											<!-- end table title -->
-										</td></tr>
+										</td></tr>										
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
 													<logic:empty name="messageForm" property="templates">
@@ -157,8 +220,18 @@
 													</digi:trn>
 												</digi:link>
 											</td>
-										</tr>
-																				
+										</tr>										
+										<tr>
+											<td>
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn key="message:clickToGoToExportImport">Click here to goto Templates Export/Import Manager</digi:trn>
+												</c:set>
+												<digi:link href="/exportImportTemplates.do?actionType=gotoExportImportPage" title="${translation}" >
+													<digi:trn key="aim:exportImport">Templates Export/Import Manager</digi:trn>
+												</digi:link>
+											</td>
+										</tr>																				
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
@@ -185,3 +258,4 @@
 		</td>
 	</tr>
 </table>
+

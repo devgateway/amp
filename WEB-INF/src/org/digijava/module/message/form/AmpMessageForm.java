@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
@@ -103,6 +103,9 @@ public class AmpMessageForm extends ActionForm {
 	private List<TemplateAlert> templates;
 	private List<LabelValueBean> availableTriggersList;
 	private String selectedTrigger;
+	
+	
+	private FormFile fileUploaded;
 	
 
 	public List<TemplateAlert> getTemplates() {
@@ -571,6 +574,14 @@ public class AmpMessageForm extends ActionForm {
                 public void setRemoveStateIds(String removeStateIds) {
                     this.removeStateIds = removeStateIds;
                 }
+
+				public FormFile getFileUploaded() {
+					return fileUploaded;
+				}
+
+				public void setFileUploaded(FormFile fileUploaded) {
+					this.fileUploaded = fileUploaded;
+				}
 
 
 	

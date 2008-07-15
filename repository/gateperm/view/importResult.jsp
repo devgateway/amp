@@ -21,13 +21,13 @@
 				<td height=33><span class=crumb> <c:set
 					var="translation">
 					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-				</c:set> <digi:link href="/admin.do" styleClass="comment"
+				</c:set> <a href="/aim/admin.do" styleClass="comment"
 					title="${translation}">
 					<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToGlobalPerm">Click here to goto Global Permission Manager</digi:trn>
 					</c:set>
-				</digi:link>&nbsp;&gt;&nbsp; <digi:link href="/managePermMap.do"
+				</a>&nbsp;&gt;&nbsp; <digi:link href="/managePermMap.do"
 					styleClass="comment" title="${translation}">
 					<digi:trn key="aim:globalperms">Global Permission Manager</digi:trn>
 				</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:exchangePermission">Permission Exchange Management</digi:trn></td>

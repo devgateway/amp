@@ -1,1 +1,0 @@
-update amp_team set computation=true where access_type="Computed";

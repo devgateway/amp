@@ -45,9 +45,13 @@ function submitForm(mode) {
 			</table>
 			<h2><digi:trn key="aim:globalperms"></digi:trn></h2>
 			
-			<digi:context name="exchangePerm" property="context/module/moduleinstance/exchangePermission.do" />
-			<input type="button" name="exchangePerm" value="Import/Export Permissions"
-			onclick="javascript:window.location.href='<%=exchangePerm%>'" />
+			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
+			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
+			<input type="button" name="export" value="EXPORT"
+			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
+			type="button" name="import" value="IMPORT"
+			onclick="javascript:window.location.href='<%=importperm%>'" />
+		
 			<p/>
 			<hr/>
 			<h3><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></h3>

@@ -9,6 +9,8 @@
  <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
  <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
  <%@ taglib uri="/taglib/aim" prefix="aim" %>
+ <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+ s
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
@@ -260,7 +262,9 @@ function selectOrganisation1() {
 	</tr>
 	<tr>
 	<td colspan="2">
+		<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 		 <font color="red">All amounts are in the thousands (000)</font>
+		</gs:test>
 		</td>
 	</tr>	
 

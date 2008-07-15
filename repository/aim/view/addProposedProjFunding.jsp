@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -70,10 +72,14 @@
   <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
     <tr>
       <td>
+		<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
         <FONT color=blue><B><BIG>*</BIG>
           <digi:trn key="aim:pleaseEnterTheAmountInThousands">
           Please enter amount in thousands (000)
           </digi:trn>
+          </B>
+          </FONT>
+		</gs:test>
       </td>
     </tr>
 

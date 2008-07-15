@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@page import="org.digijava.module.aim.form.EditActivityForm"%>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <digi:instance property="aimEditActivityForm"/>
 
 
@@ -228,11 +229,13 @@
 															</table>
 															<logic:notEmpty name="selComponents" property="commitments">
 															<TR><TD>
+																<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 																<FONT color=blue>*
 																	<digi:trn key="aim:allTheAmountsInThousands">
 																		All the amounts are in thousands (000)
 				  													</digi:trn>
 																</FONT>
+																</gs:test>
 															</TD></TR>
 															</logic:notEmpty>
 														</td></tr>

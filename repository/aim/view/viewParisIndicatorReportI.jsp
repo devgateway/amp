@@ -22,6 +22,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -1330,11 +1331,12 @@
 
 				</tr>
 
-				<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a' &&
-
-									aimParisIndicatorReportForm.indicatorCode != '10b'}">
-
-					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000) </digi:trn>
+				<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a' && aimParisIndicatorReportForm.indicatorCode != '10b'}">
+					<tr><td>
+					<font color="blue">* 
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+					<digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000) </digi:trn>
+</gs:test>
                                                                     <c:set var="selCurrency">
                                                                       ${aimParisIndicatorReportForm.currency}
                                                                     </c:set>

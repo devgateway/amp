@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -83,7 +84,12 @@
     var lastTimeStamp;
 	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
 	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 	var strThousands="<digi:trn key='aim:NPD:amountThousandsOfDollarsLabel'>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
+</gs:test>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+	var strThousands="${aimNPDForm.defCurrency}";
+</gs:test>
 	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
 	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
 	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
@@ -838,7 +844,12 @@
 
 		//tousands label
 		if (strThousands==null || strThousands==''){
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 			strThousands='All amounts are in thousands (000)';
+</gs:test>
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+			strThousands='';
+</gs:test>
 		}
 
         var spn=document.getElementById("spnAmountText");

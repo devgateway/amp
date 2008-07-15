@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -81,11 +82,13 @@
 								</td>								
 							</tr>
 							<tr><td colspan=2>
+								<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 								<FONT color=blue><BIG>*</BIG>
 									<digi:trn key="aim:pleaseEnterTheAmountInThousands">
 										Please enter amount in thousands (000)
 		  							</digi:trn>
 								</FONT>
+								</gs:test>
 							</td></tr>
 							<c:set var="translationAdd">
 									<digi:trn key="aim:addActivityRegionalFundingAddFundingItem">Add</digi:trn>

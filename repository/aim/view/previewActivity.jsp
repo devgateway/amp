@@ -16,6 +16,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
@@ -1200,9 +1201,11 @@ function collapseAll() {
 													</td></tr>
 												</c:forEach>
 												<tr><td bgcolor="#ffffff">
-<!-- 													<FONT color=blue>*
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+ 													<FONT color=blue>*
 													<digi:trn key="aim:theAmountEnteredAreInThousands">
-													The amount entered are in thousands (000)</digi:trn></FONT> -->
+													The amount entered are in thousands (000)</digi:trn></FONT>
+</gs:test>
 													
 												</td></tr>
 												</table>
@@ -1346,10 +1349,12 @@ function collapseAll() {
 																</td></tr>
 															</c:if>
 															<tr><td bgcolor="#ffffff">
-																<!--<FONT color="blue">*
+<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+																<FONT color="blue">*
 																	<digi:trn key="aim:theAmountEnteredAreInThousands">
 																		The amount entered are in thousands (000)		  															</digi:trn>
-																</FONT>-->
+																</FONT>
+</gs:test>
 															</td></tr>
 															<field:display name="Components Physical Progress" feature="Activity - Component Step">
 															<tr><td bgcolor="#f4f4f2">

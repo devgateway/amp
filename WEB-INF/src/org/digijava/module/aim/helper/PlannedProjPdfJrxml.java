@@ -1,6 +1,8 @@
 package org.digijava.module.aim.helper;
 import java.io.*;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class PlannedProjPdfJrxml
 {
 	public void createJrxml(String filePath ,int cnt, int h)
@@ -952,7 +954,17 @@ p2.println("isPrintWhenDetailOverflows='false'/>");
 p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
 p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
 p2.println("</textElement>");
-p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) \"]]></textFieldExpression>");
+
+boolean returnString = Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS) );
+if(returnString){
+	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) \"]]></textFieldExpression>");
+}
+else
+{
+	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"  \"]]></textFieldExpression>");
+}
+
+
 p2.println("</textField>");
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");

@@ -504,10 +504,8 @@
 				<page>aim_editEUActivity</page>
 				<page>aim_locPopupLayout</page>
 				<page>aim_publicActivityPreview</page>
-				<page>aim_selectFilePopupLayout</page>
 				<page>aim_selectCreateIndicatorForStep9</page>
 				<page>selectCreateIndicators</page>
-				<page>aim_selectCMSCategoryPopupLayout</page>
 				<page>aim_selSectorPopupLayout</page>
 				<page>aim_selectSectorForind</page>
 				<page>aim_selectSectorForindEdit</page>

@@ -1027,16 +1027,6 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-	<tag>
-        <name>rss</name>
-        <tagclass>org.digijava.kernel.taglib.html.RssTag</tagclass>
-        <bodycontent>empty</bodycontent>
-        <attribute>
-            <name>module</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
     <tag>
 		<name>secure</name>
 		<tagclass>org.digijava.kernel.taglib.SecureTag</tagclass>

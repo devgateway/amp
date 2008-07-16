@@ -100,8 +100,6 @@
     <form-bean name="aimTeamAuditListForm" type="org.digijava.module.aim.form.TeamAuditForm" />
     <form-bean name="aimMemberReportsForm" type="org.digijava.module.aim.form.ReportsForm" />
     <form-bean name="aimIndicatorForm" type="org.digijava.module.aim.form.IndicatorForm" />
-    <form-bean name="aimAddDocumentForm" type="org.digijava.module.cms.form.CMSContentItemForm" />
-    <form-bean name="cmsForm" type="org.digijava.module.cms.form.CMSForm" />
     <form-bean name="aimTeamPagesForm" type="org.digijava.module.aim.form.TeamPagesForm" />
     <form-bean name="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm" />
     <form-bean name="aimSelectSectorForm" type="org.digijava.module.aim.action.SelectSectorForm" />
@@ -1022,42 +1020,6 @@
     </action>
     <action name="aimIndicatorForm" path="/aim/indicatorValues" scope="request" type="org.digijava.module.aim.action.IndicatorValues" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_indicatorValues" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/addDocument" scope="session" type="org.digijava.module.aim.action.ShowAddDocument" validate="false">
-      <forward name="showCreateContentItem" path="/showLayout.do?layout=addDocument" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/showSelectFile" scope="session" type="org.digijava.module.cms.action.ShowSelectItemFile" validate="false">
-      <forward name="showSelectFile" path="/showLayout.do?layout=aim_selectFilePopupLayout" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/selectFile" scope="session" type="org.digijava.module.cms.action.SelectItemFile" validate="false">
-      <forward name="showCreate" path="/aim/addDocument.do?reset=false" redirect="true" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/addContentItemCategoryFwd" scope="session" type="org.digijava.module.cms.action.AddContentItemCategoryFwd" validate="false">
-      <forward name="addContentItemCategory" path="/aim/showSelectCategory.do?selType=3" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/addContentItemCategory" scope="session" type="org.digijava.module.cms.action.AddContentItemCategory" validate="false">
-      <forward name="showCreateContentItem" path="/aim/addDocument.do?reset=false" redirect="true" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/removeContentItemCategory" scope="session" type="org.digijava.module.cms.action.RemoveContentItemCategory" validate="false">
-      <forward name="showContentItem" path="/showLayout.do?layout=addDocument" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="aimAddDocumentForm" path="/aim/createContentItem" scope="session" type="org.digijava.module.cms.action.CreateContentItem" validate="true">
-      <forward name="createContentItem" path="/aim/viewMyDesktop.do" redirect="true" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action input="/showLayout.do?layout=addDocument" name="aimAddDocumentForm" path="/aim/createDocument" scope="session" type="org.digijava.module.aim.action.SetCMSFormValues" validate="true">
-      <forward name="forward" path="/aim/createContentItem.do" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
-    <action name="cmsForm" path="/aim/showSelectCategory" scope="request" type="org.digijava.module.cms.action.ShowSelectCategory">
-      <forward name="showSelectCategory" path="/showLayout.do?layout=aim_selectCMSCategoryPopupLayout" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimTeamPagesForm" path="/aim/configureTeamPage" scope="request" type="org.digijava.module.aim.action.ShowConfigureTeamPage">
       <forward name="showConfigurePages" path="/showLayout.do?layout=teamPagesConfigure" />

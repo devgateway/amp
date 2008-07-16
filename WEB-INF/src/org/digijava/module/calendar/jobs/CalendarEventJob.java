@@ -8,7 +8,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.calendar.util.AmpDbUtil;
-import org.digijava.module.message.helper.CalendarEventTrigger;
+import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;

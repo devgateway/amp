@@ -1,8 +1,9 @@
-package org.digijava.module.message.helper;
+package org.digijava.module.message.triggers;
 
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
+import org.digijava.module.message.helper.Event;
 
 public class CalendarEventTrigger extends Trigger {
 

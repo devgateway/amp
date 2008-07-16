@@ -107,10 +107,10 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
-import org.digijava.module.message.helper.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.helper.AmpMessageWorker;
-import org.digijava.module.message.helper.ApprovedActivityTrigger;
-import org.digijava.module.message.helper.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -424,7 +424,7 @@ public class SaveActivity extends Action {
 	                    }
 
                     }
-                    
+
                     if(eaForm.getSelectedLocs() != null && eaForm.getSelectedLocs().size()>0){
     					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
     					Double totalPercentage = 0d;
@@ -436,60 +436,60 @@ public class SaveActivity extends Action {
     					if (totalPercentage != 100) {
 	                        errors.add("locationPercentageSumWrong",
 	                                   new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
-	                        saveErrors(request, errors);    						
+	                        saveErrors(request, errors);
     						return mapping.findForward("addActivityStep2");
     					}
                     }
-                    
-                    
+
+
                     if (eaForm.getNationalPlanObjectivePrograms() != null
     						&& eaForm.getNationalPlanObjectivePrograms().size() > 0) {
                         	Iterator<AmpActivityProgram> npoIt = eaForm.getNationalPlanObjectivePrograms().iterator();
         					Double totalPercentage = 0d;
         					while (npoIt.hasNext()) {
-        						AmpActivityProgram activityProgram = npoIt.next();    						
+        						AmpActivityProgram activityProgram = npoIt.next();
         						totalPercentage += activityProgram.getProgramPercentage();
         					}
         					if (totalPercentage != 100) {
     	                        errors.add("nationalPlanProgramsPercentageSumWrong",
     	                                   new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong"));
-    	                        saveErrors(request, errors);    						
+    	                        saveErrors(request, errors);
         						return mapping.findForward("addActivityStep2");
-        					}    					
+        					}
                     }
-                    
+
                     if (eaForm.getPrimaryPrograms()!= null
 						&& eaForm.getPrimaryPrograms().size() > 0) {
                     	Iterator<AmpActivityProgram> ppIt = eaForm.getPrimaryPrograms().iterator();
     					Double totalPercentage = 0d;
     					while (ppIt.hasNext()) {
-    						AmpActivityProgram activityProgram = ppIt.next();    						
+    						AmpActivityProgram activityProgram = ppIt.next();
     						totalPercentage += activityProgram.getProgramPercentage();
     					}
     					if (totalPercentage != 100) {
 	                        errors.add("primaryProgramsPercentageSumWrong",
 	                                   new ActionError("error.aim.addActivity.primaryProgramsPercentageSumWrong"));
-	                        saveErrors(request, errors);    						
+	                        saveErrors(request, errors);
     						return mapping.findForward("addActivityStep2");
-    					}    					
+    					}
                     }
-                    
+
                     if (eaForm.getSecondaryPrograms()!= null
     						&& eaForm.getSecondaryPrograms().size() > 0) {
                         	Iterator<AmpActivityProgram> spIt = eaForm.getSecondaryPrograms().iterator();
         					Double totalPercentage = 0d;
         					while (spIt.hasNext()) {
-        						AmpActivityProgram activityProgram = spIt.next();    						
+        						AmpActivityProgram activityProgram = spIt.next();
         						totalPercentage += activityProgram.getProgramPercentage();
         					}
         					if (totalPercentage != 100) {
     	                        errors.add("secondaryProgramsPercentageSumWrong",
     	                                   new ActionError("error.aim.addActivity.secondaryProgramsPercentageSumWrong"));
-    	                        saveErrors(request, errors);    						
+    	                        saveErrors(request, errors);
         						return mapping.findForward("addActivityStep2");
-        					}    					
-                    }                    
-                    
+        					}
+                    }
+
                 }
 				// end of Modified code
 
@@ -1511,7 +1511,7 @@ public class SaveActivity extends Action {
 				Long field = null;
 				if (eaForm.getField() != null)
 					field = eaForm.getField().getAmpFieldId();
-				
+
 				//this fields are used to determine receivers of approvals(Messaging System)
 				String oldActivityApprovalStatus="";
 				String editedActivityApprovalStatus="";
@@ -1528,7 +1528,7 @@ public class SaveActivity extends Action {
 					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) ){
                         activity.setApprovalStatus(Constants.STARTED_STATUS);
                     }
-//					
+//
 //					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
 //                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
 //                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
@@ -1539,7 +1539,7 @@ public class SaveActivity extends Action {
 						{
 	                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
 	                    }
-					
+
 					if(tm.getTeamHead()){
                         activity.setApprovalStatus(Constants.APPROVED_STATUS);
                     }
@@ -1626,14 +1626,14 @@ public class SaveActivity extends Action {
             boolean approved=false;
             //this field is used to define if "activity approved" approval has to be created
             boolean needNewAppForApproved=true;
-            
+
             AmpActivity myActivity=ActivityUtil.loadActivity(actId);
             editedActivityApprovalStatus=myActivity.getApprovalStatus();
 
             if(eaForm.isEditAct()){
                 if(tm.getTeamHead()){
                 	/**
-                	 * we have two cases: team leader approves activity or edits already approved one. if so(second situation), then no messages should be 
+                	 * we have two cases: team leader approves activity or edits already approved one. if so(second situation), then no messages should be
                 	 * created. If activity that team leader edited was not approved,this means that team leader now approved it and we need to send message to
                 	 * creator/updater of activity to let him know his activity was approved.
                 	 */
@@ -1660,18 +1660,18 @@ public class SaveActivity extends Action {
                     needApproval=true;
                 }
             }
-            
+
             /**
              * I am doing this,because activity field holds old value of updatedBy and myActivity field holds new one.
              * If team leader approved activity,then myActivity has updatedBy=teamLeader and activity has previous updater if he/she exists.
              * So If updater exists message  should be sent to him, not team leader.
              * But if someone(not team leader) edited activity, then message should be sent to him.
              */
-            if(tm.getTeamHead()){            	
+            if(tm.getTeamHead()){
             	myActivity=activity;
             	myActivity.setUpdatedBy(eaForm.getUpdatedBy());
             }
-            
+
             //if workspace has no manager, then there is no need to approve any activity.
             AmpTeamMember teamMem=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
             if(teamMem.getAmpTeam().getTeamLead()!=null){
@@ -1683,8 +1683,8 @@ public class SaveActivity extends Action {
                     new NotApprovedActivityTrigger(myActivity);
                 }
             }
-            
-            
+
+
 
             if(DocumentUtil.isDMEnabled()) {
                 Site currentSite = RequestUtils.getSite(request);

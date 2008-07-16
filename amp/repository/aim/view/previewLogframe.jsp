@@ -85,9 +85,9 @@
 							
 							<tr>
 								<td valign="top" width="100%" bgcolor="#f4f4f2">
-									<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#006699" >
+									<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 									<tr>
-										<td valign="top"  width="50%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+										<td valign="top"  width="50%" vAlign="center" align ="center" height="20">
 											<digi:trn key="aim:plogframe:logframePlanningMatrix">Logframe Planning Matrix for</digi:trn>
 											<logic:notEmpty name="aimEditActivityForm" property="title">
 												<bean:write name="aimEditActivityForm" property="title"/>
@@ -95,7 +95,7 @@
 											,
 											[Location]
 										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
+										<td valign="top"  width="25%" vAlign="center" align ="center" height="20">
 											<digi:trn key="aim:plogframe:programNameAndNumber">Program name and number</digi:trn>:
 											<logic:notEmpty name="aimEditActivityForm" property="acChapter">
 												<logic:notEqual name="aimEditActivityForm" property="acChapter" value="0">
@@ -106,7 +106,7 @@
 												<bean:write name="aimEditActivityForm" property="ampId"/>
 											</logic:notEmpty>
 										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+										<td valign="top"  width="25%" vAlign="center" align ="center" height="20">
 											
 										</td>
 										
@@ -117,19 +117,15 @@
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:plogframe:contractingPeriodExpires">Contracting period expires</digi:trn>:
-											?<!-- is this the right date? -->
 											<logic:notEmpty name="aimEditActivityForm" property="contractingDate">
 												<bean:write name="aimEditActivityForm" property="contractingDate"/>
 											</logic:notEmpty>
-											?
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:plogframe:disbursementPeriodExpires">Disbursement period expires</digi:trn>:
-											?<!-- is this the right date? -->
 											<logic:notEmpty name="aimEditActivityForm" property="disbursementsDate">
 												<bean:write name="aimEditActivityForm" property="disbursementsDate"/>
 											</logic:notEmpty>
-											?
 										</td>
 									</tr>	
 									<tr>

@@ -335,7 +335,7 @@ public class AmpMessageWorker {
 		if(statesRelatedToTemplate!=null && statesRelatedToTemplate.size()>0){
 			//create receivers list for activity
 	        String receivers;
-	        Collection<TeamMember> teamMembers=TeamMemberUtil.getTeamMembers(activityCreator.getAmpTeam().getAmpTeamId());
+	        Collection<TeamMember> teamMembers=TeamMemberUtil.getAllTeamMembers(activityCreator.getAmpTeam().getAmpTeamId());
 	        receivers=fillTOfieldForReceivers(teamMembers, statesRelatedToTemplate);
 	        alert.setReceivers(receivers);			
 			

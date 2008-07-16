@@ -12,8 +12,8 @@
 	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 	};
 		
-    var myPanel5 = new YAHOOAmp.widget.Panel("newmyPLogframe", {
-		width:"720px",
+    var myPanelLogframe = new YAHOOAmp.widget.Panel("newmyPLogframe", {
+		width:"800px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",
@@ -25,32 +25,32 @@
 	    }
 	     );
 	
-	function initScripts() {
+	function initScriptsLogframe() {
 		var msgP5='\n<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>';
-		myPanel5.setHeader(msgP5);
-		myPanel5.setBody("");
-		myPanel5.render(document.body);
+		myPanelLogframe.setHeader(msgP5);
+		myPanelLogframe.setBody("");
+		myPanelLogframe.render(document.body);
 		panelFirstShow = 1;
 	}
 	
 	function showPLogframe() {
 		var content = document.getElementById("myPLogframeContent");
 		var element5 = document.getElementById("myPLogframe");
-		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="loading..."/><font size="5">loading...</font></p>';
+		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="loading..."/><font size="5">Loading...</font></p>';
 		if (panelFirstShow == 1){ //IE trick!
 			element5.style.display = "inline";
-			myPanel5.setBody(element5);
+			myPanelLogframe.setBody(element5);
 			panelFirstShow = 0;
 		}
 		document.getElementById("myPLogframeContent").scrollTop=0;
-		myPanel5.show();
+		myPanelLogframe.show();
 	}
 	function hidePLogframe() {
-		myPanel5.hide();
+		myPanelLogframe.hide();
 	}
 
 
-    var responseSuccess = function(o){ 
+    var responseSuccessLogframe = function(o){ 
 	/* Please see the Success Case section for more
 	 * details on the response object's properties.
 	 * o.tId
@@ -67,7 +67,7 @@
 		content.innerHTML = response;
 	}
 		 
-	var responseFailure = function(o){ 
+	var responseFailureLogframe = function(o){ 
 	// Access the response object's properties in the 
 	// same manner as listed in responseSuccess( ). 
 	// Please see the Failure Case section and 
@@ -75,23 +75,17 @@
 	// response object's properties.
 		alert("Connection Failure!"); 
 	}  
-	var callback = 
+	var logframeCallback = 
 	{ 
-		success:responseSuccess, 
-		failure:responseFailure 
+		success:responseSuccessLogframe, 
+		failure:responseFailureLogframe 
 	};
     
-	function addContract(){
-        var postString		= "new=true";
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", callback, postString);
-	}
-
-
 	function previewLogframe(id)
 	{
         var postString		= "pageId=1&step=1&action=edit&surveyFlag=true&logframepr=true&activityId=" + id + "&actId=" + id;
         showPLogframe();
-		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editActivity.do", callback, postString);
+		YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editActivity.do", logframeCallback, postString);
 	}
 	
 	function previewLogFrameClicked() {
@@ -99,11 +93,16 @@
 		if (flag == true) {
 	        var postString		= "edit=true&logframe=true&currentlyEditing=true&step=9&pageId=1";
 	        showPLogframe();
-			YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/previewActivity.do", callback, postString);
+			YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/previewActivity.do", logframeCallback, postString);
 		}
 	}
 
-	window.onload=initScripts;
+	var currentLogframe = window.onload;
+	window.onload = function() {
+        currentLogframe.apply(currentLogframe);
+		initScriptsLogframe();
+   	};
+
 </script>
 <style type="text/css">
 	.mask {

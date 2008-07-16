@@ -106,13 +106,16 @@
 	}
 
 
-	window.onload=initScripts;
-	
+	var current = window.onload;
+	window.onload = function() {
+        current.apply(current);
+		initScripts();
+   	};
 	
 	<logic:present parameter="displayAdd" >
-			var current = window.onload;
+			var current2 = window.onload;
 			window.onload = function() {
-	            current.apply(current);
+	            current2.apply(current2);
 				showAddContract();
         	};
 	</logic:present>
@@ -140,10 +143,6 @@
 <script language="JavaScript">
     <!--
     
-    function mapCallBack(status, statusText, responseText, responseXML){
-         window.location.reload();
-    }
-
     function callUrl(indexId){
 	    var async=new Asynchronous();
 	    async.complete=mapCallBack;

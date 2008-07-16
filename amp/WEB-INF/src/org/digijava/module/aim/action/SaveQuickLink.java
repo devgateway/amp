@@ -17,12 +17,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 public class SaveQuickLink extends Action {
     private static Logger logger = Logger.getLogger(SaveQuickLink.class);

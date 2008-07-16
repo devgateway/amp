@@ -227,7 +227,7 @@ tanzania adds
  		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">
   	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
-				<many-to-many class="org.digijava.module.cms.dbentity.CMSContentItem" column="id"/>
+				<many-to-many class="org.digijava.module.aim.dbentity.CMSContentItem" column="id"/>
 		</set>
 
 		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true">

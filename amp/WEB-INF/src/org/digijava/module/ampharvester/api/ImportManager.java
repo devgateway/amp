@@ -4,10 +4,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -24,9 +27,10 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTermsAssist;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.ampharvester.jaxb10.Activities;
 import org.digijava.module.ampharvester.jaxb10.ActivityType;
@@ -44,12 +48,6 @@ import org.digijava.module.ampharvester.util.DbUtil;
 import org.digijava.module.ampharvester.util.XmlHelper;
 import org.digijava.module.ampharvester.util.XmlTransformerHelper;
 import org.digijava.module.editor.dbentity.Editor;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.news.dbentity.News;
 
 public class ImportManager {
 

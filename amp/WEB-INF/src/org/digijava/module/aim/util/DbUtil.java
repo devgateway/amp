@@ -79,6 +79,7 @@ import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
@@ -100,7 +101,6 @@ import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class DbUtil {
@@ -6629,4 +6629,23 @@ public class DbUtil {
 		
 	}
 
+	/**
+	 * @param id
+	 * @return
+	 * @throws CMSException
+	 */
+	public static CMSContentItem getCMSContentItem(Long id) throws AimException {
+
+		CMSContentItem item = null;
+		Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			item = (CMSContentItem) session.load(CMSContentItem.class, id);
+		}
+		catch (Exception ex) {
+			logger.debug("Unable to get CMS Content Item from database", ex);
+			throw new AimException("Unable to get CMS Content Item from database", ex);
+		}
+		return item;
+	}
 }

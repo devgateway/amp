@@ -15,15 +15,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.request.Site;
 
 public class DocumentSelected extends Action {
 

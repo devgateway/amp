@@ -14,11 +14,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /***
  * Fetch the Document and activity details provided the document Id and activity Id 
@@ -58,7 +58,7 @@ extends Action {
 		
 		if (dId != null) {
 			Documents document = new Documents();
-			CMSContentItem cmsItem = org.digijava.module.cms.util.DbUtil.getCMSContentItem(dId);
+			CMSContentItem cmsItem = DbUtil.getCMSContentItem(dId);
 			AmpActivity activity = ActivityUtil.getProjectChannelOverview(aId);
 			document.setActivityId(activity.getAmpActivityId());
 			document.setActivityName(activity.getName());

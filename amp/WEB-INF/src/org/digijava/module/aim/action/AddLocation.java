@@ -6,25 +6,29 @@
 
 package org.digijava.module.aim.action;
 
-import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.LocationUtil;
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.AmpWoreda;
+import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.form.AddLocationForm;
-import javax.servlet.http.*;
-import org.digijava.kernel.translator.util.TrnCountry;
-import java.util.Collection;
-import org.digijava.kernel.util.CountryUtil;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 
-public class AddLocation extends Action
-{
-  private static Logger logger = Logger.getLogger(AddLocation.class);
+public class AddLocation extends Action {
+
 
   public ActionForward execute(ActionMapping mapping,
 							   ActionForm form,

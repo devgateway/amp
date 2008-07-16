@@ -99,7 +99,7 @@ public class TrailCellsXLS extends XLSExporter {
 			
 			if (grd.getParent().getParent() == null)
 				modified = "TOTAL";
-			if (grd.getReportMetadata().isHideActivities())
+			if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
 				cell.setCellValue(indent + modified);
 			else
 				cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");

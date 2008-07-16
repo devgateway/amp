@@ -508,5 +508,9 @@ var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", {
 autosubmenudisplay: true
  });
 oMenuBar.render();
+//Define location of monitoring iframe
+document.getElementById("_yuiResizeMonitor").style.top = "-135px";
+document.getElementById("_yuiResizeMonitor").style.left = "-135px";
+
 
 </script>      

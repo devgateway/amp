@@ -1,10 +1,14 @@
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class DeleteQuickLink

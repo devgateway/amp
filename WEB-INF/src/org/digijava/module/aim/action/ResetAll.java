@@ -33,8 +33,8 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.CategoryConstants;
@@ -43,7 +43,6 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -52,12 +51,10 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /*
  * ResetAll.java

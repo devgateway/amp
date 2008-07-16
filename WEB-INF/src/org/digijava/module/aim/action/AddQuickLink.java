@@ -1,14 +1,22 @@
 package org.digijava.module.aim.action;
 
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import org.apache.log4j.*;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.form.*;
-import org.digijava.module.aim.helper.*;
-import org.digijava.module.aim.util.*;
-import org.digijava.module.cms.dbentity.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.form.QuickLinkForm;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class AddQuickLink
     extends Action {

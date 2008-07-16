@@ -14,10 +14,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 public class UpdateDocument
 extends Action {
@@ -34,8 +34,7 @@ extends Action {
 		RelatedLinksForm rlForm = (RelatedLinksForm) form;
 		
 		if (!rlForm.isValuesSet()) {
-			CMSContentItem cmsItem = org.digijava.module.cms.util.DbUtil.
-			getCMSContentItem(rlForm.getDocId());
+			CMSContentItem cmsItem = DbUtil.getCMSContentItem(rlForm.getDocId());
 			AmpActivity activity = ActivityUtil.getProjectChannelOverview(rlForm.getActivityId());
 			rlForm.setActivityName(activity.getName());
 			rlForm.setTitle(cmsItem.getTitle());
@@ -53,8 +52,7 @@ extends Action {
 			else 
 				return mapping.findForward("showEditDocument2");
 		} else {
-			CMSContentItem cmsItem = org.digijava.module.cms.util.DbUtil.
-			getCMSContentItem(rlForm.getDocId());
+			CMSContentItem cmsItem = DbUtil.getCMSContentItem(rlForm.getDocId());
 			
 			cmsItem.setTitle(rlForm.getTitle());
 			

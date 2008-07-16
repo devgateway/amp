@@ -6,7 +6,7 @@
 package org.digijava.module.aim.helper;
 
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 
 public class RelatedLinks {
 	private AmpTeamMember member;

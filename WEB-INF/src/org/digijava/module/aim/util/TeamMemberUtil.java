@@ -11,11 +11,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.hibernate.FlushMode;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -36,13 +37,11 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.cms.dbentity.CMSContentItem;
-import java.util.*;
-import net.sf.hibernate.FlushMode;
 
 public class TeamMemberUtil {
 

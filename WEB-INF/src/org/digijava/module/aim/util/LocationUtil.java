@@ -2,29 +2,39 @@ package org.digijava.module.aim.util;
 
 
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARVRegions;
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpWoreda;
-import org.digijava.module.aim.dbentity.AmpZone;
-import org.digijava.module.aim.helper.AmpLocations;
-import org.digijava.module.aim.helper.Location;
-import java.util.*;
-import net.sf.hibernate.*;
-import java.sql.*;
-
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
-import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.module.syndication.dbentity.PublicationFeed;
+import org.digijava.module.aim.dbentity.AmpWoreda;
+import org.digijava.module.aim.dbentity.AmpZone;
+import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.helper.AmpLocations;
+import org.digijava.module.aim.helper.Location;
 
 public class LocationUtil {
 
@@ -58,9 +68,8 @@ public class LocationUtil {
         boolean show = true;
         Class[] classNames =
                 {
-            AmpActivity.class, User.class, AmpRegion.class, AmpWoreda.class, AmpZone.class,
-            PublicationFeed.class, CMSContentItem.class, AmpCurrency.class, AmpLocation.class, AmpOrganisation.class
-        ,
+        		AmpActivity.class, User.class, AmpRegion.class, AmpWoreda.class, AmpZone.class,
+        		CMSContentItem.class, AmpCurrency.class, AmpLocation.class, AmpOrganisation.class,
               };
             String subQryStr="cls.country";
 

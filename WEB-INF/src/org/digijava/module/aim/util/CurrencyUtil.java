@@ -13,8 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
@@ -22,7 +20,6 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -624,7 +621,7 @@ public class CurrencyUtil {
 				}
 			}
 			tx.commit();
-			DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE").clearAll();
+			DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE").clear();
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRates");
 			e.printStackTrace(System.out);

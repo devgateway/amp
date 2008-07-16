@@ -15,8 +15,6 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.swarmcache.ObjectCache;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -24,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyRateForm;
@@ -157,8 +156,8 @@ public class UpdateCurrencyRate extends Action {
                       cRate.setDataSource(CurrencyUtil.RATE_BY_HAND);
                       if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null && crForm.getDoAction().equalsIgnoreCase("saveRate"))
                     	  CurrencyUtil.saveCurrencyRate(cRate);
-                      ObjectCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
-                      ratesCache.clearAll();
+                      AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
+                      ratesCache.clear();
 
                       crForm.setAllRates(null);
                       crForm.setUpdateCRateAmount(null);

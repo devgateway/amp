@@ -67,6 +67,7 @@ import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
@@ -92,7 +93,6 @@ import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
  * ActivityUtil is the persister class for all activity related

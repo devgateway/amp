@@ -111,12 +111,6 @@
         - - >
     </service>
     -->
-
-    <service id="cacheService" class="org.digijava.kernel.cache.jbosscache.TreeCacheService" level="0">
-        <description>Tree Cache Service</description>
-        <property name="configFileName">swarmcache-treecache.xml</property>
-    </service>
-    
     
 	 <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
             <description>Advanced Database Patcher Module</description>

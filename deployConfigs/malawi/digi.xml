@@ -117,12 +117,6 @@
             <description>Advanced Database Patcher Module</description>
             <property name="patchesDir">patches</property>
      </service>
-    
-
-    <service id="cacheService" class="org.digijava.kernel.cache.jbosscache.TreeCacheService" level="0">
-        <description>Tree Cache Service</description>
-        <property name="configFileName">swarmcache-treecache.xml</property>
-    </service>
 
     <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
         <description>Service to determine which agents will use SSO</description> 

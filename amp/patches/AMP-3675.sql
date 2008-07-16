@@ -1,5 +1,5 @@
 -- remove instances
-delete from DG_MODULE_INSTANCE where module_name in ('sdm', 'syndication', 'news', 'forum', 'cms', 'dm', 'highlights', 'poll', 'demo');
+delete from DG_MODULE_INSTANCE where module_name in ('syndication', 'news', 'forum', 'cms', 'dm', 'highlights', 'poll', 'demo');
 
 -- SDM module
 --drop table if exists DG_SDM_ITEM;

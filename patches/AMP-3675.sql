@@ -2,8 +2,8 @@
 delete from DG_MODULE_INSTANCE where module_name in ('sdm', 'syndication', 'news', 'forum', 'cms', 'dm', 'highlights', 'poll', 'demo');
 
 -- SDM module
-drop table if exists DG_SDM_ITEM;
-drop table if exists DG_SDM;
+--drop table if exists DG_SDM_ITEM;
+--drop table if exists DG_SDM;
 -- syndication module
 drop table if exists DG_PUBLICATION_FEED;
 drop table if exists DG_COLLECTOR_FEED_ITEM;

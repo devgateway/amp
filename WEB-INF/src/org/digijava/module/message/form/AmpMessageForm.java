@@ -93,9 +93,6 @@ public class AmpMessageForm extends ActionForm {
 	private Long daysForAdvanceAlertsWarningsCurr;
 	private String daysForAdvanceAlertsWarningsNew;
 	
-	private Long maxValidityOfMsgCurr;
-	private String maxValidityOfMsgNew;
-	
 	private Long emailMsgsCurrent;
 	private Long emailMsgsNew;
 	
@@ -187,22 +184,6 @@ public class AmpMessageForm extends ActionForm {
 
 	public void setDaysForAdvanceAlertsWarningsNew(String daysForAdvanceAlertsWarningsNew) {
 		this.daysForAdvanceAlertsWarningsNew = daysForAdvanceAlertsWarningsNew;
-	}
-
-	public Long getMaxValidityOfMsgCurr() {
-		return maxValidityOfMsgCurr;
-	}
-
-	public void setMaxValidityOfMsgCurr(Long maxValidityOfMsgCurr) {
-		this.maxValidityOfMsgCurr = maxValidityOfMsgCurr;
-	}
-
-	public String getMaxValidityOfMsgNew() {
-		return maxValidityOfMsgNew;
-	}
-
-	public void setMaxValidityOfMsgNew(String maxValidityOfMsgNew) {
-		this.maxValidityOfMsgNew = maxValidityOfMsgNew;
 	}
 
 	public Long getEmailMsgsCurrent() {

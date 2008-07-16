@@ -33,8 +33,6 @@
 			record=document.getElementsByName('msgStoragePerMsgTypeNew')[0];
 		}else if(settingType=='warning'){
 			record=document.getElementsByName('daysForAdvanceAlertsWarningsNew')[0];
-		}else if(settingType=='maxValidity'){
-			record=document.getElementsByName('maxValidityOfMsgNew')[0];
 		}else if(settingType=='emailAlerts'){
 			record=document.getElementsByName('emailMsgsNew')[0];
 		}
@@ -96,12 +94,6 @@
 												<td align="center">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
 												<td align="center"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
 												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('warning')" /></td>
-											</tr>
-											<tr>
-												<td align="center"><digi:trn key="message:maxValidityOfMsg">Maximum validity of a message</digi:trn></td>
-												<td align="center">${messageForm.maxValidityOfMsgCurr}</td>
-												<td align="center"><html:text name="messageForm" property="maxValidityOfMsgNew" /></td>
-												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('maxValidity')" /></td>
 											</tr>
 											<tr>
 												<td align="center"><digi:trn key="message:emailAlerts">Email Alerts</digi:trn></td>

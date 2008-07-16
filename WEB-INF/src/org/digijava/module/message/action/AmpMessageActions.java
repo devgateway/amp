@@ -89,8 +89,7 @@ public class AmpMessageActions extends DispatchAction {
     	if(settings!=null && settings.getMsgRefreshTime()!=null && settings.getMsgRefreshTime().longValue()>0){
     		messageForm.setMsgRefreshTimeCurr(settings.getMsgRefreshTime());
     		messageForm.setMsgStoragePerMsgTypeCurr(settings.getMsgStoragePerMsgType());
-			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());
-			messageForm.setMaxValidityOfMsgCurr(settings.getMaxValidityOfMsg());
+			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());			
 			messageForm.setEmailMsgsCurrent(settings.getEmailMsgs());
                  int tabIndex = 0;
                 if (request.getParameter("tabIndex") != null) {
@@ -488,6 +487,10 @@ public class AmpMessageActions extends DispatchAction {
             AmpMessageUtil.removeMessageState(Long.parseLong(id));
             
         }
+        //reduce hidden messages amount
+        int hiddenMessages=messagesForm.getHiddenMsgCount();
+        hiddenMessages-=stateIds.length;
+        messagesForm.setHiddenMsgCount(hiddenMessages);
     	//getting message which will become visible instead of deleted one
     	messagesForm.setRemoveStateIds(null);	
     	return viewAllMessages(mapping, messagesForm, request, response);

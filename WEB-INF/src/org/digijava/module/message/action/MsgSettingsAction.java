@@ -31,8 +31,7 @@ public class MsgSettingsAction extends DispatchAction {
 		if(settings!=null){
 			msgForm.setMsgRefreshTimeCurr(settings.getMsgRefreshTime());
 			msgForm.setMsgStoragePerMsgTypeCurr(settings.getMsgStoragePerMsgType());
-			msgForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());
-			msgForm.setMaxValidityOfMsgCurr(settings.getMaxValidityOfMsg());
+			msgForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());			
 			msgForm.setEmailMsgsCurrent(settings.getEmailMsgs());
 		}		
 		return mapping.findForward("settingsPage");
@@ -58,8 +57,6 @@ public class MsgSettingsAction extends DispatchAction {
 				runMessagesFilter=true;				
 			}else if(settingType.equals("warning")){
 				setting.setDaysForAdvanceAlertsWarnings(new Long(msgForm.getDaysForAdvanceAlertsWarningsNew()));
-			}else if(settingType.equals("maxValidity")){
-				setting.setMaxValidityOfMsg(new Long(msgForm.getMaxValidityOfMsgNew()));
 			}else if(settingType.equals("emailAlerts")){
 				setting.setEmailMsgs(msgForm.getEmailMsgsNew());
 			}else if(settingType.equals("saveAll")){//<------user clicked save all button
@@ -73,9 +70,6 @@ public class MsgSettingsAction extends DispatchAction {
 				if(msgForm.getDaysForAdvanceAlertsWarningsNew()!=null && !msgForm.getDaysForAdvanceAlertsWarningsNew().equals("")){
 					setting.setDaysForAdvanceAlertsWarnings(new Long(msgForm.getDaysForAdvanceAlertsWarningsNew()));
 				}
-				if(msgForm.getMaxValidityOfMsgNew()!=null && !msgForm.getMaxValidityOfMsgNew().equals("")){
-					setting.setMaxValidityOfMsg(new Long(msgForm.getMaxValidityOfMsgNew()));
-				}
 				if(!msgForm.getEmailMsgsNew().equals(new Long(-1))){
 					setting.setEmailMsgs(msgForm.getEmailMsgsNew());
 				}
@@ -85,7 +79,7 @@ public class MsgSettingsAction extends DispatchAction {
 		boolean successfullySaved=AmpMessageUtil.saveOrUpdateSettings(setting);
 		if(successfullySaved && runMessagesFilter){
 			filterMessages(setting.getMsgStoragePerMsgType().intValue());
-		}
+		}		
 		return getSettings(mapping, msgForm, request, response);
 	}
 	
@@ -98,13 +92,16 @@ public class MsgSettingsAction extends DispatchAction {
 		for (Class<AmpMessage> clazz : allTypesOfMessages) {
 			//INBOX
 			membersIds=AmpMessageUtil.getOverflowedMembersIdsForInbox(limit, clazz);
-			if(membersIds!=null && membersIds.size()>0){
+			if(membersIds!=null && ! membersIds.isEmpty() && membersIds.size()>0){
 				for (Long id : membersIds) {
 					//load hidden messages list for inbox
 					messagesToBeHidden.addAll(AmpMessageUtil.getHiddenInboxMsgs(clazz, id,limit)); // returned list won't be empty,because we have list of users which have extra messages in inbox
 					//load visible messages list for inbox
 					messagesToBeShown.addAll(AmpMessageUtil.getVisibleInboxMsgs(clazz, id,limit));
 				}
+			}else{//<-- if storage was changed to larger number, then overflowed members may be empty.also some overflowed members may require to become not overflowed. that means hidden messages should be changed to visible
+				//anu tu iseti memberebi ar arseboben, romlebsac axal limitze meti mesiji aqvt,mahin unda vnaxot arsebobs tu ara bazashi hidden mesijebi da tu arsebobs, unda gadavaketot visible-ad,radgan storage-i gaizarda.
+				messagesToBeShown.addAll(AmpMessageUtil.getAllInboxHiddenMessages(clazz));
 			}
 			
 			//only UserMessage and AmpAlert have sent/draft tabs
@@ -118,6 +115,8 @@ public class MsgSettingsAction extends DispatchAction {
 						//load visible messages list for inbox
 						messagesToBeShown.addAll(AmpMessageUtil.getVisibleSentOrDraftMsgs(clazz, id, false,limit));
 					}
+				}else {
+					messagesToBeShown.addAll(AmpMessageUtil.getAllSentOrDrartHiddenMessages(clazz,false));
 				}
 				
 				//DRAFT
@@ -129,7 +128,9 @@ public class MsgSettingsAction extends DispatchAction {
 						//load visible messages list for inbox
 						messagesToBeShown.addAll(AmpMessageUtil.getVisibleSentOrDraftMsgs(clazz, id, true,limit));
 					}
-				}				
+				}else {
+					messagesToBeShown.addAll(AmpMessageUtil.getAllSentOrDrartHiddenMessages(clazz,true));
+				}
 			}					
 		}
 		
@@ -154,14 +155,12 @@ public class MsgSettingsAction extends DispatchAction {
 	private AmpMessageForm clearForm(AmpMessageForm form){
 		form.setMsgRefreshTimeCurr(null);
 		form.setMsgStoragePerMsgTypeCurr(null);
-		form.setDaysForAdvanceAlertsWarningsCurr(null);
-		form.setMaxValidityOfMsgCurr(null);
+		form.setDaysForAdvanceAlertsWarningsCurr(null);		
 		form.setEmailMsgsCurrent(new Long(-1));
 		
 		form.setMsgRefreshTimeNew(null);
 		form.setMsgStoragePerMsgTypeNew(null);
-		form.setDaysForAdvanceAlertsWarningsNew(null);
-		form.setMaxValidityOfMsgNew(null);
+		form.setDaysForAdvanceAlertsWarningsNew(null);		
 		form.setEmailMsgsNew(new Long(-1));
 		
 		return form;

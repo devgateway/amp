@@ -5,8 +5,7 @@ public class AmpMessageSettings {
 	private Long id;
 	private Long msgRefreshTime;
 	private Long msgStoragePerMsgType;
-	private Long daysForAdvanceAlertsWarnings;
-	private Long maxValidityOfMsg;
+	private Long daysForAdvanceAlertsWarnings;	
 	private Long emailMsgs; 					//will messages be emailable or not
 	
 	
@@ -33,13 +32,7 @@ public class AmpMessageSettings {
 	}
 	public void setDaysForAdvanceAlertsWarnings(Long daysForAdvanceAlertsWarnings) {
 		this.daysForAdvanceAlertsWarnings = daysForAdvanceAlertsWarnings;
-	}
-	public Long getMaxValidityOfMsg() {
-		return maxValidityOfMsg;
-	}
-	public void setMaxValidityOfMsg(Long maxValidityOfMsg) {
-		this.maxValidityOfMsg = maxValidityOfMsg;
-	}
+	}	
 	public Long getEmailMsgs() {
 		return emailMsgs;
 	}

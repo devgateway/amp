@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd" version="2.4">
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd" version="2.4">
 	<display-name>DigiJava</display-name>
-    <context-param>
+	
+	<context-param>
 		<param-name>patchAMP</param-name>
 		<param-value>org.digijava.module.aim.patches.DBPatcher:patchAMPDB</param-value>
-    </context-param>
+	</context-param>
 
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/spring/application-context.xml</param-value>
-  </context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/application-context.xml</param-value>
+	</context-param>
 
-  <filter>
-    <filter-name>Acegi Filter Chain Proxy</filter-name>
-    <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
-    <init-param>
-      <param-name>targetClass</param-name>
-      <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>Acegi Filter Chain Proxy</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+	<filter>
+		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+		<init-param>
+			<param-name>targetClass</param-name>
+			<param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>Acegi Filter Chain Proxy</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
-  <filter>
-    <filter-name>Acegi Authentication</filter-name>
-    <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
-    <init-param>
-      <param-name>targetBean</param-name>
-      <param-value>authenticationProcessingFilter</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>Acegi Authentication</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+	<filter>
+		<filter-name>Acegi Authentication</filter-name>
+		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+		<init-param>
+			<param-name>targetBean</param-name>
+			<param-value>authenticationProcessingFilter</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>Acegi Authentication</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<filter>
 		<filter-name>showMasterLayout</filter-name>
@@ -43,8 +46,9 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>showMasterLayout</filter-name>
-    	<url-pattern>/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
 	<!-- Web listener -->
 	<listener>
 		<listener-class>org.digijava.kernel.startup.ConfigLoaderListener</listener-class>
@@ -52,24 +56,24 @@
 	<listener>
 		<listener-class>org.digijava.module.aim.startup.AMPStartupListener</listener-class>
 	</listener>
-        <listener>
-                <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-        </listener>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
 	<!-- Startup servlet used for URL preloading -->
 	<servlet>
-          <servlet-name>url-preloader</servlet-name>
-          <servlet-class>org.digijava.kernel.startup.UrlPreloaderServlet</servlet-class>
-          <init-param>
-            <param-name>urls-list-file</param-name>
-            <param-value>repository/preload.urls.properties</param-value>
-          </init-param>
-          <init-param>
-            <param-name>max-threads</param-name>
-            <param-value>20</param-value>
-         </init-param>
-         <load-on-startup>5</load-on-startup>
-        </servlet>
+		<servlet-name>url-preloader</servlet-name>
+		<servlet-class>org.digijava.kernel.startup.UrlPreloaderServlet</servlet-class>
+		<init-param>
+			<param-name>urls-list-file</param-name>
+			<param-value>repository/preload.urls.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>max-threads</param-name>
+			<param-value>20</param-value>
+		</init-param>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
 	<!-- End of servlet used for URL preloading -->
 
 	<!-- Quartz test -->
@@ -89,103 +93,47 @@
 	</servlet>
 	<!-- Quartz test -->
 
-	<!-- Standard Action Servlet Configuration (with debugging) -->
-	<!--
-  	<servlet>
-		<servlet-name>action</servlet-name>
-		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
- 		<init-param>
-			<param-name>config</param-name>
-  		    	<param-value>/repository/struts-config.xml,
- 	    			     /repository/admin/struts-config.xml,
-						  /repository/calendar/struts-config.xml,
-							/repository/aim/struts-config.xml,
-		                 /repository/editor/struts-config.xml,
-  		    		     /repository/highlights/struts-config.xml,
-  		    		     /repository/news/struts-config.xml,
-  		    		     /repository/poll/struts-config.xml,
-  		    		     /repository/sdm/struts-config.xml,
-		                 /repository/translation/struts-config.xml,
-  		    		     /repository/um/struts-config.xml,
-				     	/repository/forum/struts-config.xml,
-				     	/repository/cms/struts-config.xml,
-				     	/repository/exception/struts-config.xml,
-				     	/repository/syndication/struts-config.xml
-				     	/repository/help/struts-config.xml
-			</param-value>
-		</init-param>
-		<init-param>
-			<param-name>debug</param-name>
-			<param-value>2</param-value>
-	  	</init-param>
-		<init-param>
-			<param-name>detail</param-name>
-			<param-value>2</param-value>
-		</init-param>
-		<init-param>
-	  		 <param-name>factory</param-name>
-	    	 <param-value>org.digijava.kernel.util.DigiMessageResourcesFactory</param-value>
-		</init-param>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	-->
-
-  	<servlet>
+	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>org.digijava.module.aim.config.AMPActionServlet</servlet-class>
- 		<init-param>
+		<init-param>
 			<param-name>config</param-name>
-  		    	<param-value>/repository/struts-config.xml,
- 	    			     /repository/admin/struts-config.xml,
-						  /repository/calendar/struts-config.xml,
-/repository/ampharvester/struts-config.xml,
-							/repository/aim/struts-config.xml,
-		                 /repository/editor/struts-config.xml,
-  		    		     /repository/highlights/struts-config.xml,
-  		    		     /repository/news/struts-config.xml,
-  		    		     /repository/poll/struts-config.xml,
-  		    		     /repository/sdm/struts-config.xml,
-  		    		     /repository/dm/struts-config.xml,
-		                 /repository/translation/struts-config.xml,
-  		    		     /repository/um/struts-config.xml,
-				     	/repository/forum/struts-config.xml,
-				     	/repository/cms/struts-config.xml,
-				     	/repository/exception/struts-config.xml,
-				     	/repository/digifeed/struts-config.xml,
-				     	/repository/syndication/struts-config.xml,
-				     		/repository/gateperm/struts-config.xml,
-				     	/repository/help/struts-config.xml,
-				     	/repository/contentrepository/struts-config.xml,
-				     	/repository/message/struts-config.xml,
-				     	/repository/gis/struts-config.xml
+			<param-value>
+				/repository/struts-config.xml, /repository/admin/struts-config.xml,
+				/repository/calendar/struts-config.xml, /repository/ampharvester/struts-config.xml,
+				/repository/aim/struts-config.xml, /repository/editor/struts-config.xml,
+				/repository/translation/struts-config.xml, /repository/um/struts-config.xml,
+				/repository/exception/struts-config.xml, /repository/digifeed/struts-config.xml,
+				/repository/gateperm/struts-config.xml, /repository/help/struts-config.xml,
+				/repository/contentrepository/struts-config.xml,
+				/repository/message/struts-config.xml, /repository/gis/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>debug</param-name>
 			<param-value>2</param-value>
-	  	</init-param>
+		</init-param>
 		<init-param>
 			<param-name>detail</param-name>
 			<param-value>2</param-value>
 		</init-param>
 		<init-param>
-	  		 <param-name>factory</param-name>
-	    	 <param-value>org.digijava.kernel.util.DigiMessageResourcesFactory</param-value>
+			<param-name>factory</param-name>
+			<param-value>org.digijava.kernel.util.DigiMessageResourcesFactory</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
 
 	<!-- JFREE Chart Start -->
 	<servlet>
-	    <servlet-name>DisplayChart</servlet-name>
-	    <servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+		<servlet-name>DisplayChart</servlet-name>
+		<servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-	    <servlet-name>DisplayChart</servlet-name>
-    	    <url-pattern>/aim/DisplayChart.img</url-pattern>
+		<servlet-name>DisplayChart</servlet-name>
+		<url-pattern>/aim/DisplayChart.img</url-pattern>
 	</servlet-mapping>
-
 	<!-- JFREE Chart End -->
 
 	<!-- Standard Action Servlet Mapping -->
@@ -202,13 +150,13 @@
 	</error-page>
 
 	<error-page>
-	    <error-code>400</error-code>
-	    <location>/exceptionHandle.do</location>
+		<error-code>400</error-code>
+		<location>/exceptionHandle.do</location>
 	</error-page>
 
 	<error-page>
-	    <error-code>404</error-code>
-	    <location>/exceptionHandle.do</location>
+		<error-code>404</error-code>
+		<location>/exceptionHandle.do</location>
 	</error-page>
 
 
@@ -247,7 +195,7 @@
 	<taglib>
 		<taglib-uri>/taglib/aim</taglib-uri>
 		<taglib-location>/WEB-INF/aim.tld</taglib-location>
-	</taglib>	
+	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/moduleVisibility</taglib-uri>
 		<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
@@ -276,11 +224,11 @@
 		<taglib-uri>/taglib/displaytag</taglib-uri>
 		<taglib-location>/WEB-INF/tld/displaytag-11.tld</taglib-location>
 	</taglib>
-    <taglib>
+	<taglib>
 		<taglib-uri>/taglib/jstl-functions</taglib-uri>
 		<taglib-location>/WEB-INF/fn.tld</taglib-location>
 	</taglib>
-    <taglib>
+	<taglib>
 		<taglib-uri>/taglib/tags-fckeditor</taglib-uri>
 		<taglib-location>/WEB-INF/FCKeditor.tld</taglib-location>
 	</taglib>
@@ -290,13 +238,15 @@
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Resources</web-resource-name>
-			<description>You are not allowed to view configuration files from the web, directly</description>
+			<description>
+				You are not allowed to view configuration files from the web, directly
+			</description>
 			<url-pattern>*.xml</url-pattern>
 			<http-method>GET</http-method>
 			<http-method>POST</http-method>
 		</web-resource-collection>
 		<auth-constraint>
-        	<role-name>DigiAdmin</role-name>
+			<role-name>DigiAdmin</role-name>
 		</auth-constraint>
 	</security-constraint>
 

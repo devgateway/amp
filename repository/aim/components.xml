@@ -150,9 +150,6 @@
 	<page page="addIndicator" name="aim_addMEIndicator" title="AMP - Add Indicator"/>
 	<page page="deleteIndicator" name="aim_deleteIndicator" title="AMP - Delete Indicator"/>
 	<page page="indicatorValues" name="aim_indicatorValues" title="AMP - Project Indicator Manager"/>
-	<page name="addDocument" title=" - Add Document" />
-	<page page="selectFile" name="aim_selectFilePopupLayout" title="AMP - Select File" />
-	<page page="selectCMSCategory" name="aim_selectCMSCategoryPopupLayout" title="AMP - Select Category" />
 	<page name="teamPagesConfigure" title=" - Configure Team Pages" />
 	<page name="configureTeam" title=" - Configure Team Pages" />
 	<page name="showTeamReports" page="showTeamReports" title=" - Public Team Reports" />

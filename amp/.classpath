@@ -14,20 +14,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/connector.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digi-commons.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-admin.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-calendar.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-common.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-editor.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-exception.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-forum.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-highlights.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-kernel.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-news.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-sdm.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-search.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-syndication.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-translator.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-um.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/dom4j.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/hibernate2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jai_codec.jar"/>
@@ -46,15 +32,12 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/mail.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/optional.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/proxool.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/spring.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/standard.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/struts.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/struts-el.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/strutstest.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/swarmcache.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/trove.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/velocity.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/system-lib/concurrent.jar"/>
@@ -63,7 +46,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-cas-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/casclient.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-dm.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bcel.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/castor-0.9.5.3-xml.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-lang-2.0.jar"/>
@@ -78,18 +60,10 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jcs.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jenkov-treetag-bin-v.1.5.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/PDFBox-0.6.7a.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/profiler_core.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/profiler_impl.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/profiler_servlet.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/profiler_transform.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/profiler_util.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/relaxngDatatype.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/string.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/Verisign.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/which4j.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xmlsec.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/xsdlib.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/system-lib/digijava-tomcat.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/system-lib/forms-1.0.3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/system-lib/hibern8ide.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/system-lib/jgraph.jar"/>
@@ -100,9 +74,9 @@
 	<classpathentry kind="lib" path="WEB-INF/system-lib/_hibern8ide.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/itext-1.4.6.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
-	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
+	<classpathentry kind="var" path="JBOSS_LIB/jsp-api.jar"/>
+	<classpathentry kind="var" path="JBOSS_LIB/log4j.jar"/>
+	<classpathentry kind="var" path="JBOSS_LIB/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/c3p0-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections.jar"/>
@@ -120,8 +94,10 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-scratchpad-3.0.2-FINAL-20080204.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/axis.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ecs-1.4.2.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/org.apache.commons.logging_1.0.4.v200706111724.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/quartz-1.6.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ehcache-1.4.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/backport-util-concurrent-3.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

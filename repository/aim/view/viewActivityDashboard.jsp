@@ -25,7 +25,7 @@
 
 <digi:instance property="aimActivityDashboardForm" />
 
-
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 
 <script language="Javascript">
 
@@ -50,16 +50,6 @@
 	 	openURLinWindow(url,650,500);
 
 	}
-
-
-function previewLogframe(id)
-{
-
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	openURLinWindow(url,650,500);
-}
-
 
 
 

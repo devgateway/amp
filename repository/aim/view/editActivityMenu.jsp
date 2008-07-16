@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
+
 <script language="JavaScript">
 <!--
 function previewClicked() {
@@ -19,19 +21,6 @@ function previewClicked() {
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true&currentlyEditing=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
-	}
-}
-
-function previewLogFrameClicked() {
-	var flag = validateForm();
-	if (flag == true) {
-	document.aimEditActivityForm.step.value = "9";
-	document.aimEditActivityForm.pageId.value = "1";
-	openResisableWindow(700, 650);
-	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true&logframe=true&currentlyEditing=true" />
-	document.aimEditActivityForm.action = "<%= preview %>";
-	document.aimEditActivityForm.target = popupPointer.name;
 	document.aimEditActivityForm.submit();
 	}
 }

@@ -20,7 +20,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 
 <script type="text/javascript">
 
@@ -37,14 +37,6 @@ function fnEditProject(id)
 	document.aimFinancingBreakdownForm.target = "_self";
    document.aimFinancingBreakdownForm.submit();
 }
-
-function previewLogframe(id)
-{
-    <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	openURLinWindow(url,650,500);
-}
-
 
 function preview(id)
 {

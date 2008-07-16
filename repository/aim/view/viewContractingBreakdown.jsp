@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="aimViewContractingForm"/>
-
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 
@@ -26,14 +26,6 @@ function preview(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
    document.location.href = "<%=addUrl%>~pageId=2~activityId=" + id;
-}
-
-
-function previewLogframe(id)
-{
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	openURLinWindow(url,650,500);
 }
 
 function projectFiche(id)

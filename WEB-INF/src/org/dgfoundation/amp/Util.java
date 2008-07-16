@@ -21,11 +21,11 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.swarmcache.ObjectCache;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
+import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -338,8 +338,7 @@ public final class Util {
 
 		if("USD".equals(currency)) return 1;
 		// we try the digi cache:
-		ObjectCache ratesCache = DigiCacheManager.getInstance().getCache(
-				"EXCHANGE_RATES_CACHE");
+		AbstractCache ratesCache = DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE");
 
 		Double cacheRet = (Double) ratesCache.get(new String(currency
 				+ currencyDate));

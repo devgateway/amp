@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -69,10 +70,10 @@ public class IPAContractDisbursement implements Serializable {
 		this.adjustmentType = adjustmentType;
 	}
 	public Double getAmount() {
-		return amount;
+		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
 	public void setAmount(Double amount) {
-		this.amount = amount;
+		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 	public AmpCurrency getCurrency() {
 		return currency;

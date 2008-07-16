@@ -3,6 +3,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class AmpFundingDetail implements Serializable
 {
 	private Long ampFundDetailId ;
@@ -85,7 +87,7 @@ public class AmpFundingDetail implements Serializable
 		 * @return
 		 */
 		public Double getTransactionAmount() {
-			return transactionAmount;
+			return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
 		}
 
 		/**
@@ -152,7 +154,7 @@ public class AmpFundingDetail implements Serializable
 		 * @param d
 		 */
 		public void setTransactionAmount(Double d) {
-			transactionAmount = d;
+			transactionAmount =FeaturesUtil.applyThousandsForEntry(d);
 		}
 
 		/**

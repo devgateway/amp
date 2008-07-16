@@ -7,6 +7,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class AmpComponentFunding{
 	
 	private Long ampComponentFundingId;
@@ -122,13 +124,13 @@ public class AmpComponentFunding{
 	 * @return Returns the transactionAmount.
 	 */
 	public Double getTransactionAmount() {
-		return transactionAmount;
+		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
 	}
 	/**
 	 * @param transactionAmount The transactionAmount to set.
 	 */
 	public void setTransactionAmount(Double transactionAmount) {
-		this.transactionAmount = transactionAmount;
+		this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
 	}
 	/**
 	 * @return Returns the transactionDate.

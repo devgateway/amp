@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -205,54 +206,54 @@ public class IPAContract implements Serializable {
     }
 
     public Double getTotalECContribIBAmount() {
-        return totalECContribIBAmount;
+        return FeaturesUtil.applyThousandsForVisibility(totalECContribIBAmount);
     }
 
     public void setTotalECContribIBAmount(Double totalECContribIBAmount) {
-        this.totalECContribIBAmount = totalECContribIBAmount;
+        this.totalECContribIBAmount = FeaturesUtil.applyThousandsForEntry(totalECContribIBAmount);
     }
     
     public Double getTotalECContribINVAmount() {
-        return totalECContribINVAmount;
+        return FeaturesUtil.applyThousandsForVisibility(totalECContribINVAmount);
     }
 
     public void setTotalECContribINVAmount(Double totalECContribINVAmount) {
-        this.totalECContribINVAmount = totalECContribINVAmount;
+        this.totalECContribINVAmount = FeaturesUtil.applyThousandsForEntry(totalECContribINVAmount);
     }
 
     public Double getTotalNationalContribCentralAmount() {
-        return totalNationalContribCentralAmount;
+        return FeaturesUtil.applyThousandsForVisibility(totalNationalContribCentralAmount);
     }
 
     public void setTotalNationalContribCentralAmount(
             Double totalNationalContribCentralAmount) {
-        this.totalNationalContribCentralAmount = totalNationalContribCentralAmount;
+        this.totalNationalContribCentralAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribCentralAmount);
     }
 
     public Double getTotalNationalContribIFIAmount() {
-        return totalNationalContribIFIAmount;
+        return FeaturesUtil.applyThousandsForVisibility(totalNationalContribIFIAmount);
     }
 
     public void setTotalNationalContribIFIAmount(
             Double totalNationalContribIFIAmount) {
-        this.totalNationalContribIFIAmount = totalNationalContribIFIAmount;
+        this.totalNationalContribIFIAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribIFIAmount);
     }
 
     public Double getTotalNationalContribRegionalAmount() {
-        return totalNationalContribRegionalAmount;
+        return FeaturesUtil.applyThousandsForVisibility(totalNationalContribRegionalAmount);
     }
 
     public void setTotalNationalContribRegionalAmount(
             Double totalNationalContribRegionalAmount) {
-        this.totalNationalContribRegionalAmount = totalNationalContribRegionalAmount;
+        this.totalNationalContribRegionalAmount = FeaturesUtil.applyThousandsForEntry(totalNationalContribRegionalAmount);
     }
 
     public Double getTotalPrivateContribAmount() {
-        return totalPrivateContribAmount;
+        return FeaturesUtil.applyThousandsForVisibility(totalPrivateContribAmount);
     }
 
     public void setTotalPrivateContribAmount(Double totalPrivateContribAmount) {
-        this.totalPrivateContribAmount = totalPrivateContribAmount;
+        this.totalPrivateContribAmount = FeaturesUtil.applyThousandsForEntry(totalPrivateContribAmount);
     }
 
 	public Date getContractValidity() {
@@ -264,11 +265,11 @@ public class IPAContract implements Serializable {
 	}
 
 	public Double getTotalAmount() {
-		return totalAmount;
+		return FeaturesUtil.applyThousandsForVisibility(totalAmount);
 	}
 
 	public void setTotalAmount(Double totalAmount) {
-		this.totalAmount = totalAmount;
+		this.totalAmount = FeaturesUtil.applyThousandsForEntry(totalAmount);
 	}
 
 	public AmpCurrency getTotalAmountCurrency() {
@@ -280,19 +281,19 @@ public class IPAContract implements Serializable {
 	}
 
 	public Double getTotalDisbursements() {
-		return totalDisbursements;
+		return FeaturesUtil.applyThousandsForVisibility(totalDisbursements);
 	}
 
 	public void setTotalDisbursements(Double totalDisbursements) {
-		this.totalDisbursements = totalDisbursements;
+		this.totalDisbursements = FeaturesUtil.applyThousandsForEntry(totalDisbursements);
 	}
 
 	public Double getExecutionRate() {
-		return executionRate;
+		return FeaturesUtil.applyThousandsForVisibility(executionRate);
 	}
 
 	public void setExecutionRate(Double executionRate) {
-		this.executionRate = executionRate;
+		this.executionRate = FeaturesUtil.applyThousandsForEntry(executionRate);
 	}
 
 	public AmpCurrency getDibusrsementsGlobalCurrency() {

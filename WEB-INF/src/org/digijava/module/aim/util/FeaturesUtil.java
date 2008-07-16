@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.Logic;
 
 public class FeaturesUtil {
@@ -74,7 +75,19 @@ public class FeaturesUtil {
 				return true;
 		return false;
 	}
+	
+	public static Double applyThousandsForVisibility(Double amount) {
+		if(amount==null) return null;
+		return amount*("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?0.001:1);
+	}
 
+	public static Double applyThousandsForEntry(Double amount) {
+		if(amount==null) return null;
+		return amount*("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))?1000:1);
+	}
+
+	
+	
 	public static Collection getAMPFeatures() {
 		Session session = null;
 		Collection col = new ArrayList();

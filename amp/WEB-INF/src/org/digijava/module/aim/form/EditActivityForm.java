@@ -556,6 +556,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
+	 private Boolean humanitarianAid;
      private boolean defaultCountryIsSet;
      // program settings
      private List primaryPrograms;
@@ -700,6 +701,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		keyword=null;
 		//selectedOrganizationsList=null;
 		//selectedOrganisationFromPages= new Integer(-1);
+	}
+
+	public Boolean getHumanitarianAid() {
+		return humanitarianAid;
+	}
+
+	public void setHumanitarianAid(Boolean humanitarianAid) {
+		this.humanitarianAid = humanitarianAid;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {

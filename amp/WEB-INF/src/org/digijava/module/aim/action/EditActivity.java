@@ -657,6 +657,12 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             eaForm.setJointCriteria(activity.isJointCriteria());
           else
             activity.setJointCriteria(new Boolean(false));
+          
+          if (activity.isHumanitarianAid() != null)
+        	  eaForm.setHumanitarianAid(activity.isHumanitarianAid());
+          else
+        	  activity.setHumanitarianAid(new Boolean(false));
+
 
           if (activity.getDescription() != null)
             eaForm.setDescription(activity.getDescription().trim());

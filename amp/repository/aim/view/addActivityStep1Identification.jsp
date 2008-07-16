@@ -502,6 +502,21 @@ target.style.cursor = "default"
 												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="jointCriteria" value="false"/>
 									</td></tr>
 								</field:display>
+								
+									<field:display name="Humanitarian Aid" feature="Identification">
+										<tr bgcolor="#ffffff"><td valign="top" align="left">
+											<a title="<digi:trn key="aim:humanitarianAid">Humanitarian Aid</digi:trn>">
+											<digi:trn key="aim:humanitarianAid">
+												Humanitarian Aid 
+												</digi:trn>
+												</a>
+											</td>
+										<td valign="top" align="left">
+												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="humanitarianAid" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="humanitarianAid" value="false"/>
+									</td></tr>
+								</field:display>	
+								
+								
 								</feature:display>
 								
 										</table>

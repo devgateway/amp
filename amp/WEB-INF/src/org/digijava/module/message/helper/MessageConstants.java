@@ -1,5 +1,11 @@
 package org.digijava.module.message.helper;
 
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.CalendarEventTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili

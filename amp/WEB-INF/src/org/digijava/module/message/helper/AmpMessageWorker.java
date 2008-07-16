@@ -25,6 +25,12 @@ import org.digijava.module.message.dbentity.Approval;
 import org.digijava.module.message.dbentity.CalendarEvent;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.CalendarEventTrigger;
 
 public class AmpMessageWorker {
 
@@ -284,36 +290,44 @@ public class AmpMessageWorker {
      * this method defines calendar event receivers and creates corresponding AmpMessageStates.
      */
     private static void defineReceiversForCalendarEvents(Event e,TemplateAlert template, AmpMessage calEvent) throws Exception{
-        HashMap<Long, AmpMessageState> msgStateMap=new HashMap<Long,AmpMessageState>();
+        HashMap<Long, AmpMessageState> temMsgStateMap=new HashMap<Long,AmpMessageState>();
 
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
         if (lstMsgStates != null) {
             for (AmpMessageState state : lstMsgStates) {
-                if(!msgStateMap.containsKey(state.getMemberId())){
-                    msgStateMap.put(state.getMemberId(),state);
+                if(!temMsgStateMap.containsKey(state.getMemberId())){
+                    temMsgStateMap.put(state.getMemberId(),state);
                 }
             }
         }
 
+        HashMap<Long, AmpMessageState> eventMsgStateMap=new HashMap<Long,AmpMessageState>();
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
-        if (att != null && !att.isEmpty()) {
+        if (att != null) {
             for (AmpCalendarAttendee ampAtt : att) {
                 User user=ampAtt.getUser();
                 if (user != null){
                     Collection<AmpTeamMember> members=TeamMemberUtil.getTeamMembers(user.getEmail());
                     if(members!=null){
                         for (AmpTeamMember mem : members) {
-                            if(!msgStateMap.containsKey(mem.getAmpTeamMemId())){
+                            if(!eventMsgStateMap.containsKey(mem.getAmpTeamMemId())){
                                 AmpMessageState state = new AmpMessageState();
                                 state.setMemberId(mem.getAmpTeamMemId());
                                 state.setSenderId(calEvent.getSenderId());
-                                msgStateMap.put(state.getMemberId(),state);
+                                eventMsgStateMap.put(state.getMemberId(),state);
                             }
                         }
                     }
                 }
+            }
+        }
+
+        HashMap<Long, AmpMessageState> msgStateMap=new HashMap<Long,AmpMessageState>();
+        for (AmpMessageState state : temMsgStateMap.values()) {
+            if(eventMsgStateMap.containsKey(state.getMemberId())){
+                msgStateMap.put(state.getMemberId(), state);
             }
         }
 
@@ -329,22 +343,22 @@ public class AmpMessageWorker {
     	List<AmpMessageState> statesRelatedToTemplate=null;
 		//get the member who created an activity. it's the current member
 		AmpTeamMember activityCreator=TeamMemberUtil.getAmpTeamMember(alert.getSenderId());
-		
+
 		statesRelatedToTemplate=AmpMessageUtil.loadMessageStates(template.getId());
 		if(statesRelatedToTemplate!=null && statesRelatedToTemplate.size()>0){
 			//create receivers list for activity
 	        String receivers;
 	        Collection<TeamMember> teamMembers=TeamMemberUtil.getAllTeamMembers(activityCreator.getAmpTeam().getAmpTeamId());
 	        receivers=fillTOfieldForReceivers(teamMembers, statesRelatedToTemplate);
-	        alert.setReceivers(receivers);			
-			
+	        alert.setReceivers(receivers);
+
 			for (AmpMessageState state : statesRelatedToTemplate) {
 				//get receiver Team Member.
 				AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
 				/**
 				 * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
 				 */
-				if(teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())){					
+				if(teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())){
 					createMsgState(state,alert);
 				}
 			}
@@ -369,7 +383,7 @@ public class AmpMessageWorker {
 		}
 	}
 	/**
-	 * This function is used to create receivers String, which will be shown on view message page in TO: section 
+	 * This function is used to create receivers String, which will be shown on view message page in TO: section
 	 */
 	private static String fillTOfieldForReceivers(Collection<TeamMember> teamMembers, List<AmpMessageState> states){
 		String receivers="";

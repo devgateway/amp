@@ -10,7 +10,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.digijava.module.message.helper.ActivityDisbursementDateTrigger;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;

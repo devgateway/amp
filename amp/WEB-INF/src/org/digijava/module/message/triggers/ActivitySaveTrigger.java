@@ -2,10 +2,11 @@
  * ActivitySaveTrigger.java
  * (c) 2007 Development Gateway Foundation
  */
-package org.digijava.module.message.helper;
+package org.digijava.module.message.triggers;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.message.util.TriggerRegistry;
+import org.digijava.module.message.helper.Event;
 
 /**
  * ActivitySaveTrigger.java
@@ -22,9 +23,9 @@ public class ActivitySaveTrigger extends Trigger {
     public static final String PARAM_URL="url";
 
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_CREATED_DATE,PARAM_CREATED_BY,PARAM_URL};
-    
+
     public ActivitySaveTrigger(Object source) {
-	if(! (source instanceof AmpActivity)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!"); 
+	if(! (source instanceof AmpActivity)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
 	this.source=source;
 	forwardEvent();
     }
@@ -32,7 +33,7 @@ public class ActivitySaveTrigger extends Trigger {
     static{
     	TriggerRegistry.getInstance().register(ActivitySaveTrigger.class,"Save Activity Event");
     }
-    
+
     /** @see org.digijava.module.message.helper.Trigger#generateEvent(java.lang.Object)
      */
     @Override
@@ -41,7 +42,7 @@ public class ActivitySaveTrigger extends Trigger {
 	AmpActivity act=(AmpActivity) source;
 	e.getParameters().put(PARAM_NAME,act.getName());
 	e.getParameters().put(PARAM_CREATED_DATE, act.getCreatedDate());
-	e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator()); 
+	e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator());
 	e.getParameters().put(PARAM_URL,"aim/selectActivityTabs.do~ampActivityId="+act.getAmpActivityId());
 	return e;
     }

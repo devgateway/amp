@@ -32,7 +32,7 @@ import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.message.helper.UserRegistrationTrigger;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
@@ -48,7 +48,7 @@ public class RegisterUser extends Action {
 		UserRegisterForm userRegisterForm = (UserRegisterForm) form;
 
 		logger.debug("In UserRegisterAction");
-		
+
 		if(!userRegisterForm.getErrors().isEmpty())
 			return (mapping.getInputForward());
 		try {
@@ -128,7 +128,7 @@ public class RegisterUser extends Action {
 				DbUtil.registerUser(user);
 				//create User Registration Trigger
 				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);
-				
+
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];

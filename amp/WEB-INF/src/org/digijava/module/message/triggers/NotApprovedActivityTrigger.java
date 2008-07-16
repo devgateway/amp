@@ -1,9 +1,10 @@
-package org.digijava.module.message.helper;
+package org.digijava.module.message.triggers;
 
-import org.digijava.module.aim.dbentity.AmpActivity;
 import java.util.Date;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.message.helper.Event;
 
-public class ApprovedActivityTrigger extends Trigger {
+public class NotApprovedActivityTrigger extends Trigger {
 
     public static final String PARAM_NAME="name";
     public static final String PARAM_SAVED_BY="savedBy";
@@ -12,7 +13,7 @@ public class ApprovedActivityTrigger extends Trigger {
 
     public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_SAVED_BY,PARAM_SAVE_DATE,PARAM_URL};
 
-    public ApprovedActivityTrigger(Object source) {
+    public NotApprovedActivityTrigger(Object source) {
         if(!(source instanceof AmpActivity)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
         this.source=source;
         forwardEvent();
@@ -22,7 +23,7 @@ public class ApprovedActivityTrigger extends Trigger {
      */
     @Override
     protected Event generateEvent() {
-        Event e=new Event(ApprovedActivityTrigger.class);
+        Event e=new Event(NotApprovedActivityTrigger.class);
         AmpActivity act=(AmpActivity) source;
         e.getParameters().put(PARAM_NAME,act.getName());
         if(act.getUpdatedBy()!=null){

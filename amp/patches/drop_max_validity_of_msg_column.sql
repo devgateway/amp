@@ -1,0 +1,2 @@
+alter table amp_message_settings
+drop max_validity_of_msg;

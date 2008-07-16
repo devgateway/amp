@@ -11,8 +11,7 @@
 		
 		<property name="msgRefreshTime" column="msg_refresh_time"  type="java.lang.Long"/>
 		<property name="msgStoragePerMsgType" column="msg_storage_per_msg_type"  type="java.lang.Long"/>
-		<property name="daysForAdvanceAlertsWarnings" column="days_for_advance_alerts_warnings"  type="java.lang.Long"/>		
-		<property name="maxValidityOfMsg" column="max_validity_of_msg"  type="java.lang.Long"/>	
+		<property name="daysForAdvanceAlertsWarnings" column="days_for_advance_alerts_warnings"  type="java.lang.Long"/>
 		<property name="emailMsgs" column="is_emailable" type="java.lang.Long"/>
 		
 	</class>

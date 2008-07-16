@@ -1229,8 +1229,7 @@ $(document).ready(function(){
 															<td colspan="4" class="settings" id="adimSettings">
 																	Message Refresh Time(minutes):  ${messageForm.msgRefreshTimeCurr} |
 																	Message Storage Per Message Type:  ${messageForm.msgStoragePerMsgTypeCurr} |
-																	Days of Advance Alert Warnings:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |
-																	Maximum validate:  ${messageForm.maxValidityOfMsgCurr} |
+																	Days of Advance Alert Warnings:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
 																	Email Alerts:
 																	
 																	<c:if test="${empty messageForm.emailMsgsCurrent ||messageForm.emailMsgsCurrent==0}">

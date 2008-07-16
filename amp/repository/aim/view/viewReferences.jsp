@@ -18,21 +18,14 @@
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
+
 <script type="text/javascript">
 
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
    document.location.href="<%=addUrl%>?pageId=1&action=edit&step=1&surveyFlag=true&activityId=" + id;
-
-}
-
-function previewLogframe(id)
-{
-
-    <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	openURLinWindow(url,650,500);
 
 }
 

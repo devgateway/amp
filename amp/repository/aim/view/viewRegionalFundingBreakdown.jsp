@@ -13,6 +13,8 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
+
 <script type="text/javascript">
 
 function fnEditProject(id)
@@ -30,13 +32,6 @@ function preview(id)
    document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
 	document.aimRegionalFundingForm.target = "_self";
    document.aimRegionalFundingForm.submit();
-}
-
-function previewLogframe(id)
-{
-    <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	openURLinWindow(url,650,500);
 }
 
 function projectFiche(id)

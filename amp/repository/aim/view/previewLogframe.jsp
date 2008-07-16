@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 
 <script language="JavaScript1.2" type="text/javascript"
@@ -73,6 +74,82 @@
 									 </table>
 								</td>
 							</tr>
+							
+							
+							
+							<tr>
+								<td>
+									&nbsp;
+								</td>
+							</tr>
+							
+							<tr>
+								<td valign="top" width="100%" bgcolor="#f4f4f2">
+									<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#006699" >
+									<tr>
+										<td valign="top"  width="50%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											<digi:trn key="aim:plogframe:logframePlanningMatrix">Logframe Planning Matrix for</digi:trn>
+											<logic:notEmpty name="aimEditActivityForm" property="title">
+												<bean:write name="aimEditActivityForm" property="title"/>
+											</logic:notEmpty>
+											,
+											[Location]
+										</td>
+										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
+											<digi:trn key="aim:plogframe:programNameAndNumber">Program name and number</digi:trn>:
+											<logic:notEmpty name="aimEditActivityForm" property="acChapter">
+												<logic:notEqual name="aimEditActivityForm" property="acChapter" value="0">
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.acChapter}"/>,
+												</logic:notEqual>
+											</logic:notEmpty>
+											<logic:notEmpty name="aimEditActivityForm" property="ampId">
+												<bean:write name="aimEditActivityForm" property="ampId"/>
+											</logic:notEmpty>
+										</td>
+										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											
+										</td>
+										
+									</tr>
+									<tr>
+										<td valign="top"  width="50%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											&nbsp;
+										</td>
+										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											<digi:trn key="aim:plogframe:contractingPeriodExpires">Contracting period expires</digi:trn>:
+											?<!-- is this the right date? -->
+											<logic:notEmpty name="aimEditActivityForm" property="contractingDate">
+												<bean:write name="aimEditActivityForm" property="contractingDate"/>
+											</logic:notEmpty>
+											?
+										</td>
+										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											<digi:trn key="aim:plogframe:disbursementPeriodExpires">Disbursement period expires</digi:trn>:
+											?<!-- is this the right date? -->
+											<logic:notEmpty name="aimEditActivityForm" property="disbursementsDate">
+												<bean:write name="aimEditActivityForm" property="disbursementsDate"/>
+											</logic:notEmpty>
+											?
+										</td>
+									</tr>	
+									<tr>
+										<td valign="top"  width="50%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											&nbsp;
+										</td>
+										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											<digi:trn key="aim:plogframe:totalBudget">Total budget</digi:trn>:
+											<bean:write name="aimEditActivityForm" property="allCosts" format="###,###,###"/>
+										</td>
+										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											<digi:trn key="aim:plogframe:ipaBudget">IPA budget</digi:trn>:
+											???
+										</td>
+									</tr>	
+								</table>
+								</td>
+							</tr>
+							
+							
 							<tr><td valign="top" width="100%" bgcolor="#f4f4f2">
 								<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff">
 									<tr>
@@ -136,13 +213,13 @@
 											</tr>
 											<tr valign="top">
 												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff" colspan="2">
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-													<font color="ff0000">
-													<digi:trn key="aim:allTheAmountsInThousands">
-														All the amounts are in thousands (000)
-													</digi:trn>
-													</font>
-</gs:test>
+													<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+														<font color="ff0000">
+														<digi:trn key="aim:allTheAmountsInThousands">
+															All the amounts are in thousands (000)
+														</digi:trn>
+														</font>
+													</gs:test>
 												</td>
 											</tr>
 										</table>
@@ -150,8 +227,8 @@
 									</tr>
 								</table>
 								</td>
-								</tr>
-								<tr>
+							</tr>
+							<tr>
 								<td valign="top" width="70%" bgcolor="#f4f4f2">
 									<table width="75%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#006699" >
 									<tr>
@@ -379,7 +456,7 @@
 		<table width="98%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff" >
 			<tr>
 				<td width="75%" align="center">
-					<html:button styleClass="dr-menu" value="Close" onclick="return window.close()" property="closeButton"/>
+					<html:button styleClass="dr-menu" value="Close" onclick="return hidePLogframe()" property="closeButton"/>
 						&nbsp;&nbsp;&nbsp;
 					<html:button styleClass="dr-menu" value="Print" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
 				</td>

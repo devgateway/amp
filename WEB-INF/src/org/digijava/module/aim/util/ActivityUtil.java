@@ -499,6 +499,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setGovernmentApprovalProcedures(activity.
             isGovernmentApprovalProcedures());
         oldActivity.setJointCriteria(activity.isJointCriteria());
+        oldActivity.setHumanitarianAid(activity.isHumanitarianAid());
         oldActivity.setGbsSbs(activity.getGbsSbs());
         oldActivity.setProjectCode(activity.getProjectCode());
         oldActivity.setSubProgram(activity.getSubProgram());
@@ -1492,6 +1493,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setGovernmentApprovalProcedures(ampActivity.
                                                  isGovernmentApprovalProcedures());
         activity.setJointCriteria(ampActivity.isJointCriteria());
+        activity.setHumanitarianAid(ampActivity.isHumanitarianAid());
+        
         activity.setVote(ampActivity.getVote());
         activity.setSubProgram(ampActivity.getSubProgram());
         activity.setSubVote(ampActivity.getSubVote());
@@ -1639,6 +1642,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setSubProgram(ampAct.getSubProgram());
         activity.setSubVote(ampAct.getSubVote());
         activity.setJointCriteria(ampAct.isJointCriteria());
+        activity.setHumanitarianAid(ampAct.isHumanitarianAid());
         activity.setGovernmentApprovalProcedures(ampAct.
                                                  isGovernmentApprovalProcedures());
         activity.setProjectCode(ampAct.getProjectCode());

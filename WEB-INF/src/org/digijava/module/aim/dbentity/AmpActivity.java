@@ -204,6 +204,9 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Boolean governmentApprovalProcedures;
 
 	private Boolean jointCriteria;
+	
+	private Boolean humanitarianAid;
+	
         private Set actPrograms;
 
 	public Boolean isGovernmentApprovalProcedures() {
@@ -1536,6 +1539,17 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		if(name!=null) return name;
 		return super.toString();
 	}
+
+	
+	public Boolean isHumanitarianAid( ) {
+		return this.humanitarianAid ;
+	}
+
+	public void setHumanitarianAid(Boolean humanitarianAid) {
+		this.humanitarianAid = humanitarianAid;
+	}
+
+	
 
 
 }

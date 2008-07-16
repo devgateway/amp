@@ -181,6 +181,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="AMP ID"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display>
 <field:display feature="Identification" name="Results"></field:display>
+<field:display name="Humanitarian Aid" feature="Identification"></field:display>
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display>
 <field:display feature="Planning" name="Line Ministry Rank"></field:display>
 <field:display feature="Preview Activity" name="Preview Button"></field:display>

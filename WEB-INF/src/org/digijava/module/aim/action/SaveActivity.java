@@ -527,7 +527,8 @@ public class SaveActivity extends Action {
 
 
 				activity.setJointCriteria(eaForm.getJointCriteria());
-
+				activity.setHumanitarianAid(eaForm.getHumanitarianAid());
+				
 				if (eaForm.getDescription() == null
 						|| eaForm.getDescription().trim().length() == 0) {
 					activity.setDescription(new String(" "));

@@ -1051,7 +1051,7 @@ public class ShowActivityPrintPreview
                 eaForm.setGbsSbs(activity.getGbsSbs());
                 eaForm.setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
                 eaForm.setJointCriteria(activity.isJointCriteria());
-                
+                eaForm.setHumanitarianAid(activity.isHumanitarianAid());
                 
                 if(activity.getUpdatedBy()!=null){
                 	eaForm.setUpdatedBy(activity.getUpdatedBy());

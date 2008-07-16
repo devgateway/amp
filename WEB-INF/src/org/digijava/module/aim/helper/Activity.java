@@ -16,7 +16,7 @@ public class Activity
   private String donors;
   private String ampId;
   private Boolean budget;
-
+  private Boolean humanitarianAid;
   	private AmpTeam team;
   
     //montenegro mission:
@@ -1121,6 +1121,14 @@ public class Activity
 
 	public void setTeam(AmpTeam team) {
 		this.team = team;
+	}
+
+	public Boolean isHumanitarianAid() {
+		return humanitarianAid;
+	}
+
+	public void setHumanitarianAid(Boolean humanitarianAid) {
+		this.humanitarianAid = humanitarianAid;
 	}
   
   

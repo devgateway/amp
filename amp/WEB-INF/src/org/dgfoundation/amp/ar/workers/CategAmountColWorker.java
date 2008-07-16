@@ -6,15 +6,12 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -26,6 +23,8 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.CalendarHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -208,7 +207,8 @@ public class CategAmountColWorker extends ColumnWorker {
 			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			
 		}
 
-		acc.setAmount(tr_amount);
+		
+		acc.setAmount(FeaturesUtil.applyThousandsForVisibility(tr_amount));
 		
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {

@@ -3,6 +3,8 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 
 public class AmpTheme implements Serializable, Identifiable
@@ -300,42 +302,42 @@ public class AmpTheme implements Serializable, Identifiable
 		 * @return the totalFinancing
 		 */
 		public Double getTotalFinancing() {
-			return totalFinancing;
+			return FeaturesUtil.applyThousandsForVisibility(totalFinancing);
 		}
 
 		/**
 		 * @param totalFinancing the totalFinancing to set
 		 */
 		public void setTotalFinancing(Double totalFinancing) {
-			this.totalFinancing = totalFinancing;
+			this.totalFinancing = FeaturesUtil.applyThousandsForEntry(totalFinancing);
 		}
 
 		/**
 		 * @return the externalFinancing
 		 */
 		public Double getExternalFinancing() {
-			return externalFinancing;
+			return FeaturesUtil.applyThousandsForVisibility(externalFinancing);
 		}
 
 		/**
 		 * @param externalFinancing the externalFinancing to set
 		 */
 		public void setExternalFinancing(Double externalFinancing) {
-			this.externalFinancing = externalFinancing;
+			this.externalFinancing = FeaturesUtil.applyThousandsForEntry(externalFinancing);
 		}
 
 		/**
 		 * @return the internalFinancing
 		 */
 		public Double getInternalFinancing() {
-			return internalFinancing;
+			return FeaturesUtil.applyThousandsForVisibility(internalFinancing);
 		}
 
 		/**
 		 * @param internalFinancing the internalFinancing to set
 		 */
 		public void setInternalFinancing(Double internalFinancing) {
-			this.internalFinancing = internalFinancing;
+			this.internalFinancing = FeaturesUtil.applyThousandsForEntry(internalFinancing);
 		}
 
 }

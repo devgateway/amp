@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
@@ -977,7 +978,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     }
 
     public Double getFunAmount() {
-        return funAmount;
+        return FeaturesUtil.applyThousandsForVisibility(funAmount);
     }
 
     public Date getFunDate() {
@@ -1001,7 +1002,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     }
 
     public void setFunAmount(Double funAmount) {
-        this.funAmount = funAmount;
+        this.funAmount = FeaturesUtil.applyThousandsForEntry(funAmount);
     }
 
     public void setFunDate(Date funDate) {

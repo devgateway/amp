@@ -3,6 +3,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class AmpPledge implements Serializable{
 	/**
 	 * 
@@ -21,10 +23,10 @@ public class AmpPledge implements Serializable{
 		this.adjustmentType = adjustmentType;
 	}
 	public Double getAmount() {
-		return amount;
+		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
 	public void setAmount(Double amount) {
-		this.amount = amount;
+		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 	public Long getAmpPledgeId() {
 		return ampPledgeId;

@@ -6,6 +6,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 /**
  * @author mihai
  *
@@ -33,11 +35,11 @@ public class EUActivityContribution implements Serializable, Comparable {
 	}
 
 	public Double getAmount() {
-		return amount;
+		return FeaturesUtil.applyThousandsForVisibility(amount);
 	}
 
 	public void setAmount(Double amount) {
-		this.amount = amount;
+		this.amount = FeaturesUtil.applyThousandsForEntry(amount);
 	}
 
 	public AmpCurrency getAmountCurrency() {

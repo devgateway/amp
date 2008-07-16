@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.exception.AimException;
 
@@ -161,12 +162,12 @@ public class EUActivity implements Serializable, Identifiable {
 
 
 	public Double getTotalCost() {
-		return totalCost;
+		return FeaturesUtil.applyThousandsForVisibility(totalCost);
 	}
 
 
 	public void setTotalCost(Double totalCost) {
-		this.totalCost = totalCost;
+		this.totalCost = FeaturesUtil.applyThousandsForEntry(totalCost);
 	}
 
 

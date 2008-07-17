@@ -111,7 +111,14 @@ public class FiscalCalendarUtil {
 			int year = DateConversion.getYear(date);
 			int stDay = fisCal.getStartDayNum().intValue();
 			int stMnt = fisCal.getStartMonthNum().intValue();
-			String bsDate = stDay + "/" + stMnt + "/" + year;
+			String day="", month="";
+			if(stDay>9)
+				 day=fisCal.getStartDayNum().toString();
+			else day="0"+fisCal.getStartDayNum().toString();
+			if(stMnt>9)
+				 month=fisCal.getStartMonthNum().toString();
+			else month="0"+fisCal.getStartMonthNum().toString();
+			String bsDate =  day+ "/" + month + "/" + year;
 			Date baseDate = DateConversion.getDate(bsDate); 
 			Date transDate = DateConversion.getDate(date);
 

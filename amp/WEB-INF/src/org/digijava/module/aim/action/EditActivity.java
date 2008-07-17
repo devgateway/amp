@@ -6,8 +6,10 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1479,6 +1481,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
     if (fp == null) {
       fp = new FilterParams();
+      int year = new GregorianCalendar().get(Calendar.YEAR);
+		fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
+		fp.setToYear(year+Constants.TO_YEAR_RANGE);
     }
 
     ApplicationSettings apps = null;

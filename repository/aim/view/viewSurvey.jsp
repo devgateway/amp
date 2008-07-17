@@ -55,7 +55,7 @@
 
 
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="760">
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 
 	<TR>
 
@@ -117,9 +117,9 @@
 
 				</td>
 
-											<TD align="right">
+											<TD align="right">&nbsp;
 
-												&nbsp;
+												
 
 											</TD>
 
@@ -136,38 +136,6 @@
 								<TD vAlign="top" align="center" width="750">
 
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 border="0">
-
-										<TR>
-
-											<TD width="750" bgcolor="#F4F4F2" height="17">
-
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-
-                        							<TR bgcolor="#F4F4F2" height="17">
-
-                          	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-
-															<digi:trn key="aim:aidEffectIndicators">Aid Effectiveness Indicators</digi:trn>
-
-							  							</TD>
-
-	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>
-
-                                                        	&nbsp;
-
-														</TD>
-
-													</TR>
-
-												</TABLE>
-
-											</TD>
-
-										</TR>
-
-
-
-
 
 										<TR>
 

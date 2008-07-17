@@ -18,6 +18,62 @@
 
 
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
+
 
 <digi:errors/>
 
@@ -283,67 +339,6 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 						<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
 
-							<TR>
-
-								<TD height="30">
-
-									<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0 height="30">
-
-										<TR>
-
-											<TD vAlign="bottom" align="left">
-
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-
-         			               		<TR bgcolor="#F4F4F2">
-
-                  			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
-
-															<digi:trn key="aim:yearlyAllAmounts">Yearly All Amounts</digi:trn>
-
-                  			          		</TD>
-
-                          						<TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
-
-			                          			</TD>
-
-         			               		</TR>
-
-                  			    		</TABLE>
-
-											</TD>
-
-											<TD vAlign="top" align="right">
-
-
-												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
-
-													<TR>
-
-														<TD>
-
-
-														</TD>
-
-														<TD>
-
-														</TD>
-
-													</TR>
-
-												</TABLE>
-
-
-											</TD>
-
-										</TR>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
-
 							<TR bgcolor="#ffffff">
 
 								<TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
@@ -490,11 +485,11 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-				                     			<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
+				                     			<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding" id="dataTable">
 
-            			                			<tr bgcolor="#DDDDDB" >
+            			                			<tr bgcolor="#999999" >
 
-                     		         				<td width="6%" bgcolor="#DDDDDB">
+                     		         				<td width="6%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
                            		   					<div align="center">
 
@@ -504,7 +499,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 		                              				</td>
 
-					                              	<td width="13%" bgcolor="#DDDDDB">
+					                              	<td width="13%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 																	<div align="center">
 
@@ -517,7 +512,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 					                             	  </td>
 
                                                                 <feature:display name="Disbursement Orders" module="Funding">
-                                                                                <td width="13%" bgcolor="#DDDDDB">
+                                                                                <td width="13%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 
 																	<div align="center">
@@ -533,7 +528,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
     </feature:display>
-						                             	<td width="13%" bgcolor="#DDDDDB">
+						                             	<td width="13%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 																	<div align="center">
 
@@ -545,7 +540,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 						                            	</td>
 
-					                              	<td width="13%" bgcolor="#DDDDDB">
+					                              	<td width="13%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 																	<div align="center">
 
@@ -559,7 +554,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			            		                  
 			            		                  <feature:display module="Funding" name="Expenditures">
-			            		                  	<td width="24%" bgcolor="#DDDDDB">
+			            		                  	<td width="24%" bgcolor="#999999" style="color:black;font-weight:bold;">
 
 			                  			              	<div align="center">
 
@@ -593,7 +588,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
                                                                         <tr valign="top">
 
-						                            	<td bgcolor="#F8F8F5">
+						                            	<td>
 
 						                            		<logic:equal name="yearlyComparisons" property="fiscalYear" value="0">
 
@@ -609,7 +604,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			                            				</td>
 
-				   	                           	<td bgcolor="#F8F8F5">
+				   	                           	<td>
 
 																	<div align="right">
 
@@ -621,7 +616,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-                                                                                                                                                                                                                                                        <feature:display name="Disbursement Orders" module="Funding"> <td bgcolor="#F8F8F5">
+                                                                                                                                                                                                                                                        <feature:display name="Disbursement Orders" module="Funding"> <td>
 
 
 																	<div align="right">
@@ -635,7 +630,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 </feature:display>
 
 
-			                           		   	<td bgcolor="#F8F8F5">
+			                           		   	<td>
 
 																	<div align="right">
 
@@ -645,7 +640,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																</td>
 
-			      	                        		<td bgcolor="#F8F8F5">
+			      	                        		<td>
 
 																	<div align="right">
 
@@ -655,7 +650,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																</td>
   <feature:display module="Funding" name="Expenditures">
-				                  	            	<td bgcolor="#F8F8F5">
+				                  	            	<td>
 
 																	<div align="right">
 
@@ -908,6 +903,10 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 <TR><TD>&nbsp;</TD></TR>
 
 </TABLE>
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 
 
 

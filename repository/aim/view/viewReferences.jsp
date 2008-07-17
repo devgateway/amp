@@ -9,6 +9,61 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
@@ -86,8 +141,8 @@ function login()
 									&nbsp;&gt;&nbsp;Overview
 								</SPAN>
 							</TD>
-											<TD align="right">
-												&nbsp;
+											<TD align="right">&nbsp;
+												
 											</TD>
 											<TD align="right">
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
@@ -133,32 +188,10 @@ function login()
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%">
 								<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
-									align="center" bgColor=#f4f4f2>
-									<TR>
-										<TD width="100%" bgcolor="#F4F4F2" height="17">
-										<TABLE border="0" cellpadding="0" cellspacing="0"
-											bgcolor="#F4F4F2" height="17">
-											<TR bgcolor="#F4F4F2" height="17">
-												<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;<digi:trn
-													key="aim:references">References</digi:trn></TD>
-												<TD><IMG src="../ampTemplate/images/corner-r.gif" width="17"
-													height="17"></TD>
-											</TR>
-										</TABLE>
-										</TD>
-									</TR>
+									align="center" bgColor=#f4f4f2 id="dataTable">
 										<tr bgcolor="#ffffff">
 												<td width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 													<table border="0" width="100%">
-													<tr valign="top" bgcolor="#DDDDDB" >
-															<td >
-																&nbsp;
-																</td>
-																<td>&nbsp;&nbsp;</td>
-																<td>
-																&nbsp;
-																</td>
-															</tr>
 														<c:forEach items="${aimReferenceForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
 															<tr valign="top">
 															<c:if test="${!empty refDoc.comment}">
@@ -189,3 +222,7 @@ function login()
 </digi:form>
 
 
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>

@@ -116,20 +116,6 @@ function projectFiche(id)
 						</TD>
 					</TR>
 					<TR>
-						<TD width="750" bgcolor="#F4F4F2" height="17">
-						<TABLE border="0" cellpadding="0" cellspacing="0"
-							bgcolor="#F4F4F2" height="17">
-							<TR bgcolor="#F4F4F2" height="17">
-								<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp; <digi:trn
-									key="aim:contracting">Contracting</digi:trn>
-								</TD>
-								<TD background="module/aim/images/corner-r.gif" height="17"
-									width="17"></TD>
-							</TR>
-						</TABLE>
-						</TD>
-					</TR>
-					<TR>
 						<TD bgcolor="#f4f4f4">
 						<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top"
 							align="center" bgcolor="#f4f4f4">

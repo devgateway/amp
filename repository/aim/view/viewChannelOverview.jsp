@@ -308,19 +308,6 @@ function commentWin(val) {
 								<TD vAlign="top" align="center" width="100%">
 								<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
 									align="center" bgColor=#f4f4f2>
-									<TR>
-										<TD width="100%" bgcolor="#F4F4F2" height="17">
-										<TABLE border="0" cellpadding="0" cellspacing="0"
-											bgcolor="#F4F4F2" height="17">
-											<TR bgcolor="#F4F4F2" height="17">
-												<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;<digi:trn
-													key="aim:details">Details</digi:trn></TD>
-												<TD><IMG src="../ampTemplate/images/corner-r.gif"
-													width="17" height="17"></TD>
-											</TR>
-										</TABLE>
-										</TD>
-									</TR>
 
 									<TR>
 										<TD width="100%" bgcolor="#F4F4F2" align="center">

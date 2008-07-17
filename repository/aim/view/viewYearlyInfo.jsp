@@ -17,6 +17,61 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <digi:instance property="aimYearlyInfoForm" />
@@ -382,97 +437,10 @@
 				<TR bgColor=#f4f4f2>
 
 					<TD vAlign="top" align="center" width="100%" bgColor="#f4f4f2">
-
+						<br />
 
 
 						<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
-
-							<TR>
-
-								<TD height="30">
-
-									<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0 height="30">
-
-										<TR>
-
-											<TD vAlign="bottom" align="left">
-
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-
-         			               		<TR bgcolor="#F4F4F2">
-
-                  			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
-
-															<logic:equal name="aimYearlyInfoForm" property="transactionType" value="0">
-
-                            							<digi:trn key="aim:yearlyCommitments">Yearly Commitments</digi:trn>
-
-															</logic:equal>
-
-                                                                                                                        	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
-
-                  			          				<digi:trn key="aim:yearlyDisbursementOrders">Yearly Disbursement Orders</digi:trn>
-
-															</logic:equal>
-
-
-
-															<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
-
-                  			          				<digi:trn key="aim:yearlyDisbursements">Yearly Disbursements</digi:trn>
-
-															</logic:equal>
-
-															<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
-
-			                            				<digi:trn key="aim:yearlyExpenditures">Yearly Expenditures</digi:trn>
-
-															</logic:equal>
-
-                  			          		</TD>
-
-                          						<TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
-
-			                          			</TD>
-
-         			               		</TR>
-
-                  			    		</TABLE>
-
-											</TD>
-
-											<TD vAlign="top" align="right">
-
-
-												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
-
-													<TR>
-
-														<TD>
-
-
-														</TD>
-
-														<TD>
-
-
-														</TD>
-
-													</TR>
-
-												</TABLE>
-
-
-
-											</TD>
-
-										</TR>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
 
 							<TR bgcolor="#ffffff">
 
@@ -654,13 +622,13 @@
 
 												<TR><TD>
 
-                      							<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
+                      							<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding" id="dataTable">
 
-					                        		<tr bgcolor="#DDDDDB" >
+					                        		<tr bgcolor="#999999" >
 
-               					           			<td bgcolor="#DDDDDB">
+               					           			<td bgcolor="#999999">
 
-					                          				<div align="center">
+					                          				<div align="center" style="font-weight:bold;color:black;">
 
 																	<digi:trn key="aim:year">Year</digi:trn>
 
@@ -668,32 +636,32 @@
 
    					                       			</td>
 									                    <logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
-									                    	<td bgcolor="#DDDDDB">
-									                    		<div align="center">
+									                    	<td bgcolor="#999999">
+									                    		<div align="center" style="font-weight:bold;color:black;">
 																	<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
 																</div>
 															</td>
 														</logic:notEqual>	
-									                 <td bgcolor="#DDDDDB">
-														  <div align="center">
+									                 <td bgcolor="#999999" align="center" style="font-weight:bold;">
 															<font color="blue">*</font>
+														  <span style="color:black;">
 																<digi:trn key="aim:actualAmount">Actual Amount</digi:trn>
-														 </div>
+														 </span>
 													</td>
 
 									              		</tr>
 
 				   					           		<logic:notEmpty name="aimYearlyInfoForm" property="yearlyInfo">
 														<logic:iterate name="aimYearlyInfoForm" property="yearlyInfo" id="yearlyInfo" type="org.digijava.module.aim.helper.YearlyInfo">
-																<tr valign="top" bgcolor="#F8F8F5">
-																	<td bgcolor="#F8F8F5">
+																<tr valign="top">
+																	<td>
 																	<logic:equal name="yearlyInfo" property="fiscalYear" value="0">NA</logic:equal>
 																	<logic:notEqual  name="yearlyInfo" property="fiscalYear" value="0">
 																		<bean:write name="yearlyInfo" property="fiscalYear" />
 																	</logic:notEqual>
 																</td>
 																<logic:notEqual  name="aimYearlyInfoForm" property="transactionType" value="4">
-																<td bgcolor="#F8F8F5">
+																<td>
 		         					                 				<div align="right">
 		         					                 					<logic:present name="debug">
 		         					                 						<%=yearlyInfo.getWrapedPlanned()%>
@@ -704,7 +672,7 @@
 																	</div>
 																</td>
 																</logic:notEqual>
-																<td bgcolor="#F8F8F5">
+																<td>
 																	<div align="right">
 																		<logic:present name="debug">
 																			<%=yearlyInfo.getWrapedActual()%>
@@ -726,19 +694,21 @@
 															</td>
 														</tr>
 													</logic:empty>
-													<tr valign="top" class="note">
+													<tr valign="top" >
 														<td>
+                                                        	<span class="note">
 															<digi:trn key="aim:total">Total</digi:trn>
+                                                            </span>
 														</td>
 														<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
 														<td>
-															<div align="right">
+															<div align="right" class="note">
 																<bean:write name="aimYearlyInfoForm" property="totalPlanned" />
 															</div>
 														</td>
 														</logic:notEqual>
 														<td>
-															<div align="right">
+															<div align="right" class="note">
 																<bean:write name="aimYearlyInfoForm" property="totalActual" />
 															</div>
 														</td>
@@ -879,6 +849,10 @@
 <TR><TD>&nbsp;</TD></TR>
 
 </TABLE>
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 
 
 

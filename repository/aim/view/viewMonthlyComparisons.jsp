@@ -23,6 +23,61 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <digi:context name="digiContext" property="context" />
 
@@ -127,9 +182,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
 
-				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20">
+				<TR><TD>
 
-				&nbsp;&nbsp;&nbsp;
+				<div id="subtabsFinancial">
 
 			<c:set var="translation">
 
@@ -137,7 +192,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			</c:set>
 
-			  			<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="${translation}" >
 
 			  				<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 
@@ -154,7 +209,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			</c:set>
 
-			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  					<digi:trn key="aim:disbursementOrders">DISBURSEMENTS ORDERS</digi:trn>
 
@@ -169,7 +224,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			</c:set>
 
-			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
@@ -183,19 +238,19 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 		</c:set>
 					<feature:display module="Funding" name="Expenditures">
-		  				<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+		  				<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 		  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
 		  				</digi:link> |
 					</feature:display>
 		  				
-								<span class="sub-nav2-selected">
+								<span>
 
 		  					<digi:trn key="aim:all">ALL</digi:trn>
 
 		  				</span>
-
+</div>
 				</TD></TR>
 
 				<TR bgColor=#f4f4f2>
@@ -261,66 +316,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 					<TD vAlign="top" align="center" width="100%" bgColor="#f4f4f2">
 
 						<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
-
-							<TR>
-
-								<TD height="30">
-
-									<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0 height="30">
-
-										<TR>
-
-											<TD vAlign="bottom" align="left">
-
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-
-         			               		<TR bgcolor="#F4F4F2">
-
-                  			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
-
- 							              				<digi:trn key="aim:monthlyAllAmounts">Monthly All Amounts</digi:trn>
-
-                  			          		</TD>
-
-                          						<TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
-
-			                          			</TD>
-
-         			               		</TR>
-
-                  			    		</TABLE>
-
-											</TD>
-
-											<TD vAlign="top" align="right">
-
-												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
-
-													<TR>
-
-														<TD>
-
-
-														</TD>
-
-														<TD>
-
-														</TD>
-
-													</TR>
-
-												</TABLE>
-
-
-											</TD>
-
-										</TR>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
 
 							<TR bgcolor="#ffffff">
 
@@ -499,13 +494,13 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 												<TR><TD>
 
 
-				                          		<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
+				                          		<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding" id="dataTable">
 
-            				                		<tr bgcolor="#DDDDDB">
+            				                		<tr bgcolor="#999999">
 
-			                              			<td bgcolor="#DDDDDB">
+			                              			<td bgcolor="#999999">
 
-         			                     				<div align="center">
+         			                     				<div align="center" style="font-weight:bold;color:black;">
 
                   			            					<digi:trn key="aim:year">Year</digi:trn>
 
@@ -513,9 +508,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			                              			</td>
 
-         			                     			<td bgcolor="#DDDDDB">
+         			                     			<td bgcolor="#999999">
 
-                  			            				<div align="center">
+                  			            				<div align="center" style="font-weight:bold;color:black;">
 
                            									<digi:trn key="aim:MonthlyComparision:Month">Month</digi:trn>
 
@@ -523,9 +518,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			                              			</td>
 
-         			                     			<td bgcolor="#DDDDDB">
+         			                     			<td bgcolor="#999999">
 
-                  			            				<div align="center">
+                  			            				<div align="center" style="font-weight:bold;color:black;">
 
 																		<FONT color="blue">*</FONT>
 
@@ -539,9 +534,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
                                                     
                                                                             <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
 
-                                                                        <td bgcolor="#DDDDDB">
+                                                                        <td bgcolor="#999999">
 
-                  			            				<div align="center">
+                  			            				<div align="center" style="font-weight:bold;color:black;">
 
 																		<FONT color="blue">*</FONT>
 
@@ -553,9 +548,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
                                                   	</field:display>
 
 												 </feature:display>
-                  			            			<td bgcolor="#DDDDDB">
+                  			            			<td bgcolor="#999999">
 
-         			         		        				<div align="center">
+         			         		        				<div align="center" style="font-weight:bold;color:black;">
 
 																		<FONT color="blue">*</FONT>
 
@@ -565,9 +560,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			                              			</td>
 
-         			                     			<td bgcolor="#DDDDDB">
+         			                     			<td bgcolor="#999999">
 
-                  			            				<div align="center">
+                  			            				<div align="center" style="font-weight:bold;color:black;">
 
 																		<FONT color="blue">*</FONT>
 
@@ -577,9 +572,9 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			                              			</td>
 										<feature:display module="Funding" name="Expenditures">
-         			                     			<td bgcolor="#DDDDDB">
+         			                     			<td bgcolor="#999999">
 
-                  			            				<div align="center">
+                  			            				<div align="center" style="font-weight:bold;color:black;">
 
 																		<FONT color="blue">*</FONT>
 
@@ -609,7 +604,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																	<tr valign="top">
 
-			                  					      		<td bgcolor="#F8F8F5">
+			                  					      		<td>
 
 								      		                 		<logic:equal name="monthlyComparison" property="fiscalYear" value="0">
 
@@ -625,7 +620,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		</td>
 
-									                           <td bgcolor="#F8F8F5">
+									                           <td>
 
 			      	   		                   				
 				            	
@@ -636,7 +631,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		</td>
 
-																		<td bgcolor="#F8F8F5">
+																		<td>
 
 																			<div align="right">
 
@@ -646,7 +641,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 																		</td>
                                                                                                                                               
                                                                                                                                               <feature:display module="Funding" name="Disbursement Orders">
-                                                                                                                                                <td bgcolor="#F8F8F5">
+                                                                                                                                                <td>
                                                                                                                                                 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders">
 
 																			<div align="right">
@@ -660,7 +655,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 </feature:display>
 
 
-																		<td bgcolor="#F8F8F5">
+																		<td>
 
 																			<div align="right">
 
@@ -669,7 +664,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		</td>
 
-																		<td bgcolor="#F8F8F5">
+																		<td>
 
 																			<div align="right">
 
@@ -678,7 +673,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 																		</td>
 	<feature:display module="Funding" name="Expenditures">
-																		<td bgcolor="#F8F8F5">
+																		<td>
 
 																			<div align="right">
 
@@ -920,6 +915,11 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 </TABLE>
 
+    
+   <script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 
 
 </digi:form>

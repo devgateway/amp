@@ -17,6 +17,61 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
@@ -230,39 +285,11 @@ function projectFiche(id)
 
 										<TR>
 
-											<TD width="750" bgcolor="#F4F4F2" height="17">
-
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-
-                        							<TR bgcolor="#F4F4F2" height="17">
-
-                          	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-
-															<digi:trn key="aim:viewAESurveysList">Aid Effectiveness Survey List</digi:trn>
-
-							  							</TD>
-
-	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>&nbsp;
-
-                                						 
-
-							  							</TD>
-
-													</TR>
-
-												</TABLE>
-
-											</TD>
-
-										</TR>
-
-										<TR>
-
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 
-												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1">
+												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" id="dataTable">
 
-                 									<TR bgcolor="#DDDDDB" >
+                 									<TR >
 
                  									<%--
 
@@ -276,9 +303,9 @@ function projectFiche(id)
 
 	                         	   					--%>
 
-                                                    <TD width="172"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
-                                                    <TD width="210"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
-                                                    <TD width="200"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
+                                                    <TD width="172" bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
+                                                    <TD width="210" bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
+                                                    <TD width="200" bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
 													</TR>
 
 												<nested:empty name="aimSurveyForm" property="survey">
@@ -297,7 +324,7 @@ function projectFiche(id)
 
 														     		type="org.digijava.module.aim.helper.SurveyFunding">
 
-													<TR valign="top" bgcolor="#f4f4f2">
+													<TR valign="top">
 
 														<c:set target="${urlParams}" property="surveyId" value="${surveyFund.surveyId}" />
 
@@ -383,7 +410,11 @@ function projectFiche(id)
 	</TR>
 
 </TABLE>
-
+<br />
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 </digi:form>
 
 

@@ -72,7 +72,7 @@ public class DateConversion
 	try {
 	    Date date = null;
 	    if (strDate != null && !strDate.trim().equals("")) {
-		date = DateTimeUtil.parseDate(strDate);
+		date = DateTimeUtil.parseDate(DateTimeUtil.formatDate(new Date(strDate)));
 
 	    }
 

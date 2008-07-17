@@ -32,14 +32,14 @@ import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 
 public class CurrencyUtil {
-    
+
 	private static Logger logger = Logger.getLogger(CurrencyUtil.class);
 	public static DecimalFormat df = new DecimalFormat("###,###,###,###,###") ;
-    
+
 	public static final int RATE_FROM_FILE					= 0;
 	public static final int RATE_FROM_WEB_SERVICE			= 1;
 	public static final int RATE_BY_HAND					= 2;
-	
+
     public static final int ORDER_BY_CURRENCY_CODE			=-1;
     public static final int ORDER_BY_CURRENCY_NAME			= 2;
     public static final int ORDER_BY_CURRENCY_COUNTRY_NAME	= 3;
@@ -845,7 +845,7 @@ public class CurrencyUtil {
 			}
 			else
 				searchOther = true;
-				
+
 			if (searchOther){
 				queryString = "select f.exchangeRate from "
 						+ AmpCurrencyRate.class.getName()
@@ -1027,7 +1027,7 @@ public class CurrencyUtil {
 					+ "returns " + exchangeRate); */
 		return exchangeRate.doubleValue();
 	}
-	
+
 	/**
 	 * Returns true if currency have at leat one value added.
 	 * Used in addfunding.
@@ -1043,7 +1043,7 @@ public class CurrencyUtil {
 		try {
 			Calendar cal=Calendar.getInstance();
 			todate = cal.getTime();
-			cal.add(Calendar.YEAR, -1);	  
+			cal.add(Calendar.YEAR, -1);
 			fromdate = cal.getTime();
 			if (currencyCode.equalsIgnoreCase("USD") ){
 				return true;
@@ -1072,8 +1072,8 @@ public class CurrencyUtil {
 		}
 	}
 
-	
-	
+
+
 
 	/**
 	 * Returns Latest Exchange rate for currency specified in parameter by code.
@@ -1082,37 +1082,38 @@ public class CurrencyUtil {
 	 * @return exchange rate, latest value
 	 * @author Irakli Kobiashvili
 	 */
-	public static double getLatestExchangeRate(String currencyCode) throws AimException {
-		Session session = null;
-		Query q = null;
-		try {
-			logger.debug("retrivieving latest exchange rate for currency:"+currencyCode);
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select f.exchangeRate from "
-					+ AmpCurrencyRate.class.getName()
-					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
-			q = session.createQuery(queryString);
-			q.setString("currencyCode", currencyCode);
-			List rates = q.list();
-			Double result = null;
-			if (rates == null){
-				logger.debug("No exchange rate value found for currency: "+currencyCode);
-				result = new Double(1.0);
-			}else{
-				result = (Double)rates.iterator().next();
-			}
-			return result.doubleValue();
-		} catch (Exception ex) {
-			logger.debug("Unable to get exchange rate from database", ex);
-			throw new AimException("Error retriving currency exchange rate for "+ currencyCode,ex);
-		}
-	}
+        public static double getLatestExchangeRate(String currencyCode) throws AimException {
+                Session session = null;
+                Query q = null;
+                try {
+                        logger.debug("retrivieving latest exchange rate for currency:"+currencyCode);
+                        session = PersistenceManager.getRequestDBSession();
+                        String queryString = "select f.exchangeRate from "
+                                        + AmpCurrencyRate.class.getName()
+                                        + " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc limit 1";
+                        q = session.createQuery(queryString);
+                        q.setString("currencyCode", currencyCode);
+                        List rates = q.list();
+                        Double result = null;
+                        if (rates == null || rates.isEmpty()){
+                                logger.debug("No exchange rate value found for currency: "+currencyCode);
+                                result = new Double(1.0);
+                        }else{
+                                result = (Double)rates.iterator().next();
+                        }
+                        return result.doubleValue();
+                } catch (Exception ex) {
+                        logger.debug("Unable to get exchange rate from database", ex);
+                        throw new AimException("Error retriving currency exchange rate for "+ currencyCode,ex);
+                }
+        }
+
 
 	public static String getCurrencyName(Long currencyId) {
 		Session session = null;
 		String queryString = null;
 		Query q = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			queryString = "select a.currencyCode from "+AmpCurrency.class.getName()+" a where a.ampCurrencyId=:currencyId";
@@ -1240,7 +1241,7 @@ public class CurrencyUtil {
 		}
 
 		return col;
-	}	
+	}
 	public static Collection getCurrencyRateValues(Long id) {
 		Collection col = new ArrayList();
 		Session session = null;

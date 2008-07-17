@@ -35,8 +35,8 @@
 	
 	function showPLogframe() {
 		var content = document.getElementById("myPLogframeContent");
-		var element5 = document.getElementById("myPLogframe");
-		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="loading..."/><font size="5">Loading...</font></p>';
+		var element5 = document.getElementById("myPLogframe"); 
+		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
 		if (panelFirstShow == 1){ 
 			element5.style.display = "inline";
 			myPanelLogframe.setBody(element5);

@@ -302,7 +302,7 @@
 
 							<tr>
 								<td valign="top" width="100%" bgcolor="#f4f4f2">
-									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699" >
+									<table width="100%" cellSpacing="0" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 									<tr>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:activities">Activities</digi:trn>
@@ -310,7 +310,7 @@
 										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:means">Means</digi:trn>
 										</td>
-										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699" >
+										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:contributions">Contributions</digi:trn>
 										</td>
 										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
@@ -323,28 +323,31 @@
 												type="org.digijava.module.aim.dbentity.EUActivity">	
 									<c:set target="${euActivity}" property="desktopCurrencyId" value="${defaultCurrency}"/>
 									<tr>
-										<td valign="top" bgcolor="#ffffff" width="25%"  style="border:1px solid #CCC;">
+										<td valign="top" bgcolor="#f4f4f2" width="25%" style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
 												<c:out default="" value="${euActivity.name}"/>
-												<c:if test="${euActivity.inputs != null}">
+												<c:if test='${euActivity.inputs != ""}'>
 												<br/>
-												<table bgcolor="#F6F6F6" style="border:1px solid #DDDDDD;">
-													<tr>
-														<td>
-															<c:out default="" value="${euActivity.inputs }" />
-														</td>
-													</tr>
-												</table>
+													<table bgcolor="#FFFFFF" style="border:1px solid #DDDDDD;">
+														<tr>
+															<td>
+																<c:out default="" value="${euActivity.inputs }" />
+															</td>
+														</tr>
+													</table>
 												</c:if>
 										</td>
-										<td valign="top" bgcolor="#ffffff"  width="25%" style="border:1px solid #CCC;">
+										<td valign="top" bgcolor="#ffffff"  width="25%" style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
 												<bean:write name="euActivity" property="totalCostConverted" format="###,###,###"/>												
 										</td>
-										<td valign="top" bgcolor="#ffffff" width="25%"  style="border:1px solid #CCC;">
+										<td valign="top" bgcolor="#f4f4f2" width="25%"  style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
 												<bean:write name="euActivity" property="totalContributionsConverted" format="###,###,###"/>
 
 										</td>
-										<td valign="top" bgcolor="#ffffff" width="25%"  style="border:1px solid #CCC;">
+										<td valign="top" bgcolor="#ffffff" width="25%"  style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
 												<c:out default="" value="${euActivity.assumptions}"/>
+												<c:if test='${euActivity.assumptions == ""}'>
+													&nbsp;
+												</c:if>
 										</td>
 									</tr>
 									</logic:iterate>

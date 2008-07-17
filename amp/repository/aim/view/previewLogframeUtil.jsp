@@ -37,7 +37,7 @@
 		var content = document.getElementById("myPLogframeContent");
 		var element5 = document.getElementById("myPLogframe");
 		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/TEMPLATE/ampTemplate/images/amploading.gif" alt="loading..."/><font size="5">Loading...</font></p>';
-		if (panelFirstShow == 1){ //IE trick!
+		if (panelFirstShow == 1){ 
 			element5.style.display = "inline";
 			myPanelLogframe.setBody(element5);
 			panelFirstShow = 0;
@@ -100,8 +100,8 @@
 	var currentLogframe = window.onload;
 	window.onload = function() {
         currentLogframe.apply(currentLogframe);
-		initScriptsLogframe();
    	};
+	initScriptsLogframe();
 
 </script>
 <style type="text/css">

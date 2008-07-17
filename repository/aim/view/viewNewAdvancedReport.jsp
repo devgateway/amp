@@ -250,6 +250,9 @@ session.setAttribute("progressValue", counter);
 	</tr>
 		<tr>
 		<td style="padding-left: 5px;padding-right: 5px" align="left">
+		<table width="100%">
+			<tr>
+			<td>
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
                     <c:set var="startRowLocal" value="1"/> 
@@ -324,6 +327,12 @@ session.setAttribute("progressValue", counter);
                 </logic:equal>
 
             </logic:notEqual>
+            </td>
+            <td align="right">
+            <jsp:include page="legendPopup.jsp" />
+            </td>
+            </tr>
+            </table>
 			</td>
 		</tr>
 	</logic:equal>
@@ -398,6 +407,9 @@ session.setAttribute("progressValue", counter);
 		</logic:equal>
 		<tr>
 			 <td style="padding-left: 5px;padding-right: 5px">
+			 <table width="100%">
+			 <tr>
+			 <td>
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
                     <c:set var="startRowLocal" value="1"/> 
@@ -472,6 +484,12 @@ session.setAttribute("progressValue", counter);
                 </logic:equal>
 
             </logic:notEqual>
+            </td>
+            <td align="right">
+            <jsp:include page="legendPopup.jsp" />
+            </td>
+            </tr>
+            </table>
 			</td>
 			</tr>
 		</logic:notEqual>

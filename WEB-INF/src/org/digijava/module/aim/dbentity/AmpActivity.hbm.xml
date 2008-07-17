@@ -108,7 +108,7 @@
 		<property name="programDescription" column="program_description"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="contractors" column="contractors" type="org.digijava.kernel.db.SafeClobType"/>
 
-		<property name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
+		<property access="field" name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
 		<property name="funDate" column="proj_cost_date" type="java.util.Date" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
 		

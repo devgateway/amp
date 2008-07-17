@@ -16,6 +16,7 @@ public class AmpFundingDetail implements Serializable
 	private Date transactionDate2 ;
 	private Date reportingDate;
 	private Double transactionAmount;
+	private Double thousandsTransactionAmount;
 	private String language ;
 	private String version ;
 	private String calType ;
@@ -281,6 +282,14 @@ public class AmpFundingDetail implements Serializable
         public void setDisbOrderId(String disbOrderId) {
                 this.disbOrderId = disbOrderId;
         }
+
+		public Double getThousandsTransactionAmount() {
+			return thousandsTransactionAmount;
+		}
+
+		public void setThousandsTransactionAmount(Double thousandsTransactionAmount) {
+			this.thousandsTransactionAmount = thousandsTransactionAmount;
+		}
 
 }
 

@@ -80,17 +80,22 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
 		<td valign="middle" align="right" width="30%">
           <logic:present name="currentMember" scope="session">
               <c:set var="translation">
-                <digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
+                <digi:trn key="aim:workspacename">Workspace name</digi:trn>
               </c:set>
-              <div title="${translation}"'>
+              <span title="${translation}"'>
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
                 <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
                 	<strong><digi:trn key="aim:pageshead:title:${teamMember.teamName}">${teamMember.teamName}</digi:trn></strong>
                 </a>
+              </span>
+              <c:set var="translation">
+                <digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
+              </c:set>
+              <span title="${translation}"'>
                 <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
                 	<digi:trn key="aim:pagesheadtitle:${teamMember.memberName}">${teamMember.memberName}</digi:trn>
                 </a>
-              </div>
+              </span>
           </logic:present>        
 		</td>
    	</tr>

@@ -177,9 +177,7 @@ function childOrgsAdded() {
 										</digi:trn>
 								</c:set>
 							
-								<input
-								type="button" value="${translation}" onclick="getChildWorkspaces()"
-								class="dr-menu">
+								<input type="button" value="${translation}" onclick="getChildWorkspaces()" class="dr-menu">
 							</td>
 						</tr>
 					</table>

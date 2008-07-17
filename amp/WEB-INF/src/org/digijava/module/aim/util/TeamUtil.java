@@ -83,7 +83,8 @@ public class TeamUtil {
             String qryStr = "select t from "
                 + AmpTeam.class.getName()
                 + " t"
-                + " where t.parentTeamId is null and (t.teamCategory=:team) ";
+                //+ " where t.parentTeamId is null and (t.teamCategory=:team) ";
+                + " where t.parentTeamId is null ";
 
             boolean wTypeFlag = false;
            // boolean tCatFlag = false;
@@ -100,7 +101,7 @@ public class TeamUtil {
 //            }
 
             Query qry = session.createQuery(qryStr);
-            qry.setParameter("team", team, Hibernate.STRING);
+          //  qry.setParameter("team", team, Hibernate.STRING);
             if(wTypeFlag) {
                 qry.setParameter("wType", workspaceType, Hibernate.STRING);
             }

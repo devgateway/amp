@@ -23,7 +23,12 @@
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
     <script type="text/javascript">
     var inboxFull='<digi:trn key="message:fullMailBox">Your MailBox Is Full</digi:trn>';
-    var deleteData='<digi:trn key="message:plzDeleteData">Please delete messages or you will not get newer ones</digi:trn>' ;
+    var deleteData='<digi:trn key="message:plzDeleteData">Please delete messages or you will not get newer ones</digi:trn>';
+    var newmessages='<digi:trn key="message:newmessages">New Messages</digi:trn>';
+    var newalerts='<digi:trn key="message:newalerts">New Alerts</digi:trn>';
+    var newapprovals='<digi:trn key="message:newaprovals">New Approvals</digi:trn>;'
+    var newcalevents='<digi:trn key="message:newcalevents">New Calendar Events</digi:trn>;'
+    var moremessages='<digi:trn key="message:moremessages">More messages</digi:trn>;'
     var newCount=0;
     var prevCount=0;
     var isInboxFull='false';
@@ -142,7 +147,7 @@
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+'New Messages</a>';
+      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
 
@@ -150,27 +155,27 @@
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+'New Alerts</a>';
+      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+'New Approvals</a>';
+      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
-      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+'New Calendar Events</a>';
+      '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+''+newcalevents+'</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=moreMsgs;
-      td1.innerHTML='<div  style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom:7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">More messages ...</a></div>';
+      td1.innerHTML='<div  style="padding-top:10px;margin-left:12px;margin-top:5px; margin-bottom:7px"><a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">'+moremessages+'...</a></div>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
       tbl.appendChild(body);

@@ -1194,8 +1194,8 @@ $(document).ready(function(){
 												 <LI style="float: right;">
 									               <div>
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
-														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;">Show more information &gt;&gt;</div>
-														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;">Hide more information<< </div>
+														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;"><digi:trn key="message:show">Show more information</digi:trn> &gt;&gt;</div>
+														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn key="message:hide">Hide more information</digi:trn><< </div>
                                                                                                 </span>
 												   </div>	
                                                                                             </LI>
@@ -1205,7 +1205,7 @@ $(document).ready(function(){
 			                                        <table  cellpadding="1" cellspacing="1" style="clear:both; padding:4px; border:silver dotted 1px;">
 														<tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong>Total Number</strong> :		
+																<strong><digi:trn key="message:totalNum">Total Number</digi:trn></strong> :		
 															</td>
 															<td colspan="4" class="settings" id="totalNumber">
 																	${messageForm.allmsg}
@@ -1213,7 +1213,7 @@ $(document).ready(function(){
 														</tr>
                                                         <tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong>Total Number Of Hidden </strong>:		
+																<strong><digi:trn key="message:numofhidden">Total Number Of Hidden </digi:trn></strong>:		
 															</td>
 															<td colspan="4"  class="settings" id="totalHidden">
 																
@@ -1223,14 +1223,14 @@ $(document).ready(function(){
 														</tr>
 														<tr>
 															<td colspan="4" class="settings" nowrap>
-																<strong>Admin Settings</strong>:
+																<strong><digi:trn key="message:adminSetings">Admin Settings</digi:trn></strong>:
 														
 															</td>
 															<td colspan="4" class="settings" id="adimSettings">
-																	Message Refresh Time(minutes):  ${messageForm.msgRefreshTimeCurr} |
-																	Message Storage Per Message Type:  ${messageForm.msgStoragePerMsgTypeCurr} |
-																	Days of Advance Alert Warnings:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
-																	Email Alerts:
+																	<digi:trn key="message:refreshtime">Message Refresh Time(minutes)</digi:trn>:  ${messageForm.msgRefreshTimeCurr} |
+																	<digi:trn key="message:storepermess">Message Storage Per Message Type</digi:trn>:  ${messageForm.msgStoragePerMsgTypeCurr} |
+																	<digi:trn key="message:alertwarnings">Days of Advance Alert Warnings</digi:trn>:  ${messageForm.daysForAdvanceAlertsWarningsCurr} |																	
+																	<digi:trn key="message:emailalerts">Email Alerts</digi:trn>:
 																	
 																	<c:if test="${empty messageForm.emailMsgsCurrent ||messageForm.emailMsgsCurrent==0}">
 																		<digi:trn key="message:No">No</digi:trn>

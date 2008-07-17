@@ -14,7 +14,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String property = "";
 	private String organisationType = "";
 	private String callBackFunction;
-	private ActionForm form;
+	private Object form;
 	private String useClient = "false";
 	private String htmlvalueHolder = "";
 	private String htmlNameHolder = "";
@@ -152,11 +152,11 @@ public class AddOrganizationButton extends BodyTagSupport {
 		this.callBackFunction = callBackFunction;
 	}
 
-	public ActionForm getForm() {
+	public Object getForm() {
 		return form;
 	}
 
-	public void setForm(ActionForm form) {
+	public void setForm(Object form) {
 		this.form = form;
 	}
 

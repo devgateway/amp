@@ -91,7 +91,16 @@
 		}
 		return true;
 	}
-
+	
+	
+	function setOrganization(id) {
+		<digi:context name="selOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=organizationSelected"/>
+	    document.aimSelectOrganizationForm.action = "<%= selOrg %>&id="+id;
+		document.aimSelectOrganizationForm.selectedOrganisationFromPages.value=-1;
+	    document.aimSelectOrganizationForm.submit();
+		return true;
+	}
+	
 	function selectOrganization() {
 		var flag = validate();
 		if (flag == false)
@@ -316,7 +325,7 @@
 													name="aimSelectOrganizationForm" property="useClient"
 													value="false">
 
-													<html:button property="select">
+													<html:button property="select" onclick="setOrganization(${organisations.ampOrgId})">
 														<digi:trn key="aim:selectDots">...</digi:trn>
 													</html:button>
 												</logic:equal> <logic:equal name="aimSelectOrganizationForm"

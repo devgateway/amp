@@ -36,7 +36,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 	String targetCollection="";
 	String targetProperty="";
 	String callbackFunction="";
-	ActionForm targetForm;
+	Object	 targetForm;
 	boolean refreshParent;
 	
 
@@ -267,11 +267,11 @@ public class selectOrganizationComponentForm extends ActionForm {
 		this.multiSelect = multiSelect;
 	}
 
-	public ActionForm getTargetForm() {
+	public Object getTargetForm() {
 		return targetForm;
 	}
 
-	public void setTargetForm(ActionForm targetForm) {
+	public void setTargetForm(Object targetForm) {
 		this.targetForm = targetForm;
 	}
 

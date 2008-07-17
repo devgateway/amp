@@ -10,6 +10,7 @@
 			</generator>
 		</id>
 
+		<property name="thousandsTransactionAmount" type="java.lang.Double" formula="applyThousandsForVisibility(transaction_amount)"/>
 		<property name="fiscalYear" column="fiscal_year"  type="java.lang.Integer"/>
 		<property name="fiscalQuarter" column="fiscal_quarter"  type="java.lang.Integer"/>
 		<property name="transactionType" column="transaction_type"  type="java.lang.Integer"/>
@@ -17,7 +18,7 @@
 		<property name="transactionDate" column="transaction_date" type="java.util.Date"/>
 		<property name="transactionDate2" column="transaction_date2" type="java.util.Date"/>
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />
-		<property name="transactionAmount" column="transaction_amount"  type="java.lang.Double"/>
+		<property access="field" name="transactionAmount" column="transaction_amount"  type="java.lang.Double"/>
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="calType" column="cal_type" type="java.lang.String"/>

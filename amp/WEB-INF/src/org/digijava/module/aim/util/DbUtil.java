@@ -937,7 +937,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = "select sum(f.transactionAmount) from "
+            queryString = "select (sum(f.thousandsTransactionAmount) from "
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
                 + " and (f.transactionType=:transactionType) "
@@ -974,7 +974,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = "select sum(f.transactionAmount) from "
+            queryString = "select sum(f.thousandsTransactionAmount) from "
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
                 + " and (f.transactionType=:transactionType) "
@@ -1268,7 +1268,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = "select f.transactionAmount,"
+            queryString = "select f.thousandsTransactionAmount,"
                 + "f.transactionDate,f.ampCurrencyId, f.fixedExchangeRate from "
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
@@ -3266,7 +3266,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = " select sum(fd.transactionAmount) from "
+            queryString = " select sum(fd.thousandsTransactionAmount) from "
                 + AmpFundingDetail.class.getName()
                 + " fd where (fd.ampFundingId = :ampFundingId ) and (fd.fiscalYear = :forcastYear) and (fd.transactionType=:transactionType) and (fd.adjustmentType=:adjustmentType) group by fd.fiscalYear ";
             q = session.createQuery(queryString);
@@ -3301,7 +3301,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = " select sum(fd.transactionAmount) from "
+            queryString = " select sum(fd.thousandsTransactionAmount) from "
                 + AmpFundingDetail.class.getName()
                 + " fd where (fd.ampFundingId = :ampFundingId ) and (fd.transactionType=:transactionType) and (fd.adjustmentType=:adjustmentType) group by fd.ampFundingId ";
             q = session.createQuery(queryString);

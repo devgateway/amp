@@ -289,7 +289,7 @@ html>body #mainEmpty {
 							   <LI>
                                		<a name="node">
                                		<div>
-									<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
+									<digi:trn key="aim:overview">Overview</digi:trn>
                                     </div>
                                     </a>
 								</LI>

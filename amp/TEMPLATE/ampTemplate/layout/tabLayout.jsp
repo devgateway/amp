@@ -126,19 +126,19 @@
 
 						<TR>
 
-							<TD class=r-dotted-lg width="10">&nbsp;</td>
+							<TD width="10">&nbsp;</td>
 
-							<TD align=center vAlign=top class=r-dotted-lg width="770">
+							<TD align=center vAlign=top width="900">
 
-								<TABLE width="760" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
+								<TABLE width="900" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 
-									<TR><TD vAlign="bottom" align="center" width="770">
+									<TR><TD vAlign="bottom" align="center" width="900">
 
 										<digi:insert attribute="tabHeader" />
 
 									</TD></TR>
 
-									<TR><TD vAlign="top" align="center" width="770">
+									<TR><TD vAlign="top" align="center" width="900">
 
 										<digi:insert attribute="tabBody" />
 

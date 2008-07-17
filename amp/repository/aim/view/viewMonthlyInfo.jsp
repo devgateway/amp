@@ -22,6 +22,61 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
 
 <digi:errors/>
 
@@ -405,88 +460,6 @@
                                         
                                         <TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
                                             
-                                            <TR>
-                                                
-                                                <TD height="30">
-                                                    
-                                                    <TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0 height="30">
-                                                        
-                                                        <TR>
-                                                            
-                                                            <TD vAlign="bottom" align="left">
-                                                                
-                                                                <TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                                                                    
-                                                                    <TR bgcolor="#F4F4F2">
-                                                                        
-                                                                        <TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
-                                                                            
-                                                                            <logic:equal name="aimMonthlyInfoForm" property="transactionType" value="4">
-                                                                                
-                                                                                <digi:trn key="aim:MonthlyDisbursementOrders">Monthly Disbursement Orders</digi:trn>
-                                                                                
-                                                                            </logic:equal>
-                                                                            
-                                                                            
-                                                                            
-                                                                            <logic:equal name="aimMonthlyInfoForm" property="transactionType" value="1">
-                                                                                
-                                                                                <digi:trn key="aim:MonthlyDisbursements">Monthly Disbursements</digi:trn>
-                                                                                
-                                                                            </logic:equal>
-                                                                            
-                                                                            <logic:equal name="aimMonthlyInfoForm" property="transactionType" value="2">
-                                                                                
-                                                                                <digi:trn key="aim:MonthlyExpenditures">Monthly Expenditures</digi:trn>
-                                                                                
-                                                                            </logic:equal>
-                                                                            
-                                                                        </TD>
-                                                                        
-                                                                        <TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
-                                                                            
-                                                                        </TD>
-                                                                        
-                                                                    </TR>
-                                                                    
-                                                                </TABLE>
-                                                                
-                                                            </TD>
-                                                            
-                                                            <TD vAlign="top" align="right">
-                                                                
-                                                                
-                                                                    <TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
-                                                                        
-                                                                        <TR>
-                                                                            
-                                                                            <TD>
-                                                                                
-                                                                                
-                                                                            </TD>
-                                                                            
-                                                                            <TD>
-                                                                                
-
-                                                                                
-                                                                            </TD>
-                                                                            
-                                                                        </TR>
-                                                                        
-                                                                    </TABLE>
-                                                                    
-
-                                                                
-                                                            </TD>
-                                                            
-                                                        </TR>
-                                                        
-                                                    </TABLE>
-                                                    
-                                                </TD>
-                                                
-                                            </TR>
-                                            
                                             <TR bgcolor="#ffffff">
                                                 
                                                 <TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
@@ -606,13 +579,13 @@
                                                                         
                                                                      
                                                                         
-                                                                            <TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
+                                                                            <TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" id="dataTable" class="box-border-nopadding">
                                                                             
-                                                                            <tr bgcolor="#DDDDDB" >
+                                                                            <tr bgcolor="#999999" >
                                                                                 
-                                                                                <td bgcolor="#DDDDDB"  >
+                                                                                <td bgcolor="#999999"  >
                                                                                     
-                                                                                    <div align="center">
+                                                                                    <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <digi:trn key="aim:year">Year</digi:trn>
                                                                                         
@@ -620,9 +593,9 @@
                                                                                     
                                                                                 </td>
                                                                                 
-                                                                                <td bgcolor="#DDDDDB">
+                                                                                <td bgcolor="#999999">
                                                                                     
-                                                                                    <div align="center">
+                                                                                    <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <digi:trn key="aim:dateDisbursed">Date Disbursed</digi:trn>
                                                                                         
@@ -631,9 +604,9 @@
                                                                                 </td>
                                                                                 <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
                                                                                 
-                                                                                <td bgcolor="#DDDDDB">
+                                                                                <td bgcolor="#999999">
                                                                                     
-                                                                                    <div align="center">
+                                                                                    <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <FONT color="blue">*</FONT>
                                                                                         
@@ -644,9 +617,9 @@
                                                                                 </td>
                                                                             </c:if>
                                                                                 
-                                                                                <td bgcolor="#DDDDDB">
+                                                                                <td bgcolor="#999999">
                                                                                     
-                                                                                    <div align="center">
+                                                                                    <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <FONT color="blue">*</FONT>
                                                                                         
@@ -673,7 +646,7 @@
                                                                                 <logic:iterate name="aimMonthlyInfoForm" property="monthlyInfoList"
                          
                          id="month" type="org.digijava.module.aim.helper.MonthlyInfo">
-                                                                                    <td valign="baseline" bgcolor="#F8F8F5">
+                                                                                    <td valign="baseline">
                                                                                         
                                                                                         ${month.year}
 
@@ -681,21 +654,21 @@
                                                                                     
                                                                                     
                                                                                     
-                                                                                    <td valign="baseline" bgcolor="#F8F8F5">
+                                                                                    <td valign="baseline">
                                                                                         
                                                                                         <div align="right"><digi:trn key='aim:monthly:${month.month}'>${month.month}</digi:trn> </div>
                                                                                         
                                                                                     </td>
                                                                                     
                                                                                      <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
-                                                                                    <td valign="baseline" bgcolor="#F8F8F5">
+                                                                                    <td valign="baseline">
                                                                                         
                                                                                         <div align="right"><bean:write name="month" property="plannedAmount" format="#.##"/></div>
                                                                                         
                                                                                     </td>
                                                                                     </c:if>
                                                                                     
-                                                                                    <td valign="baseline" bgcolor="#F8F8F5">
+                                                                                    <td valign="baseline">
                                                                                         
                                                                                         <div align="right"><bean:write name="month" property="actualAmount" format="#.##"/></div>
                                                                                         
@@ -706,23 +679,24 @@
                                                                                 
                                                                                 
                                                                             </logic:iterate>
-                                                                            <tr valign="top" class="note">
+                                                                            <tr valign="top">
                                                                                 <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
                                                                                     <td colspan="2">
                                                                                 </c:if>
                                                                                  <c:if test="${aimMonthlyInfoForm.transactionType==4}">
                                                                                     <td>
                                                                                 </c:if>
-														
+														 <span class="note">
 															<digi:trn key="aim:total">Total</digi:trn>
+                                                            </span>
 														</td>
 														<td>
-															<div align="right">
+															<div align="right" class="note">
 																<bean:write name="aimMonthlyInfoForm" property="totalPlanned" format="#.##"/>
 															</div>
 														</td>
 														<td>
-															<div align="right">
+															<div align="right" class="note">
 																<bean:write name="aimMonthlyInfoForm" property="totalActual" format="#.##"/>
 															</div>
 														</td>
@@ -872,7 +846,12 @@
         </TABLE>
     
     
-    
+   <script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
+
+ 
     
     
     </digi:form>

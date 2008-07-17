@@ -13,6 +13,62 @@
 
 <%@ page import="org.digijava.module.aim.form.FinancingBreakdownForm" %>
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
+
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
@@ -223,6 +279,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%">
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+<!--
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" height="17">
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
@@ -237,55 +294,56 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												</TABLE>
 											</TD>
 										</TR>
+-->
 										<TR>
 											<TD width="100%" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
-												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1">
-                 					<TR bgcolor="#DDDDDB" >
+												<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" id="dataTable">
+                 					<TR bgcolor="#999999" >
  
 		    	                    	<field:display name="Funding Organization Id" feature="Funding Information">
-		    	                    		<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
+		    	                    		<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
 		    	                    	</field:display>
 		    	                    	<field:display name="Funding Organization" feature="Funding Information">
-						                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
+						                    <TD width="20" bgcolor="#999999" style="color:black"><digi:trn key="aim:organization">Organization</digi:trn></TD>
 						                </field:display>
 
 						                <feature:display module="Funding" name="MTEF Projections">
 											<field:display feature="MTEF Projections" name="MTEFProjections">
-											<td><digi:trn key="aim:financialProgress:totalProjections_projection">Total Projections</digi:trn></td>
+											<td bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:financialProgress:totalProjections_projection">Total Projections</digi:trn></td>
 											</field:display>
 										</feature:display>
 
 						                <field:display name="Total Committed" feature="Funding Information">
-											<TD><digi:trn key="aim:totalCommitmentsActual">Total Commitments (Actual)</digi:trn></TD>
+											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalCommitmentsActual">Total Commitments (Actual)</digi:trn></TD>
 										</field:display>
                                                                               <field:display name="Total Ordered" feature="Disbursement Orders">
-			                	         	<TD><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
+			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
 			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Funding Information">
-			                	         	<TD><digi:trn key="aim:totalDisbursementsActual">Total Disbursements (Actual)</digi:trn></TD>
+			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalDisbursementsActual">Total Disbursements (Actual)</digi:trn></TD>
 			                	        </field:display>
 			                	        <field:display name="Undisbursed Funds" feature="Funding Information">
-											<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
+											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
 										</field:display>
 
 										<feature:display module="Funding" name="Expenditures">
                                    
                                             <field:display name="Total Expended" feature="Funding Information">
-                                                <TD><digi:trn key="aim:totalExpendituresActual">Total Expenditures (Actual)</digi:trn></TD>
+                                                <TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalExpendituresActual">Total Expenditures (Actual)</digi:trn></TD>
                                             </field:display>
                                    
                                         </feature:display>
 
 	    	                    	 	<feature:display module="Funding" name="Expenditures">
 		    	                    	 	<field:display name="Unexpended Funds" feature="Funding Information">
-												<TD><digi:trn key="aim:unExpendedFunds">Unexpended a Funds</digi:trn></TD>
+												<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:unExpendedFunds">Unexpended a Funds</digi:trn></TD>
 											</field:display>
 										</feature:display>
 
 									</TR>
 													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">
-															<TD align="center" colspan="7"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
+                                    <TD align="center" colspan="7"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
 			                     </TR>
 			                    </logic:empty>
 			                    <logic:notEmpty name="aimFinancingBreakdownForm" property="financingBreakdown">
@@ -361,34 +419,34 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 															</TR>
 														</logic:iterate>
 													</logic:notEmpty>
-				                  <TR valign="top" class="note">
-														<TD><digi:trn key="aim:total">Total</digi:trn></TD>
-				                    <TD></TD>
+				                  <TR valign="top">
+														<TD class="note" style="background-color:#FFFFFF;"><digi:trn key="aim:total">Total</digi:trn></TD>
+				                    <TD class="note" style="background-color:#FFFFFF;"></TD>
 				                    				
                                                     <feature:display module="Funding" name="MTEF Projections">
-                                                    	<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD>
+                                                    	<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD>
 				                    					</field:display>
                                                         </feature:display>
-														<field:display name="Total Committed" feature="Funding Information"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD>
+														<field:display name="Total Committed" feature="Funding Information"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD>
 														</field:display>
-                                                                                                                <field:display name="Total Ordered" feature="Disbursement Orders"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbOrdered"/></TD>
+                                                                                                                <field:display name="Total Ordered" feature="Disbursement Orders"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalDisbOrdered"/></TD>
                                                                                                                 </field:display>
-														<field:display name="Total Disbursed" feature="Funding Information"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD>
+														<field:display name="Total Disbursed" feature="Funding Information"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD>
 														</field:display>
-														<field:display name="Undisbursed Funds" feature="Funding Information"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD>
+														<field:display name="Undisbursed Funds" feature="Funding Information"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD>
                                                         
                                                         </field:display>
 												
                                                 <feature:display module="Funding" name="Expenditures">
                                               
-                                                		<field:display name="Total Expended" feature="Funding Information"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD>
+                                                		<field:display name="Total Expended" feature="Funding Information"><TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD>
                                                 		</field:display>
                                                         
                                                         </feature:display>
 														
 <feature:display module="Funding" name="Expenditures">
     <field:display name="Unexpended Funds" feature="Funding Information">
-        <TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD>
+        <TD align="right" class="note" style="background-color:#FFFFFF;"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD>
     </field:display>
 </feature:display>
 </TR>
@@ -426,4 +484,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 </logic:equal>
 
 
+
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 

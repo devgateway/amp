@@ -18,6 +18,62 @@
 
 
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+
+</style>
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+	
+
+
+}
+</script>
+
 
 <digi:errors/>
 
@@ -410,86 +466,6 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 						<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
 
-							<TR>
-
-								<TD height="30">
-
-									<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0 height="30">
-
-										<TR>
-
-											<TD vAlign="bottom" align="left">
-
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-
-         			               		<TR bgcolor="#F4F4F2">
-
-                  			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
-
-                                                                        <logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="4">
-
-   	                  								<digi:trn key="aim:quarterlyDisbursementOrders">Quarterly Disbursement Orders</digi:trn>
-
-															</logic:equal>
-
-
-
-					                      			<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="1">
-
-   	                  								<digi:trn key="aim:quarterlyDisbursements">Quarterly Disbursements</digi:trn>
-
-															</logic:equal>
-
-															<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="2">
-
-            	         								<digi:trn key="aim:quarterlyExpenditures">Quarterly Expenditures</digi:trn>
-
-															</logic:equal>
-
-                  			          		</TD>
-
-                          						<TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
-
-			                          			</TD>
-
-         			               		</TR>
-
-                  			    		</TABLE>
-
-											</TD>
-
-											<TD vAlign="top" align="right">
-
-
-												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
-
-													<TR>
-
-														<TD>
-
-
-														</TD>
-
-														<TD>
-
-														</TD>
-
-													</TR>
-
-												</TABLE>
-
-
-
-											</TD>
-
-										</TR>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
-
 							<TR bgcolor="#ffffff">
 
 								<TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
@@ -637,13 +613,13 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 
 
-					                      	<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
+					                      	<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding" id="dataTable">
 
-			                     		   	<tr bgcolor="#DDDDDB" >
+			                     		   	<tr bgcolor="#999999" >
 
-			                          				<td bgcolor="#DDDDDB"  >
+			                          				<td bgcolor="#999999"  >
 
-			   	                   					<div align="center">
+			   	                   					<div align="center" style="font-weight:bold;color:black;">
 
 					                          				<digi:trn key="aim:year">Year</digi:trn>
 
@@ -651,9 +627,9 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 			         		                 		</td>
 
-			               		           		<td bgcolor="#DDDDDB">
+			               		           		<td bgcolor="#999999">
 
-			                     		     			<div align="center">
+			                     		     			<div align="center" style="font-weight:bold;color:black;">
 
 			                          						<digi:trn key="aim:dateDisbursed">Date Disbursed</digi:trn>
 
@@ -661,16 +637,16 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 					                          		</td>
 													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
-					                          		<td bgcolor="#DDDDDB">
-														<div align="center">
+					                          		<td bgcolor="#999999">
+														<div align="center" style="font-weight:bold;color:black;">
 															<FONT color="blue">*</FONT>
 																<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
 														</div>
 													</td>
 													</logic:notEqual>
-			                          				<td bgcolor="#DDDDDB">
+			                          				<td bgcolor="#999999">
 
-					                          			<div align="center">
+					                          			<div align="center" style="font-weight:bold;color:black;">
 
 																	<FONT color="blue">*</FONT>
 
@@ -702,7 +678,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 						                          	<tr valign="top">
 
-			      					              		<td valign="baseline" bgcolor="#F8F8F5">
+			      					              		<td valign="baseline">
 
 				                     		     			<logic:equal name="qtr" property="aggregate" value="0">
 
@@ -712,7 +688,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 						                          		</td>
 
-			          			                		<td valign="baseline" bgcolor="#F8F8F5">
+			          			                		<td valign="baseline">
 
 			                  			              	<logic:equal name="qtr" property="aggregate" value="1">
 
@@ -790,11 +766,11 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 						                          		</td>
 													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
-			                   			       			<td valign="baseline" bgcolor="#F8F8F5">
+			                   			       			<td valign="baseline">
 															<div align="right"><bean:write name="qtr" property="plannedAmount" /></div>
 														</td>
 													</logic:notEqual>				
-			                          					<td valign="baseline" bgcolor="#F8F8F5">
+			                          					<td valign="baseline">
 
 			                          						<div align="right"><bean:write name="qtr" property="actualAmount" /></div>
 
@@ -805,19 +781,21 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			                           			</logic:equal>
 
 														</logic:iterate>
-                                                                                                                      <tr valign="top" class="note">
+                                                      <tr valign="top">
 														<td colspan="2">
+                                                        	 <span class="note">
 															<digi:trn key="aim:total">Total</digi:trn>
+                                                           	</span>
 														</td>
 														<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
 														<td>
-															<div align="right">
+															<div align="right" class="note">
 																<bean:write name="aimQuarterlyInfoForm" property="totalPlanned" />
 															</div>
 														</td>
 														</logic:notEqual>
 														<td>
-															<div align="right">
+															<div align="right" class="note">
 																<bean:write name="aimQuarterlyInfoForm" property="totalActual" />
 															</div>
 														</td>
@@ -951,6 +929,10 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 <TR><TD>&nbsp;</TD></TR>
 
 </TABLE>
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>
 
 
 

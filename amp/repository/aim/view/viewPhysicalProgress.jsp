@@ -8,6 +8,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<link href="/TEMPLATE/ampTemplate/css/tabview.css" rel="stylesheet" type="text/css"></link>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <script type="text/javascript">
@@ -129,22 +131,25 @@ method="post">
 					</TD>
 					</TR>
 
-					<module:display name="Components" parentModule="PROJECT MANAGEMENT">
-					<feature:display name="Components" module="Components">
-					<TR bgColor=#f4f4f2><TD vAlign="top" align="center" width="100%">
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
-							<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
-								<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-                          	<TR bgcolor="#F4F4F2" height="17">
-										<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-											<digi:trn key="aim:components">Components</digi:trn>
-										</TD>
-	                           <TD background="module/aim/images/corner-r.gif" height=17 width=17>
-										</TD>
-   	                     </TR>
-      	               </TABLE>
-							</TD></TR>
-							<TR><TD width="100%" bgcolor="#F4F4F2" align="center">
+                <module:display name="Components" parentModule="PROJECT MANAGEMENT">
+                <feature:display name="Components" module="Components">
+                <TR bgColor=#f4f4f2><TD vAlign="top" width="100%">
+
+<div id="content" class="yui-skin-sam" style="width:100%;"> 
+	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+                        <ul class="yui-nav">
+                          <li class="selected">
+                          <a>
+                          <div>
+                            <digi:trn key="aim:components">Components</digi:trn>
+                          </div>
+                          </a>
+                          </li>
+                        </ul>
+                        <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+
+
+
 								<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
 								class="box-border-nopadding">
 									<TR><TD width="100%" vAlign="top" align="left">
@@ -174,31 +179,30 @@ method="post">
 										</TABLE>
 									</TD></TR>
 								</TABLE>
-							</TD></TR>
-						</TABLE>
-					</TD>
-					</TR>
-					</feature:display>
-					</module:display>
-				</TABLE></TD></TR>
+</div>
+</div>
+</div>
+                </TD>
+                </TR>
+                </feature:display>
+                </module:display>
 				<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Issues" module="Issues">
-				<TR><TD bgcolor="#F4F4F2" vAlign="bottom" align="center" width="100%">
+				<TR><TD bgcolor="#F4F4F2" vAlign="bottom" width="100%">
 					<!-- issues -->
-					<TABLE width="96.5%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
-						<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
-							<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-                     	<TR bgcolor="#F4F4F2" height="17">
-                          	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-										<digi:trn key="aim:issues">Issues</digi:trn>
-									</TD>
-	                        <TD background="module/aim/images/corner-r.gif" height=17 width=17>
-									</TD>
-   	                  </TR>
-      	            </TABLE>
-						</TD></TR>
-						<TR><TD width="100%" bgcolor="#F4F4F2" align="center" class="box-border">
-							<TABLE width="100%" cellPadding="0" cellSpacing="1" vAlign="top" align="center" bgColor=#dddddd>
+<div id="content" class="yui-skin-sam" style="width:100%;"> 
+	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+                        <ul class="yui-nav">
+                          <li class="selected">
+                          <a>
+                          <div>
+                                <digi:trn key="aim:issues">Issues</digi:trn>
+                          </div>
+                          </a>
+                          </li>
+                        </ul>
+                        <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+					<TABLE width="100%" cellPadding="0" cellSpacing="1" vAlign="top" align="center" bgColor=#dddddd>
 	   	            	<logic:empty name="aimPhysicalProgressForm" property="issues">
 									<TR bgcolor="#f4f4f2"><TD align="center"><font color="red"><digi:trn key="aim:noIssues">No issues
 									</digi:trn></font></TD></TR>
@@ -246,7 +250,7 @@ method="post">
 																					<logic:iterate name="measure" property="actors" id="actor"
 																					type="org.digijava.module.aim.dbentity.AmpActor">
 																						<TR bgcolor="#ffffff"><TD>
-														</TD></TR>									<font color="#0000ff"><digi:trn key="aim:actor">Actor</digi:trn>: </font>
+                                                                                        <font color="#0000ff"><digi:trn key="aim:actor">Actor</digi:trn>: </font>
 																							<bean:write name="actor" property="name"/>
 																						</TD></TR>
 																					</logic:iterate>
@@ -264,16 +268,19 @@ method="post">
 									</logic:iterate>
 								</logic:notEmpty>
 							</TABLE>
-						</TD></TR>
-					</TABLE>
-					<TR><TD bgcolor="#F4F4F2">&nbsp;</TD></TR>
-				</TD></TR></feature:display></module:display>
+</div>
+</div>						
+</div>						
+				</TD></TR>
+                </feature:display>
+                </module:display>
 			</TABLE>
 		<!-- end -->
 	</TD></TR>
 	<TR><TD>&nbsp;</TD></TR>
 </TABLE>
-
+</TD></TR>
+</TABLE>
 </logic:equal>
 </digi:form>
 

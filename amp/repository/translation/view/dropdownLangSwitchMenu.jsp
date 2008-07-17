@@ -13,10 +13,10 @@
 				<bean:define id="langReferUrl" name="languages" property="referUrl" type="java.lang.String"/>
                 <c:choose>
                   <c:when test="${translationForm.referUrl == langReferUrl}">
-                    <li class="yuimenuitem yuimenuitem-checked">
+                    <li class="yuiampmenuitem yuiampmenuitem-checked first-of-type">
                   </c:when>
                   <c:otherwise>
-                    <li>
+                    <li class="yuiampmenuitem">
                   </c:otherwise>
                 </c:choose>                
 				<a href="#" onclick='SwitchLanguageMenu("<%= langReferUrl %>")'>

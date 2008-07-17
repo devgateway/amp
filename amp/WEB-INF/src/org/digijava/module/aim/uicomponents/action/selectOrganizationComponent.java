@@ -50,7 +50,7 @@ public class selectOrganizationComponent extends Action {
 	public ActionForward prepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		selectOrganizationComponentForm oForm = (selectOrganizationComponentForm) form;
 		HttpSession session = request.getSession();
-		ActionForm targetForm = (ActionForm) session.getAttribute(AddOrganizationButton.PARAM_PARAM_FORM_NAME);
+		Object targetForm =  session.getAttribute(AddOrganizationButton.PARAM_PARAM_FORM_NAME);
 
 		if ("true".equalsIgnoreCase(request.getParameter("reset"))) {
 			oForm.clearSelected();
@@ -283,14 +283,16 @@ public class selectOrganizationComponent extends Action {
 	public ActionForward setOrganizationToForm(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		selectOrganizationComponentForm eaForm = (selectOrganizationComponentForm) form;
 
-		AmpOrganisation org = DbUtil.getOrganisation(eaForm.getSelOrganisations()[0]);
+		Long id=Long.parseLong(request.getParameter("id"));
+		
+		AmpOrganisation org = DbUtil.getOrganisation(id);
 
 		if (!eaForm.isUseClient()) {
 			Field target = eaForm.getTargetForm().getClass().getDeclaredField(eaForm.getTargetProperty());
 			target.setAccessible(true);
 
 			target.set(eaForm.getTargetForm(), org);
-
+			eaForm.setAfterSelect(true);
 		}
 
 		return mapping.findForward("forward");

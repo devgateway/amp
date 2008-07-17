@@ -570,7 +570,6 @@ function fnGetSurvey() {
 					</c:if>
 				</tr>
 			    <feature:display  name="Paris Indicator" module="Add & Edit Activity">
-			    <c:if test="${aimEditActivityForm.govFlag == true}">
 			      <tr>
 			        <td>
 			          <IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
@@ -582,7 +581,6 @@ function fnGetSurvey() {
 			            </a>
 			        </td>
 			      </tr>
-			    </c:if>
 			    </feature:display>
 			    <module:display name="M & E" parentModule="MONITORING AND EVALUATING">
 				<tr>

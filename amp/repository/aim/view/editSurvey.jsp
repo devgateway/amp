@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -294,9 +294,7 @@
                                           ${aimEditActivityForm.ahsurvey.pointOfDeliveryDonor.name}
                                           </td>
                                           <td align="right">
-
-                                            <input type="button" value="<digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn>" onclick="openSelOrgPopup();" style="font-family:tahoma;font-size:8pt;" />
-                                          </td>
+										  	 <aim:addOrganizationButton useClient="false" form="${aimEditActivityForm.ahsurvey}"  property="pointOfDeliveryDonor" refreshParentDocument="true"><digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn></aim:addOrganizationButton>                                          </td>
                                         </tr>
                                       </TABLE>
                                      </td>

@@ -308,12 +308,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         eaForm.setActPrograms(prLst);
       }*/
 
-    if (tm != null && tm.getTeamType()
-       .equalsIgnoreCase("GOVERNMENT")) {
-       eaForm.setGovFlag(true);
-    } else {
-       eaForm.setGovFlag(false);
-   }
+   
         if (eaForm.getSteps() == null) {
             List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
             eaForm.setSteps(steps);

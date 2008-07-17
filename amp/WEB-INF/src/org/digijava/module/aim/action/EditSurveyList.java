@@ -39,8 +39,8 @@ public class EditSurveyList extends Action {
 
         
         // if user is not a DONOR then forward him to his portfolio
-        if (!tm.getTeamType().equalsIgnoreCase("GOVERNMENT"))
-            return mapping.findForward("viewMyDesktop");
+       // if (!tm.getTeamType().equalsIgnoreCase("GOVERNMENT"))
+        //      return mapping.findForward("viewMyDesktop");
 
         logger.debug("In edit survey list action");
 

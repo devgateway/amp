@@ -340,7 +340,8 @@
 												</c:if>
 										</td>
 										<td valign="top" bgcolor="#ffffff"  width="25%" style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
-												<bean:write name="euActivity" property="totalCostConverted" format="###,###,###"/>												
+												<bean:write name="euActivity" property="totalCostCurrency" /> &nbsp;
+												<bean:write name="euActivity" property="totalCost" format="###,###,###"/>												
 										</td>
 										<td valign="top" bgcolor="#f4f4f2" width="25%"  style="border-bottom: 1px solid #CCC; border-bottom-style: dashed;">
 												<bean:write name="euActivity" property="totalContributionsConverted" format="###,###,###"/>

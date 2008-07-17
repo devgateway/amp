@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpFunding;
 
 /**
  * <p>Title: </p>
@@ -127,10 +128,13 @@ public class DbUtil {
 
             Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
                                           AmpActivitySector.class.getName() +
-                                          " where not exists (from loc in class " +
+                                          " where exists (from fnd in class " +
+                                          AmpFunding.class.getName() +
+                                          " where sec.activityId.ampActivityId=fnd.ampActivityId.ampActivityId)" +
+                                          " and exists (from loc in class " +
                                           AmpActivityLocation.class.getName() +
-                                          " where loc.activity.ampActivityId=sec.activityId.ampActivityId" +
-                                          " and loc.location.region is null)" +
+                                          " where sec.activityId.ampActivityId=loc.activity.ampActivityId and" +
+                                          " loc.location.region is not null)" +
                                           " and size(sec.activityId.locations)>0" +
                                           " group by sec.sectorId");
 

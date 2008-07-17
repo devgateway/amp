@@ -75,8 +75,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String budgetCheckbox;
 	private double regionTotalDisb;
 	private AmpTeam team;
+	
 
 	//montenegro mission:
+	private Double ipaBudget=null; //EU total contribution
 	private String projectImpact=null;
 	private String activitySummary=null;
 	private String contractingArrangements=null;
@@ -5397,5 +5399,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setSecondarySectorVisible(String secondarySectorVisible) {
 		this.secondarySectorVisible = secondarySectorVisible;
+	}
+
+	public Double getIpaBudget() {
+		return ipaBudget;
+	}
+
+	public void setIpaBudget(Double ipaBudget) {
+		this.ipaBudget = ipaBudget;
 	}
 }

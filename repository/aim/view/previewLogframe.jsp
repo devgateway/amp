@@ -85,7 +85,9 @@
 												<bean:write name="aimEditActivityForm" property="title"/>
 											</logic:notEmpty>
 											,
-											[Location]
+											<c:forEach items="${aimEditActivityForm.selectedLocs}" var="loc">
+												<c:out value="${loc.country}" />
+											</c:forEach>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
 											<digi:trn key="aim:plogframe:programNameAndNumber">Program name and number</digi:trn>:
@@ -104,16 +106,16 @@
 										
 									</tr>
 									<tr>
-										<td valign="top"  width="50%" vAlign="center" align ="left" height="20">
+										<td valign="top"  width="50%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											&nbsp;
 										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
+										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:contractingPeriodExpires">Contracting period expires</digi:trn>:
 											<logic:notEmpty name="aimEditActivityForm" property="contractingDate">
 												<bean:write name="aimEditActivityForm" property="contractingDate"/>
 											</logic:notEmpty>
 										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
+										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:disbursementPeriodExpires">Disbursement period expires</digi:trn>:
 											<logic:notEmpty name="aimEditActivityForm" property="disbursementsDate">
 												<bean:write name="aimEditActivityForm" property="disbursementsDate"/>
@@ -124,13 +126,14 @@
 										<td valign="top"  width="50%" vAlign="center" align ="left" height="20">
 											&nbsp;
 										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
+										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:totalBudget">Total budget</digi:trn>:
 											<bean:write name="aimEditActivityForm" property="allCosts" format="###,###,###"/>
 										</td>
-										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
+										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:ipaBudget">IPA budget</digi:trn>:
-											???
+											<bean:write name="aimEditActivityForm" property="ipaBudget" format="###,###,###.##" />
+											
 										</td>
 									</tr>	
 								</table>

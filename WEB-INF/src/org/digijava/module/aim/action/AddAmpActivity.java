@@ -49,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -1394,9 +1395,21 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
               eaForm.setCurrentVal(null);
               eaForm.setCurrentValDate(null);
               eaForm.setIndicatorRisk(null);
+              eaForm.setIpaBudget(new Double(0));
+              
+              
 
             }
 
+            Double totalEUContrib = new Double(0);
+            
+            Iterator it2 = eaForm.getContracts().iterator();
+            while (it2.hasNext()) {
+            	IPAContract contr = (IPAContract) it2.next();
+            	totalEUContrib += contr.getTotalECContribIBAmount();
+            	totalEUContrib += contr.getTotalECContribINVAmount();
+            }
+            eaForm.setIpaBudget(totalEUContrib);
             //get the levels of risks
 
             Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();

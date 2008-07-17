@@ -147,6 +147,12 @@ public class AmpMessageActions extends DispatchAction {
                     messageForm.setMsgRefreshTimeCurr(new Long(-1));
                 }
 
+            }else if(tabIndex == 3){ //<--approvals
+            	count = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,false);
+                hiddenCount = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,true);
+            }else if(tabIndex == 4){//<--calendar events
+            	count = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,false);
+                hiddenCount = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,true);
             }
             messageForm.setAllmsg(count);
             messageForm.setHiddenMsgCount(hiddenCount);
@@ -762,7 +768,13 @@ public class AmpMessageActions extends DispatchAction {
 		}else if(message.getClassName().equalsIgnoreCase("a")){
 			clazz=AmpAlert.class;
 		}		
-		if(AmpMessageUtil.isInboxFull(clazz, memberId)){
+		
+		int maxStorage=-1;
+		AmpMessageSettings setting=AmpMessageUtil.getMessageSettings();
+		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
+			maxStorage=setting.getMsgStoragePerMsgType().intValue();
+		}
+		if(AmpMessageUtil.isInboxFull(clazz, memberId) || AmpMessageUtil.getInboxMessagesCount(clazz, memberId,false,false)>=maxStorage){
 			newMessageState.setMessageHidden(true);
 		}else{
 			newMessageState.setMessageHidden(false);

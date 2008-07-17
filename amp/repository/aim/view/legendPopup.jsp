@@ -27,7 +27,7 @@
 	</ul>
 </div>
 <div align="left" width="2" style="display: inline"
-	onMouseOver="stm(['legendPopup',document.getElementById('legendPopup').innerHTML],Style[0])" 
+	onMouseOver="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])" 
 	onMouseOut="htm()">
 	<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
 	<c:set var="translation">

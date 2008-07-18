@@ -93,12 +93,138 @@ function toggleSettings(){
 	</logic:notEmpty>	
 	
 </script>
+<script language="javascript">
+var allTabsPanel = null;
+var replaceableTabObject = null;
+var myTabsObject;
+
+	function scrollableDivStrips(oddColor, evenColor, hoverColor){
+		var divArray = document.getElementById("scrollableDiv").getElementsByTagName("DIV");
+		for(a=0; a<divArray.length; a++)
+		{
+			var currentDiv = divArray[a];
+			if(a%2==0) {
+				currentDiv.style.backgroundColor = evenColor;
+				currentDiv.previousColor = evenColor;
+			}
+			else
+			{
+				currentDiv.style.backgroundColor = oddColor;
+				currentDiv.previousColor = oddColor;
+			}
+			currentDiv.hoverColor = hoverColor;
+			currentDiv.onmouseout = setHover;
+			currentDiv.onmouseover = unsetHover;
+		
+		}
+		
+	}
+	function setHover()
+	{
+		this.style.backgroundColor = this.previousColor;
+	}
+	function unsetHover()
+	{
+		this.style.backgroundColor = this.hoverColor;
+	}
+
+	function initAllTabs() {
+		scrollableDivStrips("#dbe5f1","#ffffff","#a5bcf2");
+		//Initialize all tabs
+		myTabsObject = new YAHOOAmp.widget.TabView("demo"); 
+		//Create "More..." tab
+		var objeto = document.createElement("DIV");
+		objeto.innerHTML = "<digi:trn key="aim:moretabs">More Tabs...</digi:trn>";
+		objeto.title = "<digi:trn key="aim:clickforalltabs">Click to see all tabs</digi:trn>";;
+		objeto.onclick = changeTab;
+		objeto.id = "moreTabs";
+
+		//Add it to the Tab bar
+		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
+			labelEl: objeto
+			
+		}), myTabsObject.get('tabs').length-1); 
+
+		//Get the position and create the panel
+		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
+		var xPos = region.left;
+		var yPos = region.bottom;
+		allTabsPanel = new YAHOOAmp.widget.Panel("allTabsPanel1", {xy:[xPos,yPos], width:"320px", height:"225px", visible:false, constraintoviewport:true }  );
+		allTabsPanel.setHeader("<digi:trn key="aim:pleaseselect">Please select from the list below</digi:trn>");
+		allTabsPanel.setBody("");
+		allTabsPanel.render(document.body);
+		var divAllTabs = document.getElementById("allTabs");
+		divAllTabs.style.display 	= "block";
+		allTabsPanel.setBody(divAllTabs);
+	}
+
+	function setNewTab(url, label, labelComplete, id){
+		//Replace the tab with the new selection
+		if(replaceableTabObject != null)
+		{
+			myTabsObject.removeTab(replaceableTabObject);
+		}
+
+		var objeto = document.createElement("DIV");
+	
+		objeto.innerHTML = label;
+		objeto.id = "replaceableTab";
+
+		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
+			labelEl: objeto
+			
+		}), myTabsObject.get('tabs').length-2); 
+		var tabObject = document.getElementById("replaceableTab");
+
+		if(tabObject.parentNode.tagName == "A")
+		{
+			tabObject.parentNode.title = labelComplete;
+			tabObject.parentNode.rel= "ajaxcontentarea" 
+			tabObject.parentNode.href = url;
+			tabObject.parentNode.id = id;
+		}
+		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-3);
+		allTabsPanel.hide();
+		startajaxtabs("MyTabs");
+		reloadTab("MyTabs",id);
+	}
+
+    function changeTab(e) {  
+		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
+		var xPos = region.left;
+		var yPos = region.bottom;
+		allTabsPanel.moveTo(xPos,yPos);
+		allTabsPanel.show();
+    }
+
+	function mouseLeaves (element, evt) {
+		if (typeof evt.toElement != 'undefined' && typeof element.contains != 'undefined') {
+			return !element.contains(evt.toElement);
+		}
+		else if (typeof evt.relatedTarget != 'undefined' && evt.relatedTarget) {
+			return !containsElement(element, evt.relatedTarget);
+		}
+	}
+	
+	function containsElement(container, containee) {
+		while (containee) {
+			if (container == containee) {
+				return true;
+			}
+			containee = containee.parentNode;
+		}
+		return false;
+	}
+
+	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
+
+	
+
+</script>
 
 	
 <digi:context name="digiContext" property="context" />
-<style>
 
-</style>
 
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
@@ -136,6 +262,8 @@ function toggleSettings(){
 		<a href="/viewTeamReports.do?tabs=true" style="background:none;!important;color:blue;text-decoration:underline;"><digi:trn key="aim:viewallmydesktoptabs">View all of My Desktop Tabs</digi:trn></a>					
 	</li>
 </ul>									
+<div class="yui-content" style="display:none">
+</div>
 </div>
 <div id="ajaxcontentarea" class="contentstyle" style="border:1px solid black;min-height:410px;_height:410px;padding-left:5px;padding-top:5px;">
 <digi:trn key="aim:addATab">
@@ -158,4 +286,40 @@ Click on one of the tabs to display activities. You can add more tabs by using t
 	}
 </script>
 
+<style>
+DIV.panelList {
+	cursor:pointer;
+	padding:2px 2px 2px 2px;
+	color:black;
+	background-color:white;
+}
+
+</style>
 <div id="debug"></div>
+<div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
+	<logic:present name="myReports" scope="session">
+    	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
+		<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+          	<c:set var="showTab" value="true"/>
+			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+            	<c:if test="${tab.id == report.id}">
+                	<c:set var="showTab" value="false"/>
+                </c:if>
+            </logic:iterate>
+			<c:if test="${showTab}">
+					<logic:equal name="report" property="drilldownTab" value="true">
+	                    <c:set var="reportNameTrn">
+		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
+	                    </c:set>
+	                    <c:if test="${fn:length(reportNameTrn) > 25}" >
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${fn:substring(reportNameTrn, 0, 25)}" />", "TabDyn-<c:out value="${reportNameTrn}" />");' title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div>
+	                    </c:if>
+	                    <c:if test="${fn:length(reportNameTrn) <= 25}" >
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${reportNameTrn}" />", "TabDyn-<c:out value="${reportNameTrn}" />");'  title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${reportNameTrn}" /></div>
+	                    </c:if>
+					</logic:equal>
+            </c:if>
+		</logic:iterate>
+        </div>
+	</logic:present>
+</div>

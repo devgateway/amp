@@ -1,6 +1,10 @@
 package org.digijava.module.aim.util;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DecimalFormat;
@@ -31,6 +35,9 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -102,6 +109,8 @@ import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.common.util.DateTimeUtil;
+
+import com.sun.rowset.CachedRowSetImpl;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -391,6 +400,59 @@ public class DbUtil {
         return funding;
     }
 
+    public static int countActivitiesByQuery(String sQuery) {
+    	
+    	Session sess=null;
+    		Connection conn=null;
+    		CellColumn cc=null;
+    		try {
+    			sess= PersistenceManager.getSession();
+    			conn=sess.connection();
+    		} catch (HibernateException e) {
+    			logger.error(e);
+    			e.printStackTrace();
+    		} catch (SQLException e) {
+    			logger.error(e);
+    			e.printStackTrace();
+    		}
+    		
+    		int ii=0;
+
+    		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
+    				+ sQuery + " ) ";
+    		PreparedStatement ps;
+    		try {
+    			ps = conn.prepareStatement(query);
+
+    			ResultSet rs = ps.executeQuery();
+    			ResultSetMetaData rsmd;
+    			rsmd=rs.getMetaData();
+    			
+    			
+    			rs.first();
+    			ii=rs.getInt(1);
+    			System.out.println("................. "+rs.getInt(1));
+    			
+    			rs.close();
+
+    		} catch (SQLException e) {
+    			logger.error(e);
+    			e.printStackTrace();
+    		} 
+    		finally {
+    			try {
+    				if (sess != null) {
+    					PersistenceManager.releaseSession(sess);
+    				}
+    			} catch (Exception e) {
+    				logger.error(e);
+    				e.printStackTrace();
+    			}
+    		}
+    		//System.out.println("--------------------- "+ii);
+    	return ii;
+    }
+    
     public static String getTrnMessage(String keyTrn) {
         Session session = null;
         Collection funding = new ArrayList();

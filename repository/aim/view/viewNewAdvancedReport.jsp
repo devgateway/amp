@@ -231,7 +231,17 @@ session.setAttribute("progressValue", counter);
 	</td>
 	</tr>
 	<tr>
-		<td align="right">
+		<td>
+		<table width="100%">
+			<tr>
+			<td align="left">
+				<c:set var="accessTypeLocal"><%=arf.getAccessType().toString() %></c:set>
+				<c:if test="${accessTypeLocal == 'Management'}">
+                <digi:trn key="aim:noNewActivivUnvalidated">Number of new actvities that have never been validated</digi:trn>:
+                &nbsp;<%= arf.getActivitiesRejectedByFilter().toString() %>
+                </c:if>&nbsp;
+			</td>
+			<td align="right">
 			<span style="color: red;font-family: Arial;padding-right: 5px">
 				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 				<c:set var="AllAmount">
@@ -246,6 +256,9 @@ session.setAttribute("progressValue", counter);
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"><%=selCurrency %></digi:trn>
 				</logic:present>
 			</span>
+			</td>
+			</tr>
+		</table>
 		</td>
 	</tr>
 		<tr>

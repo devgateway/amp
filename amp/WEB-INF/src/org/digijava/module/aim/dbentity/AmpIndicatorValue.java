@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Indicator Value entity.
@@ -33,14 +34,14 @@ public class AmpIndicatorValue implements Serializable{
          to set and get date object value to(from) the date input field
         see addEditValue.jsp*/
         public String getValueDateString(){
-            if( valueDate!=null){
-               return  DateConversion.ConvertDateToString(valueDate);
+              if( valueDate!=null){
+               return  DateTimeUtil.formatDate(valueDate);
             }
              return null;
         }
 
-        public void setValueDateString(String valueDateString) {
-            valueDate=DateConversion.getDate(valueDateString);
+        public void setValueDateString(String valueDateString) throws Exception{
+            valueDate=DateTimeUtil.parseDate(valueDateString);
         }
 	
 	public Long getIndValId() {

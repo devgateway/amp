@@ -412,7 +412,7 @@ public class AmpMessageUtil {
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" and state.messageHidden="+true;	
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=true";	
 			query=session.createQuery(queryString);			
 			query.setParameter("tmId", tmId);			
 			hiddenMsgs=((Integer)query.uniqueResult()).intValue();
@@ -437,7 +437,7 @@ public class AmpMessageUtil {
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.sender=:tmId and msg.draft="+draft+" and state.messageHidden=true";	
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=true";	
 			query=session.createQuery(queryString);			
 			query.setParameter("tmId", tmId);	
 			if(query.list().size()>0){

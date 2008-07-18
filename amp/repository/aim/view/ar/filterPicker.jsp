@@ -72,13 +72,14 @@
 				</logic:notEqual>
 				<td colspan="5">
 					<html:select property="approvalStatusSelected"
-						style="width: 300px" styleClass="inp-text" disabled="${accessType}">
+						style="width: 300px" styleClass="inp-text" >
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>
 						</html:option>
 						<html:option value="0" style="color:green">
 							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 						</html:option>
+						<logic:notEqual name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
 						<html:option value="3" style="color:red">
 							<digi:trn key="rep:filter:ExistingDraft">Existing Draft</digi:trn>
 						</html:option>
@@ -88,6 +89,7 @@
 						<html:option value="2" style="color:green">
 							*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 						</html:option>
+						</logic:notEqual>
 					</html:select>
 					</td>
 				</tr>

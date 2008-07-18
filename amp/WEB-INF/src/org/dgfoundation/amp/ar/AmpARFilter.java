@@ -49,6 +49,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
+
 /**
  * Filtering bean. Holds info about filtering parameters and creates the
  * filtering query
@@ -68,7 +69,10 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set sectors = null;
 	private Set selectedSectors = null;
-
+	
+	@PropertyListableIgnore
+	private Long activitiesRejectedByFilter;
+	
 	@PropertyListableIgnore
 	private Set secondarySectors = null;
 	private Set selectedSecondarySectors = null;
@@ -77,6 +81,9 @@ public class AmpARFilter extends PropertyListable {
 	private List nationalPlanningObjectives;
 	private Set selectedNatPlanObj;
 
+	@PropertyListableIgnore
+	private String teamAccessType;
+	
 	@PropertyListableIgnore
 	private List primaryPrograms;
 	private Set selectedPrimaryPrograms;
@@ -203,8 +210,9 @@ public class AmpARFilter extends PropertyListable {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
-
 		this.setAmpTeams(new TreeSet());
+		
+		this.setAccessType(tm.getTeamAccessType());
 		
 		String ampReportId = request.getParameter("ampReportId");
 		if (ampReportId == null) {
@@ -315,17 +323,25 @@ public class AmpARFilter extends PropertyListable {
 		Set<String> activityStatus = new HashSet<String>();
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
+		String NO_MANAGEMENT_ACTIVITIES="";
 		if("Management".equals(this.getAccessType()))
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE approval_status IN ("+Util.toCSString(activityStatus)+") AND amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") " + " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )";
-		else
+		else{
+			
 			TEAM_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id IN ("
 				+ Util.toCSString(ampTeams)
 				+ ") "
 				+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
 				+ Util.toCSString(ampTeams) + ") )";
+		}
+		NO_MANAGEMENT_ACTIVITIES +="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IS NOT NULL AND amp_team_id AND draft<>true IN ("
+			+ Util.toCSString(ampTeams)
+			+ ") "
+			+ " OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("
+			+ Util.toCSString(ampTeams) + ") )";
 			
 
 	// computed workspace filter -- append it to the team filter so normal
@@ -338,9 +354,19 @@ public class AmpARFilter extends PropertyListable {
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
 						Util.toCSString(activityStatus)	+") )";
+				NO_MANAGEMENT_ACTIVITIES += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
+					+ Util.toCSString(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
+					Util.toCSString(activityStatus)	+") )";
+				NO_MANAGEMENT_ACTIVITIES +=" OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
+					+ Util.toCSString(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
+					Util.toCSString(activityStatus)	+") )";
 		
 			}
-		
+			
+		int c = Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		this.setActivitiesRejectedByFilter(new Long(c));
+		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
+
 		String STATUS_FILTER = "SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("
 				+ Util.toCSString(statuses) + ")";
 
@@ -403,7 +429,7 @@ public class AmpARFilter extends PropertyListable {
 			actStatusValue="1";
 			break;
 		case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-			actStatusValue=" approval_status='edited' and draft !=true";break;
+			actStatusValue=" approval_status='edited' and draft <>true";break;
 		case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
 			actStatusValue=" approval_status='started' and draft=true ";break;
 		case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
@@ -677,6 +703,7 @@ public class AmpARFilter extends PropertyListable {
 					+ jointCriteria.toString();
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
+		DbUtil.countActivitiesByQuery(this.generatedFilterQuery);
 
 	}
 
@@ -1186,6 +1213,22 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setAccessType(String accessType) {
 		this.accessType = accessType;
+	}
+
+	public Long getActivitiesRejectedByFilter() {
+		return activitiesRejectedByFilter;
+	}
+
+	public void setActivitiesRejectedByFilter(Long activitiesRejectedByFilter) {
+		this.activitiesRejectedByFilter = activitiesRejectedByFilter;
+	}
+
+	public String getTeamAccessType() {
+		return teamAccessType;
+	}
+
+	public void setTeamAccessType(String teamAccessType) {
+		this.teamAccessType = teamAccessType;
 	}
 
 }

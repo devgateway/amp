@@ -427,12 +427,8 @@ public class DbUtil {
     			ResultSet rs = ps.executeQuery();
     			ResultSetMetaData rsmd;
     			rsmd=rs.getMetaData();
-    			
-    			
     			rs.first();
     			ii=rs.getInt(1);
-    			System.out.println("................. "+rs.getInt(1));
-    			
     			rs.close();
 
     		} catch (SQLException e) {

@@ -1,63 +1,183 @@
-function addUserOrTeam(){
-		
-	var reslist = document.getElementById('whoIsReceiver');
-    var selreceivers=document.getElementById('selreceivers');
 
-    if (reslist == null) {
-        return false;
-    }
-	
-    var index = reslist.selectedIndex;
-    if (index != -1) {
-        for(var i = 0; i < reslist.length; i++) {
-            if (reslist.options[i].selected){
-              if(selreceivers.length!=0){
-                var flag=false;
-                for(var j=0; j<selreceivers.length;j++){
-                  if(selreceivers.options[j].value==reslist.options[i].value && selreceivers.options[j].text==reslist.options[i].text){
-                    flag=true;
-                  }
-                }
-                if(!flag){
-                  addOnption(selreceivers,reslist.options[i].text,reslist.options[i].value);
-                }
-              }else{
-                addOnption(selreceivers,reslist.options[i].text,reslist.options[i].value);
-              }
-            }	
-        }
-    }
-    return false;
-		
+var MyArray=new Array();
+
+function initMyArray(){
+  var reslist = document.getElementById('whoIsReceiver');
+  var teamIndex = 0;
+  for(var i = 0; i < reslist.length; i++) {
+    if(reslist.options[i].value.indexOf('t')==0){//it is a team
+      MyArray[teamIndex]=new Array();
+      MyArray[teamIndex][0]=reslist.options[i];
+      teamIndex++;
+     }
+  }
 }
-	
-function addOnption(list, text, value){
+function addUserOrTeam(){
+    
+  var reslist = document.getElementById('whoIsReceiver');
+  var selreceivers=document.getElementById('selreceivers');
+
+  if(reslist == null) {
+    return false;
+  }
+  var Mindex=reslist.selectedIndex;
+    
+  initMyArray();
+  
+  if(selreceivers.length!=0){
+    getCurrentSelectedReceivers();
+  }
+  if(Mindex==0){//user selected ALL
+    selectAllReceivers();
+  }
+  else if (Mindex != -1) {
+    for(var i = 0; i < reslist.length; i++) {
+      if(reslist.options[i].selected){
+        if(reslist.options[i].value.indexOf('t')==0){//the option is a team
+          var Myrow=getTeamRow(reslist.options[i].value);
+          //clean all row
+          for(var col=1; col<MyArray[Myrow].length; col++){
+             MyArray[Myrow][col]=null;
+          }
+          var Mycol=1;
+          for(var index=0; index<reslist.length; index++){
+            if(document.getElementById('whoIsReceiver')[index].id==MyArray[Myrow][0].value){
+              MyArray[Myrow][Mycol]=document.getElementById('whoIsReceiver')[index];
+              Mycol++
+            }
+          }
+        }  
+        else{//the option is a member
+          if(!isOptionSelected(reslist.options[i])){//it is not at the list yet
+            var Myrow=getTeamRow(reslist.options[i].id);
+            var Mycol=MyArray[Myrow].length;
+            MyArray[Myrow][Mycol]=reslist.options[i];
+          } 
+        }
+      }
+    }
+    showReceivers();
+  }
+  return false;
+}
+function getTeamRow(idTeam){
+  for(var row=0; row<MyArray.length; row++){
+    if(MyArray[row][0].value==idTeam){
+      return row;
+    }
+  }  
+}
+function isOptionSelected(option){
+  var selreceivers=document.getElementById('selreceivers');
+  for(var j=0; j<selreceivers.length;j++){
+    if(selreceivers.options[j].value==option.value){
+      return true;
+    }
+  }
+  var row=getTeamRow(option.id);
+  for(var col=1;col<MyArray[row].length;col++){
+    if(MyArray[row][col].id=option.id){
+      return true;
+    }
+  }
+  return false
+}
+
+function selectAllReceivers(){
+  var reslist = document.getElementById('whoIsReceiver');
+  var selreceivers=document.getElementById('selreceivers');
+  for(var h; h<selreceivers.length; h++){
+    selreceivers.options[h]=null
+  }  
+  selreceivers.options.length=0;
+  for(var i=1; i<reslist.length; i++){
+    addOnption(selreceivers,reslist[i].text,reslist[i].value, reslist[i].id);
+  }      
+}
+function showReceivers(){
+  var selreceivers=document.getElementById('selreceivers');
+  for(var h; h<selreceivers.length; h++){
+    selreceivers.options[h]=null
+  }  
+  selreceivers.options.length=0;
+  for(var i=0; i<MyArray.length; i++){
+    if(MyArray[i][1]!=null){
+      for(var j=0; j<MyArray[i].length; j++){
+        if(MyArray[i][j]!=null)
+          addOnption(selreceivers,MyArray[i][j].text,MyArray[i][j].value, MyArray[i][j].id);
+        else
+        break;
+      }
+    }
+  }
+}
+function getCurrentSelectedReceivers(){
+  var selreceivers=document.getElementById('selreceivers');
+  for(var i = 0; i < selreceivers.length; i++) {
+    if(selreceivers.options[i].id.indexOf('t')==0){//filters team members, they have id=team's id
+      var row = getTeamRow(document.getElementById('selreceivers')[i].id);
+      var col = MyArray[row].length;
+      MyArray[row][col]=selreceivers.options[i];
+    }
+  }
+} 
+function addOnption(list, text, value, id){
     if (list == null) {
         return;
     }
     var option = document.createElement("OPTION");
     option.value = value;
     option.text = text;
+    option.id = id;
     list.options.add(option);
     return false;
 }
-	
+  
 function removeUserOrTeam() {
-	var tobeRemoved=document.getElementById('selreceivers');
-	if(tobeRemoved==null){
-		return;
-	}		
-	
-	for(var i=tobeRemoved.length-1; i>=0; i--){
-		if(tobeRemoved.options[i].selected){
-			tobeRemoved.options[i]=null;
-		}			
-	}			
+  var tobeRemoved=document.getElementById('selreceivers');
+  if(tobeRemoved==null){
+    return;
+  }   
+  var teamId=-1;
+  for(var i=document.getElementById('selreceivers').length-1; i>=0; i--){
+    if(document.getElementById('selreceivers')[i].selected){
+      if(document.getElementById('selreceivers')[i].value.indexOf('t')==0){//it's a team
+        var elem = document.getElementById('selreceivers').length
+        for(var j=elem-1; j>=0; j--){
+          if(document.getElementById('selreceivers')[j].id == document.getElementById('selreceivers')[i].value){
+            document.getElementById('selreceivers')[j]=null;
+          }
+        }
+      }
+      else{// it is a team member
+        //get team's id from the team member
+        teamId = document.getElementById('selreceivers')[i].id;
+      }
+      document.getElementById('selreceivers')[i]=null;
+    }     
+  }
+  if(teamId!=-1){//if a member has been removed
+    var noMember=true;
+    //check if another member belonging to the same team exists
+      for(var i=document.getElementById('selreceivers').length-1; i>=0; i--){
+        if(document.getElementById('selreceivers')[i].id==teamId){
+          noMember=false;//there is member belonging to the same team
+      }
+    }
+    if(noMember){
+      //there are not members so, remove the team from the receivers
+      for(var i=document.getElementById('selreceivers').length-1; i>=0; i--){
+        if(document.getElementById('selreceivers')[i].value==teamId){
+          document.getElementById('selreceivers')[i]=null;
+        }
+      }     
+    }
+  }     
 }
 
 function addActionToURL(actionName){
-	var fullURL=document.URL;
-	var lastSlash=fullURL.lastIndexOf("/");
-	var partialURL=fullURL.substring(0,lastSlash);
-	return partialURL+"/"+actionName;
+  var fullURL=document.URL;
+  var lastSlash=fullURL.lastIndexOf("/");
+  var partialURL=fullURL.substring(0,lastSlash);
+  return partialURL+"/"+actionName;
 }

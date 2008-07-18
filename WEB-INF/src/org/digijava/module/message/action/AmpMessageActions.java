@@ -399,6 +399,8 @@ public class AmpMessageActions extends DispatchAction {
     public ActionForward checkForNewMessage(ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {
     	AmpMessageForm messagesForm=(AmpMessageForm)form;
     	
+    	messagesForm.setInboxFull(false);
+    	
     	HttpSession session = request.getSession();
     	TeamMember teamMember = new TeamMember();        	  
     	 // Get the current member who has logged in from the session

@@ -291,8 +291,8 @@ public class IndicatorUtil {
 		}
 		return result;
 	}
-	
-	/**
+        
+        /**
 	 * Returns any indicator connection type by its id and class.
 	 * @param <E>
 	 * @param connId
@@ -579,6 +579,25 @@ public class IndicatorUtil {
 			throw new Exception("cannot load Indicator value",e);			
 		}
 		return ampIndValue;
+	}
+        
+        /**
+	 * loads Indicator value for the specified indicatorValue Id;
+	 * @param indicatorValueId
+	 * @return Indicator value
+	 * @throws DgException
+	 */
+	public static AmpIndicatorValue getAmpIndicatorValue (Long indicatorValueId) throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();				
+		try {
+	
+                 AmpIndicatorValue ampIndValue =(AmpIndicatorValue) session.load(AmpIndicatorValue.class, indicatorValueId);	
+                 return ampIndValue;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DgException("cannot load Indicator value",e);			
+		}
+		
 	}
 	
 	/**

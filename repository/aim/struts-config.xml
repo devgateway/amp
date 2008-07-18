@@ -1137,7 +1137,7 @@
   	<action name="aimSelectOrganizationForm" path="/aim/selectOrganizationComponent" scope="session" type="org.digijava.module.aim.uicomponents.action.selectOrganizationComponent">
       <forward name="forward" path="/showLayout.do?layout=aim_orgComponentPopUp" />
     </action>
-
+    
 
     <action name="aimEditActivityForm" path="/aim/selectOrganization" scope="session" type="org.digijava.module.aim.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />

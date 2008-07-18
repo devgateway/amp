@@ -21,8 +21,11 @@
 		
 		<page page="addWidgetColumnPopup" name="popup_addWidgetColumn" title="Add column to widget"/>
 		<page page="tableTeaser" name="preview_tableWidget" title="Preview table widget data"/>
+                <page page="indicatorSectorRegionManager" name="gis_indicatorSectorManager" title=" Indicator Sector Manager"/>
+                <page page="createIndicatorSector" name="gis_createIndicatorSector" title="Create Indicator Sector "/>
+                <page page="addEditValue" name="gis_addEditValue" title="Add/Edit Value"/>
+                
 		
-
 	</secondary-pages>
 	<module>
 		<teaser name="gisMap" action="dashboardMapTeaser.do">showVerticalNavigation.jsp</teaser>			

@@ -356,6 +356,19 @@
                             </td>
                           </tr>
                           </feature:display>
+                            <feature:display  name="Indicator Sector Region" module="GIS DASHBOARD">
+                          <tr>
+                            <td class="f-names" nowrap="nowrap">
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="gis:clickToViewIndicatorSectorRegion">Click here to view Indicator Sector Region Manager</digi:trn>
+                              </c:set>
+                              <a href="/gis/indSectRegManager.do~actType=viewAll" title="${translation}">
+                                <digi:trn key="gis:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
+                              </a>
+                            </td>
+                          </tr>
+                          </feature:display>
                           <feature:display  name="Widget Places" module="GIS DASHBOARD">
                           <tr>
                             <td class="f-names" nowrap="nowrap">

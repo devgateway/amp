@@ -57,7 +57,7 @@ public class EUActivity implements Serializable, Identifiable {
 
 
 	public double getTotalCostConverted() throws AimException {
-		double usdAmount = CurrencyWorker.convertToUSD(totalCost.doubleValue(),totalCostCurrency.getCurrencyCode());
+		double usdAmount = CurrencyWorker.convertToUSD(getTotalCost().doubleValue(),totalCostCurrency.getCurrencyCode());
 		double finalAmount=CurrencyWorker.convertFromUSD(usdAmount,desktopCurrencyId);
 		return finalAmount;
 	}

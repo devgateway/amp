@@ -274,32 +274,33 @@
 																	<tr>
 																		<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																		<td align="left"> 
-                                                                        	<html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
-																				<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
-																				<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
-																			</html:select>																												                                                																																												
-																		</td>
-																	<tr>
-																	</tr>	
-																	<tr>
-																		<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
-													                    <td>
-													                        <table border="0" >
-													                            <tr>
-													                                <td valign="top">
-													                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
-																							<logic:empty name="messageForm" property="teamMapValues">
-																								<option value="-1">No receivers</option>
-																							</logic:empty>
-																							<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
-	                                                                                      	    <option value="all"><digi:trn key="message:AllTeams">ALL</digi:trn></option>
-    `                                                                                           	<c:forEach var="team" items="${messageForm.teamMapValues}">
-                                                                                                    	<logic:notEmpty name="team" property="members">
-     ```	                                                                                              	<option title="${team.name}" value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">${team.name}</option>
-                                                                                                                        <c:forEach var="tm" items="${team.members}">
-                                                                                                                       		<option title="${tm.memberName}" value="m:${tm.memberId}" style="font:italic;font-size:11px;" >${tm.memberName}</option>
-                                                                                                                         </c:forEach>
-                                                                                                                     </logic:notEmpty>											                                                		
+                                                                                                                                                    <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
+																							<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
+																							<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
+																						</html:select>																												                                                																																												
+																					</td>
+																				<tr>
+																				</tr>	
+                                                                                                                                                               
+																				<tr>
+																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
+																                    <td>
+																                        <table border="0" >
+																                            <tr>
+																                                <td valign="top">
+																                                   <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px" >
+																										<logic:empty name="messageForm" property="teamMapValues">
+																											<option value="-1">No receivers</option>
+																										</logic:empty>
+																										<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+                                                                                                    	    <option value="all" ><digi:trn key="message:AllTeams">ALL</digi:trn></option>
+                                                                                                               	<c:forEach var="team" items="${messageForm.teamMapValues}">
+																														<logic:notEmpty name="team" property="members">
+																															<option value="t:${team.id}" style="font:italic;color:black">---${team.name}---</option>
+																                                                			<c:forEach var="tm" items="${team.members}">
+																                                                				<option value="m:${tm.memberId}" style="font:italic;color:grey" id="t:${team.id}">${tm.memberName}</option>
+																                                                			</c:forEach>
+																														</logic:notEmpty>											                                                		
                                                                                                                 </c:forEach>
 																                                        </logic:notEmpty>
 																                                	</select>																                                         

@@ -15,7 +15,7 @@
 	  <form-bean name="gisWidgetTeaserForm" type="org.digijava.module.gis.form.WidgetTeaserForm"/>
 	  <form-bean name="gisWidgetChartForm" type="org.digijava.module.gis.form.ShowWidgetChartForm"/>
 	  <form-bean name="gisSectorByDonorTeaserForm" type="org.digijava.module.gis.form.SectorByDonorTeaserForm"/>
-	  
+	  <form-bean name="gisIndicatorSectorRegionForm" type="org.digijava.module.gis.form.IndicatorSectorRegionForm" />
 	</form-beans>
 	
 	<global-forwards>
@@ -66,6 +66,12 @@
     	</action>
     	<action name="gisTableWidgetTeaserForm" path="/gis/previewTable" scope="request" type="org.digijava.module.gis.action.PreviewTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
+    	</action>
+        
+        <action name="gisIndicatorSectorRegionForm" path="/gis/indSectRegManager"  type="org.digijava.module.gis.action.IndicatorSectorManager" validate="false" parameter="actType">
+    	  <forward name="forward" path="/showLayout.do?layout=gis_indicatorSectorManager" />
+          <forward name="create" path="/showLayout.do?layout=gis_createIndicatorSector" />
+          <forward name="addValue" path="/showLayout.do?layout=gis_addEditValue" />
     	</action>
 
 		  <action name="gisIndicatorChartForm" parameter="actType"

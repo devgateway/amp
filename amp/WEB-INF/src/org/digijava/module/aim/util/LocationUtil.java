@@ -887,4 +887,37 @@ public class LocationUtil {
             return indic1.getName().compareTo(indic2.getName());
         }
         }
+        /**
+         * Saves location into the database
+         * @param AmpLocation bean
+         */
+         
+       public static void saveLocation(AmpLocation loc) throws DgException{
+        Session session = null;
+        Transaction tx = null;
+
+
+        try {
+
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            session.saveOrUpdate(loc);
+            tx.commit();
+        } catch (Exception e) {
+
+            if (tx != null) {
+                try {
+                    tx.rollback();
+
+                } catch (HibernateException ex) {
+                     logger.error("Unable to rollback transaction  "
+					+ e.getMessage());
+                }
+            }
+            logger.error("Unable to save location into the database "
+					+ e.getMessage());
+             throw new DgException(e);
+        }
+
+    }
 }

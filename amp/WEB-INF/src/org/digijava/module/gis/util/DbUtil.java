@@ -255,6 +255,29 @@ public class DbUtil {
             }
             return retVal;
     }
-
+    
+    /**
+     * loads  all IndicatorSector ;
+     * @param indicatorValueId
+     * @return IndicatorSector list
+     * 
+     */
+    
+ public static List getAllIndicatorSectors() {
+       List retVal = null;
+       Session session = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           String query=" from " +
+                                         IndicatorSector.class.getName() +
+                                         " indsec ";
+           Query q = session.createQuery(query);
+          
+           retVal = q.list();
+       } catch (Exception ex) {
+           logger.debug("Unable to get indicators from DB", ex);
+       }
+       return retVal;
+   }
 
 }

@@ -7,6 +7,7 @@
 		<action login-required="true" pattern="/tableWidgetTeaser" />
 		<action login-required="true" pattern="/mapLoader" /> 
 		<action login-required="true" pattern="/gisService" /> 
+                <action login-required="true" pattern="/indSectRegManager" />
 	</security>
 	
 	<hibernate-classes required="false">

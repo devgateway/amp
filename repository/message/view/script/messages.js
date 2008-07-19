@@ -76,7 +76,7 @@ function isOptionSelected(option){
   }
   var row=getTeamRow(option.id);
   for(var col=1;col<MyArray[row].length;col++){
-    if(MyArray[row][col].id=option.id){
+    if(MyArray[row][col].value==option.value){
       return true;
     }
   }

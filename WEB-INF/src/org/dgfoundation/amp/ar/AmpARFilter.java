@@ -212,7 +212,6 @@ public class AmpARFilter extends PropertyListable {
 				Constants.CURRENT_MEMBER);
 		this.setAmpTeams(new TreeSet());
 		
-		this.setAccessType(tm.getTeamAccessType());
 		
 		String ampReportId = request.getParameter("ampReportId");
 		if (ampReportId == null) {
@@ -248,14 +247,17 @@ public class AmpARFilter extends PropertyListable {
 			
 			//TreeSet allManagementTeams=(TreeSet) TeamUtil.getAllRelatedTeamsByAccessType("Management");
 			TreeSet teams=new TreeSet();
-			teams.add(ampReport.getOwnerId().getAmpTeam());
-			teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
-			this.setAmpTeams(teams);
-			//this.setAmpTeams(team);
-//			Set teamAO = TeamUtil.getComputedOrgs(this.getAmpTeams());
-//
-//			if (teamAO != null && teamAO.size() > 0)
-//				this.setTeamAssignedOrgs(teamAO);
+			this.setAccessType("team");
+			if (ampReport.getOwnerId()!=null){
+				teams.add(ampReport.getOwnerId().getAmpTeam());
+				teams.addAll(TeamUtil.getAmpLevel0Teams(ampReport.getOwnerId().getAmpTeam().getAmpTeamId()));
+				this.setAmpTeams(teams);
+			}else{
+				teams.add(-1);
+				this.setAmpTeams(teams);
+				logger.error("Error getOwnerId() is null setting team to -1");
+				
+			}
 		}
 
 		if (renderStartYear == null) {

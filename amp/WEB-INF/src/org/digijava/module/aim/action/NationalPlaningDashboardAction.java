@@ -75,7 +75,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 				new ProgramUtil.ProgramHierarchyDefinition());
 		npdForm.setProgramTree(tree);
 		// generate XML from hierarchy
-		String xml = ProgramUtil.getThemesHierarchyXML(themes);
+		String xml = ProgramUtil.getThemesHierarchyXML(themes,request);
 		npdForm.setXmlTree(xml);
 
 		AmpTheme currentTheme = null;

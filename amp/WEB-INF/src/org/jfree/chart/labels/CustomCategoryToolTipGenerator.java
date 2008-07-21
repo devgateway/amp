@@ -24,7 +24,7 @@ public class CustomCategoryToolTipGenerator
      * The default format string.
      */
     public static final String DEFAULT_TOOL_TIP_FORMAT_STRING
-            = "({0}, {1}) = {2} \rBaseline: {4} \rCurrent: {5} - {6} \rTarget: {7}";
+            = "({0}, {1}) = {2} \rBaseline: {4} \rCurrent: {5} \rTarget: {7}";
 
     /**
      * Creates a new generator with a default number formatter.
@@ -89,7 +89,7 @@ public class CustomCategoryToolTipGenerator
                 for (int i = 4; i < itemsTmp.length; i++) {
                     itemsTmp[i] = tip[i - 4];
                 }
-
+               
                 result = MessageFormat.format(getLabelFormat(), itemsTmp);
             } else {
                 result = MessageFormat.format(getLabelFormat(), items);

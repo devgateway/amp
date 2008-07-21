@@ -15,6 +15,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
 <script langauage="JavaScript">
 
 	function validate(record){
@@ -75,7 +81,10 @@
 												<td>&nbsp;</td>
 											</tr>
 											<tr>
-												<td align="center"><digi:trn key="message:refreshTime">Message Refresh Time(minutes)</digi:trn></td>
+												<td align="center" >
+													<digi:trn key="message:refreshTime">Message Refresh Time(minutes)</digi:trn> &nbsp;
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm(['help balloon','From here you set message refresh time <br>This is in hom many minutes system should check for new messages'],Style[13])" onmouseout="htm()"/>
+												</td>
 												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
 												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew" /></td>
 												<td align="center">

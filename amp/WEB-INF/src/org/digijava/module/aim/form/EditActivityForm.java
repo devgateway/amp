@@ -929,6 +929,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
                       contracts=null;
                       selContractId=null;
                       indicatorsME=null;
+                      steps=null;
                      
 
 		}

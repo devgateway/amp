@@ -130,9 +130,10 @@ public class AddAmpActivity extends Action {
        eaForm.setGovFlag(false);
    }*/
 
-   
+   if(eaForm.getSteps()==null){
           List steps = ActivityUtil.getSteps();
           eaForm.setSteps(steps);
+   }
       
       
     if(eaForm.getClassificationConfigs()==null){

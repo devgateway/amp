@@ -3534,7 +3534,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
          * returns visible Steps (depends on features and module names in editActivityMenu.jsp)
 	 * @return List of visible Steps
 	 */
-        public static List getSteps(boolean govFlag){
+        public static List getSteps(){
             List<Step> steps=new ArrayList();
             Long templId=FeaturesUtil.getGlobalSettingValueLong("Visibility Template");
             AmpFeaturesVisibility step1=FeaturesUtil.getFeatureByName("Identification", "Project ID and Planning", templId);// step 1
@@ -3548,10 +3548,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             AmpFeaturesVisibility step6=FeaturesUtil.getFeatureByName("Components", "Components", templId);
             AmpFeaturesVisibility step6_2=FeaturesUtil.getFeatureByName("Issues", "Issues", templId);
             AmpModulesVisibility step7=FeaturesUtil.getModuleByName("Document", "PROJECT MANAGEMENT", templId);
-            AmpFeaturesVisibility step10=null;
-            if(govFlag){
-             step10=FeaturesUtil.getFeatureByName("Paris Indicator", "Add & Edit Activity", templId);
-            }
+            AmpFeaturesVisibility step10=FeaturesUtil.getFeatureByName("Paris Indicator", "Add & Edit Activity", templId);
+            
             AmpModulesVisibility step11=FeaturesUtil.getModuleByName("M & E", "MONITORING AND EVALUATING", templId);
             AmpFeaturesVisibility step12=FeaturesUtil.getFeatureByName("Costing", "Activity Costing", templId);
             AmpFeaturesVisibility step13=FeaturesUtil.getFeatureByName("Level Links", "Activity Levels", templId);
@@ -3620,7 +3618,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             if (step10 != null) {
                 Step newStep10 = new Step();
                 newStep10.setStepActualNumber(steps.size() + 1);
-                newStep10.setStepNumber("9");
+                newStep10.setStepNumber("17");
                 steps.add(newStep10);
             }
             

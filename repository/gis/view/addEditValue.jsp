@@ -95,7 +95,7 @@
             <td>
                 <html:hidden name="gisIndicatorSectorRegionForm" property="indSectId"/>
                 <table width="70%">
-                    <tr>
+                    <tr bgColor="#d7eafd">
                         <td align="center" valign="middle" nowrap>
                             <b><digi:trn key="gis:addEditValue:actualbasetarget">Actual/Base/Target</digi:trn></b>
                         </td>

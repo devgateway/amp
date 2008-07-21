@@ -41,7 +41,9 @@ public class AmpIndicatorValue implements Serializable{
         }
 
         public void setValueDateString(String valueDateString) throws Exception{
-            valueDate=DateTimeUtil.parseDate(valueDateString);
+            if(!valueDateString.trim().equals("")){
+               valueDate=DateTimeUtil.parseDate(valueDateString);
+            }   
         }
 	
 	public Long getIndValId() {

@@ -1622,7 +1622,7 @@ public class ProgramUtil {
 		}
 
 
-        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes) {
+        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes, HttpServletRequest request) {
             String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
             result += "<progTree>\n";
             if (allAmpThemes != null && allAmpThemes.size() > 0) {
@@ -1634,7 +1634,7 @@ public class ProgramUtil {
                 //get XML from each top level item. They will handle subitems.
                 for (Iterator treeItemIter = themeTree.iterator(); treeItemIter.hasNext(); ) {
                     TreeItem item = (TreeItem) treeItemIter.next();
-                    result += item.getXml();
+                    result += item.getXml(request);
                 }
             }
             result += "</progTree>\n";

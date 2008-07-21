@@ -112,7 +112,7 @@
 																			bgcolor="#eeeeee">
 																				<tr>
 																					<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Amount Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:totalCommitments">Total Commitments</digi:trn></td></field:display>
 																					<field:display name="Components Currency Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																					<field:display name="Components Date Commitments" feature="Activity - Component Step"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																				</tr>
@@ -122,7 +122,7 @@
 																					<tr bgcolor="#ffffff">
 																						<field:display name="Components Actual/Planned Commitments" feature="Activity - Component Step"><td>
 																							<digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td></field:display>
-																						<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"><td align="right">
+																						<field:display name="Components Amount Commitments" feature="Activity - Component Step"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
 																						</td></field:display>
@@ -153,7 +153,7 @@
 																				<tr>
 
 																					<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Amount Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:totalDisbursements">Total Disbursements</digi:trn></td></field:display>
 																					<field:display name="Components Currency Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																					<field:display name="Components Date Disbursements" feature="Activity - Component Step"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																				</tr>
@@ -165,7 +165,7 @@
 																						<field:display name="Components Actual/Planned Disbursements" feature="Activity - Component Step"><td>
 																							<digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
 																						</td></field:display>
-																						<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"><td align="right">
+																						<field:display name="Components Amount Disbursements" feature="Activity - Component Step"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${disbursement.transactionAmount}"/>
 																						</td></field:display>
@@ -193,7 +193,7 @@
 																			bgcolor="#eeeeee">
 																				<tr>
 																					<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Amount Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:totalExpenditures">Total Expenditures</digi:trn></td></field:display>
 																					<field:display name="Components Currency Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																					<field:display name="Components Date Expenditures" feature="Activity - Component Step"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																				</tr>
@@ -205,7 +205,7 @@
 																					<field:display name="Components Actual/Planned Expenditures" feature="Activity - Component Step"><td>
 																						<digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
 																					</td></field:display>
-																					<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step">
+																					<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
 																					<td align="right">
 																						<FONT color=blue>*</FONT>
 																						<c:out value="${expenditure.transactionAmount}"/>

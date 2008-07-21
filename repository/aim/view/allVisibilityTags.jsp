@@ -44,7 +44,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Physical Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -256,9 +255,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Components Grand Total Disbursements" feature="Activity - Component Step"></field:display>
 <field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display>
 <field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display>
-<field:display name="Components Total Amount Commitments" feature="Activity - Component Step"></field:display>
-<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step"></field:display>
-<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step"></field:display>
+<field:display name="Components Amount Commitments" feature="Activity - Component Step"></field:display>
+<field:display name="Components Amount Disbursements" feature="Activity - Component Step"></field:display>
+<field:display name="Components Amount Expenditures" feature="Activity - Component Step"></field:display>
 <field:display name="Conditions for Fund Release" feature="Funding Information"></field:display>
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display>
 <field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency"></field:display>

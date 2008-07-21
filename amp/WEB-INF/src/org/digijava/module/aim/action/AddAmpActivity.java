@@ -122,18 +122,18 @@ public class AddAmpActivity extends Action {
     session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
     
    
-    
-    if (teamMember != null && teamMember.getTeamType()!=null && teamMember.getTeamType()
+    // romeved  due to AMP-3715
+    /*if (teamMember != null && teamMember.getTeamType()!=null && teamMember.getTeamType()
        .equalsIgnoreCase("GOVERNMENT")) {
        eaForm.setGovFlag(true);
     } else {
        eaForm.setGovFlag(false);
-   }
+   }*/
 
-      if (eaForm.getSteps() == null) {
-          List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
+   
+          List steps = ActivityUtil.getSteps();
           eaForm.setSteps(steps);
-      }
+      
       
     if(eaForm.getClassificationConfigs()==null){
     	List<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();

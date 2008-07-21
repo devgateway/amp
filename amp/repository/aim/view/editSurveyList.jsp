@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 
@@ -63,6 +64,9 @@
 
 
 <html:hidden property="step" />
+  <c:set var="stepNm">
+  ${aimEditActivityForm.stepNumberOnPage}
+  </c:set>
 
 
 
@@ -115,9 +119,90 @@
 									<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 
 								</digi:link>&nbsp;&gt;&nbsp;
+                                                                 <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
 
-								<digi:trn key="aim:aidEffectivenessSurvey">Aid Effectiveness Survey</digi:trn>
+                                                                     <c:set property="translation" var="trans">
+                                                                         <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
+                                                                             Click here to goto Add Activity Step ${step.stepActualNumber}
+                                                                         </digi:trn>
+                                                                     </c:set>
 
+                                                                      <c:set var="link">
+                                                                              /addActivity.do?step=${step.stepNumber}&edit=true
+                                                                      </c:set>
+
+
+
+
+
+
+                                                                     <c:if test="${!index.last}">
+
+                                                                         <c:if test="${index.first}">
+
+                                                                             <digi:link href=" ${link}" styleClass="comment" title="${trans}">
+
+
+                                                                                 <c:if test="${aimEditActivityForm.editAct == true}">
+                                                                                     <digi:trn key="aim:editActivityStep1">
+                                                                                         Edit Activity - Step 1
+                                                                                     </digi:trn>
+                                                                                 </c:if>
+                                                                                 <c:if test="${aimEditActivityForm.editAct == false}">
+                                                                                     <digi:trn key="aim:addActivityStep1">
+                                                                                         Add Activity - Step 1
+                                                                                     </digi:trn>
+                                                                                 </c:if>
+
+                                                                             </digi:link>
+                                                                             &nbsp;&gt;&nbsp;
+                                                                         </c:if>
+                                                                         <c:if test="${!index.first}">
+                                                                             <digi:link href="${link}" styleClass="comment" title="${trans}">
+                                                                                 <digi:trn key="aim:addActivityStep${step.stepActualNumber}">
+                                                                                 Step ${step.stepActualNumber}
+                                                                             </digi:trn>
+                                                                             </digi:link>
+                                                                             &nbsp;&gt;&nbsp;
+                                                                         </c:if>
+                                                                     </c:if>
+
+
+
+                                                                     <c:if test="${index.last}">
+
+                                                                         <c:if test="${index.first}">
+
+
+
+                                                                             <c:if test="${aimEditActivityForm.editAct == true}">
+                                                                                 <digi:trn key="aim:editActivityStep1">
+                                                                                     Edit Activity - Step 1
+                                                                                 </digi:trn>
+                                                                             </c:if>
+                                                                             <c:if test="${aimEditActivityForm.editAct == false}">
+                                                                                 <digi:trn key="aim:addActivityStep1">
+                                                                                     Add Activity - Step 1
+                                                                                 </digi:trn>
+                                                                             </c:if>
+                                                                         </c:if>
+
+
+                                                                         <c:if test="${!index.first}">
+                                                                             <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
+                                                                         </c:if>
+
+
+
+                                                                     </c:if>
+
+
+
+
+
+
+
+                                                                 </c:forEach>
 								</span>
 
 							</td>
@@ -183,14 +268,18 @@
                                             &nbsp;
 
 											</td>
+                                                                                        <td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step${stepNm}of">
+													Step ${stepNm} of
+												</digi:trn>
+                                                                                                 ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                <digi:trn key="aim:aidEffectiveIndicators">
 
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-
-												<digi:trn key="aim:aidEffectiveIndicators">
-
-													Aid Effectiveness Indicators</digi:trn>
-
+													Aid Effectiveness Indicators
+                                                                                                  </digi:trn>
 											</td>
+
+											
 
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 

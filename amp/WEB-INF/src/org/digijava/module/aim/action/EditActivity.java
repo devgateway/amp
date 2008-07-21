@@ -309,10 +309,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       }*/
 
    
-        if (eaForm.getSteps() == null) {
-            List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
+       
+            List steps = ActivityUtil.getSteps();
             eaForm.setSteps(steps);
-        }
+        
 
       // checking its the activity is already opened for editing...
       if (activityMap != null && activityMap.containsValue(activityId)) {

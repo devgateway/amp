@@ -1521,6 +1521,10 @@ public class SaveActivity extends Action {
 					//AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
+					activity.setApprovalDate(eaForm.getApprovalDate());
+					activity.setApprovedBy(eaForm.getApprovedBy());
+				
+					
 					//AMP-3464
 					//if an approved activity is edited and the appsettins is set to newOnly then the activity
 					//doesn't need to be approved again!

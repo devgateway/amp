@@ -417,6 +417,11 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
 
+        if(activity.getApprovalDate()!=null){
+        	oldActivity.setApprovalDate(activity.getApprovalDate());
+        	oldActivity.setApprovedBy(activity.getApprovedBy());
+        }
+        
         Set programs = activity.getActPrograms();
         Set oldPrograms = oldActivity.getActPrograms();
         Set deletedPrograms = new HashSet();
@@ -1407,6 +1412,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setProposedCompletionDate(ampActivity.
                                            getProposedCompletionDate());
         activity.setApprovalStatus(ampActivity.getApprovalStatus());
+        
+        activity.setApprovedBy(ampActivity.getApprovedBy());
+        activity.setApprovalDate(ampActivity.getApprovalDate());
+        
         activity.setBudget(ampActivity.getBudget());
         activity.setUpdatedBy(ampActivity.getUpdatedBy());
         activity.setGovAgreementNumber(ampActivity.getGovAgreementNumber());
@@ -1627,7 +1636,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         
         activity.setDraft( ampAct.getDraft() );
         activity.setApprovalStatus( ampAct.getApprovalStatus() );
-
+        activity.setApprovalDate(ampAct.getApprovalDate());
+        activity.setApprovedBy(ampAct.getApprovedBy());
+        
         activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())

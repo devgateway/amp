@@ -151,7 +151,10 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private AmpTeamMember activityCreator;
 	private Date createdDate;
 	private Date updatedDate;
-
+	
+	private AmpTeamMember approvedBy;
+	private Date approvalDate;
+	
 	//private Set teamList;
 	private String contractors;
 
@@ -1547,6 +1550,22 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setHumanitarianAid(Boolean humanitarianAid) {
 		this.humanitarianAid = humanitarianAid;
+	}
+
+	public AmpTeamMember getApprovedBy() {
+		return approvedBy;
+	}
+
+	public void setApprovedBy(AmpTeamMember approvedBy) {
+		this.approvedBy = approvedBy;
+	}
+
+	public Date getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(Date approvalDate) {
+		this.approvalDate = approvalDate;
 	}
 
 	

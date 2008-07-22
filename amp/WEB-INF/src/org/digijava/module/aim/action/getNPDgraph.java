@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.NpdUtil;
@@ -76,7 +77,7 @@ public class getNPDgraph extends Action {
                 AmpTheme currentTheme = ProgramUtil.getThemeObject(currentThemeId);
 
 
-                dataset = createPercentsDataset(currentTheme, selIndicators, selYears);
+                dataset = createPercentsDataset(currentTheme, selIndicators, selYears,request);
             }
             JFreeChart chart = ChartUtil.createChart(dataset, ChartUtil.CHART_TYPE_BAR);
 
@@ -120,7 +121,7 @@ public class getNPDgraph extends Action {
 
     // TODO This method should be moved to NPD or chart util.
     private CategoryDataset createPercentsDataset(AmpTheme currentTheme,
-                                                  long[] selectedIndicators, String[] selectedYears)
+                                                  long[] selectedIndicators, String[] selectedYears, HttpServletRequest request)
             throws AimException {
 
         CustomCategoryDataset dataset = new CustomCategoryDataset();
@@ -140,7 +141,10 @@ public class getNPDgraph extends Action {
                 int pos = Arrays.binarySearch(selectedIndicators, indicator.getIndicatorId().longValue());
 
                 if (pos >= 0) {
-                    String displayLabel = indicator.getName();
+                	String key="aim:NPD:"+indicator.getName();
+                	String displayLabel = CategoryManagerUtil.translate(key, request, indicator.getName());
+                    
+                    
                     try {
                         Collection<AmpIndicatorValue> indValues = item.getValues();  // ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
                        

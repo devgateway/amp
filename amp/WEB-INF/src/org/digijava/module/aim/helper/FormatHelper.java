@@ -148,6 +148,19 @@ public class FormatHelper {
 	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
 	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
 
+	if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {		
+		//use the decimal separator to learn how many decimals we have:
+		int groupPlace = format.indexOf(groupSeparator);
+		if(groupPlace==-1) {
+			//no decimal places, we don't allow that when thousands=on, we add three
+			format+=".000";
+		} else {
+		    	int flength=format.length();
+			for(int i=1;i<=(flength-groupPlace-2);i++) 
+			    format+="0";
+		}
+	}
+	
 	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
 	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
 	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));

@@ -1006,20 +1006,34 @@ public class FeaturesUtil {
 		return col;
 	}
 
-	public static Collection getAMPTemplatesVisibilityWithSession(Session session) {
+	public static Collection getAMPTemplatesVisibilityWithSession() {
 		Collection col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
+		Session hbsession=null;
 
 		try {
-			session.beginTransaction().commit();
+			//session.beginTransaction().commit();
+			hbsession=PersistenceManager.getSession();
 			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
 			" f ";
-			qry = session.createQuery(qryStr);
+			//qry = session.createQuery(qryStr);
+			qry = hbsession.createQuery(qryStr);
 			col = qry.list();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ... " + ex.getMessage());
+		}
+		finally{
+			try {
+				PersistenceManager.releaseSession(hbsession);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return col;
 	}
@@ -1339,25 +1353,45 @@ public class FeaturesUtil {
 	/**
 	 * @author dan
 	 */
-	public static boolean deleteTemplateVisibility(Long id, Session session) {
+	public static boolean deleteTemplateVisibility(Long id) {
 		Transaction tx = null;
+		Session hbsession=null;
 		try {
-			tx=session.beginTransaction();
+			hbsession=PersistenceManager.getSession();
+			tx=hbsession.beginTransaction();
 			AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
-			ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,id);
-			ft.setItems(null);
-			ft.setFeatures(null);
-			ft.setFields(null);
-//			ft.getFields().clear();
-//			ft.getFeatures().clear();
-//			ft.getItems().clear();
-			session.delete(ft);
+			ft = (AmpTemplatesVisibility) hbsession.load(AmpTemplatesVisibility.class,id);
+//			ft.setItems(null);
+//			ft.setFeatures(null);
+//			ft.setFields(null);
+			ft.getFields().clear();
+			ft.getFeatures().clear();
+			ft.getItems().clear();
+			hbsession.delete(ft);
 			
 			tx.commit();
-			session.flush();
+			hbsession.flush();
 		}
 		catch (Exception ex) {
 			logger.error("Exception ; " + ex.getMessage());
+			try {
+				tx.rollback();
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		finally{
+			try {
+				PersistenceManager.releaseSession(hbsession);
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 		return true;

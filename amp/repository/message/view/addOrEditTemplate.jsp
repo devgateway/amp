@@ -132,7 +132,7 @@
 																														<logic:notEmpty name="team" property="members">
 																															<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
 																                                                			<c:forEach var="tm" items="${team.members}">
-																                                                				<option value="m:${tm.memberId}" style="font:italic;font-size:11px;">${tm.memberName}</option>
+																                                                				<option value="m:${tm.memberId}" id="t:${team.id}"style="font:italic;font-size:11px;">${tm.memberName}</option>
 																                                                			</c:forEach>
 																														</logic:notEmpty>											                                                		
 																                                                	</c:forEach>

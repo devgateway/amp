@@ -192,12 +192,17 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
-                |<a class="settingsLink" onClick="showRange(); " >
-                <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
-                </a>
+           	
+           	  <logic:notEqual name="viewFormat" value="foldable">
+            	|<a class="settingsLink" onClick="showRange(); " >
+               		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
+                 </a>
+              </logic:notEqual>
+                
                 |<a  class="settingsLink" onClick="showFormat(); " >
                 <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
                 </a>
+           
             </span>
              &nbsp;<br>
              <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >

@@ -371,7 +371,7 @@
 						</field:display>
 						<field:display name="Projection Amount" feature="MTEF Projections">
 							<td valign="bottom">
-								<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" styleClass="amt"/>
+								<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" onchange="this.value=trim(this.value)" styleClass="amt"/>
 							</td>
 						</field:display>
 						<field:display name="Projection Currency Code" feature="MTEF Projections">
@@ -504,7 +504,7 @@
 											</c:if>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											<td valign="bottom">
-												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)"  size="17" styleClass="amt"/>
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
@@ -694,7 +694,7 @@
                                             </field:display>
                                             <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
 											<td valign="bottom">
-												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
 											</td>
                                             </field:display>
                                             <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
@@ -869,7 +869,7 @@
 											</field:display>
 											<field:display name="Amount Disbursement" feature="Disbursement">
 											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
 											</td>
 											</field:display>
 											<field:display name="Currency Disbursement" feature="Disbursement">
@@ -1051,7 +1051,7 @@
 															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 														</td>
 														<td valign="bottom">
-															<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" size="17" styleClass="amt"/>
+															<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" onchange="this.value=trim(this.value)" size="17" styleClass="amt"/>
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >

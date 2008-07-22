@@ -43,8 +43,8 @@ function addUserOrTeam(){
           //fill the row
           var Mycol=1;
           for(var index=0; index<reslist.length; index++){
-            if(reslist[index].id==MyArray[Myrow][0].value){
-              MyArray[Myrow][Mycol]=reslist[index];
+            if(reslist.options[index].id==MyArray[Myrow][0].value){
+              MyArray[Myrow][Mycol]=reslist.options[index];
               Mycol++
             }
           }

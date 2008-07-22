@@ -293,12 +293,12 @@
 																											<option value="-1">No receivers</option>
 																										</logic:empty>
 																										<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
-                                                                                                    	    <option value="all" ><digi:trn key="message:AllTeams">ALL</digi:trn></option>
+                                                                                                    	    <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
                                                                                                                	<c:forEach var="team" items="${messageForm.teamMapValues}">
 																														<logic:notEmpty name="team" property="members">
-																															<option value="t:${team.id}" style="font:italic;color:black">---${team.name}---</option>
+																															<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
 																                                                			<c:forEach var="tm" items="${team.members}">
-																                                                				<option value="m:${tm.memberId}" style="font:italic;color:grey" id="t:${team.id}">${tm.memberName}</option>
+																                                                				<option value="m:${tm.memberId}" style="font:italic;font-size:11px;" id="t:${team.id}">${tm.memberName}</option>
 																                                                			</c:forEach>
 																														</logic:notEmpty>											                                                		
                                                                                                                 </c:forEach>

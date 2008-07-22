@@ -4,10 +4,13 @@
 package org.digijava.module.aim.action;
 
 import java.awt.Color;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,16 +29,23 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
+import org.digijava.module.aim.dbentity.AmpCategoryClass;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 import com.lowagie.text.BadElementException;
@@ -43,11 +53,15 @@ import com.lowagie.text.Cell;
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.style.RtfFont;
 
+import edu.emory.mathcs.backport.java.util.LinkedList;
+
 /**
  * @author mihai
+ * 
  * 
  */
 public class ProjectFicheExport extends Action {
@@ -88,9 +102,9 @@ public class ProjectFicheExport extends Action {
 		document.open();
 		
 		//title of doc:
-		RtfFont titleFont = new RtfFont("Arial", 14);
-		titleFont.setStyle(RtfFont.BOLD | RtfFont.UNDERLINE); 
-		Paragraph p = new Paragraph("Standard Summary Project Fiche",titleFont);
+		RtfFont titleFont = new RtfFont("Arial", 13);
+		titleFont.setStyle(RtfFont.BOLD); 
+		Paragraph p = new Paragraph("Standard Summary Project Fiche - IPA Centralised National and CDB Programmes",titleFont);
 		p.setAlignment(Paragraph.ALIGN_CENTER);
 		document.add(p);
 				
@@ -100,8 +114,8 @@ public class ProjectFicheExport extends Action {
 		RtfFont regularFont=getRegularFont();
 		
 		//title of activity
-		RtfFont title2Font = getRegularFont();
-		title2Font.setStyle(RtfFont.BOLD);
+		RtfFont title2Font = new RtfFont("Arial", 12);
+		title2Font.setStyle(RtfFont.BOLD | RtfFont.UNDERLINE);
 		p = new Paragraph(act.getName(),title2Font);
 		p.setAlignment(Paragraph.ALIGN_CENTER);
 		document.add(p);
@@ -109,9 +123,9 @@ public class ProjectFicheExport extends Action {
 		document.add(new Paragraph());
 
 		//1. BASIC INFORMATION
-		document.add(newParagraph("1. Basic information",rootSectionFont,0));
+		document.add(newParagraph("1. Basic information",rootSectionFont,1));
 		
-		document.add(newParagraph("Background:",subSectionFont,1));
+		//document.add(newParagraph("Background:",subSectionFont,1));
 		document.add(newParagraph("1.1 CRIS Number: "+act.getAmpId(),regularFont,1));
 		document.add(newParagraph("1.2 Title: "+act.getName(),regularFont,1));
 		document.add(newParagraph("1.3 Sector: "+Util.toCSString(act.getSectors()),regularFont,1));
@@ -122,21 +136,21 @@ public class ProjectFicheExport extends Action {
 			document.add(newParagraph(element.getLocation().toString(),regularFont,2));	
 		}
 		
-		document.add(newParagraph("Implementing arrangements:",subSectionFont,1));
+		document.add(newParagraph("Implementing Arrangements:",subSectionFont,1));
 		document.add(newParagraph("1.5 Contracting Authority (EC)",regularFont,1));
 		document.add(newParagraph("1.6 Implementing Agency: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"IA")),regularFont,1));
 		document.add(newParagraph("1.7 Beneficiary: "+Util.toCSString(Util.getOrgsByRole(act.getOrgrole(),"BA")),regularFont,1));
+		//	
 		
-		document.add(newParagraph("Costs:",subSectionFont,1));
 		document.add(newParagraph("1.8 Overall Cost: "+CurrencyUtil.df.format(convertToThousands(EUActivityUtil.getTotalCostConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()))+" "+currencyName,regularFont,1));
 		document.add(newParagraph("1.9 EU Contribution: "+CurrencyUtil.df.format(convertToThousands(EUActivityUtil.getTotalContributionsConverted(act.getCosts(), tm.getAppSettings().getCurrencyId()).doubleValue()))+" "+currencyName,regularFont,1));
 		document.add(newParagraph("1.10 Final date for contracting: "+(act.getContractingDate()==null?"":act.getContractingDate().toString()),regularFont,1));
 		//TODO: check here, this is same as 1.12!!
-		//document.add(newParagraph("1.11 Final date for execution of contracts: "+(act.getDisbursmentsDate()==null?"":act.getDisbursmentsDate().toString()),regularFont,1));
-		document.add(newParagraph("1.11 Final date for disbursements: "+(act.getDisbursmentsDate()==null?"":act.getDisbursmentsDate().toString()),regularFont,1));
+		document.add(newParagraph("1.11 Final date for execution of contracts: "+(act.getDisbursmentsDate()==null?"":act.getDisbursmentsDate().toString()),regularFont,1));
+		document.add(newParagraph("1.12 Final date for disbursements: "+(act.getDisbursmentsDate()==null?"":act.getDisbursmentsDate().toString()),regularFont,1));
 
 		//2. OVERALL OBJECTIVE
-		document.add(newParagraph("2. Overall Objective and Project Purpose",rootSectionFont,0));
+		document.add(newParagraph("2. Overall Objective and Project Purpose",rootSectionFont,1));
 
 		document.add(newParagraph("2.1 Overall Objective: "+Util.getEditorBody(site,act.getObjective(),navigationLanguage),regularFont,1));
 		document.add(newParagraph("2.2 Project Purpose: "+Util.getEditorBody(site,act.getPurpose(),navigationLanguage),regularFont,1));
@@ -147,10 +161,10 @@ public class ProjectFicheExport extends Action {
 		
 
 		//2. DESCRIPTION OF PROJECT
-		document.add(newParagraph("3. Description of Project",rootSectionFont,0));
+		document.add(newParagraph("3. Description of Project",rootSectionFont,1));
 		
 		document.add(newParagraph("3.1 Background and justification: "+Util.getEditorBody(site,act.getDescription(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.2 Assessment of project impact, catalytic effect, sustainability and cross border impact (where applicable) : "+Util.getEditorBody(site,act.getProjectImpact(),navigationLanguage),regularFont,1));		
+		document.add(newParagraph("3.2 Assessment of Project Impact, Catalytic Effect, Sustainability and Cross Border Impact (where applicable) : "+Util.getEditorBody(site,act.getProjectImpact(),navigationLanguage),regularFont,1));		
 		document.add(newParagraph("3.3 Results and measurable indicators: "+Util.getEditorBody(site,act.getResults(),navigationLanguage),regularFont,1));
 		document.add(newParagraph("3.4 Activities: "+Util.getEditorBody(site,act.getActivitySummary(),navigationLanguage),regularFont,1));
 		
@@ -197,18 +211,226 @@ public class ProjectFicheExport extends Action {
 		}
 		*/
 
-		document.add(newParagraph("3.5 Conditionality and sequencing: "+Util.getEditorBody(site,act.getCondSeq(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.6 Linked activities: "+Util.getEditorBody(site,act.getLinkedActivities(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.7 Lessons learned: "+Util.getEditorBody(site,act.getLessonsLearned(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.6 Conditionality and sequencing: "+Util.getEditorBody(site,act.getCondSeq(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.7 Linked activities: "+Util.getEditorBody(site,act.getLinkedActivities(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.8 Lessons learned: "+Util.getEditorBody(site,act.getLessonsLearned(),navigationLanguage),regularFont,1));
 		
-		//LOGFRAME
+		document.add(newParagraph("4. Indicative Budget (amounts in M€)",rootSectionFont,1));
 		
-		document.add(newParagraph("ANNEX 1: Logical framework matrix in standard format",rootSectionFont,0));
-		
-		Table tbl=new Table(4);
+		Table tbl = new Table(15);
 		tbl.setTableFitsPage(true);
 		
+		final int tableFontSize = 6; //constant
+		RtfFont tableFont = getRegularFont();
+		tableFont.setStyle(RtfFont.UNDERLINE);
+		tableFont.setSize(tableFontSize);
+
+		Cell c = new Cell(newParagraph("Activities", tableFont, 0));
+		c.setRowspan(3);
+		c.setLeading(1);
+		c.setColspan(2);
+		tbl.addCell(c);
+		c = new Cell(" ");
+		c.setColspan(2);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("SOURCES OF FUNDING", tableFont, 0));
+		c.setColspan(11);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("TOTAL COST  (Million Euro)", tableFont, 0));
+		c.setColspan(2);
+		c.setRowspan(2);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("EU CONTRIBUTION", tableFont, 0));
+		c.setColspan(4);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("NATIONAL PUBLIC CONTRIBUTION", tableFont, 0));
+		c.setColspan(5);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("PRIVATE", tableFont, 0));
+		c.setColspan(2);
+		tbl.addCell(c);
 		
+		c = new Cell(newParagraph("Total", tableFont, 0));
+		c = new Cell(newParagraph("%*", tableFont, 0));
+		tbl.addCell(c);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("IB", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("INV", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Total", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("%*", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Central", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Regional", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("IFIs", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Total", tableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("%*", tableFont, 0));
+		tbl.addCell(c);
+		
+		AmpCategoryClass actType = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.IPA_ACTIVITY_TYPE_KEY);
+		AmpCategoryClass ctrType = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.IPA_TYPE_KEY);
+		
+		List contracts = ActivityUtil.getIPAContracts(act.getAmpActivityId());
+		
+		final class TableHelper {
+			Double totalCost = new Double(0);
+
+			Double euTotal = new Double(0);
+			Double euPercent = new Double(0);
+			Double euIB = new Double(0);
+			Double euINV = new Double(0);
+			
+			Double nationalTotal = new Double(0);
+			Double nationalPercent = new Double(0);
+			Double nationalCentral = new Double(0);
+			Double nationalRegional = new Double(0);
+			Double nationalIFIs = new Double(0);
+
+			Double privateTotal = new Double(0);
+			Double privatePercent = new Double(0);
+			
+			public void magic(){
+				euTotal = euIB + euINV;
+				nationalTotal = nationalCentral + nationalRegional + nationalIFIs;
+				
+				totalCost = euTotal + nationalTotal + privateTotal;
+				
+				euPercent = euTotal*100.00/totalCost;
+				nationalPercent = nationalTotal*100.00/totalCost;
+				privatePercent = privateTotal*100.00/totalCost;
+			}
+			
+			public void add(TableHelper x){
+				euIB += x.euIB;
+				euINV += x.euINV;
+				
+				nationalCentral += x.nationalCentral;
+				nationalIFIs += x.nationalIFIs;
+				nationalRegional += x.nationalRegional;
+				
+				privateTotal += x.privateTotal;
+				
+				this.magic();
+			}
+			
+			private String formatNumber(double nr) {
+				Double number;
+				String result;
+				if (nr == 0) {
+					number = new Double(0);
+				}
+				else 
+					number = new Double(nr);
+			
+				
+				String format = "#0.0";
+				DecimalFormat formater = new DecimalFormat(format);
+				result = formater.format(number);
+				return result;
+			}
+			
+			public void printMe(String name, RtfFont tableFont, Table tbl) throws BadElementException{
+				Cell c = new Cell(newParagraph(name, tableFont, 0));
+				c.setColspan(2);
+				tbl.addCell(c);
+			    int style = tableFont.getFontStyle();
+			    
+			    RtfFont boldTableFont = getRegularFont();
+				boldTableFont.setStyle(RtfFont.BOLD);
+				boldTableFont.setSize(tableFontSize);
+				c = new Cell(newParagraph(formatNumber(totalCost), boldTableFont, 0));
+				c.setColspan(2);
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(euTotal), tableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(euPercent), tableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(euIB), tableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(euINV), tableFont, 0));
+				tbl.addCell(c);
+				
+				c = new Cell(newParagraph(formatNumber(nationalTotal), boldTableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(nationalPercent), tableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(nationalCentral), tableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(nationalRegional), tableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(nationalIFIs), tableFont, 0));
+				tbl.addCell(c);
+
+				c = new Cell(newParagraph(formatNumber(privateTotal), boldTableFont, 0));
+				tbl.addCell(c);
+				c = new Cell(newParagraph(formatNumber(privatePercent), tableFont, 0));
+				tbl.addCell(c);
+			}
+		};
+		
+		RtfFont tableFont2 = getRegularFont();
+		tableFont2.setSize(tableFontSize);
+		Iterator ait = actType.getPossibleValues().iterator();
+		while (ait.hasNext()) {
+			AmpCategoryValue aval = (AmpCategoryValue) ait.next();
+			
+			TableHelper actLine = new TableHelper();
+			HashMap contractLines = new HashMap(); 
+
+			Iterator ctypeIt = ctrType.getPossibleValues().iterator();
+			while (ctypeIt.hasNext()) {
+				AmpCategoryValue cval = (AmpCategoryValue) ctypeIt.next();
+				
+				Iterator contractIt = contracts.iterator();
+				boolean found = false;
+				TableHelper th = new TableHelper();
+				while (contractIt.hasNext()) {
+					IPAContract ipaContr = (IPAContract) contractIt.next();
+					if (ipaContr.getContractType().equals(cval) && ipaContr.getType().equals(aval)){
+						if (!found){ 
+							contractLines.put(cval.getId(), th);
+							found = true;
+						}
+						
+						th.euIB += ipaContr.getTotalECContribIBAmount();
+						th.euINV += ipaContr.getTotalECContribINVAmount();
+						
+						th.nationalCentral += ipaContr.getTotalNationalContribCentralAmount();
+						th.nationalIFIs += ipaContr.getTotalNationalContribIFIAmount();
+						th.nationalRegional += ipaContr.getTotalNationalContribRegionalAmount();
+						
+						th.privateTotal += ipaContr.getTotalPrivateContribAmount();
+					
+					}
+					
+				}
+				th.magic();
+				actLine.add(th);
+			}
+			if (contractLines.size() != 0){
+				actLine.printMe(aval.getValue(), tableFont2, tbl);
+				ctypeIt = ctrType.getPossibleValues().iterator();
+				while (ctypeIt.hasNext()) {
+					AmpCategoryValue cval = (AmpCategoryValue) ctypeIt.next();
+					if (contractLines.containsKey(cval.getId())){
+						TableHelper tth = (TableHelper) contractLines.get(cval.getId());
+						tth.printMe("     " + cval.getValue(), tableFont2, tbl);
+					}
+				}
+			}
+			
+		}
+		
+		
+		document.add(tbl);
+		
+		/*
 		Cell c=(getLogframeHeadingCell("Logframe Planning Matrix for Project Fiche"));
 		c.setVerticalAlignment(Cell.ALIGN_CENTER);
 		
@@ -258,11 +480,93 @@ public class ProjectFicheExport extends Action {
 			tbl.addCell(new Cell(element.getAssumptions()));
 		}
 		
+		document.add(tbl);
+
+		*/
+		
+		
+		
+		
+		//LOGFRAME
+		RtfFont annexFont = getRegularFont();
+		annexFont.setStyle(RtfFont.BOLD);
+		document.add(newParagraph("ANNEXES",rootSectionFont,1));
+		document.add(newParagraph("1 - \t Log Frame in Standard Format",annexFont,1));
+		document.add(newParagraph("2 - \t Amounts Contracted and Disbursed per Quarter over the full duration of Programme",annexFont,1));
+		document.add(newParagraph("3 - \t References to laws, regulations and Strategic Documents:",annexFont,1));
+		document.add(newParagraph("    \t\t Reference list of relevant laws and regulations",annexFont,1));
+		document.add(newParagraph("    \t\t Reference to AP /NPAA / EP / SAA",annexFont,1));
+		document.add(newParagraph("    \t\t Reference to MIPD",annexFont,1));
+		document.add(newParagraph("    \t\t Reference to National Development Plan",annexFont,1));
+		document.add(newParagraph("    \t\t Reference to National/Sectoral Investment Plans",annexFont,1));
+		document.add(newParagraph("4 - \t Details per EU Funded Contract",annexFont,1));
+		
+		//document.add(newParagraph("ANNEX 1: Logical framework matrix in standard format",rootSectionFont,0));
+		
+		document.add(newParagraph("ANNEX 1: Logical Framework Matrix",annexFont,1));
+		
+		
+		tbl=new Table(4);
+		tbl.setTableFitsPage(true);
+		
+		
+		c=(getLogframeHeadingCell("Logframe Planning Matrix for Project Fiche"));
+		c.setVerticalAlignment(Cell.ALIGN_CENTER);
+		
+		c.setColspan(4);
+		tbl.addCell(c);
+		c=new Cell("Program ID:");
+		tbl.addCell(c);
+		c=new Cell(act.getAmpId());
+		c.setColspan(3);
+		tbl.addCell(c);
+		c=new Cell("Program Name:");
+		tbl.addCell(c);
+		c=new Cell(act.getName());
+		c.setColspan(3);
+		tbl.addCell(c);
+		c=new Cell("Contract Expiration:");
+		tbl.addCell(c);
+		if(act.getActualCompletionDate()!=null)
+		c=new Cell(act.getActualCompletionDate().toString()); else c=new Cell("");
+		c.setColspan(3);
+		tbl.addCell(c);
+		
+		
+		
+		
+		Collection indicatorsMe=MEIndicatorsUtil.getActivityIndicators(act.getAmpActivityId());
+
+		
+		//fische objectives:
+		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getObjective(),navigationLanguage),"Objective",indicatorsMe);
+		//fische purpose:
+		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getPurpose(),navigationLanguage),"Purpose",indicatorsMe);	
+		//fische results:
+		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getResults(),navigationLanguage),"Results",indicatorsMe);
+		
+		tbl.addCell(getLogframeHeadingCell("Activities"));
+		tbl.addCell(getLogframeHeadingCell("Contributions"));
+		tbl.addCell(getLogframeHeadingCell("Costs"));
+		tbl.addCell(getLogframeHeadingCell("Assumptions"));
+		
+		i=act.getCosts().iterator();
+		while (i.hasNext()) {
+			EUActivity element = (EUActivity) i.next();
+			element.setDesktopCurrencyId(tm.getAppSettings().getCurrencyId());
+			tbl.addCell(new Cell(element.getName()));
+			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalContributionsConverted()))+" "+currencyName));
+			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalCostConverted()))+" "+currencyName));
+			tbl.addCell(new Cell(element.getAssumptions()));
+		}
 		
 		document.add(tbl);
 		
-		document.add(newParagraph("ANNEX 3: Reference to laws, regulations and strategic documents",rootSectionFont,0));
 		
+		
+		document.add(newParagraph("ANNEX 2: Amounts Contracted and Disbursed per Quarter over the full duration of Programme",annexFont,1));
+		
+		document.add(newParagraph("ANNEX 3: References to laws, regulations and Strategic Documents",annexFont,1));
 		if(act.getReferenceDocs()!=null) {
 			i=act.getReferenceDocs().iterator();
 			while (i.hasNext()) {
@@ -271,7 +575,7 @@ public class ProjectFicheExport extends Action {
 			}
 		}
 
-		document.add(newParagraph("ANNEX 4: Details per EU funded contract",rootSectionFont,0));
+		document.add(newParagraph("ANNEX 4: Details per EU Funded Contract",annexFont,1));
 		
 		document.add(newParagraph(Util.getEditorBody(site,act.getContractDetails(),navigationLanguage),regularFont,1));
 		

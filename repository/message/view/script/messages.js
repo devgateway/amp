@@ -27,22 +27,24 @@ function addUserOrTeam(){
   if(selreceivers.length!=0){
     getCurrentSelectedReceivers();
   }
-  if(Mindex==0){//user selected ALL
-    selectAllReceivers();
-  }
-  else if (Mindex != -1) {
+  if (Mindex != -1) {
     for(var i = 0; i < reslist.length; i++) {
       if(reslist.options[i].selected){
-        if(reslist.options[i].value.indexOf('t')==0){//the option is a team
+        if(reslist.options[i].value=="all"){
+          selectAllReceivers();
+          break;
+        }
+        else if(reslist.options[i].value.indexOf('t')==0){//the option is a team
           var Myrow=getTeamRow(reslist.options[i].value);
           //clean all row
           for(var col=1; col<MyArray[Myrow].length; col++){
              MyArray[Myrow][col]=null;
           }
+          //fill the row
           var Mycol=1;
           for(var index=0; index<reslist.length; index++){
-            if(document.getElementById('whoIsReceiver')[index].id==MyArray[Myrow][0].value){
-              MyArray[Myrow][Mycol]=document.getElementById('whoIsReceiver')[index];
+            if(reslist[index].id==MyArray[Myrow][0].value){
+              MyArray[Myrow][Mycol]=reslist[index];
               Mycol++
             }
           }
@@ -86,12 +88,17 @@ function isOptionSelected(option){
 function selectAllReceivers(){
   var reslist = document.getElementById('whoIsReceiver');
   var selreceivers=document.getElementById('selreceivers');
+  initMyArray();
   for(var h; h<selreceivers.length; h++){
     selreceivers.options[h]=null
   }  
   selreceivers.options.length=0;
   for(var i=1; i<reslist.length; i++){
-    addOnption(selreceivers,reslist[i].text,reslist[i].value, reslist[i].id);
+    if(reslist.options[i].value.indexOf('m')==0){//it is not at the list yet
+      var Myrow=getTeamRow(reslist.options[i].id);
+      var Mycol=MyArray[Myrow].length;
+      MyArray[Myrow][Mycol]=reslist.options[i];
+    } 
   }      
 }
 function showReceivers(){
@@ -103,10 +110,9 @@ function showReceivers(){
   for(var i=0; i<MyArray.length; i++){
     if(MyArray[i][1]!=null){
       for(var j=0; j<MyArray[i].length; j++){
-        if(MyArray[i][j]!=null)
+        if(MyArray[i][j]!=null){
           addOnption(selreceivers,MyArray[i][j].text,MyArray[i][j].value, MyArray[i][j].id);
-        else
-        break;
+        }
       }
     }
   }
@@ -154,25 +160,26 @@ function removeUserOrTeam() {
         teamId = document.getElementById('selreceivers')[i].id;
       }
       document.getElementById('selreceivers')[i]=null;
-    }     
-  }
-  if(teamId!=-1){//if a member has been removed
-    var noMember=true;
-    //check if another member belonging to the same team exists
-      for(var i=document.getElementById('selreceivers').length-1; i>=0; i--){
-        if(document.getElementById('selreceivers')[i].id==teamId){
-          noMember=false;//there is member belonging to the same team
-      }
-    }
-    if(noMember){
-      //there are not members so, remove the team from the receivers
-      for(var i=document.getElementById('selreceivers').length-1; i>=0; i--){
-        if(document.getElementById('selreceivers')[i].value==teamId){
-          document.getElementById('selreceivers')[i]=null;
+      if(teamId!=-1){//if a member has been removed
+        var noMember=true;
+        //check if another member belonging to the same team exists
+        for(var j=document.getElementById('selreceivers').length-1; j>=0; j--){
+          if(document.getElementById('selreceivers')[j].id==teamId){
+            noMember=false;//there is member belonging to the same team
+          }
+        }
+        if(noMember){
+          //there are not members so, remove the team from the receivers
+          for(var h=document.getElementById('selreceivers').length-1; h>=0; h--){
+            if(document.getElementById('selreceivers')[h].value==teamId){
+              document.getElementById('selreceivers')[h]=null;
+              i--;
+            }
+          }     
         }
       }     
-    }
-  }     
+    }     
+  }
 }
 
 function addActionToURL(actionName){

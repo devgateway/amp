@@ -6,6 +6,13 @@ import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
+import org.digijava.module.message.triggers.ActivityActualStartDateTrigger;
+import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
+import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
+import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
  * @author Dare Roinishvili
@@ -17,8 +24,33 @@ public class MessageConstants {
      * Add here all the other classes that extend Trigger class. Alternatively you can use a singleton for dynamic instantiation, see:
      * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
      */
-    public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,ActivityDisbursementDateTrigger.class,UserRegistrationTrigger.class,ApprovedActivityTrigger.class,NotApprovedActivityTrigger.class,CalendarEventTrigger.class};
-    public static final  String[] triggerName=new String[] {"Save Actvity","Activity Disbursement Date","New User Registration","Activity Approved", "Activity Not Approved","Calendar Event"};
+    public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,
+                                                                ActivityDisbursementDateTrigger.class,
+                                                                UserRegistrationTrigger.class,
+                                                                ApprovedActivityTrigger.class,
+                                                                NotApprovedActivityTrigger.class,
+                                                                CalendarEventTrigger.class,
+                                                                ActivityActualStartDateTrigger.class,
+                                                                ActivityCurrentCompletionDateTrigger.class,
+                                                                ActivityFinalDateForContractingTrigger.class,
+                                                                ActivityFinalDateForDisbursementsTrigger.class,
+                                                                ActivityProposedApprovalDateTrigger.class,
+                                                                ActivityProposedCompletionDateTrigger.class,
+                                                                ActivityProposedStartDateTrigger.class};
+
+    public static final  String[] triggerName=new String[] {"Save Actvity",
+                                                            "Activity Disbursement Date",
+                                                            "New User Registration",
+                                                            "Activity Approved",
+                                                            "Activity Not Approved",
+                                                            "Calendar Event",
+                                                            "Activity Actual Start Date",
+                                                            "Activity Current Completion Date",
+                                                            "Activity Final Date For Contracting",
+                                                            "Activity Final Date For Disbursements",
+                                                            "Activity Proposed Approval Date",
+                                                            "Activity Proposed Completion Date",
+                                                            "Activity Proposed Start Date"};
 
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";

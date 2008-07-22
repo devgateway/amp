@@ -16,10 +16,11 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import java.text.SimpleDateFormat;
 
-public class ActivityDisbursementsDatesJob implements StatefulJob {
-	public void execute(JobExecutionContext context) throws JobExecutionException{
+public class ActivityFinalDateForContractingJob implements StatefulJob {
+    public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
         Date dateAfterDays=null;
@@ -42,7 +43,7 @@ public class ActivityDisbursementsDatesJob implements StatefulJob {
         for (AmpActivity act: actList){
             String dt=sdf.format(act.getActualStartDate());
             if(dt.equals(exDt)){
-                new ActivityDisbursementDateTrigger(act);
+                new ActivityFinalDateForContractingTrigger(act);
             }
         }
         try {

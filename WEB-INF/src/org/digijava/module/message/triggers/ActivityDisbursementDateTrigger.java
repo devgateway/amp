@@ -5,12 +5,12 @@ import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.helper.Event;
 
 public class ActivityDisbursementDateTrigger extends Trigger {
+    public static final String PARAM_NAME="name";
+    public static final String PARAM_TEAM_ID="teamId";
+    public static final String PARAM_TRIGGER_SENDER="sender";
+    public static final String PARAM_URL="activity url";
 
-	public static final String PARAM_NAME="name";
-	public static final String PARAM_TRIGGER_SENDER="sender";
-	public static final String PARAM_URL="activity url";
-
-	public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TRIGGER_SENDER,PARAM_URL};
+    public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TEAM_ID,PARAM_TRIGGER_SENDER,PARAM_URL};
 
 	public ActivityDisbursementDateTrigger(Object source) {
 		if(! (source instanceof AmpActivity)) throw new RuntimeException("Incompatible object. Source must be an activity!");
@@ -23,6 +23,7 @@ public class ActivityDisbursementDateTrigger extends Trigger {
 		Event e=new Event(ActivityDisbursementDateTrigger.class);
 		AmpActivity activity=(AmpActivity) source;
 		e.getParameters().put(PARAM_NAME,activity.getName());
+        e.getParameters().put(PARAM_TEAM_ID,activity.getTeam().getAmpTeamId());
 		e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_SYSTEM);
 		e.getParameters().put(PARAM_URL, "aim/selectActivityTabs.do~ampActivityId="+activity.getAmpActivityId());
 		return e;

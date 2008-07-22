@@ -18,8 +18,8 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import java.text.SimpleDateFormat;
 
-public class ActivityDisbursementsDatesJob implements StatefulJob {
-	public void execute(JobExecutionContext context) throws JobExecutionException{
+public class ActivityActualStartDateJob implements StatefulJob {
+    public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
         Date dateAfterDays=null;

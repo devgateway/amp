@@ -1,6 +1,5 @@
 package org.digijava.module.message.jobs;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,16 +9,16 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AmpDateUtils;
-import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
+import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
+import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
-import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
 import java.text.SimpleDateFormat;
 
-public class ActivityDisbursementsDatesJob implements StatefulJob {
-	public void execute(JobExecutionContext context) throws JobExecutionException{
+public class ActivityProposedCompletionDateJob implements StatefulJob {
+    public void execute(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
         Date dateAfterDays=null;
@@ -42,7 +41,7 @@ public class ActivityDisbursementsDatesJob implements StatefulJob {
         for (AmpActivity act: actList){
             String dt=sdf.format(act.getActualStartDate());
             if(dt.equals(exDt)){
-                new ActivityDisbursementDateTrigger(act);
+                new ActivityProposedCompletionDateTrigger(act);
             }
         }
         try {

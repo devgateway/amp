@@ -130,11 +130,7 @@ public class AddAmpActivity extends Action {
        eaForm.setGovFlag(false);
    }*/
 
-   if(eaForm.getSteps()==null){
-          List steps = ActivityUtil.getSteps();
-          eaForm.setSteps(steps);
-   }
-      
+  
       
     if(eaForm.getClassificationConfigs()==null){
     	List<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
@@ -1054,6 +1050,11 @@ public class AddAmpActivity extends Action {
 
 
         eaForm.setFundingRegionId(new Long( -1));
+          if (eaForm.getSteps() == null) {
+              List steps = ActivityUtil.getSteps();
+              eaForm.setSteps(steps);
+          }
+      
         return mapping.findForward("addActivityStep1");
       }
       else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module

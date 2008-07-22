@@ -1671,6 +1671,26 @@ function commentWin(val) {
 																	key="aim:createdDate">Created date</digi:trn></i>: <c:out
 																	value="${activity.createdDate}" />&nbsp;</TD>
 															</TR>
+															<field:display name="Activity Approved By"
+																feature="Identification">
+																<c:if test="${!empty activity.approvedBy}">
+																	<TR>
+																		<TD bgcolor="#ffffff"><i> <digi:trn
+																			key="aim:activityApprovedBy">
+																	Activity approved by</digi:trn></i>: <c:out
+																			value="${activity.approvedBy.user.firstNames}" /> <c:out
+																			value="${activity.approvedBy.user.lastName}" /> - <c:out
+																			value="${activity.approvedBy.user.email}" />
+																	</TR>
+																	<TR>
+																		<TD bgcolor="#ffffff"><i><digi:trn
+																			key="aim:activityApprovedOn">
+																Activity approved on</digi:trn></i>: <c:out
+																			value="${activity.approvalDate}" /> &nbsp;</TD>
+																	</TR>
+																</c:if>
+															</field:display>
+															
 															<field:display name="Activity Updated By"
 																feature="Identification">
 																<c:if test="${!empty activity.updatedBy}">

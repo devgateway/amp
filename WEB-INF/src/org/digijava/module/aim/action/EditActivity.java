@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -569,11 +570,18 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null) {
-            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0 && tm.getTeamId().equals(activity.getTeam().getAmpTeamId()))
+            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0 && tm.getTeamId().equals(activity.getTeam().getAmpTeamId())){ 
               eaForm.setApprovalStatus(Constants.APPROVED_STATUS);
-            else
+              AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+			  eaForm.setApprovedBy(teamMember);
+			  eaForm.setApprovalDate(new Date());
+			  eaForm.setApprovalStatus(Constants.APPROVED_STATUS);
+			  }
+
+            else{
               //eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);
             	eaForm.setApprovalStatus(Constants.EDITED_STATUS);
+            }
         }
 
         if (activity != null) {

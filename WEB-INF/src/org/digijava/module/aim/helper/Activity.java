@@ -118,6 +118,9 @@ public class Activity
   private String approvalStatus;
   private Boolean draft;
   
+  private AmpTeamMember approvedBy;
+  private Date approvalDate;
+  
   private String lessonsLearned;
 
   private AmpTeamMember createdBy;
@@ -1129,6 +1132,22 @@ public class Activity
 
 	public void setHumanitarianAid(Boolean humanitarianAid) {
 		this.humanitarianAid = humanitarianAid;
+	}
+
+	public AmpTeamMember getApprovedBy() {
+		return approvedBy;
+	}
+
+	public void setApprovedBy(AmpTeamMember approvedBy) {
+		this.approvedBy = approvedBy;
+	}
+
+	public Date getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(Date approvalDate) {
+		this.approvalDate = approvalDate;
 	}
   
   

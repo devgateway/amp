@@ -8,6 +8,7 @@ package org.digijava.module.aim.form;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -127,6 +128,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalActualDisbursementsOrders;
 	
 	private String unDisbursementsBalance;
+	
+	private AmpTeamMember approvedBy;
+	private Date approvalDate;
 	
 	
 	
@@ -5408,5 +5412,21 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setIpaBudget(Double ipaBudget) {
 		this.ipaBudget = ipaBudget;
+	}
+
+	public AmpTeamMember getApprovedBy() {
+		return approvedBy;
+	}
+
+	public void setApprovedBy(AmpTeamMember approvedBy) {
+		this.approvedBy = approvedBy;
+	}
+
+	public Date getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(Date approvalDate) {
+		this.approvalDate = approvalDate;
 	}
 }

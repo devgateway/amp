@@ -34,7 +34,7 @@ function addUserOrTeam(){
           selectAllReceivers();
           break;
         }
-        else if(reslist.options[i].value.indexOf('t')==0){//the option is a team
+        else if(document.getElementById('whoIsReceiver').options[i].value.indexOf('t')==0){//the option is a team
           var Myrow=getTeamRow(reslist.options[i].value);
           //clean all row
           for(var col=1; col<MyArray[Myrow].length; col++){

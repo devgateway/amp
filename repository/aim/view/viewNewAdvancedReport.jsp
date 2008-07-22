@@ -234,13 +234,7 @@ session.setAttribute("progressValue", counter);
 		<td>
 		<table width="100%">
 			<tr>
-			<td align="left">
-				<c:set var="accessTypeLocal"><%=arf.getAccessType().toString() %></c:set>
-				<c:if test="${accessTypeLocal == 'Management'}">
-                <digi:trn key="aim:noNewActivivUnvalidated">Number of new actvities that have never been validated</digi:trn>:
-                &nbsp;<%= arf.getActivitiesRejectedByFilter().toString() %>
-                </c:if>&nbsp;
-			</td>
+			
 			<td align="right">
 			<span style="color: red;font-family: Arial;padding-right: 5px">
 				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
@@ -501,6 +495,18 @@ session.setAttribute("progressValue", counter);
             <td align="right">
             <jsp:include page="legendPopup.jsp" />
             </td>
+            </tr>
+            <tr>
+            	<td align="left">
+            	<%
+                	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+                %>
+				<c:set var="accessTypeLocal"><%=arf.getAccessType().toString() %></c:set>
+				<c:if test="${accessTypeLocal == 'Management'}">
+                <digi:trn key="aim:noNewActivitiesManagement">Number of activities that do not show up in the list (these include draft and new activities that are pending approvals)</digi:trn>:
+                &nbsp;<%= arf.getActivitiesRejectedByFilter().toString() %>
+                </c:if>&nbsp;
+			</td>
             </tr>
             </table>
 			</td>

@@ -8,7 +8,7 @@ function trim(s) {
 
 
 function checkAmountUsingSymbol(amount){
-	var validChars= "0123456789"+this.decimalSymbol+this.groupSymbol;
+	var validChars= "-0123456789"+this.decimalSymbol+this.groupSymbol;
 
 	for (i = 0;  i < amount.length;  i++) {
 		var ch = amount.charAt(i);
@@ -25,7 +25,7 @@ function chkNumericForProjection(objName)
 
 
 
-	var checkOK = "0123456789.";
+	var checkOK = "-0123456789"+this.decimalSymbol+this.groupSymbol;
 
 	var checkStr = objName;
 

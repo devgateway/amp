@@ -279,5 +279,56 @@ public class DbUtil {
        }
        return retVal;
    }
+ 
+    /**
+     * counts  all IndicatorSector  ;
+     * @param indicatorValueId
+     * @return IndicatorSector list size
+     * 
+     */
+    
+    public static int getAllIndicatorSectorsSize() {
+        int retVal = 0;
+        Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String query = "select count(indsec) from " +
+                    IndicatorSector.class.getName() +
+                    " indsec ";
+            Query q = session.createQuery(query);
+            if (q.uniqueResult() != null) {
+                retVal = (Integer) q.uniqueResult();
+            }
+        } catch (Exception ex) {
+            logger.debug("Unable to get indicators from DB", ex);
+        }
+        return retVal;
+    }
+    
+    public static List getIndicatorSectorsForCurrentPage(Integer[] page,int numberPerPage) {
+       List retVal = null;
+       Session session = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           String query=" from " +
+                                         IndicatorSector.class.getName() +
+                                         " indsec ";
+           Query q = session.createQuery(query);
+           int selectedIndex=(page[0]-1)*numberPerPage;
+           q.setFirstResult(selectedIndex);
+           q.setMaxResults(numberPerPage);
+           retVal = q.list();
+           if(retVal!=null&&retVal.size()==0&page[0]!=1){
+               page[0]=page[0]-numberPerPage;
+               // If all records were deleted we need to navigate to the previous page
+               retVal=getIndicatorSectorsForCurrentPage(page,numberPerPage);
+           }
+               
+           
+       } catch (Exception ex) {
+           logger.debug("Unable to get indicators from DB", ex);
+       }
+       return retVal;
+   }
 
 }

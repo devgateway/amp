@@ -25,12 +25,14 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @author medea
  */
 public class IndicatorSectorManager extends DispatchAction {
+    
+    public final static int RECORDS_PER_PAGE=15;
 
     @Override
     protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        return viewAll(mapping, form, request, response);
+        return cancel(mapping, form, request, response);
     }
 
     /*
@@ -40,11 +42,33 @@ public class IndicatorSectorManager extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
-        indSecForm.setIndSectList(DbUtil.getAllIndicatorSectors());
+        int pages;
+        int allRecords=DbUtil.getAllIndicatorSectorsSize();
+        if(allRecords==0){
+            pages=1;
+        }
+        else{
+             if(allRecords%RECORDS_PER_PAGE==0){
+                 pages=allRecords/RECORDS_PER_PAGE;
+             }
+             else{
+                 pages=allRecords/RECORDS_PER_PAGE+1;
+             }
+        }
+        if(indSecForm.getSelectedPage()==0){
+            indSecForm.setSelectedPage(1);
+        }
+        /* We need this wrapper array to navigate 
+           to the previous page if all records were deleted on current page
+         */
+        Integer[] selectedPage={indSecForm.getSelectedPage()};
+        indSecForm.setIndSectList(DbUtil.getIndicatorSectorsForCurrentPage(selectedPage,RECORDS_PER_PAGE));
+        indSecForm.setSelectedPage( selectedPage[0]);
+        indSecForm.setPages(pages);
         return mapping.findForward("forward");
 
     }
-
+    
     /*
      * saves modified SectorIndicator;
      */
@@ -274,6 +298,7 @@ public class IndicatorSectorManager extends DispatchAction {
         indSecForm.setRegionName(null);
         indSecForm.setIndicatorName(null);
         indSecForm.setIndSectId(null);
+        indSecForm.setSelectedPage(0);
         return viewAll(mapping, form, request, response);
 
     }

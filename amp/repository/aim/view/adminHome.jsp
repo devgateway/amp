@@ -363,7 +363,7 @@
                               <c:set var="translation">
                                 <digi:trn key="gis:clickToViewIndicatorSectorRegion">Click here to view Indicator Sector Region Manager</digi:trn>
                               </c:set>
-                              <a href="/gis/indSectRegManager.do~actType=viewAll" title="${translation}">
+                              <a href="/gis/indSectRegManager.do" title="${translation}">
                                 <digi:trn key="gis:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
                               </a>
                             </td>

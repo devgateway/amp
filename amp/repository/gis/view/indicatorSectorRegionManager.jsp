@@ -6,9 +6,16 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<script language="JavaScript" type="text/javascript">
+    function gotoPage(page){
+                document.gisIndicatorSectorRegionForm.selectedPage.value = page;
+                document.gisIndicatorSectorRegionForm.submit();
+            
+    }
+</script>
 <digi:instance property="gisIndicatorSectorRegionForm" />
-<digi:form action="/indSectRegManager.do">
+<digi:form action="/indSectRegManager.do~actType=viewAll">
+<html:hidden name="gisIndicatorSectorRegionForm" property="selectedPage"/>
 
 
 <table width="60%" border="0" cellpadding="15">
@@ -81,6 +88,73 @@
 						</td>
 					</tr>
 				</c:forEach>
+                                <!-- pagination -->
+                                <tr>
+                                    <td colspan="4">
+                                        <digi:trn key="gis:Pages">Pages</digi:trn>:
+                                           <c:choose>
+                                                <c:when test="${gisIndicatorSectorRegionForm.selectedPage=='1'}">
+                                                      <<&nbsp;<
+                                                </c:when>
+                                                <c:otherwise>
+                                                     <a  href="javascript:gotoPage(1)"> << </a>
+                                                     <a  href="javascript:gotoPage(${gisIndicatorSectorRegionForm.selectedPage-1})"> < </a>
+                                                 </c:otherwise>
+                                            </c:choose>|
+                                            <c:set var="start">
+                                                <c:choose>
+                                                    <c:when test="${gisIndicatorSectorRegionForm.selectedPage<=5}">
+                                                        1
+                                                    </c:when>
+                                                     <c:when test="${gisIndicatorSectorRegionForm.selectedPage+2>=gisIndicatorSectorRegionForm.pages}">
+                                                        ${gisIndicatorSectorRegionForm.pages-4}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    ${gisIndicatorSectorRegionForm.selectedPage-2}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:set>
+                                            
+                                              <c:set var="end">
+                                                <c:choose>
+                                                    <c:when test="${gisIndicatorSectorRegionForm.selectedPage<=5&&gisIndicatorSectorRegionForm.pages>=5}">
+                                                        5
+                                                    </c:when>
+                                                     <c:when test="${gisIndicatorSectorRegionForm.pages<5}">
+                                                        ${gisIndicatorSectorRegionForm.pages}
+                                                    </c:when>
+                                                    <c:when test="${gisIndicatorSectorRegionForm.selectedPage+2<=gisIndicatorSectorRegionForm.pages}">
+                                                        ${gisIndicatorSectorRegionForm.selectedPage+2}
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${gisIndicatorSectorRegionForm.pages}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:set>
+                                      
+                                        <c:forEach  var="page"  begin="${start}"  end="${end}">
+                                            <c:choose>
+                                               
+                                                <c:when test="${page==gisIndicatorSectorRegionForm.selectedPage}">
+                                                      ${page}|
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <a  href="javascript:gotoPage(${page})">${page}</a>|
+                                                 </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                                <c:choose>     
+                                                <c:when test="${gisIndicatorSectorRegionForm.selectedPage==gisIndicatorSectorRegionForm.pages}">
+                                                      >&nbsp;>>
+                                                </c:when>
+                                                <c:otherwise>
+                                                      <a  href="javascript:gotoPage(${gisIndicatorSectorRegionForm.selectedPage+1})"> > </a>
+                                                      <a  href="javascript:gotoPage(${gisIndicatorSectorRegionForm.pages})"> >> </a>
+                                                 </c:otherwise>
+                                             </c:choose> &nbsp;${gisIndicatorSectorRegionForm.selectedPage}&nbsp;<digi:trn key="gis:pagination:of">of</digi:trn>&nbsp;${gisIndicatorSectorRegionForm.pages}
+                                    </td>
+                                </tr>
+                                    <!-- end of pagination -->
 			</table>
 
 

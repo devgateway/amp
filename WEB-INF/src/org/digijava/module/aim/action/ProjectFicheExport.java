@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,7 +36,9 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.CalendarHelper;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -215,12 +218,12 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("3.7 Linked activities: "+Util.getEditorBody(site,act.getLinkedActivities(),navigationLanguage),regularFont,1));
 		document.add(newParagraph("3.8 Lessons learned: "+Util.getEditorBody(site,act.getLessonsLearned(),navigationLanguage),regularFont,1));
 		
-		document.add(newParagraph("4. Indicative Budget (amounts in M€)",rootSectionFont,1));
+		document.add(newParagraph("4. Indicative Budget (amounts in ME)",rootSectionFont,1));
 		
 		Table tbl = new Table(15);
 		tbl.setTableFitsPage(true);
 		
-		final int tableFontSize = 6; //constant
+		final int tableFontSize = 7; //constant
 		RtfFont tableFont = getRegularFont();
 		tableFont.setStyle(RtfFont.UNDERLINE);
 		tableFont.setSize(tableFontSize);
@@ -319,27 +322,11 @@ public class ProjectFicheExport extends Action {
 				this.magic();
 			}
 			
-			private String formatNumber(double nr) {
-				Double number;
-				String result;
-				if (nr == 0) {
-					number = new Double(0);
-				}
-				else 
-					number = new Double(nr);
-			
-				
-				String format = "#0.0";
-				DecimalFormat formater = new DecimalFormat(format);
-				result = formater.format(number);
-				return result;
-			}
 			
 			public void printMe(String name, RtfFont tableFont, Table tbl) throws BadElementException{
 				Cell c = new Cell(newParagraph(name, tableFont, 0));
 				c.setColspan(2);
 				tbl.addCell(c);
-			    int style = tableFont.getFontStyle();
 			    
 			    RtfFont boldTableFont = getRegularFont();
 				boldTableFont.setStyle(RtfFont.BOLD);
@@ -392,21 +379,26 @@ public class ProjectFicheExport extends Action {
 				TableHelper th = new TableHelper();
 				while (contractIt.hasNext()) {
 					IPAContract ipaContr = (IPAContract) contractIt.next();
+					
 					if (ipaContr.getContractType().equals(cval) && ipaContr.getType().equals(aval)){
 						if (!found){ 
 							contractLines.put(cval.getId(), th);
 							found = true;
 						}
+						if (ipaContr.getTotalECContribIBAmount() != null)
+							th.euIB += ipaContr.getTotalECContribIBAmount();
+						if (ipaContr.getTotalECContribINVAmount() != null)
+							th.euINV += ipaContr.getTotalECContribINVAmount();
 						
-						th.euIB += ipaContr.getTotalECContribIBAmount();
-						th.euINV += ipaContr.getTotalECContribINVAmount();
+						if (ipaContr.getTotalNationalContribCentralAmount() != null)
+							th.nationalCentral += ipaContr.getTotalNationalContribCentralAmount();
+						if (ipaContr.getTotalNationalContribIFIAmount() != null)
+							th.nationalIFIs += ipaContr.getTotalNationalContribIFIAmount();
+						if (ipaContr.getTotalNationalContribRegionalAmount() != null)
+							th.nationalRegional += ipaContr.getTotalNationalContribRegionalAmount();
 						
-						th.nationalCentral += ipaContr.getTotalNationalContribCentralAmount();
-						th.nationalIFIs += ipaContr.getTotalNationalContribIFIAmount();
-						th.nationalRegional += ipaContr.getTotalNationalContribRegionalAmount();
-						
-						th.privateTotal += ipaContr.getTotalPrivateContribAmount();
-					
+						if (ipaContr.getTotalPrivateContribAmount() != null)
+							th.privateTotal += ipaContr.getTotalPrivateContribAmount();
 					}
 					
 				}
@@ -430,59 +422,7 @@ public class ProjectFicheExport extends Action {
 		
 		document.add(tbl);
 		
-		/*
-		Cell c=(getLogframeHeadingCell("Logframe Planning Matrix for Project Fiche"));
-		c.setVerticalAlignment(Cell.ALIGN_CENTER);
 		
-		c.setColspan(4);
-		tbl.addCell(c);
-		c=new Cell("Program ID:");
-		tbl.addCell(c);
-		c=new Cell(act.getAmpId());
-		c.setColspan(3);
-		tbl.addCell(c);
-		c=new Cell("Program Name:");
-		tbl.addCell(c);
-		c=new Cell(act.getName());
-		c.setColspan(3);
-		tbl.addCell(c);
-		c=new Cell("Contract Expiration:");
-		tbl.addCell(c);
-		if(act.getActualCompletionDate()!=null)
-		c=new Cell(act.getActualCompletionDate().toString()); else c=new Cell("");
-		c.setColspan(3);
-		tbl.addCell(c);
-		
-		
-		
-		Collection indicatorsMe=MEIndicatorsUtil.getActivityIndicators(act.getAmpActivityId());
-
-		
-		//fische objectives:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getObjective(),navigationLanguage),"Objective",indicatorsMe);
-		//fische purpose:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getPurpose(),navigationLanguage),"Purpose",indicatorsMe);	
-		//fische results:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getResults(),navigationLanguage),"Results",indicatorsMe);
-		
-		tbl.addCell(getLogframeHeadingCell("Activities"));
-		tbl.addCell(getLogframeHeadingCell("Contributions"));
-		tbl.addCell(getLogframeHeadingCell("Costs"));
-		tbl.addCell(getLogframeHeadingCell("Assumptions"));
-		
-		i=act.getCosts().iterator();
-		while (i.hasNext()) {
-			EUActivity element = (EUActivity) i.next();
-			element.setDesktopCurrencyId(tm.getAppSettings().getCurrencyId());
-			tbl.addCell(new Cell(element.getName()));
-			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalContributionsConverted()))+" "+currencyName));
-			tbl.addCell(new Cell(CurrencyUtil.df.format(convertToThousands(element.getTotalCostConverted()))+" "+currencyName));
-			tbl.addCell(new Cell(element.getAssumptions()));
-		}
-		
-		document.add(tbl);
-
-		*/
 		
 		
 		
@@ -563,8 +503,226 @@ public class ProjectFicheExport extends Action {
 		document.add(tbl);
 		
 		
-		
 		document.add(newParagraph("ANNEX 2: Amounts Contracted and Disbursed per Quarter over the full duration of Programme",annexFont,1));
+		
+		Iterator cit = contracts.iterator();
+		Date lowDate = null, highDate = null;
+		while (cit.hasNext()) {
+			IPAContract contract = (IPAContract) cit.next();
+			if (lowDate == null && highDate == null) {
+				lowDate = highDate = contract.getTotalECContribIBAmountDate();
+			}
+			Date date = contract.getTotalECContribIBAmountDate();
+			if (date != null){
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+			date = contract.getTotalECContribINVAmountDate();
+			if (date != null){
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+			
+			date = contract.getTotalNationalContribCentralAmountDate();
+			if (date != null){
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+			date = contract.getTotalNationalContribIFIAmountDate();
+			if (date != null){
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+			date = contract.getTotalNationalContribRegionalAmountDate();
+			if (date != null){
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+			
+			date = contract.getTotalPrivateContribAmountDate();
+			if (date != null){
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+			
+			Iterator dit = contract.getDisbursements().iterator();
+			while (dit.hasNext()) {
+				IPAContractDisbursement disb = (IPAContractDisbursement) dit.next();
+				
+				date = disb.getDate();
+				lowDate = (lowDate.compareTo(date) < 0 )?lowDate:date;
+				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
+			}
+		}
+
+		CalendarHelper calendarHelper = new CalendarHelper();
+		calendarHelper.setTime(new java.sql.Date(lowDate.getYear(), lowDate.getMonth(), lowDate.getDay()));
+		int lowDateQuarter = calendarHelper.getQuarter();
+		calendarHelper.setTime(new java.sql.Date(highDate.getYear(), highDate.getMonth(), highDate.getDay()));
+		int highDateQuarter = calendarHelper.getQuarter();
+		
+		int noOfQuarters;
+		
+		if (highDate.getYear() != lowDate.getYear())
+			noOfQuarters = (highDate.getYear() - lowDate.getYear())*4 + (5 - lowDateQuarter) + (highDateQuarter);
+		else
+			noOfQuarters = (highDateQuarter + 1 - lowDateQuarter);
+		
+		
+		tbl=new Table(noOfQuarters + 2);
+		tbl.setTableFitsPage(true);
+		
+		
+		tableFont = getRegularFont();
+		tableFont.setSize(tableFontSize);
+		tableFont.setStyle(RtfFont.STYLE_BOLD);
+
+		tableFont2 = getRegularFont();
+		tableFont2.setSize(tableFontSize);
+		double grayLevel1 = 0.7;
+		double grayLevel2 = 0.8;
+		c=new Cell(newParagraph("Contracted", tableFont, 0));
+		c.setColspan(2);
+		c.setGrayFill((float)grayLevel1);
+		tbl.addCell(c);
+		
+		int currentQuarter = lowDateQuarter;
+		int currentYear = lowDate.getYear() + 1900; 
+		
+		for (int k = 0; k < noOfQuarters; k++){
+			c=new Cell(newParagraph(String.valueOf(currentYear) + " Q" + currentQuarter, tableFont, 0));
+			tbl.addCell(c);
+			currentQuarter++;
+			if (currentQuarter == 5){
+				currentYear++;
+				currentQuarter = 1;
+			}
+		}
+		
+		final int noOfStaticAmounts = 6;
+		
+		Double[] quarterAmounts = new Double[noOfQuarters];
+		for (int h = 0; h < noOfQuarters; h++)
+			quarterAmounts[h] = new Double(0);
+		Double[] totalQuarterAmounts = new Double[noOfQuarters];
+		for (int h = 0; h < noOfQuarters; h++)
+			totalQuarterAmounts[h] = new Double(0);
+		
+
+		cit = contracts.iterator();
+		while (cit.hasNext()) {
+			IPAContract contract = (IPAContract) cit.next();
+			for (int h = 0; h < noOfQuarters; h++)
+				quarterAmounts[h] = new Double(0);
+			 
+			
+			Double[] staticAmounts = new Double[noOfStaticAmounts];
+			Date[] staticDates = new Date[noOfStaticAmounts];
+			staticAmounts[0] = contract.getTotalECContribIBAmount();
+			staticDates[0] = contract.getTotalECContribIBAmountDate();
+			staticAmounts[1] = contract.getTotalECContribINVAmount();
+			staticDates[1] = contract.getTotalECContribINVAmountDate();
+			staticAmounts[2] = contract.getTotalNationalContribCentralAmount();
+			staticDates[2] = contract.getTotalNationalContribCentralAmountDate();
+			staticAmounts[3] = contract.getTotalNationalContribIFIAmount();
+			staticDates[3] = contract.getTotalNationalContribIFIAmountDate();
+			staticAmounts[4] = contract.getTotalNationalContribRegionalAmount();
+			staticDates[4] = contract.getTotalNationalContribRegionalAmountDate();
+			staticAmounts[5] = contract.getTotalPrivateContribAmount();
+			staticDates[5] = contract.getTotalPrivateContribAmountDate();
+			
+			for (int j = 0; j < noOfStaticAmounts; j++){
+				if (staticAmounts[j] != null){
+					if (staticDates[j] != null){
+						calendarHelper.setTime(new java.sql.Date(staticDates[j].getYear(), staticDates[j].getMonth(), staticDates[j].getDay()));
+						int quarter = calendarHelper.getQuarter();
+						int position = 4*(staticDates[j].getYear() - lowDate.getYear()) + quarter - lowDateQuarter;
+						quarterAmounts[position] += staticAmounts[j];
+					}
+				}
+				
+			}
+			
+			c = new Cell(newParagraph(contract.getContractName(), tableFont2, 0));
+			c.setColspan(2);
+			tbl.addCell(c);
+			
+			for (int j = 0; j < noOfQuarters; j++){
+				c = new Cell(newParagraph(formatNumber(quarterAmounts[j]), tableFont2, 0));
+				tbl.addCell(c);
+				totalQuarterAmounts[j] += quarterAmounts[j];
+			}
+		}
+		
+		c = new Cell(newParagraph("Cumulative", tableFont, 0));
+		c.setColspan(2);
+		c.setGrayFill((float)grayLevel2);
+		tbl.addCell(c);
+		
+		for (int j = 0; j < noOfQuarters; j++){
+			c = new Cell(newParagraph(formatNumber(totalQuarterAmounts[j]), tableFont, 0));
+			c.setGrayFill((float)grayLevel2);
+			tbl.addCell(c);
+		}
+		//part2
+
+		c=new Cell(newParagraph("Disbursed", tableFont, 0));
+		c.setColspan(2);
+		c.setGrayFill((float)grayLevel1);
+		tbl.addCell(c);
+		for (int k = 0; k < noOfQuarters; k++){
+			c=new Cell(newParagraph(String.valueOf(""), tableFont, 0));
+			tbl.addCell(c);
+		}
+
+		
+		for (int h = 0; h < noOfQuarters; h++)
+			totalQuarterAmounts[h] = new Double(0);
+
+		cit = contracts.iterator();
+		while (cit.hasNext()) {
+			IPAContract contract = (IPAContract) cit.next();
+			for (int h = 0; h < noOfQuarters; h++)
+				quarterAmounts[h] = new Double(0);
+
+			Iterator dit = contract.getDisbursements().iterator();
+			while (dit.hasNext()) {
+				IPAContractDisbursement disb = (IPAContractDisbursement) dit.next();
+				
+				Double amount = disb.getAmount();
+				Date date = disb.getDate();
+				if (amount != null){
+					if (date != null){
+						calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
+						int quarter = calendarHelper.getQuarter();
+						int position = 4*(date.getYear() - lowDate.getYear()) + quarter - lowDateQuarter;
+						quarterAmounts[position] += amount;
+					}
+				}
+			}
+			c = new Cell(newParagraph(contract.getContractName(), tableFont2, 0));
+			c.setColspan(2);
+			tbl.addCell(c);
+			
+			for (int j = 0; j < noOfQuarters; j++){
+				c = new Cell(newParagraph(formatNumber(quarterAmounts[j]), tableFont2, 0));
+				tbl.addCell(c);
+				totalQuarterAmounts[j] += quarterAmounts[j];
+			}
+		}
+		c = new Cell(newParagraph("Cumulative", tableFont, 0));
+		c.setColspan(2);
+		c.setGrayFill((float)grayLevel2);
+		tbl.addCell(c);
+		
+		for (int j = 0; j < noOfQuarters; j++){
+			c = new Cell(newParagraph(formatNumber(totalQuarterAmounts[j]), tableFont, 0));
+			c.setGrayFill((float)grayLevel2);
+			tbl.addCell(c);
+		}
+		document.add(tbl);
+		
+		
 		
 		document.add(newParagraph("ANNEX 3: References to laws, regulations and Strategic Documents",annexFont,1));
 		if(act.getReferenceDocs()!=null) {
@@ -642,6 +800,23 @@ public class ProjectFicheExport extends Action {
 		
 	}
 	
+
+	private String formatNumber(double nr) {
+		Double number;
+		String result;
+		if (nr == 0) {
+			number = new Double(0);
+		}
+		else 
+			number = new Double(nr);
+	
+		
+		String format = "#0.0";
+		DecimalFormat formater = new DecimalFormat(format);
+		result = formater.format(number);
+		return result;
+	}
+
 	public Cell getLogframeHeadingCell(String text) {
 		Cell c=new Cell(text);
 		c.setHeader(true);

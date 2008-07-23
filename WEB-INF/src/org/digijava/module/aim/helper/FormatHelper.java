@@ -156,8 +156,8 @@ public class FormatHelper {
 			format+=".000";
 		} else {
 		    	int flength=format.length();
-			for(int i=1;i<=(flength-groupPlace-2);i++) 
-			    format+="0";
+			for(int i=1;i<=(flength-groupPlace-2);i++)
+			    format+=format.charAt(flength - 1);
 		}
 	}
 	

@@ -48,6 +48,13 @@ public class ShowAddComponent extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
 		try {
+			
+			HttpSession session = request.getSession();
+			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+
+			String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
+			request.setAttribute("defCurrency", defCurr);
+			
 			String event = (request.getParameter("compFundAct") != null) ? request.getParameter("compFundAct") : "";
 
 			if ("switchType".equalsIgnoreCase(event)) {
@@ -93,7 +100,8 @@ public class ShowAddComponent extends Action {
 			}
 		}
 
-		eaForm.setAllComps(componentsList);
+		eaForm.setAllComps(componentsList);		
+		
 		return mapping.findForward("forward");
 
 	}

@@ -39,6 +39,7 @@ import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ShowAddComponent extends Action {
@@ -112,7 +113,8 @@ public class ShowAddComponent extends Action {
 		eaForm.setComponentTitle(null);
 		eaForm.setComponentDesc(null);
 		eaForm.setNewCompoenentName(null);
-		String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+		//String defCurr = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+		String defCurr = DbUtil.getMemberAppSettings(tm.getMemberId()).getCurrency().getCurrencyCode();
 		request.setAttribute("defCurrency", defCurr);
 		
 		if(!isComponentTypeEnabled()){

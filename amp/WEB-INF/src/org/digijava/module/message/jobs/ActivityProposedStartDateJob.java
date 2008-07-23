@@ -39,9 +39,11 @@ public class ActivityProposedStartDateJob implements StatefulJob {
         String exDt=sdf.format(dateAfterDays);
         List<AmpActivity> actList=ActivityUtil.getAllActivitiesList();
         for (AmpActivity act: actList){
-            String dt=sdf.format(act.getProposedStartDate());
-            if(dt.equals(exDt)){
-                new ActivityProposedStartDateTrigger(act);
+            if(act.getProposedStartDate()!=null){
+                String dt = sdf.format(act.getProposedStartDate());
+                if (dt.equals(exDt)) {
+                    new ActivityProposedStartDateTrigger(act);
+                }
             }
         }
         try {

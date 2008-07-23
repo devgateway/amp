@@ -23,6 +23,12 @@
 
 <script langauage="JavaScript">
 
+	var help='<digi:trn key="message:help">help</digi:trn>'
+	var helpForRefreshTime='<digi:trn key="message:helpForMsgRefreshTime">This indicates the time in minutes the messages count on the user\'s desktop is refreshed.</digi:trn>'
+	var helpForStorage='<digi:trn key="message:helpForStorage">This indicates the total number of messages that are permissible per type of message <br>i.e. Messages , Alerts , Approvals and Events. Within Messages and Alerts this setting <br>indicates the total number of messages permissible in the Inbox , Sent and Draft messages.</digi:trn>'
+	var helpForAdvanceAlerts='<digi:trn key="message:helpForAdvAlerts">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'
+	var helpForEmailable='<digi:trn key="message:helpForEmailables">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>'
+	
 	function validate(record){
 		if(record==null || record==""){
 			alert('Please enter data to save');
@@ -83,7 +89,7 @@
 											<tr>
 												<td align="center" >
 													<digi:trn key="message:refreshTime">Message Refresh Time(minutes)</digi:trn> &nbsp;
-													<img src="../ampTemplate/images/help.gif" onmouseover="stm(['help balloon','From here you set message refresh time <br>This is in hom many minutes system should check for new messages'],Style[13])" onmouseout="htm()"/>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForRefreshTime],Style[13])" onmouseout="htm()"/>
 												</td>
 												<td align="center">${messageForm.msgRefreshTimeCurr}</td>
 												<td align="center"><html:text name="messageForm" property="msgRefreshTimeNew" /></td>
@@ -93,19 +99,28 @@
 												</td>
 											</tr>
 											<tr>
-												<td align="center"><digi:trn key="message:msgStorage">Message Storage Per Message Type</digi:trn></td>
+												<td align="center">
+													<digi:trn key="message:msgStorage">Message Storage Per Message Type</digi:trn>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForStorage],Style[13])" onmouseout="htm()"/>
+												</td>
 												<td align="center">${messageForm.msgStoragePerMsgTypeCurr} </td>
 												<td align="center"><html:text name="messageForm" property="msgStoragePerMsgTypeNew" /> </td>
 												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('storage')" /></td>
 											</tr>
 											<tr>
-												<td align="center"><digi:trn key="message:advanceAlertWarnings">Days of Advance Alert Warnings</digi:trn></td>
+												<td align="center">
+													<digi:trn key="message:advanceAlertWarnings">Days of Advance Alert Warnings</digi:trn>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForAdvanceAlerts],Style[13])" onmouseout="htm()"/>
+												</td>
 												<td align="center">${messageForm.daysForAdvanceAlertsWarningsCurr}</td>
 												<td align="center"><html:text name="messageForm" property="daysForAdvanceAlertsWarningsNew"/> </td>
 												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('warning')" /></td>
 											</tr>
 											<tr>
-												<td align="center"><digi:trn key="message:emailAlerts">Email Alerts</digi:trn></td>
+												<td align="center">
+													<digi:trn key="message:emailAlerts">Email Alerts</digi:trn>
+													<img src="../ampTemplate/images/help.gif" onmouseover="stm([help,helpForEmailable],Style[13])" onmouseout="htm()"/>
+												</td>
 												<td align="center">
 													<c:if test="${messageForm.emailMsgsCurrent==-1}">
 														&nbsp;

@@ -26,6 +26,24 @@ public class IndicatorSectorRegionForm extends ActionForm {
     private String indicatorName;
     private String sectorName;
     private String regionName;
+    private int selectedPage;
+    private long pages;
+
+    public long getPages() {
+        return pages;
+    }
+
+    public void setPages(long pages) {
+        this.pages = pages;
+    }
+
+    public int getSelectedPage() {
+        return selectedPage;
+    }
+
+    public void setSelectedPage(int selectedPage) {
+        this.selectedPage = selectedPage;
+    }
 
     public String getIndicatorName() {
         return indicatorName;

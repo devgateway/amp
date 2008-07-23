@@ -21,7 +21,7 @@ Style[9]=["white","black","#cc0000","#FFCC99","","","","","","","","","","",200,
 Style[10]=["white","black","black","white","","","right","","Tahoma","cursive","center","",3,4,200,20,5,10,10,0,50,1,70,"complex","gray"]
 Style[11]=["white","black","#cc0000","#FFCC99","","","","","","","","","","",200,"",2,2,10,10,51,0.5,45,"simple","gray"]
 Style[12]=["white","black","#cc0000","#FFCC99","","","","","","","","","","",200,"",2,2,10,10,51,1,0,"",""]
-Style[13]=["black","black","#ccecff","white","","","center","","","","","sticky","","",200,"",2,2,10,10,"","","","",""]
+Style[13]=["black","black","#ccffcc","white","","","","","","","","","","",500,"",2,2,10,10,"","","","",""]
 
 
 applyCssFilter()

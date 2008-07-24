@@ -3,6 +3,7 @@ package org.digijava.module.gis.dbentity;
 import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.widget.dbentity.AmpWidget;
 
 /**
  * Widget of pie chart - Sector by donors. 

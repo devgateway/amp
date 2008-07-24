@@ -156,7 +156,7 @@ function validation(){
           </td>
 
           <td bgColor=#d7eafd>
-            <a href="javascript:deleteData('${index.count-1}')"><%-- v-sh-p-u! :D --%>
+            <a href="javascript:deleteData('${index.count-1}')">
               <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
           </td>

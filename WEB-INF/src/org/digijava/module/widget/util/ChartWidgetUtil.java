@@ -202,7 +202,7 @@ public class ChartWidgetUtil {
 			if (opt.getLabelPattern()!=null){
 				pattern=opt.getLabelPattern();
 			}
-			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,new DecimalFormat("0"),new DecimalFormat("0.00%"));
+			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,new DecimalFormat("0"),new DecimalFormat("0.0%"));
 			plot.setLabelGenerator(gen);
 		}else{
 			plot.setLabelGenerator(null);
@@ -222,12 +222,22 @@ public class ChartWidgetUtil {
 			fromDate=getStartOfYear(year.intValue());
 			toDate = getStartOfYear(year.intValue()+1);
 		}
-
-		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate);
+                Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
+		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
+                         double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
-				ds.setValue(funding.getSector().getName(), funding.getFounding());
+                             Double percent = funding.getFounding() / allFundingWrapper[0];
+                            // the sectors which percent is less then 10% should be group in "Other"
+                            if (percent > 0.1) {
+                                ds.setValue(funding.getSector().getName(), funding.getFounding());
+                            } else {
+                                otherFunfing += funding.getFounding();
+                            }
 			}
+                        if(otherFunfing!=0){
+                            ds.setValue("Other", otherFunfing);
+                        }		
 		}
 		return ds;
 	}
@@ -238,7 +248,7 @@ public class ChartWidgetUtil {
 		return cal.getTime();
 	}
 	
-    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate) throws DgException {
+    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;
 		String oql = "select f.ampDonorOrgId, sa.sectorId, sa.sectorPercentage, sa.activityId.ampActivityId, fd.ampCurrencyId, sum(fd.transactionAmount)";
 		oql += " from ";
@@ -300,6 +310,8 @@ public class ChartWidgetUtil {
 				}
 				//add amount to sector
 				sectorFundngObj.addFunding(converted.doubleValue());
+                                //calculate whole funding information
+                                wholeFunding[0]+=converted.doubleValue();
 			}
 			fundings = donors.values(); 
 		}

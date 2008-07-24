@@ -53,10 +53,15 @@
 </script>
 
 <table>
+    <tr>
+        <td colspan="3" align="left">
+            <digi:trn key="widget:piechart:allAmountsDollars">All amounts in dollars for </digi:trn> ${gisSectorByDonorTeaserForm.selectedYear}
+        </td>
+    </tr>
 	<tr>
 		<td>
 			<html:select name="gisSectorByDonorTeaserForm" property="selectedDonor"  style="width : 230px" onchange="donorChanged()">
-				<html:option value="-1"><digi:trn key="gis:piechart:allDonorsItem">All Donors</digi:trn></html:option>
+				<html:option value="-1"><digi:trn key="widget:piechart:allDonorsItem">All Donors</digi:trn></html:option>
 				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="donors" label="name" value="ampOrgId"/>
 			</html:select>
 		</td>

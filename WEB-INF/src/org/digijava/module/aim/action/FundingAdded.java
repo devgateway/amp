@@ -213,6 +213,9 @@ public class FundingAdded extends Action {
 		
 		this.updateTotals(eaForm, tm);
 		
+		String currCode = CurrencyUtil.getAmpcurrency( tm.getAppSettings().getCurrencyId() ).getCurrencyCode();
+		eaForm.setCurrCode( currCode );
+		
 		eaForm.setStep("3");
 
 		return mapping.findForward("forward");

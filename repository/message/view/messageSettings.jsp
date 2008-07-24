@@ -23,7 +23,7 @@
 
 <script langauage="JavaScript">
 
-	var help='<digi:trn key="message:help">help</digi:trn>'
+	var help='<digi:trn key="message:msgHelp">Message Settings Help</digi:trn>'
 	var helpForRefreshTime='<digi:trn key="message:helpForMsgRefreshTime">This indicates the time in minutes the messages count on the user\'s desktop is refreshed.</digi:trn>'
 	var helpForStorage='<digi:trn key="message:helpForStorage">This indicates the total number of messages that are permissible per type of message <br>i.e. Messages , Alerts , Approvals and Events. Within Messages and Alerts this setting <br>indicates the total number of messages permissible in the Inbox , Sent and Draft messages.</digi:trn>'
 	var helpForAdvanceAlerts='<digi:trn key="message:helpForAdvAlerts">This indicates the number of days in advance an Alert will be recieved by a user<br> for all alerts that are time sensitive and for upcoming events.</digi:trn>'

@@ -3,8 +3,10 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
+import org.digijava.module.contentrepository.action.DocumentManager;
 
 /**
  * @author jose
@@ -12,6 +14,8 @@ import org.digijava.module.aim.dbentity.AmpTermsAssist;
  */
 public class Funding implements Serializable 
 {
+	private static Logger logger		= Logger.getLogger(Funding.class);
+	
     private long fundingId;
 	//private AmpTermsAssist ampTermsAssist;
     private AmpCategoryValue typeOfAssistance;
@@ -160,6 +164,7 @@ public class Funding implements Serializable
 			Funding tmp = (Funding) e;
 			return fundingId == tmp.fundingId;
 		}
+		logger.error( "Received an object of class " + e.getClass().getName() + " instead of class Funding");
 		throw new ClassCastException();
 	}
 

@@ -26,6 +26,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="PARIS INDICATORS"></module:display>
 <module:display name="Messaging System"></module:display>
 <module:display name="GIS DASHBOARD"></module:display>
+<module:display name="WIDGETS"></module:display>
 
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -149,9 +150,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <feature:display name="Measures" module="Reports"></feature:display>
 <feature:display name="Messages" module="Messaging System"></feature:display>
-<feature:display name="Table Widgets" module="GIS DASHBOARD"></feature:display>
-<feature:display name="Indicator chart Widgets" module="GIS DASHBOARD"></feature:display>
-<feature:display name="Widget Places" module="GIS DASHBOARD"></feature:display>
+<feature:display name="Table Widgets" module="WIDGETS"></feature:display>
+<feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display>
+<feature:display name="Widget Places" module="WIDGETS"></feature:display>
+<feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display>
 
 <feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display module="Funding" name="Disbursements"></feature:display>

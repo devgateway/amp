@@ -330,54 +330,54 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <feature:display  name="Table Widgets" module="GIS DASHBOARD">
+                          <feature:display  name="Table Widgets" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="gis:clickToViewTableWidgetAdmin">Click here to view Table Widgets Manager</digi:trn>
+                                <digi:trn key="widgets:clickToViewTableWidgetAdmin">Click here to view Table Widgets Manager</digi:trn>
                               </c:set>
-                              <a href="/gis/adminTableWidgets.do" title="${translation}">
-                                <digi:trn key="gis:tableWidgetManager">Table Widget Manager</digi:trn>
+                              <a href="/widget/adminTableWidgets.do" title="${translation}">
+                                <digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
                           </feature:display>
-                          <feature:display  name="Indicator chart Widgets" module="GIS DASHBOARD">
+                          <feature:display  name="Indicator chart Widgets" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
                                 <digi:trn key="gis:clickToViewChartWidgetAdmin">Click here to view Indicator Chart Widgets Manager</digi:trn>
                               </c:set>
-                              <a href="/gis/indicatorchartwidgets.do" title="${translation}">
-                                <digi:trn key="gis:indicatorChartWidgetManager">Indicator Chart Widget Manager</digi:trn>
+                              <a href="/widget/indicatorchartwidgets.do" title="${translation}">
+                                <digi:trn key="widget:indicatorChartWidgetManager">Indicator Chart Widget Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
                           </feature:display>
-                            <feature:display  name="Indicator Sector Region" module="GIS DASHBOARD">
+                            <feature:display  name="Indicator Sector Region" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="gis:clickToViewIndicatorSectorRegion">Click here to view Indicator Sector Region Manager</digi:trn>
+                                <digi:trn key="widget:clickToViewIndicatorSectorRegion">Click here to view Indicator Sector Region Manager</digi:trn>
                               </c:set>
-                              <a href="/gis/indSectRegManager.do" title="${translation}">
-                                <digi:trn key="gis:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
+                              <a href="/widget/indSectRegManager.do" title="${translation}">
+                                <digi:trn key="widget:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
                               </a>
                             </td>
                           </tr>
                           </feature:display>
-                          <feature:display  name="Widget Places" module="GIS DASHBOARD">
+                          <feature:display  name="Widget Places" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="gis:clickToViewWidgetPlaceAdmin">Click here to view Widgets Place Manager</digi:trn>
+                                <digi:trn key="widget:clickToViewWidgetPlaceAdmin">Click here to view Widgets Place Manager</digi:trn>
                               </c:set>
-                              <a href="/gis/widgetplaces.do" title="${translation}">
-                                <digi:trn key="gis:widgetPlaceManager">Widget Place Manager</digi:trn>
+                              <a href="/widget/widgetplaces.do" title="${translation}">
+                                <digi:trn key="widget:widgetPlaceManager">Widget Place Manager</digi:trn>
                               </a>
                             </td>
                           </tr>

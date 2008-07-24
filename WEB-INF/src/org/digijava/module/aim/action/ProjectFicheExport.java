@@ -230,7 +230,6 @@ public class ProjectFicheExport extends Action {
 
 		Cell c = new Cell(newParagraph("Activities", tableFont, 0));
 		c.setRowspan(3);
-		c.setLeading(1);
 		c.setColspan(2);
 		tbl.addCell(c);
 		c = new Cell(" ");
@@ -280,6 +279,8 @@ public class ProjectFicheExport extends Action {
 		AmpCategoryClass ctrType = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.IPA_TYPE_KEY);
 		
 		List contracts = ActivityUtil.getIPAContracts(act.getAmpActivityId());
+		final double grayLevel1 = 0.7;
+		final double grayLevel2 = 0.8;
 		
 		final class TableHelper {
 			Double totalCost = new Double(0);
@@ -323,8 +324,10 @@ public class ProjectFicheExport extends Action {
 			}
 			
 			
-			public void printMe(String name, RtfFont tableFont, Table tbl) throws BadElementException{
+			public void printMe(String name, RtfFont tableFont, Table tbl, boolean grayOut) throws BadElementException{
 				Cell c = new Cell(newParagraph(name, tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				c.setColspan(2);
 				tbl.addCell(c);
 			    
@@ -333,30 +336,54 @@ public class ProjectFicheExport extends Action {
 				boldTableFont.setSize(tableFontSize);
 				c = new Cell(newParagraph(formatNumber(totalCost), boldTableFont, 0));
 				c.setColspan(2);
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(euTotal), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(euPercent), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(euIB), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(euINV), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				
 				c = new Cell(newParagraph(formatNumber(nationalTotal), boldTableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(nationalPercent), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(nationalCentral), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(nationalRegional), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(nationalIFIs), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 
 				c = new Cell(newParagraph(formatNumber(privateTotal), boldTableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 				c = new Cell(newParagraph(formatNumber(privatePercent), tableFont, 0));
+				if (grayOut)
+					c.setGrayFill((float)grayLevel1);
 				tbl.addCell(c);
 			}
 		};
@@ -406,13 +433,13 @@ public class ProjectFicheExport extends Action {
 				actLine.add(th);
 			}
 			if (contractLines.size() != 0){
-				actLine.printMe(aval.getValue(), tableFont2, tbl);
+				actLine.printMe(aval.getValue(), tableFont2, tbl, true);
 				ctypeIt = ctrType.getPossibleValues().iterator();
 				while (ctypeIt.hasNext()) {
 					AmpCategoryValue cval = (AmpCategoryValue) ctypeIt.next();
 					if (contractLines.containsKey(cval.getId())){
 						TableHelper tth = (TableHelper) contractLines.get(cval.getId());
-						tth.printMe("     " + cval.getValue(), tableFont2, tbl);
+						tth.printMe("     " + cval.getValue(), tableFont2, tbl, false);
 					}
 				}
 			}
@@ -421,10 +448,78 @@ public class ProjectFicheExport extends Action {
 		
 		
 		document.add(tbl);
+
+		RtfFont boldTableFont = getRegularFont();
+		boldTableFont.setStyle(RtfFont.BOLD);
+		boldTableFont.setSize(tableFontSize);
 		
+		document.add(newParagraph("Note: Depending on the type of supplies required, contracts may be split into more than 1 contract.",tableFont,1));
+		document.add(newParagraph("* - expressed in % of Total Cost for each Activity", boldTableFont,1));
+
 		
+		CalendarHelper calendarHelper = new CalendarHelper();
 		
+		document.add(newParagraph("5. Indicative Implementation Schedule (periods broken down per quarter)",rootSectionFont,1));
 		
+
+		tbl = new Table(5);
+		tbl.setTableFitsPage(true);
+		
+		c = new Cell(newParagraph("Contracts", boldTableFont, 0));
+		c.setColspan(2);
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Start of Tendering", boldTableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Signature of Contract", boldTableFont, 0));
+		tbl.addCell(c);
+		c = new Cell(newParagraph("Project Completion", boldTableFont, 0));
+		tbl.addCell(c);
+		
+		Iterator it = contracts.iterator();
+		while (it.hasNext()) {
+			IPAContract contract = (IPAContract) it.next();
+			
+			c = new Cell(newParagraph(contract.getContractName(), tableFont2, 0));
+			c.setColspan(2);
+			tbl.addCell(c);
+			
+			Date date = contract.getStartOfTendering();
+			if (date != null){
+				calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
+				int quarter = calendarHelper.getQuarter();
+				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(date.getYear()+1900), tableFont2, 0));
+			}
+			else
+				c = new Cell(newParagraph("", tableFont2, 0));
+			tbl.addCell(c);
+			
+			date = contract.getSignatureOfContract();
+			if (date != null){
+				calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
+				int quarter = calendarHelper.getQuarter();
+				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(date.getYear()+1900), tableFont2, 0));
+			}
+			else
+				c = new Cell(newParagraph("", tableFont2, 0));
+			tbl.addCell(c);
+			
+			date = contract.getContractCompletion();
+			if (date != null){
+				calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
+				int quarter = calendarHelper.getQuarter();
+				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(date.getYear()+1900), tableFont2, 0));
+			}
+			else
+				c = new Cell(newParagraph("", tableFont2, 0));
+			tbl.addCell(c);
+		}
+
+		document.add(tbl);
+		
+		document.add(newParagraph("6. Cross Cutting Issues (where applicable)",rootSectionFont,1));
+		document.add(newParagraph("6.1 Equal Opportunity"+Util.getEditorBody(site,act.getEqualOpportunity(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("6.2 Environment"+Util.getEditorBody(site,act.getEnvironment(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("6.3 Minorities"+Util.getEditorBody(site,act.getMinorities(),navigationLanguage),regularFont,1));
 		
 		
 		//LOGFRAME
@@ -555,7 +650,6 @@ public class ProjectFicheExport extends Action {
 			}
 		}
 
-		CalendarHelper calendarHelper = new CalendarHelper();
 		calendarHelper.setTime(new java.sql.Date(lowDate.getYear(), lowDate.getMonth(), lowDate.getDay()));
 		int lowDateQuarter = calendarHelper.getQuarter();
 		calendarHelper.setTime(new java.sql.Date(highDate.getYear(), highDate.getMonth(), highDate.getDay()));
@@ -579,8 +673,7 @@ public class ProjectFicheExport extends Action {
 
 		tableFont2 = getRegularFont();
 		tableFont2.setSize(tableFontSize);
-		double grayLevel1 = 0.7;
-		double grayLevel2 = 0.8;
+		
 		c=new Cell(newParagraph("Contracted", tableFont, 0));
 		c.setColspan(2);
 		c.setGrayFill((float)grayLevel1);

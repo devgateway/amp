@@ -993,7 +993,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				            	AmpFundingMTEFProjection ampProjection		= iterMtef.next();
 				            	MTEFProjection	projection					= new MTEFProjection();
 
-				            	projection.setAmount( ampProjection.getAmount() + "" );
+				            	projection.setAmount( FormatHelper.formatNumber(ampProjection.getAmount()) + "" );
 				            	if ( ampProjection.getProjected() != null )
 				            		projection.setProjected( ampProjection.getProjected().getId() );
 				            	else

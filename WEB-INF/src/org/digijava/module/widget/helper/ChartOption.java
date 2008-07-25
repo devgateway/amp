@@ -14,6 +14,24 @@ public class ChartOption {
 	private Integer height;
 	private boolean createMap;
 	private String title;
+        private String langCode;
+        private Long siteId;
+
+        public String getLangCode() {
+            return langCode;
+        }
+
+        public void setLangCode(String langCode) {
+            this.langCode = langCode;
+        }
+
+        public Long getSiteId() {
+            return siteId;
+        }
+
+        public void setSiteId(Long siteId) {
+            this.siteId = siteId;
+        }
 	
 	public boolean isShowLegend() {
 		return showLegend;

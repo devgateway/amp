@@ -48,6 +48,7 @@ public class UpdateIssue extends Action {
 				int index = eaForm.getIssues().indexOf(issue);
 				if (index < 0) {
 					issue.setName(eaForm.getIssue());
+					issue.setIssueDate(eaForm.getIssueDate());
 					if (eaForm.getIssues() == null) {
 						eaForm.setIssues(new ArrayList());
 					}
@@ -55,10 +56,12 @@ public class UpdateIssue extends Action {
 				} else {
 					issue = (Issues) eaForm.getIssues().get(index);
 					issue.setName(eaForm.getIssue());
-					eaForm.getIssues().set(index,issue);
+					issue.setIssueDate(eaForm.getIssueDate());
+					
 				}				
 			}
 			eaForm.setIssue(null);
+			eaForm.setIssueDate(null);
 			logger.debug("returning issueAdded");
 		}
 		return mapping.findForward("forward");

@@ -257,8 +257,9 @@ background-color: yellow;
 		    underlay:"none",
 		    close:true,
 		    visible:false,
-		    modal:true,
-		    draggable:true}
+		    //modal:true,
+		    draggable:true
+		    }
 		     );
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);

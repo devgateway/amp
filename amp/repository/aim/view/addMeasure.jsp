@@ -7,17 +7,17 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
+<digi:instance property="aimEditActivityForm" />
+<digi:form name="addMeasureForm" type="aimEditActivityForm" action="/addMeasure.do" method="post">
 <script language="JavaScript">
 <!--
 
 	function validate() {
-		if(isEmpty(document.aimEditActivityForm.measure.value) == true) {
+		if(isEmpty(document.addMeasureForm.measure.value) == true) {
 			alert("Please enter the measure");
-			document.aimEditActivityForm.measure.focus();
+			document.addMeasureForm.measure.focus();
 			return false;
 		}
 		return true;
@@ -26,9 +26,7 @@
 	function addMeasure() {
 		var flag = validate();
 		if (flag == true) {
-			document.aimEditActivityForm.target = window.opener.name;
-			document.aimEditActivityForm.submit();
-			window.close();
+			document.addMeasureForm.submit();
 			return flag;
 		} else {
 			return false;
@@ -41,29 +39,18 @@
 
 -->
 </script>
-
-<digi:instance property="aimEditActivityForm" />
-
-<digi:form action="/addMeasure.do" method="post">
-
 <html:hidden property="issueId" />
 <html:hidden property="measureId" />
-
 <html:hidden property="event"/>
 <input type="hidden" name="edit" value="true">
 <html:hidden property="editAct"/>
-
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left vAlign=top>
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-								<digi:trn key="aim:addMeasure">Add Measure</digi:trn>
-							</td>
-						</tr>
+						
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellSpacing=2 cellPadding=2>
@@ -82,14 +69,19 @@
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addMeasure()">
+														<c:if test="${aimEditActivityForm.measureId == -1}">
+															<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addMeasure()">													</td>
+														</c:if>
+														
+														<c:if test="${aimEditActivityForm.measureId != -1}">
+															<input type="button" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu" onclick="return addMeasure()">												</td>
+														</c:if>
+														
 													</td>
 													<td>
 														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
 													</td>
-													<td>
-														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="window.close()">
-													</td>
+												
 												</tr>
 											</table>
 										</td>

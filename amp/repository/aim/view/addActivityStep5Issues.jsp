@@ -1,5 +1,4 @@
 <%@ page pageEncoding="UTF-8" %>
-
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -15,6 +14,24 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+<!-- dynamic drive ajax tabs -->
+<script language="JavaScript" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
+
+
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+
+
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<!-- dynamic tooltip -->
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
+
+
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -66,6 +83,8 @@
 															<td vAlign="center" align="left">
 																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
 																<c:out value="${issues.name}"/></a>
+																 &nbsp;
+																<c:out value="${issues.issueDate}"/>
 															</td>
 														</tr>
 														<tr class="<%=rowClass%>">
@@ -160,6 +179,7 @@
 												<tr><td align="center">
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
+															
 															<field:display name="Add Issues Button" feature="Issues">
 															<td>
 																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">

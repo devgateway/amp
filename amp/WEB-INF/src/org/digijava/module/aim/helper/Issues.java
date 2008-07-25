@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Issues {
 	private Long id;
 	private String name;
+	private String issueDate;
 	private String nameTrimmed ;
 	private ArrayList measures;
 	/**
@@ -63,6 +64,12 @@ public class Issues {
 	}
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;
+	}
+	public String getIssueDate() {
+		return issueDate;
+	}
+	public void setIssueDate(String issueDate) {
+		this.issueDate = issueDate;
 	}
 	
 }

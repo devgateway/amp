@@ -217,7 +217,11 @@ method="post">
 													<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="left"
 													bgcolor="#ffffff">
 														<TR bgcolor="#dfdfdf"><TD>
-															<font color="#0000ff"><digi:trn key="aim:issue">Issue:</digi:trn> </font><bean:write name="issue" property="name"/>
+															<font color="#0000ff"><digi:trn key="aim:issue">Issue:</digi:trn> </font>
+															<bean:write name="issue" property="name"/>
+															&nbsp;
+															<bean:write name="issue" property="issueDate"/>
+															
 														</TD></TR>
 														<logic:empty name="issue" property="measures">
 															<TR><TD align="center">

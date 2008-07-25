@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,8 +18,12 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.CachedTranslatorWorker;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -31,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -40,7 +44,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -182,11 +185,17 @@ public class ChartWidgetUtil {
 		}
 	}
 	
-	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year,ChartOption opt)throws DgException{
+	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
 		PieDataset ds = getSectorByDonorDataset(donors,year);
 		String selYear = (year==null)?"All years":year.toString();
-		String title = (opt.isShowTitle())?"Breackdown by sector ("+selYear+")":null;
+                //String titleMsg= TranslatorWorker.translate("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
+                Message msg= DbUtil.getMessage("widget:piechart:breakdownbysector", opt.getLangCode(), opt.getSiteId());
+                String titleMsg="";
+                if(msg!=null){
+                   titleMsg=msg.getMessage(); 
+                }
+		String title = (opt.isShowTitle())? titleMsg+" ("+selYear+")":null;
 		boolean tooltips = false;
 		boolean urls = false;
 		result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
@@ -249,16 +258,17 @@ public class ChartWidgetUtil {
 	}
 	
     public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
-    	Collection<DonorSectorFundingHelper> fundings=null;
+    	Collection<DonorSectorFundingHelper> fundings=null;  
 		String oql = "select f.ampDonorOrgId, sa.sectorId, sa.sectorPercentage, sa.activityId.ampActivityId, fd.ampCurrencyId, sum(fd.transactionAmount)";
 		oql += " from ";
 		oql += AmpFunding.class.getName() + " as f, ";
 		oql += AmpFundingDetail.class.getName() + " as fd, ";
 		// oql+=AmpActivity.class.getName()+" as a, ";
 		// oql+=AmpSector.class.getName()+" as s, ";
-		oql += AmpActivitySector.class.getName() + " as sa ";
+		oql += AmpActivitySector.class.getName() + " as sa, ";
+                oql+=AmpSector.class.getName() + " as s ";
 		oql += " where fd.ampFundingId.ampActivityId.ampActivityId = sa.activityId.ampActivityId";
-		oql += " and fd.transactionType = 0 and fd.adjustmentType = 1";
+		oql += " and s.parentSectorId is null and s.ampSectorId=sa.sectorId.ampSectorId and fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
 		}

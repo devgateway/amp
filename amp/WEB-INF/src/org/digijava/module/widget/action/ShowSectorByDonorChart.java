@@ -10,6 +10,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.widget.form.SectorByDonorTeaserForm;
 import org.digijava.module.widget.helper.ChartOption;
 import org.digijava.module.widget.util.ChartWidgetUtil;
@@ -27,7 +28,7 @@ public class ShowSectorByDonorChart extends Action {
         response.setContentType("image/png");
         Integer year = null;
         Long[] donorIDs = null;
-        ChartOption opt=createChartOption(cForm);
+        ChartOption opt=createChartOption(cForm,request);
 
         if (cForm.getSelectedYear()!=null && !cForm.getSelectedYear().equals("-1")){
         	year = new Integer(cForm.getSelectedYear());
@@ -54,7 +55,7 @@ public class ShowSectorByDonorChart extends Action {
 		return null;
 	}
 	
-	private ChartOption createChartOption(SectorByDonorTeaserForm form){
+	private ChartOption createChartOption(SectorByDonorTeaserForm form,HttpServletRequest request){
 		ChartOption opt= new ChartOption();
 		
 		//TITLE
@@ -87,8 +88,11 @@ public class ShowSectorByDonorChart extends Action {
         }else{
         	opt.setWidth(form.getImageWidth());
         }
-		
-		return opt;
+                Long siteId=RequestUtils.getSiteDomain(request).getSite().getId();
+                opt.setSiteId(siteId);
+                String langCode= RequestUtils.getNavigationLanguage(request).getCode();
+                opt.setLangCode(langCode);
+		return opt;		
 	}
 
 }

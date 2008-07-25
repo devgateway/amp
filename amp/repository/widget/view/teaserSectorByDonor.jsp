@@ -55,7 +55,7 @@
 <table>
     <tr>
         <td colspan="3" align="left">
-            <digi:trn key="widget:piechart:allAmountsDollars">All amounts in dollars for </digi:trn> ${gisSectorByDonorTeaserForm.selectedYear}
+            <digi:trn key="widget:piechart:allAmountsinDollars">All amounts in dollars </digi:trn>
         </td>
     </tr>
 	<tr>

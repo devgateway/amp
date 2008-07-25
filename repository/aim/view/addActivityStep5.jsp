@@ -55,39 +55,98 @@ function checkallIssues() {
 
 }
 
+///CONVERT POPUP TO POPIN CODE 
+		//POPIN DEFINITION
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+			var myPanel1 = new YAHOOAmp.widget.Panel("new", {
+			width:"500px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true} 
+		    );
+	
+		//POPIN RENDER FUNCTION
+		function showPOPIN(){
+			var element = document.getElementById("divContent");
+			myPanel1.setBody(element);
+			myPanel1.render(document.body);
+			myPanel1.show();
+		}
+		
+		
+	//LOAD THE POPUP
+	var div=null; 
+		var callback = { 
+     	   		success: function(o) {
+     	   				if (div!=null){
+     	   					document.removeChild(div);
+     	   				}
+     	   					div=document.createElement('div');
+     	   					div.setAttribute("style","display:inline");
+     	   					div.setAttribute("id","divContent");
+     	   					
+     	   				
+     	   				/* 
+     	   				 just load the form part  of the popup page (we can improve it using DOM) 
+     	   			  	 be sure all needed (script etc) is located into the FORM on the popup page
+     	   				*/ 
+     	   				div.innerHTML=o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
+     	   				//APPEND THE POPUP FORM TO THE POPIN DIV 
+     	   				document.body.appendChild(div);
+     	   				//call this to render the popin
+     	   				showPOPIN();
+     	   				
+	        	} 
+        }
+	    
+	  function addIssues(){
+	 			 myPanel1.setHeader('<digi:trn key="aim:addIssue">Add Issue</digi:trn>');
+	  			 <digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
+ 				var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addIssue%>&issueId=-1",callback);
+        }
+       
+       
+       
+       function updateIssues(id) {
+     		   myPanel1.setHeader('<digi:trn key="aim:updateIssue">Update Issue</digi:trn>');
+			<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
+			var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addIssue%>&issueId="+id,callback);
+		}
+        
+        
+	function addMeasures(issueId) {
+	 	  myPanel1.setHeader('<digi:trn key="aim:addMeasure">Add Measure</digi:trn>');
+		 <digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
+		 var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issueId="+issueId+"&measureId=-1",callback);
+	}
 
 
-function addIssues() {
-
-	openNewWindow(610, 160);
-
-	<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-
-	document.aimEditActivityForm.action = "<%=addIssue%>&issueId=-1";
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
-
+	function updateMeasures(issueId,measureId) {
+		myPanel1.setHeader('<digi:trn key="aim:updateMeasure">Update Measure</digi:trn>');
+		<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addMeasure%>&issueId="+issueId+"&measureId="+measureId,callback);
+	}
+	
+	
+	function addActors(issueId,measureId) {
+		myPanel1.setHeader('<digi:trn key="aim:addActor">Add Actor</digi:trn>');
+		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId=-1",callback);
+	}
 
 
-function updateIssues(id) {
 
-	openNewWindow(610, 160);
+	function updateActor(issueId,measureId,actorId) {
+		myPanel1.setHeader('<digi:trn key="aim:updateActor">Update Actor</digi:trn>');
+		<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest("GET","<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId="+actorId,callback);
+	}
 
-	<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
-
-	document.aimEditActivityForm.action = "<%=addIssue%>&issueId="+id;
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
-
-
+//END POPIN
 
 function removeIssues() {
 
@@ -102,36 +161,6 @@ function removeIssues() {
 }
 
 
-
-function addMeasures(issueId) {
-
-	openNewWindow(610, 160);
-
-	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-
-	document.aimEditActivityForm.action = "<%=addMeasure%>&issueId="+issueId+"&measureId=-1";
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
-
-
-
-function updateMeasures(issueId,measureId) {
-
-	openNewWindow(610, 160);
-
-	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
-
-	document.aimEditActivityForm.action = "<%=addMeasure%>&issueId="+issueId+"&measureId="+measureId;
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
 
 
 
@@ -148,36 +177,6 @@ function removeMeasure(issueId) {
 }
 
 
-
-function addActors(issueId,measureId) {
-
-	openNewWindow(610, 160);
-
-	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-
-	document.aimEditActivityForm.action = "<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId=-1";
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
-
-
-
-function updateActor(issueId,measureId,actorId) {
-
-	openNewWindow(610, 160);
-
-	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
-
-	document.aimEditActivityForm.action = "<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId="+actorId;
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
 
 
 

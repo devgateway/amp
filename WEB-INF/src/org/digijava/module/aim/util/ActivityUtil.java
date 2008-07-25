@@ -2263,6 +2263,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           Issues issue = new Issues();
           issue.setId(ampIssue.getAmpIssueId());
           issue.setName(ampIssue.getName());
+          issue.setIssueDate(FormatHelper.formatDate(ampIssue.getIssueDate()));
           ArrayList mList = new ArrayList();
           if (ampIssue.getMeasures() != null &&
               ampIssue.getMeasures().size() > 0) {

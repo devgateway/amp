@@ -9,6 +9,7 @@
 			</generator>
 		</id>
 		<property column="name" name="name" type="org.digijava.kernel.db.SafeClobType"/>
+		<property column="issueDate" name="issueDate" type="java.util.Date"/>
 		<many-to-one name="activity" column="amp_activity_id" 
 		class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"/>
 		<set name="measures" cascade="all" inverse="true" order-by="amp_measure_id asc">

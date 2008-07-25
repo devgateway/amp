@@ -29,6 +29,7 @@ public class ShowUpdateIssue extends Action {
 			int index = eaForm.getIssues().indexOf(issue);
 			issue = (Issues) eaForm.getIssues().get(index);
 			eaForm.setIssue(issue.getName());
+			eaForm.setIssueDate(issue.getIssueDate());
 		}  else {
 			eaForm.setIssue(null);
 		}

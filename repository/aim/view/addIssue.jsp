@@ -5,101 +5,89 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
+<digi:instance property="aimEditActivityForm" />
+<digi:form  name="addIssueForm" type="aimEditActivityForm"  styleId="addIssueForm"  action="/addIssue.do" method="post"  onsubmit="return validate()">
 <script language="JavaScript">
-<!--
 
 	function validate() {
-		if(isEmpty(document.aimEditActivityForm.issue.value) == true) {	
+		if(isEmpty(addIssueForm.issue.value) == true) {	
 			var issueError = "<digi:trn key="aim:enterIssue">Please enter issue</digi:trn>"; 	
 			alert(issueError);			
-			document.aimEditActivityForm.issue.focus();
+			addIssueForm.issue.focus();
 			return false;
 		}
 		return true;
 	}
-
-	function addIssue() {
-		var flag = validate();
-		if (flag == true) {
-			document.aimEditActivityForm.target = window.opener.name;
-			document.aimEditActivityForm.submit();
-			window.close();
-			return flag;
-		} else {
-			return false;
-		}
-	}
-
-	function load() {}
-
-	function unload() {}
-
--->
 </script>
-
-<digi:instance property="aimEditActivityForm" />
-
-<digi:form action="/addIssue.do" method="post">
 
 <html:hidden property="issueId"/>
 <html:hidden property="event"/>
 <html:hidden property="edit" value="true"/>
 <html:hidden property="editAct"/>
-
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
-	<tr><td vAlign="top">
+	<tr>
+		<td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left vAlign=top>
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
-						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-								<digi:trn key="aim:addIssue">Add Issue</digi:trn>
-							</td>
-						</tr>
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellSpacing=2 cellPadding=2>
-									<tr>
-										<td valign="top">
-											<digi:trn key="aim:issue">Issue</digi:trn>
-										</td>
-										<td valign="top">
+							  <tr>
+										<td align="right" valign="top">
+									  <digi:trn key="aim:issue">Issue</digi:trn>
+									  &nbsp; </td>
+							     <td valign="top">
 											 <a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
 												<html:textarea property="issue" styleClass="inp-text" rows="3" cols="60"/>
-											 </a>
-										</td>
+											 </a>										</td>
 									</tr>								
+									<tr>
+									  <td align="right"><digi:trn key="aim:dateOfissue">Date of Issue</digi:trn>
+								      &nbsp;</td>
+								      <td><html:text property="issueDate" size="10"
+																styleId="issueDate" styleClass="inp-text" readonly="true"/> 
+																
+																<a id="clear1" href="javascript:clearDate(issueDate, 'clear1')">
+	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
+																</a>
+																<a id="date1" href='javascript:pickDateWithClear("date1",issueDate,"clear1")'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a></td>
+								  </tr>
 									<tr>
 										<td align="center" colspan=2>
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addIssue()">
-													</td>
+													
+														<c:if test="${aimEditActivityForm.issueId == -1}">
+															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">													</td>
+														</c:if>
+														
+														<c:if test="${aimEditActivityForm.issueId != -1}">
+															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">													</td>
+														</c:if>
+														
+														
 													<td>
-														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
-													</td>
+														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">													</td>
 													<td>
-														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="window.close()">
 													</td>
 												</tr>
-											</table>
-										</td>
+											</table>										</td>
 									</tr>
 								</table>
-							</td>
+						  </td>
 						</tr>					
 					</table>
 				</td>
 			</tr>
 		</table>
 	</td></tr>
-</table>
 </digi:form>
+</table>

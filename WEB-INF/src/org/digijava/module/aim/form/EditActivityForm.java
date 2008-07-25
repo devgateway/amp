@@ -492,6 +492,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private ArrayList issues;
 	private Long[] selIssues;
 	private String issue;
+	private String issueDate;
 	private Long[] selMeasures;
 	private String measure;
 	private Long issueId;
@@ -5428,5 +5429,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setApprovalDate(Date approvalDate) {
 		this.approvalDate = approvalDate;
+	}
+
+	public String getIssueDate() {
+		return issueDate;
+	}
+
+	public void setIssueDate(String issueDate) {
+		this.issueDate = issueDate;
 	}
 }

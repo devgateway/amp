@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 //import java.io.Serializable;
 
@@ -11,8 +12,8 @@ public class AmpIssues  implements Serializable
 	private String name ;
 	private AmpActivity activity;
 	private Set measures;
-	
-
+	private Date issueDate;
+ 
 	public String getName() {
 		return name;
 	}
@@ -48,6 +49,12 @@ public class AmpIssues  implements Serializable
 			return issue.getAmpIssueId().equals(ampIssueId);
 		}
 		throw new ClassCastException();
+	}
+	public Date getIssueDate() {
+		return issueDate;
+	}
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
 	}
 	
 

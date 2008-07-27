@@ -7,6 +7,7 @@
 package org.digijava.module.aim.action;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,8 +31,9 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -167,6 +169,8 @@ public class ViewNewAdvancedReport extends Action {
 			httpSession.setAttribute("progressValue", progressValue); 
 	
 			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));	
+			saveOrUpdateReportLog(tm, ar);
+			
 			progressValue = progressValue + 3;// 3 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 
 		}
@@ -227,6 +231,22 @@ public class ViewNewAdvancedReport extends Action {
 
 		
 		return mapping.findForward("forward");
+	}
+
+
+	private void saveOrUpdateReportLog(TeamMember tm, AmpReports ar) {
+		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+		AmpReportLog reportlog = DbUtil.getAmpReportLog(ar.getAmpReportId(), ampTeamMember.getAmpTeamMemId());
+		if(reportlog!=null){
+			reportlog.setLastView(new Date());
+			DbUtil.update(reportlog);
+		}else{
+			reportlog = new AmpReportLog();
+			reportlog.setReport(ar);
+			reportlog.setMember(ampTeamMember);
+			reportlog.setLastView(new Date());
+			DbUtil.add(reportlog);				
+		}
 	}
 	
 }

@@ -74,6 +74,7 @@ import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
+import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -1729,6 +1730,28 @@ public class DbUtil {
         }
         return ampReports;
     }
+    
+    public static AmpReportLog getAmpReportLog(Long report_id, Long member_id) {
+    	AmpReportLog ampReportMemberLog = null;
+        Session session = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select r from " + AmpReportLog.class.getName()
+                + " r " + "where (r.report=:id and r.member=:member)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("id", report_id, Hibernate.LONG);
+            qry.setParameter("member", member_id, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+            	ampReportMemberLog = (AmpReportLog) itr.next();
+            }
+            // end
+        } catch (Exception ex) {
+            logger.error("Unable to get reportmemberlog " + ex);
+        }
+        return ampReportMemberLog;
+    }    
 
     public static Collection getMembersUsingReport(Long id) {
 

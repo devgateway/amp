@@ -61,6 +61,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMember</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpApplicationSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpReports</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpReportLog</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSectorScheme</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTermsAssist</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpClosingDateHistory</hibernate-class>

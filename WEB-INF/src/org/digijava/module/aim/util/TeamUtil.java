@@ -2022,6 +2022,27 @@ public class TeamUtil {
            return col;	
     	
     }
+    public synchronized static List getLastShownReports(Long teamId, Long memberId) {
+        
+ 	   Session session 	= null;
+       List col 		= new ArrayList();
+
+       try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = null;
+            Query qry = null;
+         	queryString="select distinct r from " + AmpReports.class.getName()+
+			"  r left join r.logs m where (m.member is not null and m.member=:ampTeamMemId) order by m.lastView desc";
+         	qry = session.createQuery(queryString); 
+         	qry.setLong("ampTeamMemId", memberId);
+            col = qry.list();
+        } catch(Exception e) {
+            logger.debug("Exception from getAllTeamReports()");
+            logger.error(e.toString());
+            throw new RuntimeException(e);
+        }
+        return col;	
+ }
 
     public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage) {
     	return getAllTeamReports( teamId, null,  currentPage,  reportPerPage, false,null);

@@ -22,6 +22,7 @@ public class AmpTeamMember implements Serializable {
 	private Set activities;
 	private Set reports;
 	private Set links;
+	private Set logs;
 
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
@@ -169,6 +170,14 @@ public class AmpTeamMember implements Serializable {
 	public void setDesktopTabSelections(
 			Set<AmpDesktopTabSelection> desktopTabSelections) {
 		this.desktopTabSelections = desktopTabSelections;
+	}
+
+	public Set getLogs() {
+		return logs;
+	}
+
+	public void setLogs(Set logs) {
+		this.logs = logs;
 	}
 
 	/* (non-Javadoc)

@@ -75,12 +75,22 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private String user;
 	
 	private Set<AmpDesktopTabSelection> desktopTabSelections;
+	
+	private Set logs;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
 	// All amounts are in thousands.";
 	// private static SimpleDateFormat dateFormat = new
 	// SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+
+	public Set getLogs() {
+		return logs;
+	}
+
+	public void setLogs(Set logs) {
+		this.logs = logs;
+	}
 
 	public String getFormatedUpdatedDate() {
 		String result = null;

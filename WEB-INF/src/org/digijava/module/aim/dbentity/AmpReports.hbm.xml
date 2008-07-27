@@ -31,7 +31,11 @@
 			<key column="amp_report_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
 		</set>
-
+ 		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="save-update">
+			<key column="amp_report_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpReportLog"/>
+		</set>
+		
 		<set name="columns" table="AMP_REPORT_COLUMN">
 			<key column="amp_report_id"/>
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportColumn">

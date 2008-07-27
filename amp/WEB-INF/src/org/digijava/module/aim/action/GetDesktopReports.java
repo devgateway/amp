@@ -44,7 +44,7 @@ public class GetDesktopReports extends TilesAction {
 				
 				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 				//ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-				ArrayList userReports = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), null,null, null,true,tm.getMemberId());
+				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId());
 				if (defaultTeamReport != null){
 					Iterator iter = userReports.iterator();
 					boolean found = false;
@@ -66,12 +66,12 @@ public class GetDesktopReports extends TilesAction {
 					reports.addAll(userReports);
 //				}
 				Integer reportsPerPage=0;
-                Collections.sort((List<AmpReports>) reports, AmpReports.UpdatedDateComparator );
-                Collections.reverse((List<AmpReports>) reports);
+                //Collections.sort((List<AmpReports>) reports, AmpReports.UpdatedDateComparator );
+                //Collections.reverse((List<AmpReports>) reports);
                                 
 				session.setAttribute(Constants.MY_REPORTS,reports);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
-                                session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
+                session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
 
                 /* Setting Team Members tabs */
                 AmpTeamMember ampTeamMember				= TeamUtil.getAmpTeamMember(tm.getMemberId());

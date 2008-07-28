@@ -504,7 +504,7 @@ public class IndicatorUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <E extends IndicatorConnection> List<E> getAllConnections(Class<E> clazz)throws DgException{
-		List<E> result = null;
+		List<E> result = new ArrayList<E>();
 		Session session=PersistenceManager.getRequestDBSession();
 		String oql = "from "+clazz.getName();
 		try {

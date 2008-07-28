@@ -66,7 +66,7 @@
 					<td>
 						<html:select name="gisIndicatorChartForm" property="selIndicators" style="width : 300px">
 							<html:option value="-1">&nbsp;</html:option>
-							<html:optionsCollection name="gisIndicatorChartForm" property="indicators" label="indicator.name" value="id"/>
+							<html:optionsCollection name="gisIndicatorChartForm" property="indicators" label="generatedName" value="id"/>
 						</html:select>
 					</td>
 					<td>

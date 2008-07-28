@@ -56,7 +56,7 @@ function selectCalendarType(view, type) {
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
                                     		<a id="clear1" href="javascript:clearDate(document.calendarViewForm.customViewStartDate, 'clear1')" style="text-decoration:none">
-									 			<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="CLEAR"/>
+									 			<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 											</a>
                                     		<a id="date1" href='javascript:pickDateWithClear("date1",document.calendarViewForm.customViewStartDate,"clear1")' style="text-decoration:none">
 												<img src="../ampTemplate/images/show-calendar.gif" alt="START DATE" border=0>
@@ -111,7 +111,7 @@ function selectCalendarType(view, type) {
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
                                     		<a id="clear2" href="javascript:clearDate(document.calendarViewForm.customViewEndDate, 'clear2')" style="text-decoration:none">
-									 			<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="CLEAR"/>
+									 			<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 											</a>
                                     		<a id="date2" href='javascript:pickDateWithClear("date2",document.calendarViewForm.customViewEndDate,"clear2")' style="text-decoration:none">
 												<img src="../ampTemplate/images/show-calendar.gif" alt="END DATE" border=0>

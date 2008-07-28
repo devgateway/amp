@@ -483,7 +483,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="baseValDate" />"
 																	class="inp-text" size="10" readonly="true" id="txtBaseValDate">&nbsp;&nbsp;
 																	<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.baseValDate, 'clear1')">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date1" href='javascript:pickDateWithClear("date1",document.aimEditActivityForm.baseValDate,"clear1")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -524,7 +524,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
 																	<a id="clear2" href="javascript:clearDate(document.aimEditActivityForm.targetValDate, 'clear2')">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date2" href='javascript:pickDateWithClear("date2",document.aimEditActivityForm.targetValDate,"clear2")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -584,7 +584,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="true" id="txtRevisedTargetValDate">&nbsp;&nbsp;
 
 																	<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.revTargetValDate, 'clear3')">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date3" href='javascript:pickDateWithClear("date3",document.aimEditActivityForm.revTargetValDate,"clear3")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
@@ -667,7 +667,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	class="inp-text" size="10" readonly="readonly" id="currValDate">&nbsp;&nbsp;
 
 																	<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.currValDate, 'clear4')">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
 																	<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.currValDate,"clear4")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>

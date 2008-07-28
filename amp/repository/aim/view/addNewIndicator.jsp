@@ -293,7 +293,7 @@ function closeWindow() {
 				                  </td>
 				                  <td align="right">
 				                  <a href="javascript:removeActivity(${act.value})">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
+																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" 
 																		border="0" alt="Remove this child workspace"/></a>&nbsp;
 				                  </td>
 			                  </tr>

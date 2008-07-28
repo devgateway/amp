@@ -282,7 +282,7 @@
 																			<% String url1 =
 																			"/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
 																			<digi:link href="<%=url1%>">
-																				<digi:img src="module/cms/images/deleteIcon.gif" border="0"
+																				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"
 																				alt="Delete this physical progress"/>
 																			</digi:link>
 																		</td>																			

@@ -413,7 +413,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                       <tr>
                                                         <td>
                                                           <c:if test="${not empty aimEditActivityForm.proProjCost && aimEditActivityForm.proProjCost!=''}">
-                                                            <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
+                                                            <table cellSpacing=1 cellPadding="1"  width="100%">
                                                               <tr bgcolor="#ffffff">
                                                               	<field:display name="Proposed Project Planned" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
@@ -634,7 +634,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                       <table width="98%" border="0" cellpadding="1" bgcolor="#ffffff" cellspacing="1">
                                                                         <tr>
                                                                           <td bgcolor="#FFFFFF" align="right" colspan="2">
-                                                                            <table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
+                                                                            <table width="100%" border="0" cellSpacing="1" cellPadding="1" >
                                                                               <%-- Rendering projections --%>
                                                                               	<feature:display module="Funding" name="MTEF Projections">
 

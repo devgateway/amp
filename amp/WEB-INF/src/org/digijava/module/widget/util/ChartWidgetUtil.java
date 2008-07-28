@@ -265,7 +265,7 @@ public class ChartWidgetUtil {
 	
     public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
-		String oql = "select f.ampDonorOrgId, sa.sectorId, sa.sectorPercentage, sa.activityId.ampActivityId, fd.ampCurrencyId, sum(fd.transactionAmount)";
+		String oql = "select f.ampDonorOrgId, sa.sectorId, sa.sectorPercentage, sa.activityId.ampActivityId,  sum(fd.transactionAmountInUSD)";
 		oql += " from ";
 		oql += AmpFunding.class.getName() + " as f, ";
 		oql += AmpFundingDetail.class.getName() + " as fd, ";
@@ -311,12 +311,12 @@ public class ChartWidgetUtil {
 				AmpSector sector = (AmpSector) rowData[1];
 				Float sectorPrcentage = (Float) rowData[2];
 				//AmpActivity activity = (AmpActivity) rowData[3];
-				AmpCurrency currency = (AmpCurrency) rowData[4];
-				Double amount = (Double) rowData[5];
+				//AmpCurrency currency = (AmpCurrency) rowData[4];
+				Double amount = (Double) rowData[4];
 				//calculate percentage
 				Double calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
 				//convert to
-				Double converted = convert(calculated, currency);
+				//Double converted = convert(calculated, currency);
 				//search if we already have such sector data
 				DonorSectorFundingHelper sectorFundngObj = donors.get(sector.getAmpSectorId());
 				//if not create and add to map
@@ -325,9 +325,9 @@ public class ChartWidgetUtil {
 					donors.put(sector.getAmpSectorId(), sectorFundngObj);
 				}
 				//add amount to sector
-				sectorFundngObj.addFunding(converted.doubleValue());
+				sectorFundngObj.addFunding(calculated.doubleValue());
                                 //calculate whole funding information
-                                wholeFunding[0]+=converted.doubleValue();
+                                wholeFunding[0]+=calculated.doubleValue();
 			}
 			fundings = donors.values(); 
 		}

@@ -619,7 +619,6 @@ public class AmpReportGenerator extends ReportGenerator {
 				fakeC.setOwnerId(id);
 				//
 				// requirements for translation purposes
-				TranslatorWorker translator = TranslatorWorker.getInstance();
 				String siteId = rd.getParent().getReportMetadata().getSiteId();
 				String locale = rd.getParent().getReportMetadata().getLocale();
 				String text = fakeC.getValue().toString();
@@ -633,8 +632,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 				if (translatedText.compareTo("") == 0)
 					translatedText = text;
-				else
-					fakeC.setValue(translatedText);
+				//
+				fakeC.setValue(translatedText);
 				//
 				hc.addCell(fakeC);
 			}

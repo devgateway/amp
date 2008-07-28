@@ -25,7 +25,7 @@ public class IndicatorSector extends IndicatorConnection {
 	public void setSector(AmpSector sector) {
 		this.sector = sector;
 	}
-	public String generatedName(){
+	public String getGeneratedName(){
 		StringBuffer buf= new StringBuffer();
 		buf.append(this.getIndicator().getName());
 		buf.append(" (");
@@ -35,8 +35,8 @@ public class IndicatorSector extends IndicatorConnection {
 			buf.append(" NO SECTOR");
 		}
 		buf.append(") ");
-		if (this.location!=null){
-			buf.append(this.location.getName());
+		if (this.location!=null && this.location.getAmpRegion()!=null){
+			buf.append(this.location.getAmpRegion().getName());
 		}else{
 			buf.append("NO LOCATION");
 		}
@@ -45,6 +45,6 @@ public class IndicatorSector extends IndicatorConnection {
 	
 	@Override
 	public String toString() {
-		return generatedName();
+		return getGeneratedName();
 	}
 }

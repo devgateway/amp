@@ -54,8 +54,12 @@
 
 <table>
     <tr>
-        <td colspan="3" align="left" title=" <digi:trn key='widget:piechart:allAmountsinUSDTooltip'>The amounts are calculated according to the exchange rate at the time when funding is done</digi:trn>">
-            <digi:trn key="widget:piechart:allAmountsinUSD">All amounts in USD.</digi:trn>
+        <td colspan="3" align="left">
+            <c:set var="tooltip">
+                <digi:trn key='widget:piechart:allAmountsinUSDTooltip'>The amounts are calculated according to the exchange rate at the time when funding is done</digi:trn>
+            </c:set>
+            <digi:trn key="widget:piechart:allAmountsinUSD1">All amounts in USD.</digi:trn>
+            <digi:img  src="module/widget/images/help1.gif" title="${tooltip}"/>
         </td>
     </tr>
 	<tr>

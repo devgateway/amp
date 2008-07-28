@@ -407,7 +407,7 @@
 
 											<td>
 												<a href="javascript:removeMTEFProjection(<bean:write name="mtefProjection" property="indexId"/>,0)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
+												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
 												</a>
 											</td>
 										</tr>
@@ -532,7 +532,7 @@
 											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 												</a>
 											</td>
 										<tr>
@@ -746,7 +746,7 @@
 											</field:display>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 												</a>
 											</td>
 										</tr>
@@ -946,7 +946,7 @@
 											 
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 												</a>
 											</td>
 										</tr>
@@ -1080,7 +1080,7 @@
 														</td>
 														<td>
 															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
-															 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+															 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 															</a>
 														</td>
 													</tr>

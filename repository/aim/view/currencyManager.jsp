@@ -262,7 +262,7 @@ function sortSubmit(value){
                                             </td>
 											<td align="right">
 												<a href="javascript:deleteCurrency('${curr.currencyCode}')">
-										 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
+										 		<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
 												</a>
 											</td>
 										</tr>

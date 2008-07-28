@@ -798,7 +798,7 @@ function loadPage()
 																					</td>
 																					<td valign="bottom"><a
 																						href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>)">
-																					<digi:img src="module/cms/images/deleteIcon.gif"
+																					<digi:img src="../ampTemplate/images/deleteIcon.gif"
 																						border="0" alt="Delete this transaction" /> </a></td>
 																				</tr>
 																			</c:forEach>

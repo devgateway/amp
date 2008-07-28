@@ -292,7 +292,7 @@ function updateChild(action) {
 																		<td align="right" width="10">
 																			<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																			<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																		 	<digi:img src="module/cms/images/deleteIcon.gif"
+																		 	<digi:img src="../ampTemplate/images/deleteIcon.gif"
 																			border="0" alt="Remove this child workspace"/></a>&nbsp;
 																			</c:if>
 																		</td>

@@ -36,8 +36,7 @@ public class ShowWidgetChart extends Action {
 			widget = ChartWidgetUtil.getIndicatorChartWidget(wForm
 					.getWidgetId());
 		} else {
-			// System.out.println("No chart assigned to this teaser!");//TODO
-			// this should go to form as error message.
+			// System.out.println("No chart assigned to this teaser!");//TODO this should go to form as error message.
 			return null;
 		}
 		ChartOption opt = createChartOptions(wForm, widget);

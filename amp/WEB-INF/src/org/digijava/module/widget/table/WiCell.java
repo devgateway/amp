@@ -7,6 +7,7 @@ public abstract class WiCell implements HtmlGenerator{
 	private Long id;
 	private Long pk;
 	private WiColumn column;
+	private boolean isHeaderCell = false;
 
 	public Long getId() {
 		return id;
@@ -31,7 +32,13 @@ public abstract class WiCell implements HtmlGenerator{
 	public String generateHtml() {
 		StringBuffer result = new StringBuffer("\t\t<TD");
 		result.append(">");
+		if (isHeaderCell){
+			result.append("<strong>");
+		}
 		result.append(getValue());
+		if (isHeaderCell){
+			result.append("</strong>");
+		}
 		result.append("</TD>\n");
 		return result.toString();
 	}
@@ -42,6 +49,14 @@ public abstract class WiCell implements HtmlGenerator{
 
 	public WiColumn getColumn() {
 		return column;
+	}
+
+	public void setHeaderCell(boolean isHeaderCell) {
+		this.isHeaderCell = isHeaderCell;
+	}
+
+	public boolean isHeaderCell() {
+		return isHeaderCell;
 	}
 
 }

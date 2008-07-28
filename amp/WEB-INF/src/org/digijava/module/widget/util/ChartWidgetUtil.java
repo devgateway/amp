@@ -2,6 +2,7 @@ package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Paint;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -69,15 +70,20 @@ public class ChartWidgetUtil {
 		TimeSeriesCollection ds = getIndicatorChartDataset(indicatorCon);
 		boolean tooltips = false;
 		boolean urls = false;
-		opt.setShowLegend(true);
+		opt.setShowLegend(true);//TODO add one JPG on page as legend and turn this off, this is temporary.
+		Font font = new Font(null,0,8);
+		//create time series line chart
 		result = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
-		Font font = new Font(null,0,12);
+		result.getLegend().setItemFont(font);		
 		result.getTitle().setFont(font);
 		XYPlot plot =(XYPlot) result.getPlot();
 		XYItemRenderer renderer = plot.getRenderer();
-		System.out.println(renderer.getClass().getName());
-		renderer.setSeriesPaint(0, Color.blue);
-		renderer.setSeriesPaint(1, Color.red);
+		renderer.setItemLabelFont(font);
+		plot.setRangeZeroBaselineVisible(true);
+		plot.getDomainAxis().setLabelFont(font);
+		//For next two lines see order of TimeSeries added to TimeSeriesCollection in getIndicatorChartDataset() below
+		renderer.setSeriesPaint(0, Color.blue);//0 = Actual line, because this was added first.
+		renderer.setSeriesPaint(1, Color.red);//1 = Target line, because this was added second.
 		if (renderer instanceof XYLineAndShapeRenderer){
 			XYLineAndShapeRenderer r = (XYLineAndShapeRenderer)renderer;
 			r.setBaseShapesVisible(false);

@@ -54,51 +54,97 @@
 	}
 
 </script>
+<style  type="text/css">
+<!--
+
+.contentbox_border{
+        border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+
+#statesautocomplete ul {
+	list-style: square;
+	padding-right: 0px;
+	padding-bottom: 2px;
+}
+
+#statesautocomplete div {
+	padding: 0px;
+	margin: 0px; 
+}
+
+
+
+#statesautocomplete,
+#statesautocomplete2 {
+    width:15em; /* set width here */
+    padding-bottom:2em;
+}
+#statesautocomplete {
+    z-index:9000; /* z-index needed on top instance for ie & sf absolute inside relative issue */
+}
+#statesinput,
+#statesinput2 {
+    _position:absolute; /* abs pos needed for ie quirks */
+}
+.charcounter {
+    display: block;
+}
+
+-->
+</style>
 <html:hidden name="messageForm" property="templateId"/>
 <digi:form action="/templatesManager.do">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
-					<td class="r-dotted-lg" width="10"/>
-					<td class="r-dotted-lg" valign="top" align="left">
+<!--					<td class="r-dotted-lg" width="10"/>-->
+<!--					<td class="r-dotted-lg" valign="top" align="left">-->
 						<table width="98%" cellspacing="3" cellpadding="1" align="left" valign="top">
 						<td/>
 						<td>
 							<table width="100%" cellspacing="5" cellpadding="3" border="0" valign="top">
 								<tr>
 									<td width="75%" valign="top">
-										<table width="100%" cellspacing="0" cellpadding="0" border="0">
+										<table width="100%" cellspacing="0" cellpadding="5">
 											<tr>
-												<td width="100%">
-													<table width="100%" cellspacing="0" cellpadding="0" border="0">
-														<tr>
-															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
-															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
-																add/edit template Wizard 
-															</td>
-															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
-														</tr>
-													</table>
+												<td height=33 width="100%">
+												&nbsp;
 												</td>
 											</tr>
 											<tr>
-												<td width="100%" bgcolor="#f4f4f2">
-													<table width="100%" cellspacing="1" cellpadding="4" bgcolor="#006699" align="left" valign="top">
+								               <td height=16 vAlign=center width=571>
+									              <span class=subtitle-blue>							
+											        <digi:trn key="aim:pagetitle:add/edittemplateWizard">Add/Edit Template Wizard</digi:trn>						
+									              </span>
+								               </td>
+							                </tr>
+											
+											<tr>
+												<td width="100%">
+													<table width="100%" cellspacing="1" cellpadding="4" align="left" valign="top">
 														<tr>
-															<td valign="top" bgcolor="#f4f4f2" align="center">
-																<table width="95%" border="0" bgcolor="#f4f4f2">
+															<td valign="top">
+																<table class="contentbox_border" width="75%" border="0" bgcolor="#f4f4f2">
+							                                        <tr>			
+							                                           <td align="center">
+							                                         	  <table width="100%">
+							                                                  <tr>
+							                                                	<td style="background-color: #CCDBFF;height: 18px;"/>
+							                                                  </tr>
+							                                              </table>
+							                                           </td>
+							                                        </tr>
 																	<tr>
-																		<td/>
-																	</tr>																	
-																	<tr>
-																		<td>
-																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#ffffff">																				
+																		<td valign="top" bgcolor="#f4f4f2" align="center">
+																			<table width="100%" cellspacing="3" cellpadding="5">																				
 																				<tr>
-																					<td align="right"><digi:trn key="messages:templateName">Template Name</digi:trn><font color="red">*</font> </td>
-																					<td align="left" width="90%"><html:text property="messageName" style="width:672px;"/></td>
+																					<td align="right" width="25%"><digi:trn key="messages:templateName">Template Name</digi:trn><font color="red">*</font> </td>
+																					<td align="left" width="90%"><html:text property="messageName" style="width:600px;"/></td>
 																				</tr>																																				
 																				<tr>
 																					<td align="right"><digi:trn key="messages:text">Text</digi:trn></td>
-																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="2" cols="93"/></td>
+																					<td align="left"> <html:textarea name="messageForm" property="description" rows="3" cols="75"/></td>
 																				</tr>																				
 																				<tr>
 																					<td align="right"><digi:trn key="messages:relatedTriggers">related trigger</digi:trn></td>
@@ -123,7 +169,7 @@
 																                                    <table border="0" width="100%">																                                        
 																                                        <tr>
 																                                            <td>
-																                                              <select multiple="multiple" size="5" id="whoIsReceiver" >
+																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
@@ -154,7 +200,7 @@
 																                                                <table border="0" width="100%">																                                                   
 																                                                    <tr>
 																                                                        <td valign="top">																
-																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" style="width:200px">
+																                                                            <html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">
 																                                              					<c:if test="${!empty messageForm.receivers}">
 																	                                                              	<html:optionsCollection name="messageForm" property="receivers" value="value" label="label" />
 																	                                                              </c:if>                

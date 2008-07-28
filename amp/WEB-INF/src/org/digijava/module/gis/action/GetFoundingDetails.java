@@ -198,7 +198,7 @@ public class GetFoundingDetails extends Action {
                     }
                 }
 
-                List hilightData = prepareHilightSegments(segmentDataList, map);
+                List hilightData = prepareHilightSegments(segmentDataList, map, new Double(0), new Double(100));
 
                 BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
                                                         BufferedImage.TYPE_INT_ARGB);
@@ -265,15 +265,27 @@ public class GetFoundingDetails extends Action {
 
                 List segmentDataList = new ArrayList();
                 Iterator indsIt = inds.iterator();
+                Double min = new Double(0);
+                Double max = new Double(0);
                 while (indsIt.hasNext()) {
                     Object[] indData = (Object[]) indsIt.next();
                     SegmentData indHilightData = new SegmentData();
                     indHilightData.setSegmentCode((String) indData[1]);
-                    indHilightData.setSegmentValue(((Double) indData[0]).toString());
+                    Double indValue = (Double) indData[0];
+
+                    if (indValue < min) {
+                        min = indValue;
+                    }
+
+                    if (indValue > max) {
+                        max = indValue;
+                    }
+
+                    indHilightData.setSegmentValue(indValue.toString());
                     segmentDataList.add(indHilightData);
                 }
 
-                List hilightData = prepareHilightSegments(segmentDataList, map);
+                List hilightData = prepareHilightSegments(segmentDataList, map, min, max);
 
                 BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
                                                         BufferedImage.TYPE_INT_ARGB);
@@ -369,7 +381,11 @@ public class GetFoundingDetails extends Action {
 
     }
 
-    private List prepareHilightSegments(List segmentData, GisMap map) {
+    private List prepareHilightSegments(List segmentData, GisMap map, Double min, Double max) {
+
+        float delta = max.floatValue() - min.floatValue();
+        float coeff = 255/delta;
+
         List retVal = new ArrayList();
         Iterator it = map.getSegments().iterator();
 
@@ -380,8 +396,7 @@ public class GetFoundingDetails extends Action {
                 if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
-                    float redColor = Float.parseFloat(sd.getSegmentValue()) *
-                                     2.55f;
+                    float redColor = Float.parseFloat(sd.getSegmentValue()) * coeff;
                     hData.setColor(new ColorRGB((int) redColor,
                                                 (int) (255f - redColor), 0));
                     retVal.add(hData);

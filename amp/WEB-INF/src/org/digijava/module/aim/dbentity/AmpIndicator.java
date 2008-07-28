@@ -18,7 +18,8 @@ public class AmpIndicator implements Serializable
 	private String description;
 	private Set sectors;
 	private String comments;
-	
+        private String unit;
+
 	/**
 	 * Indicator connections with activities.
 	 * Elements in this set contains activity and values assigned to this activity-indicator connections.
@@ -34,13 +35,13 @@ public class AmpIndicator implements Serializable
 	 * @see IndicatorConnection
 	 */
 	private Set<IndicatorTheme> valuesTheme;
-	
-	
+
+
 	private AmpCategoryValue indicatorsCategory;
 
 	private AmpIndicatorRiskRatings risk;
-	
-	
+
+
 	public Long getIndicatorId() {
 		return indicatorId;
 	}
@@ -123,11 +124,18 @@ public class AmpIndicator implements Serializable
 	public Set<IndicatorTheme> getValuesTheme() {
 		return valuesTheme;
 	}
-	public void setValuesTheme(Set<IndicatorTheme> valuesTheme) {
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setValuesTheme(Set<IndicatorTheme> valuesTheme) {
 		this.valuesTheme = valuesTheme;
 	}
-	
-	
-	
-	
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+
 }

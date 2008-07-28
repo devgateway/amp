@@ -29,6 +29,17 @@ public class AmpFundingDetail implements Serializable
 	private String expCategory;
         private String disbOrderId;
         private IPAContract contract;
+        private Double transactionAmountInUSD;
+
+        public Double getTransactionAmountInUSD() {
+            return transactionAmountInUSD;
+        }
+
+        public void setTransactionAmountInUSD(Double transactionAmountInUSD) {
+            this.transactionAmountInUSD = transactionAmountInUSD;
+        }
+
+       
 
         public IPAContract getContract() {
             return contract;

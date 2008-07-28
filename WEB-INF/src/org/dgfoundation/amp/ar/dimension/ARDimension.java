@@ -22,7 +22,10 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.TextCell;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 
 public abstract class ARDimension {
@@ -69,8 +72,23 @@ public abstract class ARDimension {
     
     
     public static boolean isLinkedWith(ReportData parent, Cell childCell) {
-	//we get the dimension worker
-	if(childCell.getValue().toString().equals(ArConstants.UNALLOCATED)) return true;
+	//we get the dimension worker    
+	// requirements for translation purposes
+	String siteId = parent.getReportMetadata().getSiteId();
+	String locale = parent.getReportMetadata().getLocale();
+	String text = ArConstants.UNALLOCATED;
+	String translatedTextUnallocated = null;
+	String prefix = "aim:reportGenerator:";
+	try {
+		translatedTextUnallocated = TranslatorWorker.translate(prefix
+				+ text.toLowerCase(), locale, siteId);
+	} catch (WorkerException e) {
+		e.printStackTrace();
+	}
+	if (translatedTextUnallocated.compareTo("") == 0)
+		translatedTextUnallocated = text;
+	//
+	if(childCell.getValue().toString().equals(translatedTextUnallocated)) return true;
 	Class relatedContentPersisterClass = childCell.getColumn().getRelatedContentPersisterClass();
 	if(relatedContentPersisterClass==null) return true; // default behavior is to accept anything we have no information about
 	Class dimensionClass=childCell.getColumn().getDimensionClass();

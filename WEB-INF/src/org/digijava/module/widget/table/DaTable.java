@@ -1,20 +1,20 @@
 package org.digijava.module.widget.table;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.ecs.xhtml.col;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.helper.HtmlGenerator;
 import org.digijava.module.widget.util.TableWidgetUtil;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Html table bean.
@@ -58,35 +58,65 @@ public class DaTable implements HtmlGenerator{
 	
 	public void setup(AmpDaTable table){
 		clear();
-		Set<AmpDaColumn> dbColumns = table.getColumns();
-		if (dbColumns==null){
-			return;
-		}
-		columnsRow = new DaRow(dbColumns);
-		for (AmpDaColumn dbColumn : dbColumns) {
-			Set<AmpDaValue> dbValues = dbColumn.getValues();
-			if (dbValues==null){
-				return;
+		
+		
+		if (table!=null){
+			this.id=table.getId();
+			this.name=table.getName();
+			this.code=table.getCode();
+			this.cssClass=table.getCssClass();
+			this.htmlStyle=table.getHtmlStyle();
+			this.width = table.getWidth();
+			this.nameAsTitle = false;
+			if (table.getNameAsTitle()!=null){
+				this.nameAsTitle = table.getNameAsTitle().booleanValue();
 			}
-			for (AmpDaValue dbValue : dbValues) {
-				DaRow row = getRowByPk(dbValue.getPk());
-				if (row==null){
-					row = new DaRow(columnsRow);
-					addRow(row);
-				}
-				DaColumn column = getColumn(dbValue.getColumn().getId());
-				if (column == null){
-					column = new DaColumn(dbColumn);
-					addColumn(column);
-				}
-				DaCell cell = new DaCell(dbValue);
-				cell.setRow(row);
-				cell.setColumn(column);
-				
-				row.addCell(cell);
-				column.addCell(cell);
+			if (null != table.getColumns() && table.getColumns().size() > 1){
+				headerRows = new HashSet<DaRow>();
+				headerRows.add(new DaRow(table.getColumns()));
+			}
+			try {
+				List<AmpDaValue> values = TableWidgetUtil.getTableData(this.id);
+				List<DaRow> rows = TableWidgetUtil.valuesToRows(values);
+				Collections.sort(rows,new TableWidgetUtil.RowPkComparator());
+				this.setDataRows(rows);
+			} catch (DgException e) {
+				e.printStackTrace();
 			}
 		}
+		
+		
+		
+		
+//		Set<AmpDaColumn> dbColumns = table.getColumns();
+//		if (dbColumns==null){
+//			return;
+//		}
+//		columnsRow = new DaRow(dbColumns);
+//		for (AmpDaColumn dbColumn : dbColumns) {
+//			Set<AmpDaValue> dbValues = dbColumn.getValues();
+//			if (dbValues==null){
+//				return;
+//			}
+//			for (AmpDaValue dbValue : dbValues) {
+//				DaRow row = getRowByPk(dbValue.getPk());
+//				if (row==null){
+//					row = new DaRow(columnsRow);
+//					addRow(row);
+//				}
+//				DaColumn column = getColumn(dbValue.getColumn().getId());
+//				if (column == null){
+//					column = new DaColumn(dbColumn);
+//					addColumn(column);
+//				}
+//				DaCell cell = new DaCell(dbValue);
+//				cell.setRow(row);
+//				cell.setColumn(column);
+//				
+//				row.addCell(cell);
+//				column.addCell(cell);
+//			}
+//		}
 	}
 	
 	public void addRow(DaRow row){

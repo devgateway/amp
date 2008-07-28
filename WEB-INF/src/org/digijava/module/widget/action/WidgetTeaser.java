@@ -15,6 +15,7 @@ import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.form.WidgetTeaserForm;
 import org.digijava.module.widget.table.DaTable;
+import org.digijava.module.widget.table.WiTable;
 import org.digijava.module.widget.util.TableWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 /**
@@ -61,10 +62,19 @@ public class WidgetTeaser extends TilesAction {
 		//if widget is table widget
 		if (widget instanceof AmpDaTable){
 			logger.debug("Rendering table widget for "+wform.getPlaceName());
-			AmpDaTable table = (AmpDaTable)widget;
+			AmpDaTable dbTable = (AmpDaTable)widget;
 			wform.setRendertype(WidgetUtil.TABLE);
-			DaTable tableHelper = TableWidgetUtil.widgetToHelper(table);
+			DaTable tableHelper = TableWidgetUtil.widgetToHelper(dbTable);
 			wform.setTable(tableHelper);
+			//below this is temporary test for new redesigned tables.
+			WiTable table1 = null;
+			try {
+				table1 = new WiTable.TableBuilder(dbTable.getId()).build();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println(table1.getName());
+			System.out.println(table1.generateHtml());
 			return null;
 		}
 		logger.debug("Widget teaser: we should not get here!");

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+
 /**
  * Indicator -sector connection.
  * from devinfo we have indicators which have different values for each sector.
@@ -23,5 +24,27 @@ public class IndicatorSector extends IndicatorConnection {
 	}
 	public void setSector(AmpSector sector) {
 		this.sector = sector;
+	}
+	public String generatedName(){
+		StringBuffer buf= new StringBuffer();
+		buf.append(this.getIndicator().getName());
+		buf.append(" (");
+		if (this.sector!=null){
+			buf.append(this.sector.getName());
+		}else{
+			buf.append(" NO SECTOR");
+		}
+		buf.append(") ");
+		if (this.location!=null){
+			buf.append(this.location.getName());
+		}else{
+			buf.append("NO LOCATION");
+		}
+		return buf.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return generatedName();
 	}
 }

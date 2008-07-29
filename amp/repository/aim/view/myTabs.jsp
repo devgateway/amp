@@ -235,7 +235,6 @@ var myTabsObject;
 <ul id="MyTabs" class="yui-nav"">
 <c:set var="counter" value="0"/> 
 <logic:present name="myTabs" scope="session">
-	<logic:present name="myReports" scope="session">
 		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                    <c:set var="counter" value="${counter+1}" />
@@ -256,7 +255,6 @@ var myTabsObject;
 	                    </c:if>
 					</logic:equal>
 		</logic:iterate>
-	</logic:present>
 </logic:present>
 	<li>
 		<a href="/viewTeamReports.do?tabs=true" style="background:none;!important;color:blue;text-decoration:underline;"><digi:trn key="aim:viewallmydesktoptabs">View all of My Desktop Tabs</digi:trn></a>					
@@ -297,9 +295,9 @@ DIV.panelList {
 </style>
 <div id="debug"></div>
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
-	<logic:present name="myReports" scope="session">
+	<logic:present name="myActiveTabs" scope="session">
     	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
-		<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+		<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
           	<c:set var="showTab" value="true"/>
 			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
             	<c:if test="${tab.id == report.id}">

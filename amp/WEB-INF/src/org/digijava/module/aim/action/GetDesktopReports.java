@@ -44,9 +44,14 @@ public class GetDesktopReports extends TilesAction {
 				
 				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 				//ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
+				
+				// The userReports are shown in the upper left corner widget on My Desktop. 
+				// It has nothing to do with the tabs
 				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId());
+				
+				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId());
 				if (defaultTeamReport != null){
-					Iterator iter = userReports.iterator();
+					Iterator iter = userActiveTabs.iterator();
 					boolean found = false;
 					while (iter.hasNext()) {
 						AmpReports el = (AmpReports) iter.next();
@@ -56,20 +61,27 @@ public class GetDesktopReports extends TilesAction {
 						}
 					}
 
-					if ((userReports != null) && (!found))
+					if ( (userActiveTabs != null) && (!found) )
 						reports.add(defaultTeamReport);
 				}
 				//After Tanzania: Team Leaders should see all
 //				if (tm.getTeamHead() == true) {
 //					reports.addAll(TeamUtil.getAllTeamReports(userReports));
 //				} else {
-					reports.addAll(userReports);
+					reports.addAll(userActiveTabs);
 //				}
+					
+					
 				Integer reportsPerPage=0;
+				
+				TreeSet<AmpReports> sortedActiveTabs	= new TreeSet<AmpReports>(AmpReports.lexicographicComparator);
+				if ( userActiveTabs != null )
+						sortedActiveTabs.addAll( userActiveTabs );
                 //Collections.sort((List<AmpReports>) reports, AmpReports.UpdatedDateComparator );
                 //Collections.reverse((List<AmpReports>) reports);
                                 
-				session.setAttribute(Constants.MY_REPORTS,reports);
+				session.setAttribute(Constants.MY_REPORTS, userReports);
+				session.setAttribute(Constants.MY_ACTIVE_TABS, sortedActiveTabs);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
                 session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
 

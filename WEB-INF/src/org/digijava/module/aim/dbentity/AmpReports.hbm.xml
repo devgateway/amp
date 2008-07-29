@@ -31,7 +31,7 @@
 			<key column="amp_report_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
 		</set>
- 		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="save-update">
+ 		<set name="logs" table="AMP_REPORT_LOG" lazy="true" cascade="all-delete-orphan">
 			<key column="amp_report_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpReportLog"/>
 		</set>

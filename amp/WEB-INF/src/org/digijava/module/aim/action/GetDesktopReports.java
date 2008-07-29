@@ -47,7 +47,7 @@ public class GetDesktopReports extends TilesAction {
 				
 				// The userReports are shown in the upper left corner widget on My Desktop. 
 				// It has nothing to do with the tabs
-				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId());
+				ArrayList userReports = (ArrayList) TeamUtil.getLastShownReports(tm.getTeamId(),tm.getMemberId(), false);
 				
 				ArrayList userActiveTabs = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(), true, null, null,true,tm.getMemberId());
 				if (defaultTeamReport != null){

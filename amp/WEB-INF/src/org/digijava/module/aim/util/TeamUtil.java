@@ -2022,19 +2022,25 @@ public class TeamUtil {
            return col;	
     	
     }
-    public synchronized static List getLastShownReports(Long teamId, Long memberId) {
+    public static List getLastShownReports(Long teamId, Long memberId, Boolean getTabs) {
         
  	   Session session 	= null;
        List col 		= new ArrayList();
+       String tabFilter	= "";
+	   if ( getTabs!=null ) {
+		   tabFilter	= "r.drilldownTab=:getTabs AND";
+       }
 
        try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = null;
             Query qry = null;
          	queryString="select distinct r from " + AmpReports.class.getName()+
-			"  r left join r.logs m where (m.member is not null and m.member=:ampTeamMemId) order by m.lastView desc";
+			"  r inner join r.logs m where "+tabFilter+" (m.member is not null and m.member=:ampTeamMemId) order by m.lastView desc";
          	qry = session.createQuery(queryString); 
          	qry.setLong("ampTeamMemId", memberId);
+       	    if ( getTabs!=null )
+     		  qry.setBoolean("getTabs", getTabs);
             col = qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamReports()");

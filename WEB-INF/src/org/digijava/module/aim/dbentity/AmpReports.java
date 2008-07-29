@@ -407,4 +407,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		      return firstDate.compareTo(secondDate);
 		    }
 		  };
+	
+	  public static Comparator lexicographicComparator = new Comparator() {
+		    public int compare(Object report, Object anotherReport) {
+		      return
+		      	((AmpReports)report).getName().compareToIgnoreCase( ((AmpReports)anotherReport).getName() );
+		    }
+		  };
 }

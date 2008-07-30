@@ -317,12 +317,8 @@ public class ShowActivityPrintPreview
                             AmpActivityInternalId) projIdItr
                             .next();
                         OrgProjectId projId = new OrgProjectId();
-                        projId.setAmpOrgId(actIntId.getOrganisation()
-                                           .getAmpOrgId());
-                        projId
-                            .setName(actIntId.getOrganisation()
-                                     .getName());
-                        projId.setProjectId(actIntId.getInternalId());
+                        projId.setId(actIntId.getId());
+                         projId.setProjectId(actIntId.getInternalId());
                         temp.add(projId);
                     }
                     if(temp != null && temp.size() > 0) {

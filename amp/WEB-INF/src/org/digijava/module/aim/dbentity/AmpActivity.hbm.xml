@@ -205,17 +205,17 @@ tanzania adds
 		</set>
 
 
-		<set name="internalIds" table="AMP_ACTIVITY_INTERNAL_ID" >
-			<key column="amp_activity_id"/>
-			<composite-element class="org.digijava.module.aim.dbentity.AmpActivityInternalId">
-				<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation"
-					column="amp_org_id"/>
-				<property name="internalId" column="internal_id"  type="java.lang.String"/>
-			</composite-element>
-		</set>
 
+
+		<set name="internalIds"  lazy="true" cascade="all-delete-orphan" inverse="true"> 
+			<cache usage="read-write"/>
+			<key column="amp_activity_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityInternalId" />
+		</set>
+		
+		
 		<set name="funding" cascade="all-delete-orphan" inverse="true">
-		<cache usage="read-write" />
+			<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding"/>
 		</set>

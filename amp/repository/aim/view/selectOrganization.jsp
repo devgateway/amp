@@ -189,7 +189,7 @@
 <html:hidden property="step"/>
 <html:hidden property="item" />
 <html:hidden property="selectedOrganisationFromPages" />
-
+(Deprecated Please use the addOrganization component)
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>

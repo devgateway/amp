@@ -319,8 +319,8 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 									
 
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<feature:display name="Identification" module="Project ID and Planning">
 										<field:display name="Organizations and Project ID" feature="Identification">
@@ -329,14 +329,14 @@ ${fn:replace(message,quote,escapedQuote)}
 											</td></tr>
 										</field:display>
 									</feature:display>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 									<feature:display name="Planning" module="Project ID and Planning">
-									&nbsp;
+										<jsp:include page="addActivityStep1Planning.jsp"/>
 									</feature:display>
-											<jsp:include page="addActivityStep1Planning.jsp"/>
+										
 
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 

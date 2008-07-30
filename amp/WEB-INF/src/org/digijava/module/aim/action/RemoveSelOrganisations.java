@@ -32,7 +32,7 @@ public class RemoveSelOrganisations extends Action {
 				boolean flag = false;
 				for (int j = 0;j < selOrgs.length;j ++) {
 					if (prevOrgs[i] != null){
-					if (prevOrgs[i].getAmpOrgId().equals(selOrgs[j])) {
+					if (prevOrgs[i].getId().equals(selOrgs[j])) {
 						flag = true;
 						break;
 					}

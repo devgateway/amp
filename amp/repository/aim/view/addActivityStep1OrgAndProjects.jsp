@@ -9,9 +9,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<script language="JavaScript">
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
-</script>
 
 <digi:instance property="aimEditActivityForm" />
 										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
@@ -29,22 +28,23 @@
 											<logic:empty name="aimEditActivityForm" property="selectedOrganizations">
 												<td>
 													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
-													<input type="button" value="<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>" class="dr-menu" name="addOrgs" onclick="selectOrganisation()"></a>
-												</td>
+														<input type="button" value="<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>" class="dr-menu" name="addOrgs" onclick="selectOrganisation()"></a>
+													
+													</td>
 											</logic:empty>
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
 												<c:forEach items="${aimEditActivityForm.selectedOrganizations}" var="selectedOrganizations">
 													<tr>
-														<c:if test="${!empty selectedOrganizations.ampOrgId}">
+														<c:if test="${!empty selectedOrganizations.id}">
 															<td align="left" width=3>
 																<html:multibox property="selOrgs">
-																	<c:out value="${selectedOrganizations.ampOrgId}"/>
+																	<c:out value="${selectedOrganizations.id}"/>
 																</html:multibox>
 															</td>
 															<td align="left" width="367">
-																<c:out value="${selectedOrganizations.name}"/>
+																<c:out value="${selectedOrganizations.organisation.name}"/>
 															</td>
 															
 															<td align="left" width="130">
@@ -60,12 +60,11 @@
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<input type="button" value="<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>" class="dr-menu"
-																		onclick="selectOrganisation()">
+																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${aimEditActivityForm}" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</td>
 																<td>
 																	<input type="button" value="<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>" class="dr-menu"
-																		onclick="return removeSelOrganisations()">
+																	onclick="return removeSelOrganisations()">
 																</td>
 															</tr>
 														</table>

@@ -226,8 +226,7 @@ public class ResetAll extends Action
 					{
 						AmpActivityInternalId actIntId = (AmpActivityInternalId) projIdItr.next();
 						OrgProjectId projId = new OrgProjectId();
-						projId.setAmpOrgId(actIntId.getOrganisation().getAmpOrgId());
-						projId.setName(actIntId.getOrganisation().getName());
+						projId.setId(actIntId.getId());
 						projId.setProjectId(actIntId.getInternalId());
 						projId.setOrganisation(actIntId.getOrganisation());
 						temp.add(projId);

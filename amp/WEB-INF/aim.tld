@@ -136,8 +136,12 @@
 			</description>
 			<required>false</required>
 		</attribute>
+		<attribute>
+		<name>delegateClass</name>
+		<required>false</required>s
+		<description>Class in charge to process the post, the class have to implement the IPostProcessDelegate interface</description>
+		</attribute>
 		<bodycontent>JSP</bodycontent>
-
 	</tag>
 
 </taglib>

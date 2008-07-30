@@ -345,10 +345,11 @@ function commentWin(val) {
 																	  </td></TR>
 																		<c:forEach items="${aimChannelOverviewForm.selectedOrganizations}" var="selectedOrganizations">
 																		<tr>
-																			<c:if test="${!empty selectedOrganizations.ampOrgId}">
+																			<c:if test="${!empty selectedOrganizations.id}">
 																				<td width="75%">
-																					<li><i><c:out value="${selectedOrganizations.name}"/></i></li>
+																					<li><i><c:out value="${selectedOrganizations.organisation.name}"/></i></li>
 																			  </td>
+																	
 																				<td width="25%" align="center">
 																					<i>
 																				  <c:out value="${selectedOrganizations.projectId}"/>

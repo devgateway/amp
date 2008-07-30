@@ -60,14 +60,6 @@
 																								<div id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
 																								<li id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
 																								
-																							
-
-																								<input type=checkbox id="moduleVis:<bean:write name="themeColumn"/>"
-																											name="selectedThemes"
-																											value="<bean:write name="themeColumn"/>"
-																											onclick="toggleChildrenVisibility('limodule:<bean:write name="themeColumn"/>')"
-
-																								/>
 																								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																									<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 																								</a>

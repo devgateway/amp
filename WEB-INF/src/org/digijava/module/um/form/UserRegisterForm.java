@@ -426,7 +426,7 @@ public class UserRegisterForm
 
         	if ( (this.getFirstNames() == null) ||
                 this.getFirstNames().trim().length() == 0) {
-        		this.setFirstNames("");
+        		errors.put("error.registration.FirstNameBlank", "First Name is Blank");
             }
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {

@@ -6,24 +6,32 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
-<digi:instance id="wform" property="gisTableWidgetTeaserForm"/>
+<digi:instance id="wform" property="gisTableWidgetRenderForm"/>
 
-<bean:define id="wtable" name="wform" property="table"/>
-<table id="widgetOuter" border="0" cellpadding="20">
-	<tr>
-		<td>
-		
-			<table id="widgetInner" width="${wtable.width}">
-				<c:forEach var="wrow" items="${wtable.rows}" varStatus="varStat">
-					<tr>
-						<td nowrap="nowrap">
-							${wrow.pk} === AVOE 
-						</td>
-					</tr>
-				</c:forEach>
-			</table>
-		
-		</td>
-	</tr>
-</table>
+<div id="tableWidgetContainer_${wform.tableId}">
+	
+</div>
+
+<script language="JavaScript">
+
+	function requestTable_${wform.tableId}(){
+		<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
+		var url = '${tableRendererUrl}~tableId=${wform.tableId}';
+		var async=new Asynchronous();
+		async.complete=tableCallBack_${wform.tableId};
+		async.call(url);
+	}
+
+	function tableCallBack_${wform.tableId}(status, statusText, responseText, responseXML){
+		processTableResponce_${wform.tableId}(responseText);
+	}
+
+	function processTableResponce_${wform.tableId}(htmlResponce){
+		var myDiv = document.getElementById('tableWidgetContainer_${wform.tableId}');
+		myDiv.innerHTML = htmlResponce;;		
+	}
+
+	requestTable_${wform.tableId}();
+</script>

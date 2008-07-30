@@ -1,7 +1,14 @@
 package org.digijava.module.widget.table;
 
+import org.digijava.module.widget.table.filteredColumn.WiCellFiltered;
 import org.digijava.module.widget.web.HtmlGenerator;
 
+/**
+ * Table cell.
+ * Use concrate subclasses: {@link WiCellStandard}, {@link WiCellHeader}, {@link WiCellFiltered}
+ * @author Irakli Kobiashvili
+ *
+ */
 public abstract class WiCell implements HtmlGenerator{
 	
 	private Long id;

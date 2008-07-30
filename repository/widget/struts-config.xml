@@ -4,7 +4,7 @@
 <struts-config>
 	<form-beans>
 		<form-bean name="gisTableWidgetCreationForm" type="org.digijava.module.widget.form.TableWidgetCreationForm" />
-		<form-bean name="gisTableWidgetTeaserForm" type="org.digijava.module.widget.form.TableWidgetTeaserForm" />
+		<form-bean name="gisTableWidgetRenderForm" type="org.digijava.module.widget.form.TableWidgetTeaserForm" />
 		<form-bean name="gisTableWidgetDataForm" type="org.digijava.module.widget.form.AdminTableWidgetDataForm" />
 	  <form-bean name="gisWidgetPlacesForm" type="org.digijava.module.widget.form.WidgetPlacesForm"/>
 	  <form-bean name="gisIndicatorChartForm" type="org.digijava.module.widget.form.AdminIndicatorChartsForm"/>
@@ -27,13 +27,13 @@
 			<forward name="returnToEdit" path="/widget/adminTableWidgets.do?actType=edit" redirect="true"/>
 		</action>
 	
-	<action name="gisTableWidgetTeaserForm" path="/widget/widgetTest" scope="request" type="org.digijava.module.widget.action.TestWidget" validate="false">
+	<action name="gisTableWidgetRenderForm" path="/widget/widgetTest" scope="request" type="org.digijava.module.widget.action.TestWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widgetTestPage" />
     	</action>
     	<action name="gisTableWidgetDataForm" path="/widget/tableWidgetData" scope="session" parameter="actType" type="org.digijava.module.widget.action.AdminTableWidgetData" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
     	</action>
-    	<action name="gisTableWidgetTeaserForm" path="/widget/previewTable" scope="request" type="org.digijava.module.widget.action.PreviewTableWidget" validate="false">
+    	<action name="gisTableWidgetRenderForm" path="/widget/previewTable" scope="request" type="org.digijava.module.widget.action.PreviewTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
     	</action>
         
@@ -67,9 +67,12 @@
 		  <action name="gisSectorByDonorTeaserForm" parameter="actType"
 		   path="/widget/showSectorByDonorChart" scope="request"
 		   type="org.digijava.module.widget.action.ShowSectorByDonorChart" validate="false"/>
+
+		<action name="gisTableWidgetRenderForm" 
+			path="/widget/getTableWidget" 
+			type="org.digijava.module.widget.action.RenderTableWidget"/>
 		
 		<!-- Teasers below this -->
-		<action name="gisTableWidgetTeaserForm" path="/widget/tableWidgetTeaser" type="org.digijava.module.widget.action.TableWidgetTeaser"/>
 		<action name="gisWidgetTeaserForm" path="/widget/widgetTeaser" type="org.digijava.module.widget.action.WidgetTeaser"/>
 		<action name="gisSectorByDonorTeaserForm" path="/widget/sectorByDonorTeaser" type="org.digijava.module.widget.action.SectorsByDonorTeaser"/>
 	</action-mappings>

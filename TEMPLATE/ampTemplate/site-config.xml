@@ -482,7 +482,7 @@
             <module name="message">
             	<page>viewSelectedMessage</page>
             </module>
-            <module name="gis">
+            <module name="widget">
             	<page>popup_addWidgetColumn</page>
             	<page>preview_tableWidget</page>
             </module>

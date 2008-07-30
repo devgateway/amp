@@ -2,7 +2,6 @@ package org.digijava.module.widget.util;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Paint;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -23,8 +22,6 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.CachedTranslatorWorker;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -263,7 +260,7 @@ public class ChartWidgetUtil {
 		return cal.getTime();
 	}
 	
-    public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
+	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
 		String oql = "select f.ampDonorOrgId, sa.sectorId, sa.sectorPercentage, sa.activityId.ampActivityId,  sum(fd.transactionAmountInUSD)";
 		oql += " from ";
@@ -287,6 +284,7 @@ public class ChartWidgetUtil {
 		Session session = PersistenceManager.getRequestDBSession();
 
 		//search for grouped data
+	    @SuppressWarnings("unchecked")
 		List result = null;
 		try {
 			Query query = session.createQuery(oql);

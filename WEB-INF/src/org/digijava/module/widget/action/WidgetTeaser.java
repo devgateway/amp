@@ -14,7 +14,7 @@ import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.form.WidgetTeaserForm;
-import org.digijava.module.widget.table.DaTable;
+import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.table.WiTable;
 import org.digijava.module.widget.util.TableWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;

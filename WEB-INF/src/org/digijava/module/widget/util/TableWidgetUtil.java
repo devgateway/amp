@@ -27,10 +27,9 @@ import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
-import org.digijava.module.widget.table.DaCell;
-import org.digijava.module.widget.table.DaColumn;
-import org.digijava.module.widget.table.DaRow;
-import org.digijava.module.widget.table.DaTable;
+import org.digijava.module.widget.oldTable.DaCell;
+import org.digijava.module.widget.oldTable.DaRow;
+import org.digijava.module.widget.oldTable.DaTable;
 
 /**
  * Utilities for table widgets,
@@ -257,10 +256,6 @@ public class TableWidgetUtil {
 	public static List<DaRow> valuesToRows(Collection<AmpDaColumn> columns, Collection<AmpDaValue> data)throws DgException{
 		List<DaRow> rows=null;
 		Map<Long, DaRow> rowsByPk=new HashMap<Long, DaRow>();
-		Map<Long, DaColumn> columnsById = new HashMap<Long, DaColumn>();
-		for (AmpDaColumn dbCol : columns) {
-			
-		}
 		
 		for (AmpDaValue value : data) {
 			DaRow row=rowsByPk.get(value.getPk());
@@ -360,12 +355,6 @@ public class TableWidgetUtil {
 			throw new DgException("Cannot save,update,delete values!",e);
 		}
 		
-	}
-	
-	public static Integer getRowCount(Long tableId)throws DgException{
-		Session session = PersistenceManager.getRequestDBSession();
-		
-		return null;
 	}
 	
 	//=======PLACES=====================

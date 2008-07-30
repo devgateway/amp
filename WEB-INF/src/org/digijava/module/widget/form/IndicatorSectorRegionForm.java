@@ -14,7 +14,8 @@ import org.digijava.module.aim.dbentity.AmpRegion;
  */
 public class IndicatorSectorRegionForm extends ActionForm {
 
-    private List<IndicatorSector> indSectList;
+	private static final long serialVersionUID = 1L;
+	private List<IndicatorSector> indSectList;
     private List<AmpIndicator> indicators;
     private Long selIndicator;
     private List<AmpRegion> regions;

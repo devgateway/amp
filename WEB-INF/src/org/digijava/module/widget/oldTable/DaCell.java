@@ -1,10 +1,10 @@
-package org.digijava.module.widget.table;
+package org.digijava.module.widget.oldTable;
 
 import java.util.Map;
 
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaValue;
-import org.digijava.module.widget.helper.HtmlGenerator;
+import org.digijava.module.widget.web.HtmlGenerator;
 
 /**
  * Html table cell.

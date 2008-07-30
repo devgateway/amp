@@ -2,7 +2,8 @@ package org.digijava.module.widget.form;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.dbentity.AmpWidget;
-import org.digijava.module.widget.table.DaTable;
+import org.digijava.module.widget.oldTable.DaTable;
+import org.digijava.module.widget.table.WiTable;
 
 /**
  * Generic widget form.
@@ -25,6 +26,7 @@ public class WidgetTeaserForm extends ActionForm {
 	private String embeddedHtml;
 	private AmpWidget widget;
 	private DaTable table;
+	private WiTable tableWidget;
 	/**
 	 * multi-purpose ID.
 	 * Depending on {@link #rendertype} this is used for table or indicator or chart widget id in teaser JSP.
@@ -66,5 +68,11 @@ public class WidgetTeaserForm extends ActionForm {
 	}
 	public void setPlaceName(String placeName) {
 		this.placeName = placeName;
+	}
+	public void setTableWidget(WiTable tableWidget) {
+		this.tableWidget = tableWidget;
+	}
+	public WiTable getTableWidget() {
+		return tableWidget;
 	}
 }

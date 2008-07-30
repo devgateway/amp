@@ -215,12 +215,13 @@ public class SectorUtil {
 		return col;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Collection<AmpSector> getAllParentSectors(Long secSchemeId) {
 		Session session = null;
 		Collection<AmpSector> col = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getSession();//TODO why not use thread session?
 			String queryString = "select s from " + AmpSector.class.getName()
 					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
 					+ " and parent_sector_id is null " + "order by s.name";
@@ -268,9 +269,9 @@ public class SectorUtil {
 	
 	
 	
-	public static List getAllSectorsFromScheme(Long secSchemeId) {
+	public static List<AmpSector> getAllSectorsFromScheme(Long secSchemeId) {
 		Session session = null;
-		List col = null;
+		List<AmpSector> col = null;
 
 		try {
 			session = PersistenceManager.getSession();
@@ -968,15 +969,16 @@ public class SectorUtil {
 	/*
 	 * this is to get the sector schemes from the ampSectorScheme table
 	 */
-	public static Collection getSectorSchemes(){
+	@SuppressWarnings("unchecked")
+	public static Collection<AmpSectorScheme> getSectorSchemes(){
 		String queryString = null;
 		Session session = null;
-		Collection col = null;
+		Collection<AmpSectorScheme> col = null;
 		Query qry = null;
 
 		try
 		{
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getSession();//TODO why not thread session? please check and remove this comment.
 			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi ";
 			qry = session.createQuery(queryString);
 			col = qry.list();

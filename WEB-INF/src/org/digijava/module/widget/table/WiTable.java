@@ -30,11 +30,13 @@ public class WiTable extends Widget{
 	private String code;
 	private String cssClass;
 	private String htmlStyle;
+	private String width;
 	private boolean showTitle;
 	private boolean showHeaderRows;
 	private boolean showFooterRows;
 	private boolean showPagination;
 	private boolean nameAsTitle;
+	private boolean dataEntryMode = false;
 	private Integer currentPage;
 	private List<WiRow> headerRows;
 	private List<WiRow> dataRows;
@@ -47,15 +49,22 @@ public class WiTable extends Widget{
 		this.code = builder.code;
 		this.cssClass = builder.cssClass;
 		this.htmlStyle = builder.htmlStyle;
-		this.nameAsTitle = builder.nameAsTitle;
+		this.width = builder.width;
 		this.headerRows = builder.headerRows;
 		this.dataRows = builder.dataRows;
 		this.footerRows = builder.footerRows;
 		this.columns = builder.columns;
+		this.showFooterRows = builder.showFooterRows;
+		this.showHeaderRows = builder.showHeaderRows;
+		this.showPagination = builder.showPagination;
+		this.showTitle = builder.showTitle;
+		this.nameAsTitle = builder.nameAsTitle;
+		this.dataEntryMode = builder.dataEntryMode;
 	}
 	
 	/**
 	 * Table widget builder.
+	 * Initial idea was to have immutable WiTable, but currently this is not done, so such approach is not very useful.
 	 * @author Irakli Kobiashvili
 	 *
 	 */
@@ -65,11 +74,13 @@ public class WiTable extends Widget{
 		private String code = null;
 		private String cssClass = null;
 		private String htmlStyle = null;
+		private String width = null;
 		private boolean showTitle = true;
 		private boolean showHeaderRows = true;
 		private boolean showFooterRows = true;
 		private boolean showPagination = false;
 		private boolean nameAsTitle = true;
+		private boolean dataEntryMode = false;
 		private List<WiRow> dataRows = new ArrayList<WiRow>();
 		private List<WiRow> headerRows = new ArrayList<WiRow>();
 		private List<WiRow> footerRows = new ArrayList<WiRow>();
@@ -122,6 +133,7 @@ public class WiTable extends Widget{
 			this.cssClass = dbTable.getCssClass();
 			this.htmlStyle = dbTable.getHtmlStyle();
 			this.nameAsTitle = (dbTable.getNameAsTitle()!=null)?dbTable.getNameAsTitle().booleanValue():true;
+			this.width = dbTable.getWidth();
 			Set<AmpDaColumn> dbColumns = dbTable.getColumns();
 			for (AmpDaColumn dbColumn : dbColumns) {
 				WiColumn column = TableWidgetUtil.newColumn(dbColumn);
@@ -143,11 +155,11 @@ public class WiTable extends Widget{
 						rowsByPk.put(row.getPk(), row);
 						this.dataRows.add(row);
 					}
-					row.updateCell(cell, cell.getColumn().getId());
+					row.updateCell(cell);
 				}
 				//set up header
-				WiCell hCell = TableWidgetUtil.newHeaderCell(column);
-				headerRow.updateCell(hCell, column.getId());
+//				WiCell hCell = TableWidgetUtil.newHeaderCell(column);
+//				headerRow.updateCell(hCell);
 			}
 			Collections.sort(dataRows,new TableWidgetUtil.WiRowPkComparator());
 			this.headerRows.add(headerRow);
@@ -170,8 +182,16 @@ public class WiTable extends Widget{
 			this.htmlStyle = style;
 			return this;
 		}
+		public TableBuilder width(String width){
+			this.width = width;
+			return this;
+		}
 		public TableBuilder showTitle(boolean show){
 			this.showTitle = show;
+			return this;
+		}
+		public TableBuilder showHeaderRows(boolean show){
+			this.showHeaderRows = show;
 			return this;
 		}
 		public TableBuilder showFooterRows(boolean show){
@@ -180,6 +200,10 @@ public class WiTable extends Widget{
 		}
 		public TableBuilder nameAsTitle(boolean asTitle){
 			this.nameAsTitle = asTitle;
+			return this;
+		}
+		public TableBuilder dataEntryMode(boolean dataEntry){
+			this.dataEntryMode = dataEntry;
 			return this;
 		}
 		public TableBuilder dataRows(List<WiRow> rows){
@@ -211,11 +235,6 @@ public class WiTable extends Widget{
 	}
 
 	public List<WiRow> getDataRows() {
-		if (dataRows==null){
-			for (WiColumn column : columns) {
-				
-			}
-		}
 		return dataRows;
 	}
 
@@ -313,6 +332,13 @@ public class WiTable extends Widget{
 	}
 	public String getCode() {
 		return code;
+	}
+	public String getWidth() {
+		return width;
+	}
+
+	public boolean isDataEntryMode() {
+		return dataEntryMode;
 	}
 
 

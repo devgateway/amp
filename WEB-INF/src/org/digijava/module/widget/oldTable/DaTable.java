@@ -1,18 +1,16 @@
-package org.digijava.module.widget.table;
+package org.digijava.module.widget.oldTable;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaValue;
-import org.digijava.module.widget.helper.HtmlGenerator;
 import org.digijava.module.widget.util.TableWidgetUtil;
+import org.digijava.module.widget.web.HtmlGenerator;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 

@@ -1,4 +1,4 @@
-package org.digijava.module.widget.table;
+package org.digijava.module.widget.oldTable;
 
 import java.util.HashMap;
 import java.util.Map;

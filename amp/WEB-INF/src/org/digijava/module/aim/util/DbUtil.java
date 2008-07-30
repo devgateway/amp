@@ -3612,10 +3612,10 @@ public class DbUtil {
         return total;
     }
 
-    public static Collection getDonors() {
+    public static Collection<AmpOrganisation> getDonors() {
         Session session = null;
         Query q = null;
-        Collection donors = null;
+        Collection<AmpOrganisation> donors = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
@@ -3628,7 +3628,6 @@ public class DbUtil {
             logger.debug("Unable to get Donors from database", ex);
         }
         return donors;
-
     }
 
     public static Collection getOrganisations() {

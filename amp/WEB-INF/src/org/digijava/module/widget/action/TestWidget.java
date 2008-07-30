@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -30,13 +31,11 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.widget.form.TableWidgetTeaserForm;
-import org.digijava.module.widget.table.DaRow;
-import org.digijava.module.widget.table.DaTable;
 
 /**
  * This action is just for testing purposes.
  * It generates IndicatorSector random values in db because we do not have such UI yet.
- * Wee need this data for GIS testing. for GIS such data may come from devinfo.
+ * We need this data for GIS testing. for GIS such data may come from devinfo.
  * TODO after creating UI for such indicators, this should be removed.
  * @author Irakli Kobiashvili
  *
@@ -44,25 +43,16 @@ import org.digijava.module.widget.table.DaTable;
 public class TestWidget extends Action {
 
 	Random random = new Random(System.currentTimeMillis());
+    private static Logger logger = Logger.getLogger(TestWidget.class);
 
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		TableWidgetTeaserForm fTeaser=(TableWidgetTeaserForm)form;
+		TableWidgetTeaserForm fTable=(TableWidgetTeaserForm)form;
+		logger.debug("testing table widget with id = "+fTable.getTableId());
 		String act = request.getParameter("act");
 		if (act==null){
-			DaTable table=new DaTable();
-			table.setWidth("50%");
-			table.setDataRows(new ArrayList<DaRow>(10));
-			for (int i = 0; i < 10; i++) {
-				DaRow row=new DaRow();
-				row.setId(new Long(i));
-				row.setPk(new Long(i));
-				table.getDataRows().add(row);
-			}
-			
-			fTeaser.setTable(table);
 			return mapping.findForward("forward");
 		}
 		if (act.equals("delete")){
@@ -71,7 +61,6 @@ public class TestWidget extends Action {
 		if (act.equals("insert")){
 			insertSectorIndicators();
 		}
-		
 		return mapping.findForward("forward");
 		
 	}
@@ -80,7 +69,7 @@ public class TestWidget extends Action {
 		if (scheme == null) {
 			return;
 		}
-		Collection sectors = SectorUtil.getAllSectorsFromScheme(scheme.getAmpSecSchemeId());
+		Collection<AmpSector> sectors = SectorUtil.getAllSectorsFromScheme(scheme.getAmpSecSchemeId());
 		List<AmpIndicator> indicators = IndicatorUtil.getAllIndicators();
 		List<IndicatorSector> connections = new ArrayList<IndicatorSector>();
 		if (sectors!=null && sectors.size()>0 && indicators!=null && indicators.size()>0){
@@ -115,7 +104,7 @@ public class TestWidget extends Action {
 			}
 			tx.commit();
 		} catch (Exception e) {
-			if (tx==null){
+			if (tx!=null){
 				try {
 					tx.rollback();
 				} catch (Exception e1) {
@@ -127,11 +116,11 @@ public class TestWidget extends Action {
 	}
 	
 	private AmpSectorScheme getRandomScheme(){
-		Collection schemes = SectorUtil.getSectorSchemes();
+		Collection<AmpSectorScheme> schemes = SectorUtil.getSectorSchemes();
 		AmpSectorScheme scheme = null;
 		if (schemes!=null && schemes.size()>0){
 			int pos = (schemes.size()>1)?random.nextInt(schemes.size()-1):0;
-			scheme = (AmpSectorScheme)getAtPos(schemes, pos);
+			scheme = getAtPos(schemes, pos);
 		}
 		return scheme;
 	}
@@ -159,7 +148,7 @@ public class TestWidget extends Action {
 			value.setValueDate(cal.getTime());
 			value.setValueType(AmpIndicatorValue.ACTUAL);
 			values.add(value);
-			cal.add(2, cal.MONTH);
+			cal.add(2, Calendar.MONTH);
 		}
 		AmpIndicatorValue base=new AmpIndicatorValue();
 		base.setValueType(AmpIndicatorValue.BASE);

@@ -1,10 +1,10 @@
 package org.digijava.module.widget.form;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.widget.table.DaTable;
+import org.digijava.module.widget.table.WiTable;
 
 /**
- * Teaser form of table widgets.
+ * Form of table widgets.
  * @author Irakli Kobiashvili
  *
  */
@@ -12,9 +12,9 @@ public class TableWidgetTeaserForm extends ActionForm {
 
 	private static final long serialVersionUID = 1L;
 
-	private DaTable table;
-	private boolean isPreview=false;
 	private String placeName;
+	private WiTable table;
+	private Long tableId;
 
 	public String getPlaceName() {
 		return placeName;
@@ -24,19 +24,20 @@ public class TableWidgetTeaserForm extends ActionForm {
 		this.placeName = placeName;
 	}
 
-	public boolean isPreview() {
-		return isPreview;
+	public void setTable(WiTable table) {
+		this.table = table;
 	}
 
-	public void setPreview(boolean isPreview) {
-		this.isPreview = isPreview;
-	}
-
-	public DaTable getTable() {
+	public WiTable getTable() {
 		return table;
 	}
 
-	public void setTable(DaTable table) {
-		this.table = table;
-	} 
+	public void setTableId(Long tableId) {
+		this.tableId = tableId;
+	}
+
+	public Long getTableId() {
+		return tableId;
+	}
+
 }

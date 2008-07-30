@@ -15,8 +15,8 @@ import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.form.AdminTableWidgetDataForm;
-import org.digijava.module.widget.table.DaRow;
-import org.digijava.module.widget.table.DaTable;
+import org.digijava.module.widget.oldTable.DaRow;
+import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.util.TableWidgetUtil;
 
 /**

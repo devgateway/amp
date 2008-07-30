@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
-import org.digijava.module.widget.table.DaRow;
+import org.digijava.module.widget.oldTable.DaRow;
 
 /**
  * Widget Data administration form.
@@ -69,16 +69,32 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	}
 	
 	//This 3 methods are required for old struts to submit directly in these beans, please note differences in names====
+	/**
+	 * Old style method for struts.
+	 * Please do not remove or improve - do not add generic declarations.
+	 */
+	@SuppressWarnings("unchecked")
 	public List getRow() {
 		return rows;
 	}
 
+	/**
+	 * Old style setter for use with struts.
+	 * Please do not remove or improve - do not add generic declarations.
+	 * @param rows
+	 */
+	@SuppressWarnings("unchecked")
 	public void setRow(List rows) {
 		this.rows = rows;
 	}
+	
+	/**
+	 * Old style indexed getter for use with struts.
+	 * Please do not remove or improve - do not add generic declarations.
+	 * @param index
+	 * @return
+	 */
 	public DaRow getRow(int index) {
-		//System.out.println("getRows(int index)");
-		//if (this.rows==null) //System.out.println("Ooo, rows is NULL !!!");
 		return (rows==null)?null:rows.get(index);
 	}
 

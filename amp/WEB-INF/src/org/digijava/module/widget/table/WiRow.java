@@ -41,10 +41,16 @@ public abstract class WiRow implements HtmlGenerator{
 	 */
 	public List<WiCell> getCells() {
 		List<WiCell> result = new ArrayList<WiCell>(columns.size());
+		//ask each known column to return cells for my pk
 		for (WiColumn column : this.columns.values()) {
 			WiCell cell = column.getCell(this.pk);
+			//if column does not have cell for my pk
 			if (cell==null){
+				//then setup new cell, because row should have cell even if there is no Value in db.
 				cell = new WiCellStandard();
+				cell.setPk(this.pk);
+				cell.setColumn(column);
+				column.setCell(cell);
 			}
 			result.add(cell);
 		}
@@ -58,6 +64,7 @@ public abstract class WiRow implements HtmlGenerator{
 	public String generateHtml() {
 		StringBuffer result = new StringBuffer("\t<TR");
 		result.append(">\n");
+		//using getCells() guarantees that this method will work for subclasses too, for example for WiRowHeader
 		List<WiCell> cells = getCells();
 		for (WiCell cell : cells) {
 			result.append(cell.generateHtml());
@@ -67,13 +74,13 @@ public abstract class WiRow implements HtmlGenerator{
 	}
 	
 	/**
-	 * Update cell in specified column.
+	 * Update cell of this row and column referenced by cell 'column' property.
 	 * @param cell new cell reference
-	 * @param columnId column id where cell should be  changed with new one
 	 */
-	public void updateCell(WiCell cell,Long columnId){
-		WiColumn col = columns.get(columnId);
+	public void updateCell(WiCell cell){
+		WiColumn col = columns.get(cell.getColumn().getId());
 		col.setCell(cell);
+		cell.setColumn(col);
 		cell.setPk(this.pk);
 	}
 	

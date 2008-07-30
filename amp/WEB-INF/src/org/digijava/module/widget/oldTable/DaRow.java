@@ -1,4 +1,4 @@
-package org.digijava.module.widget.table;
+package org.digijava.module.widget.oldTable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,8 +9,8 @@ import java.util.Map;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaValue;
-import org.digijava.module.widget.helper.HtmlGenerator;
 import org.digijava.module.widget.util.TableWidgetUtil;
+import org.digijava.module.widget.web.HtmlGenerator;
 
 /**
  * Table row.

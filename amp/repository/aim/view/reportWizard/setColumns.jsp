@@ -59,7 +59,6 @@
 																								<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
 																								<div id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
 																								<li id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
-																								
 																								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																									<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 																								</a>

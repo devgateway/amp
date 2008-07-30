@@ -9,6 +9,7 @@
 <script language="JavaScript" type="text/javascript">
     function gotoPage(page){
                 document.gisIndicatorSectorRegionForm.selectedPage.value = page;
+                document.gisIndicatorSectorRegionForm.target="_self";
                 document.gisIndicatorSectorRegionForm.submit();
             
     }
@@ -31,6 +32,11 @@
                 <digi:trn key="admin:Navigation:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
 			</span>
 		</td>
+                <tr>
+                    <td>
+                        <digi:errors/>
+                    </td>
+                </tr>
 	</tr>
 	<tr>
 		<td>

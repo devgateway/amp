@@ -15,10 +15,16 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.widget.util.WidgetUtil;
 
 /**
  *
@@ -27,6 +33,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class IndicatorSectorManager extends DispatchAction {
     
     public final static int RECORDS_PER_PAGE=15;
+    public final static long ALL_REGIONS_SELECTED=-2l;
 
     @Override
     protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
@@ -75,27 +82,85 @@ public class IndicatorSectorManager extends DispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+        
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
+        ActionErrors errors = new ActionErrors();
         IndicatorSector indSec;
-        if (indSecForm.getIndSectId() == null||indSecForm.getIndSectId() ==0) {
-            indSec = new IndicatorSector();
-        } else {
-            indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
-        }
+        List<AmpRegion> regions = new ArrayList<AmpRegion>();
+        AmpSector selectedSector = indSecForm.getSector();
         Long indId = indSecForm.getSelIndicator();
-        // same thing as in activity saving process, if no location exists we will just create new object
-        AmpLocation ampLoc = LocationUtil.getAmpLocation(FeaturesUtil.getDefaultCountryIso(), indSecForm.getSelRegionId(), null, null);
-        if (ampLoc == null) {
-            ampLoc = new AmpLocation();
-            ampLoc.setCountry(FeaturesUtil.getDefaultCountryIso());
-            ampLoc.setDgCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(FeaturesUtil.getDefaultCountryIso()));
-            ampLoc.setAmpRegion(LocationUtil.getAmpRegion(indSecForm.getSelRegionId()));
-            LocationUtil.saveLocation(ampLoc);
+        AmpIndicator selectedIndicator = IndicatorUtil.getIndicator(indId);
+
+
+        // true if "all" is selcted in region dropdown
+        boolean allRegionsSelected = indSecForm.getSelRegionId().equals(ALL_REGIONS_SELECTED);
+
+        if (allRegionsSelected) {
+            regions.addAll(indSecForm.getRegions());
+        } else {
+            regions.add(LocationUtil.getAmpRegion(indSecForm.getSelRegionId()));
         }
-        indSec.setSector(indSecForm.getSector());
-        indSec.setIndicator(IndicatorUtil.getIndicator(indId));
-        indSec.setLocation(ampLoc);
-        IndicatorUtil.saveIndicatorConnection(indSec);
+
+       
+        if (indSecForm.getIndSectId() != null && indSecForm.getIndSectId() > 0) {
+             // we are editing IndicatorSector
+            
+            indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
+            indSec.setSector(selectedSector);
+            indSec.setIndicator(selectedIndicator);
+
+            if (allRegionsSelected) {
+
+                /* if all is selected in the region dropdown 
+                 * then we should create new sector indicator objects 
+                 * for all regions except region which initially is assigned to IndicatorSector
+                 * that is why we are removing it from list of regions
+                 */
+                
+                regions.remove(indSec.getLocation().getAmpRegion());
+                IndicatorUtil.saveIndicatorConnection(indSec);
+            } else {
+                AmpLocation ampLoc = getAmpLocation(regions.get(0));
+                indSec.setLocation(ampLoc);
+
+                if (!WidgetUtil.indicarorSectorExist(indSecForm.getSector().getAmpSectorId(), ampLoc.getAmpLocationId(), indId, indSecForm.getIndSectId())) {
+                    IndicatorUtil.saveIndicatorConnection(indSec);
+                    return viewAll(mapping, form, request, response);
+                } else {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorExists"));
+                    saveErrors(request, errors);
+                    return mapping.findForward("create");
+                }
+
+            }
+
+        }
+        for (AmpRegion region : regions) {
+
+            IndicatorSector ind = new IndicatorSector();
+            AmpLocation ampLoc = getAmpLocation(region);
+            ind.setLocation(ampLoc);
+            ind.setSector(selectedSector);
+            ind.setIndicator(selectedIndicator);
+
+            if (!WidgetUtil.indicarorSectorExist(indSecForm.getSector().getAmpSectorId(), ampLoc.getAmpLocationId(), indId, null)) {
+                IndicatorUtil.saveIndicatorConnection(ind);
+            } else {
+
+                if (allRegionsSelected) {
+                    if (errors.size() == 0) {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorSkipped"));
+                        saveErrors(request, errors);
+                    }
+                } else {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorExists"));
+                    saveErrors(request, errors);
+                    return mapping.findForward("create");
+                }
+            }
+
+        }
+
         return viewAll(mapping, form, request, response);
 
     }
@@ -301,5 +366,17 @@ public class IndicatorSectorManager extends DispatchAction {
         indSecForm.setSelectedPage(0);
         return viewAll(mapping, form, request, response);
 
+    }
+
+    private AmpLocation getAmpLocation(AmpRegion region) throws Exception {
+        AmpLocation ampLoc = LocationUtil.getAmpLocation(FeaturesUtil.getDefaultCountryIso(), region.getAmpRegionId(), null, null);
+        if (ampLoc == null) {
+            ampLoc = new AmpLocation();
+            ampLoc.setCountry(FeaturesUtil.getDefaultCountryIso());
+            ampLoc.setDgCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(FeaturesUtil.getDefaultCountryIso()));
+            ampLoc.setAmpRegion(LocationUtil.getAmpRegion(region.getAmpRegionId()));
+            LocationUtil.saveLocation(ampLoc);
+        }
+        return ampLoc;
     }
 }

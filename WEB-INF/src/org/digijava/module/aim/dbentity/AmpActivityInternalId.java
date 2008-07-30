@@ -3,53 +3,43 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 public class AmpActivityInternalId implements Serializable {
-    
-    private AmpOrganisation organisation;
-    private String internalId;
-    private Long ampActivityId;
-    private Long ampOrgId;
 
-   
-    
-    public Long getAmpOrgId() {
-		return ampOrgId;
+	private static final long serialVersionUID = 469552292854192522L;
+	private Long id;
+	private AmpOrganisation organisation;
+	private AmpActivity ampActivity;
+	private String internalId;
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setAmpOrgId(Long ampOrgId) {
-		this.ampOrgId = ampOrgId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public Long getAmpActivityId() {
-        return ampActivityId;
-    }
+	public AmpOrganisation getOrganisation() {
+		return organisation;
+	}
 
-    public void setAmpActivityId(Long internalId) {
-        this.ampActivityId = internalId;
-    }
-    
-    /**
-     * @return Returns the internalId.
-     */
-    public String getInternalId() {
-        return internalId;
-    }
-    /**
-     * @param internalId The internalId to set.
-     */
-    public void setInternalId(String internalId) {
-        this.internalId = internalId;
-    }
-    /**
-     * @return Returns the organisation.
-     */
-    public AmpOrganisation getOrganisation() {
-        return organisation;
-    }
-    /**
-     * @param organisation The organisation to set.
-     */
-    public void setOrganisation(AmpOrganisation organisation) {
-        this.organisation = organisation;
-    }
+	public void setOrganisation(AmpOrganisation organisation) {
+		this.organisation = organisation;
+	}
+
+	public AmpActivity getAmpActivity() {
+		return ampActivity;
+	}
+
+	public void setAmpActivity(AmpActivity ampActivity) {
+		this.ampActivity = ampActivity;
+	}
+
+	public String getInternalId() {
+		return internalId;
+	}
+
+	public void setInternalId(String internalId) {
+		this.internalId = internalId;
+	}
+
 }
-

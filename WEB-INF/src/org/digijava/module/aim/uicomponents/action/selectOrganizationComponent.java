@@ -1,5 +1,6 @@
 package org.digijava.module.aim.uicomponents.action;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.uicomponents.AddOrganizationButton;
+import org.digijava.module.aim.uicomponents.IPostProcessDelegate;
 import org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -35,11 +37,16 @@ public class selectOrganizationComponent extends Action {
 		} else if ("selectPage".equalsIgnoreCase(subAction)) {
 			return selectPage(mapping, form, request, response);
 		} else if ("organizationSelected".equalsIgnoreCase(subAction)) {
+			//if has a delegate so call it
+			if (oForm.getDelegateClass()!=null && !"".equalsIgnoreCase(oForm.getDelegateClass())){
+				return executeDelegate(mapping, form, request, response);
+			}else{
 			// if have to add to a collection so this is a multiselector
 			if (oForm.getMultiSelect()) {
 				return addOrganizationToForm(mapping, form, request, response);
 			} else {
 				return setOrganizationToForm(mapping, form, request, response);
+			}
 			}
 		}
 
@@ -95,7 +102,10 @@ public class selectOrganizationComponent extends Action {
 			oForm.setOrgSelReset(true);
 			oForm.reset(mapping, request);
 		}
-
+		if (request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS)!=null && !"".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS))){
+			oForm.setDelegateClass(request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS));
+		}
+		
 		Collection<AmpOrgType> types;
 		types = DbUtil.getAllOrgTypes();
 		oForm.setOrgTypes(types);
@@ -328,4 +338,16 @@ public class selectOrganizationComponent extends Action {
 		return mapping.findForward("forward");
 	}
 
+	public  ActionForward  executeDelegate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		selectOrganizationComponentForm eaForm = (selectOrganizationComponentForm) form;
+		String className=eaForm.getDelegateClass();
+		Class clazz= java.lang.Class.forName(className);
+		Constructor constructor =clazz.getDeclaredConstructor( new Class[] { } );
+		constructor.setAccessible( true );
+		IPostProcessDelegate processor = (IPostProcessDelegate) constructor.newInstance( new Object[] {} );
+		return processor.execute(mapping, form, request, response);
+	}
+
+	
 };

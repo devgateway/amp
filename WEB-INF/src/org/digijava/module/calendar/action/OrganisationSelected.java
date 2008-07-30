@@ -2,6 +2,7 @@ package org.digijava.module.calendar.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -71,7 +72,7 @@ public class OrganisationSelected extends Action {
                 boolean flag = false;
                 if (prevOrgs != null) {
                     for (int j = 0; j < prevOrgs.length; j++) {
-                        if (prevOrgs[j].getAmpOrgId().equals(selOrgs[i])) {
+                        if (prevOrgs[j].getId().equals(selOrgs[i])) {
                             flag = true;
                             break;
                         }
@@ -82,8 +83,8 @@ public class OrganisationSelected extends Action {
                     AmpOrganisation org = DbUtil.getOrganisation(selOrgs[i]);
                     if (org != null) {
                         OrgProjectId opId = new OrgProjectId();
-                        opId.setAmpOrgId(org.getAmpOrgId());
-                        opId.setName(org.getName());
+                        opId.setOrganisation(org);
+                        opId.setId(new Date().getTime());
                         opId.setProjectId(null);
                         currOrgs[index++] = opId;
                     }

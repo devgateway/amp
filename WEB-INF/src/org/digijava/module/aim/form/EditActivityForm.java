@@ -202,6 +202,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private long selLinks[];
     private String selManagedDocs[];
 	private OrgProjectId selectedOrganizations[];
+	
+	
 	//private Collection selectedOrganizationsList;
 	private Collection<AmpOrganisation> executingAgencies;
 	private Long selExAgencies[];
@@ -2116,6 +2118,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		return selectedOrganizations;
 	}
 
+	
 	/**
 	 * @param selectedOrganizations
 	 *            The selectedOrganizations to set.

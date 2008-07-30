@@ -18,6 +18,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String useClient = "false";
 	private String htmlvalueHolder = "";
 	private String htmlNameHolder = "";
+	private String delegateClass = "";
 	private String refreshParentDocument = "";
 
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
@@ -29,6 +30,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	public static final String PARAM_USE_CLIENT = "PARAM_USE_CLIENT";
 	public static final String PARAM_VALUE_HOLDER = "PARAM_VALUE_HOLDER";
 	public static final String PARAM_NAME_HOLDER = "PARAM_NAME_HOLDER";
+	public static final String PARAM_NAME_DELEGATE_CLASS = "PARAM_NAME_DELEGATE_CLASS";
 
 	@Override
 	public int doStartTag() throws JspException {
@@ -89,6 +91,13 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append(PARAM_VALUE_HOLDER);
 				html.append("=");
 				html.append(htmlvalueHolder);
+				html.append("~");
+			}
+			
+			if (!"".equalsIgnoreCase(delegateClass)) {
+				html.append(PARAM_NAME_DELEGATE_CLASS);
+				html.append("=");
+				html.append(delegateClass);
 				html.append("~");
 			}
 
@@ -190,6 +199,14 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 	public void setHtmlNameHolder(String htmlNameHolder) {
 		this.htmlNameHolder = htmlNameHolder;
+	}
+
+	public String getDelegateClass() {
+		return delegateClass;
+	}
+
+	public void setDelegateClass(String delegateClass) {
+		this.delegateClass = delegateClass;
 	}
 
 }

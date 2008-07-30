@@ -126,11 +126,7 @@ public class ViewChannelOverview extends TilesAction {
 	                  AmpActivityInternalId) projIdItr
 	                  .next();
 	              OrgProjectId projId = new OrgProjectId();
-	              projId.setAmpOrgId(actIntId.getOrganisation()
-	                                 .getAmpOrgId());
-	              projId
-	                  .setName(actIntId.getOrganisation()
-	                           .getName());
+	              projId.setId(actIntId.getId());
 	              projId.setOrganisation(actIntId.getOrganisation());
 	              projId.setProjectId(actIntId.getInternalId());
 	              temp.add(projId);

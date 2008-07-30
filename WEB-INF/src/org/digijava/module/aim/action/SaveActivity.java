@@ -1140,6 +1140,7 @@ public class SaveActivity extends Action {
 					activity.setTeam(null);
 				}
 
+				
 				// set activity internal ids
 				Set internalIds = new HashSet();
 				if (eaForm.getSelectedOrganizations() != null) {
@@ -1148,14 +1149,16 @@ public class SaveActivity extends Action {
 					for (int i = 0; i < orgProjId.length; i++) {
 						AmpActivityInternalId actInternalId = new AmpActivityInternalId();
 						if(orgProjId[i] != null){
+							actInternalId.setAmpActivity(activity);
 						actInternalId.setOrganisation(DbUtil
-								.getOrganisation(orgProjId[i].getAmpOrgId()));
+								.getOrganisation(orgProjId[i].getOrganisation().getAmpOrgId()));
 						actInternalId
 								.setInternalId(orgProjId[i].getProjectId());
 						internalIds.add(actInternalId);
 					}
 				}
 			}
+				//activity.getInternalIds().clear();
 				activity.setInternalIds(internalIds);
 
 				//set components

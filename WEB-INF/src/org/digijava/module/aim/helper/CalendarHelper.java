@@ -123,4 +123,22 @@ class ComparableMonth implements Comparable<ComparableMonth>{
 		return monthStr;
 	}
 	
+	
+	/**
+	 * Convert the date that comes from the input to gregorian calendar based
+	 * on global setting default calendar 
+	 * @return
+	 */
+	public Date defaultToGregorian(Date date){
+		return null;	
+	}
+	
+	/**
+	 * Convert the date that comes as gregorian to a date based
+	 * on global setting default calendar 
+	 * @return
+	 */
+	public Date gregorianToDefault(Date date){
+		return null;	
+	}
 }

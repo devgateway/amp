@@ -38,7 +38,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 	String callbackFunction="";
 	Object	 targetForm;
 	boolean refreshParent;
-	
+	private String delegateClass;
 
 	boolean useClient;
 	private String valueHoder="";
@@ -305,5 +305,13 @@ public class selectOrganizationComponentForm extends ActionForm {
 
 	public void setAfterSelect(boolean afterSelect) {
 		this.afterSelect = afterSelect;
+	}
+
+	public String getDelegateClass() {
+		return delegateClass;
+	}
+
+	public void setDelegateClass(String delegateClass) {
+		this.delegateClass = delegateClass;
 	}
 }

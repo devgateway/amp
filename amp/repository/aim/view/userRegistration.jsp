@@ -194,7 +194,7 @@
 
 					<td align=right class=f-names noWrap width="40%">
 
-						<%-- <FONT color=red>*</FONT> --%>
+						<FONT color=red>*</FONT>						
 
 						<digi:trn key="um:firstName">First Name
 

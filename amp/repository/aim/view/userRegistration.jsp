@@ -554,21 +554,21 @@
 		          <td  vAlign=top><br>
 
 
-						<c:set var="translation">
-
-							<digi:trn key="aim:clickToUseAmp">Click here to Use AMP now</digi:trn>
-
-						</c:set>
-
-						<digi:link href="/index.do" title="${translation}" >
-
-						<digi:trn key="aim:useAMPSiteNow">
-
-						Use AMP now
-
-						</digi:trn>
-
-						</digi:link>
+<!--						<c:set var="translation">-->
+<!---->
+<!--							<digi:trn key="aim:clickToUseAmp">Click here to Use AMP now</digi:trn>-->
+<!---->
+<!--						</c:set>-->
+<!---->
+<!--						<digi:link href="/index.do" title="${translation}" >-->
+<!---->
+<!--						<digi:trn key="aim:useAMPSiteNow">-->
+<!---->
+<!--						Use AMP now-->
+<!---->
+<!--						</digi:trn>-->
+<!---->
+<!--						</digi:link>-->
 
 						<BR><BR><BR>
 

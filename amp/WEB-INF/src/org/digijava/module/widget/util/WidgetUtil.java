@@ -14,6 +14,7 @@ import org.apache.struts.tiles.ComponentContext;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.helper.WidgetPlaceHelper;
@@ -395,4 +396,40 @@ public class WidgetUtil {
 		}
 		
 	}
+        
+        /**
+	 * Returns true if IndicatorSector exists .
+         * @param sectorId id of sector 
+         * @param locationId id of location
+         * @param indicatorId id of indicator {@link AmpIndicator}
+         * @param indSectId id of IndicatorSector {@link IndicatorSector}
+	 * @return true if IndicatorSector exists otherwise false
+	 * @throws DgException
+	 */
+        public static boolean indicarorSectorExist(Long sectorId,Long locationId,Long indicatorId,Long indSectId) throws DgException{
+            boolean exists=false;
+            Session session = PersistenceManager.getRequestDBSession();
+            String oql = "from "+IndicatorSector.class.getName() +
+                    " inds where inds.sector=:sectorId and inds.location=:locationId and inds.indicator=:indicatorId";
+            if(indSectId!=null){
+                oql+=" and inds.id!=:indSectId";
+            }
+            try {
+			Query query = session.createQuery(oql);
+			query.setLong("sectorId", sectorId);
+                        query.setLong("locationId",locationId);
+                        query.setLong("indicatorId", indicatorId);
+                        if (indSectId != null) {
+                            query.setLong("indSectId", indSectId);
+                        }
+			if(query.list().size()>0){
+                            exists=true;
+                        }
+		} catch (Exception e) {
+			logger.error(e);
+			throw new DgException("cannot load SectorIndicators!",e);
+		}
+            return exists;
+            
+        }
 }

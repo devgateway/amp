@@ -15,7 +15,7 @@
                   document.gisIndicatorSectorRegionForm.target = popupPointer.name;
                   document.gisIndicatorSectorRegionForm.submit();
               }
-
+              
               function addSector(param)
               {
                 <digi:context name="addSec" property="context/widget/indSectRegManager.do~actType=selectSector" />
@@ -36,7 +36,7 @@
                             alert("please select region");
                             return false;
                         }
-                       
+                        
                         return true;
                     }
                     
@@ -46,7 +46,7 @@
                 document.gisIndicatorSectorRegionForm.submit();
             }
             //-->
-                    
+            
 </script>
 <digi:instance property="gisIndicatorSectorRegionForm" />
 <digi:form action="/indSectRegManager.do~actType=save">
@@ -87,6 +87,11 @@
             <td>
                 
                 <table>
+                    <tr>
+                     <td colspan="3">
+                            <digi:errors/>
+                    </td>
+                    </tr>
                     
                     <tr>
                         <td nowrap="nowrap" align="left">
@@ -146,7 +151,8 @@
                         </td>
                         <td  colspan="2">
                             <html:select name="gisIndicatorSectorRegionForm" property="selRegionId">
-                                <html:option value="-1">Slect Region</html:option>
+                                <html:option value="-1">Select Region</html:option>
+                                 <html:option value="-2">All</html:option>
                                 <html:optionsCollection name="gisIndicatorSectorRegionForm" property="regions" label="name" value="ampRegionId"/>
                             </html:select>
                         </td>

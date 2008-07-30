@@ -1481,7 +1481,9 @@ public class SaveActivity extends Action {
 						AmpIssues ampIssue = new AmpIssues();
 						ampIssue.setActivity(activity);
 						ampIssue.setName(issue.getName());
-						ampIssue.setIssueDate(FormatHelper.parseDate(issue.getIssueDate()).getTime());
+						if (issue.getIssueDate()!=null){
+							ampIssue.setIssueDate(FormatHelper.parseDate(issue.getIssueDate()).getTime());
+						}
 						Set measureSet = new HashSet();
 						if (issue.getMeasures() != null
 								&& issue.getMeasures().size() > 0) {

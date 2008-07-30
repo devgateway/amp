@@ -217,6 +217,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Issues Button" feature="Issues"></field:display>
 <field:display name="Add Location" feature="Location"></field:display>
 <field:display name="Add Measures Link" feature="Issues"></field:display>
+<field:display name="Issue Date" feature="Issues" />
 <field:display name="Add Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Add Programs Button - National Plan Objective" feature="Program"></field:display>
 <field:display name="Add Programs Button - Primary Programs" feature="Program"></field:display>

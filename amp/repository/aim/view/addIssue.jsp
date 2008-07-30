@@ -6,7 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+									
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 
 <digi:instance property="aimEditActivityForm" />
@@ -20,7 +21,14 @@
 			addIssueForm.issue.focus();
 			return false;
 		}
-		return true;
+		<field:display feature="Issues" name="Issue Date">
+			if(isEmpty(addIssueForm.issueDate.value) == true) {	
+				var issueError2 = "<digi:trn key="aim:enterIssueDate">Please enter issue date</digi:trn>"; 	
+				alert(issueError2);
+				return false;
+		}	
+		</field:display>
+	return true;
 	}
 </script>
 
@@ -46,6 +54,7 @@
 												<html:textarea property="issue" styleClass="inp-text" rows="3" cols="60"/>
 											 </a>										</td>
 									</tr>								
+									<field:display feature="Issues" name="Issue Date">
 									<tr>
 									  <td align="right"><digi:trn key="aim:dateOfissue">Date of Issue</digi:trn>
 								      &nbsp;</td>
@@ -59,6 +68,7 @@
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a></td>
 								  </tr>
+								  </field:display>
 									<tr>
 										<td align="center" colspan=2>
 											<table cellPadding=5>

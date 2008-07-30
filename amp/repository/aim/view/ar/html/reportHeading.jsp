@@ -30,7 +30,7 @@
         </c:set>
         
         <logic:equal name="column" property="columnDepth" value="1">
-        	<td style="padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>          
+        	<td style="background-image:url('module/aim/images/graygrad.gif');background-repeat:repeat-x;padding-left: 2px; padding-right: 2px " height="20px" nowrap="nowrap" align="center" class="clsTableTitleColHtml" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>          
 	        	<logic:notEqual name="widget" scope="request" value="true">
 	            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 	              		<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
@@ -52,18 +52,18 @@
         	<logic:notEqual name="subColumn" property="width" value="1">
         		<%if (!subColumn.getName().equalsIgnoreCase("Total Costs") && !subColumn.getName().equalsIgnoreCase("Funding")){
         			if(subColumn.getName().length()<5){%>
-        				<td style="padding-left: 2px; padding-right: 2px;" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+        				<td style="background-image:url('module/aim/images/graygrad.gif'); margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
 					<%}else{%>
-						<td style="font-family: Arial;font-size: 11px;text-decoration: none;color: white;padding-left: 2px; padding-right: 2px; background: #376091;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>		
-          		<%	}
+						<td style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;padding-left: 2px; padding-right: 2px; background: #F3F3F3;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	
+          		<%}
         		}
           		%>
           		</logic:notEqual>
        			<logic:equal name="subColumn" property="width" value="1"> 
-	      			<td style="padding-left: 2px; padding-right: 2px; background: #376091;border-right: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-	      				<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: white;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
+	      			<td style="border-right: #FFFFFF 1px solid; font: bold 9px Arial;background: #F3F3F3" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+	      				<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: black ;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
 	            				<c:out value="${reportHeading}"/>
 	            			</digi:trn>

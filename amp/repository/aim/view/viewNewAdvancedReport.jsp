@@ -48,6 +48,36 @@
 	margin-left: 5px;
 }
 </style>
+<script language="JavaScript">
+function toggleSettings(){
+	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
+	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	if(currentDisplaySettings.style.display == "block"){
+		currentDisplaySettings.style.display = "none";
+		displaySettingsButton.innerHTML = "Show current settings &gt;&gt;";
+	}
+	else
+	{
+		currentDisplaySettings.style.display = "block";
+		displaySettingsButton.innerHTML = "Hide current settings &lt;&lt;";
+	}
+}
+
+	function teamWorkspaceSetup(a) {
+		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+	}
+	
+	var tabName	= "Tab-By Project";
+	<logic:empty name="filterCurrentReport" scope="session">
+		<logic:notEmpty name="myTabs" scope="session">
+				tabName	= 'Tab-${myTabs[0].name}';
+		</logic:notEmpty>
+	</logic:empty>
+	<logic:notEmpty name="filterCurrentReport" scope="session">
+		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
+	</logic:notEmpty>	
+	
+</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <div id="mySorter" style="display: none">
@@ -157,23 +187,62 @@ session.setAttribute("progressValue", counter);
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
-		<tr>
-			<td height="20px" style="padding-left: 5px;padding-left: 5px;">
-				<logic:notEmpty name="reportMeta" property="hierarchies">
-					<a style="cursor:pointer" onClick="showSorter(); ">
-						<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> 
-					</a>&nbsp;
-					| 
-				</logic:notEmpty> 
-				<a style="cursor:pointer" onClick="showFilter(); "> <u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
-				<logic:notEqual name="widget" scope="request" value="true">
-				| 	<a style="cursor:pointer"	onClick="showRange(); ">
-						<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> 
-					</a>
-				</logic:notEqual>
-				| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
-			</td>
-		</tr>
+	<tr>
+		<td>
+		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
+            <span style="cursor:pointer;float:left;">
+            <logic:notEmpty name="reportMeta" property="hierarchies">
+                <a class="settingsLink" onClick="showSorter();">
+                <digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>
+                </a> | 
+            </logic:notEmpty> 
+                <a class="settingsLink" onClick="showFilter(); " >
+                <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
+                </a>
+           	
+           	  <logic:notEqual name="viewFormat" value="foldable">
+            	|<a class="settingsLink" onClick="showRange(); " >
+               		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
+                 </a>
+              </logic:notEqual>
+                
+                |<a  class="settingsLink" onClick="showFormat(); " >
+                <digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn>
+                </a>
+           
+            </span>
+             &nbsp;<br>
+             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <table cellpadding="0" cellspacing="0" border="0" width="80%">
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+			<strong>
+			<digi:trn key="rep:pop:SelectedFilters">Selected Filters:</digi:trn></strong>
+                <logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
+                <bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
+                <bean:define id="listableStyle" value="settingsList" toScope="request"/>
+                <bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+                    <jsp:include page="${listable.jspFile}" flush="true"/>
+                </logic:present>
+             </td>
+             </tr>
+             <tr>
+             <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">
+				<strong><digi:trn key="rep:pop:SelectedRange">Selected Range:</digi:trn></strong>
+				<%
+                	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
+                %>
+                <digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=arf.getRenderStartYear()%> |
+                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=arf.getRenderEndYear()%> |
+             </td>
+             </tr>
+             <tr>
+           </table>
+           </div>
+    	</div>
+	</td>
+	</tr>
 	</logic:notEqual>
 	</logic:notEqual>
 

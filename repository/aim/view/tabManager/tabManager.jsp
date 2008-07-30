@@ -142,7 +142,8 @@
 	}
 	
 	GetDataManager.prototype.getData	= function () {
-		YAHOOAmp.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true", this);
+		var timestamp		= new Date().getTime();	
+		YAHOOAmp.util.Connect.asyncRequest("GET", "/aim/tabManager.do?get=true&iestamp="+timestamp, this);
 	}
 	
 	function SaveDataManager(destContainerId) {

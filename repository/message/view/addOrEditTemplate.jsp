@@ -140,16 +140,16 @@
 																			<table width="100%" cellspacing="3" cellpadding="5">																				
 																				<tr>
 																					<td align="right" width="25%"><digi:trn key="messages:templateName">Template Name</digi:trn><font color="red">*</font> </td>
-																					<td align="left" width="90%"><html:text property="messageName" style="width:600px;"/></td>
+																					<td align="left" width="90%"><html:text property="messageName" styleClass="inp-text" style="width:600px;"/></td>
 																				</tr>																																				
 																				<tr>
 																					<td align="right"><digi:trn key="messages:text">Text</digi:trn></td>
-																					<td align="left"> <html:textarea name="messageForm" property="description" rows="3" cols="75"/></td>
+																					<td align="left"> <html:textarea name="messageForm" property="description" rows="3" cols="75" styleClass="inp-text"/></td>
 																				</tr>																				
 																				<tr>
 																					<td align="right"><digi:trn key="messages:relatedTriggers">related trigger</digi:trn></td>
 																					<td align="left"> 
-																						<html:select property="selectedTrigger" name="messageForm">
+																						<html:select property="selectedTrigger" name="messageForm" styleClass="inp-text">
 																							<html:option value="-1"><digi:trn key="message:selectRelatedTrigger">Select from below</digi:trn></html:option>
 																							<html:optionsCollection name="messageForm" property="availableTriggersList" label="label" value="value"/>
 																								<!-- 
@@ -173,7 +173,8 @@
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
-																												<logic:notEmpty name="messageForm"  property="teamMapValues" >																								
+																												<logic:notEmpty name="messageForm"  property="teamMapValues" >
+																												    <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>																								
 																													<c:forEach var="team" items="${messageForm.teamMapValues}">
 																														<logic:notEmpty name="team" property="members">
 																															<option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>

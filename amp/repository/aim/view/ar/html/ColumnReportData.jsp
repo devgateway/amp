@@ -35,8 +35,8 @@
 		 width= "5px";
 	}
 	if (columnReport.getLevelDepth()==3){
-		request.setAttribute("pading","15px");
-		width="15px";
+		request.setAttribute("pading","30px");
+		width="25px";
 	}
 	if (columnReport.getLevelDepth()==4){
 		request.setAttribute("pading","25px");

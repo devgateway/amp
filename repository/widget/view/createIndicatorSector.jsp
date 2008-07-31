@@ -37,12 +37,24 @@
                             return false;
                         }
                         
-                        return true;
+                        save();
                     }
                     
                     function cancel(){
-        <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=cancel" />
+                     <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=cancel" />
+                      document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
+                      document.gisIndicatorSectorRegionForm.submit();
+                      }
+                      
+                      /*
+                      * we need this save method because 
+                      *  someone may press cancel 
+                      *  on the sector selection popup
+                      */
+                function save(){
+                <digi:context name="addEditIndVal" property="/widget/indSectRegManager.do~actType=save" />
                 document.gisIndicatorSectorRegionForm.action = "${addEditIndVal}";
+                document.gisIndicatorSectorRegionForm.target = "_self";
                 document.gisIndicatorSectorRegionForm.submit();
             }
             //-->

@@ -690,11 +690,7 @@ function collapseAll() {
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
 														<c:if test="${not empty selectedOrganizations}">
-															<tr><td><!-- 
-															AMP - 2681
-																<c:out value="${selectedOrganizations.name}"/>:
-																<c:out value="${selectedOrganizations.projectId}"/>
-															 -->
+															<tr><td>
 																	<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
 																			<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
 																			<jsp:include page="previewOrganizationPopup.jsp"/>

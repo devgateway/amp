@@ -1337,7 +1337,7 @@
 												&nbsp;
 											</td>
 											<td align="right" nowrap="nowrap">
-												<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
+												<digi:link href="/reportWizard.do"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
 												</td>
 										</tr>
 									</table>

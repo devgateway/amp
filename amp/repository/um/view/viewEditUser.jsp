@@ -16,7 +16,7 @@
 function goAction(value){
   if(value!=null){
     document.getElementById("event").value=value;
-    document.forms[0].submit();
+    document.umViewEditUserForm.submit();
   }
 }
 function resetPasswordFields(){

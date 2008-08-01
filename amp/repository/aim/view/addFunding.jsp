@@ -145,8 +145,9 @@
 		}
 	}
 
-	function removeMTEFProjection(index) {
-		var flag = confirm("Are you sure you want to remove the selected projection ?");
+	function removeMTEFProjection(index) 
+	{
+		var flag = confirm("<digi:trn key="aim:addFunding:warn:removeproj">Are you sure you want to remove the selected projection ?</digi:trn>");
 		if(flag != false) {
 			document.aimEditActivityForm.event.value = "delProjection";
 			document.aimEditActivityForm.transIndexId.value=index;
@@ -157,6 +158,7 @@
 
 	function load()
 	{
+		var Warn="<digi:trn key="aim:addFunding:warn:dup">This information is a duplicate of existing funding information. Do you wish to proceed?</digi:trn>";
 		if(document.aimEditActivityForm.dupFunding.value == "false")
 		{
 				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
@@ -169,7 +171,7 @@
 		{
 			if(document.aimEditActivityForm.firstSubmit.value == "true")
 			{
-				if(confirm("This information is a duplicate of existing funding information. Do you wish to proceed?"))
+				if(confirm(Warn))
 				{
 					<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
 					document.aimEditActivityForm.action = "<%=addAct%>";

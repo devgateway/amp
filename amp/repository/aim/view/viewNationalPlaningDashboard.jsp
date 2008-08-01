@@ -527,7 +527,7 @@ function doFilter() {
 		</tr>
 		<tr>
 			<td colspan="2" align="right">
-				<digi:link href="/advancedReportManager.do~clear=true"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
+				<digi:link href="/reportWizard.do"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
 			</td>
 		</tr>
         <tr>

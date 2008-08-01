@@ -27,6 +27,16 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+        <tag>
+		<name>value</name>
+		<tagclass>org.dgfoundation.amp.globalsettings.GlobalSettingsValueTagClass</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>name</name> 
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 
 	
 </taglib>

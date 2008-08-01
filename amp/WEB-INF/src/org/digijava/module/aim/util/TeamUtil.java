@@ -2042,6 +2042,13 @@ public class TeamUtil {
        	    if ( getTabs!=null )
      		  qry.setBoolean("getTabs", getTabs);
             col = qry.list();
+            if (col.isEmpty()){
+            	queryString="select distinct r from " + AmpReports.class.getName()+
+    			" r where r.drilldownTab=false AND r.ownerId is not null and r.ownerId=:ampTeamMemId";
+            	qry = session.createQuery(queryString); 
+             	qry.setLong("ampTeamMemId", memberId);
+             	col = qry.list();
+            }
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamReports()");
             logger.error(e.toString());

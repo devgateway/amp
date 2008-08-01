@@ -4,6 +4,8 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="globalsettings" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="aimChangePasswordForm" />
 
@@ -53,13 +55,16 @@
       		 <tr>
 		          <td class=r-dotted-lg-buttom vAlign=top><br>
 						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                 <c:set var="cn">
+                                                    <globalsettings:value name="Default Country" />
+                                                </c:set>
 						<c:set var="translation">
-							<digi:trn key="aim:clickToUseAmpEthiopia">Click here to Use AMP Ethiopia now</digi:trn>
+							<digi:trn key="aim:clickToUseAmp${cn}">Click here to Use AMP <digi:trn key="aim:cn:${cn}"/> now</digi:trn>
 						</c:set>
 						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:useAMPEthiopiaNow">
-						Use AMP Ethiopia now
-						</digi:trn>
+						<digi:trn key="aim:useAMP${cn}Now">
+						Use AMP <digi:trn key="aim:cn:${cn}"/> now
+                                                </digi:trn>&nbsp;
 						</digi:link>
 						<BR><BR><BR>
       	     	</td>

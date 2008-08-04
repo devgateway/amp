@@ -855,9 +855,6 @@ join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoEjecutado != 0
 join sisin_db.tabla_tipocambiogestion tc on tc.ano = sf.Ano;
 
 
-update amp_components
-set code = concat(left(code,3), '-', mid(code,4,5))
-where LENGTH(code)= 13;
 
 
 COMMIT;

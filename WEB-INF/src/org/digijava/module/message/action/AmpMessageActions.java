@@ -497,7 +497,9 @@ public class AmpMessageActions extends DispatchAction {
         }
         //reduce hidden messages amount
         int hiddenMessages=messagesForm.getHiddenMsgCount();
-        hiddenMessages-=stateIds.length;
+        if (hiddenMessages > 0) {
+            hiddenMessages -= stateIds.length;
+        }
         messagesForm.setHiddenMsgCount(hiddenMessages);
     	//getting message which will become visible instead of deleted one
     	messagesForm.setRemoveStateIds(null);	

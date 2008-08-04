@@ -62,20 +62,6 @@ function toggleSettings(){
 		displaySettingsButton.innerHTML = "Hide current settings &lt;&lt;";
 	}
 }
-
-	function teamWorkspaceSetup(a) {
-		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
-	}
-	
-	var tabName	= "Tab-By Project";
-	<logic:empty name="filterCurrentReport" scope="session">
-		<logic:notEmpty name="myTabs" scope="session">
-				tabName	= 'Tab-${myTabs[0].name}';
-		</logic:notEmpty>
-	</logic:empty>
-	<logic:notEmpty name="filterCurrentReport" scope="session">
-		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
-	</logic:notEmpty>	
 	
 </script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
@@ -190,7 +176,7 @@ session.setAttribute("progressValue", counter);
 	<tr>
 		<td>
 		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Hide current settings &lt;&lt;</span>
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">
@@ -213,7 +199,7 @@ session.setAttribute("progressValue", counter);
            
             </span>
              &nbsp;<br>
-             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <div style="display:block;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">

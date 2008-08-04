@@ -61,7 +61,7 @@
             
           <logic:notEqual name="column" property="columnDepth" value="1">
 			<logic:notEqual name="subColumn" property="width" value="1">
-				<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> 
+				<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> aa
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				

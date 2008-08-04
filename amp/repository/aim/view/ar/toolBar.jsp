@@ -1,15 +1,30 @@
-<%@ page pageEncoding="UTF-8"%>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%>	
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>	
 
 <style>
-#tablacss{
-	width:800px;
-	text-align:center;
-	background-color:#FFFFFF;
-	border-collapse:collapse
+<!--
+.toolbar{
+	width: 105px;
+	background: #addadd; 
+	background-color: #addadd; 
+	padding: 3px 3px 3px 3px; 
+	position: relative; 
+	top: 10px; 
+	left: 10px;
+	bottom: 100px;
+		
 }
+.toolbartable{
+	border-color: #FFFFFF;
+	border-width: 2px;
+	border-bottom-width: 2px; 
+	border-right-width: 2px;"
+	border-left-width: 2px;
+	border-style: solid;
+}
+-->
 </style>
 <% String ampReportId=request.getParameter("ampReportId");
 	if(ampReportId==null) ampReportId=(String)request.getAttribute("ampReportId");
@@ -22,29 +37,43 @@
    String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree";
    String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
 %>
-<div style="margin-left:5px;margin-bottom: 15px;margin-top: 15px">
-	<table style="tablacss">
-  		<tr>
-    		<td height="25px" align="center" nowrap="nowrap" style="margin: 4px;padding: 3px">
-    			<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank" style="text-decoration: none">
-						<digi:img align="middle" width="19px" height="20px" src="module/aim/images/pdf.gif" border="0" alt="Export to PDF"/>
-				</digi:link>
-			</td>
-    		<td align="center" nowrap="nowrap" style="margin: 4px;padding: 3px;">
-    			<digi:link  href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank" style="text-decoration: none">
-					<digi:img width="19px" height="20px" align="middle" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
-				</digi:link>
-    		</td>
-    		<td align="center" nowrap="nowrap" style="margin: 4px;padding: 3px">
-    			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank" style="text-decoration: none">
-					<digi:img width="19px" height="20px" align="middle" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
-				</digi:link>
-			</td>
-    		<td align="center" nowrap="nowrap" style="margin: 4px;padding: 3px">
-    			<digi:link  href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank" style="text-decoration: none">
-					<digi:img align="middle" width="19px" height="20px" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
-				</digi:link>
-    		</td>
-  		</tr>
-	</table>
+<div class="toolbar" align="center">
+<table border="0" align="center" bgcolor="#addadd" class="toolbartable">
+	<tr>
+		<!-- 
+			<td noWrap align=left valign="center">	
+				<digi:img src="module/aim/images/close.gif" border="0" alt="Close Report"/>
+					<a href="javascript:window.close();"><digi:trn key="rep:tool:CloseReport">Close Report</digi:trn></a>
+				</td>					
+			<td noWrap align=left valign="center">	
+				<digi:img src="module/aim/images/reload.gif" border="0" alt="Reload Report"/>
+			<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></td>				
+		-->
+
+		<td noWrap align=left valign="center">
+			<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				<digi:img width="21" height="24" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+			</digi:link>
+		</td>
+
+		<td noWrap align=left valign="center">
+			<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				<digi:img width="21" height="24" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+			</digi:link>
+		</td>
+
+		<td noWrap align=left valign="center">
+			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				<digi:img width="21" height="24" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
+			</digi:link>
+		</td>
+		
+		<td noWrap align=left valign="center">
+			<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				<digi:img width="21" height="24" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+			</digi:link>
+		</td>
+	</tr>
+</table>
 </div>
+<br>

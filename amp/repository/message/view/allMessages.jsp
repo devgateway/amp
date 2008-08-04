@@ -554,8 +554,8 @@ background-color:yellow;
 												}else{
                                                                                                 msgTR=document.createElement('TR');      	
                                                     msgTR.setAttribute('onmouseover','hoverTr('+msgId+',this)');
-                                               	}                                                                                                
-                                                                                                msgTR=paintTr(msgTR,i);                                                                                                
+                                               	}                                                  var color=++j;                                    
+                                                                                                msgTR=paintTr(msgTR,color);                                                                                                
 												tbl.tBodies[0].appendChild(createTableRow(tbl,msgTR,messages[i],true));
 												myArray[myArray.length]=msgId;										
 											}else{

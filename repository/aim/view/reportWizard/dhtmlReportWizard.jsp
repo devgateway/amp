@@ -40,9 +40,6 @@
 	<c:set var="failureMessage">
 		<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>
 	</c:set>
-	<c:set var="savingMessage">
-		<digi:trn key="aim:reportwizard:savingReport">Saving report</digi:trn>
-	</c:set>
 	
 	<c:if test="${myForm.desktopTab}">
 		<c:set var="pageTitle">
@@ -54,6 +51,9 @@
 		<c:set var="descriptionName">
 			<digi:trn key="aim:reportBuilder:TabDescription">Tab Description</digi:trn>
 		</c:set>
+		<c:set var="savingMessage">
+			<digi:trn key="aim:reportwizard:savingTab">Saving tab</digi:trn>
+		</c:set>
 	</c:if>
 	<c:if test="${!myForm.desktopTab}">
 		<c:set var="pageTitle">
@@ -64,6 +64,9 @@
 		</c:set>
 		<c:set var="descriptionName">
 			<digi:trn key="aim:reportBuilder:ReportDescription">Report Description</digi:trn>
+		</c:set>
+		<c:set var="savingMessage">
+			<digi:trn key="aim:reportwizard:savingReport">Saving report</digi:trn>
 		</c:set>
 	</c:if>
 

@@ -38,6 +38,14 @@ public class AmountCell extends Cell {
 		return columnPercent;
 	}
 
+	public Map<String, Comparable> getColumnCellValue() {
+		return columnCellValue;
+	}
+
+	public void setColumnCellValue(Map<String, Comparable> columnCellValue) {
+		this.columnCellValue = columnCellValue;
+	}
+
 	public void setColumnPercent(Map<String, Double> columnPercent) {
 		this.columnPercent = columnPercent;
 	}

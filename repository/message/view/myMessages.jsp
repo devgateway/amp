@@ -60,6 +60,7 @@
       //mdv.setAttribute("style","left:"+myWidth+";top:"+myHeight+";")
       mdv.style.left=myWidth;
       mdv.style.top=myHeight;
+      mdv.style.zIndex=1;
     }
 
     function getInterval(){

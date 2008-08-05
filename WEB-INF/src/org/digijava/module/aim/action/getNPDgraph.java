@@ -347,30 +347,36 @@ public class getNPDgraph extends Action {
      * @return
      */
     private static Double computePercent(AmpIndicator indic, Double _target, Double _actual, Double _base) {
-        double actual = (_actual == null) ? 0 : _actual.doubleValue();
-        double base = (_base == null) ? actual : _base.doubleValue();//if no base value than using actual as base
-        double target = (_target == null) ? actual : _target.doubleValue();
-        double result = 0;
-        if (indic.getType()!=null && "D".equals(indic.getType())) {
-            //descending
-            base -= target;
-            actual -= target;
-            target = 0;
-            if (base != 0 && actual != 0) {
-                result = actual / (base / 100);
-                result = 1 - result / 100;
-
-            }
+        if ((_actual == null || _actual == 0)) {
+            return new Double(0);
         } else {
-            //ascending
-        	actual-=base;
-        	target-=base;
-        	base=0;
-            result = actual / target;
-        }
-        return new Double(result);
-    }
+            double actual = _actual.doubleValue();
+            double base = (_base == null) ? 0 : _base.doubleValue();
+            double target = (_target == null) ? 0 : _target.doubleValue();
+            double result = 0;
+            if (indic.getType() != null && "D".equals(indic.getType())) {
+                //descending
+                base -= target;
+                actual -= target;
+                target = 0;
+                if (base != 0 && actual != 0) {
+                    result = actual / (base / 100);
+                    result = 1 - result / 100;
 
+                }
+            } else {
+                //ascending
+                actual -= base;
+                target -= base;
+                base = 0;
+                if (target != 0) {
+                    result = actual / target;
+                }
+            }
+            return new Double(result);
+        }
+
+    }
     private static int extractYearInt(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

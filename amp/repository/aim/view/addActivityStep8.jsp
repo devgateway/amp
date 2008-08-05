@@ -455,12 +455,12 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td width="15%" align="right"></td>
 															<td width="65%"></td>
 														</tr>
-														<feature:display name="Project Coordinator" module="Contact Information">
+														<feature:display name="Project Coordinator Contact Information" module="Contact Information">
 														<tr>
 															<td align="right">
-																<digi:trn key="aim:projectCoordinator">Project Coordinator</digi:trn>
+																<digi:trn key="aim:projectCoordinator">Project Coordinator Contact Information</digi:trn>
 															</td>
-															<field:display name="Project Coordinator First Name" feature="Project Coordinator">
+															<field:display name="Project Coordinator First Name" feature="Project Coordinator Contact Information">
 																<td align="right">
 																	<b><digi:trn key="aim:projectCoordinator:firstName">First Name</digi:trn></b>
 																</td>
@@ -469,7 +469,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</field:display>
 														</tr>
-														<field:display name="Project Coordinator Last Name" feature="Project Coordinator">
+														<field:display name="Project Coordinator Last Name" feature="Project Coordinator Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -480,7 +480,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Project Coordinator Email" feature="Project Coordinator">
+														<field:display name="Project Coordinator Email" feature="Project Coordinator Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -491,7 +491,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Project Coordinator Title" feature="Project Coordinator">
+														<field:display name="Project Coordinator Title" feature="Project Coordinator Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -502,7 +502,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Project Coordinator Organization" feature="Project Coordinator">
+														<field:display name="Project Coordinator Organization" feature="Project Coordinator Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -513,7 +513,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Project Coordinator Phone Number" feature="Project Coordinator">
+														<field:display name="Project Coordinator Phone Number" feature="Project Coordinator Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -524,7 +524,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Project Coordinator Fax Number" feature="Project Coordinator">
+														<field:display name="Project Coordinator Fax Number" feature="Project Coordinator Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -539,12 +539,12 @@ ${fn:replace(message,quote,escapedQuote)}
 														<tr>
 															<td>&nbsp;</td><td></td><td></td>
 														</tr>
-														<feature:display name="Sector Ministry Contact" module="Contact Information">
+														<feature:display name="Sector Ministry Contact Information" module="Contact Information">
 														<tr>
 															<td align="right">
-																<digi:trn key="aim:sectorMinistryCnt">Sector Ministry Contact</digi:trn>
+																<digi:trn key="aim:sectorMinistryCnt">Sector Ministry Contact Information</digi:trn>
 															</td>
-															<field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact">
+															<field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact Information">
 																<td align="right">
 																	<b><digi:trn key="aim:sectorMinistryCnt:firstName">First Name</digi:trn></b>
 																</td>
@@ -553,7 +553,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</field:display>
 														</tr>
-														<field:display name="Sector Ministry Contact Last Name" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Contact Last Name" feature="Sector Ministry Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -564,7 +564,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -575,7 +575,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -586,7 +586,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -597,7 +597,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -608,7 +608,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Sector Ministry Fax Number" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information">
 														<tr>
 															<td></td>
 															<td align="right">

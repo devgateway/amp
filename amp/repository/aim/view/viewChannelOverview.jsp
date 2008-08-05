@@ -1024,7 +1024,7 @@ function commentWin(val) {
 															</TR>
 														</feature:display>
 														<feature:display module="Contact Information"
-															name="Mofed Contact Information">
+															name="Government Contact Information">
 															<TR>
 																<TD>
 																<TABLE width="100%" cellPadding=3 cellSpacing=1
@@ -1036,8 +1036,8 @@ function commentWin(val) {
 																		<b><digi:trn key="aim:mofedContactInformation">
 																			MOFED Contact Information</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Mofed Contact Information"
-																		name="Mofed First Name">
+																	<field:display feature="Government Contact Information"
+																		name="Government First Name">
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
 																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
@@ -1045,8 +1045,8 @@ function commentWin(val) {
 																				value="${activity.mfdContLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Mofed Contact Information"
-																		name="Mofed Email">
+																	<field:display feature="Government Contact Information"
+																		name="Government Email">
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
 																				key="aim:contactPersonEmail">Email</digi:trn></i>: <a
@@ -1057,7 +1057,7 @@ function commentWin(val) {
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display name="Project Coordinator"
+														<feature:display name="Project Coordinator Contact Information"
 															module="Contact Information">
 															<TR>
 																<TD>
@@ -1069,10 +1069,10 @@ function commentWin(val) {
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn
 																			key="aim:projectCoordinator">
-																				Project Coordinator
+																				Project Coordinator Contact Information
 																			</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Project Coordinator"
+																	<field:display feature="Project Coordinator Contact Information"
 																		name="Project Coordinator First Name">
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
@@ -1081,7 +1081,7 @@ function commentWin(val) {
 																				value="${activity.prjCoLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Project Coordinator"
+																	<field:display feature="Project Coordinator Contact Information"
 																		name="Project Coordinator Email">
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
@@ -1094,7 +1094,7 @@ function commentWin(val) {
 																</TD>
 															</TR>
 														</feature:display>
-														<feature:display name="Sector Ministry Contact"
+														<feature:display name="Sector Ministry Contact Information"
 															module="Contact Information">
 															<TR>
 																<TD>
@@ -1106,10 +1106,10 @@ function commentWin(val) {
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn
 																			key="aim:sectorMinistryCnt">
-																				Sector Ministry Contact
+																				Sector Ministry Contact Information
 																			</digi:trn></b></TD>
 																	</TR>
-																	<field:display feature="Sector Ministry Contact"
+																	<field:display feature="Sector Ministry Contact Information"
 																		name="Sector Ministry Contact First Name">
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
@@ -1118,7 +1118,7 @@ function commentWin(val) {
 																				value="${activity.secMiCntLastName}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display feature="Sector Ministry Contact"
+																	<field:display feature="Sector Ministry Contact Information"
 																		name="Sector Ministry Contact Email">
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn

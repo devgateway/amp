@@ -63,6 +63,13 @@ function addNewIndicator(){
 	alert("${translation}");
     return false;
   }
+   if(document.aimNewIndicatorForm.type.value!="A"&&document.aimNewIndicatorForm.type.value!="D"){
+       <c:set var="translation">
+                <digi:trn key="admin:selectIndicatorType">Please Select Indicator Type</digi:trn>
+        </c:set>
+	alert("${translation}");
+    return false;
+  }
 <%-- 
 	if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorForm.IndicatorType.checked){
 	   alert("Please select indicator type(s).!");
@@ -220,7 +227,7 @@ function closeWindow() {
           </field:display>
           <field:display name="Indicator Type" feature="Admin">
           <tr>
-          	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>:</td>
+          	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>: <span style="color:Red;">*</span></td>
           	<td><html:select name="aimNewIndicatorForm" property="type">          		
           		<html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
           		<html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>

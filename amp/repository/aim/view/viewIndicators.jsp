@@ -65,7 +65,7 @@ a.itr:hover {
 	  if(value!=null){
 	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do" />
 	    document.getElementById("sortBy").value=value;
-	    document.forms[0].submit();
+	    document.aimViewIndicatorsForm.submit();
 	  }
 	}
 	

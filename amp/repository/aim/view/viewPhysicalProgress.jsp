@@ -164,7 +164,7 @@ method="post">
 														<c:set target="${urlPP}" property="ampActivityId">
 															<bean:write name="aimPhysicalProgressForm" property="ampActivityId"/>
 														</c:set>
-														<c:set target="${urlPP}" property="tabIndex" value="2"/>
+														<c:set target="${urlPP}" property="tabIndex" value="3"/>
 														<c:set target="${urlPP}" property="compId">
 															<bean:write name="component" property="componentId"/>
 														</c:set>

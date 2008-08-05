@@ -122,7 +122,7 @@
 <feature:display name="Planning" module="Project ID and Planning"></feature:display> 
 <feature:display name="Preview Activity" module="Previews"></feature:display> 
 <feature:display name="Program" module="Program"></feature:display> 
-<feature:display name="Project Coordinator" module="Contact Information"></feature:display> 
+<feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Project Fiche" module="Previews"></feature:display> 
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display> 
 <feature:display name="References" module="References"></feature:display> 
@@ -132,7 +132,7 @@
 <feature:display name="Related Documents" module="Document"></feature:display> 
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
-<feature:display name="Sector Ministry Contact" module="Contact Information"></feature:display> 
+<feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display> 
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
@@ -159,10 +159,10 @@
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display> 
 <field:display feature="Planning" name="Line Ministry Rank"></field:display> 
 <field:display feature="Preview Activity" name="Preview Button"></field:display> 
-<field:display feature="Project Coordinator" name="Project Coordinator Email"></field:display> 
-<field:display feature="Project Coordinator" name="Project Coordinator First Name"></field:display> 
-<field:display feature="Sector Ministry Contact" name="Sector Ministry Contact Email"></field:display> 
-<field:display feature="Sector Ministry Contact" name="Sector Ministry Contact First Name"></field:display> 
+<field:display feature="Project Coordinator Contact Information" name="Project Coordinator Email"></field:display> 
+<field:display feature="Project Coordinator Contact Information" name="Project Coordinator First Name"></field:display> 
+<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact Email"></field:display> 
+<field:display feature="Sector Ministry Contact Information" name="Sector Ministry Contact First Name"></field:display> 
 <field:display feature="Sectors" name="Level 1 Sectors List"></field:display> 
 <field:display name="A.C. Chapter" feature="Identification"></field:display> 
 <field:display name="AMP ID" feature="Identification"></field:display> 
@@ -381,8 +381,8 @@
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 
 <field:display name="Government Fax Number" feature="Government Contact Information"></field:display> 
-<field:display name="Government Fax Number" feature="Project Coordinator"></field:display> 
-<field:display name="Government Fax Number" feature="Sector Ministry Contact"></field:display> 
+<field:display name="Government Fax Number" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Government Fax Number" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Government First Name" feature="Government Contact Information"></field:display> 
 <field:display name="Government Last Name" feature="Government Contact Information"></field:display> 
 <field:display name="Government Organization" feature="Government Contact Information"></field:display> 
@@ -462,13 +462,13 @@
 <field:display name="Program Target Groups" feature="Admin NPD"></field:display> 
 <field:display name="Program Type" feature="Admin NPD"></field:display> 
 <field:display name="Project Code" feature="Budget"></field:display> 
-<field:display name="Project Coordinator Email" feature="Project Coordinator"></field:display> 
-<field:display name="Project Coordinator Fax Number" feature="Project Coordinator"></field:display> 
-<field:display name="Project Coordinator First Name" feature="Project Coordinator"></field:display> 
-<field:display name="Project Coordinator Last Name" feature="Project Coordinator"></field:display> 
-<field:display name="Project Coordinator Organization" feature="Project Coordinator"></field:display> 
-<field:display name="Project Coordinator Phone Number" feature="Project Coordinator"></field:display> 
-<field:display name="Project Coordinator Title" feature="Project Coordinator"></field:display> 
+<field:display name="Project Coordinator Email" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Project Coordinator Fax Number" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Project Coordinator First Name" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Project Coordinator Last Name" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Project Coordinator Organization" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Project Coordinator Phone Number" feature="Project Coordinator Contact Information"></field:display> 
+<field:display name="Project Coordinator Title" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche"></field:display> 
 <field:display name="Project Id" feature="Identification"></field:display> 
@@ -521,13 +521,13 @@
 <field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
-<field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector Ministry Contact Last Name" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact"></field:display> 
+<field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
+<field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 
+<field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact Information"></field:display> 
+<field:display name="Sector Ministry Contact Last Name" feature="Sector Ministry Contact Information"></field:display> 
+<field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact Information"></field:display> 
+<field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact Information"></field:display> 
+<field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display>
 <field:display name="Primary Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display>

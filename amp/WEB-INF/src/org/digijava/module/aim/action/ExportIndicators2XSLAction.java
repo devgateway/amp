@@ -125,14 +125,14 @@ public class ExportIndicators2XSLAction extends Action {
 			cell.setCellStyle(csSubHeader);
 
 			for (int i = 0; i < npdForm.getSelYears().length; i++) {
+                                cell = row.createCell(cellNum++);
+				cell.setCellValue("Base");
+				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
 				cell.setCellValue("Actual");
 				cell.setCellStyle(csSubHeader);
 				cell = row.createCell(cellNum++);
 				cell.setCellValue("Target");
-				cell.setCellStyle(csSubHeader);
-				cell = row.createCell(cellNum++);
-				cell.setCellValue("Base");
 				cell.setCellStyle(csSubHeader);
 			}
 
@@ -154,12 +154,12 @@ public class ExportIndicators2XSLAction extends Action {
 					List<IndicatorGridItem> values = indic.getValues();
 					if (values!=null){
 						for (IndicatorGridItem item: values) {
+                                                        cell = row.createCell(cellNum++);
+							cell.setCellValue(item.getBaseValue());
 							cell = row.createCell(cellNum++);
 							cell.setCellValue(item.getActualValue());
 							cell = row.createCell(cellNum++);
 							cell.setCellValue(item.getTargetValue());
-							cell = row.createCell(cellNum++);
-							cell.setCellValue(item.getBaseValue());
 						}
 					}
 				}

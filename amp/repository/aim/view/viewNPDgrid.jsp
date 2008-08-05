@@ -132,15 +132,16 @@
 												<strong><digi:trn key="aim:indGrid:indicname">Indicator Name</digi:trn></strong>
 											</td>
 											<c:forEach  var="year" items="${aimNPDForm.selYears}">
+                                                                                                <td align="center">
+                                                                                                    <strong><digi:trn key="aim:indGrid:baseVal">Base</digi:trn></strong>
+                                                                                                </td>
 												<td align="center">
 													<strong><digi:trn key="aim:indGrid:actualVal">Actual</digi:trn></strong>
 												</td>
 												<td align="center">
 													<strong><digi:trn key="aim:indGrid:targetVal">Target</digi:trn></strong>
 												</td>
-												<td align="center">
-													<strong><digi:trn key="aim:indGrid:baseVal">Base</digi:trn></strong>
-												</td>
+				
 											</c:forEach>
 											
 										</tr>
@@ -151,15 +152,16 @@
 														<span title="${indRow.description}">${indRow.name}</span>
 													</td>
 													<c:forEach  var="val" items="${indRow.values}">
+                                                                                                                 <td align="right">
+															${val.baseValue}
+														</td>
 														<td align="right">
 															${val.actualValue}
 														</td>
 														<td align="right">
 															${val.targetValue}
 														</td>
-															<td align="right">
-															${val.baseValue}
-														</td>
+															
 												</c:forEach>
 												</tr>
 											</c:forEach>

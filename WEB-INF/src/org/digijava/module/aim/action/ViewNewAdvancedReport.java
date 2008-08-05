@@ -168,8 +168,11 @@ public class ViewNewAdvancedReport extends Action {
 			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 
 	
-			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));	
-			saveOrUpdateReportLog(tm, ar);
+			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+			//This is for public views to avoid nullPointerException due to there is no logged user.
+			if(tm != null){
+				saveOrUpdateReportLog(tm, ar);
+			}
 			
 			progressValue = progressValue + 3;// 3 is the weight of this process on the progress bar
 			httpSession.setAttribute("progressValue", progressValue); 

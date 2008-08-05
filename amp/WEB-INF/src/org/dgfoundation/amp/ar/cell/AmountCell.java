@@ -308,11 +308,11 @@ public class AmountCell extends Cell {
 		//never apply percentage coming from a column twice
 	//	if(percentageSourceColumnName.contains(source.getName())) return;
 		
-		//we search if there is another percentage of the same column, if so, we add it
-		if(columnPercent.containsKey(source.getName())) {
-			columnPercent.put(source.getName(),columnPercent.get(source.getName())+percentage);
-			return;
-		}
+//		//we search if there is another percentage of the same column, if so, we add it
+//		if(columnPercent.containsKey(source.getName() )) {
+//			columnPercent.put(source.getName(),columnPercent.get(source.getName())+percentage);
+//			return;
+//		}
 	
 		if(columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR) && source.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
 			//we forget the sector percentage, and apply the sub-sector percentage:

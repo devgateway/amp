@@ -989,14 +989,16 @@
 			var donorList = donors[0].childNodes;
 			if (donorList !=null && donorList.length>0){
 				var donorTable = document.createElement('table');
+                                var donorTableBD = document.createElement('TBODY');
 				donorTable.cellSpacing=0;
 				for (var i=0; i<donorList.length; i++){
 					var donorTr = document.createElement('tr');
 					var donorTd = document.createElement('td');
 					donorTd.innerHTML = donorList[i].getAttribute('name');
 					donorTr.appendChild(donorTd);
-					donorTable.appendChild(donorTr);
+                                        donorTableBD.appendChild(donorTr);
 				}
+                                donorTable.appendChild(donorTableBD);
 				target.appendChild(donorTable);
 			}else{
 				target.innerHTML = ' ';

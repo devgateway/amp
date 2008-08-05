@@ -28,12 +28,11 @@
 </div>
 <div align="left" width="2" style="display: inline"
 	onMouseOver="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])" 
-	onMouseOut="htm()">
-	<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
+	onMouseOut="htm()" onclick="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])">
 	<c:set var="translation">
 		<digi:trn key="aim:clickToViewLegend">Click here to view Legend</digi:trn>
 	</c:set>
-	<digi:link href="/getWorkspace.do" name="urlParams22" >
-		<digi:trn key="aim:showLegend">Show Legend</digi:trn>
-	</digi:link>
+	<span style="font-style: italic;color: #093678">
+	<digi:trn key="aim:showLegend">Show Legend</digi:trn>
+	</span>
 </div>

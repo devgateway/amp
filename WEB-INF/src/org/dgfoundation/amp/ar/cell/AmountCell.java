@@ -12,10 +12,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.AmountColWorker;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -60,6 +59,7 @@ public class AmountCell extends Cell {
 	 * We apply percentage only if there were no other percentages applied
 	 */
 	protected Map<String,Double> columnPercent;
+	protected Map<String,Comparable> columnCellValue;
 	
 
 		/**
@@ -83,6 +83,7 @@ public class AmountCell extends Cell {
 		super();
 		mergedCells = new HashSet();
 		columnPercent=new HashMap<String, Double>();
+		columnCellValue=new HashMap<String, Comparable>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -90,6 +91,7 @@ public class AmountCell extends Cell {
 		super();
 		mergedCells = new HashSet(ensureCapacity);
 		columnPercent=new HashMap<String, Double>();
+		columnCellValue=new HashMap<String, Comparable>();
 	}
 
 	
@@ -100,6 +102,7 @@ public class AmountCell extends Cell {
 		super(id);
 		mergedCells = new HashSet();
 		columnPercent=new HashMap<String, Double>();
+		columnCellValue=new HashMap<String, Comparable>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -304,24 +307,26 @@ public class AmountCell extends Cell {
 		return ret;
 	}
 
-	public void setPercentage(double percentage, CellColumn source) {
-		//never apply percentage coming from a column twice
-	//	if(percentageSourceColumnName.contains(source.getName())) return;
+	public void setPercentage(double percentage, MetaTextCell source) {
+		Column sourceCol=source.getColumn();
 		
-//		//we search if there is another percentage of the same column, if so, we add it
-//		if(columnPercent.containsKey(source.getName() )) {
-//			columnPercent.put(source.getName(),columnPercent.get(source.getName())+percentage);
-//			return;
-//		}
+		//we search if there is another percentage of the same column AND of the same cell, if so, we add (the sum) of it
+		if(columnPercent.containsKey(sourceCol.getName()) && !columnCellValue.get(sourceCol.getName()).equals(source.getValue())) {
+			columnPercent.put(sourceCol.getName(),columnPercent.get(sourceCol.getName())+percentage);
+			columnCellValue.put(sourceCol.getName(), (Comparable) source.getValue());
+			return;
+		}
 	
-		if(columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR) && source.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
+		if(columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR) && sourceCol.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
 			//we forget the sector percentage, and apply the sub-sector percentage:
 			columnPercent.remove(ArConstants.COLUMN_ANY_SECTOR);
 			columnPercent.put(ArConstants.COLUMN_SUB_SECTOR, percentage);
+			columnCellValue.put(ArConstants.COLUMN_SUB_SECTOR, (Comparable) source.getValue());
 			return;
 		}
 		
-		columnPercent.put(source.getName(), percentage);
+		columnPercent.put(sourceCol.getName(), percentage);
+		columnCellValue.put(sourceCol.getName(), (Comparable) source.getValue());
 	}
 
 	

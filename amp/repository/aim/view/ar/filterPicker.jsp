@@ -371,7 +371,7 @@
 				</tr>
 				</field:display>
                                 
-                               <field:display name="Primary Program" feature="NPD Programs">
+                <field:display name="Primary Program" feature="NPD Programs">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:primaryProgram">Primary Program</digi:trn></td>
 				</tr>
@@ -552,6 +552,7 @@
 					<digi:trn key="rep:filter:otherCriteria">Specify other criteria to filter with.</digi:trn>
 				</c:set>
 				<table align="center" cellpadding="1" cellspacing="1">
+				<field:display name="Status" feature="Planning">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 						<b><digi:trn key="rep:filter:StatusTitle">Status</digi:trn></b>
@@ -568,6 +569,7 @@
 					</td>
 				</tr>
 				<tr><td>&nbsp;</td></tr>
+				</field:display>
 				<field:display name="Risk" feature="Activity">
 				<tr>
 						<td>
@@ -584,7 +586,7 @@
 			</table>
 		</td>
 		<td>
-				<field:display name="Ministry Rank" feature="Planning">
+				<field:display name="Ministry of Planning Rank" feature="Planning">
 				<table align="center" cellpadding="1" cellspacing="1" >
 					<tr><td><b><digi:trn key="rep:filer:MinistryRankTitle">Ministry Rank</digi:trn></b></td></tr>
 					<field:display name="Line Ministry Rank" feature="Planning">
@@ -604,7 +606,7 @@
 					</field:display>
 		
 					<tr><td>&nbsp;</td></tr>
-					<field:display name="Planning Ministry Rank" feature="Planning">
+					<field:display name="Ministry of Planning Rank" feature="Planning">
 					<tr>
 						<td>
 							<digi:trn key="rep:filer:PlanningMinRank">Planning Ministry Rank</digi:trn></b>

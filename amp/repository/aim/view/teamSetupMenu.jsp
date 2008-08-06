@@ -411,17 +411,7 @@ html>body #mainEmpty {
 									</span>
 							</LI>
 						</c:if>
-						<c:if test="${selectedSubTab != '1'}">
-							<LI>
-								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
-									<span>
-									<digi:link href="/donorActivityList.do" name="urlParams">
-										<digi:trn key="aim:workspaceActivitiesDonor">Donor</digi:trn>
-									</digi:link>							
-									</span>
-								</div>	
-							</LI>
-						</c:if>					
+								
                         <c:if test="${aimTeamActivitiesForm.donorFlag == false}">
                             <c:if test="${selectedSubTab  == '2'}">
                                 <LI>

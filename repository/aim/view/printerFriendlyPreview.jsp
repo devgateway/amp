@@ -135,6 +135,7 @@
 									</field:display>
 									 </feature:display>
                                        <feature:display name="Identification" module="Project ID and Planning">   
+									<field:display name="AMP ID" feature="Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
 											<b>
@@ -142,12 +143,12 @@
 									  		</b>								
 									  	</td>
 									  	<td bgcolor="#ffffff">
-													<c:if test="${aimEditActivityForm.ampId!=null}">
-														${aimEditActivityForm.ampId}
-													</c:if>
+											<c:if test="${aimEditActivityForm.ampId!=null}">
+													${aimEditActivityForm.ampId}
+											</c:if>
 										</td>
 									</tr>
-                                                             
+                                    </field:display>                         
 									<field:display name="Contract Number" feature="Planning">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >

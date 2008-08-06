@@ -368,28 +368,18 @@ target.style.cursor = "default"
 											
 											<feature:display name="Budget" module="Project ID and Planning">	
 											<tr bgcolor="#ffffff">
-											
-											
-												
 												<td valign="top" align="left">
-											
-												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
-												<digi:trn key="aim:actBudget">
-												Activity Budget
-												</digi:trn>
-												<br/>
-												</a>
+													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
+														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
+														<br/>
+													</a>
 													<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
-													<digi:trn key="aim:actBudgeton">
-												Activity is On Budget
-												</digi:trn>
+													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<input type="hidden" name="budgetCheckbox">
 												</td>
-											
-											
-								<td>
-								<table>
+											<td>
+											<table>
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
@@ -460,6 +450,8 @@ target.style.cursor = "default"
 								</td></tr>		
 								
 								
+								</feature:display>
+								
 								<field:display name="Financial Instrument" feature="Budget">
 										<tr bgcolor="#ffffff" id="financial"><td valign="top" align="left" >
 											<a title="<digi:trn key="aim:GBS">Financial Instrument</digi:trn>">
@@ -515,11 +507,7 @@ target.style.cursor = "default"
 												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="humanitarianAid" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="humanitarianAid" value="false"/>
 									</td></tr>
 								</field:display>	
-								
-								
-								</feature:display>
-								
-										</table>
+								</table>
 									<script>
 										budgetCheckboxClick();
 									</script>

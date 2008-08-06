@@ -284,7 +284,7 @@ function checkUncheckAll2() {
 											<field:display name="Donor Type" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
-											<field:display name="Activity Creator" feature="Identification">&nbsp;</field:display>
+											<field:display name="Activity Created By" feature="Identification">&nbsp;</field:display>
 											<field:display name="Last changed by" feature="Identification">&nbsp;</field:display>
 											
 											<field:display name="Type Of Assistance" feature="Funding Information">&nbsp;</field:display>

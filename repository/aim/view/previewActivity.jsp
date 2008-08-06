@@ -737,8 +737,9 @@ function collapseAll() {
 
 												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:originalApprovalDate">
-													Original Approval Date</digi:trn></td>
+													<td width="32%">
+														<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
+													</td>
 													<td width="1">:</td>
 													<td align="left">
 														${aimEditActivityForm.originalAppDate}													</td>
@@ -746,7 +747,7 @@ function collapseAll() {
 												</field:display>
 												<field:display name="Actual Approval Date" feature="Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:revisedApprovalDate">Revised Approval Date</digi:trn></td>
+													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
 														${aimEditActivityForm.revisedAppDate}													</td>
@@ -779,7 +780,7 @@ function collapseAll() {
 												</field:display>
 												<field:display name="Actual Start Date" feature="Planning">
 												<tr>
-													<td width="32%"><digi:trn key="aim:revisedStartDate">Revised Start Date</digi:trn></td>
+													<td width="32%"><digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
 														${aimEditActivityForm.revisedStartDate}													</td>
@@ -796,7 +797,7 @@ function collapseAll() {
 												</tr>
 												</c:if>
 												</field:display>
-												<field:display name="Actual Completion Date" feature="Planning">
+												<field:display name="Current Completion Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:currentCompletionDate">
 													Current Completion Date</digi:trn></td>
@@ -805,7 +806,7 @@ function collapseAll() {
 														<c:out value="${aimEditActivityForm.currentCompDate}"/>													</td>
 												</tr>
 												</field:display>
-												<field:display name="Proposed Completion Dates" feature="Planning">
+												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
 												<tr>

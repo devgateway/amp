@@ -1478,21 +1478,18 @@ function commentWin(val) {
 																		<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
 																		</TD>
 																	</TR>
-																	<field:display name="Proposed Approval Date"
-																		feature="Planning">
+																	<field:display name="Proposed Approval Date" feature="Planning">
 																		<TR>
-																			<TD bgcolor="#ffffff"><digi:trn
-																				key="aim:originalApprovalDate">
-																			Original Approval Date</digi:trn> : <c:out
-																				value="${activity.origAppDate}" /></TD>
+																			<TD bgcolor="#ffffff">
+																			<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn> : 
+																				<c:out value="${activity.origAppDate}" />
+																			</TD>
 																		</TR>
 																	</field:display>
-																	<field:display name="Actual Approval Date"
-																		feature="Planning">
+																	<field:display name="Actual Approval Date" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
-																				key="aim:revisedApprovalDate">
-																			Revised Approval Date</digi:trn> : <c:out
+																				key="aim:actualapprovaldate">Actual Approval Date</digi:trn> : <c:out
 																				value="${activity.revAppDate}" /></TD>
 																		</TR>
 																	</field:display>
@@ -1505,13 +1502,12 @@ function commentWin(val) {
 																				value="${activity.origStartDate}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display name="Actual Start Date"
-																		feature="Planning">
+																	<field:display name="Actual Start Date" feature="Planning">
 																		<TR>
-																			<TD bgcolor="#ffffff"><digi:trn
-																				key="aim:revisedStartDate">
-																			Revised Start Date</digi:trn> : <c:out
-																				value="${activity.revStartDate}" /></TD>
+																			<TD bgcolor="#ffffff">
+																				<digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn> : 
+																				<c:out value="${activity.revStartDate}" />
+																			</TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Final Date for Contracting"
@@ -1532,7 +1528,7 @@ function commentWin(val) {
 																				value="${activity.disbursmentsDate}" /></TD>
 																		</TR>
 																	</field:display>
-																	<field:display name="Actual Completion Date"
+																	<field:display name="Current Completion Date"
 																		feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn

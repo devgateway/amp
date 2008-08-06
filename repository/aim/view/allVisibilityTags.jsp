@@ -50,7 +50,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Reports" parentModule="REPORTING"></module:display>
-<module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>

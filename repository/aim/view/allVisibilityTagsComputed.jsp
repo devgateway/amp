@@ -48,7 +48,6 @@
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Reports" parentModule="REPORTING"></module:display> 
-<module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <feature:display module="Contracting" name="Contracting"></feature:display> 

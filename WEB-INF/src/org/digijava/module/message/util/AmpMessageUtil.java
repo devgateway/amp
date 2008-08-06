@@ -1,5 +1,6 @@
 package org.digijava.module.message.util;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -212,7 +213,7 @@ public class AmpMessageUtil {
 	/**
 	 * return inbox messages amount for each type of message. if onlyUnred is true, then returns only unread messages amount
 	 */
-	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId,boolean onlyUnread,boolean hidden) throws Exception {
+	public static <E extends AmpMessage> int getInboxMessagesCount(Class<E> clazz,Long tmId,boolean onlyUnread,boolean hidden,int msgStoragePerMsgType) throws Exception {
 		int retValue=0;
 		Session session=null;
 		String queryString =null;
@@ -228,13 +229,74 @@ public class AmpMessageUtil {
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
                         query.setParameter("hidden", hidden);
-			retValue=((Integer)query.uniqueResult()).intValue();			
+			retValue=((Integer)query.uniqueResult()).intValue();
+                        
+                       /* Someone may change msgStoragePerMsgType (make it more then it was previously). 
+                        In this case we need to unhide some states which are marked as hidden in db*/
+                        
+                        if(retValue<msgStoragePerMsgType){
+                            int limit=msgStoragePerMsgType-retValue;
+                            int numUnhidden=unhideMessageStates(clazz,tmId,limit);
+                            retValue+=numUnhidden;
+                        }
 		}catch(Exception ex) {			
 			ex.printStackTrace();
 			throw new AimException("Unable to Load Messages", ex);
 			
 		}
 		return retValue;
+	}
+        
+        /**
+	 * unhide hidden message
+         * 
+	 */
+	public static <E extends AmpMessage> int unhideMessageStates(Class<E> clazz,Long memberId,int limit) throws DgException {
+		Session session=null;
+                int retValue=0;
+		String queryString =null;
+		Query query=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=:hidden";
+		
+			queryString+=" order by msg.creationDate asc";
+			query=session.createQuery(queryString);			 				
+			query.setParameter("tmId", memberId);
+                        query.setParameter("hidden", true );
+                        query.setMaxResults(limit);
+                        if(!query.list().isEmpty()){
+                            Iterator<AmpMessageState> iterState=query.list().iterator();
+                            while(iterState.hasNext()){
+                                unhideMessageState(iterState.next().getId());
+                            }
+                        }
+						
+		}catch(Exception ex) {			
+			ex.printStackTrace();
+			throw new DgException("Unable to unhide Messages", ex);
+			
+		}
+                return retValue;
+	}
+        
+         /**
+	 * unhide hidden message
+	 */
+	public static  void unhideMessageState(Long stateId) throws DgException {
+		Session session=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();	
+			AmpMessageState state=(AmpMessageState)session.load(AmpMessageState.class, stateId);
+                        state.setMessageHidden(false);
+                        session.update(state);			
+		}catch(Exception ex) {			
+			ex.printStackTrace();
+			throw new DgException("Unable to unhide Messages", ex);
+			
+		}
+         
 	}
 	
 	public static <E extends AmpMessage> int getSentOrDraftMessagesCount(Class<E> clazz,Long tmId,Boolean draft,boolean hidden) throws Exception {
@@ -257,14 +319,14 @@ public class AmpMessageUtil {
 		return retValue;
 	}
 	
-	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Integer[] page,int msgStoragePerMsgType) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
 		List<AmpMessageState> returnValue=null;	
 		int messagesAmount=0;
 		try {
-			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false);
+			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=false";	
@@ -296,7 +358,7 @@ public class AmpMessageUtil {
                         // after we delete the all rows we need to move to previous page
                         if((returnValue==null||returnValue.size()==0)&&page[0]!=1){
                             page[0]--;
-                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page);
+                            returnValue=loadAllInboxMessagesStates(clazz,teamMemberId,maxStorage,page,msgStoragePerMsgType);
                         }
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	

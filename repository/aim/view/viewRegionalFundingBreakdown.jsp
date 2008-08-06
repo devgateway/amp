@@ -235,7 +235,6 @@ function projectFiche(id)
 											      			    </field:display>
 																<field:display name="Total Expended" feature="Funding Information">
 														            <TD align="right">
-														            	<bean:write name="fd" property="totExpenditures"/>
 														            <%=FormatHelper.formatNumber(fd.getTotExpenditures())  %>
 														            </TD>
 														        </field:display>

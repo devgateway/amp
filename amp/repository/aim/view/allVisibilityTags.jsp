@@ -199,7 +199,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
 <field:display name="Actual Approval Date" feature="Planning"></field:display>
-<field:display name="Actual Completion Date" feature="Planning"></field:display>
+<field:display name="Current Completion Date" feature="Planning"></field:display>
 <field:display name="Actual Start Date" feature="Planning"></field:display>
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display>
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display>
@@ -585,7 +585,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <!-- AMP-2965 by cornel -->
 <field:display name="Objective Comments" feature="Identification"></field:display>
-<field:display name="Proposed Completion Dates" feature="Planning"></field:display>
 <field:display name="Contract Name" feature="Contracting"></field:display>
 <field:display name="Contract Description" feature="Contracting"></field:display>
 <field:display name="Contracting Activity Category" feature="Contracting"></field:display>

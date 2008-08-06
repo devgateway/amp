@@ -178,7 +178,7 @@
 <field:display name="Actual Approval Date" feature="Planning" ></field:display> 
 <field:display name="Actual Approval Date" feature="Planning"></field:display> 
 <field:display name="Actual Commitments" feature="Measures"></field:display> 
-<field:display name="Actual Completion Date" feature="Planning"></field:display> 
+<field:display name="Current Completion Date" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
 <field:display name="Actual Disbursement Orders Measure" feature="Measures"></field:display> 
 <field:display name="Actual Disbursements" feature="Measures"></field:display> 
@@ -234,7 +234,6 @@
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display>
-<field:display name="Changed Date" feature="Planning"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Information"></field:display> 
 <field:display name="Comments Base Value" feature="Activity"></field:display> 
 <field:display name="Comments Current Value" feature="Activity"></field:display> 
@@ -295,7 +294,6 @@
 <field:display name="Costing Total Contribution" feature="Costing"></field:display> 
 <field:display name="Costing Total Cost" feature="Costing"></field:display> 
 <field:display name="Costing Tab" feature="Costing"></field:display>
-<field:display name="Creation Date" feature="Planning"></field:display> 
 <field:display name="Creation date" feature="Admin"></field:display> 
 <field:display name="Credit/Donation" feature="Planning"></field:display> 
 <field:display name="Cumulative Commitment" feature="Funding Information"></field:display> 
@@ -445,7 +443,6 @@
 <field:display name="Planned Commitments" feature="Measures"></field:display> 
 <field:display name="Planned Disbursements" feature="Measures"></field:display> 
 <field:display name="Planned Expenditures" feature="Measures"></field:display> 
-<field:display name="Planning Ministry Rank" feature="Planning"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display> 
 <field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard"></field:display> 
@@ -478,7 +475,6 @@
 <field:display name="Projection Name" feature="MTEF Projections"></field:display> 
 <field:display name="Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Proposed Completion Date" feature="Planning"></field:display> 
-<field:display name="Proposed Completion Dates" feature="Planning"></field:display> 
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Currency" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Project Date" feature="Proposed Project Cost"></field:display> 

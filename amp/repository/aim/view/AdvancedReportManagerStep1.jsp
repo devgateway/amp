@@ -277,8 +277,7 @@ function checkUncheckAll2() {
 											
 											<field:display name="Proposed Project Cost" feature="Costing">&nbsp;</field:display>
 											<field:display name="Status" feature="Planning">&nbsp;</field:display>
-											<field:display name="Creation Date" feature="Planning">&nbsp;</field:display>
-											<field:display name="Changed Date" feature="Planning">&nbsp;</field:display>
+											<field:display name="Activity Created On" feature="Identification">&nbsp;</field:display>
 											
 											<field:display name="Donor Agency" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Donor Type" feature="Funding Information">&nbsp;</field:display>
@@ -289,7 +288,7 @@ function checkUncheckAll2() {
 											
 											<field:display name="Type Of Assistance" feature="Funding Information">&nbsp;</field:display>
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
-											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
+											<field:display name="Current Completion Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Primary Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Secondary Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Componente" feature="Planning">&nbsp;</field:display>											

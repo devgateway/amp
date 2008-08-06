@@ -342,7 +342,7 @@
 											</tr>
 											</field:display>
 											
-											<field:display name="Actual Completion Date" feature="Planning">
+											<field:display name="Current Completion Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">&nbsp;
 												<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">

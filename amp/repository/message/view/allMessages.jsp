@@ -97,8 +97,8 @@ background-color:yellow;
         var  selectedMessagePanel;
 	var noMsgs="<digi:trn key="message:noMessages">No Messages Present</digi:trn>";
     var noAlerts="<digi:trn key="message:noAlerts">No Alerts Present</digi:trn>";
-    var noApprovals="<digi:trn key="message:noPendingApprovals">No Pending Approvals</digi:trn>";
-    var noEvents="<digi:trn key="message:noUpcomingEvents">No Upcoming Events</digi:trn>";
+    var noApprovals="<digi:trn key='message:noPendingApprovals'>No Pending Approvals</digi:trn>";
+    var noEvents="<digi:trn key='message:noUpcomingEvents'>No Upcoming Events</digi:trn>";
 	var from='<digi:trn key="message:from">From</digi:trn>';
     var to='<digi:trn key="message:to">To</digi:trn>';
 	var date='<digi:trn key="message:date">Date</digi:trn>';
@@ -478,6 +478,7 @@ background-color:yellow;
 	
 	function buildMessagesList (status, statusText, responseText, responseXML){		
 		msgsXml=responseXML;		
+                alert("test");
 		var tbl=document.getElementById('msgsList');
 		tbl.border='0';
 		tbl.cellPadding="1";

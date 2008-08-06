@@ -477,7 +477,8 @@ background-color:yellow;
 	
 	
 	function buildMessagesList (status, statusText, responseText, responseXML){		
-		msgsXml=responseXML;		
+		msgsXml=responseXML;	
+                alert(responseText);
 		var tbl=document.getElementById('msgsList');
 		tbl.border='0';
 		tbl.cellPadding="1";

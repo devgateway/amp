@@ -89,6 +89,10 @@ public class AmpMessageActions extends DispatchAction {
     	if(settings!=null && settings.getMsgRefreshTime()!=null && settings.getMsgRefreshTime().longValue()>0){
     		messageForm.setMsgRefreshTimeCurr(settings.getMsgRefreshTime());
     		messageForm.setMsgStoragePerMsgTypeCurr(settings.getMsgStoragePerMsgType());
+                int maxStorage = 0;
+                if (settings.getMsgStoragePerMsgType() != null) {
+                    maxStorage = settings.getMsgStoragePerMsgType().intValue();
+                }
 			messageForm.setDaysForAdvanceAlertsWarningsCurr(settings.getDaysForAdvanceAlertsWarnings());			
 			messageForm.setEmailMsgsCurrent(settings.getEmailMsgs());
                  int tabIndex = 0;
@@ -114,8 +118,8 @@ public class AmpMessageActions extends DispatchAction {
             if (tabIndex == 1) { //<-----messages    
                 if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
                     //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false);
-                    hiddenCount=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true);
+                    count = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false,maxStorage);
+                    hiddenCount=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(), false,true,maxStorage);
                 } else if (childTab.equalsIgnoreCase("sent")) {
                     //how many messages are in db. used for pagination
                     count = AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class, teamMember.getMemberId(), false,false);
@@ -130,13 +134,13 @@ public class AmpMessageActions extends DispatchAction {
             } else if (tabIndex == 2) {// <--alerts
                 if (childTab == null || childTab.equalsIgnoreCase("inbox")) {
                     //how many messages are in db. used for pagination
-                    count = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false);
-                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true);
+                    count = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false,maxStorage);
+                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
 
                 } else if (childTab.equalsIgnoreCase("sent")) {
                     //how many messages are in db. used for pagination
                     count = AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,false);
-                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true);
+                     hiddenCount = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(), false,true,maxStorage);
 
                 } else if (childTab.equalsIgnoreCase("draft")) {
                     //how many messages are in db. used for pagination
@@ -148,11 +152,11 @@ public class AmpMessageActions extends DispatchAction {
                 }
 
             }else if(tabIndex == 3){ //<--approvals
-            	count = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,false);
-                hiddenCount = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,true);
+            	count = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,false,maxStorage);
+                hiddenCount = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(), false,true,maxStorage);
             }else if(tabIndex == 4){//<--calendar events
-            	count = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,false);
-                hiddenCount = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,true);
+            	count = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,false,maxStorage);
+                hiddenCount = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(), false,true,maxStorage);
             }
             messageForm.setAllmsg(count);
             messageForm.setHiddenMsgCount(hiddenCount);
@@ -189,6 +193,10 @@ public class AmpMessageActions extends DispatchAction {
     	
     	List<AmpMessageState> allMessages=null; //all messages
     	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
+        int maxStorage = 0;
+        if (settings.getMsgStoragePerMsgType() != null) {
+            maxStorage = settings.getMsgStoragePerMsgType().intValue();
+        }
     	
     	Integer[] page={1};
     	if(request.getParameter("page")!=null){
@@ -201,8 +209,8 @@ public class AmpMessageActions extends DispatchAction {
     	if(tabIndex==1){ //<-----messages    
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
-    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page);        		
+    			count=AmpMessageUtil.getInboxMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false,maxStorage);
+    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(UserMessage.class,teamMember.getMemberId(),-1,page,maxStorage);        		
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(UserMessage.class,teamMember.getMemberId(),false,false);
@@ -215,8 +223,8 @@ public class AmpMessageActions extends DispatchAction {
     	}else if(tabIndex==2){// <--alerts
     		if(childTab==null || childTab.equalsIgnoreCase("inbox")){
     			//how many messages are in db. used for pagination
-    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
-    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page);        		
+    			count=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false,maxStorage);
+    			allMessages =AmpMessageUtil.loadAllInboxMessagesStates(AmpAlert.class,teamMember.getMemberId(),-1,page,maxStorage);        		
     		}else if(childTab.equalsIgnoreCase("sent")){
     			//how many messages are in db. used for pagination
     			count=AmpMessageUtil.getSentOrDraftMessagesCount(AmpAlert.class,teamMember.getMemberId(),false,false);
@@ -228,12 +236,12 @@ public class AmpMessageActions extends DispatchAction {
     		}    		
     	}else if(tabIndex==3){// <---approvals
     		//how many messages are in db. used for pagination
-			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false,false);
-    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(Approval.class,teamMember.getMemberId(),-1,page);    		
+			count=AmpMessageUtil.getInboxMessagesCount(Approval.class,teamMember.getMemberId(),false,false,maxStorage);
+    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(Approval.class,teamMember.getMemberId(),-1,page,maxStorage);    		
     	}else if(tabIndex==4){// <--calendar events
     		//how many messages are in db. used for pagination
-			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false);
-    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page);    		
+			count=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class,teamMember.getMemberId(),false,false,maxStorage);
+    		allMessages =AmpMessageUtil.loadAllInboxMessagesStates(CalendarEvent.class,teamMember.getMemberId(),-1,page,maxStorage);    		
     	}
     	Collections.reverse(allMessages);
     	messageForm.setMessagesForTm(allMessages);
@@ -254,8 +262,8 @@ public class AmpMessageActions extends DispatchAction {
     	 * if max.Storage per message type is less than messages in db,then we should show only max.Storage amount messages.
     	 *and pages quantity will depend on max.Storage. In other case,we will show all messages and pages amount will depend on messages amount 
     	 */    	
-    	if(settings!=null && settings.getMsgStoragePerMsgType()!=null && settings.getMsgStoragePerMsgType().intValue()<=count){
-    		count=settings.getMsgStoragePerMsgType().intValue();
+    	if(settings!=null && settings.getMsgStoragePerMsgType()!=null && maxStorage<=count){
+    		count=maxStorage;
     		//if(count<messages.size()){
     			if(page[0]==1){
     				if(count<messages.size()){
@@ -411,10 +419,15 @@ public class AmpMessageActions extends DispatchAction {
 		int msgType=0;
 		int approvalType=0;
 		int calEventType=0;
-		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false);
-		alertType=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false);
-		approvalType=AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true,false);
-		calEventType=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(),true,false);
+                AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
+                int maxStorage = 0;
+                if (settings.getMsgStoragePerMsgType() != null) {
+                    maxStorage = settings.getMsgStoragePerMsgType().intValue();
+                }
+		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false,maxStorage);
+		alertType=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false,  maxStorage);
+		approvalType=AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true,false,  maxStorage);
+		calEventType=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(),true,false,  maxStorage);
 		
 		//checking if Any of the inbox is full
 		Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
@@ -778,7 +791,7 @@ public class AmpMessageActions extends DispatchAction {
 		if(setting!=null && setting.getMsgStoragePerMsgType()!=null){
 			maxStorage=setting.getMsgStoragePerMsgType().intValue();
 		}
-		if(AmpMessageUtil.isInboxFull(clazz, memberId) || AmpMessageUtil.getInboxMessagesCount(clazz, memberId,false,false)>=maxStorage){
+		if(AmpMessageUtil.isInboxFull(clazz, memberId) || AmpMessageUtil.getInboxMessagesCount(clazz, memberId,false,false, maxStorage)>=maxStorage){
 			newMessageState.setMessageHidden(true);
 		}else{
 			newMessageState.setMessageHidden(false);

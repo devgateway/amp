@@ -310,10 +310,10 @@ DIV.panelList {
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
 	                    </c:set>
 	                    <c:if test="${fn:length(reportNameTrn) > 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${fn:substring(reportNameTrn, 0, 25)}" />", "TabDyn-<c:out value="${reportNameTrn}" />");' title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div>
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${fn:substring(reportNameTrn, 0, 25)}" />", "Tab-<c:out value="${reportNameTrn}" />");' title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div>
 	                    </c:if>
 	                    <c:if test="${fn:length(reportNameTrn) <= 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${reportNameTrn}" />", "TabDyn-<c:out value="${reportNameTrn}" />");'  title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${reportNameTrn}" /></div>
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${reportNameTrn}" />", "Tab-<c:out value="${reportNameTrn}" />");'  title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${reportNameTrn}" /></div>
 	                    </c:if>
 					</logic:equal>
             </c:if>

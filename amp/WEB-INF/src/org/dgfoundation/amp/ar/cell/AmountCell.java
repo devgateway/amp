@@ -26,11 +26,11 @@ import org.digijava.module.aim.helper.FormatHelper;
  * 
  */
 public class AmountCell extends Cell {
-	//public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
+	// public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 
 	protected double amount;
-	
-	protected double percentage=100;
+
+	protected double percentage = 100;
 
 	protected Set mergedCells;
 
@@ -56,21 +56,20 @@ public class AmountCell extends Cell {
 	}
 
 	protected double fromExchangeRate;
-	
+
 	protected double toExchangeRate;
-	
+
 	protected String currencyCode;
-	
+
 	protected Date currencyDate;
-	
+
 	/**
 	 * We apply percentage only if there were no other percentages applied
 	 */
-	protected Map<String,Double> columnPercent;
-	protected Map<String,Comparable> columnCellValue;
-	
+	protected Map<String, Double> columnPercent;
+	protected Map<String, Comparable> columnCellValue;
 
-		/**
+	/**
 	 * @return Returns the toExchangeRate.
 	 */
 	public double getToExchangeRate() {
@@ -78,10 +77,18 @@ public class AmountCell extends Cell {
 	}
 
 	/**
-	 * @param toExchangeRate The toExchangeRate to set.
+	 * @param toExchangeRate
+	 *            The toExchangeRate to set.
 	 */
 	public void setToExchangeRate(double toExchangeRate) {
 		this.toExchangeRate = toExchangeRate;
+	}
+
+	private void initializePercentageMaps() {
+		if (columnPercent == null || columnCellValue == null) {
+			columnPercent = new HashMap<String, Double>();
+			columnCellValue = new HashMap<String, Comparable>();
+		}
 	}
 
 	/**
@@ -90,39 +97,30 @@ public class AmountCell extends Cell {
 	public AmountCell() {
 		super();
 		mergedCells = new HashSet();
-		columnPercent=new HashMap<String, Double>();
-		columnCellValue=new HashMap<String, Comparable>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public AmountCell(int ensureCapacity) {
 		super();
 		mergedCells = new HashSet(ensureCapacity);
-		columnPercent=new HashMap<String, Double>();
-		columnCellValue=new HashMap<String, Comparable>();
 	}
 
-	
 	/**
 	 * @param id
 	 */
 	public AmountCell(Long id) {
 		super(id);
 		mergedCells = new HashSet();
-		columnPercent=new HashMap<String, Double>();
-		columnCellValue=new HashMap<String, Comparable>();
 		// TODO Auto-generated constructor stub
 	}
 
-
-	
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.dgfoundation.amp.ar.cell.Cell#toString()
 	 */
 	public String toString() {
-		//mf.setMaximumFractionDigits(2);
+		// mf.setMaximumFractionDigits(2);
 		double am = getAmount();
 		if (am == 0)
 			return "";
@@ -187,22 +185,24 @@ public class AmountCell extends Cell {
 	public double getAmount() {
 		double ret = 0;
 		if (id != null)
-			return convert()*getPercentage()/100;
+			return convert() * getPercentage() / 100;
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
 			ret += element.getAmount();
-			//logger.info("amount++"+element.getAmount());
-		}		
-		//logger.info("******total amount for owner "+this.getOwnerId()+"="+ret);
+			// logger.info("amount++"+element.getAmount());
+		}
+		// logger.info("******total amount for owner
+		// "+this.getOwnerId()+"="+ret);
 		return ret;
-    }
+	}
 
-    public String getWrappedAmount() {
-	if (id != null)
-	    return FormatHelper.formatNumberUsingCustomFormat(convert() * getPercentage() / 100);
-	else
-	    return "";
+	public String getWrappedAmount() {
+		if (id != null)
+			return FormatHelper.formatNumberUsingCustomFormat(convert()
+					* getPercentage() / 100);
+		else
+			return "";
 	}
 
 	/**
@@ -232,7 +232,8 @@ public class AmountCell extends Cell {
 	}
 
 	/**
-	 * @param currencyCode The currencyCode to set.
+	 * @param currencyCode
+	 *            The currencyCode to set.
 	 */
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
@@ -246,12 +247,12 @@ public class AmountCell extends Cell {
 	}
 
 	/**
-	 * @param fromExchangeRate The fromExchangeRate to set.
+	 * @param fromExchangeRate
+	 *            The fromExchangeRate to set.
 	 */
 	public void setFromExchangeRate(double exchangeRate) {
 		this.fromExchangeRate = exchangeRate;
 	}
-
 
 	public double convert() {
 		double resultDbl = 0.0;
@@ -262,41 +263,44 @@ public class AmountCell extends Cell {
 		} else {
 			resultDbl = amount;
 		}
-		return resultDbl;//Math.round(resultDbl);
+		return resultDbl;// Math.round(resultDbl);
 	}
 
 	/**
-	 * Adds amount directly to the amount property. Do not use this to perform horizontal totals, use merge() instead !
-	 * @param amount the amount to be added to the internal property.
+	 * Adds amount directly to the amount property. Do not use this to perform
+	 * horizontal totals, use merge() instead !
+	 * 
+	 * @param amount
+	 *            the amount to be added to the internal property.
 	 */
 	public void rawAdd(double amount) {
-		this.amount+=amount;
+		this.amount += amount;
 	}
 
 	public Date getCurrencyDate() {
 		return currencyDate;
 	}
-	
-	
+
 	public void setCurrencyDate(Date CurrencyDate) {
 		this.currencyDate = CurrencyDate;
 	}
-	
-	public Cell filter(Cell metaCell,Set ids) {
-		 AmountCell ret=(AmountCell) super.filter(metaCell,ids);
-		 if(ret==null || ret.getMergedCells().size()==0) return ret;
-		 //we need to filter the merged cells too...
-		 AmountCell realRet=(AmountCell) this.newInstance();
-		 realRet.setOwnerId(ret.getOwnerId());
-		 //AmountCell realRet=new AmountCell(ret.getOwnerId());
-		 Iterator i=ret.getMergedCells().iterator();
-		 while (i.hasNext()) {
+
+	public Cell filter(Cell metaCell, Set ids) {
+		AmountCell ret = (AmountCell) super.filter(metaCell, ids);
+		if (ret == null || ret.getMergedCells().size() == 0)
+			return ret;
+		// we need to filter the merged cells too...
+		AmountCell realRet = (AmountCell) this.newInstance();
+		realRet.setOwnerId(ret.getOwnerId());
+		// AmountCell realRet=new AmountCell(ret.getOwnerId());
+		Iterator i = ret.getMergedCells().iterator();
+		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
-			AmountCell filtered=(AmountCell) element.filter(metaCell,ids);
-			if(filtered!=null) 
-				realRet.merge(realRet,filtered);
+			AmountCell filtered = (AmountCell) element.filter(metaCell, ids);
+			if (filtered != null)
+				realRet.merge(realRet, filtered);
 		}
-		 return realRet;
+		return realRet;
 	}
 
 	public Cell newInstance() {
@@ -308,61 +312,73 @@ public class AmountCell extends Cell {
 	}
 
 	public double getPercentage() {
-		double ret=100;
+		double ret = 100;
+		if(columnPercent!=null)
 		for (Double perc : columnPercent.values()) {
-			ret*=perc/100;
+			ret *= perc / 100;
 		}
 		return ret;
 	}
 
 	public void setPercentage(double percentage, MetaTextCell source) {
-		Column sourceCol=source.getColumn();
-		
-		//we search if there is another percentage of the same column AND of the same cell, if so, we add (the sum) of it
-		if(columnPercent.containsKey(sourceCol.getName()) && !columnCellValue.get(sourceCol.getName()).equals(source.getValue())) {
-			columnPercent.put(sourceCol.getName(),columnPercent.get(sourceCol.getName())+percentage);
-			columnCellValue.put(sourceCol.getName(), (Comparable) source.getValue());
+		Column sourceCol = source.getColumn();
+		initializePercentageMaps();
+		// never apply same percentage of same value again
+		if (columnPercent.containsKey(sourceCol.getName()) && columnCellValue.get(sourceCol.getName()).equals(source.getValue())) return;
+
+		// we search if there is another percentage of the same column - we add
+		// (the sum) of it
+		if (columnPercent.containsKey(sourceCol.getName())) {
+			columnPercent.put(sourceCol.getName(), columnPercent.get(sourceCol
+					.getName())
+					+ percentage);
+			columnCellValue.put(sourceCol.getName(), (Comparable) source
+					.getValue());
 			return;
 		}
-	
-		if(columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR) && sourceCol.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR))  {
-			//we forget the sector percentage, and apply the sub-sector percentage:
+
+		if (columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR)
+				&& sourceCol.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR)) {
+			// we forget the sector percentage, and apply the sub-sector
+			// percentage:
 			columnPercent.remove(ArConstants.COLUMN_ANY_SECTOR);
 			columnPercent.put(ArConstants.COLUMN_SUB_SECTOR, percentage);
-			columnCellValue.put(ArConstants.COLUMN_SUB_SECTOR, (Comparable) source.getValue());
+			columnCellValue.put(ArConstants.COLUMN_SUB_SECTOR,
+					(Comparable) source.getValue());
 			return;
 		}
-		
+
 		columnPercent.put(sourceCol.getName(), percentage);
-		columnCellValue.put(sourceCol.getName(), (Comparable) source.getValue());
+		columnCellValue
+				.put(sourceCol.getName(), (Comparable) source.getValue());
 	}
 
-	
-	 @Override
-	    public void merge(Cell c1, Cell c2) {
+	@Override
+	public void merge(Cell c1, Cell c2) {
 		AmountCell ac1 = (AmountCell) c1;
 		AmountCell ac2 = (AmountCell) c2;
 		if (this.getOwnerId() == null)
-		    if(ac1.getOwnerId()!=null) this.setOwnerId(ac1.getOwnerId()); else this.setOwnerId(ac2.getOwnerId());
-		
-		//merge with c1 only if this is different than c1
+			if (ac1.getOwnerId() != null)
+				this.setOwnerId(ac1.getOwnerId());
+			else
+				this.setOwnerId(ac2.getOwnerId());
+
+		// merge with c1 only if this is different than c1
 		if (!this.equals(c1)) {
-		    if (ac1.getId() == null)
-			this.getMergedCells().addAll(ac1.getMergedCells());
-		    else
-			this.getMergedCells().add(ac1);
+			if (ac1.getId() == null)
+				this.getMergedCells().addAll(ac1.getMergedCells());
+			else
+				this.getMergedCells().add(ac1);
 		}
 
-		//merge with c2 only if this is different than c2
+		// merge with c2 only if this is different than c2
 		if (!this.equals(c2)) {
-		    if (ac2.getId() == null)
-			this.getMergedCells().addAll(ac2.getMergedCells());
-		    else
-			this.getMergedCells().add(ac2);
+			if (ac2.getId() == null)
+				this.getMergedCells().addAll(ac2.getMergedCells());
+			else
+				this.getMergedCells().add(ac2);
 		}
 
-	    }
+	}
 
-
-	
 }

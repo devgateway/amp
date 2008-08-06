@@ -37,8 +37,19 @@
 					</td>
 					<td>
 						<html:select name="aimTabManagerForm" property="tabsId" value="${myForm.tabsId[k-1]}" onchange="tabManager.check();">
-							<html:option value="0">-- <digi:trn key="aim:tabmanager:selectNone">None</digi:trn> --</html:option>
-							<html:optionsCollection name="aimTabManagerForm" property="tabs" label="name" value="ampReportId"/>
+							<html:option value="0" >-- <digi:trn key="aim:tabmanager:selectNone">None</digi:trn> --</html:option>
+							<c:forEach var="tab" items="${aimTabManagerForm.tabs}">
+								<option value="${tab.ampReportId }" title="${tab.name }"
+								<c:if test="${tab.ampReportId == myForm.tabsId[k-1]}">SELECTED</c:if>
+								>
+									<c:if test="${fn:length(tab.name) > 40}" >
+										${fn:substring(tab.name, 0, 40)}...
+									</c:if>
+									<c:if test="${fn:length(tab.name) <= 40}" >
+										${tab.name}
+									</c:if>
+								</option>
+							</c:forEach>
 						</html:select>
 					</td>
 				</tr>

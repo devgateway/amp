@@ -66,7 +66,7 @@ cursor:pointer;
             </li>
             </feature:display>
 			<li style="float:left;"  title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do">
+               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false">
                <digi:trn key="aim:publicReports">Public Reports</digi:trn>
                </a>
 			</li>
@@ -318,7 +318,7 @@ border-right:1px solid white;
                           </li>
 						<module:display name="REPORTING">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="border-right:1px solid white;">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">

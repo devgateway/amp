@@ -172,7 +172,6 @@
 <field:display name="Contracting Activity Category" feature="Contracting"></field:display> 
 <field:display name="Activity Created By" feature="Identification"></field:display> 
 <field:display name="Activity Created On" feature="Identification"></field:display> 
-<field:display name="Activity Creator" feature="Identification"></field:display> 
 <field:display name="Activity Updated By" feature="Identification"></field:display> 
 <field:display name="Activity Updated On" feature="Identification"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display> 

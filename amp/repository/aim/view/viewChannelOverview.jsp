@@ -151,8 +151,7 @@ function commentWin(val) {
 												<module:display name="Previews"
 													parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Preview Activity" module="Previews">
-														<field:display feature="Preview Activity"
-															name="Preview Button">
+														<field:display feature="Preview Activity" name="Preview Button">
 															<td><input type="button"
 																value="<digi:trn key='btn:preview'>Preview</digi:trn>"
 																class="dr-menu"
@@ -185,8 +184,7 @@ function commentWin(val) {
 												<module:display name="Previews"
 													parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Edit Activity" module="Previews">
-														<field:display feature="Edit Activity"
-															name="Validate Activity Button">
+														<field:display feature="Edit Activity" name="Validate Activity Button">
     														<c:if
 																test="${aimChannelOverviewForm.buttonText == 'validate'}">
 																 <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
@@ -326,16 +324,21 @@ function commentWin(val) {
 																<TD>
 																<TABLE width="100%" cellPadding=2 cellSpacing=1
 																	vAlign="top" align="center" bgcolor="#FFFFFF">
+																	<field:display name="AMP ID" feature="Identification">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b>
-																	  <digi:trn key="aim:ampId">AMP ID</digi:trn></b></td></TR>
+																			<b>
+																	  		<digi:trn key="aim:ampId">AMP ID</digi:trn></b>
+																	  	</td>
+																	  </TR>
 																	<TR>
 																		<TD bgcolor="#ffffff" colspan="2">&nbsp;&nbsp;&nbsp;
-																	  <c:out
-																			value="${activity.ampId}" /></td></TR>
+																	  		<c:out value="${activity.ampId}" />
+																		</td>
+																	</TR>
+																	</field:display> 
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
@@ -1132,6 +1135,7 @@ function commentWin(val) {
 															</TR>
 														</feature:display>
 													</module:display>
+													<field:display name="Accession Instrument" feature="Identification">
 													<c:if test="${!empty activity.accessionInstrument}">
 														<TR>
 															<TD>
@@ -1152,6 +1156,8 @@ function commentWin(val) {
 															</TD>
 														</TR>
 													</c:if>
+													</field:display>
+													<field:display name="A.C. Chapter" feature="Identification">
 													<c:if test="${!empty activity.acChapter}">
 														<TR>
 															<TD>
@@ -1170,6 +1176,7 @@ function commentWin(val) {
 															</TD>
 														</TR>
 													</c:if>
+													</field:display>
 												</TABLE>
 												</TD>
 												<TD width="50%" vAlign="top" align="left">
@@ -1652,13 +1659,16 @@ function commentWin(val) {
 																	key="aim:activityCreationDetails">
 																	Activity creation details</digi:trn></b></TD>
 															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn
-																	key="aim:createdBy">Created By</digi:trn></i>: <c:out
-																	value="${activity.createdBy.user.firstNames}" /> <c:out
-																	value="${activity.createdBy.user.lastName}" /> - <c:out
-																	value="${activity.createdBy.user.email}" /></TD>
-															</TR>
+															<field:display name="Activity Created By" feature="Identification">
+																<TR>
+																	<TD bgcolor="#ffffff"><i><digi:trn
+																		key="aim:createdBy">Created By</digi:trn></i>: <c:out
+																		value="${activity.createdBy.user.firstNames}" /> <c:out
+																		value="${activity.createdBy.user.lastName}" /> - <c:out
+																		value="${activity.createdBy.user.email}" />
+																	</TD>
+																</TR>
+															</field:display>
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn
 																	key="aim:email">Email</digi:trn></i>: <bean:define
@@ -1667,11 +1677,14 @@ function commentWin(val) {
 																</bean:define> <a href="<%=mailTo%>"> <c:out
 																	value="${activity.createdBy.user.email}" /></a></TD>
 															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn
-																	key="aim:createdDate">Created date</digi:trn></i>: <c:out
-																	value="${activity.createdDate}" />&nbsp;</TD>
-															</TR>
+															<field:display name="Activity Created On" feature="Identification">
+																<TR>
+																	<TD bgcolor="#ffffff"><i><digi:trn
+																		key="aim:createdDate">Created date</digi:trn></i>: <c:out
+																		value="${activity.createdDate}" />&nbsp;
+																	</TD>
+																</TR>
+															</field:display>
 															<field:display name="Activity Approved By"
 																feature="Identification">
 																<c:if test="${!empty activity.approvedBy}">
@@ -1692,13 +1705,12 @@ function commentWin(val) {
 																</c:if>
 															</field:display>
 															
-															<field:display name="Activity Updated By"
-																feature="Identification">
+															<field:display name="Activity Updated By" feature="Identification">
 																<c:if test="${!empty activity.updatedBy}">
 																	<TR>
 																		<TD bgcolor="#ffffff"><i> <digi:trn
 																			key="aim:activityUpdatedBy">
-																	Activity updated by</digi:trn></i>: <c:out
+																				Activity updated by</digi:trn></i>: <c:out
 																			value="${activity.updatedBy.user.firstNames}" /> <c:out
 																			value="${activity.updatedBy.user.lastName}" /> - <c:out
 																			value="${activity.updatedBy.user.email}" />
@@ -1724,14 +1736,14 @@ function commentWin(val) {
 																			<br/>
 																		</TD>
 															</TR>
-															<field:display name="Activity Updated On"
-																feature="Identification">
+															<field:display name="Activity Updated On" feature="Identification">
 																<c:if test="${!empty activity.updatedDate}">
 																	<TR>
 																		<TD bgcolor="#ffffff"><i><digi:trn
 																			key="aim:activityUpdatedOn">
-																Activity updated on</digi:trn></i>: <c:out
-																			value="${activity.updatedDate}" /> &nbsp;</TD>
+																			Activity updated on</digi:trn></i>: <c:out
+																			value="${activity.updatedDate}" /> &nbsp;
+																		</TD>
 																	</TR>
 																</c:if>
 															</field:display>

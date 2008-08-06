@@ -231,10 +231,12 @@ html>body #mainEmpty {
 					<TD>
 						<TABLE cellpadding=0 cellspacing=0 valign=top align=left width="100%"> 
 							<TR>
-							<TD vAlign=center><span class=subtitle-blue>
-								<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
-							</TD>
 							<feature:display module="Project ID and Planning" name="Identification">
+							<field:display  feature="Identification" name="Project Title">
+								<TD vAlign=center><span class=subtitle-blue>
+									<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
+								</TD>
+							</field:display>
 							<TD align="right">
 								<SPAN class=crumb>
 									<field:display name="Description" feature="Identification">

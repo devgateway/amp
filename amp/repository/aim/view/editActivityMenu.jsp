@@ -758,6 +758,7 @@ function fnGetSurvey() {
 						</html:button>
 					</td>
 				</tr>
+				<field:display name="Draft" feature="Identification">
 				<tr>
 					<td align="center">
 						<html:button  styleClass="dr-menu" property="submitButton" onclick="saveAsDraftClicked()">
@@ -765,6 +766,7 @@ function fnGetSurvey() {
 						</html:button>
 					</td>
 				</tr>
+				</field:display>
 			</table>
 		</td>
 	</tr>

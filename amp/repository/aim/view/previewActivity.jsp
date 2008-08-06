@@ -352,13 +352,14 @@ function collapseAll() {
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellpadding=3 cellSpacing=1 bgcolor="#dddddd">
 							<feature:display name="Identification" module="Project ID and Planning">
+								<field:display name="AMP ID" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ampId">
 											 AMP ID</digi:trn>										</td>
 										<td class="v-name" bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.ampId}"/>										</td>
 									</tr>
-									
+								</field:display>
 									<field:display name="Contract Number" feature="Planning">
                                         <tr>
 	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        

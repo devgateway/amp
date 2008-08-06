@@ -12,7 +12,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				'Secondary Program', 'Donor Type', 'Credit/Donation', 'Beneficiary Agency', 
 				'Implementing Agency', 'Component Name',
 				'Secondary Sector', 'Secondary Sub-Sector',
-				'Responsible Organisation', 'Activity Creator'
+				'Responsible Organisation', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Status',
@@ -21,20 +21,20 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Secondary Program', 'Sub-Sector', 'Type Of Assistance', 
 				'Sector', 'Region', 
 				'Project Title', 'Beneficiary Agency', 'Implementing Agency',
-				'Secondary Sector', 'Secondary Sub-Sector', 'Responsible Organisation', 'Activity Creator'
+				'Secondary Sector', 'Secondary Sub-Sector', 'Responsible Organisation', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				'Status', 'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
 				'Implementation Level', 'National Planning Objectives', 'Primary Program',
 				'Secondary Program', 'Sub-Sector', 'Type Of Assistance',
 				'Sector', 'Component Name', 'Project Title', 'Beneficiary Agency', 'Implementing Agency', 
-				'Secondary Sector', 'Secondary Sub-Sector', 'Responsible Organisation', 'Activity Creator'
+				'Secondary Sector', 'Secondary Sub-Sector', 'Responsible Organisation', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor', 'National Planning Objectives', 'Primary Program', 
 				'Project Title', 'Secondary Program', 'Sub-Sector',
 				'Status', 'Sector', 'A.C. Chapter',
-				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sub-Sector', 'Activity Creator'
+				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sub-Sector', 'Activity Created By'
 			);
 
 function insertColInfo (id, name) {

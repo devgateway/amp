@@ -3,4 +3,18 @@ CREATE OR REPLACE VIEW `v_contribution_funding` AS select `eu`.`amp_activity_id`
 CREATE OR REPLACE VIEW `v_financing_instrument` AS (select `f`.`amp_activity_id` AS `amp_activity_id`,`val`.`category_value` AS `name`,`f`.`financing_instr_category_value_id` AS `amp_modality_id` from (`amp_funding` `f` join `amp_category_value` `val`) where (`f`.`financing_instr_category_value_id` = `val`.`id`)) union (select `eu`.`amp_activity_id` AS `amp_activity_id`,`val`.`category_value` AS `category_value`,`eu_con`.`financing_instr_category_value_id` AS `financing_instr_category_value_id` from ((`amp_eu_activity` `eu` join `amp_eu_activity_contributions` `eu_con`) join `amp_category_value` `val`) where ((`eu_con`.`eu_activity_id` = `eu`.`id`) and (`eu_con`.`financing_instr_category_value_id` = `val`.`id`))) order by `amp_activity_id`,`name`;
 CREATE OR REPLACE VIEW `v_regional_funding` AS select `f`.`activity_id` AS `amp_activity_id`,`f`.`amp_regional_funding_id` AS `amp_regional_funding_id`,`f`.`amp_regional_funding_id` AS `amp_fund_detail_id`,`r`.`name` AS `region_name`,`f`.`transaction_type` AS `transaction_type`,`f`.`adjustment_type` AS `adjustment_type`,`f`.`transaction_date` AS `transaction_date`,`f`.`transaction_amount` AS `transaction_amount`,`c`.`currency_code` AS `currency_code`,`f`.`region_id` AS `region_id` from ((`amp_regional_funding` `f` join `amp_region` `r`) join `amp_currency` `c`) where ((`c`.`amp_currency_id` = `f`.`currency_id`) and (`f`.`region_id` = `r`.`amp_region_id`)) order by `f`.`activity_id`;
 TRUNCATE TABLE amp_columns_filters;
-INSERT INTO `amp_columns_filters` VALUES (1,8,'selectedSecondarySectors','amp_sector_id'),(2,41,'selectedNatPlanObj','amp_program_id'),(3,42,'selectedPrimaryPrograms','amp_program_id'),(4,43,'selectedSecondaryPrograms','amp_program_id'),(5,9,'regionSelected','region_id'),(6,44,'executingAgency','amp_org_id'),(7,46,'implementingAgency','amp_org_id'),(8,48,'beneficiaryAgency','amp_org_id'),(9,10,'financingInstruments','amp_modality_id'),(10,5,'typeOfAssistance','terms_assist_code'),(11,29,'donorGroups','amp_org_grp_id'),(12,123,'donorTypes','org_type_id'),(13,2,'donorGroups','org_grp_id'),(14,2,'donorTypes','org_type_id'),(15,8,'selectedSectors','amp_sector_id');
+INSERT INTO `amp_columns_filters` VALUES (1,getReportColumnId('Primary Sector'),'selectedSecondarySectors','amp_sector_id')
+,(2,getReportColumnId('National Planning Objectives'),'selectedNatPlanObj','amp_program_id')
+,(3,getReportColumnId('Primary Program'),'selectedPrimaryPrograms','amp_program_id')
+,(4,getReportColumnId('Secondary Program'),'selectedSecondaryPrograms','amp_program_id')
+,(5,getReportColumnId('Region'),'regionSelected','region_id')
+,(6,getReportColumnId('Executing Agency'),'executingAgency','amp_org_id')
+,(7,getReportColumnId('Implementing Agency'),'implementingAgency','amp_org_id')
+,(8,getReportColumnId('Beneficiary Agency'),'beneficiaryAgency','amp_org_id')
+,(9,getReportColumnId('Financing Instrument'),'financingInstruments','amp_modality_id')
+,(10,getReportColumnId('Type Of Assistance'),'typeOfAssistance','terms_assist_code')
+,(11,getReportColumnId('Donor Group'),'donorGroups','amp_org_grp_id')
+,(12,getReportColumnId('Donor Type'),'donorTypes','org_type_id')
+,(13,getReportColumnId('Donor Agency'),'donorGroups','org_grp_id')
+,(14,getReportColumnId('Donor Agency'),'donorTypes','org_type_id')
+,(15,getReportColumnId('Primary Sector'),'selectedSectors','amp_sector_id');

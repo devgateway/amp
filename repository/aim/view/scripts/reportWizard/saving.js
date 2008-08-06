@@ -109,7 +109,8 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 }
 
 SaveReportEngine.prototype.saveReport	= function () {
-	this.titlePanel.hide();
+	if ( this.titlePanel != null )
+		this.titlePanel.hide();
 
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 

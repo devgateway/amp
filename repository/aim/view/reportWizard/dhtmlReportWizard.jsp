@@ -573,7 +573,7 @@
 			</div>
 			<div class="ft" align="right">
 				<button id="last_save_button" type="button" class="buton repbuton" 
-					style="color: lightgray" onclick="repManager.nextStep()" disabled="disabled">
+					style="color: lightgray" onclick="saveReportEngine.saveReport();" disabled="disabled">
 						<digi:trn key="btn:saveReport">Save Report</digi:trn>
 				</button>
 				&nbsp;&nbsp;&nbsp;

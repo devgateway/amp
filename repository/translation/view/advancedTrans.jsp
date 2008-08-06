@@ -60,7 +60,7 @@ function saveAll() {
 	}
 	
 	form.action = "<%=saveAllAction%>"+ "?d-1338053-p="+pageId+"&showExpired="+form.showExpired.checked;
-	alert(form.action);
+	
 	return true;
 	
 }

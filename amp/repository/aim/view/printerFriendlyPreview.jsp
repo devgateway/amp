@@ -337,7 +337,7 @@
 															<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
 																<c:if test="${not empty selectedOrganizations}">
 																	<tr><td>
-																		<c:out value="${selectedOrganizations.name}"/>:
+																		<c:out value="${selectedOrganizations.organisation.name}"/>:
 																		<c:out value="${selectedOrganizations.projectId}"/>																		
 																	</td></tr>
 																</c:if>

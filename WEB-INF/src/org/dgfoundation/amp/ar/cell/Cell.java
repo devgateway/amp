@@ -65,6 +65,14 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	    return 1;
 	}
 
+	/**
+	 * Useful for seeing which cell are unique
+	 * @see AmountCell.jsp
+	 * @return
+	 */
+	public int getHashCode() {
+		return this.hashCode();
+	}
 	
 	protected Comparator sorter; 
 	

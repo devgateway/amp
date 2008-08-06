@@ -20,6 +20,7 @@
 
 <div style='position:relative;display:none;' id='cellId-<bean:write name="amountCell" property="objectId"/>'> 
 <ul>
+<li>Object Id=<bean:write name="amountCell" property="hashCode"/></li>
 <li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/></li>
 <li>To Rate=<bean:write name="amountCell" property="toExchangeRate"/></li>
 <li>Percentage=<bean:write name="amountCell" property="percentage"/>%</li>

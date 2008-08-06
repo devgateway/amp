@@ -44,6 +44,7 @@ public class CurrencyUtil {
     public static final int ORDER_BY_CURRENCY_NAME			= 2;
     public static final int ORDER_BY_CURRENCY_COUNTRY_NAME	= 3;
     public static final int ALL_ACTIVE						= 1;
+    public static final String BASE_CODE                    = "USD";
 
 
 	public static Collection getAllActiveRates() {

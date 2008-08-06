@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.util.CurrencyUtil"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <digi:instance property="aimCurrencyRateForm" />
@@ -134,8 +135,14 @@ function closePopup() {
 								<c:set var="formatTip">
 														<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("1"+FormatHelper.getDecimalSymbol()+"5"))%>
 								</c:set>
-								
+								    <c:set var="codeBase"><%= CurrencyUtil.BASE_CODE %></c:set>
+									<c:if test="${aimCurrencyRateForm.updateCRateCode==codeBase}">
+									<html:text title="${formatTip}" property="updateCRateAmount" disabled="true" styleClass="amt" size="7"/>
+									</c:if>
+									<c:if test="${aimCurrencyRateForm.updateCRateCode!=codeBase}">
 									<html:text title="${formatTip}" property="updateCRateAmount" styleClass="amt" size="7"/>
+									</c:if>
+
 									<!-- 
 									<FONT color=red>
 									<digi:trn key="aim:USD">USD</digi:trn></FONT> -->

@@ -313,9 +313,11 @@ public class AmpMessageActions extends DispatchAction {
     	messageForm.setPagedMessagesForTm(msgs);
     	
     	response.setContentType("text/xml");
-		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+           OutputStreamWriter outputStream = new OutputStreamWriter(response.
+                                            getOutputStream(), "UTF-8");
 		PrintWriter out = new PrintWriter(outputStream, true);
 		String xml = messages2XML(messageForm.getPagedMessagesForTm(),messageForm);
+                
 		out.println(xml);
 		out.close();
 		// return xml			

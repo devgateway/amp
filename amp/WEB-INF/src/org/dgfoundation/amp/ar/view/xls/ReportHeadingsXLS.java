@@ -84,7 +84,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 					while (ii.hasNext()) {
 						//cellCount++;
 						Column element2 = (Column) ii.next();
-						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(false));
+						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
 						String cellValue=element2.getName(metadata.getHideActivities());
 						
 						//if (rowId.value == 8){
@@ -133,7 +133,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						// if(rowsp>1) makeRowSpan(rowsp);
 						
 						if (element2.getWidth() > 1)
-							makeColSpan(element2.getWidth());
+							makeColSpan(element2.getWidth(),true);
 						else
 							colId.inc();
 						
@@ -142,7 +142,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 				else {
 					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
 					cell.setCellValue(" ");
-					makeColSpan(col.getWidth());
+					makeColSpan(col.getWidth(),true);
 				}
 			}
 			rowId.inc();

@@ -108,7 +108,7 @@ public class CSVExportAction
 	
     cell.setCellValue(translatedNotes + "\n");
     
-    grdx.makeColSpan(rd.getTotalDepth());
+    grdx.makeColSpan(rd.getTotalDepth(),false);
     rowId.inc();
     colId.reset();
 
@@ -125,7 +125,7 @@ public class CSVExportAction
 
     cell.setCellValue(translatedReportName+": " + r.getName());
 
-    grdx.makeColSpan(rd.getTotalDepth());
+    grdx.makeColSpan(rd.getTotalDepth(),false);
     rowId.inc();
     colId.reset();
 
@@ -133,12 +133,12 @@ public class CSVExportAction
     cell = row.createCell(colId.shortValue());
     cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
 
-    grdx.makeColSpan(rd.getTotalDepth());
+    grdx.makeColSpan(rd.getTotalDepth(),false);
     rowId.inc();
     colId.reset();
 
     grdx.generate();
-
+    
     // we now iterate the rows and create the csv
 
     StringBuffer sb = new StringBuffer();

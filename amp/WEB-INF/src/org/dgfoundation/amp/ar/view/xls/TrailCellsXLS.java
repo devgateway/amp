@@ -70,7 +70,7 @@ public class TrailCellsXLS extends XLSExporter {
 //			rowId.inc();
 //			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
-			HSSFCell cell = this.getCell(this.getHighlightedStyle(false));
+			HSSFCell cell = this.getCell(this.getHighlightedStyle(true));
 			
 //			introducing the translaton issues
 			
@@ -104,7 +104,7 @@ public class TrailCellsXLS extends XLSExporter {
 			else
 				cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
 			
-			makeColSpan(grd.getSourceColsCount().intValue());
+			makeColSpan(grd.getSourceColsCount().intValue(),false);
 			//colId.inc();
 			Iterator i = grd.getTrailCells().iterator();
 			while (i.hasNext()) {

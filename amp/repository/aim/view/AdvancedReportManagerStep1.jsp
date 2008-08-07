@@ -296,7 +296,7 @@ function checkUncheckAll2() {
 											<field:display name="Financing Instrument" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Objective" feature="Identification">&nbsp;</field:display>
 											
-											<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
+											<field:display name="Organizations and Project ID" feature="Identification">&nbsp;</field:display>
 											<field:display name="AMP ID" feature="Identification">&nbsp;</field:display>
 											<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
 											<field:display name="Description" feature="Identification">&nbsp;</field:display>
@@ -305,7 +305,7 @@ function checkUncheckAll2() {
 											<field:display name="Component Name" feature="Activity - Component Step">&nbsp;</field:display>
 											<field:display name="Undisbursed Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Uncommitted Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
-											<field:display name="Team" feature="Identification">&nbsp;</field:display>
+											<field:display name="Workspace of Creator" feature="Identification">&nbsp;</field:display>
 											<field:display name="Issues" feature="Issues">&nbsp;</field:display>
 											<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
 											<field:display name="Actors" feature="Issues">&nbsp;</field:display>

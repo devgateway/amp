@@ -173,7 +173,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display>
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display>
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display>
-<field:display feature="Identification" name="Activity Budget"></field:display>
 <field:display feature="Identification" name="Data Source"></field:display>
 <field:display feature="Identification" name="Description"></field:display>
 <field:display feature="Identification" name="Objective"></field:display>
@@ -190,7 +189,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="A.C. Chapter" feature="Identification"></field:display>
 <field:display name="Accession Instrument" feature="Identification"></field:display>
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display>
-<field:display name="Activity Budget" feature="Identification"></field:display>
 <field:display name="Activity Created By" feature="Identification"></field:display>
 <field:display name="Date Of Last Activity Change" feature="Identification"></field:display>
 <field:display name="Activity Created On" feature="Identification"></field:display>
@@ -305,7 +303,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Date Revised Target Value" feature="Activity"></field:display>
 <field:display name="Date Target Value" feature="Activity"></field:display>
-<field:display name="Date Team Leader" feature="Identification"></field:display>
+<field:display name="Data Team Leader" feature="Identification"></field:display>
 <field:display name="Delete Funding Link - Donor Organization" feature="Funding Information"></field:display>
 <field:display name="Delegated Cooperation" feature="Funding Information"></field:display>
 <field:display name="Delegated Partner" feature="Funding Information"></field:display>
@@ -417,7 +415,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Financing Required" feature="Admin NPD"></field:display>
 <field:display name="Project Code" feature="Budget"></field:display>
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display>
-<field:display name="Project Id" feature="Identification"></field:display>
 <field:display name="Activity Performance"  feature="Activity Dashboard"></field:display>
 <field:display name="Project Risk" feature="Activity Dashboard"></field:display>
 <field:display name="Project Title" feature="Identification"></field:display>
@@ -480,7 +477,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sub-Program" feature="Budget"></field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display>
-<field:display name="Team" feature="Identification"></field:display>
+<field:display name="Workspace of Creator" feature="Identification"></field:display>
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display>
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display>

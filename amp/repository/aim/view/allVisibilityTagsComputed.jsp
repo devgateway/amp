@@ -142,7 +142,6 @@
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 
 <field:display feature="Funding Information" name="Type Of Assistance"></field:display> 
 <field:display feature="Identification" name="AMP ID"></field:display> 
-<field:display feature="Identification" name="Activity Budget"></field:display> 
 <field:display feature="Identification" name="Data Source"></field:display> 
 <field:display feature="Identification" name="Description"></field:display> 
 <field:display feature="Identification" name="Objective Assumption"></field:display> 
@@ -167,7 +166,7 @@
 <field:display name="AMP ID" feature="Identification"></field:display> 
 <field:display name="Accession Instrument" feature="Identification"></field:display> 
 <field:display name="Active Funding Organization" feature="Funding Information"></field:display> 
-<field:display name="Activity Budget" feature="Identification"></field:display> 
+
 <field:display name="Contracting Activity Category" feature="Contracting"></field:display> 
 <field:display name="Activity Created By" feature="Identification"></field:display> 
 <field:display name="Activity Created On" feature="Identification"></field:display> 
@@ -318,7 +317,7 @@
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Date Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Date Target Value" feature="Activity"></field:display> 
-<field:display name="Date Team Leader" feature="Identification"></field:display> 
+<field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Delegated Cooperation" feature="Funding Information"></field:display> 
 <field:display name="Delegated Partner" feature="Funding Information"></field:display> 
@@ -466,7 +465,6 @@
 <field:display name="Project Coordinator Title" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche"></field:display> 
-<field:display name="Project Id" feature="Identification"></field:display> 
 <field:display name="Project Title" feature="Identification"></field:display> 
 <field:display name="Projection Amount" feature="MTEF Projections"></field:display> 
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display> 
@@ -545,7 +543,7 @@
 <field:display name="Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Target Value" feature="Activity"></field:display> 
-<field:display name="Team" feature="Identification"></field:display> 
+<field:display name="Workspace of Creator" feature="Identification"></field:display> 
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 

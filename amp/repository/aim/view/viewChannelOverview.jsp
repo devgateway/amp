@@ -339,6 +339,7 @@ function commentWin(val) {
 																		</td>
 																	</TR>
 																	</field:display> 
+																	<field:display name="Organizations and Project ID" feature="Identification">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
@@ -360,6 +361,7 @@ function commentWin(val) {
 																			</c:if>
 																		</tr>
 																	</c:forEach>
+																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
@@ -389,12 +391,9 @@ function commentWin(val) {
 																</TR>
 															</field:display>
 														</feature:display>
-														<feature:display name="Budget"
-															module="Project ID and Planning">
-															<field:display feature="Identification"
-																name="Activity Budget">
-																<TR>
-																	<TD>
+														<feature:display name="Budget" module="Project ID and Planning">
+															<TR>
+																<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1
 																		vAlign="top" align="top" bgcolor="#aaaaaa">
 																		<TR>
@@ -501,7 +500,6 @@ function commentWin(val) {
 																	</TABLE>
 																	</TD>
 																</TR>
-															</field:display>
 														</feature:display>
 														<feature:display module="Project ID and Planning" name="Sectors">
 															<field:display feature="Sectors" name="Level 1 Sectors List">
@@ -1681,22 +1679,26 @@ function commentWin(val) {
 																	</TD>
 																</TR>
 															</field:display>
-															<field:display name="Activity Approved By"
-																feature="Identification">
+															<field:display name="Activity Approved By" feature="Identification">
 																<c:if test="${!empty activity.approvedBy}">
 																	<TR>
-																		<TD bgcolor="#ffffff"><i> <digi:trn
-																			key="aim:activityApprovedBy">
-																	Activity approved by</digi:trn></i>: <c:out
-																			value="${activity.approvedBy.user.firstNames}" /> <c:out
-																			value="${activity.approvedBy.user.lastName}" /> - <c:out
-																			value="${activity.approvedBy.user.email}" />
+																		<TD bgcolor="#ffffff"><i> 
+																		<digi:trn key="aim:activityApprovedBy">Activity approved by</digi:trn></i>: 
+																		<c:out value="${activity.approvedBy.user.firstNames}"/> 
+																		<c:out value="${activity.approvedBy.user.lastName}" /> - 
+																		<c:out value="${activity.approvedBy.user.email}" />
 																	</TR>
+																</c:if>
+															</field:display>
+															<field:display name="Activity Approved On" feature="Identification">
+																<c:if test="${!empty activity.approvalDate}">
 																	<TR>
-																		<TD bgcolor="#ffffff"><i><digi:trn
-																			key="aim:activityApprovedOn">
-																Activity approved on</digi:trn></i>: <c:out
-																			value="${activity.approvalDate}" /> &nbsp;</TD>
+																		<TD bgcolor="#ffffff">
+																			<i>
+																				<digi:trn key="aim:activityApprovedOn">Activity approved on</digi:trn>
+																			</i>: 
+																			<c:out value="${activity.approvalDate}" /> &nbsp;
+																		</TD>
 																	</TR>
 																</c:if>
 															</field:display>
@@ -1713,6 +1715,7 @@ function commentWin(val) {
 																	</TR>
 																</c:if>
 															</field:display>
+															<field:display name="Workspace of Creator" feature="Identification">
 															<TR>
 																		<TD bgcolor="#ffffff">
 																			<i>
@@ -1732,6 +1735,7 @@ function commentWin(val) {
 																			<br/>
 																		</TD>
 															</TR>
+															</field:display>
 															<field:display name="Activity Updated On" feature="Identification">
 																<c:if test="${!empty activity.updatedDate}">
 																	<TR>

@@ -660,7 +660,7 @@ function collapseAll() {
 									</tr>
 								</field:display>
 
-                                <field:display name="Activity Budget" feature="Identification">
+                               <feature:display name="Budget" module="Project ID and Planning">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -680,7 +680,7 @@ function collapseAll() {
 												Activity is Off Budget										</digi:trn>
 										</logic:equal>										</td>
 									</tr>
-									</field:display>
+									</feature:display>
                                    
                                     <!--END 13 -->
                                     		<field:display feature="Identification" name="Organizations and Project ID">
@@ -2297,6 +2297,7 @@ function collapseAll() {
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>										</td>
 									</tr>
 									</field:display>
+									<field:display name="Workspace of Creator" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>										</td>
@@ -2304,6 +2305,7 @@ function collapseAll() {
 											<c:out value="${aimEditActivityForm.createdBy.ampTeam.name}"/> - <c:out value="${aimEditActivityForm.createdBy.ampTeam.accessType}"/>
 										</td>
 									</tr>
+									</field:display>
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:computation">Computation</digi:trn>
@@ -2365,7 +2367,7 @@ function collapseAll() {
 									</logic:notEmpty>
 									</field:display>
 									<logic:notEmpty name="aimEditActivityForm" property="team">
-									<field:display name="Date Team Leader" feature="Identification">
+									<field:display name="Data Team Leader" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityTeamLeader">

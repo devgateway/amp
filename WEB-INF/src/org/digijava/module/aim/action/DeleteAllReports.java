@@ -39,6 +39,7 @@ public class DeleteAllReports extends Action {
 		  	HttpSession session = request.getSession();
 		  	TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		  	AmpReports ampReport=null;
+		  	boolean isTab			= false; 
 		  	ActionErrors errors = new ActionErrors();
 		  	//logger.info("In delete reports11111111");
 		  	boolean lead = false;
@@ -64,6 +65,7 @@ public class DeleteAllReports extends Action {
 				 Long id = new Long(a);
 				 if(id!=null){
 					  ampReport=DbUtil.getAmpReport(id);
+					  isTab		= (ampReport.getDrilldownTab()!=null) && ampReport.getDrilldownTab();
 					  if(lead||(ampReport.getOwnerId()!=null && tm.getMemberId().equals(ampReport.getOwnerId().getAmpTeamMemId())))
 						 {							
 							 logger.info("In delete reports");							 
@@ -89,8 +91,10 @@ public class DeleteAllReports extends Action {
 		
 					logger.debug("Report could not be deleted! ");
 				 }
-				 
-				 return mapping.findForward("forward");				
+				 if (isTab)
+					 return mapping.findForward("forwardTabs");
+				 else
+					 return mapping.findForward("forwardReports");
 	  }
 	  
 	  public void removeFromSession(HttpSession session, Long reportId) {

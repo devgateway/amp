@@ -9,8 +9,10 @@ function getReportType() {
 }
 
 function getPublicReport() {
+	if (aimReportWizardForm.publicReport == null)
+			return false;
 	var checkboxObject		= aimReportWizardForm.publicReport;
-	return checkboxObject.value;
+	return checkboxObject.checked;
 }
 
 function getReportTitleEl() {
@@ -121,7 +123,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
-	//alert (postString);
+	alert (postString);
 	
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 	

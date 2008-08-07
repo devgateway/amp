@@ -320,9 +320,26 @@
 													Activity is Off Budget										</digi:trn>
 											</logic:equal>										</td>
 										</tr>
+										
+
+										<field:display name="Humanitarian Aid" feature="Identification">
+											<tr>
+												<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
+													<digi:trn key="aim:humanitarianaid">
+													 Humanitarian Aid</digi:trn></b></td>
+												<td bgcolor="#ffffff">
+													<c:if test="${!aimEditActivityForm.humanitarianAid==true}">
+														<digi:trn key="aim:no">No</digi:trn>
+													</c:if>
+													<c:if test="${aimEditActivityForm.humanitarianAid==true}">
+														<digi:trn key="aim:yes">Yes</digi:trn>
+													</c:if>
+	&nbsp;										</td>
+											</tr>
 										</field:display>
-									</feature:display>
+
 									
+								
 									<field:display feature="Identification" name="Organizations and Project ID">
 											<tr>
 												<td align="right" valign="top" nowrap="nowrap">

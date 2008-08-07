@@ -1149,6 +1149,8 @@ public class Activity
 	public void setApprovalDate(Date approvalDate) {
 		this.approvalDate = approvalDate;
 	}
-  
-  
+	
+	public Boolean getHumanitarianAid() {
+		return humanitarianAid;
+	} 
 }

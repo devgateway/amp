@@ -123,7 +123,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
-	alert (postString);
+//	alert (postString);
 	
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 	

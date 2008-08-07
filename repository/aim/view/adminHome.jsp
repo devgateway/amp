@@ -156,6 +156,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          <module:display name="ACTIVITY IMP&EXP">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -170,6 +171,7 @@
 
                             </td>
                           </tr>
+                          </module:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

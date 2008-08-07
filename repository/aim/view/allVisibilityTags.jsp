@@ -27,6 +27,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Messaging System"></module:display>
 <module:display name="GIS DASHBOARD"></module:display>
 <module:display name="WIDGETS"></module:display>
+<module:display name="ACTIVITY IMP&EXP"></module:display>
 
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>

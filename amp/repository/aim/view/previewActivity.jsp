@@ -1228,7 +1228,7 @@ function collapseAll() {
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
 															<tr><td><b>
-																<digi:trn key="aim:equipment"><c:out value="${comp.title}"/></digi:trn>	</b>
+																<digi:trn key="aim:component"><c:out value="${comp.title}"/></digi:trn>	</b>
 															</td></tr>
 															<tr><td><i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>

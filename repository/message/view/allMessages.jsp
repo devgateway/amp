@@ -613,7 +613,6 @@ background-color:yellow;
 				//pagination end
 			}
 	}
-        alert("art");
      }
        	
 	function setupPagionation (paginationTag,page,allPages){

@@ -525,8 +525,13 @@ background-color:yellow;
                             }
 				else{
                                      messages=root.childNodes;
-                                    
-                                     
+           
+                    var newTR1=document.createElement('TR');
+                    var newTD1=document.createElement('TD');
+                    var tableBody1= tbl.getElementsByTagName("tbody");
+                    tableBody1[0].appendChild(newTR1);
+                    newTD1.innerText="aaaa"+responseText;
+                    newTR1.appendChild(newTD1)
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
 					//	tblBody.removeChild(tblBody.childNodes[0]);

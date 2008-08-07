@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper ;
+package org.digijava.module.aim.helper.fiscalcalendar ;
 
 import java.util.GregorianCalendar ;
 import java.util.Calendar ;
@@ -16,6 +16,19 @@ public class EthiopianCalendar
 	public String ethMonthName="";
 	
 	public static Logger logger = Logger.getLogger(EthiopianCalendar.class) ;
+	/**
+	 * This method takes as input a date object containing the date 
+	 * which you want to convert to Ethiopian Calendar and it returns a 
+	 * EthiopianCalendar object containing 
+	 * @param date
+	 * @return
+	 */
+	static public EthiopianCalendar getEthiopianDate(Date date){
+		GregorianCalendar gc=new GregorianCalendar();
+		gc.setTime(date);
+		return getEthiopianDate(gc);
+		
+	}
 	
 	/**@author ronald
 	 * This method takes as input a GregorianCalendar object containing the date 
@@ -128,30 +141,25 @@ public class EthiopianCalendar
 		if(ethDayOfYear >=0 && ethDayOfYear <=30 )
 		{
 			ecal.ethFiscalQrt = 1;
-//			ecal.ethFiscalYear = ecal.ethYear - 1;
 			ecal.ethFiscalYear = ecal.ethYear;
 		}
 		else if(ethDayOfYear >=31 && ethDayOfYear <=120 )
 		{
 			ecal.ethFiscalQrt = 2;
-//			ecal.ethFiscalYear = ecal.ethYear - 1;
 			ecal.ethFiscalYear = ecal.ethYear;
 		}
 		else if(ethDayOfYear >=121 && ethDayOfYear <=210 )
 		{
 			ecal.ethFiscalQrt = 3;
-//			ecal.ethFiscalYear = ecal.ethYear - 1;
 			ecal.ethFiscalYear = ecal.ethYear;
 		}
 		else if(ethDayOfYear >=211 && ethDayOfYear <=300 )
 		{
 			ecal.ethFiscalQrt = 4;
-//			ecal.ethFiscalYear = ecal.ethYear - 1;
 			ecal.ethFiscalYear = ecal.ethYear;
 		}
 		else if(ethDayOfYear >= 301 && ethDayOfYear <=366)
 		{
-//			ecal.ethFiscalYear = ecal.ethYear;
 			ecal.ethFiscalYear = ecal.ethYear + 1;
 			ecal.ethFiscalQrt = 1;
 		}
@@ -283,10 +291,6 @@ public class EthiopianCalendar
 
 		gcYrStart = obj.Date(ethYrStart, ethYr + 7);
 		gcYrEnd	  = obj.Date(ethLeapYrEnd, ethYr + 8);
-
-		// adjust the gc start and gc end date by converting back to ethYr and
-		// comparing with input ethYr
-
 		EthiopianCalendar ecStart = obj.getEthiopianDate(gcYrStart);
 		EthiopianCalendar ecEnd   = obj.getEthiopianDate(gcYrEnd);
 

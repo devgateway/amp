@@ -40,20 +40,18 @@
 	  </tr>
 		<tr>
 			<td width="50%" align="center" nowrap="nowrap"><br />
-			<html:select property="renderStartYear" styleClass="inp-text">
+			<html:select  styleClass="inp-text" property="renderStartYear">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
 				</html:option>
-				<html:optionsCollection property="fromYears" label="wrappedInstance"
-					value="wrappedInstance" />
+				<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select></td>
 			<td width="50%" align="center" nowrap="nowrap"><br />
 			<html:select property="renderEndYear" styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
 				</html:option>
-				<html:optionsCollection property="toYears" label="wrappedInstance"
-					value="wrappedInstance" />
+				<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select></td>
 		</tr>
 	</table>

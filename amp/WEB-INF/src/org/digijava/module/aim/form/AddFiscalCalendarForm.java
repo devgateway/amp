@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Vector;
 
 import org.apache.struts.action.*;
-import org.digijava.module.aim.helper.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 

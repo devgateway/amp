@@ -25,12 +25,12 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
-import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.Commitments;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -73,8 +73,7 @@ public class FilterDesktopActivities extends Action {
 				int fromYear = (dForm.getFltrFrmYear() > 0) ? dForm.getFltrFrmYear() : 0;
 				int toYear = (dForm.getFltrToYear() > 0) ? dForm.getFltrToYear() : 9999;
 
-				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ||
-					fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
+				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ) {
 
 					for (int i = 0;i < activities.size();i ++) {
 						AmpProject proj = (AmpProject) activities.get(i);

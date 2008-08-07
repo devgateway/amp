@@ -11,6 +11,8 @@ import java.util.Date;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.DateColWorker;
 import org.digijava.module.aim.helper.EthDateWorker;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -31,7 +33,8 @@ public class DateCell extends Cell {
 	
 	public String getEthDate()
 	{
-		return EthDateWorker.getEthDate(value);
+		EthiopianCalendar ec1=EthiopianCalendar.getEthiopianDate(value);
+		return  ec1.ethDay+"/"+ec1.ethMonth+"/"+ec1.ethYear ;
 	}
 	
 	

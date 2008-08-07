@@ -8,6 +8,7 @@ package org.dgfoundation.amp.ar.workers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +22,10 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.module.aim.helper.BaseCalendar;
-import org.digijava.module.aim.helper.CalendarHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -34,7 +36,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class CategAmountColWorker extends ColumnWorker {
 
-	private CalendarHelper calendarHelper;
+	
 	protected Map metaInfoCache;
 
 	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {
@@ -60,7 +62,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			String columnName,ReportGenerator generator) {
 		super(condition, viewName, columnName,generator);
 		this.metaInfoCache=new HashMap();
-		this.calendarHelper = new CalendarHelper();
+		
 	}
 
 	/**filter.getFromYear()!=null
@@ -255,9 +257,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		//Date handling..
 		
 		
-		if (td!=null) 
-			calendarHelper.setTime(td); 
-		else 
+		if (td==null) 
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
 		
 		
@@ -265,20 +265,17 @@ public class CategAmountColWorker extends ColumnWorker {
 		Comparable month=null;		
 		Integer year=null;
 		
-		
-//		AMP-2212
-		if(filter.getCalendarType()==null || filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
-			month = calendarHelper.getMonth();
-			quarter= "Q"+ new Integer(calendarHelper.getQuarter());
-			year=new Integer(calendarHelper.getYear());
-		} else if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
-				year=new Integer(calendarHelper.getEthiopianFiscalYear());
-				quarter=new String("Q"+calendarHelper.getEthiopianFiscalQuarter());
-				month = calendarHelper.getEthiopianMonth();
-		} else if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())){
-				year=new Integer(calendarHelper.getEthiopianYear());				
-				quarter=new String("Q"+calendarHelper.getEthiopianQuarter());
-				month = calendarHelper.getEthiopianMonth();				
+		if (filter.getCalendarType() != null) {
+			try {
+				ICalendarWorker worker = filter.getCalendarType().getworker();
+				worker.setTime(td);
+				month = worker.getMonth();
+				quarter = "Q" + worker.getQuarter();
+				year = worker.getYear();
+
+			} catch (Exception e) {
+				logger.error("Error gettin fiscal year of activity id =" + id);
+			}
 		}
 
 		

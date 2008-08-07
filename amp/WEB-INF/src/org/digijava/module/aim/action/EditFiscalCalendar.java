@@ -13,7 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.form.AddFiscalCalendarForm;
-import org.digijava.module.aim.helper.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 

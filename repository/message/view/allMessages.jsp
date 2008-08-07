@@ -482,9 +482,13 @@ background-color:yellow;
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
-                alert("tes");
                 var browser=navigator.appName;
-                alert("aa");
+                  var newTR1=document.createElement('TR');
+                    var newTD1=document.createElement('TD');
+                    var tableBody1= tbl.getElementsByTagName("tbody");
+                    tableBody1[0].appendChild(newTR1);
+                    newTD1.innerText="aaaa"+responseText;
+                    newTR1.appendChild(newTD1)
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
                      alert("aaaaaaa");
@@ -498,7 +502,6 @@ background-color:yellow;
                         }
                        
 			//messages start
-                         alert("test...");
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
                            if(!root.hasChildNodes()&& firstEntry==0){
@@ -524,21 +527,14 @@ background-color:yellow;
                                 var tableBody= tbl.getElementsByTagName("tbody");
                                 tableBody[0].appendChild(newTR);
                                 firstEntry++;
-                                   alert("test");
                                 return;
                                
                             }
 				else{
-                                    alert("test1");
+                       
                                      messages=root.childNodes;
-                                     alert("test2");
-           
-                    var newTR1=document.createElement('TR');
-                    var newTD1=document.createElement('TD');
-                    var tableBody1= tbl.getElementsByTagName("tbody");
-                    tableBody1[0].appendChild(newTR1);
-                    newTD1.innerText="aaaa"+responseText;
-                    newTR1.appendChild(newTD1)
+                                
+                  
 					//var tblBody=tbl.getElementsByTagName('tbody')[0];
 					//while (tblBody.childNodes.length>0){
 					//	tblBody.removeChild(tblBody.childNodes[0]);
@@ -623,8 +619,9 @@ background-color:yellow;
 				}
 				//pagination end
 			}
-	}	
-	
+	}
+     }
+       	
 	function setupPagionation (paginationTag,page,allPages){
 		currentPage=page;
 		var paginationTR=document.getElementById('paginationPlace');
@@ -670,7 +667,7 @@ background-color:yellow;
 				paginationTR.appendChild(paginationTD);						
 			}
 		}				
-	}
+	
 	
 	//creates table rows with message information
 	function createTableRow(tbl,msgTr,message,fwdOrEditDel){

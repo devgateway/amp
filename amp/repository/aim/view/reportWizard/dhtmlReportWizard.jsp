@@ -314,9 +314,7 @@
 									<br /><br />
 								</div>
 								<bean:define id="lead" property="teamHead" name="currentMember" scope="session" />
-                  				<c:if test="${lead != true}">
-                                    <html:hidden property="publicReport" value="false"/>
-								</c:if>
+                  				
                   				<c:if test="${lead == true}">
 
 								<span class="list_header">
@@ -324,7 +322,7 @@
 								</span>
 								<div align="center" id="optionsDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
 									<br />
-                                    <html:checkbox property="publicReport" value="true"/>
+                                    <html:checkbox property="publicReport"/>
                                     <digi:trn key="aim:makePublic">
                                         Make public
                                     </digi:trn>

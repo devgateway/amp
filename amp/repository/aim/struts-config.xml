@@ -8,7 +8,7 @@
       <form-property name="templates" type="java.util.Collection" />
       <form-property name="ampFeatures" type="java.lang.String" />
       <form-property name="templateFeatures" type="java.util.Collection" />
-      <form-property name="templateFeaturesNotActive" type="java.util.Collection" />
+      <form-property name="templateFeaturesNotActive" type="java.util.Collection" /> 
     </form-bean>
 
     <form-bean name="aimViewAhSurveisForm" type="org.digijava.module.aim.form.ViewAhSurveisForm" />
@@ -868,7 +868,8 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimTeamReportsForm" path="/aim/deleteAllReports" scope="session" type="org.digijava.module.aim.action.DeleteAllReports" validate="false">
-      <forward name="forward" path="/aim/viewTeamReports.do" redirect="true" />
+      <forward name="forwardReports" path="/aim/viewTeamReports.do?tabs=false" redirect="true" />
+      <forward name="forwardTabs" path="/aim/viewTeamReports.do?tabs=true" redirect="true" /> 
     </action>
     <action input="/showLayout.do?layout=teamActivities" name="aimTeamActivitiesForm" path="/aim/updateTeamActivity" scope="session" type="org.digijava.module.aim.action.UpdateTeamActivities" validate="false">
       <forward name="showAddActivity" path="/showLayout.do?layout=addTeamActivities" />

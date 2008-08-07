@@ -494,7 +494,8 @@ background-color:yellow;
                               totalHidden.innerHTML=informationTag.getAttribute("totalHidden");
                         }
                        
-			//messages start	
+			//messages start
+                         alert("test...");
 			var root=mainTag.getElementsByTagName('MessagesList')[0];
 			if(root!=null){
                            if(!root.hasChildNodes()&& firstEntry==0){
@@ -520,11 +521,14 @@ background-color:yellow;
                                 var tableBody= tbl.getElementsByTagName("tbody");
                                 tableBody[0].appendChild(newTR);
                                 firstEntry++;
+                                   alert("test");
                                 return;
                                
                             }
 				else{
+                                    alert("test1");
                                      messages=root.childNodes;
+                                     alert("test2");
            
                     var newTR1=document.createElement('TR');
                     var newTD1=document.createElement('TD');

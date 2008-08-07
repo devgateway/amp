@@ -296,14 +296,11 @@
 									</field:display>
 
 		        </feature:display>
-<feature:display name="Identification" module="Project ID and Planning">
-                                        
-                                        
-										<field:display name="Activity Budget" feature="Identification">
+                                     <feature:display name="Budget" module="Project Id And Planning"></feature:display>
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">
 												<b>
-											  <digi:trn key="aim:actBudget"> Budget</digi:trn>
+											  <digi:trn key="aim:actBudget">Budget</digi:trn>
 											  	</b>
 											</td>
 										  <td bgcolor="#ffffff">
@@ -325,6 +322,7 @@
 										</tr>
 										</field:display>
 									</feature:display>
+									
 									<field:display feature="Identification" name="Organizations and Project ID">
 											<tr>
 												<td align="right" valign="top" nowrap="nowrap">
@@ -1705,7 +1703,7 @@
 									</logic:notEmpty>
 									</field:display>
 									<logic:notEmpty name="aimEditActivityForm" property="team">
-									<field:display name="Date Team Leader" feature="Identification">
+									<field:display name="Data Team Leader" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" >
 											<b>

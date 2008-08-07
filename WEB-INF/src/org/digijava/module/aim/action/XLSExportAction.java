@@ -14,8 +14,6 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFFooter;
-import org.apache.poi.hssf.usermodel.HSSFHeader;
-import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -137,7 +135,7 @@ public class XLSExportAction extends Action {
             translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			
-			grdx.makeColSpan(rd.getTotalDepth());
+			grdx.makeColSpan(rd.getTotalDepth(),false);
 			
 			
 			rowId.inc();
@@ -151,30 +149,31 @@ public class XLSExportAction extends Action {
 			cs.setFillBackgroundColor(HSSFColor.BROWN.index);
 			HSSFFont font = wb.createFont();
 			font.setFontName(HSSFFont.FONT_ARIAL);
-			font.setFontHeightInPoints((short)25);			
+			font.setFontHeightInPoints((short)18);			
 			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 			cs.setFont(font);		
 			cell.setCellStyle(cs);
 			
 			
-			grdx.makeColSpan(rd.getTotalDepth());
+			grdx.makeColSpan(rd.getTotalDepth(),false);
 			
 			rowId.inc();
 			colId.reset();
 			
-			
-			row=sheet.createRow(rowId.shortValue()); 		 
-			cell=row.createCell(colId.shortValue());
-			translatedReportDescription = translatedReportDescription.replaceAll("\n", " ");
-			cell.setCellValue(translatedReportDescription+" "+r.getReportDescription());
-			grdx.makeColSpan(rd.getTotalDepth());
-			rowId.inc();
-			colId.reset();
+			if (r.getDescription()!=null){
+				row=sheet.createRow(rowId.shortValue()); 		 
+				cell=row.createCell(colId.shortValue());
+				translatedReportDescription = translatedReportDescription.replaceAll("\n", " ");
+				cell.setCellValue(translatedReportDescription+" "+r.getReportDescription());
+				grdx.makeColSpan(rd.getTotalDepth(),false);
+				rowId.inc();
+				colId.reset();
+			}
 			
 	
 		
 		grdx.generate();
-	   
+		sheet.autoSizeColumn((short)0);
 	    wb.write(response.getOutputStream());
 	    
 	    

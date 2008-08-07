@@ -200,7 +200,6 @@ background-color:yellow;
         selectedMessagePanel=new YAHOO.widget.Panel("selectedMessagePanel",{
             x:"20",
             y:"20",
-            width:"1000",
             constraintoviewport: true, 
             Underlay:"shadow", 
             modal: true,

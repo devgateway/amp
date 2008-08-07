@@ -14,6 +14,9 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
@@ -43,8 +46,7 @@ public class QuarterlyInfoWorker {
 		
 		AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fp.getFiscalCalId());
 		
-		if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
-				|| fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
+		if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
 			if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
 				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),fp.getToYear(), fp.getFiscalCalId());
 				return filterArrList;
@@ -158,7 +160,18 @@ public class QuarterlyInfoWorker {
 				quarterlyInfo.setWrapedPlanned(amountConverted.getCalculations());
 				String strDate = DateConversion.ConvertDateToString(transactionDate);
 				quarterlyInfo.setDateDisbursed(strDate);
-				FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate, fp.getFiscalCalId());
+				//FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate, fp.getFiscalCalId());
+				AmpFiscalCalendar fiscalCalendar=FiscalCalendarUtil.getAmpFiscalCalendar( fp.getFiscalCalId());
+				FiscalDO fdo=new FiscalDO();
+				try {
+				ICalendarWorker worker=fiscalCalendar.getworker();
+				worker.setTime(transactionDate);
+				fdo.setFiscalYear(worker.getYear());
+				fdo.setFiscalQuarter(worker.getQuarter());
+				} catch (Exception e) {
+					logger.error("Can't get the Year and Quarter ",e);
+				}
+				
 				quarterlyInfo.setFiscalYear(fdo.getFiscalYear());
 				quarterlyInfo.setFiscalQuarter(fdo.getFiscalQuarter());
 				quarterlyInfo.setAggregate(1);
@@ -176,8 +189,7 @@ public class QuarterlyInfoWorker {
 			arrayList1 = merge(arrayList, c1,selCurrency,fp.getFiscalCalId());
 		//AMP-2212
 			AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fp.getFiscalCalId());
-			if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
-					|| fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
+			if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ) {
 				//ethArrList = convertToEth(arrayList1);
 				ethArrList = convertToEth(arrayList,fp.getFiscalCalId().longValue());
 				arrayList2 = aggregate(ethArrList);
@@ -234,8 +246,19 @@ public class QuarterlyInfoWorker {
 			
 			String strDate = DateConversion
 					.ConvertDateToString(transactionDate);
-			FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate,fiscalId);
-
+			
+			AmpFiscalCalendar fiscalCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(fiscalId);
+			FiscalDO fdo=new FiscalDO();
+			try {
+			ICalendarWorker worker=fiscalCalendar.getworker();
+			worker.setTime(transactionDate);
+			fdo.setFiscalYear(worker.getYear());
+			fdo.setFiscalQuarter(worker.getQuarter());
+			} catch (Exception e) {
+				logger.error("Can't get the Year and Quarter ",e);
+			}
+			//FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate,fiscalId);
+			
 			for (int i = 0; i < arrayList.size(); i++) {
 				QuarterlyInfo quarterlyInfo = (QuarterlyInfo) arrayList.get(i);
 				if (fdo.getFiscalYear() == quarterlyInfo.getFiscalYear()
@@ -396,41 +419,25 @@ public class QuarterlyInfoWorker {
 				//logger.debug("Gregorian Date  string " + strTrsDate);
 				Date trsDate = DateConversion.getDate(strTrsDate);
 				//	logger.debug("date parsed out "+trsDate);
-				FiscalDO fdo = null;
-				//AMP-2212
-				/*
-				if ( == Constants.ETH_CAL.longValue()) {
-					fdo = FiscalCalendarWorker.getFiscalYrQtr(trsDate,
-							Constants.ETH_CAL);					
-				} else {
-					fdo = FiscalCalendarWorker.getFiscalYrQtr(trsDate,
-							Constants.ETH_FY);
-				}*/
-//				AMP-2212
-				AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
-				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
-						|| fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
-				    fdo = FiscalCalendarWorker.getFiscalYrQtr(trsDate,
-					    fiscalCal.getAmpFiscalCalId());
+				AmpFiscalCalendar fiscalCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
+				FiscalDO fdo=new FiscalDO();
+				try {
+				ICalendarWorker worker=fiscalCalendar.getworker();
+				worker.setTime(trsDate);
+				fdo.setFiscalYear(worker.getYear());
+				fdo.setFiscalQuarter(worker.getQuarter());
+				} catch (Exception e) {
+					logger.error("Can't get the Year and Quarter ",e);
 				}
 				
 				qf.setFiscalYear(fdo.getFiscalYear());
 				qf.setFiscalQuarter(fdo.getFiscalQuarter());
-				//		logger.debug("Ethiopian fiscal year"+fdo.getFiscalYear()+
-				//					 "Ethiopian fiscal quarter "+fdo.fiscalQuarter) ;
 				gc.setTime(trsDate);
-				//		logger.debug("Greg date passed to getEthiopianDate"+gc) ;
-
+				
 				ec1 = ec.getEthiopianDate(gc);
-
-				//				logger.debug("Ethiopian date returned day "+ec1.ethDay
-				//							+ " month " + ec1.ethMonth
-				//							+ " year " + ec1.ethYear );
-				String ethDate = ec1.ethDay + "/" + ec1.ethMonth + "/"
-						+ ec1.ethYear;
-				//		logger.debug("Ethiopian date set " + ethDate);
+				String ethDate = ec1.ethDay + "/" + ec1.ethMonth + "/"+ ec1.ethYear;
 				qf.setDateDisbursed(ethDate);
-				//logger.debug("Ethiopian Date :" + ethDate);
+				
 			}
 		}
 		//if (logger.isDebugEnabled())
@@ -464,11 +471,7 @@ public class QuarterlyInfoWorker {
 			if (qf.getAggregate() == 1) {
 			    
 				AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
-				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) 
-				//if (fiscalCalId.longValue() == Constants.ETH_FY.longValue())
-				{
-					yr = qf.getFiscalYear();
-				} else { // Filter by calendar type greg or eth
+					// Filter by calendar type greg or eth
 					String ds = qf.getDateDisbursed();
 					if (ds != null) {
 						//if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) 
@@ -478,7 +481,7 @@ public class QuarterlyInfoWorker {
 							yr = FiscalCalendarUtil.getYear(fiscalCalId,ds);
 						}
 					}
-				}
+				
 				if (yr >= fromYear && yr <= toYear) {
 					a.add(qf);
 				} else if (yr == 0) { // if transaction date is null

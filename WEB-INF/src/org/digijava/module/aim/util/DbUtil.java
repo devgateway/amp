@@ -93,7 +93,6 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
-import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -101,12 +100,13 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -2703,54 +2703,39 @@ public class DbUtil {
         return c;
     }
 
+    
     /**
-     * @author jose A fiscal calendar id is passed and the start month and start
-     *              day of the corrsponding fiscal calendar is returned wrapped in
-     *              object FiscalCalendar. The month starts from 1 that is Jan is 1,
-     *              Feb is 2.
+     * 
      * @param fiscalCalId
-     * @return FiscalCalendar
+     * @return
      */
-    public static FiscalCalendar getFiscalCalendar(Long fiscalCalId) {
-        logger.debug("getFiscalCalendar with fiscalCalId" + fiscalCalId);
-
-        Session session = null;
+    public static AmpFiscalCalendar getFiscalCalendar(Long fiscalCalId) {
+    	logger.debug("getFiscalCalendar with fiscalCalId" + fiscalCalId);
+    	Session session = null;
         Query q = null;
-        Collection c = null;
+        Collection collection = null;
         Iterator iter = null;
-        FiscalCalendar fc = new FiscalCalendar();
+        AmpFiscalCalendar fc=null;
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
-            queryString = "select f.startMonthNum,f.startDayNum from "
+            queryString = "select f from "
                 + AmpFiscalCalendar.class.getName()
                 + " f where (f.ampFiscalCalId=:fiscalCalId) ";
             q = session.createQuery(queryString);
             q.setParameter("fiscalCalId", fiscalCalId, Hibernate.LONG);
-            c = q.list();
-            if (c.size() != 0) {
-                iter = c.iterator();
-                if (iter.hasNext()) {
-                    Object[] row = (Object[]) iter.next();
-                    Integer month = (Integer) row[0];
-                    Integer day = (Integer) row[1];
-                    fc.setStartMonth(month.intValue());
-                    fc.setStartDay(day.intValue());
-                }
-            } else {
-                logger
-                    .error("Unable to get start month and start day of fiscal calendar");
-                fc.setStartMonth( -1);
-                fc.setStartDay( -1);
+            collection = q.list();
+            if (collection.size() > 0){
+            	fc= (AmpFiscalCalendar) collection.toArray()[0];
             }
-
         } catch (Exception ex) {
             logger.error("Unable to get fiscal calendar from database", ex);
         }
-        logger.debug("getFiscalCalendar Start month:" + fc.getStartMonth());
-        logger.debug("getFiscalCalendar Start day:" + fc.getStartDay());
-        return fc;
+        return fc;	
     }
+
+    
+    
 
     public static Collection getMaxFiscalYears() {
         Session session = null;
@@ -5491,8 +5476,7 @@ public class DbUtil {
                         AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
 
                         if (startDates[i] == null || endDates[i] == null) {
-                            if (! (fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ||
-                                   fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))) {
+                            if (! (fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) )) {
                                 startDates[i] = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar), startYear + i);
                                 endDates[i] = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar), startYear + i);
                             }

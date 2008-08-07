@@ -14,8 +14,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.DateCell;
-import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 
 /**
  * 
@@ -57,8 +57,7 @@ public class DateColWorker extends ColumnWorker {
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		//AMP-2212
 		if(value!=null && filter.getCalendarType()!=null && 
-				(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) || 
-					filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())))
+				(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())))
 			ret.setEthiopianDate(true);
 			
 		

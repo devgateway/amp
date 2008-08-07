@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
@@ -60,17 +61,8 @@ public class RegionalFundingsHelper {
 			fd.setTransactionAmount(FormatHelper.formatNumber(regFund.getTransactionAmount().doubleValue()));
 			
 			String tsDate = DateConversion.ConvertDateToString(regFund.getTransactionDate());
+			fd.setTransactionDate(tsDate);
 			
-			AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(calCode);
-			//AMP-2212
-			if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) || 
-				fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
-				// Ethiopian Calendar or Ethiopian Fiscal Year
-				fd.setTransactionDate(EthDateWorker.getEthDate(tsDate));
-			} else {
-				// Gregorian calendar
-				fd.setTransactionDate(tsDate);
-			}
 			
 			fd.setTransactionType(regFund.getTransactionType().intValue());
 

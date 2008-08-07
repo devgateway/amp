@@ -38,12 +38,13 @@ import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.CalendarHelper;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
+import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -457,8 +458,6 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("* - expressed in % of Total Cost for each Activity", boldTableFont,1));
 
 		
-		CalendarHelper calendarHelper = new CalendarHelper();
-		
 		document.add(newParagraph("5. Indicative Implementation Schedule (periods broken down per quarter)",rootSectionFont,1));
 		
 
@@ -474,7 +473,7 @@ public class ProjectFicheExport extends Action {
 		tbl.addCell(c);
 		c = new Cell(newParagraph("Project Completion", boldTableFont, 0));
 		tbl.addCell(c);
-		
+		GregorianBasedWorker worker=new GregorianBasedWorker();
 		Iterator it = contracts.iterator();
 		while (it.hasNext()) {
 			IPAContract contract = (IPAContract) it.next();
@@ -484,30 +483,33 @@ public class ProjectFicheExport extends Action {
 			tbl.addCell(c);
 			
 			Date date = contract.getStartOfTendering();
+			worker.setTime(date);
 			if (date != null){
-				calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
-				int quarter = calendarHelper.getQuarter();
-				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(date.getYear()+1900), tableFont2, 0));
+				int quarter = worker.getQuarter();
+				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+worker.getYear(), tableFont2, 0));
 			}
 			else
 				c = new Cell(newParagraph("", tableFont2, 0));
 			tbl.addCell(c);
 			
 			date = contract.getSignatureOfContract();
+			worker.setTime(date);
 			if (date != null){
-				calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
-				int quarter = calendarHelper.getQuarter();
-				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(date.getYear()+1900), tableFont2, 0));
+				
+				int quarter = worker.getYear();
+				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+worker.getYear(), tableFont2, 0));
 			}
 			else
 				c = new Cell(newParagraph("", tableFont2, 0));
 			tbl.addCell(c);
 			
 			date = contract.getContractCompletion();
+			
+			 worker.setTime(date);
+			
 			if (date != null){
-				calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
-				int quarter = calendarHelper.getQuarter();
-				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(date.getYear()+1900), tableFont2, 0));
+				int quarter = worker.getQuarter();
+				c = new Cell(newParagraph("Q"+String.valueOf(quarter)+" "+String.valueOf(worker.getYear()), tableFont2, 0));
 			}
 			else
 				c = new Cell(newParagraph("", tableFont2, 0));
@@ -649,11 +651,13 @@ public class ProjectFicheExport extends Action {
 				highDate = (highDate.compareTo(date) > 0 )?highDate:date;
 			}
 		}
-
-		calendarHelper.setTime(new java.sql.Date(lowDate.getYear(), lowDate.getMonth(), lowDate.getDay()));
-		int lowDateQuarter = calendarHelper.getQuarter();
-		calendarHelper.setTime(new java.sql.Date(highDate.getYear(), highDate.getMonth(), highDate.getDay()));
-		int highDateQuarter = calendarHelper.getQuarter();
+		if (lowDate!=null && highDate!=null ){
+		worker.setTime(lowDate);
+		//calendarHelper.setTime(new java.sql.Date(lowDate.getYear(), lowDate.getMonth(), lowDate.getDay()));
+		int lowDateQuarter = worker.getQuarter();
+		//calendarHelper.setTime(new java.sql.Date(highDate.getYear(), highDate.getMonth(), highDate.getDay()));
+		worker.setTime(highDate);
+		int highDateQuarter = worker.getQuarter();
 		
 		int noOfQuarters;
 		
@@ -664,6 +668,7 @@ public class ProjectFicheExport extends Action {
 		
 		
 		tbl=new Table(noOfQuarters + 2);
+		
 		tbl.setTableFitsPage(true);
 		
 		
@@ -727,8 +732,9 @@ public class ProjectFicheExport extends Action {
 			for (int j = 0; j < noOfStaticAmounts; j++){
 				if (staticAmounts[j] != null){
 					if (staticDates[j] != null){
-						calendarHelper.setTime(new java.sql.Date(staticDates[j].getYear(), staticDates[j].getMonth(), staticDates[j].getDay()));
-						int quarter = calendarHelper.getQuarter();
+						worker.setTime(staticDates[j]);
+						//calendarHelper.setTime(new java.sql.Date(staticDates[j].getYear(), staticDates[j].getMonth(), staticDates[j].getDay()));
+						int quarter = worker.getQuarter();
 						int position = 4*(staticDates[j].getYear() - lowDate.getYear()) + quarter - lowDateQuarter;
 						quarterAmounts[position] += staticAmounts[j];
 					}
@@ -777,17 +783,18 @@ public class ProjectFicheExport extends Action {
 			IPAContract contract = (IPAContract) cit.next();
 			for (int h = 0; h < noOfQuarters; h++)
 				quarterAmounts[h] = new Double(0);
-
+			
 			Iterator dit = contract.getDisbursements().iterator();
 			while (dit.hasNext()) {
 				IPAContractDisbursement disb = (IPAContractDisbursement) dit.next();
 				
 				Double amount = disb.getAmount();
 				Date date = disb.getDate();
+				worker.setTime(date);
 				if (amount != null){
 					if (date != null){
-						calendarHelper.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
-						int quarter = calendarHelper.getQuarter();
+						worker.setTime(new java.sql.Date(date.getYear(), date.getMonth(), date.getDay()));
+						int quarter = worker.getQuarter();
 						int position = 4*(date.getYear() - lowDate.getYear()) + quarter - lowDateQuarter;
 						quarterAmounts[position] += amount;
 					}
@@ -814,7 +821,7 @@ public class ProjectFicheExport extends Action {
 			tbl.addCell(c);
 		}
 		document.add(tbl);
-		
+		}
 		
 		
 		document.add(newParagraph("ANNEX 3: References to laws, regulations and Strategic Documents",annexFont,1));

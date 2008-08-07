@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-
+@Deprecated
 public class ReportQuarterWorker
 {
 	private static Logger logger = Logger.getLogger(ReportQuarterWorker.class) ;
@@ -24,6 +24,8 @@ public class ReportQuarterWorker
 		}//while
 		return amt;
 	}
+	
+	
 	public static double getAmount1(int yr, int qtr, Long ampFundingId,
 	Integer transactionType,
 	Integer adjustmentType)

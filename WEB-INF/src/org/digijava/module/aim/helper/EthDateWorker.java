@@ -3,9 +3,10 @@ package org.digijava.module.aim.helper ;
 import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import org.digijava.module.aim.helper.EthiopianCalendar;
 
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 
+@Deprecated
 public class EthDateWorker
 {
 	private static Logger logger = Logger.getLogger(FiscalCalendarWorker.class) ;

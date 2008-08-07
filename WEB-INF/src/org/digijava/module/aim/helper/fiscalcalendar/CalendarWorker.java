@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper;
+package org.digijava.module.aim.helper.fiscalcalendar;
 
 import java.sql.Date;
 import java.text.DateFormatSymbols;
@@ -7,20 +7,27 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CalendarHelper {
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+
+@Deprecated
+public class CalendarWorker {
 	private GregorianCalendar gregCalendar;
 	private EthiopianCalendar ethcalendar;
 	private DateFormatSymbols dateFormatSymbols;
 	protected Map<Integer,ComparableMonth> gregorianMonthCache = new HashMap<Integer,ComparableMonth>();
 	protected Map<Integer,ComparableMonth> ethiopianMonthCache = new HashMap<Integer,ComparableMonth>();
-	public CalendarHelper() {
+	private AmpFiscalCalendar ampFiscalCalendar=null;
+	private java.util.Date time=new java.util.Date();
+	
+	public CalendarWorker() {
 		gregCalendar = new GregorianCalendar();
 		dateFormatSymbols = new DateFormatSymbols();
 		ethcalendar= EthiopianCalendar.getEthiopianDate(gregCalendar);
 	}
 	public void setTime(Date td) {
-		getCalendar().setTime(td);
-		ethcalendar = EthiopianCalendar.getEthiopianDate(gregCalendar);
+		this.time=td;
+		this.gregCalendar.setTime(td);
+		this.ethcalendar = EthiopianCalendar.getEthiopianDate(gregCalendar);
 	}
 	public void setCalendar(GregorianCalendar calendar) {
 		this.gregCalendar = calendar;
@@ -35,6 +42,7 @@ public class CalendarHelper {
 		return dateFormatSymbols;
 	}
 	public Comparable getMonth() {
+		applyFiscal();
 		int monthId = gregCalendar.get(Calendar.MONTH);
 		ComparableMonth cm = gregorianMonthCache.get(monthId);
 		if (cm == null) {
@@ -43,6 +51,18 @@ public class CalendarHelper {
 			gregorianMonthCache.put(monthId, cm);
 		}
 		return cm;
+	}
+	
+	
+	private void applyFiscal(){
+		gregCalendar.setTime(time);
+		gregCalendar.add(GregorianCalendar.YEAR, ampFiscalCalendar.getYearOffset());
+		ampFiscalCalendar.getStartMonthNum();
+		int toAdd=-(ampFiscalCalendar.getStartMonthNum()-1);
+		gregCalendar.add(GregorianCalendar.MONTH, toAdd);
+		toAdd=-(ampFiscalCalendar.getStartDayNum()-1);
+		gregCalendar.add(GregorianCalendar.DAY_OF_MONTH, ampFiscalCalendar.getYearOffset());
+		
 	}
 	
 	//FIXED
@@ -71,9 +91,11 @@ public class CalendarHelper {
 		
 	}
 	public int getYear() {
+		applyFiscal();
 		return gregCalendar.get(Calendar.YEAR);
 	}
 	public EthiopianCalendar getEthiopianDate() {
+		applyFiscal();
 		return ethcalendar.getEthiopianDate(gregCalendar);
 	}
 	public Comparable getEthiopianMonth() {
@@ -96,49 +118,18 @@ public class CalendarHelper {
 	public int getEthiopianFiscalQuarter() {
 		return ethcalendar.ethFiscalQrt;
 	}
+	
 	public int getEthiopianQuarter() {
 		return ethcalendar.ethQtr;
 	}
+	
+	public AmpFiscalCalendar getAmpFiscalCalendar() {
+		return ampFiscalCalendar;
+	}
+	public void setAmpFiscalCalendar(AmpFiscalCalendar ampFiscalCalendar) {
+		this.ampFiscalCalendar = ampFiscalCalendar;
+	}
 
 }
 
-class ComparableMonth implements Comparable<ComparableMonth>{
-	private int monthId;
-	private String monthStr;
 
-	public ComparableMonth(int monthId, String monthStr) {
-		this.monthId = monthId;
-		this.monthStr = monthStr;
-	}
-
-	public int compareTo(ComparableMonth o) {
-		if(monthId < o.monthId)
-			return -1;
-		if(monthId > o.monthId)
-			return 1;
-		return 0;
-	}
-	
-	public String toString() {
-		return monthStr;
-	}
-	
-	
-	/**
-	 * Convert the date that comes from the input to gregorian calendar based
-	 * on global setting default calendar 
-	 * @return
-	 */
-	public Date defaultToGregorian(Date date){
-		return null;	
-	}
-	
-	/**
-	 * Convert the date that comes as gregorian to a date based
-	 * on global setting default calendar 
-	 * @return
-	 */
-	public Date gregorianToDefault(Date date){
-		return null;	
-	}
-}

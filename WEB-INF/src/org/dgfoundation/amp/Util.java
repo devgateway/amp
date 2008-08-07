@@ -34,9 +34,9 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.helper.BaseCalendar;
-import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.dbentity.Editor;
@@ -416,12 +416,7 @@ public final class Util {
 		Integer year					= currentTime.get(Calendar.YEAR);
 		//AMP-2212
 		AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(calendarTypeId);
-		if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
-		{
-			year	= new Integer(ec.ethFiscalYear);
-			
-			//quarter=new String("Q"+ec.ethFiscalQrt);
-		}
+		
 		if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))
 		{
 			year	=	new Integer(ec.ethYear);

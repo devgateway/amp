@@ -634,6 +634,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.setCreatedBy(activity.getActivityCreator());
           eaForm.setUpdatedBy(activity.getUpdatedBy());
           eaForm.setBudget(activity.getBudget());
+          eaForm.setHumanitarianAid(activity.getHumanitarianAid());
           
 
           /*

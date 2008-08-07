@@ -703,6 +703,21 @@ function collapseAll() {
 											</c:if>										</td>
 									</tr>
 									</field:display>
+									<field:display name="Humanitarian Aid" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:humanitarianaid">
+											 Humanitarian Aid</digi:trn></td>
+										<td bgcolor="#ffffff">
+											<c:if test="${!aimEditActivityForm.humanitarianAid==true}">
+												<digi:trn key="aim:no">No</digi:trn>
+											</c:if>
+											<c:if test="${aimEditActivityForm.humanitarianAid==true}">
+												<digi:trn key="aim:yes">Yes</digi:trn>
+											</c:if>
+										</td>
+									</tr>
+									</field:display>
                                     
                                     <!--15-->
                                     <tr>

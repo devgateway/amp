@@ -1552,6 +1552,10 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		this.humanitarianAid = humanitarianAid;
 	}
 
+	public Boolean getHumanitarianAid() {
+		return humanitarianAid;
+	}
+
 	public AmpTeamMember getApprovedBy() {
 		return approvedBy;
 	}

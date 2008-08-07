@@ -144,7 +144,7 @@ session.setAttribute("progressValue", counter);
 	<tr>
 	</logic:notEmpty> 
 		<td align="left" height="20px" style="padding-left: 5px;padding-left: 5px;">
-			<span  style="color: red;font-family: Arial;font-size: 12px;">
+			<span  style="color: red;font-family: Arial;font-size: 10px;">
 				<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 					<c:set var="AllAmount">
 						<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>

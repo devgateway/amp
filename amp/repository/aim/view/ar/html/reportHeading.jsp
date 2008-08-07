@@ -60,7 +60,7 @@
           		<%}%>
           		</logic:notEqual>
        			<logic:equal name="subColumn" property="width" value="1"> 
-	      			<td style="background-color:#EAEAEA;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid; font:9px Arial;" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+	      			<td style="background-color:#EAEAEA;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid; font:9px Arial;" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	      				<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: black ;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
 	            				<c:out value="${reportHeading}"/>

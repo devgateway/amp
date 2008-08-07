@@ -6,7 +6,7 @@
 <style>
 <!--
 .toolbar{
-	width: 105px;
+	width: 90px;
 	background: #addadd; 
 	background-color: #addadd; 
 	padding: 3px 3px 3px 3px; 
@@ -52,25 +52,25 @@
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="21" height="24" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
+				<digi:img width="17" height="20" hspace="2" vspace="2"src="module/aim/images/pdf.gif" border="0" alt="Export to PDF" />
 			</digi:link>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="21" height="24" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/excel.gif" border="0" alt="Export to Excel" />
 			</digi:link>
 		</td>
 
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="21" height="24" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/csv.gif" border="0" alt="Export to CSV" />
 			</digi:link>
 		</td>
 		
 		<td noWrap align=left valign="center">
 			<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				<digi:img width="21" height="24" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
+				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
 			</digi:link>
 		</td>
 	</tr>

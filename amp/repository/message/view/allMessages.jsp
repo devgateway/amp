@@ -482,9 +482,12 @@ background-color:yellow;
 		tbl.cellPadding="1";
 		tbl.cellSpacing="1";
 		tbl.width="100%";
+                alert("tes");
                 var browser=navigator.appName;
+                alert("aa");
 		var mainTag=responseXML.getElementsByTagName('Messaging')[0];
 		if(mainTag!=null){
+                     alert("aaaaaaa");
 			var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
                         var informationTag=mainTag.getElementsByTagName('Information')[0];
                         var totalNumber=document.getElementById('totalNumber');

@@ -313,9 +313,9 @@
 									</html:radio>
 									<br /><br />
 								</div>
-								<bean:define id="lead" property="teamHead" name="currentMember" scope="session" />
+								<bean:define id="member" name="currentMember" scope="session" />
                   				
-                  				<c:if test="${lead == true}">
+                  				<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
 
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>

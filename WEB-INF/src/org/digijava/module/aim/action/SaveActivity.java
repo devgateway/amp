@@ -159,7 +159,20 @@ public class SaveActivity extends Action {
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
 			}
-
+                        boolean createdAsDraft=false;
+                        if(!eaForm.isEditAct()){
+                            activity.setCreatedAsDraft(eaForm.getDraft());
+                            createdAsDraft=eaForm.getDraft();
+                        }
+                        else{
+                            if(eaForm.getWasDraft()&&!eaForm.getDraft()){
+                                activity.setCreatedAsDraft(false);
+                                createdAsDraft=false;
+                            }
+                            else{
+                                createdAsDraft=true;
+                            }
+                        }
 			/* Saving categories to AmpActivity */
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAccessionInstrument(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
@@ -1629,10 +1642,10 @@ public class SaveActivity extends Action {
 				}
 
 			//If we're adding an activity, create system/admin message
-			if(!eaForm.isEditAct()) {
+			if(!createdAsDraft) {
 				ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 			}
-
+                     
             boolean needApproval=false;
             boolean approved=false;
             //this field is used to define if "activity approved" approval has to be created
@@ -1687,10 +1700,10 @@ public class SaveActivity extends Action {
             AmpTeamMember teamMem=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
             if(teamMem.getAmpTeam().getTeamLead()!=null){
             	//check whether Activity is approved or needs Approval
-            	if(approved && needNewAppForApproved){
+            	if(approved && needNewAppForApproved&&!myActivity.getDraft()){
                     new ApprovedActivityTrigger(myActivity);
                 }
-                if(needApproval){
+                if(needApproval&&!myActivity.getDraft()){
                     new NotApprovedActivityTrigger(myActivity);
                 }
             }

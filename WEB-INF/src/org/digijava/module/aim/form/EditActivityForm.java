@@ -592,6 +592,17 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private List steps;
     
     private List classificationConfigs;
+    
+    
+   private Boolean wasDraft;
+
+    public Boolean getWasDraft() {
+        return wasDraft;
+    }
+
+    public void setWasDraft(Boolean wasDraft) {
+        this.wasDraft = wasDraft;
+    }
 
     public List getClassificationConfigs() {
         return classificationConfigs;

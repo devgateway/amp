@@ -396,7 +396,7 @@
 						</tr>
 						<tr>
 							<td align="center">
-								<span id="columnsMust">
+								<span id="columnsMust" style="visibility: visible">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectcolumn">
 										Must select at least one column
@@ -406,7 +406,7 @@
 							</td>
 							<td>&nbsp;</td>
 							<td align="center" style="visibility: hidden;">
-								<span id="columnsLimit" >
+								<span id="columnsLimit" style="visibility: hidden">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:limit3columns">
 										You cannot select more than 3 columns in a desktop tab
@@ -469,7 +469,7 @@
 						</tr>
 						<tr>
 							<td colspan="3">
-								<span id="hierarchiesMust">
+								<span id="hierarchiesMust" style="visibility: hidden;">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:notmorehierarchies">
 										You cannot select more than 3 hierarchies
@@ -533,7 +533,7 @@
 						</tr>
 						<tr>
 							<td>
-								<span id="measuresMust">
+								<span id="measuresMust" style="visibility: visible">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectmeasure">
 										Must select at least one measure

@@ -245,7 +245,7 @@ TabReportManager.prototype.checkMeasures	= function () {
 		if ( items.length > 2 )
 			measuresLimitEl.style.visibility	= "visible";
 		else
-			measuresLimitEl.style.visibility	= "hiddden";
+			measuresLimitEl.style.visibility	= "hidden";
 		this.disableSave();
 		return false;
 	}

@@ -236,7 +236,6 @@
                             -->
                            
 						  <!-- hidden Lucene Debug!
-						  <feature:display name="Lucene Debug" module="Admin Home">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -248,7 +247,6 @@
                               </digi:link>
                             </td>
                           </tr>
-						  </feature:display>
 						   -->
                         </table>
                       </td>

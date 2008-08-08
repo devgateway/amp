@@ -444,7 +444,8 @@ public class SaveActivity extends Action {
     					while (itr.hasNext()) {
     						Location loc = itr.next();
     						Double percentage=FormatHelper.parseDouble(loc.getPercent());
-							totalPercentage += percentage;
+    						if(percentage != null)
+    							totalPercentage += percentage;
     					}
     					//Checks if it's 100%
     					

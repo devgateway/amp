@@ -751,7 +751,7 @@ public class ReportsFilterPicker extends MultiAction {
 			worker=null;
 			checkDate=null;
 		} catch (Exception e) {
-			logger.error("Can´t get year on calendar",e);
+			logger.error("Can't get year on calendar",e);
 		}
 		return year;
 	

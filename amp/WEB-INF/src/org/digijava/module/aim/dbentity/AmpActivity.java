@@ -211,6 +211,16 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Boolean humanitarianAid;
 	
         private Set actPrograms;
+        
+        private boolean createdAsDraft;
+
+        public boolean isCreatedAsDraft() {
+            return createdAsDraft;
+        }
+
+        public void setCreatedAsDraft(boolean createdAsDraft) {
+            this.createdAsDraft = createdAsDraft;
+        }
 
 	public Boolean isGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;

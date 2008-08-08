@@ -311,7 +311,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private Collection indicatorPriorValues;
     
     private Long documentType;
-
+  
     public EditActivityForm() {
         step = "1";
         reset = false;
@@ -495,7 +495,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
             componentRepDate = null;
         }
     }
-
+    
     public OrgProjectId getSelectedOrganizations(int index) {
         return selectedOrganizations[index];
     }

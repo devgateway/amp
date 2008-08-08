@@ -159,8 +159,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     boolean isPublicView = (request.getParameter("public")==null)?false:request.getParameter("public").equals("true");
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = eaForm.getActivityId();
-   
-
+    
+  
     // set Globam Settings Multi-Sector Selecting
    /* String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
@@ -174,6 +174,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     boolean gatePermEditAllowed = false;
     if (activityId != null) {
         activity = ActivityUtil.getAmpActivity(activityId);
+        eaForm.setWasDraft(activity.isCreatedAsDraft());
         if(activity!=null)
         {
         	Map scope=new HashMap();

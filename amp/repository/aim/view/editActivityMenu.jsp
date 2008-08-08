@@ -109,6 +109,7 @@ function fnGetSurvey() {
 <html:hidden property="pageId" />
 <html:hidden property="currentValDate" />
 <html:hidden property="draft" styleId="draftFlag" />
+<html:hidden property="wasDraft" />
 
 
 <table border=0 width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>

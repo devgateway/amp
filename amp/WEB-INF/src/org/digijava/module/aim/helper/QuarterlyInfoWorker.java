@@ -85,9 +85,21 @@ public class QuarterlyInfoWorker {
 				
 					/*Checking Date Filter*/
 					
-					// TODO this 01/01 string is hardcodded patern part and is not good, its thros exeption if patren is dd/MMM/yyyy in global settinsg
-					Date startDate				=  DateConversion.getDate( "01/01/" + fp.getFromYear() );
-					Date endDate				=  DateConversion.getDate( "01/01/" + fp.getToYear() );
+					// TODO this 01/01 string is hardcoded pattern part and is not good, its throws exception if pattern is dd/MMM/yyyy in global settinsg
+					Date startDate=null;
+					try {
+						startDate = FormatHelper.parseDate("01/01/" + fp.getFromYear()).getTime();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}//DateConversion.getDate( "01/01/" + fp.getFromYear() );
+					Date endDate=null;
+					try {
+						endDate = FormatHelper.parseDate("01/01/" + fp.getToYear()).getTime();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}//DateConversion.getDate( "01/01/" + fp.getToYear() );
 					
 					if ( startDate!=null&& endDate!=null&&!Util.checkYearFilter(transactionDate, startDate, endDate, fp.getFiscalCalId()) )
 							continue;

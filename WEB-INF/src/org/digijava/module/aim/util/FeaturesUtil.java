@@ -2836,4 +2836,11 @@ public class FeaturesUtil {
 		return false;
 	}
 
+	public static boolean isVisibleField(String fieldName, ServletContext ampContext){
+		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		AmpFieldsVisibility fieldToTest=ampTreeVisibility.getFieldByNameFromRoot(fieldName);
+		if(fieldToTest!=null)
+			return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+		return false;
+	}
 }

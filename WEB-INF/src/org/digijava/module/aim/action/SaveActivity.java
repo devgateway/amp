@@ -444,9 +444,11 @@ public class SaveActivity extends Action {
     					while (itr.hasNext()) {
     						Location loc = itr.next();
     						Double percentage=FormatHelper.parseDouble(loc.getPercent());
-    						totalPercentage += percentage;
+							totalPercentage += percentage;
     					}
-    					if (totalPercentage != 100) {
+    					//Checks if it's 100%
+    					
+    					if (totalPercentage != 100 && FeaturesUtil.isVisibleField("Regional Percentage", ampContext)) {
 	                        errors.add("locationPercentageSumWrong",
 	                                   new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
 	                        saveErrors(request, errors);

@@ -175,8 +175,8 @@ function validation(){
     </tr>
   </c:if>
   <tr>
-    <td height="25" align="center" colspan="6"><digi:trn key="aim:addeditdata:adddata">
-      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="Add Data" onclick="addData()">&nbsp;&nbsp;</digi:trn>
+    <td height="25" align="center" colspan="6">
+      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="<digi:trn key="aim:addeditdata:adddata">Add Data</digi:trn>" onclick="addData()">&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>

@@ -404,7 +404,7 @@
 <field:display name="Issues" feature="Issues"></field:display> 
 <field:display name="Joint Criteria" feature="Budget"></field:display> 
 <field:display name="Humanitarian Aid" feature="Identification"></field:display>
-<field:display name="Last changed by" feature="Identification"></field:display> 
+<field:display name="Activity Updated By" feature="Identification"></field:display>
 <field:display name="Lessons Learned" feature="Identification"></field:display> 
 <field:display name="Level 1 Sectors List" feature="Sectors"></field:display> 
 <field:display name="Level 2 Sectors List" feature="Sectors"></field:display> 

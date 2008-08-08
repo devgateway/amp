@@ -110,6 +110,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -121,6 +122,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </feature:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -156,7 +158,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <module:display name="ACTIVITY IMP&EXP">
+                          <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -171,7 +173,7 @@
 
                             </td>
                           </tr>
-                          </module:display>
+                          </feature:display>
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

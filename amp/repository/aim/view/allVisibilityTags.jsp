@@ -27,7 +27,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Messaging System"></module:display>
 <module:display name="GIS DASHBOARD"></module:display>
 <module:display name="WIDGETS"></module:display>
-<module:display name="ACTIVITY IMP&EXP"></module:display>
+<module:display name="ADMINISTRATIVE SECTION"></module:display>
 
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -638,4 +638,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 		<field:display name="Save Button" feature="Admin - Component Type"></field:display>
 		<field:display name="Cancel Button" feature="Admin - Component Type"></field:display>
 		<field:display name="Close Button" feature="Admin - Component Type"></field:display>
+		
+<feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
+<feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display>
 		

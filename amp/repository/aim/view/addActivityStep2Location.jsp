@@ -42,8 +42,8 @@
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td>
-                                        &nbsp;
+                                        <td>&nbsp;
+                                        
                                         </td>
                                       </tr>
                                       <tr>
@@ -99,11 +99,11 @@
                                         </td>
                                       </tr>
                                       <tr>
-                                        <td>
-                                        &nbsp;
+                                        <td>&nbsp;
+                                        
                                         </td>
                                       </tr>
-                                      <field:display name="Add Location" feature="Location">
+                                      
                                       <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
@@ -203,5 +203,4 @@
                                                
                                               </td>
                                             </tr>
-											</field:display>
                                           </table>

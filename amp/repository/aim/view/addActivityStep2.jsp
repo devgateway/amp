@@ -146,7 +146,8 @@ function validateForm(){
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage() || </feature:display> !validateLocationPercentage() ||
+    if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage() || </feature:display> 
+    <field:display name="Regional Percentage" feature="Location">!validateLocationPercentage() || </field:display> 
     !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
     !validateProgramsPercentage(ppSize,"primaryPrograms") ||
     !validateProgramsPercentage(spSize,"secondaryPrograms")  ){

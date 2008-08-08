@@ -12,5 +12,6 @@
 		<property name="globalSettingsValue" column="settingsValue" type="java.lang.String"/>
 		<property name="globalSettingsPossibleValues" column="possibleValues" type="java.lang.String"/>
 		<property name="globalSettingsDescription" column="description" type="java.lang.String"/>
+		<property name="section" column="section" type="java.lang.String"/>
 	</class>
 </hibernate-mapping>

@@ -98,7 +98,6 @@
 <feature:display name="Level Links" module="Activity Levels"></feature:display> 
 <feature:display name="Location" module="Project ID and Planning"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
-<feature:display name="Lucene Debug" module="Admin Home"></feature:display> 
 <feature:display name="Measures" module="Reports"></feature:display> 
 <feature:display name="Messages" module="Messaging System"></feature:display> 
 <feature:display name="My Messages" module="Desktop Sections"></feature:display> 
@@ -124,7 +123,6 @@
 <feature:display name="Project Coordinator Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Project Fiche" module="Previews"></feature:display> 
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display> 
-<feature:display name="References" module="References"></feature:display> 
 <feature:display name="Regional Funding" module="Funding"></feature:display> 
 <feature:display name="Regional Group" module="Organizations"></feature:display> 
 <feature:display name="Regional Report" module="Reports"></feature:display> 
@@ -478,7 +476,6 @@
 <field:display name="Proposed Project Planned" feature="Proposed Project Cost"></field:display> 
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display>
-<field:display name="References Tab" feature="References"></field:display>  
 <field:display name="Region" feature="Location"></field:display> 
 <field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display> 
@@ -543,7 +540,7 @@
 <field:display name="Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Target Value" feature="Activity"></field:display> 
-<field:display name="Workspace of Creator" feature="Identification"></field:display> 
+<field:display name="Team" feature="Identification"></field:display> 
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 

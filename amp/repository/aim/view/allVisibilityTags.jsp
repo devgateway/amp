@@ -129,7 +129,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Program" module="Program"></feature:display>
 <feature:display name="Project Fiche" module="Previews"></feature:display>
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display>
-<feature:display name="References" module="References"></feature:display>
 <feature:display name="Regional Funding" module="Funding"></feature:display>
 <feature:display name="Regional Group" module="Organizations"></feature:display>
 <feature:display name="Regional Report" module="Reports"></feature:display>
@@ -162,7 +161,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Financial Progress Tab" feature="Financial Progress"></field:display>
 <field:display name="Funding Organizations Tab" feature="Funding Information"></field:display>
 <field:display name="Physical Progress Tab" feature="Physical Progress"></field:display>
-<field:display name="References Tab" feature="References"></field:display>
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display>
 <field:display name="Costing Tab" feature="Costing"></field:display>
 <field:display name="Contracting Tab" feature="Contracting"></field:display>

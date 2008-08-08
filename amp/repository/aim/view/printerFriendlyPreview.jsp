@@ -505,7 +505,7 @@
                                          	 </tr>
 										</field:display>									
                                         </feature:display>
-                                        <feature:display name="References" module="References">
+                                        <module:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
 									<b>
@@ -523,7 +523,7 @@
 										</table>
 									</c:forEach>									</td>
 									</tr>
-									</feature:display>
+									</module:display>
 								
                                
                                  <feature:display name="Location" module="Project ID and Planning">

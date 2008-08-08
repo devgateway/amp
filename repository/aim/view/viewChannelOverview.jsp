@@ -634,7 +634,7 @@ function commentWin(val) {
 																							</TD>
 																						</TR>
 																					</field:display>
-
+																					<field:display name="Implementation Location" feature="Location">
 																					<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
 																						<i>
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
@@ -643,6 +643,7 @@ function commentWin(val) {
 																						<c:out value="${aimChannelOverviewForm.implemLocationLevel}" />
 
 																					</TD>
+																					</field:display>
 
 																					<c:if test="${!empty activity.locations}">
                                                                                                                                                                              <c:if test="${aimChannelOverviewForm.implLocationCountry}" >

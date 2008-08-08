@@ -982,7 +982,7 @@ $(document).ready(function(){
 	                                                <c:when test="${messageForm.tabIndex==2}">
 	                                                  <digi:trn key="message:Alerts">Alerts</digi:trn>
 	                                                </c:when>
-	                                                <c:when test="${messageForm.tabIndex==3}">
+	                                                <c:when test="${messageForm.tabIndex==3&&sessionScope.currentMember.teamAccessType != 'Management'}">
 	                                                  <digi:trn key="message:approvals">Approvals</digi:trn>
 	                                                </c:when>
 	                                                <c:otherwise>
@@ -1068,8 +1068,7 @@ $(document).ready(function(){
                                                     </LI>
 								</c:if>
                                                     
-                                                    
-                                                    
+                                                    <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 								<c:if test="${messageForm.tabIndex==3}">
                                                     <LI>
                                                         <a name="node">
@@ -1090,6 +1089,7 @@ $(document).ready(function(){
                                                         </span>
                                                     </LI>
 								</c:if>
+                                                                </c:if>
                                                     
                                                     
                                                     

@@ -66,7 +66,7 @@ public class DateTimeUtil {
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_FORMAT;
 		}
-                pattern = pattern.replace('m', 'M');
+        pattern = pattern.replace('m', 'M');
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		String result = formater.format(date);
 

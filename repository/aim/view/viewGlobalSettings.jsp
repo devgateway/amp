@@ -10,6 +10,7 @@
 
 
 <%@page import="org.digijava.module.aim.helper.GlobalSettings"%>
+<%@page import="org.digijava.module.aim.form.GlobalSettingsForm"%>
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="java.util.Date"%>
 <%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
@@ -225,6 +226,23 @@ function saveAllSettings(){
 								</logic:iterate>
 							</ul>
 			                <div class="yui-content" > 
+
+									<!-- Start - Sorting settings based on its name  -->
+									<jsp:useBean id="aimGlobalSettingsForm" class="org.digijava.module.aim.form.GlobalSettingsForm" scope="page"/>
+									<jsp:useBean id="sortedglobalSett" class="java.util.TreeMap" scope="page" />
+									<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
+		                            <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
+		                            			   type="org.digijava.module.aim.dbentity.AmpGlobalSettings ">
+										<c:set var="key" scope="page"><digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn></c:set>
+										<jsp:useBean id="key" class="java.lang.String" scope="page"/>
+										<%
+											sortedglobalSett.put(key,globalSett);
+										%>
+									</logic:iterate>
+									</logic:notEmpty>
+									<jsp:setProperty name="aimGlobalSettingsForm" property="gsfCol" value="<%=sortedglobalSett.values()%>"/>
+									<!-- End - Sorting settings based on its name  -->
+
 								<logic:iterate name="sections"  id="sectionName">
 								<div>
 									<table width="100%" border="0" id="${sectionName}">
@@ -247,10 +265,7 @@ function saveAllSettings(){
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
 			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<bean:write name="globalSett" property="globalSettingsDescription"/>">                              
 			                                 </logic:notEmpty>
-										     <c:set var="globaLset">
-			                                   <bean:write name="globalSett" property="globalSettingsName"/>
-			                                 </c:set>
-			                                 <digi:trn key="aim:Global:${globaLset}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
+			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
 										   </td>
 											
 											<digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >

@@ -245,12 +245,16 @@ function saveAllSettings(){
 
 								<logic:iterate name="sections"  id="sectionName">
 								<div>
+									<font style="color:black;font-size:14pt;font-weight:bold"">									
+									<digi:trn key="aim:global:section:${sectionName}">${sectionName}</digi:trn>
+									</font>
+									<br /> <br />
 									<table width="100%" border="0" id="${sectionName}">
 										<tr>
-			                               <td width="60%" bgcolor="#999999" style="color:black">
+			                               <td width="60%" bgcolor="#999999" style="color:black;font-size:10pt;font-weight:bold">
 												<digi:trn key="aim:globalsettings:setting">Setting</digi:trn>
 										   </td>
-			                               <td width="40%" bgcolor="#999999" style="color:black">
+			                               <td width="40%" bgcolor="#999999" style="color:black;font-size:10pt;font-weight:bold">
 												<digi:trn key="aim:globalsettings:value">Value</digi:trn>
 										   </td>
 										</tr>

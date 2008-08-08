@@ -190,7 +190,7 @@ function fnGetSurvey() {
 					</c:if>
 				</tr>
 				</feature:display>
-				<feature:display name="References" module="References">
+				<module:display name="References" parentModule="PROJECT MANAGEMENT">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != '1_5'}">
 					<td nowrap="nowrap">
@@ -222,7 +222,7 @@ function fnGetSurvey() {
 					</td>
 					</c:if>
 				</tr>
-				</feature:display>
+				</module:display>
 				<feature:display name="Location" module="Project ID and Planning">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 2}">

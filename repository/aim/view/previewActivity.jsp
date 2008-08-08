@@ -863,7 +863,7 @@ function collapseAll() {
                                         </tr>
                                     </field:display>                                   
                                    
-								<feature:display name="References" module="References">
+								<module:display name="References" parentModule="PROJECT MANAGEMENT">
 									<tr>
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:References">References</digi:trn>									</td>
 									<td bgcolor="#ffffff">
@@ -877,7 +877,7 @@ function collapseAll() {
 										</table>
 									</c:forEach>									</td>
 									</tr>
-								</feature:display>
+								</module:display>
                                     <!--END 16 -->
                                    <!--17--> 
                                

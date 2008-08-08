@@ -1,1 +1,1 @@
-DELETE FROM amp_modules_visibility WHERE name = 'Activity Imp&Exp';
+DELETE FROM amp_modules_visibility WHERE name = 'ACTIVITY IMP&EXP';

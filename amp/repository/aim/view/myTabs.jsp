@@ -143,7 +143,7 @@ var myTabsObject;
 		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
 			labelEl: objeto
 			
-		}), myTabsObject.get('tabs').length-1); 
+		}), myTabsObject.get('tabs').length+1); 
 
 		//Get the position and create the panel
 		var region = YAHOOAmp.util.Dom.getRegion("moreTabs");
@@ -173,7 +173,7 @@ var myTabsObject;
 		myTabsObject.addTab( new YAHOOAmp.widget.Tab({ 
 			labelEl: objeto
 			
-		}), myTabsObject.get('tabs').length-2); 
+		}), myTabsObject.get('tabs').length-1); 
 		var tabObject = document.getElementById("replaceableTab");
 
 		if(tabObject.parentNode.tagName == "A")
@@ -183,7 +183,7 @@ var myTabsObject;
 			tabObject.parentNode.href = url;
 			tabObject.parentNode.id = id;
 		}
-		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-3);
+		replaceableTabObject = myTabsObject.getTab(myTabsObject.get('tabs').length-2);
 		allTabsPanel.hide();
 		startajaxtabs("MyTabs");
 		reloadTab("MyTabs",id);
@@ -256,9 +256,7 @@ var myTabsObject;
 					</logic:equal>
 		</logic:iterate>
 </logic:present>
-	<li>
-		<a href="/viewTeamReports.do?tabs=true" style="background:none;!important;color:blue;text-decoration:underline;"><digi:trn key="aim:viewallmydesktoptabs">View all of My Desktop Tabs</digi:trn></a>					
-	</li>
+	
 </ul>									
 <div class="yui-content" style="display:none">
 </div>

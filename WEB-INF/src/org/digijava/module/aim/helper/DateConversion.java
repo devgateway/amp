@@ -72,8 +72,10 @@ public class DateConversion
 	try {
 	    Date date = null;
 	    if (strDate != null && !strDate.trim().equals("")) {
+	    //date=sdf.parse(strDate);
+	    	//date=sdf.parse("01/Jun/2008");
 		//date = DateTimeUtil.parseDate(DateTimeUtil.formatDate(new Date(strDate)));
-	    	date = DateTimeUtil.parseDate(strDate);
+	    	date = FormatHelper.parseDate(strDate).getTime();
 
 	    }
 

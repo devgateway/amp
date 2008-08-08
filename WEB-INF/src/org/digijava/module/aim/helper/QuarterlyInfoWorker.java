@@ -475,10 +475,18 @@ public class QuarterlyInfoWorker {
 					String ds = qf.getDateDisbursed();
 					if (ds != null) {
 						//if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) 
-					    	if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())){
-							yr = DateConversion.getYear(ds);
-						} else {
-							yr = FiscalCalendarUtil.getYear(fiscalCalId,ds);
+//					    	if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())){
+//							yr = DateConversion.getYear(ds);
+//						} else {
+//							yr = FiscalCalendarUtil.getYear(fiscalCalId,ds);
+//						}
+						 ICalendarWorker worker= fiscalCal.getworker();
+                         try {
+							worker.setTime(FormatHelper.parseDate(ds).getTime());
+							yr =worker.getYear();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}
 				

@@ -153,8 +153,8 @@ div.fakefile2 input{
 			    <ul class="yui-nav">
 			        <li id="tab1" class="selected"><a href="#my_res"><div><digi:trn key="rep:res:dhtmlTab:myresources">My Resources</digi:trn></div></a></li>
 			        <li id="tab2"><a href="#team_res"><div><digi:trn key="rep:res:dhtmlTab:teamResources">Team Resources</digi:trn></div></a></li>
-			        <li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Publicy Resources</digi:trn></div></a></li>
-			        <li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:teamMemberResources">Team Member Resources</digi:trn></div></a></li>
+			        <li id="tab3"><a href="#public_res"><div><digi:trn key="rep:res:dhtmlTab:publicResources">Public Resources</digi:trn></div></a></li>
+			        <li id="tab4"><a href="#team_mem_res"><div><digi:trn key="rep:res:dhtmlTab:otherResources">Other Resources</digi:trn></div></a></li>
 			    </ul>            
 			    <div class="yui-content" style="background-color: #EEEEEE;">
 			        <div id="my_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">

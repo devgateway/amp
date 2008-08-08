@@ -176,15 +176,19 @@ function validation(){
   </c:if>
   <tr>
     <td height="25" align="center" colspan="6">
-      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="<digi:trn key="aim:addeditdata:adddata">Add Data</digi:trn>" onclick="addData()">&nbsp;&nbsp;
+      <c:set var="trnadd"><digi:trn key="aim:btn:adddata">Add data</digi:trn></c:set>
+      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="${trnadd}" onclick="addData()">&nbsp;&nbsp;
     </td>
   </tr>  
   <tr>
     <td bgColor=#dddddb height="25" align="center" colspan="6">
-      <c:set var="trn"><digi:trn key="aim:btn:save">Save</digi:trn></c:set>      
+      <c:set var="trn"><digi:trn key="aim:btn:save">Save</digi:trn></c:set>
+      <c:set var="trncancel"><digi:trn key="aim:btn:cancel">Cancel</digi:trn></c:set>
+      <c:set var="trnclose"><digi:trn key="aim:btn:close">Close</digi:trn></c:set>
+      
       <input class="dr-menu" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
-      <digi:trn key="aim:addeditdata:cancel"><input class="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;</digi:trn>
-      <digi:trn key="aim:addeditdata:close"><input class="dr-menu" type="button" name="close" value="Close" onclick="window.close();"></digi:trn>
+      <input class="dr-menu" type="reset" value="${trncancel}">
+      <input class="dr-menu" type="button" name="close" value="${trnclose}" onclick="window.close();">
     </td>
   </tr>
    <tr><td width="100%" colspan="6"><br>

@@ -586,7 +586,6 @@
 			</table>
 		</td>
 		<td>
-				<field:display name="Ministry of Planning Rank" feature="Planning">
 				<table align="center" cellpadding="1" cellspacing="1" >
 					<tr><td><b><digi:trn key="rep:filer:MinistryRankTitle">Ministry Rank</digi:trn></b></td></tr>
 					<field:display name="Line Ministry Rank" feature="Planning">
@@ -622,7 +621,6 @@
 					</tr>	
 					</field:display>
 				</table>
-				</field:display>
 				<logic:notEqual name="widget" value="true" scope="request">
 				<br/>
 				<c:set var="tooltip_translation">

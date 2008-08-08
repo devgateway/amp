@@ -17,6 +17,7 @@
   <digi:form action="/messageActions.do" style="margin-bottom:0;">
     <html:hidden name="messageForm" property="msgRefreshTimeCurr"/>
     <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
+    <c:set var="teamType">${sessionScope.currentMember.teamAccessType}</c:set>
 
 
     <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -159,6 +160,7 @@
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
+      if("${teamType}"!='Management'){
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
@@ -166,6 +168,7 @@
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>';
       tr1.appendChild(td1);
       body.appendChild(tr1);
+  }
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;

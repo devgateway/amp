@@ -73,7 +73,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/system-lib/_hibern8ide.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.8.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/itext-1.4.6.jar"/>
 	<classpathentry kind="var" path="JBOSS_LIB/jsp-api.jar"/>
 	<classpathentry kind="var" path="JBOSS_LIB/log4j.jar"/>
 	<classpathentry kind="var" path="JBOSS_LIB/servlet-api.jar"/>
@@ -99,5 +98,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/ehcache-1.4.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/backport-util-concurrent-3.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/iText-2.1.3.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/iText-rtf-2.1.3.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

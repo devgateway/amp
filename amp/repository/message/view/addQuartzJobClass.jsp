@@ -26,14 +26,14 @@ function saveJc(){
 
   txt=document.getElementById("txtClassFullname");
   if(txt==null || txt.value==""){
-    alert("Please enter Class Fullname!");
+	alert('<digi:trn key="aim:enterclassfullname">Please enter Class Fullname!</digi:trn>');
     txt.focus();
     return false;
   }
 
   txt=document.getElementById("txtName");
   if(txt==null || txt.value==""){
-    alert("Please enter Name!");
+	alert('<digi:trn key="aim:enterclassname">Please enter Name!</digi:trn>');
     txt.focus();
     return false;
   }

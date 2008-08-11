@@ -29,6 +29,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="WIDGETS"></module:display>
 <module:display name="ADMINISTRATIVE SECTION"></module:display>
 
+
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -641,4 +642,5 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 		
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display>
+<feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"></feature:display>
 		

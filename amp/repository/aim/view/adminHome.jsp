@@ -86,18 +86,21 @@
                               </digi:link>
                             </td>
                           </tr>
+                          
                           <tr>
+                          <feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"> 
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="gatePermLink">
                                 <digi:trn key="aim:gatePermLinkTitle">Click here to manage gate permissions and assignments</digi:trn>
                               </c:set>
-                              <html:link href="/gateperm/managePermMap.do" title="${gatePermLinkTitle}" >
+                              <html:link href="/gateperm/managePermMap.do" title="${gatePermLinkTitle}">
                                 <digi:trn key="aim:globalPermissionManager">
-                                Global Permission Manager
+                                	Global Permission Manager
                                 </digi:trn>
                               </html:link>
                             </td>
+                           </feature:display>
                           </tr>
                           <tr>
                             <td class="f-names" nowrap="nowrap">

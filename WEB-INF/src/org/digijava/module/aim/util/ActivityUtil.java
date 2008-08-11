@@ -1609,12 +1609,18 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setUpdatedDate(ampAct.getUpdatedDate());
 
         /* Set Categories */
-        activity.setAccessionInstrument(
+        activity.setProjectCategory(
             CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.ACCESSION_INSTRUMENT_NAME, ampAct.getCategories())
+            CategoryConstants.PROJECT_CATEGORY_NAME, ampAct.getCategories())
             )
             );
+        activity.setAccessionInstrument(
+                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+                    CategoryManagerUtil.getAmpCategoryValueFromList(
+                CategoryConstants.ACCESSION_INSTRUMENT_NAME, ampAct.getCategories())
+                )
+                );
         activity.setAcChapter(
             CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromList(

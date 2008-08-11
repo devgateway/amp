@@ -913,6 +913,11 @@ public class ShowActivityPrintPreview
                     if (ampCategoryValue != null) {
                     	eaForm.setAccessionInstrument(ampCategoryValue.getId());
                     }
+                ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
+                        CategoryConstants.PROJECT_CATEGORY_NAME, activity.getCategories());
+                    if (ampCategoryValue != null) {
+                      	eaForm.setProjectCategory(ampCategoryValue.getId());
+                    }
                     
                     
                   //load programs by type

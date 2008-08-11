@@ -337,6 +337,24 @@ target.style.cursor = "default"
 											</td></tr>	
 											</field:display>
 
+											<field:display name="Project Category" feature="Identification">
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
+												<a title="<digi:trn key="aim:DescriptionOfProjectCategory">Project Category</digi:trn>">
+												<digi:trn key="aim:ProjectCategory">
+												Project Category
+												</digi:trn>
+												</a>
+											</td>
+											
+											<td valign="top" align="left">
+													<c:set var="translation">
+														<digi:trn key="aim:addActivityAccInstrFirstLine">Please select from below</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="projectCategory" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_NAME %>" styleClass="inp-text" />
+											</td></tr>	
+											</field:display>
+
+
 											<field:display name="Government Agreement Number" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:step1:GovernmentAgreementNumTooltip">Government Agreement Number</digi:trn>">

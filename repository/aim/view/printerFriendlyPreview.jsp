@@ -294,8 +294,20 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									<field:display name="Project Category" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
+									  <digi:trn key="aaim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.projectCategory > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.projectCategory}"/>
+											</c:if>
+&nbsp;										</td>
+									</tr>
+									</field:display>
+									
 
-		        </feature:display>
+		</feature:display>
                                      <feature:display name="Budget" module="Project Id And Planning"></feature:display>
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">

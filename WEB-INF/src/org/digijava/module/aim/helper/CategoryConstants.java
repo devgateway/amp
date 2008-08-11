@@ -44,7 +44,10 @@ public class CategoryConstants {
 	
 	public static final String ACTIVITY_LEVEL_NAME					="Activity Level";
 	public static final String ACTIVITY_LEVEL_KEY					="activity_level";
-        
+
+	public static final String PROJECT_CATEGORY_NAME		= "Project Category";
+	public static final String PROJECT_CATEGORY_KEY		= "project_category";
+	
 	
 	//--- IPA Contracting Step 13
 	

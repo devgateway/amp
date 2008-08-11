@@ -124,6 +124,8 @@ public class Activity
   private String lessonsLearned;
 
   private AmpTeamMember createdBy;
+  
+  private String projectCategory;
 
   public String getAccessionInstrument() {
     return accessionInstrument;
@@ -1152,5 +1154,13 @@ public class Activity
 	
 	public Boolean getHumanitarianAid() {
 		return humanitarianAid;
+	}
+
+	public String getProjectCategory() {
+		return projectCategory;
+	}
+
+	public void setProjectCategory(String projectCategory) {
+		this.projectCategory = projectCategory;
 	} 
 }

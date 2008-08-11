@@ -3,6 +3,8 @@ package org.digijava.module.widget.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
+import net.sf.hibernate.Session;
+
 /**
  * Table widget column entity class.
  * @author Irakli Kobiashvili
@@ -93,6 +95,5 @@ public class AmpDaColumn implements Serializable, Comparable<AmpDaColumn>{
 	public void setColumnType(Integer columnType) {
 		this.columnType = columnType;
 	}
-	
 	
 }

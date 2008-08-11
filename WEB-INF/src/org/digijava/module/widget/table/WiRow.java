@@ -96,5 +96,13 @@ public abstract class WiRow implements HtmlGenerator{
 	public Long getPk() {
 		return pk;
 	}
+
+	public void setPk(Long newPk) {
+		this.pk =  newPk;
+		List<WiCell> cells = getCells();
+		for (WiCell cell : cells) {
+			cell.setPk(newPk);
+		}
+	}
 	
 }

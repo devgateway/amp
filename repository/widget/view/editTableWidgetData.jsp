@@ -80,6 +80,7 @@
 						<c:forEach var="dcell" items="${drow.cells}" varStatus="statCell">
 							<td>
 								<html:text name="dform" property="row[${statRow.index}].cell[${statCell.index}].value"/>
+								<html:text name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value" value="${dcell.value}"/>
 							</td>
 						</c:forEach>
 						<td>

@@ -15,7 +15,8 @@ public abstract class WiCell implements HtmlGenerator{
 	private Long pk;
 	private WiColumn column;
 	private boolean isHeaderCell = false;
-
+	private boolean editMode = false;
+	
 	public Long getId() {
 		return id;
 	}
@@ -42,7 +43,7 @@ public abstract class WiCell implements HtmlGenerator{
 		if (isHeaderCell){
 			result.append("<strong>");
 		}
-		result.append(getValue());
+		result.append(tagContent()); //result.append(getValue());
 		if (isHeaderCell){
 			result.append("</strong>");
 		}
@@ -50,6 +51,8 @@ public abstract class WiCell implements HtmlGenerator{
 		return result.toString();
 	}
 
+	public abstract String tagContent();
+	
 	public void setColumn(WiColumn column) {
 		this.column = column;
 	}
@@ -64,6 +67,14 @@ public abstract class WiCell implements HtmlGenerator{
 
 	public boolean isHeaderCell() {
 		return isHeaderCell;
+	}
+
+	public void setEditMode(boolean editMode) {
+		this.editMode = editMode;
+	}
+
+	public boolean isEditMode() {
+		return editMode;
 	}
 
 }

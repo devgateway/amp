@@ -30,6 +30,10 @@ import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.oldTable.DaCell;
 import org.digijava.module.widget.oldTable.DaRow;
 import org.digijava.module.widget.oldTable.DaTable;
+import org.digijava.module.widget.table.WiCell;
+import org.digijava.module.widget.table.WiColumn;
+import org.digijava.module.widget.table.WiRow;
+import org.digijava.module.widget.table.WiTable;
 
 /**
  * Utilities for table widgets,
@@ -280,18 +284,15 @@ public class TableWidgetUtil {
 	 * @param columns
 	 * @return
 	 * @throws DgException
+	 * @Deprecated {@link WiTable} should create new empty row when asked, so all these logic is encapsulated in table widget
 	 */
-	public static DaRow createEmptyRow(List<AmpDaColumn> columns) throws DgException{
-		DaRow row = new DaRow();
-		row.setCells(new ArrayList<DaCell>(columns.size()));
-		for (AmpDaColumn col : columns) {
-			DaCell cell = new DaCell();
-			cell.setColumnId(col.getId());
-			cell.setColumnOrderNo(col.getOrderNo());
-			cell.setHeader(false);
-			row.getCells().add(cell);
-		}
-		Collections.sort(row.getCells(),new CellOrderNoComparator());
+	@Deprecated
+	public static WiRow createEmptyRow(List<WiColumn> columns) throws DgException{
+		WiRow row = null;
+//		for (WiColumn col : columns) {
+//			WiCell cell = org.digijava.module.widget.table.util.TableWidgetUtil.newCell(value);
+//			row.updateCell(cell);
+//		}
 		return row;
 	}
 	

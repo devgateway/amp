@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ecs.html.TT;
-import org.apache.ecs.xhtml.col;
-import org.apache.ecs.xhtml.del;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -495,8 +492,7 @@ public class AdminTableWidgets extends DispatchAction {
 		saveToSession(columns, request); 
 		resetDeletedColumns(request);
 	}
-	
-	
+
 	/**
 	 * Stops editing mode by removing widget from session.
 	 * Also removes columns and deleted columns from session.

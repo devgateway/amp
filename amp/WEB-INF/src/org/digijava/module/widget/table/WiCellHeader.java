@@ -11,7 +11,7 @@ public class WiCellHeader extends WiCell {
 	@Override
 	public String getValue() {
 		if (getColumn()!=null){
-			return "<strong>"+getColumn().getName()+"</strong>";	
+			return getColumn().getName();	
 		}
 		return "";
 	}
@@ -21,6 +21,11 @@ public class WiCellHeader extends WiCell {
 	 */
 	@Override
 	public void setValue(String value) {
+	}
+
+	@Override
+	public String tagContent() {
+		return "<strong>"+getValue()+"</strong>";
 	}
 
 }

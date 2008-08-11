@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
@@ -21,6 +24,7 @@ import org.digijava.module.widget.table.WiCellStandard;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiColumnStandard;
 import org.digijava.module.widget.table.WiRow;
+import org.digijava.module.widget.table.WiRowStandard;
 import org.digijava.module.widget.table.WiTable;
 import org.digijava.module.widget.table.calculated.WiColumnCalculated;
 import org.digijava.module.widget.table.filteredColumn.FilterItem;
@@ -104,6 +108,8 @@ public final class TableWidgetUtil {
 			WiColumnDropDownFilter filterCol = (WiColumnDropDownFilter)column;
 			cell = new WiCellHeaderFiltered();
 			cell.setValue(filterCol.getSelectedColumn().getName());
+			cell.setColumn(filterCol);
+			
 		}else{
 			cell = new WiCellHeader();
 			cell.setValue(column.getName());
@@ -113,14 +119,26 @@ public final class TableWidgetUtil {
 		return cell;
 	}
 	
+	public static WiRow newDataRow(Long pk,Map<Long, WiColumn> columnMap){
+		WiRow result = new WiRowStandard(pk,columnMap);
+		return result;
+	}
+	
+	
 	/**
 	 * Loads table entity from db.
 	 * @param id db key of the table.
 	 * @return
 	 * @throws DgException
+	 * TODO imlement here
 	 */
 	public static AmpDaTable getDbTable(Long id) throws DgException{
 		return org.digijava.module.widget.util.TableWidgetUtil.getTableWidget(id);
+	}
+
+	public static void saveTable(WiTable table) throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		table.save(session);
 	}
 	
 	/**

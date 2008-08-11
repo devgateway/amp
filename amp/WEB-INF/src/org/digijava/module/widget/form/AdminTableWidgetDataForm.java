@@ -3,8 +3,9 @@ package org.digijava.module.widget.form;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.widget.dbentity.AmpDaColumn;
-import org.digijava.module.widget.oldTable.DaRow;
+import org.digijava.module.widget.table.WiColumn;
+import org.digijava.module.widget.table.WiRow;
+import org.digijava.module.widget.table.WiTable;
 
 /**
  * Widget Data administration form.
@@ -16,11 +17,11 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	
 	private Long widgetId;
-	private List<AmpDaColumn> columns;
-	private List<DaRow> rows;
+	private List<WiColumn> columns;
+	private List<WiRow> rows;
 	private Integer rowIndex;
-
 	private String tableName;
+	private WiTable table;
 	
 	public String getTableName() {
 		return tableName;
@@ -38,11 +39,11 @@ public class AdminTableWidgetDataForm extends ActionForm {
 		this.widgetId = widgetId;
 	}
 
-	public List<AmpDaColumn> getColumns() {
+	public List<WiColumn> getColumns() {
 		return columns;
 	}
 
-	public void setColumns(List<AmpDaColumn> columns) {
+	public void setColumns(List<WiColumn> columns) {
 		this.columns = columns;
 	}
 
@@ -54,17 +55,15 @@ public class AdminTableWidgetDataForm extends ActionForm {
 		this.rowIndex = rowIndex;
 	}
 
-	public List<DaRow> getRows() {
+	public List<WiRow> getRows() {
 		return rows;
 	}
 
-	public void setRows(List<DaRow> rows) {
+	public void setRows(List<WiRow> rows) {
 		this.rows = rows;
 	}
 	
-	public DaRow getRows(int index) {
-		//System.out.println("getRows(int index)");
-		//if (this.rows==null) //System.out.println("Ooo, rows is NULL !!!");
+	public WiRow getRows(int index) {
 		return (rows==null)?null:rows.get(index);
 	}
 	
@@ -91,11 +90,20 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	/**
 	 * Old style indexed getter for use with struts.
 	 * Please do not remove or improve - do not add generic declarations.
-	 * @param index
-	 * @return
+	 * @param index not list index but pk of the row to find in table.
+	 * @return table row object coresponding to specified pk.
 	 */
-	public DaRow getRow(int index) {
-		return (rows==null)?null:rows.get(index);
+	public WiRow getRow(int index) {
+//		return (rows==null)?null:rows.get(index);
+		return table.getDataRowByPk(new Long(index));
+	}
+
+	public void setTable(WiTable table) {
+		this.table = table;
+	}
+
+	public WiTable getTable() {
+		return table;
 	}
 
 }

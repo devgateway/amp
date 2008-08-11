@@ -1,8 +1,5 @@
 package org.digijava.module.widget.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,14 +7,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.dgfoundation.amp.utils.AmpCollectionUtils;
-import org.digijava.module.widget.dbentity.AmpDaColumn;
-import org.digijava.module.widget.dbentity.AmpDaTable;
-import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.form.AdminTableWidgetDataForm;
-import org.digijava.module.widget.oldTable.DaRow;
-import org.digijava.module.widget.oldTable.DaTable;
-import org.digijava.module.widget.util.TableWidgetUtil;
+import org.digijava.module.widget.table.WiTable;
 
 /**
  * Action for editing table widget data.
@@ -27,7 +18,7 @@ import org.digijava.module.widget.util.TableWidgetUtil;
  */
 public class AdminTableWidgetData extends DispatchAction {
 
-	public static final String EDITING_WIDGET_DATA = "Editin_Widget_Data";
+	public static final String EDITING_WIDGET_TABLE = "Editing_Widget_Table";
 
 	/**
 	 * Forwards to {@link #showEdit(ActionMapping, ActionForm, HttpServletRequest, HttpServletResponse)}
@@ -72,25 +63,33 @@ public class AdminTableWidgetData extends DispatchAction {
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		
-		AmpDaTable dTable = TableWidgetUtil.getTableWidget(dForm.getWidgetId());
-		dForm.setTableName(dTable.getName());
+//		AmpDaTable dTable = TableWidgetUtil.getTableWidget(dForm.getWidgetId());
+//		dForm.setTableName(dTable.getName());
+//		List<AmpDaColumn> columns = new ArrayList<AmpDaColumn>(dTable.getColumns());
+//		dForm.setColumns(columns);
+//		List<AmpDaValue> values = TableWidgetUtil.getTableData(dForm.getWidgetId());
+//		List<DaRow> rows = TableWidgetUtil.valuesToRows(values);
+//		if(rows==null){
+//			rows = new ArrayList<DaRow>(1);
+//		}
+//		if(rows.size()==0){
+//			rows.add(TableWidgetUtil.createEmptyRow(columns));
+//		}
+//		dForm.setRows(rows);
 		
-		List<AmpDaColumn> columns = new ArrayList<AmpDaColumn>(dTable.getColumns());
-		dForm.setColumns(columns);
 		
-		List<AmpDaValue> values = TableWidgetUtil.getTableData(dForm.getWidgetId());
-		List<DaRow> rows = TableWidgetUtil.valuesToRows(values);
-		if(rows==null){
-			rows = new ArrayList<DaRow>(1);
+		//===NEW====
+		WiTable wTable = new WiTable.TableBuilder(dForm.getWidgetId()).build();
+		dForm.setColumns(wTable.getColumns());
+		if (wTable.getDataRows().size()==0){
+			wTable.appendNewRow();//we should have one empty row if table has no rows (data).
 		}
-		if(rows.size()==0){
-			rows.add(TableWidgetUtil.createEmptyRow(columns));
-		}
+		dForm.setRows(wTable.getDataRows());
+		dForm.setTableName(wTable.getName());
+		dForm.setWidgetId(wTable.getId());
+		dForm.setTable(wTable);
 		
-		dForm.setRows(rows);
-		DaTable table = new DaTable(dTable);
-		table.generateHtml();
-		markEditStarted(request, rows);
+		markEditStarted(request, wTable);
 		
 		return mapping.findForward("forward");
 	}
@@ -125,11 +124,8 @@ public class AdminTableWidgetData extends DispatchAction {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
 			int insertIndex=dForm.getRowIndex().intValue()+1;
-			
-			List<DaRow> rows = dForm.getRows();
-			DaRow newRow = TableWidgetUtil.createEmptyRow(dForm.getColumns());
-			rows.add(insertIndex, newRow);
-			updateSession(request, rows);
+			WiTable wTable = getFromSession(request);
+			wTable.addNewRowAt(insertIndex);
 		}		
 		return mapping.findForward("forward");
 	}
@@ -149,9 +145,8 @@ public class AdminTableWidgetData extends DispatchAction {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
 		if (null != dForm.getRowIndex() && dForm.getRowIndex()>=0){
 			int removeIndex = dForm.getRowIndex().intValue();
-			List<DaRow> rows = dForm.getRows();
-			rows.remove(removeIndex);
-			updateSession(request, rows);
+			WiTable wTable = getFromSession(request);
+			wTable.deleteDataRow(removeIndex);
 		}	
 		
 		return mapping.findForward("forward");
@@ -170,12 +165,10 @@ public class AdminTableWidgetData extends DispatchAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
-		AmpDaTable widget = TableWidgetUtil.getTableWidget(dForm.getWidgetId());
-		List<DaRow> rows = dForm.getRows();
-		List<AmpDaValue> newValues = TableWidgetUtil.rowsToValues(rows,widget.getColumns());
-		List<AmpDaValue> oldValues = TableWidgetUtil.getTableData(dForm.getWidgetId());
-		AmpCollectionUtils.joinAndMarkRemoved(oldValues, newValues, new TableWidgetUtil.AmpDaValueKeyWorker());
-		TableWidgetUtil.saveTableValues(oldValues);
+		System.out.println(dForm.getRows());
+		WiTable wTable = getFromSession(request);
+		org.digijava.module.widget.table.util.TableWidgetUtil.saveTable(wTable);
+		
 		markEditStopped(request);
 		return mapping.findForward("listTableWidgets");
 	}
@@ -185,19 +178,20 @@ public class AdminTableWidgetData extends DispatchAction {
 	 * @param request
 	 * @param rows
 	 */
-	private void markEditStarted(HttpServletRequest request,List<DaRow> rows){
-		updateSession(request, rows);
+	private void markEditStarted(HttpServletRequest request,WiTable table){
+		updateSession(request, table);
 	}
 	private void markEditStopped(HttpServletRequest request){
-		request.getSession().removeAttribute(EDITING_WIDGET_DATA);
+		request.getSession().removeAttribute(EDITING_WIDGET_TABLE);
 	}
 	private boolean isEdit(HttpServletRequest request){
 		return null!=getFromSession(request);
 	}
-	private List<DaRow> getFromSession(HttpServletRequest request){
-		return (List<DaRow>)request.getSession().getAttribute(EDITING_WIDGET_DATA);
+
+	private WiTable getFromSession(HttpServletRequest request){
+		return (WiTable)request.getSession().getAttribute(EDITING_WIDGET_TABLE);
 	}
-	private void updateSession(HttpServletRequest request,List<DaRow> rows){
-		request.getSession().setAttribute(EDITING_WIDGET_DATA, rows);
+	private void updateSession(HttpServletRequest request,WiTable table){
+		request.getSession().setAttribute(EDITING_WIDGET_TABLE, table);
 	}
 }

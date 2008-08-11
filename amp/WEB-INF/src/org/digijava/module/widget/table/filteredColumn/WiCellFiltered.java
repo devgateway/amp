@@ -6,6 +6,8 @@ public class WiCellFiltered extends WiCell {
 
 	private Long filterItemId;
 	private String value;
+	private Long selectedFilterId;
+	private FilterItemProvider itemProvider;
 	
 	@Override
 	public String getValue() {
@@ -23,6 +25,23 @@ public class WiCellFiltered extends WiCell {
 
 	public Long getFilterItemId() {
 		return filterItemId;
+	}
+
+	@Override
+	public String tagContent() {
+		return getValue();
+	}
+
+	public void setSelectedFilterId(Long selectedFilterId) {
+		this.selectedFilterId = selectedFilterId;
+	}
+
+	public Long getSelectedFilterId() {
+		return selectedFilterId;
+	}
+
+	public FilterItemProvider getItemProvider() {
+		return itemProvider;
 	}
 
 }

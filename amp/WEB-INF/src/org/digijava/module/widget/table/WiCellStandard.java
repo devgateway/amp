@@ -32,5 +32,17 @@ public class WiCellStandard extends WiCell {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	@Override
+	public String tagContent() {
+		if (isEditMode()){
+			StringBuffer buff = new StringBuffer("<input type='edit' name='cell");
+			buff.append(getColumn().getId().toString());
+			buff.append("'>");
+			buff.append(getValue());
+			buff.append("</imput>");
+			return buff.toString();
+		}
+		return getValue();
+	}
 
 }

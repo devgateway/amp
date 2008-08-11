@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.Widget;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
+import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.table.util.TableWidgetUtil;
 
 import edu.emory.mathcs.backport.java.util.Collections;
@@ -22,6 +26,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
  * AmpDaTable entity should not be closed by utility methods used in this process, otherwise LazyInitializationExeption will be thrown. 
  * Beside building widget from db record, it also can generate HTML, XML (not finished yet) and convert its state back to DB Record.
  * This class is not thread safe.
+ * TODO try to make thread safe.
  * @author Irakli Kobiashvili
  *
  */
@@ -42,6 +47,8 @@ public class WiTable extends Widget{
 	private List<WiRow> dataRows;
 	private List<WiRow> footerRows;
 	private List<WiColumn> columns;
+	private Map<Long,WiColumn> columnsById = null;
+	private Map<Long,WiRow> dataRowsByPk = null;
 	
 	private WiTable(TableBuilder builder){
 		this.setId(builder.tableId);
@@ -60,6 +67,8 @@ public class WiTable extends Widget{
 		this.showTitle = builder.showTitle;
 		this.nameAsTitle = builder.nameAsTitle;
 		this.dataEntryMode = builder.dataEntryMode;
+		this.columnsById = builder.columnsById;
+		this.dataRowsByPk = builder.dataRowsByPk;
 	}
 	
 	/**
@@ -86,6 +95,7 @@ public class WiTable extends Widget{
 		private List<WiRow> footerRows = new ArrayList<WiRow>();
 		private List<WiColumn> columns = new ArrayList<WiColumn>();
 		private Map<Long,WiColumn> columnsById=new HashMap<Long,WiColumn>();
+		private Map<Long, WiRow> dataRowsByPk = new HashMap<Long, WiRow>();
 		
 		/**
 		 * Use this constructor to build new empty table with default values set and empty but not null collections.
@@ -145,14 +155,13 @@ public class WiTable extends Widget{
 			//default header. later we may add complex headers, for example two rows in headers and with special cells.
 			WiRowHeader headerRow = new WiRowHeader(0L,columnsById);
 			//data rows
-			Map<Long, WiRow> rowsByPk = new HashMap<Long, WiRow>();
 			for (WiColumn column : columns) {
 				List<WiCell> cells = column.getAllCells();
 				for (WiCell cell : cells) {
-					WiRow row = rowsByPk.get(cell.getPk());
+					WiRow row = dataRowsByPk.get(cell.getPk());
 					if (row ==null){
 						row = new WiRowStandard(cell.getPk(),columnsById);
-						rowsByPk.put(row.getPk(), row);
+						dataRowsByPk.put(row.getPk(), row);
 						this.dataRows.add(row);
 					}
 					row.updateCell(cell);
@@ -340,6 +349,75 @@ public class WiTable extends Widget{
 	public boolean isDataEntryMode() {
 		return dataEntryMode;
 	}
+	
+	public WiRow addDataRowAt(Long rowIndex,WiRow newRow){
+		this.dataRows.add(rowIndex.intValue(), newRow);
+		renumDataRowPks();
+		return newRow;
+	}
+	
+	public WiRow appendRow(WiRow row){
+		row.setPk(getLastPk());
+		return this.addDataRowAt(row.getPk(), row);
+	}
 
+	public WiRow addNewRowAt(long index){
+		WiRow newRow = createNewDataRow();
+		newRow.setPk(new Long(index));
+		return this.addDataRowAt(newRow.getPk(), newRow);
+	}
+	
+	public WiRow appendNewRow(){
+		WiRow newRow = createNewDataRow(); 
+		return this.addDataRowAt(newRow.getPk(), newRow);
+	}
+
+	public WiRow deleteDataRow(long index){
+		WiRow deletedRow =dataRowsByPk.get(new Long(index));
+		if (deletedRow!=null){
+			dataRowsByPk.remove(new Long(index));
+			dataRows.remove(deletedRow);
+			renumDataRowPks();
+		}
+		return deletedRow;
+	}
+	
+	public void save(Session dbSession) throws DgException{
+		AmpDaTable dbTable = TableWidgetUtil.getDbTable(this.getId());
+		List<AmpDaColumn> dbColumns = new ArrayList<AmpDaColumn>(this.columns.size());
+		List<AmpDaValue> dbValues = new ArrayList<AmpDaValue>(100);
+		for (WiColumn column : this.columns) {
+			//TODO AmpDaColumn dbColumn = column.dbColumn(Session dbSession);
+			//TODO dbColumns.add(dbColumn);
+		}
+		try {
+			Transaction tx = dbSession.beginTransaction();
+			tx.commit();
+		} catch (Exception e) {
+			
+		}
+	}
+
+	private WiRow createNewDataRow(){
+		return TableWidgetUtil.newDataRow(getLastPk(), this.columnsById);
+	}
+	
+	private Long getLastPk(){
+		//remember this is not thread safe
+		return new Long(this.dataRows.size());
+	}
+	
+	private void renumDataRowPks(){
+		long pk=1;
+		this.dataRowsByPk = new HashMap<Long, WiRow>(this.dataRows.size());
+		for (WiRow row : this.dataRows) {
+			row.setPk(new Long(pk++));
+			this.dataRowsByPk.put(row.getPk(), row);
+		}
+	}
+
+	public WiRow getDataRowByPk(Long pk){
+		return dataRowsByPk.get(pk);
+	}
 
 }

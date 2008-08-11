@@ -1667,11 +1667,11 @@ function collapseAll() {
 											<digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-										<field:display name="Responsible Organisation" feature="Responsible Organisation">
+										<field:display name="Responsible Organization" feature="Responsible Organization">
 											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
 												<img id="implementing_agency_plus"  onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
                                             	<img id="implementing_agency_minus" onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
-											<b><digi:trn key="aim:responsibleorganisation">Responsible Organisation</digi:trn></b><br/>
+											<b><digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
 												<div id="responsible_organisation_dots">...</div>
 												<div id="act_responsible_organisation" style="display: none;">

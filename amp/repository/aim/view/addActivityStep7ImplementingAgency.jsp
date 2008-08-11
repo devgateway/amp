@@ -44,12 +44,12 @@
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency">
+																<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
 																	<aim:addOrganizationButton form="${aimEditActivityForm}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
-																<field:display name="Implementing Agency Remove Organizations Button" feature="Implementing Agency">															
+																<field:display name="Implementing Agency Remove Button" feature="Implementing Agency">															
 																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs(2)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
@@ -65,7 +65,7 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency">
+													<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
 															<aim:addOrganizationButton form="${aimEditActivityForm}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													</field:display>
 													</td>

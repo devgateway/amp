@@ -1269,7 +1269,7 @@ function commentWin(val) {
 																	</module:display>
 																	<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 																	
-																		<feature:display module="Organizations" name="Responsible Organisation">
+																		<feature:display module="Organizations" name="Responsible Organization">
 																			<TR>
 																				<TD>
 																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
@@ -1277,7 +1277,7 @@ function commentWin(val) {
 																					<TR>
 																						<TD bgcolor="#ffffff"><b><digi:trn
 																							key="aim:responsibleOrganisation">
-																							Responsible Organisation</digi:trn></b></TD>
+																							Responsible Organization</digi:trn></b></TD>
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if

@@ -240,7 +240,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2">
-							<feature:display name="Responsible Organisation" module="Organizations">
+							<feature:display name="Responsible Organization" module="Organizations">
 								<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
 							</feature:display>
 

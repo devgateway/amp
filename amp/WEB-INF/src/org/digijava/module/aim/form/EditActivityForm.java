@@ -545,6 +545,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/*Categories*/
 	private Long acChapter				= new Long(0);
 	private Long accessionInstrument	= new Long(0);
+	private Long projectCategory     = new Long(0);
 
 	 private Collection searchedSectors = null; // list of searched Sectors.
 
@@ -919,6 +920,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
                         environment=null;
                         minorities=null;
                         accessionInstrument=new Long(0);
+                        projectCategory=new Long(0);
                         acChapter=new Long(0);
 
             /* Indicator values reset */
@@ -5452,4 +5454,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setIssueDate(String issueDate) {
 		this.issueDate = issueDate;
 	}
+
+	public Long getProjectCategory() {
+		return projectCategory;
+	}
+
+	public void setProjectCategory(Long projectCategory) {
+		this.projectCategory = projectCategory;
+	}
+
 }

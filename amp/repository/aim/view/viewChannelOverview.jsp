@@ -1185,6 +1185,29 @@ function commentWin(val) {
 														</TR>
 													</c:if>
 													</field:display>
+													<field:display name="Project Category" feature="Identification">
+													<c:if test="${!empty activity.projectCategory}">
+														<TR>
+															<TD>
+															<TABLE width="100%" cellPadding=3 cellSpacing=1
+																vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR>
+																	<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																		height=10 src="../ampTemplate/images/arrow-014E86.gif"
+																		width=15> <b><digi:trn
+																		key="aim:ProjectCategory">
+																	Project Category</digi:trn></b></TD>
+																</TR>
+																<TR>
+																	<TD bgcolor="#ffffff">
+																	${activity.projectCategory}</TD>
+																</TR>
+															</TABLE>
+															</TD>
+														</TR>
+													</c:if>
+													</field:display>
+													
 												</TABLE>
 												</TD>
 												<TD width="50%" vAlign="top" align="left">

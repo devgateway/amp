@@ -181,6 +181,7 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
                         CategoryManagerUtil.addCategoryToSet(eaForm.getImplemLocationLevel(), activity.getCategories() );
                         CategoryManagerUtil.addCategoryToSet(eaForm.getActivityLevel(), activity.getCategories());
+                        CategoryManagerUtil.addCategoryToSet(eaForm.getProjectCategory(), activity.getCategories());
 			/* END - Saving categories to AmpActivity */
 
 			/* Saving related documents into AmpActivity */
@@ -1782,6 +1783,7 @@ public class SaveActivity extends Action {
 			eaForm.setStatusId(new Long(0));
 			eaForm.setGbsSbs(new Long(0));
             eaForm.setDraft(null);
+            eaForm.setProjectCategory(new Long(0));
 			/* END - Clearing categories */
 
 			int temp = eaForm.getPageId();

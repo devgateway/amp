@@ -647,6 +647,17 @@ function collapseAll() {
 &nbsp;										</td>
 									</tr>
 									</field:display>
+                                	<field:display name="Project Category" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ProjectCategory">Project Category</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.projectCategory > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.projectCategory}"/>
+											</c:if>
+&nbsp;										</td>
+									</tr>
+									</field:display>
+									
                               <!--END 11 12  -->        
 
                                 <field:display name="Government Agreement Number" feature="Identification">

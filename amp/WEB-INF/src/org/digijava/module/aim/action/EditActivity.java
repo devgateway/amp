@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -520,10 +521,17 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             if (ampCategoryValue != null)
               eaForm.setGbsSbs(new Long(ampCategoryValue.getId()));
 
-            ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
             if (ampCategoryValue != null)
               eaForm.setImplemLocationLevel(new Long(ampCategoryValue.getId()));
+            
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                    CategoryConstants.PROJECT_CATEGORY_KEY, activity.getCategories());
+            if (ampCategoryValue != null)
+                  eaForm.setProjectCategory(new Long(ampCategoryValue.getId()));
+
+            
 
         /* End - Insert Categories */ 
 
@@ -707,7 +715,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
   
   
   	eaForm.setContractDetails(activity.getContractDetails());
-
+  	
 
   		eaForm.setConvenioNumcont(activity.getConvenioNumcont());
   		eaForm.setClasiNPD(activity.getClasiNPD());

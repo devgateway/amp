@@ -1551,32 +1551,63 @@ public class SaveActivity extends Action {
 					//if an approved activity is edited and the appsettins is set to newOnly then the activity
 					//doesn't need to be approved again!
 					AmpActivity aAct = ActivityUtil.getAmpActivity(eaForm.getActivityId());
-					oldActivityApprovalStatus=aAct.getApprovalStatus();
-					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) ){
-                        activity.setApprovalStatus(Constants.STARTED_STATUS);
-                    }
+//					oldActivityApprovalStatus=aAct.getApprovalStatus();
+//					if( Constants.STARTED_STATUS.equals(aAct.getApprovalStatus()) ){
+//                        activity.setApprovalStatus(Constants.STARTED_STATUS);
+//                    }
+////
+////					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
+////                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
+////                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
+////                    }
+//					//AMP-3464
+//					String s=DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation();
+//					if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()) && Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus()))
+//						{
+//	                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
+//	                    }
 //
-//					if("newOnly".equals(tm.getAppSettings().getValidation()) &&
-//                       Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())){
+//					if(tm.getTeamHead()){
 //                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
 //                    }
-					//AMP-3464
-					String s=DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation();
-					if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()) && Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus()))
-						{
-	                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
-	                    }
+					
+					activity.setApprovalStatus(aAct.getApprovalStatus());
+					if(tm.getTeamId().equals(aAct.getTeam().getAmpTeamId())){
 
-					if(tm.getTeamHead()){
-                        activity.setApprovalStatus(Constants.APPROVED_STATUS);
-                    }
-					if(eaForm.getDraft()==true){
-						if(tm.getTeamHead()){
-                            activity.setApprovalStatus(Constants.APPROVED_STATUS);
-                        }else{
-                            activity.setApprovalStatus(aAct.getApprovalStatus());
-                        }
+						if(eaForm.getDraft()==true){
+							if(tm.getTeamHead()){
+								activity.setApprovalStatus(Constants.APPROVED_STATUS);
+							}else{
+								activity.setApprovalStatus(aAct.getApprovalStatus());
+							}
+						}
+						if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
+						{
+							if(Constants.APPROVED_STATUS.equals(activity.getApprovalStatus()) || Constants.EDITED_STATUS.equals(activity.getApprovalStatus()) )
+								activity.setApprovalStatus(Constants.APPROVED_STATUS);
+						}
+						
+						if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
+							if(!tm.getTeamHead()){
+								if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
+								 else activity.setApprovalStatus(aAct.getApprovalStatus());
+							}
+						}
+						if(tm.getTeamHead()) activity.setApprovalStatus(Constants.APPROVED_STATUS);
 					}
+					else{
+						if("newOnly".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation()))
+						{
+							if(Constants.APPROVED_STATUS.equals(activity.getApprovalStatus()) || Constants.EDITED_STATUS.equals(activity.getApprovalStatus()) )
+								activity.setApprovalStatus(Constants.APPROVED_STATUS);
+						}
+						
+						if("allEdits".equals(DbUtil.getTeamAppSettingsMemberNotNull(aAct.getTeam().getAmpTeamId()).getValidation())){
+								if(Constants.APPROVED_STATUS.equals(aAct.getApprovalStatus())) activity.setApprovalStatus(Constants.EDITED_STATUS);
+								 else activity.setApprovalStatus(aAct.getApprovalStatus());
+						}
+					}
+					
 
 					activity.setActivityCreator(eaForm.getCreatedBy());
                     List<String> auditTrail = AuditLoggerUtil.generateLogs(

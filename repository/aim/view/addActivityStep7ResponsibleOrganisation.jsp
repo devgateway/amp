@@ -12,11 +12,11 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <digi:instance property="aimEditActivityForm" />
-								<field:display name="Responsible Organisation" feature="Responsible Organisation">
+								<field:display name="Responsible Organization" feature="Responsible Organization">
 								<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:OrganisationResponsible">The responsible Organisation</digi:trn>">
-										<b><digi:trn key="aim:responsibleOrganisation">Responsible Organisation</digi:trn></b></a>
+										<a title="<digi:trn key="aim:OrganisationResponsible">The responsible Organization</digi:trn>">
+										<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b></a>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
@@ -47,12 +47,12 @@
 										<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation">
+																<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 																<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
-																<field:display name="Responsible Organisation Remove Organizations Button" feature="Responsible Organisation">
+																<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization">
 																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(9)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
@@ -70,7 +70,7 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation">
+														<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 														<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														</field:display>
 													</td>

@@ -224,8 +224,8 @@
 <field:display name="Amount of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Assumptions" feature="Identification"></field:display> 
 <field:display name="Base Value" feature="Activity"></field:display> 
-<field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency"></field:display> 
-<field:display name="Beneficiary Agency Remove Organizations Button" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency Add Button" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
@@ -266,8 +266,8 @@
 <field:display name="Contract of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Contract of Disbursement Order" feature="Disbursement"></field:display> 
 <field:display name="Contract type" feature="Contracting"></field:display> 
-<field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency"></field:display> 
-<field:display name="Contracting Agency Remove Organizations Button" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Add Button" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Organizations Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Disbursements" feature="Contracting"></field:display> 
 <field:display name="Contracting Organization Text" feature="Contracting"></field:display> 
@@ -356,9 +356,8 @@
 <field:display name="Environment" feature="Cross Cutting Issues"></field:display> 
 <field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display> 
 <field:display name="Exchange Rate" feature="Funding Information"></field:display> 
-<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency"></field:display> 
-<field:display name="Executing Agency Percentage" feature="Executing Agency"></field:display> 
-<field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Add Button" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency" feature="Executing Agency"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
@@ -389,8 +388,8 @@
 <field:display name="Contracting INV" feature="Contracting"></field:display> 
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
-<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency"></field:display> 
-<field:display name="Implementing Agency Remove Organizations Button" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
 <field:display name="Indicator Current Value" feature="Activity"></field:display> 
@@ -481,8 +480,8 @@
 <field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
-<field:display name="Regional Group Add Organizations Button" feature="Regional Group"></field:display> 
-<field:display name="Regional Group Remove Organizations Button" feature="Regional Group"></field:display> 
+<field:display name="Regional Group Add Button" feature="Regional Group"></field:display> 
+<field:display name="Regional Group Remove Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group" feature="Regional Group"></field:display> 
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Contracting Regional Amount" feature="Contracting"></field:display> 
@@ -507,8 +506,8 @@
 <field:display name="Same as Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Contracting Save Button" feature="Contracting"></field:display> 
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
-<field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display> 
-<field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 

@@ -86,7 +86,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Organizations" name="Implementing Agency"></feature:display>
 <feature:display module="Organizations" name="Regional Group"></feature:display>
 <feature:display module="Organizations" name="Sector Group"></feature:display>
-<feature:display module="Organizations" name="Responsible Organisation"></feature:display>
+<feature:display module="Organizations" name="Responsible Organization"></feature:display>
 <feature:display module="Project ID and Planning" name="Identification"></feature:display>
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
@@ -233,8 +233,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Amount Disbursement" feature="Disbursement"></field:display>
 <field:display name="Amount Expenditure" feature="Funding Information"></field:display>
 <field:display name="Base Value" feature="Activity"></field:display>
-<field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency"></field:display>
-<field:display name="Beneficiary Agency Remove Organizations Button" feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Add Button" feature="Beneficiary Agency"></field:display>
+<field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display>
 <field:display name="Classification Expenditure" feature="Funding Information"></field:display>
 <field:display name="Comments Base Value" feature="Activity"></field:display>
 <field:display name="Comments Current Value" feature="Activity"></field:display>
@@ -260,8 +260,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Components Amount Expenditures" feature="Activity - Component Step"></field:display>
 <field:display name="Conditions for Fund Release" feature="Funding Information"></field:display>
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display>
-<field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency"></field:display>
-<field:display name="Contracting Agency Remove Organizations Button" feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Add Button" feature="Contracting Agency"></field:display>
+<field:display name="Contracting Agency Remove Button" feature="Contracting Agency"></field:display>
 
 <field:display name="Costing Activity Name" feature="Costing"></field:display>
 <field:display name="Costing Assumptions" feature="Costing"></field:display>
@@ -333,13 +333,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display>
 <field:display name="Exchange Rate" feature="Funding Information"></field:display>
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
-<field:display name="Responsible Organisation Groups" feature="Responsible Organisation"></field:display>
+<field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display>
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display>
-<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency"></field:display>
-<field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency"></field:display>
-<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation"></field:display>
-<field:display name="Responsible Organisation Remove Organizations Button" feature="Responsible Organisation"></field:display>
+<field:display name="Executing Agency Add Button" feature="Executing Agency"></field:display>
+<field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display>
+<field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display>
+<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display>
 <field:display name="FY" feature="Budget"></field:display>
 <field:display name="Final Date for Contracting" feature="Planning"></field:display>
 <field:display name="Final Date for Disbursements" feature="Planning"></field:display>
@@ -360,8 +360,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Grand Total Disbursements" feature="Activity - Component Step"></field:display>
 <field:display name="Implementation Level" feature="Location"></field:display>
 <field:display name="Implementation Location" feature="Location"></field:display>
-<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency"></field:display>
-<field:display name="Implementing Agency Remove Organizations Button" feature="Implementing Agency"></field:display>
+<field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display>
+<field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display>
 <field:display name="Indicator Base Value" feature="Activity"></field:display>
 <field:display name="Indicator Current Value" feature="Activity"></field:display>
 <field:display name="Indicator Description" feature="Activity"></field:display>
@@ -435,8 +435,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
-<field:display name="Regional Group Add Organizations Button" feature="Regional Group"></field:display>
-<field:display name="Regional Group Remove Organizations Button" feature="Regional Group"></field:display>
+<field:display name="Regional Group Add Button" feature="Regional Group"></field:display>
+<field:display name="Regional Group Remove Button" feature="Regional Group"></field:display>
 <field:display name="Remove Actors Button" feature="Issues"></field:display>
 <field:display name="Remove Components Button" feature="Activity - Component Step"></field:display>
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display>
@@ -456,8 +456,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Risk" feature="Activity"></field:display>
 <field:display name="Secondary Program" feature="NPD Programs"></field:display>
 <field:display name="Secondary Program" feature="NPD Programs"></field:display>
-<field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display>
-<field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display>
+<field:display name="Sector Group Add Button" feature="Sector Group"></field:display>
+<field:display name="Sector Group Remove Button" feature="Sector Group"></field:display>
 <field:display name="Primary Sector" feature="Sectors"></field:display>
 <field:display name="Primary Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display>

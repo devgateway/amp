@@ -1395,8 +1395,8 @@
 
 										<td bgcolor="#ffffff">
 										
-										<feature:display name="Responsible Organisation" module="Organizations">
-											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organisation</digi:trn></b><br/>
+										<feature:display name="Responsible Organization" module="Organizations">
+											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>

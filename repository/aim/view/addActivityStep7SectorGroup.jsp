@@ -44,12 +44,12 @@
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<field:display name="Sector Group Add Organizations Button" feature="Sector Group">
+																<field:display name="Sector Group Add Button" feature="Sector Group">
 																	<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 																</field:display>
 															</td>
 															<td>
-																<field:display name="Sector Group Remove Organizations Button" feature="Sector Group">															
+																<field:display name="Sector Group Remove Button" feature="Sector Group">															
 																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs(8)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
@@ -65,7 +65,7 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													<field:display name="Sector Group Add Organizations Button" feature="Sector Group">
+													<field:display name="Sector Group Add Button" feature="Sector Group">
 														<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 													</field:display>
 													</td>

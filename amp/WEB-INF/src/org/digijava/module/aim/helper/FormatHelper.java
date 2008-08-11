@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -21,31 +22,31 @@ public class FormatHelper {
 
     
     public static ThreadLocal<DecimalFormat> tlocal = new ThreadLocal<DecimalFormat>();
-
-           /**                                                                                                                                                  
-            * Parse a String tring based on Global Setting Format to Double                                                                                     
-            *                                                                                                                                                   
-            * @param number                                                                                                                                     
-            * @return                                                                                                                                           
-            * @throws ParseException                                                                                                                            
-            */                                                                                                                                                  
-           public static Double parseDouble(String number) {                                                                              
-                                             
-                   if(number==null) return null;
-                   if("".equalsIgnoreCase(number)){
-                	   return new Double(0);
-                   }
-                                                                                    
-                   Double result;                                                                                                                               
-                   DecimalFormat formater = getDecimalFormat();                                                                              
-                   try {                                                                                                                                        
-                           result = formater.parse(number).doubleValue();                                                                                       
-                   } catch (ParseException e) {                                                                                                                 
-                           logger.error("Error parsing String to double", e);     
-                           return null;
-                   }                                                                                                                                            
-                   return result;                                                                                                                               
-           }                                                                                                                                                    
+    	
+    	/**                                                                                                                                                  
+        * Parse a String tring based on Global Setting Format to Double                                                                                     
+        *                                                                                                                                                   
+        * @param number                                                                                                                                     
+        * @return                                                                                                                                           
+        * @throws ParseException                                                                                                                            
+        */                                                                                                                                                  
+       public static Double parseDouble(String number) {                                                                              
+                                         
+               if(number==null) return null;
+               if("".equalsIgnoreCase(number)){
+            	   return new Double(0);
+               }
+                                                                                
+               Double result;                                                                                                                               
+               DecimalFormat formater = getDecimalFormat();                                                                              
+               try {    
+            	   result = formater.parse(number).doubleValue();                                                                                       
+            	 } catch (ParseException e) {                                                                                                                 
+                       logger.error("Error parsing String to double", e);     
+                       return null;
+               }                                                                                                                                            
+               return result;                                                                                                                               
+       }                                                                                                                                                    
                                                                                                                                                                 
         public static String getDifference(String one, String two) {
 		Double d1 = parseDouble(one);
@@ -75,14 +76,17 @@ public class FormatHelper {
     * @return                                                                                                                                           
     */                                                                                                                                                  
    public static String formatNumber(Double number) {                                                                                                   
+       return formatNumber((Number)number);                                                                                                                               
+    }
+   
+
+   public static String formatNumber(Number number) {                                                                                                   
        String result;                                                                                                                               
-       if (number == null) {                                                                                                                        
-               number = new Double(0d);                                                                                                             
-       }                                                                                                                                                             
-	   DecimalFormat formater = getDecimalFormat();                                                     
+       DecimalFormat formater = getDecimalFormat();                                                     
 	   result = formater.format(number);                                                                                                            
        return result;                                                                                                                               
     }
+
    
    public static String formatNumberUsingCustomFormat(double number){
 	   DecimalFormat formater = null;     
@@ -150,15 +154,30 @@ public class FormatHelper {
 
 	if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS))) {		
 		//use the decimal separator to learn how many decimals we have:
-		int groupPlace = format.indexOf(groupSeparator);
+		//for format definition decimal place is defined by .  
+		int groupPlace = format.indexOf(".");
 		if(groupPlace==-1) {
 			//no decimal places, we don't allow that when thousands=on, we add three
 			format+=".000";
 		} else {
-		    	int flength=format.length();
+		    
+			String[] formatBreaked = format.split("[.]");
+				String decimal = formatBreaked[1];
+				if (decimal.length() < 3) {
+					for (int i = 1; i < (3 - decimal.length()); i++) {
+						//if decimal is .00 it will add one 0 more .000 if decimal format is .## it will add a new # more
+						decimal += decimal.charAt(decimal.length() - 1);
+					}
+				}
+				format=formatBreaked[0]+"."+decimal;
+						
+		}
+		/*
+			int flength=format.length();
 			for(int i=1;i<=(flength-groupPlace-2);i++)
 			    format+=format.charAt(flength - 1);
-		}
+			}*/
+			
 	}
 	
 	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();

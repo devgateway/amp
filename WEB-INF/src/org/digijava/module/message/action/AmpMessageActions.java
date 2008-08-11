@@ -55,10 +55,12 @@ public class AmpMessageActions extends DispatchAction {
 	
     
     public ActionForward fillTypesAndLevels (ActionMapping mapping,ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception {        		
-    	AmpMessageForm messageForm=(AmpMessageForm)form;    		
+    	AmpMessageForm messageForm=(AmpMessageForm)form;   
+        HttpSession session = request.getSession();
+        TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
     	if(request.getParameter("editingMessage").equals("false")){
     		//load activities
-        	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds());
+        	messageForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(teamMember));
     		setDefaultValues(messageForm);
     	}else {
     		Long id=new Long(request.getParameter("msgStateId"));    			
@@ -489,7 +491,9 @@ public class AmpMessageActions extends DispatchAction {
             messagesForm.setMessageName("FWD: "+ msg.getName());
         	MessageHelper msgHelper=createHelperMsgFromAmpMessage(msg,stateId);
         	messagesForm.setForwardedMsg(msgHelper);
-        	messagesForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds());
+            HttpSession session = request.getSession();
+            TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+            messagesForm.setRelatedActivities(ActivityUtil.loadActivitiesNamesAndIds(teamMember));
     	}
     	return loadReceiversList(mapping,messagesForm,request,response);	
     }

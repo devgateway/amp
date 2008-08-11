@@ -25,6 +25,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -3673,17 +3674,37 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
          * @param partOfName
          * @return Array of Strings,which have a look like: activity_name(activiti_id) 
          */
-        public static String[] loadActivitiesNamesAndIds() throws DgException{
+        public static String[] loadActivitiesNamesAndIds(TeamMember member) throws DgException{
         	Session session=null;
     		String queryString =null;
     		Query query=null;
     		List activities=null;
     		String [] retValue=null;
     		try {
-    			session=PersistenceManager.getRequestDBSession();
-    			queryString= "select a.name,a.ampActivityId from " + AmpActivity.class.getName()+ " a order by a.name";
+                    session=PersistenceManager.getRequestDBSession();
+                    
+                Set<String> activityStatus = new HashSet<String>();
+                String teamType=member.getTeamType();
+		activityStatus.add(Constants.APPROVED_STATUS);
+		activityStatus.add(Constants.EDITED_STATUS);
+                Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
+                    Set teamAO = TeamUtil.getComputedOrgs(relatedTeams);
+                    // computed workspace
+                    if (teamAO != null && !teamAO.isEmpty()) {
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a left outer join a.orgrole r  left outer join a.funding f " +
+                                " where  a.team in  (" + Util.toCSString(relatedTeams) + ")    or (r.organisation in  (" + Util.toCSString(teamAO) + ") or f.ampDonorOrgId in (" + Util.toCSString(teamAO) + ")) order by a.name";
+
+                    } else {
+                        // none computed workspace
+                        queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
+                        if (teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+                            queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+                        }
+                        queryString += " order by a.name ";
+                    }
+    			  			
     			query=session.createQuery(queryString);    			
-    			activities=query.list(); 			
+    			activities=query.list(); 		
     		}catch(Exception ex) { 
     			logger.error("couldn't load Activities" + ex.getMessage());	
     			ex.printStackTrace(); 

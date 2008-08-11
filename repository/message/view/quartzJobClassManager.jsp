@@ -117,7 +117,7 @@ function addJc(){
           <c:forEach var="jc" items="${quartzJobClassManagerForm.clsCol}">
             <tr>
               <td>
-              ${jc.name}
+              	<digi:trn key="job:${jc.name}">${jc.name}</digi:trn>
               </td>
               <td>
               ${jc.classFullname}

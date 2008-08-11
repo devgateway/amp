@@ -30,8 +30,8 @@
 	var helpForEmailable='<digi:trn key="message:helpForEmailables">Set this to true to allow all alerts to be forwarded to the user\'s email address</digi:trn>'
 	
 	function validate(record){
-		if(record==null || record==""){
-			alert('Please enter data to save');
+		if(record==null || record=="" || record=="-1"){
+			alert('<digi:trn key="message:pleaseenterdata">Please enter data to save</digi:trn>');
 			return false;
 		}
 		return true;
@@ -134,9 +134,9 @@
 												</td>
 												<td align="center">
 													<html:select property="emailMsgsNew" name="messageForm">
-														<html:option value="-1">please select</html:option>
-														<html:option value="0">No</html:option>
-														<html:option value="1">Yes</html:option>
+														<html:option value="-1"><digi:trn key="aim:pleaseselectemail">please select</digi:trn></html:option>
+														<html:option value="0"><digi:trn key="message:No">No</digi:trn></html:option>
+														<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn></html:option>
 													</html:select>
 												</td>
 												<td align="center"><input type="button" value="${saveBtn}" onclick="saveRecord('emailAlerts')" /></td>

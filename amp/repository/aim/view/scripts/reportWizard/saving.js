@@ -1,11 +1,13 @@
 
 function getReportType() {
 	var radioEls		= aimReportWizardForm.reportType;
-	for (var i=0; i<radioEls.length; i++) {
+	for (var i=0; i < radioEls.length +1; i++) {
 		if ( radioEls[i].checked ) {
 			return radioEls[i].value;
 		}
 	}
+	//if there only one options this is not a collection!
+	return radioEls.value;
 }
 
 function getPublicReport() {

@@ -421,7 +421,7 @@ public class DbUtil {
 
     		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
     				+ sQuery + " ) ";
-    		System.out.println("MASTER query count activities::: " + query);
+    		//System.out.println("MASTER query count activities::: " + query);
     		PreparedStatement ps;
     		try {
     			ps = conn.prepareStatement(query);
@@ -447,7 +447,7 @@ public class DbUtil {
     				e.printStackTrace();
     			}
     		}
-    		System.out.println("--------------------- "+ii);
+    		//System.out.println("--------------------- "+ii);
     	return ii;
     }
     

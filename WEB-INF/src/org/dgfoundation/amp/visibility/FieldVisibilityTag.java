@@ -116,7 +116,9 @@ public class FieldVisibilityTag extends BodyTagSupport {
 				   } 
 //	   }
 	   
- 	}catch (Exception e) {e.printStackTrace();}
+ 	}catch (Exception e) {
+ 		System.out.println("error in field visibility. pls check the field: "+this.getName() +" or its parent: "+this.getFeature());
+ 		e.printStackTrace();}
 	   	
  	return EVAL_BODY_BUFFERED;//super.doStartTag();
 	

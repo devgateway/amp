@@ -521,7 +521,7 @@
 							</td>
 						</tr>
 					   </feature:display>
-					   <field:display name="Donor Agency" feature="Funding">
+					   <field:display name="Donor Agency" feature="Funding Information">
 							<tr>
 								<td>
 									<digi:trn key="rep:filer:donnorAgency">Donor Agency</digi:trn>

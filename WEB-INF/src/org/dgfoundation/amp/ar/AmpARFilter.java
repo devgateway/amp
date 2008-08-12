@@ -300,7 +300,8 @@ public class AmpARFilter extends PropertyListable {
 			if (calendarType != null) {
 				worker = calendarType.getworker();
 				try {
-					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
+					if(renderStartYear!=null) checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
+					else checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
 					worker.setTime(checkDate);
 					renderStartYear=worker.getYear();
 				} catch (Exception e) {
@@ -327,7 +328,9 @@ public class AmpARFilter extends PropertyListable {
 			if (calendarType != null) {
 				worker = calendarType.getworker();
 				try {
-					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
+					//checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
+					if(renderEndYear!=null) checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
+					else checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
 					worker.setTime(checkDate);
 					renderEndYear=worker.getYear();
 				} catch (Exception e) {

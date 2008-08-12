@@ -394,7 +394,7 @@
 <field:display name="Document Title" feature="Related Documents"></field:display> 
 <field:display name="Document Type" feature="Related Documents"></field:display> 
 <field:display name="Donor Agency" feature="Funding Information"></field:display> 
-<field:display name="Donor Agency" feature="Funding"></field:display> 
+<field:display name="Donor Agency" feature="Funding Information"></field:display> 
 <field:display name="Donor Commitment Date" feature="Funding Information"></field:display> 
 <field:display name="Donor Email" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Fax Number" feature="Donor Contact Information"></field:display> 

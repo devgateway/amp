@@ -41,7 +41,7 @@ background: #FFF;
 </script>
 
 <digi:form action="/messageActions.do">
-			<table width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
+			<table cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" valign="top">
 				<tr>
 					<td class="r-dotted-lg" width="10"/>
 					<td class="r-dotted-lg" valign="top" align="left">

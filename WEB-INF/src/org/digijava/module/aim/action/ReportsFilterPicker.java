@@ -375,6 +375,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setPageSize(null);
 		filterForm.setGovernmentApprovalProcedures(null);
 		filterForm.setJointCriteria(null);
+		filterForm.setJustSearch(null);
 		filterForm.setRegionSelected(null);
 		filterForm.setApprovalStatusSelected(null);
 		// filterForm.setRegions(null);
@@ -622,6 +623,8 @@ public class ReportsFilterPicker extends MultiAction {
 
 			}
 		}
+		
+		arf.setJustSearch(filterForm.getJustSearch());
 
 		arf.setRenderStartYear((filterForm.getRenderStartYear() != -1) ? filterForm.getRenderStartYear() : 0);
 		arf.setRenderEndYear((filterForm.getRenderEndYear() != -1) ? filterForm.getRenderEndYear() : 0);
@@ -657,6 +660,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
 		filterForm.setSelectedNatPlanObj(null);
+		filterForm.setJustSearch(null);
 		filterForm.setSelectedPrimaryPrograms(null);
 		filterForm.setSelectedSecondarySectors(null);
 		HttpSession httpSession = request.getSession();

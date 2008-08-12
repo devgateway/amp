@@ -84,6 +84,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	private Integer selectedBudget = null;
+	private Boolean justSearch = null;
 
 	// to keep the default currency after user changues
 	private Long defaultCurrency;
@@ -317,6 +318,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedBeneficiaryAgency = null;
 			this.selectedImplementingAgency = null;
 			this.selectedBudget = null;
+			this.justSearch=false;
 			this.selectedNatPlanObj = null;
 			this.selectedPrimaryPrograms = null;
 			this.selectedSecondaryPrograms = null;
@@ -773,6 +775,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setDonnorAgency(Collection<AmpOrganisation> donnorAgency) {
 		this.donnorAgency = donnorAgency;
+	}
+
+	public Boolean getJustSearch() {
+		return justSearch;
+	}
+
+	public void setJustSearch(Boolean justSearch) {
+		this.justSearch = justSearch;
 	}
 
 	

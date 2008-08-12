@@ -48,6 +48,7 @@
 					</td>
 				</tr>
 				
+				
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">&nbsp;</td>
 				</tr>
@@ -62,6 +63,7 @@
 						key="rep:filter:ApprovalStatus">Approval Status</digi:trn></b><br/>
 					</td>
 				</tr>
+				
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr  bgcolor="#EEEEEE">
 				<logic:equal name="aimReportsFilterPickerForm" property="teamAccessType" value="Management">
@@ -93,6 +95,14 @@
 					</html:select>
 					</td>
 				</tr>
+					<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						<html:checkbox property="justSearch" value="true" />&nbsp;
+						<digi:trn key="rep:filer:advancedSearch">Use the filter as an advanced search</digi:trn>
+
+					</td>
+				</tr>
+				
 			</table>
 		</td>
 		<td align="center">

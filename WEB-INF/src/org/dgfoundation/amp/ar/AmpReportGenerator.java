@@ -139,10 +139,11 @@ public class AmpReportGenerator extends ReportGenerator {
 			arc.setOrderId(new String("1"));
 			extractable.add(arc);
 		}
-
+		if(!filter.isJustSearch()){
 		extractableCount += ColumnFilterGenerator
 				.appendFilterRetrievableColumns(extractable, filter);
-
+		}
+		
 		if (extractable.size() > 0) {
 			createDataForColumns(extractable);
 		}
@@ -191,8 +192,12 @@ public class AmpReportGenerator extends ReportGenerator {
 				ColumnWorker ce = null;
 
 				// get the column bound condition:
-				String columnFilterSQLClause = ColumnFilterGenerator
+				String columnFilterSQLClause = "";
+				
+				if(!filter.isJustSearch()) {
+				columnFilterSQLClause=ColumnFilterGenerator
 						.generateColumnFilterSQLClause(filter, col, true);
+				}
 
 				if (columnFilterSQLClause.length() > 0)
 					logger.info("Column " + col.getColumnName()

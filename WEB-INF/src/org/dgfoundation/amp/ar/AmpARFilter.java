@@ -65,6 +65,7 @@ public class AmpARFilter extends PropertyListable {
 
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
+	private boolean justSearch=false;
 	private Long ampReportId;
 	private Set statuses = null;
 	// private Set donors=null; //not used anymore
@@ -1285,6 +1286,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setTeamAccessType(String teamAccessType) {
 		this.teamAccessType = teamAccessType;
+	}
+
+	public boolean isJustSearch() {
+		return justSearch;
+	}
+
+	public void setJustSearch(boolean justSearch) {
+		this.justSearch = justSearch;
 	}
 
 }

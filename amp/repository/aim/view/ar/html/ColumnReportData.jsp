@@ -31,16 +31,13 @@
 
 <% 
 	if(columnReport.getLevelDepth()<=2){
-		request.setAttribute("pading","5px");
-		 width= "5px";
+		request.setAttribute("pading","20px");
 	}
 	if (columnReport.getLevelDepth()==3){
 		request.setAttribute("pading","30px");
-		width="25px";
 	}
 	if (columnReport.getLevelDepth()==4){
 		request.setAttribute("pading","25px");
-		width="25px";
 	}
 %>
 <%if (rowIdx%2==0){ %>

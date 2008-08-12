@@ -1283,7 +1283,7 @@ function collapseAll() {
 																								</digi:trn>
 																							</td>
 																							</field:display>
-																							<field:display name="Components Total Amount Commitments" feature="Activity - Component Step">
+																							<field:display name="Components Amount Commitments" feature="Activity - Component Step">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<!--<FONT color="blue">*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1319,7 +1319,7 @@ function collapseAll() {
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>																							</td>
 																							</field:display>
-																							<field:display name="Components Total Amount Disbursements" feature="Activity - Component Step">
+																							<field:display name="Components Amount Disbursements" feature="Activity - Component Step">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<!--<FONT color="blue">*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1355,7 +1355,7 @@ function collapseAll() {
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
 																								</digi:trn>																							</td>
 																							</field:display>
-																							<field:display name="Components Total Amount Expenditures" feature="Activity - Component Step">
+																							<field:display name="Components Amount Expenditures" feature="Activity - Component Step">
 																							<td align="right">
 																								<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>

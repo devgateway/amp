@@ -38,4 +38,6 @@ public interface ICalendarWorker {
 	public void setTime(Date time);
 
 	
+	public Integer getYearDiff(ICalendarWorker worker) throws Exception;
+	
 }

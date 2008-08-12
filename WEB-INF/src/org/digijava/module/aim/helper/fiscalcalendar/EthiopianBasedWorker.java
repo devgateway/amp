@@ -58,18 +58,20 @@ public class EthiopianBasedWorker implements ICalendarWorker {
 		int toAdd = -(fiscalCalendar.getStartMonthNum() - 1);
 		internalCalendar.add(GregorianCalendar.MONTH, toAdd);
 		toAdd = -(fiscalCalendar.getStartDayNum() - 1);
-		internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, fiscalCalendar.getYearOffset());
+		internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, toAdd);
 		internalEthiopianCalendar = EthiopianCalendar.getEthiopianDate(internalCalendar);
 
 	}
 
-	public Date toDefatultDate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private void checkSetTimeCalled() throws Exception {
 		if (internalTime == null)
 			throw new Exception("Should call to setime first");
+	}
+	
+	
+	public Integer getYearDiff(ICalendarWorker worker) throws Exception {
+			return this.getYear().intValue() - worker.getYear().intValue();
+		
 	}
 }

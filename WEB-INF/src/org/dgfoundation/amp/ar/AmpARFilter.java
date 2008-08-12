@@ -409,7 +409,11 @@ public class AmpARFilter extends PropertyListable {
 		
 			}
 			
-		int c = Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		int c;
+		if(draft){
+			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )" )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		}
+		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 
@@ -750,7 +754,15 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
 		DbUtil.countActivitiesByQuery(this.generatedFilterQuery);
-
+		
+		if(draft){
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )" )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		}
+		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		this.setActivitiesRejectedByFilter(new Long(c));
+		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
+		
+		
 	}
 
 	/**

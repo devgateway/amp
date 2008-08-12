@@ -71,7 +71,7 @@
 <feature:display module="Organizations" name="Executing Agency"></feature:display> 
 <feature:display module="Organizations" name="Implementing Agency"></feature:display> 
 <feature:display module="Organizations" name="Regional Group"></feature:display> 
-<feature:display module="Organizations" name="Responsible Organisation"></feature:display> 
+<feature:display module="Organizations" name="Responsible Organization"></feature:display> 
 <feature:display module="Organizations" name="Sector Group"></feature:display> 
 <feature:display module="Project ID and Planning" name="Identification"></feature:display> 
 <feature:display module="Project ID and Planning" name="Location"></feature:display> 
@@ -100,13 +100,13 @@
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display> 
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
-<feature:display name="Donnor Agency" module="Organizations"></feature:display> 
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Donor Report" module="Reports"></feature:display> 
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Financial Progress" module="Financial Progress"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
+<feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Identification" module="Project ID and Planning"></feature:display> 
 <feature:display name="Implementing Agency" module="Organizations"></feature:display> 
@@ -148,7 +148,7 @@
 <feature:display name="Related Documents" module="Document"></feature:display> 
 <feature:display name="Report Generator" module="New Report Wizard"></feature:display> 
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display> 
-<feature:display name="Responsible Organisation" module="Organizations"></feature:display> 
+<feature:display name="Responsible Organization" module="Organizations"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display> 
@@ -257,9 +257,9 @@
 <field:display name="Amount of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Assumptions" feature="Identification"></field:display> 
 <field:display name="Base Value" feature="Activity"></field:display> 
-<field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency Add Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display> 
-<field:display name="Beneficiary Agency Remove Organizations Button" feature="Beneficiary Agency"></field:display> 
+<field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
 <field:display name="Cancel Button" feature="Admin - Component Type"></field:display> 
 <field:display name="Cancel Button" feature="Admin - Component"></field:display> 
@@ -309,8 +309,8 @@
 <field:display name="Contract type" feature="Contracting"></field:display> 
 <field:display name="Contracting Activity Category" feature="Contracting"></field:display> 
 <field:display name="Contracting Add Disbursement" feature="Contracting"></field:display> 
-<field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency"></field:display> 
-<field:display name="Contracting Agency Remove Organizations Button" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Add Button" feature="Contracting Agency"></field:display> 
+<field:display name="Contracting Agency Remove Button" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Agency" feature="Contracting Agency"></field:display> 
 <field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
 <field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
@@ -394,6 +394,7 @@
 <field:display name="Document Title" feature="Related Documents"></field:display> 
 <field:display name="Document Type" feature="Related Documents"></field:display> 
 <field:display name="Donor Agency" feature="Funding Information"></field:display> 
+<field:display name="Donor Agency" feature="Funding"></field:display> 
 <field:display name="Donor Commitment Date" feature="Funding Information"></field:display> 
 <field:display name="Donor Email" feature="Donor Contact Information"></field:display> 
 <field:display name="Donor Fax Number" feature="Donor Contact Information"></field:display> 
@@ -414,9 +415,9 @@
 <field:display name="Environment" feature="Cross Cutting Issues"></field:display> 
 <field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display> 
 <field:display name="Exchange Rate" feature="Funding Information"></field:display> 
-<field:display name="Executing Agency Add Organizations Button" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Add Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency Groups" feature="Executing Agency"></field:display> 
-<field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency"></field:display> 
+<field:display name="Executing Agency Remove Button" feature="Executing Agency"></field:display> 
 <field:display name="Executing Agency" feature="Executing Agency"></field:display> 
 <field:display name="External Financing" feature="Admin NPD"></field:display> 
 <field:display name="FY" feature="Budget"></field:display> 
@@ -444,9 +445,9 @@
 <field:display name="Humanitarian Aid" feature="Identification"></field:display> 
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
-<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Add Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display> 
-<field:display name="Implementing Agency Remove Organizations Button" feature="Implementing Agency"></field:display> 
+<field:display name="Implementing Agency Remove Button" feature="Implementing Agency"></field:display> 
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display> 
 <field:display name="Indicator Base Value" feature="Activity"></field:display> 
 <field:display name="Indicator Current Value" feature="Activity"></field:display> 
@@ -517,6 +518,7 @@
 <field:display name="Program Outputs" feature="Admin NPD"></field:display> 
 <field:display name="Program Target Groups" feature="Admin NPD"></field:display> 
 <field:display name="Program Type" feature="Admin NPD"></field:display> 
+<field:display name="Project Category" feature="Identification"></field:display> 
 <field:display name="Project Code" feature="Budget"></field:display> 
 <field:display name="Project Coordinator Email" feature="Project Coordinator Contact Information"></field:display> 
 <field:display name="Project Coordinator Fax Number" feature="Project Coordinator Contact Information"></field:display> 
@@ -567,10 +569,10 @@
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
 <field:display name="Remove Web Resource Button" feature="Web Resources"></field:display> 
-<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation"></field:display> 
-<field:display name="Responsible Organisation Groups" feature="Responsible Organisation"></field:display> 
-<field:display name="Responsible Organisation Remove Organizations Button" feature="Responsible Organisation"></field:display> 
-<field:display name="Responsible Organisation" feature="Responsible Organisation"></field:display> 
+<field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
+<field:display name="Responsible Organization" feature="Responsible Organization"></field:display> 
 <field:display name="Results" feature="Identification"></field:display> 
 <field:display name="Revised Target Value" feature="Activity"></field:display> 
 <field:display name="Risk" feature="Activity"></field:display> 
@@ -582,8 +584,8 @@
 <field:display name="Secondary Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Secondary Sub-Sub-Sector" feature="Sectors"></field:display> 
-<field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display> 
-<field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
+<field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
 <field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact Information"></field:display> 
 <field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact Information"></field:display> 

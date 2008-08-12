@@ -6,7 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<%@page import="org.digijava.module.aim.helper.BaseCalendar"%>
 <digi:errors/>
 <digi:instance property="aimFiscalCalendarForm" />
 <digi:context name="digiContext" property="context" />
@@ -132,15 +131,16 @@
                                                                         	<c:set scope="page" var="baseName">
                                                                         		<bean:write name="fiscalCal" property="baseCal"/>
                                                                         	</c:set>
+                                                                        
                                                                         	<c:set var="key">
-                                                                        		<%=BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getTrnName()%>
+                                                                        		<%=org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getTrnName()%>
                                                                             </c:set>
                                                                             <digi:trn key="${key}">
-                                                                            <%=BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getName()%>
+                                                                            <%=org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getName()%>
                                                                             </digi:trn>
 																	  </td>
 																		<td width="117">
-                                                                  			<%--<c:set value="${fiscalCal.startMonthNum}" var="monthIndex"/>--%>
+                                                                  			
                                                                                         <c:set var="startMonth">
                                                                                         <digi:trn key="calendar:${aimFiscalCalendarForm.month[monthIndex]}">
                                                                                         ${aimFiscalCalendarForm.month[monthIndex]}

@@ -43,16 +43,13 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.quartz.impl.calendar.BaseCalendar;
 
 
 /**
@@ -271,8 +268,8 @@ public class AmpARFilter extends PropertyListable {
 				calendarType=tempSettings.getFiscalCalendar();
 			}
 		}
+		String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (calendarType==null){
-			String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 			if (gvalue!=null){
 				Long fiscalCalId=Long.parseLong(gvalue);
 				calendarType=DbUtil.getFiscalCalendar(fiscalCalId);
@@ -289,7 +286,7 @@ public class AmpARFilter extends PropertyListable {
 				this.setRenderStartYear(tempSettings.getReportStartYear());
 			} else { // if not check if the value exist on
 				// global setting
-				String gvalue = FeaturesUtil
+				 gvalue = FeaturesUtil
 						.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
 				if (gvalue != null && !"".equalsIgnoreCase(gvalue)
 						&& Integer.parseInt(gvalue) > 0) {
@@ -297,11 +294,10 @@ public class AmpARFilter extends PropertyListable {
 				}
 
 			}
-			if (calendarType != null) {
+			if ((calendarType != null)&&(Long.parseLong( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR))!=calendarType.getAmpFiscalCalId())) {
 				worker = calendarType.getworker();
 				try {
-					if(renderStartYear!=null) checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
-					else checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
 					worker.setTime(checkDate);
 					renderStartYear=worker.getYear();
 				} catch (Exception e) {
@@ -317,7 +313,8 @@ public class AmpARFilter extends PropertyListable {
 					&& tempSettings.getReportEndYear().intValue() != 0) {
 				this.setRenderEndYear(tempSettings.getReportEndYear());
 			} else {
-				String gvalue = FeaturesUtil
+				 gvalue=null;
+				 gvalue = FeaturesUtil
 						.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
 				if (gvalue != null && !"".equalsIgnoreCase(gvalue)
 						&& Integer.parseInt(gvalue) > 0) {
@@ -325,12 +322,10 @@ public class AmpARFilter extends PropertyListable {
 				}
 			}
 			
-			if (calendarType != null) {
+			if ((calendarType != null)&&(Long.parseLong( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR))!=calendarType.getAmpFiscalCalId())){
 				worker = calendarType.getworker();
 				try {
-					//checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
-					if(renderEndYear!=null) checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
-					else checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1900");
+					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
 					worker.setTime(checkDate);
 					renderEndYear=worker.getYear();
 				} catch (Exception e) {

@@ -99,6 +99,8 @@ public class GregorianBasedWorker implements ICalendarWorker {
 			throw new Exception("Should call to setime first");
 	}
 
-	
+	public Integer getYearDiff(ICalendarWorker worker) throws Exception {
+		return this.getYear().intValue() - worker.getYear().intValue();
+	}
 	
 }

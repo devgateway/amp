@@ -743,13 +743,16 @@ public class ReportsFilterPicker extends MultiAction {
 	private Integer getYearOnCalendar(AmpFiscalCalendar calendar, Integer pyear) {
 		Integer year=null;
 		try {
-			String strDate=(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue()))?"01/01/" + pyear:"11/09/" + pyear;
-			Date checkDate = new SimpleDateFormat("dd/MM/yyyy").parse(strDate);
-			ICalendarWorker worker = calendar.getworker();
-			worker.setTime(checkDate);
-			year= worker.getYear();
-			worker=null;
-			checkDate=null;
+			String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			AmpFiscalCalendar defCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calValue));
+			Date testDate=new SimpleDateFormat("dd/MM/yyyy").parse("11/09/"+pyear);
+			ICalendarWorker work1=defCalendar.getworker();
+			work1.setTime(testDate);
+			ICalendarWorker work2=calendar.getworker();
+			work2.setTime(testDate);
+			int diff=work2.getYearDiff(work1);
+			pyear=pyear+diff;
+			return pyear;
 		} catch (Exception e) {
 			logger.error("Can't get year on calendar",e);
 		}

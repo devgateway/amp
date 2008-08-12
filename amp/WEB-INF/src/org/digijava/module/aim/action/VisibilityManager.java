@@ -139,7 +139,21 @@ public class VisibilityManager extends MultiAction {
 		Collection features=FeaturesUtil.getAMPFeaturesVisibility();
 		Collection fields=FeaturesUtil.getAMPFieldsVisibility();
 		vForm.setMode("viewFields");
-		vForm.setAllModules(modules);
+		
+		// Create a new Collection only with AmpModulesVisibility object not repeated (can't change the query because is used elsewhere). 
+		Collection modulesGrouped = new ArrayList<AmpModulesVisibility>();
+		Iterator iter = modules.iterator();
+		String nameAux = "";
+		while(iter.hasNext()){
+			AmpModulesVisibility auxAmp = (AmpModulesVisibility) iter.next();
+			// Assuming the query is ordered by name.
+			if(!nameAux.equals(auxAmp.getName())){
+				modulesGrouped.add(auxAmp);
+				nameAux = auxAmp.getName();
+			}
+		}
+		
+		vForm.setAllModules(modulesGrouped);
 		vForm.setAllFeatures(features);
 		vForm.setAllFields(fields);
 

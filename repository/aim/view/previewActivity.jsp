@@ -675,6 +675,7 @@ function collapseAll() {
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
 										<td bgcolor="#ffffff">
+										<field:display name="On/Off Budget" feature="Budget">	
 
 										<logic:equal name="aimEditActivityForm" property="budget" value="true">
 										<digi:trn key="aim:actBudgeton">
@@ -689,7 +690,9 @@ function collapseAll() {
 										<logic:equal name="aimEditActivityForm" property="budget" value="">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget										</digi:trn>
-										</logic:equal>										</td>
+										</logic:equal>										
+										</field:display>
+										</td>
 									</tr>
 									</feature:display>
                                    

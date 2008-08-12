@@ -407,46 +407,49 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff"><c:if
 																				test="${activity.budget}">
 																				<table>
-																					<tr>
-																						<td><digi:trn key="aim:actBudgeton">
-																							Activity is On Budget
-																						</digi:trn></td>
-																					</tr>
-																					<field:display name="FY" feature="Budget">
+																					<field:display name="On/Off Budget" feature="Budget">
 																						<tr>
-																							<td><digi:trn key="aim:actFY">
-																					FY
-																					</digi:trn>: ${activity.FY}</td>
+																							<td><digi:trn key="aim:actBudgeton">
+																								Activity is On Budget
+																							</digi:trn></td>
 																						</tr>
+																						<field:display name="FY" feature="Budget">
+																							<tr>
+																								<td><digi:trn key="aim:actFY">
+																						FY
+																						</digi:trn>: ${activity.FY}</td>
+																							</tr>
+																						</field:display>
+																						<field:display name="Vote" feature="Budget">
+																							<tr>
+																								<td><digi:trn key="aim:actVote">
+																						Vote
+																						</digi:trn>: ${activity.vote}</td>
+																							</tr>
+																						</field:display>
+																						<field:display name="Sub-Vote" feature="Budget">
+																							<tr>
+																								<td><digi:trn key="aim:actSub-Vote">
+																						Sub-Vote
+																						</digi:trn>: ${activity.subVote}</td>
+																							</tr>
+																						</field:display>
+																						<field:display name="Sub-Program" feature="Budget">
+																							<tr>
+																								<td><digi:trn key="aim:actSub-Program">
+																						Sub-Program
+																						</digi:trn>: ${activity.subProgram}</td>
+																							</tr>
+																						</field:display>
+																						<field:display name="Project Code" feature="Budget">
+																							<tr>
+																								<td><digi:trn key="aim:actProjectCode">
+																						Project Code
+																						</digi:trn>: ${activity.projectCode}</td>
+																							</tr>
+																						</field:display>
 																					</field:display>
-																					<field:display name="Vote" feature="Budget">
-																						<tr>
-																							<td><digi:trn key="aim:actVote">
-																					Vote
-																					</digi:trn>: ${activity.vote}</td>
-																						</tr>
-																					</field:display>
-																					<field:display name="Sub-Vote" feature="Budget">
-																						<tr>
-																							<td><digi:trn key="aim:actSub-Vote">
-																					Sub-Vote
-																					</digi:trn>: ${activity.subVote}</td>
-																						</tr>
-																					</field:display>
-																					<field:display name="Sub-Program" feature="Budget">
-																						<tr>
-																							<td><digi:trn key="aim:actSub-Program">
-																					Sub-Program
-																					</digi:trn>: ${activity.subProgram}</td>
-																						</tr>
-																					</field:display>
-																					<field:display name="Project Code" feature="Budget">
-																						<tr>
-																							<td><digi:trn key="aim:actProjectCode">
-																					Project Code
-																					</digi:trn>: ${activity.projectCode}</td>
-																						</tr>
-																					</field:display>
+																					
 																					<field:display name="Financial Instrument"
 																						feature="Budget">
 																						<tr>
@@ -495,7 +498,9 @@ function commentWin(val) {
 																								</c:if></td></tr>
 																					</field:display>
 																				</table>
-																			</c:if> <c:if test="${!activity.budget}">
+																			</c:if> 
+																			<field:display name="On/Off Budget" feature="Budget">
+																			<c:if test="${!activity.budget}">
 																				<digi:trn key="aim:actBudgetoff">
 																						Activity is Off Budget
 																				</digi:trn>
@@ -503,7 +508,9 @@ function commentWin(val) {
 																				<digi:trn key="aim:actBudgetoff">
 																						Activity is Off Budget
 																				</digi:trn>
-																			</c:if></TD>
+																			</c:if>
+																			</field:display>
+																			</TD>
 																		</TR>
 
 																	</TABLE>

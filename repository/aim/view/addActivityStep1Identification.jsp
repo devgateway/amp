@@ -384,9 +384,12 @@ target.style.cursor = "default"
 											</td></tr>											
 											</field:display>
 											
-											<feature:display name="Budget" module="Project ID and Planning">	
+											<feature:display name="Budget" module="Project ID and Planning">
+											
 											<tr bgcolor="#ffffff">
 												<td valign="top" align="left">
+
+													<field:display name="On/Off Budget" feature="Budget">	
 													<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
 														<br/>
@@ -395,6 +398,7 @@ target.style.cursor = "default"
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
 													<input type="hidden" name="budgetCheckbox">
+													</field:display>
 												</td>
 											<td>
 											<table>

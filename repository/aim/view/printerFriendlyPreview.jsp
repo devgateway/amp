@@ -308,7 +308,7 @@
 									
 
 		</feature:display>
-                                     <feature:display name="Budget" module="Project Id And Planning"></feature:display>
+                                     <feature:display name="Budget" module="Project Id And Planning">
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">
 												<b>
@@ -316,7 +316,7 @@
 											  	</b>
 											</td>
 										  <td bgcolor="#ffffff">
-	
+											<field:display name="On/Off Budget" feature="Budget">
 											<logic:equal name="aimEditActivityForm" property="budget" value="true">
 											<digi:trn key="aim:actBudgeton">
 													Activity is On Budget										</digi:trn>
@@ -330,9 +330,11 @@
 											<logic:equal name="aimEditActivityForm" property="budget" value="">
 											<digi:trn key="aim:actBudgetoff">
 													Activity is Off Budget										</digi:trn>
-											</logic:equal>										</td>
+											</logic:equal>										
+											</field:display>
+											</td>
 										</tr>
-										
+										</feature:display>
 
 										<field:display name="Humanitarian Aid" feature="Identification">
 											<tr>

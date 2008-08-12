@@ -214,7 +214,6 @@
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display> 
-<field:display name="Add Activity Button" feature="Edit Activity"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Funding Information"></field:display> 
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display> 

@@ -88,7 +88,6 @@
 		<logic:iterate name="aimVisibilityManagerForm" property="allFeatures" id="feature"
 			type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">
 			<tr>
-				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
 				<td align="left">
 				<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
 					<bean:write name="feature" property="name"/>
@@ -96,9 +95,12 @@
 				</td>
 				<td>
 					<i>
-					<digi:trn key="<%="fm:"+module.getNameTrimmed()%>">
-					<bean:write name="module" property="name"/></i>
-					</digi:trn>
+					<%if(feature.getParent() != null){%>
+						<digi:trn key="<%="fm:"+feature.getParent().getNameTrimmed()%>">
+						<bean:write name="module" property="name"/> 
+						</digi:trn>
+					<%}%>
+					</i>
 				</td>
 				<c:set target="${urlParamsDelFeature}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelFeature}" property="featureId" value="<%=feature.getId()%>"/>

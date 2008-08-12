@@ -492,6 +492,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Unexpended Funds" feature="Funding Information"></field:display>
 <field:display name="View Schemes Link" feature="Sectors"></field:display>
 <field:display name="Vote" feature="Budget"></field:display>
+<field:display name="On/Off Budget" feature="Budget"></field:display>
 <field:display name="Web Resource Description" feature="Web Resources"></field:display>
 <field:display name="Web Resources Title" feature="Web Resources"></field:display>
 <field:display name="Web Resources Url" feature="Web Resources"></field:display>

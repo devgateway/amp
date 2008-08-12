@@ -37,7 +37,7 @@
 		request.setAttribute("pading","30px");
 	}
 	if (columnReport.getLevelDepth()==4){
-		request.setAttribute("pading","25px");
+		request.setAttribute("pading","35px");
 	}
 %>
 <%if (rowIdx%2==0){ %>

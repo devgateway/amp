@@ -355,6 +355,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			acProp.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
 			acProp.setColumnName(ArConstants.COLUMN_FUNDING);
 			acProp.setExtractorView(ArConstants.VIEW_PROPOSED_COST);
+			ColumnFilterGenerator.attachHardcodedFilters(acProp);
 			reportMetadata.getOrderedColumns().add(arcProp);
 		}
 	}

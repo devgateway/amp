@@ -1252,6 +1252,26 @@ public class SectorUtil {
         return id;
 
     }
+    
+    /***
+     * 
+     * @param classificationId
+     */
+    public static void deleteClassification (Long classificationId){
+	   Session session = null;
+       AmpClassificationConfiguration config = null;
+       Transaction tx = null;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           tx = session.beginTransaction();
+           config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, classificationId);
+           session.delete(config);
+           tx.commit();
+           session.flush();
+       } catch (Exception e) {
+    	   logger.error(e);
+       }
+   }
     /*
  * this is to delete a scheme
  */

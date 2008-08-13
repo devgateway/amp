@@ -173,7 +173,7 @@
 										</div>
 								</td>
 							</tr>
-                             <feature:display module="Funding" name="Disbursement Orders">
+                             <feature:display module="Funding" name="Disbursements">
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
 										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 

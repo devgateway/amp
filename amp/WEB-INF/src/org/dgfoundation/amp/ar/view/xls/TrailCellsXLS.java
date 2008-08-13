@@ -99,11 +99,14 @@ public class TrailCellsXLS extends XLSExporter {
 			
 			if (grd.getParent().getParent() == null)
 				modified = "TOTAL";
-			if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
-				cell.setCellValue(indent + modified);
-			else
+			if (grd.getReportMetadata().isHideActivities()!=null){
+				if (grd.getReportMetadata()!=null && grd.getReportMetadata().isHideActivities())
+					cell.setCellValue(indent + modified);
+				else
+					cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
+			}else{
 				cell.setCellValue(indent + modified+" ("+grd.getTotalUniqueRows()+")");
-			
+			}
 			makeColSpan(grd.getSourceColsCount().intValue(),false);
 			//colId.inc();
 			Iterator i = grd.getTrailCells().iterator();

@@ -244,19 +244,19 @@
 															<td valign="top" bgcolor="#f4f4f2" align="center">
 																<table width="100%" cellspacing="0" cellpadding="3" >																				
 																	<tr>
-																	  <feature:display name="Title Text Box" module="MESSAGING SYSTEM"> 
+																	  <feature:display name="Title Text Box" module="Messages"> 
 																		 <td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
                                                                          <td align="left"><html:text property="messageName" style="width:320px;" styleClass="inp-text" styleId="titleMax"/></td>
 																		</feature:display>
 																	</tr>																																					
 																	<tr>
-																	 <feature:display name="Description Text Box" module="MESSAGING SYSTEM"> 
+																	 <feature:display name="Description Text Box" module="Messages"> 
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
                                                                         <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax"/></td>
 																	 </feature:display>
 																	</tr>
 																	<tr>
-																	 <feature:display name="Related Actvitiy Dropdown" module="MESSAGING SYSTEM"> 
+																	 <feature:display name="Related Actvitiy Dropdown" module="Messages"> 
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 
@@ -278,7 +278,7 @@
                                                                          </td>
                                                                     </tr> 
 																	<tr>
-																		<feature:display name="Set Alert Drop down" module="MESSAGING SYSTEM"> 
+																		<feature:display name="Set Alert Drop down" module="Messages"> 
 																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																			<td align="left"> 
 	                                                                                            <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
@@ -289,7 +289,7 @@
 																		</feature:display>
 																      </tr>	
                                                                        <tr>
-                                                                       		<feature:display name="Recievers" module="MESSAGING SYSTEM"> 
+                                                                       		<feature:display name="Recievers" module="Messages"> 
 																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
@@ -333,7 +333,7 @@
 																					<td colspan="2">
 																						<table width="100%" >
 																							<tr>
-																							<feature:display name="Save button" module="MESSAGING SYSTEM"> 
+																							<feature:display name="Save button" module="Messages"> 
 																									<td align="right" width="30%">
 																										<c:set var="trnSavetBtn">
 																											<digi:trn key="messages:btn:save">Save</digi:trn>
@@ -341,7 +341,7 @@
 																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" class="dr-menu"/>
 																									</td>
 																							</feature:display>
-																							<feature:display name="Send button" module="MESSAGING SYSTEM">		
+																							<feature:display name="Send button" module="Messages">		
                                                                                                      <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
@@ -359,7 +359,7 @@
 																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="dr-menu" />
 																									</td>
                                                                                                     </c:if>
-                                                                                                    <feature:display name="Cancel button" module="MESSAGING SYSTEM">
+                                                                                                    <feature:display name="Cancel button" module="Messages">
 																										<td align="left" width="47%">
 																											<c:set var="trnCancelBtn">
 																												<digi:trn key="message:btn:cancel">Cancel</digi:trn>

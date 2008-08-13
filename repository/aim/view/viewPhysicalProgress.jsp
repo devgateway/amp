@@ -188,6 +188,7 @@ method="post">
                 </module:display>
 				<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Issues" module="Issues">
+				<field:display name="Issues" feature="Issues">
 				<TR><TD bgcolor="#F4F4F2" vAlign="bottom" width="100%">
 					<!-- issues -->
 <div id="content" class="yui-skin-sam" style="width:100%;"> 
@@ -220,51 +221,57 @@ method="post">
 															<font color="#0000ff"><digi:trn key="aim:issue">Issue:</digi:trn> </font>
 															<bean:write name="issue" property="name"/>
 															&nbsp;
-															<bean:write name="issue" property="issueDate"/>
+															<field:display feature="Issues" name="Issue Date">
+																<bean:write name="issue" property="issueDate"/>
+															</field:display>
 															
 														</TD></TR>
-														<logic:empty name="issue" property="measures">
-															<TR><TD align="center">
-																<font color="red">
-																	<digi:trn key="aim:noMeasures">No measures</digi:trn>
-																</font>
-															</TD></TR>
-														</logic:empty>
-														<logic:notEmpty name="issue" property="measures">
-															<logic:iterate name="issue" property="measures" id="measure"
-															type="org.digijava.module.aim.helper.Measures">
-																<TR><TD>
-																	<TABLE width="95%" cellPadding="2" cellSpacing="1" vAlign="top"
-																	align="center" bgcolor="#dddddd">
-																		<TR bgcolor="#f6f6f6"><TD>
-																			<font color="#0000ff"><digi:trn key="aim:measure">Measure</digi:trn>: </font>
-																			<bean:write name="measure" property="name"/>
-																		</TD></TR>
-																		<logic:empty name="measure" property="actors">
-																			<TR bgcolor="#ffffff"><TD align="center">
-																			<font color="red">
-																				<digi:trn key="aim:noActors">No actors</digi:trn>
-																			</font>
-																			</TD></TR>
-																		</logic:empty>
-																		<logic:notEmpty name="measure" property="actors">
-																			<TR bgcolor="#ffffff"><TD>
-																				<TABLE width="100%" cellPadding="2" cellSpacing="1"
-																				vAlign="top" align="center" bgcolor="#ffffff">
-																					<logic:iterate name="measure" property="actors" id="actor"
-																					type="org.digijava.module.aim.dbentity.AmpActor">
-																						<TR bgcolor="#ffffff"><TD>
-                                                                                        <font color="#0000ff"><digi:trn key="aim:actor">Actor</digi:trn>: </font>
-																							<bean:write name="actor" property="name"/>
-																						</TD></TR>
-																					</logic:iterate>
-																				</TABLE>
-																			</TD></TR>
-																		</logic:notEmpty>
-																	</TABLE>
+														<field:display name="Measures Taken" feature="Issues">
+															<logic:empty name="issue" property="measures">
+																<TR><TD align="center">
+																	<font color="red">
+																		<digi:trn key="aim:noMeasures">No measures</digi:trn>
+																	</font>
 																</TD></TR>
-															</logic:iterate>
-														</logic:notEmpty>
+															</logic:empty>
+															<logic:notEmpty name="issue" property="measures">
+																<logic:iterate name="issue" property="measures" id="measure"
+																type="org.digijava.module.aim.helper.Measures">
+																	<TR><TD>
+																		<TABLE width="95%" cellPadding="2" cellSpacing="1" vAlign="top"
+																		align="center" bgcolor="#dddddd">
+																			<TR bgcolor="#f6f6f6"><TD>
+																				<font color="#0000ff"><digi:trn key="aim:measure">Measure</digi:trn>: </font>
+																				<bean:write name="measure" property="name"/>
+																			</TD></TR>
+																			<field:display name="Actors" feature="Issues">
+																				<logic:empty name="measure" property="actors">
+																					<TR bgcolor="#ffffff"><TD align="center">
+																					<font color="red">
+																						<digi:trn key="aim:noActors">No actors</digi:trn>
+																					</font>
+																					</TD></TR>
+																				</logic:empty>
+																				<logic:notEmpty name="measure" property="actors">
+																					<TR bgcolor="#ffffff"><TD>
+																						<TABLE width="100%" cellPadding="2" cellSpacing="1"
+																						vAlign="top" align="center" bgcolor="#ffffff">
+																							<logic:iterate name="measure" property="actors" id="actor"
+																							type="org.digijava.module.aim.dbentity.AmpActor">
+																								<TR bgcolor="#ffffff"><TD>
+		                                                                                        <font color="#0000ff"><digi:trn key="aim:actor">Actor</digi:trn>: </font>
+																									<bean:write name="actor" property="name"/>
+																								</TD></TR>
+																							</logic:iterate>
+																						</TABLE>
+																					</TD></TR>
+																				</logic:notEmpty>
+																			</field:display>
+																		</TABLE>
+																	</TD></TR>
+																</logic:iterate>
+															</logic:notEmpty>
+														</field:display>
 													</TABLE>
 												</TD></TR>
 											</TABLE>
@@ -276,6 +283,7 @@ method="post">
 </div>						
 </div>						
 				</TD></TR>
+				</field:display>
                 </feature:display>
                 </module:display>
 			</TABLE>

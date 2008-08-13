@@ -1514,6 +1514,8 @@ function collapseAll() {
 
 									
                                     	<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
+									<feature:display name="Issues" module="Issues">
+									<field:display name="Issues" feature="Issues">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="issues_plus"  onclick="toggleGroup('issues')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
 											<img id="issues_minus" onclick="toggleGroup('issues')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
@@ -1527,36 +1529,42 @@ function collapseAll() {
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
 													<tr><td valign="top">
 														<li class="level1"><b>
-														<digi:trn key="aim:issuename:${issue.id}"> <c:out value="${issue.name}"/> <c:out value="${issue.issueDate}"/></digi:trn>
+														<digi:trn key="aim:issuename:${issue.id}"> <c:out value="${issue.name}"/> </digi:trn> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display>
 														</b></li>
 													</td></tr>
-													<c:if test="${!empty issue.measures}">
-														<c:forEach var="measure" items="${issue.measures}">
-															<tr><td>
-																<li class="level2"><i>
-																<digi:trn key="aim:${measure.nameTrimmed}">
-																<c:out value="${measure.name}"/>
-																</digi:trn>
-																</i></li>
-															</td></tr>
-															<c:if test="${!empty measure.actors}">
-																<c:forEach var="actor" items="${measure.actors}">
-																	<tr><td>
-																		<li class="level3">
-																		<digi:trn key="aim:${actor.nameTrimmed}">
-																		<c:out value="${actor.name}"/>
-																		</digi:trn>
-																		</li>
-																	</td></tr>
-																</c:forEach>
-															</c:if>
-														</c:forEach>
-													</c:if>
+													<field:display name="Measures Taken" feature="Issues">
+														<c:if test="${!empty issue.measures}">
+															<c:forEach var="measure" items="${issue.measures}">
+																<tr><td>
+																	<li class="level2"><i>
+																	<digi:trn key="aim:${measure.nameTrimmed}">
+																	<c:out value="${measure.name}"/>
+																	</digi:trn>
+																	</i></li>
+																</td></tr>
+																<field:display name="Actors" feature="Issues">
+																	<c:if test="${!empty measure.actors}">
+																		<c:forEach var="actor" items="${measure.actors}">
+																			<tr><td>
+																				<li class="level3">
+																				<digi:trn key="aim:${actor.nameTrimmed}">
+																				<c:out value="${actor.name}"/>
+																				</digi:trn>
+																				</li>
+																			</td></tr>
+																		</c:forEach>
+																	</c:if>
+																</field:display>
+															</c:forEach>
+														</c:if>
+													</field:display>
 												</c:forEach>
 												</table>
 											</c:if>
 										</div>										</td>
 									</tr>
+									</field:display>
+									</feature:display>
 									</module:display>
                              <module:display name="Document" parentModule="PROJECT MANAGEMENT">       
                                    	<feature:display name="Related Documents" module="Document">

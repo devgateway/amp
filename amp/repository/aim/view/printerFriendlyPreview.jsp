@@ -1288,6 +1288,8 @@
 								  
 								  
                                	  <module:display name="Issues" parentModule="PROJECT MANAGEMENT">
+								  <feature:display name="Issues" module="Issues">
+								  <field:display name="Issues" feature="Issues">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -1299,27 +1301,33 @@
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
 													<tr><td valign="top">
-														<li class="level1"><b><c:out value="${issue.name}"/></b></li>
+														<li class="level1"><b><c:out value="${issue.name}"/> <field:display feature="Issues" name="Issue Date"><c:out value="${issue.issueDate}"/> </field:display> </b></li>
 													</td></tr>
-													<c:if test="${!empty issue.measures}">
-														<c:forEach var="measure" items="${issue.measures}">
-															<tr><td>
-																<li class="level2"><i><c:out value="${measure.name}"/></i></li>
-															</td></tr>
-															<c:if test="${!empty measure.actors}">
-																<c:forEach var="actor" items="${measure.actors}">
-																	<tr><td>
-																		<li class="level3"><c:out value="${actor.name}"/></li>
-																	</td></tr>
-																</c:forEach>
-															</c:if>
-														</c:forEach>
-													</c:if>
+													<field:display name="Measures Taken" feature="Issues">
+														<c:if test="${!empty issue.measures}">
+															<c:forEach var="measure" items="${issue.measures}">
+																<tr><td>
+																	<li class="level2"><i><c:out value="${measure.name}"/></i></li>
+																</td></tr>
+																<field:display name="Actors" feature="Issues">
+																	<c:if test="${!empty measure.actors}">
+																		<c:forEach var="actor" items="${measure.actors}">
+																			<tr><td>
+																				<li class="level3"><c:out value="${actor.name}"/></li>
+																			</td></tr>
+																		</c:forEach>
+																	</c:if>
+																</field:display>
+															</c:forEach>
+														</c:if>
+													</field:display>
 												</c:forEach>
 												</table>
 											</c:if>
 										</td>
 									</tr>
+									</field:display>
+									</feature:display>
 									</module:display>
                              <module:display name="Document" parentModule="PROJECT MANAGEMENT">       
                                    	<feature:display name="Related Documents" module="Document">

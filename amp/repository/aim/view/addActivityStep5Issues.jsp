@@ -35,7 +35,9 @@
 
 <digi:instance property="aimEditActivityForm" />
 
-
+					<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
+						<feature:display name="Issues" module="Issues">
+							<field:display name="Issues" feature="Issues">
 								<table width="95%" bgcolor="#f4f4f2">
 
 									<tr><td>
@@ -84,7 +86,9 @@
 																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
 																<c:out value="${issues.name}"/></a>
 																 &nbsp;
-																<c:out value="${issues.issueDate}"/>
+																<field:display feature="Issues" name="Issue Date">
+																	<c:out value="${issues.issueDate}"/>
+																</field:display>
 															</td>
 														</tr>
 														<tr class="<%=rowClass%>">
@@ -120,6 +124,7 @@
 																		<td vAlign="center" align="left" width="3">
 																		</td>
 																		<td vAlign="center" align="left">
+																		  <field:display name="Actors" feature="Issues">
 																			<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0
 																			bgcolor="#dddddd">
 																				<tr class="<%=rowClass%>">
@@ -156,6 +161,7 @@
 																				</field:display>
 																				</logic:notEmpty>
 																			</table>
+																		  </field:display>
 																		</td>
 																	</tr>
 																	</logic:iterate>
@@ -213,3 +219,6 @@
 										</logic:empty>
 									</td></tr>
 									</table>
+								</field:display>
+							</feature:display>
+						</module:display>

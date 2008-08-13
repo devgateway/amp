@@ -627,6 +627,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                           </td>
                                                                         </tr>
                                                                       </table>
+                                                                      
                                     </td>
                                                                   </tr>
                                                                   <tr>
@@ -1010,7 +1011,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                               </td>
                                             </tr>
  -->
-                                      </table>
+                                      </table></feature:display>
                                       </td>
                                       </tr>
                                       </table>

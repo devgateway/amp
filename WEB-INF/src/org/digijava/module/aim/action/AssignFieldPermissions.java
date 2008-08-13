@@ -187,6 +187,26 @@ public class AssignFieldPermissions extends Action {
 		fpf.setOwEdit("on");
 		fpf.setOwRead("on");
 		
+		{
+			fpf.setBaEdit("on");
+		    fpf.setCaEdit("on");
+		    fpf.setEaEdit("on");
+		    fpf.setIaEdit("on");
+		    fpf.setRoEdit("on");
+		    fpf.setFaEdit("on");
+		    fpf.setRgEdit("on");
+		    fpf.setSgEdit("on");
+		    
+		    fpf.setBaRead("on");
+		    fpf.setCaRead("on");
+		    fpf.setEaRead("on");
+		    fpf.setIaRead("on");
+		    fpf.setRoRead("on");
+		    fpf.setFaRead("on");
+		    fpf.setRgRead("on");
+		    fpf.setSgRead("on");
+		}
+		
 		//get the global for the fields:
 		Permission globalPermissionForPermissibleClass = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpFieldsVisibility.class);
 		if(globalPermissionForPermissibleClass!=null) {Set<String> allowedActions = globalPermissionForPermissibleClass.getAllowedActions(permScope);

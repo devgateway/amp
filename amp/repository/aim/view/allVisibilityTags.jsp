@@ -24,7 +24,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="HELP"></module:display>
 <module:display name="PARIS INDICATORS"></module:display>
-<module:display name="Messaging System"></module:display>
+<module:display name="MESSAGING SYSTEM"></module:display>
 <module:display name="GIS DASHBOARD"></module:display>
 <module:display name="WIDGETS"></module:display>
 <module:display name="ADMINISTRATIVE SECTION"></module:display>
@@ -60,8 +60,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="PI Reports" parentModule="REPORTING"></module:display>
 <module:display name="New Report Wizard" parentModule="REPORTING"></module:display>
-<module:display name="Messages" parentModule="Messaging System"></module:display>
-<module:display name="ADMIN" parentModule="Messaging System"></module:display>
+<module:display name="Messages" parentModule="MESSAGING SYSTEM"></module:display>
+<module:display name="ADMIN" parentModule="MESSAGING SYSTEM"></module:display>
 
 
 

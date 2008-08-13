@@ -299,7 +299,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         else
         	oldActivity.setFunding( new HashSet() );
-
+        oldActivity.setCreatedAsDraft(activity.isCreatedAsDraft());
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
         oldActivity.getDocuments().clear();
@@ -1388,6 +1388,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
       if (ampActivity != null) {
         activity = new AmpActivity();
+        activity.setCreatedAsDraft(ampActivity.isCreatedAsDraft());
         activity.setLineMinRank(ampActivity.getLineMinRank());
         activity.setPlanMinRank(ampActivity.getPlanMinRank());
         activity.setActivityApprovalDate(ampActivity.getActivityApprovalDate());

@@ -58,53 +58,53 @@
                 <tr>
                     <td noWrap width=100% vAlign="top">
                         <table width="100%" cellspacing=1 cellSpacing=1 border=0>
-                            <tr><td noWrap width=600 vAlign="top">
-                                    <table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
-                                        <tr bgColor=#ffffff>
-                                            <td vAlign="top" width="100%">
-                                                
-                                                <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
-                                                    <tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+                            <tr>
+                            	<td noWrap width=600 vAlign="top">
+                            		<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+                                		<tr bgColor=#ffffff>
+                                    		<td vAlign="top" width="100%">
+                                        		<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+                                                	<tr>
+                                                		<td bgColor=#d7eafd class=box-title height="20" align="center">
                                                             <!-- Table title -->
-                                                                                         <digi:trn key="aim:ManageClassificationsConfigurations">Manage Classifications Configurations</digi:trn>
+                                                    		<digi:trn key="aim:ManageClassificationsConfigurations">Manage Classifications Configurations</digi:trn>
                                                             <!-- end table title -->
-                                                    </td></tr>
-                                                    <tr><td>
-                                                            <table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
-                                                                
-                                                                <logic:notEmpty name="aimSectorClassConfigForm" property="classifications">
-                                                                    <logic:iterate name="aimSectorClassConfigForm" property="classificationConfigs" id="classConfig"
-type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
-                                                                        <tr>
-                                                                            <td width="256" bgcolor="#ffffff">
-                                                                                <digi:trn key="aim:addActivitySectors:${classConfig.name}">${classConfig.name}</digi:trn>
-                                                                            </td>
-                                                         
-                                                                            
-                                                                            <td bgcolor="#ffffff" width="97" align="right">
-                                                                                <c:set var="trnEditScheme">
-                                                                                    <digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
-                                                                                </c:set>
+                                                    	</td>
+                                                	</tr>
+                                                	<tr>
+                                               			<td>
+                                                    		<table width="90%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+                                                        		<logic:notEmpty name="aimSectorClassConfigForm" property="classifications">
+                                                            		<logic:iterate name="aimSectorClassConfigForm" property="classificationConfigs" id="classConfig"
+																				type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
+                                                                 		<tr>
+                                                                    		<td width="256" bgcolor="#ffffff">
+                                                                        		<digi:trn key="aim:addActivitySectors:${classConfig.name}">${classConfig.name}</digi:trn>
+                                                                         	</td>
+                                                         					<td bgcolor="#ffffff" width="80px" align="right">
+                                                                        		<c:set var="trnEditScheme">
+                                                                            		<digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
+                                                                              	</c:set>
                                                                                 [ <digi:link href="/updateSectorClassConfig.do?event=edit&id=${classConfig.id}"  title="${trnEditScheme}">
-                                                                                <digi:trn key="aim:edit">
-																				edit
-																				</digi:trn>
-                                                                                </digi:link>]													  </td>
-                                                                           
-                                                                          
-                                                                            
-                                    
-                                                                   </tr>
-                                                                    </logic:iterate>
-                                                                    
-                                                                    
-                                                                    
-                                                                </logic:notEmpty>
+                                                                                	<digi:trn key="aim:edit">edit</digi:trn>
+                                                                                </digi:link>]													  
+                                                                             </td>
+                                                                             <td bgcolor="#ffffff" width="80px" align="left">
+                                                                        		<c:set var="trnEditScheme">
+                                                                            		<digi:trn key="aim:clickToDeleteClassification">Click here to Delete a Classification</digi:trn>
+                                                                              	</c:set>
+                                                                                [ <digi:link href="/updateSectorClassConfig.do?event=delete&id=${classConfig.id}"  title="${trnEditScheme}">
+                                                                                	 <digi:trn key="aim:delete">Delete</digi:trn>
+                                                                                </digi:link>]													  
+                                                                             </td>
+                                                                        	</tr>
+                                                                	</logic:iterate>
+                                                               </logic:notEmpty>
                                                                 <!-- end page logic -->
                                                             </table>
-                                                    </td></tr>
+                                                    	</td>
+                                                    </tr>
                                                 </table>
-                                                
                                             </td>
                                         </tr>
                                     </table>
@@ -122,9 +122,7 @@ type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
                                                                 Other links
                                                             </digi:trn>
                                                         </td>
-                                                        <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
-                                                            
-                                                        </td>
+                                                        <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;</td>
                                                     </tr>
                                                 </table>
                                             </td>
@@ -132,25 +130,18 @@ type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
                                         <tr>
                                             <td bgColor=#ffffff class=box-border>
                                                 <table cellPadding=5 cellSpacing=1 width="100%">
-                                                  
-                                                        <tr>
-                                                            <td>
-                                                                <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-                                                                <c:set var="trnAddScheme">
-                                                                    <digi:trn key="aim:clickToAddConfiguration">Click here to Add a Configuration</digi:trn>
-                                                                </c:set>
-                                                                <digi:link href="/updateSectorClassConfig.do?event=add" title="${trnAddScheme}" >
-                                                                    <digi:trn key="aim:AddConfiguration">
-                                                                        Add Configuration
-                                                                    </digi:trn>
-                                                                </digi:link>
-                                                            </td>
+                                                  <tr>
+                                                  	<td>
+                                                    	<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                        <c:set var="trnAddScheme">
+                                                         	<digi:trn key="aim:clickToAddConfiguration">Click here to Add a Configuration</digi:trn>
+                                                         </c:set>
+                                                      	<digi:link href="/updateSectorClassConfig.do?event=add" title="${trnAddScheme}" >
+                                                          <digi:trn key="aim:AddConfiguration">Add Configuration</digi:trn>
+                                                           </digi:link>
+                                                          </td>
                                                         </tr>
-                                               
-                                                    
-                                               
-                                                    
-                                                    <tr>
+                                              		 <tr>
                                                         <td>
                                                             <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
                                                             <c:set var="trnViewAdmin">

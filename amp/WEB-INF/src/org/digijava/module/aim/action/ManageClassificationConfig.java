@@ -35,9 +35,9 @@ public class ManageClassificationConfig extends Action {
                 configForm.setMultiSectorSelecting(multiSelect);
             }
             return mapping.findForward("edit");
-        } else {
-
-            if (event != null && event.equals("save")) {
+        }
+        
+        if (event != null && event.equals("save")) {
                 Long configId = configForm.getId();
                 String configName = configForm.getConfigName();
                 boolean multiSector = false;
@@ -55,6 +55,8 @@ public class ManageClassificationConfig extends Action {
                 configForm.setClassificationConfigs(SectorUtil.getAllClassificationConfigs());
 
             }
+        if (event != null && event.equals("delete")) {
+        	SectorUtil.deleteClassification(configForm.getId());
         }
 
         return mapping.findForward("manageClassifications");

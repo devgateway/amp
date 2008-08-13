@@ -343,18 +343,12 @@ session.setAttribute("progressValue", counter);
                     </a>
                     |
                     </c:if>
-					<c:if test="${startRowLocal == 1}">
-                    &lt;&lt;
-                    |
-                    <digi:trn key="aim:previous">Previous</digi:trn>
-                    |
-                    </c:if>
                 </logic:equal>
 				<c:set var="lastPage">
                 	0
                 </c:set>
                 <c:forEach var="i" begin="1" end="${report.visibleRows-1}" step="${recordsPerPage}">
-                  	<logic:equal name="viewFormat" value="html">
+                    <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
@@ -385,11 +379,6 @@ session.setAttribute("progressValue", counter);
                         <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)+1}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)+1}"/>');">	
                         &gt;&gt;
                         </a>
-                    </c:if>
-					<c:if  test="${(startRowLocal+recordsPerPage) >= report.visibleRows}">
-    		            <digi:trn key="aim:next">Next</digi:trn>
-                        |
-	                    &gt;&gt;
                     </c:if>
                 </logic:equal>
 
@@ -500,12 +489,6 @@ session.setAttribute("progressValue", counter);
                     </a>
                     |
                     </c:if>
-					<c:if test="${startRowLocal == 1}">
-                    &lt;&lt;
-                    |
-                    <digi:trn key="aim:previous">Previous</digi:trn>
-                    |
-                    </c:if>
                 </logic:equal>
 				<c:set var="lastPage">
                 	0
@@ -528,7 +511,7 @@ session.setAttribute("progressValue", counter);
                     </a>
                     |
                 	<c:set var="lastPage">
-                    	${lastPage}
+                    	${lastPage+1}
                     </c:set>
 
                 </c:forEach>
@@ -542,11 +525,6 @@ session.setAttribute("progressValue", counter);
                         <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${((lastPage-1)*recordsPerPage)+1}"/>~endRow=<c:out value="${(lastPage*recordsPerPage)+1}"/>');">	
                         &gt;&gt;
                         </a>
-                    </c:if>
-					<c:if  test="${(startRowLocal+recordsPerPage) >= report.visibleRows}">
-    		            <digi:trn key="aim:next">Next</digi:trn>
-                        |
-	                    &gt;&gt;
                     </c:if>
                 </logic:equal>
 

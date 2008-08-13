@@ -60,6 +60,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="PI Reports" parentModule="REPORTING"></module:display>
 <module:display name="New Report Wizard" parentModule="REPORTING"></module:display>
+<module:display name="Messages" parentModule="Messaging System"></module:display>
+<module:display name="ADMIN" parentModule="Messaging System"></module:display>
+
+
 
 <feature:display  name="Tab Generator" module="New Report Wizard"></feature:display>
 <feature:display  name="Report Generator" module="New Report Wizard"></feature:display>
@@ -149,7 +153,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Contracting" name="Contracting"></feature:display>
 
 <feature:display name="Measures" module="Reports"></feature:display>
-<feature:display name="Messages" module="Messaging System"></feature:display>
+
+
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display>
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display>
 <feature:display name="Widget Places" module="WIDGETS"></feature:display>
@@ -157,6 +162,19 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display module="Funding" name="Disbursements"></feature:display>
+
+
+<feature:display name="AddMessageButton" module="Messages"></feature:display>
+<feature:display name="Create Message Form" module="Messages"></feature:display>
+<feature:display name="Message tab" module="Messages"></feature:display>
+<feature:display name="Alert tab" module="Messages"></feature:display>
+<feature:display name="Approval Tab" module="Messages"></feature:display>
+<feature:display name="Event Tab" module="Messages"></feature:display>
+
+
+<feature:display name="Message Manager" module="ADMIN"></feature:display>
+<feature:display name="Job Manager" module="ADMIN"></feature:display>
+
 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display>
 <field:display name="Financial Progress Tab" feature="Financial Progress"></field:display>
@@ -578,7 +596,35 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact Information"></field:display>
 <field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact Information"></field:display>
 <field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact Information"></field:display>
-<field:display name="addMessageButton" feature="Messages"></field:display>
+
+
+
+<field:display name="Program Background" feature="Admin NPD"></field:display>
+
+<field:display name="Related Actvitiy Dropdown" feature="Create Message Form"></field:display>
+<field:display name="Description Text Box" feature="Create Message Form"></field:display>
+<field:display name="Set Alert Drop down" feature="Create Message Form"></field:display>
+<field:display name="Title Text Box" feature="Create Message Form"></field:display>
+<field:display name="Recievers" feature="Create Message Form"></field:display>
+<field:display name="Save button" feature="Create Message Form"></field:display>
+<field:display name="Cancel button" feature="Create Message Form"></field:display>
+<field:display name="Send button" feature="Create Message Form"></field:display>
+
+
+<field:display name="Inbox" feature="Message tab"></field:display>
+<field:display name="Sent" feature="Message tab"></field:display>
+<field:display name="Draft" feature="Message tab"></field:display>
+
+<field:display name="Inbox" feature="Alert tab"></field:display>
+<field:display name="Sent" feature="Alert tab"></field:display>
+<field:display name="Draft" feature="Alert tab"></field:display>
+
+<field:display name="Template Manager" feature="Message Manager"></field:display>
+
+
+
+
+
 
 <!-- AMP-2965 by cornel -->
 <field:display name="Objective Comments" feature="Identification"></field:display>

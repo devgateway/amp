@@ -91,6 +91,7 @@
 																</field:display>
 															</td>
 														</tr>
+														<field:display feature="Issues" name="Measures Taken">
 														<tr class="<%=rowClass%>">
 															<td vAlign="center" align="left" width="3">
 															</td>
@@ -179,6 +180,7 @@
 																</table>
 															</td>
 														</tr>
+														</field:display>
 														</logic:iterate>
 													</table>
 												</td></tr>

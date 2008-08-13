@@ -122,6 +122,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 						//valueIds						= (Long[])(beanProperty.getReadMethod().invoke(bean,new Object[0]));
 						valueIdsColl					= new HashSet();
 						if (values != null) {
+							if (values instanceof Object[]){//many values
 								Object [] valueIds	= (Object []) values;
 								for (int i=0; i<valueIds.length; i++) {
 									if ( valueIds[i] instanceof Long )
@@ -129,13 +130,24 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 									if ( valueIds[i] instanceof String )
 										valueIdsColl.add( new Long ((String)valueIds[i]) );
 								}
-						}
+						
+							}else{//only one value
+								if ( values instanceof Long )
+									valueIdsColl.add( (Long)values );
+								if (values instanceof String )
+									valueIdsColl.add( new Long ((String)values) );
+								
+							}
+							
+							
+							}
 					}
 					catch(Exception E){
 						logger.error(E);
 						E.printStackTrace();
 					}
 				}
+
 				else {
 					/* Getting the id of the current value of the category */
 					try{
@@ -220,16 +232,16 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
-			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
-			
-			if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() || 
-					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
-				out.println("<option value='"+ampCategoryValue.getId()+"' selected='selected'"+innerDynamicAttributes+" >"+outputValue+"</option>");
+			if (ampCategoryValue!=null){
+				String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
+				if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() || 
+						( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
+					out.println("<option value='"+ampCategoryValue.getId()+"' selected='selected'"+innerDynamicAttributes+" >"+outputValue+"</option>");
+				}
+				else{
+					out.println("<option value='"+ampCategoryValue.getId()+"' "+innerDynamicAttributes+" >"+outputValue+"</option>");
+				}
 			}
-			else{
-				out.println("<option value='"+ampCategoryValue.getId()+"' "+innerDynamicAttributes+" >"+outputValue+"</option>");
-			}
-			
 		}
 		out.println("</select>");
 	}

@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
@@ -112,7 +113,16 @@ public class UpdateTeamActivities extends Action {
 						
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);
-						activity.setActivityCreator(TeamMemberUtil.getAmpTeamMember(memberId));
+						AmpTeamMember atm=TeamMemberUtil.getAmpTeamMember(memberId);
+//						AmpTeamMemberRoles ampRole = atm.getAmpMemberRole();
+//						AmpTeamMemberRoles headRole = TeamMemberUtil.getAmpTeamHeadRole();
+						//AMP-3937 - the activities assigned to an user, if that user is team lead then the 
+						//activities are approved!
+						if(ampTeam.getTeamLead().getAmpTeamMemId().equals(atm.getAmpTeamMemId())){
+						//if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(headRole.getAmpTeamMemRoleId())) {
+							activity.setApprovalStatus(Constants.APPROVED_STATUS);
+						}
+						activity.setActivityCreator(atm);
 						
 						if (activity.getActivityCreator() == null) {
 							AmpTeamMember thisTeamMember	= TeamUtil.getAmpTeamMember(tm.getMemberId());

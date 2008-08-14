@@ -524,7 +524,7 @@ public final class PermissionUtil {
 
     	    if (col.size() > 1) {
     	    	logger.error("Non Unique Cluster Identifier !");
-    	    	throw new RuntimeException("Cluster Identifier "+clusterIdentifier+" identified more than one local object for class "+permissibleClass);
+    	    	//throw new RuntimeException("Cluster Identifier "+clusterIdentifier+" identified more than one local object for class "+permissibleClass);
     	    }
     	    
     	    return  (Identifiable) col.get(0);

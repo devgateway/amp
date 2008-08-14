@@ -347,12 +347,12 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
-                <c:forEach var="i" begin="1" end="${report.visibleRows-1}" step="${recordsPerPage}">
+                <c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i-1}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
                     </logic:equal>
                     <c:choose>							
                         <c:when  test="${i eq startRowLocal || ( i eq 1 && startRowLocal eq 0)}">
@@ -484,7 +484,7 @@ session.setAttribute("progressValue", counter);
                     &lt;&lt;
                     </a>
                     |
-                    <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${startRowLocal-recordsPerPage}"/>~endRow=<c:out value="${startRowLocal}"/>');">	
+                    <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${(startRowLocal-recordsPerPage)-1}"/>~endRow=<c:out value="${startRowLocal}"/>');">	
     		            <digi:trn key="aim:previous">Previous</digi:trn>
                     </a>
                     |
@@ -493,12 +493,12 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
-                <c:forEach var="i" begin="1" end="${report.visibleRows-1}" step="${recordsPerPage}">
+                <c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
                     </logic:equal>
                     <logic:equal name="viewFormat" value="foldable">
-                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
+                        <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i-1}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
                     </logic:equal>
                     <c:choose>							
                         <c:when  test="${i eq startRowLocal || ( i eq 1 && startRowLocal eq 0)}">

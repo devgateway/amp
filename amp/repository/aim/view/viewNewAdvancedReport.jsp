@@ -219,8 +219,12 @@ session.setAttribute("progressValue", counter);
 				<%
                 	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
                 %>
-                <digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=arf.getRenderStartYear()%> |
-                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=arf.getRenderEndYear()%> |
+                <c:set var="all" scope="page">
+                	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
+                </c:set>
+                
+                <digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
+                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
              </td>
              </tr>
              <tr>
@@ -280,9 +284,13 @@ session.setAttribute("progressValue", counter);
 				<%
                 	AmpARFilter arf = (AmpARFilter) session.getAttribute("ReportsFilter");
                 %>
-                <digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=arf.getRenderStartYear()%> |
-                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=arf.getRenderEndYear()%> |
-             </td>
+                    <c:set var="all" scope="page">
+                	<digi:trn key="rep:pop:SelectedRangeAll">All:</digi:trn>
+                </c:set>
+                
+            	<digi:trn key="rep:pop:SelectedRangeStartYear">Start Year:</digi:trn> <%=(arf.getRenderStartYear() > 0)?arf.getRenderStartYear():pageContext.getAttribute("all")%> |
+                <digi:trn key="rep:pop:SelectedRangeEndYear">End Year:</digi:trn> <%=(arf.getRenderEndYear() > 0)?arf.getRenderEndYear():pageContext.getAttribute("all")%> |
+              </td>
              </tr>
              <tr>
            </table>

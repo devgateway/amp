@@ -45,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -291,10 +292,10 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		Integer rEnd = getDefaultEndYear(request);
 		
-			
+		
 		 if (filterForm.getCalendar() != null) {
-			rStart = getYearOnCalendar(filterForm.getCalendar(), rStart);
-			rEnd = getYearOnCalendar(filterForm.getCalendar(), rEnd);
+			rStart = getYearOnCalendar(filterForm.getCalendar(), rStart,tempSettings);
+			rEnd = getYearOnCalendar(filterForm.getCalendar(), rEnd,tempSettings);
 		}
 
 		if (filterForm.getRenderStartYear() == null) {
@@ -500,7 +501,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setSelectedSecondaryPrograms(null);
 
 		}
-
+		AmpApplicationSettings tempSettings = getAppSetting(request);
 		AmpFiscalCalendar selcal = (AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class, filterForm.getCalendar());
 		if (!selcal.equals(arf.getCalendarType())) {
 			arf.setCalendarType(selcal);
@@ -508,8 +509,11 @@ public class ReportsFilterPicker extends MultiAction {
 				Integer defaultStart = getDefaultStartYear(request);
 				Integer defaultEnd = getDefaultEndYear(request);
 				if (filterForm.getCalendar() != null) {
-					filterForm.setRenderStartYear(getYearOnCalendar(filterForm.getCalendar(), defaultStart));
-					filterForm.setRenderEndYear(getYearOnCalendar(filterForm.getCalendar(), defaultEnd));
+					if (filterForm.getRenderStartYear() > 0)
+					filterForm.setRenderStartYear(getYearOnCalendar(filterForm.getCalendar(), defaultStart,tempSettings));
+				
+					if (filterForm.getRenderEndYear()> 0)
+					filterForm.setRenderEndYear(getYearOnCalendar(filterForm.getCalendar(), defaultEnd,tempSettings));
 
 				}
 
@@ -744,11 +748,11 @@ public class ReportsFilterPicker extends MultiAction {
 	}
 
 	
-	private Integer getYearOnCalendar(AmpFiscalCalendar calendar, Integer pyear) {
+	private Integer getYearOnCalendar(AmpFiscalCalendar calendar, Integer pyear, AmpFiscalCalendar defCalendar) {
+		if (pyear==null) return 0;
+		
 		Integer year=null;
 		try {
-			String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-			AmpFiscalCalendar defCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calValue));
 			Date testDate=new SimpleDateFormat("dd/MM/yyyy").parse("11/09/"+pyear);
 			ICalendarWorker work1=defCalendar.getworker();
 			work1.setTime(testDate);
@@ -763,9 +767,20 @@ public class ReportsFilterPicker extends MultiAction {
 		return year;
 	
 	}
-	private Integer getYearOnCalendar(Long calendarId, Integer pyear) {
+	private Integer getYearOnCalendar(Long calendarId, Integer pyear,AmpApplicationSettings 	tempSettings ) {
+		if (pyear==null) return 0;
 		AmpFiscalCalendar	cal = FiscalCalendarUtil.getAmpFiscalCalendar(calendarId);
-		Integer year=getYearOnCalendar(cal, pyear);
+	
+		AmpFiscalCalendar defauCalendar=null;
+		if  (tempSettings!=null)
+			defauCalendar=tempSettings.getFiscalCalendar();
+		
+		if (defauCalendar==null){
+			String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			defauCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calValue));
+		}
+			
+		Integer year=getYearOnCalendar(cal, pyear,defauCalendar);
 		cal=null;
 		return year;
 	}

@@ -128,16 +128,7 @@
 																		  </digi:link>
 																	  </td>
                                                                           <td nowrap="nowrap">
-                                                                        	<c:set scope="page" var="baseName">
-                                                                        		<bean:write name="fiscalCal" property="baseCal"/>
-                                                                        	</c:set>
-                                                                        
-                                                                        	<c:set var="key">
-                                                                        		<%=org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getTrnName()%>
-                                                                            </c:set>
-                                                                            <digi:trn key="${key}">
-                                                                            <%=org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getName()%>
-                                                                            </digi:trn>
+                                                                        	<bean:write name="fiscalCal" property="baseCal"/>
 																	  </td>
 																		<td width="117">
                                                                   			

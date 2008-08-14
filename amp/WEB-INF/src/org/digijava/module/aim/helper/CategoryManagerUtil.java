@@ -159,6 +159,23 @@ public class CategoryManagerUtil {
 		}
 		return null;
 	}
+	
+	public static Collection getAmpCategoryValuesFromListByKey(String categoryKey, Set values) {
+		Collection<AmpCategoryValue> ret=new ArrayList<AmpCategoryValue>();
+		if ( categoryKey == null || values == null) {
+			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
+			return null;
+		}
+		Iterator iterator	= values.iterator();
+		while( iterator.hasNext() ) {
+			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
+			if ( ampCategoryValue.getAmpCategoryClass().getKeyName().equals(categoryKey) ) {
+				ret.add(ampCategoryValue);
+			}
+		}
+		return ret;
+	}
+	
 	/**
 	 * 
 	 * @param categoryKey The key of the category
@@ -554,6 +571,16 @@ public class CategoryManagerUtil {
 			return ampCategoryValue.getValue();
 		}
 		return "";
+	}
+	
+	public static Collection<String> getStringValueOfAmpCategoryValues(Collection<AmpCategoryValue> values) {
+		Collection<String> ret=new ArrayList<String>();
+		Iterator i=values.iterator();
+		while (i.hasNext()) {
+			AmpCategoryValue elem = (AmpCategoryValue) i.next();
+			ret.add(elem.getValue());
+		}
+		return ret;
 	}
 	
 	

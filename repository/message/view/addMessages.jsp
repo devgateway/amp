@@ -405,6 +405,7 @@
 	    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";    
 	    this.oAutoComp2.useShadow = true;
 	    this.oAutoComp2.forceSelection = true;
+            this.oAutoComp2.maxResultsDisplayed = myArray.length; 
 	    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
 	        var sMarkup = oResultItem[0];
 	        return (sMarkup);

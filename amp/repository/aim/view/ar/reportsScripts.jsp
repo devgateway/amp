@@ -265,7 +265,7 @@ background-color: yellow;
 	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 		    
 	function initScripts() {
-	    var msg='\n<digi:trn key="rep:filter:advancedSearch">Advanced Search</digi:trn>';
+	    var msg='\n<digi:trn key="rep:filter:filters">Filters</digi:trn>';
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("");
 		myPanel1.render(document.body);

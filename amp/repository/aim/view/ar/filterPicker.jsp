@@ -95,14 +95,6 @@
 					</html:select>
 					</td>
 				</tr>
-					<tr bgcolor="#EEEEEE">
-					<td colspan="5" styleClass="inp-text">
-						<html:checkbox property="justSearch" value="true" />&nbsp;
-						<digi:trn key="rep:filer:advancedSearch">Use the filter as an advanced search</digi:trn>
-
-					</td>
-				</tr>
-				
 			</table>
 		</td>
 		<td align="center">
@@ -194,7 +186,23 @@
 		</table>
 			</td> 
 				</tr>
-			</tr>
+			
+			
+			
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						&nbsp;
+						<br/>
+						<br/>
+					</td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text" align="center">
+						<html:checkbox property="justSearch" value="true" />&nbsp;
+						<digi:trn key="rep:filer:advancedSearch2">Use filter selections as an advanced search</digi:trn>
+					</td>
+				</tr>
+			
 		</table>
 		</div>
 		<div id="financing" style="display: none;">

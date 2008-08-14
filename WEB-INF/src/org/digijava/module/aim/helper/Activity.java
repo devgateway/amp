@@ -40,7 +40,8 @@ public class Activity
   private Collection sectors;
   private Collection projectIds;
   private Collection locations;
-  private String impLevel;
+  private Collection impLevel;
+  private Collection impLocation;
   private Collection relOrgs;
   private String origAppDate;
   private String revAppDate;
@@ -270,21 +271,16 @@ public class Activity
     this.description = description;
   }
 
-  /**
-   * @return Returns the impLevel.
-   */
-  public String getImpLevel() {
-    return impLevel;
-  }
 
-  /**
-   * @param impLevel The impLevel to set.
-   */
-  public void setImpLevel(String impLevel) {
-    this.impLevel = impLevel;
-  }
+  public Collection getImpLevel() {
+	return impLevel;
+}
 
-  /**
+public void setImpLevel(Collection impLevel) {
+	this.impLevel = impLevel;
+}
+
+/**
    * @return Returns the locations.
    */
   public Collection getLocations() {
@@ -1162,5 +1158,13 @@ public class Activity
 
 	public void setProjectCategory(String projectCategory) {
 		this.projectCategory = projectCategory;
+	}
+
+	public Collection getImpLocation() {
+		return impLocation;
+	}
+
+	public void setImpLocation(Collection impLocation) {
+		this.impLocation = impLocation;
 	} 
 }

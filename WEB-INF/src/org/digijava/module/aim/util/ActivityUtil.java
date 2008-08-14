@@ -1635,11 +1635,21 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             )
             );
         activity.setImpLevel(
-            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+            CategoryManagerUtil.getStringValueOfAmpCategoryValues(
+                CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
             )
             );
+      
+        
+        activity.setImpLocation(
+                CategoryManagerUtil.getStringValueOfAmpCategoryValues(
+                    CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+                CategoryConstants.IMPLEMENTATION_LOCATION_KEY, ampAct.getCategories())
+                )
+                );
+          
+        
         /* END - Set Categories */
         
         activity.setDraft( ampAct.getDraft() );
@@ -1848,13 +1858,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           activity.setActPrograms(programs);
         }
 
-        AmpCategoryValue ampCategoryValueForStatus =
-            CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-            CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories());
-        if (ampCategoryValueForStatus != null) {
-          activity.setImpLevel(ampCategoryValueForStatus.getValue());
-        }
-
+        activity.setImpLevel(
+                CategoryManagerUtil.getStringValueOfAmpCategoryValues(
+                    CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+                CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
+                )
+                );
+            
         Collection locColl = new ArrayList();
         if (ampAct.getLocations() != null) {
           Iterator locItr = ampAct.getLocations().iterator();

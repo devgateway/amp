@@ -647,7 +647,7 @@ function commentWin(val) {
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
 																							:&nbsp;
 																						</i>
-																						<c:out value="${aimChannelOverviewForm.implemLocationLevel}" />
+																						<c:out value="${activity.impLocation}" />
 
 																					</TD>
 																					</field:display>

@@ -101,13 +101,13 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
-		if(filter.getRenderStartYear()!=null || filter.getRenderEndYear()!=null) {
+		if((filter.getRenderStartYear()!=null && filter.getRenderStartYear()> 0) || (filter.getRenderEndYear()!=null && filter.getRenderEndYear() > 0  )) {
 			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
 			
-			if(filter.getRenderStartYear()!=null &&  filter.getRenderStartYear()!=0 &&
+			if(filter.getRenderStartYear()!=null &&  filter.getRenderStartYear() > 0 &&
 				itemYear.intValue() < filter.getRenderStartYear().intValue()) renderizable=false;
 			
-			if(filter.getRenderEndYear()!=null &&  filter.getRenderEndYear()!=0 &&
+			if(filter.getRenderEndYear()!=null &&  filter.getRenderEndYear()>0 &&
 				itemYear.intValue() > filter.getRenderEndYear().intValue()) renderizable=false;
 		}
 		return renderizable;

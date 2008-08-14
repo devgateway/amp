@@ -50,6 +50,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.jboss.security.plugins.TmpFilePassword;
 
 
 /**
@@ -263,7 +264,7 @@ public class AmpARFilter extends PropertyListable {
 			}
 		}
 		
-		
+	
 		if (calendarType==null){
 			if (tempSettings!=null){
 				calendarType=tempSettings.getFiscalCalendar();
@@ -276,6 +277,17 @@ public class AmpARFilter extends PropertyListable {
 				calendarType=DbUtil.getFiscalCalendar(fiscalCalId);
 			}
 		}
+		
+		
+		Long defaulCalenadarId=null;
+		
+		if (tempSettings!=null){
+			if (tempSettings.getFiscalCalendar()!=null){
+				defaulCalenadarId=tempSettings.getFiscalCalendar().getAmpFiscalCalId();
+			}else{
+				defaulCalenadarId=Long.parseLong(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));	
+			}
+		}	
 		///Set the range depending of workspase setup / global setting and selected calendar
 		ICalendarWorker worker = null;
 		Date checkDate = null;
@@ -295,7 +307,10 @@ public class AmpARFilter extends PropertyListable {
 				}
 
 			}
-			if ((calendarType != null)&&(Long.parseLong( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR))!=calendarType.getAmpFiscalCalId())) {
+			
+			
+			
+			if (renderStartYear!=null && calendarType != null && defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderStartYear);
@@ -305,8 +320,9 @@ public class AmpARFilter extends PropertyListable {
 					e.printStackTrace();
 				}
 			}
-		}
+			}
 		
+		renderStartYear=(renderStartYear==null)?-1:renderStartYear;
 		
 		if (renderEndYear == null) {
 			// Check if there is value on workspace setting
@@ -323,7 +339,7 @@ public class AmpARFilter extends PropertyListable {
 				}
 			}
 			
-			if ((calendarType != null)&&(Long.parseLong( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR))!=calendarType.getAmpFiscalCalId())){
+			if (renderEndYear!=null && calendarType != null && defaulCalenadarId!=calendarType.getAmpFiscalCalId()){
 				worker = calendarType.getworker();
 				try {
 					checkDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/" + renderEndYear);
@@ -334,7 +350,7 @@ public class AmpARFilter extends PropertyListable {
 				}
 			}
 		}
-		
+		renderEndYear=(renderEndYear==null)?-1:renderEndYear;
 		
 
 		if (currentFormat == null) {

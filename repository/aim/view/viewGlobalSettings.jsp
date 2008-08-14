@@ -15,6 +15,8 @@
 <%@page import="java.util.Date"%>
 <%@page import="org.digijava.module.aim.services.auditcleaner.AuditCleaner"%>
 
+<%@page import="org.digijava.module.aim.util.DbUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <!-- dynamic tooltip -->
 
@@ -483,8 +485,10 @@ function saveAllSettings(){
 														
 														<c:when test='${type == "t_year_default_start" || type == "t_year_default_end"}'>
 				                                    		<% 
-					                                    		String dateValues	= globalSett.getGlobalSettingsValue();
-					                                    		int default_year		= Integer.parseInt(dateValues);
+				                                    	
+				                                    		g_year=Integer.parseInt( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START));
+				                                    		g_range=Integer.parseInt( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_OF_YEARS_IN_RANGE));
+				                                    		int default_year		= Integer.parseInt(globalSett.getGlobalSettingsValue());
 				                                    		%>
 				                                    		<select styleClass="inp-text" name="gsfValue">
 				                                    		    <option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>

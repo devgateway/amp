@@ -709,40 +709,18 @@ public class AmpMessageActions extends DispatchAction {
 			Address [] addresses=new Address [messageReceivers.length];
 			int addressIndex=0;
 			for (String receiver : messageReceivers) {				
-				if(!receiver.startsWith("m")){//<--this means that receiver is team
-					List<TeamMember> teamMembers=null;
-                                        if(receiver.startsWith("t")){
-                                               teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(new Long(receiver.substring(2)));
-                                        }
-                                        else{
-                                             teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(null);
-                                        }
-					if(teamMembers!=null && teamMembers.size()>0){
-						for (TeamMember tm : teamMembers) {
-							if(! statesMemberIds.contains(tm.getMemberId())){
-								createMessageState(message,tm.getMemberId(),teamMember.getMemberName(),tm.getTeamName());
-								if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
-									//creating internet address where the mail will be sent
-									addresses[addressIndex]=new InternetAddress(tm.getEmail());
-									addressIndex++;									
-								}
-							}
-						}
-					}
-					
-				}else {//<--receiver is team member
-					if(! statesMemberIds.contains(new Long(receiver.substring(2)))){
-						Long memId=new Long(receiver.substring(2));
-						String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
-						createMessageState(message,memId,teamMember.getMemberName(),teamName);
-						if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
-							//creating internet address where the mail will be sent
-							addresses[addressIndex]=new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail());
-							addressIndex++;							
-						}
-					}
-				}				
-			}
+                                  if (receiver.startsWith("m")) {
+                                    Long memId = new Long(receiver.substring(2));
+                                    String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
+                                    createMessageState(message, memId, teamMember.getMemberName(), teamName);
+                                    if (settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))) {
+                                        //creating internet address where the mail will be sent
+                                        addresses[addressIndex] = new InternetAddress(TeamMemberUtil.getAmpTeamMember(memId).getUser().getEmail());
+                                        addressIndex++;
+                                    }
+                              				
+                                }
+                    }
 			
 			if(settings!=null && settings.getEmailMsgs()!=null && settings.getEmailMsgs().equals(new Long(1))){
 				if(request.getParameter("toDo")!=null && !request.getParameter("toDo").equals("draft")){

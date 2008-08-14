@@ -50,11 +50,11 @@ function addUserOrTeam(){
           }
         }  
         else{//the option is a member
-          if(!isOptionSelected(reslist.options[i])){//it is not at the list yet
+        
             var Myrow=getTeamRow(reslist.options[i].id);
             var Mycol=MyArray[Myrow].length;
             MyArray[Myrow][Mycol]=reslist.options[i];
-          } 
+          
         }
       }
     }

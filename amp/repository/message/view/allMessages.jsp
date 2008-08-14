@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
@@ -1018,187 +1021,243 @@ $(document).ready(function(){
                 	<td noWrap vAlign="top">
 						<TABLE cellPadding=0 cellSpacing=0 width="100%"	valign="top" align="left" border="0" >
 	        				<TR>
-                                    <TD STYLE="width:750">
-                                        <DIV id="tabs">
-                                            <UL>
-                                                
-								<c:if test="${messageForm.tabIndex==1}">
-                                                    <LI>
-                                                        <a name="node">
-                                                        <div>
-									<digi:trn key="message:Messages">Messages</digi:trn>							
-                                                        </div>
-                                                        </a>
+	        					<TD STYLE="width:750">
+                                	<DIV id="tabs">
+                                     	<UL>
+                                     	<feature:display name="Message tab" module="Messaging System">
+                                			<c:if test="${messageForm.tabIndex==1}">
+                                         		<LI>
+                                            		<a name="node">
+                                      					<div>
+															<digi:trn key="message:Messages">Messages</digi:trn>							
+                                               			</div>
+                                              		</a>
                                                     </LI>
-								</c:if> 
-								<c:if test="${messageForm.tabIndex!=1}">
-                                                    <LI>
-                                                        <span>
-                                                           
-									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
-                                                             <div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
-	                 					<digi:trn key="message:Messages">Messages</digi:trn>
-                                                            </div>
-	                 				</a>
+												</c:if> 
+												<c:if test="${messageForm.tabIndex!=1}">
+                                                	<LI>
+                                                    	<span>
+                                    						<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
+                                                        		<div title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
+	                 												<digi:trn key="message:Messages">Messages</digi:trn>
+                                                            	</div>
+	                 										</a>
                                                         </span>
                                                     </LI>
-								</c:if>							
-                                                    
-                                                    
-                                                    
-								<c:if test="${messageForm.tabIndex==2}">
-                                                    <LI>
-                                                        <a name="node">
-                                                            <div>
-									<digi:trn key="message:Alerts">Alerts</digi:trn>							
-                                                            </div>
-                                                        </a>
-                                                    </LI>
-								</c:if>
-								<c:if test="${messageForm.tabIndex!=2}">
-                                                    <LI>
-                                                        <span>
-									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
-                                                            <div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
-										<digi:trn key="message:Alerts">Alerts</digi:trn>
-                                                                </div>
-									</a>							
-                                                        </span>
-                                                    </LI>
-								</c:if>
-                                                    
-                                                    <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
-								<c:if test="${messageForm.tabIndex==3}">
-                                                    <LI>
-                                                        <a name="node">
-                                                            <div>
-									<digi:trn key="message:approvals">Approvals</digi:trn>
-                                                        </div>
-                                                        </a>
-                                                    </LI>
-								</c:if>
-								<c:if test="${messageForm.tabIndex!=3}">
-                                                    <LI>
-                                                        <span>
-									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
-                                                            <div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
-										<digi:trn key="message:approvals">Approvals</digi:trn>
-                                                            </div>
-									</a>
-                                                        </span>
-                                                    </LI>
-								</c:if>
-                                                                </c:if>
-                                                    
-                                                    
-                                                    
-								<c:if test="${messageForm.tabIndex==4}">
-                                                    <LI>
-                                                        <a name="node">
-                                                            <div>
-									<digi:trn key="message:ebents">Calendar Events</digi:trn>
-                                                        </div>
-                                                        </a>
-                                                    </LI>
-								</c:if>
-								<c:if test="${messageForm.tabIndex!=4}">
-                                                    <LI>
-                                                        <span>
-									<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
-                                                             <div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
-										<digi:trn key="message:ebents">Calendar Events</digi:trn>
-                                                            </div>
-									</a>
-                                                        </span>
-                                                    </LI>
-								</c:if>							
-                                            </UL>						
-                                        </DIV>
-                                        
-					<div id="main">
-					
-					
-						
-                                                                <DIV id="subtabs">
-                                                                 <div style="pa">
-                                                                    <UL>
-						<c:if test="${messageForm.tabIndex!=3 && messageForm.tabIndex!=4}">                                                                    
-											<c:if test="${messageForm.childTab=='inbox'}">
-                                                                                            <LI>
-                                                                                                <span>
-                                                                                                    <digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;&nbsp;|					
-                                                                                                </span>
-                                                                                            </LI>
-												
-                                                                                        </c:if>
-											<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
-                                                                                            
-                                                                                                <LI>
-                                                                                                    <div>
-                                                                                                        <span>
-                                                                                                            
-                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                                                                                <digi:trn key="message:inbox">Inbox</digi:trn>
-                                                                                                            </a>&nbsp;&nbsp;|							
-                                                                                                        </span>
-                                                                                                    </div>	
-                                                                                                </LI>
-                                                                                                    
-											</c:if>
-										
-										
-											<c:if test="${messageForm.childTab=='sent'}">
-                                                                                             <LI>
-                                                                                                <span>
-                                                                                                    <digi:trn key="message:sent">Sent</digi:trn>&nbsp;&nbsp;|					
-                                                                                                </span>
-                                                                                            </LI>
-												
-											</c:if>
-											<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
-                                                                                             <LI>
-                                                                                                    <div>
-                                                                                                        <span>
-                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                                                                                <digi:trn key="message:sent">Sent</digi:trn>
-                                                                                                            </a>&nbsp;&nbsp;|							
-                                                                                                        </span>
-                                                                                                    </div>	
-                                                                                                </LI>
-												
-											</c:if>
-										 
-										
-											<c:if test="${messageForm.childTab=='draft'}">
-                                                                                                <LI>
-                                                                                                <span>
-                                                                                                    <digi:trn key="message:draft">Draft</digi:trn>					
-                                                                                                </span>
-                                                                                            </LI>
-												
-											</c:if>
-											<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
-                                                                                              <LI>
-                                                                                                    <div>
-                                                                                                        <span>
-                                                                                                            <a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
-                                                                                                                <digi:trn key="message:draft">Draft</digi:trn>
-                                                                                                            </a>							
-                                                                                                        </span>
-                                                                                                    </div>	
-                                                                                                </LI>
-												
-											</c:if>
+											</c:if>							
+                                		</feature:display>                  
+                                        <feature:display name="Alert tab" module="Messaging System">           
+                                        	<c:if test="${messageForm.tabIndex==2}">
+                                            	<LI>
+                                                 	<a name="node">
+                                                    	<div>
+															<digi:trn key="message:Alerts">Alerts</digi:trn>							
+                                                         </div>
+                                                      </a>
+                                                 </LI>
 										</c:if>
+										<c:if test="${messageForm.tabIndex!=2}">
+											<LI>
+                                            	<span>
+													<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
+                                                    	<div title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
+															<digi:trn key="message:Alerts">Alerts</digi:trn>
+                                                        </div>
+													</a>							
+                                                </span>
+                                            </LI>
+										</c:if>
+                                        </feature:display>
+                                        <feature:display name="Approval Tab" module="Messaging System">          
+                                        	<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
+												<c:if test="${messageForm.tabIndex==3}">
+                                                    <LI>
+                                                        <a name="node">
+                                                            <div>
+																<digi:trn key="message:approvals">Approvals</digi:trn>
+                                                        	</div>
+                                                        </a>
+                                                    </LI>
+												</c:if>
+												<c:if test="${messageForm.tabIndex!=3}">
+                                                    <LI>
+                                                        <span>
+															<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
+                                                            	<div title='<digi:trn key="message:approvalsAssosiatedWithTeam">List of Approvals associated with Team</digi:trn>'>
+																	<digi:trn key="message:approvals">Approvals</digi:trn>
+                                                            	</div>
+															</a>
+                                                        </span>
+                                                    </LI>
+												</c:if>
+                                            </c:if>
+                                        </feature:display>          
+                                        <feature:display name="Event Tab" module="Messaging System">     
+                                			<c:if test="${messageForm.tabIndex==4}">
+                                            	<LI>
+                                                	<a name="node">
+                                                    	<div>
+															<digi:trn key="message:ebents">Calendar Events</digi:trn>
+                                                        </div>
+                                                      </a>
+                                                 </LI>
+											</c:if>
+												<c:if test="${messageForm.tabIndex!=4}">
+                                            		<LI>
+                                                		<span>
+															<a onclick="return unCheckMessages()" href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
+                                                        		<div title='<digi:trn key="message:eventsAssosiatedWithTeam">List of Events associated with Team</digi:trn>'>
+																	<digi:trn key="message:ebents">Calendar Events</digi:trn>
+                                                        		 </div>
+															</a>
+                                                     	</span>
+                                                  	</LI>
+												</c:if>	
+											</feature:display>						
+											</UL>						
+										</DIV>
+                    	<div id="main">
+						<DIV id="subtabs">
+	                        <div style="pa">
+	                        	<UL>
+	                        	<feature:display name="Message tab" module="Messaging System">
+	                        	<c:if test="${messageForm.tabIndex==1}">    
+	                        	<field:display name="Inbox Message" feature="Message tab">                                                                
+									<c:if test="${messageForm.childTab=='inbox'}">
+                                    	<LI>
+                                        	<span>
+                                        		<digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;&nbsp;|					
+                                             </span>
+                                         </LI>
+									</c:if>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:inbox">Inbox</digi:trn>
+                                                     </a>&nbsp;&nbsp;|							
+                                                 </span>
+                                             </div>	
+                                        </LI>
+                                    </c:if>
+								</field:display>
+								<field:display name="Sent Message" feature="Message tab">		
+								<c:if test="${messageForm.childTab=='sent'}">
+                             		<LI>
+                                		<span>
+                                			<digi:trn key="message:sent">Sent</digi:trn>&nbsp;&nbsp;|					
+                                		</span>
+                                	</LI>
+								</c:if>
+								<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+                                	<LI>
+                                    	<div>
+                                         	<span>
+                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                 	<digi:trn key="message:sent">Sent</digi:trn>
+                                                 </a>&nbsp;&nbsp;|							
+                                             </span>
+                                        </div>	
+                                    </LI>
+								</c:if>
+								</field:display>		 
+								<field:display name="Draft Message" feature="Message tab">		
+									<c:if test="${messageForm.childTab=='draft'}">
+                                    	<LI>
+                                        	<span>
+                                            	<digi:trn key="message:draft">Draft</digi:trn>					
+                                            </span>
+                                        </LI>
+									</c:if>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:draft">Draft</digi:trn>
+                                                     </a>							
+                                                 </span>
+                                              </div>	
+                                        </LI>
+									</c:if>
+								</field:display>
+								</c:if>
+								</feature:display>
+								<feature:display name="Alert tab" module="Messaging System">
+	                        	<c:if test="${messageForm.tabIndex==2}">    
+	                        	<field:display name="Inbox Alert" feature="Alert tab">                                                                
+									<c:if test="${messageForm.childTab=='inbox'}">
+                                    	<LI>
+                                        	<span>
+                                        		<digi:trn key="message:inbox">Inbox</digi:trn>&nbsp;&nbsp;|					
+                                             </span>
+                                         </LI>
+									</c:if>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='inbox'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=inbox&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:inbox">Inbox</digi:trn>
+                                                     </a>&nbsp;&nbsp;|							
+                                                 </span>
+                                             </div>	
+                                        </LI>
+                                    </c:if>
+								</field:display>
+								<field:display name="Sent Alert" feature="Alert tab">		
+								<c:if test="${messageForm.childTab=='sent'}">
+                             		<LI>
+                                		<span>
+                                			<digi:trn key="message:sent">Sent</digi:trn>&nbsp;&nbsp;|					
+                                		</span>
+                                	</LI>
+								</c:if>
+								<c:if test="${empty messageForm.childTab || messageForm.childTab!='sent'}">
+                                	<LI>
+                                    	<div>
+                                         	<span>
+                                            	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=sent&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                 	<digi:trn key="message:sent">Sent</digi:trn>
+                                                 </a>&nbsp;&nbsp;|							
+                                             </span>
+                                        </div>	
+                                    </LI>
+								</c:if>
+								</field:display>		 
+								<field:display name="Draft Alert" feature="Alert tab">		
+									<c:if test="${messageForm.childTab=='draft'}">
+                                    	<LI>
+                                        	<span>
+                                            	<digi:trn key="message:draft">Draft</digi:trn>					
+                                            </span>
+                                        </LI>
+									</c:if>
+									<c:if test="${empty messageForm.childTab || messageForm.childTab!='draft'}">
+                                    	<LI>
+                                        	<div>
+                                            	<span>
+                                                	<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&childTab=draft&tabIndex=${messageForm.tabIndex}" onclick="return unCheckMessages()">
+                                                    	<digi:trn key="message:draft">Draft</digi:trn>
+                                                     </a>							
+                                                 </span>
+                                              </div>	
+                                        </LI>
+									</c:if>
+								</field:display>
+								</c:if>
+								</feature:display>
 												 <LI style="float: right;">
 									               <div>
 													<span id="displaySettingsButton"  style="cursor: pointer;float: right; font-style: italic;">
 														<div id="show"  style="display:block; float: right; margin:0 3px 0 0;"><digi:trn key="message:show">Show more information</digi:trn> &gt;&gt;</div>
-														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn key="message:hide">Hide more information</digi:trn><< </div>
-                                                                                                </span>
+														<div id="hidde" style="display:none;float: right; margin:0 3px 0 0;"><digi:trn key="message:hide">Hide more information</digi:trn>
+														</div>
+                                                     </span>
 												   </div>	
-                                                                                            </LI>
-                                                                                </UL>
+                                                   </LI>
+                                                </UL>
 											</div>
 									            <div id="currentDisplaySettings" style="clear:both;padding: 2px; display:none; background-color: rgb(255, 255, 204);">
 			                                        <table  cellpadding="1" cellspacing="1" style="clear:both; padding:4px; border:silver dotted 1px;">

@@ -611,13 +611,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Send button" feature="Create Message Form"></field:display>
 
 
-<field:display name="Inbox" feature="Message tab"></field:display>
-<field:display name="Sent" feature="Message tab"></field:display>
-<field:display name="Draft" feature="Message tab"></field:display>
+<field:display name="Inbox Message" feature="Message tab"></field:display>
+<field:display name="Sent Message" feature="Message tab"></field:display>
+<field:display name="Draft Message" feature="Message tab"></field:display>
 
-<field:display name="Inbox" feature="Alert tab"></field:display>
-<field:display name="Sent" feature="Alert tab"></field:display>
-<field:display name="Draft" feature="Alert tab"></field:display>
+<field:display name="Inbox Alert" feature="Alert tab"></field:display>
+<field:display name="Sent Alert" feature="Alert tab"></field:display>
+<field:display name="Draft Alert" feature="Alert tab"></field:display>
 
 <field:display name="Template Manager" feature="Message Manager"></field:display>
 

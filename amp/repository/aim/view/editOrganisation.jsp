@@ -20,6 +20,24 @@
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
+	var oldSchemeValue = -1;
+	function checkScheme(){
+		if(oldSchemeValue != -1 && document.aimAddOrgForm.ampSecSchemeId.value != oldSchemeValue)
+		{
+			//If the selected scheme is different, the sectors selected should be reset
+			if(confirm('<digi:trn key="aim:editOrganisation:sectorReset">If you change Sector Scheme, the sectors selected will be deleted. Are you sure?</digi:trn>')){
+				resetSelectedSectors();
+			}
+		}
+	}
+	function resetSelectedSectors(){
+		
+		var sectorsRows = document.getElementsByName("selSectors");
+		for(idx=0; idx < sectorsRows.length; idx++)
+			sectorsRows[idx].checked = true;
+			removeSelSectors();
+
+	}
 	function addPledge() {
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
 		document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~addPledge=true";
@@ -56,9 +74,14 @@
 		document.aimAddOrgForm.submit();
 	}
 	function addSectors() {
+		var schemeId = document.aimAddOrgForm.ampSecSchemeId.value;
+		if(schemeId == -1){
+			alert("<digi:trn key="aim:editOrganisation:selectScheme">Please select a sector scheme before adding sectors.</digi:trn>");
+			return false;
+		}
 		openNewWindow(600, 450);
 		<digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
-	  	document.aimAddOrgForm.action = "<%= addSector %>";
+	  	document.aimAddOrgForm.action = "<%= addSector %>&sectorScheme=" +schemeId;
 		document.aimAddOrgForm.target = popupPointer.name;
 		document.aimAddOrgForm.submit();
 	}
@@ -619,7 +642,7 @@ function loadPage()
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:sectorScheme">Sector Scheme</digi:trn></td>
 																	<td width="380" height="30" colspan="2"><html:select
-																		property="ampSecSchemeId">
+																		property="ampSecSchemeId" onclick="oldSchemeValue=this.value" onchange="checkScheme()">
 																		<c:set var="translation">
 																			<digi:trn
 																				key="aim:editOrganisationSelectSectorScheme">Sector Scheme</digi:trn>
@@ -667,7 +690,7 @@ function loadPage()
 																									<%
 																										i++;
 																									%>
-																									<tr>
+																									<tr name="sectorsRow">
 																										<td>
 																										<table width="100%" cellSpacing=1
 																											cellPadding=1 vAlign="top" align="left">

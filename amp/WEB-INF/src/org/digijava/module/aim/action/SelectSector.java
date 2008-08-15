@@ -8,6 +8,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -37,7 +38,27 @@ public class SelectSector extends Action {
 			ssForm.setSectorReset(true);
 			ssForm.reset(mapping, request);
 		}
-		
+		if(request.getParameter("sectorScheme") != null)
+		{
+			//Added for AMP-3943, to be able to select sectors from a specified scheme
+			ssForm.setSectorScheme(new Long(request.getParameter("sectorScheme")));
+			//If the sectorSchemes is specified, set it with the current Sector Scheme
+			AmpSectorScheme defClassification=SectorUtil.getAmpSectorScheme(ssForm.getSectorScheme());
+			Collection secSchemes = new ArrayList() ;
+                        secSchemes.add(defClassification);
+			ssForm.setSectorSchemes(secSchemes);
+			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
+			Collection classConfigs = SectorUtil.getAllClassificationConfigs();
+			for (Iterator<AmpClassificationConfiguration> it=classConfigs.iterator(); it.hasNext(); ) {
+		        AmpClassificationConfiguration classConfig = it.next();
+		        if(classConfig.getClassification().getAmpSecSchemeId().equals(defClassification.getAmpSecSchemeId())){
+		        	ssForm.setConfigId(classConfig.getId());
+		        }
+		        
+		    }
+			
+			
+		}
 		if (ssForm.getSectorScheme() == null
 				|| ssForm.getSectorScheme().equals(new Long(-1))) {
 			// if sector schemes not loaded or reset, load all sector schemes

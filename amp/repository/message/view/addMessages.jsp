@@ -34,6 +34,11 @@
 .yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
 .yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
 
+#statescontainer .yui-ac-content { 
+    max-height:16em;overflow:auto;overflow-x:hidden; /* set scrolling */ 
+    _height:16em; /* ie6 */ 
+} 
+
 -->
 </style>
 
@@ -261,7 +266,7 @@
 																		<td align="left">
 																			<div id="statesautocomplete"> 
 																				<html:text property="selectedAct" name="messageForm" styleId="statesinput" style="width:320px;font-size:100%"></html:text>																			    
-																				<div id="statescontainer" style="width:320px"></div> 
+																				<div id="statescontainer" style="width:320px;"></div> 
 																			</div>																		
 																		</td>
 																	 																				

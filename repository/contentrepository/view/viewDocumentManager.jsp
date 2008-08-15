@@ -327,7 +327,9 @@ YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 	function afterPageLoad(e) {
 		windowController	= newWindow( '<digi:trn key="rep:res:dhtmltab:publicresources">Public Resources</digi:trn>', false, 'publicDocumentsDiv');
 		windowController.populateWithPublicDocs();
-		windowController	= newWindow( '<digi:trn key="rep:res:dhtmltab:teammemberresources">Team Member Resources</digi:trn>', true, 'otherDocumentsDiv');
+		//This is to avoid a problem in French with a string with the character ' in the middle.
+		var msgaux = '<digi:trn key="rep:res:dhtmltab:teammemberresources">Team Member Resources</digi:trn>';
+		windowController	= newWindow( msgaux, true, 'otherDocumentsDiv');
 		windowController.populateWithPublicDocs();
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 

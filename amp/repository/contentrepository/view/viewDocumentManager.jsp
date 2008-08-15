@@ -325,11 +325,10 @@ YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 </script>
 <script type="text/javascript">
 	function afterPageLoad(e) {
-		windowController	= newWindow( 'Public Resources', false, 'publicDocumentsDiv');
+		windowController	= newWindow( '<digi:trn key="rep:res:dhtmltab:publicresources">Public Resources</digi:trn>', false, 'publicDocumentsDiv');
 		windowController.populateWithPublicDocs();
-		windowController	= newWindow( 'Team Member Resources', true, 'otherDocumentsDiv');
+		windowController	= newWindow( '<digi:trn key="rep:res:dhtmltab:teammemberresources">Team Member Resources</digi:trn>', true, 'otherDocumentsDiv');
 		windowController.populateWithPublicDocs();
-		
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>	

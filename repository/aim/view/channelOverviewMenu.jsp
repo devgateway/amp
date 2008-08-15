@@ -118,6 +118,7 @@
 						</logic:notEqual>
 
 					</td></tr>		
+					<feature:display name="Documents Tab" module="Document">
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
@@ -136,7 +137,8 @@
 						</digi:link></div>
 					
 						</logic:notEqual>
-					</td></tr>		
+					</td></tr>
+					</feature:display>		
 
 					<feature:display name="Regional Funding" module="Funding">
 					<TR><TD bgcolor="#f7f9e3">

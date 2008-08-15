@@ -404,7 +404,8 @@ div.fakefile2 input{
 									</field:display>
 								</logic:equal>								
 									
-									<field:display name="Document Comment" feature="Related Documents">
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
+									<field:display name="Document Notes" feature="Related Documents">
 									<tr>
 										<td>
 											<a title="<digi:trn key="cr:NotesForDocument">Notes regarding the document</digi:trn>">
@@ -418,7 +419,25 @@ div.fakefile2 input{
 										</td>
 									</tr>
 									</field:display>
+								</logic:equal>
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="true">
+									<field:display name="Web Resources Notes" feature="Web Resources">
+									<tr>
+										<td>
+											<a title="<digi:trn key="cr:NotesForDocument">Notes regarding the document</digi:trn>">
+											<digi:trn key="cr:comments">Notes</digi:trn>
+											</a>
+										</td>
+										<td>
+											<a title="<digi:trn key="cr:NotesForDocument">Notes regarding the document</digi:trn>">
+											<html:textarea property="docNotes" rows="3" cols="50" styleClass="inp-text"/>
+											</a>
+										</td>
+									</tr>
+									</field:display>
+								</logic:equal>
 									
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
 									<field:display name="Document Type" feature="Related Documents">
 										<tr>
 											<td>
@@ -436,9 +455,29 @@ div.fakefile2 input{
 											</td>
 										</tr>
 									</field:display>
+								</logic:equal>
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="true">
+									<field:display name="Web Resources Document Type" feature="Web Resources">
+										<tr>
+											<td>
+												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
+													<digi:trn key="aim:typeOfTheDocument">Document type</digi:trn>
+												</a>
+											</td>
+											<td>
+												<c:set var="translation">
+													<digi:trn key="aim:addActivityDocTypeFirstLine">Please select from below</digi:trn>
+												</c:set>
+												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
+													<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
+												</a>
+											</td>
+										</tr>
+									</field:display>
+								</logic:equal>
 									
 									<%-- 
-									<field:display name="Document Language" feature="Related Documents">
+									
 									<tr>
 										<td>
 											<a title="<digi:trn key="aim:languageOfTheDocumentDescription">Select document language</digi:trn>">
@@ -454,7 +493,7 @@ div.fakefile2 input{
 											</a>
 										</td>
 									</tr>
-									</field:display>
+									
 									--%>
 									<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
 									<field:display name="Document FileName" feature="Related Documents">

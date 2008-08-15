@@ -379,7 +379,8 @@ div.fakefile2 input {
 										</tr>
 									</logic:notEqual>
 									
-									<field:display name="Document Language" feature="Related Documents">
+									<%--
+
 									<tr>
 										<td>
 											<a title="<digi:trn key="aim:languageOfTheDocumentDescription">Select document language</digi:trn>">
@@ -395,7 +396,9 @@ div.fakefile2 input {
 											</a>
 										</td>
 									</tr>
-									</field:display>
+
+									 --%>
+									 
 									<logic:equal name="aimEditActivityForm" property="docFileOrLink" value="file">
 									<tr>
 										<td>

@@ -383,6 +383,7 @@ html>body #mainEmpty {
 								</field:display>
 							
 						<module:display name="Document" parentModule="PROJECT MANAGEMENT">
+						<feature:display name="Documents Tab" module="Document">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 							   <LI>
                                		<a name="node">
@@ -404,6 +405,7 @@ html>body #mainEmpty {
     		                            </span>
 										</LI>
 							</logic:notEqual>
+							</feature:display>
 							</module:display>
 							<feature:display name="Regional Funding" module="Funding"></feature:display>
 							 <field:display name="Regional Funding Tab" feature="Regional Funding">

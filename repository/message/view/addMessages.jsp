@@ -6,7 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/yahoo-dom-event.js"/>"></script>
 <script type="text/javascript" language="JavaScript" src="<digi:file src="module/message/script/animation-min.js"/>"></script>
@@ -249,19 +250,19 @@
 															<td valign="top" bgcolor="#f4f4f2" align="center">
 																<table width="100%" cellspacing="0" cellpadding="3" >																				
 																	<tr>
-																	   
+																	   <field:display name="Title Text Box" feature="Create Message Form">
 																		 <td align="right" width="25%"><digi:trn key="messages:title">Title</digi:trn><font color="red">*</font> </td>
                                                                          <td align="left"><html:text property="messageName" style="width:320px;" styleClass="inp-text" styleId="titleMax"/></td>
-																		
+																		</field:display>
 																	</tr>																																					
 																	<tr>
-																	  
+																	   <field:display name="Description Text Box" feature="Create Message Form">
 																		<td align="right"><digi:trn key="message:description">Description</digi:trn></td>
                                                                         <td align="left"> <html:textarea name="messageForm" property="description"  rows="3"  styleClass="inp-text" style="width:320px;"  styleId="descMax"/></td>
-																	 
+																	 </field:display>
 																	</tr>
 																	<tr>
-																	  
+																	  <field:display name="Related Actvitiy Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 
@@ -269,7 +270,7 @@
 																				<div id="statescontainer" style="width:320px;"></div> 
 																			</div>																		
 																		</td>
-																	 																				
+																	  </field:display>																			
 																	</tr>	
                                                                     <tr>
                                                                     	<td align="right" nowrap="nowrap"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
@@ -283,7 +284,7 @@
                                                                          </td>
                                                                     </tr> 
 																	<tr>
-																		 
+																		 <field:display name="Set Alert Drop down" feature="Create Message Form">
 																			<td align="right" valign="top"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																			<td align="left"> 
 	                                                                                            <html:select property="setAsAlert" styleClass="inp-text" style="width:140px">																							
@@ -291,10 +292,10 @@
 																								  <html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
 																			  				    </html:select>																												                                                																																												
 																			</td>
-																		
+																		</field:display>
 																      </tr>	
                                                                        <tr>
-                                                                       		
+                                                                       		<field:display name="Recievers" feature="Create Message Form">
 																					<td nowrap="nowrap" valign="top" align="right"><digi:trn key="message:Receevers">Receivers</digi:trn></td>
 																                    <td>
 																                        <table border="0" >
@@ -332,21 +333,21 @@
 																                            </tr>
 																                        </table>
 																                    </td>
-																                  
+																                  </field:display>
 																				</tr>																																												
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >
 																							<tr>
-																							 
+																							 <field:display name="Save button" feature="Create Message Form">
 																									<td align="right" width="30%">
 																										<c:set var="trnSavetBtn">
 																											<digi:trn key="messages:btn:save">Save</digi:trn>
 																										</c:set> 
 																										<input type="button" value="${trnSavetBtn }" onclick="save('draft');" class="dr-menu"/>
 																									</td>
-																							
-																									
+																							  </field:display>	
+																							   <field:display name="Send button" feature="Create Message Form">
                                                                                                      <c:if test="${empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnSendtBtn">
@@ -355,7 +356,7 @@
 																										<input type="button" value="${trnSendtBtn }" onclick="save('send');" class="dr-menu"/>
 																									</td>
                                                                                                     </c:if>
-                                                                                           
+                                                                                               </field:display>
                                                                                                   <c:if test="${not empty messageForm.forwardedMsg}">
 																									<td align="center" width="6%">
 																										<c:set var="trnFwdtBtn">
@@ -364,14 +365,14 @@
 																										<input type="button" value="${trnFwdtBtn }" onclick="save('send');" class="dr-menu" />
 																									</td>
                                                                                                     </c:if>
-                                                                                                   
+                                                                                                   <field:display name="Cancel button" feature="Create Message Form">
 																										<td align="left" width="47%">
 																											<c:set var="trnCancelBtn">
 																												<digi:trn key="message:btn:cancel">Cancel</digi:trn>
 																											</c:set>
 																											<input type="button" value="${trnCancelBtn}" onclick="cancel();" class="dr-menu">																																							
 																										</td>
-																									
+																									</field:display>
 																								</tr>
 																						</table>
 																					</td>

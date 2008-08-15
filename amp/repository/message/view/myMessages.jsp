@@ -144,38 +144,51 @@
           tbl.removeChild(tbl.childNodes[0]);
         }
       }
+      
       var body=document.createElement('TBODY');
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>';
-      tr1.appendChild(td1);
-      body.appendChild(tr1);
-
+      <feature:display name="Message tab" module="Messaging System">
+      	tr1.appendChild(td1);
+      	body.appendChild(tr1);
+      </feature:display>
+      
+	 
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2&childTab=inbox">'+alertsAmount+''+newalerts+'</a>';
-      tr1.appendChild(td1);
-      body.appendChild(tr1);
+      <feature:display name="Alert tab" module="Messaging System">
+ 		tr1.appendChild(td1);
+     	body.appendChild(tr1);
+      </feature:display>
+      
       if("${teamType}"!='Management'){
-      var tr1=document.createElement('TR');
+     var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">'+approvalsAmount+''+newapprovals+'</a>';
-      tr1.appendChild(td1);
-      body.appendChild(tr1);
-  }
+      <feature:display name="Approval Tab" module="Messaging System">
+      	tr1.appendChild(td1);
+     	 body.appendChild(tr1);
+      </feature:display>
+  	}
+     
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">'+calEventsAmount+''+newcalevents+'</a>';
-      tr1.appendChild(td1);
-      body.appendChild(tr1);
+      <feature:display name="Event Tab" module="Messaging System">
+      	tr1.appendChild(td1);
+      	body.appendChild(tr1);
+     </feature:display>
+      
       var tr1=document.createElement('TR');
       var td1=document.createElement('TD');
       td1.title=moreMsgs;
@@ -193,6 +206,7 @@
       return partialURL+"/"+actionName;
     }
     </script>
+    
     <br />
     <div id="content" class="yui-skin-sam" style="width:100%;">
       <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">

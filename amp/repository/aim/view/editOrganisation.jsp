@@ -28,6 +28,10 @@
 			if(confirm('<digi:trn key="aim:editOrganisation:sectorReset">If you change Sector Scheme, the sectors selected will be deleted. Are you sure?</digi:trn>')){
 				resetSelectedSectors();
 			}
+			else
+			{
+				document.aimAddOrgForm.ampSecSchemeId.value = oldSchemeValue;
+			}
 		}
 	}
 	function resetSelectedSectors(){

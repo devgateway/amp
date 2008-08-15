@@ -570,15 +570,16 @@ function commentWin(val) {
 																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																											src="../ampTemplate/images/link_out_bot.gif"/>
 																										<c:out value="${actSect.subsectorLevel1Name}" />
+																										
+																											<c:if test="${!empty actSect.subsectorLevel2Name}">
+																											<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
+																												 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																													src="../ampTemplate/images/link_out_bot.gif"/>
+																												<c:out value="${actSect.subsectorLevel2Name}" />
+																												&nbsp;
+																											</field:display>
+																											</c:if>
 																										</field:display>
-																										<c:if test="${!empty actSect.subsectorLevel2Name}">
-																										<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
-																											 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																												src="../ampTemplate/images/link_out_bot.gif"/>
-																											<c:out value="${actSect.subsectorLevel2Name}" />
-																											&nbsp;
-																										</field:display>
-																										</c:if>
 																									</c:if>
 																									<field:display name="Percentage" feature="Sectors">
 				                                                                                    <logic:present name="actSect" property="sectorPercentage">

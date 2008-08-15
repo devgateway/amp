@@ -20,7 +20,7 @@
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 

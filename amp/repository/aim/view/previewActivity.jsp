@@ -1409,7 +1409,7 @@ function collapseAll() {
 									</logic:equal>
 									
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">									
-									<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT">
+									<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<img id="components_resume_plus"  onclick="toggleGroup('components_resume')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>

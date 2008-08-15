@@ -533,13 +533,7 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 												                            <c:forEach var="config" items="${aimChannelOverviewForm.classificationConfigs}" varStatus="ind">
 																				<bean:define id="emptySector" value="Sector"></bean:define>
-																				<c:if test="${config.name== 'Secondary' }">
-																					<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
-																				</c:if>
-																				<c:if test="${config.name== 'Primary' }">
-																					<bean:define id="auxSectorType" value="Primary Sector"></bean:define>
-																				</c:if>
-																				 <field:display name="${auxSectorType}" feature="Sectors">
+																				<field:display name="${config.name} Sector" feature="Sectors">
 																				<c:set var="hasSectors">
 																					false
 																				</c:set>
@@ -553,8 +547,8 @@ function commentWin(val) {
 																				</c:forEach>
 																				<c:if test="${hasSectors}">
 												                                <strong>
-													                               	<digi:trn key="aim:addactivitysectors:${auxSectorType }">
-													                                <c:out value="${auxSectorType }"/>
+													                               	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
+													                                <c:out value="${config.name} Sector"/>
 													                                </digi:trn>
 													                                </strong>
 												                                </c:if>
@@ -568,17 +562,17 @@ function commentWin(val) {
 																										<br/>&nbsp;
 																										<IMG src="../ampTemplate/images/link_out_bot.gif"/>
 																									</field:display>
-																									<field:display name="${auxSectorType}" feature="Sectors">
+																									<field:display name="${config.name} Sector" feature="Sectors">
 																										<c:out value="${actSect.sectorName}" />
 																									</field:display>
 																									<c:if test="${!empty actSect.subsectorLevel1Name}">
-																										<field:display name="${auxSectorType} Sub-Sector" feature="Sectors">
+																										<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
 																										<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																											src="../ampTemplate/images/link_out_bot.gif"/>
 																										<c:out value="${actSect.subsectorLevel1Name}" />
 																										</field:display>
 																										<c:if test="${!empty actSect.subsectorLevel2Name}">
-																										<field:display name="${auxSectorType} Sub-Sub-Sector" feature="Sectors">
+																										<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
 																											 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																												src="../ampTemplate/images/link_out_bot.gif"/>
 																											<c:out value="${actSect.subsectorLevel2Name}" />

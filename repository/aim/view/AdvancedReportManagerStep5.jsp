@@ -212,7 +212,7 @@ function deleteColumn()
 																							notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || notHierarchyColumns.columnName == 'Componente' || 
 																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Donor Type' || notHierarchyColumns.columnName == 'Credit/Donation' ||notHierarchyColumns.columnName == 'Beneficiary Agency' 
 																							||notHierarchyColumns.columnName == 'Implementing Agency' || notHierarchyColumns.columnName == 'Component Name'
-																							|| notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sub-Sector'
+																							|| notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sector Sub-Sector'
 																							|| notHierarchyColumns.columnName == 'Responsible Organization'
 																							}">
 																								<TR bgcolor="#ffffff">
@@ -242,7 +242,7 @@ function deleteColumn()
 																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || notHierarchyColumns.columnName == 'Type Of Assistance' || 
 																							notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Region' || 
 																							notHierarchyColumns.columnName == 'Project Title' ||notHierarchyColumns.columnName == 'Beneficiary Agency' ||notHierarchyColumns.columnName == 'Implementing Agency'
-																							|| notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sub-Sector'|| notHierarchyColumns.columnName == 'Responsible Organization'
+																							|| notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sector Sub-Sector'|| notHierarchyColumns.columnName == 'Responsible Organization'
 																							}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
@@ -267,7 +267,7 @@ function deleteColumn()
 																							notHierarchyColumns.columnName == 'Implementation Level' || notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || 
 																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || notHierarchyColumns.columnName == 'Type Of Assistance' || 
 																							notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Component Name' || notHierarchyColumns.columnName == 'Project Title'|| notHierarchyColumns.columnName == 'Beneficiary Agency' || notHierarchyColumns.columnName == 'Implementing Agency'
-																							|| notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sub-Sector'|| notHierarchyColumns.columnName == 'Responsible Organization'
+																							|| notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sector Sub-Sector'|| notHierarchyColumns.columnName == 'Responsible Organization'
 																							}">
 																							
 																								<tr bgcolor="#ffffff">
@@ -292,7 +292,7 @@ function deleteColumn()
 																							notHierarchyColumns.columnName == 'Project Title' || notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || 
 																							 notHierarchyColumns.columnName == 'Status' || notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'A.C. Chapter' || 
 																							 notHierarchyColumns.columnName == 'Accession Instrument' || notHierarchyColumns.columnName == 'Donor'
-																							 || notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sub-Sector'
+																							 || notHierarchyColumns.columnName == 'Secondary Sector' || notHierarchyColumns.columnName == 'Secondary Sector Sub-Sector'
 																							 }">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>

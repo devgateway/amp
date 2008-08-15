@@ -4,14 +4,14 @@ YAHOO.amp.reportwizard.colIdToName		= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
 
 YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
-				'A.C. Chapter', 'Primary Sub-Sector', 'Implementation Level', 'Accession Instrument', 
+				'A.C. Chapter', 'Primary Sector Sub-Sector', 'Implementation Level', 'Accession Instrument', 
 				'Executing Agency', 'Donor', 'Donor Group', 
 				'Donor Agency', 'Primary Sector', 'Status', 'Region', 
 				'Type Of Assistance', 'Financing Instrument', 'Project Title',
 				'National Planning Objectives', 'Primary Program', 'Componente', 
 				'Secondary Program', 'Donor Type', 'Credit/Donation', 'Beneficiary Agency', 
 				'Implementing Agency', 'Component Name',
-				'Secondary Sector', 'Secondary Sub-Sector',
+				'Secondary Sector', 'Secondary Sector Sub-Sector',
 				'Responsible Organization', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
@@ -21,20 +21,20 @@ YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Secondary Program', 'Sub-Sector', 'Type Of Assistance', 
 				'Sector', 'Region', 
 				'Project Title', 'Beneficiary Agency', 'Implementing Agency',
-				'Secondary Sector', 'Secondary Sub-Sector', 'Responsible Organization', 'Activity Created By'
+				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["component"]		= new Array(
 				'Status', 'A.C. Chapter', 'Accession Instrument', 'Financing Instrument',
 				'Implementation Level', 'National Planning Objectives', 'Primary Program',
 				'Secondary Program', 'Sub-Sector', 'Type Of Assistance',
 				'Sector', 'Component Name', 'Project Title', 'Beneficiary Agency', 'Implementing Agency', 
-				'Secondary Sector', 'Secondary Sub-Sector', 'Responsible Organization', 'Activity Created By'
+				'Secondary Sector', 'Secondary Sector Sub-Sector', 'Responsible Organization', 'Activity Created By'
 			);
 YAHOO.amp.reportwizard.fundingGroups["contribution"]	= new Array(
 				'Costing Donor', 'National Planning Objectives', 'Primary Program', 
 				'Project Title', 'Secondary Program', 'Sub-Sector',
 				'Status', 'Sector', 'A.C. Chapter',
-				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sub-Sector', 'Activity Created By'
+				'Accession Instrument', 'Donor', 'Secondary Sector', 'Secondary Sector Sub-Sector', 'Activity Created By'
 			);
 
 function insertColInfo (id, name) {

@@ -38,14 +38,22 @@
 	}	
 
 	function reloadSector(value) {
-		document.aimSelectSectorForm.subsectorLevel1.disabled=false;
-		document.aimSelectSectorForm.subsectorLevel2.disabled=false;
+		if(document.getElementsByName("subsectorLevel1")[0]){
+			document.aimSelectSectorForm.subsectorLevel1.disabled=false;
+		}
+		if(document.getElementsByName("subsectorLevel2")[0]){
+			document.aimSelectSectorForm.subsectorLevel2.disabled=false;
+		}
 		if (value == 1) {
 			document.aimSelectSectorForm.sector.value = -1;
 		} else if (value == 2) {
-			document.aimSelectSectorForm.subsectorLevel1.value = -1;
+			if(document.getElementsByName("subsectorLevel1")[0]){
+				document.aimSelectSectorForm.subsectorLevel1.value = -1;
+			}
 		} else if (value == 3) {
-			document.aimSelectSectorForm.subsectorLevel2.value = -1;
+			if(document.getElementsByName("subsectorLevel2")[0]){
+				document.aimSelectSectorForm.subsectorLevel2.value = -1;
+			}
 		}
 		<digi:context name="selSector" property="context/module/moduleinstance/selectSectors.do?edit=true"/>
 	    document.aimSelectSectorForm.action = "<%= selSector %>";
@@ -217,7 +225,7 @@ function checkNumeric(objName,comma,period,hyphen)
 										</td>
 									</tr>
 									<c:if test="${aimSelectSectorForm.configId == 1}"> 								
-									<field:display name="Sub-Sector" feature="Sectors">
+									<field:display name="Primary Sector Sub-Sector" feature="Sectors">
 									<tr>
 										<td>
 											<digi:trn key="aim:subSectorLevel1">Sub-Sector Level 1</digi:trn>
@@ -234,27 +242,29 @@ function checkNumeric(objName,comma,period,hyphen)
 											</html:select>
 										</td>
 									</tr>
-									<tr style="position:relative;">
-										<td>
-											<digi:trn key="aim:subSectorLevel2">Sub-Sector Level 2</digi:trn>
-										</td>
-										<td>
-											<html:select property="subsectorLevel2" styleClass="inp-text">
-												<html:option value="-1">
-														<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
-												</html:option>
-												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
-													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
-													value="ampSectorId" label="name" />												
-												</logic:notEmpty>													
-											</html:select>
-										</td>
-									</tr>
+										<field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors">
+										<tr style="position:relative;">
+											<td>
+												<digi:trn key="aim:subSectorLevel2">Sub-Sector Level 2</digi:trn>
+											</td>
+											<td>
+												<html:select property="subsectorLevel2" styleClass="inp-text">
+													<html:option value="-1">
+															<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
+													</html:option>
+													<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
+														<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
+														value="ampSectorId" label="name" />												
+													</logic:notEmpty>													
+												</html:select>
+											</td>
+										</tr>
+										</field:display>
 									</field:display>
 									</c:if>
 									
 									<c:if test="${aimSelectSectorForm.configId == 2}"> 								
-									<field:display name="Secondary Sub-Sector" feature="Sectors">
+									<field:display name="Secondary Sector Sub-Sector" feature="Sectors">
 									<tr>
 										<td>
 											<digi:trn key="aim:subSectorLevel1">Sub-Sector Level 1</digi:trn>
@@ -271,22 +281,24 @@ function checkNumeric(objName,comma,period,hyphen)
 											</html:select>
 										</td>
 									</tr>
-									<tr style="position:relative;">
-										<td>
-											<digi:trn key="aim:subSectorLevel2">Sub-Sector Level 2</digi:trn>
-										</td>
-										<td>
-											<html:select property="subsectorLevel2" styleClass="inp-text">
-												<html:option value="-1">
-														<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
-												</html:option>
-												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
-													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
-													value="ampSectorId" label="name" />												
-												</logic:notEmpty>													
-											</html:select>
-										</td>
-									</tr>
+										<field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors">
+										<tr style="position:relative;">
+											<td>
+												<digi:trn key="aim:subSectorLevel2">Sub-Sector Level 2</digi:trn>
+											</td>
+											<td>
+												<html:select property="subsectorLevel2" styleClass="inp-text">
+													<html:option value="-1">
+															<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
+													</html:option>
+													<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
+														<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
+														value="ampSectorId" label="name" />												
+													</logic:notEmpty>													
+												</html:select>
+											</td>
+										</tr>
+										</field:display>
 									</field:display>
 									</c:if>
 																		

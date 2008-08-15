@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ page import="org.digijava.module.contentrepository.action.SelectDocumentDM"%>
 <%@ page import="org.digijava.module.aim.helper.ActivityDocumentsConstants"%>
 
@@ -35,6 +36,7 @@
 	<c:if test="${ (!empty relDocs) || (!empty tempDocs) }" >
 
 		<div id="selDocumentsDiv"></div>
+		<field:display name="Remove Documents Button" feature="Related Documents">
 		<logic:notEmpty name="showRemoveButton" >
 			<logic:equal name="showRemoveButton" value="true">
 		&nbsp;&nbsp;&nbsp;&nbsp;
@@ -43,6 +45,7 @@
 			</html:button>
 			</logic:equal>
 		</logic:notEmpty>
+		</field:display>
 		<br /> <br />
 		<logic:empty scope="request" name="dmWindowTitle"><bean:define toScope="request" id="dmWindowTitle" value=" " /></logic:empty>
 			<script type="text/javascript">

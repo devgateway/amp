@@ -250,6 +250,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="Add Sectors Button" feature="Sectors"></field:display>
 <field:display name="Add Web Resource Button" feature="Web Resources"></field:display>
+<field:display name="Web Resources Notes" feature="Web Resources"></field:display>
+<field:display name="Web Resources Document Type" feature="Web Resources"></field:display>
 <field:display name="Adjustment Type Commitment" feature="Funding Information"></field:display>
 <field:display name="Adjustment Type Disbursement" feature="Disbursement"></field:display>
 <field:display name="Adjustment Type Expenditure" feature="Funding Information"></field:display>
@@ -331,11 +333,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Delegated Cooperation" feature="Funding Information"></field:display>
 <field:display name="Delegated Partner" feature="Funding Information"></field:display>
 <field:display name="Description" feature="Identification"></field:display>
-<field:display name="Document Comment" feature="Related Documents"></field:display>
+<field:display name="Document Notes" feature="Related Documents"></field:display>
 <field:display name="Document Date" feature="Related Documents"></field:display>
 <field:display name="Document Description" feature="Related Documents"></field:display>
 <field:display name="Document FileName" feature="Related Documents"></field:display>
-<field:display name="Document Language" feature="Related Documents"></field:display>
 <field:display name="Document Title" feature="Related Documents"></field:display>
 <field:display name="Document Type" feature="Related Documents"></field:display>
 <field:display name="Donor Agency" feature="Funding Information"></field:display>
@@ -474,7 +475,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display>
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display>
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display>
-<field:display name="Remove Web Resource Button" feature="Web Resources"></field:display>
 <field:display name="Results" feature="Identification"></field:display>
 <field:display name="Revised Target Value" feature="Activity"></field:display>
 <field:display name="Risk" feature="Activity"></field:display>

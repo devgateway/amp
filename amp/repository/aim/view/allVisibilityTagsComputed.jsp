@@ -385,11 +385,10 @@
 <field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Orders Tab" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursements" feature="Contracting"></field:display> 
-<field:display name="Document Comment" feature="Related Documents"></field:display> 
+<field:display name="Document Notes" feature="Related Documents"></field:display> 
 <field:display name="Document Date" feature="Related Documents"></field:display> 
 <field:display name="Document Description" feature="Related Documents"></field:display> 
 <field:display name="Document FileName" feature="Related Documents"></field:display> 
-<field:display name="Document Language" feature="Related Documents"></field:display> 
 <field:display name="Document Title" feature="Related Documents"></field:display> 
 <field:display name="Document Type" feature="Related Documents"></field:display> 
 <field:display name="Donor Agency" feature="Funding Information"></field:display> 
@@ -565,7 +564,6 @@
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display> 
 <field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display> 
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display> 
-<field:display name="Remove Web Resource Button" feature="Web Resources"></field:display> 
 <field:display name="Responsible Organization Add Button" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Groups" feature="Responsible Organization"></field:display> 
 <field:display name="Responsible Organization Organizations Button" feature="Responsible Organization"></field:display> 
@@ -638,4 +636,6 @@
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
-<field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
+<field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
+<field:display name="Web Resources Notes" feature="Web Resources"></field:display>
+<field:display name="Web Resources Document Type" feature="Web Resources"></field:display>

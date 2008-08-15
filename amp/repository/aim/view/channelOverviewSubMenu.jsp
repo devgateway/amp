@@ -92,22 +92,19 @@
                  	</digi:link></div>
 					</field:display>
 					
-					</td></tr>		
+					</td></tr>
+
+					<feature:display name="Documents Tab" module="Document">		
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
-
-					
-					
-					
      					<c:set target="${urlTabs}" property="tabIndex" value="3"/>
-					
 						<div id="gen" title='<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
-           			<digi:link href="/viewKnowledge.do" name="urlTabs" styleClass="leftNavItem">
+	           			<digi:link href="/viewKnowledge.do" name="urlTabs" styleClass="leftNavItem">
 							 <digi:trn key="aim:documents">Documents</digi:trn>	
 						</digi:link></div>
-					
-					
-					</td></tr>		
+					</td></tr>
+					</feature:display>
+		
 					<feature:display name="Regional Funding" module="Funding">
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">

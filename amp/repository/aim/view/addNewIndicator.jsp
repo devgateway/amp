@@ -200,7 +200,7 @@ function closeWindow() {
             </td>
           </tr>
           </field:display>
-          <field:display name="Description" feature="Admin">
+          <field:display name="Admin Description" feature="Admin">
           <tr id="trDescription">
             <td valign="top">
             <digi:trn key="admin:decription">

@@ -502,8 +502,6 @@
 <field:display name="Planned Expenditures" feature="Measures"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display> 
 <field:display name="Primary Sector" feature="Sectors"></field:display> 
-<field:display name="Primary Sub-Sector" feature="Sectors"></field:display> 
-<field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Program Background" feature="Admin NPD"></field:display> 
@@ -581,8 +579,6 @@
 <field:display name="Save Button" feature="Admin - Component"></field:display> 
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
 <field:display name="Secondary Sector" feature="Sectors"></field:display> 
-<field:display name="Secondary Sub-Sector" feature="Sectors"></field:display> 
-<field:display name="Secondary Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group" feature="Sector Group"></field:display> 
@@ -607,7 +603,6 @@
 <field:display name="Sub Program Level 7" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub-Program" feature="Budget"></field:display> 
-<field:display name="Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Target Value" feature="Activity"></field:display> 
 <field:display name="Title" feature="Admin - Component"></field:display> 

@@ -242,6 +242,12 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Sector Level 1 Link" feature="Sectors"></field:display>
 <field:display name="Add Sector Level 2 Link" feature="Sectors"></field:display>
 <field:display name="Add Sector Level 3 Link" feature="Sectors"></field:display>
+
+<field:display name="Primary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sector Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors"></field:display>
+
 <field:display name="Add Sectors Button" feature="Sectors"></field:display>
 <field:display name="Add Web Resource Button" feature="Web Resources"></field:display>
 <field:display name="Adjustment Type Commitment" feature="Funding Information"></field:display>
@@ -477,11 +483,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sector Group Add Button" feature="Sector Group"></field:display>
 <field:display name="Sector Group Remove Button" feature="Sector Group"></field:display>
 <field:display name="Primary Sector" feature="Sectors"></field:display>
-<field:display name="Primary Sub-Sector" feature="Sectors"></field:display>
-<field:display name="Primary Sub-Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Secondary Sector" feature="Sectors"></field:display>
-<field:display name="Secondary Sub-Sector" feature="Sectors"></field:display>
-<field:display name="Secondary Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>
@@ -651,9 +653,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
 	<field:display name="${ampMeasures.aliasName}" feature="Measures"></field:display>
-</logic:iterate>
-<logic:iterate id="classConfig"  name="classConfigs" scope="page" type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
-	<field:display name="${classConfig.name}" feature="Sectors"></field:display>
 </logic:iterate>
 
 <field:display name="Actual Commitments" feature="Measures"></field:display>

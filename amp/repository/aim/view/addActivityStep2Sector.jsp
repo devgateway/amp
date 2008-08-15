@@ -158,12 +158,16 @@
                                                                         <c:if test="${!empty activitySectors.sectorName}">
                                                                             [${activitySectors.sectorName}]
                                                                         </c:if>
-                                                                        <c:if test="${!empty activitySectors.subsectorLevel1Name}">
-                                                                            [${activitySectors.subsectorLevel1Name}]
-                                                                        </c:if>
-                                                                        <c:if test="${!empty activitySectors.subsectorLevel2Name}">
-                                                                            [${activitySectors.subsectorLevel2Name}]
-                                                                        </c:if>
+										                               	<field:display name="${config.name} Sector Sub-Sector" feature="Sectors">
+	                                                                        <c:if test="${!empty activitySectors.subsectorLevel1Name}">
+	                                                                            [${activitySectors.subsectorLevel1Name}]
+	                                                                        </c:if>
+																			<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
+	                                                                        <c:if test="${!empty activitySectors.subsectorLevel2Name}">
+	                                                                            [${activitySectors.subsectorLevel2Name}]
+	                                                                        </c:if>
+																			</field:display>
+																		</field:display>
                                                                     </td>
                                                                     <td width="5%" vAlign="center" align="right">
                                                                        

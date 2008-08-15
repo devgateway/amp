@@ -195,7 +195,7 @@
 											</td>
 										</tr>
 										</field:display>
-                                                                             
+                                                                             	<field:display name="Multi Sector Configuration" feature="Sectors">
                                                                                      <tr>
                                                                                          <td>
                                                                                              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
@@ -209,6 +209,7 @@
                                                                                              </digi:link>
                                                                                          </td>
                                                                                      </tr>
+																				</field:display>
                                                                          
 										<tr>
 											<td>

@@ -602,7 +602,7 @@
 										</td>
 										<td bgcolor="#ffffff">
 			                            <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
-			                               <field:display name="${config.name}" feature="Sectors">
+			                               <field:display name="${config.name} Sector" feature="Sectors">
 											<c:set var="hasSectors">
 												false
 											</c:set>
@@ -616,8 +616,8 @@
 											</c:forEach>
 											<c:if test="${hasSectors}">
 			                                <strong>
-				                               	<digi:trn key="aim:addactivitysectors:${config.name }">
-				                                <c:out value="${config.name }"/>
+				                               	<digi:trn key="aim:addactivitysectors:${config.name} Sector">
+				                                <c:out value="${config.name} Sector"/>
 				                                </digi:trn>
 				                                </strong><br/>
 			                                </c:if>
@@ -628,13 +628,17 @@
 														<tr><td>
 														<c:if test="${!empty sectors.sectorName}">
 															<c:out value="${sectors.sectorName}" />
-														</c:if>&nbsp;&nbsp; 
+														</c:if>&nbsp;&nbsp;
+														<field:display name="${config.name} Sector Sub-Sector" feature="Sectors"> 
 														<c:if test="${!empty sectors.subsectorLevel1Name}">
 															[<c:out value="${sectors.subsectorLevel1Name}"/>]
 														</c:if>
+														</field:display>
+														<field:display name="${config.name} Sector Sub-Sub-Sector" feature="Sectors">
 														<c:if test="${!empty sectors.subsectorLevel2Name}">
 															[<c:out value="${sectors.subsectorLevel2Name}"/>]
 														</c:if>
+														</field:display>
 														<c:if test="${sector.sectorPercentage!=''}">
 															<c:if test="${sector.sectorPercentage!='0'}">
 																(<c:out value="${sectors.sectorPercentage}" />)%

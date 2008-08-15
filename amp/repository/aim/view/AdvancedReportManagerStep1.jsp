@@ -325,10 +325,10 @@ function checkUncheckAll2() {
 											<field:display name="Indicator Current Value" feature="Activity">&nbsp;</field:display>
 												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
 												<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
-											<field:display name="Primary Sub-Sector" feature="Sectors">&nbsp;</field:display>
-											<field:display name="Secondary Sub-Sector" feature="Sectors">&nbsp;</field:display>
-											<field:display name="Primary Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
-			                            	<field:display name="Secondary Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
+			                            	<field:display name="Primary Sector Sub-Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Secondary Sector Sub-Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Primary Sector Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Secondary Sector Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 			                            	<field:display name="National Planning Objectives" feature="NPD Programs">&nbsp;</field:display>
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>

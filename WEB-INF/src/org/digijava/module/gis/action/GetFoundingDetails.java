@@ -492,12 +492,17 @@ public class GetFoundingDetails extends Action {
                 while (fundDetIt.hasNext()) {
                     AmpFundingDetail fundDet = fundDetIt.next();
                     Double exchangeRate = null;
+                    /*
                     try {
+
                         exchangeRate = CurrencyUtil.getLatestExchangeRate(
                                 fundDet.getAmpCurrencyId().getCurrencyCode());
+
                     } catch (AimException ex) {
                         //Add exception reporting
                     }
+                    */
+                    exchangeRate = fundDet.getFixedExchangeRate();
 
                     retVal += fundDet.getTransactionAmount() / exchangeRate;
                 }

@@ -152,10 +152,20 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
-                                          AmpActivitySector.class.getName() +
-                                          " where sec.sectorId=:sectorId");
-            q.setParameter("sectorId", sectorId, Hibernate.LONG);
+            Query q = null;
+            if (sectorId > -1) {
+                q = session.createQuery(
+                        "select sec.activityId, sec.sectorPercentage from sec in class " +
+                        AmpActivitySector.class.getName() +
+                        " where sec.sectorId=:sectorId");
+                q.setParameter("sectorId", sectorId, Hibernate.LONG);
+            } else {
+                q = session.createQuery(
+                        "select sec.activityId, sec.sectorPercentage from sec in class " +
+                        AmpActivitySector.class.getName());
+
+
+            }
             retVal = q.list();
         } catch (Exception ex) {
             logger.debug("Unable to get map from DB", ex);
@@ -255,14 +265,14 @@ public class DbUtil {
             }
             return retVal;
     }
-    
+
     /**
      * loads  all IndicatorSector ;
      * @param indicatorValueId
      * @return IndicatorSector list
-     * 
+     *
      */
-    
+
  public static List getAllIndicatorSectors() {
        List retVal = null;
        Session session = null;
@@ -272,21 +282,21 @@ public class DbUtil {
                                          IndicatorSector.class.getName() +
                                          " indsec ";
            Query q = session.createQuery(query);
-          
+
            retVal = q.list();
        } catch (Exception ex) {
            logger.debug("Unable to get indicators from DB", ex);
        }
        return retVal;
    }
- 
+
     /**
      * counts  all IndicatorSector  ;
      * @param indicatorValueId
      * @return IndicatorSector list size
-     * 
+     *
      */
-    
+
     public static int getAllIndicatorSectorsSize() {
         int retVal = 0;
         Session session = null;
@@ -304,7 +314,7 @@ public class DbUtil {
         }
         return retVal;
     }
-    
+
     public static List getIndicatorSectorsForCurrentPage(Integer[] page,int numberPerPage) {
        List retVal = null;
        Session session = null;
@@ -323,8 +333,8 @@ public class DbUtil {
                // If all records were deleted we need to navigate to the previous page
                retVal=getIndicatorSectorsForCurrentPage(page,numberPerPage);
            }
-               
-           
+
+
        } catch (Exception ex) {
            logger.debug("Unable to get indicators from DB", ex);
        }

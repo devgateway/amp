@@ -110,21 +110,12 @@ public class TemplateAlertActions extends DispatchAction {
 	    	}	
 			if(messageReceivers!=null && messageReceivers.length>0){				
 				for (String receiver : messageReceivers) {				
-					if(receiver.startsWith("t")){//<--this means that receiver is team
-						List<TeamMember> teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(new Long(receiver.substring(2)));
-						if(teamMembers!=null && teamMembers.size()>0){
-							for (TeamMember tm : teamMembers) {
-								if(! statesMemberIds.contains(tm.getMemberId())){
-									createMessageState(newTemplate,tm.getMemberId(),tm.getTeamName());									
-								}
-							}
-						}						
-					}else {//<--receiver is team member
-						if(! statesMemberIds.contains(new Long(receiver.substring(2)))){
+					if(receiver.startsWith("m")){//<--this means that receiver is team				
+					//<--receiver is team member
 							Long memId=new Long(receiver.substring(2));
 							String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
 							createMessageState(newTemplate,memId,teamName);							
-						}
+						
 					}				
 				}		
 			}

@@ -554,7 +554,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Delete Regional Funding Button" feature="Regional Funding"></field:display>
 
 <field:display name="Indicator name" feature="Admin"></field:display>
-<field:display name="Description" feature="Admin"></field:display>
+<field:display name="Admin Description" feature="Admin"></field:display>
 <field:display name="Indicator code" feature="Admin"></field:display>
 <field:display name="Indicator Type" feature="Admin"></field:display>
 <field:display name="Sectors" feature="Admin"></field:display>

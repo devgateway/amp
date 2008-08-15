@@ -379,7 +379,7 @@
 <field:display name="Delete Funding Link - Donor Organization" feature="Funding Information"></field:display> 
 <field:display name="Delete Regional Funding Button" feature="Regional Funding"></field:display> 
 <field:display name="Description" feature="Admin - Component"></field:display> 
-<field:display name="Description" feature="Admin"></field:display> 
+<field:display name="Admin Description" feature="Admin"></field:display> 
 <field:display name="Description" feature="Identification"></field:display> 
 <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display> 

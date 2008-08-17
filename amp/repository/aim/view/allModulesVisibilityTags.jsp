@@ -26,7 +26,6 @@
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>

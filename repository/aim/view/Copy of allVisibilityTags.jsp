@@ -29,7 +29,6 @@
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>

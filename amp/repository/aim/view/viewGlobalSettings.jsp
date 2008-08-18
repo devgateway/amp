@@ -182,6 +182,9 @@ function saveAllSettings(){
 	document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].allValues.value=allvalues;
 	return true;
 }
+function setIndex(index){
+		document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].indexTab.value=index;
+	}
 --></script>
 
 
@@ -192,10 +195,10 @@ function saveAllSettings(){
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=760>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=760px>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg vAlign=top width=750px>
 		<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 			<tr>
 				<td height=33>
@@ -218,7 +221,7 @@ function saveAllSettings(){
 								<c:set var="indexTab" value="0"/>
 								<logic:iterate name="sections"  id="sectionName">
 								<li>
-										<a href="#section${indexTab}" indexTab="${indexTab}">	
+										<a href="#section${indexTab}" indexTab="${indexTab}" onclick="setIndex(${indexTab})">	
 											<div style="text-transform: capitalize;">
 												<digi:trn key="aim:globalsettings:sectionname:${sectionName}">${sectionName}</digi:trn>
 											</div>	
@@ -269,7 +272,7 @@ function saveAllSettings(){
 			                            <tr>
 			                               <td width="60%">
 			                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
-			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<bean:write name="globalSett" property="globalSettingsDescription"/>">                              
+			                                   <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:Global:Help:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsDescription"/></digi:trn>">                              
 			                                 </logic:notEmpty>
 			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
 										   </td>
@@ -577,11 +580,12 @@ function saveAllSettings(){
 									<br /> <br />
 								</div>
 								</logic:iterate>
-									<digi:form  action="/GlobalSettings.do" method="post" onsubmit="return saveAllSettings()" >	
-										<table width="100%" border="0" height="100%">
+									<digi:form  action="/GlobalSettings.do?" method="post" onsubmit="return saveAllSettings()" >	
+										<table width="100%" border="0">
 	  			                            <tr>
 				                              <td colspan="2" align="center" valign="bottom" >
 					                              	<html:hidden property="allValues"/>
+					                              	<html:hidden property="indexTab"/>
 					                              	<html:submit property="saveAll">
 					                                    <digi:trn key="aim:saveAll">
 					                                    	Save All                                    
@@ -599,7 +603,6 @@ function saveAllSettings(){
 		</td>
 	</tr>
 </table>
-
 <script language="javascript">
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
@@ -635,7 +638,7 @@ function setHoveredTable(tableId, hasHeaders) {
 </script>
 <script type="text/javascript">
 	var myTabs = new YAHOOAmp.widget.TabView("demo");
-	myTabs.set('activeIndex', 0);
+	myTabs.set('activeIndex',<%=aimGlobalSettingsForm.getIndexTab()%>);
 
 	<logic:iterate name="sections"  id="sectionName">
 		setStripsTable("${sectionName}", "tableEven", "tableOdd");

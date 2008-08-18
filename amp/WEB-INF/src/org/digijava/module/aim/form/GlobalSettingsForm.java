@@ -9,6 +9,7 @@ public class GlobalSettingsForm extends ActionForm {
 	Long gsfId;
 	String gsfName = null;
 	String gsfValue = null;
+	String indexTab = "0";
 	
 	Long globalId;
 	String globalSettingsName = null;
@@ -106,7 +107,10 @@ public class GlobalSettingsForm extends ActionForm {
 		
 		globalSettingsType.put(gsName, gsType);
 	}
-	
-
-	
+	public String getIndexTab() {
+		return indexTab;
+	}
+	public void setIndexTab(String indexTab) {
+		this.indexTab = indexTab;
+	}
 }

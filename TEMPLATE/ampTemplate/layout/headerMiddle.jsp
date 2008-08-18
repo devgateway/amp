@@ -172,6 +172,7 @@ border-right:1px solid white;
                               </div>                    
                           </li>
                           <module:display name="HELP">
+						  <feature:display name="Admin Help" module="HELP">
                           <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   <digi:trn key="help:help">HELP</digi:trn>
@@ -179,35 +180,44 @@ border-right:1px solid white;
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
+										<feature:display name="Admin Help" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="/help/admin/help.do~blankPage=true">
                                         <digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
                                         </a>
                                         </li>
+										</feature:display>
+										<feature:display name="User Help" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
                                         <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>
                                         </li>
+										</feature:display>
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:tutorial">Tutorial</digi:trn>
                                         </a>
                                         </li>
+										<feature:display name="Support Request Form" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
                                         </a>
                                         </li>
+										</feature:display>
+										<feature:display name="About AMP" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:aboutamp">About AMP</digi:trn>
                                         </a>
                                         </li>
+										</feature:display>
                                       </ul>
                                   </div>
                               </div>                    
                           </li>
+						  </feature:display>
                           </module:display>
             
                         </ul>            
@@ -469,26 +479,32 @@ border-right:1px solid white;
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
+										<feature:display name="User Help" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
                                         <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>
                                         </li>
-                                        <li>
+										</feature:display>
+										<li>
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:tutorial">Tutorial</digi:trn>
                                         </a>
                                         </li>
+										<feature:display name="Support Request Form" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
                                         </a>
                                         </li>
+										</feature:display>
+										<feature:display name="About AMP" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:aboutamp">About AMP</digi:trn>
                                         </a>
                                         </li>
+										</feature:display>
                                       </ul>
                                   </div>
                               </div>                    

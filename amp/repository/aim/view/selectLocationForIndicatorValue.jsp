@@ -14,24 +14,22 @@ function closeWindow() {
 
 function selectLocation(){
   document.getElementById("indAction").value="add";
-  document.forms[0].target=window.opener.name;
-  document.forms[0].submit();
-  //window.opener.document.forms[0].submit();
+  document.aimThemeForm.target=window.opener.name;
+  document.aimThemeForm.submit();
+  window.opener.document.aimThemeForm.submit();
   window.close();
 }
 
 function countryChanged() {
 		  document.aimThemeForm.fill.value = "region";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  document.aimThemeForm.action = "<%= selectLoc %>";
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 
 	function regionChanged() {
-		  document.aimThemeForm.fill.value = "zone";
+	     document.aimThemeForm.fill.value = "zone";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  document.aimThemeForm.action = "<%= selectLoc %>";
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
@@ -39,14 +37,14 @@ function countryChanged() {
 	function zoneChanged() {
 		  document.aimThemeForm.fill.value = "woreda";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  document.aimThemeForm.action = "<%= selectLoc %>";
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
 	
-	function levelChanged() {		 
+	function levelChanged() {
+		 
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do?edit=true" />
-		  document.aimThemeForm.action = "<%= selectLoc %>";
+	 	  
 		  document.aimThemeForm.target = "_self";
 		  document.aimThemeForm.submit();
 	}
@@ -73,7 +71,7 @@ function countryChanged() {
 									<tr>
 										<td align="right" width="50%"><digi:trn key="aim:pleaseSelectLevel">Select level</digi:trn></td>
 										<td align="left" width="50%">
-											<html:select name="aimThemeForm" property="locationLevelIndex" onchange="levelChanged()">
+											<html:select name="aimThemeForm" property="locationLevelIndex" onchange="levelChanged();">
 												<html:option value="-1"><digi:trn key="aim:selectFromBelow">Select From Below</digi:trn></html:option>
 												<html:option value="1"><digi:trn key="aim:national">National</digi:trn></html:option>
 												<html:option value="2"><digi:trn key="aim:regional">Regional</digi:trn></html:option>

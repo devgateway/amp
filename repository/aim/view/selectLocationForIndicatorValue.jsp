@@ -98,7 +98,7 @@ function countryChanged() {
 											</td>
 										</tr>
 									</c:if>
-									<c:if test="${aimThemeForm.locationLevelIndex==3}">
+									<c:if test="${aimThemeForm.locationLevelIndex==3 &&  !empty aimThemeForm.zones }">
 										<tr>
 										<td align="right" width="50%"><digi:trn key="aim:selectZone">Select Zone</digi:trn></td>
 										<td align="left" width="50%">
@@ -110,6 +110,7 @@ function countryChanged() {
 											</html:select>
 										</td>
 									</tr>
+									<c:if test="${aimThemeForm.locationLevelIndex==3 &&  !empty aimThemeForm.woredas }">
 									<tr>
 										<td align="right" width="50%"><digi:trn key="aim:selectWoreda">Select Woreda</digi:trn></td>
 										<td align="left" width="50%">
@@ -122,6 +123,7 @@ function countryChanged() {
 										</td>
 									</tr>
 									</c:if>
+								</c:if>
 									
 								</table>
 							</td>

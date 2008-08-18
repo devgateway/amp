@@ -41,6 +41,10 @@ import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigge
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.util.ActivityUtil;
+import java.util.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.Address;
+import org.digijava.kernel.mail.DgEmailManager;
 
 public class AmpMessageWorker {
 
@@ -143,22 +147,27 @@ public class AmpMessageWorker {
 
         String receivers = new String();
 
+        HashMap emailes=new HashMap();
+
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
         if (att != null) {
             for (AmpCalendarAttendee ampAtt : att) {
-                User user = ampAtt.getUser();
-                if (user != null) {
-                    Collection<AmpTeamMember> members = TeamMemberUtil.getTeamMembers(user.getEmail());
-                    if (members != null) {
-                        for (AmpTeamMember mem : members) {
-                            receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + mem.getAmpTeam().getName() + ";";
-                        }
-                    }
+                AmpTeamMember member=ampAtt.getMember();
+                User user = member.getUser();
+                receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
+
+                if(!emailes.containsKey(user.getEmail())){
+                    emailes.put(user.getEmail(),user.getEmail());
                 }
             }
+            for (Iterator iter = emailes.values().iterator(); iter.hasNext(); ) {
+                String email = (String) iter.next();
+
+            }
         }
+
         newEvent.setReceivers(receivers.substring(", ".length()));
 
         return newEvent;
@@ -449,6 +458,8 @@ public class AmpMessageWorker {
     private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent) throws Exception {
         HashMap<Long, AmpMessageState> temMsgStateMap = new HashMap<Long, AmpMessageState> ();
 
+        List<AmpMessageState> mlMsgStates=new ArrayList<AmpMessageState>();
+
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
         if (lstMsgStates != null) {
             for (AmpMessageState state : lstMsgStates) {
@@ -464,19 +475,12 @@ public class AmpMessageWorker {
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
         if (att != null) {
             for (AmpCalendarAttendee ampAtt : att) {
-                User user = ampAtt.getUser();
-                if (user != null) {
-                    Collection<AmpTeamMember> members = TeamMemberUtil.getTeamMembers(user.getEmail());
-                    if (members != null) {
-                        for (AmpTeamMember mem : members) {
-                            if (!eventMsgStateMap.containsKey(mem.getAmpTeamMemId())) {
-                                AmpMessageState state = new AmpMessageState();
-                                state.setMemberId(mem.getAmpTeamMemId());
-                                state.setSenderId(calEvent.getSenderId());
-                                eventMsgStateMap.put(state.getMemberId(), state);
-                            }
-                        }
-                    }
+                AmpTeamMember member=ampAtt.getMember();
+                if (!eventMsgStateMap.containsKey(member.getAmpTeamMemId())) {
+                    AmpMessageState state = new AmpMessageState();
+                    state.setMemberId(member.getAmpTeamMemId());
+                    state.setSenderId(calEvent.getSenderId());
+                    eventMsgStateMap.put(state.getMemberId(), state);
                 }
             }
         }
@@ -491,6 +495,7 @@ public class AmpMessageWorker {
         for (AmpMessageState state : msgStateMap.values()) {
             createMsgState(state, calEvent);
         }
+        sendMailes(msgStateMap.values());
     }
 
     /**
@@ -519,6 +524,7 @@ public class AmpMessageWorker {
                     createMsgState(state, alert);
                 }
             }
+            sendMailes(statesRelatedToTemplate);
         }
     }
 
@@ -545,6 +551,7 @@ public class AmpMessageWorker {
                     createMsgState(state, alert);
                 }
             }
+            sendMailes(statesRelatedToTemplate);
         }
     }
 
@@ -566,7 +573,7 @@ public class AmpMessageWorker {
         }
     }
 
-    /**
+    /*
      * This function is used to create receivers String, which will be shown on view message page in TO: section
      */
     private static String fillTOfieldForReceivers(Collection<TeamMember> teamMembers, List<AmpMessageState> states) {
@@ -581,4 +588,34 @@ public class AmpMessageWorker {
         return receivers;
     }
 
+    private static void sendMailes(Collection<AmpMessageState> statesRelatedToTemplate){
+        HashMap<String, String> mailes=new HashMap<String,String>();
+        for(AmpMessageState state:statesRelatedToTemplate){
+            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+            if(teamMember!=null){
+                User user=teamMember.getUser();
+                if(!mailes.containsKey(user.getEmail())){
+                    mailes.put(user.getEmail(),state.getMessage().getDescription());
+                }
+            }
+        }
+        for(String email:mailes.keySet()){
+            try{
+                InternetAddress[] to = new InternetAddress[] {new InternetAddress(email)};
+                String from = "system@digijava.org";
+                Address[] cc = null;
+                Address[] bcc = null;
+                String subject = "New alert";
+                String text = mailes.get(email);
+                String charset = "UTF8";
+                boolean asHtml = true;
+                boolean log = true;
+                boolean rtl = false;
+
+                DgEmailManager.sendMail(to, from, cc, bcc, subject, text, charset, asHtml, log, rtl);
+            }catch(Exception ex){
+
+            }
+        }
+    }
 }

@@ -11,10 +11,12 @@
 <table border="0" align="center" width="80%">
     <tr>
         <td valign="top">
-            <digi:form action="/previewCalendarEventDone.do">
-            <html:hidden styleId="method" name="calendarEventForm" property="method" value="save"/>
+            <digi:form action="/showCalendarEvent.do">
+            <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
             <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+            <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
+            <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
             <table border="0" style="border:1px solid">
                 <tr>
                     <td colspan="2" nowrap="nowrap"><digi:trn key="calendar:details">&nbsp;Details&nbsp;&nbsp;</digi:trn></td>
@@ -22,35 +24,32 @@
                 <tr>
                     <td nowrap="nowrap"><digi:trn key="calendar:eventTitle">&nbsp;Event Title:&nbsp;&nbsp;</digi:trn></td>
                     <td>
-                        <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
                         <b>${calendarEventForm.eventTitle}</b>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap="nowrap"><digi:trn key="calendar:eventType">&nbsp;Event Type:&nbsp;&nbsp;</digi:trn></td>
                     <td>
-                        <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
                         <b>${calendarEventForm.selectedEventTypeName}</b>
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:donors">&nbsp;Donors:&nbsp;&nbsp;</digi:trn></td>
+                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:orgs">&nbsp;Donors:&nbsp;&nbsp;</digi:trn></td>
                     <td>
-                        <logic:empty name="calendarEventForm" property="donors">
+                        <c:if test="${empty calendarEventForm.organisations}">
                             &nbsp;
-                        </logic:empty>
-                        <logic:notEmpty name="calendarEventForm" property="donors">
+                        </c:if>
+                        <c:if test="${!empty calendarEventForm.organisations}">
                             <table cellpadding="0" cellspacing="0">
-                                <logic:iterate id="donor" name="calendarEventForm" property="donors">
+                                <c:forEach var="org" items="${calendarEventForm.selectedEventOrganisationsCol}">
                                     <tr>
                                         <td nowrap="nowrap">
-                                            <html:hidden name="calendarEventForm" property="selectedDonors" value="${donor.value}"/>
-                                            ${donor.label};
+                                            ${org.label};
                                         </td>
                                     </tr>
-                                </logic:iterate>
+                                </c:forEach>
                             </table>
-                        </logic:notEmpty>
+                        </c:if>
                     </td>
                 </tr>
                 <tr>
@@ -74,41 +73,20 @@
                     <td>
                         <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td valign="top"><digi:trn key="calendar:users">&nbsp;Users</digi:trn></td>
-                                <td rowspan="2">&nbsp;</td>
-                                <td valign="top"><digi:trn key="calendar:guests">&nbsp;Guests</digi:trn></td>
-                            </tr>
-                            <tr>
                                 <td valign="top">
-                                    <div style="width:200px;height:100px;border:1px solid;overflow:auto">
-                                        <logic:notEmpty name="calendarEventForm" property="attendeeUsers">
+                                    <div style="width:300px;height:200px;border:1px solid;overflow:auto">
+                                        <c:if test="${!empty calendarEventForm.selectedAttsCol}">
                                             <table cellpadding="0" cellspacing="0">
-                                                <logic:iterate id="user" name="calendarEventForm" property="attendeeUsers">
+                                                <c:forEach var="att" items="${calendarEventForm.selectedAttsCol}">
                                                     <tr>
                                                         <td nowrap="nowrap">
-                                                            <html:hidden name="calendarEventForm" property="selectedAttendeeUsers" value="${user.value}"/>
-                                                            &nbsp;${user.label}&nbsp;
+                                                           <html:hidden name="calendarEventForm" property="selectedAtts" value="${att.value}"/>
+                                                           &nbsp;${att.label}&nbsp;
                                                         </td>
                                                     </tr>
-                                                </logic:iterate>
+                                                </c:forEach>
                                             </table>
-                                        </logic:notEmpty>
-                                    </div>
-                                </td>
-                                <td valign="top">
-                                    <div style="width:200px;height:100px;border:1px solid;overflow:auto">
-                                        <logic:notEmpty name="calendarEventForm" property="attendeeGuests">
-                                            <table cellpadding="0" cellspacing="0">
-                                                <logic:iterate id="guest" name="calendarEventForm" property="attendeeGuests">
-                                                    <tr>
-                                                        <td nowrap="nowrap">
-                                                            <html:hidden name="calendarEventForm" property="selectedAttendeeGuests" value="${guest.value}"/>
-                                                            &nbsp;${guest.label}&nbsp;
-                                                        </td>
-                                                    </tr>
-                                                </logic:iterate>
-                                            </table>
-                                        </logic:notEmpty>
+                                        </c:if>
                                     </div>
                                 </td>
                             </tr>
@@ -116,19 +94,21 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap"><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn></td>
+                    <td nowrap="nowrap">&nbsp;<digi:trn key="calendar:privateEvent">Private event:</digi:trn>&nbsp;</td>
                     <td>
                         <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
                         <c:if test="${calendarEventForm.privateEvent}"><b><digi:trn key="calendar:yes">Yes</digi:trn></b></c:if>
                         <c:if test="${!calendarEventForm.privateEvent}"><b><digi:trn key="calendar:no">No</digi:trn></b></c:if>
                     </td>
-                </tr>                     
+                </tr>
                     <tr>
                     <td>&nbsp;</td>
                      <td>
-                        <input type="submit" value="<digi:trn key="calendar:savebutton">Save</digi:trn>">&nbsp;<input type="submit" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('method').value = 'edit'">
+                        <input type="submit" value="<digi:trn key="calendar:savebutton">Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
+                        &nbsp;
+                        <input type="submit" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
                     </td>
-                </tr>                 
+                </tr>
             </table>
             </digi:form>
         </td>

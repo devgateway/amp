@@ -63,7 +63,7 @@
       <forward name="success" path="/showLayout.do?layout=viewEvents" />
       <forward name="forward" path="/showLayout.do?layout=noEvents" />
     </action>
-    <action name="calendarEventForm" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
+    <action name="calendarEventForm" parameter="method" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
       <forward name="success" path="/showLayout.do?layout=showAmpEvent" />
       <forward name="preview" path="/showLayout.do?layout=previewAmpEvent" />
       <forward name="failure" path="/calendar/showCalendarView.do" />
@@ -84,7 +84,7 @@
     <action name="calendarEventTypeForm" parameter="method" path="/calendar/eventTypes" scope="session" type="org.digijava.module.calendar.action.EventTypeAction" validate="false">
       <forward name="eventTypesPage" path="/showLayout.do?layout=eventTypes" />
     </action>
-    <action name="calendarEditActivityForm" path="/calendar/selectOrganization" scope="session" type="org.digijava.module.calendar.action.SelectOrganization">
+    <action name="calendarEventForm" path="/calendar/selectOrganization" scope="session" type="org.digijava.module.calendar.action.SelectOrganization">
       <forward name="forward" path="/showLayout.do?layout=calendarOrgPopupLayout" />
     </action>
     <action name="calendarEditActivityForm" path="/calendar/searchOrganisation" scope="session" type="org.digijava.module.calendar.action.SearchOrganisation">

@@ -375,9 +375,7 @@ public class ViewYearEvents
             ArrayList rowMonths = new ArrayList();
             for (int j = 0; j < 3 && iterator.hasNext(); j++) {
                 item = (org.digijava.module.um.util.Calendar) iterator.next();
-
-                if (item.getCalendarId().equals(new Long(currCal.get(java.util.
-                    Calendar.MONTH) + 1))) {
+                if (item.getCalendarId().equals(new Long(currCal.get(java.util.Calendar.MONTH) + 1))) {
                     item.setToday(true);
                 }
 

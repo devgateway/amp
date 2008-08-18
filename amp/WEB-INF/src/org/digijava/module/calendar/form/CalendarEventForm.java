@@ -1,28 +1,40 @@
 package org.digijava.module.calendar.form;
 
+import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
+import javax.servlet.ServletRequest;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.helper.Team;
 import org.digijava.module.calendar.entity.DateBreakDown;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class CalendarEventForm
     extends ActionForm {
-    private String method;
     private Long ampCalendarId;
-    private List calendarTypes;
-    private int selectedCalendarTypeId;
-    private String selectedCalendarTypeName;
     private String eventTitle;
-    private List eventTypesList;
+    private String method;
+    private String searchOrgKey;
+    private Map<String,Team> teamsMap;
+    private boolean privateEvent;
+
+    private Collection calendarTypes;
+    private Long selectedCalendarTypeId;
+    private String selectedCalendarTypeName;
+
+    private Collection eventTypesList;
     private Long selectedEventTypeId;
     private String selectedEventTypeName;
-    private List donors;
-    private String[] selectedDonors;
+
+    private Collection organisations;
+    private String[] selectedOrganisations;
+    private Collection<LabelValueBean> selectedOrganisationsCol;
+
     private String selectedStartDate;
     private String selectedStartTime;
     private GregorianCalendar startDate;
@@ -31,39 +43,25 @@ public class CalendarEventForm
     private String selectedEndTime;
     private GregorianCalendar endDate;
     private DateBreakDown endDateBreakDown;
-    private List attendeeUsers;
-    private List attendeeGuests;
-    private List selectedUsersList;
-    private String[] selectedAttendeeUsers;
-    private String[] selectedAttendeeGuests;
-    private String[] selectedUsers;
-    private boolean privateEvent=true;
-    private int ispreview=0;
-    private boolean reset=false;
-   
 
-	public boolean isReset() {
-		return reset;
+    private Collection eventOrganisations;
+    private String[] selectedEventOrganisations;
+    private Collection<LabelValueBean> selectedEventOrganisationsCol;
+
+    private Collection attendees;
+    private String[] selectedAtts;
+    private Collection<LabelValueBean> selectedAttsCol;
+
+    public Collection<Team> getTeamMapValues(){
+        return (Collection<Team>)teamsMap.values();
 	}
 
-	public void setReset(boolean reset) {
-		this.reset = reset;
-	}
-
-	public int getIspreview() {
-		return ispreview;
-	}
-
-	public void setIspreview(int ispreview) {
-		this.ispreview = ispreview;
-	}
-
-	public List getCalendarTypes() {
-        return calendarTypes;
+    public Long getAmpCalendarId() {
+        return ampCalendarId;
     }
 
-    public List getDonors() {
-        return donors;
+    public Collection getCalendarTypes() {
+        return calendarTypes;
     }
 
     public GregorianCalendar getEndDate() {
@@ -74,18 +72,60 @@ public class CalendarEventForm
         return endDateBreakDown;
     }
 
-    public List getEventTypesList() {
+    public String getEventTitle() {
+        return eventTitle;
+    }
 
+    public Collection getEventTypesList() {
         return eventTypesList;
     }
 
-    public int getSelectedCalendarTypeId() {
+    public Collection getOrganisations() {
+        return organisations;
+    }
 
+    public boolean isPrivateEvent() {
+        return privateEvent;
+    }
+
+    public String[] getSelectedAtts() {
+        return selectedAtts;
+    }
+
+    public Long getSelectedCalendarTypeId() {
         return selectedCalendarTypeId;
     }
 
-    public String[] getSelectedDonors() {
-        return selectedDonors;
+    public String getSelectedCalendarTypeName() {
+        return selectedCalendarTypeName;
+    }
+
+    public String getSelectedEndDate() {
+        return selectedEndDate;
+    }
+
+    public String getSelectedEndTime() {
+        return selectedEndTime;
+    }
+
+    public Long getSelectedEventTypeId() {
+        return selectedEventTypeId;
+    }
+
+    public String getSelectedEventTypeName() {
+        return selectedEventTypeName;
+    }
+
+    public String[] getSelectedOrganisations() {
+        return selectedOrganisations;
+    }
+
+    public String getSelectedStartDate() {
+        return selectedStartDate;
+    }
+
+    public String getSelectedStartTime() {
+        return selectedStartTime;
     }
 
     public GregorianCalendar getStartDate() {
@@ -96,224 +136,195 @@ public class CalendarEventForm
         return startDateBreakDown;
     }
 
-    public String getSelectedStartDate() {
-        return selectedStartDate;
-    }
-
-    public String getSelectedEndDate() {
-        return selectedEndDate;
-    }
-
-    public String getEventTitle() {
-        return eventTitle;
-    }
-
-    public String[] getSelectedAttendeeGuests() {
-        return selectedAttendeeGuests;
-    }
-
-    public String[] getSelectedAttendeeUsers() {
-        return selectedAttendeeUsers;
-    }
-
-    public String getSelectedEventTypeName() {
-
-        return selectedEventTypeName;
-    }
-
-    public Long getSelectedEventTypeId() {
-        return selectedEventTypeId;
-    }
-
-    public String getSelectedCalendarTypeName() {
-        return selectedCalendarTypeName;
-    }
-
-    public boolean isPrivateEvent() {
-        return privateEvent;
-    }
-
-    public List getAttendeeGuests() {
-        return attendeeGuests;
-    }
-
-    public List getAttendeeUsers() {
-        return attendeeUsers;
-    }
-
     public String getMethod() {
         return method;
     }
 
-    public Long getAmpCalendarId() {
-        return ampCalendarId;
+    public Collection getAttendees() {
+        return attendees;
     }
 
-    public String getSelectedEndTime() {
-        return selectedEndTime;
+    public String[] getSelectedEventOrganisations() {
+        return selectedEventOrganisations;
     }
 
-    public String getSelectedStartTime() {
-        return selectedStartTime;
+    public String getSearchOrgKey() {
+        return searchOrgKey;
     }
 
-    public String[] getSelectedUsers() {
-        return selectedUsers;
+    public Map<String,Team> getTeamsMap() {
+        return teamsMap;
     }
 
-    public List getSelectedUsersList() {
-        return selectedUsersList;
+    public Collection<LabelValueBean> getSelectedAttsCol() {
+        return selectedAttsCol;
     }
 
-    public void setCalendarTypes(List calendarTypes) {
-        this.calendarTypes = calendarTypes;
+    public Collection<LabelValueBean> getSelectedOrganisationsCol() {
+        return selectedOrganisationsCol;
     }
 
-    public void setDonors(List donors) {
-        this.donors = donors;
+    public Collection<LabelValueBean> getSelectedEventOrganisationsCol() {
+        return selectedEventOrganisationsCol;
     }
 
-    public void setEndDate(GregorianCalendar endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setEndDateBreakDown(DateBreakDown endDateBreakDown) {
-        this.endDateBreakDown = endDateBreakDown;
-    }
-
-    public void setEventTypesList(List eventTypesList) {
-        this.eventTypesList = eventTypesList;
-    }
-
-    public void setSelectedCalendarTypeId(int selectedCalendarTypeId) {
-
-        this.selectedCalendarTypeId = selectedCalendarTypeId;
-    }
-
-    public void setSelectedDonors(String[] selectedDonors) {
-        this.selectedDonors = selectedDonors;
-    }
-
-    public void setStartDate(GregorianCalendar startDate) {
-        this.startDate = startDate;
+    public Collection getEventOrganisations() {
+        return eventOrganisations;
     }
 
     public void setStartDateBreakDown(DateBreakDown startDateBreakDown) {
         this.startDateBreakDown = startDateBreakDown;
     }
 
-    public void setSelectedStartDate(String selectedStartDate) {
-        this.selectedStartDate = selectedStartDate;
-    }
-
-    public void setSelectedEndDate(String selectedEndDate) {
-        this.selectedEndDate = selectedEndDate;
-    }
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
-    }
-
-    public void setSelectedAttendeeGuests(String[] selectedAttendeeGuests) {
-        this.selectedAttendeeGuests = selectedAttendeeGuests;
-    }
-
-    public void setSelectedAttendeeUsers(String[] selectedAttendeeUsers) {
-        this.selectedAttendeeUsers = selectedAttendeeUsers;
-    }
-
-    public void setSelectedEventTypeId(Long selectedEventTypeId) {
-        this.selectedEventTypeId = selectedEventTypeId;
-    }
-
-    public void setSelectedEventTypeName(String selectedEventTypeName) {
-
-        this.selectedEventTypeName = selectedEventTypeName;
-    }
-
-    public void setSelectedCalendarTypeName(String selectedCalendarTypeName) {
-        this.selectedCalendarTypeName = selectedCalendarTypeName;
-    }
-
-    public void setPrivateEvent(boolean privateEvent) {
-        this.privateEvent = privateEvent;
-    }
-
-    public void setAttendeeUsers(List attendeeUsers) {
-        this.attendeeUsers = attendeeUsers;
-    }
-
-    public void setAttendeeGuests(List attendeeGuests) {
-        this.attendeeGuests = attendeeGuests;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public void setAmpCalendarId(Long ampCalendarId) {
-        this.ampCalendarId = ampCalendarId;
+    public void setStartDate(GregorianCalendar startDate) {
+        this.startDate = startDate;
     }
 
     public void setSelectedStartTime(String selectedStartTime) {
         this.selectedStartTime = selectedStartTime;
     }
 
+    public void setSelectedStartDate(String selectedStartDate) {
+        this.selectedStartDate = selectedStartDate;
+    }
+
+    public void setSelectedOrganisations(String[] selectedOrganisations) {
+        this.selectedOrganisations = selectedOrganisations;
+    }
+
+    public void setSelectedEventTypeName(String selectedEventTypeName) {
+        this.selectedEventTypeName = selectedEventTypeName;
+    }
+
+    public void setSelectedEventTypeId(Long selectedEventTypeId) {
+        this.selectedEventTypeId = selectedEventTypeId;
+    }
+
     public void setSelectedEndTime(String selectedEndTime) {
         this.selectedEndTime = selectedEndTime;
     }
 
-    public void setSelectedUsers(String[] selectedUsers) {
-        this.selectedUsers = selectedUsers;
+    public void setSelectedEndDate(String selectedEndDate) {
+        this.selectedEndDate = selectedEndDate;
     }
 
-    public void setSelectedUsersList(List selectedUsersList) {
-        this.selectedUsersList = selectedUsersList;
+    public void setSelectedCalendarTypeName(String selectedCalendarTypeName) {
+        this.selectedCalendarTypeName = selectedCalendarTypeName;
     }
 
-    public ActionErrors validate(ActionMapping mapping,
-                                 HttpServletRequest httpServletRequest) {
-        ActionErrors errors = new ActionErrors();
-        // event title
-        if(this.getEventTitle() == null || this.getEventTitle().equals("")) {
-            errors.add(null, new ActionError("error.calendar.emptyEventTitle"));
-        }
-        // event typeId
-        if(this.getSelectedEventTypeId() == null) {
-            errors.add(null, new ActionError("error.calendar.emptyEventType"));
-        }
-        // start date
-        if(this.selectedStartDate == null || this.selectedStartDate.equals("")) {
-            errors.add(null,
-                       new ActionError("error.calendar.emptyEventStartDate"));
-        } else if(!DateBreakDown.isValidDate(this.selectedCalendarTypeId,
-                                             this.selectedStartDate)) {
-            errors.add(null,
-                       new ActionError("error.calendar.invalidEventStartDate"));
-        } else if(!DateBreakDown.isValidTime(this.selectedStartTime)) {
-            errors.add(null,
-                       new ActionError("error.calendar.invalidEventStartTime"));
-        }
-        // end date
-        if(this.selectedEndDate == null || this.selectedEndDate.equals("")) {
-            errors.add(null, new ActionError("error.calendar.emptyEventEndDate"));
-        } else if(!DateBreakDown.isValidDate(this.selectedCalendarTypeId,
-                                             this.selectedEndDate)) {
-            errors.add(null,
-                       new ActionError("error.calendar.invalidEventEndDate"));
-        } else if(!DateBreakDown.isValidTime(this.selectedEndTime)) {
-            errors.add(null,
-                       new ActionError("error.calendar.invalidEventEndTime"));
-        }
-        // startDate <= endDate ?
-        GregorianCalendar startDate = DateBreakDown.createValidGregorianCalendar(this.
-            selectedCalendarTypeId, this.selectedStartDate, this.selectedStartTime);
-        GregorianCalendar endDate = DateBreakDown.createValidGregorianCalendar(this.
-            selectedCalendarTypeId, this.selectedEndDate, this.selectedEndTime);
-        if(startDate.getTimeInMillis() > endDate.getTimeInMillis()) {
-            errors.add(null,
-                       new ActionError("error.calendar.endDateLessThanStartDate"));
-        }
-        return errors.isEmpty() ? null : errors;
+    public void setSelectedCalendarTypeId(Long selectedCalendarTypeId) {
+        this.selectedCalendarTypeId = selectedCalendarTypeId;
+    }
+
+    public void setSelectedAtts(String[] selectedAtts) {
+        this.selectedAtts = selectedAtts;
+    }
+
+    public void setPrivateEvent(boolean privateEvent) {
+        this.privateEvent = privateEvent;
+    }
+
+    public void setOrganisations(Collection organisations) {
+        this.organisations = organisations;
+    }
+
+    public void setEventTypesList(Collection eventTypesList) {
+        this.eventTypesList = eventTypesList;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+
+    public void setEndDateBreakDown(DateBreakDown endDateBreakDown) {
+        this.endDateBreakDown = endDateBreakDown;
+    }
+
+    public void setEndDate(GregorianCalendar endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setCalendarTypes(Collection calendarTypes) {
+        this.calendarTypes = calendarTypes;
+    }
+
+    public void setAmpCalendarId(Long ampCalendarId) {
+        this.ampCalendarId = ampCalendarId;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setAttendees(Collection attendees) {
+        this.attendees = attendees;
+    }
+
+    public void setSelectedEventOrganisations(String[] selectedEventOrganisations) {
+        this.selectedEventOrganisations = selectedEventOrganisations;
+    }
+
+    public void setSearchOrgKey(String searchOrgKey) {
+        this.searchOrgKey = searchOrgKey;
+    }
+
+    public void setTeamsMap(Map<String,Team> teamsMap) {
+        this.teamsMap = teamsMap;
+    }
+
+    public void setSelectedAttsCol(Collection<LabelValueBean> selectedAttsCol) {
+        this.selectedAttsCol = selectedAttsCol;
+    }
+
+    public void setSelectedOrganisationsCol(Collection<LabelValueBean> selectedOrganisationsCol) {
+        this.selectedOrganisationsCol = selectedOrganisationsCol;
+    }
+
+    public void setSelectedEventOrganisationsCol(Collection<LabelValueBean> selectedEventOrganisationsCol) {
+        this.selectedEventOrganisationsCol = selectedEventOrganisationsCol;
+    }
+
+    public void setEventOrganisations(Collection eventOrganisations) {
+        this.eventOrganisations = eventOrganisations;
+    }
+
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        ampCalendarId=null;
+        eventTitle=null;
+        //method=null;
+        searchOrgKey=null;
+        teamsMap=null;
+        privateEvent=false;
+
+        calendarTypes=null;
+        selectedCalendarTypeId=null;
+        selectedCalendarTypeName=null;
+
+        eventTypesList=null;
+        selectedEventTypeId=null;
+        selectedEventTypeName=null;
+
+        organisations=null;
+        selectedOrganisations=null;
+        selectedOrganisationsCol=null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        selectedStartDate=sdf.format(new Date());
+        selectedStartTime="00:00";
+        startDate=null;
+        startDateBreakDown=null;
+        selectedEndDate=sdf.format(new Date());
+        selectedEndTime="00:00";
+        endDate=null;
+        endDateBreakDown=null;
+
+        eventOrganisations=null;
+        selectedEventOrganisations=null;
+        selectedEventOrganisationsCol=null;
+
+        attendees=null;
+        selectedAtts=null;
+        selectedAttsCol=null;
     }
 }

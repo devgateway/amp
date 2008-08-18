@@ -1,25 +1,32 @@
 package org.digijava.module.calendar.dbentity;
 
-import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class AmpCalendarAttendee {
     private Long id;
     private AmpCalendar ampCalendar;
-    private User user;
+    private AmpTeamMember member;
+    private AmpTeam team;
     private String guest;
 
     public AmpCalendarAttendee() {
 
     }
 
-    public AmpCalendarAttendee(AmpCalendar ampCalendar, User user) {
-        this.ampCalendar = ampCalendar;
-        this.user = user;
+    public AmpCalendarAttendee(AmpCalendar ampCalendar, AmpTeamMember member) {
+        this.ampCalendar=ampCalendar;
+        this.member=member;
+    }
+
+    public AmpCalendarAttendee(AmpCalendar ampCalendar, AmpTeam team) {
+        this.ampCalendar=ampCalendar;
+        this.team=team;
     }
 
     public AmpCalendarAttendee(AmpCalendar ampCalendar, String guest) {
-        this.ampCalendar = ampCalendar;
-        this.guest = guest;
+        this.ampCalendar=ampCalendar;
+        this.guest=guest;
     }
 
     public String getGuest() {
@@ -30,12 +37,16 @@ public class AmpCalendarAttendee {
         return id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public AmpCalendar getAmpCalendar() {
         return ampCalendar;
+    }
+
+    public AmpTeamMember getMember() {
+        return member;
+    }
+
+    public AmpTeam getTeam() {
+        return team;
     }
 
     public void setGuest(String guest) {
@@ -46,37 +57,17 @@ public class AmpCalendarAttendee {
         this.id = id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public void setAmpCalendar(AmpCalendar ampCalendar) {
         this.ampCalendar = ampCalendar;
     }
 
-    public boolean equals(Object obj) {
-        boolean result;
-        AmpCalendarAttendee other = (AmpCalendarAttendee) obj;
-        Long idA = this.getId() != null ? this.getId() : new Long(0);
-        Long idB = other != null && other.getId() != null ? other.getId() :
-            new Long(0);
-        result = idA.equals(idB);
-        if(!result) {
-            return result;
-        }
-        Long userA = this.getUser() != null && this.getUser().getId() != null ?
-            this.getUser().getId() : new Long(0);
-        Long userB = other != null && other.getUser() != null &&
-            other.getUser().getId() != null ? other.getUser().getId() :
-            new Long(0);
-        result = userA.equals(userB);
-        if(!result) {
-            return result;
-        }
-        String guestA = this.getGuest() != null ? this.getGuest() : "";
-        String guestB = other != null && other.getGuest() != null ?
-            other.getGuest() : "";
-        return guestA.equals(guestB);
+    public void setMember(AmpTeamMember member) {
+        this.member = member;
+    }
+
+    public void setTeam(AmpTeam team) {
+        this.team = team;
     }
 
     public int hashCode() {

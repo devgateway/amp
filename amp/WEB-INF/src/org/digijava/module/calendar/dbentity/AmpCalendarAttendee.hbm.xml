@@ -8,7 +8,8 @@
 			</generator>
 		</id>
         <many-to-one name="ampCalendar" column="CALENDAR_ID" class="org.digijava.module.calendar.dbentity.AmpCalendar"/>
-		<many-to-one name="user" column="USER_ID" class="org.digijava.kernel.user.User"/>
+		<many-to-one name="member" column="MEMBER_ID" class="org.digijava.module.aim.dbentity.AmpTeamMember"/>
+        <many-to-one name="team" column="TEAM_ID" class="org.digijava.module.aim.dbentity.AmpTeam"/>
         <property name="guest" column="GUEST"  type="java.lang.String"/>
 	</class>
 </hibernate-mapping>

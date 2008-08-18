@@ -172,7 +172,6 @@ border-right:1px solid white;
                               </div>                    
                           </li>
                           <module:display name="HELP">
-						  <feature:display name="Admin Help" module="HELP">
                           <li class="yuiampmenuitem">
                               <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
                                   <digi:trn key="help:help">HELP</digi:trn>
@@ -212,7 +211,6 @@ border-right:1px solid white;
                                   </div>
                               </div>                    
                           </li>
-						  </feature:display>
                           </module:display>
             
                         </ul>            

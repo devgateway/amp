@@ -19,7 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
  * USA.
  */
-
 package org.digijava.module.editor.action;
 
 import java.util.ArrayList;
@@ -45,6 +44,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.form.EditorForm;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.editor.util.DbUtil;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -54,18 +54,19 @@ import org.digijava.module.editor.util.DbUtil;
  * @author not attributable
  * @version 1.0
  */
-
 public class ShowEditText
-    extends Action {
+        extends Action {
 
     public ActionForward execute(ActionMapping mapping,
-                                 ActionForm form,
-                                 javax.servlet.http.HttpServletRequest request,
-                                 javax.servlet.http.HttpServletResponse
-                                 response) throws java.lang.Exception {
+            ActionForm form,
+            javax.servlet.http.HttpServletRequest request,
+            javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
+        
+        HttpSession session = request.getSession();
 
+        String name=(String)session.getAttribute("activityName");
         EditorForm formBean = (EditorForm) form;
-
+        formBean.setActivityName(name);
         List dbEditorList = null;
         Editor editor = null;
 
@@ -97,11 +98,11 @@ public class ShowEditText
             if ( (key != null) && (currentLang != null)) {
                 //get editor
                 editor = DbUtil.getEditor(site.getSiteId(),
-                                          key, currentLang);
+                        key, currentLang);
 
                 //get editor list for other languages
                 dbEditorList = DbUtil.getEditorList(moduleInstance.getSite().
-                    getSiteId(), key, currentLang);
+                        getSiteId(), key, currentLang);
 
                 if (editor == null) { //create editor
                     Editor editorKey = new Editor();

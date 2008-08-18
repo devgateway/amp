@@ -50,7 +50,7 @@ public class EditorForm
         private String userName;
         private String lastModDate;
         private String url;
-
+    
         public void setContent(String content) {
             this.content = content;
         }
@@ -118,6 +118,16 @@ public class EditorForm
 
     private String contentEng;
     private String returnUrl;
+    
+    private String activityName;
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
 
     public String getNotice() {
         return notice;

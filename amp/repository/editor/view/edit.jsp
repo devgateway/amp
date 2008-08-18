@@ -50,24 +50,25 @@
 	<html:hidden name="editorForm" property="lang"/>
 
 	<html:hidden name="editorForm" property="returnUrl"/>
-
-	<table width="80%">
-
-		<tr>
-
-			<td noWrap width="7%" align="right"><B style="COLOR: #004080"><digi:trn key="editor:title">Title</digi:trn>:</B>
-
-			</td>
-
-			<td width="93%">
-
-				<html:text name="editorForm" property="title" size="70" style="COLOR: #004080"/>
-
-			</td>
-
-		</tr>
-
-	</table><BR>
+        <html:hidden name="editorForm" property="title"/>
+        <c:if test="${not empty editorForm.activityName}">
+            <table width="80%">
+                
+                <tr>
+                    
+                    <td noWrap width="7%" align="right"><B style="COLOR: #004080"><digi:trn key="editor:title">Title</digi:trn>:</B>
+                        
+                    </td>
+                        
+                    <td width="93%">
+                        
+                        <html:text name="editorForm" property="activityName" size="70" style="COLOR: #004080" readonly="true"/>
+                            
+                    </td>
+                        
+                </tr>
+                    
+            </table><BR></c:if>
             <FCK:editor id="content"   basePath="/FCKeditor/"
             width="80%"
             height="500" toolbarSet="AMP" defaultLanguage="${editorForm.lang}">

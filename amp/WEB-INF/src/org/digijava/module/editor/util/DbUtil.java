@@ -454,10 +454,10 @@ public class DbUtil {
 
             Query q = session.createQuery(
                 "select e.body from " +
-                Editor.class.getName() + " e, " +
+                Editor.class.getName() + " e " +
                 " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language=:language)");
 
-            q.setCacheable(true);
+          //  q.setCacheable(true);
             q.setParameter("siteId", siteId, Hibernate.STRING);
             q.setParameter("editorKey", editorKey, Hibernate.STRING);
             q.setParameter("language", language, Hibernate.STRING);

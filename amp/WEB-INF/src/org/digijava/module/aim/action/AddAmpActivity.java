@@ -1060,6 +1060,7 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
         eaForm.setStep("1");
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
+        session.setAttribute("activityName", eaForm.getTitle());
         String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
                         getNavigationLanguage(request).
                         getCode()+

@@ -116,7 +116,7 @@ function resetAll(){
 }
 
 function validateForm() {
-  <field:display name="Project Title" feature="Identification">
+  /*<field:display name="Project Title" feature="Identification">
   if (trim(document.aimEditActivityForm.title.value) == "") {
     <c:set var="translation">
     <digi:trn key="aim:pleaseEnterTitle">Please enter title</digi:trn>
@@ -139,7 +139,7 @@ function validateForm() {
       return false;
     }
     </field:display>
-  }
+  }*/
   /*	if (document.aimEditActivityForm.status.value == "-1") {
     alert("Please select status");
     document.aimEditActivityForm.status.focus();

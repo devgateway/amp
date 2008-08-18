@@ -2,13 +2,13 @@ package org.digijava.module.calendar.dbentity;
 
 import java.util.Set;
 
-import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class AmpCalendar {
     private AmpCalendarPK calendarPK;
     private AmpEventType eventType;
-    private User user;
-    private Set donors;
+    private AmpTeamMember member;
+    private Set organisations;
     private Set attendees;
     private boolean privateEvent;
 
@@ -36,16 +36,16 @@ public class AmpCalendar {
         return privateEvent;
     }
 
-    public Set getDonors() {
-        return donors;
+    public AmpTeamMember getMember() {
+        return member;
+    }
+
+    public Set getOrganisations() {
+        return organisations;
     }
 
     public Set getAttendees() {
         return attendees;
-    }
-
-    public User getUser() {
-        return user;
     }
 
     public void setCalendarPK(AmpCalendarPK calendarPK) {
@@ -60,15 +60,15 @@ public class AmpCalendar {
         this.privateEvent = privateEvent;
     }
 
+    public void setMember(AmpTeamMember member) {
+        this.member = member;
+    }
+
+    public void setOrganisations(Set organisations) {
+        this.organisations = organisations;
+    }
+
     public void setAttendees(Set attendees) {
         this.attendees = attendees;
-    }
-
-    public void setDonors(Set donors) {
-        this.donors = donors;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

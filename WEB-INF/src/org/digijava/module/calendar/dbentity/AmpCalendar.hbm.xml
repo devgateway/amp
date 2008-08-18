@@ -6,8 +6,8 @@
             <key-many-to-one column="CALENDAR_ID" name="calendar" class="org.digijava.module.calendar.dbentity.Calendar"/>
         </composite-id>
         <many-to-one column="EVENT_TYPE_ID" name="eventType" class="org.digijava.module.calendar.dbentity.AmpEventType"/>
-        <many-to-one column="USER_ID" name="user" class="org.digijava.kernel.user.User"/>
-        <set name="donors" table="AMP_CALENDAR_DONORS_MAP" lazy="true">
+        <many-to-one column="MEMBER_ID" name="member" class="org.digijava.module.aim.dbentity.AmpTeamMember"/>
+        <set name="organisations" table="AMP_CALENDAR_EVENT_ORGANISATIONS" lazy="true">
             <key column="CALENDAR_ID"/>
             <many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>
         </set>

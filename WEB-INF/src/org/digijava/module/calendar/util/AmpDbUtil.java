@@ -371,7 +371,7 @@ public class AmpDbUtil {
     try {
       Session session = PersistenceManager.getRequestDBSession();
       String queryString = "select ac from " +
-          AmpCalendar.class.getName() + " ac left  join  ac.eventType et left  join ac.donors don, "+ Calendar.class.getName()   +" c ";
+          AmpCalendar.class.getName() + " ac left  join  ac.eventType et left  join ac.organisations don, "+ Calendar.class.getName()   +" c ";
       /*String queryString = "select ac from " +
           AmpCalendar.class.getName() + " ac, " +
           Calendar.class.getName() + " c";

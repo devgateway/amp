@@ -24,6 +24,10 @@ import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.DateNavigatorItem;
 import org.digijava.module.calendar.exception.CalendarException;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
@@ -79,23 +83,21 @@ public class AmpUtil {
         return result;
     }
 
-    public static Set getSelectedAttendeeUsers(AmpCalendar ampCalendar,
-                                               String[] userIds) {
+    public static Set getSelectedAttendeeMembers(AmpCalendar ampCalendar, String[] memberIds) {
         Set result = new HashSet();
         try {
-            if(userIds == null || userIds.length == 0) {
+            if(memberIds == null || memberIds.length == 0) {
                 return result;
             }
-            List allUsers = AmpDbUtil.getUsers();
+            Collection<AmpTeamMember> members = TeamMemberUtil.getAllTeamMembers();
             BeanIdResolver resolver = new BeanIdResolver() {
                 public String getId(Object o) {
-                    return((User) o).getId().toString();
+                    return((AmpTeamMember) o).getAmpTeamMemId().toString();
                 }
             };
-            Iterator it = getSelectedItems(allUsers, userIds, resolver).
-                iterator();
+            Iterator it = getSelectedItems(members, memberIds, resolver).iterator();
             while(it.hasNext()) {
-                result.add(new AmpCalendarAttendee(ampCalendar, (User) it.next()));
+                result.add(new AmpCalendarAttendee(ampCalendar, (AmpTeamMember) it.next()));
             }
         } catch(Exception ex) {
 
@@ -103,8 +105,29 @@ public class AmpUtil {
         return result;
     }
 
-    public static Set getSelectedAttendeeGuests(AmpCalendar ampCalendar,
-                                                String[] guestIds) {
+    public static Set getSelectedAttendeeTeams(AmpCalendar ampCalendar,String[] teamIds) {
+        Set result = new HashSet();
+        try {
+            if(teamIds == null || teamIds.length == 0) {
+                return result;
+            }
+            Collection<AmpTeam> teams = TeamUtil.getAllTeams();
+            BeanIdResolver resolver = new BeanIdResolver() {
+                public String getId(Object o) {
+                    return((AmpTeam) o).getAmpTeamId().toString();
+                }
+            };
+            Iterator it = getSelectedItems(teams, teamIds, resolver).iterator();
+            while(it.hasNext()) {
+                result.add(new AmpCalendarAttendee(ampCalendar, (AmpTeam) it.next()));
+            }
+        } catch(Exception ex) {
+
+        }
+        return result;
+    }
+
+    public static Set getSelectedAttendeeGuests(AmpCalendar ampCalendar,String[] guestIds) {
         Set result = new HashSet();
         try {
             if(guestIds == null && guestIds.length == 0) {
@@ -333,7 +356,8 @@ class AttendeeSyncronizer
         AmpCalendarAttendee other = (AmpCalendarAttendee) o2;
         if(me != other) {
             me.setAmpCalendar(other.getAmpCalendar());
-            me.setUser(other.getUser());
+            me.setMember(other.getMember());
+            me.setTeam(other.getTeam());
             me.setGuest(other.getGuest());
         }
         return true;
@@ -362,10 +386,10 @@ class AttendeeSyncronizer
             return result;
         }
         // compare by user id
-        Long userIdA = A != null && A.getUser() != null && A.getUser().getId() != null ?
-            A.getUser().getId() : new Long(0);
-        Long userIdB = B != null && B.getUser() != null && B.getUser().getId() != null ?
-            B.getUser().getId() : new Long(0);
+        Long userIdA = A != null && A.getMember() != null && A.getMember().getAmpTeamMemId() != null ?
+            A.getMember().getAmpTeamMemId() : new Long(0);
+        Long userIdB = B != null && B.getMember() != null && B.getMember().getAmpTeamMemId() != null ?
+            B.getMember().getAmpTeamMemId() : new Long(0);
         result = userIdA.compareTo(userIdB);
         if(result != 0) {
             return result;

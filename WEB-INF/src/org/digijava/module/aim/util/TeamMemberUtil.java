@@ -208,6 +208,22 @@ public class TeamMemberUtil {
 
 	}
 
+    public static Collection<AmpTeamMember> getAllTeamMembers() {
+        Session session = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select tm from " + AmpTeamMember.class.getName() + " tm";
+            qry = session.createQuery(queryString);
+            return qry.list();
+        } catch (Exception e) {
+            logger.error("Unable to get team members");
+            logger.debug("Exceptiion " + e);
+        }
+        return null;
+	}
+
 	public static TeamMember getTMTeamHead(Long teamId) {
 		AmpTeamMember ampMem	= getTeamHead(teamId);
 		Long id 	= ampMem.getAmpTeamMemId();

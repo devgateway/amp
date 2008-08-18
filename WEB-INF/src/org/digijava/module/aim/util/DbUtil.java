@@ -115,25 +115,25 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
-        
+
            public static String filter(String text) {
 
 		String result = null;
-             
+
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = result.replaceAll(">", "&gt;");
 			result = result.replaceAll("<", "&lt;");
 			result = result.replaceAll("'", "\'");//"&acute;");
 			result = result.replaceAll("\"", "&quot;");
-			
+
 		}
-                
+
 
 		return result;
 
 	}
-	public static String getDescParsed(String str) 
+	public static String getDescParsed(String str)
 	{
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];
@@ -402,7 +402,7 @@ public class DbUtil {
     }
 
     public static int countActivitiesByQuery(String sQuery) {
-    	
+
     	Session sess=null;
     		Connection conn=null;
     		CellColumn cc=null;
@@ -416,7 +416,7 @@ public class DbUtil {
     			logger.error(e);
     			e.printStackTrace();
     		}
-    		
+
     		int ii=0;
 
     		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
@@ -436,7 +436,7 @@ public class DbUtil {
     		} catch (SQLException e) {
     			logger.error(e);
     			e.printStackTrace();
-    		} 
+    		}
     		finally {
     			try {
     				if (sess != null) {
@@ -450,7 +450,7 @@ public class DbUtil {
     		//System.out.println("--------------------- "+ii);
     	return ii;
     }
-    
+
     public static String getTrnMessage(String keyTrn) {
         Session session = null;
         Collection funding = new ArrayList();
@@ -1587,7 +1587,7 @@ public class DbUtil {
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
-            
+
         } catch (Exception e) {
         	e.printStackTrace();
             logger.error("Unable to get TeamAppSettings");
@@ -1613,7 +1613,7 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
                 if(ampAppSettings!=null) break;
             }
-            
+
         } catch (Exception e) {
         	e.printStackTrace();
             logger.error("Unable to get TeamAppSettings");
@@ -1621,7 +1621,7 @@ public class DbUtil {
         }
         return ampAppSettings;
     }
-    
+
     public static boolean isUserTranslator(Long userId) {
 
         logger.debug("In isUserTranslator()");
@@ -1687,9 +1687,9 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-    
-    
-    
+
+
+
     public static Collection getAllReports() {
         Session session = null;
         Query qry = null;
@@ -1731,7 +1731,7 @@ public class DbUtil {
         }
         return ampReports;
     }
-    
+
     public static AmpReportLog getAmpReportLog(Long report_id, Long member_id) {
     	AmpReportLog ampReportMemberLog = null;
         Session session = null;
@@ -1752,7 +1752,7 @@ public class DbUtil {
             logger.error("Unable to get reportmemberlog " + ex);
         }
         return ampReportMemberLog;
-    }    
+    }
 
     public static Collection getMembersUsingReport(Long id) {
 
@@ -3097,7 +3097,7 @@ public class DbUtil {
                         + "'";
             }
             logger.debug(" transactionType " + transactionType
-                         + " adjustmentType " + adjustmentType 
+                         + " adjustmentType " + adjustmentType
                          + " ampCurrencyCode" + ampCurrencyCode);
             queryString = queryString = "select fd from "
                 + AmpFundingDetail.class.getName()
@@ -4415,7 +4415,7 @@ public class DbUtil {
         }
         return grp;
     }
-   
+
     public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
         Session session = null;
         Collection col = null;
@@ -4433,7 +4433,7 @@ public class DbUtil {
         }
         return col;
     }
-    
+
     public static Collection<AmpOrgGroup> searchForOrganisationGroup(String keyword, Long orgType) {
         Session session = null;
         Collection col = null;
@@ -4469,7 +4469,7 @@ public class DbUtil {
         }
         return col;
     }
-    
+
     public static Collection<AmpOrgGroup> getAllOrganisationGroup() {
         Session session = null;
         Query qry = null;
@@ -5801,8 +5801,8 @@ public class DbUtil {
                 itr1 = calDonorsList.iterator();
                 while (itr1.hasNext()) {
                     AmpCalendar cal = (AmpCalendar) itr1.next();
-                    if (cal.getDonors() != null)
-                        donors.addAll(cal.getDonors());
+                    if (cal.getOrganisations() != null)
+                        donors.addAll(cal.getOrganisations());
                 }
             }
             if (donors.size() > 0) {
@@ -5879,7 +5879,7 @@ public class DbUtil {
                                 if (answersRow[0] == Double.parseDouble(year.format(cal.getStartDate())) ||
                                     answersRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
                                     // checking if the Mission is 'joint'
-                                    if (null != ampCal.getDonors() && ampCal.getDonors().size() > 1) {
+                                    if (null != ampCal.getOrganisations() && ampCal.getOrganisations().size() > 1) {
                                         answersRow[1] += 1;
                                         //allDnRow[1] += 1;
                                     }
@@ -5910,10 +5910,10 @@ public class DbUtil {
                             Calendar cal = (Calendar) acal.getCalendarPK().getCalendar();
                             if (allDnRow[0] == Double.parseDouble(year.format(cal.getStartDate())) ||
                                 allDnRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
-                                if (null != acal.getDonors()) {
-                                    if (acal.getDonors().size() > 1) // checking if the Mission is 'joint'
+                                if (null != acal.getOrganisations()) {
+                                    if (acal.getOrganisations().size() > 1) // checking if the Mission is 'joint'
                                         allDnRow[1] += 1;
-                                    if (!acal.getDonors().isEmpty())
+                                    if (!acal.getOrganisations().isEmpty())
                                         allDnRow[2] += 1; // total number of Missions
                                 }
                             }
@@ -6644,8 +6644,8 @@ public class DbUtil {
             e.printStackTrace(System.out);
         }
         return obResult;
-	}	
-        
+	}
+
 	/**
 	 * Compares Values by type(actual,base,target)
 	 * Used in Multi Program Manager to sort them in order: base,actual,target  of the same year
@@ -6657,7 +6657,7 @@ public class DbUtil {
 			int retValue=0;
 			String  o1Year="";
 			String o2Year="";
-			//getting  year from creation date 
+			//getting  year from creation date
 			if(o1.getCreationDate()!=null){
 				int length=o1.getCreationDate().length();
 				o1Year=o1.getCreationDate().substring(length-4, length);
@@ -6677,21 +6677,21 @@ public class DbUtil {
 			return retValue;
 		}
 	}
-	
+
 	public static class AmpIndicatorValuesComparatorByTypeAndYear implements Comparator<AmpIndicatorValue>{
 
-		public int compare(AmpIndicatorValue o1, AmpIndicatorValue o2) {	
+		public int compare(AmpIndicatorValue o1, AmpIndicatorValue o2) {
 			AmpPrgIndicatorValue val1=new AmpPrgIndicatorValue();
 			AmpPrgIndicatorValue val2=new AmpPrgIndicatorValue();
-			
+
 			val1.setValueType(o1.getValueType());
 			val1.setCreationDate(DateConversion.ConvertDateToString(o1.getValueDate()));
-			
+
 			val2.setValueType(o2.getValueType());
-			val2.setCreationDate(DateConversion.ConvertDateToString(o2.getValueDate()));			
+			val2.setCreationDate(DateConversion.ConvertDateToString(o2.getValueDate()));
 			return new IndicatorValuesComparatorByTypeAndYear().compare(val1, val2) ;
 		}
-		
+
 	}
 
 	/**

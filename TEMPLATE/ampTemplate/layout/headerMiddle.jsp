@@ -194,11 +194,6 @@ border-right:1px solid white;
                                         </a>
                                         </li>
 										</feature:display>
-                                        <li>
-                                        <a class="yuiampmenuitemlabel" href="#">
-                                        <digi:trn key="aim:tutorial">Tutorial</digi:trn>
-                                        </a>
-                                        </li>
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">
@@ -486,11 +481,6 @@ border-right:1px solid white;
                                         </a>
                                         </li>
 										</feature:display>
-										<li>
-                                        <a class="yuiampmenuitemlabel" href="#">
-                                        <digi:trn key="aim:tutorial">Tutorial</digi:trn>
-                                        </a>
-                                        </li>
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#">

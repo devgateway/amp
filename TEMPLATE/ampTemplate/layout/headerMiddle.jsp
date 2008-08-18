@@ -195,7 +195,7 @@ border-right:1px solid white;
 										</feature:display>
 										<feature:display name="Support Request Form" module="HELP">
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="#">
+                                        <a class="yuiampmenuitemlabel" href="http://support.ampdev.net/">
                                         <digi:trn key="aim:supportrequestform">Support Request Form</digi:trn>
                                         </a>
                                         </li>

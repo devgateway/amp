@@ -335,13 +335,13 @@ public class SaveActivity extends Action {
 
 				if (titleFlag) {
 					eaForm.setStep("1");
-					return mapping.findForward("addActivity");
+					return mapping.findForward("addActivityStep1");
 				}
 
                 if(eaForm.getDraft()==null || !eaForm.getDraft().booleanValue()){
                     if (statusFlag) {
                         eaForm.setStep("1");
-                        return mapping.findForward("addActivity");
+                        return mapping.findForward("addActivityStep1");
                     }
                     eaForm.setPrimarySectorVisible(FeaturesUtil.isVisibleSectors("Primary", ampContext)?"true":"false");
                     eaForm.setSecondarySectorVisible(FeaturesUtil.isVisibleSectors("Secondary", ampContext)?"true":"false");
@@ -1868,11 +1868,12 @@ public class SaveActivity extends Action {
 
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) ampTreeVisibility.getRoot();
 		if(currentTemplate!=null)
-			if(currentTemplate.getFeatures()!=null)
-				for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
+			if(currentTemplate.getFields()!=null)
+				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 				{
-					AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
-					if(feature.getName().compareTo("Status")==0)
+					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+					System.out.println(field.getName());
+					if(field.getName().equals("Status"))
 					{
 						return true;
 					}

@@ -636,3 +636,8 @@
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
 <field:display name="Web Resources Notes" feature="Web Resources"></field:display>
 <field:display name="Web Resources Document Type" feature="Web Resources"></field:display>
+
+<feature:display name="About AMP" module="HELP"></feature:display>
+<feature:display name="Admin Help" module="HELP"></feature:display>
+<feature:display name="Support Request Form" module="HELP"></feature:display>
+<feature:display name="User Help" module="HELP"></feature:display>

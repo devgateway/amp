@@ -56,13 +56,13 @@
                 
                 <tr>
                     
-                    <td noWrap width="7%" align="right"><B style="COLOR: #004080"><digi:trn key="editor:title">Title</digi:trn>:</B>
+                    <td noWrap width="7%" align="right"><B><digi:trn key="editor:title">Title</digi:trn>:</B>
                         
                     </td>
                         
                     <td width="93%">
                         
-                        <html:text name="editorForm" property="activityName" size="70" style="COLOR: #004080" readonly="true"/>
+                        <html:text name="editorForm" property="activityName" size="70"  readonly="true"/>
                             
                     </td>
                         

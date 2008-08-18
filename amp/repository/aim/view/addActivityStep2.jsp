@@ -426,7 +426,7 @@ function validateLocationPercentage(){
     return false;
   }
   else if (cnt_blank_fields!=cnt) {
-  	if (cnt>0 && sum!=100 ) {
+  	if (cnt>0 && sum!=0 && sum!=100 ) {
 	    alert("${errMsgSumPercentage}");
 	    (document.aimEditActivityForm.elements)[str].focus();
 	    return false;

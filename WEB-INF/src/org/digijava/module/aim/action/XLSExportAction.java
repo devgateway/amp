@@ -23,6 +23,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
@@ -52,12 +54,14 @@ public class XLSExportAction extends Action {
 				response);
 
 		rd.setCurrentView(GenericViews.XLS);
+		HttpSession session = request.getSession();
+		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		
+		if (session.getAttribute("currentMember")!=null && !arf.isPublicView()){
 	     response.setContentType("application/msexcel");
 	        response.setHeader("Content-Disposition",
 	                "inline; filename=data.xls");
 
-	        HttpSession session=request.getSession();
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
 //			for translation purposes
@@ -176,7 +180,10 @@ public class XLSExportAction extends Action {
 		sheet.autoSizeColumn((short)0);
 	    wb.write(response.getOutputStream());
 	    
-	    
+		}else{
+			session.setAttribute("sessionExpired", true);
+			return mapping.findForward("index");
+		}
 
 		return null;
 	}

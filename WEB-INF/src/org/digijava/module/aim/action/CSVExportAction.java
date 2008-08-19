@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
@@ -57,6 +59,10 @@ public class CSVExportAction
     rd.setCurrentView(GenericViews.XLS);
 
     HttpSession session = request.getSession();
+    
+    AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+	
+	if (session.getAttribute("currentMember")!=null && !arf.isPublicView()){
     AmpReports r = (AmpReports) session.getAttribute("reportMeta");
 
     response.setContentType("application/vnd.ms-excel");
@@ -168,7 +174,10 @@ public class CSVExportAction
     out.println(sb.toString());
 
     out.close();
-
+	}else{
+		session.setAttribute("sessionExpired", true);
+		return mapping.findForward("index");
+	}
     return null;
   }
 

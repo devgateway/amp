@@ -402,22 +402,10 @@ function validateLocationPercentage(){
     str   = "selectedLocs[" + i + "].percent";    
     val   = (document.aimEditActivityForm.elements)[str].value;    
     // added by mouhamad for burkina on 22/02/08
-    if (val == "" || val == null || val == "0") {
+    if (val == "" || val == null || val == "0" || val== ",00") {
     	val = "0";
     	cnt_blank_fields = cnt_blank_fields + 1;
     }    
-    /* commented by Mouhamad for burkina on 21/02/08
-    if (val == "" || val == null) {
-      alert("${errMsgAddPercentage}");
-      flag = true;
-      break;
-    }
-    if (val == "0"){
-    alert("${errMsgZeroPercentage}");
-    flag = true;
-      break;
-    }
-	*/
     sum = sum + parseFloat(val);
     i = i + 1;
   }

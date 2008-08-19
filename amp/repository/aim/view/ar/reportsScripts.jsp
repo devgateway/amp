@@ -257,7 +257,7 @@ background-color: yellow;
 		    underlay:"none",
 		    close:true,
 		    visible:false,
-		    //modal:true,
+		    modal:true,
 		    draggable:true
 		    }
 		     );

@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -32,6 +35,7 @@ import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.digijava.module.widget.table.filteredColumn.WiCellFiltered;
 import org.digijava.module.widget.table.filteredColumn.WiCellHeaderFiltered;
 import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
+import org.digijava.module.widget.table.filteredColumn.WiColumnFilterSubColumn;
 
 /**
  * Utility methods for table widgets and its children.
@@ -97,6 +101,17 @@ public final class TableWidgetUtil {
 		return cell;
 	}
 
+	public static WiCell newCell(WiColumn column){
+		WiCell cell = null;
+		if (column instanceof WiColumnFilterSubColumn){
+			cell = new WiCellFiltered();
+		}else{
+			cell = new WiCellStandard(column);
+		}
+		cell.setColumn(column);
+		return cell;
+	}
+
 	/**
 	 * Creates new header cell for header row.
 	 * @param column
@@ -106,10 +121,11 @@ public final class TableWidgetUtil {
 		WiCell cell = null;
 		if (column instanceof WiColumnDropDownFilter){
 			WiColumnDropDownFilter filterCol = (WiColumnDropDownFilter)column;
-			cell = new WiCellHeaderFiltered();
-			cell.setValue(filterCol.getSelectedColumn().getName());
+			WiCellHeaderFiltered cellFilteredHeader= new WiCellHeaderFiltered();
+			cell = cellFilteredHeader;
+			cell.setValue("===");//filterCol.getSelectedColumn().getName());
 			cell.setColumn(filterCol);
-			
+			cellFilteredHeader.setItemProvider(filterCol.getProvider());
 		}else{
 			cell = new WiCellHeader();
 			cell.setValue(column.getName());
@@ -119,8 +135,9 @@ public final class TableWidgetUtil {
 		return cell;
 	}
 	
-	public static WiRow newDataRow(Long pk,Map<Long, WiColumn> columnMap){
-		WiRow result = new WiRowStandard(pk,columnMap);
+	public static WiRow newDataRow(Map<Long, WiColumn> columnMap, WiTable table){
+		WiRow result = new WiRowStandard(-1L,columnMap);
+		result.setTable(table);
 		return result;
 	}
 	
@@ -130,7 +147,7 @@ public final class TableWidgetUtil {
 	 * @param id db key of the table.
 	 * @return
 	 * @throws DgException
-	 * TODO imlement here
+	 * TODO implement here
 	 */
 	public static AmpDaTable getDbTable(Long id) throws DgException{
 		return org.digijava.module.widget.util.TableWidgetUtil.getTableWidget(id);
@@ -138,7 +155,21 @@ public final class TableWidgetUtil {
 
 	public static void saveTable(WiTable table) throws DgException{
 		Session session = PersistenceManager.getRequestDBSession();
-		table.save(session);
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			table.saveData(session);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception e2) {
+					throw new DgException("Cannot rolback table widget data save operation",e2);
+				}
+			}
+			throw new DgException("Cannot save table widget data",e);
+		}
 	}
 	
 	/**
@@ -182,6 +213,10 @@ public final class TableWidgetUtil {
 
 		public List<FilterItem> getItems() {
 			return items;
+		}
+
+		public Long getId() {
+			return new Long(FilterItemProvider.DONORS_FILTER);
 		}
 		
 	}
@@ -257,6 +292,27 @@ public final class TableWidgetUtil {
 		
 	}
 	
+	/**
+	 * {@link WiColumn} key worker.
+	 * Resolves ID of the WiColumn as the key
+	 * @author Irakli Kobiashvili
+	 *
+	 */
+	public static class WiSubColumnIdKeyResolver implements KeyWorker<Long, WiColumnFilterSubColumn>{
+
+		public void markKeyForRemoval(WiColumnFilterSubColumn element) {
+			//dummy at this time
+		}
+
+		public void updateKey(WiColumnFilterSubColumn element, Long newKey) {
+			element.setId(newKey);
+		}
+
+		public Long resolveKey(WiColumnFilterSubColumn element) {
+			return element.getId();
+		}
+		
+	}
 	
 	
 }

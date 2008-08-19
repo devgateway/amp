@@ -45,6 +45,7 @@ public class TableWidgetCreationForm extends ActionForm {
 	private Boolean colColumnEdit;
 	
 	private Collection<LabelValueBean> columnTypes;
+	private Long colSelectedType;
 
 	public Collection<LabelValueBean> getColumnTypes() {
 		return columnTypes;
@@ -228,6 +229,14 @@ public class TableWidgetCreationForm extends ActionForm {
 
 	public void setColColumnEdit(Boolean colColumnEdit) {
 		this.colColumnEdit = colColumnEdit;
+	}
+
+	public void setColSelectedType(Long colSelectedType) {
+		this.colSelectedType = colSelectedType;
+	}
+
+	public Long getColSelectedType() {
+		return colSelectedType;
 	}
 
 }

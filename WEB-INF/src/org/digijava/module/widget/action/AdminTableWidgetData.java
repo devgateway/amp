@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.widget.form.AdminTableWidgetDataForm;
 import org.digijava.module.widget.table.WiTable;
+import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
 
 /**
  * Action for editing table widget data.
@@ -45,6 +46,18 @@ public class AdminTableWidgetData extends DispatchAction {
 		if ( ! isEdit(request)){
 			return startEdit(mapping, form, request, response);
 		}
+		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
+		WiTable wTable = getFromSession(request);
+		dForm.setColumns(wTable.getColumns());
+		if (wTable.getDataRows().size()==0){
+			wTable.appendNewRow();//we should have one empty row if table has no rows (data).
+		}
+		dForm.setRows(wTable.getDataRows());
+		dForm.setTableName(wTable.getName());
+		dForm.setWidgetId(wTable.getId());
+		dForm.setTable(wTable);
+		dForm.setData(new String[dForm.getRows().size()][dForm.getColumns().size()]);
+		dForm.setTableName(wTable.getDataRows().toString());
 		return mapping.findForward("forward");
 	}
 	
@@ -80,18 +93,10 @@ public class AdminTableWidgetData extends DispatchAction {
 		
 		//===NEW====
 		WiTable wTable = new WiTable.TableBuilder(dForm.getWidgetId()).build();
-		dForm.setColumns(wTable.getColumns());
-		if (wTable.getDataRows().size()==0){
-			wTable.appendNewRow();//we should have one empty row if table has no rows (data).
-		}
-		dForm.setRows(wTable.getDataRows());
-		dForm.setTableName(wTable.getName());
-		dForm.setWidgetId(wTable.getId());
-		dForm.setTable(wTable);
 		
 		markEditStarted(request, wTable);
 		
-		return mapping.findForward("forward");
+		return mapping.findForward("returnToEdit");
 	}
 	
 	/**
@@ -127,7 +132,7 @@ public class AdminTableWidgetData extends DispatchAction {
 			WiTable wTable = getFromSession(request);
 			wTable.addNewRowAt(insertIndex);
 		}		
-		return mapping.findForward("forward");
+		return mapping.findForward("returnToEdit");
 	}
 
 	/**
@@ -149,7 +154,29 @@ public class AdminTableWidgetData extends DispatchAction {
 			wTable.deleteDataRow(removeIndex);
 		}	
 		
-		return mapping.findForward("forward");
+		return mapping.findForward("returnToEdit");
+	}
+
+	/**
+	 * Changes state of the drop down filter.
+	 * Filter column and selected item in that filter both should be specified by id's. 
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward filterChanged(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		AdminTableWidgetDataForm dForm = (AdminTableWidgetDataForm) form;
+		Long filterColumnId = dForm.getFilterColumnId();
+		Long filterItemId = dForm.getSelectedFilterItemId();
+		WiTable table = getFromSession(request);
+		WiColumnDropDownFilter filterColumn = (WiColumnDropDownFilter) table.getColumnById(filterColumnId);
+		filterColumn.setFilterOn(filterItemId);
+		return mapping.findForward("returnToEdit");
 	}
 
 	/**

@@ -27,6 +27,12 @@
 		myForm.action="<%=justSubmit%>";  
 		myForm.submit();
 	}
+	function changeFilter(myForm,colId){
+		var sel = document.getElementById('dropDownFilter'+colId);
+		<digi:context name="justSubmit" property="context/module/moduleinstance/tableWidgetData.do?actType=filterChanged" />
+		myForm.action="<%=justSubmit%>"+"&filterColumnId="+colId+"&selectedFilterItemId="+sel.value;
+		myForm.submit();
+	}
 //-->
 </script>
 
@@ -64,9 +70,21 @@
 				<tr bgColor="#d7eafd">
 					<c:forEach var="col" items="${dform.columns}" varStatus="cvarstat">
 						<td>
-							<strong>
-								${col.name}
-							</strong>
+							<c:if test="${col.type==1}">
+								<strong>
+									${col.name}
+								</strong>
+							</c:if>
+							<c:if test="${col.type==2}">
+								<strong>
+									${col.name}
+								</strong>
+							</c:if>
+							<c:if test="${col.type==3}">
+								<html:select styleId="dropDownFilter${col.id}" name="col" property="activeItemId" style="width : 180px" onchange="changeFilter(this.form,${col.id})">
+									<html:optionsCollection name="col" property="provider.items" label="name" value="id"/>											
+								</html:select>
+							</c:if>
 						</td>
 					</c:forEach>
 					<td>
@@ -75,19 +93,18 @@
 						</strong>
 					</td>
 				</tr>
-				<c:forEach var="drow" items="${dform.rows}" varStatus="statRow">
+				<c:forEach var="drow" items="${dform.table.dataRows}" varStatus="statRow">
 					<tr>
 						<c:forEach var="dcell" items="${drow.cells}" varStatus="statCell">
-							<td>
-								<html:text name="dform" property="row[${statRow.index}].cell[${statCell.index}].value"/>
-								<html:text name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value" value="${dcell.value}"/>
+							<td> 
+								<html:text name="dform" property="row[${drow.pk}].cell[${dcell.column.id}].value"/>
 							</td>
 						</c:forEach>
 						<td>
 							<c:set var="addButton"><digi:trn key="gis:addButton">Add</digi:trn></c:set>
 							<c:set var="removeButton"><digi:trn key="gis:removeButton">Remove</digi:trn></c:set>
-							<input type="button" value="${addButton}" onclick="addRow(this.form,${statRow.index})">
-							<input type="button" value="${removeButton}" onclick="removeRow(this.form,${statRow.index})">
+							<input type="button" value="${addButton}" onclick="addRow(this.form,${drow.pk})">
+							<input type="button" value="${removeButton}" onclick="removeRow(this.form,${drow.pk})">
 						</td>
 					</tr>
 				</c:forEach>

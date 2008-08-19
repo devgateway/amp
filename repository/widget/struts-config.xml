@@ -27,11 +27,12 @@
 			<forward name="returnToEdit" path="/widget/adminTableWidgets.do?actType=edit" redirect="true"/>
 		</action>
 	
-	<action name="gisTableWidgetRenderForm" path="/widget/widgetTest" scope="request" type="org.digijava.module.widget.action.TestWidget" validate="false">
+		<action name="gisTableWidgetRenderForm" path="/widget/widgetTest" scope="request" type="org.digijava.module.widget.action.TestWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=widgetTestPage" />
     	</action>
-    	<action name="gisTableWidgetDataForm" path="/widget/tableWidgetData" scope="session" parameter="actType" type="org.digijava.module.widget.action.AdminTableWidgetData" validate="false">
-	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
+		<action name="gisTableWidgetDataForm" path="/widget/tableWidgetData" scope="session" parameter="actType" type="org.digijava.module.widget.action.AdminTableWidgetData" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />
+			<forward name="returnToEdit" path="/widget/tableWidgetData.do?actType=showEdit" redirect="true"/>
     	</action>
     	<action name="gisTableWidgetRenderForm" path="/widget/previewTable" scope="request" type="org.digijava.module.widget.action.PreviewTableWidget" validate="false">
 	      <forward name="forward" path="/showLayout.do?layout=edit_tableWidgetData" />

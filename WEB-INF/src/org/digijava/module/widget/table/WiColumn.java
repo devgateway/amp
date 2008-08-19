@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
+import org.digijava.module.widget.table.util.TableWidgetUtil;
 
 public abstract class WiColumn {
 	
@@ -19,8 +23,9 @@ public abstract class WiColumn {
 	private Integer orderId;
 	private String pattern;
 	private String cssClass;
-	private int type;
+	private int type = STANDARD;
 	private Map<Long, WiCell> cells = new HashMap<Long, WiCell>();
+	private WiTable table;
 	
 	public WiColumn(){
 		
@@ -33,6 +38,12 @@ public abstract class WiColumn {
 		this.setCssClass(dbColumn.getCssClass());
 		this.setOrderId(dbColumn.getOrderNo());
 	}
+	
+	public WiCell removeCellWithPk(Long pk){
+		return cells.remove(pk);
+	}
+	
+	public abstract void saveData(Session dbSession) throws DgException;
 	
 	public Long getId() {
 		return id;
@@ -53,7 +64,13 @@ public abstract class WiColumn {
 //		return cells;
 //	}
 	public WiCell getCell(Long rowPk){
-		return cells.get(rowPk);
+		WiCell cell = cells.get(rowPk);
+		if (cell ==null){
+			cell = TableWidgetUtil.newCell(this);
+			cell.setPk(rowPk);
+			this.setCell(cell);
+		}
+		return cell;
 	}
 	public void setCell(WiCell cell){
 		cells.put(cell.getPk(), cell);
@@ -91,5 +108,13 @@ public abstract class WiColumn {
 
 	public Integer getOrderId() {
 		return orderId;
+	}
+
+	public void setTable(WiTable table) {
+		this.table = table;
+	}
+
+	public WiTable getTable() {
+		return table;
 	}
 }

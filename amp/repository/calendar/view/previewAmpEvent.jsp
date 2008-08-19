@@ -36,20 +36,24 @@
                 <tr>
                     <td nowrap="nowrap" valign="top"><digi:trn key="calendar:orgs">&nbsp;Donors:&nbsp;&nbsp;</digi:trn></td>
                     <td>
-                        <c:if test="${empty calendarEventForm.organisations}">
-                            &nbsp;
+                      <div style="width:300px;height:200px;border:1px solid;overflow:auto">
+
+                        <c:if test="${empty calendarEventForm.selectedEventOrganisationsCol}">
+                        &nbsp;
                         </c:if>
-                        <c:if test="${!empty calendarEventForm.organisations}">
-                            <table cellpadding="0" cellspacing="0">
-                                <c:forEach var="org" items="${calendarEventForm.selectedEventOrganisationsCol}">
-                                    <tr>
-                                        <td nowrap="nowrap">
-                                            ${org.label};
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
+                        <c:if test="${!empty calendarEventForm.selectedEventOrganisationsCol}">
+                          <table cellpadding="0" cellspacing="0">
+                            <c:forEach var="org" items="${calendarEventForm.selectedEventOrganisationsCol}">
+                              <tr>
+                                <td nowrap="nowrap">
+                                  <html:hidden name="calendarEventForm" property="selectedEventOrganisations" value="${org.value}"/>
+                                  ${org.label};
+                                </td>
+                              </tr>
+                            </c:forEach>
+                          </table>
                         </c:if>
+                      </div>
                     </td>
                 </tr>
                 <tr>

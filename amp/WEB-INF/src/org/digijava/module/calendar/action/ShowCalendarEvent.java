@@ -163,6 +163,7 @@ public class ShowCalendarEvent extends Action {
                 Set atts = new HashSet();
                 for (int i = 0; i < slAtts.length; i++) {
                     AmpCalendarAttendee att = new AmpCalendarAttendee();
+                    att.setAmpCalendar(ampCalendar);
                     if (slAtts[i].startsWith("t:")) {
                         AmpTeam team = TeamUtil.getAmpTeam(Long.valueOf(slAtts[i].substring(2)));
                         att.setTeam(team);
@@ -254,6 +255,7 @@ public class ShowCalendarEvent extends Action {
                 Collection<String> selAtts = new ArrayList<String> ();
                 if (ampCalendar.getAttendees() != null) {
                     LabelValueBean lvb = null;
+                    //List<AmpCalendarAttendee> atts=AmpDbUtil.getAmpCalendarAttendees(ampCalendar)
                     Iterator attItr = ampCalendar.getAttendees().iterator();
                     while (attItr.hasNext()) {
                         AmpCalendarAttendee attendee = (AmpCalendarAttendee) attItr.next();
@@ -299,7 +301,7 @@ public class ShowCalendarEvent extends Action {
                         AmpOrganisation org = (AmpOrganisation) orgItr.next();
                         orgs.add(new LabelValueBean(org.getName(), org.getAmpOrgId().toString()));
                     }
-                    ceform.setOrganisations(orgs);
+                    ceform.setSelectedEventOrganisationsCol(orgs);
                 }
 
                 // selected start date and selected end date

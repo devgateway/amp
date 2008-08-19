@@ -40,12 +40,7 @@ ${fn:replace(message,quote,escapedQuote)}
 String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
 if("On".equals(publicView)) { 
 %>
-<style>
-.yuiampmenuitemlabel
-{
-border-right:1px solid white;
-}
-</style>
+
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
@@ -72,9 +67,12 @@ border-right:1px solid white;
 	            </digi:link>
             </li>
             <li>
-                <a class="yuiampmenuitemlabel" href="#">
+                <a href="#" class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;border-right:0px;">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
                 </a>
+                 <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                </a>               
                 <div id="reports2" class="yuiampmenu">
                     <div class="bd">                    
                         <ul>
@@ -110,10 +108,13 @@ border-right:1px solid white;
 	            </digi:link>
             </li>
             <li>
-                <a class="yuiampmenuitemlabel" href="#">
+                <a href="#" class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;border-right:0px;">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
                 </a>
-                <div id="reports2" class="yuiampmenu">
+                 <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                   <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                </a>               
+                <div id="reports2" class="yuiampmenu" style="width:120px;">
                     <div class="bd">                    
                         <ul>
                         <digi:insert attribute="dropdownLangSwitch" />
@@ -132,7 +133,7 @@ border-right:1px solid white;
 <script language="javascript">
 //Run initialization for menu
 var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
-autosubmenudisplay: true
+
  });
 oMenuBar.render();
 

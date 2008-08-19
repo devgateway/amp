@@ -1013,16 +1013,15 @@ public class FeaturesUtil {
 		Session hbsession=null;
 
 		try {
-			//session.beginTransaction().commit();
 			hbsession=PersistenceManager.getSession();
 			qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
-			" f ";
-			//qry = session.createQuery(qryStr);
+			" f";
 			qry = hbsession.createQuery(qryStr);
 			col = qry.list();
 		}
 		catch (Exception ex) {
-			logger.error("Exception ... " + ex.getMessage());
+			logger.error("Exception ..... " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 		finally{
 			try {

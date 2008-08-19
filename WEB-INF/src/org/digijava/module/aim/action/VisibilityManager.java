@@ -45,14 +45,6 @@ public class VisibilityManager extends MultiAction {
 	private ServletContext ampContext = null;
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Session hbsession = PersistenceManager.getRequestDBSession();
-		hbsession.flush();
-		Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
-		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
-		vForm.setTemplates(templates);
-		vForm.setMode("manageTemplates");
-		//this function generate a file containing all the fields, features and modules from 
-		//all the .jsp files from AMP
 		//generateAllFieldsInFile();
 
 		return  modeSelect(mapping, form, request, response);
@@ -84,6 +76,11 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("saveTreeVisibility")!=null) return modeSaveTreeVisibility(mapping, form, request, response);
 		if(request.getParameter("exportTreeVisibility")!=null) return modeExportTreeVisibility(mapping, form, request, response);
 		if(request.getParameter("importTreeVisibility")!=null) return modeImportTreeVisibility(mapping, form, request, response);
+		
+		Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
+		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
+		vForm.setTemplates(templates);
+		vForm.setMode("manageTemplates");
 		return mapping.findForward("forward");
 	}
 	
@@ -351,15 +348,13 @@ public class VisibilityManager extends MultiAction {
 	}
 
 	public ActionForward modeDeleteTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Session hbsession = PersistenceManager.getRequestDBSession();
+
 		FeaturesUtil.deleteTemplateVisibility(new Long(Long.parseLong(request.getParameter("templateId"))));
-		
 		((VisibilityManagerForm)form).addMessage("aim:fm:message:deletedTemplate", "The template was deleted.");
 //		return modeManageTemplates(mapping, form, request, response);
 		
 		{//for refreshing the page
 			VisibilityManagerForm vForm = (VisibilityManagerForm) form;
-			hbsession.flush();
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibilityWithSession();
 			vForm.setTemplates(templates);
 			vForm.setMode("manageTemplates");

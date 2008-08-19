@@ -250,8 +250,11 @@ border-right:1px solid white;
                   <div class="bd">
                       <ul class="first-of-type">
                     	 <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
+                              </a>
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">
@@ -321,8 +324,11 @@ border-right:1px solid white;
                           </li>
 						<module:display name="REPORTING">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
+                              </a>
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -356,17 +362,20 @@ border-right:1px solid white;
                           </module:display>
 						  <feature:display name="Content Repository" module="Document Management">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel"  href="/contentrepository/documentManager.do" style="border-right:1px solid white;cursor:pointer;">
                                  <digi:trn key="aim:resources">Resources</digi:trn>
                               </a>
                           </li>
                           </feature:display>
 						  <feature:display name="Calendar" module="Calendar">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
-                              <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              </a>
+                              <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;width:120px;">
                                   <div class="bd">                    
                                       <ul>
                                         <li class="yuiampmenuitem">
@@ -380,10 +389,13 @@ border-right:1px solid white;
                           </li>
                           </feature:display>
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
                               </a>
-                              <div id="dashboards" class="yuiampmenu" style="opacity:0.9;">
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
+                              </a>
+                              <div id="dashboards" class="yuiampmenu" style="opacity:0.9;width:150px;">
                                   <div class="bd">                    
                                       <ul>
                                         <li class="yuiampmenuitem">
@@ -407,8 +419,11 @@ border-right:1px solid white;
                           </li>
 						  <module:display name="Messages" parentModule="Messaging System">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="fm:messages">Messages</digi:trn>
+                              </a>
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -432,8 +447,11 @@ border-right:1px solid white;
                           </module:display>
                           
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
+                              </a>
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -466,8 +484,11 @@ border-right:1px solid white;
                           </li>
                           <module:display name="HELP">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#" style="border-right:1px solid white;">
+                              <a class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
                                   <digi:trn key="help:help">HELP</digi:trn>
+                              </a>
+                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                                 <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
@@ -509,7 +530,6 @@ border-right:1px solid white;
 <script language="javascript">
 //Run initialization for menu
 var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
-autosubmenudisplay: true
  });
 oMenuBar.render();
 //Define location of monitoring iframe

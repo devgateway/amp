@@ -40,7 +40,12 @@ ${fn:replace(message,quote,escapedQuote)}
 String publicView=FeaturesUtil.getGlobalSettingValue("Public View");
 if("On".equals(publicView)) { 
 %>
-
+<style>
+.yuiampmenuitemlabel
+{
+border-right:1px solid white;
+}
+</style>
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">

@@ -150,6 +150,19 @@
 		else return false;
 	}
 
+	function searchAlpha(val) {
+		if (document.aimEditActivityForm.tempNumResults.value == 0) {
+			  alert ("Invalid value at 'Number of results per page'");
+			  document.aimEditActivityForm.tempNumResults.focus();
+			  return false;
+		} else {
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
+			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true";
+		     document.aimEditActivityForm.action = url;
+		     document.aimEditActivityForm.submit();
+			  return true;
+		}
+	}
 	
 	function searchAlphaAll(val) {
 		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
@@ -458,7 +471,8 @@
 														href="javascript:searchAlpha('<%=alphaPages%>')"
 														title="${translation}"><%=alphaPages%></a>
 												</c:if>
-											|&nbsp;											</c:if>
+											|&nbsp;											
+											</c:if>
 										</logic:iterate></td>
 									</tr>
 									<tr>

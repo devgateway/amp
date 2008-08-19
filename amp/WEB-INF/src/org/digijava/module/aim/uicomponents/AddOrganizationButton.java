@@ -6,8 +6,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.struts.action.ActionForm;
-
 public class AddOrganizationButton extends BodyTagSupport {
 	private static final long serialVersionUID = 1L;
 	private String collection = "";

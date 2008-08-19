@@ -85,6 +85,9 @@ public class selectOrganizationComponentForm extends ActionForm {
 
 	public void clearSelected() {
 		selOrganisations = null;
+		this.organizations=null;
+		this.alphaPages =  null;
+		this.keyword="";
 	}
 
 	private int selectedOrganisationFromPages;

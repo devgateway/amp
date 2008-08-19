@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.widget.dbentity.AmpDaColumn" table="AMP_WIDGET_COLUMN">
+	<class name="org.digijava.module.widget.dbentity.AmpDaColumn" table="AMP_WIDGET_COLUMN" discriminator-value="s">
 		<cache usage="read-write"/>
 		<id column="ID" name="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
 				<param name="sequence">AMP_WIDGET_COLUMN_seq</param>
 			</generator>
 		</id>
+		<discriminator column="column_type"/>
 
         <property name="name" column="col_name" type="java.lang.String"/>
 		<property name="code" column="col_code" type="java.lang.String"/>
@@ -23,6 +24,10 @@
 			<key column="column_id"/>
 			<one-to-many class="org.digijava.module.widget.dbentity.AmpDaValue"/>
 		</set>
+
+		<subclass name="org.digijava.module.widget.dbentity.AmpDaColumnFilter" discriminator-value="f">
+			<property name="filterItemProvider" column="filter_item_provider" type="java.lang.Long"/>
+		</subclass>			
 		
 	</class>
 </hibernate-mapping>

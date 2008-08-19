@@ -22,6 +22,9 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	private Integer rowIndex;
 	private String tableName;
 	private WiTable table;
+	private String data[][];
+	private Long filterColumnId;
+	private Long selectedFilterItemId;
 	
 	public String getTableName() {
 		return tableName;
@@ -64,7 +67,7 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	}
 	
 	public WiRow getRows(int index) {
-		return (rows==null)?null:rows.get(index);
+		return table.getDataRowByPk(new Long(index));
 	}
 	
 	//This 3 methods are required for old struts to submit directly in these beans, please note differences in names====
@@ -84,6 +87,7 @@ public class AdminTableWidgetDataForm extends ActionForm {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setRow(List rows) {
+		System.out.println("setRow(List)");
 		this.rows = rows;
 	}
 	
@@ -104,6 +108,30 @@ public class AdminTableWidgetDataForm extends ActionForm {
 
 	public WiTable getTable() {
 		return table;
+	}
+
+	public void setData(String data[][]) {
+		this.data = data;
+	}
+
+	public String[][] getData() {
+		return data;
+	}
+
+	public void setFilterColumnId(Long filterColumnId) {
+		this.filterColumnId = filterColumnId;
+	}
+
+	public Long getFilterColumnId() {
+		return filterColumnId;
+	}
+
+	public void setSelectedFilterItemId(Long selectedFilterItemId) {
+		this.selectedFilterItemId = selectedFilterItemId;
+	}
+
+	public Long getSelectedFilterItemId() {
+		return selectedFilterItemId;
 	}
 
 }

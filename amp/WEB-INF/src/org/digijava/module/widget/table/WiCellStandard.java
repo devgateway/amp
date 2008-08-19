@@ -1,5 +1,10 @@
 package org.digijava.module.widget.table;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 
 /**
@@ -43,6 +48,23 @@ public class WiCellStandard extends WiCell {
 			return buff.toString();
 		}
 		return getValue();
+	}
+	@Override
+	public void saveData(Session dbSession, AmpDaColumn dbColumn)throws DgException {
+		try {
+			AmpDaValue dbValue = null;
+			if (this.getId() == null || this.getId().longValue() <= 0) {
+				dbValue = new AmpDaValue();
+			} else {
+				dbValue = (AmpDaValue) dbSession.load(AmpDaValue.class,dbColumn.getId());
+			}
+			dbValue.setPk(this.getPk());
+			dbValue.setValue(getValue());
+			dbValue.setColumn(dbColumn);
+			dbSession.saveOrUpdate(dbValue);
+		} catch (HibernateException e) {
+			throw new DgException("cannot save cell, ID=" + getId()+ ", columnID=" + getColumn().getId(), e);
+		}
 	}
 
 }

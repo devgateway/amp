@@ -50,7 +50,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.jboss.security.plugins.TmpFilePassword;
 
 
 /**

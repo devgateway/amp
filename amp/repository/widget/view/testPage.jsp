@@ -30,8 +30,13 @@
 
 	function processTableResponce_${wform.tableId}(htmlResponce){
 		var myDiv = document.getElementById('tableWidgetContainer_${wform.tableId}');
-		myDiv.innerHTML = htmlResponce;;		
+		myDiv.innerHTML = htmlResponce;		
 	}
 
+	function tableWidgetFilterChanged_${wform.tableId}(columnId){
+		var myDiv = document.getElementById('tableWidgetContainer_${wform.tableId}');
+		myDiv.innerHTML = 'loading...';
+		alert('${wform.tableId} and '+columnId);
+	}
 	requestTable_${wform.tableId}();
 </script>

@@ -30,7 +30,6 @@ import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.oldTable.DaCell;
 import org.digijava.module.widget.oldTable.DaRow;
 import org.digijava.module.widget.oldTable.DaTable;
-import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiRow;
 import org.digijava.module.widget.table.WiTable;

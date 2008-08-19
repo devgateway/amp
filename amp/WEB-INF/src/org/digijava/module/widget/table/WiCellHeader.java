@@ -1,5 +1,10 @@
 package org.digijava.module.widget.table;
 
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.widget.dbentity.AmpDaColumn;
+
 /**
  * Represents table header row cell.
  * @author Irakli Kobiashvili
@@ -26,6 +31,11 @@ public class WiCellHeader extends WiCell {
 	@Override
 	public String tagContent() {
 		return "<strong>"+getValue()+"</strong>";
+	}
+
+	@Override
+	public void saveData(Session dbSession, AmpDaColumn dbColumn) throws DgException {
+		//dummy method, header does not need save!
 	}
 
 }

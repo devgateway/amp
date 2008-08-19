@@ -1,5 +1,9 @@
 package org.digijava.module.widget.table;
 
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.table.filteredColumn.WiCellFiltered;
 import org.digijava.module.widget.web.HtmlGenerator;
 
@@ -11,11 +15,17 @@ import org.digijava.module.widget.web.HtmlGenerator;
  */
 public abstract class WiCell implements HtmlGenerator{
 	
+	public static final int STANDARD_CELL = 1;
+	public static final int CALCULATED_CELL = 2;
+	public static final int FILTER_CELL = 3;
+	public static final int FILTER_HEADER_CELL = 4;
+
 	private Long id;
 	private Long pk;
 	private WiColumn column;
 	private boolean isHeaderCell = false;
 	private boolean editMode = false;
+	private int cellTypeId = WiCell.STANDARD_CELL;
 	
 	public Long getId() {
 		return id;
@@ -36,6 +46,7 @@ public abstract class WiCell implements HtmlGenerator{
 	public abstract String getValue();
 
 	public abstract void setValue(String value);
+	public abstract void saveData(Session dbSession, AmpDaColumn dbColumn) throws DgException;
 
 	public String generateHtml() {
 		StringBuffer result = new StringBuffer("\t\t<TD");
@@ -75,6 +86,14 @@ public abstract class WiCell implements HtmlGenerator{
 
 	public boolean isEditMode() {
 		return editMode;
+	}
+
+	public void setCellTypeId(int cellTypeId) {
+		this.cellTypeId = cellTypeId;
+	}
+
+	public int getCellTypeId() {
+		return cellTypeId;
 	}
 
 }

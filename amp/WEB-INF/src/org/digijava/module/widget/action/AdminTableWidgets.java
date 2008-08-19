@@ -21,9 +21,12 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
+import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.form.TableWidgetCreationForm;
+import org.digijava.module.widget.table.WiColumn;
+import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.digijava.module.widget.util.TableWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 import org.digijava.module.widget.util.TableWidgetUtil.ColumnOrderNoComparator;
@@ -556,6 +559,9 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @throws DgException
 	 */
 	private AmpDaColumn formToColumn(TableWidgetCreationForm form) throws DgException {
+		if (form.getColSelectedType().longValue()==2){
+			return formToColumn(form,new AmpDaColumnFilter());
+		}
 		return formToColumn(form,new AmpDaColumn());
 	}
 	
@@ -574,6 +580,13 @@ public class AdminTableWidgets extends DispatchAction {
 		column.setHtmlStyle(form.getColHtmlStyle());
 		column.setPattern(form.getColPattern());
 		column.setWidth(form.getColWidth());
+		if (column instanceof AmpDaColumnFilter){
+			AmpDaColumnFilter filter = (AmpDaColumnFilter) column;
+			filter.setColumnType(WiColumn.FILTER);
+			filter.setFilterItemProvider(new Long(FilterItemProvider.DONORS_FILTER));//TODO refactor !
+			return filter;
+		}
+		column.setColumnType(WiColumn.STANDARD);
 		return column;
 	}
 	
@@ -592,13 +605,16 @@ public class AdminTableWidgets extends DispatchAction {
 	}
 	
 	/**
-	 * Dummy method yet.
+	 * Returns label-value beans for avaliable types of the columns.
 	 * @return
 	 * @throws DgException
 	 */
 	private Collection<LabelValueBean> getColumnTypes() throws DgException{
-		
-		return null;
+		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>(2);
+		//TODO temporary solution, improve this.
+		result.add(new LabelValueBean("Standard","1"));
+		result.add(new LabelValueBean("Dropdown Filter - Donors","2"));
+		return result;
 	}
 	
 	
@@ -618,6 +634,7 @@ public class AdminTableWidgets extends DispatchAction {
 		tableForm.setColId(null);
 		tableForm.setColName(null);
 		tableForm.setColPattern(null);
+		tableForm.setColSelectedType(null);
 		tableForm.setColumnTypes(getColumnTypes());
 		tableForm.setColWidth(null);
 		tableForm.setShouldClose(false);
@@ -649,6 +666,8 @@ public class AdminTableWidgets extends DispatchAction {
 		cForm.setColWidth(col.getWidth());
 		cForm.setColPattern(col.getPattern());
 		cForm.setColColumnEdit(true);
+		cForm.setColumnTypes(getColumnTypes());
+		cForm.setColSelectedType(null);
 		return mapping.findForward("showAddColumnPopup");
 	}
 	

@@ -8,4 +8,5 @@ public interface FilterItemProvider {
 	
 	List<FilterItem> getItems();
 	FilterItem getItem(Long id);
+	Long getId();
 }

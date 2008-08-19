@@ -21,6 +21,7 @@ public abstract class WiRow implements HtmlGenerator{
 
 	private Long pk;
 	private Map<Long, WiColumn> columns = new HashMap<Long, WiColumn>();
+	private WiTable table;
 
 	public WiRow(Long pk){
 		this.pk = pk;
@@ -45,13 +46,12 @@ public abstract class WiRow implements HtmlGenerator{
 		for (WiColumn column : this.columns.values()) {
 			WiCell cell = column.getCell(this.pk);
 			//if column does not have cell for my pk
-			if (cell==null){
-				//then setup new cell, because row should have cell even if there is no Value in db.
-				cell = new WiCellStandard();
-				cell.setPk(this.pk);
-				cell.setColumn(column);
-				column.setCell(cell);
-			}
+//			if (cell==null){
+//				cell = TableWidgetUtil.newCell(column);
+//				cell.setPk(this.pk);
+//				cell.setColumn(column);
+//				column.setCell(cell);
+//			}
 			result.add(cell);
 		}
 		Collections.sort(result,new TableWidgetUtil.WiCellColumnOrderComparator());
@@ -92,17 +92,27 @@ public abstract class WiRow implements HtmlGenerator{
 	public WiCell getCell(Long columnId){
 		return columns.get(columnId).getCell(this.pk);
 	}
+	public WiCell getCell(int columnId){
+		return columns.get(new Long(columnId)).getCell(this.pk);
+	}
 
 	public Long getPk() {
 		return pk;
 	}
 
 	public void setPk(Long newPk) {
-		this.pk =  newPk;
 		List<WiCell> cells = getCells();
 		for (WiCell cell : cells) {
+			//TODO delegate to column.replacePks(oldPk, newPk) because getCells() on filtered columns will not return all cells but only active sub column cells.
 			cell.setPk(newPk);
 		}
+		this.pk =  newPk;
+	}
+	public void setTable(WiTable table) {
+		this.table = table;
+	}
+	public WiTable getTable() {
+		return table;
 	}
 	
 }

@@ -97,59 +97,60 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 		rd.setCurrentView(GenericViews.PDF);
 		HttpSession session = request.getSession();
+		
 		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-		
 		/*
 		 * this should not be used anymore as the page size has been included in the ARFilters.
 		 * String pageSize=formBean.getPdfPageSize();
 		 */
 		//use the session to get the existing filters
-		String pageSize=null;
-		if(arf!=null)
-			pageSize=arf.getPageSize();//use the page size set in the filters 
+		if (session.getAttribute("currentMember")!=null && !arf.isPublicView()){
+			String pageSize=null;
+			if(arf!=null)
+				pageSize=arf.getPageSize();//use the page size set in the filters 
 
 		//the pagesize is not initialized in the filters	
-		Rectangle page=null;
+			Rectangle page=null;
 		
-		if(pageSize==null)
-			page=PageSize.A4;
-		else{
-			if(pageSize.equals("A0")) page=PageSize.A0;
-			if(pageSize.equals("A1")) page=PageSize.A1;
-			if(pageSize.equals("A2")) page=PageSize.A2;
-			if(pageSize.equals("A3")) page=PageSize.A3;
-			if(pageSize.equals("A4")) page=PageSize.A4;
-		}
+			if(pageSize==null)
+				page=PageSize.A4;
+			else{
+				if(pageSize.equals("A0")) page=PageSize.A0;
+				if(pageSize.equals("A1")) page=PageSize.A1;
+				if(pageSize.equals("A2")) page=PageSize.A2;
+				if(pageSize.equals("A3")) page=PageSize.A3;
+					if(pageSize.equals("A4")) page=PageSize.A4;
+			}
 
-		response.setContentType("application/pdf");
-	        response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_"));
+			response.setContentType("application/pdf");
+				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_"));
 	   
 	        
-		Document document = new Document(page.rotate(),5, 5, 5, 50);
-		PDFExporter.headingCells=null;
+				Document document = new Document(page.rotate(),5, 5, 5, 50);
+				PDFExporter.headingCells=null;
 		
-		PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());
+				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());
 		
-		writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response));
+				writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response));
 		
-		//noteFromSession=AmpReports.getNote(request.getSession());
+				//noteFromSession=AmpReports.getNote(request.getSession());
 		
-		String sortBy=(String) session.getAttribute("sortBy");
+				String sortBy=(String) session.getAttribute("sortBy");
 		
-		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+				if(sortBy!=null) rd.setSorterColumn(sortBy); 
 		
 		
-		  PDFExporter.widths=new float[rd.getTotalDepth()];		
-			for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
-			    PDFExporter.widths[k]=0.120f;
-			}
+				PDFExporter.widths=new float[rd.getTotalDepth()];		
+				for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
+					PDFExporter.widths[k]=0.120f;
+				}
 			
-			for (int k = rd.getSourceColsCount().intValue();k<rd.getTotalDepth() ; k++) {
-				PDFExporter.widths[k]=0.08f;
-			}
-		contenTable = new PdfPTable(PDFExporter.widths);
-		contenTable.setWidthPercentage(100);
+				for (int k = rd.getSourceColsCount().intValue();k<rd.getTotalDepth() ; k++) {
+					PDFExporter.widths[k]=0.08f;
+				}
+				contenTable = new PdfPTable(PDFExporter.widths);
+				contenTable.setWidthPercentage(100);
                 GroupReportDataPDF grdp=new GroupReportDataPDF(contenTable,(Viewable) rd,null);
                 //it is for not to show first group it is always the report title;
                 //in a few grdp.setVisible(false);
@@ -161,8 +162,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 document.add(contenTable);
                 //document.add(grdp.getTable());
                 document.close();
-		return null;
-
+                return null;
+		}else{
+			session.setAttribute("sessionExpired", true);
+			return mapping.findForward("index");
+		}
 	}
 
 	public void onOpenDocument(PdfWriter arg0, Document arg1) {

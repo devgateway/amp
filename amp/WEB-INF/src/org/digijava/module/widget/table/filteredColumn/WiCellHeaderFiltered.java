@@ -9,21 +9,27 @@ public class WiCellHeaderFiltered extends WiCellFiltered {
 	
 	@Override
 	public String tagContent() {
-		StringBuffer buf = new StringBuffer("<select id='mydropdown");
+		WiColumnDropDownFilter masterColumn = (WiColumnDropDownFilter) this.getColumn();
+		
+		StringBuffer buf = new StringBuffer("<select id='tableWidgetDropDown_");
 		buf.append(this.getColumn().getTable().getId());
-		buf.append("' name='");
-		buf.append(this.getId());
+		buf.append("' name='selectedFilterItemId_");
+		buf.append(this.getColumn().getTable().getId());
 		buf.append("' onchange='tableWidgetFilterChanged_");
 		buf.append(this.getColumn().getTable().getId());
 		buf.append("(");
 		buf.append(this.getColumn().getId());
-		buf.append(")'> ");
+		buf.append(")'>\n ");
 		for (FilterItem item : getItemProvider().getItems()) {
-			buf.append("<option id='");
+			buf.append("<option value='");
 			buf.append(item.getId());
-			buf.append("'>");
+			buf.append("'");
+			if (item.getId().equals(masterColumn.getActiveItemId())){
+				buf.append(" selected='true' ");
+			}
+			buf.append(">");
 			buf.append(item.getName());
-			buf.append("</option>");
+			buf.append("</option>\n");
 		}
 		buf.append("</select>");
 		return buf.toString();

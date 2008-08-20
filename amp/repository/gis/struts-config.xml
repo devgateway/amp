@@ -15,7 +15,7 @@
 			<forward name="forwardOld" path="/showLayout.do?layout=gis_dashboard"/>
 		</action>
 	    <action name="gisDashboardForm" path="/gis/index" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
-    	  <forward name="forward" path="/showLayout.do?layout=gis_dashboard" />
+    	  <forward name="forward" path="/showLayout.do?layout=gisDashboardLayout" />
     	</action>
 	    <action name="gisMapLoaderForm" path="/gis/mapLoader" scope="request" type="org.digijava.module.gis.action.MapLoader" validate="false">
     	  <forward name="forward" path="/showLayout.do?layout=mapLoader" />

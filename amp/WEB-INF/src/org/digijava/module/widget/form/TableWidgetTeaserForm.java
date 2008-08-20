@@ -15,6 +15,8 @@ public class TableWidgetTeaserForm extends ActionForm {
 	private String placeName;
 	private WiTable table;
 	private Long tableId;
+	private Long columnId;
+	private Long itemId;
 
 	public String getPlaceName() {
 		return placeName;
@@ -38,6 +40,22 @@ public class TableWidgetTeaserForm extends ActionForm {
 
 	public Long getTableId() {
 		return tableId;
+	}
+
+	public void setColumnId(Long columnId) {
+		this.columnId = columnId;
+	}
+
+	public Long getColumnId() {
+		return columnId;
+	}
+
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
+	}
+
+	public Long getItemId() {
+		return itemId;
 	}
 
 }

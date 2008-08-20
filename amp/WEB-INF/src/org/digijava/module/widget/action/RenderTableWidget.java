@@ -10,9 +10,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.widget.form.TableWidgetTeaserForm;
 import org.digijava.module.widget.table.WiTable;
+import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
 
 /**
  * Renders table widget teaser.
+ * Uses {@link WiTable} HTML generation result as output.
  * @author Irakli Kobiashvili
  *
  */
@@ -26,8 +28,17 @@ public class RenderTableWidget extends Action {
 		TableWidgetTeaserForm fTable=(TableWidgetTeaserForm)form;
 		logger.debug("Building table Widget id = "+fTable.getTableId());
 		
-		Long tableId = fTable.getTableId();
+		Long tableId 	= fTable.getTableId();
+		Long columnId 	= fTable.getColumnId();
+		Long itemId 	= fTable.getItemId();
 		WiTable table = new WiTable.TableBuilder(tableId).build();
+		if (columnId!=null && itemId!=null && columnId.longValue()>0 && itemId.longValue()>0){
+			WiColumnDropDownFilter filter = (WiColumnDropDownFilter) table.getColumnById(columnId);
+			//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
+			if (filter!=null){
+				filter.setActiveItemId(itemId);
+			}
+		}
 		String html = table.generateHtml();	
 		response.getOutputStream().print(html);
 		response.getOutputStream().close();

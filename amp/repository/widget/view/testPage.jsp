@@ -16,9 +16,12 @@
 
 <script language="JavaScript">
 
-	function requestTable_${wform.tableId}(){
+	function requestTable_${wform.tableId}(columnId,itemId){
 		<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
 		var url = '${tableRendererUrl}~tableId=${wform.tableId}';
+		if (columnId!=null && itemId!=null){
+			url+='~columnId='+columnId+'~itemId='+itemId;
+		}
 		var async=new Asynchronous();
 		async.complete=tableCallBack_${wform.tableId};
 		async.call(url);
@@ -35,8 +38,12 @@
 
 	function tableWidgetFilterChanged_${wform.tableId}(columnId){
 		var myDiv = document.getElementById('tableWidgetContainer_${wform.tableId}');
+		var selItem = document.getElementsByName('selectedFilterItemId_${wform.tableId}')[0];
+		var itemId = selItem.value;
 		myDiv.innerHTML = 'loading...';
-		alert('${wform.tableId} and '+columnId);
+		requestTable_${wform.tableId}(columnId,itemId);
 	}
+	
 	requestTable_${wform.tableId}();
+
 </script>

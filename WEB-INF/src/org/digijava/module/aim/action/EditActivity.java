@@ -488,6 +488,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
     	  eaForm.setJointCriteria(new Boolean(false));
     	  /* END - Clearing Tanzania Adds */
 
+    	  eaForm.setCrisNumber(null);
         /* Insert Categories */
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
             getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,
@@ -680,6 +681,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  activity.setHumanitarianAid(new Boolean(false));
 
 
+          if (activity.getCrisNumber() != null)
+              eaForm.setCrisNumber(activity.getCrisNumber().trim());
+
+          
           if (activity.getDescription() != null)
             eaForm.setDescription(activity.getDescription().trim());
 

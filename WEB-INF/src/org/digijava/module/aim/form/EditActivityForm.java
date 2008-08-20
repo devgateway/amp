@@ -90,6 +90,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String contractDetails=null;
 	private String primarySectorVisible=null;
 	private String secondarySectorVisible=null;
+	private String crisNumber;
 	
     private Long selPrograms[];
     private Long selProgramId;
@@ -5461,6 +5462,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setProjectCategory(Long projectCategory) {
 		this.projectCategory = projectCategory;
+	}
+
+	public String getCrisNumber() {
+		return crisNumber;
+	}
+
+	public void setCrisNumber(String crisNumber) {
+		this.crisNumber = crisNumber;
 	}
 
 }

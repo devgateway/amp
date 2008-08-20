@@ -294,6 +294,15 @@
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									<field:display name="Cris Number" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
+									  <digi:trn key="aim:crisNumber">Cris Number</digi:trn>	</b>										</td>
+										<td bgcolor="#ffffff">
+										<c:out value="${aimEditActivityForm.crisNumber}"/>
+&nbsp;										</td>
+									</tr>
+									</field:display>
 									<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>

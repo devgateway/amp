@@ -118,6 +118,7 @@ public class ResetAll extends Action
 				eaForm.setGovernmentApprovalProcedures(new Boolean(false));
 				eaForm.setJointCriteria(new Boolean(false));
 				
+				eaForm.setCrisNumber(null);
 	    	}
 	    	if(eaForm.getStep().equals("2"))
 	    	{

@@ -517,18 +517,36 @@ target.style.cursor = "default"
 									</td></tr>
 								</field:display>
 								
-									<field:display name="Humanitarian Aid" feature="Identification">
-										<tr bgcolor="#ffffff"><td valign="top" align="left">
+								<field:display name="Humanitarian Aid" feature="Identification">
+									<tr bgcolor="#ffffff">
+										<td valign="top" align="left">
 											<a title="<digi:trn key="aim:humanitarianAid">Humanitarian Aid</digi:trn>">
-											<digi:trn key="aim:humanitarianAid">
-												Humanitarian Aid 
+												<digi:trn key="aim:humanitarianAid">
+													Humanitarian Aid 
 												</digi:trn>
-												</a>
-											</td>
+											</a>
+										</td>
 										<td valign="top" align="left">
 												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="humanitarianAid" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="humanitarianAid" value="false"/>
-									</td></tr>
+										</td>
+									</tr>
 								</field:display>	
+
+								<field:display name="Cris Number" feature="Identification">
+									<tr bgcolor="#ffffff">
+										<td valign="top" align="left">
+											<a title="<digi:trn key="aim:crisNumber">Cris Number</digi:trn>">
+												<digi:trn key="aim:crisNumber">
+													Cris Number 
+												</digi:trn>
+											</a>
+										</td>
+										<td valign="top" align="left">
+										    <html:text property="crisNumber" size="12"/>
+										</td>
+									</tr>
+								</field:display>	
+
 								</table>
 									<script>
 										budgetCheckboxClick();

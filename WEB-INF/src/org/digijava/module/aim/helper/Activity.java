@@ -116,6 +116,8 @@ public class Activity
   private Boolean governmentApprovalProcedures;
   private Boolean jointCriteria;
   
+  private String crisNumber;
+  
   private String approvalStatus;
   private Boolean draft;
   
@@ -1166,5 +1168,13 @@ public void setImpLevel(Collection impLevel) {
 
 	public void setImpLocation(Collection impLocation) {
 		this.impLocation = impLocation;
+	}
+
+	public String getCrisNumber() {
+		return crisNumber;
+	}
+
+	public void setCrisNumber(String crisNumber) {
+		this.crisNumber = crisNumber;
 	} 
 }

@@ -49,13 +49,17 @@ public class SelectSector extends Action {
 			ssForm.setSectorSchemes(secSchemes);
 			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
 			Collection classConfigs = SectorUtil.getAllClassificationConfigs();
-			for (Iterator<AmpClassificationConfiguration> it=classConfigs.iterator(); it.hasNext(); ) {
-		        AmpClassificationConfiguration classConfig = it.next();
-		        if(classConfig.getClassification().getAmpSecSchemeId().equals(defClassification.getAmpSecSchemeId())){
-		        	ssForm.setConfigId(classConfig.getId());
-		        }
-		        
-		    }
+			
+			
+			
+			// Comented for AMP-3971 to work
+//			for (Iterator<AmpClassificationConfiguration> it=classConfigs.iterator(); it.hasNext(); ) {
+//		        AmpClassificationConfiguration classConfig = it.next();
+//		        if(classConfig.getClassification().getAmpSecSchemeId().equals(defClassification.getAmpSecSchemeId())){
+//		        	ssForm.setConfigId(classConfig.getId());
+//		        }
+//		        
+//		    }
 			
 			
 		}

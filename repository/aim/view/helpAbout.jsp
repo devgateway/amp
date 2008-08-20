@@ -6,18 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 
 <%
-org.digijava.kernel.request.SiteDomain siteDomain = (org.digijava.kernel.request.SiteDomain) session.getAttribute("site");
-request.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
-String siteUrl = org.digijava.kernel.util.SiteUtils.getSiteURL(siteDomain, request.getScheme(), request.getServerPort(), request.getContextPath());
-request.setAttribute(org.digijava.kernel.Constants.REQUEST_ALREADY_PROCESSED, siteUrl+"/repository/help/view/helpAbout.jsp");
+//org.digijava.kernel.request.SiteDomain siteDomain = (org.digijava.kernel.request.SiteDomain) session.getAttribute("site");
+//request.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE, siteDomain);
+//String siteUrl = org.digijava.kernel.util.SiteUtils.getSiteURL(siteDomain, request.getScheme(), request.getServerPort(), request.getContextPath());
+//request.setAttribute(org.digijava.kernel.Constants.REQUEST_ALREADY_PROCESSED, siteUrl+"/repository/help/view/helpAbout.jsp");
 %>
 
-<html>
-<head>
-<title><digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn></title>
-</head>
-
-<body>
 <table width="474" border="0">
 	<tr>
 		<td width="206">
@@ -43,12 +37,4 @@ request.setAttribute(org.digijava.kernel.Constants.REQUEST_ALREADY_PROCESSED, si
 		Gateway logo are trademarks for The Development Gateway Foundation.</digi:trn>
 		All Rights Reserved.</td>
 	</tr>
-	<tr align="center">
-		<td colspan="2"><input type="submit"
-			value='<digi:trn
-			key="aim:btn:close">Close</digi:trn>'
-			onclick="self.close();return false;"></td>
-	</tr>
 </table>
-</body>
-</html>

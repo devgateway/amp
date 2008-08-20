@@ -261,6 +261,16 @@ background-color: yellow;
 		    draggable:true
 		    }
 		     );
+
+		    var myPanel5 = new YAHOOAmp.widget.Panel("new", {
+				width:"470px",
+			    fixedcenter: true,
+			    constraintoviewport: true,
+			    underlay:"none",
+			    close:true,
+			    visible:false,
+			    modal:true,
+			    draggable:true} );
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
 		    
@@ -286,8 +296,11 @@ background-color: yellow;
 		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);
-				
-				
+
+		var msg='\n<digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn>';
+		myPanel5.setHeader(msg);
+		myPanel5.setBody("");
+		myPanel5.render(document.body);				
 	}
 	
 	function showFilter() {
@@ -303,6 +316,17 @@ background-color: yellow;
 		
 		
 	}
+
+	function showAbout() {
+		YAHOOAmp.amptab.init();
+		var element = document.getElementById("customAbout");
+		element.style.display = "inline";
+		
+		myPanel5.setBody(element);
+		myPanel5.center();
+		myPanel5.show();
+	}
+	
 	function checkRangeValues(){
 	    var actualFrom = document.aimReportsFilterPickerForm2.renderStartYear.value;
         var actualTo = document.aimReportsFilterPickerForm2.renderEndYear.value;

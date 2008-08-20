@@ -542,6 +542,8 @@ public class SaveActivity extends Action {
 				activity.setGovernmentApprovalProcedures(eaForm.getGovernmentApprovalProcedures());
 				activity.setGovAgreementNumber(eaForm.getGovAgreementNumber());
 
+				activity.setCrisNumber(eaForm.getCrisNumber());
+				
 
 				activity.setJointCriteria(eaForm.getJointCriteria());
 				activity.setHumanitarianAid(eaForm.getHumanitarianAid());

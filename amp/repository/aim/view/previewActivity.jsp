@@ -647,6 +647,14 @@ function collapseAll() {
 &nbsp;										</td>
 									</tr>
 									</field:display>
+									<field:display name="Cris Number" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:crisNumber">Cris Number</digi:trn></td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.crisNumber}"/>	
+&nbsp;									</td>
+									</tr>
+									</field:display>
                                 	<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:ProjectCategory">Project Category</digi:trn>										</td>

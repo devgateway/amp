@@ -1055,6 +1055,9 @@ public class ShowActivityPrintPreview
                 eaForm.setJointCriteria(activity.isJointCriteria());
                 eaForm.setHumanitarianAid(activity.isHumanitarianAid());
                 
+                if(activity.getCrisNumber()!=null)
+                	eaForm.setCrisNumber(activity.getCrisNumber().trim());
+                
                 if(activity.getUpdatedBy()!=null){
                 	eaForm.setUpdatedBy(activity.getUpdatedBy());
                 }
@@ -1155,7 +1158,7 @@ public class ShowActivityPrintPreview
 				eaForm.setGovernmentApprovalProcedures(false);
 				eaForm.setJointCriteria(false);               
                 
-				
+				eaForm.setCrisNumber(null);
             
      }
     }

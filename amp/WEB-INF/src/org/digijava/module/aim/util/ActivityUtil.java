@@ -515,6 +515,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setDraft(activity.getDraft());
         oldActivity.setGovAgreementNumber(activity.getGovAgreementNumber());
 
+        oldActivity.setCrisNumber(activity.getCrisNumber());
       }
 
       Iterator itr = null;
@@ -1517,6 +1518,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (ampActivity.getActivityCreator() != null) {
           activity.setCreatedBy(ampActivity.getActivityCreator());
         }
+        
+        activity.setCrisNumber(ampActivity.getCrisNumber());
+        
         // get lessons learned
 		if (ampActivity.getLessonsLearned() != null) {
 			activity.setLessonsLearned(ampActivity.getLessonsLearned());
@@ -1676,6 +1680,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                                                  isGovernmentApprovalProcedures());
         activity.setProjectCode(ampAct.getProjectCode());
 
+        activity.setCrisNumber(ampAct.getCrisNumber());
 
         Collection col = ampAct.getClosingDates();
         List dates = new ArrayList();

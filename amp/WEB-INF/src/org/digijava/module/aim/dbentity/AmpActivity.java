@@ -169,6 +169,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer planMinRank;
 	private Collection actRankColl;
 	
+	
+	
 	/**
 	 * Indicator connections.
 	 * This field contains {@link IndicatorActivity} beans which represent activity-indicator connections 
@@ -201,6 +203,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String subProgram;
 
 	private String projectCode;
+	private String crisNumber;
 
 	private Long gbsSbs;
 
@@ -1580,6 +1583,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setApprovalDate(Date approvalDate) {
 		this.approvalDate = approvalDate;
+	}
+
+	public String getCrisNumber() {
+		return crisNumber;
+	}
+
+	public void setCrisNumber(String crisNumber) {
+		this.crisNumber = crisNumber;
 	}
 
 	

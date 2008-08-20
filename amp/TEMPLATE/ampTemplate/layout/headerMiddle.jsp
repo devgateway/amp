@@ -19,17 +19,14 @@
         <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 
-<script type="text/javascript">
-    function modalWin() {
-    	if(navigator.appName == 'Netscape' || navigator.appName == 'Firefox'){
-        	window.showModalDialog("/repository/help/view/helpAbout.jsp","name","dialogWidth:495px;dialogHeight:310px;toolbar=no;status=no;menubar=no;scrollbars=no;resizable=no;url=no");
-    	} else if(navigator.appName == 'Microsoft Internet Explorer'){
-    		window.showModalDialog("/repository/help/view/helpAbout.jsp","name","dialogWidth:480px;dialogHeight:300px;toolbar=no;status=no;menubar=no;scrollbars=no;resizable=no;url=no");
-    	} else {
-    		window.open('/repository/help/view/helpAbout.jsp','name','height=310,width=495,toolbar=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,modal=yes');			
-    	}
-    }
-</script>
+
+<div id="myFilterWrapper" style="display: none;" >
+	<div id="customAbout" style="display: none">
+		<jsp:include page="/repository/aim/view/helpAbout.jsp" />
+	</div>
+</div>
+
+<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />
@@ -46,6 +43,8 @@
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
+
+<%org.digijava.kernel.request.SiteDomain siteDomain = null;%>
 
 <logic:notPresent name="currentMember">
 <% 
@@ -227,11 +226,11 @@ border-right:1px solid white;
 										<feature:display name="About AMP" module="HELP">
                                         <li>
 										<%
-										org.digijava.kernel.request.SiteDomain siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
+										siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 										session.setAttribute("site", siteDomain);
 										%>
-                                        <a class="yuiampmenuitemlabel" href="/repository/help/view/helpAbout.jsp" target="name"
-											onclick="modalWin(); return false;">
+                                        <a class="yuiampmenuitemlabel" href="" target="name"
+											onClick="showAbout(); return false;">
                                         	<digi:trn key="aim:aboutamp">About AMP</digi:trn>
                                         </a>
                                         </li>
@@ -539,11 +538,11 @@ border-right:1px solid white;
 										<feature:display name="About AMP" module="HELP">
                                         <li>
 										<%
-										org.digijava.kernel.request.SiteDomain siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
+										siteDomain = (org.digijava.kernel.request.SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 										session.setAttribute("site", siteDomain);
 										%>
-                                        <a class="yuiampmenuitemlabel" href="/repository/help/view/helpAbout.jsp" target="name"
-											onclick="modalWin(); return false;">
+                                        <a class="yuiampmenuitemlabel" href="" target="name"
+											onClick="showAbout(); return false;">
                                         	<digi:trn key="aim:aboutamp">About AMP</digi:trn>
                                         </a>
                                         </li>

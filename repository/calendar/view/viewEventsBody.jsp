@@ -146,7 +146,7 @@
 
                               <c:if test="${startMonth==currentMonth}">
                                 <c:if test="${item.dayOfMonth==startDay&&item.enabled}">
-                                  <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~reset=true">
+                                  <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
                                     <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
                                     ${ampCalendarEventItem.title}
                                     </logic:iterate>
@@ -156,7 +156,7 @@
 
                               <c:if test="${startMonth!=currentMonth&&currentMonth==endMonth}">
                                 <c:if test="${item.dayOfMonth==startDay&&!item.enabled}">
-                                  <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~reset=true">
+                                  <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
                                     <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
                                     ${ampCalendarEventItem.title}
                                     </logic:iterate>
@@ -288,7 +288,7 @@
 
                                                   <c:if test="${hour==startHours}">
 
-                                                    <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~reset=true">
+                                                    <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~resetForm=true">
                                                       <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
                                                       ${ampCalendarEventItem.title}
                                                       </logic:iterate>
@@ -389,7 +389,7 @@
                 <tr>
                   <td align="center" style="border-top:1px solid;" width="80">
                     <div style="width:140;overflow:hidden">
-                      <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~reset=true">
+                      <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
                         <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
                         ${ampCalendarEventItem.title}
                         </logic:iterate>

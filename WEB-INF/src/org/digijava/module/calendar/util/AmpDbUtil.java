@@ -1,3 +1,5 @@
+
+
 package org.digijava.module.calendar.util;
 
 import java.util.GregorianCalendar;
@@ -20,6 +22,8 @@ import net.sf.hibernate.Transaction;
 import java.util.Collection;
 import java.util.*;
 import java.text.SimpleDateFormat;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeam;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -289,6 +293,22 @@ public class AmpDbUtil {
     }
   }
 
+  public static List<AmpCalendarAttendee> getAmpCalendarAttendees(AmpCalendar cal) {
+      try {
+          Session session = PersistenceManager.getRequestDBSession();
+          String queryString = "from " + AmpCalendarAttendee.class.getName() +
+              " att where att.CALENDAR_ID = :calendarId";
+          Query query = session.createQuery(queryString);
+          query.setLong("calendarId", cal.getCalendarPK().getCalendar().getId());
+
+          return query.list();
+      }
+      catch (Exception e) {
+        logger.debug("Unable to get AmpCalendarAttendees by AmpCalendar", e);
+        return null;
+    }
+  }
+
   public static void deleteAmpCalendar(Long ampCalendarId) throws
       CalendarException {
     Transaction tx = null;
@@ -326,20 +346,20 @@ public class AmpDbUtil {
         session.save(ampCalendar);
       }
       else {
-        Set attendees = ampCalendar.getAttendees();
-        if (attendees != null) {
-          Iterator it = attendees.iterator();
-          while (it.hasNext()) {
-            AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
-                next();
-            Long attendeeId = attendee.getId();
-            if (attendeeId != null && attendeeId < 0) {
-              attendee.setId( -attendeeId);
-              session.delete(attendee);
-              it.remove();
-            }
-          }
-        }
+//        Set attendees = ampCalendar.getAttendees();
+//        if (attendees != null) {
+//          Iterator it = attendees.iterator();
+//          while (it.hasNext()) {
+//            AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
+//                next();
+//            Long attendeeId = attendee.getId();
+//            if (attendeeId != null && attendeeId < 0) {
+//              attendee.setId( -attendeeId);
+//              session.delete(attendee);
+//              it.remove();
+//            }
+//          }
+//        }
         session.update(calendar);
         session.update(ampCalendar);
       }
@@ -360,6 +380,54 @@ public class AmpDbUtil {
     }
   }
 
+  public static Collection<AmpCalendar> getAmpCalendarEventsByMember(GregorianCalendar startDate,
+                                          GregorianCalendar endDate,
+                                          String[] selectedEventTypeIds,
+                                          String[] selectedDonorIds,
+                                          AmpTeamMember curMember,
+                                          boolean showPublicEvents,
+                                          String instanceId, String siteId) throws
+      CalendarException {
+      try{
+          AmpTeam curMemTeam=curMember.getAmpTeam();
+
+          Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
+
+          List events = getAmpCalendarEvents(startDate, endDate, selectedEventTypeIds, selectedDonorIds, Long.valueOf(0), showPublicEvents, instanceId, siteId);
+          if (events != null) {
+              for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
+                  AmpCalendar ampCal = (AmpCalendar) eventItr.next();
+                  if (ampCal.getMember() != null) {
+
+                      AmpTeam calTeam = ampCal.getMember().getAmpTeam();
+
+                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMember.getAmpTeam().getAmpTeamId())) {
+                          retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                          continue;
+                      }
+                      if (ampCal.getAttendees() != null) {
+                          for (Iterator attItr = ampCal.getAttendees().iterator(); attItr.hasNext(); ) {
+                              AmpCalendarAttendee att = (AmpCalendarAttendee) attItr.next();
+                              AmpTeamMember member = null;
+                              if (att.getMember() != null) {
+                                  member = att.getMember();
+                              }
+                              if (member != null &&
+                                  member.getAmpTeamMemId().equals(curMember.getAmpTeamMemId()) &&
+                                  !retEvents.containsKey(ampCal.getCalendarPK().getCalendar().getId())) {
+                                  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                                  break;
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+          return retEvents.values();
+      } catch (Exception ex) {
+          throw new RuntimeException(ex);
+      }
+  }
   public static List getAmpCalendarEvents(GregorianCalendar startDate,
                                           GregorianCalendar endDate,
                                           String[] selectedEventTypeIds,

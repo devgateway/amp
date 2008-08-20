@@ -29,6 +29,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import java.util.*;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class ShowCalendarView extends Action {
 
@@ -195,10 +197,11 @@ public class ShowCalendarView extends Action {
         if (currentUser != null) {
             userId = currentUser.getId();
         }
-        List ampCalendarEvents = AmpDbUtil.getAmpCalendarEvents(startDate,
+        AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
+        Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(startDate,
             endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
-            userId, filter.isShowPublicEvents(), null, null);
-        List ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,
+            member, filter.isShowPublicEvents(), null, null);
+        Collection ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,
             navigator, view);
         calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
 

@@ -142,7 +142,7 @@ public class AmpUtil {
         return result;
     }
 
-    public static List getAmpCalendarGraphs(List ampCalendarEvents,
+    public static List getAmpCalendarGraphs(Collection ampCalendarEvents,
                                             DateNavigator navigator,
                                             String view) throws
         CalendarException {

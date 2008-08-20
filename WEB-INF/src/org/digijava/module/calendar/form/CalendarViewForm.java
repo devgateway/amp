@@ -29,7 +29,7 @@ public class CalendarViewForm
     private String view;
     private EventsFilter filter;
     private boolean filterInUse;
-    private List ampCalendarGraphs;
+    private Collection ampCalendarGraphs;
   private Boolean resetFilter;
 
   public GregorianCalendar getCurrentDate() {
@@ -115,7 +115,7 @@ public class CalendarViewForm
         return customViewEndDate;
     }
 
-    public List getAmpCalendarGraphs() {
+    public Collection getAmpCalendarGraphs() {
         return ampCalendarGraphs;
     }
 
@@ -203,7 +203,7 @@ public class CalendarViewForm
         this.customViewEndDate = customViewEndDate;
     }
 
-    public void setAmpCalendarGraphs(List ampCalendarGraphs) {
+    public void setAmpCalendarGraphs(Collection ampCalendarGraphs) {
         this.ampCalendarGraphs = ampCalendarGraphs;
     }
 

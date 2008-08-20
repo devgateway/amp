@@ -1,18 +1,17 @@
 package org.digijava.module.calendar.form;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Map;
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.calendar.entity.DateBreakDown;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 public class CalendarEventForm
     extends ActionForm {
@@ -51,6 +50,8 @@ public class CalendarEventForm
     private Collection attendees;
     private String[] selectedAtts;
     private Collection<LabelValueBean> selectedAttsCol;
+
+    private boolean resetForm;
 
     public Collection<Team> getTeamMapValues(){
         return (Collection<Team>)teamsMap.values();
@@ -172,6 +173,10 @@ public class CalendarEventForm
         return eventOrganisations;
     }
 
+    public boolean isResetForm() {
+        return resetForm;
+    }
+
     public void setStartDateBreakDown(DateBreakDown startDateBreakDown) {
         this.startDateBreakDown = startDateBreakDown;
     }
@@ -286,6 +291,10 @@ public class CalendarEventForm
 
     public void setEventOrganisations(Collection eventOrganisations) {
         this.eventOrganisations = eventOrganisations;
+    }
+
+    public void setResetForm(boolean resetForm) {
+        this.resetForm = resetForm;
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {

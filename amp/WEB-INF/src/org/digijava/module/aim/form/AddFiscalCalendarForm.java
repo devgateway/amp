@@ -120,10 +120,12 @@ public class AddFiscalCalendarForm extends ActionForm {
 			}
 		}
 
+		/* AMP-3944
 		if (yearOffset > 0) {
 			errors.add("yearOffset", new ActionError(
 					"error.aim.addFiscalCal.invalidYearOffset"));
 		}
+		*/
 
 		return (errors);
 	}

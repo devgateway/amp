@@ -22,10 +22,10 @@ function addUserOrTeam(){
   }
   var Mindex=reslist.selectedIndex;
     
-  initMyArray();
+  initMyArray();//creates the empty array
   
   if(selreceivers.length!=0){
-    getCurrentSelectedReceivers();
+    getCurrentSelectedReceivers(); //fills the array with existing selected options
   }
   if (Mindex != -1) {
     for(var i = 0; i < reslist.length; i++) {

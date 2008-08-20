@@ -14,6 +14,7 @@
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
 
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/message/script/messages.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
@@ -51,10 +52,32 @@ function addOrganisation(orgId, orgName){
       return true;
     }
   }
+  function MyaddUserOrTeam(){
+  	var MyGuests=new Array();
+    var list = document.getElementById('selreceivers');
 
+	var index = 0;
+    for(var i=0; i<list.length;i++){
+      if(list.options[i].value.indexOf('g')==0){
+      	MyGuests[index]=list.options[i];
+      	index++;
+      }
+    }
+
+	//add teams and members
+  	addUserOrTeam();//fills out the list with teams and members
+
+  	//add the guests to the list
+  	if(index != 0){
+	   for(var j=0; j<index; j++){
+	      list.options.add(MyGuests[j]);
+	   }
+    }  	
+  }
+  
   function addAtt(){
-    var reclist = document.getElementById('lstAtts');
-    var selrec=document.getElementById('lstSelAtts');
+    var reclist = document.getElementById('whoIsReceiver');
+    var selrec=document.getElementById('selreceivers');
 
     if (reclist == null) {
       return false;
@@ -97,7 +120,7 @@ function addOrganisation(orgId, orgName){
   }
 
   function addGuest(guest) {
-    var list = document.getElementById('lstSelAtts');
+    var list = document.getElementById('selreceivers');
     if (list == null || guest == null || guest.value == null || guest.value == "") {
       return;
     }
@@ -122,7 +145,7 @@ function addOrganisation(orgId, orgName){
   }
 
   function removeAtt() {
-    var list = document.getElementById('lstSelAtts');
+    var list = document.getElementById('selreceivers');
     if (list == null) {
       return;
     }
@@ -140,7 +163,7 @@ function addOrganisation(orgId, orgName){
   }
 
   function selectAtts() {
-    var list = document.getElementById("lstSelAtts");
+    var list = document.getElementById("selreceivers");
     if (list != null) {
       for(var i = 0; i < list.length; i++){
         list.options[i].selected = true;
@@ -548,7 +571,7 @@ function addOrganisation(orgId, orgName){
                           </tr>
                           <tr>
                             <td>
-                              <select multiple="multiple" size="13" id="lstAtts" class="inp-text" style="width:200px">
+                              <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width:200px">
                                 <c:if test="${empty calendarEventForm.teamMapValues}">
                                   <option value="-1">No receivers</option>
                                 </c:if>
@@ -558,7 +581,7 @@ function addOrganisation(orgId, orgName){
                                     <c:if test="${!empty team.members}">
                                       <option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
                                       <c:forEach var="tm" items="${team.members}">
-                                        <option value="m:${tm.memberId}" styleId="t:${team.id}" style="font:italic;font-size:11px;">${tm.memberName}</option>
+                                        <option value="m:${tm.memberId}" id="t:${team.id}" styleId="t:${team.id}" style="font:italic;font-size:11px;">${tm.memberName}</option>
                                       </c:forEach>
                                     </c:if>
                                   </c:forEach>
@@ -569,7 +592,7 @@ function addOrganisation(orgId, orgName){
                         </table>
                       </td>
                       <td>
-                        <input type="button" onclick="addAtt();" style="font-family:tahoma;font-size:11px;" value="<digi:trn key="calendar:addUser">Add Users >></digi:trn>">
+                        <input type="button" onclick="MyaddUserOrTeam();" style="font-family:tahoma;font-size:11px;" value="<digi:trn key="calendar:addUser">Add Users >></digi:trn>">
                       </td>
                       <td valign="top">
                         <table border="0" width="100%" cellpadding="0">
@@ -589,14 +612,14 @@ function addOrganisation(orgId, orgName){
                                 </tr>
                                 <tr>
                                   <td valign="top">
-                                    <html:select multiple="multiple" styleId="lstSelAtts" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width:200px">
+                                    <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width:200px">
                                       <c:if test="${!empty calendarEventForm.selectedAttsCol}">
                                         <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
                                       </c:if>
                                     </html:select>
                                   </td>
                                   <td valign="top">
-                                    <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeAtt()" value="<digi:trn key="calendar:removeBtn">Remove</digi:trn>" >
+                                    <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUserOrTeam()" value="<digi:trn key="calendar:removeBtn">Remove</digi:trn>" >
                                   </td>
                                 </tr>
                               </table>

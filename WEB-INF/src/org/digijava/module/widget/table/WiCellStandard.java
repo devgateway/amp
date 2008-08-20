@@ -20,9 +20,9 @@ public class WiCellStandard extends WiCell {
 		
 	}
 	public WiCellStandard(WiColumn col){
-		setHeaderCell(true);
+//		setHeaderCell(true);
 		setColumn(col);
-		value = col.getName();
+//		value = col.getName();
 	}
 	public WiCellStandard(AmpDaValue dbValue){
 		this.value = dbValue.getValue();

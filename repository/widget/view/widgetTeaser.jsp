@@ -14,44 +14,48 @@
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==3}">
-	<c:if test="${ ! empty gisWidgetTeaserForm.table}">
-		<table 
-			<c:if test="${gisWidgetTeaserForm.table.width != null}">
-				width="${gisWidgetTeaserForm.table.width}" 
-			</c:if>
-			<c:if test="${gisWidgetTeaserForm.table.cssClass != null}">
-				class="${gisWidgetTeaserForm.table.cssClass}" 
-			</c:if>
-			style="border : 1px solid silver"
-			>
-			<c:if test="${gisWidgetTeaserForm.table.nameAsTitle == true}">
-				<tr>
-					<td colspan="${fn:length(gisWidgetTeaserForm.table.headerRows)}">
-						${gisWidgetTeaserForm.table.name}
-					</td>
-				</tr>
-			</c:if>
-			<c:forEach var="theader" items="${gisWidgetTeaserForm.table.headerRows}" varStatus="hstat">
-				<tr>
-					<c:forEach var="cell" items="${theader.cells}">
-						<td nowrap="nowrap" style="border : 1px solid silver;${cell.htmlStyle}">
-							<strong>${cell.value}</strong>
-						</td>
-					</c:forEach>
-				</tr>
-				<c:forEach var="trow" items="${gisWidgetTeaserForm.table.dataRows}" varStatus="dstat">
-					<tr>
-						<c:forEach var="tcell" items="${trow.cells}" varStatus="cstat">
-							<td nowrap="nowrap" style="border : 1px solid silver">
-								${tcell.value}
-							</td>
-						</c:forEach>
-					</tr>
-				</c:forEach>
-			</c:forEach>
-		</table>
-	</c:if>
-			
+
+	<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
+	
+	<div id="tableWidgetContainer_${gisWidgetTeaserForm.id}">
+		
+	</div>
+
+
+	<script language="JavaScript">
+	
+		function requestTable_${gisWidgetTeaserForm.id}(columnId,itemId){
+			<digi:context name="tableRendererUrl" property="/widget/getTableWidget.do" />
+			var url = '${tableRendererUrl}~tableId=${gisWidgetTeaserForm.id}';
+			if (columnId!=null && itemId!=null){
+				url+='~columnId='+columnId+'~itemId='+itemId;
+			}
+			var async=new Asynchronous();
+			async.complete=tableCallBack_${gisWidgetTeaserForm.id};
+			async.call(url);
+		}
+	
+		function tableCallBack_${gisWidgetTeaserForm.id}(status, statusText, responseText, responseXML){
+			processTableResponce_${gisWidgetTeaserForm.id}(responseText);
+		}
+	
+		function processTableResponce_${gisWidgetTeaserForm.id}(htmlResponce){
+			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
+			myDiv.innerHTML = htmlResponce;		
+		}
+	
+		function tableWidgetFilterChanged_${gisWidgetTeaserForm.id}(columnId){
+			var myDiv = document.getElementById('tableWidgetContainer_${gisWidgetTeaserForm.id}');
+			var selItem = document.getElementsByName('selectedFilterItemId_${gisWidgetTeaserForm.id}')[0];
+			var itemId = selItem.value;
+			myDiv.innerHTML = 'loading...';
+			requestTable_${gisWidgetTeaserForm.id}(columnId,itemId);
+		}
+		
+		requestTable_${gisWidgetTeaserForm.id}();
+	
+	</script>
+
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==1}">

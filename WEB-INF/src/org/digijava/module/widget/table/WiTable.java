@@ -297,7 +297,7 @@ public class WiTable extends Widget{
 	public String generateHtml() {
 		StringBuffer result = new StringBuffer("<TABLE id='tableWidget");
 		result.append(this.getId());
-		result.append("' ");
+		result.append("' border='1' ");
 		//TODO add parameters
 		result.append(">\n");
 		if (showHeaderRows){

@@ -262,24 +262,25 @@ public class ChartWidgetUtil {
 	
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
-		String oql = "select f.ampDonorOrgId, sa.sectorId, sa.sectorPercentage, sa.activityId.ampActivityId,  sum(fd.transactionAmountInUSD)";
+		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
+                        " actSec.sectorPercentage, act.ampActivityId,  sum(fd.transactionAmountInUSD)";
 		oql += " from ";
-		oql += AmpFunding.class.getName() + " as f, ";
-		oql += AmpFundingDetail.class.getName() + " as fd, ";
-		// oql+=AmpActivity.class.getName()+" as a, ";
-		// oql+=AmpSector.class.getName()+" as s, ";
-		oql += AmpActivitySector.class.getName() + " as sa, ";
-                oql+=AmpSector.class.getName() + " as s ";
-		oql += " where fd.ampFundingId.ampActivityId.ampActivityId = sa.activityId.ampActivityId";
-		oql += " and s.parentSectorId is null and s.ampSectorId=sa.sectorId.ampSectorId and fd.transactionType = 0 and fd.adjustmentType = 1 ";
+		oql += AmpFundingDetail.class.getName() +
+                        " as fd inner join fd.ampFundingId f ";
+                oql +=  "   inner join f.ampActivityId act "+
+                        " inner join act.sectors actSec "+
+                        " inner join actSec.sectorId sec ";
+		
+		
+		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
 		if (donorIDs != null && donorIDs.length > 0) {
 			oql += " and (fd.ampFundingId.ampDonorOrgId in ("+ getInStatment(donorIDs) + ") ) ";
 		}
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
-		oql += " group by fd.ampFundingId.ampDonorOrgId, sa.sectorId, sa.activityId.ampActivityId, fd.ampCurrencyId";
-		oql += " order by fd.ampFundingId.ampDonorOrgId, sa.sectorId";
+		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
+		oql += " order by f.ampDonorOrgId, actSec.sectorId";
 
 		Session session = PersistenceManager.getRequestDBSession();
 

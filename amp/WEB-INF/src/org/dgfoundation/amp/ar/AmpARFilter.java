@@ -506,6 +506,8 @@ public class AmpARFilter extends PropertyListable {
 			actStatusValue=" approval_status='started' and draft<>true";break;
 		case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
 			actStatusValue=" approval_status='edited' and draft= true ";break;
+		case 4://Validated Activities 
+			actStatusValue="approval_status='approved' and draft<>true";break;
 		default:actStatusValue="1";	break;
 		}
 		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue;

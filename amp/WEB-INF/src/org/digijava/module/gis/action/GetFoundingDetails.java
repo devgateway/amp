@@ -384,7 +384,7 @@ public class GetFoundingDetails extends Action {
     private List prepareHilightSegments(List segmentData, GisMap map, Double min, Double max) {
 
         float delta = max.floatValue() - min.floatValue();
-        float coeff = 255/delta;
+        float coeff = 205/delta;
 
         List retVal = new ArrayList();
         Iterator it = map.getSegments().iterator();
@@ -397,8 +397,8 @@ public class GetFoundingDetails extends Action {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
                     float redColor = Float.parseFloat(sd.getSegmentValue()) * coeff;
-                    hData.setColor(new ColorRGB((int) redColor,
-                                                (int) (255f - redColor), 0));
+                    hData.setColor(new ColorRGB((int) 0,
+                                                (int) (redColor + 50f), 0));
                     retVal.add(hData);
                 }
             }

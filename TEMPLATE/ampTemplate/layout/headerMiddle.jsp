@@ -20,7 +20,7 @@
         <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
 
 
-<div id="myFilterWrapper" style="display: none;" >
+<div id="myAboutFilterWrapper" style="display: none;" >
 	<div id="customAbout" style="display: none">
 		<jsp:include page="/repository/aim/view/helpAbout.jsp" />
 	</div>

@@ -9,7 +9,7 @@
 <table>
 	<tr>
 		<td>
-			<img onLoad="getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA">
+			<img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA">
 		</td>
 	</tr>
 	<tr>
@@ -75,13 +75,16 @@
 
 
 <script language="JavaScript">
-
-	document.onmousemove = mouseMoveTranslatorIE;
+	
+	function initMouseOverEvt() {
+		document.onmousemove = mouseMoveTranslatorIE;
+	}
 	
 	function mouseMoveTranslatorIE(e) {
 			if (e == null) {
 				e = window.event;
 			}
+						
 			document.getElementById("tooltipContainer").style.left = e.clientX  + 2 + "px";
 			document.getElementById("tooltipContainer").style.top = e.clientY + document.body.scrollTop + 2 + "px";
 	}
@@ -89,14 +92,17 @@
 	
 	var mouseX, mouseY;
 	var evt;
-	
+	var xmlhttp = null;
 
-
-	var xmlhttp = new XMLHttpRequest();
 	
-	if (xmlhttp == null) {
-		xmlhttp = ActiveXObject("Microsoft.XMLHTTP")
+	function ajaxInit() {
+		xmlhttp = new XMLHttpRequest();
+	
+		if (xmlhttp == null) {
+			xmlhttp = ActiveXObject("Microsoft.XMLHTTP")
+		}
 	}
+
 	
 	var imageMapLoaded = false;
 	

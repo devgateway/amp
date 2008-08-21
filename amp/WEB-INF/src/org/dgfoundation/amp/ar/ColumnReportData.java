@@ -194,9 +194,9 @@ public class ColumnReportData extends ReportData {
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
 	public Collection getOwnerIds() {
+		Set allIds = new TreeSet();
 		//get the entire set of ids:
 		try {
-		Set allIds = new TreeSet();
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
@@ -225,6 +225,11 @@ public class ColumnReportData extends ReportData {
 					break;
 				}
 			}
+		}
+		
+		if (theColumn == null) {
+			logger.warn("Tried to sort by an invalid column");
+			return allIds;
 		}
 		
 		List sorterItems = theColumn.getItems();
@@ -262,9 +267,8 @@ public class ColumnReportData extends ReportData {
 		
 		return sortedIds;
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error(e);
-			return null;
+			return allIds;
 		}
 		
 	}

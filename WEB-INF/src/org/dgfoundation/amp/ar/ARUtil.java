@@ -185,6 +185,19 @@ public final class ARUtil {
 		return ret;
 	}
 
+	/**
+	 * Checks if the hierarchy with the specified name as a parameter is present amount the given collection
+	 * @param hierarchies the collection of hierarchies that the report holds persisted
+	 * @param hierarchyName the name of the hierarchy to check
+	 * @return true if the hierarchy exists
+	 */
+	public static boolean hasHierarchy(Collection<AmpReportHierarchy> hierarchies,String hierarchyName) {
+		for (AmpReportHierarchy h : hierarchies) {
+			if(h.getColumn().getColumnName().equals(hierarchyName)) return true;
+		}
+		return false;
+	}
+	
 	public static boolean containsMeasure(String measureName, Set measures) {
 		if (measureName == null)
 			return false;

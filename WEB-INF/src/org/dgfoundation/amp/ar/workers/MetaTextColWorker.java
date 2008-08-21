@@ -61,8 +61,12 @@ public class MetaTextColWorker extends TextColWorker {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 
 		//if(mtc.getMetaData())
 		MetaInfo percentageMeta = MetaInfo.getMetaInfo(mtc.getMetaData(), ArConstants.PERCENTAGE);
-		if(percentageMeta!=null && ((Double)percentageMeta.getValue()).doubleValue()==0 && columnName.equals("Region") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE) 
-			mtc.setValue(ArConstants.UNALLOCATED);
+		if(		percentageMeta!=null && 
+				((Double)percentageMeta.getValue()).doubleValue()==0 && 
+				columnName.equals(ArConstants.COLUMN_REGION) && 
+				generator.getReportMetadata().getType().equals(ArConstants.REGIONAL_TYPE) &&
+				ARUtil.hasHierarchy(generator.getReportMetadata().getHierarchies(),ArConstants.COLUMN_REGION )) 
+					mtc.setValue(ArConstants.UNALLOCATED);
 		return mtc;
 	}
 

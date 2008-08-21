@@ -7,12 +7,16 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
 <digi:instance property="gisSectorByDonorTeaserForm" />
 
 
 <script type="text/javascript">
 <!--
+        var help='<digi:trn key="widget:msgHelp">Help</digi:trn>';
+        var tooltip= "<digi:trn key='widget:piechart:allAmountsinUSDTooltip'>The amounts are calculated according to the exchange rate at the time when funding is done</digi:trn>";
 	<digi:context name="chartImageUrl" property="context/module/moduleinstance/showSectorByDonorChart.do" />
 	var chartURL = "<%=chartImageUrl%>";
 	function donorChanged(){
@@ -55,11 +59,8 @@
 <table>
     <tr>
         <td colspan="3" align="left">
-            <c:set var="tooltip">
-                <digi:trn key='widget:piechart:allAmountsinUSDTooltip'>The amounts are calculated according to the exchange rate at the time when funding is done</digi:trn>
-            </c:set>
             <digi:trn key="widget:piechart:allAmountsinUSD1">All amounts in USD.</digi:trn>
-            <digi:img  src="module/widget/images/help1.gif" title="${tooltip}"/>
+            <digi:img  src="module/widget/images/help1.gif" onmouseover="stm([help,tooltip],Style[9])" onmouseout="htm()"/>
         </td>
     </tr>
 	<tr>

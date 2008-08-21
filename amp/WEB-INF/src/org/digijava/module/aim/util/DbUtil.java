@@ -2342,7 +2342,7 @@ public class DbUtil {
         return col;
     }
 
-    public static ArrayList<AmpOrganisation> getAmpOrganisations() {
+    public static ArrayList<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
         Session session = null;
         Query q = null;
         AmpOrganisation ampOrganisation = null;
@@ -2352,8 +2352,11 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = " select org from " + AmpOrganisation.class.getName()
-                + " org order by org.name";
+            queryString = " select org from " + AmpOrganisation.class.getName() +" org ";
+            if(!includeWeirdOrgs){
+               queryString +=  " where org.name not like '%x_%' and org.orgTypeId.orgTypeCode in ('BIL','MUL','Private') ";
+            }     
+            queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
             iter = q.list().iterator();
 
@@ -2368,7 +2371,7 @@ public class DbUtil {
         }
         return organisation;
     }
-
+    
     public static ArrayList getBilMulOrganisations() {
         Session session = null;
         Query q = null;

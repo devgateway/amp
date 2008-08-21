@@ -67,7 +67,7 @@ public class GetUnAssignedWorkspaces extends Action {
 					col = DbUtil.searchForOrganisation(uwForm.getKeyword().trim());
 				} else {
 					// get all organisations since keyword field is blank and org type field has 'ALL'.
-					col = DbUtil.getAmpOrganisations();
+					col = DbUtil.getAmpOrganisations(true);
 				}
 				uwForm.setAllOrganizations(col);
 /* Search feature end */

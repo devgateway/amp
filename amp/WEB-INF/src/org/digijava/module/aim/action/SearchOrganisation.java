@@ -51,7 +51,7 @@ public class SearchOrganisation extends Action {
 				col = DbUtil.searchForOrganisation(eaForm.getKeyword().trim());
 			} else {
 				// get all organisations since keyword field is blank and org type field has 'ALL'.
-				col = DbUtil.getAmpOrganisations();
+				col = DbUtil.getAmpOrganisations(true);
 			}
 
 			if (col != null && col.size() > 0) {

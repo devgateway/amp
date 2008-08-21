@@ -28,7 +28,7 @@ public class SectorsByDonorTeaser extends TilesAction {
 		SectorByDonorTeaserForm tForm = (SectorByDonorTeaserForm)form;
 		tForm.setSelectedYear("2008");
 		tForm.setSelectedDonor(new Long(-1));
-		Collection<AmpOrganisation> donors = DbUtil.getDonors();
+		Collection<AmpOrganisation> donors = DbUtil.getAmpOrganisations(false);
 		tForm.setDonors(donors);
 		
 		return null;

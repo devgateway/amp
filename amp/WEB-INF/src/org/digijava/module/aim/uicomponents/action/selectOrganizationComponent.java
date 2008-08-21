@@ -147,7 +147,7 @@ public class selectOrganizationComponent extends Action {
 			} else {
 				// get all organisations since keyword field is blank and org
 				// type field has 'ALL'.
-				organizationResult = DbUtil.getAmpOrganisations();
+				organizationResult = DbUtil.getAmpOrganisations(true);
 			}
 
 			if (organizationResult != null && organizationResult.size() > 0) {

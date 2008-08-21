@@ -14,27 +14,27 @@
 
 <table width="474" border="0">
 	<tr>
-		<td width="206">
-		<p align="center"><strong><digi:trn
+		<td width="257">
+		<p align="center" style="font-family: Arial, Helvetica, sans-serif; font-size: 16px;"><strong><digi:trn
 			key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn></strong></p>
 		<p align="center"><digi:trn
 			key="aim:aidmanagementplatformversionshort">Version 1.11c</digi:trn></p>
 		</td>
-		<td width="258"><img width="220" height="149"
+		<td width="220"><img width="220" height="149"
 			src="/TEMPLATE/ampTemplate/images/dgf_logo.jpg"></td>
 	</tr>
-	<tr>
+	<tr style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
 		<td colspan="2">
 		<p><digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn>
-		<digi:trn key="aim:aidmanagementplatformversion">Version 1.11c Build 9. August
-		2008.</digi:trn> <digi:trn key="aim:ampdevelopmentcredits">Developed in partnership with OECD, UNDP, WB, Government of
-		Ethiopia and Development Gateway Foundation.</digi:trn></p>
+		<digi:trn key="aim:aidmanagementplatformversion">Version 1.11c Build 9. August 2008.</digi:trn>
+		<digi:trn key="aim:ampdevelopmentcredits">Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.</digi:trn>
+		</p>
 		</td>
 	</tr>
-	<tr>
-		<td colspan="2"><digi:trn
-			key="aim:aidmanagementplatformtrademark">The Development Gateway and the The Development
-		Gateway logo are trademarks for The Development Gateway Foundation.</digi:trn>
-		All Rights Reserved.</td>
+	<tr style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
+		<td colspan="2">
+		<p><digi:trn key="aim:aidmanagementplatformtrademark">The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation.</digi:trn>
+		<digi:trn key="aim:ampallrightreserved">All Rights Reserved.</digi:trn></p>
+		</td>
 	</tr>
 </table>

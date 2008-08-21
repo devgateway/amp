@@ -213,6 +213,14 @@ background-color: yellow;
 		YAHOOAmp.amptab.init = function() {
 		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
 		};
+
+		YAHOOAmp.amptab.handleCloseAbout = function() {
+			if(navigator.appName == 'Microsoft Internet Explorer'){
+				//window.location.reload();
+				//history.go(-1);
+			}
+		}
+		
 		YAHOOAmp.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
@@ -262,8 +270,8 @@ background-color: yellow;
 		    }
 		     );
 
-		    var myPanel5 = new YAHOOAmp.widget.Panel("new", {
-				width:"470px",
+		    var myPanel5 = new YAHOOAmp.widget.Panel("new5", {
+				width:"480px",
 			    fixedcenter: true,
 			    constraintoviewport: true,
 			    underlay:"none",
@@ -273,6 +281,7 @@ background-color: yellow;
 			    draggable:true} );
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleClose);
+	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
 		    
 	function initScripts() {
 	    var msg='\n<digi:trn key="rep:filter:filters">Filters</digi:trn>';
@@ -297,8 +306,8 @@ background-color: yellow;
 		myPanel4.setBody("");
 		myPanel4.render(document.body);
 
-		var msg='\n<digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn>';
-		myPanel5.setHeader(msg);
+		var msgP5='\n<digi:trn key="aim:aboutamp">About AMP</digi:trn>';
+		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
 		myPanel5.render(document.body);				
 	}
@@ -321,7 +330,6 @@ background-color: yellow;
 		YAHOOAmp.amptab.init();
 		var element = document.getElementById("customAbout");
 		element.style.display = "inline";
-		
 		myPanel5.setBody(element);
 		myPanel5.center();
 		myPanel5.show();

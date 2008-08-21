@@ -75,7 +75,7 @@ public class AmpUtil {
         try {
 //            Collection allDonors = org.digijava.module.aim.util.DbUtil.
 //                getDonors();
-            Collection allDonors = DbUtil.getAmpOrganisations();
+            Collection allDonors = DbUtil.getAmpOrganisations(true);
             result = getSelectedDonors(allDonors, donorIds);
         } catch(Exception ex) {
 

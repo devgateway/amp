@@ -34,7 +34,7 @@
         <td align="center" style="background-color:#999999;color:black;" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
             <logic:equal name="column" property="columnDepth" value="1">          
 	            <logic:equal name="widget" scope="request" value="true">				
-	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
+	              <a style="color:black;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="subColumn" property="name"/>');">
 		              <c:set var="portfTitle">
 		                <%=subColumn.getName(reportMeta.getHideActivities())%>
 		              </c:set>
@@ -43,12 +43,12 @@
 	            </logic:equal>
             
 	            <logic:notEqual name="widget" scope="request" value="true">
-	              <html:link style="color:black;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+	              <html:link style="color:black;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 	              </html:link>
 	            </logic:notEqual>
             
-	            <c:if test="${column.name == columnReport.sorterColumn}">
+	            <c:if test="${subColumn.name == columnReport.sorterColumn}">
 	              <logic:equal name="columnReport" property="sortAscending" value="false">
 	                <img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
 	              </logic:equal>
@@ -61,7 +61,7 @@
             
           <logic:notEqual name="column" property="columnDepth" value="1">
 			<logic:notEqual name="subColumn" property="width" value="1">
-				<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn> aa
+				<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
           	</logic:notEqual>
           	<logic:equal name="subColumn" property="width" value="1"> 
 	            <logic:equal name="widget" scope="request" value="true">				

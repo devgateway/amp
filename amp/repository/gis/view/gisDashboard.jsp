@@ -9,7 +9,7 @@
 <table>
 	<tr>
 		<td>
-			<img onLoad="getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&segmentData=Tanga/Muheza%20DC/38|Tanga/Korogwe%20DC/15|Tanga/Lushoto%20DC/30|Tanga/Handeni%20DC/5|Tanga/Pangani%20DC/12">
+			<img onLoad="getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA">
 		</td>
 	</tr>
 	<tr>
@@ -92,7 +92,12 @@
 	
 
 
-	var xmlhttp =  new XMLHttpRequest();
+	var xmlhttp = new XMLHttpRequest();
+	
+	if (xmlhttp == null) {
+		xmlhttp = ActiveXObject("Microsoft.XMLHTTP")
+	}
+	
 	var imageMapLoaded = false;
 	
 	var fundingDataByRegion = new Array();
@@ -175,23 +180,24 @@
 			
 			var selectCmb = document.getElementById("indicatorsCombo");
 			
+			selectCmb.innerHTML = null;
 			
-			var innerHtmlText = "<option value=\"-1\">None</option>";
-			/*			
-			var innerHtmlText = ""
-			if (indicators.length == 0) {
-				innerHtmlText = "<option value=\"-1\">None</option>";
-			}
-			*/
+			var noneOpt = document.createElement("OPTION");
+			noneOpt.value="-1";
+			noneOpt.text="none";
+			selectCmb.options.add(noneOpt);
+			
 			
 			for (indIndex = 0; indIndex < indicators.length; indIndex ++) {
 				var indicatorData = indicators[indIndex];
-				innerHtmlText += "<option value=\"" + indicatorData.attributes.getNamedItem("id").value + "\">" + indicatorData.attributes.getNamedItem("name").value + "</option>";
+
+				var opt = document.createElement("OPTION");
+				opt.value=indicatorData.attributes.getNamedItem("id").value;
+				opt.text=indicatorData.attributes.getNamedItem("name").value;
+				selectCmb.options.add(opt);
 				
-				//alert (indicatorData.attributes.getNamedItem("name").value + " - " + indicatorData.attributes.getNamedItem("id").value)
 			}
 			
-			selectCmb.innerHTML = innerHtmlText;
 			setBusy(false);
 		}
 	}

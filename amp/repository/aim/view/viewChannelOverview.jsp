@@ -18,7 +18,7 @@
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
-
+<jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
 <script type="text/javascript">
 
 function fnEditProject(id)
@@ -129,22 +129,58 @@ function commentWin(val) {
 								<TD align=left>
 								<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left"
 									vAlign="top">
-									<TR>
-										<TD align="left"><SPAN class=crumb> <jsp:useBean
-											id="urlChannelOverview" type="java.util.Map"
-											class="java.util.HashMap" /> <c:set
-											target="${urlChannelOverview}" property="ampActivityId">
-                                            ${aimChannelOverviewForm.id}
+									<TR bgColor=#f4f4f2>
+										<TD align="left">
+										<SPAN><strong>
+										<feature:display module="Project ID and Planning" name="Identification">
+											<field:display name="Description" feature="Identification">
+											&nbsp;&nbsp;<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>'); return false;" >
+											<digi:trn key="aim:description">Description</digi:trn></a>&nbsp;|</div>&nbsp;
+											</field:display>
+											<field:display name="Objectives" feature="Identification">
+												<field:display name="Objective" feature="Identification">
+												<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
+												<a href="#" onclick="javascript:previewOverviewframe('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>'); return false;" >
+												<digi:trn key="aim:objectives">Objectives</digi:trn></a>&nbsp;|</div>&nbsp;
+												</field:display>
+											</field:display>
+											<field:display name="Purpose" feature="Identification">
+											<div id="gen" title='<digi:trn key="aim:clickToViewProjectPurpose">Click here to View Project Purpose</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('Purp','<c:out value="${aimMainProjectDetailsForm.purpose}"/>'); return false;" >
+												<digi:trn key="aim:purpose">Purpose</digi:trn></a>&nbsp;|</div>&nbsp;
+											</field:display>
+											<field:display name="Results" feature="Identification">
+											<div id="gen" title='<digi:trn key="aim:clickToViewProjectResults">Click here to View Project Results</digi:trn>'>
+											<a href="#" onclick="javascript:previewOverviewframe('Res','<c:out value="${aimMainProjectDetailsForm.results}"/>'); return false;" >
+												<digi:trn key="aim:results">Results</digi:trn></a>&nbsp;|</div>&nbsp;
+											</field:display>
+										</feature:display>
 
-										</c:set> <c:set target="${urlChannelOverview}" property="tabIndex"
-											value="0" /> <c:set var="translation">
-											<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
-										</c:set> <digi:link href="/viewChannelOverview.do"
-											name="urlChannelOverview" styleClass="comment"
-											title="${translation}">
-											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-										</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn>										
-										</SPAN></TD>
+												<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+													<feature:display name="Logframe" module="Previews">
+														<field:display name="Logframe Preview Button" feature="Logframe">
+															<div id="gen" title='<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
+																<a href="#" onclick="javascript:previewLogframe(${aimChannelOverviewForm.id}); return false;">
+																	<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn></a>&nbsp;|</div>&nbsp;
+														</field:display>
+													</feature:display>
+												</module:display>
+
+												<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+													<feature:display name="Project Fiche" module="Previews">
+														<field:display name="Project Fiche Button" feature="Project Fiche">
+															<div id="gen" title='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'>
+																<a href="#" onclick='javascript:projectFiche(${aimChannelOverviewForm.id}); return false;'>
+															<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a>&nbsp;|</div>&nbsp;
+														</field:display>
+													</feature:display>
+												</module:display>
+											
+											</strong>
+										</SPAN>									
+										</TD>
+										
 										<TD align="right">
 										<table>
 											<tr>
@@ -152,11 +188,8 @@ function commentWin(val) {
 													parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Preview Activity" module="Previews">
 														<field:display feature="Preview Activity" name="Preview Button">
-															<td><input type="button"
-																value="<digi:trn key='btn:preview'>Preview</digi:trn>"
-																class="dr-menu"
-																onclick="preview(${aimChannelOverviewForm.id})"></td>
-
+															<td> <a href="" target="_blank" onclick="javascript:preview(${aimChannelOverviewForm.id}); return false;" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
+																<img src="/repository/aim/images/magnifier.png" border="0"></a></td>
 														</field:display>
 													</feature:display>
 												</module:display>
@@ -169,8 +202,9 @@ function commentWin(val) {
                                                                                <c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
                                                                                <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
                                                                                  -->  
-                                                                                       <input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" 
-                                                                                       class="dr-menu" onclick="fnEditProject(${activity.activityId})">
+                                                                                       <a href="" target="_blank" onclick="javascript:fnEditProject(${activity.activityId}); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+																							<img src="/repository/aim/images/application_edit.png" border="0"></a>
+
                                                                                <!--       
                                                                                </c:if>                                                                 
                                                                                      
@@ -205,37 +239,6 @@ function commentWin(val) {
 							                                        	</td>
 
 																	</c:if> --%>
-														</field:display>
-													</feature:display>
-												</module:display>
-
-												<module:display name="Previews"
-													parentModule="PROJECT MANAGEMENT">
-													<feature:display name="Logframe" module="Previews">
-														<field:display name="Logframe Preview Button"
-															feature="Logframe">
-															<td><input type="button"
-																value="<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>"
-																class="dr-menu"
-																onclick="previewLogframe(${aimChannelOverviewForm.id})">
-															</td>
-
-														</field:display>
-													</feature:display>
-												</module:display>
-
-												<module:display name="Previews"
-													parentModule="PROJECT MANAGEMENT">
-													<feature:display name="Project Fiche" module="Previews">
-														<field:display name="Project Fiche Button"
-															feature="Project Fiche">
-
-															<td><input type='button'
-																value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'
-																class='dr-menu'
-																onclick='projectFiche(${aimChannelOverviewForm.id})'>
-															</td>
-
 														</field:display>
 													</feature:display>
 												</module:display>

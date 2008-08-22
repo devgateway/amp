@@ -411,9 +411,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Overall Contribution" feature="Planning"></field:display>
 <field:display name="Overall Cost" feature="Planning"></field:display>
 <field:display name="Paris Survey" feature="Paris Indicators"></field:display>
-<field:display name="Perspective Commitment" feature="Funding Information"></field:display>
-<field:display name="Perspective Disbursement" feature="Disbursement"></field:display>
-<field:display name="Perspective Expenditure" feature="Funding Information"></field:display>
 <field:display name="Physical Progress" feature="Physical Progress"></field:display>
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>
 <field:display name="Physical progress title" feature="Physical Progress"></field:display>
@@ -454,9 +451,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Purpose" feature="Identification"></field:display>
 <field:display name="Region" feature="Location"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display>
-<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
-<field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display>
-<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display>
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display>
 <field:display name="Remove Actors Button" feature="Issues"></field:display>

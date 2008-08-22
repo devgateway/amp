@@ -485,9 +485,6 @@
 <field:display name="Overall Cost" feature="Planning"></field:display> 
 <field:display name="Paris Survey" feature="Paris Indicators"></field:display> 
 <field:display name="Percentage" feature="Sectors"></field:display> 
-<field:display name="Perspective Commitment" feature="Funding Information"></field:display> 
-<field:display name="Perspective Disbursement" feature="Disbursement"></field:display> 
-<field:display name="Perspective Expenditure" feature="Funding Information"></field:display> 
 <field:display name="Physical Progress Tab" feature="Physical Progress"></field:display> 
 <field:display name="Physical Progress" feature="Physical Progress"></field:display> 
 <field:display name="Physical progress description" feature="Physical Progress"></field:display> 
@@ -538,9 +535,6 @@
 <field:display name="Proposed Start Date" feature="Planning"></field:display> 
 <field:display name="Purpose" feature="Identification"></field:display> 
 <field:display name="Region" feature="Location"></field:display> 
-<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display> 
-<field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display> 
-<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display> 
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display> 

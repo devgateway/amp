@@ -901,10 +901,6 @@
 											</td>
 											</field:display>
 
-											<field:display name="Perspective Disbursement" feature="Disbursement">
-											<td valign="bottom">
-											</td>
-											</field:display>
                                                                                         <feature:display module="Funding" name="Disbursement Orders">
   											<td valign="bottom" align="center">
                                                                                         <c:if test="${aimEditActivityForm.disbursementOrders}">

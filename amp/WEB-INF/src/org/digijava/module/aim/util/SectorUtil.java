@@ -1229,10 +1229,14 @@ public class SectorUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select cls.ampSecSchemeId from "
+            queryString = "select config.id from "
                     + AmpClassificationConfiguration.class.getName() +
                     " config inner join config.classification cls "+
                     " where config.primary=true ";
+//            queryString = "select cls.ampSecSchemeId from "
+//                + AmpClassificationConfiguration.class.getName() +
+//                " config inner join config.classification cls "+
+//                " where config.primary=true ";
             qry = session.createQuery(queryString);
             //There must be only one primary configuration in database
             id=(Long)qry.uniqueResult();

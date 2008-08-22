@@ -9,12 +9,14 @@
 <logic:present name="starFlag" scope="request">
 	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
 </logic:present>
-	<div align="left">
+<div align="left">
 	<logic:present name="starFlag" scope="request">
 		<logic:equal name="starFlagLocal" value="true">*</logic:equal>
 		<bean:define id="starFlag" value="" scope="page" toScope="request" />
 	</logic:present>
-<bean:write name="textCell" property="shortTextVersion" filter="false"/>...</div>
+	<logic:empty name="textCell" property="shortTextVersion">...</logic:empty>
+	<bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;
+</div>
 
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">

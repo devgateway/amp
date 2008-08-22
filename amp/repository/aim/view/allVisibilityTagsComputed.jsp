@@ -43,7 +43,6 @@
 <module:display name="PI Reports" parentModule="REPORTING"></module:display> 
 <module:display name="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Physical Progress" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 

@@ -1,15 +1,17 @@
 
-<div id="myPOverviewframe" style="display: none">
-	<div id="myPOverviewframeContent" class="content">
-		===== ERROR =====
-	</div>
-</div>
+<!--<div id="myPOverviewframe" style="display: none">-->
+<!--	<div id="myPOverviewframeContent" class="content">-->
+<!--		===== ERROR =====-->
+<!--	</div>-->
+<!--</div>-->
 
 
 <script type="text/javascript">
-	YAHOOAmp.namespace("YAHOOAmp.amptab2");
+	var contentLocal;
+
+	YAHOOAmp.namespace("YAHOOAmp.amptab_2");
 	YAHOOAmp.amptab.init = function() {
-	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container2');
+	    		var tabView = new YAHOOAmp.widget.TabView('tabview_container_2');
 	};
 
 	YAHOOAmp.amptab.handleClose = function() {
@@ -19,10 +21,12 @@
 			//window.location.reload();
 			//history.go(-1);
 		//}
+		//document.getElementById("myPOverviewframe").removeChild(contentLocal);
 	}
 		
     var myPanelOverviewframe = new YAHOOAmp.widget.Panel("newmyPOverviewframe", {
 		width:"700px",
+		height:"500px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",
@@ -30,6 +34,7 @@
 	    visible:false,
 	    modal:true,
 	    draggable:true,
+	    context: ["showbtn", "tl", "bl"]
 	    }
 	     );
 
@@ -42,19 +47,30 @@
 		myPanelOverviewframe.setBody("The Panel is a powerful UI control");
 		myPanelOverviewframe.render(document.body);
 		panelFirstShow = 1;
+		//contentLocal = document.getElementById("myPOverviewframeContent");
 	}
 	
 	function showPOverviewframe() {
 		//alert('showPOverviewframe');
-		var content = document.getElementById("myPOverviewframeContent");
-		var element5 = document.getElementById("myPOverviewframe"); 
-		content.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
+		//contentLocal = document.getElementById("myPOverviewframeContent");
+		contentLocal = document.createElement('div');
+		contentLocal.setAttribute('id', 'myPOverviewframeContent');
+		contentLocal.setAttribute('class', 'content');
+						
+		//var element5 = document.getElementById("myPOverviewframe");
+		//element5.appendChild(contentLocal);
+		 
+		contentLocal.innerHTML = '<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /><font size="3"><b>Loading...</b></font></p>';
+		//contentLocal.parentElement = element5;
 		//if (panelFirstShow == 1){ 
-			element5.style.display = "inline";
-			myPanelOverviewframe.setBody(element5);
+			contentLocal.style.display = "inline";
+			myPanelOverviewframe.setBody(contentLocal);
 			panelFirstShow = 0;
 		//}
-		document.getElementById("myPOverviewframeContent").scrollTop=0;
+		//document.getElementById("myPOverviewframeContent").scrollTop=0;
+		//content.scrollTop=0;
+		//contentLocal = content;
+		//myPanelOverviewframe.render(document.body);
 		myPanelOverviewframe.show();
 	}
 	function hidePOverviewframe() {
@@ -74,9 +90,10 @@
 	 * o.responseXML
 	 * o.argument
 	 */
-		var response = o.responseText; 
-		var content = document.getElementById("myPOverviewframeContent");
-		content.innerHTML = response;
+		var response = o.responseText;
+		//alert(response);
+		//var content = document.getElementById("myPOverviewframeContent");
+		contentLocal.innerHTML = response;
 	}
 		 
 	var responseFailureOverviewframe = function(o){ 

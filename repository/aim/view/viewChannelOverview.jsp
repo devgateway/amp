@@ -250,6 +250,9 @@ function commentWin(val) {
 								</TABLE>
 								</TD>
 							</TR>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
 
 							<TR bgColor=#f4f4f2 >
 								<TD vAlign="top" align="center" width="100%">

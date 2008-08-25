@@ -240,44 +240,80 @@
 								<feature:display name="Donor Report" module="Reports">
                                              <tr>
                                                <td>
-                                                 <html:radio property="reportType" value="donor"  onclick="repManager.checkSteps()">
-                                                   <digi:trn key="aim:donorReport">
-                                                   Donor Report (Donor Funding)
-                                                   </digi:trn>
-                                                 </html:radio>
+                                               <c:if test="${!empty aimReportWizardForm.reportId}">
+	                                               <html:radio disabled="true" property="reportType" value="donor"  onclick="repManager.checkSteps()">
+	                                                   <digi:trn key="aim:donorReport">
+	                                                   Donor Report (Donor Funding)
+	                                                   </digi:trn>
+	                                                 </html:radio>
+                                               </c:if>
+                                               <c:if test="${empty aimReportWizardForm.reportId}">
+	                                               <html:radio property="reportType" value="donor"  onclick="repManager.checkSteps()">
+	                                                   <digi:trn key="aim:donorReport">
+	                                                   Donor Report (Donor Funding)
+	                                                   </digi:trn>
+	                                                 </html:radio>
+                                               </c:if>
                                                </td>
                                              </tr>
                                              </feature:display>
                                              <feature:display name="Regional Report" module="Reports">										
                                              <tr>
                                                <td>
-                                                 <html:radio property="reportType" value="regional"  onclick="repManager.checkSteps()">
+                                                 <c:if test="${!empty aimReportWizardForm.reportId}">
+	                                               <html:radio disabled="true" property="reportType" value="regional"  onclick="repManager.checkSteps()">
                                                    <digi:trn key="aim:regionalReport">
                                                    Regional Report (Regional Funding)
                                                    </digi:trn>
                                                  </html:radio>
+                                               </c:if>
+                                               <c:if test="${empty aimReportWizardForm.reportId}">
+	                                               <html:radio property="reportType" value="regional"  onclick="repManager.checkSteps()">
+                                                   <digi:trn key="aim:regionalReport">
+                                                   Regional Report (Regional Funding)
+                                                   </digi:trn>
+                                                 </html:radio>
+                                               </c:if>                                                 
                                                </td>
                                              </tr>
                                              </feature:display>
                                              <feature:display name="Component Report" module="Reports">
                                              <tr>
                                                <td>
-                                 	                <html:radio property="reportType" value="component"  onclick="repManager.checkSteps()">
+                                               <c:if test="${!empty aimReportWizardForm.reportId}">
+	                                               <html:radio disabled="true" property="reportType" value="component"  onclick="repManager.checkSteps()">
                                                    <digi:trn key="aim:componentReport">
                                                    Component Report (Component Funding)
                                                    </digi:trn>
                                                  </html:radio>
+                                               </c:if>                                  	                
+                                               <c:if test="${empty aimReportWizardForm.reportId}">
+	                                               <html:radio property="reportType" value="component"  onclick="repManager.checkSteps()">
+                                                   <digi:trn key="aim:componentReport">
+                                                   Component Report (Component Funding)
+                                                   </digi:trn>
+                                                 </html:radio>
+                                               </c:if>                                  	                
                                                </td>
                                              </tr>
                                              </feature:display>
                                                <feature:display module="Reports" name="Contribution Report">
                                                  <tr>
                                                    <td>
-                                                     <html:radio property="reportType" value="contribution"  onclick="repManager.checkSteps()">
-                                                       <digi:trn key="aim:contributionReport">
-                                                       Contribution Report (Activity Contributions)
-                                                       </digi:trn>
-                                                     </html:radio>
+	                                                   <c:if test="${!empty aimReportWizardForm.reportId}">
+			                                               <html:radio disabled="true" property="reportType" value="contribution"  onclick="repManager.checkSteps()">
+	                                                       <digi:trn key="aim:contributionReport">
+	                                                       Contribution Report (Activity Contributions)
+	                                                       </digi:trn>
+	                                                     </html:radio>
+		                                               </c:if>                                  	                
+                                              		   <c:if test="${empty aimReportWizardForm.reportId}">
+			                                               <html:radio property="reportType" value="contribution"  onclick="repManager.checkSteps()">
+	                                                       <digi:trn key="aim:contributionReport">
+	                                                       Contribution Report (Activity Contributions)
+	                                                       </digi:trn>
+	                                                     </html:radio>
+		                                               </c:if> 
                                                    </td>
                                                  </tr>
                                                </feature:display>

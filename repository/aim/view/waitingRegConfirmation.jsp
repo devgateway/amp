@@ -20,7 +20,10 @@
 					<td width="3%">&nbsp;</td>
 					<td align=left class=title noWrap colspan="2">
 						<b>
-						<digi:trn key="aim:newUserConfirmRegistrationSuccess"> The confirmation mail is sent to you. Please confirm your registartion</digi:trn>
+						<digi:trn key="aim:newUserConfirmRegSuccess"> 
+                                                Registration is Successful! <br/>
+                                                A confirmation email has been sent to the address you specified ${aimUserRegisterForm.email}.<br/>
+                                                You need to read and respond to this email before you can use your account. If you don't do this, the new account will be deleted automatically after a few days.</digi:trn>
 						</b>
 					</td>
 				</tr>

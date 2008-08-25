@@ -52,16 +52,57 @@ function addOrganisation(orgId, orgName){
       return true;
     }
   }
-  function MyaddUserOrTeam(){
+  function MyremoveUserOrTeam(){
   	var MyGuests=new Array();
+  	var orphands=new Array();
     var list = document.getElementById('selreceivers');
 
 	var index = 0;
+	var orpIndex = 0;
     for(var i=0; i<list.length;i++){
+      if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
+         orphands[orpIndex]=list.options[i];
+         orpIndex++;
+      }
+      if(list.options[i].value.indexOf('g')==0){
+         if(list.options[i].selected){
+            list.options[i]=null;
+         }
+         else{
+      	   MyGuests[index]=list.options[i];
+      	   index++;           
+         }
+      }
+    }
+    if(orpIndex!=0){
+       registerOrphanMember(orphands);
+    }
+    removeUserOrTeam();
+    if(index != 0){
+	   for(var j=0; j<index; j++){
+	      list.options.add(MyGuests[j]);
+	   }
+    }  
+  }  
+  function MyaddUserOrTeam(){
+  	var MyGuests=new Array();
+    var list = document.getElementById('selreceivers');
+	var orphands=new Array();
+	var index = 0;
+	var orpIndex = 0;
+    for(var i=0; i<list.length;i++){
+      if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
+         orphands[orpIndex]=list.options[i];
+         orpIndex++;
+      }
+    
       if(list.options[i].value.indexOf('g')==0){
       	MyGuests[index]=list.options[i];
       	index++;
       }
+    }
+    if(orpIndex!=0){
+       registerOrphanMember(orphands);
     }
 
 	//add teams and members
@@ -619,7 +660,7 @@ function addOrganisation(orgId, orgName){
                                     </html:select>
                                   </td>
                                   <td valign="top">
-                                    <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUserOrTeam()" value="<digi:trn key="calendar:removeBtn">Remove</digi:trn>" >
+                                    <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<digi:trn key="calendar:removeBtn">Remove</digi:trn>" >
                                   </td>
                                 </tr>
                               </table>

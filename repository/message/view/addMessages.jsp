@@ -44,8 +44,42 @@
 </style>
 
 <script langauage="JavaScript">
+
+  function MyremoveUserOrTeam(){
+  	var orphands=new Array();
+    var list = document.getElementById('selreceivers');
+	var orpIndex = 0;
+    for(var i=0; i<list.length;i++){
+      if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
+         orphands[orpIndex]=list.options[i];
+         orpIndex++;
+      }
+    }
+    if(orpIndex!=0){
+       registerOrphanMember(orphands);
+    }
+    removeUserOrTeam();
+  }  
+  function MyaddUserOrTeam(){
+    var list = document.getElementById('selreceivers');
+	var orphands=new Array();
+	var orpIndex = 0;
+    for(var i=0; i<list.length;i++){
+      if(list.options[i].value.indexOf('m')==0 && list.options[i].id.indexOf('t')!=0){
+         orphands[orpIndex]=list.options[i];
+         orpIndex++;
+      }
+    }
+    if(orpIndex!=0){
+       registerOrphanMember(orphands);
+    }
+
+	//add teams and members
+  	addUserOrTeam();//fills out the list with teams and members
+
+  }
 	
-	function validate(){
+  function validate(){
             var titleSize=document.messageForm.messageName.value.length;
             var descSize=document.messageForm.description.value.length;
 		if(titleSize==0){
@@ -319,9 +353,9 @@
 																                                	</select>																                                         
 																                                </td>
 																                                <td>
-																                                  <input type="button" onclick="addUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+																                                  <input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
 																                                  <br><br>
-																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
+																                       			  <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >	
 																                                </td>
 																                                <td valign="top">
 																                                	<html:select multiple="multiple" styleId="selreceivers" name="messageForm" property="receiversIds"  size="5" styleClass="inp-text" style="width:200px">

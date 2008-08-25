@@ -4,6 +4,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -995,12 +996,27 @@ public class AmpMessageActions extends DispatchAction {
 		List<LabelValueBean> members=null;
 		if(msgStates!=null && msgStates.size()>0){
 			members=new ArrayList<LabelValueBean>();
-			for (AmpMessageState state :msgStates) {
+			Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
+			Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
+			for (AmpMessageState state : msgStates) {
 				if(state.getMemberId()!=null){
 					AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-					LabelValueBean tm=new LabelValueBean(teamMember.getUser().getName(),"m:"+state.getMemberId());				
-					members.add(tm);
+					AmpTeam team = teamMember.getAmpTeam();
+					if(!teamList.contains(team)){
+					   teamList.add(team);	
+					}					
+					memberList.add(teamMember);
 				}					
+			}
+			for(AmpTeam team : teamList){
+				LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());				
+				members.add(teamLabel);
+				for(AmpTeamMember member : memberList){
+					if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
+						LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());				
+						members.add(tm);						
+					}
+				}
 			}
 		}
 		return members;

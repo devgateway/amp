@@ -9,7 +9,9 @@ package org.digijava.module.aim.action;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -29,8 +31,10 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -192,11 +196,26 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 		// test if the request was for column sorting purposes:
-		
-		if(sortBy!=null) {
-			httpSession.setAttribute("sortBy",sortBy);
+		if (sortBy != null) {
+			httpSession.setAttribute("sortBy", sortBy);
 			rd.setSorterColumn(sortBy);
-		
+			if (applySorter == null && ar.getHierarchies() != null
+					&& !ar.getHierarchies().isEmpty()) {
+				List<AmountCell> trailCells = rd.getTrailCells();
+				for (AmountCell cell : trailCells) {
+					if (sortBy.equals(cell.getColumn().getName())) {
+						Set<AmpReportHierarchy> hierarchies = ar.getHierarchies();
+						for (AmpReportHierarchy hierarchy : hierarchies) {
+							sorters.put(hierarchy.getLevelId(), new MetaInfo(
+									cell.getColumn().getAbsoluteColumnName(),
+									rd.getSortAscending() ? "ascending": "descending"));
+						}
+						rd.importLevelSorters(sorters, ar.getHierarchies().size());
+						rd.applyLevelSorter();
+						break;
+					}
+				}
+			}
 		}
 		
 		if (rd==null) return mapping.findForward("index");

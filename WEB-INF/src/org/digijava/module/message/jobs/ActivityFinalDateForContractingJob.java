@@ -40,11 +40,13 @@ public class ActivityFinalDateForContractingJob implements StatefulJob {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String exDt=sdf.format(dateAfterDays);
         List<AmpActivity> actList=ActivityUtil.getAllActivitiesList();
-        for (AmpActivity act: actList){
-            if(act.getContractingDate()!=null){
-                String dt = sdf.format(act.getContractingDate());
-                if (dt.equals(exDt)) {
-                    new ActivityFinalDateForContractingTrigger(act);
+        if(actList!=null){
+            for (AmpActivity act : actList) {
+                if (act.getContractingDate() != null) {
+                    String dt = sdf.format(act.getContractingDate());
+                    if (dt.equals(exDt)) {
+                        new ActivityFinalDateForContractingTrigger(act);
+                    }
                 }
             }
         }

@@ -51,38 +51,37 @@
 										type="org.digijava.module.aim.helper.Funding">
 										<tr>
 											<td>
-											<table cellSpacing=1 cellPadding=0 border="0" width="100%"
-												class="box-border-nopadding">
+											<table cellSpacing=1 cellPadding=0 border="0" width="100%">
 												<tr>
 													<td>
 													<table cellSpacing=1 cellPadding=0 border="0" width="100%">
 														<tr>
 															<td>
-															<table width="100%" border="0" cellpadding="1"
-																bgcolor="#ffffff" cellspacing="1">
+															<table width="100%" border="0" cellpadding="0"
+																bgcolor="#dddddd" cellspacing="1">
 																<field:display name="Funding Organization Id"
 																	feature="Funding Information">
 																	<tr>
-																		<td bgcolor="#FFFFFF" align="left" width="150"><a
+																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>'>
 																		<digi:trn key="aim:fundingOrgId">
                                                                                     Funding Organization Id
                                                                           </digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td bgcolor="#FFFFFF" align="left"><bean:write
+																		<td align="left"><bean:write
 																			name="funding" property="orgFundingId" /></td>
 																	</tr>
 																</field:display>
 																<field:display name="Funding Organization Name"
 																	feature="Funding Information">
 																	<tr>
-																		<td bgcolor="#FFFFFF" align="left" width="150"><a
+																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>'>
 																		<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td bgcolor="#FFFFFF" align="left">
+																		<td align="left">
 																		${fundingOrganization.orgName}</td>
 																	</tr>
 																</field:display>
@@ -91,13 +90,13 @@
 																<field:display name="Type Of Assistance"
 																	feature="Funding Information">
 																	<tr>
-																		<td bgcolor="#FFFFFF" align="left" width="150"><a
+																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>'>
 																		<digi:trn key="aim:typeOfAssist">
                                                                                     Type of Assistance </digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td bgcolor="#FFFFFF" align="left"><logic:notEmpty
+																		<td align="left"><logic:notEmpty
 																			name="funding" property="typeOfAssistance">
 																			<bean:write name="funding"
 																				property="typeOfAssistance.value" />
@@ -107,12 +106,12 @@
 																<field:display name="Type Of Assistance"
 																	feature="Funding Information">
 																	<tr>
-																		<td bgcolor="#FFFFFF" align="left" width="150"><a
+																		<td align="left" width="150"><a
 																			title='<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>'>
 																		<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
 																		</a></td>
 																		<td width="1">:</td>
-																		<td bgcolor="#FFFFFF" align="left"><logic:notEmpty
+																		<td align="left"><logic:notEmpty
 																			name="funding" property="financingInstrument">
 																			<bean:write name="funding"
 																				property="financingInstrument.value" />
@@ -125,7 +124,7 @@
 													</table>
 													</td>
 												</tr>
-
+												<tr>
 												<td><!-- Begin funding detail -->
 												<table width="100%" border="0" align="center"
 													cellpadding="2" cellspacing="0">
@@ -142,19 +141,14 @@
 													<feature:display module="Funding" name="Expenditures">
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</feature:display>
-													<tr>
 
-														<feature:display module="Funding"															name="Disbursement Orders">
-															<jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
-														</feature:display>
-														
-														<td colspan="4" height="18"
-															style="border-bottom: 1px dotted #000000"></td>
-													<tr>
-													<feature:display module="Funding"
-														name="Undisbursed Balance">
+                                                    <feature:display module="Funding" name="Disbursement Orders">
+                                                        <jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
+                                                    </feature:display>
+
+													<feature:display module="Funding" name="Undisbursed Balance">
 													<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
-												</feature:display>
+													</feature:display>
 												</table>
 												
 												<!-- end funding detail --></td>
@@ -172,6 +166,8 @@
 													</td>
 												</tr>
 											</table>
+											
+											<br><br>
 											</td>
 										</tr>
 									</logic:iterate>
@@ -180,6 +176,122 @@
 							<tr>
 								<td>&nbsp;</td>
 							</tr>
+                        
+                    <tr>
+                        <td>
+                        <table cellSpacing=1 cellPadding=0 border="0" bordercolor="#FF0000" width="100%">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
+                                key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalPlannedCommitments" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" />
+                        </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS: </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalCommitments" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                        </tr>
+                        <feature:display module="Funding"
+                            name="Disbursement">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key='aim:totalplanneddisbursement'>
+                                TOTAL PLANNED DISBURSEMENT:	
+                                </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalPlannedDisbursements" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000"><digi:trn
+                                key='aim:totalActualdisbursement'>
+                                                                                                        TOTAL ACTUAL DISBURSEMENT </digi:trn>
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalDisbursements" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                        </tr>
+                        </feature:display>
+                        <feature:display module="Funding" name="Expenditures">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key="aim:totalActualExpenditures">
+                                  TOTAL PLANNED EXPENDITURES             </digi:trn></td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalPlannedExpenditures" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key="aim:totalplannedExpenditures">
+                                    TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalExpenditures" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                        </tr>
+                        </feature:display>
+                        <feature:display module="Funding" name="Disbursement Orders">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase;">
+                        <digi:trn
+                                key='aim:totalActualDisbursementOrder'>
+                                    <a
+                                title='<digi:trn key="aim:FundRelease"> Release of funds to,
+                                or the purchase of goods or services for a recipient; by
+                                extension, the amount thus spent. Disbursements record the actual
+                                international transfer of financial resources, or of goods or
+                                services valued at the cost to the donor</digi:trn>'>
+                          TOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>
+                        </td>
+                          <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase;">
+                                <bean:write
+                                name="aimEditActivityForm" property="totalActualDisbursementsOrders" />	<bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                      	</tr>
+                        </feature:display>
+                        <feature:display module="Funding" name="Undisbursed Balance">
+                      	<tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+                                key="aim:undisbursedBalance">
+                                  UNDISBURSED BALANCE 	             </digi:trn></td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #000000"><bean:write
+                                name="aimEditActivityForm" property="unDisbursementsBalance" /> <bean:write
+                                name="aimEditActivityForm" property="currCode" /></td>
+                        </tr>
+                        </feature:display>
+                        </table>
+                        </td>
+                        </tr>
+
 						</logic:notEmpty>
 					</table>
 					</td>

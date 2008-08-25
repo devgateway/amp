@@ -65,12 +65,14 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
-			key='aim:totalplannedcommittment'> TOTAL PLANNED COMMITMENTS: </digi:trn>
+			key='aim:subtotalplannedcommittment'> SUBTOTAL PLANNED COMMITMENTS: </digi:trn>
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><bean:write
+			style="border-top: 1px solid #000000">
+            ${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}
+            <!--<bean:write
 			name="aimEditActivityForm" property="totalPlannedCommitments" /> <bean:write
-			name="aimEditActivityForm" property="currCode" /></td>
+			name="aimEditActivityForm" property="currCode" />--></td>
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
@@ -125,12 +127,14 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key='aim:totalactualcommittment'> TOTAL ACTUAL COMMITMENTS: </digi:trn>
+			key='aim:subtotalactualcommittment'> SUBTOTAL ACTUAL COMMITMENTS: </digi:trn>
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><bean:write
+			style="border-top: 1px solid #000000">
+            ${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}
+            <!--<bean:write
 			name="aimEditActivityForm" property="totalCommitments" /> <bean:write
-			name="aimEditActivityForm" property="currCode" /></td>
+			name="aimEditActivityForm" property="currCode" />--></td>
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

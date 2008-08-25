@@ -528,6 +528,9 @@ public class ShowActivityPrintPreview
                 }
                 
                 FundingCalculationsHelper calculations=new FundingCalculationsHelper();  
+                String toCurrCode=null;
+                if (tm != null)
+                    toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 
           
                 ArrayList fundingOrgs = new ArrayList();
@@ -561,9 +564,6 @@ public class ShowActivityPrintPreview
                        
                         if(fundDetails != null && fundDetails.size() > 0) {
                           
-                            String toCurrCode=null;
-                            if (tm != null)
-                                toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 
                             calculations.doCalculations(fundDetails, toCurrCode);
     			            
@@ -573,6 +573,7 @@ public class ShowActivityPrintPreview
                                 Collections.sort(fundDetail,
                                                  FundingValidator.dateComp);
                             fund.setFundingDetails(fundDetail);
+                            fund.setAmpFundingDetails(fundDetails);
                             eaForm.setFundingDetails(fundDetail);
                             // funding.add(fund);
                         }
@@ -589,6 +590,29 @@ public class ShowActivityPrintPreview
                             fundingOrgs.add(fundOrg);
                             //	logger.info("Adding new fund org object");
                         }
+                    }
+                    //Added for the calculation of the subtotal per Organization          
+                    Iterator<FundingOrganization> iterFundOrg = fundingOrgs.iterator();
+                    while (iterFundOrg.hasNext())
+                    {
+                  	  FundingOrganization currFundingOrganization = iterFundOrg.next();
+                  	  Iterator<Funding> iterFunding = currFundingOrganization.getFundings().iterator();
+                  	  while(iterFunding.hasNext()){
+                  		  Funding currFunding = iterFunding.next();
+                            FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();    
+                            calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
+                  		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
+                  		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
+                  		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
+                  		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
+                  		  currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
+                  		  currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
+                  		  currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
+                  		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
+                  		  currFunding.setAmpFundingDetails(null);
+                  		  //TODO:aca se setearia el resto
+                  		  
+                  	  }
                     }
 
                   eaForm.setFundingOrganizations(fundingOrgs);

@@ -130,19 +130,21 @@
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">
 	<digi:trn
-			key='aim:totalActualDisbursementOrder'>
+			key='aim:subtotalActualDisbursementOrder'>
             	<a
 			title='<digi:trn key="aim:FundRelease"> Release of funds to,
 			or the purchase of goods or services for a recipient; by
 			extension, the amount thus spent. Disbursements record the actual
 			international transfer of financial resources, or of goods or
 			services valued at the cost to the donor</digi:trn>'>
-	  TOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>
+	  SUBTOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>
 	</td>
 	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase;"><bean:write
+			style="border-top: 1px solid #000000; text-transform: uppercase;">
+            ${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
+            <!--<bean:write
 			name="aimEditActivityForm" property="totalActualDisbursementsOrders" />	<bean:write
-			name="aimEditActivityForm" property="currCode" /></td>
+			name="aimEditActivityForm" property="currCode" />--></td>
 	  <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
   </tr>

@@ -951,6 +951,9 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           
           
           FundingCalculationsHelper calculations=new FundingCalculationsHelper();    
+          String toCurrCode=null;
+          if (tm != null)
+              toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
           calculations.setDebug(debug);
 
                     ArrayList fundingOrgs = new ArrayList();
@@ -1029,9 +1032,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                          
 			              long indexId = System.currentTimeMillis();
 
-			              String toCurrCode=null;
-			              if (tm != null)
-                              toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 
 			        
 			            calculations.doCalculations(fundDetails, toCurrCode);
@@ -1042,6 +1042,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			                Collections.sort(fundDetail,
 			                                 FundingValidator.dateComp);
 			              fund.setFundingDetails(fundDetail);
+			              fund.setAmpFundingDetails(fundDetails);
 			              eaForm.setFundingDetails(fundDetail);
 			              // funding.add(fund);
 			            }
@@ -1060,6 +1061,32 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			              //	logger.info("Adding new fund org object");
 			            }
           }
+                 
+          //Added for the calculation of the subtotal per Organization          
+          Iterator<FundingOrganization> iterFundOrg = fundingOrgs.iterator();
+          while (iterFundOrg.hasNext())
+          {
+        	  FundingOrganization currFundingOrganization = iterFundOrg.next();
+        	  Iterator<Funding> iterFunding = currFundingOrganization.getFundings().iterator();
+        	  while(iterFunding.hasNext()){
+        		  Funding currFunding = iterFunding.next();
+                  FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();    
+                  calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
+        		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
+        		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
+        		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
+        		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
+        		  currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
+        		  currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
+        		  currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
+        		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
+        		  currFunding.setAmpFundingDetails(null);
+        		  //TODO:aca se setearia el resto
+        		  
+        	  }
+          }
+
+                    
           //logger.info("size = " + fundingOrgs);
           eaForm.setFundingOrganizations(fundingOrgs);
           //get the total depend of the 

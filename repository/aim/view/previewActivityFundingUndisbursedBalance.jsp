@@ -18,8 +18,8 @@
 			key="aim:undisbursedBalance">
            	  UNDISBURSED BALANCE 	             </digi:trn></td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><bean:write
-			name="aimEditActivityForm" property="unDisbursementsBalance" /> <bean:write
-			name="aimEditActivityForm" property="currCode" /></td>
+			style="border-top: 1px solid #000000">
+${funding.unDisbursementBalance} ${aimEditActivityForm.currCode}
+</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

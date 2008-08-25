@@ -27,6 +27,7 @@ import org.digijava.module.widget.table.WiCellStandard;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiColumnStandard;
 import org.digijava.module.widget.table.WiRow;
+import org.digijava.module.widget.table.WiRowHeader;
 import org.digijava.module.widget.table.WiRowStandard;
 import org.digijava.module.widget.table.WiTable;
 import org.digijava.module.widget.table.calculated.WiColumnCalculated;
@@ -288,6 +289,14 @@ public final class TableWidgetUtil {
 			Long pk1=(row1.getPk()==null)?0L:row1.getPk();
 			Long pk2=(row2.getPk()==null)?0L:row2.getPk();
 			return pk1.compareTo(pk2);
+		}
+		
+	}
+	
+	public static class WiHeaderRowComparator implements Comparator<WiRowHeader>{
+
+		public int compare(WiRowHeader o1, WiRowHeader o2) {
+			return 0;
 		}
 		
 	}

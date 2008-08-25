@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.digijava.module.widget.table.util.TableWidgetUtil;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 /**
  * Header row of the table widget.
  * overrides some methods from parent to handle header row logic. 
@@ -37,6 +39,7 @@ public class WiRowHeader extends WiRow {
 	@Override
 	public List<WiCell> getCells() {
 		List<WiCell> allCells = new ArrayList<WiCell>(cellsByColumnId.values());
+		Collections.sort(allCells,new TableWidgetUtil.WiCellColumnOrderComparator());
 		return allCells;
 	}
 

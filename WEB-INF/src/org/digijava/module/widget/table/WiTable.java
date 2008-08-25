@@ -72,6 +72,7 @@ public class WiTable extends Widget{
 		for (WiColumn col : this.columns) {
 			col.setTable(this);
 		}
+		Collections.sort(this.columns,new TableWidgetUtil.WiColumnOrderComparator());
 	}
 	
 	/**
@@ -175,6 +176,7 @@ public class WiTable extends Widget{
 			}
 			Collections.sort(dataRows,new TableWidgetUtil.WiRowPkComparator());
 			this.headerRows.add(headerRow);
+			
 			
 		}
 

@@ -321,7 +321,7 @@ border-right:1px solid white;
 												</li>
 	                                        </feature:display>
                                         <li class="yuiampmenuitem" style="_width:100px">
-                                        	<a class="yuiampmenuitemlabel" href="">
+                                        	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
                                             </a>
                                             <div id="workspaceSubmenu" class="yuiampmenu">

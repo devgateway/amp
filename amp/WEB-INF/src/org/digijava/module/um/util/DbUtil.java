@@ -622,7 +622,7 @@ public class DbUtil {
                 "Unable to update user information into database", ex);
         }
     }
-
+    
     public static void registerUser(User user) throws UMException {
         Transaction tx = null;
         Session session = null;
@@ -697,6 +697,50 @@ public class DbUtil {
 
         }
 
+    }
+    
+    public static boolean registerUser(String id) throws
+            UMException {
+        Session sess = null;
+        boolean verified = false;
+        Transaction tx = null;
+        try {
+            sess = PersistenceManager.getSession();
+
+            Iterator usIter = sess.iterate("from rs in class " +
+                    User.class.getName() +
+                    " where sha(concat(rs.email,rs.id))=? and rs.emailVerified=false", id,
+                    Hibernate.STRING);
+            if (usIter.hasNext()) {
+                User user = (User) usIter.next();
+                user.setActive(true);
+                user.setBanned(false);
+                user.setEmailVerified(true);
+                tx = sess.beginTransaction();
+                sess.update(user);
+                tx.commit();
+                verified =true;
+                
+            }
+
+            
+
+          
+        } catch (Exception ex0) {
+            logger.debug("isRegisteredEmail() failed", ex0);
+            throw new UMException(ex0.getMessage(), ex0);
+        } finally {
+            if (sess != null) {
+                try {
+                    PersistenceManager.releaseSession(sess);
+                } catch (Exception ex1) {
+                    logger.warn("releaseSession() failed ", ex1);
+                }
+            }
+
+        }
+
+        return verified ;
     }
 
     public static boolean isRegisteredEmail(String email) throws

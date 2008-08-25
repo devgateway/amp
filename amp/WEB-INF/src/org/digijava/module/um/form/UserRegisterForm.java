@@ -84,7 +84,7 @@ public class UserRegisterForm
     private Collection topicitems;
 
     private Long siteId;
-
+    
     public String[] getSelectedItems() {
         return this.selectedItems;
     }

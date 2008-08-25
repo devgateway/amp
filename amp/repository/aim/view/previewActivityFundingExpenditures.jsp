@@ -18,7 +18,7 @@
 	<td colspan="4" style="text-transform: uppercase"><a
 		title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>
 
-	<digi:trn key="aim:plannedexpenditures"> PLANED EXPENDITURES</digi:trn>
+	<digi:trn key="aim:plannedexpenditures"> PLANNED EXPENDITURES</digi:trn>
 	</a></td>
 </tr>
 
@@ -65,12 +65,14 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key="aim:totalActualExpenditures">
-           	  TOTAL PLANED EXPENDITURES             </digi:trn></td>
+			key="aim:subtotalActualExpenditures">
+           	  SUBTOTAL PLANNED EXPENDITURES             </digi:trn></td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><bean:write
+			style="border-top: 1px solid #000000">
+            ${funding.subtotalPlannedExpenditures} ${aimEditActivityForm.currCode}
+            <!--<bean:write
 			name="aimEditActivityForm" property="totalPlannedExpenditures" /> <bean:write
-			name="aimEditActivityForm" property="currCode" /></td>
+			name="aimEditActivityForm" property="currCode" />--></td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	<tr>
@@ -127,12 +129,14 @@
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
-			key="aim:totalplannedExpenditures">
-       	 	 	TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
+			key="aim:subtotalplannedExpenditures">
+       	 	 	SUBTOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000"><bean:write
+			style="border-top: 1px solid #000000">
+ 			${funding.subtotalExpenditures} ${aimEditActivityForm.currCode}
+             <!--<bean:write
 			name="aimEditActivityForm" property="totalExpenditures" /> <bean:write
-			name="aimEditActivityForm" property="currCode" /></td>
+			name="aimEditActivityForm" property="currCode" />--></td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	<tr>

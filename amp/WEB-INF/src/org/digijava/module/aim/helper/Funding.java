@@ -32,7 +32,17 @@ public class Funding implements Serializable
    	private String actCloseDate;
    	private String reportingDate;
    	private String conditions;
-	
+
+	private Collection ampFundingDetails;
+
+	private String subtotalActualCommitments;
+	private String subtotalPlannedCommitments;
+	private String subtotalPlannedDisbursements;
+	private String subtotalDisbursements;
+	private String subtotalPlannedExpenditures;
+	private String subtotalExpenditures;
+	private String subtotalActualDisbursementsOrders;
+	private String undisbursementbalance;
    		
 	public AmpCategoryValue getTypeOfAssistance() {
 		return typeOfAssistance;
@@ -174,5 +184,80 @@ public class Funding implements Serializable
 
 	public void setMtefProjections(Collection<MTEFProjection> mtefProjections) {
 		this.mtefProjections = mtefProjections;
+	}
+	
+	public String getSubtotalActualCommitments(){
+		
+		return this.subtotalActualCommitments;
+	}
+	public void setSubtotalActualCommitments(String s){
+		
+		this.subtotalActualCommitments = s;
+	}
+	public String getSubtotalPlannedCommitments(){
+		
+		return this.subtotalPlannedCommitments;
+	}
+	public void setSubtotalPlannedCommitments(String s){
+		
+		this.subtotalPlannedCommitments = s;
+	}
+	
+	public String getSubtotalPlannedDisbursements(){
+		
+		return this.subtotalPlannedDisbursements;
+	}
+	public void setSubtotalPlannedDisbursements(String s){
+		
+		this.subtotalPlannedDisbursements = s;
+	}
+	public String getSubtotalDisbursements(){
+		
+		return this.subtotalDisbursements;
+	}
+	public void setSubtotalDisbursements(String s){
+		
+		this.subtotalDisbursements = s;
+	}
+	public String getSubtotalPlannedExpenditures(){
+		
+		return this.subtotalPlannedExpenditures;
+	}
+	public void setSubtotalPlannedExpenditures(String s){
+		
+		this.subtotalPlannedExpenditures = s;
+	}
+	public String getSubtotalExpenditures(){
+		
+		return this.subtotalExpenditures;
+	}
+	public void setSubtotalExpenditures(String s){
+		
+		this.subtotalExpenditures = s;
+	}
+
+	public void setSubtotalActualDisbursementsOrders(
+			String s) {
+		this.subtotalActualDisbursementsOrders = s;
+	}
+
+	public String getSubtotalActualDisbursementsOrders() {
+		return this.subtotalActualDisbursementsOrders;
+	}
+
+	public void setAmpFundingDetails(Collection fundDetails) {
+		this.ampFundingDetails = fundDetails;
+	}
+
+	public Collection getAmpFundingDetails() {
+		return this.ampFundingDetails;
+	}
+
+	public void setUnDisbursementBalance(String formatNumber) {
+		this.undisbursementbalance = formatNumber;
+		
+	}
+	public String getUnDisbursementBalance(){
+		return this.undisbursementbalance;
 	}
 }

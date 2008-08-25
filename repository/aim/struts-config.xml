@@ -947,6 +947,10 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action input="/aim/showRegisterUser.do" name="aimUserRegisterForm" path="/aim/registerUser" scope="session" type="org.digijava.module.aim.action.RegisterUser" validate="true">
+      <forward name="forward" path="/showLayout.do?layout=waitingRegConfirmation" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action  name="aimUserRegisterForm" path="/aim/confirmRegisteration" scope="session" type="org.digijava.module.aim.action.ConfirmUserRegistration" validate="true">
       <forward name="forward" path="/showLayout.do?layout=userRegistrationSuccess" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

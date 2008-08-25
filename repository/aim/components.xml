@@ -133,6 +133,7 @@
 	<page name="addMemberActivities" title=" - Add Team Member Activities" />
 	<page name="teamMemberActivities" title=" - Team Member Activities" />
 	<page name="userRegistrationSuccess" title=" - Successfully registered user" />
+        <page name="waitingRegConfirmation" title=" - Successfully registered user" />
 	<page name="getEmail" title=" - Forgot Password" />
 	<page name="resetEmailSuccess" title=" - Forgot Password" />
 

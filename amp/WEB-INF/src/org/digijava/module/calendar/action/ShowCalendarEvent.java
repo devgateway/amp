@@ -1,11 +1,20 @@
 package org.digijava.module.calendar.action;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -18,33 +27,23 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Team;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
+import org.digijava.module.calendar.dbentity.AmpCalendarPK;
+import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
+import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
-import java.util.Map;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import java.util.HashMap;
-import org.digijava.module.aim.helper.Team;
-import java.util.List;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.calendar.dbentity.AmpEventType;
-import org.digijava.module.aim.util.DbUtil;
-import java.util.Set;
-import java.util.Hashtable;
-import java.util.HashSet;
-import org.digijava.module.calendar.dbentity.AmpCalendarPK;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import org.digijava.module.calendar.dbentity.CalendarItem;
-import javax.servlet.http.HttpSession;
 import org.digijava.module.common.dbentity.ItemStatus;
 
 public class ShowCalendarEvent extends Action {
@@ -99,7 +98,7 @@ public class ShowCalendarEvent extends Action {
                 if (slAtts[i].startsWith("t:")) {
                     AmpTeam team = TeamUtil.getAmpTeam(Long.valueOf(slAtts[i].substring(2)));
                     if (team != null) {
-                        selectedAttsCol.add(new LabelValueBean(team.getName(), slAtts[i]));
+                        selectedAttsCol.add(new LabelValueBean("---"+team.getName()+"---", slAtts[i]));
                     }
                 } else if (slAtts[i].startsWith("m:")) {
                     AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
@@ -261,6 +260,9 @@ public class ShowCalendarEvent extends Action {
                 Collection<LabelValueBean> selectedAttsCol = new ArrayList<LabelValueBean> ();
 
                 Collection<String> selAtts = new ArrayList<String> ();
+                Collection<AmpTeam> teams = new ArrayList<AmpTeam> ();
+                Collection<AmpTeamMember> members = new ArrayList<AmpTeamMember> ();
+                Collection<String> guests = new ArrayList<String> ();
                 if (ampCalendar.getAttendees() != null) {
                     LabelValueBean lvb = null;
                     //List<AmpCalendarAttendee> atts=AmpDbUtil.getAmpCalendarAttendees(ampCalendar)
@@ -273,15 +275,26 @@ public class ShowCalendarEvent extends Action {
                         String guest = attendee.getGuest();
 
                         if (member != null) {
-                            selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), "m:" + member.getAmpTeamMemId().toString()));
-                            selAtts.add("m:" + member.getAmpTeamMemId().toString());
+                        	members.add(member);
                         } else if (team != null) {
-                            selectedAttsCol.add(new LabelValueBean(team.getName(), "t:" + team.getAmpTeamId().toString()));
-                            selAtts.add("t:" + team.getAmpTeamId().toString());
+                        	teams.add(team);
                         } else {
-                            selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));
-                            selAtts.add("g:" + guest);
+                        	guests.add(guest);
                         }
+                    }
+                    for(AmpTeam team : teams){
+                    	selectedAttsCol.add(new LabelValueBean("---"+team.getName()+"---", "t:" + team.getAmpTeamId().toString()));
+                    	selAtts.add("t:" + team.getAmpTeamId().toString());
+                    	for(AmpTeamMember member: members){                    		
+                    		if(member.getAmpTeam().getAmpTeamId()==team.getAmpTeamId()){
+                    			selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), "m:" + member.getAmpTeamMemId().toString()));
+                    			selAtts.add("m:" + member.getAmpTeamMemId().toString());
+                    		}
+                    	}                    	
+                    }
+                    for(String guest: guests){
+                    	selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));
+                    	selAtts.add("g:" + guest);
                     }
                 }
 

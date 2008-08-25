@@ -2,6 +2,7 @@ package org.digijava.module.message.action;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,23 +175,32 @@ public class TemplateAlertActions extends DispatchAction {
 	 /**
 	  * used to get message recipients, which will be shown on edit Message Page 
 	  */
-	 private static List<LabelValueBean> getMessageRecipients(Long tempId) {
-		 	List<AmpMessageState> msgStates=null;
-			try {
-				msgStates = AmpMessageUtil.loadMessageStates(tempId);
-			} catch (AimException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	 private static List<LabelValueBean> getMessageRecipients(Long tempId) throws Exception{
+		 	List<AmpMessageState> msgStates=AmpMessageUtil.loadMessageStates(tempId);
 			List<LabelValueBean> members=null;
 			if(msgStates!=null && msgStates.size()>0){
 				members=new ArrayList<LabelValueBean>();
-				for (AmpMessageState state :msgStates) {
+				Collection<AmpTeam> teamList = new ArrayList<AmpTeam>();
+				Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
+				for (AmpMessageState state : msgStates) {
 					if(state.getMemberId()!=null){
 						AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-						LabelValueBean tm=new LabelValueBean(teamMember.getUser().getName(),"m:"+state.getMemberId());				
-						members.add(tm);
+						AmpTeam team = teamMember.getAmpTeam();
+						if(!teamList.contains(team)){
+						   teamList.add(team);	
+						}					
+						memberList.add(teamMember);
 					}					
+				}
+				for(AmpTeam team : teamList){
+					LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());				
+					members.add(teamLabel);
+					for(AmpTeamMember member : memberList){
+						if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
+							LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());				
+							members.add(tm);						
+						}
+					}
 				}
 			}
 			return members;

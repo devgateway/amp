@@ -50,11 +50,11 @@ function addUserOrTeam(){
           }
         }  
         else{//the option is a member
-        
+          if(!isOptionSelected(reslist.options[i])){//it is not at the list yet
             var Myrow=getTeamRow(reslist.options[i].id);
             var Mycol=MyArray[Myrow].length;
             MyArray[Myrow][Mycol]=reslist.options[i];
-          
+          } 
         }
       }
     }
@@ -127,6 +127,22 @@ function getCurrentSelectedReceivers(){
     }
   }
 } 
+function registerOrphanMember(orphans){
+   for(var i=0; i<orphans.length; i++){
+      var itsTeam = getTeam(orphans[i].value);
+      orphans[i].id=itsTeam;
+   }    	
+}
+function getTeam(memberValue){
+  var reslist = document.getElementById('whoIsReceiver');
+  var found = false;
+  for(var i=reslist.length-1; i>0; i--){
+  	if(reslist.options[i].value==memberValue){
+  	   return reslist.options[i].id;
+  	}
+  }
+  return "";
+}
 function addOnption(list, text, value, id){
     if (list == null) {
         return;

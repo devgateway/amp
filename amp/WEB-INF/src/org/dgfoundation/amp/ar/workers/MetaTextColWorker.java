@@ -53,18 +53,20 @@ public class MetaTextColWorker extends TextColWorker {
 			}
 		} else
 				
-		if(columnName.equals("Region") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
+		//if(columnName.equals("Region") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
+		if(columnName.equals("Region"))
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
-		if(columnName.equals("Componente") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE) 
+//		if(columnName.equals("Componente") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
+		if(columnName.equals("Componente"))
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 
-		if((columnName.equals("Primary Program") || columnName.equals("Secondary Program")) && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE) 
+		//
+		if((columnName.equals("Primary Program") || columnName.equals("Secondary Program"))) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); 
 		//if(mtc.getMetaData())
 		MetaInfo percentageMeta = MetaInfo.getMetaInfo(mtc.getMetaData(), ArConstants.PERCENTAGE);
 		if(		percentageMeta!=null && 
 				((Double)percentageMeta.getValue()).doubleValue()==0 && 
 				columnName.equals(ArConstants.COLUMN_REGION) && 
-				generator.getReportMetadata().getType().intValue()==ArConstants.DONOR_TYPE &&
 				ARUtil.hasHierarchy(generator.getReportMetadata().getHierarchies(),ArConstants.COLUMN_REGION )) 
 					mtc.setValue(ArConstants.UNALLOCATED);
 		return mtc;

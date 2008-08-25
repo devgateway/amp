@@ -13,7 +13,7 @@ import org.digijava.module.widget.table.WiCellStandard;
 public class WiCellFiltered extends WiCellStandard {
 
 	private Long filterItemId;
-	private String value = "&nbsp;";
+	private String value;
 	private Long selectedFilterId;
 	private FilterItemProvider itemProvider;
 
@@ -42,6 +42,9 @@ public class WiCellFiltered extends WiCellStandard {
 
 	@Override
 	public String tagContent() {
+		if (getValue()==null || getValue().trim().equals("")){
+			return "&nbsp;";
+		}
 		return getValue();
 	}
 

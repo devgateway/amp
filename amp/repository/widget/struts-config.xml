@@ -69,7 +69,7 @@
 		   path="/widget/showSectorByDonorChart" scope="request"
 		   type="org.digijava.module.widget.action.ShowSectorByDonorChart" validate="false"/>
 
-		<action name="gisTableWidgetRenderForm" 
+		<action name="gisTableWidgetRenderForm" scope="request"  
 			path="/widget/getTableWidget" 
 			type="org.digijava.module.widget.action.RenderTableWidget"/>
 		

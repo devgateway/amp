@@ -161,7 +161,7 @@
                                                                     <td align="right" nowrap="nowrap">
                                                                      <field:display name="Regional Percentage" feature="Location">
                                                                     		<digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
-                                                                    		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="3" onkeyup="fnChk(this)"/>
+                                                                    		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="3" onkeyup="fnChk(this, 'region')"/>
                                                                     </field:display>
                                                                     </td>
                                                                   </tr>

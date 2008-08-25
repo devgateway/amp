@@ -424,26 +424,42 @@ function validateLocationPercentage(){
 }
 
 
-function fnChk(frmContrl){
+function fnChk(frmContrl, f){
   <c:set var="errMsgAddSectorNumericValue">
   <digi:trn key="aim:addSecorNumericValueErrorMessage">
   Please enter numeric value only
   </digi:trn>
   </c:set>
-  <c:set var="errMsgAddSectorSumExceed">
-  <digi:trn key="aim:addSecorSumExceedErrorMessage">
-  Sector percentage can not exceed 100
-  </digi:trn>
-  </c:set>
+  
   if (isNaN(frmContrl.value)) {
     alert("${errMsgAddSectorNumericValue}");
     frmContrl.value = "";
     //frmContrl.focus();
     return false;
-  }
-  
-  if (frmContrl.value > 100) {
-    alert("${errMsgAddSectorSumExceed}");
+  }  
+  if (frmContrl.value > 100) {    
+      if (f == "sector") {
+	     <c:set var="errMsgAddSumExceed">
+		  <digi:trn key="aim:addSecorSumExceedErrorMessage">
+		  Sector percentage can not exceed 100
+		  </digi:trn>
+		  </c:set>
+		  alert("${errMsgAddSumExceed}");
+	  } else if (f == "program") {
+	     <c:set var="errMsgAddSumExceed">
+		  <digi:trn key="aim:addProgramSumExceedErrorMessage">
+		  Program percentage can not exceed 100
+		  </digi:trn>
+		  </c:set>  
+		  alert("${errMsgAddSumExceed}");
+	  } else if (f == "region") {
+	      <c:set var="errMsgAddSumExceed">
+		  <digi:trn key="aim:addRegionSumExceedErrorMessage">
+		  Region percentage can not exceed 100
+		  </digi:trn>
+		  </c:set> 
+		  alert("${errMsgAddSumExceed}");
+	  }
     frmContrl.value = "";
     return false;
   }

@@ -39,15 +39,21 @@ public class WiCellStandard extends WiCell {
 	}
 	@Override
 	public String tagContent() {
+		String content = "";
+		if (getValue()==null || getValue().trim().equals("")){
+			content = "&nbsp;";
+		}else{
+			content = getValue();
+		}
 		if (isEditMode()){
 			StringBuffer buff = new StringBuffer("<input type='edit' name='cell");
 			buff.append(getColumn().getId().toString());
 			buff.append("'>");
-			buff.append(getValue());
+			buff.append(content);
 			buff.append("</imput>");
 			return buff.toString();
 		}
-		return getValue();
+		return content;
 	}
 	@Override
 	public void saveData(Session dbSession, AmpDaColumn dbColumn)throws DgException {
@@ -56,7 +62,7 @@ public class WiCellStandard extends WiCell {
 			if (this.getId() == null || this.getId().longValue() <= 0) {
 				dbValue = new AmpDaValue();
 			} else {
-				dbValue = (AmpDaValue) dbSession.load(AmpDaValue.class,dbColumn.getId());
+				dbValue = (AmpDaValue) dbSession.load(AmpDaValue.class,this.getId());
 			}
 			dbValue.setPk(this.getPk());
 			dbValue.setValue(getValue());

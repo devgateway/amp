@@ -662,20 +662,20 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 
 	<feature:display name="Admin - Component" module="Components"></feature:display>
-		<field:display name="Title" feature="Admin - Component"></field:display>
-		<field:display name="Code" feature="Admin - Component"></field:display>
-		<field:display name="Type" feature="Admin - Component"></field:display>
-		<field:display name="Description" feature="Admin - Component"></field:display>
-		<field:display name="Save Button" feature="Admin - Component"></field:display>
-		<field:display name="Cancel Button" feature="Admin - Component"></field:display>
+		<field:display name="Admin - Component Title" feature="Admin - Component"></field:display>
+		<field:display name="Admin - Component Code" feature="Admin - Component"></field:display>
+		<field:display name="Admin - Component Type" feature="Admin - Component"></field:display>
+		<field:display name="Admin - Component Description" feature="Admin - Component"></field:display>
+		<field:display name="Admin - Component Save Button" feature="Admin - Component"></field:display>
+		<field:display name="Admin - Component Cancel Button" feature="Admin - Component"></field:display>
 
 	<feature:display name="Admin - Component Type" module="Components"></feature:display>
-		<field:display name="Name" feature="Admin - Component Type"></field:display>
-		<field:display name="Code" feature="Admin - Component Type"></field:display>
-		<field:display name="Enable checkbox" feature="Admin - Component Type"></field:display>
-		<field:display name="Save Button" feature="Admin - Component Type"></field:display>
-		<field:display name="Cancel Button" feature="Admin - Component Type"></field:display>
-		<field:display name="Close Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Admin - Component Type Name" feature="Admin - Component Type"></field:display>
+		<field:display name="Admin - Component Type Code" feature="Admin - Component Type"></field:display>
+		<field:display name="Admin - Component Type Enable checkbox" feature="Admin - Component Type"></field:display>
+		<field:display name="Admin - Component Type Save Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Admin - Component Type Cancel Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Admin - Component Type Close Button" feature="Admin - Component Type"></field:display>
 		
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display>

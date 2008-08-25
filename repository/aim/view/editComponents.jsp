@@ -5,6 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this Scheme?");
@@ -92,32 +97,41 @@
 												<tr>
 													<td width="100%">
 													<table width="100%" border=0 bgColor=#f4f4f2>
+														<field:display name="Admin - Component Title" feature="Admin - Component">
 														<tr>
 															<td width="30%" align="right"><font color=red>*</font> <digi:trn
 																key="aim:compTitle">Component Title</digi:trn></td>
 															<td width="30%"><html:textarea property="compTitle"
 																cols="40" rows="2" /></td>
 														</tr>
+														</field:display>
+														<field:display name="Admin - Component Code" feature="Admin - Component">
 														<tr>
 															<td width="30%" align="right"><font color=red>*</font> <digi:trn
 																key="aim:compCode">Component Code</digi:trn></td>
 															<td width="30%"><html:text property="compCode" size="10" />
 															</td>
 														</tr>
+														</field:display>
+														<field:display name="Admin - Component Type" feature="Admin - Component">
 														<tr>
 															<td width="30%" align="right"><digi:trn
 																key="aim:compType">Component Type</digi:trn></td>
-															<td width="30%"><html:select property="compType">
-                                          	  <html:optionsCollection property="typeList" label="name" value="type_id"/>
-                                            </html:select>
+															<td width="30%">
+																<html:select property="compType">
+				                                          	  		<html:optionsCollection property="typeList" label="name" value="type_id"/>
+				                                            	</html:select>
 															</td>
 														</tr>
+														</field:display>
+														<field:display name="Admin - Component Description" feature="Admin - Component">
 														<tr>
 															<td width="30%" align="right"><digi:trn
 																key="aim:compDesc">Component Description</digi:trn></td>
 															<td width="30%"><html:textarea property="compDes"
 																cols="40" rows="3" /></td>
 														</tr>
+														</field:display>
 														<tr>
 															<td width=30% align=right>
 																<font color=red>
@@ -131,12 +145,16 @@
 															<td colspan="2" width="60%">
 															<table width="100%" cellspacing="5">
 																<tr>
-																	<td width="50%" align="right"><input type="button"
-																		name="addBtn" value="<digi:trn key='btn:save'>Save</digi:trn>"
-																		onclick="updateScheme('<bean:write name="aimUpdateComponentsForm" property="id" />');">
-																	</td>
-																	<td width="50%" align="left"><input type="button" value="<digi:trn key='btn:cancel'>Cancel</digi:trn>"
-																		styleClass="dr-menu" onclick="window.close();" /></td>
+																	<field:display name="Admin - Component Save Button" feature="Admin - Component">
+																		<td width="50%" align="right"><input type="button"
+																			name="addBtn" value="<digi:trn key='btn:save'>Save</digi:trn>"
+																			onclick="updateScheme('<bean:write name="aimUpdateComponentsForm" property="id" />');">
+																		</td>
+																	</field:display>
+																	<field:display name="Admin - Component Cancel Button" feature="Admin - Component">
+																		<td width="50%" align="left"><input type="button" value="<digi:trn key='btn:cancel'>Cancel</digi:trn>"
+																			styleClass="dr-menu" onclick="window.close();" /></td>
+																	</field:display>
 																</tr>
 															</table>
 															</td>

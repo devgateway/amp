@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <digi-config>
     <smtp>
-		 <host>gnyan.ncb.ernet.in</host>
+		 <host>localhost</host>
 		 <from>system@digijava.org</from>
 	</smtp>
 

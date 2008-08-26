@@ -6,7 +6,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
-			<table id="team_table" bgcolor="white">
+			
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
+
+<table id="team_table" bgcolor="white">
 						<thead>
 							<tr>
 								<th><digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn></th>
@@ -49,7 +53,9 @@
 							</logic:equal>
 							<tr>
 								<td>
-									<bean:write name="documentData" property="title" />
+									<script type="text/javascript">
+										document.write(unescape("<bean:write name='documentData' property='title'/>"));
+									</script>
 								</td>
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
@@ -83,7 +89,9 @@
 									${documentData.cmDocType }
 								</td>
 								<td>
-									<bean:write name="documentData" property="description" />
+									<script type="text/javascript">
+										document.write(unescape("<bean:write name='documentData' property='description'/>"));
+									</script>
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								<td nowrap="nowrap"> 
@@ -128,7 +136,7 @@
 <!--								</c:set> -->
 								<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
-								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
+								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}');"
 								title="<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
 								</logic:equal>
 <!--								<c:set var="translation">-->

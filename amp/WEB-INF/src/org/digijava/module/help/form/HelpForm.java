@@ -23,6 +23,9 @@ public class HelpForm extends ActionForm {
 	private Collection topicTree;
 	private List<String> helpErrors;
 	private Boolean blankPage;
+	private String title;
+	private String body;
+	private Long childId;
 	
 
 	public Boolean getBlankPage() {
@@ -137,6 +140,30 @@ public class HelpForm extends ActionForm {
 
 	public void setHelpTopicId(Long helpTopicId) {
 		this.helpTopicId = helpTopicId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public Long getChildId() {
+		return childId;
+	}
+
+	public void setChildId(Long childId) {
+		this.childId = childId;
 	}
 
 

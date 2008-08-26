@@ -56,8 +56,8 @@
     <tr>
         <td colspan="3" align="left">
             <c:set var="tooltip">
-               <digi:trn key='widget:piechart:allAmountsinUSDTooltip'>
-                   The amounts are calculated according to the change rate at the time when funding is done</digi:trn>
+               <digi:trn key='widget:piechart:allAmountinUSDTooltip'>
+                   The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>
             </c:set>
             <digi:trn key="widget:piechart:allAmountsinUSD1">All amounts in USD.</digi:trn>
             <digi:img  src="module/widget/images/help1.gif" title="${tooltip}"/>

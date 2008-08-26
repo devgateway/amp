@@ -97,13 +97,22 @@ public class GisUtil {
                        (mapRightX - mapLeftX);
         float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
 
+        int centerXOffset = 0;
+        int centerYOffset = 0;
+
         if (scaleX < scaleY) {
             scale = scaleX;
+            centerYOffset = ((canvasHeight - border * 2) - (int)((mapTopY - mapLowY) * scale))/2;
+
         } else {
             scale = scaleY;
+            centerXOffset = ((canvasWidth - border * 2) - (int)((mapRightX - mapLeftX) * scale))/2;
         }
-        int xOffset = (int) ( -mapLeftX * scale) + border;
-        int yOffset = (int) ( -mapLowY * scale);
+
+
+        int xOffset = (int) ( -mapLeftX * scale) + border + centerXOffset;
+        int yOffset = (int) ( -mapLowY * scale) + centerYOffset;
+
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
 
@@ -181,13 +190,25 @@ public class GisUtil {
                        (mapRightX - mapLeftX);
         float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
 
+
+
+
+        int centerXOffset = 0;
+        int centerYOffset = 0;
+
         if (scaleX < scaleY) {
             scale = scaleX;
+            centerYOffset = ((canvasHeight - border * 2) - (int)((mapTopY - mapLowY) * scale))/2;
+
         } else {
             scale = scaleY;
+            centerXOffset = ((canvasWidth - border * 2) - (int)((mapRightX - mapLeftX) * scale))/2;
         }
-        int xOffset = (int) ( -mapLeftX * scale) + border;
-        int yOffset = (int) ( -mapLowY * scale);
+
+
+        int xOffset = (int) ( -mapLeftX * scale) + border + centerXOffset;
+        int yOffset = (int) ( -mapLowY * scale) + centerYOffset;
+
 
         try {
 
@@ -508,17 +529,28 @@ public class GisUtil {
 
         int border = 10;
 
-        float scaleX = (float) (canvasWidth - border * 4) / (mapRightX - mapLeftX);
-        float scaleY = (float) (canvasHeight - border * 4) / (mapTopY - mapLowY);
+        float scaleX = (float) (canvasWidth - border * 2) /
+                       (mapRightX - mapLeftX);
+        float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
+
+
+
+
+        int centerXOffset = 0;
+        int centerYOffset = 0;
 
         if (scaleX < scaleY) {
             scale = scaleX;
+            centerYOffset = ((canvasHeight - border * 2) - (int)((mapTopY - mapLowY) * scale))/2;
+
         } else {
             scale = scaleY;
+            centerXOffset = ((canvasWidth - border * 2) - (int)((mapRightX - mapLeftX) * scale))/2;
         }
-        int xOffset = (int) ( -mapLeftX * scale) + border;
-        int yOffset = (int) ( -mapLowY * scale);
 
+
+        int xOffset = (int) ( -mapLeftX * scale) + border + centerXOffset;
+        int yOffset = (int) ( -mapLowY * scale) + centerYOffset;
 
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
@@ -553,11 +585,11 @@ public class GisUtil {
                             mapPointId);
 
                     int xCoord = xOffset +
-                                 (int) ((gmp.getLongatude()) *
-                                        scale);
-                    int yCoord = canvasHeight - border - (yOffset +
-                                                          (int) ((gmp.getLatitude()) *
-                                                                 scale));
+                                     (int) ((gmp.getLongatude()) *
+                                            scale);
+                        int yCoord = canvasHeight - border - (yOffset +
+                                (int) ((gmp.getLatitude()) *
+                                       scale));
 
 
 

@@ -211,7 +211,7 @@ border-right:1px solid white;
 										</feature:display>
 										<feature:display name="User Help" module="HELP">
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
+                                        <a class="yuiampmenuitemlabel" onclick="help();">
                                         <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>
                                         </li>
@@ -269,6 +269,11 @@ border-right:1px solid white;
 	function addLink(id){
 		<digi:context name="rev" property="context/module/moduleinstance/addQuickLink.do" />
 		openURLinWindow("<%=rev%>?memId="+id,400,100);
+	}
+	
+	function help(){
+	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
+		openURLinWindow("<%=rev%>",1024,768);
 	}
 
 </script>
@@ -523,8 +528,8 @@ border-right:1px solid white;
                                       <ul>
 										<feature:display name="User Help" module="HELP">
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="/help/help.do~blankPage=true">
-                                        <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                        <a class="yuiampmenuitemlabel" onclick="help();">
+                                       	 <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>
                                         </li>
 										</feature:display>

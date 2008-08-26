@@ -36,6 +36,8 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.exception.*;
+import org.digijava.module.gis.util.FundingData;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * <p>Title: </p>
@@ -114,7 +116,7 @@ public class GetFoundingDetails extends Action {
                 String imageMapCode = gisUtil.getImageMap(mapDataSegments, 20,
                                                           canvasWidth,
                                                           canvasHeight, rect.getLeft(),
-                                                          rect.getLeft(), rect.getTop(),
+                                                          rect.getRight(), rect.getTop(),
                                                           rect.getBottom()).toString();
 
                 sos.print(imageMapCode);
@@ -329,19 +331,24 @@ public class GetFoundingDetails extends Action {
 
                 Object [] fundingList = getFundingsByLocations(secFundings);
                 Map fundingLocationMap = (Map) fundingList[0];
-                Double totalFunding = (Double) fundingList[1];
+                FundingData totalFunding = (FundingData) fundingList[1];
 
                 XMLDocument segmendDataInfo = new XMLDocument();
                 XML root = new XML("funding");
-                root.addAttribute("total", ((float) Math.round(totalFunding / 10)) / 100f);
+                root.addAttribute("totalCommitment", ((float) Math.round(totalFunding.getCommitment() / 10)) / 100f);
+                root.addAttribute("totalDisbursement", ((float) Math.round(totalFunding.getDisbursement() / 10)) / 100f);
+                root.addAttribute("totalExpenditure", ((float) Math.round(totalFunding.getExpenditure() / 10)) / 100f);
+
                 segmendDataInfo.addElement(root);
                 Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
                 while (locFoundingMapIt.hasNext()) {
                     String key = (String) locFoundingMapIt.next();
-                    Double ammount = (Double) fundingLocationMap.get(key);
+                    FundingData ammount = (FundingData) fundingLocationMap.get(key);
                         XML regionData = new XML("region");
                         regionData.addAttribute("reg-code", key);
-                        regionData.addAttribute("funding", ((float) Math.round(ammount * 100)) / 100f);
+                        regionData.addAttribute("fundingCommitment", ((float) Math.round(ammount.getCommitment().intValue() * 100)) / 100f);
+                        regionData.addAttribute("fundingDisbursement", ((float) Math.round(ammount.getDisbursement().intValue() * 100)) / 100f);
+                        regionData.addAttribute("fundingExpenditure", ((float) Math.round(ammount.getExpenditure().intValue() * 100)) / 100f);
                         root.addElement(regionData);
                 }
 
@@ -442,18 +449,24 @@ public class GetFoundingDetails extends Action {
     private Object[] getFundingsByLocations (List activityList) throws Exception {
 
         Map locationFundingMap = new HashMap();
-        Double totalFundingForSector = new Double(0);
+        FundingData totalFundingForSector = new FundingData();
         //Calculate total funding
         Iterator<Object[]> actIt = activityList.iterator();
         while (actIt.hasNext()) {
             Object[] actData = actIt.next();
             AmpActivity activity = (AmpActivity) actData[0];
             Float percentsForSectorSelected = (Float)actData[1];
-            Double totalFunding = getActivityTotalFundingInUSD (activity);
+            FundingData totalFunding = getActivityTotalFundingInUSD (activity);
 
-            totalFundingForSector += totalFunding;
+            totalFundingForSector.setCommitment(totalFundingForSector.getCommitment() + totalFunding.getCommitment());
+            totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement() + totalFunding.getDisbursement());
+            totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure() + totalFunding.getExpenditure());
 
-            Double fundingForSector = new Double(totalFunding.floatValue()*percentsForSectorSelected.floatValue()/100f);
+
+            FundingData fundingForSector = new FundingData();
+            fundingForSector.setDisbursement(new Double(totalFunding.getCommitment().floatValue()*percentsForSectorSelected.floatValue()/100f));
+            fundingForSector.setCommitment(new Double(totalFunding.getDisbursement().floatValue()*percentsForSectorSelected.floatValue()/100f));
+            fundingForSector.setExpenditure(new Double(totalFunding.getExpenditure().floatValue()*percentsForSectorSelected.floatValue()/100f));
 
             Set locations = activity.getLocations();
             Iterator <AmpActivityLocation> locIt = locations.iterator();
@@ -464,10 +477,21 @@ public class GetFoundingDetails extends Action {
                 if (loc.getLocation().getAmpRegion() != null) {
                     String regCode = loc.getLocation().getAmpRegion().getName();
                     if (locationFundingMap.containsKey(regCode)) {
-                        Double existingVal = (Double)locationFundingMap.get(regCode);
-                        locationFundingMap.put(regCode, new Double(existingVal + fundingForSector.floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        FundingData existingVal = (FundingData)locationFundingMap.get(regCode);
+
+                        FundingData newVal = new FundingData();
+                        newVal.setCommitment(new Double(existingVal.getCommitment() + fundingForSector.getCommitment().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setDisbursement(new Double(existingVal.getDisbursement() + fundingForSector.getDisbursement().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setExpenditure(new Double(existingVal.getExpenditure() + fundingForSector.getExpenditure().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+
+                        locationFundingMap.put(regCode, newVal);
                     } else {
-                        locationFundingMap.put(regCode, new Double(fundingForSector.floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        FundingData newVal = new FundingData();
+                        newVal.setCommitment(new Double(fundingForSector.getCommitment().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setDisbursement(new Double(fundingForSector.getDisbursement().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setExpenditure(new Double(fundingForSector.getExpenditure().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+
+                        locationFundingMap.put(regCode, newVal);
                     }
                 }
             }
@@ -480,10 +504,15 @@ public class GetFoundingDetails extends Action {
         return retVal;
     }
 
-    private Double getActivityTotalFundingInUSD(AmpActivity activity) {
-        Double retVal = new Double(0);
+    private FundingData getActivityTotalFundingInUSD(AmpActivity activity) {
+        FundingData retVal = null;
         Set fundSet = activity.getFunding();
         Iterator <AmpFunding> fundIt = fundSet.iterator();
+
+        Double commitment = new Double (0);
+        Double disbursement = new Double (0);
+        Double expenditure = new Double (0);
+
         try {
             while (fundIt.hasNext()) {
                 AmpFunding fund = fundIt.next();
@@ -504,12 +533,48 @@ public class GetFoundingDetails extends Action {
                     */
                     exchangeRate = fundDet.getFixedExchangeRate();
 
-                    retVal += fundDet.getTransactionAmount() / exchangeRate;
+
+                    /*
+                    switch (fundDet.getTransactionType().intValue()) {
+                    case Constants.COMMITMENT:
+                        commitment += fundDet.getTransactionAmount() /
+                                exchangeRate;
+                        break;
+
+                    case Constants.DISBURSEMENT:
+                        disbursement += fundDet.getTransactionAmount() /
+                                exchangeRate;
+                        break;
+
+                    case Constants.EXPENDITURE:
+                        expenditure += fundDet.getTransactionAmount() /
+                                exchangeRate;
+                        break;
+                    }
+                    */
+
+                   if (fundDet.getTransactionType().intValue() ==
+                       Constants.COMMITMENT) {
+                       commitment += fundDet.getTransactionAmount() /
+                               exchangeRate;
+                   } else if (fundDet.getTransactionType().intValue() ==
+                              Constants.DISBURSEMENT) {
+                       disbursement += fundDet.getTransactionAmount() /
+                               exchangeRate;
+                   } else if (fundDet.getTransactionType().intValue() ==
+                              Constants.EXPENDITURE) {
+                       expenditure += fundDet.getTransactionAmount() /
+                               exchangeRate;
+                   }
+
                 }
             }
         } catch (Exception ex1) {
             //Add exception reporting
         }
+
+        retVal = new FundingData(commitment, disbursement, expenditure);
+
         return retVal;
     }
 

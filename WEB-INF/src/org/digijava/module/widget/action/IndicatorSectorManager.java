@@ -26,6 +26,8 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 
+import com.sun.corba.se.impl.protocol.INSServerRequestDispatcher;
+
 /**
  *
  * @author medea
@@ -279,7 +281,11 @@ public class IndicatorSectorManager extends DispatchAction {
             indSecForm.setRegionName("");
         }
         indSecForm.setSector(indSec.getSector());
-        indSecForm.setSectorName(indSec.getSector().getName());
+        if (indSec.getSector()!=null){
+            indSecForm.setSectorName(indSec.getSector().getName());
+        }else{
+            indSecForm.setSectorName("");
+        }
 
         return mapping.findForward("addValue");
 

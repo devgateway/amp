@@ -203,6 +203,7 @@ public class NewIndicatorForm
         this.selectedActivities=null;
         this.selActivitySector=null;
         this.activitySectors = null;
+        this. sectorSchemes=null;
     }
     
     public void resetsector(){

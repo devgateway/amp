@@ -80,7 +80,10 @@ public class ReportWizardAction extends MultiAction {
 		if (request.getParameter("editReportId") != null ) {
 			return modeEdit(mapping, form, request, response);
 		}
-		if (request.getParameter("reportTitle") == null){
+		if (request.getParameter("reportTitle") == null){			
+			//
+			modeReset(mapping, form, request, response);
+			//
 			if ( "true".equals( request.getParameter("tab") ) )
 				myForm.setDesktopTab(true);
 			else

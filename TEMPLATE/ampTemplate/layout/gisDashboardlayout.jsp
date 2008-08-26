@@ -47,6 +47,15 @@
 			</TR>
 			<TR>
 				<TD width="100%" vAlign="top" align="left">
+<script language="javascript">
+  function exportPDF() {
+	openURLinWindow("/gis/pdfExport.do", 780, 500);
+  }
+</script>
+<a onclick="exportPDF()" style="Font-size:12px;float:right;clear:both;padding:5px 5px 5px 5px;cursor:pointer;text-decoration:underline;background-color:#CCCCCC;">
+<digi:trn key="gis:exporttopdf">Export to PDF</digi:trn>
+</a>
+<br />
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>
 							<TD  width="10">&nbsp;</td>

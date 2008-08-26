@@ -10,6 +10,7 @@
 	</form-beans>
 	
 	<action-mappings>
+		<action name="gisDashboardForm" path="/gis/pdfExport" scope="session" type="org.digijava.module.gis.action.PDFExportAction" validate="false" />
 		<action name="gisDashboardForm" path="/gis/showGisDashboard" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=gisDashboardLayout"/>
 			<forward name="forwardOld" path="/showLayout.do?layout=gis_dashboard"/>

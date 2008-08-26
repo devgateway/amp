@@ -231,7 +231,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
-		  				<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+		  				<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
 
 		  			</digi:link>|
                                         	</field:display>
@@ -277,7 +277,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 				<TR bgColor=#f4f4f2>
 
             	<TD align=left>
-
+						<!-- 
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 
 							<TR>
@@ -326,7 +326,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 							</TR>
 
 						</TABLE>
-
+						-->
 					</TD>
 
 				</TR>

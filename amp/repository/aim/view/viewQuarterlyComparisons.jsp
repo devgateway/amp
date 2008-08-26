@@ -272,7 +272,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 				<TR bgColor=#f4f4f2>
 
             	<TD align=left>
-
+						<!-- 
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 
 							<TR>
@@ -319,7 +319,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 							</TR>
 
 						</TABLE>
-
+						 -->
 					</TD>
 
 				</TR>

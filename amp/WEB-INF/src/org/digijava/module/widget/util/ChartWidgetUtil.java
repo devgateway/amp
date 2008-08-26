@@ -22,9 +22,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -32,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -214,7 +213,8 @@ public class ChartWidgetUtil {
 			if (opt.getLabelPattern()!=null){
 				pattern=opt.getLabelPattern();
 			}
-			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,new DecimalFormat("0"),new DecimalFormat("0.0%"));
+                        DecimalFormat format=FormatHelper.getDecimalFormat();
+			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,format,new DecimalFormat("0.0%"));
 			plot.setLabelGenerator(gen);
 		}else{
 			plot.setLabelGenerator(null);

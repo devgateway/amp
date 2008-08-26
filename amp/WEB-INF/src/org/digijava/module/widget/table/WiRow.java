@@ -101,12 +101,11 @@ public abstract class WiRow implements HtmlGenerator{
 	}
 
 	public void setPk(Long newPk) {
-		List<WiCell> cells = getCells();
-		for (WiCell cell : cells) {
-			//TODO delegate to column.replacePks(oldPk, newPk) because getCells() on filtered columns will not return all cells but only active sub column cells.
-			cell.setPk(newPk);
-		}
+		Long oldPk = this.pk;
 		this.pk =  newPk;
+		for (WiColumn col : this.columns.values()) {
+			col.replacePk(oldPk, newPk);
+		}
 	}
 	public void setTable(WiTable table) {
 		this.table = table;

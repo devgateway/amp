@@ -80,11 +80,17 @@ public class WiColumnDropDownFilter extends WiColumn {
 		return columns;
 	}
 	
+	/**
+	 * Delegates to active sub column 
+	 */
 	@Override
 	public WiCell getCell(Long rowPk) {
 		return getActiveSubColumn().getCell(rowPk);
 	}
 
+	/**
+	 * Delegates to active sub column
+	 */
 	@Override
 	public void setCell(WiCell cell) {
 		getActiveSubColumn().setCell(cell);
@@ -95,11 +101,22 @@ public class WiColumnDropDownFilter extends WiColumn {
 		return WiColumn.FILTER;
 	}
 
+	
 	@Override
 	public void saveData(Session dbSession) throws DgException {
 		Collection<WiColumnFilterSubColumn> subColumns = this.columns.values();
 		for (WiColumnFilterSubColumn subColumn : subColumns) {
 			subColumn.saveData(dbSession);
+		}
+	}
+
+	/**
+	 * Delegates to all sub columns because filter column has several sub columns. 
+	 */
+	@Override
+	public void replacePk(Long oldPk, Long newPk) {
+		for (WiColumnFilterSubColumn subColumn : this.columns.values()) {
+			subColumn.replacePk(oldPk, newPk);
 		}
 	}
 	
@@ -126,6 +143,5 @@ public class WiColumnDropDownFilter extends WiColumn {
 	public Long getActiveItemId() {
 		return activeItemId;
 	}
-	
 	
 }

@@ -61,13 +61,37 @@
 			<td width="50%" id="tooltipRegionContainer">&nbsp;</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">Total funding</td>
-			<td width="50%" id="tooltipTotalContainer">&nbsp;</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2">Total funding</td>
 		</tr>
 		<tr>
-			<td nowrap width="50%">For this region</td>
-			<td width="50%" id="tooltipCurrentContainer">&nbsp;</td>
+			<td nowrap width="50%">Commitment</td>
+			<td width="50%" id="tooltipTotalCommitmentContainer">&nbsp;</td>
 		</tr>
+		<tr>
+			<td nowrap width="50%">Disbursement</td>
+			<td width="50%" id="tooltipTotalDisbursementContainer">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Expenditure</td>
+			<td width="50%" id="tooltipTotalExpenditureContainer">&nbsp;</td>
+		</tr>
+		
+		<tr>
+			<td nowrap bgcolor="#D9DAC9" colspan="2">For this region</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Commitment</td>
+			<td width="50%" id="tooltipCurrentCommitmentContainer">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Disbursement</td>
+			<td width="50%" id="tooltipCurrentDisbursementContainer">&nbsp;</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%">Expenditure</td>
+			<td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
+		</tr>
+		
 	</table>
 	</div>
 </div>
@@ -107,7 +131,11 @@
 	var imageMapLoaded = false;
 	
 	var fundingDataByRegion = new Array();
-	var totalFund = "0";
+
+	var totalCommitmentFund = "0";
+	var totalDisbursementFund = "0";
+	var totalExpenditureFund = "0";
+
 	var selSector = 0;
 	
 	
@@ -155,7 +183,11 @@
 	
 	function dataForSectorReady () {
 		if (xmlhttp.readyState == 4) {
-			totalFund = xmlhttp.responseXML.getElementsByTagName('funding')[0].attributes[0].value;
+			totalCommitmentFund = xmlhttp.responseXML.getElementsByTagName('funding')[0].attributes.getNamedItem("totalCommitment").value;
+			totalDisbursementFund = xmlhttp.responseXML.getElementsByTagName('funding')[0].attributes.getNamedItem("totalDisbursement").value;
+			totalExpenditureFund = xmlhttp.responseXML.getElementsByTagName('funding')[0].attributes.getNamedItem("totalExpenditure").value;
+			
+			
 			var regionDataList = xmlhttp.responseXML.getElementsByTagName('region');
 			fundingDataByRegion = new Array();
 			var regIndex = 0;
@@ -163,7 +195,10 @@
 				var regData = regionDataList[regIndex];
 				var regionDataMap = new Array();
 				regionDataMap[0] = regData.attributes.getNamedItem("reg-code").value;
-				regionDataMap[1] = regData.attributes.getNamedItem("funding").value;
+				regionDataMap[1] = regData.attributes.getNamedItem("fundingCommitment").value;
+				regionDataMap[2] = regData.attributes.getNamedItem("fundingDisbursement").value;
+				regionDataMap[3] = regData.attributes.getNamedItem("fundingExpenditure").value;
+
 				fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
 			}
 			
@@ -240,8 +275,17 @@
 	function showRegionTooltip(regCode) {
 		var mouseEvent = null;
 		document.getElementById("tooltipRegionContainer").innerHTML = regCode;
-		document.getElementById("tooltipTotalContainer").innerHTML = totalFund + " k";
-		document.getElementById("tooltipCurrentContainer").innerHTML = getRegFounding (regCode);
+		
+		document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund + " k";
+		document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund + " k";
+		document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund + " k";
+		
+		var regData = getRegFounding(regCode);
+		
+		document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0];
+		document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1];
+		document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2];
+		
 		document.getElementById("tooltipContainer").style.display = "block";
 		
 	}
@@ -251,12 +295,12 @@
 	}
 	
 	function getRegFounding (regCode) {
-		var retVal = "0";
+		var retVal = new Array (0, 0, 0);;
 		var dataIndex = 0;
 		for (dataIndex = 0; dataIndex < fundingDataByRegion.length; dataIndex ++) {
 			var dataItem = fundingDataByRegion[dataIndex];
 			if (dataItem[0] == regCode) {
-				retVal = dataItem[1];
+				retVal = new Array (dataItem[1], dataItem[2], dataItem[3]);
 				break;
 			}
 		}

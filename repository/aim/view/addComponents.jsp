@@ -4,6 +4,11 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
 <script defer src="ie_onload.js" type="text/javascript"></script>
 <script language="JavaScript">
 
@@ -114,15 +119,17 @@ function closeWindow()
                                   <tr>
                                     <td width="100%">
                                       <table width="100%" border=0	 bgColor=#f4f4f2>
-                                        <tr>
-
-                                          <td width="30%" align="right"><font color=red>*</font>
-                                            <digi:trn key="aim:compTitle">Component Title</digi:trn>
-                                    </td>
-                                    <td width="30%" >
-                                      <html:textarea property="compTitle" cols="40" rows="2" />
-                                    </td>
-                                        </tr>
+										<field:display name="Admin - Component Title" feature="Admin - Component">
+	                                        <tr>
+	                                            <td width="30%" align="right"><font color=red>*</font>
+	                                             <digi:trn key="aim:compTitle">Component Title</digi:trn>
+			                                    </td>
+			                                    <td width="30%" >
+			                                      <html:textarea property="compTitle" cols="40" rows="2" />
+			                                    </td>
+	                                        </tr>
+										</field:display>
+									    <field:display name="Admin - Component Code" feature="Admin - Component">
                                         <tr>
                                           <td width="30%" align="right"><font color=red>*</font>
                                             <digi:trn key="aim:compCode">Component Code</digi:trn>
@@ -131,6 +138,8 @@ function closeWindow()
                                       <html:text property="compCode" size="10" />
                                     </td>
                                         </tr>
+										</field:display>
+										<field:display name="Admin - Component Type" feature="Admin - Component">
                                         <tr>
                                           <td width="30%" align="right">
                                             <digi:trn key="aim:compType">Component Type</digi:trn>
@@ -142,6 +151,8 @@ function closeWindow()
                                             
                                           </td>
                                         </tr>
+										</field:display>
+										<field:display name="Admin - Component Description" feature="Admin - Component">
                                         <tr>
                                           <td width="30%" align="right">
                                             <digi:trn key="aim:compDesc">Component Description</digi:trn>
@@ -152,6 +163,7 @@ function closeWindow()
                                         </tr>
 
                                   </tr>
+								  </field:display>
                                   <td width=30% align = right>
                                      <font color=red>*
                                       <digi:trn key="aim:addNewComponent:mandatoryFields">
@@ -164,14 +176,12 @@ function closeWindow()
                                       <table width="100%" cellspacing="5">
                                         <tr>
                                           <td bgColor=#dddddb height="25" align="center" colspan="2">
-
-                                            <input class="dr-menu" id="addBtn" type="button" value='<digi:trn key="btn:save">Save</digi:trn>' onClick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
-                                            <html:reset  styleClass="dr-menu" property="submitButton" >
-                                              <digi:trn key="btn:cancel">Cancel</digi:trn> &nbsp;&nbsp;
-                                            </html:reset>
-                                            <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
-                                              <digi:trn key="btn:close">Close</digi:trn>
-                                            </html:button>
+											<field:display name="Admin - Component Save Button" feature="Admin - Component">
+                                            	<input class="dr-menu" id="addBtn" type="button" value='<digi:trn key="btn:save">Save</digi:trn>' onClick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
+											</field:display>
+											<field:display name="Admin - Component Cancel Button" feature="Admin - Component">
+												<input type="button" value="<digi:trn key='btn:cancel'>Cancel</digi:trn>" styleClass="dr-menu" onclick="window.close();" />
+											</field:display>
                                           </td>
                                         </tr>
                                       </table>

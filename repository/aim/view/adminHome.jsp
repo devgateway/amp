@@ -419,6 +419,7 @@
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td class="f-names">
                         <table cellPadding="0" cellSpacing="0" width="70%">
+						 <feature:display name="Admin - Component Type" module="Components">
                           <tr>
                             <td class="f-names" nowrap="nowrap"><digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
@@ -428,6 +429,8 @@
                                 <digi:trn key="aim:componentsTypesManager">Components Types Manager</digi:trn>
                               </digi:link>         </td>
                           </tr>
+						 </feature:display>
+						 <feature:display name="Admin - Component" module="Components">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -439,6 +442,7 @@
                               </digi:link>
                             </td>
                           </tr>
+						 </feature:display>
 						 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
                           <tr>
                           <td class="f-names" nowrap="nowrap">

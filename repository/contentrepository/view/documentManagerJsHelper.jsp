@@ -47,6 +47,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/tooltip/wz_tooltip.js'/>" > .</script>
 
+<%@page import="java.net.URLDecoder"%>
+
 <c:set var="translation_public_ver_msg">
 		<digi:trn key="contentrepository:publicVersionMsg">The marked version is currently public</digi:trn>
 </c:set>
@@ -756,14 +758,12 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 		optionText	= '';
 
 	var myForm		= document.getElementById('typeId').form;
-	
-	myForm.docTitle.value		= title;
-	myForm.docDescription.value	= description;
+	myForm.docTitle.value		= unescape(title);
+	myForm.docDescription.value	= unescape(description);
 	myForm.docNotes.value		= '';
 	myForm.uuid.value			= uuid;
 	myForm.fileData.value		= null;
 	myForm.webLink.value		= '';
-	
 	if (isAUrl == null) 
 		isAUrl	= false;
 		
@@ -848,20 +848,19 @@ function setType(typeValue) {
 }
 
 function validateAddDocument() {
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü ]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü% ]+");
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
 		msg = msg + "${translation_validation_title}" ;
 	else {
-		var title	= document.forms['crDocumentManagerForm'].docTitle.value;
+		var title	= escape(document.forms['crDocumentManagerForm'].docTitle.value);
 		var found	= regexp.exec(title);
-		//alert(found);
+		document.forms['crDocumentManagerForm'].docTitle.value = title;
 		if ( found != title ) {
 			msg = msg + "${translation_validation_title_chars}" ;
 		}
-		
 	}
 	if ( document.forms['crDocumentManagerForm'].webResource[0].checked == true && 
 			document.forms['crDocumentManagerForm'].fileData.value == '')
@@ -869,7 +868,8 @@ function validateAddDocument() {
 	if ( document.forms['crDocumentManagerForm'].webResource[1].checked == true && 
 			document.forms['crDocumentManagerForm'].webLink.value == '')
 		msg = msg + "${translation_validation_url}" ;
-	
+
+	document.forms['crDocumentManagerForm'].docDescription.value = escape(document.forms['crDocumentManagerForm'].docDescription.value);
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)
 			return true;

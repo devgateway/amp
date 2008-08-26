@@ -26,7 +26,7 @@
 		</li>
 	</ul>
 </div>
-<div align="left" width="2" style="display: inline"
+<div align="left" width="2" style="display: inline; cursor: default"
 	onMouseOver="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])" 
 	onMouseOut="htm()" onclick="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])">
 	<c:set var="translation">

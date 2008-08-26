@@ -198,6 +198,18 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 			  			</digi:link> |
 
+			<c:set var="translation">
+
+				<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
+
+			</c:set>
+
+			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
+
+			  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
+
+			  			</digi:link> |
+
 			
                                                     <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
 
@@ -256,7 +268,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 				<TR bgColor=#f4f4f2>
 
             	<TD align=left>
-
+						<!-- 
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 
 							<TR>
@@ -304,7 +316,7 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 							</TR>
 
 						</TABLE>
-
+						 -->
 					</TD>
 
 				</TR>

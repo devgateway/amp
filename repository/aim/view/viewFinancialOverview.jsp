@@ -65,22 +65,22 @@
 				<!-- logic:notEqual name="aimFinancialOverviewForm" property="ampActivityId" value="0"-->
 	            	<span>
 	              		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
-	              	</span>
+	              	</span> | 
 	              	<!-- /logic:notEqual--> 
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
 					</c:set>
 					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 					<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
-					</digi:link>
-                                        <field:display feature="Disbursement Orders" name="Disbursement Orders Tab">
-                                        <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
+					</digi:link> | 
+                     <field:display feature="Disbursement Orders" name="Disbursement Orders Tab">
+                     <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewDisbursementOrders">Click here to view Disbursement Orders</digi:trn>
 					</c:set>
 					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
-					<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
-					</digi:link>
+					<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
+					</digi:link> | 
                                         </field:display>
 					<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
 					<c:set var="translation">
@@ -88,7 +88,7 @@
 					</c:set>
 					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
-					</digi:link>
+					</digi:link> | 
 					<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
@@ -97,7 +97,7 @@
                     <feature:display module="Funding" name="Expenditures">
                     	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 							<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
-						</digi:link>
+						</digi:link> | 
 					</feature:display>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
@@ -110,6 +110,7 @@
 				</TD></TR>
 				<TR bgColor=#f4f4f2>
             	<TD align=left><html:hidden property="tabIndex" />
+            		<!-- 
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 							<TR>
 								<TD align="left">
@@ -136,6 +137,7 @@
 								</TD>
 							</TR>
 						</TABLE>
+						 -->
 					</TD>
 				</TR>
 				<TR bgColor=#f4f4f2>

@@ -263,7 +263,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
-			  				<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+			  				<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
 
 			  			</digi:link>
 
@@ -273,7 +273,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 	            	<span>
 
-	              		<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+	              		<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
 
 	              	</span>
 
@@ -329,7 +329,7 @@ function setHoveredTable(tableId, hasHeaders) {
                <logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
 				
 				<feature:display module="Funding" name="Expenditures">
-	            	<span class="sub-nav2-selected">
+	            	<span>
 
 	              		<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
@@ -355,7 +355,7 @@ function setHoveredTable(tableId, hasHeaders) {
 				<TR bgColor=#f4f4f2>
 
             	<TD align=left>
-
+						<!-- 
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 
 							<TR>
@@ -427,7 +427,7 @@ function setHoveredTable(tableId, hasHeaders) {
 							</TR>
 
 						</TABLE>
-
+						-->
 					</TD>
 
 				</TR>
@@ -437,8 +437,7 @@ function setHoveredTable(tableId, hasHeaders) {
 				<TR bgColor=#f4f4f2>
 
 					<TD vAlign="top" align="center" width="100%" bgColor="#f4f4f2">
-						<br />
-
+						
 
 						<TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
 

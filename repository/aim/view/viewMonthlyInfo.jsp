@@ -275,7 +275,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                 
                                                 <digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
                                                     
-                                                    <digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+                                                    <digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
                                                     
                                                 </digi:link>
                                                 
@@ -285,7 +285,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                             
                                                 <span>
                                                     
-                                                    <digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+                                                    <digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
                                                     
                                                 </span>
                                                 
@@ -373,7 +373,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                     <TD align=left>
                                         
                                         
-                                        
+                                        <!-- 
                                         <TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
                                             
                                             <TR>
@@ -443,7 +443,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                             </TR>
                                             
                                         </TABLE>
-                                        
+                                        -->
                                         
                                         
                                         

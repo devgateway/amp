@@ -282,7 +282,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 			  			<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" title="${translation}" >
 
-			  				<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+			  				<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
 
 			  			</digi:link>
 
@@ -292,7 +292,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 			      	<span>
 
-			      		<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+			      		<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
 
 			      	</span>
 
@@ -380,7 +380,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
             	<TD align=left>
 
 
-
+						<!-- 
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 
 							<TR>
@@ -449,7 +449,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 							</TR>
 
 						</TABLE>
-
+						-->
 
 
 

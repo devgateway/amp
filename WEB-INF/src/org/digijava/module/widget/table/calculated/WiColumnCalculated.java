@@ -12,5 +12,11 @@ public class WiColumnCalculated extends WiColumn{
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void replacePk(Long oldPk, Long newPk) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

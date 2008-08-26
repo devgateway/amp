@@ -42,5 +42,14 @@ public class WiColumnStandard extends WiColumn {
 		}
 	}
 
+	@Override
+	public void replacePk(Long oldPk, Long newPk) {
+		WiCell cell = removeCellWithPk(oldPk);
+		if (cell!=null){
+			cell.setPk(newPk);
+			setCell(cell);
+		}
+	}
+
 
 }

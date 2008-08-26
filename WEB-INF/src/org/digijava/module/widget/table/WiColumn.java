@@ -45,6 +45,8 @@ public abstract class WiColumn {
 	
 	public abstract void saveData(Session dbSession) throws DgException;
 	
+	public abstract void replacePk(Long oldPk, Long newPk);
+	
 	public Long getId() {
 		return id;
 	}

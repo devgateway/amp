@@ -14,6 +14,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+/**
+ * 
+ * @author Diego Dimunzio
+ *
+ */
+
 public class EntityHelper {
 	private static Logger log = Logger.getLogger(EntityHelper.class.getName());
 
@@ -59,7 +65,33 @@ public class EntityHelper {
 			return (Login) result.get(0);
 		}
 	}
-
+	
+	/**
+	 * 
+	 * @param countryCode
+	 * @return
+	 */
+	public static Login getLoginbyCountry(Country country) {
+		Session session = HibernateUtil.getSession();
+		String sqlquery;
+		sqlquery = "select l from "
+				+ Login.class.getName()
+				+ " l where l.country=:pcountry";
+		try {
+			Query qry = session.createQuery(sqlquery);
+			qry.setParameter("pcountry", country);
+			List result = qry.list();
+			if (result.size() == 0) {
+				return null;
+			} else {
+				return (Login) result.get(0);
+			}	
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+		return null;
+	}
+	
 	/**
 	 * @return a List with all countries
 	 */

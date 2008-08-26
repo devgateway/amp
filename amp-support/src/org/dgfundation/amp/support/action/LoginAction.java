@@ -16,7 +16,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public class LoginAction extends ActionSupport implements ServletRequestAware {
 	private static final long serialVersionUID = 8739024626239922575L;
-	
+
 	HttpServletRequest request = null;
 
 	private String password;
@@ -27,28 +27,38 @@ public class LoginAction extends ActionSupport implements ServletRequestAware {
 
 	private String rlocale;
 
-	
-
 	public String execute() throws Exception {
+		Login login = null;
+		if (request.getParameter("code") != null) {
+			String code = (String) request.getParameter("code");
+			login = EntityHelper.getLoginbyCountry(EntityHelper.getCountry(code));
+			if (login != null) {
+				request.getSession().setAttribute("login", login);
+				request.getSession().setAttribute("request_locale", getLocale());
+				return "succes";
+			}
+		}
 		return "login";
 	}
 
 	public String postLoging() throws Exception {
-		Login login = EntityHelper.getLogin(this.username, this.password,EntityHelper.getCountry(this.countrycode));
-			if (login != null) {
-				if (login.getRole()!=2){
-					request.getSession().setAttribute("login", login);
-					request.getSession().setAttribute("request_locale", getLocale());
+		Login login = EntityHelper.getLogin(this.username, this.password,
+				EntityHelper.getCountry(this.countrycode));
+		if (login != null) {
+			if (login.getRole() != 2) {
+				request.getSession().setAttribute("login", login);
+				request.getSession()
+						.setAttribute("request_locale", getLocale());
 				return "succes";
-				}else{
-					request.getSession().setAttribute("login", login);
-					request.getSession().setAttribute("request_locale", getLocale());
-					return "isadmin";
-				}
 			} else {
+				request.getSession().setAttribute("login", login);
+				request.getSession()
+						.setAttribute("request_locale", getLocale());
+				return "isadmin";
+			}
+		} else {
 			return "failed";
 		}
-
 	}
 
 	@Override

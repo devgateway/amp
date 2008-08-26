@@ -1229,7 +1229,7 @@ public class SectorUtil {
         Query qry = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            queryString = "select config.id from "
+            queryString = "select cls.ampSecSchemeId from "
                     + AmpClassificationConfiguration.class.getName() +
                     " config inner join config.classification cls "+
                     " where config.primary=true ";

@@ -49,7 +49,9 @@ public class SelectSectorsForInd extends Action {
                 AmpSectorScheme secSchemes = SectorUtil.getAmpSectorScheme(primaryConfigClassId);
                 if (eaForm.getSectorSchemes() == null || eaForm.getSectorSchemes().size() == 0) {
                     eaForm.setSectorSchemes(new ArrayList());
-                    eaForm.getSectorSchemes().add(secSchemes);
+                    if(secSchemes!=null){
+                         eaForm.getSectorSchemes().add(secSchemes);
+                    }
                 }
 
                 eaForm.setSectorScheme(primaryConfigClassId);

@@ -172,12 +172,16 @@ function checkNumeric(objName,comma,period,hyphen)
 											Sector scheme</digi:trn>
 										</td>
 										<td>
-											<html:select property="sectorScheme" onchange="reloadSector(1)" styleClass="inp-text">
+                                                                                    <c:if test="${not empty aimNewIndicatorForm.sectorSchemes}">
+                                                                                        <html:select property="sectorScheme" onchange="reloadSector(1)" styleClass="inp-text">
 												<logic:notEmpty name="aimNewIndicatorForm" property="sectorSchemes">
 													<html:optionsCollection name="aimNewIndicatorForm" property="sectorSchemes" 
 													value="ampSecSchemeId" label="secSchemeName" />												
 												</logic:notEmpty>
 											</html:select>
+                                                                                        
+                                                                                    </c:if>
+											
 										</td>
 									</tr>								
 									<tr>
@@ -186,6 +190,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											Sector</digi:trn>
 										</td>
 										<td>
+                                                                                    <c:if test="${not empty aimNewIndicatorForm.parentSectors}">
 											<html:select property="sector" onchange="reloadSector(2)" styleClass="inp-text">
 												<html:option value="-1">Select sector</html:option>
 												<logic:notEmpty name="aimNewIndicatorForm" property="parentSectors">
@@ -193,6 +198,7 @@ function checkNumeric(objName,comma,period,hyphen)
 													value="ampSectorId" label="name" />												
 												</logic:notEmpty>												
 											</html:select>
+                                                                                        </c:if>
 										</td>
 									</tr>								
 									<!--<tr>
@@ -209,7 +215,7 @@ function checkNumeric(objName,comma,period,hyphen)
 												</logic:notEmpty>													
 											</html:select>
 										</td>
-									</tr>
+												</tr>
 									<tr <logic:empty name="SA" scope="application">style="position:relative;display:none;"</logic:empty>>
 										<td>
 											<digi:trn key="aim:subSectorLevel2">

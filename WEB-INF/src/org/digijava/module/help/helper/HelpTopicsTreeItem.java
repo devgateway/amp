@@ -18,8 +18,14 @@ public class HelpTopicsTreeItem extends HierarchyMember{
 		HelpTopic topic=(HelpTopic)this.getMember();
 		return topic.getTopicKey();
 	}
+	
 	public Long getHelpTopicId(){
 		HelpTopic topic=(HelpTopic)this.getMember();
 		return topic.getHelpTopicId();
+	}
+	
+	public HelpTopic getparent(){
+		HelpTopic topic=(HelpTopic)this.getMember();
+		return topic.getParent();
 	}
 }

@@ -106,20 +106,26 @@
 																					<td align="right"><digi:trn key="help:topic:key">Help Topic key</digi:trn></td>
 																					<td align="left"><html:text property="topicKey" /></td>
 																				</tr>
-																				<c:if test="${not empty helpForm.firstLevelTopics}">
+																				<c:if test="${not empty helpForm.topicTree}">
 																				<tr>
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
-																						<c:if test="${not empty helpForm.firstLevelTopics}">
+																						<c:if test="${not empty helpForm.topicTree}">
 																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
-																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">	
-																										<c:set var="trn">
-																											<digi:trn key="help:firstLeveltopics:${firstLevTopic.helpTopicId}">${firstLevTopic.titleTrnKey}</digi:trn>
-																										</c:set>
-																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
+																									<logic:iterate id="firstLevTopic" name="helpForm" property="topicTree">	
+																												<html:option value="${firstLevTopic.helpTopicId}">${firstLevTopic.titleTrnKey}</html:option>
+																													<c:if test="${not empty firstLevTopic.children}">
+																														<c:forEach var="child" items="${firstLevTopic.children}">
+																												 			<html:option value="${child.helpTopicId}">&nbsp;&nbsp;${child.titleTrnKey}</html:option>				
+																														
+																															<c:forEach var="child" items="${child.children}">
+																												 			<html:option value="${child.helpTopicId}">&nbsp;&nbsp;&nbsp;&nbsp;${child.titleTrnKey}</html:option>				
+																														</c:forEach>	
+																														</c:forEach>	
+																													</c:if>																		
 																									</logic:iterate>
-																							</html:select>	
+																							</html:select>
 																						</c:if>
 																					</td>
 																				</tr>

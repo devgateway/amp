@@ -18,11 +18,11 @@
 	</HEAD>
 	
     <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
+		<!--<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
 				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
-					<digi:insert attribute="headerTop" />
+					
 				</TD>
 			</TR>
 			<TR>
@@ -35,7 +35,7 @@
 
 						   	<TD align="left" vAlign="center">
 
-									<digi:insert attribute="headerMiddle" />
+									
 								</TD>	
 							 	<TD align="right" vAlign="middle" style="padding-right:5px;">
 										<digi:insert attribute="loginWidget" />
@@ -53,9 +53,9 @@
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 									<TR>
-										<TD vAlign="top" align="left" width="75%" >
+										<TD vAlign="top" align="left" width="75%" > -->
 											<digi:insert attribute="body" />
-										</TD>										
+										<!--</TD>										
 									</TR>
 								</TABLE>
 							</TD>
@@ -69,7 +69,7 @@
 				</TD>
 			</TR>
 			</TBODY>
-		</TABLE>
+		</TABLE> -->
 	</BODY>
 </HTML>
 

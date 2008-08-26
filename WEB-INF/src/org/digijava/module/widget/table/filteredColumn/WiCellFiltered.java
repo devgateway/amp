@@ -72,7 +72,7 @@ public class WiCellFiltered extends WiCellStandard {
 			if (this.getId() == null || this.getId().longValue() <= 0) {
 				dbValue = new AmpDaValueFiltered();
 			} else {
-				dbValue = (AmpDaValueFiltered) dbSession.load(AmpDaValueFiltered.class,dbColumnFilter.getId());
+				dbValue = (AmpDaValueFiltered) dbSession.load(AmpDaValueFiltered.class,this.getId());
 			}
 			dbValue.setPk(this.getPk());
 			dbValue.setValue(this.getValue());

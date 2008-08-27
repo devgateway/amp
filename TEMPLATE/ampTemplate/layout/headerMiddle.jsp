@@ -26,7 +26,6 @@
 	</div>
 </div>
 
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />

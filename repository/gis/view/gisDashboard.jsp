@@ -8,12 +8,12 @@
 
 <table>
 	<tr>
-		<td>
+		<td colspan="2">
 			<img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA">
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="2">
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
 
 			<MAP NAME="legendMap">
@@ -31,8 +31,11 @@
 
 		</td>
 	</tr>
-	<tr><td><img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif"></td></tr>
+	<tr><td colspan="2"><img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif"></td></tr>
 	<tr>
+            <td>
+                <digi:trn key="gis:selectSector">Select Sector</digi:trn>:
+            </td>
 		<td>
 		<select onChange="sectorSelected(this)">
 			<option value="-1">All</option>
@@ -44,6 +47,9 @@
 		</td>
 	</tr>
 	<tr>
+            <td>
+                <digi:trn key="gis:selectIndicator">Select Indicator</digi:trn>:
+            </td>
 		<td>
 		<select id="indicatorsCombo" onchange="indicatorSelected(this)">
 			<option value=-1>None</option>

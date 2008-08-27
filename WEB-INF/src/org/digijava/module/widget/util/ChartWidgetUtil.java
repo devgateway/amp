@@ -272,6 +272,7 @@ public class ChartWidgetUtil {
                 oql +=  "   inner join f.ampActivityId act "+
                         " inner join act.sectors actSec "+
                         " inner join actSec.sectorId sec "+
+                        " inner join actSec.activityId act "+
                         " inner join actSec.classificationConfig config ";
 		
 		
@@ -282,7 +283,7 @@ public class ChartWidgetUtil {
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
-                oql +=" and config.name='Primary'";
+                oql +=" and config.name='Primary' and act.team is not null ";
 		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
 		oql += " order by f.ampDonorOrgId, actSec.sectorId";
 

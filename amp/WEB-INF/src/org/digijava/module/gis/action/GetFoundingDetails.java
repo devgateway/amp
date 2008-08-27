@@ -38,6 +38,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.exception.*;
 import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.aim.helper.Constants;
+import java.util.HashSet;
 
 /**
  * <p>Title: </p>
@@ -267,13 +268,27 @@ public class GetFoundingDetails extends Action {
 
                 List segmentDataList = new ArrayList();
                 Iterator indsIt = inds.iterator();
-                Double min = new Double(0);
-                Double max = new Double(0);
+                Double min = null;
+                Double max = null;
+
+                Set regSet = new HashSet();
+
                 while (indsIt.hasNext()) {
                     Object[] indData = (Object[]) indsIt.next();
-                    SegmentData indHilightData = new SegmentData();
-                    indHilightData.setSegmentCode((String) indData[1]);
+
+                    String segmentCode = (String) indData[1];
                     Double indValue = (Double) indData[0];
+
+            //                    if (isRegion(map,segmentCode) && !regSet.contains(segmentCode)) {
+
+                    SegmentData indHilightData = new SegmentData();
+                    indHilightData.setSegmentCode(segmentCode);
+                    indHilightData.setSegmentValue(indValue.toString());
+
+                    if (min == null) {
+                        min = indValue;
+                        max = indValue;
+                    }
 
                     if (indValue < min) {
                         min = indValue;
@@ -283,8 +298,16 @@ public class GetFoundingDetails extends Action {
                         max = indValue;
                     }
 
-                    indHilightData.setSegmentValue(indValue.toString());
+            //                        regSet.add(segmentCode);
                     segmentDataList.add(indHilightData);
+            //                    }
+
+
+                }
+
+                if (min == null) {
+                    min = new Double(0);
+                    max = new Double(0);
                 }
 
                 List hilightData = prepareHilightSegments(segmentDataList, map, min, max);
@@ -379,6 +402,7 @@ public class GetFoundingDetails extends Action {
             }
 
         } catch (Exception e) {
+            String ggg="gadfg";
             //Add exception reporting
         } finally {
             sos.flush();
@@ -403,13 +427,28 @@ public class GetFoundingDetails extends Action {
                 if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
                     HilightData hData = new HilightData();
                     hData.setSegmentId((int) segment.getSegmentId());
-                    float redColor = Float.parseFloat(sd.getSegmentValue()) * coeff;
+                    float green = (Float.parseFloat(sd.getSegmentValue()) - min.floatValue()) * coeff;
                     hData.setColor(new ColorRGB((int) 0,
-                                                (int) (redColor + 50f), 0));
+                                                (int) (green + 50f), 0));
                     retVal.add(hData);
                 }
             }
         }
+        return retVal;
+    }
+
+    private boolean isRegion (GisMap map, String regCode) {
+        boolean retVal = false;
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            if (segment.getSegmentCode().equalsIgnoreCase(regCode)) {
+                retVal = true;
+                break;
+            }
+        }
+
         return retVal;
     }
 
@@ -570,6 +609,7 @@ public class GetFoundingDetails extends Action {
                 }
             }
         } catch (Exception ex1) {
+            String ggg="gadfg";
             //Add exception reporting
         }
 

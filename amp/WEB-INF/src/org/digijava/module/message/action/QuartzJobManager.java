@@ -49,7 +49,9 @@ public class QuartzJobManager extends Action {
                     if (exJob.getEndDateTime() != null) {
                         qmform.setEndDateTime(exJob.getEndDateTime().toString());
                     }
-                    qmform.setStartDateTime(exJob.getStartDateTime().toString());
+                    if(exJob.getStartDateTime()!=null){
+                        qmform.setStartDateTime(exJob.getStartDateTime().toString());
+                    }
                     qmform.setName(exJob.getName());
                     qmform.setClassFullname(exJob.getClassFullname());
                     qmform.setJob(exJob);

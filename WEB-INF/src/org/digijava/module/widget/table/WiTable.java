@@ -300,6 +300,15 @@ public class WiTable extends Widget{
 		StringBuffer result = new StringBuffer("<TABLE id='tableWidget");
 		result.append(this.getId());
 		result.append("' border='1' ");
+		if (this.htmlStyle!=null && !this.htmlStyle.trim().equals("")){
+			result.append(" style='");
+			result.append(this.htmlStyle);
+			result.append("' ");
+		}else if (this.cssClass!=null && !this.htmlStyle.trim().equals("")){
+			result.append(" class='");
+			result.append(this.cssClass);
+			result.append("' ");
+		}
 		//TODO add parameters
 		result.append(">\n");
 		if (showHeaderRows){

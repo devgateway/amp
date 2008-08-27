@@ -68,10 +68,16 @@ public class SelectSector extends Action {
 			// if sector schemes not loaded or reset, load all sector schemes
 			// and reset the
 			// parent sectors and child sectors.
+			AmpClassificationConfiguration config= null;
 			if(ssForm.getConfigId()==null){
-                            ssForm.setConfigId(SectorUtil.getPrimaryConfigClassificationId());
-                        }
-			AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(ssForm.getConfigId());
+				//if no ID specified then load primary config
+				config = SectorUtil.getPrimaryConfigClassification();
+				ssForm.setConfigId(config.getId());
+			}else{
+				//else load with specified ID 
+				config = SectorUtil.getClassificationConfigById(ssForm.getConfigId());
+			}
+			
 			AmpSectorScheme defClassification=config.getClassification();
 			Collection secSchemes = new ArrayList() ;
                         secSchemes.add(defClassification);

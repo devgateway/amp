@@ -249,7 +249,7 @@ public class ChartWidgetUtil {
                             }
 			}
                         if(otherFunfing!=0){
-                            ds.setValue("Other", otherFunfing);
+                            ds.setValue("Other Sectors", otherFunfing);
                         }		
 		}
 		return ds;

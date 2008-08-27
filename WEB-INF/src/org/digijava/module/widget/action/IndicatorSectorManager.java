@@ -1,32 +1,33 @@
 package org.digijava.module.widget.action;
 
-import org.apache.struts.action.ActionForward;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.struts.action.ActionMapping;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.actions.DispatchAction;
-import org.digijava.module.gis.util.DbUtil;
-import org.digijava.module.widget.form.IndicatorSectorRegionForm;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.LocationUtil;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.gis.util.DbUtil;
+import org.digijava.module.widget.form.IndicatorSectorRegionForm;
+import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
-
-import com.sun.corba.se.impl.protocol.INSServerRequestDispatcher;
 
 /**
  *
@@ -253,7 +254,15 @@ public class IndicatorSectorManager extends DispatchAction {
             HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         IndicatorSector indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
-        IndicatorUtil.removeConnection(indSec);
+        boolean widgetsExists = ChartWidgetUtil.isWidgetForIndicator(indSec);
+        if (widgetsExists){
+        	ActionErrors aes = new ActionErrors();
+        	ActionError ae = new ActionError("error.aim.deleteIndicatorSector.widgetReferencesIt");
+        	aes.add("Cannot delete indicator - widget is referenceing it",ae);
+        	saveErrors(request, aes);
+        }else{
+            IndicatorUtil.removeConnection(indSec);
+        }
         return viewAll(mapping, form, request, response);
 
     }

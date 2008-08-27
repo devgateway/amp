@@ -188,6 +188,23 @@ public class ChartWidgetUtil {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static boolean isWidgetForIndicator(IndicatorSector sectorIndicator) throws DgException{
+		boolean result=false;
+		Session session = PersistenceManager.getRequestDBSession();
+		String oql = "from " + AmpWidgetIndicatorChart.class.getName();
+		oql += " as w where w.indicator.id = :indId";
+		try {
+			Query query = session.createQuery(oql);
+			query.setLong("indId", sectorIndicator.getId());
+			List widgets = query.list();
+			return (widgets!=null && widgets.size()>0);
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
 		PieDataset ds = getSectorByDonorDataset(donors,year);

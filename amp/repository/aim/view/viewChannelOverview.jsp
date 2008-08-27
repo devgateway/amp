@@ -129,7 +129,7 @@ function commentWin(val) {
 								<TD align=left>
 								<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left"
 									vAlign="top">
-									<TR bgColor=#eeeeee>
+									<TR bgColor=#ccdbff>
 										<TD align="left">
 										<SPAN><strong>
 										<feature:display module="Project ID and Planning" name="Identification">

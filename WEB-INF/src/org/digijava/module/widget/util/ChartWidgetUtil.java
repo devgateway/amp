@@ -22,7 +22,6 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -32,7 +31,6 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -52,6 +50,7 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 
 /**
@@ -316,7 +315,8 @@ public class ChartWidgetUtil {
 				Float sectorPrcentage = (Float) rowData[2];
 				//AmpActivity activity = (AmpActivity) rowData[3];
 				//AmpCurrency currency = (AmpCurrency) rowData[4];
-				Double amount = (Double) rowData[4];
+				Double amt = (Double) rowData[4];
+                                Double amount =FeaturesUtil.applyThousandsForVisibility(amt);
 				//calculate percentage
 				Double calculated = (sectorPrcentage.floatValue() == 100)?amount:calculatePercentage(amount,sectorPrcentage);
 				//convert to

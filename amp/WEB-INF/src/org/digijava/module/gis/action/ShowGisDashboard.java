@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import org.digijava.module.aim.dbentity.AmpSector;
+import java.util.Collection;
 
 /**
  * GIS Dashboard renderer action.
@@ -28,6 +29,11 @@ public class ShowGisDashboard extends Action {
 			throws Exception {
 		GisDashboardForm gisForm=(GisDashboardForm)form;
 
+
+        Collection sectors = DbUtil.getPrimaryToplevelSectors();
+
+
+/*
         List secData = DbUtil.getUsedSectors();
 
         filterUsedSecData(secData);
@@ -40,7 +46,8 @@ public class ShowGisDashboard extends Action {
             usedSectors.add(src);
         }
 
-        gisForm.setSectorCollection(usedSectors);
+*/
+        gisForm.setSectorCollection(sectors);
 
 
 		return mapping.findForward("forward");

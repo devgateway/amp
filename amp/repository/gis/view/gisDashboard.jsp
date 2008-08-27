@@ -40,7 +40,7 @@
 		<select onChange="sectorSelected(this)">
 			<option value="-1">All</option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
-				<option value="<bean:write name="sec" property="sector.ampSectorId"/>"><bean:write name="sec" property="sector.name"/> (<bean:write name="sec" property="count"/>)</option>
+				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
 			</logic:iterate>
 		</select>
 		<div id="imageMapContainer" style="visibility:hidden;"></div>

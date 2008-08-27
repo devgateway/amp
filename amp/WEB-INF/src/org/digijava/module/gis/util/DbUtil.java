@@ -20,6 +20,9 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.util.SectorUtil;
+import java.util.Collection;
 
 /**
  * <p>Title: </p>
@@ -146,6 +149,16 @@ public class DbUtil {
         return retVal;
     }
 
+    public static Collection getPrimaryToplevelSectors(){
+        Collection retVal = null;
+
+        try {
+            retVal = SectorUtil.getSectorLevel1(new Integer(SectorUtil.getPrimaryConfigClassificationId().intValue()));
+        } catch (DgException ex) {
+            String ggg="123";
+        }
+        return retVal;
+    }
 
     public static List getSectorFoundings(Long sectorId) {
         List retVal = null;
@@ -340,5 +353,7 @@ public class DbUtil {
        }
        return retVal;
    }
+
+
 
 }

@@ -22,6 +22,7 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
@@ -31,6 +32,7 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -241,7 +243,7 @@ public class ChartWidgetUtil {
 			for (DonorSectorFundingHelper funding : fundings) {
                              Double percent = funding.getFounding() / allFundingWrapper[0];
                             // the sectors which percent is less then 10% should be group in "Other"
-                            if (percent > 0.1) {
+                            if (percent > 0.05) {
                                 ds.setValue(funding.getSector().getName(), funding.getFounding());
                             } else {
                                 otherFunfing += funding.getFounding();
@@ -262,6 +264,7 @@ public class ChartWidgetUtil {
 	
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
+        Long clsId=SectorUtil.getPrimaryConfigClassificationId();
 		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
                         " actSec.sectorPercentage, act.ampActivityId,  sum(fd.transactionAmountInUSD)";
 		oql += " from ";
@@ -269,7 +272,8 @@ public class ChartWidgetUtil {
                         " as fd inner join fd.ampFundingId f ";
                 oql +=  "   inner join f.ampActivityId act "+
                         " inner join act.sectors actSec "+
-                        " inner join actSec.sectorId sec ";
+                        " inner join actSec.sectorId sec "+
+                        " inner join sec.ampSecSchemeId cls ";
 		
 		
 		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
@@ -279,6 +283,7 @@ public class ChartWidgetUtil {
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
+                oql +=" and cls.ampSecSchemeId="+clsId;
 		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
 		oql += " order by f.ampDonorOrgId, actSec.sectorId";
 

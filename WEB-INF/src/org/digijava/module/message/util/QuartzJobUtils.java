@@ -24,26 +24,33 @@ public class QuartzJobUtils {
                 if (trgNames != null) {
                     for (int j = 0; j < trgNames.length; j++) {
                         Trigger exTrg = sched.getTrigger(trgNames[j], trgGroupNames[i]);
+                        if (exTrg != null) {
 
-                        QuartzJobForm job = new QuartzJobForm();
+                            QuartzJobForm job = new QuartzJobForm();
 
-                        job.setName(exTrg.getJobName());
-                        job.setGroupName(exTrg.getJobGroup());
-                        job.setTriggerGroupName(exTrg.getGroup());
-                        job.setTriggerName(exTrg.getName());
-                        if(exTrg.getEndTime()!=null)job.setEndDateTime(sdf.format(exTrg.getEndTime()));
-                        if(exTrg.getFinalFireTime()!=null)job.setFinalFireDateTime(sdf.format(exTrg.getFinalFireTime()));
-                        if(exTrg.getNextFireTime()!=null)job.setNextFireDateTime(sdf.format(exTrg.getNextFireTime()));
-                        if(exTrg.getPreviousFireTime()!=null)job.setPrevFireDateTime(sdf.format(exTrg.getPreviousFireTime()));
-                        if(exTrg.getStartTime()!=null)job.setStartDateTime(sdf.format(exTrg.getStartTime()));
+                            job.setName(exTrg.getJobName());
+                            job.setGroupName(exTrg.getJobGroup());
+                            job.setTriggerGroupName(exTrg.getGroup());
+                            job.setTriggerName(exTrg.getName());
+                            if (exTrg.getEndTime() != null)
+                                job.setEndDateTime(sdf.format(exTrg.getEndTime()));
+                            if (exTrg.getFinalFireTime() != null)
+                                job.setFinalFireDateTime(sdf.format(exTrg.getFinalFireTime()));
+                            if (exTrg.getNextFireTime() != null)
+                                job.setNextFireDateTime(sdf.format(exTrg.getNextFireTime()));
+                            if (exTrg.getPreviousFireTime() != null)
+                                job.setPrevFireDateTime(sdf.format(exTrg.getPreviousFireTime()));
+                            if (exTrg.getStartTime() != null)
+                                job.setStartDateTime(sdf.format(exTrg.getStartTime()));
 
-                        if(sched.getTriggerState(exTrg.getName(),exTrg.getGroup())==Trigger.STATE_PAUSED){
-                            job.setPaused(true);
-                        }else{
-                            job.setPaused(false);
+                            if (sched.getTriggerState(exTrg.getName(), exTrg.getGroup()) == Trigger.STATE_PAUSED) {
+                                job.setPaused(true);
+                            } else {
+                                job.setPaused(false);
+                            }
+
+                            qrtzCol.add(job);
                         }
-
-                        qrtzCol.add(job);
                     }
                 }
             }

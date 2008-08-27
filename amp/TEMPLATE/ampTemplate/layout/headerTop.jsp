@@ -6,17 +6,18 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language=javascript>
-<!--
-function showUserProfile(id){
-	<digi:context name="information" property="context/aim/default/userProfile.do" />
-	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
-}
--->
-
-</script>
-
-
+<logic:present name="currentMember" scope="session">
+	<script language=javascript>
+	function showUserProfile(id){
+		<digi:context name="information" property="context/aim/default/userProfile.do" />
+		//openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
+		var param = "~edit=true~id="+id;
+		previewWorkspaceframe('/aim/default/userProfile.do',param);
+	}
+	</script>
+	
+	<jsp:include page="/repository/aim/view/workspacePopup.jsp" flush="true" />
+</logic:present>
 
 
 <digi:context name="displayFlag" property="context/aim/default/displayFlag.do" />
@@ -80,13 +81,13 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
 		<td valign="middle" align="right" width="30%">
           <logic:present name="currentMember" scope="session">
               <c:set var="translation">
-                <digi:trn key="aim:workspacename">Workspace name</digi:trn>
+                <digi:trn key="aim:workspacename">Workspace Name</digi:trn>
               </c:set>
               <span title="${translation}"'>
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
-                <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
-                	<strong><digi:trn key="aim:pageshead:title:${teamMember.teamName}">${teamMember.teamName}</digi:trn></strong>
-                </a>
+				<!--<a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">-->
+                	<strong style="color:#FFFFFF"><digi:trn key="aim:pageshead:title:${teamMember.teamName}">${teamMember.teamName}</digi:trn></strong>
+				<!--</a>-->
               </span>
               <c:set var="translation">
                 <digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>

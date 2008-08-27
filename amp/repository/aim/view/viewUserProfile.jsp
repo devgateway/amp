@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<link href="css/global.css" rel="stylesheet" type="text/css">
+<link href="/TEMPLATE/ampTemplate/css/styles.css" rel="stylesheet" type="text/css"></link>
 
 <script language="JavaScript">
 <!--
@@ -26,7 +28,7 @@ function unload() {
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
-		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding border=0 height="470">
 			<tr>
 				<td align=left vAlign=top>
 					<table width="100%" cellSpacing="1" cellPadding="4" vAlign="top"
@@ -79,7 +81,7 @@ function unload() {
 						</tr>
 						<tr>
 							<td bgcolor="#f4f4f2" colspan="2">
-								<table width="97%" cellPadding=3 cellSpacing="1" bgcolor="#aaaaaa" align="center">
+								<table width="97%" cellPadding=3 cellSpacing="1" bgcolor="#aaaaaa" align="center" border=0>
 									<tr>
 										<td align="center" bgcolor="#dddddd" colspan="2" class="box-title">
 											<digi:trn key="aim:teamsAssociatedWith" ><b>Teams Associated with</b>	</digi:trn>
@@ -107,12 +109,11 @@ function unload() {
 						</tr>
 					</table>
 				</td>
-				<tr align="center">
-					<td>
-						<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
-					</td>
-
-				</tr>
+			</tr>
+			<tr align="center">
+				<td>
+					<input type="button" value="Close" class="dr-menu" onclick="hidePWorkspaceframe()">
+				</td>
 			</tr>
 		</table>
 	</td></tr>

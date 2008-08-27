@@ -1,5 +1,8 @@
 package org.digijava.module.widget.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,7 +43,9 @@ public class RenderTableWidget extends Action {
 			}
 		}
 		String html = table.generateHtml();	
-		response.getOutputStream().print(html);
+		OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
+		PrintWriter out = new PrintWriter(outputStream, true);
+		out.println(html);
 		response.getOutputStream().close();
 		return null;
 	}

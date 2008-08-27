@@ -355,8 +355,7 @@ public class DocumentManagerUtil {
 			return null;
 		try {
 			DocumentManager dm				= new DocumentManager();
-			dm.myRequest					= request;
-			Collection<DocumentData> ret	= dm.getDocuments(UUIDs);
+			Collection<DocumentData> ret	= dm.getDocuments(UUIDs, request);
 			ret.addAll(
 					TemporaryDocumentData.retrieveTemporaryDocDataList(request)
 				);

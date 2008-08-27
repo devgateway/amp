@@ -23,17 +23,17 @@
 		<td width="220"><img width="220" height="149"
 			src="/TEMPLATE/ampTemplate/images/dgf_logo.jpg"></td>
 	</tr>
-	<tr style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
+	<tr>
 		<td colspan="2">
-		<p><digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn>
+		<p style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;"><digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn>
 		<digi:trn key="aim:aidmanagementplatformversion">Version 1.11c Build 9. August 2008.</digi:trn>
 		<digi:trn key="aim:ampdevelopmentcredits">Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.</digi:trn>
 		</p>
 		</td>
 	</tr>
-	<tr style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;">
+	<tr>
 		<td colspan="2">
-		<p><digi:trn key="aim:aidmanagementplatformtrademark">The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation.</digi:trn>
+		<p style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;"><digi:trn key="aim:aidmanagementplatformtrademark">The Development Gateway and the The Development Gateway logo are trademarks for The Development Gateway Foundation.</digi:trn>
 		<digi:trn key="aim:ampallrightreserved">All Rights Reserved.</digi:trn></p>
 		</td>
 	</tr>

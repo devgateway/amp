@@ -129,7 +129,7 @@ function commentWin(val) {
 								<TD align=left>
 								<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left"
 									vAlign="top">
-									<TR bgColor=#f4f4f2>
+									<TR bgColor=#eeeeee>
 										<TD align="left">
 										<SPAN><strong>
 										<feature:display module="Project ID and Planning" name="Identification">
@@ -172,7 +172,7 @@ function commentWin(val) {
 														<field:display name="Project Fiche Button" feature="Project Fiche">
 															<div id="gen" title='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'>
 																<a href="#" onclick='javascript:projectFiche(${aimChannelOverviewForm.id}); return false;'>
-															<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a>&nbsp;|</div>&nbsp;
+															<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a></div>
 														</field:display>
 													</feature:display>
 												</module:display>
@@ -319,7 +319,7 @@ function commentWin(val) {
 											vAlign="top" align="center" bgColor=#f4f4f2
 											class="box-border-nopadding">
 											<TR>
-												<TD width="50%" vAlign="top" align="left">
+												<TD width="49%" vAlign="top" align="left">
 												<TABLE width="100%" cellPadding="3" cellSpacing="1"
 													vAlign="top" align="left">
 													<module:display name="Project ID and Planning"
@@ -1239,7 +1239,10 @@ function commentWin(val) {
 													
 												</TABLE>
 												</TD>
-												<TD width="50%" vAlign="top" align="left">
+												<TD width="2%" vAlign="top" align="left">
+													&nbsp;
+												</TD>
+												<TD width="49%" vAlign="top" align="left">
 												<TABLE width="100%" cellPadding="2" cellSpacing="2"
 													vAlign="top" align="left">
 													<TR>

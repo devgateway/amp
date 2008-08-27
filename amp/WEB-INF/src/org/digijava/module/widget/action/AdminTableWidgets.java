@@ -559,7 +559,7 @@ public class AdminTableWidgets extends DispatchAction {
 	 * @throws DgException
 	 */
 	private AmpDaColumn formToColumn(TableWidgetCreationForm form) throws DgException {
-		if (form.getColSelectedType().longValue()==2){
+		if (form.getColSelectedType().longValue()==2||form.getColSelectedType().longValue()==3){
 			return formToColumn(form,new AmpDaColumnFilter());
 		}
 		return formToColumn(form,new AmpDaColumn());
@@ -583,7 +583,7 @@ public class AdminTableWidgets extends DispatchAction {
 		if (column instanceof AmpDaColumnFilter){
 			AmpDaColumnFilter filter = (AmpDaColumnFilter) column;
 			filter.setColumnType(WiColumn.FILTER);
-			filter.setFilterItemProvider(new Long(FilterItemProvider.DONORS_FILTER));//TODO refactor !
+			filter.setFilterItemProvider(form.getColSelectedType()-1);//TODO refactor !
 			return filter;
 		}
 		column.setColumnType(WiColumn.STANDARD);
@@ -614,6 +614,7 @@ public class AdminTableWidgets extends DispatchAction {
 		//TODO temporary solution, improve this.
 		result.add(new LabelValueBean("Standard","1"));
 		result.add(new LabelValueBean("Dropdown Filter - Donors","2"));
+                result.add(new LabelValueBean("Organization Groups Filter - Organization Groups(excluding government)","3"));
 		return result;
 	}
 	

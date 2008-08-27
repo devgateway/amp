@@ -14,6 +14,7 @@ import net.sf.hibernate.Transaction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
@@ -181,7 +182,11 @@ public final class TableWidgetUtil {
 	 */
 	public static FilterItemProvider getFilterItemProvider(AmpDaColumnFilter col){
 		//TODO this may return different providers depending on col.filterItemProvider
-		return new DonorFilter();
+              if (col.getFilterItemProvider().equals(new Long(FilterItemProvider.DONORS_FILTER))) {
+                return new DonorFilter();
+            } else {
+                return new OrgGroupFilter();
+            }
 	}
 	
 	/**
@@ -221,6 +226,45 @@ public final class TableWidgetUtil {
 		}
 		
 	}
+        
+        /**
+	 * private implementation of filter data provider for donors
+         * includes only Bilateral and Multilatera organizations
+	 * 
+	 *
+	 */
+	private static class OrgGroupFilter implements FilterItemProvider{
+		
+		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
+		private List<FilterItem> items = new ArrayList<FilterItem>();
+		
+		@SuppressWarnings("unchecked")
+		public OrgGroupFilter(){
+			Collection<AmpOrgGroup> groups = DbUtil.getAllNonGovOrgGroups();
+			if (groups==null){
+				groups = new ArrayList<AmpOrgGroup>();
+			}
+			for (AmpOrgGroup orgGr : groups) {
+				FilterItem item= new OrgGroupFilterItem(orgGr);
+				items.add(item);
+				itemsById.put(item.getId(), item);
+			}
+			
+		}
+		
+		public FilterItem getItem(Long id) {
+			return itemsById.get(id);
+		}
+
+		public List<FilterItem> getItems() {
+			return items;
+		}
+
+		public Long getId() {
+			return new Long(FilterItemProvider.ORG_GROUPS);
+		}
+		
+	}
 	
 	/**
 	 * item implementation for donor.
@@ -235,6 +279,31 @@ public final class TableWidgetUtil {
 		public DonorFilterItem(AmpOrganisation org){
 			this.id = org.getAmpOrgId();
 			this.name = org.getName();
+		}
+		
+		public Long getId() {
+			return id;
+		}
+
+		public String getName() {
+			return name;
+		}
+		
+	}
+        
+        /**
+	 * item implementation for donor.
+	 * Probably AmpOrganization can implement this, but if there is no conflict with exiting fields.
+	 * 
+	 *
+	 */
+	private static class OrgGroupFilterItem implements FilterItem{
+		private Long id;
+		private String name;
+		
+		public OrgGroupFilterItem(AmpOrgGroup  orgGr){
+			this.id = orgGr.getAmpOrgGrpId();
+			this.name = orgGr.getOrgGrpName();
 		}
 		
 		public Long getId() {

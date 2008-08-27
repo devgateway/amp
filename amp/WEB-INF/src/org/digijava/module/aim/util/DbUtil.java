@@ -2402,7 +2402,26 @@ public class DbUtil {
         }
         return organisation;
     }
+    /*
+     * gets all organisation groups  excluding goverment groups
+     */ 
+   public static Collection<AmpOrgGroup> getAllNonGovOrgGroups() {
+        Session session = null;
+        Query qry = null;
+        Collection<AmpOrgGroup> groups = new ArrayList<AmpOrgGroup>();
 
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select org from " + AmpOrgGroup.class.getName()
+                + " org inner join org.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by org_grp_name asc";
+            qry = session.createQuery(queryString);
+            groups = qry.list();
+        } catch (Exception e) {
+            logger.error("Unable to get all organisation groups");
+            logger.debug("Exceptiion " + e);
+        }
+        return groups;
+    }
     public static void updateIndicator(AmpAhsurveyIndicator ind) {
         AmpAhsurveyIndicator oldInd = new AmpAhsurveyIndicator();
         Session session = null;

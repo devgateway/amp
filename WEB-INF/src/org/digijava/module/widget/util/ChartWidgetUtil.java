@@ -264,7 +264,6 @@ public class ChartWidgetUtil {
 	
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
-        Long clsId=SectorUtil.getPrimaryConfigClassificationId();
 		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
                         " actSec.sectorPercentage, act.ampActivityId,  sum(fd.transactionAmountInUSD)";
 		oql += " from ";
@@ -273,7 +272,7 @@ public class ChartWidgetUtil {
                 oql +=  "   inner join f.ampActivityId act "+
                         " inner join act.sectors actSec "+
                         " inner join actSec.sectorId sec "+
-                        " inner join sec.ampSecSchemeId cls ";
+                        " inner join actSec.classificationConfig config ";
 		
 		
 		oql += " where sec.parentSectorId is null  and fd.transactionType = 0 and fd.adjustmentType = 1 ";
@@ -283,7 +282,7 @@ public class ChartWidgetUtil {
 		if (fromDate != null && toDate != null) {
 			oql += " and (fd.transactionDate between :fDate and  :eDate ) ";
 		}
-                oql +=" and cls.ampSecSchemeId="+clsId;
+                oql +=" and config.name='Primary'";
 		oql += " group by f.ampDonorOrgId, actSec.sectorId,  fd.ampCurrencyId";
 		oql += " order by f.ampDonorOrgId, actSec.sectorId";
 

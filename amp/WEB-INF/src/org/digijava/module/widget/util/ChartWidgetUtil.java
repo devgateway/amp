@@ -242,7 +242,7 @@ public class ChartWidgetUtil {
                          double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
                              Double percent = funding.getFounding() / allFundingWrapper[0];
-                            // the sectors which percent is less then 10% should be group in "Other"
+                            // the sectors which percent is less then 5% should be group in "Other"
                             if (percent > 0.05) {
                                 ds.setValue(funding.getSector().getName(), funding.getFounding());
                             } else {

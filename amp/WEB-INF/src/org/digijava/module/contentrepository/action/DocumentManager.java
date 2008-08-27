@@ -44,8 +44,8 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  */
 public class DocumentManager extends Action {
 	private static Logger logger		= Logger.getLogger(DocumentManager.class);
-	public HttpServletRequest myRequest	= null;
-	DocumentManagerForm myForm			= null;
+	//public HttpServletRequest myRequest	= null;
+	// DocumentManagerForm myForm			= null;
 	//ActionErrors errors					= null;
 	private boolean showOnlyLinks		= false;
 	private boolean showOnlyDocs		= false;
@@ -55,43 +55,43 @@ public class DocumentManager extends Action {
 	{
 		//errors		= new ActionErrors();
 		
-		myForm		= (DocumentManagerForm) form;
+		DocumentManagerForm myForm		= (DocumentManagerForm) form;
 		
-		myRequest	= request;
+		// myRequest	= request;
 		
-		myRequest.setAttribute("ServletContext", this.getServlet().getServletContext() );
+		request.setAttribute("ServletContext", this.getServlet().getServletContext() );
 		
-		if ( myRequest.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
+		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
 			showOnlyDocs 	= true;
 		else
 			showOnlyDocs	= false;
-		if ( myRequest.getParameter(CrConstants.REQUEST_GET_SHOW_LINKS) != null )
+		if ( request.getParameter(CrConstants.REQUEST_GET_SHOW_LINKS) != null )
 			showOnlyLinks 	= true;
 		else
 			showOnlyLinks	= false;
 		
 		if (  myForm.getAjaxDocumentList() ) {
-			ajaxDocumentList();
+			ajaxDocumentList(request, myForm);
 			return mapping.findForward("ajaxDocumentList");
 		}
 		
-		if ( !isLoggeedIn(myRequest) ) {
+		if ( !isLoggeedIn(request) ) {
 			return mapping.findForward("publicView");
 		}
 
-		showContentRepository(request);
+		showContentRepository(request, myForm);
 		
 		//this.saveErrors(request, errors);
 		
 		return mapping.findForward("forward");
 	}
 	
-	private boolean ajaxDocumentList() {
+	private boolean ajaxDocumentList(HttpServletRequest myRequest, DocumentManagerForm myForm) {
 		Session jcrWriteSession			= 	DocumentManagerUtil.getWriteSession(myRequest);
 		if ( !isLoggeedIn(myRequest) || myRequest.getParameter(CrConstants.GET_PUBLIC_DOCUMENTS) != null ) {
 			HashMap<String, CrDocumentNodeAttributes> uuidMap		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);
 			try {
-				Collection<DocumentData> otherDocuments = this.getDocuments( uuidMap.keySet() );
+				Collection<DocumentData> otherDocuments = this.getDocuments( uuidMap.keySet(), myRequest );
 				myForm.setOtherDocuments( otherDocuments );
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -103,7 +103,7 @@ public class DocumentManager extends Action {
 			Collection<DocumentData> tempCol	= TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
 			if (UUIDs != null)
 				try {
-					Collection<DocumentData> documents = this.getDocuments(UUIDs);
+					Collection<DocumentData> documents = this.getDocuments(UUIDs, myRequest);
 					myForm.setOtherDocuments(documents);
 				}catch(Exception e){
 					e.printStackTrace();
@@ -139,18 +139,18 @@ public class DocumentManager extends Action {
 			
 			if (otherTeamMember != null) {
 				Node otherHomeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , otherTeamMember );
-				myForm.setOtherDocuments( this.getDocuments(otherHomeNode) );
+				myForm.setOtherDocuments( this.getDocuments(otherHomeNode, myRequest) );
 			}
 		}
 		if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
 			TeamMember otherTeamLeader			= TeamMemberUtil.getTMTeamHead( myForm.getOtherTeamId() );
 			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, otherTeamLeader);
-			myForm.setOtherDocuments( this.getDocuments(otherHomeNode) );
+			myForm.setOtherDocuments( this.getDocuments(otherHomeNode, myRequest) );
 		}
 		return false;
 	}
 	
-	private boolean showContentRepository(HttpServletRequest request) {
+	private boolean showContentRepository(HttpServletRequest request, DocumentManagerForm myForm) {
 		try {
 			
 			HttpSession	httpSession		= request.getSession();
@@ -170,7 +170,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("private") ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, userHomeNode, false);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, userHomeNode, false);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() )
 							nodeWrapper.saveNode(jcrWriteSession);
 				}
@@ -178,7 +178,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("team") && teamMember.getTeamHead() ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, teamHomeNode , false);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}
@@ -187,15 +187,15 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, vNode , true);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}
 				}
 			}
 			
-			myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode())  );
-			myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode()) );
+			myForm.setMyPersonalDocuments(  this.getPrivateDocuments(teamMember, jcrWriteSession.getRootNode(), request)  );
+			myForm.setMyTeamDocuments( this.getTeamDocuments(teamMember, jcrWriteSession.getRootNode(), request) );
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			
@@ -323,7 +323,7 @@ public class DocumentManager extends Action {
 		
 		return true;
 	}*/
-	private Collection getPrivateDocuments(TeamMember teamMember, Node rootNode) {
+	private Collection getPrivateDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
 		Node userNode;
 		try {
 			//userNode = rootNode.getNode("private/" + teamMember.getTeamId() +  "/" + teamMember.getEmail());
@@ -332,9 +332,9 @@ public class DocumentManager extends Action {
 			e.printStackTrace();
 			return null;
 		}
-		return getDocuments(userNode);
+		return getDocuments(userNode, request);
 	}
-	private Collection getTeamDocuments(TeamMember teamMember, Node rootNode) {
+	private Collection getTeamDocuments(TeamMember teamMember, Node rootNode, HttpServletRequest request) {
 		Node teamNode;
 		try {
 			//teamNode = rootNode.getNode("team/" + teamMember.getTeamId() );
@@ -343,13 +343,13 @@ public class DocumentManager extends Action {
 			e.printStackTrace();
 			return null;
 		}
-		return getDocuments(teamNode);
+		return getDocuments(teamNode, request);
 	}
 	
-	private Collection getDocuments(Node node) {
+	private Collection getDocuments(Node node, HttpServletRequest request) {
 		try {
 			NodeIterator nodeIterator	= node.getNodes();
-			return getDocuments(nodeIterator);
+			return getDocuments(nodeIterator, request);
 		} catch (RepositoryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -359,7 +359,7 @@ public class DocumentManager extends Action {
 				
 	}
 	
-	public Collection<DocumentData> getDocuments(Collection<String> UUIDs) {
+	public Collection<DocumentData> getDocuments(Collection<String> UUIDs, HttpServletRequest myRequest) {
 		ArrayList<Node> documents		= new ArrayList<Node>();
 		Iterator<String> iter			= UUIDs.iterator();
 		while (iter.hasNext()) {
@@ -388,10 +388,10 @@ public class DocumentManager extends Action {
 		}
 		Iterator iterator			= documents.iterator();
 		return 
-				getDocuments(iterator);
+				getDocuments(iterator, myRequest);
 	}
 	
-	private Collection<DocumentData> getDocuments(Iterator nodeIterator) {
+	private Collection<DocumentData> getDocuments(Iterator nodeIterator, HttpServletRequest myRequest) {
 		ArrayList<DocumentData> documents										= new ArrayList<DocumentData>();
 		HashMap<String,CrDocumentNodeAttributes> uuidMapOrg		= CrDocumentNodeAttributes.getPublicDocumentsMap(false);
 		HashMap<String,CrDocumentNodeAttributes> uuidMapVer		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);

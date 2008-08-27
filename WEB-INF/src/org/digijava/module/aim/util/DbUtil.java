@@ -2412,8 +2412,10 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select org from " + AmpOrgGroup.class.getName()
-                + " org inner join org.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by org_grp_name asc";
+            String queryString = "select distinct gr from " + AmpFunding.class.getName()
+                    +" f inner join f.ampDonorOrgId  org "
+                    +" inner join org.orgGrpId gr "
+                + " inner join gr.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by org_grp_name asc";
             qry = session.createQuery(queryString);
             groups = qry.list();
         } catch (Exception e) {

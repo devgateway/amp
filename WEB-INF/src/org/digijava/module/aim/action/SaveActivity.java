@@ -190,7 +190,7 @@ public class SaveActivity extends Action {
             Iterator<DocumentData> docIter			= tempDocs.iterator();
             while ( docIter.hasNext() ) {
             	TemporaryDocumentData tempDoc	= (TemporaryDocumentData) docIter.next();
-            	NodeWrapper nodeWrapper			= tempDoc.saveToRepository(request, eaForm);
+            	NodeWrapper nodeWrapper			= tempDoc.saveToRepository(request, errors);
             	if ( nodeWrapper != null )
             			UUIDs.add( nodeWrapper.getUuid() );
             }

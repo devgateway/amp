@@ -442,6 +442,7 @@ public class AdminTableWidgets extends DispatchAction {
 	 */
 	private void setPlaces(TableWidgetCreationForm form) throws DgException{
 		List<AmpDaWidgetPlace> places = WidgetUtil.getAllPlaces();
+		Collections.sort(places,new org.digijava.module.widget.table.util.TableWidgetUtil.AmpDaWidgetPlaceNameComparator());
 		List<LabelValueBean> placesBeans = new ArrayList<LabelValueBean>();
 		if (places != null){
 			for (AmpDaWidgetPlace place : places) {

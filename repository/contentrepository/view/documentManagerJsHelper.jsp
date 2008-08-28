@@ -857,7 +857,7 @@ function validateAddDocument() {
 	else {
 		var title	= escape(document.forms['crDocumentManagerForm'].docTitle.value);
 		var found	= regexp.exec(title);
-		document.forms['crDocumentManagerForm'].docTitle.value = title;
+		//document.forms['crDocumentManagerForm'].docTitle.value = title;
 		if ( found != title ) {
 			msg = msg + "${translation_validation_title_chars}" ;
 		}
@@ -869,7 +869,7 @@ function validateAddDocument() {
 			document.forms['crDocumentManagerForm'].webLink.value == '')
 		msg = msg + "${translation_validation_url}" ;
 
-	document.forms['crDocumentManagerForm'].docDescription.value = escape(document.forms['crDocumentManagerForm'].docDescription.value);
+	//document.forms['crDocumentManagerForm'].docDescription.value = escape(document.forms['crDocumentManagerForm'].docDescription.value);
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)
 			return true;

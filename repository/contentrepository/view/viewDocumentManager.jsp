@@ -116,7 +116,19 @@ div.fakefile2 input{
 		}
 	}
 
-	
+	function validateAddDocumentLocal(){
+		var ret = false;
+		if(validateAddDocument() == true){
+			hidePanel(0);
+			document.forms['crDocumentManagerForm'].docTitle.value = escape(document.forms['crDocumentManagerForm'].docTitle.value);
+			document.forms['crDocumentManagerForm'].docDescription.value = escape(document.forms['crDocumentManagerForm'].docDescription.value);
+			//document.forms['crDocumentManagerForm'].style.visibility='hidden';
+			//document.getElementById('msgLoading').style.visibility='visible';
+			//alert('asd');
+			ret = true;
+		}
+		return ret;
+	}
 
 </script>
 
@@ -294,7 +306,7 @@ div.fakefile2 input{
 						</tr>
 						<tr>
 							<td align="right">
-								<html:submit styleClass="dr-menu" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
+								<html:submit styleClass="dr-menu" onclick="return validateAddDocumentLocal()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 							</td>
 							<td align="left">
 								&nbsp;<button class="dr-menu" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>

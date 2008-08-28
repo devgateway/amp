@@ -80,8 +80,6 @@ public class GisUtil {
         }
         addDataToImage(g2d, mapData, hilightList,  canvasWidth, canvasHeight,
                        mapLeftX, mapRightX, mapTopY, mapLowY, fill);
-
-
     }
 
     public void addCaptionsToImage(Graphics2D g2d, List mapData,
@@ -282,8 +280,13 @@ public class GisUtil {
 
                     if (fill) {
                         Color gg = fillColor;
-
-                        g2d.setColor(gg);
+                        //TODO: Improve this it's a last minute solution
+                        if (shape.getSegment().getSegmentName().indexOf("Lake")>=0){
+                        	g2d.setColor( new Color(51,153,255));
+            	          
+            			}else{
+            				g2d.setColor(gg);
+            			}
                         g2d.fillPolygon(xCoords, yCoords,
                                         shape.getShapePoints().size());
 

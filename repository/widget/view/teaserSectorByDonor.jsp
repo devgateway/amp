@@ -51,7 +51,7 @@
 //-->
 </script>
 
-<div id="content" class="yui-skin-sam" style="width:100%;">
+<div id="content" class="yui-skin-sam" style="width:100%;z-index: 1;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
     <ul class="yui-nav">
       <li class="selected">

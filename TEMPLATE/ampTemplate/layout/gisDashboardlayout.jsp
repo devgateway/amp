@@ -280,19 +280,19 @@ function setHoveredTable(tableId, hasHeaders) {
                                         
                                             <table>
                                                 <tr>
-                                                    <td>
+                                                    <td valign="top">
                                                         <digi:insert attribute="widget10">
                                                             <digi:put name="widget-teaser-param">table_place1</digi:put>
                                                         </digi:insert>
                                                     </td>
-                                                    <td>
+                                                    <td valign="top">
                                                         <digi:insert attribute="widget11">
                                                             <digi:put name="widget-teaser-param">table_place2</digi:put>
                                                         </digi:insert>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>
+                                                    <td valign="top">
                                                     <br><br>
                                                         <digi:insert attribute="widget12">
                                                             <digi:put name="widget-teaser-param">table_place3</digi:put>
@@ -309,7 +309,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                         </td>
                                     </tr>
 									<tr>
-										<td colspan="2">
+										<td colspan="2" valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:600px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
@@ -338,7 +338,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:600px;">
+                                        <div id="content" class="yui-skin-sam" style="width:700px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
@@ -352,12 +352,12 @@ function setHoveredTable(tableId, hasHeaders) {
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                                             <table>
                                                 <tr>
-                                                    <td>
+                                                    <td valign="top">
                                                         <digi:insert attribute="widget14">
                                                             <digi:put name="widget-teaser-param">table_place5</digi:put>
                                                         </digi:insert>
                                                     </td>
-                                                    <td>
+                                                    <td valign="top">
                                                         <digi:insert attribute="widget15">
                                                             <digi:put name="widget-teaser-param">table_place6</digi:put>
                                                         </digi:insert>

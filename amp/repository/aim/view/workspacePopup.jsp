@@ -28,7 +28,7 @@
 	
 	function initScriptsWorkspaceframe() {
 		//alert('initScriptsWorkspaceframe');
-		var msgP8='\n<digi:trn key="aim:options">Options</digi:trn>';
+		var msgP8='\n<digi:trn key="aim:memberDetails">Member Details</digi:trn>';
 		myPanelWorkspaceframe.setHeader(msgP8);
 		myPanelWorkspaceframe.setBody("The Panel is a powerful UI control");
 		myPanelWorkspaceframe.render(document.body);

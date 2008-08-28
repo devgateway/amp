@@ -265,7 +265,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:800px;">
+                                        <div id="content" class="yui-skin-sam" style="width:900px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
@@ -338,7 +338,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:700px;">
+                                        <div id="content" class="yui-skin-sam" style="width:900px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">

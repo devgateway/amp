@@ -3,11 +3,30 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+
+<%
+String countryName = "";
+String ISO = null;
+java.util.Iterator itr1 = org.digijava.module.aim.util.FeaturesUtil.getDefaultCountryISO().iterator();
+while (itr1.hasNext()) {
+	org.digijava.module.aim.dbentity.AmpGlobalSettings ampG = (org.digijava.module.aim.dbentity.AmpGlobalSettings) itr1.next();
+	ISO = ampG.getGlobalSettingsValue();
+}
+
+if(ISO != null && !ISO.equals("")){
+	org.digijava.kernel.dbentity.Country cntry = org.digijava.module.aim.util.DbUtil.getDgCountry(ISO);
+	countryName = " " + cntry.getCountryName();
+}
+else {
+	countryName = "";
+}
+%>
+
 <HTML>
 	<digi:base />
 	<digi:context name="digiContext" property="context"/>
 	<HEAD>
-		<TITLE><tiles:getAsString name="title"/></TITLE>
+		<TITLE><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></TITLE>
 		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">

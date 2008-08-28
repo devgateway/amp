@@ -41,10 +41,29 @@
 				<AREA TITLE="80-90%" SHAPE=RECT COORDS="560,0,630,20">
 				<AREA TITLE="90-100%" SHAPE=RECT COORDS="630,0,700,20">
 			</MAP>
-
 		</td>
 	</tr>
-	<tr><td colspan="2"><img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif"></td></tr>
+	<tr>
+		<td colspan="2">
+			<span style="font: 6px;margin-top: 2px; font-style: italic">
+				<digi:trn key="gis:minmax:message">
+				Regions with the lowest (MIN) values for the selected indicator are shaded dark green. 
+				Regions with the highest (MAX) value are shaded light green. 
+				For some indicators (such as mortality rates), having the MAX value indicates the lowest performance.
+				</digi:trn>
+			</span>
+			<br>
+			<br>
+			<digi:trn key="gis:datasource:message">
+				Data Source: Dev Info
+			</digi:trn>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif">
+		</td>
+	</tr>
 	<tr>
             <td>
                 <digi:trn key="gis:selectSector">Select Sector</digi:trn>:

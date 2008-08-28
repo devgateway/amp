@@ -22,6 +22,7 @@ import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaValue;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
+import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiCellHeader;
 import org.digijava.module.widget.table.WiCellStandard;
@@ -238,7 +239,6 @@ public final class TableWidgetUtil {
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
 		
-		@SuppressWarnings("unchecked")
 		public OrgGroupFilter(){
 			Collection<AmpOrgGroup> groups = DbUtil.getAllNonGovOrgGroups();
 			if (groups==null){
@@ -392,5 +392,10 @@ public final class TableWidgetUtil {
 		
 	}
 	
+	public static class AmpDaWidgetPlaceNameComparator implements Comparator<AmpDaWidgetPlace>{
+		public int compare(AmpDaWidgetPlace p1, AmpDaWidgetPlace p2) {
+			return p1.getName().compareTo(p2.getName());
+		}
+	}
 	
 }

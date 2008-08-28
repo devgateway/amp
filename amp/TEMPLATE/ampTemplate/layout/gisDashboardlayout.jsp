@@ -36,8 +36,8 @@ else {
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
         <style>
-		.tableElement {
-			border:1px solid red;
+		.tableElement TD {
+			border:1px solid white;
 		}
 		.tableEven {
 			background-color:#dbe5f1;
@@ -93,6 +93,7 @@ function checkTables(){
 	}
 }    
 function applyStyle(table){
+	table.className += " tableElement";
 	setStripsTable(table.id, "tableEven", "tableOdd");
 	setHoveredTable(table.id, true);
 /*	table.parentNode.onpropertychange = function() {
@@ -103,6 +104,9 @@ function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
 	if(tableElement)
 	{
+		tableElement.setAttribute("border","0");
+		tableElement.setAttribute("cellPadding","2");
+		tableElement.setAttribute("cellSpacing","2");
 		rows = tableElement.getElementsByTagName('tr');
 		for(var i = 0, n = rows.length; i < n; ++i) {
 			if(i%2 == 0)
@@ -115,9 +119,6 @@ function setStripsTable(tableId, classOdd, classEven) {
 }
 function setHoveredTable(tableId, hasHeaders) {
 	var tableElement = document.getElementById(tableId);
-	tableElement.setAttribute("border","0");
-	tableElement.setAttribute("cellPadding","2");
-	tableElement.setAttribute("cellSpacing","2");
 	if(tableElement){
 	    var className = 'Hovered',
         pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
@@ -171,7 +172,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                               <li class="selected">
                                                 <a href="#">
                                                 <div>
-                                                  <digi:trn key="gis:milleniumdevelopmentgoals">Millenium Development Goals</digi:trn>
+                                                  <digi:trn key="gis:millenniumdevelopmentgoals">Millennium Development Goals</digi:trn>
                                                 </div>
                                                 </a>
                                               </li>
@@ -264,7 +265,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:100%;">
+                                        <div id="content" class="yui-skin-sam" style="width:800px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
@@ -292,6 +293,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                 </tr>
                                                 <tr>
                                                     <td>
+                                                    <br><br>
                                                         <digi:insert attribute="widget12">
                                                             <digi:put name="widget-teaser-param">table_place3</digi:put>
                                                         </digi:insert>
@@ -308,13 +310,13 @@ function setHoveredTable(tableId, hasHeaders) {
                                     </tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:100%;">
+                                        <div id="content" class="yui-skin-sam" style="width:600px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
                                                 <a href="#">
                                                 <div>
-                                                  <digi:trn key="gis:externalaidresources">External Aid Resources</digi:trn>
+                                                  <digi:trn key="gis:intermediateoutputindicators">Intermediate Output Indicators</digi:trn>
                                                 </div>
                                                 </a>
                                               </li>
@@ -336,13 +338,13 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:100%;">
+                                        <div id="content" class="yui-skin-sam" style="width:240px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
                                                 <a href="#">
                                                 <div>
-                                                  <digi:trn key="gis:totalresources">Total Resources</digi:trn>
+                                                  <digi:trn key="gis:resources">Resources</digi:trn>
                                                 </div>
                                                 </a>
                                               </li>

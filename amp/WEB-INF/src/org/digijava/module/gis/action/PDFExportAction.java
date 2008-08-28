@@ -259,7 +259,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell firstCell = new PdfPCell();
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
-		Paragraph paragraph = new Paragraph("External Aid Resources\n", new Font(
+		Paragraph paragraph = new Paragraph("Intermediate Output Indicators\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -568,7 +568,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell firstCell = new PdfPCell();
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
-		Paragraph paragraph = new Paragraph("Millenium Development Goals\n", new Font(
+		Paragraph paragraph = new Paragraph("Millennium Development Goals\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);

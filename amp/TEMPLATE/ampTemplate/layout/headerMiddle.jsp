@@ -442,7 +442,7 @@ border-right:1px solid white;
                                             </a>
                                         </li>
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do">
+                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do" target="_blank">
                                             <digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>

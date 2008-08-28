@@ -46,31 +46,6 @@
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" height="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
-				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
-					<digi:insert attribute="headerTop" />
-				</TD>
-			</TR>
-			<TR>
-				<TD width="100%" align="center" bgcolor="#376091">
-					<TABLE cellSpacing=0 cellPadding=0 width="98%">
-
-						<TBODY>
-
-						  	<TR>
-
-						   	<TD align="left" vAlign="center">
-
-									<digi:insert attribute="headerMiddle" />
-								</TD>	
-							 	<TD align="right" vAlign="middle" style="padding-right:5px;">
-										<digi:insert attribute="loginWidget" />
-								</TD>
-					</TR>
-						</TBODY>
-					</TABLE>
-				</TD>
-			</TR>
-			<TR>
 				<TD width="100%" vAlign="top" align="left">
 <script language="javascript">
   function exportPDF() {
@@ -374,11 +349,6 @@ function setHoveredTable(tableId, hasHeaders) {
 							</TD>
 						</TR>
 					</TABLE>
-				</TD>
-			</TR>
-			<TR>
-				<TD width="100%" >
-				   <digi:insert attribute="footer" />
 				</TD>
 			</TR>
 			</TBODY>

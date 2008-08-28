@@ -158,6 +158,33 @@ public class WidgetUtil {
 		}
 		
 	}
+
+	/**
+	 * Saves multiple places together in one transaction.
+	 * @param places
+	 * @throws DgException
+	 */
+	public static void savePlaces(List<AmpDaWidgetPlace> places) throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			for (AmpDaWidgetPlace place : places) {
+				session.saveOrUpdate(place);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception e1) {
+					throw new DgException("Cannot rallback Widget places save or update!",e1);
+				}
+			}
+			throw new DgException("Cannot save or update Widget places!",e);
+		}
+		
+	}
 	
 	/**
 	 * Retrieves widget assigned to particular place.
@@ -182,7 +209,7 @@ public class WidgetUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getWidgetPlaces(Long widgetId) throws DgException{
-		List<AmpDaWidgetPlace> places = null;
+		List<AmpDaWidgetPlace> places = new ArrayList<AmpDaWidgetPlace>();
 		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where p.assignedWidget.id =:wid";
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
@@ -204,7 +231,7 @@ public class WidgetUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<AmpDaWidgetPlace> getPlacesWithIDs(Long[] pids) throws DgException{
-		List<AmpDaWidgetPlace> places = null;
+		List<AmpDaWidgetPlace> places = new ArrayList<AmpDaWidgetPlace>(pids.length);
 		String oql = "select p from "+AmpDaWidgetPlace.class.getName()+" as p where (p.id in ( ";
 		for (int i = 0; i < pids.length; i++) {
 			oql+=""+pids[i];

@@ -26,7 +26,6 @@ import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.form.TableWidgetCreationForm;
 import org.digijava.module.widget.table.WiColumn;
-import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
 import org.digijava.module.widget.util.TableWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 import org.digijava.module.widget.util.TableWidgetUtil.ColumnOrderNoComparator;
@@ -207,6 +206,27 @@ public class AdminTableWidgets extends DispatchAction {
 			dbWidget.setId(null);
 		}
 		TableWidgetUtil.saveOrUpdateWidget(dbWidget,deletedColumns);
+		
+		
+		//==PLACES==
+		//first NULL old placess
+		List<AmpDaWidgetPlace> oldPlaces = WidgetUtil.getWidgetPlaces(dbWidget.getId());
+		if (oldPlaces!=null && oldPlaces.size()>0){
+			for (AmpDaWidgetPlace oldPlace : oldPlaces) {
+				oldPlace.setAssignedWidget(null);
+			}
+			WidgetUtil.savePlaces(oldPlaces);
+		}
+		
+		//Then update selected places
+		Long[] selPlaceIDs = wForm.getSelPlaces();
+		if (selPlaceIDs!=null && selPlaceIDs.length>0){
+			List<AmpDaWidgetPlace> selectedPlaces = WidgetUtil.getPlacesWithIDs(selPlaceIDs);
+			for (AmpDaWidgetPlace place : selectedPlaces) {
+				place.setAssignedWidget(dbWidget);
+			}
+			WidgetUtil.savePlaces(selectedPlaces);
+		}
 		
 		stopEditing(request);
 		

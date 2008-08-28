@@ -53,9 +53,9 @@ public class TemporaryDocumentData extends DocumentData {
 		this.formFile = formFile;
 	}
 	
-	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request) {
+	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request, ActionErrors errors) {
 		errorsFound		= false;
-		HashMap errors = new HashMap();
+		//HashMap errors = new HashMap();
 		if ( dmForm.getFileData() != null ) {
 			FormFile formFile	= dmForm.getFileData();
 			if ( DocumentManagerUtil.checkFileSize(formFile, errors) ) {
@@ -71,7 +71,6 @@ public class TemporaryDocumentData extends DocumentData {
 			}
 			else {
 				errorsFound	= true;
-				dmForm.getErrors().putAll(errors);
 			}
 		}
 		
@@ -105,13 +104,13 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setUuid( CrConstants.TEMPORARY_UUID + (list.size()-1) );
 	}
 	
-	public NodeWrapper saveToRepository (HttpServletRequest request, EditActivityForm dmForm) {
+	public NodeWrapper saveToRepository (HttpServletRequest request, ActionErrors errors) {
 		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
 		HttpSession	httpSession		= request.getSession();
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
 		
-		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, dmForm);
+		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
 		
 		if ( !nodeWrapper.isErrorAppeared() ) {
 			if ( nodeWrapper.saveNode(jcrWriteSession) ) {

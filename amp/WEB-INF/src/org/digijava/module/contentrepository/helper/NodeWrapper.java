@@ -14,7 +14,8 @@ import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -38,7 +39,7 @@ public class NodeWrapper {
 	}
 	
 	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,  
-			boolean isANewVersion) {
+			boolean isANewVersion, ActionErrors errors) {
 		
 		FormFile formFile		= myForm.getFileData();
 		
@@ -68,7 +69,7 @@ public class NodeWrapper {
 			}
 			
 			String contentType			= null;
-			HashMap errors = new HashMap();
+			//HashMap errors = new HashMap();
 			if ( isAUrl ){
 				String link				= DocumentManagerUtil.processUrl(myForm.getWebLink(), myForm);
 				if (link != null) {
@@ -97,17 +98,14 @@ public class NodeWrapper {
 			if ( !errorAppeared ) {			
 				populateNode(newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
 					contentType, myForm.getDocType() , teamMember.getEmail() );
-			} else {
-				if (!errors.isEmpty()) {
-					myForm.getErrors().putAll(errors);
-				}				
-			}
+			} 
 			
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			myForm.addError("error.contentrepository.addFile:badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty.");
-			
+			ActionError error	= 
+				new ActionError("error.contentrepository.addFile:badPath");
+			errors.add("title",error);
 			e.printStackTrace();
 			errorAppeared	= true;
 		} 
@@ -119,7 +117,7 @@ public class NodeWrapper {
 	}
 	
 	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,  
-			boolean isANewVersion, EditActivityForm myForm) {
+			boolean isANewVersion, ActionErrors errors) {
 		
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
@@ -158,7 +156,7 @@ public class NodeWrapper {
 			}
 			
 			String contentType			= null;
-			HashMap errors = new HashMap();
+			//HashMap errors = new HashMap();
 			if ( isAUrl ){
 				contentType				= CrConstants.URL_CONTENT_TYPE;
 				newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, tempDoc.getWebLink() );
@@ -181,17 +179,14 @@ public class NodeWrapper {
 			if ( !errorAppeared ) {
 				populateNode(newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
 					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail() );
-			} else {
-				if (!errors.isEmpty()) {
-					myForm.getErrors().putAll(errors);
-				}				
-			}
+			} 
 			
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			myForm.addError("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty."); 
-			
+			ActionError error	= 
+				new ActionError("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty."); 
+			errors.add("title",error);
 			e.printStackTrace();
 			errorAppeared	= true;
 		} 

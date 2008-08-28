@@ -46,7 +46,6 @@ public class DocumentManager extends Action {
 	private static Logger logger		= Logger.getLogger(DocumentManager.class);
 	//public HttpServletRequest myRequest	= null;
 	// DocumentManagerForm myForm			= null;
-	//ActionErrors errors					= null;
 	private boolean showOnlyLinks		= false;
 	private boolean showOnlyDocs		= false;
 
@@ -54,7 +53,7 @@ public class DocumentManager extends Action {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		//errors		= new ActionErrors();
-		
+		ActionErrors errors					= new ActionErrors();
 		DocumentManagerForm myForm		= (DocumentManagerForm) form;
 		
 		// myRequest	= request;
@@ -79,9 +78,9 @@ public class DocumentManager extends Action {
 			return mapping.findForward("publicView");
 		}
 
-		showContentRepository(request, myForm);
+		showContentRepository(request, myForm, errors);
 		
-		//this.saveErrors(request, errors);
+		this.saveErrors(request, errors);
 		
 		return mapping.findForward("forward");
 	}
@@ -150,7 +149,7 @@ public class DocumentManager extends Action {
 		return false;
 	}
 	
-	private boolean showContentRepository(HttpServletRequest request, DocumentManagerForm myForm) {
+	private boolean showContentRepository(HttpServletRequest request, DocumentManagerForm myForm, ActionErrors errors) {
 		try {
 			
 			HttpSession	httpSession		= request.getSession();
@@ -170,7 +169,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("private") ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, userHomeNode, false);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, userHomeNode, false, errors);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() )
 							nodeWrapper.saveNode(jcrWriteSession);
 				}
@@ -178,7 +177,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("team") && teamMember.getTeamHead() ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, teamHomeNode , false, errors);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}
@@ -187,7 +186,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, request, vNode , true, errors);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}

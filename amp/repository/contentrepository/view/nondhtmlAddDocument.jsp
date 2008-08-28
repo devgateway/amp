@@ -302,6 +302,7 @@ div.fakefile2 input{
 				<td align="center" vAlign="top">
 									
 					<span class="error">
+						<digi:errors />
 						<logic:iterate id="element" name="crDocumentManagerForm" property="errors">
 						   <digi:trn key="${element.key}">
 						       <bean:write name="element" property="value"/>

@@ -391,7 +391,7 @@ public class DocumentManagerUtil {
 //	}
 
 	
-	public static boolean checkFileSize(FormFile formFile, HashMap errors) {
+	public static boolean checkFileSize(FormFile formFile, ActionErrors errors) {
 		int maxFileSizeInBytes		= Integer.MAX_VALUE;
 		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
 		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
@@ -400,12 +400,16 @@ public class DocumentManagerUtil {
 				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
 		}
 		if ( formFile.getFileSize() > maxFileSizeInBytes) {
-			errors.put("error.contentrepository.addFile.fileTooLarge", "Error adding new document. The file size is over 2 MB.");
+			errors.add("title",
+					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes)
+					);
 			
 			return false;
 			}
 		if (formFile.getFileSize()<1){
-			errors.put("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty.");
+			errors.add("title", 
+					new ActionError("error.contentrepository.addFile.badPath")
+					);
 			
 			return false;
 		}

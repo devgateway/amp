@@ -6,6 +6,8 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,6 +36,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -165,7 +168,19 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 return null;
 		}else{
 			session.setAttribute("sessionExpired", true);
-			return mapping.findForward("index");
+			response.setContentType("text/html");
+    		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+    		PrintWriter out = new PrintWriter(outputStream, true);
+    		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
+    		String alert = TranslatorWorker.translate("aim:session:expired",locale,siteId);
+    		String script = "<script>opener.close();" 
+    			+ "alert('"+ alert +"');" 
+    			+ "window.location=('"+ url +"');"
+    			+ "</script>";
+    		out.println(script);
+			out.close();	
+			outputStream.close();
+			return null;
 		}
 	}
 

@@ -33,6 +33,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 import java.io.PrintWriter;
 import java.io.OutputStreamWriter;
 import javax.servlet.*;
@@ -175,8 +177,27 @@ public class CSVExportAction
 
     out.close();
 	}else{
+		
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		
+		String siteId=site.getSiteId();
+		String locale=navigationLanguage.getCode();
+		
 		session.setAttribute("sessionExpired", true);
-		return mapping.findForward("index");
+		response.setContentType("text/html");
+		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+		PrintWriter out = new PrintWriter(outputStream, true);
+		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
+		String alert = TranslatorWorker.translate("aim:session:expired",locale,siteId);
+		String script = "<script>opener.close();" 
+			+ "alert('"+ alert +"');" 
+			+ "window.location=('"+ url +"');"
+			+ "</script>";
+		out.println(script);
+		out.close();	
+		outputStream.close();
+		return null;
 	}
     return null;
   }

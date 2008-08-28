@@ -37,6 +37,7 @@
 	
 		function tableCallBack_${gisWidgetTeaserForm.id}(status, statusText, responseText, responseXML){
 			processTableResponce_${gisWidgetTeaserForm.id}(responseText);
+			applyStyle(document.getElementById("tableWidget${gisWidgetTeaserForm.id}"));
 		}
 	
 		function processTableResponce_${gisWidgetTeaserForm.id}(htmlResponce){

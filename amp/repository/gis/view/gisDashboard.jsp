@@ -6,6 +6,19 @@
 
 <digi:instance property="gisDashboardForm"/>
 
+<div id="content" class="yui-skin-sam" style="width:100%;">
+  <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+    <ul class="yui-nav">
+      <li class="selected">
+        <a href="#">
+        <div>
+          <digi:trn key="gis:regionalview">Regional View</digi:trn>
+        </div>
+        </a>
+      </li>
+    </ul>
+    <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+
 <table>
 	<tr>
 		<td colspan="2">
@@ -57,6 +70,9 @@
 		</td>
 	</tr>
 </table>
+    </div>
+  </div>
+</div>   
 
 <div id="tooltipContainer" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #d9ceba; border: 1px solid silver;">
 	<div style="border-top: 1px solid white; border-left: 1px solid white; border-bottom: 1px solid Black; border-right: 1px solid Black;">

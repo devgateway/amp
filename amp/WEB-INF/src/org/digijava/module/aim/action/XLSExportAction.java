@@ -6,6 +6,9 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +40,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -181,8 +185,26 @@ public class XLSExportAction extends Action {
 	    wb.write(response.getOutputStream());
 	    
 		}else{
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+			
+			String siteId=site.getSiteId();
+			String locale=navigationLanguage.getCode();
+			
 			session.setAttribute("sessionExpired", true);
-			return mapping.findForward("index");
+			response.setContentType("text/html");
+    		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
+    		PrintWriter out = new PrintWriter(outputStream, true);
+    		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
+    		String alert = TranslatorWorker.translate("aim:session:expired",locale,siteId);
+    		String script = "<script>opener.close();" 
+    			+ "alert('"+ alert +"');" 
+    			+ "window.location=('"+ url +"');"
+    			+ "</script>";
+    		out.println(script);
+			out.close();	
+			outputStream.close();
+			return null;
 		}
 
 		return null;

@@ -15,6 +15,7 @@
 		<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 	    <digi:ref href="css/new_styles.css" type="text/css" rel="stylesheet" />
         <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+		<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
         <style>
 		.tableElement {
 			border:1px solid red;
@@ -37,6 +38,10 @@
 		}		 
 		.Hovered {
 			background-color:#a5bcf2;
+		}
+		SELECT {
+			Font-size:10px;
+			font-family:Verdana,Arial,Helvetica,sans-serif;
 		}
 		
 		</style>
@@ -123,10 +128,8 @@ function setHoveredTable(tableId, hasHeaders) {
 }
 
 </script>
-<a onClick="exportPDF()" style="Font-size:12px;float:right;clear:both;padding:5px 5px 5px 5px;cursor:pointer;text-decoration:underline;background-color:#CCCCCC;">
-<digi:trn key="gis:exporttopdf">Export to PDF</digi:trn>
-</a>
-<br />
+<jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbar.jsp" />
+
 
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>

@@ -2,7 +2,7 @@
 <site-config>
 	<site-layout>
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
-			<put name="title">GIS Dashboard</put>
+			<put name="title">Results Matrix</put>
 <!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->
 			<put-item name="widget1" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget2" module="widget" instance="default" teaser="teaserOfWidget"/>

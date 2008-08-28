@@ -258,6 +258,12 @@ border-right:1px solid white;
 		selectedLevelId=0; 
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
+
+	function openGIS() {
+		openNewWindowWithMenubar(1000, 600);
+		popupPointer.location.href = "/gis/showGisDashboard.do";
+		
+	}
 	
 	function teamWorkspaceSetup(a) {
 		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
@@ -442,7 +448,7 @@ border-right:1px solid white;
                                             </a>
                                         </li>
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do" target="_blank">
+                                            <a class="yuiampmenuitemlabel" href="javascript:openGIS()">
                                             <digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>

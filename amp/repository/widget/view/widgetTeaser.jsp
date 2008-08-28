@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:instance property="gisWidgetTeaserForm" />
 
@@ -60,7 +61,9 @@
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==1}">
-	<digi:trn key="gis:widgetTeaser:emptyPlace">empty teaser: </digi:trn>&nbsp;${gisWidgetTeaserForm.placeName}
+	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.SHOW_WIDGET_PLACE_NAMES %>" compareWith="true" onTrueEvalBody="true">
+		<digi:trn key="gis:widgetTeaser:emptyPlace">empty teaser: </digi:trn>&nbsp;${gisWidgetTeaserForm.placeName}
+	</gs:test>
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==0}">

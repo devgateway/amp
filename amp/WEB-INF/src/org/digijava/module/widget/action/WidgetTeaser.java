@@ -44,6 +44,10 @@ public class WidgetTeaser extends TilesAction {
 		if (place!= null && place.getAssignedWidget()==null){
 			logger.debug("Rendering empty widget for "+wform.getPlaceName());
 			wform.setRendertype(WidgetUtil.EMPTY);
+//			String gsValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WIDGET_PLACE_NAMES);
+//			if (gsValue!=null){
+//				wform.setShowPlaceInfo(gsValue.trim().equals("true"));
+//			}
 			return null;
 		}
 		//we have widget assigned to teaser place.

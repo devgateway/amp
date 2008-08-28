@@ -32,7 +32,14 @@ public class WidgetTeaserForm extends ActionForm {
 	 * Depending on {@link #rendertype} this is used for table or indicator or chart widget id in teaser JSP.
 	 */
 	private Long id;
+	private boolean showPlaceInfo;
 	
+	public boolean isShowPlaceInfo() {
+		return showPlaceInfo;
+	}
+	public void setShowPlaceInfo(boolean showPlaceInfo) {
+		this.showPlaceInfo = showPlaceInfo;
+	}
 	public AmpWidget getWidget() {
 		return widget;
 	}

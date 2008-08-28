@@ -314,21 +314,22 @@
 	}
 	
 	function showRegionTooltip(regCode) {
-		var mouseEvent = null;
-		document.getElementById("tooltipRegionContainer").innerHTML = regCode;
+		if (regCode.indexOf("Lake")<0){
+			var mouseEvent = null;
+			document.getElementById("tooltipRegionContainer").innerHTML = regCode;
 		
-		document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund + " k";
-		document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund + " k";
-		document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund + " k";
+			document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund + " k";
+			document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund + " k";
+			document.getElementById("tooltipTotalExpenditureContainer").innerHTML = totalExpenditureFund + " k";
 		
-		var regData = getRegFounding(regCode);
+			var regData = getRegFounding(regCode);
 		
-		document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0];
-		document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1];
-		document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2];
+			document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0];
+			document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1];
+			document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2];
 		
-		document.getElementById("tooltipContainer").style.display = "block";
-		
+			document.getElementById("tooltipContainer").style.display = "block";
+		}
 	}
 	
 	function hideRegionTooltip() {

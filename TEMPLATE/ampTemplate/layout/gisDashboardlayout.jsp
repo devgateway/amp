@@ -226,6 +226,11 @@ function setHoveredTable(tableId, hasHeaders) {
 														<digi:img src="images/legend1.jpg"/>
 													</td>
 												</tr>
+                                                                                                <tr>
+                                                                                                    <td colspan="3">
+                                                                                                        <digi:trn key="widget:SourceOfficialgovernmentsources">Source: Official government sources </digi:trn>
+                                                                                                    </td>
+                                                                                                </tr>
 											</table>
                                             </div>
                                           </div>
@@ -262,6 +267,11 @@ function setHoveredTable(tableId, hasHeaders) {
 														<digi:insert attribute="widget9">
 															<digi:put name="widget-teaser-param">atGalnceTable_Place2</digi:put>
 														</digi:insert>
+													</td>
+												</tr>
+                                                                                                <tr>
+													<td>
+													  <digi:trn key="widget:SourceOECD">Source: OECD </digi:trn>
 													</td>
 												</tr>
 											</table>
@@ -309,6 +319,11 @@ function setHoveredTable(tableId, hasHeaders) {
                                                     <td>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>
+                                                        <digi:trn key="widget:SourceParisDeclaration">Source: 2006 Paris Declaration Survey</digi:trn>
+                                                    </td>
+                                                </tr>
                                             </table>
                                             
                                             </div>
@@ -336,6 +351,11 @@ function setHoveredTable(tableId, hasHeaders) {
                                                     <digi:insert attribute="widget13">
                                                         <digi:put name="widget-teaser-param">table_place4</digi:put>
                                                     </digi:insert>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <digi:trn key="widget:SourceOfficialgovernmentsources">Source: Official government sources </digi:trn>
                                                     </td>
                                                 </tr>
                                             </table>

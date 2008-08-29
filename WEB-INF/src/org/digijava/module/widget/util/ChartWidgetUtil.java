@@ -293,7 +293,7 @@ public class ChartWidgetUtil {
                 if(msg!=null){
                    titleMsg=msg.getMessage(); 
                 }
-		String title = (opt.isShowTitle())? titleMsg+" ("+selYear+")":null;
+		String title = (opt.isShowTitle())? titleMsg:null;
 		boolean tooltips = false;
 		boolean urls = false;
 		result = ChartFactory.createPieChart(title, ds, opt.isShowLegend(), tooltips, urls);
@@ -310,6 +310,7 @@ public class ChartWidgetUtil {
 				pattern=opt.getLabelPattern();
 			}
                         DecimalFormat format=FormatHelper.getDecimalFormat();
+                        format.setMaximumFractionDigits(0);
 			PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern,format,new DecimalFormat("0.0%"));
 			plot.setLabelGenerator(gen);
 		}else{
@@ -345,13 +346,13 @@ public class ChartWidgetUtil {
                              Double percent = funding.getFounding() / allFundingWrapper[0];
                             // the sectors which percent is less then 5% should be group in "Other"
                             if (percent > 0.05) {
-                                ds.setValue(funding.getSector().getName(), funding.getFounding());
+                                ds.setValue(funding.getSector().getName(), Math.round(funding.getFounding()));
                             } else {
                                 otherFunfing += funding.getFounding();
                             }
 			}
                         if(otherFunfing!=0){
-                            ds.setValue("Other Sectors", otherFunfing);
+                            ds.setValue("Other Sectors",Math.round(otherFunfing));
                         }		
 		}
 		return ds;

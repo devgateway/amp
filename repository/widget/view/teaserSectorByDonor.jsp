@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
@@ -78,8 +79,8 @@
             <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">
                <digi:trn key='widget:piechart:allAmountinUSDTooltip'>
                    The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>
-            </div>
-            <digi:trn key="widget:piechart:allAmountsinUSD1">All amounts in USD.</digi:trn>
+            </div>  
+                <digi:trn key="widget:piechart:allAmountsin000USD">All amounts in 000s of USD</digi:trn>
             <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
         </td>
     </tr>
@@ -114,6 +115,11 @@
 	<tr>
 		<td colspan="3">
 			<img id="sectorByDonorChartImage" src="/widget/showSectorByDonorChart.do">
+		</td>
+	</tr>
+        <tr>
+		<td colspan="3" align="left">
+                    <digi:trn key="widget:SourceAmpdatabase">Source: Amp database</digi:trn>
 		</td>
 	</tr>
 </table>

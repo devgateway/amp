@@ -81,14 +81,40 @@ else {
   
 	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedYear=" + selectedYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends , 780, 500);
   }
-
-function checkTables(){
+function resizeDivs(){
 	var tables = document.getElementsByTagName("table");
 	var matchingTables = new Array();
 	var currentTable;
 	for(var idx=0;idx < tables.length; idx++){
 		if(tables[idx].id.search("tableWidget") > -1){
-			applyStyle(tables[idx]);
+			//Resize the container
+			table = tables[idx];
+			tempTable = table;
+			var counter = 0;
+		
+			while(tempTable.id != "content" && counter < 10)
+			{
+				if(tempTable.id != "content")
+					tempTable = tempTable.parentNode;
+				counter++;
+			}
+			if(tempTable.id == "content"){
+//				alert("Hola1: " + tempTable.alreadyResized + "table: " + table.id);
+				if(tempTable.style.width == "1000px" || tempTable.alreadyResized )
+				{
+					if(tempTable.alreadyResized == true )
+					{
+						if((table.offsetWidth + 20) > tempTable.style.width)
+							tempTable.style.width = (table.offsetWidth + 20);
+					}
+					else
+					{
+						tempTable.style.width = (table.offsetWidth + 20);
+						tempTable.alreadyResized = true;
+					}
+				}
+				
+			}
 		}
 	}
 }    
@@ -96,9 +122,7 @@ function applyStyle(table){
 	table.className += " tableElement";
 	setStripsTable(table.id, "tableEven", "tableOdd");
 	setHoveredTable(table.id, true);
-/*	table.parentNode.onpropertychange = function() {
-		alert("hola");
-	}*/
+
 }
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
@@ -283,7 +307,7 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:900px;">
+                                        <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
@@ -303,6 +327,8 @@ function setHoveredTable(tableId, hasHeaders) {
                                                             <digi:put name="widget-teaser-param">table_place1</digi:put>
                                                         </digi:insert>
                                                     </td>
+                                                </tr>
+                                                <tr>
                                                     <td valign="top">
                                                         <digi:insert attribute="widget11">
                                                             <digi:put name="widget-teaser-param">table_place2</digi:put>
@@ -333,7 +359,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                     </tr>
 									<tr>
 										<td colspan="2" valign="top">
-                                        <div id="content" class="yui-skin-sam" style="width:600px;">
+                                        <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
@@ -366,13 +392,43 @@ function setHoveredTable(tableId, hasHeaders) {
 									</tr>
 									<tr>
 										<td colspan="2">
-                                        <div id="content" class="yui-skin-sam" style="width:900px;">
+                                        <div id="content" class="yui-skin-sam" style="width:1000px;">
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
                                                 <a href="#">
                                                 <div>
-                                                  <digi:trn key="gis:resources">Resources</digi:trn>
+                                                  <digi:trn key="gis:totalresources">Total resources</digi:trn>
+                                                </div>
+                                                </a>
+                                              </li>
+                                            </ul>
+                                            <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                                            <table>
+                                                <tr>
+                                                    <td valign="top">
+                                                        <digi:insert attribute="widget15">
+                                                            <digi:put name="widget-teaser-param">table_place6</digi:put>
+                                                        </digi:insert>
+                                                        <br>
+                                                        Source: Ministry of Finance <br>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            </div>
+                                            </div>
+                                            </div>
+    									</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+                                        <div id="content" class="yui-skin-sam" style="width:1000px;">
+                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+                                            <ul class="yui-nav">
+                                              <li class="selected">
+                                                <a href="#">
+                                                <div>
+                                                  <digi:trn key="gis:externalaidresources">External Aid Resources</digi:trn>
                                                 </div>
                                                 </a>
                                               </li>
@@ -384,11 +440,8 @@ function setHoveredTable(tableId, hasHeaders) {
                                                         <digi:insert attribute="widget14">
                                                             <digi:put name="widget-teaser-param">table_place5</digi:put>
                                                         </digi:insert>
-                                                    </td>
-                                                    <td valign="top">
-                                                        <digi:insert attribute="widget15">
-                                                            <digi:put name="widget-teaser-param">table_place6</digi:put>
-                                                        </digi:insert>
+                                                        <br>
+                                                        Source: AMP database <br>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -412,6 +465,14 @@ function setHoveredTable(tableId, hasHeaders) {
 			</TR>
 			</TBODY>
 		</TABLE>
+<script language="javascript">
+window.onload = function(){
+	resizeDivs();
+}
+
+
+</script>
+
 	</BODY>
 </HTML>
 

@@ -45,7 +45,7 @@
 	</tr>
 	<tr>
 		<td colspan="2">
-			<span style="font: 6px;margin-top: 2px; font-style: italic">
+			<span>
 				<digi:trn key="gis:minmax:message">
 				Regions with the lowest (MIN) values for the selected indicator are shaded dark green. 
 				Regions with the highest (MAX) value are shaded light green. 

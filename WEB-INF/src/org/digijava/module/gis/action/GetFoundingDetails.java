@@ -279,7 +279,7 @@ public class GetFoundingDetails extends Action {
                     String segmentCode = (String) indData[1];
                     Double indValue = (Double) indData[0];
 
-            //                    if (isRegion(map,segmentCode) && !regSet.contains(segmentCode)) {
+                    if (isRegion(map,segmentCode)) {
 
                     SegmentData indHilightData = new SegmentData();
                     indHilightData.setSegmentCode(segmentCode);
@@ -300,7 +300,7 @@ public class GetFoundingDetails extends Action {
 
             //                        regSet.add(segmentCode);
                     segmentDataList.add(indHilightData);
-            //                    }
+                   }
 
 
                 }
@@ -497,14 +497,14 @@ public class GetFoundingDetails extends Action {
             Float percentsForSectorSelected = (Float)actData[1];
             FundingData totalFunding = getActivityTotalFundingInUSD (activity);
 
-            totalFundingForSector.setCommitment(totalFundingForSector.getCommitment() + totalFunding.getCommitment());
-            totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement() + totalFunding.getDisbursement());
-            totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure() + totalFunding.getExpenditure());
+            totalFundingForSector.setCommitment(totalFundingForSector.getCommitment() + totalFunding.getCommitment().floatValue()*percentsForSectorSelected.floatValue()/100f);
+            totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement() + totalFunding.getDisbursement().floatValue()*percentsForSectorSelected.floatValue()/100f);
+            totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure() + totalFunding.getExpenditure().floatValue()*percentsForSectorSelected.floatValue()/100f);
 
 
             FundingData fundingForSector = new FundingData();
-            fundingForSector.setDisbursement(new Double(totalFunding.getCommitment().floatValue()*percentsForSectorSelected.floatValue()/100f));
-            fundingForSector.setCommitment(new Double(totalFunding.getDisbursement().floatValue()*percentsForSectorSelected.floatValue()/100f));
+            fundingForSector.setCommitment(new Double(totalFunding.getCommitment().floatValue()*percentsForSectorSelected.floatValue()/100f));
+            fundingForSector.setDisbursement(new Double(totalFunding.getDisbursement().floatValue()*percentsForSectorSelected.floatValue()/100f));
             fundingForSector.setExpenditure(new Double(totalFunding.getExpenditure().floatValue()*percentsForSectorSelected.floatValue()/100f));
 
             Set locations = activity.getLocations();
@@ -513,7 +513,7 @@ public class GetFoundingDetails extends Action {
 
             while (locIt.hasNext()) {
                 AmpActivityLocation loc = locIt.next();
-                if (loc.getLocation().getAmpRegion() != null) {
+                if (loc.getLocation().getAmpRegion() != null && loc.getLocationPercentage().floatValue() > 0.0f) {
                     String regCode = loc.getLocation().getAmpRegion().getName();
                     if (locationFundingMap.containsKey(regCode)) {
                         FundingData existingVal = (FundingData)locationFundingMap.get(regCode);

@@ -73,13 +73,37 @@ else {
 				<TD width="100%" vAlign="top" align="left">
 <script language="javascript">
   function exportPDF() {
+  
+  	var divs = document.getElementsByTagName("select");
+	var matchingDivs = new Array();
+	var currentDiv;
+	var tableId = "-1";
+	var columnId = "-1";
+	var itemId = "-1";
+	var columnquerystring="";
+
+	for(var idx=0;idx < divs.length; idx++){
+		if(divs[idx].id.search("tableWidgetDropDown") > -1){
+			var tableId;//20
+			var columnId;//59
+			var itemId;//15
+			tableId = divs[idx].getAttribute("idtable");
+			columnId = divs[idx].getAttribute("idcolumn");
+			itemId = divs[idx].value;
+			columnquerystring = "&tableId="+tableId+"&columnId="+columnId+"&itemId="+itemId;
+		}
+	}
+
 	var selectedDonor = document.getElementsByName("selectedDonor")[0].value;
 	var selectedYear = document.getElementsByName("selectedYear")[0].value;
 	var showLabels = document.getElementsByName("showLabels")[0].checked;
 	var showLegends = document.getElementsByName("showLegends")[0].checked;
-	
+
+
+	var sectorId =  document.getElementById("sectorsMapCombo").value;
+	var indicatorId = document.getElementById("indicatorsCombo").value;	
   
-	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedYear=" + selectedYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends , 780, 500);
+	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedYear=" + selectedYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring, 780, 500);
   }
 function resizeDivs(){
 	var tables = document.getElementsByTagName("table");

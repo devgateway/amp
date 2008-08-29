@@ -119,7 +119,7 @@
 	</tr>
         <tr>
 		<td colspan="3" align="left">
-                    <digi:trn key="widget:SourceAmpdatabase">Source: Amp database</digi:trn>
+                    <digi:trn key="widget:SourceAmpdatabase">Source: AMP database</digi:trn>
 		</td>
 	</tr>
 </table>

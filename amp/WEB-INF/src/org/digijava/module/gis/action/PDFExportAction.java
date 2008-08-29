@@ -7,13 +7,20 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -31,15 +38,29 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.action.PDFExportAction;
 import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.gis.dbentity.GisMapSegment;
+import org.digijava.module.gis.util.ColorRGB;
 import org.digijava.module.gis.util.CoordinateRect;
+import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.gis.util.GisUtil;
+import org.digijava.module.gis.util.HilightData;
+import org.digijava.module.gis.util.SegmentData;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
@@ -48,6 +69,7 @@ import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiRow;
 import org.digijava.module.widget.table.WiTable;
+import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
 import org.digijava.module.widget.util.ChartWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 import org.jfree.chart.ChartRenderingInfo;
@@ -88,6 +110,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 	private PdfPTable contenTable;
 	private HttpServletResponse response;
+	
+	private Long tableId = null;
+	private Long columnId = null;
+	private Long itemId = null;
 
 	public PDFExportAction(HttpSession session, String locale, Site site,
 			HttpServletResponse response) {
@@ -152,8 +178,52 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				selectedDonor, selectedYear, showLegends, showLabels);
 		Image imgChart = Image.getInstance(outChartByteArray.toByteArray());
 
+		Long secId = null;
+		Long indId = null;
+		if (request.getParameter("sectorId") != null
+				&& !request.getParameter("sectorId").equals("-1")) {
+			secId = Long.parseLong(request
+					.getParameter("sectorId"));
+		}
+		if (request.getParameter("indicatorId") != null
+				&& !request.getParameter("indicatorId").equals("-1")) {
+			indId = Long.parseLong(request
+					.getParameter("indicatorId"));
+		}
+
+		if (request.getParameter("tableId") != null
+				&& !request.getParameter("tableId").equals("-1")) {
+			this.tableId = Long.parseLong(request
+					.getParameter("tableId"));
+		}
+		if (request.getParameter("columnId") != null
+				&& !request.getParameter("columnId").equals("-1")) {
+			this.columnId = Long.parseLong(request
+					.getParameter("columnId"));
+		}
+		if (request.getParameter("itemId") != null
+				&& !request.getParameter("itemId").equals("-1")) {
+			this.itemId = Long.parseLong(request
+					.getParameter("itemId"));
+		}
+		
+		
+		//Check for sector and indicator
+		ByteArrayOutputStream outMapByteArray;
+		String indicatorName = "None";
+		String sectorName = "None";
+		if(secId != null && indId != null){
+			AmpIndicator indicator = IndicatorUtil.getIndicator(indId);
+			indicatorName = indicator.getName();
+			sectorName = SectorUtil.getAmpSector(secId).getName();
+			outMapByteArray = getMapImageSectorIndicator("TZA", secId, indId);
+		}
+		else
+		{
+			outMapByteArray = getMapImage("TZA"); // TODO:
+		}
+		
 		// Get the Map Image
-		ByteArrayOutputStream outMapByteArray = getMapImage("TZA"); // TODO:
 		// GIS, this
 		// should
 		// come
@@ -167,7 +237,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		imagesTable.setWidthPercentage(100);
 		imagesTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
-		imagesTable.addCell(getImageMap(imgMap));
+		imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName));
 		imagesTable.addCell(getImageChart(imgChart));
 //		imagesTable.addCell(" ");
 
@@ -602,7 +672,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
-	private PdfPTable getImageMap(Image imgMap) {
+	private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName) {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 		
@@ -651,6 +721,35 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.addElement(imgMap);
 		generalBox.addCell(layoutCell);
 
+		PdfPCell textCell = new PdfPCell();
+		textCell.setPadding(2);
+		textCell.setBackgroundColor(new Color(206,226,251));
+		textCell.addElement(new Paragraph("Regions with the lowest (MIN) values for the selected indicator are shaded dark green. Regions with the highest (MAX) value are shaded light green. For some indicators (such as mortality rates), having the MAX value indicates the lowest performance.\nSelected sector: " + sectorName + "\nSelected Indicator: " + indicatorName + "\n\nData Source: Dev Info ", new Font(Font.HELVETICA, 6)));
+		PdfPCell legendCell = new PdfPCell();		
+		legendCell.setPadding(0);
+		legendCell.setBorder(Rectangle.NO_BORDER);
+		try {
+			Image image = Image.getInstance(this.getServlet().getServletContext().getRealPath("/repository/gis/view/images/fundingLegend.png"));
+//			image.scaleAbsoluteWidth(320f);
+			image.setAlignment(Image.ALIGN_RIGHT);
+//			image.scaleAbsoluteHeight(20f);
+			legendCell.addElement(image);
+		} catch (BadElementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		generalBox.addCell(legendCell);
+		generalBox.addCell(textCell);
+		
+		
 		
 		return generalBox;
 	}
@@ -904,7 +1003,23 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				return null;
 
 			WiTable table = new WiTable.TableBuilder(widget.getId()).build();
-
+			WiColumnDropDownFilter filter = null;
+			if(this.tableId.equals(table.getId()))
+			{
+				table = new WiTable.TableBuilder(tableId).build();
+				if (columnId!=null && itemId!=null && columnId.longValue()>0 && itemId.longValue()>0){
+					filter = (WiColumnDropDownFilter) table.getColumnById(columnId);
+					//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
+					if (filter!=null){
+						filter.setActiveItemId(itemId);
+					}
+				}
+//				String html = table.generateHtml();	
+//				OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
+//				PrintWriter out = new PrintWriter(outputStream, true);
+//				out.println(html);
+//				response.getOutputStream().close();
+			}
 			List<WiColumn> columns = table.getColumns();
 			List<WiRow> rows = table.getDataRows();
 
@@ -919,7 +1034,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			fontCell.setSize(4);
 
 			for (WiColumn column : columns) {
-				PdfPCell cell = new PdfPCell(new Phrase(column.getName(),
+				String columnName = "";
+				if(filter != null && column.getId() == filter.getId())
+					column = filter;
+				
+				if (column instanceof WiColumnDropDownFilter)
+					columnName = filter.getProvider().getItem(filter.getActiveItemId()).getName();
+				else
+					columnName = column.getName();
+					
+				PdfPCell cell = new PdfPCell(new Phrase(columnName,
 						fontHeader));
 				cell.setBackgroundColor(new Color(34, 46, 93));
 
@@ -953,7 +1077,127 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		return null;
 	}
+	private ByteArrayOutputStream getMapImageSectorIndicator(String mapCode, Long secId, Long indId) throws Exception {
+		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
+		GisMap map = null;
+
+		if (mapCode != null && mapCode.trim().length() > 0) {
+			map = GisUtil.getMap(mapCode);
+		}
+
+        //Get segments with funding for dashed paint map
+        List secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId);
+        
+        Iterator it = secFundings.iterator();
+
+        Object [] fundingList = getFundingsByLocations(secFundings);
+        Map fundingLocationMap = (Map) fundingList[0];
+
+        List segmentDataDasheList = new ArrayList();
+
+        Iterator locFoundingMapIt = fundingLocationMap.keySet().iterator();
+        while (locFoundingMapIt.hasNext()) {
+            String key = (String) locFoundingMapIt.next();
+            org.digijava.module.gis.util.SegmentData segmentData = new SegmentData();
+            segmentData.setSegmentCode(key);
+            segmentData.setSegmentValue("100");
+            segmentDataDasheList.add(segmentData);
+        }
+
+        List hilightDashData = prepareDashSegments(segmentDataDasheList,
+                new ColorRGB(0, 0, 0), map);
+
+        List inds = org.digijava.module.gis.util.DbUtil.getIndicatorValuesForSectorIndicator(secId, indId);
+
+        List segmentDataList = new ArrayList();
+        Iterator indsIt = inds.iterator();
+        Double min = null;
+        Double max = null;
+
+        Set regSet = new HashSet();
+
+        while (indsIt.hasNext()) {
+            Object[] indData = (Object[]) indsIt.next();
+
+            String segmentCode = (String) indData[1];
+            Double indValue = (Double) indData[0];
+
+            if (isRegion(map,segmentCode)) {
+
+            SegmentData indHilightData = new SegmentData();
+            indHilightData.setSegmentCode(segmentCode);
+            indHilightData.setSegmentValue(indValue.toString());
+
+            if (min == null) {
+                min = indValue;
+                max = indValue;
+            }
+
+            if (indValue < min) {
+                min = indValue;
+            }
+
+            if (indValue > max) {
+                max = indValue;
+            }
+
+    //                        regSet.add(segmentCode);
+            segmentDataList.add(indHilightData);
+           }
+
+
+        }
+
+        if (min == null) {
+            min = new Double(0);
+            max = new Double(0);
+        }
+
+        List hilightData = prepareHilightSegments(segmentDataList, map, min, max);
+
+        int canvasWidth = 700;
+		int canvasHeight = 700;
+
+        BufferedImage graph = new BufferedImage(canvasWidth, canvasHeight,
+                                                BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = graph.createGraphics();
+
+        g2d.setBackground(new Color(0, 0, 100, 255));
+
+        g2d.clearRect(0, 0, canvasWidth, canvasHeight);
+		GisUtil gisUtil = new GisUtil();
+		CoordinateRect rect = gisUtil.getMapRect(map);
+        gisUtil.addDataToImage(g2d,
+                               map.getSegments(),
+                               hilightData,
+                               hilightDashData,
+                               canvasWidth, canvasHeight,
+                               rect.getLeft(), rect.getRight(),
+                               rect.getTop(), rect.getBottom(), true);
+
+        gisUtil.addCaptionsToImage(g2d,
+                                   map.getSegments(),
+                                   canvasWidth, canvasHeight,
+                                   rect.getLeft(), rect.getRight(),
+                                   rect.getTop(), rect.getBottom());
+
+        g2d.dispose();
+
+        RenderedImage ri = graph;
+
+		try {
+			ImageIO.write(ri, "png", outByteStream);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		graph.flush();
+
+		return outByteStream;
+	}
 	private ByteArrayOutputStream getMapImage(String mapCode) {
 		GisUtil gisUtil = new GisUtil();
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
@@ -1197,4 +1441,197 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 //			cb.curveTo(x, y + r * b, x + r * b, y, x + r, y);
 		}
 	}
+
+    private Object[] getFundingsByLocations (List activityList) throws Exception {
+
+        Map locationFundingMap = new HashMap();
+        FundingData totalFundingForSector = new FundingData();
+        //Calculate total funding
+        Iterator<Object[]> actIt = activityList.iterator();
+        while (actIt.hasNext()) {
+            Object[] actData = actIt.next();
+            AmpActivity activity = (AmpActivity) actData[0];
+            Float percentsForSectorSelected = (Float)actData[1];
+            FundingData totalFunding = getActivityTotalFundingInUSD (activity);
+
+            totalFundingForSector.setCommitment(totalFundingForSector.getCommitment() + totalFunding.getCommitment().floatValue()*percentsForSectorSelected.floatValue()/100f);
+            totalFundingForSector.setDisbursement(totalFundingForSector.getDisbursement() + totalFunding.getDisbursement().floatValue()*percentsForSectorSelected.floatValue()/100f);
+            totalFundingForSector.setExpenditure(totalFundingForSector.getExpenditure() + totalFunding.getExpenditure().floatValue()*percentsForSectorSelected.floatValue()/100f);
+
+
+            FundingData fundingForSector = new FundingData();
+            fundingForSector.setCommitment(new Double(totalFunding.getCommitment().floatValue()*percentsForSectorSelected.floatValue()/100f));
+            fundingForSector.setDisbursement(new Double(totalFunding.getDisbursement().floatValue()*percentsForSectorSelected.floatValue()/100f));
+            fundingForSector.setExpenditure(new Double(totalFunding.getExpenditure().floatValue()*percentsForSectorSelected.floatValue()/100f));
+
+            Set locations = activity.getLocations();
+            Iterator <AmpActivityLocation> locIt = locations.iterator();
+
+
+            while (locIt.hasNext()) {
+                AmpActivityLocation loc = locIt.next();
+                if (loc.getLocation().getAmpRegion() != null && loc.getLocationPercentage().floatValue() > 0.0f) {
+                    String regCode = loc.getLocation().getAmpRegion().getName();
+                    if (locationFundingMap.containsKey(regCode)) {
+                        FundingData existingVal = (FundingData)locationFundingMap.get(regCode);
+
+                        FundingData newVal = new FundingData();
+                        newVal.setCommitment(new Double(existingVal.getCommitment() + fundingForSector.getCommitment().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setDisbursement(new Double(existingVal.getDisbursement() + fundingForSector.getDisbursement().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setExpenditure(new Double(existingVal.getExpenditure() + fundingForSector.getExpenditure().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+
+                        locationFundingMap.put(regCode, newVal);
+                    } else {
+                        FundingData newVal = new FundingData();
+                        newVal.setCommitment(new Double(fundingForSector.getCommitment().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setDisbursement(new Double(fundingForSector.getDisbursement().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+                        newVal.setExpenditure(new Double(fundingForSector.getExpenditure().floatValue() * loc.getLocationPercentage().floatValue() / 100f));
+
+                        locationFundingMap.put(regCode, newVal);
+                    }
+                }
+            }
+
+        //    Set activiactivity.getFunding();
+        }
+        Object[] retVal = new Object[2];
+        retVal[0] = locationFundingMap;
+        retVal[1] = totalFundingForSector;
+        return retVal;
+    }
+    private List prepareDashSegments(List segmentData, ColorRGB dashColor, GisMap map) {
+        List retVal = new ArrayList();
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            for (int idx = (int) 0; idx < segmentData.size(); idx++) {
+                SegmentData sd = (SegmentData) segmentData.get(idx);
+                if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
+                    HilightData hData = new HilightData();
+                    hData.setSegmentId((int) segment.getSegmentId());
+                    hData.setColor(dashColor);
+                    retVal.add(hData);
+                }
+            }
+        }
+        return retVal;
+    }
+
+    private boolean isRegion (GisMap map, String regCode) {
+        boolean retVal = false;
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            if (segment.getSegmentCode().equalsIgnoreCase(regCode)) {
+                retVal = true;
+                break;
+            }
+        }
+
+        return retVal;
+    }
+
+
+    private List prepareHilightSegments(List segmentData, GisMap map, Double min, Double max) {
+
+        float delta = max.floatValue() - min.floatValue();
+        float coeff = 205/delta;
+
+        List retVal = new ArrayList();
+        Iterator it = map.getSegments().iterator();
+
+        while (it.hasNext()) {
+            GisMapSegment segment = (GisMapSegment) it.next();
+            for (int idx = (int) 0; idx < segmentData.size(); idx++) {
+                SegmentData sd = (SegmentData) segmentData.get(idx);
+                if (sd.getSegmentCode().equalsIgnoreCase(segment.getSegmentCode())) {
+                    HilightData hData = new HilightData();
+                    hData.setSegmentId((int) segment.getSegmentId());
+                    float green = (Float.parseFloat(sd.getSegmentValue()) - min.floatValue()) * coeff;
+                    hData.setColor(new ColorRGB((int) 0,
+                                                (int) (green + 50f), 0));
+                    retVal.add(hData);
+                }
+            }
+        }
+        return retVal;
+    }
+
+    private FundingData getActivityTotalFundingInUSD(AmpActivity activity) {
+        FundingData retVal = null;
+        Set fundSet = activity.getFunding();
+        Iterator <AmpFunding> fundIt = fundSet.iterator();
+
+        Double commitment = new Double (0);
+        Double disbursement = new Double (0);
+        Double expenditure = new Double (0);
+
+        try {
+            while (fundIt.hasNext()) {
+                AmpFunding fund = fundIt.next();
+                Set fundDetaiuls = fund.getFundingDetails();
+                Iterator<AmpFundingDetail> fundDetIt = fundDetaiuls.iterator();
+                while (fundDetIt.hasNext()) {
+                    AmpFundingDetail fundDet = fundDetIt.next();
+                    Double exchangeRate = null;
+                    /*
+                    try {
+
+                        exchangeRate = CurrencyUtil.getLatestExchangeRate(
+                                fundDet.getAmpCurrencyId().getCurrencyCode());
+
+                    } catch (AimException ex) {
+                        //Add exception reporting
+                    }
+                    */
+                    exchangeRate = fundDet.getFixedExchangeRate();
+
+
+                    /*
+                    switch (fundDet.getTransactionType().intValue()) {
+                    case Constants.COMMITMENT:
+                        commitment += fundDet.getTransactionAmount() /
+                                exchangeRate;
+                        break;
+
+                    case Constants.DISBURSEMENT:
+                        disbursement += fundDet.getTransactionAmount() /
+                                exchangeRate;
+                        break;
+
+                    case Constants.EXPENDITURE:
+                        expenditure += fundDet.getTransactionAmount() /
+                                exchangeRate;
+                        break;
+                    }
+                    */
+
+                   if (fundDet.getTransactionType().intValue() ==
+                       Constants.COMMITMENT) {
+                       commitment += fundDet.getTransactionAmount() /
+                               exchangeRate;
+                   } else if (fundDet.getTransactionType().intValue() ==
+                              Constants.DISBURSEMENT) {
+                       disbursement += fundDet.getTransactionAmount() /
+                               exchangeRate;
+                   } else if (fundDet.getTransactionType().intValue() ==
+                              Constants.EXPENDITURE) {
+                       expenditure += fundDet.getTransactionAmount() /
+                               exchangeRate;
+                   }
+
+                }
+            }
+        } catch (Exception ex1) {
+            String ggg="gadfg";
+            //Add exception reporting
+        }
+
+        retVal = new FundingData(commitment, disbursement, expenditure);
+
+        return retVal;
+    }
+
 }

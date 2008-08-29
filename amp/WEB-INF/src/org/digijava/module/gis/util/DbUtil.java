@@ -193,7 +193,7 @@ public class DbUtil {
            session = PersistenceManager.getRequestDBSession();
            Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from ds in class " +
                                          IndicatorSector.class.getName() +
-                                         " where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId");
+                                         " where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
            retVal = q.list();
        } catch (Exception ex) {

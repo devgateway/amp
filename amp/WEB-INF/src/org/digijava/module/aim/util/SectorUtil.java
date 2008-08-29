@@ -1015,7 +1015,7 @@ public class SectorUtil {
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select pi from "+AmpSector.class.getName()+" pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null";
+			queryString ="select pi from "+AmpSector.class.getName()+" pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null order by pi.name ";
 			qry = session.createQuery(queryString);
 			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
 			col = qry.list();

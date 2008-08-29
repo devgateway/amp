@@ -365,7 +365,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                               <li class="selected">
                                                 <a href="#">
                                                 <div>
-                                                  <digi:trn key="gis:intermediateoutputindicators">Intermediate Output Indicators</digi:trn>
+                                                  <digi:trn key="gis:outputindicators">Output Indicators</digi:trn>
                                                 </div>
                                                 </a>
                                               </li>

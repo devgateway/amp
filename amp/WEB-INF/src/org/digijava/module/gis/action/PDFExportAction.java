@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -107,7 +108,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		// for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
-
+		
 		String siteId = site.getSiteId();
 		String locale = navigationLanguage.getCode();
 
@@ -183,18 +184,24 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutTable1.addCell(mdgsBox);
 		layoutTable1.addCell(resourcesBox);
 		
+		layoutTable1.addCell(" ");
+		layoutTable1.addCell(" ");
 
 		PdfPTable aeProcessIndicatorBox = getAEPIBox();
 		PdfPCell tempCell = new PdfPCell(aeProcessIndicatorBox);
 		tempCell.setColspan(2);
 		layoutTable1.addCell(tempCell);
+
+		layoutTable1.addCell(" ");
+		layoutTable1.addCell(" ");
 		
-		PdfPTable EAResourcesBox = getEAResourcesBox();
-		tempCell = new PdfPCell(EAResourcesBox);
+		PdfPTable IOBox = getIntermediateOutputBox();
+		tempCell = new PdfPCell(IOBox);
 		tempCell.setColspan(2);
 		tempCell.setBorder(Rectangle.NO_BORDER);
 		tempCell.setPaddingBottom(10);
 		layoutTable1.addCell(tempCell);
+
 
 		PdfPTable totalResourcesBox = getTotalResourcesBox();
 		tempCell = new PdfPCell(totalResourcesBox);
@@ -202,6 +209,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		tempCell.setBorder(Rectangle.NO_BORDER);
 		layoutTable1.addCell(tempCell);
 
+		layoutTable1.addCell(" ");
+		layoutTable1.addCell(" ");
+
+		PdfPTable EAResourcesBox = getEAResourcesBox();
+		tempCell = new PdfPCell(EAResourcesBox);
+		tempCell.setColspan(2);
+		tempCell.setBorder(Rectangle.NO_BORDER);
+		tempCell.setPaddingBottom(10);
+		layoutTable1.addCell(tempCell);
+		
 		document.open();
 		String countryName = "";
         String ISO = null;
@@ -242,7 +259,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return null;
 	}
 	
-	private PdfPTable getEAResourcesBox() {
+	private PdfPTable getIntermediateOutputBox() {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 		
@@ -259,7 +276,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell firstCell = new PdfPCell();
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
-		Paragraph paragraph = new Paragraph("Intermediate Output Indicators\n", new Font(
+		Paragraph paragraph = new Paragraph("Output Indicators\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
@@ -296,11 +313,14 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutExAidResources.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		layoutExAidResources.setWidthPercentage(100);
 
-		PdfPTable table1ExAidResources = getWidgetTable("table_place6");
+		PdfPTable table1ExAidResources = getWidgetTable("table_place4");
 		layoutExAidResources.addCell(table1ExAidResources);
 
 		layoutExAidResources.addCell(" ");
-		
+		layoutExAidResources.addCell(new Paragraph("Source: Official government sources", new Font(Font.HELVETICA, 6)));
+
+		layoutExAidResources.addCell(" ");
+			
 		layoutCell.addElement(layoutExAidResources);
 		generalBox.addCell(layoutCell);
 
@@ -362,14 +382,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				layoutTotalResourcesWidths);
 		layoutTotalResources.setWidthPercentage(100);
 		layoutTotalResources.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-		PdfPTable tableTotalResources1 = getWidgetTable("table_place4");
+		PdfPTable tableTotalResources1 = getWidgetTable("table_place6");
 		layoutTotalResources.addCell(tableTotalResources1);
 //		PdfPTable tableTotalResources2 = getWidgetTable("table_place6");
 //		layoutTotalResources.addCell(tableTotalResources2);
+		layoutTotalResources.addCell(new Paragraph("Source: Ministry of Finance", new Font(Font.HELVETICA, 6)));
 		
 		layoutCell.addElement(layoutTotalResources);
 		generalBox.addCell(layoutCell);
-
+		
 		
 		return generalBox;
 	}
@@ -411,14 +432,15 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		//add the full header cell to the general layout of the box
 		generalBox.addCell(headerCell);
 		PdfPCell lineCell = new PdfPCell();
+		lineCell.setPadding(0);
 		lineCell.setBorder(Rectangle.NO_BORDER);
 		lineCell.setBackgroundColor(new Color(34, 46, 93));
-		lineCell.setPadding(0);
 		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
 		generalBox.addCell(lineCell);
 		//Work the layout
 		PdfPCell layoutCell = new PdfPCell();
-		layoutCell.setPadding(2);
+		layoutCell.setPadding(0);
+		lineCell.setBorder(Rectangle.NO_BORDER);
 		layoutCell.setBackgroundColor(new Color(206,226,251));
 
 		float[] layoutAEIndicatorsWidths = { 1f, 1f };
@@ -431,12 +453,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutAEIndicators.addCell(table1AEIndicators);
 		layoutAEIndicators.addCell(table2AEIndicators);
+		layoutAEIndicators.addCell(new Paragraph("Source: 2006 Paris Declaration Survey", new Font(Font.HELVETICA, 6))); 
+		layoutAEIndicators.addCell(" "); 
 		
 		
 		
 		layoutCell.addElement(layoutAEIndicators);
 
-		
 		
 		generalBox.addCell(layoutCell);
 
@@ -444,6 +467,74 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 
+	private PdfPTable getEAResourcesBox() {
+		PdfPTable generalBox = new PdfPTable(1);
+		generalBox.setWidthPercentage(100f);
+		
+		//Work the header
+		PdfPCell headerCell = new PdfPCell();
+		headerCell.setPadding(0);
+		headerCell.setBorder(Rectangle.NO_BORDER);
+		
+		float[] widths = {1f,3f};
+		PdfPTable headerTable = new PdfPTable(widths);
+		headerTable.setWidthPercentage(100f);
+		//Get the first cell, with the rounded edges and the text
+		RoundRectangle border = new RoundRectangle();
+		PdfPCell firstCell = new PdfPCell();
+		firstCell.setPadding(0);
+		firstCell.setBorder(Rectangle.NO_BORDER);
+		Paragraph paragraph = new Paragraph("External Aid Resources\n", new Font(
+				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
+		paragraph.setAlignment(Element.ALIGN_CENTER);
+		firstCell.setCellEvent(border);
+		firstCell.addElement(paragraph);
+		
+		PdfPCell secondCell = new PdfPCell();
+		secondCell.setPadding(0);
+		secondCell.setBorder(Rectangle.NO_BORDER);
+		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
+
+		//Add rounded tab
+		headerTable.addCell(firstCell);
+		//Add empty space
+		headerTable.addCell(secondCell);
+
+		//add the table with the rounded tab and the empty space to the cell
+		headerCell.addElement(headerTable);
+		//add the full header cell to the general layout of the box
+		generalBox.addCell(headerCell);
+		PdfPCell lineCell = new PdfPCell();
+		lineCell.setBorder(Rectangle.NO_BORDER);
+		lineCell.setBackgroundColor(new Color(34, 46, 93));
+		lineCell.setPadding(0);
+		lineCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 1f)));
+		generalBox.addCell(lineCell);
+		//Work the layout
+		PdfPCell layoutCell = new PdfPCell();
+		layoutCell.setPadding(2);
+		layoutCell.setBackgroundColor(new Color(206,226,251));
+
+		float[] layoutExAidResourcesWidths = { 1f, 1f };
+		PdfPTable layoutExAidResources = new PdfPTable(layoutExAidResourcesWidths);
+		layoutExAidResources.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		layoutExAidResources.setWidthPercentage(100);
+
+		PdfPTable table1ExAidResources = getWidgetTable("table_place5");
+		layoutExAidResources.addCell(table1ExAidResources);
+
+		layoutExAidResources.addCell(" ");
+		layoutExAidResources.addCell(new Paragraph("Source: AMP database", new Font(Font.HELVETICA, 6)));
+
+		layoutExAidResources.addCell(" ");
+			
+		layoutCell.addElement(layoutExAidResources);
+		generalBox.addCell(layoutCell);
+
+		
+		return generalBox;
+	}
+	
 	private PdfPTable getImageChart(Image imgChart) {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
@@ -491,7 +582,21 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.setPadding(2);
 		layoutCell.setBackgroundColor(new Color(206,226,251));
 		layoutCell.addElement(imgChart);
+		
+		PdfPCell textCell = new PdfPCell();
+		textCell.setPadding(2);
+		textCell.setBackgroundColor(new Color(206,226,251));
+		textCell.addElement(new Paragraph("All amounts in 000s of USD", new Font(Font.HELVETICA, 6)));
+		
+		
+		generalBox.addCell(textCell);
+		PdfPCell text2Cell = new PdfPCell();
+		text2Cell.setPadding(2);
+		text2Cell.setBackgroundColor(new Color(206,226,251));
+		text2Cell.addElement(new Paragraph("Source: AMP database", new Font(Font.HELVETICA, 6)));
+		
 		generalBox.addCell(layoutCell);
+		generalBox.addCell(text2Cell);
 
 		
 		return generalBox;
@@ -658,7 +763,40 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		PdfPCell legendCell = new PdfPCell();		
+		legendCell.setPadding(0);
+		legendCell.setBorder(Rectangle.NO_BORDER);
+		try {
+			Image image = Image.getInstance(this.getServlet().getServletContext().getRealPath("/TEMPLATE/ampTemplate/images/legend1.jpg"));
+			image.scaleAbsoluteWidth(50f);
+			image.setAlignment(Image.ALIGN_RIGHT);
+//			image.scaleAbsoluteHeight(20f);
+			legendCell.addElement(image);
+		} catch (BadElementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		
+		//120px × 20px
+		PdfPCell legendTextCell = new PdfPCell();
+		legendTextCell.setPadding(0);
+		legendTextCell.setBorder(Rectangle.NO_BORDER);
+		legendTextCell.addElement(new Paragraph("Source: Official government sources", new Font(Font.HELVETICA, 6)));
+
+		PdfPTable legendTable = new PdfPTable(1);
+		legendTable.setWidthPercentage(100f);
+		legendTable.addCell(legendCell);
+		legendTable.addCell(legendTextCell);
+		PdfPCell legendCellLayout = new PdfPCell();
+		legendCellLayout.setColspan(3);
+		legendCellLayout.addElement(legendTable);
+		layoutCharts.addCell(legendCellLayout);
 		layoutCell.addElement(layoutCharts);
 
 		generalBox.addCell(layoutCell);
@@ -747,6 +885,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable3alone);
 		layoutCell.addElement(layoutResourcesAtAGlance);
+		layoutCell.addElement(new Paragraph("Source: OECD ", new Font(Font.HELVETICA, 6)));
 		
 		generalBox.addCell(layoutCell);
 		

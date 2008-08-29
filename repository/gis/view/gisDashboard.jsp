@@ -65,7 +65,7 @@
 		</td>
 	</tr>
 	<tr>
-            <td>
+            <td width="15%" nowrap>
                 <digi:trn key="gis:selectSector">Select Sector</digi:trn>:
             </td>
 		<td>
@@ -79,7 +79,7 @@
 		</td>
 	</tr>
 	<tr>
-            <td>
+            <td width="15%" nowrap>
                 <digi:trn key="gis:selectIndicator">Select Indicator</digi:trn>:
             </td>
 		<td>

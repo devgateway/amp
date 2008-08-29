@@ -979,6 +979,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			impLevelValue = new Integer(0);
 			impCountry = "";
 			impRegion = new Long(-1);
+			impMultiRegion = null;
 			impZone = new Long(-1);
 			impWoreda = new Long(-1);
 			regions = null;

@@ -48,6 +48,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.Range;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
@@ -109,6 +110,17 @@ public class ChartWidgetUtil {
 			r.setBaseShapesVisible(true);
 			r.setBaseShapesFilled(true);
 		}
+		
+		//This will expand ranges slightly so that points at the edge will move inside 
+		//and number will not be cut by borders. 
+		Range oldRange = plot.getRangeAxis().getRange();
+		Range newRange = Range.expand(oldRange, 0.1, 0.1);
+		plot.getRangeAxis().setRange(newRange);
+
+		oldRange = plot.getDomainAxis().getRange();
+		newRange = Range.expand(oldRange, 0.1, 0.1);
+		plot.getDomainAxis().setRange(newRange);
+
 		return chart;
 	}
     

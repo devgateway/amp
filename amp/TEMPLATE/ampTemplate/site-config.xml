@@ -19,6 +19,7 @@
 			<put-item name="widget13" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget14" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget15" module="widget" instance="default" teaser="teaserOfWidget"/>
+			<put-item name="widget16" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="pieChart" module="widget" instance="default" teaser="teaserOfSectorByDonor"/>
 			<put-item name="body" module="gis" page="gisDashboard"/>
 		</layout>

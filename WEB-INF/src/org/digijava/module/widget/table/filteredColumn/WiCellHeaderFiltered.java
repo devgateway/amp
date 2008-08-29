@@ -20,13 +20,14 @@ public class WiCellHeaderFiltered extends WiCellFiltered {
 		buf.append("(");
 		buf.append(this.getColumn().getId());
 		buf.append(")'>\n ");
+		buf.append("<option value='-1' selected='true'>Select Donor Group</option>\n");
 		for (FilterItem item : getItemProvider().getItems()) {
 			buf.append("<option value='");
 			buf.append(item.getId());
 			buf.append("'");
-			if (item.getId().equals(masterColumn.getActiveItemId())){
-				buf.append(" selected='true' ");
-			}
+			//if (item.getId().equals(masterColumn.getActiveItemId())){
+				//buf.append(" selected='true' ");
+			//}
 			buf.append(">");
 			buf.append(item.getName());
 			buf.append("</option>\n");

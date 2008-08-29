@@ -12,6 +12,14 @@
 
 <script type="text/javascript">
 <!--
+
+       function showHelpTooltip() {
+          document.getElementById("piehelptooltip").style.display = "block";
+         }
+                
+        function hideHelpTooltip() {
+             document.getElementById("piehelptooltip").style.display = "none";
+        }
 	<digi:context name="chartImageUrl" property="context/module/moduleinstance/showSectorByDonorChart.do" />
 	var chartURL = "<%=chartImageUrl%>";
 	function donorChanged(){
@@ -67,12 +75,12 @@
 <table>
     <tr>
         <td colspan="3" align="left">
-            <c:set var="tooltip">
+            <div id="piehelptooltip" style="display:none; width:200; position: absolute; left:50px; top: 50px; background-color: #ffffff; border: 1px solid silver;">
                <digi:trn key='widget:piechart:allAmountinUSDTooltip'>
                    The amounts are calculated using the exchange rate for the date of the transaction.</digi:trn>
-            </c:set>
+            </div>
             <digi:trn key="widget:piechart:allAmountsinUSD1">All amounts in USD.</digi:trn>
-            <digi:img  src="module/widget/images/help1.gif" title="${tooltip}"/>
+            <digi:img  src="module/widget/images/help1.gif" onmouseover="showHelpTooltip()" onmouseout="hideHelpTooltip()"/>
         </td>
     </tr>
 	<tr>

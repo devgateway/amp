@@ -56,6 +56,14 @@ public class ShowWidgetChart extends Action {
 		return null;
 	}
 
+	/**
+	 * Builds chart options bean from action form.
+	 * Uses default values if parameters are not specified in from or form has no field yet for such parameters.
+	 * This gives us ability to specify chart objects directly from URL, something like cewolf tag library.
+	 * @param form
+	 * @param widget
+	 * @return
+	 */
 	private ChartOption createChartOptions(ShowWidgetChartForm form, AmpWidget widget) {
 		ChartOption opt = new ChartOption();
 
@@ -64,7 +72,13 @@ public class ShowWidgetChart extends Action {
 			opt.setTitle(widget.getName());
 		}
 		opt.setShowLegend(false);
-		opt.setShowLabels(false);
+		if (form.getShowLegend()!=null){
+			opt.setShowLegend(form.getShowLegend().booleanValue());
+		}
+		opt.setShowLabels(true);
+		if (form.getShowLabels()!=null){
+			opt.setShowLabels(form.getShowLabels().booleanValue());
+		}
 		if (form.getImageHeight() == null) {
 			opt.setHeight(new Integer(160));
 		} else {

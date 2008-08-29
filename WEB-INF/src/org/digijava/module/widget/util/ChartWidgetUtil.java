@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -41,6 +42,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardXYItemLabelGenerator;
+import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -50,7 +53,7 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.jfree.ui.RectangleInsets;
 
 
 /**
@@ -62,34 +65,65 @@ public class ChartWidgetUtil {
 
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
 
+    /**
+     * Generates chart object from specified indicator and options.
+     * This chart then can be rendered as image or pdf or file.
+     * @param indicatorCon
+     * @param opt
+     * @return
+     * @throws DgException
+     */
     public static JFreeChart getIndicatorChart(IndicatorSector indicatorCon,ChartOption opt) throws DgException{
-		JFreeChart result = null;
+		JFreeChart chart = null;
+		Font font8 = new Font(null,0,8);
 		TimeSeriesCollection ds = getIndicatorChartDataset(indicatorCon);
 		boolean tooltips = false;
 		boolean urls = false;
-		opt.setShowLegend(true);//TODO add one JPG on page as legend and turn this off, this is temporary.
-		Font font = new Font(null,0,8);
 		//create time series line chart
-		result = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
-		result.getLegend().setItemFont(font);		
-		result.getTitle().setFont(font);
-		XYPlot plot =(XYPlot) result.getPlot();
-		XYItemRenderer renderer = plot.getRenderer();
-		renderer.setItemLabelFont(font);
+		chart = ChartFactory.createTimeSeriesChart(opt.getTitle(), null, null, ds, opt.isShowLegend(), tooltips, urls);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+		RectangleInsets padding = new RectangleInsets(0,0,0,0);
+		chart.setPadding(padding);
+		
+		XYPlot plot =(XYPlot) chart.getPlot();
 		plot.setRangeZeroBaselineVisible(true);
-		plot.getDomainAxis().setLabelFont(font);
+		plot.getDomainAxis().setLabelFont(font8);
+		plot.getDomainAxis().setTickLabelFont(font8);
+		plot.getRangeAxis().setLabelFont(font8);
+		plot.getRangeAxis().setTickLabelFont(font8);
+		
+		XYItemRenderer renderer = plot.getRenderer();
+//		renderer.setItemLabelFont(font8);
+		renderer.setItemLabelsVisible(opt.isShowLabels());
+		XYItemLabelGenerator labelGenerator = new StandardXYItemLabelGenerator("{2}",new DecimalFormat("0.00"),new DecimalFormat("#.####"));
+		renderer.setBaseItemLabelGenerator(labelGenerator);
+
 		//For next two lines see order of TimeSeries added to TimeSeriesCollection in getIndicatorChartDataset() below
 		renderer.setSeriesPaint(0, Color.blue);//0 = Actual line, because this was added first.
 		renderer.setSeriesPaint(1, Color.red);//1 = Target line, because this was added second.
 		if (renderer instanceof XYLineAndShapeRenderer){
 			XYLineAndShapeRenderer r = (XYLineAndShapeRenderer)renderer;
-			r.setBaseShapesVisible(false);
+			r.setBaseShapesVisible(true);
 			r.setBaseShapesFilled(true);
-//			r.setItemLabelsVisible(true);
 		}
-		return result;
+		return chart;
 	}
     
+    /**
+     * Generates chart dataset from AMP data.
+     * This dataset is required to generate chart object.
+     * Because this chart show changes of some values in time we use time series objects.
+     * It creates two lines (TimeSeries): one line is desired change of values, which connects base value to target value, 
+     * and another line is actual change of indicator value, it connects all actual value points.
+     * So we go through values of the indicator and put them in the correct TimeSeries objects. 
+     * Correctness of the resulting chart depends on correctness of data.  
+     * @param indicator
+     * @return
+     * @throws DgException
+     */
 	public static TimeSeriesCollection getIndicatorChartDataset(IndicatorSector indicator) throws DgException{
 		TimeSeriesCollection ds = new TimeSeriesCollection();
 		if (indicator.getValues()!=null && indicator.getValues().size()>0){
@@ -112,6 +146,11 @@ public class ChartWidgetUtil {
 		return ds;
 	}
 	
+	/**
+	 * Returns all chart widgets.
+	 * @return
+	 * @throws DgException
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<AmpWidgetIndicatorChart> getAllIndicatorChartWidgets() throws DgException{
 		Session session = PersistenceManager.getRequestDBSession();
@@ -127,12 +166,24 @@ public class ChartWidgetUtil {
 		return result;
 	}
 
+	/**
+	 * Returns chart widget that is assigned to specified place.
+	 * @param place
+	 * @return
+	 * @throws DgException
+	 */
 	public static AmpWidgetIndicatorChart getIndicatorChartWidget(AmpDaWidgetPlace place) throws DgException{
 		AmpWidget widget = WidgetUtil.getWidgetOnPlace(place.getId());
 		if (widget==null) return null;
 		return (AmpWidgetIndicatorChart)widget;
 	}
 	
+	/**
+	 * Loads indicator chart widget by its ID.
+	 * @param widgetId
+	 * @return
+	 * @throws DgException
+	 */
 	public static AmpWidgetIndicatorChart getIndicatorChartWidget(Long widgetId) throws DgException{
 		Session session = PersistenceManager.getRequestDBSession();
 		AmpWidgetIndicatorChart result;
@@ -145,6 +196,12 @@ public class ChartWidgetUtil {
 		return result;
 	}
 	
+	/**
+	 * Saves or creates indicator chart widget in db.
+	 * @param widget
+	 * @return
+	 * @throws DgException
+	 */
 	public static AmpWidgetIndicatorChart saveOrUpdate(AmpWidgetIndicatorChart widget) throws DgException{
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
@@ -167,6 +224,11 @@ public class ChartWidgetUtil {
 		return widget;
 	}
 	
+	/**
+	 * Removes indicator chart widget from db.
+	 * @param widget
+	 * @throws DgException
+	 */
 	public static void delete(AmpWidgetIndicatorChart widget) throws DgException{
 		Session session = PersistenceManager.getRequestDBSession();
 		Transaction tx = null;
@@ -188,6 +250,13 @@ public class ChartWidgetUtil {
 		}
 	}
 	
+	/**
+	 * Checks if there is an widget for specified indicator.
+	 * This helps to prevent deletion of indicator while it is assigned to widgets. 
+	 * @param sectorIndicator
+	 * @return true if widgets for the indicator is found in db. othervise false is returned.
+	 * @throws DgException
+	 */
 	@SuppressWarnings("unchecked")
 	public static boolean isWidgetForIndicator(IndicatorSector sectorIndicator) throws DgException{
 		boolean result=false;
@@ -205,6 +274,15 @@ public class ChartWidgetUtil {
 		return result;
 	}
 	
+	/**
+	 * Generates chart of sector-donor funding.
+	 * @param donors ID's of donors to use in calculation
+	 * @param year
+	 * @param opt chart options
+	 * @return
+	 * @throws DgException
+	 * @throws WorkerException
+	 */
 	public static JFreeChart getSectorByDonorChart(Long[] donors,Integer year,ChartOption opt)throws DgException,WorkerException{
 		JFreeChart result = null;
 		PieDataset ds = getSectorByDonorDataset(donors,year);
@@ -243,7 +321,14 @@ public class ChartWidgetUtil {
 		plot.setIgnoreZeroValues(true);
 		return result;
 	}
-	
+
+	/**
+	 * Generates dataset for sector-donor pie chart.
+	 * @param donors
+	 * @param year fundings only for this year are used.
+	 * @return
+	 * @throws DgException
+	 */
 	public static PieDataset getSectorByDonorDataset(Long[] donors, Integer year) throws DgException{
 		DefaultPieDataset ds = new DefaultPieDataset();
 		Date fromDate = null;
@@ -278,6 +363,16 @@ public class ChartWidgetUtil {
 		return cal.getTime();
 	}
 	
+	/**
+	 * Returns collection of DonorSectorFundingHelper beans. 
+	 * Each of them represents funding of one particular sector. 
+	 * @param donorIDs
+	 * @param fromDate
+	 * @param toDate
+	 * @param wholeFunding
+	 * @return
+	 * @throws DgException
+	 */
 	public static Collection<DonorSectorFundingHelper> getDonorSectorFunding(Long donorIDs[],Date fromDate, Date toDate,Double[] wholeFunding) throws DgException {
     	Collection<DonorSectorFundingHelper> fundings=null;  
 		String oql ="select f.ampDonorOrgId, actSec.sectorId, "+
@@ -322,7 +417,7 @@ public class ChartWidgetUtil {
 					"Cannot load sector fundings by donors from db", e);
 		}
 		
-		//Process groupped data
+		//Process grouped data
 		if (result != null) {
 			Map<Long, DonorSectorFundingHelper> donors = new HashMap<Long, DonorSectorFundingHelper>();
 			for (Object row : result) {
@@ -381,12 +476,18 @@ public class ChartWidgetUtil {
     	return oql;
     }
     
+    /**
+     * Key worker for donors
+     * @author Irakli Kobiashvili
+     *
+     */
     public static class DonorIdWorker implements KeyWorker<Long, AmpOrganisation>{
 
 		public void markKeyForRemoval(AmpOrganisation element) {
 			//empty, no need yet
 		}
 
+		@SuppressWarnings("deprecation")
 		public void updateKey(AmpOrganisation element, Long newKey) {
 			element.setAmpOrgId(newKey);
 		}

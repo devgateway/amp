@@ -178,7 +178,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                               </li>
                                             </ul>
                                             <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">                                        
-											<table cellpadding="5">
+											<table cellpadding="5" border="0" width="100%">
 												<tr>
 													<td>
 														<digi:insert attribute="widget1">
@@ -216,6 +216,14 @@ function setHoveredTable(tableId, hasHeaders) {
 														<digi:insert attribute="widget6">
 															<digi:put name="widget-teaser-param">chart_place6</digi:put>
 														</digi:insert>
+													</td>
+												</tr>
+												<tr>
+													<td colspan="2" width="100%">
+														<digi:trn key="gis:sixChartLegend:desctiption">&nbsp;</digi:trn>
+													</td>
+													<td align="right">
+														<digi:img src="images/legend1.jpg"/>
 													</td>
 												</tr>
 											</table>
@@ -368,6 +376,13 @@ function setHoveredTable(tableId, hasHeaders) {
                                             </div>
                                             </div>
     									</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<digi:insert attribute="widget16">
+											    <digi:put name="widget-teaser-param">additional_table</digi:put>
+											</digi:insert>
+										</td>
 									</tr>
 								</TABLE>
 							</TD>

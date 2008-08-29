@@ -17,6 +17,8 @@ public class ShowWidgetChartForm extends ActionForm {
 	private Long objectId; 
 	private Long donorId;
 	private String selectedYear;
+	private Boolean showLegend;
+	private Boolean showLabels;
 	
 	public String getSelectedYear() {
 		return selectedYear;
@@ -53,6 +55,18 @@ public class ShowWidgetChartForm extends ActionForm {
 	}
 	public void setWidgetId(Long widgetId) {
 		this.widgetId = widgetId;
+	}
+	public void setShowLegend(Boolean showLegend) {
+		this.showLegend = showLegend;
+	}
+	public Boolean getShowLegend() {
+		return showLegend;
+	}
+	public void setShowLabels(Boolean showLabels) {
+		this.showLabels = showLabels;
+	}
+	public Boolean getShowLabels() {
+		return showLabels;
 	}
 	
 }

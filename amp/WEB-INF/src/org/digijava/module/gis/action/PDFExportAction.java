@@ -519,7 +519,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutAEIndicators.setWidthPercentage(100);
 
 		PdfPTable table1AEIndicators = getWidgetTable("table_place1");
-		PdfPTable table2AEIndicators = getWidgetTable("table_place3");
+		PdfPTable table2AEIndicators = getWidgetTable("table_place2");
 
 		layoutAEIndicators.addCell(table1AEIndicators);
 		layoutAEIndicators.addCell(table2AEIndicators);
@@ -1367,7 +1367,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			opt.setTitle(widget.getName());
 		}
 		opt.setShowLegend(false);
-		opt.setShowLabels(false);
+		opt.setShowLabels(true);
 		opt.setHeight(new Integer(160));
 		opt.setWidth(new Integer(220));
 		IndicatorSector indicatorCon = cWidget.getIndicator();

@@ -77,9 +77,10 @@ else {
   	var divs = document.getElementsByTagName("select");
 	var matchingDivs = new Array();
 	var currentDiv;
-	var tableId = "-1";
-	var columnId = "-1";
-	var itemId = "-1";
+	
+	var tableId = new Array();
+	var columnId = new Array();
+	var itemId = new Array();
 	var columnquerystring="";
 
 	for(var idx=0;idx < divs.length; idx++){
@@ -87,23 +88,49 @@ else {
 			var tableId;//20
 			var columnId;//59
 			var itemId;//15
-			tableId = divs[idx].getAttribute("idtable");
-			columnId = divs[idx].getAttribute("idcolumn");
-			itemId = divs[idx].value;
-			columnquerystring = "&tableId="+tableId+"&columnId="+columnId+"&itemId="+itemId;
+			tableId.push(divs[idx].getAttribute("idtable"));
+			columnId.push(divs[idx].getAttribute("idcolumn"));
+			itemId.push(divs[idx].value);
 		}
 	}
+	var tableIdStr = "-1";
+	var columnIdStr = "-1";
+	var itemIdStr = "-1";
+	
+	for(var idx=0;idx < tableId.length; idx++)
+	{
+		if(tableIdStr == "-1"){
+			tableIdStr = tableId[idx];
+			columnIdStr = columnId[idx];
+			itemIdStr = itemId[idx];
+		}
+		else
+		{
+			tableIdStr += "," + tableId[idx];
+			columnIdStr += "," + columnId[idx];
+			itemIdStr += "," + itemId[idx];
+		}
+	}
+	columnquerystring += "&tableId="+tableIdStr+"&columnId="+columnIdStr+"&itemId="+itemIdStr;
 
 	var selectedDonor = document.getElementsByName("selectedDonor")[0].value;
 	var selectedYear = document.getElementsByName("selectedYear")[0].value;
 	var showLabels = document.getElementsByName("showLabels")[0].checked;
 	var showLegends = document.getElementsByName("showLegends")[0].checked;
 
+	//Get donor name also
+	var selectDonors = document.getElementsByName("selectedDonor")[0];
+	var selectDonorsStr = " ";
+	for(var idx = 0; idx < selectDonors.length;idx++)
+	{
+		if(selectDonors.options[idx].value == selectDonors.value)
+			selectDonorsStr = (selectDonors.options[idx].text);
+	}
 
 	var sectorId =  document.getElementById("sectorsMapCombo").value;
 	var indicatorId = document.getElementById("indicatorsCombo").value;	
   
-	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedYear=" + selectedYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring, 780, 500);
+	openURLinWindow("/gis/pdfExport.do?selectedDonor=" + selectedDonor + "&selectedYear=" + selectedYear + "&showLabels=" + showLabels + "&showLegends=" + showLegends + "&sectorId=" + sectorId + "&indicatorId=" + indicatorId + ""+ columnquerystring + "&selectedDonorName=" +selectDonorsStr, 780, 500);
   }
 function resizeDivs(){
 	var tables = document.getElementsByTagName("table");

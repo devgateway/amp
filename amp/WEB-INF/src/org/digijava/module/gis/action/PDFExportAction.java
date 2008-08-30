@@ -111,9 +111,9 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	private PdfPTable contenTable;
 	private HttpServletResponse response;
 	
-	private Long tableId = null;
-	private Long columnId = null;
-	private Long itemId = null;
+	private Long[] tableId = null;
+	private Long[] columnId = null;
+	private Long[] itemId = null;
 
 	public PDFExportAction(HttpSession session, String locale, Site site,
 			HttpServletResponse response) {
@@ -152,11 +152,17 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		Integer selectedYear = null;
 		Boolean showLabels = true;
 		Boolean showLegends = true;
+		String selectedDonorName = "";
 
 		if (request.getParameter("selectedDonor") != null
 				&& !request.getParameter("selectedDonor").equals("-1")) {
 			selectedDonor = Long.parseLong(request
 					.getParameter("selectedDonor"));
+		}
+		if (request.getParameter("selectedDonorName") != null
+				&& !request.getParameter("selectedDonorName").equals("-1")) {
+			selectedDonorName = request
+					.getParameter("selectedDonorName");
 		}
 		if (request.getParameter("selectedYear") != null
 				&& request.getParameter("selectedYear") != "-1") {
@@ -193,18 +199,44 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		if (request.getParameter("tableId") != null
 				&& !request.getParameter("tableId").equals("-1")) {
-			this.tableId = Long.parseLong(request
-					.getParameter("tableId"));
+			String tableStr = request.getParameter("tableId");
+			String tableIdStr[] = tableStr.split(",");
+			this.tableId = new Long[tableIdStr.length];
+
+			int tableIdIndex = 0;
+			for(String str : tableIdStr)
+			{
+				this.tableId[tableIdIndex] = Long.parseLong(str);
+				tableIdIndex++;
+			}
 		}
 		if (request.getParameter("columnId") != null
 				&& !request.getParameter("columnId").equals("-1")) {
-			this.columnId = Long.parseLong(request
-					.getParameter("columnId"));
+
+			String tableStr = request.getParameter("columnId");
+			String tableIdStr[] = tableStr.split(",");
+			this.columnId = new Long[tableIdStr.length];
+
+			int tableIdIndex = 0;
+			for(String str : tableIdStr)
+			{
+				this.columnId[tableIdIndex] = Long.parseLong(str);
+				tableIdIndex++;
+			}			
+			
 		}
 		if (request.getParameter("itemId") != null
 				&& !request.getParameter("itemId").equals("-1")) {
-			this.itemId = Long.parseLong(request
-					.getParameter("itemId"));
+			String tableStr = request.getParameter("itemId");
+			String tableIdStr[] = tableStr.split(",");
+			this.itemId = new Long[tableIdStr.length];
+
+			int tableIdIndex = 0;
+			for(String str : tableIdStr)
+			{
+				this.itemId[tableIdIndex] = Long.parseLong(str);
+				tableIdIndex++;
+			}			
 		}
 		
 		
@@ -238,7 +270,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		imagesTable.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 
 		imagesTable.addCell(getImageMap(imgMap, sectorName, indicatorName));
-		imagesTable.addCell(getImageChart(imgChart));
+		imagesTable.addCell(getImageChart(imgChart, selectedDonorName, selectedYear));
 //		imagesTable.addCell(" ");
 
 		// First batch of widgets
@@ -605,7 +637,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		return generalBox;
 	}
 	
-	private PdfPTable getImageChart(Image imgChart) {
+	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedYear) {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
 		
@@ -656,10 +688,18 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell textCell = new PdfPCell();
 		textCell.setPadding(2);
 		textCell.setBackgroundColor(new Color(206,226,251));
-		textCell.addElement(new Paragraph("All amounts in 000s of USD", new Font(Font.HELVETICA, 6)));
-		
-		
+
+		textCell.addElement(new Paragraph("All amounts in 000s of USD\nSelected Donor:" + selectedDonorName + "\n" + "Selected year: " + selectedYear + "\n\n", new Font(Font.HELVETICA, 6)));
+//		PdfPCell captionCell = new PdfPCell();
+//		captionCell.setPadding(0);
+//		captionCell.setBackgroundColor(new Color(206,226,251));
+//		captionCell.setBorder(Rectangle.NO_BORDER);
+//		captionCell.addElement(new Paragraph(", new Font(
+//				Font.HELVETICA, 6)));
+//		
+//		
 		generalBox.addCell(textCell);
+//		generalBox.addCell(captionCell);
 		PdfPCell text2Cell = new PdfPCell();
 		text2Cell.setPadding(2);
 		text2Cell.setBackgroundColor(new Color(206,226,251));
@@ -1004,21 +1044,17 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 			WiTable table = new WiTable.TableBuilder(widget.getId()).build();
 			WiColumnDropDownFilter filter = null;
-			if(this.tableId.equals(table.getId()))
+			int currentTableIdIndex = matchesId(table.getId());
+			if(currentTableIdIndex > -1)
 			{
-				table = new WiTable.TableBuilder(tableId).build();
-				if (columnId!=null && itemId!=null && columnId.longValue()>0 && itemId.longValue()>0){
-					filter = (WiColumnDropDownFilter) table.getColumnById(columnId);
+				table = new WiTable.TableBuilder(this.tableId[currentTableIdIndex]).build();
+				if (columnId[currentTableIdIndex]!=null && itemId[currentTableIdIndex]!=null && columnId[currentTableIdIndex].longValue()>0 && itemId[currentTableIdIndex].longValue()>0){
+					filter = (WiColumnDropDownFilter) table.getColumnById(columnId[currentTableIdIndex]);
 					//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
 					if (filter!=null){
-						filter.setActiveItemId(itemId);
+						filter.setActiveItemId(itemId[currentTableIdIndex]);
 					}
 				}
-//				String html = table.generateHtml();	
-//				OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
-//				PrintWriter out = new PrintWriter(outputStream, true);
-//				out.println(html);
-//				response.getOutputStream().close();
 			}
 			List<WiColumn> columns = table.getColumns();
 			List<WiRow> rows = table.getDataRows();
@@ -1077,6 +1113,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		return null;
 	}
+	private int matchesId(Long ptableId)
+	{
+		for(int a=0;a < this.tableId.length; a++)
+		{
+			if(this.tableId[a].equals(ptableId))
+				return a;
+		}
+		return -1;
+	}
+	
 	private ByteArrayOutputStream getMapImageSectorIndicator(String mapCode, Long secId, Long indId) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 

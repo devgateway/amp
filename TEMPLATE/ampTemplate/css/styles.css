@@ -606,6 +606,21 @@ A.sub-nav2:hover
 	BORDER-BOTTOM: 1px; 
 	LETTER-SPACING: 1px
 }
+
+.subtitle-blue-1
+{
+	BORDER-RIGHT: 1px; 
+	BORDER-TOP: 1px; 
+	FONT-WEIGHT: bold; 
+	FONT-SIZE: 9pt; 
+	PADDING-BOTTOM: 5px; 
+	BORDER-LEFT: 1px; 
+	COLOR: #014e86; 
+	PADDING-TOP: 5px; 
+	BORDER-BOTTOM: 1px; 
+	LETTER-SPACING: 1px
+}
+
 .subtitle-blue-2
 {
 	BORDER-RIGHT: 1px; 

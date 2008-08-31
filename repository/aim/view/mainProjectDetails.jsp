@@ -8,6 +8,35 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+<jsp:include page="previewLogframeUtil.jsp" flush="true" />
+<jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
+
+<script type="text/javascript">
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	var url ="<%=ficheUrl%>~ampActivityId=" + id;
+	openURLinWindow(url,650,500);
+}
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
+	document.aimChannelOverviewForm.target = "_self";
+    document.aimChannelOverviewForm.submit();
+}
+
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
+	document.aimChannelOverviewForm.target = "_self";
+   document.aimChannelOverviewForm.submit();
+}
+</script>
+
 <script language="JavaScript">
 <!--
 
@@ -194,7 +223,9 @@ html>body #mainEmpty {
 <c:set target="${urlDescription}" property="ampActivityId">
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
-	
+
+<input name="tempActivity" type="hidden" value='<%=request.getParameter("ampActivityId")%>' id="tempActivity">
+
 <TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
    <TR>
 		<TD>
@@ -222,7 +253,67 @@ html>body #mainEmpty {
 			</digi:form>
 		</TD>
 	</TR>
-
+	<tr>
+		<td><strong>
+			<module:display name="Previews"
+				parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Preview Activity" module="Previews">
+					<field:display feature="Preview Activity" name="Preview Button">
+						<a href="" target="_blank" onclick="javascript:preview(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
+							<img src="/repository/aim/images/magnifier.png" border="0"></a>
+					</field:display>
+				</feature:display>
+			</module:display>
+			<module:display name="Previews"
+				parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Edit Activity" module="Previews">
+					<field:display feature="Edit Activity" name="Edit Activity Button">           
+	                	<a href="" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+							<img src="/repository/aim/images/application_edit.png" border="0"></a>&nbsp;                                                                     
+					</field:display>
+				</feature:display>
+			</module:display>
+			<module:display name="Previews"
+				parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Edit Activity" module="Previews">
+					<field:display feature="Edit Activity" name="Validate Activity Button">
+						<c:if
+							test="${aimChannelOverviewForm.buttonText == 'validate'}">
+							 <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
+							
+							<td><html:button styleClass="dr-menu"
+								onclick="fnEditProject(document.getElementById('tempActivity').value)"
+								property="validateBtn">
+								<digi:trn key="aim:validate">Validate</digi:trn>
+							</html:button></td>
+							</c:if>	
+						</c:if>
+					</field:display>
+				</feature:display>
+			</module:display>
+			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Logframe" module="Previews">
+					<field:display name="Logframe Preview Button" feature="Logframe">
+						<div id="gen" title='<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
+						<a href="#" onclick="javascript:previewLogframe(document.getElementById('tempActivity').value); return false;">
+						<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn></a>&nbsp;|</div>&nbsp;
+					</field:display>
+				</feature:display>
+			</module:display>
+			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+				<feature:display name="Project Fiche" module="Previews">
+					<field:display name="Project Fiche Button" feature="Project Fiche">
+						<div id="gen" title='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'>
+						<a href="#" onclick="javascript:projectFiche(document.getElementById('tempActivity').value); return false;">
+						<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a></div>
+					</field:display>
+				</feature:display>
+			</module:display></strong>
+		</td>
+	</tr>
+	<tr><td>
+		&nbsp;
+	</td></tr>
    <TR>
 		<TD>
 
@@ -233,7 +324,7 @@ html>body #mainEmpty {
 							<TR>
 							<feature:display module="Project ID and Planning" name="Identification">
 							<field:display  feature="Identification" name="Project Title">
-								<TD vAlign=center><span class=subtitle-blue>
+								<TD vAlign=center><span class="subtitle-blue-1">
 									<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
 								</TD>
 							</field:display>						

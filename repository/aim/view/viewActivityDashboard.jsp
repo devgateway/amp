@@ -156,62 +156,6 @@ method="post">
 
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
-
-	<TR>
-
-		<TD align=right>
-
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-											<feature:display name="Preview Activity" module="Previews">
-												<field:display feature="Preview Activity" name="Preview Button">
-	                                          		<html:button style="FONT-SIZE: 11px; COLOR: #313131" onclick="preview('${actId}')" property="previewBtn">
-		                                          		<digi:trn key="btn:preview">Preview</digi:trn>
-	                                          		</html:button>
-															&nbsp;
-												</field:display>
-											</feature:display>
-										</module:display>
-
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-											<feature:display name="Edit Activity" module="Previews">
-												<field:display feature="Edit Activity" name="Edit Activity Button">
-													<c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
-	                                                        <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
-	                                                                <html:button style="FONT-SIZE: 11px; COLOR: #313131" onclick="fnEditProject('${actId}')" property="editBtn">
-														<digi:trn key="btn:edit">Edit</digi:trn>
-													</html:button>
-												&nbsp;
-	                                                        </c:if>
-	                                                     </c:if> 													
-												</field:display>
-											</feature:display>
-										</module:display>
-
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-												<feature:display name="Logframe" module="Previews">
-													<field:display name="Logframe Preview Button" feature="Logframe" >
-														<html:button property="logframe" style="FONT-SIZE: 11px; COLOR: #313131" onclick="previewLogframe(${actId})">
-															<digi:trn key="btn:previewLogframe">Preview Logframe</digi:trn>
-														</html:button>
-															&nbsp;
-													</field:display>
-												</feature:display>
-										</module:display>
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-												<feature:display name="Project Fiche" module="Previews">
-													<field:display name="Project Fiche Button" feature="Project Fiche" >
-														<html:button  style="FONT-SIZE: 11px; COLOR: #313131" onclick='projectFiche(${actId})' property="projectFiche">
-															<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
-														</html:button>
-													</field:display>
-												</feature:display>
-										</module:display>
-
-
-		</TD>
-
-	</TR>
-
 	<TR>
 
 		<TD vAlign="top" align="center">

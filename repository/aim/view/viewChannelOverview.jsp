@@ -17,17 +17,7 @@
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
-<jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
 <script type="text/javascript">
-
-function fnEditProject(id)
-{
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
-	document.aimChannelOverviewForm.target = "_self";
-    document.aimChannelOverviewForm.submit();
-}
 
 function fnEditProject1(id)
 {
@@ -35,22 +25,6 @@ function fnEditProject1(id)
    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~debugFM=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
-}
-
-function projectFiche(id)
-{
-	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
-	var url ="<%=ficheUrl%>~ampActivityId=" + id;
-	openURLinWindow(url,650,500);
-}
-
-
-function preview(id)
-{
-	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
-   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
-	document.aimChannelOverviewForm.target = "_self";
-   document.aimChannelOverviewForm.submit();
 }
 
 function login()
@@ -153,11 +127,11 @@ function commentWin(val) {
 											<field:display name="Results" feature="Identification">
 											<div id="gen" title='<digi:trn key="aim:clickToViewProjectResults">Click here to View Project Results</digi:trn>'>
 											<a href="#" onclick="javascript:previewOverviewframe('Res','<c:out value="${aimMainProjectDetailsForm.results}"/>'); return false;" >
-												<digi:trn key="aim:results">Results</digi:trn></a>&nbsp;|</div>&nbsp;
+												<digi:trn key="aim:results">Results</digi:trn></a></div>&nbsp;
 											</field:display>
 										</feature:display>
 
-												<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+											<%--	<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Logframe" module="Previews">
 														<field:display name="Logframe Preview Button" feature="Logframe">
 															<div id="gen" title='<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
@@ -175,13 +149,13 @@ function commentWin(val) {
 															<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a></div>
 														</field:display>
 													</feature:display>
-												</module:display>
+												</module:display>--%>
 											
 											</strong>
 										</SPAN>									
 										</TD>
 										
-										<TD align="right">
+										<%--<TD align="right">
 										<table>
 											<tr>
 												<module:display name="Previews"
@@ -230,22 +204,14 @@ function commentWin(val) {
 																</html:button></td>
  															</c:if>	
 
-															</c:if>  
-															<%--<c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
-							                                        	<td >
-							                                        		<html:button  styleClass="FONT-SIZE: 11px; COLOR: #313131" disabled="true" property="validateBtn">
-																				<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
-																			</html:button>
-							                                        	</td>
-
-																	</c:if> --%>
+															</c:if>
 														</field:display>
 													</feature:display>
 												</module:display>
 
 											</tr>
 										</table>
-										</TD>
+										</TD>--%>
 									</TR>
 								</TABLE>
 								</TD>

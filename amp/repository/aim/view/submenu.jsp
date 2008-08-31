@@ -48,7 +48,7 @@
 <TR>
 <TD vAlign="top" align="left">
 		<!-- contents -->
-			OVERVIEW
+			<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 		 </td>
 </tr>
 <tr>

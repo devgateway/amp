@@ -338,7 +338,7 @@ public class LocationUtil {
                                 if (!flag) {
                                         queryString += " where";
                                 } else {
-                                        queryString += " or";
+                                        queryString += " and";
                                 }
                                 queryString += " region_id = " + regionId;
                                 flag = true;
@@ -348,7 +348,7 @@ public class LocationUtil {
                                 if (!flag) {
                                         queryString += " where";
                                 } else {
-                                        queryString += " or";
+                                        queryString += " and";
                                 }
                                 queryString += " zone_id = " + zoneId;
                         }
@@ -357,7 +357,7 @@ public class LocationUtil {
                                 if (!flag) {
                                         queryString += " where";
                                 } else {
-                                        queryString += " or";
+                                        queryString += " and";
                                 }
                                 queryString += " woreda_id = " + woredaId;
                         }

@@ -48,18 +48,24 @@
 	margin-left: 5px;
 }
 </style>
+<c:set var="showCurrSettings">
+	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
+</c:set>
+<c:set var="hideCurrSettings">
+	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
+</c:set>
 <script language="JavaScript">
 function toggleSettings(){
 	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "Show current settings &gt;&gt;";
+		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "Hide current settings &lt;&lt;";
+		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
 	}
 }
 	
@@ -176,7 +182,7 @@ session.setAttribute("progressValue", counter);
 	<tr>
 		<td>
 		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Hide current settings &lt;&lt;</span>
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${hideCurrSettings} &lt;&lt;</span>
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">
@@ -241,7 +247,7 @@ session.setAttribute("progressValue", counter);
 		<tr>
 		<td style="padding-left:-2px;">
 		<div style="width:99%;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &gt;&gt;</span>
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">

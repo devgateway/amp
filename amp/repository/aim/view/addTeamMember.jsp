@@ -37,14 +37,14 @@ function validate() {
 
 function cancel()
 {
-	if(document.aimTeamMemberForm.fromPage == 1)
-		document.aimTeamMemberForm.action = "/aim/teamMembers.do";
+	if(document.aimTeamMemberForm.fromPage.value == 1)
+		document.aimTeamMemberForm.action = "/aim/teamMembers.do?teamId="+document.aimTeamMemberForm.teamId.value;
 	else
 		document.aimTeamMemberForm.action = "/aim/teamMemberList.do";
 	
 	document.aimTeamMemberForm.target = "_self";
 	document.aimTeamMemberForm.submit();
-	return true;
+	return false;
 }
 
 function load()
@@ -135,7 +135,7 @@ function clearForms()
 						</html:submit>
 					</td>
 					<td width="50%" align="left">
-						<html:button  styleClass="dr-menu" property="submitButton" onclick="cancel()">
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="return cancel();">
 							<digi:trn key="btn:cancel">Cancel</digi:trn> 
 						</html:button>
 

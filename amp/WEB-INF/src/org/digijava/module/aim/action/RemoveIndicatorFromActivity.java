@@ -50,6 +50,16 @@ public class RemoveIndicatorFromActivity extends Action {
 			}
 		}			
 		
+		if(actForm.getIndicatorsME()!=null && actForm.getIndicatorsME().size()>0){
+			Collection<ActivityIndicator> actIndicators=actForm.getIndicatorsME();
+			for (ActivityIndicator actInd : actIndicators) {
+				if(actInd.getIndicatorId().equals(indicatorId)){
+					actIndicators.remove(actInd);
+					break;
+				}
+			}
+		}
+		
 		session.setAttribute("forStep9", "true");
 		return mapping.findForward("forward");
 	}

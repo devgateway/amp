@@ -25,7 +25,6 @@
 <digi:instance property="aimTeamMemberForm" />
 
 <digi:form action="/addTeamMember.do" method="post">
-<html:hidden property="teamId" />
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 

@@ -1459,7 +1459,8 @@
     <action name="aimAdvancedReportForm" path="/aim/advancedReportPieChart" scope="session" type="org.digijava.module.aim.action.AdvancedReportPieChart" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/advancedReportBarChart" scope="session" type="org.digijava.module.aim.action.AdvancedReportBarChart" validate="false" />
     <action name="aimReportWizardForm" path="/aim/reportWizard" scope="session" type="org.digijava.module.aim.action.reportwizard.ReportWizardAction">
-    	 <forward name="show" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
+    	 <forward name="showReport" path="/showLayout.do?layout=aim_dhtmlReportWizard" />
+    	 <forward name="showTab" path="/showLayout.do?layout=aim_dhtmlTabWizard" />
     	 <forward name="save" path="/showLayout.do?layout=aim_saveMessage" />
     </action>
     <action name="aimAdvancedReportForm" parameter="/aim/advancedReportManager" path="/aim/advancedReportManager" scope="session" type="org.digijava.module.aim.action.AdvancedReport">

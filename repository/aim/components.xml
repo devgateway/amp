@@ -347,6 +347,7 @@
 
 	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
 	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlReportWizard" title=" - Report Wizard" />
+	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlTabWizard" title=" - Tab Wizard" />
 	<page page="reportWizard/saveMessage" name="aim_saveMessage" />
 
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />

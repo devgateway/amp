@@ -236,12 +236,12 @@ div.fakefile2 input{
 					</table>
 			        </div>
 			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-			        <div>
-			        <jsp:include page="iconReferences.jsp"/>
-			        </div>
-				    <br/>
-					<div id="publicDocumentsDiv">
-					</div>			        
+				        <div>
+				       	 <jsp:include page="iconReferences.jsp"/>
+				        </div>
+					    <br/>
+						<div id="publicDocumentsDiv">
+						</div>			        
 			        </div>
 			        
 			        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
@@ -324,6 +324,12 @@ div.fakefile2 input{
 </table>
 <br/>
 
+<c:set var="publicResourcesWindowName">
+	<digi:trn key="cr:windowsName:publicResources">Public Resources</digi:trn>
+</c:set>
+<c:set var="teammemberResourcesWindowName">
+	<digi:trn key="cr:windowsName:teammemberResources">Team Member Resources</digi:trn>
+</c:set>
 	
 <%@include file="documentManagerDivHelper.jsp" %>
 
@@ -337,11 +343,10 @@ YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 </script>
 <script type="text/javascript">
 	function afterPageLoad(e) {
-		windowController	= newWindow( '<digi:trn key="rep:res:dhtmltab:publicresources">Public Resources</digi:trn>', false, 'publicDocumentsDiv');
+		windowController	= newWindow( "${publicResourcesWindowName}", false, 'publicDocumentsDiv');
 		windowController.populateWithPublicDocs();
-		//This is to avoid a problem in French with a string with the character ' in the middle.
-		var msgaux = "<digi:trn key="rep:res:dhtmltab:teammemberresources">Team Member Resources</digi:trn>";
-		windowController	= newWindow( msgaux, true, 'otherDocumentsDiv');
+
+		windowController	= newWindow( "${teammemberResourcesWindowName}", true, 'otherDocumentsDiv');
 		windowController.populateWithPublicDocs();
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 

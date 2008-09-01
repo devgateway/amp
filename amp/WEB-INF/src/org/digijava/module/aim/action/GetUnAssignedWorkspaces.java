@@ -46,6 +46,7 @@ public class GetUnAssignedWorkspaces extends Action {
 //				team="GOVERNMENT";
 //			}
 			uwForm.setActionType(null);
+			uwForm.setSelChildOrgs(null);
 			if(request.getParameter("childorgs")!=null){
 /* Search feature start */
 				Collection col = null;

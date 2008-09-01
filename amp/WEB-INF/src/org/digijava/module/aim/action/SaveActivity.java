@@ -449,12 +449,13 @@ public class SaveActivity extends Action {
     							totalPercentage += percentage;
     					}
     					//Checks if it's 100%
-    					
-    					if (totalPercentage != 0 && totalPercentage != 100 && FeaturesUtil.isVisibleField("Regional Percentage", ampContext)) {
-	                        errors.add("locationPercentageSumWrong",
-	                                   new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
-	                        saveErrors(request, errors);
-    						return mapping.findForward("addActivityStep2");
+    					if(FeaturesUtil.isVisibleField("Regional Percentage", ampContext)){
+    						if(totalPercentage != 100){
+    							errors.add("locationPercentageSumWrong",
+ 	                                   new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
+    							saveErrors(request, errors);
+    							return mapping.findForward("addActivityStep2");
+    						}
     					}
                     }
 

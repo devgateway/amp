@@ -34,8 +34,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.help.dbentity.HelpTopic;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -116,6 +119,30 @@ public class DbUtil {
      * @return
      * @throws EditorException
      */
+    
+    public static List<Editor> getAllHelpData() throws 
+    EditorException {
+	
+	Session session = null;
+	List<Editor> helpTopics = new ArrayList<Editor>();
+	
+	try {
+		session = PersistenceManager.getRequestDBSession();
+		 Query q = session.createQuery(" from e in class " +
+                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
+
+		helpTopics = q.list();
+		
+		
+	} catch (Exception e) {
+		logger.error("Unable to load help data");
+			throw new EditorException("Unable to Load Help data", e);
+	}
+	return helpTopics;
+}
+    
+    
+    
     public static List getSiteEditorList(String siteId) throws
         EditorException {
 
@@ -295,6 +322,9 @@ public class DbUtil {
         return item;
     }
 
+   
+    
+    
     /**
      * Update editor
      *

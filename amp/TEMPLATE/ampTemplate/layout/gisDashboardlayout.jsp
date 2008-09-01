@@ -225,6 +225,7 @@ function setHoveredTable(tableId, hasHeaders) {
 </script>
 <jsp:include page="/TEMPLATE/ampTemplate/layout/gisReportToolbar.jsp" />
 
+<h2 style="padding-left:10px;font-size:15pt;"><digi:trn key="gis:resultsmatrix">Results Matrix: </digi:trn><%=countryName%></h2>
 
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>
@@ -245,7 +246,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
-                                                <a href="#">
+                                                <a style="cursor:default">
                                                 <div>
                                                   <digi:trn key="gis:millenniumdevelopmentgoals">Millennium Development Goals</digi:trn>
                                                 </div>
@@ -316,7 +317,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
-                                                <a href="#">
+                                                <a style="cursor:default">
                                                 <div>
                                                   <digi:trn key="gis:resourcesatglance">Resources at a glance</digi:trn>
                                                 </div>
@@ -362,7 +363,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
-                                                <a href="#">
+                                                <a  style="cursor:default">
                                                 <div>
                                                   <digi:trn key="gis:aideffectivenessindicators">Aid Effectiveness Process Indicators</digi:trn>
                                                 </div>
@@ -414,7 +415,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
-                                                <a href="#">
+                                                <a  style="cursor:default">
                                                 <div>
                                                   <digi:trn key="gis:outputindicators">Output Indicators</digi:trn>
                                                 </div>
@@ -447,7 +448,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
-                                                <a href="#">
+                                                <a  style="cursor:default">
                                                 <div>
                                                   <digi:trn key="gis:totalresources">Total resources</digi:trn>
                                                 </div>
@@ -477,7 +478,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                                             <ul class="yui-nav">
                                               <li class="selected">
-                                                <a href="#">
+                                                <a  style="cursor:default">
                                                 <div>
                                                   <digi:trn key="gis:externalaidresources">External Aid Resources</digi:trn>
                                                 </div>

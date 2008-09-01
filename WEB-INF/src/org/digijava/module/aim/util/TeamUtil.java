@@ -801,6 +801,7 @@ public class TeamUtil {
             return;
         } catch(Exception ex) {
             logger.error("Execption from removeTeam() :" + ex.getMessage());
+            ex.printStackTrace();
             if(tx != null) {
                 try {
                     tx.rollback();

@@ -1603,7 +1603,7 @@ public class TeamMemberUtil {
 
                             Collection memAppSettings = qry.list();
                             if (memAppSettings != null && !memAppSettings.isEmpty()) {
-                                for (Iterator appSettIter = memReports.iterator(); appSettIter.hasNext(); ) {
+                                for (Iterator appSettIter = memAppSettings.iterator(); appSettIter.hasNext(); ) {
                                     AmpApplicationSettings set = (AmpApplicationSettings) appSettIter.next();
                                     set.setDefaultTeamReport(null);
                                     session.update(set);
@@ -1647,6 +1647,7 @@ public class TeamMemberUtil {
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to removeTeamMembers " + e.getMessage());
+            e.printStackTrace();
             if (tx != null) {
                 try {
                     tx.rollback();

@@ -814,7 +814,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  indConn.getValues().add(indValRevised);
           }
           // save connection with its new values.
-          IndicatorUtil.saveConnectionToActivity(indConn);
+          IndicatorUtil.saveConnectionToActivity(indConn, session);
         }
       }
         String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;

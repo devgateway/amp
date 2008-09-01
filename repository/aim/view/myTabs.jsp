@@ -58,6 +58,13 @@
     
 </script>
 
+<c:set var="showCurrSettings">
+	<digi:trn key="rep:showCurrSettings">Show current settings</digi:trn> 
+</c:set>
+<c:set var="hideCurrSettings">
+	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
+</c:set>
+
 <script language="JavaScript">
 /*	function addActivity() {
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
@@ -69,12 +76,12 @@ function toggleSettings(){
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "Show current settings &gt;&gt;";
+		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "Hide current settings &lt;&lt;";
+		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
 	}
 }
 
@@ -238,17 +245,17 @@ var myTabsObject;
 		<logic:iterate name="myTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                    <c:set var="counter" value="${counter+1}" />
-	                    <c:set var="reportNameTrn">
+	                    <%-- <c:set var="reportNameTrn">
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
-	                    </c:set>
+	                    </c:set> --%>
 	                   
 	                    <c:if test="${counter < 6}">
 	                    <li>
-	                    <c:if test="${fn:length(reportNameTrn) > 25}" >
-							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${reportNameTrn}" />'><div><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div></a>
+	                    <c:if test="${fn:length(report.name) > 25}" >
+							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>
 	                    </c:if>
-	                    <c:if test="${fn:length(reportNameTrn) <= 25}" >
-							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${reportNameTrn}" />'><div><c:out value="${reportNameTrn}" /></div></a>
+	                    <c:if test="${fn:length(report.name) <= 25}" >
+							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${report.name}" /></div></a>
 	                    </c:if>
 	                                                                
 	                    </li>
@@ -304,14 +311,14 @@ DIV.panelList {
             </logic:iterate>
 			<c:if test="${showTab}">
 					<logic:equal name="report" property="drilldownTab" value="true">
-	                    <c:set var="reportNameTrn">
+	                   <%--  <c:set var="reportNameTrn"> 
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
-	                    </c:set>
-	                    <c:if test="${fn:length(reportNameTrn) > 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${fn:substring(reportNameTrn, 0, 25)}" />", "Tab-<c:out value="${reportNameTrn}" />");' title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${fn:substring(reportNameTrn, 0, 25)}" />...</div>
+	                    </c:set> --%>
+	                    <c:if test="${fn:length(report.name) > 25}" >
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.name}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
 	                    </c:if>
-	                    <c:if test="${fn:length(reportNameTrn) <= 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${reportNameTrn}" />", "<c:out value="${reportNameTrn}" />", "Tab-<c:out value="${reportNameTrn}" />");'  title="<c:out value="${reportNameTrn}" />" id="<c:out value="${reportNameTrn}" />"><c:out value="${reportNameTrn}" /></div>
+	                    <c:if test="${fn:length(report.name) <= 25}" >
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${report.name}" />", "Tab-<c:out value="${report.name}" />");'  title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${report.name}" /></div>
 	                    </c:if>
 					</logic:equal>
             </c:if>

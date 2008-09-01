@@ -21,7 +21,10 @@
 							border="0" align="absmiddle"
 							src="module/contentrepository/images/folder_folder.gif" />
 					</a>
-					<button class="dr-menu" type="button" name="otherDocumentsButton"><digi:trn key="contentrepository:SelectButton">Select</digi:trn></button>
+					<button class="dr-menu" type="button" name="otherDocumentsButton" 
+						style="font-size: 9px;">
+						<digi:trn key="contentrepository:SelectButton">Select</digi:trn>
+					</button>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>&nbsp;</span>
 				</td>
 				<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" 

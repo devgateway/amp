@@ -922,7 +922,6 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			e.printStackTrace();
 		}
 //		
-		//120px × 20px
 		PdfPCell legendTextCell = new PdfPCell();
 		legendTextCell.setPadding(0);
 		legendTextCell.setBorder(Rectangle.NO_BORDER);

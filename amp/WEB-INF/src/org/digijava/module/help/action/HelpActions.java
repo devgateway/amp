@@ -60,60 +60,6 @@ public class HelpActions extends DispatchAction {
 //		return mapping.findForward("help");
 //	}
 
-
-	
-	
-//	public static createHelp(){
-//		
-//		Editor item = new Editor(); 
-//		DateFormat formatter ; 
-//	    Date date ; 
-//		
-//		Long irde = IndexReader.lastModified("lucene-index");
-//		
-//		  List<Editor> data =  DbUtil.getAllHelpData();
-//		  
-//		for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
-//		
-//			 item = (Editor) iter.next();
-//        
-//			 
-//             String article =  item.getBody();
-//             int editkey = item.getEditorKey().indexOf("body:");
-//             String title = item.getEditorKey().substring(editkey+5);
-//             System.out.println("String : " + title);
-//             
-//             Long lastLucModDay = IndexReader.lastModified("lucene-index");
-// 			 SimpleDateFormat time = new SimpleDateFormat();
-// 			 String leastUpDate =  time.format(lastLucModDay);
-// 			 
-// 			 
-// 		     formatter = new SimpleDateFormat("yy-MMM-dd");
-// 		     date = (Date)formatter.parse(leastUpDate);
-// 		    
-// 		     //if(update)
-// 		    	// if(item.getLastModDate().after(date)){
-// 				 
-// 				  //   LuceneUtil.addUpdateHelp(article, title,update,add);
-// 			 
-// 		    	// }
-// 		    	// else if (add){
-// 		    		LuceneUtil.addUpdateHelp(article, title,false,true);
-// 		    		 
-// 		    	// }
-// 		    		
-// 		    		boolean createDir = IndexReader.indexExists("lucene-index");
-// 		   		
-// 		 		  if(!createDir){
-// 		 			  LuceneUtil.addUpdateHelp(article, title,false,true);
-// 		 		  }
-//           		
-//             	
-//            
-//           }
-//   
-//		
-//	}
 	
 	private Collection<LabelValueBean> getSearchedData() throws DgException{
 		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>(2);

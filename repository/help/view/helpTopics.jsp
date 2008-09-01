@@ -22,7 +22,7 @@
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
                <ul class="yui-nav">
-                          <li class="selected">
+                          <li class="selected" style="width: 100%">
                           <a title='<digi:trn key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>'>
                           <div>
                           	<digi:trn key="aim:helpTopic">Help Topics</digi:trn>
@@ -30,7 +30,7 @@
                           </a>
                           </li>
                         </ul>
-                        <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+                        <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <c:if test="${ not empty helpForm.topicTree}">
                                   <c:if test="${not empty helpForm.parentId}">
                                     <c:if test="${helpForm.parentId!=''}">
@@ -122,14 +122,14 @@
                                         </c:if>
                                             <c:if test="${curTopicParentId==parent.helpTopicId}">
                                              <div id="collapse${parent.helpTopicId}" style="display:none;padding:3px">
-                                              		<digi:img src="images/arrow_right.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},true);"/>
+                                              		<digi:img src="images/tree_plus.giff" onclick="javascript:toggleDiv(${parent.helpTopicId},true);"/>
                                                    <a href="${url}&amp;topicKey=${parent.topicKey}">
                                                       <digi:trn key="${parent.titleTrnKey}"></digi:trn>
                                                     </a> 
                                                    
                                               </div>
                                               <div id="uncollapse${parent.helpTopicId}" style="display: block;padding:3px">
-                                                <digi:img src="images/arrow_down.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},false);"/>
+                                                <digi:img src="images/tree_minus.gif" onclick="javascript:toggleDiv(${parent.helpTopicId},false);"/>
                                                       <a href="${url}&amp;topicKey=${parent.topicKey}">
 														<digi:trn key="${parent.titleTrnKey}"></digi:trn>
                                                       </a>

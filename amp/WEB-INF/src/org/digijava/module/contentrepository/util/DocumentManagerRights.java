@@ -26,7 +26,10 @@ public class DocumentManagerRights {
 	}
 	
 	public static Boolean hasViewRights (Node node, HttpServletRequest request) {
-		Boolean isOwnerOrTeamLeader	= isOwnerOrTeamLeader(node, request);
+		Boolean manuallySetViewAllRights	= isManuallySetViewAllFlag(request);
+		if ( manuallySetViewAllRights != null && manuallySetViewAllRights)
+			return true;
+		Boolean isOwnerOrTeamLeader			= isOwnerOrTeamLeader(node, request);
 		if ( isOwnerOrTeamLeader != null && isOwnerOrTeamLeader.booleanValue() )
 			return new Boolean(true);
 		
@@ -159,6 +162,13 @@ public class DocumentManagerRights {
 	private static Boolean isManuallySetNoMakePublicFlag(HttpServletRequest request) {
 		if ( request.getParameter("makePublicRights") != null ) {
 			Boolean result	= Boolean.parseBoolean( request.getParameter("makePublicRights") );
+			return result;
+		}
+		return null;
+	}
+	private static Boolean isManuallySetViewAllFlag(HttpServletRequest request) {
+		if ( request.getParameter("viewAllRights") != null ) {
+			Boolean result	= Boolean.parseBoolean( request.getParameter("viewAllRights") );
 			return result;
 		}
 		return null;

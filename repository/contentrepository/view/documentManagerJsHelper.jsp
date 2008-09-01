@@ -33,6 +33,19 @@
 .versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
 .versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color:#dddddb;}
 .versions_markup .yui-dt-pagelinks {font-size: 10px;}
+
+#otherDocumentsDiv .yuimenu {z-index: 101;}
+#otherDocumentsDiv ul.first-of-type { background: transparent; z-index: 300000;} 
+#otherDocumentsDiv ul.first-of-type li  {
+	background: transparent; z-index: 300001
+}
+#otherDocumentsDiv ul.first-of-type li.selected  {
+	background: #8c8ad0;
+}
+#otherDocumentsDiv ul.first-of-type a{float: none; background: transparent; color: #000000; font-size: 10px; text-decoration: none; font-style: normal;}
+#otherDocumentsDiv ul.first-of-type li.selected a.selected{ 
+	color: #ffffff; text-decoration: underline; font-size: 10px; font-style: normal;
+}
 </style>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/fonts/fonts.css'/>"> 
@@ -399,6 +412,8 @@ function WindowControllerObject(bodyContainerEl) {
 						parameters	+= "&showVersionsRights=" + obj.rights.showVersionsRights;
 					if (obj.rights.makePublicRights != null) 
 						parameters	+= "&makePublicRights=" + obj.rights.makePublicRights;
+					if (obj.rights.viewAllRights != null) 
+						parameters	+= "&viewAllRights=" + obj.rights.viewAllRights;
 				}
 				if (obj.userName != null)
 					parameters	+= "&otherUsername=" + obj.userName;
@@ -660,7 +675,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	var optionsMenu	= new YAHOO.widget.Menu("optionsMenu" + menuNum);
 	
 	<logic:notEmpty name="tMembers">
-	<logic:iterate name="tMembers" id="member">
+	<logic:iterate name="tMembers" id="member" indexId="counterId">
 		var scopeObj	= {
 			teamId				: '<bean:write name="member" property="teamId" />',
 			userName			: '<bean:write name="member" property="email" />'
@@ -671,7 +686,8 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			scope				: windowController
 			
 		};
-		var menuItem	= new YAHOO.widget.MenuItem('<bean:write name="member" property="email" />', { onclick:onclickObj } );
+		var menuId		= "myMember-${counterId}";
+		var menuItem	= new YAHOO.widget.MenuItem('<bean:write name="member" property="email" />', { onclick:onclickObj, id:menuId } );
 		membersMenu.addItem(menuItem); 
 
 	</logic:iterate>

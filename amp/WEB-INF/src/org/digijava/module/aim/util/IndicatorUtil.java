@@ -448,15 +448,15 @@ public class IndicatorUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static IndicatorActivity saveConnectionToActivity(IndicatorActivity connection) throws DgException{
-		Session sessioin=PersistenceManager.getRequestDBSession();
+	public static IndicatorActivity saveConnectionToActivity(IndicatorActivity connection, Session hbSession) throws DgException{
 		Transaction tx=null;
 		try {
-			tx=sessioin.beginTransaction();
-			sessioin.saveOrUpdate(connection);
+			tx=hbSession.beginTransaction();
+			hbSession.saveOrUpdate(connection);
 			tx.commit();
 			return connection;
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			if (tx!=null){
 				try {
 					tx.rollback();

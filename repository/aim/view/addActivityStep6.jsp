@@ -605,6 +605,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												<bean:define toScope="request" id="showRemoveButton" value="true" />
 												<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
 												<bean:define toScope="request" id="versioningRights" value="false" />
+												<bean:define toScope="request" id="viewAllRights" value="true" />
 												<bean:define toScope="request" id="makePublicRights" value="false" />
 												<bean:define toScope="request" id="showVersionsRights" value="false" />
 												<bean:define toScope="request" id="deleteRights" value="false" />

@@ -27,6 +27,9 @@
 	<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" 
 			property="<%=ActivityDocumentsConstants.TEMPORARY_DOCUMENTS %>"  id="tempDocs" scope="session" toScope="page"/>
 	</logic:notEmpty>
+	<c:if test="${viewAllRights==null}">
+		<c:set var="viewAllRights" value="false"/>
+	</c:if>
 
 	<logic:empty name="windowName">
 		<bean:define id="windowName" toScope="page">
@@ -55,7 +58,8 @@
 						showVersionsRights	: ${showVersionsRights},
 						versioningRights	: ${versioningRights},
 						makePublicRights	: ${makePublicRights},
-						deleteRights		: ${deleteRights}
+						deleteRights		: ${deleteRights},
+						viewAllRights		: ${viewAllRights}
 				};
 				</logic:notEmpty>
 				windowController	= newWindow('<bean:write name="dmWindowTitle"/>',false,'selDocumentsDiv');

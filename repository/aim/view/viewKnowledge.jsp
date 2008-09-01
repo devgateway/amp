@@ -172,7 +172,8 @@ function preview(id)
 											<bean:define id="dmWindowTitle" toScope="request">Related Documents</bean:define>
 											<bean:define toScope="request" id="documentsType"
 												value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
-											<bean:define toScope="request" id="versioningRights" value="false" /> 
+											<bean:define toScope="request" id="versioningRights" value="false" />
+											<bean:define toScope="request" id="viewAllRights" value="true" /> 
 											<bean:define toScope="request" id="deleteRights" value="false" /> 
 											<bean:define toScope="request" id="showVersionsRights" value="false" /> 
 											<bean:define toScope="request" id="makePublicRights" value="false" /> 

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
@@ -26,6 +27,7 @@ public class HelpForm extends ActionForm {
 	private String title;
 	private String body;
 	private Long childId;
+	private Collection<LabelValueBean> searched; 
 	
 
 	public Boolean getBlankPage() {
@@ -164,6 +166,14 @@ public class HelpForm extends ActionForm {
 
 	public void setChildId(Long childId) {
 		this.childId = childId;
+	}
+
+	public Collection<LabelValueBean> getSearched() {
+		return searched;
+	}
+
+	public void setSearched(Collection<LabelValueBean> searched) {
+		this.searched = searched;
 	}
 
 

@@ -1,7 +1,14 @@
 package org.digijava.module.help.action;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,12 +19,36 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.util.HelpUtil;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.store.Directory;
+import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.aim.util.LuceneUtil;
+
+
+
+
+
 
 public class HelpActions extends DispatchAction {
 
@@ -29,6 +60,69 @@ public class HelpActions extends DispatchAction {
 //		return mapping.findForward("help");
 //	}
 
+
+	
+	
+//	public static createHelp(){
+//		
+//		Editor item = new Editor(); 
+//		DateFormat formatter ; 
+//	    Date date ; 
+//		
+//		Long irde = IndexReader.lastModified("lucene-index");
+//		
+//		  List<Editor> data =  DbUtil.getAllHelpData();
+//		  
+//		for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
+//		
+//			 item = (Editor) iter.next();
+//        
+//			 
+//             String article =  item.getBody();
+//             int editkey = item.getEditorKey().indexOf("body:");
+//             String title = item.getEditorKey().substring(editkey+5);
+//             System.out.println("String : " + title);
+//             
+//             Long lastLucModDay = IndexReader.lastModified("lucene-index");
+// 			 SimpleDateFormat time = new SimpleDateFormat();
+// 			 String leastUpDate =  time.format(lastLucModDay);
+// 			 
+// 			 
+// 		     formatter = new SimpleDateFormat("yy-MMM-dd");
+// 		     date = (Date)formatter.parse(leastUpDate);
+// 		    
+// 		     //if(update)
+// 		    	// if(item.getLastModDate().after(date)){
+// 				 
+// 				  //   LuceneUtil.addUpdateHelp(article, title,update,add);
+// 			 
+// 		    	// }
+// 		    	// else if (add){
+// 		    		LuceneUtil.addUpdateHelp(article, title,false,true);
+// 		    		 
+// 		    	// }
+// 		    		
+// 		    		boolean createDir = IndexReader.indexExists("lucene-index");
+// 		   		
+// 		 		  if(!createDir){
+// 		 			  LuceneUtil.addUpdateHelp(article, title,false,true);
+// 		 		  }
+//           		
+//             	
+//            
+//           }
+//   
+//		
+//	}
+	
+	private Collection<LabelValueBean> getSearchedData() throws DgException{
+		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>(2);
+		//TODO temporary solution, improve this.
+		result.add(new LabelValueBean("Standard","1"));
+		result.add(new LabelValueBean("Dropdown Filter - Donors","2"));
+		return result;
+	}
+
 	public ActionForward searchHelpTopic(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -38,9 +132,39 @@ public class HelpActions extends DispatchAction {
 		 .getInstanceName();
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 String keywords = helpForm.getKeywords();
+		 
+		 if(keywords != ""){
+		 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
+		
+		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords());
+		 
+		 HelpForm help = (HelpForm) form;
+		 
+		  int hitCount = hits.length();   
+    	   
+    	  if(hitCount == 0){
+    		  
+    		  help.setTitle(null);
+			  help.setBody(null);
+    	  
+    	  }else{
+    	  
+    		  for(int i=0; (i < hitCount && i < 10); i++){
+
+    		  Document doc = hits.doc(i);
+
+			   String title = doc.get("title");
+			   String article = doc.get("article");
+			   Searched.add(new LabelValueBean(title,article));
+			   help.setSearched(Searched);
+			   help.setTopicKey(null);
+			   
+    	  }
+    	}
+   	}
 		 helpForm.setHelpTopics(HelpUtil.getHelpTopics(siteId, moduleInstance,locale,
 		 keywords));
-		 return mapping.findForward("search");		
+		 return mapping.findForward("help");		
 	}
 
 	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,
@@ -55,6 +179,8 @@ public class HelpActions extends DispatchAction {
 		helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
 		helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
 		helpForm.setHelpErrors(null);
+		helpForm.setSearched(null);
+		LuceneUtil.addUpdatehelp(true);
 		if(helpTopic.getParent()!=null){
 			helpForm.setParentId(helpTopic.getParent().getHelpTopicId());
 		}		
@@ -93,6 +219,9 @@ public class HelpActions extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
+		 
+		
+		  
 		int wizardStep = helpForm.getWizardStep();
 		helpForm.setEdit(false);
 		switch (wizardStep) {

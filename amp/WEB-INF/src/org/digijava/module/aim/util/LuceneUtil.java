@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +46,9 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
 
 /**
  * @author Alexandru Artimon
@@ -53,7 +59,7 @@ public class LuceneUtil {
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
 	public final static Analyzer analyzer = new StandardAnalyzer();
 	public final static String idField = "id";
-	
+	public final static String indexDirectory = "lucene-index";
 //	/**
 //	 * Opens the writer so information can be added to the index
 //	 * @param create set it to true to create the index filestructure
@@ -474,6 +480,141 @@ public class LuceneUtil {
 			e1.printStackTrace();
 		}
 		return hits;
+	}
+	
+	
+	public static void createHelp() throws IOException , EditorException, Exception{
+	
+		boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir"));
+	
+		if(!createDir){
+			logger.info("Building the help");
+				  LuceneUtil.addUpdatehelp(false);
+		  }
+	
+}
+
+	 public static void addUpdatehelp(boolean update) throws IOException , EditorException, Exception{
+	 
+		Editor item = new Editor(); 
+		DateFormat formatter ; 
+	    Date date ; 
+	    
+	    boolean createDir = IndexReader.indexExists("indexDirectory");
+		Long irde = IndexReader.lastModified("indexDirectory");
+ 	    Long lastLucModDay = IndexReader.lastModified("lucene-index");
+	
+ 	    formatter  = new SimpleDateFormat();
+	    String leastUpDate = formatter.format(lastLucModDay);
+	    date = (Date)formatter.parse(leastUpDate);
+	
+  	    List<Editor> data =  DbUtil.getAllHelpData();
+		  
+		for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
+		
+			 item = (Editor) iter.next();
+ 			 
+             String article =  item.getBody();
+             int editkey = item.getEditorKey().indexOf("body:");
+             String title = item.getEditorKey().substring(editkey+5);
+             if(update){
+            	 if(item.getLastModDate().after(date)){
+            		 deleteHelp("title",title);
+            		 indexArticle(article, title);
+            	 }
+             	}else if(!update){
+             		indexArticle(article, title);	
+             	}
+            }
+ 	}
+	
+	
+	
+	
+	
+	public static Hits helpSearch(String field, String searchString){
+		QueryParser parser = new QueryParser(field, analyzer);
+		Query query = null;
+		Hits hits = null;
+	
+		
+		Searcher indexSearcher = null;
+		try {
+			indexSearcher = new IndexSearcher(indexDirectory);
+			searchString = searchString.trim();
+			query = parser.parse(searchString+"*");
+			hits = indexSearcher.search(query);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return hits;
+	}
+	
+	
+	
+	public static void indexArticle(String article, String title)
+    throws Exception {
+		Document document = LuceneUtil.createDocument(article,title);
+		LuceneUtil.indexDocument(document);
+		
+}	
+	
+   
+	public static Document createDocument(String article, String title){
+
+		 Document document = new Document();
+		 document.add(new Field("title",title,Field.Store.YES,Field.Index.TOKENIZED));
+		 document.add(new Field("article",article,Field.Store.YES,Field.Index.TOKENIZED));
+		 return document;
+		
+	}
+
+	
+	public static boolean isDir(Document document){
+		boolean createDir = IndexReader.indexExists(indexDirectory);
+		return createDir;
+	}
+	
+	
+	public static void indexDocument(Document document) throws IOException {
+		try{
+    	
+		boolean createDir = IndexReader.indexExists(indexDirectory);
+			
+			if(createDir == false){
+		
+				createDir= true;
+		
+			}else if (createDir == true){
+			
+				createDir= false;
+			}
+		
+		StandardAnalyzer analyzer  = new StandardAnalyzer();
+        IndexWriter writer = new IndexWriter(indexDirectory, analyzer, createDir);
+        writer.addDocument(document);
+        writer.optimize();
+        writer.close();
+        
+    } catch (IOException e) {
+
+    	System.out.println("IOException opening Lucene IndexWriter: " + e.getMessage());
+
+    }
+    
+  }
+	public static void deleteHelp(String field, String search){
+		Term term = new Term(field,search);
+		Directory directory;
+		IndexReader indexReader;
+
+		try {
+			indexReader = IndexReader.open(indexDirectory);
+			Integer deleted = indexReader.deleteDocuments(term);
+			indexReader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

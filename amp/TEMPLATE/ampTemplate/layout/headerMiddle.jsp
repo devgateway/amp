@@ -321,7 +321,7 @@ border-right:1px solid white;
                                             </a> --%>
                                             <feature:display  name="Tab Generator" module="New Report Wizard">
 		                                      	<li class="yuiampmenuitem" title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
-		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true">
+		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true&reset=true">
 		                                                <b><digi:trn key="aim:addTab">Add Tab</digi:trn></b>
 		                                            </a>
 		                                        </li>
@@ -374,7 +374,7 @@ border-right:1px solid white;
                                       <ul>
                                         <feature:display  name="Report Generator" module="New Report Wizard">
 	                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
-	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do">
+	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true">
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>

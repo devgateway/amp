@@ -25,7 +25,6 @@
 
 <digi:instance property="aimActivityDashboardForm" />
 
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 
 <script language="Javascript">
 

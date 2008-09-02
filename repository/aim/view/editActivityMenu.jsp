@@ -9,7 +9,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 
 <script language="JavaScript">
 <!--

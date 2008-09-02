@@ -40,6 +40,7 @@ public class UpdateIssue extends Action {
 			}
 			if (eaForm.getIssues() == null) {
 				issue.setName(eaForm.getIssue());
+				issue.setIssueDate(eaForm.getIssueDate());
 				if (eaForm.getIssues() == null) {
 					eaForm.setIssues(new ArrayList());
 				}

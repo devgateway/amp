@@ -7,13 +7,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
@@ -32,6 +38,7 @@ import org.digijava.module.widget.table.WiRow;
 import org.digijava.module.widget.table.WiRowHeader;
 import org.digijava.module.widget.table.WiRowStandard;
 import org.digijava.module.widget.table.WiTable;
+import org.digijava.module.widget.table.WiTable.TableProxy;
 import org.digijava.module.widget.table.calculated.WiColumnCalculated;
 import org.digijava.module.widget.table.filteredColumn.FilterItem;
 import org.digijava.module.widget.table.filteredColumn.FilterItemProvider;
@@ -65,13 +72,14 @@ public final class TableWidgetUtil {
 		WiTable table = new WiTable.TableBuilder(dbTable.getId()).name("Some Name").showTitle(true).build();
 		return table;
 	}
-	
+
 	/**
 	 * Creates new column. Exact type of the result depends on the parameter.
 	 * @param dbColumn
+	 * @param table
 	 * @return
 	 */
-	public static WiColumn newColumn(AmpDaColumn dbColumn){
+	public static WiColumn newColumn(AmpDaColumn dbColumn, TableProxy tableProxy){
 		int type = (dbColumn.getColumnType()==null)?WiColumn.STANDARD:dbColumn.getColumnType();
 		WiColumn column = null;
 		if (type == WiColumn.STANDARD){
@@ -81,6 +89,7 @@ public final class TableWidgetUtil {
 		}else if (type == WiColumn.FILTER && (dbColumn instanceof AmpDaColumnFilter)){
 			column = new WiColumnDropDownFilter((AmpDaColumnFilter)dbColumn);
 		}
+		column.setTableProxy(tableProxy);
 		return column;
 	}
 	
@@ -175,6 +184,18 @@ public final class TableWidgetUtil {
 		}
 	}
 	
+	public static String getTranslation(String key, HttpServletRequest request, String defaultValue){
+		String result = defaultValue;
+		try {
+			Locale local = RequestUtils.getNavigationLanguage(request);
+			Message message = TranslatorWorker.getInstance(key).get(key, local.getCode(), "amp");
+			result = message.getMessage();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	/**
 	 * Returns provider of filter items. Which provider is returned depends on col.filterItemProvider property.
 	 * TODO currently returns always same - donor provider.
@@ -200,12 +221,20 @@ public final class TableWidgetUtil {
 		private Map<Long, FilterItem> itemsById = new HashMap<Long, FilterItem>();
 		private List<FilterItem> items = new ArrayList<FilterItem>();
 		
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "deprecation" })
 		public DonorFilter(){
 			Collection<AmpOrganisation> donors = DbUtil.getAllDonorOrgs();
 			if (donors==null){
 				donors = new ArrayList<AmpOrganisation>();
 			}
+			//AMP-4097 start. Ugly !
+			AmpOrganisation dummyGrp = new AmpOrganisation();
+			dummyGrp.setAmpOrgId(new Long(-1));
+			dummyGrp.setName("Select Donor Group");
+			FilterItem dummyItem = new DonorFilterItem(dummyGrp);
+			items.add(dummyItem);
+			itemsById.put(getId(), dummyItem);
+			//AMP-4097 end
 			for (AmpOrganisation org : donors) {
 				FilterItem item= new DonorFilterItem(org);
 				items.add(item);
@@ -244,6 +273,15 @@ public final class TableWidgetUtil {
 			if (groups==null){
 				groups = new ArrayList<AmpOrgGroup>();
 			}
+			//AMP-4097 start. Ugly !
+			AmpOrgGroup dummyGrp = new AmpOrgGroup();
+			dummyGrp.setAmpOrgGrpId(new Long(-1));
+			dummyGrp.setOrgGrpName("Select Donor Group");
+			FilterItem dummyItem = new OrgGroupFilterItem(dummyGrp);
+			items.add(dummyItem);
+			itemsById.put(getId(), dummyItem);
+			//AMP-4097 end
+
 			for (AmpOrgGroup orgGr : groups) {
 				FilterItem item= new OrgGroupFilterItem(orgGr);
 				items.add(item);

@@ -1,6 +1,8 @@
 package org.digijava.module.widget.table.filteredColumn;
 
 
+
+
 public class WiCellHeaderFiltered extends WiCellFiltered {
 
 	public WiCellHeaderFiltered(){
@@ -25,6 +27,13 @@ public class WiCellHeaderFiltered extends WiCellFiltered {
 		buf.append("' idTable='");
 		buf.append(this.getColumn().getTable().getId());
 		buf.append("'>\n ");
+		
+		//AMP-4097 start
+//		buf.append("<option value='-1'>");
+//		buf.append("Select Donor Group");
+//		buf.append("</option>");
+		//AMP-4097 end
+		
 		for (FilterItem item : getItemProvider().getItems()) {
 			buf.append("<option value='");
 			buf.append(item.getId());

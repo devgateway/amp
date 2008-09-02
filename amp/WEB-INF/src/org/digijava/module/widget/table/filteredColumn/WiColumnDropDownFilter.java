@@ -35,6 +35,7 @@ public class WiColumnDropDownFilter extends WiColumn {
 		//setup currently selected item in drop down
 		if (columnMap.values().size()>0){
 			this.setActiveItemId(new Long(columnMap.values().iterator().next().getFilterItemId()));
+//			this.setActiveItemId(new Long(-1));
 		}
 		//store map in this specialized filter column.
 		this.columns = columnMap;
@@ -66,7 +67,16 @@ public class WiColumnDropDownFilter extends WiColumn {
 
 	private Map<Long,WiColumnFilterSubColumn> createColumnsFromProvider(FilterItemProvider provider,WiColumn masterColumn){
 		List<FilterItem> items = provider.getItems();
-		Map<Long, WiColumnFilterSubColumn> columns = new HashMap<Long,WiColumnFilterSubColumn>(items.size());
+		Map<Long, WiColumnFilterSubColumn> columns = new HashMap<Long,WiColumnFilterSubColumn>(items.size()+1);
+		
+		//AMP-4097, pint 2.  do not like this idea...
+//		WiColumnFilterSubColumn dummyColumn = new WiColumnFilterSubColumn();
+//		dummyColumn.setId(masterColumn.getId());
+//		dummyColumn.setFilterItemId(new Long(-1));
+//		dummyColumn.setName("Select Donor Group");
+//		columns.put(dummyColumn.getFilterItemId(), dummyColumn);
+		//AMP-4097 end
+		
 		for (FilterItem item : items) {
 			WiColumnFilterSubColumn column = new WiColumnFilterSubColumn();
 			column.setId(masterColumn.getId());

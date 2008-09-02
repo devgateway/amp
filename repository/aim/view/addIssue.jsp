@@ -61,7 +61,7 @@
 								      <td><html:text property="issueDate" size="10"
 																styleId="issueDate" styleClass="inp-text" readonly="true"/> 
 																
-																<a id="clear1" href="javascript:clearDate(issueDate, 'clear1')">
+																<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.issueDate, 'clear1')">
 	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 																</a>
 																<a id="date1" href='javascript:pickDateWithClear("date1", document.aimEditActivityForm.issueDate,"clear1")'>

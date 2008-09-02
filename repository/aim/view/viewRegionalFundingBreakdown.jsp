@@ -265,6 +265,8 @@ function projectFiche(id)
 	<TR><TD>&nbsp;</TD></TR>
 </TABLE>
 </digi:form>
-
-
-
+<script>
+if(document.getElementById('showBottomBorder').value=='1'){
+	document.write('</table><tr><td class="td_bottom1">&nbsp;</td></tr></table>&nbsp');
+}
+</script>

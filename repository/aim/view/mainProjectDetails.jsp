@@ -12,6 +12,41 @@
 <jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <jsp:include page="overviewOptionsPopupUtil.jsp" flush="true" />
 
+<style type="text/css">
+	.td_top1 {
+		border-top-style:solid; 
+		border-top-color:#455786;
+		border-top-width: 1px;
+		border-right-style:solid; 
+		border-right-color:#455786;
+		border-right-width: 1px; 
+		border-left-style:solid; 
+		border-left-color:#455786;
+		border-left-width: 1px;
+	}
+	
+	.td_bottom1 {
+		border-bottom-style:solid; 
+		border-bottom-color:#455786;
+		border-bottom-width: 1px;
+		border-right-style:solid; 
+		border-right-color:#455786;
+		border-right-width: 1px; 
+		border-left-style:solid; 
+		border-left-color:#455786;
+		border-left-width: 1px;
+	}
+	
+	.td_right_left1 {
+		border-right-style:solid; 
+		border-right-color:#455786;
+		border-right-width: 1px; 
+		border-left-style:solid; 
+		border-left-color:#455786;
+		border-left-width: 1px;
+	}
+</style>
+
 <script type="text/javascript">
 function projectFiche(id)
 {
@@ -224,37 +259,39 @@ html>body #mainEmpty {
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 
-<input name="tempActivity" type="hidden" value='<%=request.getParameter("ampActivityId")%>' id="tempActivity">
-
-<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
-   <TR>
+<digi:form action="/viewProjectDetails.do">
+<html:hidden property="type" />
+<html:hidden property="description" />
+<html:hidden property="objectives" />					
+<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">
+	<TR>
 		<TD>
-			<digi:form action="/viewProjectDetails.do">
-			<html:hidden property="type" />
-			<html:hidden property="description" />
-			<html:hidden property="objectives" />					
-			<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">
-				<TR>
-					<TD>
-						<SPAN class=crumb>
-							<div id="gen" title='<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>'>
-							<digi:link href="/viewMyDesktop.do" styleClass="comment">
-								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-							</digi:link></div>&nbsp;&gt;&nbsp;
-							<div id="gen" title='<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>'>
-		            	<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="comment">
-        						<digi:trn key="aim:activity">Activity</digi:trn>
-							</digi:link></div>&nbsp;&gt;&nbsp;
-        					<digi:trn key="aim:activityDetails">Details</digi:trn>
-						</SPAN>
-					</TD>
-				</TR>
-			</TABLE>
-			</digi:form>
+			<SPAN class=crumb>
+				<div id="gen" title='<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>'>
+				<digi:link href="/viewMyDesktop.do" styleClass="comment">
+					<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+				</digi:link></div>&nbsp;&gt;&nbsp;
+				<div id="gen" title='<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>'>
+           	<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="comment">
+     						<digi:trn key="aim:activity">Activity</digi:trn>
+				</digi:link></div>&nbsp;&gt;&nbsp;
+     					<digi:trn key="aim:activityDetails">Details</digi:trn>
+			</SPAN>
 		</TD>
 	</TR>
+</TABLE>
+</digi:form>
+
+<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left"><tr><td class="td_top1">
+<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left"><tr><td>
+
+<input name="tempActivity" type="hidden" value='<%=request.getParameter("ampActivityId")%>' id="tempActivity">
+<input name="showBottomBorder" type="hidden" value="1" id="showBottomBorder">
+
+<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
+	<tr><td>&nbsp;</td></tr>
 	<tr>
-		<td><strong>
+		<td class="td_top"><strong>&nbsp;
 			<module:display name="Previews"
 				parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Preview Activity" module="Previews">
@@ -325,7 +362,7 @@ html>body #mainEmpty {
 							<feature:display module="Project ID and Planning" name="Identification">
 							<field:display  feature="Identification" name="Project Title">
 								<TD vAlign=center><span class="subtitle-blue-1">
-									<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
+									&nbsp;<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
 								</TD>
 							</field:display>						
 							</feature:display>

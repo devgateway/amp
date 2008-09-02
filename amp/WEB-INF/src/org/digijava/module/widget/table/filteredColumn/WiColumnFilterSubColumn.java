@@ -14,18 +14,22 @@ public class WiColumnFilterSubColumn extends WiColumnStandard {
 
 	private Long filterItemId;
 
-	@Override
-	public void saveData(Session dbSession) throws DgException {
-		try {
-			AmpDaColumnFilter dbColumn = (AmpDaColumnFilter) dbSession.load(AmpDaColumnFilter.class, this.getId());
-			List<WiCell> myCells = this.getAllCells();
-			for (WiCell cell : myCells) {
-				cell.saveData(dbSession, dbColumn);
-			}
-		} catch (HibernateException e) {
-			throw new DgException("cannot save column, ID="+getId(),e);
-		}
-	}
+        @Override
+        public void saveData(Session dbSession) throws DgException {
+            try {
+                AmpDaColumnFilter dbColumn = (AmpDaColumnFilter) dbSession.load(AmpDaColumnFilter.class, this.getId());
+                List<WiCell> myCells = this.getAllCells();
+                List<WiCell> trashedCells = this.getAllTrashedCells();
+                for (WiCell cell : myCells) {
+                    cell.saveData(dbSession, dbColumn);
+                }
+                for (WiCell trashedCell : trashedCells) {
+                    trashedCell.removeData(dbSession, dbColumn);
+                }
+            } catch (HibernateException e) {
+                throw new DgException("cannot save column, ID=" + getId(), e);
+            }
+        }
 
 	public void setFilterItemId(Long filterItemId) {
 		this.filterItemId = filterItemId;

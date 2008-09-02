@@ -12,7 +12,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="aimViewContractingForm"/>
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 

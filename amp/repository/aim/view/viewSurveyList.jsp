@@ -74,7 +74,6 @@ function setHoveredTable(tableId, hasHeaders) {
 </script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 
 
 <script language="Javascript">

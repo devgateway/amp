@@ -73,7 +73,6 @@ function setHoveredTable(tableId, hasHeaders) {
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 
 <script type="text/javascript">
 

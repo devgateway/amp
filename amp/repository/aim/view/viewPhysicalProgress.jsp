@@ -11,7 +11,6 @@
 <link href="/TEMPLATE/ampTemplate/css/tabview.css" rel="stylesheet" type="text/css"></link>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<jsp:include page="previewLogframeUtil.jsp" flush="true" />
 <script type="text/javascript">
 
 

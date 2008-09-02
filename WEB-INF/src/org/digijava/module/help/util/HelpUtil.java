@@ -2,7 +2,10 @@ package org.digijava.module.help.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.ObjectNotFoundException;
@@ -14,6 +17,10 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
@@ -24,7 +31,9 @@ import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ChartUtil;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.help.dbentity.HelpTopic;
+import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
 public class HelpUtil {
@@ -279,6 +288,47 @@ public class HelpUtil {
 			return false;
 		}
 	return true;	
+	}
+	
+	 public static String renderLevelGroup(Collection topics,int level) {
+		String retVal="";
+		Iterator iter = topics.iterator();
+		while (iter.hasNext()) {
+			HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
+			HelpTopic theme = (HelpTopic) item.getMember();
+			retVal += "<option value="+theme.getHelpTopicId()+">"+theme.getTitleTrnKey()+"</option>\n";
+			if (item.getChildren() != null || item.getChildren().size() > 0) {
+				retVal += renderLevelGroup(item.getChildren(), level+1);
+			}
+		}
+		return retVal;
+	}
+	
+	 public static String renderTopicsTree(Collection topics,int level) {
+		 //CategoryManagerUtil cat = new CategoryManagerUtil();
+		String retVal = "";
+		Iterator iter = topics.iterator();
+		while (iter.hasNext()) {
+			HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
+			HelpTopic topic = (HelpTopic) item.getMember();
+					// visible div start
+			retVal += " <div>";
+			if(item.getChildren().isEmpty()){
+				retVal += "<img src=\"../ampTemplate/images/tree_minus.gif\";\">\n";
+			}else{
+			retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
+			}
+			retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
+			retVal += "<a href=\"../../help/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+topic.getTopicKey()+"</a>";
+			retVal += "</div>\n";
+			// hidden div start
+			retVal += "<div id=\"div_theme_"+ topic.getHelpTopicId()+ "\" style=\"display:none;padding:4px;\">\n";
+			if (item.getChildren() != null || item.getChildren().size() > 0) {
+				retVal += renderTopicsTree(item.getChildren(), level+1);
+			}
+			retVal += "</div>\n";
+		}
+		return retVal;
 	}
 	
 }

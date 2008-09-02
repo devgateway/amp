@@ -15,9 +15,10 @@
 <!--
 
 	function validate() {
-		if(isEmpty(document.addMeasureForm.measure.value) == true) {
+		var meas = document.getElementById("measure");
+		if(isEmpty(meas.value) == true) {
 			alert("Please enter the measure");
-			document.addMeasureForm.measure.focus();
+			meas.focus();
 			return false;
 		}
 		return true;
@@ -26,7 +27,8 @@
 	function addMeasure() {
 		var flag = validate();
 		if (flag == true) {
-			document.addMeasureForm.submit();
+			var myform = document.getElementsByName("addMeasureForm")[0];
+			myform.submit();
 			return flag;
 		} else {
 			return false;

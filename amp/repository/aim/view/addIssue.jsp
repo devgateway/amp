@@ -64,7 +64,7 @@
 																<a id="clear1" href="javascript:clearDate(issueDate, 'clear1')">
 	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1",issueDate,"clear1")'>
+																<a id="date1" href='javascript:pickDateWithClear("date1", document.aimEditActivityForm.issueDate,"clear1")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a></td>
 								  </tr>

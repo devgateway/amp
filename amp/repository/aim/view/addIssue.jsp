@@ -61,10 +61,10 @@
 								      <td><html:text property="issueDate" size="10"
 																styleId="issueDate" styleClass="inp-text" readonly="true"/> 
 																
-																<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.issueDate, 'clear1')">
+																<a id="clear1" href="javascript:clearDate(document.getElementById('issueDate'), 'clear1')">
 	 	    														<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0"/>
 																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1", document.aimEditActivityForm.issueDate,"clear1")'>
+																<a id="date1" href='javascript:pickDateWithClear("date1", document.getElementById("issueDate"),"clear1")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a></td>
 								  </tr>

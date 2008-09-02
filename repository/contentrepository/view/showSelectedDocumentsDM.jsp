@@ -32,9 +32,7 @@
 	</c:if>
 
 	<logic:empty name="windowName">
-		<bean:define id="windowName" toScope="page">
-			<digi:trn key="cr:selectedDocs:defaultWindowName">Selection</digi:trn>
-		</bean:define>
+		<c:set var="windowName" target="request"><digi:trn key="cr:selectedDocs:defaultWindowName">Selection</digi:trn></c:set>
 	</logic:empty>
 	<c:if test="${ (!empty relDocs) || (!empty tempDocs) }" >
 
@@ -50,7 +48,7 @@
 		</logic:notEmpty>
 		</field:display>
 		<br /> <br />
-		<logic:empty scope="request" name="dmWindowTitle"><bean:define toScope="request" id="dmWindowTitle" value=" " /></logic:empty>
+		
 			<script type="text/javascript">
 				var rights			= null;
 				<logic:notEmpty scope="request" name="crRights">
@@ -62,8 +60,8 @@
 						viewAllRights		: ${viewAllRights}
 				};
 				</logic:notEmpty>
-				windowController	= newWindow('<bean:write name="dmWindowTitle"/>',false,'selDocumentsDiv');
-				windowController.setTitle('${windowName}');
+				windowController	= newWindow('${windowName}',false,'selDocumentsDiv');
+				// windowController.setTitle('${windowName}');
 				windowController.populateWithSelDocs('<%=documentsType%>', rights);
 				
 			</script>

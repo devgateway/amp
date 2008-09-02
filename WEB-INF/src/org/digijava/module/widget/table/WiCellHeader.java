@@ -37,5 +37,10 @@ public class WiCellHeader extends WiCell {
 	public void saveData(Session dbSession, AmpDaColumn dbColumn) throws DgException {
 		//dummy method, header does not need save!
 	}
+        
+        @Override
+	public void removeData(Session dbSession, AmpDaColumn dbColumn) throws DgException {
+		//dummy method, header does not need save!
+	}
 
 }

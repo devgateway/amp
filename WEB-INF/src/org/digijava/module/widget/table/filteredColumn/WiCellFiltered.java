@@ -84,5 +84,19 @@ public class WiCellFiltered extends WiCellStandard {
 			throw new DgException("cannot save cell, ID=" + getId()+ ", columnID=" + getColumn().getId(), e);
 		}
 	}
+        
+       @Override
+       public void removeData(Session dbSession, AmpDaColumn dbColumn) throws DgException {
+        try {
+            if (this.getId() != null && this.getId() > 0) {
+                AmpDaValueFiltered dbValue = (AmpDaValueFiltered) dbSession.load(AmpDaValueFiltered.class, this.getId());
+                dbColumn.getValues().remove(dbValue);
+                dbSession.saveOrUpdate(dbColumn);
+            }
+        } catch (HibernateException e) {
+            throw new DgException("cannot save column, ID=" + getId(), e);
+        }
+
+    }
 
 }

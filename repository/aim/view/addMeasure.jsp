@@ -25,7 +25,7 @@
 	}
 
 	function addMeasure() {
-		var flag = validate();
+		var flag = true; //validate();
 		if (flag == true) {
 			var myform = document.getElementsByName("addMeasureForm")[0];
 			myform.submit();

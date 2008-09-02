@@ -15,7 +15,7 @@
 <!--
 
 	function validate() {
-		var meas = document.getElementById("measure");
+		var meas = document.getElementsByName("measure")[0];
 		if(isEmpty(meas.value) == true) {
 			alert("Please enter the measure");
 			meas.focus();

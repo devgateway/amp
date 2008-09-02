@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
+<%@page import="org.digijava.module.help.util.HelpUtil"%>
 <digi:instance property="helpForm" />
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
    
@@ -110,23 +111,12 @@
 																				<tr>
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
-																						<c:if test="${not empty helpForm.topicTree}">
-																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
-																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
-																									<logic:iterate id="firstLevTopic" name="helpForm" property="topicTree">	
-																												<html:option value="${firstLevTopic.helpTopicId}">${firstLevTopic.titleTrnKey}</html:option>
-																													<c:if test="${not empty firstLevTopic.children}">
-																														<c:forEach var="child" items="${firstLevTopic.children}">
-																												 			<html:option value="${child.helpTopicId}">&nbsp;&nbsp;${child.titleTrnKey}</html:option>				
-																														
-																															<c:forEach var="child" items="${child.children}">
-																												 			<html:option value="${child.helpTopicId}">&nbsp;&nbsp;&nbsp;&nbsp;${child.titleTrnKey}</html:option>				
-																														</c:forEach>	
-																														</c:forEach>	
-																													</c:if>																		
-																									</logic:iterate>
-																							</html:select>
-																						</c:if>
+																						
+																						<bean:define id="firstLevel" name="helpForm" property="topicTree" type="java.util.Collection"/>
+																						<html:select property="parentId" name="helpForm" styleClass="inp-text">
+																						<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
+																						<%= HelpUtil.renderLevelGroup(firstLevel,0) %>
+																						</html:select>
 																					</td>
 																				</tr>
 																				</c:if>																				

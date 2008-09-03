@@ -56,7 +56,7 @@
                         </ul>
                         <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-                        <%= HelpUtil.renderTopicsTree(topic,0) %>
+                        <%= HelpUtil.renderTopicsTree(topic) %>
              		</div>
 
 

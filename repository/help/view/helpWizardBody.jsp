@@ -115,7 +115,7 @@
 																						<bean:define id="firstLevel" name="helpForm" property="topicTree" type="java.util.Collection"/>
 																						<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																						<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
-																						<%= HelpUtil.renderLevelGroup(firstLevel,0) %>
+																						<%= HelpUtil.renderLevelGroup(firstLevel) %>
 																						</html:select>
 																					</td>
 																				</tr>

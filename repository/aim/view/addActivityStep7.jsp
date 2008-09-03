@@ -236,28 +236,33 @@ ${fn:replace(message,quote,escapedQuote)}
 								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+							
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2">
-									<feature:display name="Responsible Organization" module="Organizations">
-										<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
-									</feature:display>
+							<feature:display name="Responsible Organization" module="Organizations">
+								<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
+							</feature:display>
 
-									<tr><td>&nbsp;</td></tr>
-									
-									<feature:display name="Executing Agency" module="Organizations">
-									<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
-									</feature:display>
+									<tr><td>
+										&nbsp;
+									</td></tr>
+							<feature:display name="Executing Agency" module="Organizations">
+							<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
+							</feature:display>
 
-									<tr><td>&nbsp;</td></tr>
-									
+									<tr><td>
+										&nbsp;
+									</td></tr>
 									<feature:display name="Implementing Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ImplementingAgency.jsp"/>
 									</feature:display>
-									
-									<tr><td>&nbsp;</td></tr>
-									
+									<tr><td>
+										&nbsp;
+									</td></tr>
+
+
 									<!-- Beneficiary Agency  -->
 									<feature:display name="Beneficiary Agency" module="Organizations">
 										<jsp:include page="addActivityStep7BeneficiaryAgency.jsp"/>
@@ -265,9 +270,11 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									<tr><td>&nbsp;</td></tr>
 
+
 									<!-- Contracting Agency  -->
 									<feature:display name="Contracting Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ContractingAgency.jsp"/>
+
 									</feature:display>
 
 									<tr><td>&nbsp;</td></tr>

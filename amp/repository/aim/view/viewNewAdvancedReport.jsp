@@ -478,20 +478,20 @@ session.setAttribute("progressValue", counter);
 			 <table width="100%">
 			 <tr>
 			 <td>
+			 <c:set var="startRowLocal" value="1"/> 
+             <c:choose>							
+             	<c:when test="${report.startRow == 0}">
+                	<c:set var="startRowLocal" value="1"/> 
+                </c:when>
+               	<c:otherwise>
+                	<c:set var="startRowLocal">
+                    	${report.startRow}
+                    </c:set> 
+                </c:otherwise>								
+             </c:choose>
             <logic:notEqual name="viewFormat" value="print">
                 <logic:equal name="viewFormat" value="foldable">
-                    <c:set var="startRowLocal" value="1"/> 
-                    <c:choose>							
-                        <c:when test="${report.startRow == 0}">
-                            <c:set var="startRowLocal" value="1"/> 
-                        </c:when>
-                        <c:otherwise>
-                            <c:set var="startRowLocal">
-                            ${report.startRow}
-                            </c:set> 
-                        </c:otherwise>								
-                    </c:choose>
-					<c:if test="${startRowLocal != 1}">
+                   <c:if test="${startRowLocal != 1}">
                     <a style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=1~endRow=<c:out value="${recordsPerPage+1}"/>');">	
                     &lt;&lt;
                     </a>

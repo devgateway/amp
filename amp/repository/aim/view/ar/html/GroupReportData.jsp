@@ -16,15 +16,14 @@
 
 <!-- generate total row -->
 <logic:present name="groupReport" property="parent">
-	<logic:equal name="groupReport" property="canDisplayRow" value="true">
-		<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
-		<bean:define id="grandTotal" toScope="request" value="yes" property="java.lang.String" />
-		<jsp:include page="TrailCells.jsp"/>
-		<tr>
-			<td height="5px" colspan='<bean:write name="groupReport" property="totalDepth"/>'></td>
-		</tr>
-	</logic:equal>
+	<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
+	<bean:define id="grandTotal" toScope="request" value="yes" property="java.lang.String" />
+	<jsp:include page="TrailCells.jsp"/>
+	<tr>
+		<td height="5px" colspan='<bean:write name="groupReport" property="totalDepth"/>'></td>
+	</tr>
 </logic:present>
+
 
 	<logic:iterate name="groupReport"  property="items" id="item" scope="page">
 		<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

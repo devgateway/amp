@@ -30,6 +30,8 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/dragdrop-min.js"/>" ></script>
 
+<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
+
 <style type="text/css">
 	a { text-decoration: underline; color: #46546C; }
 	a:hover { text-decoration: underline; color: #4d77c3; }
@@ -43,6 +45,9 @@
 		display : none;
 		height : 1%;
 		vertical-align: top;
+	}
+	SELECT {
+		font-size:8pt;
 	}
 </style>
 <digi:instance property="aimNPDForm" />
@@ -1259,32 +1264,36 @@
 <c:forEach var="sys" items="${aimNPDForm.selYears}">
 	<html:hidden property="myYears" value="${sys}"/>
 </c:forEach>
-<table border="0" id="mainBodyTable" width="100%">
-	<tr>
-		<td>
-			<table id="topParttable" border="0" width="100%">
+
+<div style="padding-left:10px;padding-top:10px;width:95%;">
+    <div id="content" class="yui-skin-sam" style="width:100%;">
+        <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+            <ul class="yui-nav">
+                <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+                <li class="selected">
+                    <a style="cursor:default">
+                        <div>
+	                        <digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
+                        </div>
+                    </a>
+                </li>
+                </module:display>
+                <feature:display name="Portfolio Dashboard" module="M & E">
+                <li>
+                    <digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1">
+                        <div>
+                            <digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
+                        </div>
+                    </digi:link>
+                </li>
+                </feature:display>
+            </ul>
+        </div>
+	</div>
+<div class="yui-content" style="background-color:#EDF5FF;border:1px solid black;">
+<table id="topParttable" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
-					<td>
-						<table cellpadding="0" cellspacing="0" border="0">
-							<tr>
-								<TD bgColor="#c9c9c7" class="box-title" width="220" >
-									&nbsp;<digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
-								</TD>
-								<TD background="module/aim/images/corner-r.gif" height="17" width="17"></TD>
-                                <feature:display name="Portfolio Dashboard" module="M & E">
-									<TD bgColor="#c9c9c7" class="box-title" width="80">
-										<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1">
-											<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
-										</digi:link>
-									</TD>
-									<TD background="module/aim/images/corner-r.gif" height="17" width="17"/>
-			                    </feature:display>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td valign="top">
+					<td style="border-bottom:1px solid black;">
 						<table id="topLeftTable" border="0" width="100%" cellspacing="0" cellpadding="5">
 							<tr bgcolor="silver">
 								<td>
@@ -1319,24 +1328,24 @@
 													<digi:trn key="aim:NPD:changeOptionsLink">Change Options</digi:trn>
 												</a>
 											</td>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td nowrap="nowrap">
 												<a href="JavaScript:openGridWindow(false);">
 													<digi:trn key="aim:NPD:viewTable_Link">View table</digi:trn>
 												</a>
 											</td>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td nowrap="nowrap">
 												<a href="JavaScript:openGridWindow(true);">
 													<digi:trn key="aim:NPD:viewAllLink">View All</digi:trn>
 												</a>
 											</td>
-											<td width="100%">
-												&nbsp;
+											<td width="100%">&nbsp;
+												
 											</td>
 											<td align="right" nowrap="nowrap">
 												<digi:link href="/reportWizard.do"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
@@ -1347,13 +1356,12 @@
 							</tr>
 						</table>
 					</td>
-					<td valign="top" width="100%">
+					<td valign="top" width="100%" style="border-left:1px solid black;border-bottom:1px solid black;">
 						<div id="tree" style="width: 100%;"></div>
 					</td>
 				</tr>
 			</table>
-		</td>
-	</tr>
+<table width="100%">
     <tr>
       <td>
         <span id="spnAmountText" style="color:blue">
@@ -1401,8 +1409,8 @@
 					</td>
 				</tr>
 				<tr id="activityResultsPlace">
-					<td colspan="8">
-						&nbsp;
+					<td colspan="8">&nbsp;
+						
 					</td>
 				</tr>
 			</table>
@@ -1422,4 +1430,7 @@
 	<map name="npdChartMap" id="npdChartMap">
 	</map>
 </span>
+</div>
+</div>
+
 </digi:form>

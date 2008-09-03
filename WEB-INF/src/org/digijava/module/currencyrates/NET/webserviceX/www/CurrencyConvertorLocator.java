@@ -43,6 +43,7 @@ public class CurrencyConvertorLocator extends org.apache.axis.client.Service imp
        java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(CurrencyConvertorSoap_address);
+            
         }
         catch (java.net.MalformedURLException e) {
             throw new javax.xml.rpc.ServiceException(e);
@@ -54,6 +55,7 @@ public class CurrencyConvertorLocator extends org.apache.axis.client.Service imp
         try {
             org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoapStub _stub = new org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoapStub(portAddress, this);
             _stub.setPortName(getCurrencyConvertorSoapWSDDServiceName());
+            _stub.setTimeout(4 * 1000 * 60);
             return _stub;
         }
         catch (org.apache.axis.AxisFault e) {

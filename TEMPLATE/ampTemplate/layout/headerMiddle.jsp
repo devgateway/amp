@@ -437,21 +437,28 @@ border-right:1px solid white;
                               <div id="dashboards" class="yuiampmenu" style="opacity:0.9;width:150px;">
                                   <div class="bd">                    
                                       <ul>
+                                       <feature:display name="NPD Dashboard" module="National Planning Dashboard">
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/nationalPlaningDashboard.do">
                                             <digi:trn key="aim:npd">NPD</digi:trn>
                                             </a>
                                         </li>
+                                       </feature:display>
+                                        
+                                        <feature:display name="Programs" module="GIS DASHBOARD">
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="#">
                                             <digi:trn key="aim:programs">Programs</digi:trn>
                                             </a>
                                         </li>
+                                        </feature:display>
+                                        <module:display name="GIS DASHBOARD">
                                         <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="javascript:openGIS()">
+                                            <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do">
                                             <digi:trn key="aim:gis">GIS</digi:trn>
                                             </a>
                                         </li>
+                                        </module:display>
                                       </ul>
                                   </div>
                               </div>                    

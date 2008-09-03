@@ -24,6 +24,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
+<digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <digi:context name="digiContext" property="context" />
 
@@ -122,44 +123,35 @@
 
 <digi:form action="/viewPortfolioDashboard.do">
 
-
-
-<TABLE width="810" cellspacing="1" cellpadding="4" valign="top" align="left">
-
-
-
-	<TR><TD>
-
+<div style="padding-left:10px;padding-top:10px;width:98%;">
+    <div id="content" class="yui-skin-sam" style="width:100%;">
+        <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+            <ul class="yui-nav">
+                <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+                <li>
+                    <digi:link href="/nationalPlaningDashboard.do">
+                        <div>
+	                        <digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
+                        </div>
+                    </digi:link>
+                </li>
+                </module:display>
+                <feature:display name="Portfolio Dashboard" module="M & E">
+                <li class="selected">
+                    <a style="cursor:pointer">
+                        <div>
+                            <digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
+                        </div>
+                    </a>
+                </li>
+                </feature:display>
+            </ul>
+        </div>
+	</div>
+<div class="yui-content" style="background-color:#EDF5FF;border:1px solid black;height:auto;">
+        <feature:display name="Portfolio Dashboard" module="M & E">
 		<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
-
-      	<TR><TD>
-
-           	<TABLE border=0 cellPadding=0 cellSpacing=0 >
-
-           		<TR>
-                	<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-
-              			<TD bgColor=#c9c9c7 class=box-title width=220 nowrap="nowrap">
-							&nbsp;<digi:link href="/nationalPlaningDashboard.do"><digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn></digi:link>
-						</TD>
-
-	                 	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
-                    </module:display>
-                    <feature:display name="Portfolio Dashboard" module="M & E">
-              			<TD bgColor=#c9c9c7 class=box-title width=80>
-							&nbsp;<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
-						</TD>
-	                 	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
-                    </feature:display>
-                 </TR>
-			</TABLE>
-
-			</TD></TR>
-                         <feature:display name="Portfolio Dashboard" module="M & E">
-			<TR><TD bgColor=#ffffff class=box-border align=left>
-
-
-
+			<TR><TD align=left>
 				<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 
 					<TR>
@@ -181,6 +173,7 @@
 
 										<digi:trn key='<%="aim:" + riskName%>'><%=riskName%></digi:trn>
 									</logic:notEmpty>
+                                    </font>
 
 								</TD></TR>
 
@@ -307,14 +300,12 @@
 					<TR><TD>&nbsp;</TD></TR>
 
 				</TABLE>
-</feature:display>
 			</TD></TR>
 
 		</TABLE>
-
-	</TD></TR>
-
-</TABLE>
+		</feature:display>
+</div>
+</div>
 
 </digi:form>
 

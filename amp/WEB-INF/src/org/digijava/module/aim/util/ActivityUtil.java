@@ -2737,7 +2737,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	     				e.printStackTrace();
 	     			}	
 	    		  
-	    		  double execRate=c.getTotalDisbursements()/finalAmount1;
+	    		  double execRate=0;
+	    		  if(finalAmount1!=0)
+	    			  execRate=c.getTotalDisbursements()/finalAmount1;
 	    		  //System.out.println("1 execution rate: "+execRate);
 	    		  c.setExecutionRate(execRate);
 	    	  }

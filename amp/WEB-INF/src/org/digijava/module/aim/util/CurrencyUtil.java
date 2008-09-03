@@ -778,6 +778,37 @@ public class CurrencyUtil {
 		return ampCurrency;
 	}
 
+	public static AmpCurrency getAmpcurrency(String currCode) {
+		AmpCurrency ampCurrency = null;
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			// modified by Priyajith
+			// desc:used select query instead of session.load
+			// start
+			String queryString = "select c from " + AmpCurrency.class.getName()
+					+ " c " + "where (c.currencyCode=:id)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("id", currCode, Hibernate.STRING);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				ampCurrency = (AmpCurrency) itr.next();
+			}
+			// end
+		} catch (Exception ex) {
+			logger.error("Unable to get currency " + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.debug("releaseSession() failed", ex2);
+			}
+		}
+		return ampCurrency;
+	}
+
+	
 	public static ArrayList getAmpCurrency() {
 		AmpCurrency ampCurrency = null;
 		Session session = null;

@@ -1,14 +1,15 @@
 package org.digijava.module.aim.form;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.helper.FundingDetail;
 
 /**
  * @author mihai
@@ -22,6 +23,8 @@ public class IPAContractForm extends ActionForm  {
     private Long activityCategoryId = new Long(0);
     private Long statusId = new Long(0);
     private Long typeId = new Long(0);
+    
+    private List<FundingDetail> fundingDetailsLinked= new ArrayList<FundingDetail>();
 
     public Long getStatusId() {
         return statusId;
@@ -287,6 +290,9 @@ public class IPAContractForm extends ActionForm  {
 
     
     public void reset(ActionMapping mapping, HttpServletRequest request) {
+    	if (request.getParameter("editEU")!=null){
+    		fundingDetailsLinked=new ArrayList();
+    	}
         if (request.getParameter("new")!=null && request.getParameter("addFields")==null){
         contractDisbursements=null;
         activityCategoryId = null;
@@ -332,6 +338,7 @@ public class IPAContractForm extends ActionForm  {
         totalNationalContribIFIAmountDate = null;
         totalNationalContribRegionalAmountDate = null;
         totalPrivateContribAmountDate = null;
+        fundingDetailsLinked = new ArrayList();
         }
 
         
@@ -451,6 +458,14 @@ public class IPAContractForm extends ActionForm  {
 
 	public void setContractTypeId(Long contractTypeId) {
 		this.contractTypeId = contractTypeId;
+	}
+
+	public List<FundingDetail> getFundingDetailsLinked() {
+		return fundingDetailsLinked;
+	}
+
+	public void setFundingDetailsLinked(List<FundingDetail> fundingDetailsLinked) {
+		this.fundingDetailsLinked = fundingDetailsLinked;
 	}
 
 

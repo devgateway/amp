@@ -1,8 +1,6 @@
     package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +16,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.IPAContract;
@@ -26,12 +23,11 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.IPAContractForm;
-import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -112,6 +108,14 @@ public class EditIPAContract extends MultiAction {
         euaf.reset(mapping, request);
         Integer indexId = new Integer(request.getParameter("indexId")) - 1;
         IPAContract contract = (IPAContract) eaf.getContracts().get(indexId);
+        
+        for (Iterator it = eaf.getFundingDetails().iterator(); it.hasNext();) {
+			FundingDetail afd = (FundingDetail) it.next();
+			if(afd.getContract()!=null)
+				if(afd.getContract().getContractName().equals(contract.getContractName()))
+					euaf.getFundingDetailsLinked().add(afd);
+		}
+        
         euaf.setIndexId(indexId);
         euaf.setContractName(contract.getContractName());
         euaf.setDescription(contract.getDescription());
@@ -299,8 +303,9 @@ public class EditIPAContract extends MultiAction {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
-		 
-		 double amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
+			double amountRate=0;
+			if(finalAmount1!=0 )
+				amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
         	
    	  		//double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
    	  		contract.setExecutionRate(amountRate);
@@ -549,16 +554,19 @@ public class EditIPAContract extends MultiAction {
         if (euaf.getTotalECContribIBAmount() != null&&!euaf.getTotalECContribIBAmount().equals("")) {
             eua.setTotalECContribIBAmount(Double.parseDouble(euaf.getTotalECContribIBAmount()));
         }
-        if (euaf.getTotalAmount() != null&&!euaf.getTotalAmount().equals("")) {
+        if (euaf.getTotalAmount() != null && !euaf.getTotalAmount().equals("")) {
             eua.setTotalAmount(Double.parseDouble(euaf.getTotalAmount()));
-            if (euaf.getTotalAmountCurrency() != null&&!euaf.getTotalAmountCurrency().equals("")) {
-            	eua.setTotalAmountCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrency()));
-            }
         }
+        if (euaf.getTotalAmountCurrency() != null && !euaf.getTotalAmountCurrency().equals("") && !euaf.getTotalAmountCurrency().equals(new Long(-1))) {
+        	eua.setTotalAmountCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrency()));
+        }
+        else eua.setTotalAmountCurrency(CurrencyUtil.getAmpcurrency(eaf.getCurrCode()));
         
-        if (euaf.getDibusrsementsGlobalCurrency() != null&&!euaf.getDibusrsementsGlobalCurrency().equals("")) {
+        if (euaf.getDibusrsementsGlobalCurrency() != null&&!euaf.getDibusrsementsGlobalCurrency().equals("") && !euaf.getDibusrsementsGlobalCurrency().equals(new Long(-1))) {
         	eua.setDibusrsementsGlobalCurrency(CurrencyUtil.getAmpcurrency(euaf.getDibusrsementsGlobalCurrency()));
         }
+        else
+        	eua.setDibusrsementsGlobalCurrency(CurrencyUtil.getAmpcurrency(eaf.getCurrCode()));
         
         if (euaf.getTotalECContribINVAmount() != null&&!euaf.getTotalECContribINVAmount().equals("")) {
 
@@ -654,11 +662,13 @@ public class EditIPAContract extends MultiAction {
   				e.printStackTrace();
   			}	
   		 
-  		 double amountRate;
-  		 if (eua.getTotalDisbursements() != null)
-  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
-  		 else
-  			 amountRate=0;
+  		 double amountRate=0;
+  		 if(finalAmount1!=0){
+	  		 if (eua.getTotalDisbursements() != null)
+	  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
+	  		 else
+	  			 amountRate=0;
+  		 }
   		 
         	// double amountRate=eua.getTotalDisbursements().doubleValue()/eua.getTotalAmount().doubleValue();
     	  		eua.setExecutionRate(amountRate);

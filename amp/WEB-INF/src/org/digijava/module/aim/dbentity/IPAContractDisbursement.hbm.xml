@@ -11,7 +11,7 @@
 	<property name="adjustmentType" column="adjustment_type" type="java.lang.Integer"/>
 	<property access="field" name="amount" column="amount" type="java.lang.Double"/>
 	<many-to-one name="currency" column="currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
-        <many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="save-update"/>		
+    <many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="save-update"/>		
 	<property name="date" column="date" type="java.util.Date"/>	
 	</class>
 </hibernate-mapping>

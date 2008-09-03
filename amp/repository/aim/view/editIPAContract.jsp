@@ -616,11 +616,59 @@ window.onload=autosum;
 	</td>
 	</tr>
 
-	<field:display name="Contracting Disbursements" feature="Contracting">
+	
 	<tr><td colspan="2" bgcolor="#006699" class="textalb" align="center">
 		<b><digi:trn key="aim:IPA:newPopup:disbursements">Disbursements</digi:trn></b>
 	</td></tr>
-		
+	<field:display name="Contract Donor Disbursements" feature="Contracting">
+	<logic:notEmpty name="aimIPAContractForm" property="fundingDetailsLinked">
+	<tr>
+		<td colspan="2">
+			<table width="100%" >
+			<tr>
+				<th><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></th>
+				<th><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn></field:display></th>
+				<th><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn></field:display></th>
+				<th><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></th>
+				
+			</tr>
+				<logic:iterate name="aimIPAContractForm" property="fundingDetailsLinked" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+					<logic:equal name="fundingDetail" property="transactionType" value="1">		
+																									<tr bgcolor="#ffffff">
+																										<td align="center">
+																											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
+																												<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																													<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																												</digi:trn>
+																											</field:display>
+																										</td>
+																										<td align="center">
+																											<field:display name="Amount Disbursement" feature="Disbursement">
+																												<FONT color=blue>*</FONT>
+																												<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+																											</field:display>
+																										</td>
+																										<td align="center">
+																											<field:display name="Currency Disbursement" feature="Disbursement">
+																												<bean:write name="fundingDetail" property="currencyCode"/>
+																											</field:display>
+																										</td>
+																										<td align="center">
+																											<field:display name="Date Disbursement" feature="Disbursement">
+																												<bean:write name="fundingDetail" property="transactionDate"/>
+																											</field:display>
+																										</td>
+																																																	
+																									</tr>
+																						</logic:equal>
+				</logic:iterate>
+			</table>
+		</td>
+	</tr>
+	</logic:notEmpty>
+	</field:display>
+	
+	<field:display name="Contracting Disbursements" feature="Contracting">
 	<tr>
 		<td colspan="2" align="left">
 			<field:display name="Contracting Add Disbursement" feature="Contracting">
@@ -639,18 +687,25 @@ window.onload=autosum;
 	
 	<field:display name="Contracting Disbursements Global Currency" feature="Contracting">
 	<tr>
-		<td align="left">
-			<digi:trn key="aim:ipa:newPopup:dibusrsementsGlobalCurrency">Disbursements Global Currency</digi:trn>
-		</td>
-		<td>
-			<html:select property="dibusrsementsGlobalCurrency" styleClass="inp-text">
-				<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
-				<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
-			</html:select>
+		<td colspan="2">
+		<table width="100%">
+			<tr>
+				<td align="left" width="30%">
+					<digi:trn key="aim:ipa:newPopup:dibusrsementsGlobalCurrency">Disbursements Global Currency</digi:trn>
+				</td>
+				<td align="left">
+					<html:select property="dibusrsementsGlobalCurrency" styleClass="inp-text">
+						<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+					</html:select>
+				</td>
+			</tr>
+		</table>
 		</td>
 	</tr>
 	</field:display>
-
+	
+	
 	<logic:notEmpty name="aimIPAContractForm" property="contractDisbursements">
 		<tr>
 			<td colspan="2">

@@ -16,7 +16,7 @@
 										<a title="<digi:trn key="aim:ContractingAgency">The third party outside of the implementing agency</digi:trn>">
 										<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b></a>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
+									<tr><td >
 										&nbsp;
 									</td></tr>
 									<tr><td>

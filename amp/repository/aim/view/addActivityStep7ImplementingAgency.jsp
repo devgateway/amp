@@ -17,7 +17,7 @@
 										<a title="<digi:trn key="aim:AgencyImplementing">The organisation that directly implements the activity</digi:trn>">
 										<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b></a>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
+									<tr><td>
 										&nbsp;
 									</td></tr>
 									<tr><td>

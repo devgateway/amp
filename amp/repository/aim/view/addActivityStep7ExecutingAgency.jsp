@@ -18,7 +18,7 @@
 										<a title="<digi:trn key="aim:AgencyExecuting">The organization that receives the funds from the funding country/agency, and coordinates the project</digi:trn>">
 										<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b></a>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
+									<tr><td>
 										&nbsp;
 									</td></tr>
 									<tr><td>

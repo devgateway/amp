@@ -45,10 +45,9 @@ public class ExportIndicators2XSLAction extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		NpdForm npdForm = (NpdForm) form;
-
-		response.setContentType("application/msexcel");
-		response.setHeader("Content-Disposition",
-				"inline; filename=AMPIndicatorsExport.xls");
+		 
+		response.setContentType("application/vnd.ms-excel");
+		response.setHeader("Content-disposition", "inline; filename=AMPIndicatorsExport.xls");
 
 		AmpTheme mainProg = ProgramUtil.getThemeObject(npdForm.getProgramId());
 		Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
@@ -60,7 +59,7 @@ public class ExportIndicators2XSLAction extends Action {
 		String sheetName = mainProg.getName();
 		if (sheetName.length() > 31)
 			sheetName = sheetName.substring(0, 31);
-		HSSFSheet sheet = wb.createSheet(sheetName);
+		HSSFSheet sheet = wb.createSheet( sheetName.replace(":", "-"));
 
 		
 		HSSFCellStyle csHeader = wb.createCellStyle();

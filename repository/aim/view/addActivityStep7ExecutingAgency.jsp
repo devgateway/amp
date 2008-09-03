@@ -74,3 +74,4 @@
 												</tr>
 											</table>
 										</logic:empty>
+										</td></tr>

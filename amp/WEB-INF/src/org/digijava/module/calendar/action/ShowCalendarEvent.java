@@ -45,6 +45,7 @@ import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
+import java.util.*;
 
 public class ShowCalendarEvent extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -150,22 +151,37 @@ public class ShowCalendarEvent extends Action {
 
     private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) {
         try {
-            ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
-            String instanceId = moduleInstance.getInstanceName();
-            String siteId = moduleInstance.getSite().getSiteId();
 
-            AmpCalendar ampCalendar = null;
+
             if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
-                Long ampCalendarId = ceform.getAmpCalendarId();
-
-                ampCalendar = AmpDbUtil.getAmpCalendar(ampCalendarId, instanceId, siteId);
-            } else {
-                ampCalendar = new AmpCalendar();
+                AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
             }
 
+            AmpCalendar ampCalendar = new AmpCalendar();
+
+            AmpEventType eventType = AmpDbUtil.getEventType(ceform.getSelectedEventTypeId());
+            ampCalendar.setEventType(eventType);
+
+            if(ampCalendar.getMember()==null){
+                HttpSession ses = request.getSession();
+                TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
+                AmpTeamMember calMember = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
+                ampCalendar.setMember(calMember);
+            }
+
+            Set orgs = new HashSet();
+            String[] slOrgs = ceform.getSelectedEventOrganisations();
+            if (slOrgs != null) {
+                for (int i = 0; i < slOrgs.length; i++) {
+                    AmpOrganisation org = DbUtil.getOrganisation(Long.valueOf(slOrgs[i]));
+                    orgs.add(org);
+                }
+            }
+            ampCalendar.setOrganisations(orgs);
+
+            Set atts =  new HashSet();
             String[] slAtts = ceform.getSelectedAtts();
             if (slAtts != null) {
-                Set atts = new HashSet();
                 for (int i = 0; i < slAtts.length; i++) {
                     AmpCalendarAttendee att = new AmpCalendarAttendee();
                     att.setAmpCalendar(ampCalendar);
@@ -180,8 +196,8 @@ public class ShowCalendarEvent extends Action {
                     }
                     atts.add(att);
                 }
-                ampCalendar.setAttendees(atts);
             }
+            ampCalendar.setAttendees(atts);
 
             AmpCalendarPK calPK = ampCalendar.getCalendarPK();
 
@@ -191,20 +207,23 @@ public class ShowCalendarEvent extends Action {
 
             Calendar calendar = calPK.getCalendar();
             // title
+            Set calendarItems =new HashSet();
             CalendarItem calendarItem = new CalendarItem();
             calendarItem.setCalendar(calendar);
             calendarItem.setTitle(ceform.getEventTitle());
             calendarItem.setCreationIp(RequestUtils.getRemoteAddress(request));
             calendarItem.setCreationDate(new Date());
             // fill calendar object
-            HashSet calendarItems = new HashSet();
+
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            calendar.setCalendarItem(calendarItems);
+            //status
             calendar.setStatus(new ItemStatus(ItemStatus.PUBLISHED));
-            calendar.setInstanceId(instanceId);
-            calendar.setSiteId(siteId);
+
+            ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(request);
+            calendar.setInstanceId(moduleInstance.getInstanceName());
+            calendar.setSiteId(moduleInstance.getSite().getSiteId());
 
             // selected start date and selected end date
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
@@ -217,24 +236,6 @@ public class ShowCalendarEvent extends Action {
 
             calPK.setCalendar(calendar);
             ampCalendar.setCalendarPK(calPK);
-
-            AmpEventType eventType = AmpDbUtil.getEventType(ceform.getSelectedEventTypeId());
-            ampCalendar.setEventType(eventType);
-
-            HttpSession ses = request.getSession();
-            TeamMember mem = (TeamMember) ses.getAttribute("currentMember");
-            AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(mem.getMemberId());
-            ampCalendar.setMember(member);
-
-            String[] slOrgs = ceform.getSelectedEventOrganisations();
-            if (slOrgs != null) {
-                Set orgs = new HashSet();
-                for (int i = 0; i < slOrgs.length; i++) {
-                    AmpOrganisation org = DbUtil.getOrganisation(Long.valueOf(slOrgs[i]));
-                    orgs.add(org);
-                }
-                ampCalendar.setOrganisations(orgs);
-            }
 
             ampCalendar.setPrivateEvent(ceform.isPrivateEvent());
 
@@ -285,12 +286,12 @@ public class ShowCalendarEvent extends Action {
                     for(AmpTeam team : teams){
                     	selectedAttsCol.add(new LabelValueBean("---"+team.getName()+"---", "t:" + team.getAmpTeamId().toString()));
                     	selAtts.add("t:" + team.getAmpTeamId().toString());
-                    	for(AmpTeamMember member: members){                    		
+                    	for(AmpTeamMember member: members){
                     		if(member.getAmpTeam().getAmpTeamId()==team.getAmpTeamId()){
                     			selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), "m:" + member.getAmpTeamMemId().toString()));
                     			selAtts.add("m:" + member.getAmpTeamMemId().toString());
                     		}
-                    	}                    	
+                    	}
                     }
                     for(String guest: guests){
                     	selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));

@@ -1,5 +1,6 @@
 
 
+
 package org.digijava.module.calendar.util;
 
 import java.util.GregorianCalendar;
@@ -24,6 +25,8 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.calendar.dbentity.CalendarItem;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -337,33 +340,40 @@ public class AmpDbUtil {
       CalendarException {
     Transaction tx = null;
     try {
-      Session session = PersistenceManager.getRequestDBSession();
-      tx = session.beginTransaction();
-      Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
-      // calendar
-      if (calendar.getId() == null) {
-        session.save(calendar);
-        session.save(ampCalendar);
-      }
-      else {
-//        Set attendees = ampCalendar.getAttendees();
-//        if (attendees != null) {
-//          Iterator it = attendees.iterator();
-//          while (it.hasNext()) {
-//            AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
-//                next();
-//            Long attendeeId = attendee.getId();
-//            if (attendeeId != null && attendeeId < 0) {
-//              attendee.setId( -attendeeId);
-//              session.delete(attendee);
-//              it.remove();
-//            }
-//          }
-//        }
-        session.update(calendar);
-        session.update(ampCalendar);
-      }
-      tx.commit();
+        Session session = PersistenceManager.getRequestDBSession();
+        tx = session.beginTransaction();
+        Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
+        // calendar
+        if (calendar.getId() == null) {
+            session.save(calendar);
+            session.save(ampCalendar);
+        } else {
+            if (calendar.getCalendarItem() != null) {
+                for (Iterator itemIter = calendar.getCalendarItem().iterator(); itemIter.hasNext(); ) {
+                    CalendarItem item = (CalendarItem) itemIter.next();
+                    if(item.getId()<0){
+                        item.setId(-item.getId());
+                        session.delete(item);
+                        itemIter.remove();
+                    }
+                }
+            }
+
+            if (ampCalendar.getAttendees() != null) {
+                for (Iterator attIter = ampCalendar.getAttendees().iterator(); attIter.hasNext(); ) {
+                    AmpCalendarAttendee att = (AmpCalendarAttendee) attIter.next();
+                    if(att.getId()<0){
+                        att.setId(-att.getId());
+                        session.delete(att);
+                        attIter.remove();
+                    }
+                }
+            }
+
+            session.update(calendar);
+            session.update(ampCalendar);
+        }
+        tx.commit();
     }
     catch (Exception e) {
       if (tx != null) {

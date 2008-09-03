@@ -70,7 +70,7 @@ function addOrganisation(orgId, orgName){
          }
          else{
       	   MyGuests[index]=list.options[i];
-      	   index++;           
+      	   index++;
          }
       }
     }
@@ -82,8 +82,8 @@ function addOrganisation(orgId, orgName){
 	   for(var j=0; j<index; j++){
 	      list.options.add(MyGuests[j]);
 	   }
-    }  
-  }  
+    }
+  }
   function MyaddUserOrTeam(){
   	var MyGuests=new Array();
     var list = document.getElementById('selreceivers');
@@ -95,7 +95,7 @@ function addOrganisation(orgId, orgName){
          orphands[orpIndex]=list.options[i];
          orpIndex++;
       }
-    
+
       if(list.options[i].value.indexOf('g')==0){
       	MyGuests[index]=list.options[i];
       	index++;
@@ -113,9 +113,9 @@ function addOrganisation(orgId, orgName){
 	   for(var j=0; j<index; j++){
 	      list.options.add(MyGuests[j]);
 	   }
-    }  	
+    }
   }
-  
+
   function addAtt(){
     var reclist = document.getElementById('whoIsReceiver');
     var selrec=document.getElementById('selreceivers');
@@ -219,31 +219,36 @@ function addOrganisation(orgId, orgName){
     document.calendarEditActivityForm.submit();
   }
 
-  function removeSelOrganisations() {
-    var list = document.getElementById('organizationList');
-    if (list == null) {
-      return false;
-    }
-    var index = list.selectedIndex;
-    if (index != -1) {
-      for(var i = list.length - 1; i >= 0; i--) {
-        if (list.options[i].selected) {
-          list.options[i] = null;
+  function removeSelectedElements(selId){
+    var sel = document.getElementById(selId);
+    if (sel != null) {
+      if (sel.selectedIndex > -1) {
+        for(var i=0; i<sel.options.length; i++) {
+          if (sel.options[i].selected) {
+            sel.remove(i);
+          }
         }
       }
-      if (list.length > 0) {
-        list.selectedIndex = index == 0 ? 0 : index - 1;
+    }
+  }
+
+  function removeSelOrganisations() {
+    var orglist = document.getElementById('organizationList');
+    if (orglist != null) {
+      if (orglist.selectedIndex > -1) {
+        for(var i=0; i<orglist.options.length; i++) {
+          if (orglist.options[i].selected) {
+            orglist.remove(i);
+          }
+        }
       }
     }
-    return false;
   }
 
   function selectAllOrgs() {
-    var lsItem;
     var orglist = document.getElementById('organizationList');
-    for(var ind=0; ind<orglist.options.length; ind++){
-      lsItem=orglist.options[ind];
-      lsItem.selected=true;
+    for(var i=0; i<orglist.options.length; i++){
+      orglist.options[i].selected=true;
     }
     //document.getElementById('organizationList').option.selectAll;
     return true;
@@ -352,7 +357,7 @@ function addOrganisation(orgId, orgName){
                       <digi:trn key="calendar:addOrganizations">Add Organizations</digi:trn>
                     </digi:link>
                     &nbsp
-                    <a href="javascript:removeSelOrganisations();">
+                    <a href="javascript:removeSelectedElements('organizationList');">
                       <digi:trn key="calendar:deleteOrganisation">Delete Organization</digi:trn>
                     </a>
                   </a>

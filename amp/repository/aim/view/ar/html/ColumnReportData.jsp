@@ -12,10 +12,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <!-- generate total row -->
-<logic:equal name="columnReport" property="canDisplayRow" value="true">
-<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
+
+<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
-</logic:equal>
 
 <%int rowIdx = 2;%>
 

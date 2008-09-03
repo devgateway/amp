@@ -35,8 +35,10 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
@@ -101,6 +103,7 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FiscalCalendar;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
@@ -115,20 +118,20 @@ import com.sun.rowset.CachedRowSetImpl;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
-
+        
            public static String filter(String text) {
 
 		String result = null;
-
+             
 		if (text != null) {
 			result=text.replaceAll("&", "&amp;");
 			result = result.replaceAll(">", "&gt;");
 			result = result.replaceAll("<", "&lt;");
 			result = result.replaceAll("'", "\'");//"&acute;");
 			result = result.replaceAll("\"", "&quot;");
-
+			
 		}
-
+                
 
 		return result;
 
@@ -401,13 +404,15 @@ public class DbUtil {
         return funding;
     }
 
-    public static int countActivitiesByQuery(String sQuery) {
-
+    
+    public static int countActivitiesByQuery(String sQuery, ArrayList<FilterParam> params) {
+    	
     	Session sess=null;
-    		Connection conn=null;
+    	Connection conn=null;
     		CellColumn cc=null;
     		try {
     			sess= PersistenceManager.getSession();
+    		
     			conn=sess.connection();
     		} catch (HibernateException e) {
     			logger.error(e);
@@ -416,16 +421,25 @@ public class DbUtil {
     			logger.error(e);
     			e.printStackTrace();
     		}
-
+    		
     		int ii=0;
 
     		String query = "SELECT count(*) FROM amp_activity WHERE amp_activity_id IN ("
     				+ sQuery + " ) ";
     		//System.out.println("MASTER query count activities::: " + query);
     		PreparedStatement ps;
+    		
+    		
     		try {
     			ps = conn.prepareStatement(query);
-
+    			if (params!=null){
+        			
+        			//add params if exist
+        			for (int i = 0; i < params.size(); i++) {
+        				ps.setObject(i+1, params.get(i).getValue(),params.get(i).getSqlType());	
+        			}
+        		
+        		}	
     			ResultSet rs = ps.executeQuery();
     			ResultSetMetaData rsmd;
     			rsmd=rs.getMetaData();
@@ -436,21 +450,23 @@ public class DbUtil {
     		} catch (SQLException e) {
     			logger.error(e);
     			e.printStackTrace();
-    		}
+    		} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
     		finally {
     			try {
     				if (sess != null) {
     					PersistenceManager.releaseSession(sess);
     				}
     			} catch (Exception e) {
-    				logger.error(e);
-    				e.printStackTrace();
+    				logger.error("Error parsing date filters");
     			}
     		}
     		//System.out.println("--------------------- "+ii);
     	return ii;
     }
-
+    
     public static String getTrnMessage(String keyTrn) {
         Session session = null;
         Collection funding = new ArrayList();
@@ -1587,7 +1603,7 @@ public class DbUtil {
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
-
+            
         } catch (Exception e) {
         	e.printStackTrace();
             logger.error("Unable to get TeamAppSettings");
@@ -1613,7 +1629,7 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
                 if(ampAppSettings!=null) break;
             }
-
+            
         } catch (Exception e) {
         	e.printStackTrace();
             logger.error("Unable to get TeamAppSettings");
@@ -1621,7 +1637,7 @@ public class DbUtil {
         }
         return ampAppSettings;
     }
-
+    
     public static boolean isUserTranslator(Long userId) {
 
         logger.debug("In isUserTranslator()");
@@ -1687,9 +1703,9 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-
-
-
+    
+    
+    
     public static Collection getAllReports() {
         Session session = null;
         Query qry = null;
@@ -1731,7 +1747,7 @@ public class DbUtil {
         }
         return ampReports;
     }
-
+    
     public static AmpReportLog getAmpReportLog(Long report_id, Long member_id) {
     	AmpReportLog ampReportMemberLog = null;
         Session session = null;
@@ -1752,7 +1768,7 @@ public class DbUtil {
             logger.error("Unable to get reportmemberlog " + ex);
         }
         return ampReportMemberLog;
-    }
+    }    
 
     public static Collection getMembersUsingReport(Long id) {
 
@@ -2371,7 +2387,7 @@ public class DbUtil {
         }
         return organisation;
     }
-    
+
     public static ArrayList getBilMulOrganisations() {
         Session session = null;
         Query q = null;
@@ -4457,7 +4473,7 @@ public class DbUtil {
         }
         return col;
     }
-
+    
     public static Collection<AmpOrgGroup> searchForOrganisationGroup(String keyword, Long orgType) {
         Session session = null;
         Collection col = null;
@@ -4493,7 +4509,7 @@ public class DbUtil {
         }
         return col;
     }
-
+    
     public static Collection<AmpOrgGroup> getAllOrganisationGroup() {
         Session session = null;
         Query qry = null;

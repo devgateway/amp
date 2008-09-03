@@ -7,11 +7,13 @@
 package org.dgfoundation.amp.ar.workers;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -21,11 +23,13 @@ import net.sf.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
+import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.helper.FormatHelper;
 
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -38,7 +42,7 @@ import com.sun.rowset.CachedRowSetImpl;
  */   
 public abstract class ColumnWorker {
     
-    	public static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+   public static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     	
     protected AmpColumns relatedColumn; 
     
@@ -139,11 +143,21 @@ public abstract class ColumnWorker {
 				+ condition + " ) "+(internalCondition!=null?internalCondition:"");
 		PreparedStatement ps;
 		try {
+			
 			ps = conn.prepareStatement(query);
 
+			//add params if exist
+			ArrayList<FilterParam> params=generator.getFilter().getIndexedParams();
+			for (int i = 0; i < params.size(); i++) {
+				ps.setObject(i+1, params.get(i).getValue(),params.get(i).getSqlType());	
+			}
+		
+			
 			ResultSet rs = ps.executeQuery();
 			rsmd=rs.getMetaData();
 			
+			//Set parameters to query
+			//generator.getFilter().getYearFrom();
 			
 			int colsCount=rsmd.getColumnCount()+1;
 			
@@ -178,6 +192,8 @@ public abstract class ColumnWorker {
 			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);
 			logger.error(e);
 			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Error parsing date filters");
 		} 
 		finally {
 			try {

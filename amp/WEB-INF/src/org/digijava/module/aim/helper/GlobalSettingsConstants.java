@@ -40,6 +40,9 @@ public class GlobalSettingsConstants {
     public static final String SITE_DOMAIN = "Site Domain";
     
     public static final String AMOUNTS_IN_THOUSANDS = "Amounts in Thousands";
-    
+
+    public static final String SPLIT_BY_TYPE_OF_ASSISTANCE= "Enabled Split by Type Of Assistance";
+
     public static final String SHOW_WIDGET_PLACE_NAMES = "Show widget place names";
+
 }

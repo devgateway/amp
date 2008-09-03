@@ -210,6 +210,15 @@ public class FormatHelper {
 	  return result;
    }
    
+   public static Date  parseDate2(String sDate){
+	   try {
+		   return FormatHelper.parseDate(sDate).getTime();
+	} catch (Exception e) {
+		logger.error("Can not parse date "+sDate,e);
+		return null;
+	}
+   }
+   
    public static String formatDate(Date date) {
 	if(date==null) return null;
 	String defaultFormat = FeaturesUtil

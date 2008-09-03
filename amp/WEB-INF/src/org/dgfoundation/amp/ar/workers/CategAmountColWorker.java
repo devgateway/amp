@@ -6,12 +6,15 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.poi.hssf.util.HSSFColor.SKY_BLUE;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmountCellColumn;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -22,6 +25,8 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.CalendarWorker;
@@ -77,18 +82,34 @@ public class CategAmountColWorker extends ColumnWorker {
 		//proposed cost is by default not showable and should not appear in any funding totals. it is used to ease the use of destination post processed columns
 		if(this.getViewName().equals(ArConstants.VIEW_PROPOSED_COST))
 		    return false;
-		    
-		
-		
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
-		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
-		if(filter.getYearFrom()!=null || filter.getYearTo()!=null) {
+		//now this is null due we have one field 
+		try {
+			if(filter.getFromDate()!=null || filter.getToDate()!=null) {
+				java.util.Date tDate=(java.util.Date) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.TRANSACTION_DATE).getValue();
+				
+				
+				if (filter.getFromDate()!=null  && !("".equalsIgnoreCase(filter.getFromDate()))){
+					java.util.Date sDate=FormatHelper.parseDate2(filter.getFromDate());
+					if (tDate.before(sDate)) showable=false;
+				}
+				
+				if (filter.getToDate()!=null && !("".equalsIgnoreCase(filter.getToDate()))){
+					java.util.Date toDate=FormatHelper.parseDate2(filter.getToDate());
+					if (tDate.after(toDate)) showable=false;
+				}
+		}
+		/* if(filter.getYearFrom()!=null || filter.getYearTo()!=null) {
 			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
 			if(filter.getYearFrom()!=null && filter.getYearFrom().intValue()>itemYear.intValue()) showable=false;
 			if(filter.getYearTo()!=null && filter.getYearTo().intValue()<itemYear.intValue()) showable=false;
+		}*/
+		} catch (Exception e) {
+			logger.error("Can't define if cell is Showable possible parse error detected",e );
 		}
+
 		return showable;
 	}
 
@@ -176,14 +197,29 @@ public class CategAmountColWorker extends ColumnWorker {
 		if (columnsMetaData.contains("org_grp_name")) {
 			donorGroupName	= rs.getString("org_grp_name");
 		}
-				
-		if (columnsMetaData.contains("terms_assist_name")){
-			String termsAssist = rs.getString("terms_assist_name");
-			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
-					termsAssist);
-			acc.getMetaData().add(termsAssistMeta);
+		
+		String value=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
+		boolean skpyCategorize=("false".equalsIgnoreCase(value));
+        //if (generator.getReportMetadata().getHierarchies().contains()
+		//check if the column is a into Hierarchies //Ned to talk with mihai to find a better solution
+		
+		Set<AmpReportHierarchy> hierarchies =generator.getReportMetadata().getHierarchies(); 
+		for (AmpReportHierarchy ampReportHierarchy : hierarchies) {
+			if (ArConstants.TERMS_OF_ASSISTANCE.equalsIgnoreCase(ampReportHierarchy.getColumn().getColumnName())){
+				skpyCategorize=false;
+				break ;
+			}
 		}
 		
+		if (!skpyCategorize){
+			if (columnsMetaData.contains("terms_assist_name")){
+				String termsAssist = rs.getString("terms_assist_name");
+				MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
+						termsAssist);
+				acc.getMetaData().add(termsAssistMeta);
+			}
+        }
+			
 		if (columnsMetaData.contains("financing_instrument_name")){			
 		    	String financingInstrument = rs.getString("financing_instrument_name");
 			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
@@ -272,7 +308,10 @@ public class CategAmountColWorker extends ColumnWorker {
 				month = worker.getMonth();
 				quarter = "Q" + worker.getQuarter();
 				year = worker.getYear();
-
+				//The complete will be used to see if the cell is showable
+				MetaInfo dateInfo = this.getCachedMetaInfo(ArConstants.TRANSACTION_DATE, worker.getDate());
+				acc.getMetaData().add(dateInfo);
+				
 			} catch (Exception e) {
 				logger.error("Error gettin fiscal year of activity id =" + id);
 			}

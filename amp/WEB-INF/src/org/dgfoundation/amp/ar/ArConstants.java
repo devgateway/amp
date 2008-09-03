@@ -36,6 +36,8 @@ public final class ArConstants {
 	//metainfo categs:
 	public final static String ADJUSTMENT_TYPE="Adjustment Type";
 	public final static String TRANSACTION_TYPE="Transaction Type";
+	public final static String TRANSACTION_DATE="Transaction Date";
+	
 	public final static String FUNDING_TYPE="Funding Type";
 	public final static String TERMS_OF_ASSISTANCE="Type Of Assistance";
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	

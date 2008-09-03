@@ -18,6 +18,8 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Column that is built
@@ -119,17 +121,22 @@ public class GroupColumn extends Column {
      * @return a GroupColumn that holds the categorized Data
      */
     private static Column verticalSplitByCateg(CellColumn src,
-            String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
+           String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
         Column ret = new GroupColumn(src);
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator i = src.iterator();
+       
+        
+        
+        
         while (i.hasNext()) {
             Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
             MetaInfo minfo=MetaInfo.getMetaInfo(element.getMetaData(),category);
             if(minfo==null || minfo.getValue()==null) return null;
             	//if the year is not renderizable just not add it to minfo
-        	if (element.isRenderizable()) {
+           
+            if (element.isRenderizable()) {
         	    metaSet.add(minfo);
         	}
         }
@@ -143,15 +150,16 @@ public class GroupColumn extends Column {
         	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q4"));
         }
    
-       //manually add at least one term :(
-       
-       if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
+      
+    	   //manually add at least one term :(
+    	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
     	   //Commented for Bolivia
-	   if (metaSet.size()==0)
-	   metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
-    	//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
-    	//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
-       }
+    		if (metaSet.size()==0)
+    			metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
+    		//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
+    		//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
+    		}
+       
        
        //manually add measures selected
        if(category.equals(ArConstants.FUNDING_TYPE)) {
@@ -233,8 +241,7 @@ public class GroupColumn extends Column {
         }
         // End AMP-2724
         
-        
-        
+         
         if(ret.getItems().size()==0) {
         	AmountCellColumn acc=new AmountCellColumn(ret);
         	Iterator ii=src.iterator();

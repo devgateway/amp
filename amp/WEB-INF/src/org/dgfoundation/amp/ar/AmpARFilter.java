@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -61,8 +62,8 @@ import org.digijava.module.aim.util.TeamUtil;
  * @since Aug 5, 2006
  * 
  */
-public class AmpARFilter extends PropertyListable {
 
+public class AmpARFilter extends PropertyListable {
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
 	private boolean justSearch=false;
@@ -72,6 +73,10 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	private Set sectors = null;
 	private Set selectedSectors = null;
+	
+	@PropertyListableIgnore
+	private ArrayList<FilterParam> indexedParams=null;
+
 	
 	@PropertyListableIgnore
 	private Long activitiesRejectedByFilter;
@@ -374,6 +379,8 @@ public class AmpARFilter extends PropertyListable {
 	}
 
 	public void generateFilterQuery(HttpServletRequest request) {
+		indexedParams=new ArrayList<FilterParam>();
+		
 		String BUDGET_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE budget="
 				+ (budget != null ? budget.toString() : "null")
 				+ (budget != null && budget.booleanValue() == false ? " OR budget is null"
@@ -431,9 +438,9 @@ public class AmpARFilter extends PropertyListable {
 			
 		int c;
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )" )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )",null )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null));
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		else c= Math.abs( DbUtil.countActivitiesByQuery(TEAM_FILTER,null)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 
@@ -606,47 +613,25 @@ public class AmpARFilter extends PropertyListable {
 		}
 
 		
-		SimpleDateFormat sdf = new SimpleDateFormat(org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT));
-		
 		
 		if (fromDate != null) 
 			if (fromDate.length() > 0){
-				AmpARFilterHelper filterHelper = Logic.getInstance()
-				.getAmpARFilterHelper();
-				String fromStr = null;
-				try {
-					Date from = null;
-					from = sdf.parse(fromDate);
-					sdf = new SimpleDateFormat("yyyy-MM-dd");
-					fromStr = sdf.format(from);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 				String FROM_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
-					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(fd.transaction_date,'"+ fromStr+"') >= 0";
+					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(fd.transaction_date,?) >= 0";
 				queryAppend(FROM_FUNDING_DATE_FILTER);
+				//add to the params list that will be used on the prepared statment
+				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getFromDate()).getTime()),java.sql.Types.DATE));
 			}
-		sdf = new SimpleDateFormat(org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT));
 		if (toDate != null)
 			if (toDate.length() > 0){
-				AmpARFilterHelper filterHelper = Logic.getInstance()
-				.getAmpARFilterHelper();
-				String toStr = null;
-				try {
-					Date to = null;
-					to = sdf.parse(toDate);
-					sdf = new SimpleDateFormat("yyyy-MM-dd");
-					toStr = sdf.format(to);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				String TO_FUNDING_DATE_FILTER = "SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd "
-					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF('"+ toStr+"', fd.transaction_date) >= 0";
+					+ "WHERE f.amp_funding_id=fd.amp_funding_id AND DATEDIFF(?, fd.transaction_date) >= 0";
 				queryAppend(TO_FUNDING_DATE_FILTER);
+				//add to the params list that will be used on the prepared statment
+				indexedParams.add(new FilterParam(new java.sql.Date(FormatHelper.parseDate2(this.getToDate()).getTime()),java.sql.Types.DATE));
+				
 			}
+		
 		/*
 		 * if (fromYear==null) fromYear = 0;
 		 * 
@@ -775,12 +760,12 @@ public class AmpARFilter extends PropertyListable {
 					+ jointCriteria.toString();
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
-		DbUtil.countActivitiesByQuery(this.generatedFilterQuery);
+		DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams);
 		
 		if(draft){
-			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )" )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+			c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery + " AND amp_activity_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false) )",indexedParams )-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,indexedParams) );
 		}
-		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES) );
+		else c= Math.abs( DbUtil.countActivitiesByQuery(this.generatedFilterQuery,indexedParams)-DbUtil.countActivitiesByQuery(NO_MANAGEMENT_ACTIVITIES,null) );
 		this.setActivitiesRejectedByFilter(new Long(c));
 		request.getSession().setAttribute("activitiesRejected",this.getActivitiesRejectedByFilter());
 		
@@ -1317,6 +1302,10 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setJustSearch(boolean justSearch) {
 		this.justSearch = justSearch;
+	}
+	@PropertyListableIgnore
+	public ArrayList<FilterParam> getIndexedParams() {
+		return indexedParams;
 	}
 
 }

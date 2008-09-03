@@ -48,13 +48,23 @@ public class GetTeamReports extends Action {
 		}
 
 		ReportsForm raForm = (ReportsForm) form;
-                if (raForm.getCurrentPage() == 0) {
-                  raForm.setCurrentPage(FIRST_PAGE);
-                }
+        if (raForm.getCurrentPage() == 0) {
+          raForm.setCurrentPage(FIRST_PAGE);
+        }
+        
+        Boolean tabs = null; 
+        if(mapping.getParameter().equals("reportList")){
+        	raForm.setShowReportList(true);
+        	tabs = false;
+        }else{
+        	// mapping.getParameter().equals("desktopTabList")
+        	raForm.setShowReportList(false);
+        	tabs = true;
+        }
 
 
 		Long id = null;
-                int defReportsPerPage=0;
+        int defReportsPerPage=0;
 
 		if (request.getParameter("id") != null) {
 			id = new Long(Long.parseLong(request.getParameter("id")));
@@ -75,12 +85,12 @@ public class GetTeamReports extends Action {
             Collection col =null;
             if(defReportsPerPage!=0){
                 int curPage=raForm.getCurrentPage()-1;
-                col= TeamUtil.getTeamReportsCollection(id,curPage*defReportsPerPage,defReportsPerPage);
-                int size=TeamUtil.getTeamReportsCollectionSize(id);
+                col= TeamUtil.getTeamReportsCollection(id,curPage*defReportsPerPage,defReportsPerPage,tabs);
+                int size=TeamUtil.getTeamReportsCollectionSize(id,tabs);
                 totalPages=Math.ceil(1.0*size/defReportsPerPage);
              }
              else{
-                col= TeamUtil.getTeamReportsCollection(id);
+                col= TeamUtil.getTeamReportsCollection(id,tabs);
                 totalPages=new Double(FIRST_PAGE);
               }
 

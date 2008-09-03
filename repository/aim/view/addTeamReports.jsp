@@ -162,9 +162,16 @@ function setHoveredTable(tableId, hasHeaders) {
 						Report List
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:addReports">
-						Add Reports
-						</digi:trn>
+						<c:if test="${aimTeamReportsForm.showReportList == true}">
+							<digi:trn key="aim:addReports">
+								Add Reports
+							</digi:trn>
+						</c:if>
+						<c:if test="${aimTeamReportsForm.showReportList == false}">
+							<digi:trn key="aim:addTabs">
+								Add Tabs
+							</digi:trn>
+						</c:if>	
 					</td>
 				</tr>
 				<tr>
@@ -176,7 +183,12 @@ function setHoveredTable(tableId, hasHeaders) {
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="3" scope="request"/>
+									<c:if test="${aimTeamReportsForm.showReportList == true}">
+										<c:set var="selectedTab" value="3" scope="request"/>
+									</c:if>
+									<c:if test="${aimTeamReportsForm.showReportList == false}">
+										<c:set var="selectedTab" value="8" scope="request"/>
+									</c:if>	
 									<c:set var="selectedSubTab" value="1" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
 								</td>
@@ -198,9 +210,18 @@ function setHoveredTable(tableId, hasHeaders) {
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
 																<td valign="center" align="center" bgcolor="#999999" style="color:black">
-																	<b><digi:trn key="aim:reportListUnassignedReports">
-																		List of unassigned reports
-																	</digi:trn></b>
+																	<b>
+																		<c:if test="${aimTeamReportsForm.showReportList == true}">
+																			<digi:trn key="aim:reportListUnassignedReports">
+																				List of unassigned reports
+																			</digi:trn>
+																		</c:if>
+																		<c:if test="${aimTeamReportsForm.showReportList == false}">
+																			<digi:trn key="aim:reportListUnassignedTabs">
+																				List of unassigned tabs
+																			</digi:trn>
+																		</c:if>
+																	</b>
 																</td>
 															</table>
 														</td>
@@ -211,9 +232,16 @@ function setHoveredTable(tableId, hasHeaders) {
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#f4f4f2">
 																<tr><td bgcolor="#f4f4f2" align="center">
-																	<digi:trn key="aim:noReportsPresent">
-																		No reports present
-																	</digi:trn>
+																	<c:if test="${aimTeamReportsForm.showReportList == true}">
+																		<digi:trn key="aim:noReportsPresent">
+																			No reports present
+																		</digi:trn>
+																	</c:if>
+																	<c:if test="${aimTeamReportsForm.showReportList == false}">
+																		<digi:trn key="aim:noTabsPresent">
+																			No tabs present
+																		</digi:trn>
+																	</c:if>	
 																</td></tr>
 															</table>														
 														</td>
@@ -252,10 +280,16 @@ function setHoveredTable(tableId, hasHeaders) {
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit  styleClass="dr-menu" property="assignReports"  onclick="return validate()">
-																			<digi:trn key="btn:addReportsToTheWorkspace">Add Reports to the Workspace</digi:trn> 
-																		</html:submit>
-																		
+																		<c:if test="${aimTeamReportsForm.showReportList == true}">
+																			<html:submit  styleClass="dr-menu" property="assignReports"  onclick="return validate()">
+																				<digi:trn key="btn:addReportsToTheWorkspace">Add Reports to the Workspace</digi:trn> 
+																			</html:submit>
+																		</c:if>
+																		<c:if test="${aimTeamReportsForm.showReportList == false}">
+																			<html:submit  styleClass="dr-menu" property="assignReports"  onclick="return validate()">
+																				<digi:trn key="btn:addTabsToTheWorkspace">Add Tabs to the Workspace</digi:trn> 
+																			</html:submit>
+																		</c:if>
 																	</td>
 																</tr>
 															</table>

@@ -1763,7 +1763,7 @@ public class TeamUtil {
     /*
      * return ReportsCollection Object
      */
-    public static Collection getTeamReportsCollection(Long teamId) {
+    public static Collection getTeamReportsCollection(Long teamId, Boolean tabs) {
         Session session = null;
         ArrayList col = null;
         try {
@@ -1783,32 +1783,37 @@ public class TeamUtil {
 	                // desc:used select query instead of session.load
 	                // start
 	                queryString = "select r from " + AmpReports.class.getName()
-	                    + " r " + "where (r.ampReportId=:id) order by r.name";
+	                    + " r " + "where (r.ampReportId=:id) "; 	                
+	                if (tabs != null) {
+	    				if (tabs) {
+	    					queryString += " and r.drilldownTab=true ";
+	    				} else {
+	    					queryString += " and r.drilldownTab=false ";
+	    				}
+	    			}	 
+	                queryString += " order by r.name";
 	                qry = session.createQuery(queryString);
 	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
 	                                 Hibernate.LONG);
 	                Iterator itrTemp = qry.list().iterator();
 	                AmpReports ampReport = null;
-	                while(itrTemp.hasNext()) {
+	                if(itrTemp.hasNext()) {
 	                    ampReport = (AmpReports) itrTemp.next();
+		                ReportsCollection rc = new ReportsCollection();
+		                rc.setReport(ampReport);
+		                if(ampTeamRep.getTeamView() == false) {
+		                    rc.setTeamView(false);
+		                } else {
+		                    rc.setTeamView(true);
+		                }		
+		                col.add(rc);
 	                }
-	                // end
-	                ReportsCollection rc = new ReportsCollection();
-	                rc.setReport(ampReport);
-	                if(ampTeamRep.getTeamView() == false) {
-	                    rc.setTeamView(false);
-	                } else {
-	                    rc.setTeamView(true);
-	                }
-	
-	                col.add(rc);
                 }
 
             }
             Collections.sort(col);
         } catch(Exception e) {
-            logger.debug("Exception from getTeamReportsCollection");
-            logger.debug(e.toString());
+            logger.error("Exception from getTeamReportsCollection", e);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -1822,14 +1827,23 @@ public class TeamUtil {
         }
         return col;
     }
-    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage) {
+    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage, Boolean tabs) {
         Session session = null;
         List col = new ArrayList<ReportsCollection>();
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select new "+ReportsCollection.class.getName()+"(r, tr.teamView) from "
                 + AmpTeamReports.class.getName()
-                + " tr inner join tr.report r where (tr.team=:teamId) group by tr.report order by tr.report limit "+currentPage+", "+recordPerPage ;
+                + " tr inner join tr.report r where (tr.team=:teamId) ";
+            
+            if (tabs != null) {
+				if (tabs) {
+					queryString += " and r.drilldownTab=true ";
+				} else {
+					queryString += " and r.drilldownTab=false ";
+				}
+			}
+            queryString += " group by tr.report order by tr.report limit " +currentPage+", "+recordPerPage ;
             Query qry = session.createQuery(queryString);
             qry.setLong("teamId", teamId);
 
@@ -1844,7 +1858,7 @@ public class TeamUtil {
         return col;
     }
 
-    public static int getTeamReportsCollectionSize(Long teamId) {
+    public static int getTeamReportsCollectionSize(Long teamId, Boolean tabs) {
        Session session = null;
        List col =new ArrayList();
        int size=0;
@@ -1852,7 +1866,16 @@ public class TeamUtil {
            session = PersistenceManager.getRequestDBSession();
            String queryString = "select r, tr.teamView from "
                + AmpTeamReports.class.getName()
-               + " tr inner join tr.report r where (tr.team=:teamId) order by tr.report";
+               + " tr inner join tr.report r where (tr.team=:teamId) "; 
+           if (tabs != null) {
+				if (tabs) {
+					queryString += " and r.drilldownTab=true ";
+				} else {
+					queryString += " and r.drilldownTab=false ";
+				}
+			}           
+           queryString += " order by tr.report";
+           
            Query qry = session.createQuery(queryString);
            qry.setLong("teamId", teamId);
            col = qry.list();
@@ -2214,18 +2237,19 @@ public class TeamUtil {
         return getAllTeamActivities(null);
     }
 
-    public static Collection getAllUnassignedTeamReports(Long id) {
+    public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {
         Session session = null;
         Collection col = null;
         Collection col1 = null;
 
         try {
-            col = DbUtil.getAllReports();
+
+        	col = DbUtil.getAllReports(tabs);        		
             session = PersistenceManager.getRequestDBSession();
 
             String queryString = "select tr from "
                 + AmpTeamReports.class.getName()
-                + " tr where (tr.team=:teamId)";
+                + " tr where (tr.team=:teamId) ";            
             Query qry = session.createQuery(queryString);
             qry.setParameter("teamId", id, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -2237,7 +2261,14 @@ public class TeamUtil {
 	                // desc:used select query instead of session.load
 	                // start
 	                queryString = "select r from " + AmpReports.class.getName()
-	                    + " r " + "where (r.ampReportId=:id)";
+	                    + " r " + "where (r.ampReportId=:id)";	                
+	                if (tabs != null) {
+	    				if (tabs) {
+	    					queryString += " and r.drilldownTab=true ";
+	    				} else {
+	    					queryString += " and r.drilldownTab=false ";
+	    				}
+	    			}	                
 	                qry = session.createQuery(queryString);
 	                qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
 	                                 Hibernate.LONG);
@@ -2245,9 +2276,8 @@ public class TeamUtil {
 	                AmpReports ampReport = null;
 	                while(itrTemp.hasNext()) {
 	                    ampReport = (AmpReports) itrTemp.next();
+		                col1.add(ampReport);
 	                }
-	                // end
-	                col1.add(ampReport);
             	}
             }
 

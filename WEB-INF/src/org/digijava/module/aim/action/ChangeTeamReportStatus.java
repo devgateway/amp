@@ -83,7 +83,14 @@ public class ChangeTeamReportStatus extends Action {
 
 		DbUtil.update(teamReports);
 
-		url += "/aim/teamReportList.do";
+		String returnPage = null;
+		if("teamReportList".equals(request.getParameter("returnPage"))){
+			returnPage = "/aim/teamReportList.do";
+		}else if("teamDesktopTabList".equals(request.getParameter("returnPage"))){
+			returnPage = "/aim/teamDesktopTabList.do";
+		}
+		
+		url += returnPage;
 		response.sendRedirect(url);
 
 		return null;

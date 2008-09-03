@@ -51,6 +51,8 @@ public class UpdateTeamReports extends Action {
 		Long id = null;
 		TeamMember tm = null;
 
+		boolean tabs = !raForm.isShowReportList();
+		
 		if (session.getAttribute("currentMember") != null) {
 			tm = (TeamMember) session.getAttribute("currentMember");
 			id = tm.getTeamId();
@@ -65,12 +67,14 @@ public class UpdateTeamReports extends Action {
 			 * shows you the unassigned report list
 			 */
 			raForm.setAddReport(null);
-                        return mapping.findForward("forward");
+			if(!raForm.isShowReportList())
+				return mapping.findForward("forwardDesktopTabList");
+			return mapping.findForward("forward");
 		}
 		if (raForm.getAddReport() != null) {
 			/* show all unassigned reports */
 
-			Collection col = TeamUtil.getAllUnassignedTeamReports(id);
+			Collection col = TeamUtil.getAllUnassignedTeamReports(id, tabs);
 			raForm.setReports(col);
 			raForm.setTeamId(tm.getTeamId());
 			raForm.setAddReport(null);
@@ -84,31 +88,8 @@ public class UpdateTeamReports extends Action {
 			DbUtil.addTeamReports(selReports,tm.getTeamId());
 			raForm.setAssignReports(null);
 
-			/*
-			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-
-			Collection reports = new ArrayList();
-			for (int i = 0; i < selReports.length; i++) {
-				if (selReports[i] != null) {
-					AmpTeamReports ampTeamRep = null;
-					Long repId = selReports[i];
-
-					ampTeamRep = DbUtil.getAmpTeamReport(
-							ampTeam.getAmpTeamId(), repId);
-
-					if (ampTeamRep == null) {
-						ampTeamRep = new AmpTeamReports();
-						AmpReports ampReport = DbUtil.getAmpReport(repId);
-						if (ampReport != null) {
-							ampTeamRep.setTeam(ampTeam);
-							ampTeamRep.setReport(ampReport);
-							ampTeamRep.setTeamView(false);
-							DbUtil.add(ampTeamRep);
-							logger.info("added team report");
-						}
-					}
-				}
-			}*/
+			if(!raForm.isShowReportList())
+				return mapping.findForward("forwardDesktopTabList");
 			return mapping.findForward("forward");
 		} else {
 			return mapping.findForward(null);

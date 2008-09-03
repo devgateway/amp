@@ -147,22 +147,27 @@
 								<TD width="100%">
         							<TABLE cellSpacing=0 cellPadding=0 width="99%" align=center bgColor=#f4f4f2 border=0>
                 					<TR bgColor=#f4f4f2>
-					            		<TD width=370 bgColor=#f4f4f2>
+					            		<TD width=400 bgColor=#f4f4f2>
 					                    	<TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
 			      	                		<TR bgColor=#f4f4f2>
-			                        			<TD class=box-title noWrap bgColor=#c9c9c7 height="17">&nbsp;
-																			<digi:trn key="aim:referenceInformation">Reference Information</digi:trn>
-			                          		</TD>
-			                        			<TD background="module/aim/images/corner-r.gif" height="17" width="17">
-			                          		</TD>
+			                        			<TD width="7" height="17">
+                                                <img src="/TEMPLATE/ampTemplate/css/boxleftcorner.gif" border="0"  /><br />
+                                                </TD>
+			                        			<TD bgColor=#ccdbff height="17" style="padding:4px 4px 4px 4px;">
+												<strong>
+                                                	<digi:trn key="aim:referenceInformation">Reference Information</digi:trn>
+                                                </strong>
+			                          			</TD>
+			                        			<TD width="7" height="17">
+                                                <img src="/TEMPLATE/ampTemplate/css/boxrightcorner.gif" border="0"  /><br />
+                                                </TD>
 			                          		</TR>
 			                  			</TABLE>
 			                  		</TD>
           							</TR>
 		                			<TR>
 											<TD>
-												<TABLE width="100%" cellSpacing=2 cellPadding=5 vAlign="top" align="left"
-												class="box-border-nopadding">
+												<TABLE width="100%" cellSpacing=2 cellPadding=5 vAlign="top" align="left" style="border:1px solid #ccdbff;">
 													<TR>
 														<TD width="150" bgcolor="#f4f4f2">
 															<b><digi:trn key="aim:fundingOrganization">

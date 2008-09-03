@@ -157,7 +157,7 @@
 				<TD width="100%">
 </logic:notPresent>
 <logic:present name="currentMember">
-				<TD width="100%" style="clear:both;position:fixed;bottom:0px;top:auto;">
+				<TD width="100%" style="clear:both;bottom:0px;top:auto;">
 </logic:present>
 				   <digi:insert attribute="footer" />
 

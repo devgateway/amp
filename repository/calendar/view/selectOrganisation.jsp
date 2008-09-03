@@ -76,9 +76,26 @@ function closeWindow() {
                       </tr>
                       <tr>
                         <td align="center" colspan=2>
-                          <input type="button" value="Search" class="dr-menu" onclick="return searchOrganization()">&nbsp;
-                          <input type="reset" value="Clear" class="dr-menu">&nbsp;
-                          <input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
+                          <c:set var="trn">
+                            <digi:trn key="calendar:selectOrg:btnSearch">
+                            Search
+                            </digi:trn>
+                          </c:set>
+                          <input type="button" value="${trn}" class="dr-menu" onclick="return searchOrganization()">&nbsp;
+
+                          <c:set var="trn">
+                            <digi:trn key="calendar:selectOrg:btnClear">
+                            Clear
+                            </digi:trn>
+                          </c:set>
+                          <input type="reset" value="${trn}" class="dr-menu">&nbsp;
+
+                          <c:set var="trn">
+                            <digi:trn key="calendar:selectOrg:btnClose">
+                            Close
+                            </digi:trn>
+                          </c:set>
+                          <input type="button" value="${trn}" class="dr-menu" onclick="closeWindow()">
                         </td>
                       </tr>
                     </table>
@@ -116,10 +133,20 @@ function closeWindow() {
                           <table cellPadding=5>
                             <tr>
                               <td>
-                                <input type="button" value="Add" class="dr-menu" onclick="return selectOrganization()">
+                                <c:set var="trn">
+                                  <digi:trn key="calendar:selectOrg:btnAdd">
+                                  Add
+                                  </digi:trn>
+                                </c:set>
+                                <input type="button" value="${trn}" class="dr-menu" onclick="return selectOrganization()">
                               </td>
                               <td>
-                                <input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
+                                <c:set var="trn">
+                                  <digi:trn key="calendar:selectOrg:btnClose">
+                                  Close
+                                  </digi:trn>
+                                </c:set>
+                                <input type="button" value="${trn}" class="dr-menu" onclick="closeWindow()">
                               </td>
                             </tr>
                           </table>

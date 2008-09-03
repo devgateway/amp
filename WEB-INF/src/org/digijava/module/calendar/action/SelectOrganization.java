@@ -20,10 +20,10 @@ public class SelectOrganization extends Action {
         CalendarEventForm ceform = (CalendarEventForm) form;
 
         Collection orgs=DbUtil.getAllOrganisation();
-        if(ceform.getSearchOrgKey()!=null && ceform.getSearchOrgKey().equals("")){
+        if(ceform.getSearchOrgKey()!=null && !ceform.getSearchOrgKey().equals("")){
             for (Iterator iter = orgs.iterator(); iter.hasNext(); ) {
                 AmpOrganisation org = (AmpOrganisation) iter.next();
-                if(org.getName().indexOf(ceform.getSearchOrgKey())==-1){
+                if(org.getName().toLowerCase().indexOf(ceform.getSearchOrgKey().toLowerCase())==-1){
                     iter.remove();
                 }
             }

@@ -223,7 +223,6 @@ var myTabsObject;
 		return false;
 	}
 
-	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
 
 	
 
@@ -302,6 +301,7 @@ DIV.panelList {
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
 	<logic:present name="myActiveTabs" scope="session">
     	<div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
+        <c:set var="showMoreTab" value="false"/>
 		<logic:iterate name="myActiveTabs" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports">
           	<c:set var="showTab" value="true"/>
 			<logic:iterate name="myTabs" id="tab" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
@@ -310,6 +310,7 @@ DIV.panelList {
                 </c:if>
             </logic:iterate>
 			<c:if test="${showTab}">
+			        <c:set var="showMoreTab" value="true"/>
 					<logic:equal name="report" property="drilldownTab" value="true">
 	                   <%--  <c:set var="reportNameTrn"> 
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
@@ -326,3 +327,8 @@ DIV.panelList {
         </div>
 	</logic:present>
 </div>
+<c:if test="${showMoreTab}">
+<script language="javascript">
+	YAHOOAmp.util.Event.addListener(window, "load", initAllTabs);
+</script>
+</c:if>

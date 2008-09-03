@@ -14,7 +14,7 @@
 
 <digi:instance  property="aimEditActivityForm" />
 
-<digi:form name="addActorForm" type="aimEditActivityForm" action="/addActor.do" method="post">
+<digi:form name="addActorForm" type="aimEditActivityForm" action="/addActor.do" method="post" onsubmit="return validate()">
 
 
 <script language="JavaScript">
@@ -79,11 +79,11 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.actorId == -1}">
-															<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addActor()">
+															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.actorId != -1}">
-															<input type="button" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu" onclick="return addActor()">
+															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">
 														</c:if>
 													</td>
 													<td>

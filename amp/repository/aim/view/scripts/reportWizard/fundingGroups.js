@@ -2,12 +2,11 @@ YAHOO.namespace("YAHOO.amp.reportwizard");
 
 YAHOO.amp.reportwizard.colIdToName		= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
-
 YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				'A.C. Chapter', 'Primary Sector Sub-Sector', 'Implementation Level', 'Accession Instrument', 
 				'Executing Agency', 'Donor', 'Donor Group', 
 				'Donor Agency', 'Primary Sector', 'Status', 'Region', 
-				'Type Of Assistance', 'Financing Instrument', 'Project Title',
+				'Type Of Assistance', 'Financing Instrument', 'On/Off Budget',
 				'National Planning Objectives', 'Primary Program', 'Componente', 
 				'Secondary Program', 'Donor Type', 'Credit/Donation', 'Beneficiary Agency', 
 				'Implementing Agency', 'Component Name',

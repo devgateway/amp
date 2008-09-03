@@ -69,7 +69,7 @@
 		</td>
 		
 		<td noWrap align=left valign="center">
-			<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+			<digi:link href="#" paramName="ampReportId" paramId="ampReportId" onclick="javascript:openPrinter(); return false;">
 				<digi:img width="17" height="20" hspace="2" vspace="2" src="module/aim/images/printer.gif" border="0" alt="Printer Friendly" />
 			</digi:link>
 		</td>
@@ -77,3 +77,10 @@
 </table>
 </div>
 <br>
+
+<script type="text/javascript">
+function openPrinter(){
+	//alert('<%=viewParamPrint%>');
+	window.open('<%=viewParamPrint%>','Printer Friendly','toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+}
+</script>

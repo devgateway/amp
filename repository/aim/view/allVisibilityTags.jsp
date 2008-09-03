@@ -670,6 +670,18 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>
 
 
+<field:display name="Table Show name as widget title" feature="Table Widgets"></field:display>
+<field:display name="Table Code" feature="Table Widgets"></field:display>
+<field:display name="Table CSS class" feature="Table Widgets"></field:display>
+<field:display name="Table Style" feature="Table Widgets"></field:display>
+<field:display name="Table Width" feature="Table Widgets"></field:display>
+<field:display name="Table Place" feature="Table Widgets"></field:display>
+<field:display name="Table Column Pattern" feature="Table Widgets"></field:display>
+<field:display name="Table Column Code" feature="Table Widgets"></field:display>
+<field:display name="Table Column CSS class" feature="Table Widgets"></field:display>
+<field:display name="Table Column Widgth" feature="Table Widgets"></field:display>
+<field:display name="Table Column HTML Style" feature="Table Widgets"></field:display>
+
 	<feature:display name="Admin - Component" module="Components"></feature:display>
 		<field:display name="Title" feature="Admin - Component"></field:display>
 		<field:display name="Code" feature="Admin - Component"></field:display>

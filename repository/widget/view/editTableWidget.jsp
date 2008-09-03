@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
@@ -103,26 +106,37 @@
 					<td align="right" nowrap="nowrap"><font color="red">*</font><strong><digi:trn key="gis:editTableWidget:nameTitle">Name:</digi:trn></strong></td>
 					<td><html:text name="wform" property="name" style="width : 200px"/></td>
 				</tr>
+                                <field:display name="Table Show name as widget title" feature="Table Widgets">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:editTableWidget:nameAsTitleTitle">Show name as widget title:</digi:trn></strong></td>
 					<td><html:checkbox name="wform" property="nameAsTitle"/></td>
 				</tr>
+                                </field:display>
+                                <field:display name="Table Code" feature="Table Widgets">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:editTableWidget:codeTitle">Code:</digi:trn></strong></td>
 					<td><html:text name="wform" property="code" style="width : 200px"/></td>
 				</tr>
+                                </field:display>
+                                <field:display name="Table CSS class" feature="Table Widgets">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:editTableWidget:cssClassTitle">CSS class:</digi:trn></strong></td>
 					<td><html:text name="wform" property="cssClass" style="width : 200px"/></td>
 				</tr>
+                                </field:display>
+                                <field:display name="Table Style" feature="Table Widgets">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:editTableWidget:styleTitle">Style:</digi:trn></strong></td>
 					<td><html:text name="wform" property="htmlStyle" style="width : 200px"/></td>
 				</tr>
+                                </field:display>
+                                <field:display name="Table Width" feature="Table Widgets">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:editTableWidget:widthTitle">Width:</digi:trn></strong></td>
 					<td><html:text name="wform" property="width" style="width : 200px"/></td>
 				</tr>
+                                </field:display>
+                                <field:display name="Table Place" feature="Table Widgets">
 				<tr>
 					<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:editTableWidget:placeTitle">Place:</digi:trn></strong></td>
 					<td>
@@ -131,6 +145,7 @@
 						</html:select>
 					</td>
 				</tr>
+                                </field:display>
 				<tr>
 					<td align="right">
 						<c:set var="cancelButton"><digi:trn key="gis:cancelButton">Cancel</digi:trn></c:set>
@@ -149,9 +164,9 @@
 			<table id="columns_list" width="50%"  align="center" style="font-family:verdana;font-size:11px;border:1px solid silver;">
 				<tr bgColor="#d7eafd">
 					<td><strong><digi:trn key="gis:editTableWidget:colName">Column Name</digi:trn></strong></td>
-					<td><strong><digi:trn key="gis:editTableWidget:colCode">Code</digi:trn></strong></td>
-					<td><strong><digi:trn key="gis:editTableWidget:colCssClass">CSS class</digi:trn></strong></td>
-					<td><strong><digi:trn key="gis:editTableWidget:colPate">Pattern</digi:trn></strong></td>
+                                        <field:display name="Table Column Code" feature="Table Widgets"><td><strong><digi:trn key="gis:editTableWidget:colCode">Code</digi:trn></strong></td></field:display>
+					<field:display name="Table Column CSS class" feature="Table Widgets"><td><strong><digi:trn key="gis:editTableWidget:colCssClass">CSS class</digi:trn></strong></td></field:display>
+                                        <field:display name="Table Column Pattern" feature="Table Widgets"><td><strong><digi:trn key="gis:editTableWidget:colPate">Pattern</digi:trn></strong></td></field:display>
 					<td colspan="4"><strong><digi:trn key="gis:editTableWidget:colOps">Operations</digi:trn></strong></td>
 				</tr>
 				<c:forEach var="column" items="${wform.columns}" varStatus="varStat">
@@ -159,15 +174,21 @@
 						<td>
 							${column.name}
 						</td>
+                                                <field:display name="Table Column Code" feature="Table Widgets">
 						<td>
 							${column.code}
 						</td>
+                                                </field:display>
+                                                <field:display name="Table Column CSS class" feature="Table Widgets">
 						<td>
 							${column.cssClass}
 						</td>
+                                                </field:display>
+                                                <field:display name="Table Column Pattern" feature="Table Widgets">
 						<td>
 							${column.pattern}
 						</td>
+                                                </field:display>
 						<td>
 							<c:if test="${not empty wform.id}">
 								<a href="javascript:editCol(${column.id},${wform.id})"><digi:trn key="gis:editLink">Edit</digi:trn></a>

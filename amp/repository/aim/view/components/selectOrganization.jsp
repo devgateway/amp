@@ -123,6 +123,9 @@
 	
 	}
 
+
+
+
 	function selectOrganizationPages(page) {
 	   <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do?edit=true&orgSelReset=false&subAction=selectPage&page=" />
 	   var val = "<%=searchOrg%>";
@@ -150,20 +153,23 @@
 		else return false;
 	}
 
+
+
+
 	function searchAlpha(val) {
-		if (document.aimEditActivityForm.tempNumResults.value == 0) {
+		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
-			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true";
-		     document.aimEditActivityForm.action = url;
-		     document.aimEditActivityForm.submit();
-			  return true;
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganizationComponent.do"/>
+			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true&subAction=search";
+		     document.aimSelectOrganizationForm.action = url;
+		     document.aimSelectOrganizationForm.submit();
+			 return true;
 		}
 	}
-	
+		
 	function searchAlphaAll(val) {
 		if (document.aimSelectOrganizationForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
@@ -471,8 +477,7 @@
 														href="javascript:searchAlpha('<%=alphaPages%>')"
 														title="${translation}"><%=alphaPages%></a>
 												</c:if>
-											|&nbsp;											
-											</c:if>
+											|&nbsp;											</c:if>
 										</logic:iterate></td>
 									</tr>
 									<tr>

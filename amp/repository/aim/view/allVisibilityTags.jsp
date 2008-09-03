@@ -37,6 +37,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -123,6 +124,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Location" module="Project ID and Planning"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display>
+<feature:display name="My Messages" module="Desktop Sections"></feature:display>
+<feature:display name="My Tasks" module="Desktop Sections"></feature:display>
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display>
@@ -411,6 +414,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Overall Contribution" feature="Planning"></field:display>
 <field:display name="Overall Cost" feature="Planning"></field:display>
 <field:display name="Paris Survey" feature="Paris Indicators"></field:display>
+<field:display name="Perspective Commitment" feature="Funding Information"></field:display>
+<field:display name="Perspective Disbursement" feature="Disbursement"></field:display>
+<field:display name="Perspective Expenditure" feature="Funding Information"></field:display>
 <field:display name="Physical Progress" feature="Physical Progress"></field:display>
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>
 <field:display name="Physical progress title" feature="Physical Progress"></field:display>
@@ -451,6 +457,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Purpose" feature="Identification"></field:display>
 <field:display name="Region" feature="Location"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display>
+<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
+<field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display>
+<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Regional Group Add Button" feature="Regional Group"></field:display>
 <field:display name="Regional Group Remove Button" feature="Regional Group"></field:display>
 <field:display name="Remove Actors Button" feature="Issues"></field:display>
@@ -662,27 +671,29 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 
 	<feature:display name="Admin - Component" module="Components"></feature:display>
-		<field:display name="Admin - Component Title" feature="Admin - Component"></field:display>
-		<field:display name="Admin - Component Code" feature="Admin - Component"></field:display>
-		<field:display name="Admin - Component Type" feature="Admin - Component"></field:display>
-		<field:display name="Admin - Component Description" feature="Admin - Component"></field:display>
-		<field:display name="Admin - Component Save Button" feature="Admin - Component"></field:display>
-		<field:display name="Admin - Component Cancel Button" feature="Admin - Component"></field:display>
+		<field:display name="Title" feature="Admin - Component"></field:display>
+		<field:display name="Code" feature="Admin - Component"></field:display>
+		<field:display name="Type" feature="Admin - Component"></field:display>
+		<field:display name="Description" feature="Admin - Component"></field:display>
+		<field:display name="Save Button" feature="Admin - Component"></field:display>
+		<field:display name="Cancel Button" feature="Admin - Component"></field:display>
 
 	<feature:display name="Admin - Component Type" module="Components"></feature:display>
-		<field:display name="Admin - Component Type Name" feature="Admin - Component Type"></field:display>
-		<field:display name="Admin - Component Type Code" feature="Admin - Component Type"></field:display>
-		<field:display name="Admin - Component Type Enable checkbox" feature="Admin - Component Type"></field:display>
-		<field:display name="Admin - Component Type Save Button" feature="Admin - Component Type"></field:display>
-		<field:display name="Admin - Component Type Cancel Button" feature="Admin - Component Type"></field:display>
-		<field:display name="Admin - Component Type Close Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Name" feature="Admin - Component Type"></field:display>
+		<field:display name="Code" feature="Admin - Component Type"></field:display>
+		<field:display name="Enable checkbox" feature="Admin - Component Type"></field:display>
+		<field:display name="Save Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Cancel Button" feature="Admin - Component Type"></field:display>
+		<field:display name="Close Button" feature="Admin - Component Type"></field:display>
 		
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"></feature:display>
+<%//MALAWI TEMP TAGS %>
 
 <feature:display name="About AMP" module="HELP"></feature:display>
 <feature:display name="Admin Help" module="HELP"></feature:display>
 <feature:display name="Support Request Form" module="HELP"></feature:display>
 <feature:display name="User Help" module="HELP"></feature:display>
+
 		

@@ -34,8 +34,8 @@
 
 		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
 		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding"/>
-                <many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="none"/>
-                <property name="transactionAmountInUSD"  type="java.lang.Double" formula="getTransactionAmmountUSD(amp_fund_detail_id)"/>
+        <many-to-one name="contract" column="ipa_contract_id" class="org.digijava.module.aim.dbentity.IPAContract" cascade="none"/>
+        <property name="transactionAmountInUSD"  type="java.lang.Double" formula="getTransactionAmmountUSD(amp_fund_detail_id)"/>
 
 	</class>
 </hibernate-mapping>

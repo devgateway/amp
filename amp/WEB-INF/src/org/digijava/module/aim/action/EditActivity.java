@@ -223,8 +223,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			if (!isPreview && activity!=null && activity.getTeam()!=null && currentTeam!=null){
 				AmpTeam activityTeam=activity.getTeam();
 				//if user is member of same team to which activity belongs then it can be edited
-				if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
-					errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
+				if (!currentTeam.getComputation()){
+					if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
+						errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
+					}
 				}
 			}
 

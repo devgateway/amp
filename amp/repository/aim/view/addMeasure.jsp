@@ -10,7 +10,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <digi:instance property="aimEditActivityForm" />
-<digi:form name="addMeasureForm" type="aimEditActivityForm" action="/addMeasure.do" method="post">
+<digi:form name="addMeasureForm" type="aimEditActivityForm" action="/addMeasure.do" method="post" onsubmit="return validate()">
 <script language="JavaScript">
 <!--
 
@@ -25,7 +25,7 @@
 	}
 
 	function addMeasure() {
-		var flag = true; //validate();
+		var flag = validate();
 		if (flag == true) {
 			var myform = document.getElementsByName("addMeasureForm")[0];
 			myform.submit();
@@ -72,11 +72,13 @@
 												<tr>
 													<td>
 														<c:if test="${aimEditActivityForm.measureId == -1}">
-															<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addMeasure()">													</td>
+															<input type="submit" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu">
+															</td>
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.measureId != -1}">
-															<input type="button" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu" onclick="return addMeasure()">												</td>
+															<input type="submit" value="<digi:trn key='btn:update'>Update</digi:trn>" class="dr-menu">													
+															</td>
 														</c:if>
 														
 													</td>

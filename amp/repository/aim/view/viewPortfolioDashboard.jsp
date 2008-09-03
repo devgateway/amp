@@ -148,7 +148,7 @@
             </ul>
         </div>
 	</div>
-<div class="yui-content" style="background-color:#EDF5FF;border:1px solid black;height:auto;">
+<div class="yui-content" style="background-color:#ffffff;border:1px solid black;height:auto;">
         <feature:display name="Portfolio Dashboard" module="M & E">
 		<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
 			<TR><TD align=left>

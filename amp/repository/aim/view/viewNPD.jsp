@@ -1290,7 +1290,7 @@
             </ul>
         </div>
 	</div>
-<div class="yui-content" style="background-color:#EDF5FF;border:1px solid black;">
+<div class="yui-content" style="background-color:#ffffff;border:1px solid black;">
 <table id="topParttable" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td style="border-bottom:1px solid black;">

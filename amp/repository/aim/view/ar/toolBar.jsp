@@ -81,6 +81,6 @@
 <script type="text/javascript">
 function openPrinter(){
 	//alert('<%=viewParamPrint%>');
-	window.open('<%=viewParamPrint%>','Printer Friendly','toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
+	window.open('<%=viewParamPrint%>','mywindow','toolbar=yes,location=yes,directories=yes,status=yes,menubar=yes,scrollbars=yes,copyhistory=yes,resizable=yes');
 }
 </script>

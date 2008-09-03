@@ -17,7 +17,7 @@
 										<a title="<digi:trn key="aim:BeneficiaryAgency">The organisation that benefits from the activity</digi:trn>">
 										<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b></a>
 									</td></tr>
-									<tr><td bgColor=#f4f4f2>
+									<tr><td >
 										&nbsp;
 									</td></tr>
 									<tr><td>

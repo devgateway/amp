@@ -854,16 +854,21 @@
       <forward name="forward" path="/aim/getDonorActivityList.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimTeamReportsForm" path="/aim/teamReportList" scope="request" type="org.digijava.module.aim.action.GetTeamReports" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=teamReports" />
+    <action name="aimTeamReportsForm" path="/aim/teamReportList" scope="request" type="org.digijava.module.aim.action.GetTeamReports" parameter="reportList" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=teamReports"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimTeamReportsForm" path="/aim/teamDesktopTabList" scope="request" type="org.digijava.module.aim.action.GetTeamReports" parameter="desktopTabList" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=teamReports" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>    
     <action name="aimTeamAuditListForm" path="/aim/teamAuditList" scope="session" type="org.digijava.module.aim.action.TeamAuditLogger" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=teamAuditList" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
    <action input="/showLayout.do?layout=teamReports" name="aimTeamReportsForm" path="/aim/updateTeamReports" scope="session" type="org.digijava.module.aim.action.UpdateTeamReports" validate="false">
       <forward name="forward" path="/aim/teamReportList.do" />
+      <forward name="forwardDesktopTabList" path="/aim/teamDesktopTabList.do" />
       <forward name="showAddReport" path="/showLayout.do?layout=addTeamReports" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

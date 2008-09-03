@@ -1703,18 +1703,28 @@ public class DbUtil {
         return ampAppSettings;
     }
 
-    
-    
-    
-    public static Collection getAllReports() {
+
+    /*
+     * Get all reports 
+     * if 	tabs = null (all)
+     * 		tab = true 	only get tabs
+     * 		tab = false reports which aren't tabs
+     */
+    public static Collection getAllReports(Boolean tabs) {
         Session session = null;
         Query qry = null;
         Collection reports = new ArrayList();
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select r from " + AmpReports.class.getName()
-                + " r";
+            String queryString = "select r from " + AmpReports.class.getName() + " r";
+            if (tabs != null) {
+				if (tabs) {
+					queryString += " where r.drilldownTab=true ";
+				} else {
+					queryString += " where r.drilldownTab=false ";
+				}
+			}            
             qry = session.createQuery(queryString);
             reports = qry.list();
         } catch (Exception e) {

@@ -145,8 +145,10 @@ function setHoveredTable(tableId, hasHeaders) {
 </script>
 
 <digi:instance property="aimTeamReportsForm" />
+
 <digi:form action="/updateTeamReports.do" method="post">
 <html:hidden property="addReport"/>
+<html:hidden property="showReportList"/>
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -172,7 +174,12 @@ function setHoveredTable(tableId, hasHeaders) {
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:reportList">Report List</digi:trn>
+						<c:if test="${aimTeamReportsForm.showReportList == true}">
+							<digi:trn key="aim:reportList">Report List</digi:trn>
+						</c:if>
+						<c:if test="${aimTeamReportsForm.showReportList == false}">
+							<digi:trn key="aim:tabsList">Tab List</digi:trn>
+						</c:if>						
 					</td>
 				</tr>
 				<tr>
@@ -184,7 +191,12 @@ function setHoveredTable(tableId, hasHeaders) {
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="3" scope="request"/>
+									<c:if test="${aimTeamReportsForm.showReportList == true}">
+										<c:set var="selectedTab" value="3" scope="request"/>
+									</c:if>
+									<c:if test="${aimTeamReportsForm.showReportList == false}">
+										<c:set var="selectedTab" value="8" scope="request"/>
+									</c:if>									
 									<c:set var="selectedSubTab" value="0" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
@@ -205,9 +217,16 @@ function setHoveredTable(tableId, hasHeaders) {
 														<td colspan="2">
 															<font color="blue">
 															<digi:trn key="aim:reportTeamSpecific">*T</digi:trn>
-															<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
-																Indicates the report is viewable by all workspace members.
-															</digi:trn>
+															<c:if test="${aimTeamReportsForm.showReportList == true}">
+																<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
+																	Indicates the report is viewable by all workspace members.
+																</digi:trn>
+															</c:if>
+															<c:if test="${aimTeamReportsForm.showReportList == false}">
+																<digi:trn key="aim:teamTabListViewableByAllWorkspaceMembers">
+																	Indicates the tab is viewable by all workspace members.
+																</digi:trn>
+															</c:if>
 															</font>
 														</td>
 													</tr>
@@ -215,10 +234,18 @@ function setHoveredTable(tableId, hasHeaders) {
 													<td colspan="2">
 															<font color="blue">
 															<digi:trn key="aim:reportMemberSpecific">*M</digi:trn>
-															<digi:trn key="aim:teamReportListViewableBySelected">
-															Indicates the report is viewable by selected team members,
-															whom the team leader assigns.
-															</digi:trn>
+															<c:if test="${aimTeamReportsForm.showReportList == true}">
+																<digi:trn key="aim:teamReportListViewableBySelected">
+																Indicates the report is viewable by selected team members,
+																whom the team leader assigns.
+																</digi:trn>
+															</c:if>
+															<c:if test="${aimTeamReportsForm.showReportList == false}">
+																<digi:trn key="aim:teamTabListViewableBySelected">
+																Indicates the tab is viewable by selected team members,
+																whom the team leader assigns.
+																</digi:trn>
+															</c:if>	
 															</font>
 														</td>
 													</tr>
@@ -248,7 +275,14 @@ function setHoveredTable(tableId, hasHeaders) {
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
 																<td valign="center" align="center" bgcolor="#999999" style="color:black" width="75%">
-																	<b><digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn></b>
+																	<b>
+																		<c:if test="${aimTeamReportsForm.showReportList == true}">
+																			<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
+																		</c:if>
+																		<c:if test="${aimTeamReportsForm.showReportList == false}">
+																			<digi:trn key="aim:tabListWorkspace">List of Tabs in the Workspace</digi:trn>
+																		</c:if>
+																	</b>
 																</td>
 																<td valign="center" align="center" bgcolor="#999999" style="color:black" width="20%">
 																	<b><digi:trn key="aim:action">Action</digi:trn></b>
@@ -259,7 +293,12 @@ function setHoveredTable(tableId, hasHeaders) {
 													<logic:empty name="aimTeamReportsForm" property="reports">
 													<tr bgColor=#f4f4f2>
 														<td align="center">
-															<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
+															<c:if test="${aimTeamReportsForm.showReportList == true}">
+																<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
+															</c:if>
+															<c:if test="${aimTeamReportsForm.showReportList == false}">
+																<digi:trn key="aim:noTabsPresent">No tabs present</digi:trn>
+															</c:if>															
 														</td>
 													</tr>
 													<tr><td>&nbsp;</td></tr>
@@ -299,6 +338,14 @@ function setHoveredTable(tableId, hasHeaders) {
 																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPublic">Click here to make this public</digi:trn>
 																			</c:set>
+																			
+																			<c:if test="${aimTeamReportsForm.showReportList == true}">
+																				<c:set target="${urlParams}" property="returnPage">teamReportList</c:set>
+																			</c:if>	
+																			<c:if test="${aimTeamReportsForm.showReportList == false}">
+																				<c:set target="${urlParams}" property="returnPage">teamDesktopTabList</c:set>
+																			</c:if>	
+																			
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
 <img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border=0>
 																			</digi:link>
@@ -355,14 +402,16 @@ function setHoveredTable(tableId, hasHeaders) {
 														<td align="left">
 															<table cellspacing="5" width="100%">
 																<tr>
-																	<td align="center">
-
+																	<td align="center">	
 																		<html:submit  styleClass="dr-menu" property="removeReports"  onclick="return confirmDelete() ">
-																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
+																			<c:if test="${aimTeamReportsForm.showReportList == true}">
+																				<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
+																			</c:if>
+																			<c:if test="${aimTeamReportsForm.showReportList == false}">
+																				<digi:trn key="btn:removeSelectedTabs">Remove selected tabs</digi:trn>
+																			</c:if>																			
 																		</html:submit>
-
 																	</td>
-
 																</tr>
 															</table>
 														</td>

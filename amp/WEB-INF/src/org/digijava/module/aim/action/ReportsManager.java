@@ -29,7 +29,7 @@ public class ReportsManager extends Action {
 					 ReportsForm repForm = (ReportsForm) form;
 					 
 					 logger.debug("In report manager");
-					 reports = DbUtil.getAllReports();
+					 reports = DbUtil.getAllReports(null);
 					 repForm.setReports(reports);
 					 return mapping.findForward("forward");
 		  }

@@ -30,6 +30,7 @@ public class ReportsForm extends ActionForm {
 	private int page;
     private int pagesToShow;
     private int offset;
+    private boolean showReportList;
 
     private Boolean showTabs	= false;
 
@@ -232,6 +233,14 @@ public class ReportsForm extends ActionForm {
 
 	public void setShowTabs(Boolean showTabs) {
 		this.showTabs = showTabs;
+	}
+
+	public void setShowReportList(boolean showReportList) {
+		this.showReportList = showReportList;
+	}
+
+	public boolean isShowReportList() {
+		return showReportList;
 	}
 	
 	

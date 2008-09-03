@@ -330,6 +330,28 @@ html>body #mainEmpty {
 							</LI>
 						</c:if>
 
+						<c:if test="${selectedTab  == '8'}">
+						   	<LI>
+						   		<a name="node">
+								<div>
+									<digi:trn key="aim:workspacedesktoptabs">Desktop Tabs</digi:trn>								
+								</div>
+								</a>
+							</LI>
+						</c:if>	
+						
+						<c:if test="${selectedTab != '8'}">
+							<LI>
+						   		<span>
+									<digi:link href="/teamDesktopTabList.do"> 
+									<div title='<digi:trn key="aim:clickToViewWorkspaceDesktopTabs">Click here to view Desktop Tabs</digi:trn>'>
+										<digi:trn key="aim:workspacedesktoptabs">Desktop Tabs</digi:trn>
+									</div>	
+									</digi:link>							
+						   		</span>
+							</LI>
+						</c:if>
+
 					</UL>
 
 				</DIV>
@@ -450,6 +472,44 @@ html>body #mainEmpty {
 								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
 									<span>
 									<digi:link href="/teamReportList.do" name="urlParams">
+										<digi:trn key="aim:assignedreports">Assigned</digi:trn>
+									</digi:link>							
+									</span>
+								</div>	
+							</LI>
+						</c:if>					
+						<c:if test="${selectedSubTab  == '1'}">
+						   	<LI>
+                                <span>
+                                <digi:trn key="aim:unassignedreports">Unassigned</digi:trn>								
+                                </span>
+							</LI>
+						</c:if>
+						<c:if test="${selectedSubTab != '1'}">
+							<LI>
+								<div title='<digi:trn key="aim:listofunassignedreports">List of unassigned reports</digi:trn>'>
+									<span>
+									<a href="javascript:listReports()">
+										<digi:trn key="aim:unassignedreports">Unassigned</digi:trn>
+									</a>							
+									</span>
+								</div>	
+							</LI>
+						</c:if>
+					</c:if>
+					<c:if test="${selectedTab  == '8'}">
+						<c:if test="${selectedSubTab  == '0'}">
+						   	<LI>
+									<span>
+									<digi:trn key="aim:assignedreports">Assigned</digi:trn>								
+									</span>
+							</LI>
+						</c:if>
+						<c:if test="${selectedSubTab != '0'}">
+							<LI>
+								<div title='<digi:trn key="aim:clickToViewWorkspaceActivitiesDonor">Click here to view Donor activities</digi:trn>'>
+									<span>
+									<digi:link href="/teamDesktopTabList.do" name="urlParams">
 										<digi:trn key="aim:assignedreports">Assigned</digi:trn>
 									</digi:link>							
 									</span>

@@ -240,56 +240,51 @@ ${fn:replace(message,quote,escapedQuote)}
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2">
-							<feature:display name="Responsible Organization" module="Organizations">
-								<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
-							</feature:display>
+									<feature:display name="Responsible Organization" module="Organizations">
+										<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
+									</feature:display>
 
-									<tr><td>
-										&nbsp;
-									</td></tr>
-							<feature:display name="Executing Agency" module="Organizations">
-							<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
-							</feature:display>
+									<tr><td>&nbsp;</td></tr>
+									
+									<feature:display name="Executing Agency" module="Organizations">
+									<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
+									</feature:display>
 
-									<tr><td>
-										&nbsp;
-									</td></tr>
+									<tr><td>&nbsp;</td></tr>
+									
 									<feature:display name="Implementing Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ImplementingAgency.jsp"/>
 									</feature:display>
-									<tr><td>
-										&nbsp;
-									</td></tr>
-
-
+									
+									<tr><td>&nbsp;</td></tr>
+									
 									<!-- Beneficiary Agency  -->
 									<feature:display name="Beneficiary Agency" module="Organizations">
 										<jsp:include page="addActivityStep7BeneficiaryAgency.jsp"/>
 									</feature:display>
 
-									<!-- /Benegiciary Agency -->
-
+									<tr><td>&nbsp;</td></tr>
 
 									<!-- Contracting Agency  -->
 									<feature:display name="Contracting Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ContractingAgency.jsp"/>
-
 									</feature:display>
 
-									<!-- /Contracting Agency -->
+									<tr><td>&nbsp;</td></tr>
 
 									<!-- Regional Group  -->
 									<feature:display name="Regional Group" module="Organizations">
 										<jsp:include page="addActivityStep7RegionalGroup.jsp"/>
 									</feature:display>
 
-									<!-- /Regional Group -->
+									<tr><td>&nbsp;</td></tr>
 									
 									<!-- Sector Group  -->
 									<feature:display name="Sector Group" module="Organizations">
 										<jsp:include page="addActivityStep7SectorGroup.jsp"/>
 									</feature:display>
-									<!-- /Sector Group  -->
+									
+									<tr><td>&nbsp;</td></tr>
 
 
 <!--
@@ -334,7 +329,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										</table>
 									</td></tr>
  -->
-							</td></tr>
+							
 								</table>
 
 								<!-- end contents -->

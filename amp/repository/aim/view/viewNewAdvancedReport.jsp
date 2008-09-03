@@ -241,7 +241,7 @@ session.setAttribute("progressValue", counter);
 	</tr>
 	</logic:notEqual>
 	</logic:notEqual>
-
+ 
 	<logic:equal name="widget" scope="request" value="true">
 	<table width="100%"> 
 		<tr>

@@ -5,6 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 
 
@@ -55,26 +59,36 @@
 				<font color="red">*</font><strong><digi:trn key="gis:addwidgetcolumn:nameTitle">Name:</digi:trn></strong></td>
 			<td width="100%"><html:text name="cForm" property="colName" tabindex="2"/></td>
 		</tr>
+                <field:display name="Table Column Code" feature="Table Widgets">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:addwidgetcolumn:codeTitle">Code:</digi:trn></strong></td>
 			<td width="100%"><html:text name="cForm" property="colCode" tabindex="3"/></td>
 		</tr>
+                </field:display>
+                <field:display name="Table Column CSS class" feature="Table Widgets">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:addwidgetcolumn:cssClassTitle">CSS class:</digi:trn></strong></td>
 			<td width="100%"><html:text name="cForm" property="colCssClass" tabindex="4"/></td>
 		</tr>
+                </field:display>
+                <field:display name="Table Column HTML Style" feature="Table Widgets">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:addwidgetcolumn:htmlStyleTitle">HTML Style:</digi:trn></strong></td>
 			<td width="100%"><html:text name="cForm" property="colHtmlStyle" tabindex="5"/></td>
 		</tr>
+                </field:display>
+                <field:display name="Table Column Pattern" feature="Table Widgets">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:addwidgetcolumn:patternTitle">Pattern:</digi:trn></strong></td>
 			<td width="100%"><html:text name="cForm" property="colPattern" tabindex="6"/></td>
 		</tr>
+                </field:display>
+                 <field:display name="Table Column Widgth" feature="Table Widgets">
 		<tr>
 			<td align="right" nowrap="nowrap"><strong><digi:trn key="gis:addwidgetcolumn:widthTitle">Width:</digi:trn></strong></td>
 			<td width="100%"><html:text name="cForm" property="colWidth" tabindex="7"/></td>
 		</tr>
+                </field:display>
 		<tr>
 			<td colspan="2">
 				<hr>

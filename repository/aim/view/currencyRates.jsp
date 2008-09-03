@@ -354,7 +354,12 @@ function fnSubmit() {
 												<input id="currRateFile" name="currRateFile" type="file" class="file"/>
 												<input type="button" value="${trnUpdateValues}" class="button" onclick="return updateRates()">
 											</div>
-                                        </a>
+                                        </a><%--
+										<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+												<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+													<input id="docFile" name="docFile" type="file" class="file"/>
+												</div>
+											</a> --%>
                                         
 										  
                                         </td>
@@ -547,3 +552,7 @@ function fnSubmit() {
 </td></tr>
 </table>
 </digi:form>
+
+<script type="text/javascript">
+	initFileUploads();
+</script>

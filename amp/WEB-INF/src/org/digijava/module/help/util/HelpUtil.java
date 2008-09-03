@@ -290,7 +290,7 @@ public class HelpUtil {
 	return true;	
 	}
 	
-	 public static String renderLevelGroup(Collection topics,int level) {
+	 public static String renderLevelGroup(Collection topics) {
 		String retVal="";
 		Iterator iter = topics.iterator();
 		while (iter.hasNext()) {
@@ -298,13 +298,13 @@ public class HelpUtil {
 			HelpTopic theme = (HelpTopic) item.getMember();
 			retVal += "<option value="+theme.getHelpTopicId()+">"+theme.getTitleTrnKey()+"</option>\n";
 			if (item.getChildren() != null || item.getChildren().size() > 0) {
-				retVal += renderLevelGroup(item.getChildren(), level+1);
+				retVal += renderLevelGroup(item.getChildren());
 			}
 		}
 		return retVal;
 	}
 	
-	 public static String renderTopicsTree(Collection topics,int level) {
+	 public static String renderTopicsTree(Collection topics) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		String retVal = "";
 		Iterator iter = topics.iterator();
@@ -324,7 +324,7 @@ public class HelpUtil {
 			// hidden div start
 			retVal += "<div id=\"div_theme_"+ topic.getHelpTopicId()+ "\" style=\"display:none;padding:4px;\">\n";
 			if (item.getChildren() != null || item.getChildren().size() > 0) {
-				retVal += renderTopicsTree(item.getChildren(), level+1);
+				retVal += renderTopicsTree(item.getChildren());
 			}
 			retVal += "</div>\n";
 		}

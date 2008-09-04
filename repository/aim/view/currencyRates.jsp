@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
@@ -427,8 +427,8 @@ function fnSubmit() {
 											<c:out value="${cRates.exchangeRateDate}"/>
 											</a>
 										</td>
-										<td align="right">
-											<c:out value="${cRates.exchangeRate}"/>
+										<td align="right" nowrap="nowrap">
+											<aim:formatNumber  maxFractionDigits="10" value="${cRates.exchangeRate}"> </aim:formatNumber>
 										</td>
 									</tr>
 									</c:forEach>

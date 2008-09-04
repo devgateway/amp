@@ -145,7 +145,7 @@
                                                 <div id="${level.value}${index.count}">
                                                     <tr>
                                                         <td>
-                                                            ${level.value} 
+                                                            <digi:trn key="aim:regionmanager:${level.encodedValue}">${level.value}</digi:trn>
                                                         </td>
                                                         <td>
                                                         
@@ -182,8 +182,8 @@
                                                             
                                                         </td>
                                                           <td nowrap> 
-                                                            <input type="button" value="<digi:trn key="aim:AddNew${level.value}">Add New ${level.value}</digi:trn>"  title="${translation}" onclick="return selectedParentId('${index.count}','${level.id}','${level.country}')"/>
-                                                            <input type="button" value="<digi:trn key="aim:Edit${level.value}">Edit ${level.value}</digi:trn>"  title="${translation}" onclick="return editId('${index.count}','${level.country}')"/>
+                                                            <input type="button" value="<digi:trn key="aim:AddNew${level.encodedValue}">Add New ${level.value}</digi:trn>"  title="${translation}" onclick="return selectedParentId('${index.count}','${level.id}','${level.country}')"/>
+                                                            <input type="button" value="<digi:trn key="aim:Edit${level.encodedValue}">Edit ${level.value}</digi:trn>"  title="${translation}" onclick="return editId('${index.count}','${level.country}')"/>
                                                            
                                                         </td>
                                                         

@@ -164,6 +164,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setDesktopTab( ampReport.getDrilldownTab() );
 		myForm.setOriginalTitle( ampReport.getName() );
 		myForm.setPublicReport( ampReport.getPublicReport() );
+		myForm.setHideActivities( ampReport.getHideActivities() );
 		
 		if ( new Long(ArConstants.DONOR_TYPE).equals(ampReport.getType()) )
 			myForm.setReportType("donor");

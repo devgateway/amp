@@ -115,7 +115,7 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 SaveReportEngine.prototype.saveReport	= function () {
 	if ( this.titlePanel != null )
 		this.titlePanel.hide();
-
+	alert ( getHideActivities() );
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
@@ -124,6 +124,7 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
+						"&hideActivities="+getHideActivities() +
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 	
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);

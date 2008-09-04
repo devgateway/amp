@@ -155,9 +155,7 @@ public class getNPDgraph extends Action {
                        
                         Date latestActualDate = null;
 
-                        Double targetValue = null;
-                        Double baseValue = null;
-                        Double actualValue = null;
+                       
                            for (AmpIndicatorValue valueItem : indValues) {
                                 if (valueItem.getValueType() == 1) {
                                     // actual value's year must be in the selected years range
@@ -234,11 +232,13 @@ public class getNPDgraph extends Action {
                              * 2) if there is no actual value in 
                              * this year the year of target value must be equal or greater than selected year.
                              */
-                            
+                            Double targetValue = null;
+                            Double baseValue = null;
+                            Double actualValue = null;
                             for (Integer year : years) {
-                                if(targValue !=null){
+                                /*if(targValue !=null){
                                     break;
-                                }
+                                }*/
                                 if (Integer.parseInt(selectedYear) <= year) {
                                     ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
                                     for (AmpIndicatorValue value : targValues) {
@@ -266,9 +266,9 @@ public class getNPDgraph extends Action {
                              * this year the year of base value must be equal or less than selected year.
                              */
                             for (Integer year : baseYears) {
-                                if(basValue !=null){
+                               /* if(basValue !=null){
                                     break;
-                                }
+                                }*/
                                 if (Integer.parseInt(selectedYear) >= year) {
                                    
                                     ArrayList<AmpIndicatorValue> basValues = baseVals.get(year);

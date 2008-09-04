@@ -109,12 +109,12 @@ function toggleSettings(){
 	var displaySettingsButton = document.getElementById('displaySettingsButton');
 	if(currentDisplaySettings.style.display == "block"){
 		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "Show cleanup options &gt;&gt;";
+		displaySettingsButton.innerHTML = '<digi:trn key="aim:Showcleanupoptions">Show cleanup options</digi:trn>'+ ' &gt;&gt;';
 	}
 	else
 	{
 		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "Hide cleanup options &lt;&lt;";
+		displaySettingsButton.innerHTML = '<digi:trn key="aim:Hidecleanupoptions">Hide cleanup options</digi:trn>'+ ' &lt;&lt;';
 	}
 }
 </script>

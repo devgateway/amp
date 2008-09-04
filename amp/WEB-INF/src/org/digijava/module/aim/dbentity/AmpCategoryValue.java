@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Set;
 
 import org.digijava.module.aim.helper.CategoryConstants;
@@ -38,7 +40,17 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable 
 
     }
 
-        
+       //Created because of an error with some strings with french simbols as ID.
+       public String getEncodedValue(){
+    	String value = "";
+   		for(int i=0;i<this.value.length();i++) {
+    		if(this.value.charAt(i)>='A' && this.value.charAt(i) <= 'z'){
+    			value = value + this.value.charAt(i);
+    		}
+   		}
+		//value = URLEncoder.encode(this.value,"");
+		return value;
+    }
 	
 	public Set getActivities() {
 		return activities;

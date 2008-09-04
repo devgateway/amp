@@ -53,8 +53,7 @@ public class MetaTextColWorker extends TextColWorker {
 			}
 		} else
 				
-		//if(columnName.equals("Region") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
-		if(columnName.equals("Region"))
+		if(columnName.equals("Region") && (generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE || generator.getReportMetadata().getType()==ArConstants.COMPONENT_TYPE))
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
 //		if(columnName.equals("Componente") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
 		if(columnName.equals("Componente"))

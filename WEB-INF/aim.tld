@@ -137,10 +137,17 @@
 			<required>false</required>
 		</attribute>
 		<attribute>
+			<rtexprvalue>true</rtexprvalue>
+			<name>aditionalRequestParameters</name>
+			<required>false</required>
+			<description>Additional parameter will be added on popup the request </description>
+		</attribute>
+		<attribute>
 		<name>delegateClass</name>
 		<required>false</required>s
 		<description>Class in charge to process the post, the class have to implement the IPostProcessDelegate interface</description>
 		</attribute>
+		
 		<bodycontent>JSP</bodycontent>
 	</tag>
 

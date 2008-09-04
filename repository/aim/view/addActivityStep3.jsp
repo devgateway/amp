@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -522,10 +523,8 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="changeOrganisation(${fundingOrganization.ampOrgId})">
-																		<digi:trn key="btn:changeOrganizations">Change Organizations</digi:trn>
-																</html:button>
-                                                            </td>
+															<aim:addOrganizationButton  aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations" form="${aimEditActivityForm}" refreshParentDocument="true" > <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
+													        </td>
 
                                                             <field:display name="Active Funding Organization" feature="Funding Information">
                                                             <td> &nbsp;&nbsp;
@@ -944,9 +943,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																			<tr>
 																				<td>
 																					<field:display name="Add Donor Organization" feature="Funding Information">
-																				   		<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
-																							<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																						</html:button>
+																				   		
+																					<aim:addOrganizationButton delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+													
+																					
 																					</field:display>
 																				</td>
 																				<td>
@@ -967,9 +967,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																<tr>
 																	<td>
 																		<field:display name="Add Donor Organization" feature="Funding Information">
-																			<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
-																					<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
-																			</html:button>
+																			<aim:addOrganizationButton delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+													
 																		</field:display>
 																	</td>
 																</tr>

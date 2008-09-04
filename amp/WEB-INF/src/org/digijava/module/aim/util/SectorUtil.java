@@ -248,9 +248,14 @@ public class SectorUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select s from " + AmpSector.class.getName()
-					+ " s "	+ " where parent_sector_id is null " + "order by s.name";
+			
+			String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.primary=true ";
 			Query qry = session.createQuery(queryString);
+			AmpClassificationConfiguration auxConfig = (AmpClassificationConfiguration) qry.uniqueResult();
+
+			queryString = "select s from " + AmpSector.class.getName()
+				+ " s "	+ " where parent_sector_id is null and amp_sec_scheme_id = " + auxConfig.getClassification().getAmpSecSchemeId() + " order by s.name";
+			qry = session.createQuery(queryString);
 			col = qry.list();
 
 		} catch (Exception e) {

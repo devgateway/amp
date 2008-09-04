@@ -33,20 +33,20 @@
 	{
 		if (trim(document.aimThemeForm.name.value).length == 0)
 		{
-			alert("Please enter Indicator name");
+			alert('<digi:trn key="admin:enterindicatorname">Please enter Indicator name</digi:trn>');
 			document.aimThemeForm.name.focus();
 			return false;
 		}
 		if (trim(document.aimThemeForm.code.value).length == 0)
 		{
-			alert("Please enter Indicator code");
+			alert('<digi:trn key="admin:enterindicatorcode">Please enter Indicator code</digi:trn>');
 			document.aimThemeForm.code.focus();
 			return false;
 		}
 
 		if (trim(document.aimThemeForm.type.value).length == 0)
 		{
-			alert("Please enter Indicator type");
+			alert('<digi:trn key="admin:enterindicatortype">Please enter Indicator type</digi:trn>');
 			document.aimThemeForm.type.focus();
 			return false;
 		}
@@ -107,7 +107,7 @@ function checkValues(){
       }
     }
     if (targets > 1 || targets < 1 ) {
-      alert('Please specify only one target value');
+   	  alert('<digi:trn key="admin:onlyonetargetvalue">Please specify only one target value</digi:trn>');
       return false;
     }
   }
@@ -116,7 +116,7 @@ function checkValues(){
   if (dates.length !=null){
     for (var i=0; i< dates.length; i++){
       if (dates[i] == '' || dates[i] ==  null ){
-        alert('Please specify dates for all indicators');
+    	alert('<digi:trn key="admin:datesallindicators">Please specify dates for all indicators</digi:trn>');
         return false;
       }
     }
@@ -134,7 +134,7 @@ function checkBaseValues(){
       }
     }
     if (targets > 1 || targets < 1 ) {
-      alert('Please specify only one Base value');
+      alert('<digi:trn key="admin:onlyonebasevalue">Please specify only one Base value</digi:trn>');
       return false;
     }
   }
@@ -230,7 +230,7 @@ function closeWindow() 
 	  
 	  	if (document.aimThemeForm.indicatorsId.checked != null) {
 	  		if (document.aimThemeForm.indicatorsId.checked == false) {
-	    		alert("Please choose a indicator to remove");
+	  			alert('<digi:trn key="admin:chooseindicatorremove">Please choose a indicator to remove</digi:trn>');
 	    return false;
 	  	}
 	  	
@@ -245,12 +245,12 @@ function closeWindow() 
 	    }
 	  }
 	  	if (flag == 0) {
-		   		 alert("Please choose a indicator to remove");
+	  		alert('<digi:trn key="admin:chooseindicatorremove">Please choose a indicator to remove</digi:trn>');
 		    return false;
 		  }
 		}
 		
-		var validate = window.confirm("Are you sure you want to remove the selected indicator(s)?");
+		var validate = window.confirm('<digi:trn key="admin:confirmremoveindicator">Are you sure you want to remove the selected indicator(s)?</digi:trn>'); 
 		if(validate){
 			 return true;
 			 }else{
@@ -411,9 +411,9 @@ function closeWindow() 
 														   <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
 																<tr bgcolor="#ffffff">
 																	<td width="40" bgcolor="#f4f4f2" align="center">																		
-																		<c:if test="${prgIndicatorValues.valueType=='0'}">Target</c:if>
-																		<c:if test="${prgIndicatorValues.valueType=='1'}">Actual</c:if>
-																		<c:if test="${prgIndicatorValues.valueType=='2'}">Base</c:if>
+																		<c:if test="${prgIndicatorValues.valueType=='0'}"><digi:trn key="aim:addeditdata:target">Target</digi:trn></c:if>
+																		<c:if test="${prgIndicatorValues.valueType=='1'}"><digi:trn key="aim:addeditdata:actual">Actual</digi:trn></c:if>
+																		<c:if test="${prgIndicatorValues.valueType=='2'}"><digi:trn key="aim:addeditdata:base">Base</digi:trn></c:if>
 																	</td>
 																	<td align="center" width="10%" bgcolor="#f4f4f2"><b>
 																		<bean:write name="prgIndicatorValues" property="valAmount"/></b>

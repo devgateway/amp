@@ -414,7 +414,7 @@ border-right:1px solid white;
                               <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
-                              <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;width:120px;">
+                              <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
                                         <li class="yuiampmenuitem">

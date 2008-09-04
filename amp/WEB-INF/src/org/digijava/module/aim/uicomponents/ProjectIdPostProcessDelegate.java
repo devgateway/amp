@@ -1,8 +1,6 @@
 package org.digijava.module.aim.uicomponents;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;

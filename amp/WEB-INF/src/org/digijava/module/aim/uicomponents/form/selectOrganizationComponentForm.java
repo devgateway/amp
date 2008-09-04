@@ -1,6 +1,7 @@
 package org.digijava.module.aim.uicomponents.form;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -39,6 +40,15 @@ public class selectOrganizationComponentForm extends ActionForm {
 	Object	 targetForm;
 	boolean refreshParent;
 	private String delegateClass;
+	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
+	
+	public HashMap<String, String> getAditionalParameters() {
+		return aditionalParameters;
+	}
+
+	public void setAditionalParameters(HashMap<String, String> aditionalParameters) {
+		this.aditionalParameters = aditionalParameters;
+	}
 
 	boolean useClient;
 	private String valueHoder="";

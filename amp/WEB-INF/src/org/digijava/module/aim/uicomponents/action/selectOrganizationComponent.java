@@ -37,16 +37,16 @@ public class selectOrganizationComponent extends Action {
 		} else if ("selectPage".equalsIgnoreCase(subAction)) {
 			return selectPage(mapping, form, request, response);
 		} else if ("organizationSelected".equalsIgnoreCase(subAction)) {
-			//if has a delegate so call it
-			if (oForm.getDelegateClass()!=null && !"".equalsIgnoreCase(oForm.getDelegateClass())){
+			// if has a delegate so call it
+			if (oForm.getDelegateClass() != null && !"".equalsIgnoreCase(oForm.getDelegateClass())) {
 				return executeDelegate(mapping, form, request, response);
-			}else{
-			// if have to add to a collection so this is a multiselector
-			if (oForm.getMultiSelect()) {
-				return addOrganizationToForm(mapping, form, request, response);
 			} else {
-				return setOrganizationToForm(mapping, form, request, response);
-			}
+				// if have to add to a collection so this is a multiselector
+				if (oForm.getMultiSelect()) {
+					return addOrganizationToForm(mapping, form, request, response);
+				} else {
+					return setOrganizationToForm(mapping, form, request, response);
+				}
 			}
 		}
 
@@ -57,7 +57,7 @@ public class selectOrganizationComponent extends Action {
 	public ActionForward prepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		selectOrganizationComponentForm oForm = (selectOrganizationComponentForm) form;
 		HttpSession session = request.getSession();
-		Object targetForm =  session.getAttribute(AddOrganizationButton.PARAM_PARAM_FORM_NAME);
+		Object targetForm = session.getAttribute(AddOrganizationButton.PARAM_PARAM_FORM_NAME);
 
 		if ("true".equalsIgnoreCase(request.getParameter("reset"))) {
 			oForm.clearSelected();
@@ -72,7 +72,7 @@ public class selectOrganizationComponent extends Action {
 		oForm.setTargetProperty(propertyName);
 
 		String callbackFunction = request.getParameter(AddOrganizationButton.PARAM_CALLBACKFUNCTION_NAME);
-		if (callbackFunction!=null && !"null".equalsIgnoreCase(callbackFunction)){
+		if (callbackFunction != null && !"null".equalsIgnoreCase(callbackFunction)) {
 			oForm.setCallbackFunction(callbackFunction);
 		}
 		if ("true".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_REFRESH_PARENT))) {
@@ -85,8 +85,8 @@ public class selectOrganizationComponent extends Action {
 			oForm.setUseClient(true);
 			oForm.setValueHoder(request.getParameter(AddOrganizationButton.PARAM_VALUE_HOLDER));
 			oForm.setNameHolder(request.getParameter(AddOrganizationButton.PARAM_NAME_HOLDER));
-		}else{
-			
+		} else {
+
 			oForm.setUseClient(false);
 		}
 
@@ -102,10 +102,33 @@ public class selectOrganizationComponent extends Action {
 			oForm.setOrgSelReset(true);
 			oForm.reset(mapping, request);
 		}
-		if (request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS)!=null && !"".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS))){
+		if (request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS) != null && !"".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS))) {
 			oForm.setDelegateClass(request.getParameter(AddOrganizationButton.PARAM_NAME_DELEGATE_CLASS));
 		}
-		
+
+		if (request.getParameter(AddOrganizationButton.ADITIONAL_REQUEST_PARAMS) != null && !"".equalsIgnoreCase(request.getParameter(AddOrganizationButton.ADITIONAL_REQUEST_PARAMS))) 
+		{
+
+			String[] paramString = request.getParameter(AddOrganizationButton.ADITIONAL_REQUEST_PARAMS).split(",");
+
+			String name, value;
+			if (paramString.length > 0) {
+
+				for (int i = 0; i < paramString.length; i++) {
+					name = paramString[i].split("=")[0];
+					value = paramString[i].split("=")[1];
+					oForm.getAditionalParameters().put(name, value);
+				}
+
+			} else {
+
+				name = paramString[0].split("=")[0];
+				value = paramString[1].split("=")[1];
+				oForm.getAditionalParameters().put(name, value);
+			}
+			
+		}
+
 		Collection<AmpOrgType> types;
 		types = DbUtil.getAllOrgTypes();
 		oForm.setOrgTypes(types);
@@ -293,8 +316,8 @@ public class selectOrganizationComponent extends Action {
 	public ActionForward setOrganizationToForm(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		selectOrganizationComponentForm eaForm = (selectOrganizationComponentForm) form;
 
-		Long id=Long.parseLong(request.getParameter("id"));
-		
+		Long id = Long.parseLong(request.getParameter("id"));
+
 		AmpOrganisation org = DbUtil.getOrganisation(id);
 
 		if (!eaForm.isUseClient()) {
@@ -338,16 +361,15 @@ public class selectOrganizationComponent extends Action {
 		return mapping.findForward("forward");
 	}
 
-	public  ActionForward  executeDelegate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+	public ActionForward executeDelegate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		selectOrganizationComponentForm eaForm = (selectOrganizationComponentForm) form;
-		String className=eaForm.getDelegateClass();
-		Class clazz= java.lang.Class.forName(className);
-		Constructor constructor =clazz.getDeclaredConstructor( new Class[] { } );
-		constructor.setAccessible( true );
-		IPostProcessDelegate processor = (IPostProcessDelegate) constructor.newInstance( new Object[] {} );
+		String className = eaForm.getDelegateClass();
+		Class clazz = java.lang.Class.forName(className);
+		Constructor constructor = clazz.getDeclaredConstructor(new Class[] {});
+		constructor.setAccessible(true);
+		IPostProcessDelegate processor = (IPostProcessDelegate) constructor.newInstance(new Object[] {});
 		return processor.execute(mapping, form, request, response);
 	}
 
-	
 };

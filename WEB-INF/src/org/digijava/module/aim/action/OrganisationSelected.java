@@ -24,7 +24,6 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
-@Deprecated 
 public class OrganisationSelected extends Action {
 
 	private static Logger logger = Logger.getLogger(OrganisationSelected.class);

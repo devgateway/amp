@@ -18,6 +18,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String htmlNameHolder = "";
 	private String delegateClass = "";
 	private String refreshParentDocument = "";
+	private String aditionalRequestParameters = "";
 
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
 	public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
@@ -29,8 +30,8 @@ public class AddOrganizationButton extends BodyTagSupport {
 	public static final String PARAM_VALUE_HOLDER = "PARAM_VALUE_HOLDER";
 	public static final String PARAM_NAME_HOLDER = "PARAM_NAME_HOLDER";
 	public static final String PARAM_NAME_DELEGATE_CLASS = "PARAM_NAME_DELEGATE_CLASS";
+	public static final String ADITIONAL_REQUEST_PARAMS = "ADITIONAL_REQUEST_PARAMS";
 
-	@Override
 	public int doStartTag() throws JspException {
 		try {
 			// add current form to session under a common param name
@@ -91,7 +92,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append(htmlvalueHolder);
 				html.append("~");
 			}
-			
+
 			if (!"".equalsIgnoreCase(delegateClass)) {
 				html.append(PARAM_NAME_DELEGATE_CLASS);
 				html.append("=");
@@ -99,6 +100,12 @@ public class AddOrganizationButton extends BodyTagSupport {
 				html.append("~");
 			}
 
+			if (!"".equalsIgnoreCase(aditionalRequestParameters)) {
+				html.append(ADITIONAL_REQUEST_PARAMS);
+				html.append("=");
+				html.append(aditionalRequestParameters);
+				html.append("~");
+			}
 			html.append("','addOrganisationWindows','height=400,width=600,scrollbars=yes,resizable=yes')\" ");
 
 			out.write(html.toString());
@@ -207,4 +214,13 @@ public class AddOrganizationButton extends BodyTagSupport {
 		this.delegateClass = delegateClass;
 	}
 
+	public String getAditionalRequestParameters() {
+		return aditionalRequestParameters;
+	}
+
+	public void setAditionalRequestParameters(String aditionalRequestParameters) {
+		this.aditionalRequestParameters = aditionalRequestParameters;
+	}
+
+	
 }

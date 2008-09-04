@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.digijava.module.aim.util.TeamMemberUtil;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ApplicationSettings;
@@ -110,7 +112,8 @@ public class ViewChannelOverview extends TilesAction {
 			formBean.clearMessages();
 			AmpTeam ampTeam=TeamUtil.getAmpTeam(teamMember.getTeamId());
 			boolean hasTeamLead=true;
-			if(ampTeam.getTeamLead()==null) hasTeamLead=false;
+			AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(teamMember.getTeamId());
+			if(teamHead==null) hasTeamLead=false;
 			createWarnings(activity,teamMember.getTeamHead(), formBean,hasTeamLead);
 
 			AmpActivity ampact = ActivityUtil.getAmpActivity(id);

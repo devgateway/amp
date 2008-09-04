@@ -62,6 +62,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedImplementingAgency;
 	private Object[] selectedBeneficiaryAgency;
 	private Object[] selectedDonnorAgency;
+	private Object[] selectedProjectCategory;
+
 	private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
 
@@ -317,6 +319,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedExecutingAgency = null;
 			this.selectedBeneficiaryAgency = null;
 			this.selectedImplementingAgency = null;
+			this.selectedProjectCategory = null;
 			this.selectedBudget = null;
 			this.justSearch=false;
 			this.selectedNatPlanObj = null;
@@ -783,6 +786,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setJustSearch(Boolean justSearch) {
 		this.justSearch = justSearch;
+	}
+
+	public void setSelectedProjectCategory(Object[] selectedProjectCategory) {
+		this.selectedProjectCategory = selectedProjectCategory;
+	}
+
+	public Object[] getSelectedProjectCategory() {
+		return selectedProjectCategory;
 	}
 
 	

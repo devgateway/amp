@@ -306,7 +306,7 @@
 									<field:display name="Project Category" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
-									  <digi:trn key="aaim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
+									  <digi:trn key="aim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.projectCategory > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.projectCategory}"/>

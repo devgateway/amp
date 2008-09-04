@@ -512,6 +512,9 @@ background-color: yellow;
 		if (aimReportsFilterPickerForm.selectedDonorTypes)
 			aimReportsFilterPickerForm.selectedDonorTypes.selectedIndex=-1;
 			
+		if (aimReportsFilterPickerForm.selectedProjectCategory)
+			aimReportsFilterPickerForm.selectedProjectCategory.selectedIndex=-1;
+
 		if (aimReportsFilterPickerForm.selectedBeneficiaryAgency)
 			aimReportsFilterPickerForm.selectedBeneficiaryAgency.selectedIndex=-1;
 		if (aimReportsFilterPickerForm.selectedExecutingAgency)

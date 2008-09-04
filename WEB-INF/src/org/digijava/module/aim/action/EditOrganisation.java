@@ -218,7 +218,7 @@ public class EditOrganisation
         editForm.setOrgGroupColl(sortedCol);
       }
     }
-    Collection orgGroup = DbUtil.getAllOrgGroups();
+    Collection orgGroup = new ArrayList();
     editForm.setOrgGroup(orgGroup);
 
     //Collection country = DbUtil.getAllCountries();

@@ -559,12 +559,22 @@ public class ReportsFilterPicker extends MultiAction {
 			AmpCategoryValue value = (AmpCategoryValue) session.load(AmpCategoryValue.class, new Long((String) filterForm.getSelectedStatuses()[i]));
 			arf.getStatuses().add(value);
 		}
+		if (filterForm.getSelectedProjectCategory() != null && filterForm.getSelectedProjectCategory().length > 0)
+			arf.setProjectCategory(new HashSet());
+		else
+			arf.setProjectCategory(null);
+		
+		for (int i = 0; filterForm.getSelectedProjectCategory() != null && i < filterForm.getSelectedProjectCategory().length; i++) {
+			Long id = Long.parseLong(filterForm.getSelectedProjectCategory()[i] + "");
+			AmpCategoryValue value = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+			arf.getProjectCategory().add(value);
+		}
 
 		if (filterForm.getSelectedFinancingInstruments() != null && filterForm.getSelectedFinancingInstruments().length > 0)
 			arf.setFinancingInstruments(new HashSet());
 		else
 			arf.setFinancingInstruments(null);
-
+		
 		for (int i = 0; filterForm.getSelectedFinancingInstruments() != null && i < filterForm.getSelectedFinancingInstruments().length; i++) {
 			Long id = Long.parseLong(filterForm.getSelectedFinancingInstruments()[i] + "");
 			AmpCategoryValue value = (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(id);
@@ -650,6 +660,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
+		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpOrganisation.class));
 
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
 		if (arf.isPublicView())

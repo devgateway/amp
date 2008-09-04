@@ -11,7 +11,7 @@ YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
 				'Secondary Program', 'Donor Type', 'Credit/Donation', 'Beneficiary Agency', 
 				'Implementing Agency', 'Component Name',
 				'Secondary Sector', 'Secondary Sector Sub-Sector',
-				'Responsible Organization', 'Activity Created By'
+				'Responsible Organization', 'Activity Created By', 'Project Category'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Status',

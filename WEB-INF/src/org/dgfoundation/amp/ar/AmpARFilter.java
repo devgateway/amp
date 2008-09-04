@@ -164,6 +164,9 @@ public class AmpARFilter extends PropertyListable {
 	private Set teamAssignedOrgs = null;
 
 	private Set financingInstruments = null;
+	private Set<AmpCategoryValue> projectCategory = null;
+
+	
 	private Set<AmpCategoryValue> typeOfAssistance = null;
 	// private Long ampModalityId=null;
 
@@ -529,6 +532,9 @@ public class AmpARFilter extends PropertyListable {
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 				+ Util.toCSString(typeOfAssistance) + ")";
 
+		String PROJECT_CATEGORY_FILTER = "SELECT amp_activity_id FROM v_project_category WHERE amp_category_id IN ("
+			+ Util.toCSString(projectCategory) + ")";
+
 		String DONOR_TYPE_FILTER = "SELECT aa.amp_activity_id "
 				+ "FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  "
 				+ "WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' "
@@ -734,7 +740,10 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(DRAFT_FILTER);
 		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
 			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
-
+		if (projectCategory != null && projectCategory.size() > 0)
+			queryAppend(PROJECT_CATEGORY_FILTER);
+		
+		
 		if (donorGroups != null && donorGroups.size() > 0)
 			queryAppend(DONOR_GROUP_FILTER);
 		if (donorTypes != null && donorTypes.size() > 0)
@@ -793,6 +802,14 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setFinancingInstruments(Set financingInstruments) {
 		this.financingInstruments = financingInstruments;
+	}
+
+	public void setProjectCategory(Set<AmpCategoryValue> projectCategory) {
+		this.projectCategory = projectCategory;
+	}
+
+	public Set<AmpCategoryValue> getProjectCategory() {
+		return projectCategory;
 	}
 
 	/**

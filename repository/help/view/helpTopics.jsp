@@ -38,8 +38,8 @@
 		$(imghId).hide();
 		$(imgId).show();
 		$(divId).hide('fast');
-	} 
-	
+	}
+
 </script>
 <digi:instance property="helpForm" />
 <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
@@ -56,7 +56,7 @@
                         </ul>
                         <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-                        <%= HelpUtil.renderTopicsTree(topic) %>
+                        <%= HelpUtil.renderTopicsTree(topic,request) %>
              		</div>
 
 

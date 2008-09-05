@@ -32,13 +32,14 @@ function getReportDescription() {
 }
 
 function getHideActivities() {
-	if ( aimReportWizardForm.hideActivities.checked )
-			return true;
-	else
-			return false;
+	if ( aimReportWizardForm.hideActivities == null )
+		return false;
+	return aimReportWizardForm.hideActivities.checked;
 }
 
 function getReportPeriod() {
+	if ( aimReportWizardForm.reportPeriod == null )
+				return "A";
 	var radioEls		= aimReportWizardForm.reportPeriod;
 	for (var i=0; i<radioEls.length; i++) {
 		if ( radioEls[i].checked ) {

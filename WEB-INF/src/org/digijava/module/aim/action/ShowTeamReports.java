@@ -132,7 +132,7 @@ public class ShowTeamReports extends Action {
 		}
 
 		if (tm == null) {
-			Collection reports = ARUtil.getAllPublicReports();
+			Collection reports = ARUtil.getAllPublicReports(false);
 			rf.setReports(reports);
 			rf.setTotalPages(FIRST_PAGE);
 		} else {

@@ -324,32 +324,35 @@
 									<br />
 								</div>
 
-								<span class="list_header">
-									<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
-								</span>
-								<div align="center" id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
-									<br />
-									<html:checkbox property="hideActivities" value="true">
-										${summary}
-									</html:checkbox>
-									<br /><br />
-									<html:radio property="reportPeriod" value="A">
-										<digi:trn key="aim:AnnualReport">
-											Annual Report
-										</digi:trn>
-									</html:radio>								
-									<html:radio property="reportPeriod" value="Q">
-										<digi:trn key="aim:QuarterlyReport">
-											Quarterly Report
-										</digi:trn>
-									</html:radio>
-									<html:radio property="reportPeriod" value="M">
-										<digi:trn key="aim:MonthlyReport">
-											Monthly Report
-										</digi:trn>
-									</html:radio>
-									<br /><br />
-								</div>
+								<c:if test="${!myForm.desktopTab}">
+									<span class="list_header">
+										<digi:trn key="aim:reportBuilder:TotalsGrouping">Totals Grouping</digi:trn>
+									</span>
+									<div align="center" id="totalsGroupingDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
+										<br />
+										<html:checkbox property="hideActivities" value="true">
+											${summary}
+										</html:checkbox>
+										<br /><br />
+										<html:radio property="reportPeriod" value="A">
+											<digi:trn key="aim:AnnualReport">
+												Annual Report
+											</digi:trn>
+										</html:radio>								
+										<html:radio property="reportPeriod" value="Q">
+											<digi:trn key="aim:QuarterlyReport">
+												Quarterly Report
+											</digi:trn>
+										</html:radio>
+										<html:radio property="reportPeriod" value="M">
+											<digi:trn key="aim:MonthlyReport">
+												Monthly Report
+											</digi:trn>
+										</html:radio>
+										<br /><br />
+									</div>
+								</c:if>
+								
 								<bean:define id="member" name="currentMember" scope="session" />
                   				
                   				<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">

@@ -47,17 +47,27 @@ import org.digijava.module.aim.util.DbUtil;
  * 
  */
 public final class ARUtil {
-
-	public static ArrayList getAllPublicReports() {
+	/**
+	 * 
+	 * @param getTabs if null gets both reports and tabs, on true only tabs, on false only reports
+	 * @return list of public reports
+	 */
+	public static ArrayList getAllPublicReports(Boolean getTabs) {
 		Session session = null;
 		ArrayList col = new ArrayList();
+		String tabFilter	= "";
 
+		if ( getTabs!=null ) {
+			tabFilter	= "r.drilldownTab=:getTabs AND";
+		}
 		try {
 
 			session = PersistenceManager.getSession();
 			String queryString = "select r from " + AmpReports.class.getName()
-					+ " r " + "where (r.publicReport=true)";
+					+ " r " + "where ( " + tabFilter + " r.publicReport=true)";
 			Query qry = session.createQuery(queryString);
+			if ( getTabs!=null )
+				qry.setBoolean("getTabs", getTabs);
 
 			Iterator itrTemp = qry.list().iterator();
 			AmpReports ar = null;

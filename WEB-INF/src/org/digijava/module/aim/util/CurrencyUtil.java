@@ -20,6 +20,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -315,8 +316,7 @@ public class CurrencyUtil {
 				"order by curr.currencyName";
 			qry = session.createQuery(qryStr);
 			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
-				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
-				"order by curr.countryName";
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryId dg order by dg.countryName";
 			qry = session.createQuery(qryStr);
 			}else {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +

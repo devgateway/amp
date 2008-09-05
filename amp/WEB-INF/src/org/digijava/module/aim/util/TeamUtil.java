@@ -1991,7 +1991,7 @@ public class TeamUtil {
                        + AmpTeamReports.class.getName() 
                        + " r2 " + " where r2.team=:p.teamid)) order by r.name";
                    qry = session.createQuery(queryString);
-                   qry.setParameter("p.memberid", ampteammember);
+                   qry.setParameter("p.memberid", ampteammember.getAmpTeamMemId());
                    qry.setParameter("p.teamid", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);

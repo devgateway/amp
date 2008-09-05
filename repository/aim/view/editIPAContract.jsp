@@ -53,6 +53,20 @@ function fnChk(frmContrl){
   return autosum();
 }
 
+function fnChk1(frmContrl){
+  <c:set var="errMsgAddNumericValue">
+  <digi:trn key="aim:addNumericValueErrorMessage">
+  Please enter numeric value only
+  </digi:trn>
+  </c:set>
+  if (isNaN(frmContrl.value)) {
+    alert("${errMsgAddNumericValue}");
+    frmContrl.value = "";
+    return false;
+  }
+  return true;
+}
+
 function autosum(){
 	var v1 = document.aimIPAContractForm.totalECContribIBAmount.value;
 	var v2 = document.aimIPAContractForm.totalECContribINVAmount.value;
@@ -80,16 +94,29 @@ function validate(){
     Please Select Currency
     </digi:trn>
     </c:set>
-    if((document.aimIPAContractForm.totalECContribIBAmount.value!='' ||
-   		document.aimIPAContractForm.totalECContribINVAmount.value!='' ||
-    	document.aimIPAContractForm.totalNationalContribIFIAmount.value!='' ||
-    	document.aimIPAContractForm.totalNationalContribCentralAmount.value!='' ||
-    	document.aimIPAContractForm.totalNationalContribRegionalAmount.value!='' ||
-    	document.aimIPAContractForm.totalPrivateContribAmount.value!='') &&
-        (document.aimIPAContractForm.totalAmountCurrency.value==-1)){
-        alert("${errMsgSelectCurrency}");
-            return false;
-        }
+    if(document.aimIPAContractForm.contractTotalValue!=null)
+      {
+      	if(document.aimIPAContractForm.contractTotalValue.value!='' && (document.aimIPAContractForm.totalAmountCurrency.value==-1))
+	     {
+	     	alert("${errMsgSelectCurrency}");
+		    return false;
+	      }
+	 
+      }
+      else{
+	    if((document.aimIPAContractForm.totalECContribIBAmount.value!='' ||
+	   		document.aimIPAContractForm.totalECContribINVAmount.value!='' ||
+	    	document.aimIPAContractForm.totalNationalContribIFIAmount.value!='' ||
+	    	document.aimIPAContractForm.totalNationalContribCentralAmount.value!='' ||
+	    	document.aimIPAContractForm.totalNationalContribRegionalAmount.value!='' ||
+	    	document.aimIPAContractForm.totalPrivateContribAmount.value!='') &&
+	        (document.aimIPAContractForm.totalAmountCurrency.value==-1))
+	    {
+	        alert("${errMsgSelectCurrency}");
+	        return false;
+	    }
+	    }
+			    
         mySaveReportEngine.saveContract();
         return true;
     }
@@ -159,40 +186,79 @@ function getContractDisbursments(){
 
 function generateFields(){
 	var ret = "";
-	ret =			    "contractName="+document.getElementsByName("contractName")[0].value+"&"
-						+ "description="+document.getElementsByName("description")[0].value+"&"
+	ret =			    
+						<field:display name="Contract Name" feature="Contracting">
+							"contractName="+document.getElementsByName("contractName")[0].value+"&"
+						</field:display>
+						<field:display name="Contract Description" feature="Contracting">
+							+ "description="+document.getElementsByName("description")[0].value+"&"
+						</field:display>
+						
 						+ "activityCategoryId="+document.getElementsByName("activityCategoryId")[0].value+"&"
 						+ "typeId="+document.getElementsByName("typeId")[0].value+"&"
-						+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
-						+ "contractValidity="+document.getElementsByName("contractValidity")[0].value+"&"
+						
+						<field:display name="Contracting Start of Tendering" feature="Contracting"> 
+							+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
+						</field:display>
+						<field:display name="Contract Validity Date" feature="Contracting">
+							+ "contractValidity="+document.getElementsByName("contractValidity")[0].value+"&"
+						</field:display>
+						
 						+ "statusId="+document.getElementsByName("statusId")[0].value+"&"
+						
 						+ "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
-						+ "signatureOfContract="+document.getElementsByName("signatureOfContract")[0].value+"&"
-						+ "contractCompletion="+document.getElementsByName("contractCompletion")[0].value+"&"
-						+ "contractingOrganizationText="+document.getElementsByName("contractingOrganizationText")[0].value+"&"
-						+ "totalAmount="+document.getElementsByName("totalAmount")[0].value+"&"
+						<field:display name="Signature of Contract" feature="Contracting">
+							+ "signatureOfContract="+document.getElementsByName("signatureOfContract")[0].value+"&"
+						</field:display>
+						<field:display name="Contract Completion" feature="Contracting">
+							+ "contractCompletion="+document.getElementsByName("contractCompletion")[0].value+"&"
+						</field:display>
+						<field:display name="Contracting Organization Text" feature="Contracting">
+							+ "contractingOrganizationText="+document.getElementsByName("contractingOrganizationText")[0].value+"&"
+						</field:display>
+						<field:display name="Contracting Total Amount" feature="Contracting">
+							+ "totalAmount="+document.getElementsByName("totalAmount")[0].value+"&"
+						</field:display>
+						<field:display name="Contract Total Value" feature="Contracting">
+							+ "contractTotalValue="+document.getElementsByName("contractTotalValue")[0].value+"&"
+						</field:display>
+						
 						+ "totalAmountCurrency="+document.getElementsByName("totalAmountCurrency")[0].value+"&"
-						+ "totalECContribIBAmount="+document.getElementsByName("totalECContribIBAmount")[0].value+"&"
-						+ "totalECContribIBAmountDate="+document.getElementsByName("totalECContribIBAmountDate")[0].value+"&"
+						<field:display name="Contracting IB" feature="Contracting">
+							+ "totalECContribIBAmount="+document.getElementsByName("totalECContribIBAmount")[0].value+"&"
+							+ "totalECContribIBAmountDate="+document.getElementsByName("totalECContribIBAmountDate")[0].value+"&"
+						</field:display>
 						//+ "totalECContribIBCurrency="+document.getElementsByName("totalECContribIBCurrency")[0].value+"&"
-						+ "totalECContribINVAmount="+document.getElementsByName("totalECContribINVAmount")[0].value+"&"
-						+ "totalECContribINVAmountDate="+document.getElementsByName("totalECContribINVAmountDate")[0].value+"&"
+						<field:display name="Contracting INV" feature="Contracting">
+							+ "totalECContribINVAmount="+document.getElementsByName("totalECContribINVAmount")[0].value+"&"
+							+ "totalECContribINVAmountDate="+document.getElementsByName("totalECContribINVAmountDate")[0].value+"&"
+						</field:display>
 						//+ "totalECContribINVCurrency="+document.getElementsByName("totalECContribINVCurrency")[0].value+"&"
-						+ "totalNationalContribCentralAmount="+document.getElementsByName("totalNationalContribCentralAmount")[0].value+"&"
-						+ "totalNationalContribCentralAmountDate="+document.getElementsByName("totalNationalContribCentralAmountDate")[0].value+"&"
+						<field:display name="Contracting Central Amount" feature="Contracting">
+							+ "totalNationalContribCentralAmount="+document.getElementsByName("totalNationalContribCentralAmount")[0].value+"&"
+							+ "totalNationalContribCentralAmountDate="+document.getElementsByName("totalNationalContribCentralAmountDate")[0].value+"&"
+						</field:display>
 						//+ "totalNationalContribCentralCurrency="+document.getElementsByName("totalNationalContribCentralCurrency")[0].value+"&"
-						+ "totalNationalContribIFIAmount="+document.getElementsByName("totalNationalContribIFIAmount")[0].value+"&"
-						+ "totalNationalContribIFIAmountDate="+document.getElementsByName("totalNationalContribIFIAmountDate")[0].value+"&"
+						<field:display name="Contracting IFIs" feature="Contracting">
+							+ "totalNationalContribIFIAmount="+document.getElementsByName("totalNationalContribIFIAmount")[0].value+"&"
+							+ "totalNationalContribIFIAmountDate="+document.getElementsByName("totalNationalContribIFIAmountDate")[0].value+"&"
+						</field:display>
 						//+ "totalNationalContribIFICurrency="+document.getElementsByName("totalNationalContribIFICurrency")[0].value+"&"
-						+ "totalNationalContribRegionalAmount="+document.getElementsByName("totalNationalContribRegionalAmount")[0].value+"&"
-						+ "totalNationalContribRegionalAmountDate="+document.getElementsByName("totalNationalContribRegionalAmountDate")[0].value+"&"
+						<field:display name="Contracting Regional Amount" feature="Contracting">
+							+ "totalNationalContribRegionalAmount="+document.getElementsByName("totalNationalContribRegionalAmount")[0].value+"&"
+							+ "totalNationalContribRegionalAmountDate="+document.getElementsByName("totalNationalContribRegionalAmountDate")[0].value+"&"
+						</field:display>
+						<field:display name="Total Private Contribution" feature="Contracting">
 						//+ "totalNationalContribRegionalCurrency="+document.getElementsByName("totalNationalContribRegionalCurrency")[0].value+"&"
 						+ "totalPrivateContribAmount="+document.getElementsByName("totalPrivateContribAmount")[0].value+"&"
 						+ "totalPrivateContribAmountDate="+document.getElementsByName("totalPrivateContribAmountDate")[0].value+"&"
+						</field:display>
+						<field:display name="Contracting Disbursements Global Currency" feature="Contracting">
 						//+ "totalPrivateContribCurrency="+document.getElementsByName("totalPrivateContribCurrency")[0].value+"&"
 						+ "dibusrsementsGlobalCurrency="+document.getElementsByName("dibusrsementsGlobalCurrency")[0].value
-						+ "&" + getContractDisbursments()
-						;
+						+ "&"
+						</field:display>
+						 + getContractDisbursments();
 	
 	return ret;
 }
@@ -266,7 +332,7 @@ SaveReportEngine.prototype.failure			= function(o) {
 
 SaveReportEngine.prototype.saveContract	= function () {
 	var postString		= "save=true&"+generateFields();
-	//alert (postString);
+	alert (postString);
 	
 	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
 }
@@ -473,8 +539,33 @@ window.onload=autosum;
 	<tr>
 	<td colspan="2">
 	<table cellpadding="2" cellspacing="2" width="100%">
-		<tr>
-			<field:display name="Contracting Total Amount" feature="Contracting">
+	
+		<field:display name="Contract Total Value" feature="Contracting">
+			<tr>
+				<td align="left">
+					<digi:trn key="aim:ipa:newPopup:contractTotalValue">Contract Total Value</digi:trn>
+				</td>
+				<td align="left">
+					<c:set var="trnSum">
+						<digi:trn key="aim:addNumericValueErrorMessage">
+							Please enter the amount
+						</digi:trn>
+					</c:set>
+					<html:text title="${trnSum}" property="contractTotalValue" style="text-align:right" onkeyup="fnChk1(this)" />
+				</td>
+				<td align="left" colspan="4">
+					<digi:trn key="aim:ipa:newPopup:currencyType">Currency Type</digi:trn>
+					&nbsp;&nbsp;
+					<html:select property="totalAmountCurrency" styleClass="inp-text">
+						<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
+						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+					</html:select>
+				</td>
+			</tr>
+		</field:display>
+	
+		<field:display name="Contracting Total Amount" feature="Contracting">
+			<tr>
 				<td align="left">
 					<digi:trn key="aim:ipa:newPopup:totalAmount">Total Amount</digi:trn>
 				</td>
@@ -494,8 +585,9 @@ window.onload=autosum;
 						<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
 					</html:select>
 				</td>
-		</tr>
-			</field:display>
+			</tr>
+		</field:display>
+
 		<field:display name="Total EC Contribution" feature="Contracting">
 			<tr>
 				<td colspan="6" align="center">

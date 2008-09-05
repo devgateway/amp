@@ -120,27 +120,46 @@ public class ContractingBreakdown extends TilesAction {
 				
 				 if(contract.getTotalAmount()!=null)
 			   	  	{
-					 try {
-							usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
-						} catch (AimException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-	       			  	try {
-							finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-						} catch (AimException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}	
+//					 try {
+//							usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
+//						} catch (AimException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//	       			  	try {
+//							finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//						} catch (AimException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}	
+//					 
+//					 double amountRate=0;
+//					 if(finalAmount1!=0) amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
 					 
-					 double amountRate=0;
-					 if(finalAmount1!=0) amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
-			   	  		contract.setExecutionRate(amountRate);
+			   	  	contract.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(contract, cc));
 			   	  	//System.out.println("2 execution rate: "+amountRate);
 			   	  	}
-			   	  	else {
-			   	  		contract.setExecutionRate(new Double(0));
-			   	  	}
+				 else if(contract.getContractTotalValue()!=null){
+	//					 try {
+	//							usdAmount1 = CurrencyWorker.convertToUSD(contract.getContractTotalValue().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
+	//						} catch (AimException e) {
+	//							// TODO Auto-generated catch block
+	//							e.printStackTrace();
+	//						}
+	//	       			  	try {
+	//							finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+	//						} catch (AimException e) {
+	//							// TODO Auto-generated catch block
+	//							e.printStackTrace();
+	//						}	
+	//					 
+	//					 double amountRate=0;
+	//					 if(finalAmount1!=0) amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
+					 
+			   	  		contract.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
+			   	  	//System.out.println("2 execution rate: "+amountRate);
+				 	}
+			   	  		else contract.setExecutionRate(new Double(0));
 				
 				newContracts.add(contract);
 			}

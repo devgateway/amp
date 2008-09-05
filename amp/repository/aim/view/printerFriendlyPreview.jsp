@@ -317,6 +317,7 @@
 									
 
 		</feature:display>
+                                     <module:display name="Project Id And Planning">
                                      <feature:display name="Budget" module="Project Id And Planning">
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">
@@ -344,6 +345,7 @@
 											</td>
 										</tr>
 										</feature:display>
+                                     </module:display>
 
 										<field:display name="Humanitarian Aid" feature="Identification">
 											<tr>

@@ -53,9 +53,10 @@
 							</logic:equal>
 							<tr>
 								<td>
-									<script type="text/javascript">
+									<bean:write name='documentData' property='title'/>
+									<%-- <script type="text/javascript">
 										document.write(unescape("<bean:write name='documentData' property='title'/>"));
-									</script>
+									</script> --%>
 								</td>
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
@@ -89,9 +90,10 @@
 									${documentData.cmDocType }
 								</td>
 								<td>
-									<script type="text/javascript">
+									<bean:write name='documentData' property='description'/>
+									<%-- <script type="text/javascript">
 										document.write(unescape("<bean:write name='documentData' property='description'/>"));
-									</script>
+									</script> --%>
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								<td nowrap="nowrap"> 
@@ -123,7 +125,7 @@
 <!--								</c:set>-->
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
-								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>', '<%=documentData.getCmDocType() %>' ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
+								onClick="setType('version'); configPanel(0,'<%=documentData.getEscapedAmpTitle() %>','<%=documentData.getEscapedAmpDescription() %>', '<%=documentData.getCmDocType() %>' ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
 								title="<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
 								
 								</logic:equal>

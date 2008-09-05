@@ -69,9 +69,7 @@
 			PLANNED <digi:trn key="aim:actualdisbursementOrders"> DISBURSMENT ORDERS</digi:trn>
 			</a></digi:trn>
 	  </td><TD align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000; text-transform: uppercase;"><bean:write
-			name="aimEditActivityForm" property="totalPlannedDisbursementsOrders" />		  <bean:write
-			name="aimEditActivityForm" property="currCode" /></TD>
+			style="border-top: 1px solid #000000; text-transform: uppercase;"></TD>
 	    <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
 	</tr-->
@@ -142,9 +140,7 @@
 	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">
             ${funding.subtotalActualDisbursementsOrders} ${aimEditActivityForm.currCode}
-            <!--<bean:write
-			name="aimEditActivityForm" property="totalActualDisbursementsOrders" />	<bean:write
-			name="aimEditActivityForm" property="currCode" />--></td>
+           </td>
 	  <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
   </tr>

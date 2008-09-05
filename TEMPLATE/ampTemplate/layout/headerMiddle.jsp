@@ -289,7 +289,7 @@ border-right:1px solid white;
 
 </script>
 
-             <div class="yuiamp-skin-amp" style="clear:both;">
+             <div class="yuiamp-skin-amp" style="clear: both; width: 940px;">
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
                       <ul class="first-of-type">

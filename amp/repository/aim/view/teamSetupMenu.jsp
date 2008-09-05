@@ -215,26 +215,26 @@ html>body #mainEmpty {
 							</LI>							
 						</c:if>						
 						<c:if test="${teamAccessTypeLocal != 'Management' }">
-						<c:if test="${selectedTab == '2'}">
-							<LI>
-						   		<a name="node">
-						   		<div>
-								<digi:trn key="aim:activities">Activities</digi:trn>
-								</div>
-								</a>
-							</LI>
-						</c:if>
-						<c:if test="${selectedTab != '2'}">
-							<LI>
-								<span>
-								<digi:link href="/teamActivityList.do" name="urlParams">
-								<div title='<digi:trn key="aim:clickToViewActivities">Click here to view Activities</digi:trn>'>
+							<c:if test="${selectedTab == '2'}">
+								<LI>
+							   		<a name="node">
+							   		<div>
 									<digi:trn key="aim:activities">Activities</digi:trn>
-								</div>
-								</digi:link>
-								</span>
-							</LI>
-						</c:if>
+									</div>
+									</a>
+								</LI>
+							</c:if>
+							<c:if test="${selectedTab != '2'}">
+								<LI>
+									<span>
+									<digi:link href="/teamActivityList.do" name="urlParams">
+									<div title='<digi:trn key="aim:clickToViewActivities">Click here to view Activities</digi:trn>'>
+										<digi:trn key="aim:activities">Activities</digi:trn>
+									</div>
+									</digi:link>
+									</span>
+								</LI>
+							</c:if>
 						</c:if>
 						<c:if test="${selectedTab == '3'}">
 							<LI>

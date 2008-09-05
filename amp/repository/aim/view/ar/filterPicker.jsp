@@ -57,6 +57,7 @@
 					<html:text property="indexString" style="width: 250px"	styleClass="inp-text" /></td>
 				</tr>
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><b><digi:trn
 						key="rep:filter:ApprovalStatus">Approval Status</digi:trn></b><br/>
@@ -97,25 +98,6 @@
 					</html:select>
 					</td>
 				</tr>
-				<field:display name="Project Category" feature="Identification">
-				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><b><digi:trn
-						key="aim:projectcategory">Project Category</digi:trn></b><br/>
-					</td>
-				</tr>
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><b>
-					<category:showoptions size="3"
-						outerstyle="width: 300px" styleClass="inp-text"
-						name="aimReportsFilterPickerForm"
-						multiselect="true"
-						property="selectedProjectCategory"
-						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_KEY %>" />
-					</td>
-				</tr>
-				</field:display>
-
 			</table>
 		</td>
 		<td align="center">
@@ -325,6 +307,29 @@
 							label="region" value="regionId" />
 					</html:select></td>
 				</tr>
+				<field:display name="Project Category" feature="Identification">
+				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><b><digi:trn
+						key="aim:projectcategory">Project Category</digi:trn></b><br/>
+					</td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><b>
+					<category:showoptions size="3"
+						outerstyle="width: 300px" styleClass="inp-text"
+						name="aimReportsFilterPickerForm"
+						multiselect="true"
+						property="selectedProjectCategory"
+						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_KEY %>" />
+					</td>
+				</tr>
+				</field:display>
+
+
 				</table>
 			</td>
 		</tr>

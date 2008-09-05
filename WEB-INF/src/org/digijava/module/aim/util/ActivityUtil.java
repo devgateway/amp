@@ -2670,6 +2670,12 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     			  td+=cd.getAmount().doubleValue();
     	  }
     	  c.setTotalDisbursements(new Double(td));
+    	  if(c.getTotalAmount()!=null && (c.getTotalAmount().doubleValue()!=0.0) )
+    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
+    	  else 
+    		  if(c.getContractTotalValue()!=null)
+    		  	c.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, c.getTotalAmountCurrency().getCurrencyCode()));
+    		  else c.setExecutionRate(new Double(0));
       }
     }
      
@@ -2721,7 +2727,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
      			  }
 	    	  }
 	    	  c.setTotalDisbursements(new Double(td));
-	    	  if(c.getTotalAmount()!=null)
+	    	  if(c.getTotalAmount()!=null && c.getTotalAmount().doubleValue()!=0.0)
 	    	  {
 //	    		  double usdAmount1=0;  
 //	      		   double finalAmount1=0; 

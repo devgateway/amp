@@ -538,6 +538,17 @@
 			                                             </td>
 			                                         </tr>
 		                                         </field:display>
+		                                         <field:display name="Contract Total Value" feature="Contracting">
+			                                         <tr>
+			                                             <td align="left">
+			                                                 <b><digi:trn key="aim:ipa:popup:contractTotalValue">Contract Total Value</digi:trn>:</b>
+			                                             </td>
+			                                             <td>
+			                                                 ${contract.contractTotalValue}
+			                                                 ${contract.totalAmountCurrency} 
+			                                             </td>
+			                                         </tr>
+		                                         </field:display>
 		                                         <field:display name="Total EC Contribution" feature="Contracting">
 			                                         <tr>
 			                                             <td align="left" colspan="2">

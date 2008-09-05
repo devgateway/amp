@@ -475,7 +475,8 @@ public class LuceneUtil {
 			searchString = searchString.trim();
 			if (searchString.charAt(0) == '*')
 				searchString = searchString.substring(1);
-			query = parser.parse(searchString);
+			//AMP-3806
+			query = parser.parse("+"+searchString+"*");
 			hits = indexSearcher.search(query);
 		} catch (Exception e1) {
 			e1.printStackTrace();

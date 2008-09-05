@@ -126,12 +126,9 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
 			key='aim:subtotalactualcommittment'> SUBTOTAL ACTUAL COMMITMENTS: </digi:trn>
 		</td>
-		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
-			style="border-top: 1px solid #000000">
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
             ${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}
-            <!--<bean:write
-			name="aimEditActivityForm" property="totalCommitments" /> <bean:write
-			name="aimEditActivityForm" property="currCode" />--></td>
+            
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

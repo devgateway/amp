@@ -817,15 +817,20 @@
 																				  </a>                                                                                </td>
                                                                                 <td width="10">:</td>
                                                                                 <td align="left">
-	                                                                                <c:set var="creditTypeId">
-										                                        		<bean:write name="funding"	property="financingInstrument.value"/>
-										                                        	</c:set>
-										                                        	<c:if test="${creditTypeId == 'Comercial' || creditTypeId == 'Concesional'}">
-										                                        		<digi:trn key="aim:preview_credit">Credito</digi:trn>	                                        		 
-										                                        	</c:if>
-																					<c:if test="${creditTypeId == 'Donación'}">
-																						<digi:trn key="aim:preview_donation">Donación</digi:trn>	                                        		
-										                                        	</c:if>                                                                               </td>
+                                                                                    <c:if test="${not empty funding.financingInstrument}">
+                                                                                        <c:set var="creditTypeId">
+                                                                                            <bean:write name="funding"	property="financingInstrument.value"/>
+                                                                                        </c:set>
+                                                                                        <c:if test="${creditTypeId == 'Comercial' || creditTypeId == 'Concesional'}">
+                                                                                            <digi:trn key="aim:preview_credit">Credito</digi:trn>	                                        		 
+                                                                                        </c:if>
+                                                                                        <c:if test="${creditTypeId == 'Donación'}">
+                                                                                            <digi:trn key="aim:preview_donation">Donación</digi:trn>	                                        		
+                                                                                        </c:if>
+                                                                                            
+                                                                                    </c:if>
+                                                                                       
+										                                        	                                                                               </td>
                                                                               </tr>
                                                                               
 																			</field:display>

@@ -74,9 +74,7 @@
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
             ${funding.subtotalPlannedDisbursements} ${aimEditActivityForm.currCode}
-			<!--<bean:write
-			name="aimEditActivityForm" property="totalPlannedDisbursements" /> <bean:write
-			name="aimEditActivityForm" property="currCode" />--></td>
+			</td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	
@@ -134,11 +132,8 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-            ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}
-            
-            <!--<bean:write
-			name="aimEditActivityForm" property="totalDisbursements" /> <bean:write
-			name="aimEditActivityForm" property="currCode" />--></td>
+                                  ${funding.subtotalDisbursements} ${aimEditActivityForm.currCode}</td>
+                   
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 	<tr><td colspan="4" height="7px"></td></tr>

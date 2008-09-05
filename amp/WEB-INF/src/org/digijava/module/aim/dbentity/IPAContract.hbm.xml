@@ -50,7 +50,8 @@
 		<property name="contractCompletion" column="contract_completion" type="java.util.Date" />		
 				
 		
-		<property access="field" name="totalAmount" column="total_amount" type="java.lang.Double" />		
+		<property access="field" name="totalAmount" column="total_amount" type="java.lang.Double" />
+		<property access="field" name="contractTotalValue" column="contract_total_value" type="java.lang.Double" />		
 		<many-to-one name="totalAmountCurrency" column="total_amount_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
 		<many-to-one name="dibusrsementsGlobalCurrency" column="disbursements_global_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
 		

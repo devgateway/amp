@@ -670,6 +670,7 @@ public class AmpARFilter extends PropertyListable {
 
 				Hits hits = LuceneUtil.search(idx, "all", indexText);
 				logger.info("New lucene search !");
+				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {
 					Document doc;
 					try {

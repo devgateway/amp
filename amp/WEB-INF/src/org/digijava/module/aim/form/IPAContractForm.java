@@ -73,6 +73,8 @@ public class IPAContractForm extends ActionForm  {
 	private String totalECContribIBAmountDate;
 	
 	private String totalAmount;
+	private String contractTotalValue;
+	
 	private Long totalAmountCurrency;
 	private Long dibusrsementsGlobalCurrency;
 	
@@ -309,6 +311,7 @@ public class IPAContractForm extends ActionForm  {
         totalECContribIBAmount = null;
         
         totalAmount = null;
+        contractTotalValue=null;
         totalAmountCurrency = null;
         dibusrsementsGlobalCurrency=null;
         executionRate=null;
@@ -466,6 +469,14 @@ public class IPAContractForm extends ActionForm  {
 
 	public void setFundingDetailsLinked(List<FundingDetail> fundingDetailsLinked) {
 		this.fundingDetailsLinked = fundingDetailsLinked;
+	}
+
+	public String getContractTotalValue() {
+		return contractTotalValue;
+	}
+
+	public void setContractTotalValue(String contractTotalValue) {
+		this.contractTotalValue = contractTotalValue;
 	}
 
 

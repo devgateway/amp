@@ -27,6 +27,7 @@ import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -213,6 +214,12 @@ public class EditIPAContract extends MultiAction {
         }
         else euaf.setTotalAmount("");
         
+        if (contract.getContractTotalValue() != null) {
+            euaf.setContractTotalValue(String.valueOf(contract.getContractTotalValue()));
+        }
+        else euaf.setContractTotalValue("");
+        
+        
         if (contract.getTotalAmountCurrency() != null) {
             euaf.setTotalAmountCurrency(contract.getTotalAmountCurrency().getAmpCurrencyId());
         }
@@ -289,33 +296,53 @@ public class EditIPAContract extends MultiAction {
 
         if(contract.getTotalAmount()!=null)
    	  	{
-        	double usdAmount1=0;  
- 		   double finalAmount1=0; 
-        	try {
-				usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
-			} catch (AimException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			  	try {
-				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-			} catch (AimException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-			double amountRate=0;
-			if(finalAmount1!=0 )
-				amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
-        	
-   	  		//double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
-   	  		contract.setExecutionRate(amountRate);
-   	  		euaf.setExecutionRate(amountRate);
-   	  	//System.out.println("2 execution rate: "+amountRate);
+//        	double usdAmount1=0;  
+// 		   double finalAmount1=0; 
+//        	try {
+//				usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
+//			} catch (AimException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			  	try {
+//				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//			} catch (AimException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}	
+//			double amountRate=0;
+//			if(finalAmount1!=0 )
+//				amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
+//        	
+   	  		contract.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(contract, cc));
+   	  		euaf.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(contract, cc));
    	  	}
-   	  	else {
-   	  		contract.setExecutionRate(new Double(0));
-   	  		euaf.setExecutionRate(new Double(0));
-   	  	}
+        else if(contract.getContractTotalValue()!=null){
+//	           double usdAmount1=0;  
+//	  		   double finalAmount1=0; 
+//	         	try {
+//	 				usdAmount1 = CurrencyWorker.convertToUSD(contract.getContractTotalValue().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
+//	 			} catch (AimException e) {
+//	 				// TODO Auto-generated catch block
+//	 				e.printStackTrace();
+//	 			}
+//	 			  	try {
+//	 				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//	 			} catch (AimException e) {
+//	 				// TODO Auto-generated catch block
+//	 				e.printStackTrace();
+//	 			}	
+//	 			double amountRate=0;
+//	 			if(finalAmount1!=0 )
+//	 				amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
+//	         	
+	    	  		contract.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
+	    	  		euaf.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
+	        }
+	   	  	else {
+	   	  		contract.setExecutionRate(new Double(0));
+	   	  		euaf.setExecutionRate(new Double(0));
+	   	  	}
 
         return modeFinalize(mapping, form, request, response);
     }
@@ -557,6 +584,11 @@ public class EditIPAContract extends MultiAction {
         if (euaf.getTotalAmount() != null && !euaf.getTotalAmount().equals("")) {
             eua.setTotalAmount(Double.parseDouble(euaf.getTotalAmount()));
         }
+        
+        if (euaf.getContractTotalValue() != null && !euaf.getContractTotalValue().equals("")) {
+            eua.setContractTotalValue(Double.parseDouble(euaf.getContractTotalValue()));
+        }
+        
         if (euaf.getTotalAmountCurrency() != null && !euaf.getTotalAmountCurrency().equals("") && !euaf.getTotalAmountCurrency().equals(new Long(-1))) {
         	eua.setTotalAmountCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalAmountCurrency()));
         }
@@ -647,34 +679,58 @@ public class EditIPAContract extends MultiAction {
          
          if(eua.getTotalAmount()!=null)
     	  	{
-        	 double usdAmount1=0;  
-   		   double finalAmount1=0; 
-          	try {
-  				usdAmount1 = CurrencyWorker.convertToUSD(eua.getTotalAmount().doubleValue(),eua.getTotalAmountCurrency().getCurrencyCode());
-  			} catch (AimException e) {
-  				// TODO Auto-generated catch block
-  				e.printStackTrace();
-  			}
-  			  	try {
-  				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-  			} catch (AimException e) {
-  				// TODO Auto-generated catch block
-  				e.printStackTrace();
-  			}	
-  		 
-  		 double amountRate=0;
-  		 if(finalAmount1!=0){
-	  		 if (eua.getTotalDisbursements() != null)
-	  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
-	  		 else
-	  			 amountRate=0;
-  		 }
-  		 
-        	// double amountRate=eua.getTotalDisbursements().doubleValue()/eua.getTotalAmount().doubleValue();
-    	  		eua.setExecutionRate(amountRate);
-    	  		//System.out.println("3 execution rate: "+amountRate);
+//	           double usdAmount1=0;  
+//	   		   double finalAmount1=0; 
+//	          	try {
+//	  				usdAmount1 = CurrencyWorker.convertToUSD(eua.getTotalAmount().doubleValue(),eua.getTotalAmountCurrency().getCurrencyCode());
+//	  			} catch (AimException e) {
+//	  				// TODO Auto-generated catch block
+//	  				e.printStackTrace();
+//	  			}
+//	  			  	try {
+//	  				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//	  			} catch (AimException e) {
+//	  				// TODO Auto-generated catch block
+//	  				e.printStackTrace();
+//	  			}	
+//	  		 
+//		  		 double amountRate=0;
+//		  		 if(finalAmount1!=0){
+//			  		 if (eua.getTotalDisbursements() != null)
+//			  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
+//			  		 else
+//			  			 amountRate=0;
+//		  		 }
+//		    	 eua.setExecutionRate(amountRate);
+        	 eua.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(eua, cc));
     	  	}
-    	  	else eua.setExecutionRate(new Double(0));
+         else if(eua.getContractTotalValue()!=null){
+//	        	   double usdAmount1=0;  
+//		   		   double finalAmount1=0; 
+//		          	try {
+//		  				usdAmount1 = CurrencyWorker.convertToUSD(eua.getContractTotalValue().doubleValue(),eua.getTotalAmountCurrency().getCurrencyCode());
+//		  			} catch (AimException e) {
+//		  				// TODO Auto-generated catch block
+//		  				e.printStackTrace();
+//		  			}
+//		  			  	try {
+//		  				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//		  			} catch (AimException e) {
+//		  				// TODO Auto-generated catch block
+//		  				e.printStackTrace();
+//		  			}	
+//		  		 
+//			  		 double amountRate=0;
+//			  		 if(finalAmount1!=0){
+//				  		 if (eua.getTotalDisbursements() != null)
+//				  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
+//				  		 else
+//				  			 amountRate=0;
+//			  		 }
+			    	 //eua.setExecutionRate(amountRate);
+        	 	eua.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(eua, cc));
+         		}
+    	  		else eua.setExecutionRate(new Double(0));
          
          if (eaf.getContracts() != null && euaf.getIndexId() != null && euaf.getIndexId() != -1) {
              eaf.getContracts().set(euaf.getIndexId(), eua);

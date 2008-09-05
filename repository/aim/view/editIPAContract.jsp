@@ -332,7 +332,7 @@ SaveReportEngine.prototype.failure			= function(o) {
 
 SaveReportEngine.prototype.saveContract	= function () {
 	var postString		= "save=true&"+generateFields();
-	alert (postString);
+	//alert (postString);
 	
 	YAHOOAmp.util.Connect.asyncRequest("POST", "/aim/editIPAContract.do", this, postString);
 }

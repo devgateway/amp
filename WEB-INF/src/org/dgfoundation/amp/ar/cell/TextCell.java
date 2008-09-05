@@ -87,4 +87,5 @@ public class TextCell extends Cell {
 		this.setValue((this.equals(c1)?"":c1.getValue()+(String)(this.equals(c2)?"":c2.getValue())));
 	}
 	
+	
 }

@@ -38,6 +38,7 @@ public class IPAContract implements Serializable {
     
     private Double totalECContribIBAmount;
     private Double totalAmount;
+    private Double contractTotalValue;
     private AmpCurrency totalAmountCurrency;
     private AmpCurrency dibusrsementsGlobalCurrency;
     private Double totalECContribINVAmount;
@@ -379,4 +380,13 @@ public class IPAContract implements Serializable {
 	public void setContractType(AmpCategoryValue contractType) {
 		this.contractType = contractType;
 	}
+
+	public Double getContractTotalValue() {
+		return FeaturesUtil.applyThousandsForVisibility(contractTotalValue);
+	}
+
+	public void setContractTotalValue(Double contractTotalValue) {
+		this.contractTotalValue = FeaturesUtil.applyThousandsForEntry(contractTotalValue);
+	}
+		
 }

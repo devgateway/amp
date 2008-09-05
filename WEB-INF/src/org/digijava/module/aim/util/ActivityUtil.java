@@ -845,6 +845,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     
                     oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
                     oldContract.setTotalAmount(contract.getTotalAmount());
+                    oldContract.setContractTotalValue(contract.getContractTotalValue());
                     oldContract.setTotalAmountCurrency(contract.getTotalAmountCurrency());
                     oldContract.setDibusrsementsGlobalCurrency(contract.getDibusrsementsGlobalCurrency());
                     oldContract.setExecutionRate(contract.getExecutionRate());
@@ -2722,28 +2723,49 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	    	  c.setTotalDisbursements(new Double(td));
 	    	  if(c.getTotalAmount()!=null)
 	    	  {
-	    		  double usdAmount1=0;  
-	      		   double finalAmount1=0; 
-	             	try {
-	     				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
-	     			} catch (AimException e) {
-	     				// TODO Auto-generated catch block
-	     				e.printStackTrace();
-	     			}
-	     			  	try {
-	     				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-	     			} catch (AimException e) {
-	     				// TODO Auto-generated catch block
-	     				e.printStackTrace();
-	     			}	
-	    		  
-	    		  double execRate=0;
-	    		  if(finalAmount1!=0)
-	    			  execRate=c.getTotalDisbursements()/finalAmount1;
-	    		  //System.out.println("1 execution rate: "+execRate);
-	    		  c.setExecutionRate(execRate);
+//	    		  double usdAmount1=0;  
+//	      		   double finalAmount1=0; 
+//	             	try {
+//	     				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+//	     			} catch (AimException e) {
+//	     				// TODO Auto-generated catch block
+//	     				e.printStackTrace();
+//	     			}
+//	     			  	try {
+//	     				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//	     			} catch (AimException e) {
+//	     				// TODO Auto-generated catch block
+//	     				e.printStackTrace();
+//	     			}	
+//	    		  
+//	    		  double execRate=0;
+//	    		  if(finalAmount1!=0)
+//	    			  execRate=c.getTotalDisbursements()/finalAmount1;
+//	    		  //System.out.println("1 execution rate: "+execRate);
+	    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, cc));
 	    	  }
-	    	  else c.setExecutionRate(new Double(0));
+	    	  else if(c.getContractTotalValue()!=null){
+//		    		   double usdAmount1=0;  
+//		      		   double finalAmount1=0; 
+//		             	try {
+//		     				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+//		     			} catch (AimException e) {
+//		     				// TODO Auto-generated catch block
+//		     				e.printStackTrace();
+//		     			}
+//		     			  	try {
+//		     				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+//		     			} catch (AimException e) {
+//		     				// TODO Auto-generated catch block
+//		     				e.printStackTrace();
+//		     			}	
+//		    		  
+//		    		  double execRate=0;
+//		    		  if(finalAmount1!=0)
+//		    			  execRate=c.getTotalDisbursements()/finalAmount1;
+		    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
+	    	  		}
+	    	  		else c.setExecutionRate(new Double(0));
 	    	  
 	      }
 	    }
@@ -2756,7 +2778,54 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	    
 	    return  contrcats ;
 	  } 
+  
+  	public static double computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
+  		double usdAmount1=0;  
+		   double finalAmount1=0; 
+      	try {
+				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  	try {
+				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,currCode);
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		  
+		  double execRate=0;
+		  if(finalAmount1!=0)
+			  execRate=c.getTotalDisbursements()/finalAmount1;
+		  c.setExecutionRate(execRate);
+		  return execRate;
+  	}
 
+  	public static double computeExecutionRateFromTotalAmount(IPAContract c, String currCode){
+  		double usdAmount1=0;  
+		   double finalAmount1=0; 
+      	try {
+				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  	try {
+				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,currCode);
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		  
+		  double execRate=0;
+		  if(finalAmount1!=0)
+			  execRate=c.getTotalDisbursements()/finalAmount1;
+		  c.setExecutionRate(execRate);
+		  return execRate;
+  	}
+
+  	
   /*
    * get the list of all the activities
    * to display in the activity manager of Admin

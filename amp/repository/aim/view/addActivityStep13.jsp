@@ -145,7 +145,7 @@
     
     function callUrl(indexId){
 	    var async=new Asynchronous();
-	    async.complete=mapCallBack;
+	    //async.complete=mapCallBack;
 	    async.call("/aim/editIPAContract.do?deleteEU&indexId="+indexId);
     }
     
@@ -661,10 +661,17 @@
 			                                              </td>
 			                                              <td>
 		                                                      <logic:notEmpty name="contract" property="disbursements">
-		                                                           <table>
+		                                                           <table width="100%">
+																    <tr>
+																		<th><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></th>
+																		<th><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn></field:display></th>
+																		<th><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn></field:display></th>
+																		<th><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></th>
+																		
+																	</tr>
 			                                                           <c:forEach  items="${contract.disbursements}" var="disbursement" >
 			                                                               <tr>
-			                                                                   <td align="left" valign="top">
+			                                                                   <td align="center" valign="top">
 			                                                                       <c:if test="${disbursement.adjustmentType==0}">
 		                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
 			                                                                       </c:if>
@@ -672,13 +679,13 @@
 		                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
 			                                                                       </c:if>
 			                                                                   </td>
-			                                                                   <td align="left" valign="top">
+			                                                                   <td align="center" valign="top">
 			                                                                       ${disbursement.amount}
 			                                                                   </td>
-			                                                                   <td align="left" valign="top">
+			                                                                   <td align="center" valign="top">
 			                                                                      ${disbursement.currency.currencyName} 
 			                                                                   </td>
-			                                                                   <td align="left" valign="top">
+			                                                                   <td align="center" valign="top">
 			                                                                       ${disbursement.disbDate}
 			                                                                   </td>
 			                                                               </tr>

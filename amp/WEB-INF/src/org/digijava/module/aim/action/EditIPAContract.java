@@ -95,6 +95,7 @@ public class EditIPAContract extends MultiAction {
         Integer indexId = new Integer(request.getParameter("indexId"));
         eaf.getContracts().remove(indexId - 1);
         //request.setAttribute("close", "close");
+        request.setAttribute("close", "close");
         return modeFinalize(mapping, form, request, response);
        
     }

@@ -27,6 +27,11 @@
 	</div>
 <!--</div>-->
 
+<div id="myUserFilterWrapper" style="display: none;" >
+	<div id="customUser" style="display: none" class="content" >
+		<jsp:include page="/repository/aim/view/workspacePopup.jsp" />
+	</div>
+</div>
 
         <!-- Core + Skin CSS -->
         <digi:ref href="css/menu.css" type="text/css" rel="stylesheet" />

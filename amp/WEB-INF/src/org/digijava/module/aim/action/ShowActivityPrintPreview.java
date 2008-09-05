@@ -599,9 +599,10 @@ public class ShowActivityPrintPreview
                   	  Iterator<Funding> iterFunding = currFundingOrganization.getFundings().iterator();
                   	  while(iterFunding.hasNext()){
                   		  Funding currFunding = iterFunding.next();
-                            FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();    
-                            calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
-                  		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
+                            FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper(); 
+                                if(currFunding.getAmpFundingDetails()!=null){
+                                calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
+                                 currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
                   		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
                   		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
                   		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
@@ -609,6 +610,8 @@ public class ShowActivityPrintPreview
                   		  currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
                   		  currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
                   		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
+                                }
+                  		 
                   		  currFunding.setAmpFundingDetails(null);
                   		  //TODO:aca se setearia el resto
                   		  

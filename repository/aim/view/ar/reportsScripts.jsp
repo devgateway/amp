@@ -320,10 +320,29 @@ background-color: yellow;
 		myPanel1.setBody(element);
 		myPanel1.center();
 		myPanel1.show();
-		
+
 		initCalendar();
-		
-		
+
+		<field:display name="Project Category" feature="Identification">
+			try {
+				addTitleSelect("selectedProjectCategory");
+			}
+			catch(e)
+			{
+//				alert(e);
+			}
+		</field:display>
+	}
+	
+	function addTitleSelect(selectName){
+		var categoryOptions = document.getElementsByName(selectName);
+		if(categoryOptions[0])
+		{
+			for(idx = 0; idx < categoryOptions[0].options.length;idx++)
+			{
+				categoryOptions[0].options[idx].title = categoryOptions[0].options[idx].text;
+			}
+		}
 	}
 
 	function showAbout() {

@@ -158,8 +158,8 @@
 					%>
 				</tr>
 				<tr>
-					<td>
-						&nbsp;
+					<td>&nbsp;
+						
 					</td>
 				</tr>
 				<tr>
@@ -276,8 +276,8 @@
 						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
 							key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
 					</field:display></td>
-					<td>
-					&nbsp;
+					<td>&nbsp;
+					
 					</td>
 				</tr>
 			</table>
@@ -286,18 +286,18 @@
 				<c:set var="tooltip_translation">
 					<digi:trn key="rep:filter:regionofinterest">Specify the region  of interest.</digi:trn>
 				</c:set>
-				<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+				<table align="center" cellpadding="1" cellspacing="1">
 						<tr bgcolor="#EEEEEE">
-					<td colspan="5">
+					<td colspan="5" onmouseover="Tip('${tooltip_translation}');">
 					<b><digi:trn key="rep:filter:RegionTitle">Region </digi:trn></b>
 					<br>
 					</td>
 				</tr>
 				
-				<tr bgcolor="#EEEEEE">
+				<tr bgcolor="#EEEEEE" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
 				</tr>
-				<tr bgcolor="#EEEEEE">
+				<tr bgcolor="#EEEEEE" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><html:select property="regionSelected"
 						style="width: 300px" styleClass="inp-text">
 						<html:option value="-1">
@@ -310,12 +310,9 @@
 				<field:display name="Project Category" feature="Identification">
 				<tr bgcolor="#EEEEEE"><td colspan="5">&nbsp;</td></tr>
 				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><b><digi:trn
-						key="aim:projectcategory">Project Category</digi:trn></b><br/>
+					<td colspan="5"><digi:trn
+						key="aim:projectcategory">Project Category</digi:trn><br/>
 					</td>
-				</tr>
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><b>
@@ -467,7 +464,7 @@
 							<br />
 							</td>
 						</tr>
-						<tr><td colspan="5"> &nbsp;</td></tr>
+						<tr><td colspan="5">&nbsp; </td></tr>
 
 						<tr bgcolor="#EEEEEE">
 							<td colspan="5"><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn>
@@ -482,9 +479,9 @@
 							</td>
 							
 						</tr>
-						<tr><td colspan="5"> &nbsp;</td></tr>
-						<tr><td colspan="5"> &nbsp;</td></tr>
-						<tr><td colspan="5"> &nbsp;</td></tr>
+						<tr><td colspan="5">&nbsp; </td></tr>
+						<tr><td colspan="5">&nbsp; </td></tr>
+						<tr><td colspan="5">&nbsp; </td></tr>
 						<tr bgcolor="#EEEEEE">
 							<td colspan="5">
 								<digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn>
@@ -510,7 +507,7 @@
 									<br />									
 							</td>
 						</tr>
-						<tr><td colspan="5"> &nbsp;</td></tr>
+						<tr><td colspan="5">&nbsp; </td></tr>
 						<feature:display name="Beneficiary Agency" module="Organizations">
 						<tr bgcolor="#EEEEEE">
 				         	<td>

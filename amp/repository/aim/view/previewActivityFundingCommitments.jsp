@@ -69,12 +69,8 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-                                      <c:if test="${@empty funding.subtotalPlannedCommitments}">
-                                      ${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}
-                                      </c:if>
-            <!--<bean:write
-			name="aimEditActivityForm" property="totalPlannedCommitments" /> <bean:write
-			name="aimEditActivityForm" property="currCode" />--></td>
+            <bean:write name="funding" property="totalPlannedCommitments" />
+            <bean:write name="aimEditActivityForm" property="currCode" /></td>
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

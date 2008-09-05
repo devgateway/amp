@@ -69,8 +69,7 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-            <bean:write name="funding" property="totalPlannedCommitments" />
-            <bean:write name="aimEditActivityForm" property="currCode" /></td>
+                                  <c:out value="${funding.totalPlannedCommitments}"/>  <c:out value="${aimEditActivityForm.currCode}"/>
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

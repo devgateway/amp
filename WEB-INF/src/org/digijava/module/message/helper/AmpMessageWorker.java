@@ -404,8 +404,8 @@ public class AmpMessageWorker {
         receivers = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<" + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName() + ";";
         if (needsApproval) {
             //team lead can't be null,because if team has no leader,then no trigger will be invoked
-            AmpTeamMember teamLead = tm.getAmpTeam().getTeamLead();
-            receivers += ", " + teamLead.getUser().getFirstNames() + " " + teamLead.getUser().getLastName() + "<" + teamLead.getUser().getEmail() + ">;" + teamLead.getAmpTeam().getName() + ";";
+            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(tm.getAmpTeam().getAmpTeamId());
+            receivers += ", " + teamHead.getUser().getFirstNames() + " " + teamHead.getUser().getLastName() + "<" + teamHead.getUser().getEmail() + ">;" + teamHead.getAmpTeam().getName() + ";";
         }
         newApproval.setReceivers(receivers);
         return newApproval;
@@ -443,10 +443,11 @@ public class AmpMessageWorker {
         createMsgState(state, approval);
         if (triggerClass.equals(NotApprovedActivityTrigger.class)) {
             AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(approval.getSenderId());
-            if (tm.getAmpTeam().getTeamLead() != null) {
-                Long teamLeaderId = tm.getAmpTeam().getTeamLead().getAmpTeamMemId();
+            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(tm.getAmpTeam().getAmpTeamId());
+            if (teamHead != null) {
+                Long teamHeadId = teamHead.getAmpTeamMemId();
                 state = new AmpMessageState();
-                state.setMemberId(teamLeaderId);
+                state.setMemberId(teamHeadId);
                 createMsgState(state, approval);
             }
         }

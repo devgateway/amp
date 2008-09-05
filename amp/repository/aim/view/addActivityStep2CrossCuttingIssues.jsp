@@ -70,6 +70,7 @@ function edit(key) {
                                                     <td>
                                                       <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
+														<c:if test="${!empty aimEditActivityForm.equalOpportunity}" >
                                                                                                                             <bean:define id="eqOppKey">
 																	   <c:out value="${aimEditActivityForm.equalOpportunity}"/>
 																</bean:define>
@@ -89,8 +90,10 @@ function edit(key) {
 																<digi:edit key="<%=eqOppKey%>"/>
 															</td>
 														</tr>
+														</c:if>
 														</field:display>
 														<field:display name="Environment" feature="Cross Cutting Issues">
+														<c:if test="${!empty aimEditActivityForm.environment}" >
                                                         <tr>                                                                    <bean:define id="envKey">
 																	<c:out value="${aimEditActivityForm.environment}"/>
 																</bean:define>
@@ -109,8 +112,11 @@ function edit(key) {
 															
 															</td>
 														</tr>
+														</c:if>
 														</field:display>
+														
 														<field:display name="Minorities" feature="Cross Cutting Issues">
+														<c:if test="${!empty aimEditActivityForm.minorities}" >
                                                                                                                      <bean:define id="minKey">
 																	<c:out value="${aimEditActivityForm.minorities}"/>
 																</bean:define>
@@ -131,6 +137,7 @@ function edit(key) {
                                                                                                                           <digi:edit key="<%=minKey%>"/>
                                                                                                                       </td>
 														</tr>
+														</c:if>
 														</field:display>
                                                       </table>
                                                     </td>

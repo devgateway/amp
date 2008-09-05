@@ -398,32 +398,37 @@ function projectFiche(id)
                                                                                                
                                                                                     
                                                                                                     <logic:notEmpty name="contract" property="disbursements">
-                                                                                                         <table>
-                                                                                              
-                                                                                                        <c:forEach  items="${contract.disbursements}" var="disbursement" >
-                                                                                                            <tr>
-                                                                                          
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    <c:if test="${disbursement.adjustmentType==0}">
-                                                                                                                          <digi:trn key="aim:actual">Actual</digi:trn>
-                                                                                                                   </c:if>
-                                                                                                                    <c:if test="${disbursement.adjustmentType==1}">
-                                                                                                                          <digi:trn key="aim:planned">Planned</digi:trn>
-                                                                                                                   </c:if>
-                                                                                                    
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    ${disbursement.amount}
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                   ${disbursement.currency.currencyName} 
-                                                                                                                </td>
-                                                                                                                <td align="left" valign="top">
-                                                                                                                    ${disbursement.disbDate}
-                                                                                                                    
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                        </c:forEach>
+                                                                                                         <table width="100%">
+                                                                                              					<tr>
+																													<td><b><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></b></td>
+																													<td><b><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn></field:display></b></td>
+																													<td><b><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn></field:display></b></td>
+																													<td><b><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></b></td>
+																													
+																												</tr>
+	                                                                                                        <c:forEach  items="${contract.disbursements}" var="disbursement" >
+	                                                                                                            <tr>
+	                                                                                          
+	                                                                                                                <td align="center" valign="top">
+	                                                                                                                    <c:if test="${disbursement.adjustmentType==0}">
+	                                                                                                                          <digi:trn key="aim:actual">Actual</digi:trn>
+	                                                                                                                   </c:if>
+	                                                                                                                    <c:if test="${disbursement.adjustmentType==1}">
+	                                                                                                                          <digi:trn key="aim:planned">Planned</digi:trn>
+	                                                                                                                   </c:if>
+	                                                                                                    
+	                                                                                                                </td>
+	                                                                                                                <td align="center" valign="top">
+	                                                                                                                    ${disbursement.amount}
+	                                                                                                                </td>
+	                                                                                                                <td align="center" valign="top">
+	                                                                                                                   ${disbursement.currency.currencyName} 
+	                                                                                                                </td>
+	                                                                                                                <td align="center" valign="top">
+	                                                                                                                    ${disbursement.disbDate}
+	                                                                                                                </td>
+	                                                                                                            </tr>
+	                                                                                                        </c:forEach>
                                                                                                         </table>
                                                                                                         
                                                                                                     </logic:notEmpty>						

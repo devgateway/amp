@@ -65,41 +65,7 @@
 	<digi:trn key="rep:hideCurrSettings">Hide current settings</digi:trn> 
 </c:set>
 
-<script language="JavaScript">
-/*	function addActivity() {
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
-	}
-	*/
 
-function toggleSettings(){
-	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
-	var displaySettingsButton = document.getElementById('displaySettingsButton');
-	if(currentDisplaySettings.style.display == "block"){
-		currentDisplaySettings.style.display = "none";
-		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
-	}
-	else
-	{
-		currentDisplaySettings.style.display = "block";
-		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
-	}
-}
-
-	function teamWorkspaceSetup(a) {
-		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
-	}
-	
-	var tabName	= "Tab-By Project";
-	<logic:empty name="filterCurrentReport" scope="session">
-		<logic:notEmpty name="myTabs" scope="session">
-				tabName	= 'Tab-${myTabs[0].name}';
-		</logic:notEmpty>
-	</logic:empty>
-	<logic:notEmpty name="filterCurrentReport" scope="session">
-		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
-	</logic:notEmpty>	
-	
-</script>
 <script language="javascript">
 var allTabsPanel = null;
 var replaceableTabObject = null;
@@ -163,6 +129,14 @@ var myTabsObject;
 		var divAllTabs = document.getElementById("allTabs");
 		divAllTabs.style.display 	= "block";
 		allTabsPanel.setBody(divAllTabs);
+		<logic:notEmpty name="filterCurrentReport" scope="session">
+		if(!tabExists('Tab-<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}"/>'))
+			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />");
+		</logic:notEmpty>	
+	}
+	function tabExists(tabCheckName){
+		if (document.getElementById(tabCheckName)) return true;
+		return false;
 	}
 
 	function setNewTab(url, label, labelComplete, id){
@@ -227,7 +201,40 @@ var myTabsObject;
 	
 
 </script>
+<script language="JavaScript">
+/*	function addActivity() {
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
+	}
+	*/
 
+function toggleSettings(){
+	var currentDisplaySettings = document.getElementById('currentDisplaySettings');
+	var displaySettingsButton = document.getElementById('displaySettingsButton');
+	if(currentDisplaySettings.style.display == "block"){
+		currentDisplaySettings.style.display = "none";
+		displaySettingsButton.innerHTML = "${showCurrSettings} &gt;&gt;";
+	}
+	else
+	{
+		currentDisplaySettings.style.display = "block";
+		displaySettingsButton.innerHTML = "${hideCurrSettings} &lt;&lt;";
+	}
+}
+
+	function teamWorkspaceSetup(a) {
+		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+	}
+	
+	var tabName	= "Tab-By Project";
+	<logic:empty name="filterCurrentReport" scope="session">
+		<logic:notEmpty name="myTabs" scope="session">
+				tabName	= 'Tab-${myTabs[0].name}';
+		</logic:notEmpty>
+	</logic:empty>
+	<logic:notEmpty name="filterCurrentReport" scope="session">
+		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
+	</logic:notEmpty>	
+</script>
 	
 <digi:context name="digiContext" property="context" />
 

@@ -457,6 +457,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Purpose" feature="Identification"></field:display>
 <field:display name="Region" feature="Location"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display>
+<field:display name="Validate Mandatory Regional Percentage" feature="Location"></field:display>	
 <field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>

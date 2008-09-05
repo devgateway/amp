@@ -147,7 +147,9 @@ function validateForm(){
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
     if ( <feature:display name="Sectors" module="Project ID and Planning"> !validateSectorPercentage() || </feature:display> 
-    <field:display name="Regional Percentage" feature="Location">!validateLocationPercentage() || </field:display> 
+     <field:display name="Regional Percentage" feature="Location">
+   	 !validateLocationPercentage() || 
+     </field:display> 
     !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
     !validateProgramsPercentage(ppSize,"primaryPrograms") ||
     !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
@@ -397,31 +399,43 @@ function validateLocationPercentage(){
   var flag = false;
   var sum = 0;
   var cnt = document.aimEditActivityForm.sizeLocs.value;
-  var cnt_blank_fields = 0;
+  var checkoutSum=false;
   while (i < cnt) {
     str   = "selectedLocs[" + i + "].percent";    
     val   = (document.aimEditActivityForm.elements)[str].value;    
-    // added by mouhamad for burkina on 22/02/08
-    if (val == "" || val == null || val == "0" || val== ",00") {
-    	val = "0";
-    	cnt_blank_fields = cnt_blank_fields + 1;
-    }    
+   <field:display name="Validate Mandatory Regional Percentage" feature="Location">
+	  checkoutSum=true;
+	    if (val == ""){
+	   			alert("${errMsgAddPercentage}");
+	   			return false;
+	    }
+	 </field:display>
+    
+    if(val=="") {
+    	val=0;
+    }
     sum = sum + parseFloat(val);
     i = i + 1;
   }
-  if (flag == true) {
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  else if (cnt_blank_fields!=cnt) {
-  	if (cnt>0 && sum!=0 && sum!=100 ) {
-	    alert("${errMsgSumPercentage}");
-	    (document.aimEditActivityForm.elements)[str].focus();
-	    return false;
+
+
+	if (checkoutSum){
+	 	if (sum!=100){
+	 		 alert("${errMsgSumPercentage}");
+	   		 (document.aimEditActivityForm.elements)[str].focus();
+	 		 return false;
+	 	}
+	}else {
+		if (sum!=100 && sum!=0) {
+		    alert("${errMsgSumPercentage}");
+		    (document.aimEditActivityForm.elements)[str].focus();
+		    return false;
+	    }
     }
-  }
-  return true;
+    return true;
 }
+
+
 
 
 function fnChk(frmContrl, f){

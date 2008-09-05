@@ -295,7 +295,7 @@ public class EditIPAContract extends MultiAction {
             euaf.setContractDisbursements(disbs);
         }
 
-        if(contract.getTotalAmount()!=null)
+        if(contract.getTotalAmount()!=null && contract.getTotalAmount().doubleValue()!=0.0)
    	  	{
 //        	double usdAmount1=0;  
 // 		   double finalAmount1=0; 
@@ -678,7 +678,7 @@ public class EditIPAContract extends MultiAction {
        	  		
          }
          
-         if(eua.getTotalAmount()!=null)
+         if(eua.getTotalAmount()!=null && eua.getTotalAmount().doubleValue()!=0.0)
     	  	{
 //	           double usdAmount1=0;  
 //	   		   double finalAmount1=0; 

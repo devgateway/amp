@@ -120,29 +120,6 @@ public class DbUtil {
      * @throws EditorException
      */
     
-    public static List<Editor> getAllHelpData() throws 
-    EditorException {
-	
-	Session session = null;
-	List<Editor> helpTopics = new ArrayList<Editor>();
-	
-	try {
-		session = PersistenceManager.getRequestDBSession();
-		 Query q = session.createQuery(" from e in class " +
-                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
-
-		helpTopics = q.list();
-		
-		
-	} catch (Exception e) {
-		logger.error("Unable to load help data");
-			throw new EditorException("Unable to Load Help data", e);
-	}
-	return helpTopics;
-}
-    
-    
-    
     public static List getSiteEditorList(String siteId) throws
         EditorException {
 

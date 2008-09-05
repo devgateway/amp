@@ -49,6 +49,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.help.util.HelpUtil;
 
 /**
  * @author Alexandru Artimon
@@ -508,7 +509,7 @@ public class LuceneUtil {
 	    String leastUpDate = formatter.format(lastLucModDay);
 	    date = (Date)formatter.parse(leastUpDate);
 	
-  	    List<Editor> data =  DbUtil.getAllHelpData();
+  	    List<Editor> data =  HelpUtil.getAllHelpData();
 		  
 		for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
 		
@@ -533,6 +534,7 @@ public class LuceneUtil {
 	
 	
 	public static Hits helpSearch(String field, String searchString){
+		
 		QueryParser parser = new QueryParser(field, analyzer);
 		Query query = null;
 		Hits hits = null;
@@ -540,13 +542,16 @@ public class LuceneUtil {
 		
 		Searcher indexSearcher = null;
 		try {
+			if(searchString != null){
 			indexSearcher = new IndexSearcher(indexDirectory);
 			searchString = searchString.trim();
-			query = parser.parse(searchString+"*");
+			query = parser.parse("+"+searchString+"*");
 			hits = indexSearcher.search(query);
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	
 		return hits;
 	}
 	

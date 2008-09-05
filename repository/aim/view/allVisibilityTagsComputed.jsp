@@ -84,7 +84,8 @@
 <feature:display name="Admin - Component" module="Components"></feature:display> 
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display> 
 <feature:display name="Admin" module="M & E"></feature:display> 
-<feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
+<feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
+<feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display>  
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
 <feature:display name="Budget" module="Project Id And Planning"></feature:display> 

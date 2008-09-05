@@ -29,17 +29,19 @@
 		                        	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 		                          	<c:if test="${doc.webLink == null}" >
 		                             	<a  href="/contentrepository/downloadFile.do?uuid=<bean:write name='doc' property='uuid'/>">
-										<script type="text/javascript">
+		                             	<bean:write name='doc' property='title'/>
+										<%-- <script type="text/javascript">
 											document.write(unescape("<bean:write name='doc' property='title'/>"));
-										</script>
+										</script> --%>
 		                            	</a>
 									</c:if>
 									
 									<c:if test="${doc.webLink != null}" >
 		                    	       <a href="<bean:write name="doc" property="webLink"/>">
-										<script type="text/javascript">
+		                    	       <bean:write name='doc' property='title'/>
+										<%-- <script type="text/javascript">
 											document.write(unescape("<bean:write name='doc' property='title'/>"));
-										</script>
+										</script> --%>
 										</a>
 									</c:if>
 		                         </div>

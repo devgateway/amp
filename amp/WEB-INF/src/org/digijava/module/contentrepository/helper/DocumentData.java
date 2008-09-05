@@ -74,11 +74,17 @@ public class DocumentData implements Comparable<DocumentData>{
 	public void setCalendar(String calendar) {
 		this.calendar = calendar;
 	}
+	public String getEscapedAmpDescription() {
+		return description.replace("'", "\\'").replace("\r", "").replace("\n", " ");
+	}
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getEscapedAmpTitle() {
+		return title.replace("'", "\\'");
 	}
 	public String getTitle() {
 		return title;

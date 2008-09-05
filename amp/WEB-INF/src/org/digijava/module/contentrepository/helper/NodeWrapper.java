@@ -1,5 +1,7 @@
 package org.digijava.module.contentrepository.helper;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -55,7 +57,8 @@ public class NodeWrapper {
 				newNode.checkout();
 			}
 			else{
-				newNode	= parentNode.addNode( myForm.getDocTitle() );
+				String encTitle	= URLEncoder.encode(myForm.getDocTitle(), "UTF-8");
+				newNode	= parentNode.addNode( encTitle );
 				newNode.addMixin("mix:versionable");
 			}
 			
@@ -143,7 +146,8 @@ public class NodeWrapper {
 				newNode.checkout();
 			}
 			else{
-				newNode	= parentNode.addNode(tempDoc.getTitle());
+				String encTitle	= URLEncoder.encode(tempDoc.getTitle(), "UTF-8");
+				newNode	= parentNode.addNode(encTitle);
 				newNode.addMixin("mix:versionable");
 			}
 			
@@ -199,9 +203,13 @@ public class NodeWrapper {
 	
 	private void populateNode(Node newNode, String doTitle, String docDescr, String docNotes, String contentType, Long cmDocType, String user) {
 		try{
-			newNode.setProperty( CrConstants.PROPERTY_TITLE, doTitle );
-			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, docDescr );
-			newNode.setProperty( CrConstants.PROPERTY_NOTES, docNotes );
+			String encTitle		= URLEncoder.encode(doTitle, "UTF-8");
+			String encDescr		= URLEncoder.encode(docDescr, "UTF-8");
+			String encNotes		= URLEncoder.encode(docNotes, "UTF-8");
+			
+			newNode.setProperty( CrConstants.PROPERTY_TITLE, encTitle );
+			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, encDescr );
+			newNode.setProperty( CrConstants.PROPERTY_NOTES, encNotes );
 			newNode.setProperty( CrConstants.PROPERTY_CONTENT_TYPE, contentType );
 			newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
 			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
@@ -259,7 +267,8 @@ public class NodeWrapper {
 		Property title		=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_TITLE);
 		if ( title != null ) {
 			try {
-				return title.getString();
+				String ret	= URLDecoder.decode( title.getString() ,"UTF-8");
+				return ret;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -272,7 +281,8 @@ public class NodeWrapper {
 		Property description	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_DESCRIPTION);
 		if ( description != null ) {
 			try {
-				return description.getString();
+				String ret	= URLDecoder.decode( description.getString() ,"UTF-8");
+				return ret;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -285,7 +295,8 @@ public class NodeWrapper {
 		Property notes	=  DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_NOTES);
 		if ( notes != null ) {
 			try {
-				return notes.getString();
+				String ret	= URLDecoder.decode( notes.getString() ,"UTF-8");
+				return ret;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -774,8 +774,8 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 		optionText	= '';
 
 	var myForm		= document.getElementById('typeId').form;
-	myForm.docTitle.value		= unescape(title);
-	myForm.docDescription.value	= unescape(description);
+	myForm.docTitle.value		= title;
+	myForm.docDescription.value	= description;
 	myForm.docNotes.value		= '';
 	myForm.uuid.value			= uuid;
 	myForm.fileData.value		= null;
@@ -848,6 +848,7 @@ function selectResourceType(isAUrl) {
 		elUrl.style.display		= "";
 	}
 	else {
+		alex					= 'ùù éè &é"\'(-è_çà';
 		elFile.style.display	= "";
 		elUrl.style.display		= "none";	
 	}
@@ -864,14 +865,14 @@ function setType(typeValue) {
 }
 
 function validateAddDocument() {
-	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü% ]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü%&' ]+");
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
 		msg = msg + "${translation_validation_title}" ;
 	else {
-		var title	= escape(document.forms['crDocumentManagerForm'].docTitle.value);
+		var title	= document.forms['crDocumentManagerForm'].docTitle.value;
 		var found	= regexp.exec(title);
 		//document.forms['crDocumentManagerForm'].docTitle.value = title;
 		if ( found != title ) {

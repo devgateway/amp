@@ -403,8 +403,8 @@
                     <td align="center" style="border-top:1px solid">
                       <select style="width:80">
                         <c:if test="${calendarViewForm.view == 'custom'}">
-                          <c:forEach var="donor" items="${ampCalendarGraph.ampCalendar.donors}">
-                            <option>${donor.name}</option>
+                          <c:forEach var="organization" items="${ampCalendarGraph.ampCalendar.organisations}">
+                            <option>${organization.name}</option>
                           </c:forEach>
                         </c:if>
                       </select>
@@ -413,10 +413,10 @@
                       <select style="width:80">
                         <c:forEach var="attendee" items="${ampCalendarGraph.ampCalendar.attendees}">
                           <c:if test="${!empty attendee.member}">
-                            <option>${attendee.member.memberName}</option>
+                            <option>${attendee.member.user.firstNames} ${attendee.member.user.lastName}</option>
                           </c:if>
                           <c:if test="${!empty attendee.team}">
-                            <option>${attendee.name}</option>
+                            <option>${attendee.team.name}</option>
                           </c:if>
                           <c:if test="${!empty attendee.guest}">
                             <option>${attendee.guest}</option>

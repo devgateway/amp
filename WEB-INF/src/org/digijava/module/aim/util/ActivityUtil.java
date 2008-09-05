@@ -2743,6 +2743,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 //	    			  execRate=c.getTotalDisbursements()/finalAmount1;
 //	    		  //System.out.println("1 execution rate: "+execRate);
 	    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, cc));
+	    		  System.out.println("1 execution rate: "+c.getExecutionRate());
 	    	  }
 	    	  else if(c.getContractTotalValue()!=null){
 //		    		   double usdAmount1=0;  
@@ -2764,8 +2765,12 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 //		    		  if(finalAmount1!=0)
 //		    			  execRate=c.getTotalDisbursements()/finalAmount1;
 		    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
+		    		  System.out.println("	222 execution rate: "+c.getExecutionRate());
 	    	  		}
-	    	  		else c.setExecutionRate(new Double(0));
+	    	  		else {
+	    	  			c.setExecutionRate(new Double(0));
+	    	  			System.out.println("333 execution rate: "+c.getExecutionRate());
+	    	  		}
 	    	  
 	      }
 	    }

@@ -527,16 +527,17 @@
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 															</a>
 														</td>
+														<td>
+															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
+												 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+															</a>
+														</td>
 													</tr>
 												</table>
+												
 											</td>
-											<td valign="bottom">
-											</td>
-											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-												 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>
+											
+											
 										<tr>
 											<td bgcolor="#ffff00">&nbsp;
 												

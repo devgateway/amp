@@ -15,8 +15,6 @@
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
 	</script>
-	
-	<jsp:include page="/repository/aim/view/workspacePopup.jsp" flush="true" />
 </logic:present>
 
 

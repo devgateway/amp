@@ -12,7 +12,7 @@
 		
     var myPanelWorkspaceframe = new YAHOOAmp.widget.Panel("newmyPWorkspaceframe", {
 		width:"480px",
-		height:"500px",
+		height:"550px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",
@@ -36,6 +36,7 @@
 	}
 	
 	function showPWorkspaceframe() {
+		initScriptsWorkspaceframe();
 		//alert('showPWorkspaceframe');
 		contentLocal = document.createElement('div');
 		contentLocal.setAttribute('id', 'myPWorkspaceframeContent');
@@ -93,7 +94,7 @@
 	window.onload = function() {
         currentWorkspaceframe.apply(currentWorkspaceframe);
    	};
-	initScriptsWorkspaceframe();
+	//initScriptsWorkspaceframe();
 
 </script>
 <style type="text/css">
@@ -103,12 +104,4 @@
 	  filter: alpha(opacity=80);
 	  background-color:#2f2f2f;
 	}
-	
-	#myPWorkspaceframe .content { 
-	    overflow:auto; 
-	    height:455px; 
-	    background-color:fff; 
-	    padding:10px; 
-	} 
-	
 </style>

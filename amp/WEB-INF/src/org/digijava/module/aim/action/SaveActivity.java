@@ -1734,9 +1734,8 @@ public class SaveActivity extends Action {
             	myActivity.setUpdatedBy(eaForm.getUpdatedBy());
             }
 
-            //if workspace has no manager, then there is no need to approve any activity.
-            AmpTeamMember teamMem=TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-            if(teamMem.getAmpTeam().getTeamLead()!=null){
+            //sometimes workspace has no team lead, but has manager...
+            if(TeamMemberUtil.getTeamHead(tm.getTeamId())!=null){
             	//check whether Activity is approved or needs Approval
             	if(approved && needNewAppForApproved&&!myActivity.getDraft()){
                     new ApprovedActivityTrigger(myActivity);

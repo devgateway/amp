@@ -22,16 +22,16 @@
           </c:if>
           <td align="center" >
             <span id="calendarFont">
-              <logic:equal name="calendarViewForm" property="view" value="yearly">
+              <c:if test="${calendarViewForm.view == 'yearly'}">
               ${calendarViewForm.baseDateBreakDown.year}
-              </logic:equal>
-              <logic:equal name="calendarViewForm" property="view" value="monthly">
+              </c:if>
+              <c:if test="${calendarViewForm.view == 'monthly'}">
 
                 <digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>,&nbsp;
                 ${calendarViewForm.baseDateBreakDown.year}
 
-              </logic:equal>
-              <logic:equal name="calendarViewForm" property="view" value="weekly">
+              </c:if>
+              <c:if test="${calendarViewForm.view == 'weekly'}">
 
                 <digi:trn key="aim:calendar:startmonthNameShort:${calendarViewForm.startDateBreakDown.monthNameShort}">${calendarViewForm.startDateBreakDown.monthNameShort}</digi:trn>
                 ${calendarViewForm.startDateBreakDown.dayOfMonth},&nbsp;
@@ -39,20 +39,20 @@
                 <digi:trn key="aim:calendar:endmonthNameShort:${calendarViewForm.endDateBreakDown.monthNameShort}">${calendarViewForm.endDateBreakDown.monthNameShort}</digi:trn>
                 ${calendarViewForm.endDateBreakDown.dayOfMonth},&nbsp;
                 ${calendarViewForm.endDateBreakDown.year}
-              </logic:equal>
-              <logic:equal name="calendarViewForm" property="view" value="daily">
+              </c:if>
+              <c:if test="${calendarViewForm.view == 'daily'}">
                 <digi:trn key="aim:calendar:dailymonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                 ${calendarViewForm.baseDateBreakDown.dayOfMonth},&nbsp;
                 ${calendarViewForm.baseDateBreakDown.year}
-              </logic:equal>
-              <logic:equal name="calendarViewForm" property="view" value="custom">
+              </c:if>
+              <c:if test="${calendarViewForm.view == 'custom'}">
                 <digi:trn key="aim:calendar:startmonthNameLong:${calendarViewForm.startDateBreakDown.monthNameLong}">${calendarViewForm.startDateBreakDown.monthNameLong}</digi:trn>
                 ${calendarViewForm.startDateBreakDown.dayOfMonth},&nbsp;
                 ${calendarViewForm.startDateBreakDown.year}&nbsp;-&nbsp;
                 <digi:trn key="aim:calendar:endmonthNameLong:${calendarViewForm.endDateBreakDown.monthNameLong}">${calendarViewForm.endDateBreakDown.monthNameLong}</digi:trn>
                 ${calendarViewForm.endDateBreakDown.dayOfMonth},&nbsp;
                 ${calendarViewForm.endDateBreakDown.year}
-              </logic:equal>
+              </c:if>
             </span>
           </td>
           <c:if test="${calendarViewForm.view != 'custom'}">
@@ -78,15 +78,15 @@
         <%--   f5f8e5     <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>><digi:trn key="calendar:EventName">Event Name</digi:trn></td>
         <c:if test="${calendarViewForm.view != 'custom'}">
           <c:if test="${calendarViewForm.view == 'monthly'}">
-            <logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
+            <c:forEach var="row" name="calendarViewForm" property="dateNavigator.items">
               <c:set var="firstItem" value="true"/>
-              <logic:iterate id="item" name="row">
+              <c:forEach var="item" name="row">
                 <c:if test="${firstItem}">
                   <td colspan="7" style="border-left:1px solid;">&nbsp;<digi:trn key="aim:calendar:month:${item.month}">${item.month}</digi:trn>&nbsp;${item.dayOfMonth} :(</td>
                 </c:if>
                 <c:set var="firstItem" value="false"/>
-              </logic:iterate>
-            </logic:iterate>
+              </c:forEach>
+            </c:forEach>
   </tr><tr>
           </c:if>--%>
 
@@ -108,20 +108,20 @@
                       <td valign="left"><digi:trn key="aim:s">S</digi:trn></td>
                       <td valign="left"><digi:trn key="aim:s">S</digi:trn></td>
                     </tr>
-                    <logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
+                    <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 
                       <tr vAlign="center" bgcolor="#ffffff">
 
-                        <logic:iterate id="item" name="row" >
+                        <c:forEach var="item" items="${row}" >
                           <td align="top" vAlign="top">
                             <c:if test="${!item.enabled}"><span style="color:#cbcbcb"></c:if>
                             ${item.dayOfMonth}
                             <c:if test="${!item.enabled}"></span></c:if>
                           </td>
-                        </logic:iterate>
+                        </c:forEach>
 
                       </tr>
-                      <logic:iterate id="ampCalendarGraph" name="calendarViewForm" property="ampCalendarGraphs">
+                      <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
 
 
 
@@ -141,15 +141,15 @@
                          ${calendarViewForm.baseDateBreakDown.month}
                         </c:set>
                         <tr vAlign="center" bgcolor="#ffffff">
-                          <logic:iterate id="item" name="row" >
+                          <c:forEach var="item" items="${row}" >
                             <td align="top" vAlign="top" width="14%" >
 
                               <c:if test="${startMonth==currentMonth}">
                                 <c:if test="${item.dayOfMonth==startDay&&item.enabled}">
                                   <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
-                                    <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
+                                    <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
                                     ${ampCalendarEventItem.title}
-                                    </logic:iterate>
+                                    </c:forEach>
                                   </digi:link>
                                 </c:if>
                               </c:if>
@@ -157,9 +157,9 @@
                               <c:if test="${startMonth!=currentMonth&&currentMonth==endMonth}">
                                 <c:if test="${item.dayOfMonth==startDay&&!item.enabled}">
                                   <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
-                                    <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
+                                    <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
                                     ${ampCalendarEventItem.title}
-                                    </logic:iterate>
+                                    </c:forEach>
                                   </digi:link>
                                 </c:if>
                               </c:if>
@@ -168,19 +168,19 @@
 
                               <c:if test="${startMonth!=currentMonth&&endMonth!=currentMonth}">
 
-                                <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems" length="1">
+                                <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                   <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
-                                </logic:iterate>
+                                </c:forEach>
 
 
                               </c:if>
 
                               <c:if test="${startMonth==currentMonth&&endMonth==currentMonth}">
-                                <c:if test="${item.dayOfMonth>startDay&&item.dayOfMonth<=endDay&&item.enabled}">
+                                <c:if test="${item.dayOfMonth>startDay && item.dayOfMonth<=endDay && item.enabled}">
 
-                                  <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems" length="1">
+                                  <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
-                                  </logic:iterate>
+                                  </c:forEach>
 
                                 </c:if>
                               </c:if>
@@ -188,31 +188,31 @@
                               <c:if test="${startMonth==currentMonth&&endMonth!=currentMonth}">
                                 <c:if test="${item.dayOfMonth>startDay&&item.enabled}">
 
-                                  <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems" length="1">
+                                  <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
-                                  </logic:iterate>
+                                  </c:forEach>
 
                                 </c:if>
-                                <c:if test="${item.dayOfMonth<endDay&&!item.enabled}">
+                                <c:if test="${item.dayOfMonth<endDay && !item.enabled}">
 
-                                  <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems" length="1">
+                                  <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
-                                  </logic:iterate>
+                                  </c:forEach>
 
                                 </c:if>
                               </c:if>
 
-                              <c:if test="${startMonth!=currentMonth&&endMonth==currentMonth}">
+                              <c:if test="${startMonth!=currentMonth && endMonth==currentMonth}">
                                 <c:if test="${item.dayOfMonth>startDay&&!item.enabled}">
-                                  <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems" length="1">
+                                  <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
-                                  </logic:iterate>
+                                  </c:forEach>
 
                                 </c:if>
                                 <c:if test="${item.dayOfMonth<=endDay&&item.enabled}">
-                                  <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems" length="1">
+                                  <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
-                                  </logic:iterate>
+                                  </c:forEach>
 
                                 </c:if>
                               </c:if>
@@ -221,19 +221,19 @@
 
                             </td>
 
-                          </logic:iterate>
+                          </c:forEach>
 
                         </tr>
 
 
-                      </logic:iterate>
+                      </c:forEach>
 
 
 
 
 
                       <tr height="1px" bgcolor="f5f8e5"><td colspan="7" ></td></tr>
-                    </logic:iterate>
+                    </c:forEach>
                   </table>
     </td>
               </tr>
@@ -278,7 +278,7 @@
                                                 </c:if>
                                               </td>
                                               <td>
-                                                <logic:iterate id="ampCalendarGraph" name="calendarViewForm" property="ampCalendarGraphs">
+                                                <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
 
                                                   <c:set var="startHours">
                                                   ${ampCalendarGraph.ampCalendar.calendarPK.startHour}
@@ -288,15 +288,15 @@
 
                                                   <c:if test="${hour==startHours}">
 
-                                                    <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~resetForm=true">
-                                                      <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
+                                                    <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
+                                                      <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
                                                       ${ampCalendarEventItem.title}
-                                                      </logic:iterate>
+                                                      </c:forEach>
                                                     </digi:link>
                                                     <br/>
 
                                                   </c:if>
-                                                </logic:iterate>
+                                                </c:forEach>
 
 
                                               </td>
@@ -326,13 +326,13 @@
 
 
               <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>>
-              <c:if test="${calendarViewForm.view != 'daily'&&calendarViewForm.view != 'monthly'}">
+              <c:if test="${calendarViewForm.view != 'daily' && calendarViewForm.view != 'monthly'}">
                 <digi:trn key="calendar:EventName">Event Name</digi:trn>
               </c:if>
 </td>
-<logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
+<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 
-  <logic:iterate id="item" name="row">
+  <c:forEach var="item" items="${row}">
 
 
 
@@ -367,8 +367,8 @@
 </td>
 </c:when>
     </c:choose>
-  </logic:iterate>
-</logic:iterate>
+  </c:forEach>
+</c:forEach>
 
 <c:if test="${calendarViewForm.view == 'custom'}">
   <td align="center" width="80"><digi:trn key="calendar:BodyEventTypes">Event Types</digi:trn></td>
@@ -385,14 +385,14 @@
 </c:if>
             </tr>
             <c:if test="${calendarViewForm.view != 'daily'&&calendarViewForm.view != 'monthly'}">
-              <logic:iterate id="ampCalendarGraph" name="calendarViewForm" property="ampCalendarGraphs">
+              <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
                 <tr>
                   <td align="center" style="border-top:1px solid;" width="80">
                     <div style="width:140;overflow:hidden">
                       <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
-                        <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
+                        <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
                         ${ampCalendarEventItem.title}
-                        </logic:iterate>
+                        </c:forEach>
                       </digi:link>
                     </div>
                   </td>
@@ -402,21 +402,26 @@
                     </td>
                     <td align="center" style="border-top:1px solid">
                       <select style="width:80">
-                        <logic:iterate id="donor" name="ampCalendarGraph" property="ampCalendar.donors">
-                          <option>${donor.name}</option>
-                        </logic:iterate>
+                        <c:if test="${calendarViewForm.view == 'custom'}">
+                          <c:forEach var="donor" items="${ampCalendarGraph.ampCalendar.donors}">
+                            <option>${donor.name}</option>
+                          </c:forEach>
+                        </c:if>
                       </select>
                     </td>
                     <td align="center" style="border-top:1px solid" width="80">
                       <select style="width:80">
-                        <logic:iterate id="attendee" name="ampCalendarGraph" property="ampCalendar.attendees">
-                          <logic:notEmpty name="attendee" property="guest">
+                        <c:forEach var="attendee" items="${ampCalendarGraph.ampCalendar.attendees}">
+                          <c:if test="${!empty attendee.member}">
+                            <option>${attendee.member.memberName}</option>
+                          </c:if>
+                          <c:if test="${!empty attendee.team}">
+                            <option>${attendee.name}</option>
+                          </c:if>
+                          <c:if test="${!empty attendee.guest}">
                             <option>${attendee.guest}</option>
-                          </logic:notEmpty>
-                          <logic:notEmpty name="attendee" property="user">
-                            <option>${attendee.user.firstNames}&nbsp;${attendee.user.lastName}</option>
-                          </logic:notEmpty>
-                        </logic:iterate>
+                          </c:if>
+                        </c:forEach>
                       </select>
                     </td>
                     <td align="center" style="border-top:1px solid">
@@ -424,7 +429,7 @@
                         <tr>
                   </c:if>
 
-                  <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems">
+                  <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                     <td align="center" valign="middle" <c:if test="${calendarViewForm.view == 'custom'}">width="25%"</c:if><c:if test="${calendarViewForm.view != 'custom'}">style="border-top:1px solid; border-left:1px solid"</c:if>>
                     <table cellpadding="0" cellspacing="0" width="100%" border="0">
                       <tr>
@@ -440,13 +445,13 @@
                       </tr>
                     </table>
 </td>
-                  </logic:iterate>
+                  </c:forEach>
 
                   <c:if test="${calendarViewForm.view == 'custom'}">
                         </tr></table></td>
                   </c:if>
                 </tr>
-              </logic:iterate>
+              </c:forEach>
 </c:if>
                       </table>
 </td>

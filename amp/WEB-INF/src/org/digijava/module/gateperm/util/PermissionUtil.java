@@ -71,8 +71,10 @@ public final class PermissionUtil {
 	
 	public static void putInScope(HttpSession session ,MetaInfo key, Object value) {
 		Map scope=getScope(session);
-	    scope.put(key, value);
-	    logger.debug("Object ["+key+"] with value ["+value.toString()+"] has been placed in the permission scope");
+		scope.put(key, value);
+		if (value!=null){
+			logger.debug("Object ["+key+"] with value ["+value.toString()+"] has been placed in the permission scope");
+		}
 	}
 	
 	public static Object getFromScope(HttpSession session,MetaInfo key) {

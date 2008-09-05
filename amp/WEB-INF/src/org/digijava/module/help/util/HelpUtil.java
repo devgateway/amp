@@ -32,9 +32,11 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
+import org.digijava.module.translation.util.DbUtil;
 
 public class HelpUtil {
 	private static Logger logger = Logger.getLogger(HelpUtil.class);
@@ -290,6 +292,27 @@ public class HelpUtil {
 	return true;	
 	}
 	
+    public static List<Editor> getAllHelpData() throws 
+    EditorException {
+	
+	Session session = null;
+	List<Editor> helpTopics = new ArrayList<Editor>();
+	
+	try {
+		session = PersistenceManager.getRequestDBSession();
+		 Query q = session.createQuery(" from e in class " +
+                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
+
+		helpTopics = q.list();
+		
+		
+	} catch (Exception e) {
+		logger.error("Unable to load help data");
+			throw new EditorException("Unable to Load Help data", e);
+	}
+	return helpTopics;
+}
+	
 	 public static String renderLevelGroup(Collection topics) {
 		String retVal="";
 		Iterator iter = topics.iterator();
@@ -304,7 +327,7 @@ public class HelpUtil {
 		return retVal;
 	}
 	
-	 public static String renderTopicsTree(Collection topics) {
+	 public static String renderTopicsTree(Collection topics,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		String retVal = "";
 		Iterator iter = topics.iterator();
@@ -319,16 +342,41 @@ public class HelpUtil {
 			retVal += "<img id=\"img_" + topic.getHelpTopicId()+ "\" onclick=\"expandProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_plus.gif\"/>\n";
 			}
 			retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
-			retVal += "<a href=\"../../help/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+topic.getTopicKey()+"</a>";
+			if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
+			retVal += "<a href=\"../../help/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
+			}
 			retVal += "</div>\n";
 			// hidden div start
 			retVal += "<div id=\"div_theme_"+ topic.getHelpTopicId()+ "\" style=\"display:none;padding:4px;\">\n";
 			if (item.getChildren() != null || item.getChildren().size() > 0) {
-				retVal += renderTopicsTree(item.getChildren());
+				retVal += renderTopicsTree(item.getChildren(),request);
 			}
 			retVal += "</div>\n";
 		}
 		return retVal;
 	}
-	
+	 public static String getTrn(String key, String defResult, HttpServletRequest request){
+		 //CategoryManagerUtil cat = new CategoryManagerUtil();
+		 //return CategoryManagerUtil.translate(key, request, defResult);
+		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+		Long	siteId	= RequestUtils.getSite(request).getId();
+		
+		Message m = null;
+		
+		try {
+			m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 if (m == null)
+		 {
+			 return defResult;
+		 }
+		 else
+		 {
+			 return m.getMessage();
+		 }
+		 
+	 }
 }

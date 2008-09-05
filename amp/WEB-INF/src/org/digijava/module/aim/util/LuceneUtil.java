@@ -476,6 +476,16 @@ public class LuceneUtil {
 			if (searchString.charAt(0) == '*')
 				searchString = searchString.substring(1);
 			//AMP-3806
+			searchString = searchString.replace("+","\\+");
+			searchString = searchString.replace("-","\\-");
+			searchString = searchString.replace("&","\\&");
+			searchString = searchString.replace("(","\\(");
+			searchString = searchString.replace(")","\\)");
+			searchString = searchString.replace("{","\\{");
+			searchString = searchString.replace("{","\\}");
+			searchString = searchString.replace("[","\\[");
+			searchString = searchString.replace("]","\\]");
+		
 			query = parser.parse("+"+searchString+"*");
 			hits = indexSearcher.search(query);
 		} catch (Exception e1) {

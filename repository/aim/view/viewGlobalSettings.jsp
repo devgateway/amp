@@ -440,6 +440,34 @@ function setIndex(index){
 						                                    <%= sdate +" "+formatter.format( new java.util.Date() ) %>  
 				                                    	
 				                                    	</c:when>
+				                                    	<c:when test='${type == "t_timeout_currency_update"}'>
+				                                            <% 
+					                                    		String timeoutValue	= globalSett.getGlobalSettingsValue();
+					                                    		int timeout		= Integer.parseInt(timeoutValue);
+					                                    		//g_range=timeout;
+				                                    		%>
+				                                    		
+				                                    		<select styleClass="inp-text" name="gsfValue">
+				                                    			<% for (int k=1; k<=10; k+=1) {
+				                                    					if ( k == timeout ) {
+				                                    			%>
+				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
+				                                    			<%
+					                                    				}
+					                                    				else {
+					                                    		%>
+					                                    				<option value="<%=k %>"><%=k %></option>
+					                                    		<%
+					                                    				}
+				                                    				} 
+				                                    			%>
+				                                    			<option value="15">15</option>
+				                                    			<option value="20">20</option>
+				                                    			<option value="25">25</option>
+				                                    			<option value="30">30</option>
+				                                    		</select>
+				                                    	    <digi:trn key="aim:globalSettings:minutes">(Minutes)</digi:trn>
+				                                    	</c:when>
 				                                    	<c:when test='${type == "t_static_range"}'>
 				                                    		<% 
 					                                    		String dateValues	= globalSett.getGlobalSettingsValue();

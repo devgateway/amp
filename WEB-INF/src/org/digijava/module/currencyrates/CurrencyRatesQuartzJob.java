@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.helper.DateConversion;
@@ -30,7 +31,7 @@ public class CurrencyRatesQuartzJob implements Job {
 	private WSCurrencyClient myWSCurrencyClient;
 	private String baseCurrency;
 	private Date lastExcecution;
-	private static final int tries = 2;
+	private static final int tries = 3;
 
 	public CurrencyRatesQuartzJob() {
 		myWSCurrencyClient = DailyCurrencyRateSingleton.getInstance()
@@ -58,11 +59,12 @@ public class CurrencyRatesQuartzJob implements Job {
 				.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
 
 		String[] ampCurrencies = this.getCurrencies(currencies);
+		HashMap<String, Double> wsCurrencyValues=null;
 
 		try {
-			HashMap<String, Double> wsCurrencyValues=null;
-			int mytries = 0;			
-			while (mytries < tries && ampCurrencies!=null) {
+			
+			int mytries = 3;			
+			while (mytries <= tries && ampCurrencies!=null) {
 				logger.info("Attempt.........................." + mytries);
 				wsCurrencyValues = this.myWSCurrencyClient
 						.getCurrencyRates(ampCurrencies, baseCurrency);
@@ -78,6 +80,9 @@ public class CurrencyRatesQuartzJob implements Job {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		if(ampCurrencies!=null){
+			sendEmailToAdmin();
 		}
 		logger
 				.info("END Getting Currencies Rates from WS............................."
@@ -190,5 +195,14 @@ public class CurrencyRatesQuartzJob implements Job {
 			logger.info(curr[i].trim() + ": "
 					+ currencyValues.get(curr[i].trim()));
 		}
+	}
+	void sendEmailToAdmin(){
+		System.out.println("There are connection error");
+//		try {
+//			DgEmailManager.sendMail("msotero@dgfoundation.org", "something is wrong","Please, check your internet connection and Timeout Daily Currency Update");
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		
 	}
 }

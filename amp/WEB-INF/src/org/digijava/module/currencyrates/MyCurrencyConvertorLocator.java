@@ -22,7 +22,7 @@ public class MyCurrencyConvertorLocator extends CurrencyConvertorLocator {
         try {
             org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoapStub _stub = new org.digijava.module.currencyrates.NET.webserviceX.www.CurrencyConvertorSoapStub(portAddress, this);
             _stub.setPortName(getCurrencyConvertorSoapWSDDServiceName());
-            _stub.setTimeout(minutes * 1000);
+            _stub.setTimeout(minutes * 1000 * 60);
             return _stub;
         }
         catch (org.apache.axis.AxisFault e) {

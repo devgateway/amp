@@ -7,13 +7,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.calendar.exception.CalendarException;
+import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -63,7 +67,7 @@ public class CurrencyRatesQuartzJob implements Job {
 
 		try {
 			
-			int mytries = 3;			
+			int mytries = 1;			
 			while (mytries <= tries && ampCurrencies!=null) {
 				logger.info("Attempt.........................." + mytries);
 				wsCurrencyValues = this.myWSCurrencyClient
@@ -84,7 +88,6 @@ public class CurrencyRatesQuartzJob implements Job {
 		if(ampCurrencies!=null){
 			sendEmailToAdmin();
 		}
-		sendEmailToAdmin();
 		logger
 				.info("END Getting Currencies Rates from WS............................."
 						+ formatter.format(new Date()));
@@ -197,13 +200,21 @@ public class CurrencyRatesQuartzJob implements Job {
 					+ currencyValues.get(curr[i].trim()));
 		}
 	}
+
 	void sendEmailToAdmin(){
-		System.out.println("There are connection error");
 		try {
-			DgEmailManager.sendMail("msotero@dgfoundation.org", "something is wrong","Please, check your internet connection and Timeout Daily Currency Update");
-		} catch (Exception e) {
+			Collection<User> users = (List <User>)AmpDbUtil.getUsers();
+			for(User user:users){
+				if(user.isGlobalAdmin()){
+					System.out.println("An email has been sent to "+ user.getFirstNames()+" "+user.getLastName() +"-"+user.getEmail());
+					DgEmailManager.sendMail(user.getEmail(), "Daily Currency Rates Update ERROR","Please, check your internet connection and Timeout at Admin Tools > Global Settings >Timeout Daily Currency Update.");
+				}
+			}
+		} catch (CalendarException e) {
 			e.printStackTrace();
-		}
-		
+		} catch (Exception e) {
+		    e.printStackTrace();
+	    }
+		System.out.println("There are connection error");
 	}
 }

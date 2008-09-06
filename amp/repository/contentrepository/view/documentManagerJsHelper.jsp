@@ -460,7 +460,7 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	
 	var tableTemplateElement		= document.getElementById("tableTemplate");
 	
-	newDiv.innerHTML				= tableTemplateElement.innerHTML + "<br />" + "<br />";
+	newDiv.innerHTML				= tableTemplateElement.innerHTML + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />" + "<br />";
 	
 	var otherDocumentsDivElement	= document.getElementById(otherDocumentsDiv);
 

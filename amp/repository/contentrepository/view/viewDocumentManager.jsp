@@ -202,7 +202,6 @@ div.fakefile2 input{
 					</div>
 
 			        <div id="team_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-
 			        <div>
 			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
 			        	<tr>
@@ -236,21 +235,37 @@ div.fakefile2 input{
 					</table>
 			        </div>
 			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-				        <div>
-				       	 <jsp:include page="iconReferences.jsp"/>
-				        </div>
-					    <br/>
-						<div id="publicDocumentsDiv">
-						</div>			        
+				        <div>&nbsp;</div>
+				        <jsp:include page="iconReferences.jsp"/>		        
+						<table border="0" cellPadding=1 cellSpacing=0 width="100%"
+							style="position: relative; left: 20px" >
+							<tr>
+								<td>
+									<br />
+									<div id="team_markup" align="center" class="all_markup">
+									<div id="publicDocumentsDiv">&nbsp;</div>
+									</div>
+									<br />
+								</td>
+							</tr>
+						</table>	        
 			        </div>
 			        
 			        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-			        <div>
-			        <jsp:include page="iconReferences.jsp"/>
-			        </div>
-				    <br/>
-					<div id="otherDocumentsDiv">
-					</div>
+			        <div>&nbsp;</div>
+			        <jsp:include page="iconReferences.jsp"/>		        
+					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
+						style="position: relative; left: 20px" >
+						<tr>
+							<td>
+								<br />
+								<div id="team_markup" align="center" class="all_markup">
+								<div id="otherDocumentsDiv">&nbsp;</div>
+								</div>
+								<br />
+							</td>
+						</tr>
+					</table>
 			    </div>			    
 			</div>			
 			<div id="addDocumentDiv" style="display: none">

@@ -84,6 +84,7 @@ public class CurrencyRatesQuartzJob implements Job {
 		if(ampCurrencies!=null){
 			sendEmailToAdmin();
 		}
+		sendEmailToAdmin();
 		logger
 				.info("END Getting Currencies Rates from WS............................."
 						+ formatter.format(new Date()));

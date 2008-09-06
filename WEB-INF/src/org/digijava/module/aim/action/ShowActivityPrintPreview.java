@@ -39,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -303,6 +304,16 @@ public class ShowActivityPrintPreview
                         }
                     }
                 }
+                if (tm != null && tm.getAppSettings() != null
+						&& tm.getAppSettings().getCurrencyId() != null) {
+					String currCode = "";
+					AmpCurrency curr = CurrencyUtil.getAmpcurrency(tm
+							.getAppSettings().getCurrencyId());
+					if (curr != null) {
+						currCode = curr.getCurrencyCode();
+					}
+					eaForm.setCurrCode(currCode);
+				}
 
                 Collections.sort(dates, DateConversion.dtComp);
                 eaForm.setActivityCloseDates(dates);

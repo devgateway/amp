@@ -12,6 +12,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
+<digi:instance property="aimEditActivityForm" />
 
 <!--start commitments-->
 <tr bgcolor="#ffffff">
@@ -69,7 +70,7 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-                                  <c:out value="${funding.subtotalPlannedCommitments}"/>  <c:out value="${aimEditActivityForm.currCode}"/>
+                  <c:out value="${funding.subtotalPlannedCommitments}"/>  <c:out value="${aimEditActivityForm.currCode}"/>
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

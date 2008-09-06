@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<digi:instance property="aimEditActivityForm" />
+
 	<!-- Disbursement orders-->
 	<!-- Comment added by mouhamad for burkina AMP-3361
 	<tr bgcolor="#ffffff">

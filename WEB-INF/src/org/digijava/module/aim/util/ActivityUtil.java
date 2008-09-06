@@ -3348,14 +3348,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
 
     public String actualAmount() {
-      if (actualAmount == null) {
+      if (actualAmount == null || actualAmount == 0) {
         return "N/A";
       }
       return df.format(actualAmount);
     }
 
     public String plannedAmount() {
-      if (plannedAmount == null) {
+      if (plannedAmount == null|| plannedAmount == 0) {
         return "N/A";
       }
       return df.format(plannedAmount);
@@ -3417,68 +3417,21 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         result.setProposedAmout(tempProposed);
       }
       else {
-        Set fundings = act.getFunding();
-        if (fundings != null) {
-          for (Iterator iter = fundings.iterator(); iter.hasNext(); ) {
-            AmpFunding funding = (AmpFunding) iter.next();
-            Set details = funding.getFundingDetails();
-            if (details != null) {
-              for (Iterator detailIterator = details.iterator();detailIterator.hasNext(); ) {
-                AmpFundingDetail detail = (AmpFundingDetail) detailIterator.next();
-                Integer transType = detail.getTransactionType();
 
-                Double amount = new Double(detail.getTransactionAmount().doubleValue());
+          Set fundings = act.getFunding();
+          if (fundings != null) {
+              Iterator fundItr = act.getFunding().iterator();
+              while(fundItr.hasNext()) {
+                  AmpFunding ampFunding = (AmpFunding) fundItr.next();
+				  Collection fundDetails = ampFunding.getFundingDetails();
 
-                Integer adjastType = detail.getAdjustmentType();
-
-                //AMP-1403 workaround
-                String currencyCode = "USD";
-                if (detail.getAmpCurrencyId() != null
-                    && detail.getAmpCurrencyId().getCurrencyCode() != null
-                    &&
-                    detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
-                  currencyCode = detail.getAmpCurrencyId().getCurrencyCode();
-                } //end of AMP-1403
-
-                if (transType != null
-                    && transType.intValue() == Constants.COMMITMENT
-                    && adjastType != null && amount != null
-                    && detail.getAmpCurrencyId() != null) {
-
-                	if (detail.getFixedExchangeRate()!=null && detail.getFixedExchangeRate().doubleValue()!=1d
-                			&& tocode!=null && tocode.trim().equals("USD")){
-                		//in this case we use fixed exchange rates to convert to USD, see AMP-1821,
-
-                		//convert to USD with fixed rate secified in the FundingDetail
-            			double tempAmount = amount.doubleValue()/detail.getFixedExchangeRate().doubleValue();
-            			//sett to correct place
-                		if (adjastType.intValue() == Constants.ACTUAL) {
-                			result.AddActual(tempAmount);
-                		}else if (adjastType.intValue() == Constants.PLANNED) {
-                			result.AddPalenned(tempAmount);
-                		}
-
-                	}else{
-                		//calculate in old way
-
-                		double tempAmount = CurrencyWorker.convert(amount.doubleValue(),currencyCode);
-
-            			//sett to correct place
-                		if (adjastType.intValue() == Constants.ACTUAL) {
-                			result.AddActual(tempAmount);
-                		}
-                		if (adjastType.intValue() == Constants.PLANNED) {
-                			result.AddPalenned(tempAmount);
-                		}
-
-                	}
-
-                }
+                  org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
+                  calculations.doCalculations(fundDetails, tocode);
+                  result.AddActual(calculations.getTotActualComm().doubleValue());
+                  result.AddPalenned(calculations.getTotPlannedComm().doubleValue());
               }
-            }
           }
         }
-      }
 
     }
     return result;

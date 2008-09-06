@@ -780,6 +780,7 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 	myForm.uuid.value			= uuid;
 	myForm.fileData.value		= null;
 	myForm.webLink.value		= '';
+	myForm.docType.disabled		= false;
 	if (isAUrl == null) 
 		isAUrl	= false;
 		

@@ -75,7 +75,8 @@ public class DocumentData implements Comparable<DocumentData>{
 		this.calendar = calendar;
 	}
 	public String getEscapedAmpDescription() {
-		return description.replace("'", "\\'").replace("\r", "").replace("\n", " ");
+		String ret = description.replace("'", "\\'").replace("\r", "").replace("\n", "\\n");
+		return ret;
 	}
 	public String getDescription() {
 		return description;

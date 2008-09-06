@@ -45,7 +45,8 @@ public final class DailyCurrencyRateSingleton {
 	public void setTimeout(int minutes){
 		if(minutesTimeout!=minutes){//to avoid creating a new object
 			minutesTimeout = minutes;
-			this.myWSCurrencyClient = new WSCurrencyClientImp(minutes);			
+			this.myWSCurrencyClient = new WSCurrencyClientImp(minutes);	
+			logger.info("Daily Currency Rate Update Timout changed to "+ minutes + "minutes");
 		}
 	}
 

@@ -215,6 +215,6 @@ public class CurrencyRatesQuartzJob implements Job {
 		} catch (Exception e) {
 		    e.printStackTrace();
 	    }
-		System.out.println("There are connection error");
+		logger.info("There were connection error trying to update currencies");
 	}
 }

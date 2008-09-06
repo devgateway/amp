@@ -8,6 +8,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -26,6 +27,7 @@ public final class DailyCurrencyRateSingleton {
 	private WSCurrencyClient myWSCurrencyClient;
 	private String baseCurrency; 
 	private Date lastExcecution;
+	private int minutesTimeout=4;
 
 	private DailyCurrencyRateSingleton() {
 		myWSCurrencyClient = new WSCurrencyClientImp();
@@ -39,6 +41,12 @@ public final class DailyCurrencyRateSingleton {
 					instance = new DailyCurrencyRateSingleton();
 			}
 		return instance;
+	}
+	public void setTimeout(int minutes){
+		if(minutesTimeout!=minutes){//to avoid creating a new object
+			minutesTimeout = minutes;
+			this.myWSCurrencyClient = new WSCurrencyClientImp(minutes);			
+		}
 	}
 
 	public void start(int hour, int min, String ampm, int hour_repeat,
@@ -88,7 +96,7 @@ public final class DailyCurrencyRateSingleton {
 			status = false;
 			logger.info("Daily Currency Rate Service ...... STOPED");
 		}else{
-			logger.info("Daily Currency Rate Service ......already STOPED");
+			logger.info("Daily Currency Rate Service ......already STOPPED");
 		}
 	}
 

@@ -18,20 +18,21 @@ public class CurrencyRatesService extends AbstractServiceImpl {
 	protected void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 		String serviceEnabled = FeaturesUtil
-				.getGlobalSettingValue("Enabled Daily Currency Rates Update");
+				.getGlobalSettingValue("Daily Currency Rates Update Enabled");
 		String ampmHour = FeaturesUtil
 				.getGlobalSettingValue("Daily Currency Rates Update Hour");
+		String timeout = FeaturesUtil.getGlobalSettingValue("Daily Currency Rates Update Timeout");
 		if (serviceEnabled != null
 				&& "On".compareToIgnoreCase(serviceEnabled) == 0
 				&& ampmHour != null) {
-			CurrencyRatesService.startCurrencyRatesService(ampmHour);
+			CurrencyRatesService.startCurrencyRatesService(ampmHour, timeout);
 		}
 	}
 
 	/**
 	 * @param hourampm
 	 */
-	public static void startCurrencyRatesService(String hourampm) {
+	public static void startCurrencyRatesService(String hourampm, String timeout) {
 		String[] hourminampm = hourampm.split(" ");
 		String[] hourmin = hourminampm[0].split(":");
 		String hour = hourmin[0];
@@ -39,6 +40,7 @@ public class CurrencyRatesService extends AbstractServiceImpl {
 		String ampm = hourminampm[1];
 		DailyCurrencyRateSingleton dcrf = DailyCurrencyRateSingleton
 				.getInstance();
+		dcrf.setTimeout(Integer.parseInt(timeout));
 		dcrf.start(Integer.parseInt(hour), Integer.parseInt(min), ampm);
 	}
 

@@ -1,5 +1,6 @@
 package org.digijava.module.currencyrates;
 
+import java.net.NoRouteToHostException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,15 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 			e.printStackTrace();
 		}
 	}
-
+	public WSCurrencyClientImp(int minutes) {
+		this.currencyConvertor = null;
+		try {
+			this.currencyConvertor = new MyCurrencyConvertorLocator()
+					.getCurrencyConvertorSoap(minutes);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
 	public HashMap<String, Double> getCRatesBasedUSD(String[] currencyCode) {
 		HashMap<String, Double> values=null;
 		try {
@@ -60,11 +69,15 @@ public class WSCurrencyClientImp implements WSCurrencyClient {
 				}
 			} catch (IllegalArgumentException e) {
 				rate = WSCurrencyClient.INVALID_CURRENCY_CODE;
-				e.getStackTrace();
+				e.getStackTrace();			
+			} catch ( org.apache.axis.AxisFault af) {
+				System.out.println( "fault reason: " + af.getFaultReason() );
+				rate = WSCurrencyClient.CONNECTION_ERROR;
 			} catch (RemoteException e) {
 				rate = WSCurrencyClient.CONNECTION_ERROR;
 				e.printStackTrace();
 			}
+			
 			values.put(currencyCode[i], rate);
 		}
 		return values;

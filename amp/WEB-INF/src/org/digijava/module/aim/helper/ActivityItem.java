@@ -99,6 +99,7 @@ public class ActivityItem {
 			id = entity.getAmpActivityId();
 			name = entity.getName();
 			name = name.replaceAll("&","&amp;");
+			name = name.replaceAll("\"","&quot;");
 			try {
 				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode);
 				proposedAmount=amounts.proposedAmout();

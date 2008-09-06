@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <!-- expenditures -->
+<digi:instance property="aimEditActivityForm" />
 
 <tr bgcolor="#FFFFCC">
 	<td colspan="4" style="text-transform: uppercase"><a

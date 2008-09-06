@@ -198,11 +198,11 @@ public class CurrencyRatesQuartzJob implements Job {
 	}
 	void sendEmailToAdmin(){
 		System.out.println("There are connection error");
-//		try {
-//			DgEmailManager.sendMail("msotero@dgfoundation.org", "something is wrong","Please, check your internet connection and Timeout Daily Currency Update");
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			DgEmailManager.sendMail("msotero@dgfoundation.org", "something is wrong","Please, check your internet connection and Timeout Daily Currency Update");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 }

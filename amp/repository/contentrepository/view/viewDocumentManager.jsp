@@ -309,7 +309,7 @@ div.fakefile2 input{
 								<html:submit styleClass="dr-menu" onclick="return validateAddDocumentLocal()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 							</td>
 							<td align="left">
-								&nbsp;<button class="dr-menu" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
+								&nbsp;<button class="dr-menu buton" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
 							</td>
 						</tr>
 					</table>

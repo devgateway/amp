@@ -151,7 +151,7 @@
     
     function callUrl(indexId){
 	    var async=new Asynchronous();
-	    //async.complete=mapCallBack;
+	    async.complete=mapCallBack;
 	    async.call("/aim/editIPAContract.do?deleteEU&indexId="+indexId);
     }
     

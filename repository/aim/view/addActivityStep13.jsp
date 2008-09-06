@@ -143,6 +143,12 @@
 <script language="JavaScript">
     <!--
     
+    //DO NOT REMOVE THIS FUNCTION --- AGAIN!!!!
+    function mapCallBack(status, statusText, responseText, responseXML){
+         window.location.reload();
+    }
+    
+    
     function callUrl(indexId){
 	    var async=new Asynchronous();
 	    //async.complete=mapCallBack;

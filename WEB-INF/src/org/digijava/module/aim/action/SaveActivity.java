@@ -450,12 +450,25 @@ public class SaveActivity extends Action {
     					}
     					//Checks if it's 100%
     					if(FeaturesUtil.isVisibleField("Regional Percentage", ampContext)){
-    						if(totalPercentage != 100){
-    							errors.add("locationPercentageSumWrong",
- 	                                   new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
-    							saveErrors(request, errors);
-    							return mapping.findForward("addActivityStep2");
-    						}
+    					
+    						if (FeaturesUtil.isVisibleField("Validate Mandatory Regional Percentage",ampContext)){
+	    						if(totalPercentage != 100){
+	    							errors.add("locationPercentageSumWrong",new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
+	    							saveErrors(request, errors);
+	    							return mapping.findForward("addActivityStep2");
+	    						}
+	    					}else{
+	    						
+	    						if (totalPercentage != 100 && totalPercentage != 0){
+	    							errors.add("locationPercentageSumWrong",new ActionError("error.aim.addActivity.locationPercentageSumWrong"));
+	    							saveErrors(request, errors);
+	    							return mapping.findForward("addActivityStep2");
+	    			
+	    							
+	    						}
+	    						
+	    					}
+    						
     					}
                     }
 

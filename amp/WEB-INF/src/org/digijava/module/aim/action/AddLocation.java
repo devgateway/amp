@@ -332,7 +332,7 @@ public class AddLocation extends Action {
    				DbUtil.delete(obj);
    			}
    		}
-                if ( categoryLevel.longValue() == 0 ){ //is country
+        if ( categoryLevel.longValue() == 0 ){ //is country
    			Country obj = null;
    			if (addForm.getCountryId() != null) {
                             Collection <Country>countries=FeaturesUtil.getDefaultCountry(addForm.getCountryId());

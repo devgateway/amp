@@ -159,8 +159,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display>
 <feature:display name="Widget Places" module="WIDGETS"></feature:display>
 <feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display>
-
-<feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display module="Funding" name="Disbursements"></feature:display>
 
 

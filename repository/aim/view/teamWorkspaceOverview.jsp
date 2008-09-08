@@ -51,24 +51,13 @@ function update(action) {
 }
 
 function updateChild(action) {
-	var val1  = document.aimUpdateWorkspaceForm.category.value;
-	var val2  = document.aimUpdateWorkspaceForm.workspaceType.value;
-	var msg='';
-	if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
-		msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
-		alert(msg);
-		return false;
-	}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
-		msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
-		alert(msg);
-		return false;
-	}else {
+
 		var id = document.aimUpdateWorkspaceForm.teamId.value;
 		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
 		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
 		document.aimUpdateWorkspaceForm.target = "_self";
 		document.aimUpdateWorkspaceForm.submit();
-	}
+	
 	
 }
 

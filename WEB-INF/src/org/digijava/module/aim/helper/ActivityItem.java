@@ -124,7 +124,6 @@ public class ActivityItem {
 	 * @return String representing XML of the Activity.
 	 */
 	public String getXml() {
-		DecimalFormat df=NpdUtil.getNumberFormatter();
 		String result = "";
 		if (id != null) {
 			result += "<" + TAG_NAME;

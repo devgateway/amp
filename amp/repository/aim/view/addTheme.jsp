@@ -78,7 +78,7 @@
 				<tr bgColor="blue"><td height="1" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="15" align="center" colspan="2"><h4>
-						Program Manager </h4>
+						<digi:trn key="aim:programManager">Program Manager</digi:trn> </h4>
 				</td>
 				</tr>
 				<tr bgColor="blue"><td height="1" colspan="2"></td></tr>

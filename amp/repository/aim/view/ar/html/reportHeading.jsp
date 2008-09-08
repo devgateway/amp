@@ -34,6 +34,18 @@
 	        	<logic:notEqual name="widget" scope="request" value="true">
 	            	<html:link  style="font-family: Arial;font-size: 11px;text-decoration: none;color: black;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 	              		<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+                        <c:if test="${reportHeading == 'Undisbursed Balance'}">
+                                <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
+                        </c:if>
+                        <c:if test="${reportHeading == 'Cumulative Commitment'}">
+                            <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:CumulativeCommitmentToolip">Sum of all ACTUAL COMMITMENTS independent of filters</digi:trn>">
+                        </c:if>
+                        <c:if test="${reportHeading == 'Cumulative Disbursement'}">
+                            <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:CumulativeDisbursementToolip">Sum of all ACTUAL DISBURSEMENTS independent of filters</digi:trn>">
+                        </c:if>
+                        <c:if test="${reportHeading == 'Undisbursed Cumulative Balance'}">
+                            <img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedCumulativeBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
+                        </c:if>
 	              	</html:link>
 	            </logic:notEqual>
             

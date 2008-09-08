@@ -130,7 +130,7 @@ var myTabsObject;
 		divAllTabs.style.display 	= "block";
 		allTabsPanel.setBody(divAllTabs);
 		<logic:notEmpty name="filterCurrentReport" scope="session">
-		if(!tabExists('Tab-<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}"/>'))
+		if(!tabExists('Tab-<c:out value="${filterCurrentReport.name}"/>'))
 			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />");
 		</logic:notEmpty>	
 	}
@@ -227,9 +227,15 @@ function toggleSettings(){
 	
 	var tabName	= "Tab-By Project";
 	<logic:empty name="filterCurrentReport" scope="session">
-		<logic:notEmpty name="myTabs" scope="session">
-				tabName	= 'Tab-${myTabs[0].name}';
+		<logic:notEmpty name="defaultTeamReport" scope="session">
+				tabName	= 'Tab-${defaultTeamReport.name}';
 		</logic:notEmpty>
+
+		<logic:empty name="defaultTeamReport" scope="session">
+			<logic:notEmpty name="myTabs" scope="session">
+					tabName	= 'Tab-${myTabs[0].name}';
+			</logic:notEmpty>
+		</logic:empty>
 	</logic:empty>
 	<logic:notEmpty name="filterCurrentReport" scope="session">
 		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';

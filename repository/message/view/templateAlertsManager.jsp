@@ -72,7 +72,8 @@ div.fakefile2 input{
 
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this workspace?");
+               var confirmMsg="<digi:trn key='message:template:deleteTemplate'>Delete this Template?</digi:trn>";
+               var flag = confirm(confirmMsg);
 		return flag;
 	}	
 	

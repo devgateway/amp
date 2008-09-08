@@ -153,23 +153,19 @@ public class LocationManager extends Action {
 									addForm.setWoreda(LocationUtil.getAllWoredasUnderZone(addForm.getZoneId()));
 
 									// Checking whether this zone is currently being referenced by some activity
-									// if yes then 'delete' link is not shown against this zone by setting zoneFlag='no'
-									//AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
-                                                                          boolean isAssignedToActivity=LocationUtil.isAssignedToActivity(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
-									//if (addForm.getWoreda().isEmpty()) {
-										if (isAssignedToActivity) {
-								   			addForm.setZoneFlag("no");
-								   		} else
-								   			addForm.setZoneFlag("yes");
-								   	//}
-									//else {
-										if (addForm.getLevel().equals("nextworeda")) {
-											if (isAssignedToActivity)
-												addForm.setWoredaFlag("no");
-											else
-												addForm.setWoredaFlag("yes");
-								   		}
-									//}
+
+									boolean isAssignedToActivity=LocationUtil.isAssignedToActivity(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+									if (!addForm.getWoreda().isEmpty() || isAssignedToActivity) {
+							   			addForm.setZoneFlag("no");
+							   		} else{
+							   			addForm.setZoneFlag("yes");
+							   		}
+									if (addForm.getLevel().equals("nextworeda")) {
+										if (isAssignedToActivity)
+											addForm.setWoredaFlag("no");
+										else
+											addForm.setWoredaFlag("yes");
+							   		}
 
 								}
 					 } else {

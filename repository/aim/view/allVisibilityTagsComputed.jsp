@@ -56,7 +56,6 @@
 <module:display name="WIDGETS"></module:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
-<feature:display module="Funding" name="Commitments"></feature:display> 
 <feature:display module="Funding" name="Disbursement Orders"></feature:display> 
 <feature:display module="Funding" name="Disbursement"></feature:display> 
 <feature:display module="Funding" name="Disbursements"></feature:display> 

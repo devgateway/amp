@@ -18,11 +18,10 @@
 		<property name="woredaCode" column="woreda_code" type="java.lang.String"/>
 		<many-to-one name="country" column="country_id" class="org.digijava.kernel.dbentity.Country" cascade="none"/>
 		<many-to-one name="zone" column="zone_id" class="org.digijava.module.aim.dbentity.AmpZone" cascade="none"/>
-
-                <set name="locations" cascade="all" inverse="true" >
-			<key column="woreda_id"/>
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocation"/>
-              </set>
+		<set name="locations" cascade="all" inverse="true">
+			<key column="woreda_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocation" />
+		</set>
 
 	</class>
 </hibernate-mapping>

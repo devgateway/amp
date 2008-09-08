@@ -304,9 +304,11 @@ html>body #mainEmpty {
 			<module:display name="Previews"
 				parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">
-					<field:display feature="Edit Activity" name="Edit Activity Button">           
-	                	<a href="" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
-							<img src="/repository/aim/images/application_edit.png" border="0"></a>&nbsp;                                                                     
+					<field:display feature="Edit Activity" name="Edit Activity Button">  
+						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
+	                		<a href="" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+								<img src="/repository/aim/images/application_edit.png" border="0"></a>&nbsp;
+						</logic:equal>
 					</field:display>
 				</feature:display>
 			</module:display>
@@ -314,17 +316,13 @@ html>body #mainEmpty {
 				parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Validate Activity Button">
-						<c:if
-							test="${aimChannelOverviewForm.buttonText == 'validate'}">
-							 <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
-							
-							<td><html:button styleClass="dr-menu"
-								onclick="fnEditProject(document.getElementById('tempActivity').value)"
-								property="validateBtn">
-								<digi:trn key="aim:validate">Validate</digi:trn>
-							</html:button></td>
-							</c:if>	
-						</c:if>
+						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
+							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
+								<a href="#" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;">
+									<digi:trn key="aim:validate">Validate</digi:trn>
+								</a>&nbsp;|
+							</c:if>
+						</logic:equal>
 					</field:display>
 				</feature:display>
 			</module:display>

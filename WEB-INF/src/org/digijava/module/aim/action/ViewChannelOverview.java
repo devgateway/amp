@@ -171,6 +171,8 @@ public class ViewChannelOverview extends TilesAction {
 			// added by Akash
 			// desc: approval status check
 			// start
+			/* this section was moved to ViewMainProjectDetails.java
+
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
 			Long ampTeamId = teamMember.getTeamId();
 			boolean teamLeadFlag    = teamMember.getTeamHead();
@@ -190,7 +192,7 @@ public class ViewChannelOverview extends TilesAction {
 		 			formBean.setButtonText("edit");	// In case of regular working teams
 		 		else
 		 			formBean.setButtonText("none");	// In case of management-workspace
-		 	}
+		 	}*/
 		 	// end
 
 			String currCode = null;

@@ -16,11 +16,14 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.MainProjectDetailsForm;
+import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.COverSubString;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewMainProjectDetails extends TilesAction {
@@ -93,6 +96,30 @@ public class ViewMainProjectDetails extends TilesAction {
 			formBean.setFinancialProgressTabColor(financialProgressTabColor);
 			formBean.setPhysicalProgressTabColor(physicalProgressTabColor);
 			formBean.setDocumentsTabColor(documentsTabColor);
+			
+			//Long id = new Long(request.getParameter("ampActivityId"));
+			Activity activity = ActivityUtil.getChannelOverview(id);
+			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
+			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
+			TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+			Long ampTeamId = teamMember.getTeamId();
+			boolean teamLeadFlag    = teamMember.getTeamHead();
+			boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
+			if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null &&
+		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  ))
+		 	{
+		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(ampact.getTeam().getAmpTeamId()))
+		 			formBean.setButtonText("validate");
+		 		else
+		 			formBean.setButtonText("approvalAwaited");
+		 		
+		 	}
+		 	else {
+		 		if (workingTeamFlag && teamMember.getWrite())
+		 			formBean.setButtonText("edit");	// In case of regular working teams
+		 		else
+		 			formBean.setButtonText("none");	// In case of management-workspace
+		 	}
 		}
 		} catch (Exception e) {
 			logger.debug("Exception " + e.getMessage());

@@ -43,28 +43,13 @@ function removeChildWorkspace(id) {
 }
 
 function update(action) {
-	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
-	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
-	var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
-	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
-	var msg='';
-	if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
-		msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
-		alert(msg);
-		return false;
-	}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
-		msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
-		alert(msg);
-		return false;
-	}else {
-		var id = document.aimUpdateWorkspaceForm.teamId.value;
-		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
-		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
-		document.aimUpdateWorkspaceForm.target = "_self";
-		document.aimUpdateWorkspaceForm.submit();
-	}
-	
+	var id = document.aimUpdateWorkspaceForm.teamId.value;
+	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
+	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
+	document.aimUpdateWorkspaceForm.target = "_self";
+	document.aimUpdateWorkspaceForm.submit();
 }
+
 function updateChild(action) {
 	var val1  = document.aimUpdateWorkspaceForm.category.value;
 	var val2  = document.aimUpdateWorkspaceForm.workspaceType.value;
@@ -217,32 +202,7 @@ function updateChild(action) {
 														</tr>
 														</logic:notEmpty>
 	
-														<tr>
-															<td align="right" width="50%">
-																<digi:trn key="aim:teamType">Team Type</digi:trn>
-															</td>
-															<td align="left">
-																<category:showoptions name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
-															</td>
-														</tr>
-														<tr>
-															<td align="right" width="50%">
-																<digi:trn key="aim:teamCategory">Team Category</digi:trn>
-															</td>
-															<td align="left">
-																<html:select property="category" styleClass="inp-text" >
-																		<html:option value="-1">--
-																			<digi:trn key="aim:createWorkspaceSelectCategFirstLine">
-																				Select Category
-																			</digi:trn>
-																			--
-																		</html:option>
-																		<html:option value="GOVERNMENT"><digi:trn key="aim:government">Government</digi:trn></html:option>
-																		<html:option value="DONOR"><digi:trn key="aim:donor">Donor</digi:trn></html:option>
-																	</html:select>
-															</td>
-														</tr>
-														<tr>
+														
 															<td align="right">
 																<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 															</td>

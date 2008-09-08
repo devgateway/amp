@@ -166,7 +166,7 @@ function toggleSettings(){
 				  	<%}
 				  	}%>
 				  </span>
-				  <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">Show current settings &gt;&gt;</span>
+				  <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton"><digi:trn key="aim:Showcleanupoptions">Show cleanup options</digi:trn> &gt;&gt;</span>
                                 &nbsp;<br>
 								<div style="display:none;background-color:#FFFFCC;padding:2px" id="currentDisplaySettings" >
                                  <table cellpadding="2" cellspacing="2" border="0" width="250px">
@@ -322,7 +322,7 @@ function toggleSettings(){
 								</c:if>
 								</td>
 								<td align="center" width="150" title="${log.objectTypeTrimmed}">
-									<bean:write name="log" property="objectTypeTrimmed"/>									
+									<digi:trn key="aim:ObjectType${log.objectTypeTrimmed}"><bean:write name="log" property="objectTypeTrimmed"/></digi:trn>									
 								</td>
 								<td align="center" width="100" title="${log.teamName}">
 									<bean:write name="log" property="teamName"/>									

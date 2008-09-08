@@ -184,12 +184,12 @@
 																					<td align="left"> 
 																						<html:select property="selectedTrigger" name="messageForm" styleClass="inp-text">
 																							<html:option value="-1"><digi:trn key="message:selectRelatedTrigger">Select from below</digi:trn></html:option>
-																							<html:optionsCollection name="messageForm" property="availableTriggersList" label="label" value="value"/>
-																								<!-- 
+<!--																							<html:optionsCollection name="messageForm" property="availableTriggersList" label="label" value="value"/>-->
+
 																								<logic:iterate id="trigger" name="messageForm" property="availableTriggersList">																																															
-																									<html:option value="${trigger}">${trigger}</html:option>																		
+																									<html:option value="${trigger.value}"><digi:trn key="message:selectRelatedTrigger:${trigger.label}">${trigger.label}</digi:trn></html:option>																		
 																								</logic:iterate>
-																								 --> 
+ 
 																						</html:select> 
 																					</td>
 																				</tr>													

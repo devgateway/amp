@@ -13,16 +13,16 @@
 <div style='position:relative;display:none;' id='legendPopup'> 
 	<ul>
 		<li>
-			<font color="GREEN">* "green Text"</font> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activites that have never been approved by the workspace manager</digi:trn>
+			<font color="GREEN">* <digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activites that have never been approved by the workspace manager</digi:trn>
 		</li>
 		<li>
-			<font color="GREEN">"green text"</font> - <digi:trn key="aim:existingUnvalidatedText">Existing Un-validated. These are activites that have been approved at least once by the workspace manager. These are edited actvities that are not approved.</digi:trn>
+			<font color="GREEN"><digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:existingUnvalidatedText">Existing Un-validated. These are activites that have been approved at least once by the workspace manager. These are edited actvities that are not approved.</digi:trn>
 		</li>
 		<li>
-			<font color="RED">* "red"</font> - <digi:trn key="aim:newDraftText">New Draft. These are new actvities that have been saved as drafts.</digi:trn>
+			<font color="RED">* <digi:trn key="aim:redtext">red</digi:trn></font> - <digi:trn key="aim:newDraftText">New Draft. These are new actvities that have been saved as drafts.</digi:trn>
 		</li>
 		<li>
-			<font color="RED">"red"</font> - <digi:trn key="aim:existingDraftsText">Existing Drafts. These are actvities that have been saved once and edited and saved as drafts.</digi:trn>
+			<font color="RED"><digi:trn key="aim:redtext">red</digi:trn></font> - <digi:trn key="aim:existingDraftsText">Existing Drafts. These are actvities that have been saved once and edited and saved as drafts.</digi:trn>
 		</li>
 	</ul>
 </div>

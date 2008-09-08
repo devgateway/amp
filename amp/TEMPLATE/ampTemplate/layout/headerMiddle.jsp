@@ -216,7 +216,7 @@ border-right:1px solid white;
 										</feature:display>
 										<feature:display name="User Help" module="HELP">
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="" target="name" onClick="help();">
+                                        <a class="yuiampmenuitemlabel" href="#" onClick="help();">
                                         <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>
                                         </li>
@@ -546,7 +546,7 @@ border-right:1px solid white;
                                       <ul>
 										<feature:display name="User Help" module="HELP">
                                         <li>
-                                         <a class="yuiampmenuitemlabel" href="" target="name" onClick="help();">
+                                         <a class="yuiampmenuitemlabel" href="#" onClick="help();">
                                         	<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
                                         </a>
                                         </li>

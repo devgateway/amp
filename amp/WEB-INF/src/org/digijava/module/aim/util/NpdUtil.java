@@ -60,8 +60,5 @@ public class NpdUtil {
 		return npdSettings;
 	}
 	
-	public static DecimalFormat getNumberFormatter(){
-		return new DecimalFormat("###,###,###,###,###") ;
-	}
 
 }

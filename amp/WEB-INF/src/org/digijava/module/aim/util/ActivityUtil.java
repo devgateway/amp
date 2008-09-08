@@ -3327,7 +3327,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     private Double proposedAmout;
     private Double plannedAmount;
     private Double actualAmount;
-    private DecimalFormat df = NpdUtil.getNumberFormatter();
 
     public void AddPalenned(double amount) {
       if (plannedAmount != null) {
@@ -3351,21 +3350,21 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       if (actualAmount == null || actualAmount == 0) {
         return "N/A";
       }
-      return df.format(actualAmount);
+      return FormatHelper.formatNumber(actualAmount);
     }
 
     public String plannedAmount() {
       if (plannedAmount == null|| plannedAmount == 0) {
         return "N/A";
       }
-      return df.format(plannedAmount);
+      return FormatHelper.formatNumber(plannedAmount);
     }
 
     public String proposedAmout() {
       if (proposedAmout == null) {
         return "N/A";
       }
-      return df.format(proposedAmout);
+      return FormatHelper.formatNumber(proposedAmout);
     }
 
     public void setProposedAmout(double proposedAmout) {

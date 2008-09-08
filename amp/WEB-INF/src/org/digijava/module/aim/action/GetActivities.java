@@ -30,6 +30,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -312,7 +313,6 @@ public class GetActivities extends Action {
         double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
-		DecimalFormat mf=NpdUtil.getNumberFormatter();
 		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		result += "<" + ROOT_TAG;
 		String temp = "";
@@ -331,9 +331,9 @@ public class GetActivities extends Action {
 				temp += item.getXml();
 			}
 		}
-		result += " proposedSum=\"" + mf.format(proposedSum)+ "\" ";
-		result += " actualSum=\"" + mf.format(actualSum)+ "\" ";
-		result += " plannedSum=\"" + mf.format(plannedSum)+ "\" ";
+		result += " proposedSum=\"" + FormatHelper.formatNumberUsingCustomFormat(proposedSum) + "\" ";
+		result += " actualSum=\"" + FormatHelper.formatNumberUsingCustomFormat(actualSum) + "\" ";
+		result += " plannedSum=\"" + FormatHelper.formatNumberUsingCustomFormat(plannedSum) + "\" ";
 		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;

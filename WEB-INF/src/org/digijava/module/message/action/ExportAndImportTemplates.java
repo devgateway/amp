@@ -5,9 +5,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
@@ -41,10 +42,14 @@ public class ExportAndImportTemplates extends DispatchAction {
 		String xml=generateXMLString(templates);	
 		response.setContentType("text/xml");
 	    response.setHeader("content-disposition", "attachment; filename=exportTemplates.xml"); // file neme will generate by date
-	    ServletOutputStream outputStream = null;
+	    OutputStreamWriter outputStream = null;
+            PrintWriter out=null;
 	    try {
-	      outputStream = response.getOutputStream();
-	      outputStream.println(xml);
+	      outputStream = new OutputStreamWriter(response.
+                                            getOutputStream(), "UTF-8");
+              out = new PrintWriter(outputStream, true);
+              // return xml	
+                out.println(xml);
 	    } catch (Exception ex) {
 	      try {
 	        StringBuffer sp = new StringBuffer("error ocure while exporting Activityes");
@@ -58,12 +63,14 @@ public class ExportAndImportTemplates extends DispatchAction {
 	        }
 
 	        sp.append("\n");
-	        outputStream.println(sp.toString());
+	        out.println(sp.toString());
 	      } catch (Exception ex1) {
-	        log.error("ImportExportManagerAction.export.error.out", ex1);
+               log.error("ImportExportManagerAction.export.error.out", ex1);
 	      }
-	      log.error("ImportExportManagerAction.export.error", ex);
+                log.error("ImportExportManagerAction.export.error", ex);
 	    }
+            out.close();		
+            outputStream.close();
 	    return null;
 	}
 	

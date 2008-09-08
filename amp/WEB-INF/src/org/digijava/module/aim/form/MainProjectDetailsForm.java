@@ -49,7 +49,16 @@ public class MainProjectDetailsForm extends ValidatorForm
 	private boolean goButtonPresent;
 	private boolean sessionExpired;
 	private String type;
+	private String buttonText;
 	
+	public String getButtonText() {
+		return buttonText;
+	}
+
+	public void setButtonText(String buttonText) {
+		this.buttonText = buttonText;
+	}
+
 	/**
 	 * @return
 	 */

@@ -28,7 +28,7 @@ public class UserVerifiedDateJob implements StatefulJob {
             for (User user : userList) {
                 if (user.getCreationDate()!= null) {
                     String dt = sdf.format(user.getCreationDate());
-                    if (dt.equals(exDt)) {
+                    if (dt.equals(exDt) && !user.isEmailVerified()) {
                         AmpUserUtil.deleteUser(user.getId());
                     }
                 }

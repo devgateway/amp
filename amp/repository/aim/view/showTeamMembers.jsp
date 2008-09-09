@@ -95,7 +95,7 @@ function showUserProfile(id){
 																	<bean:write name="teamMembers" property="memberName" />
 																</a>											
 															</td>
-															<td align="center" width="50">  
+															<td align="center" width="80">  
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="id">
 																	<bean:write name="teamMembers" property="memberId" />
@@ -110,7 +110,7 @@ function showUserProfile(id){
 																	</digi:trn>
 																</digi:link> ]
 															</td>
-															<td align="center" width="60"> 
+															<td align="center" width="80"> 
 																<c:set target="${urlParams}" property="action" value="delete" />
 																
 																<c:set var="clickToDeleteTeamMember">

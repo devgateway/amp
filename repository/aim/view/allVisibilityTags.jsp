@@ -602,7 +602,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="Program Background" feature="Admin NPD"></field:display>
 
-<field:display name="Related Actvitiy Dropdown" feature="Create Message Form"></field:display>
+<field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display>
 <field:display name="Description Text Box" feature="Create Message Form"></field:display>
 <field:display name="Set Alert Drop down" feature="Create Message Form"></field:display>
 <field:display name="Title Text Box" feature="Create Message Form"></field:display>

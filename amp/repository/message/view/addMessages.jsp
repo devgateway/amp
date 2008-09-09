@@ -296,7 +296,7 @@
 																	 </field:display>
 																	</tr>
 																	<tr>
-																	  <field:display name="Related Actvitiy Dropdown" feature="Create Message Form">
+																	  <field:display name="Related Activity Dropdown" feature="Create Message Form">
 																		<td align="right" nowrap="nowrap" valign="top"><digi:trn key="message:relatedActivity">Related Activity</digi:trn></td>
 																		<td align="left">
 																			<div id="statesautocomplete"> 

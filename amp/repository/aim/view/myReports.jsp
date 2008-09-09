@@ -75,6 +75,6 @@ return false;
 				</logic:notEmpty>
 				<logic:present name="currentMember" scope="session">
                     <logic:empty name="myReports" scope="session">
-                            <digi:trn key="aim:noReportForThisWorkspace">No reports for this workspace</digi:trn>
+                            <digi:trn key="aim:noReportHaveBeenViewed">No reports have been viewed.</digi:trn>
                     </logic:empty>
 				</logic:present>

@@ -799,14 +799,23 @@
 				//amount
 				var actTDproposedAmount = document.createElement('TD');
 				actTDproposedAmount.innerHTML = actList[i].getAttribute('proposedAmount');
+				if(actTDproposedAmount.innerHTML == "N/A"){
+				   actTDproposedAmount.innerHTML = "--"
+				}
 				actTR.appendChild(actTDproposedAmount);
 
 				var actTDplannedAmount = document.createElement('TD');
 				actTDplannedAmount.innerHTML = actList[i].getAttribute('plannedAmount');
+				if(actTDplannedAmount.innerHTML == "N/A"){
+				   actTDplannedAmount.innerHTML = "--"
+				}
 				actTR.appendChild(actTDplannedAmount);
 
 				var actTDActualAmount = document.createElement('TD');
 				actTDActualAmount.innerHTML = actList[i].getAttribute('actualAmount');
+				if(actTDActualAmount.innerHTML == "N/A"){
+				   actTDActualAmount.innerHTML = "--"
+				}
 				actTR.appendChild(actTDActualAmount);
 
 

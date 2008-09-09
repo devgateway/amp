@@ -320,7 +320,7 @@ function setIndex(index){
 			                                          <digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
 			                                        </c:set>
 			
-			                                        <html:option value="${global.key}">${global.value}</html:option>
+			                                        <html:option value="${global.key}"><digi:trn key="aim:globalsettings:${global.value}">${global.value}</digi:trn></html:option>
 			                                      </logic:iterate>
 			                                    </html:select>
 			                                    <%} %>										
@@ -589,8 +589,8 @@ function setIndex(index){
 														
 				                                    	<c:when test='${type == "t_Boolean"}'>
 				                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
-				                                    			<html:option value="true">true</html:option>
-				                                    			<html:option value="false">false</html:option>
+				                                    			<html:option value="true"><digi:trn key="aim:globalsettings:true">true</digi:trn></html:option>
+				                                    			<html:option value="false"><digi:trn key="aim:globalsettings:false">false</digi:trn></html:option>
 				                                    		</html:select>
 				                                    	</c:when>
 				                                    	<c:otherwise>

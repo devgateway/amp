@@ -50,7 +50,7 @@
 
 
 <div id="helpReports" style="display:none">
-	<div class="hd">Report Sheet</div>
+	<div class="hd"><digi:trn key="aim:reportsheet">Report Sheet</digi:trn></div>
 	<div align="center" class="bd" id="tableForReportSheet">
 		<table>
 				<tr>

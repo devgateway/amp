@@ -48,6 +48,49 @@ public class AmpUserUtil {
 		return users;
 	}
 
+    public static Collection<User> getAllNotVerifiedUsers() {
+        Session session = null;
+        Query qry = null;
+        Collection<User> users = new ArrayList<User>();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select u from " + User.class.getName() + " u"
+                    + " where u.emailVerified=:emailVerified order by u.email";
+            qry = session.createQuery(queryString);
+            qry.setBoolean("emailVerified", true);
+            users = qry.list();
+        } catch (Exception e) {
+            logger.error("Unable to get user");
+            logger.error("Exception " + e);
+            e.printStackTrace();
+        }
+        return users;
+	}
+
+
+    public static void deleteUser(Long userId) {
+        Session session = null;
+        Transaction tx=null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx=session.beginTransaction();
+            User user=(User)session.load(User.class,userId);
+            session.delete(user);
+            tx.commit();
+        } catch (Exception e) {
+            if(tx!=null){
+                try{
+                    tx.rollback();
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+            e.printStackTrace();
+        }
+	}
+
 	public static AmpUserExtension getAmpUserExtension(Long userId)
 			throws AimException {
 		User user = UserUtils.getUser(userId);

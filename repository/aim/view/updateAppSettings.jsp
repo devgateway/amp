@@ -209,8 +209,11 @@
 															<html:option value="0">
 															------ <digi:trn key="aim:selDefTeamTab">Select Default Team Tab</digi:trn> ------
 															</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm"
-															property="reports" value="ampReportId" label="name" />
+															<%--<html:optionsCollection name="aimUpdateAppSettingsForm"
+															property="reports" value="ampReportId" label="name" />--%>
+																<html:option value="${aimUpdateAppSettingsForm.reports.ampReportId}">
+																	<digi:trn key="aim:settings:${aimUpdateAppSettingsForm.reports.name}">${aimUpdateAppSettingsForm.reports.name}</digi:trn>
+																</html:option>
 															</html:select>
 															<br />
 															<a style="cursor:pointer;color:#006699" onClick="if(document.getElementById('defaultReport').value == 0) {alert('<digi:trn key="aim:defaultTeamReportDetailsAlertMessage">Please select a default report</digi:trn>');return false;}else{showMyPanel();}"><digi:trn key="aim:defaultTeamReportDetailsMessage">Click here for details</digi:trn></a>

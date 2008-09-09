@@ -308,7 +308,7 @@
 									<table width="100%" cellSpacing="0" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 									<tr>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-											<digi:trn key="aim:activities">Activities</digi:trn>
+											<digi:trn key="aim:activitiesMonte">Activities</digi:trn>
 										</td>
 										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:means">Means</digi:trn>

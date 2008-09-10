@@ -674,64 +674,12 @@ public class EditIPAContract extends MultiAction {
        	  	//eaf.getCurrCode();
     		   
        	  	eua.setTotalDisbursements(td);
-       	  	
        	  		
          }
+         eua.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(eua, cc));
+         eua.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(eua, cc));
+         eua.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(eua, cc));
          
-         if(eua.getTotalAmount()!=null && eua.getTotalAmount().doubleValue()!=0.0)
-    	  	{
-//	           double usdAmount1=0;  
-//	   		   double finalAmount1=0; 
-//	          	try {
-//	  				usdAmount1 = CurrencyWorker.convertToUSD(eua.getTotalAmount().doubleValue(),eua.getTotalAmountCurrency().getCurrencyCode());
-//	  			} catch (AimException e) {
-//	  				// TODO Auto-generated catch block
-//	  				e.printStackTrace();
-//	  			}
-//	  			  	try {
-//	  				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-//	  			} catch (AimException e) {
-//	  				// TODO Auto-generated catch block
-//	  				e.printStackTrace();
-//	  			}	
-//	  		 
-//		  		 double amountRate=0;
-//		  		 if(finalAmount1!=0){
-//			  		 if (eua.getTotalDisbursements() != null)
-//			  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
-//			  		 else
-//			  			 amountRate=0;
-//		  		 }
-//		    	 eua.setExecutionRate(amountRate);
-        	 eua.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(eua, cc));
-    	  	}
-         else if(eua.getContractTotalValue()!=null){
-//	        	   double usdAmount1=0;  
-//		   		   double finalAmount1=0; 
-//		          	try {
-//		  				usdAmount1 = CurrencyWorker.convertToUSD(eua.getContractTotalValue().doubleValue(),eua.getTotalAmountCurrency().getCurrencyCode());
-//		  			} catch (AimException e) {
-//		  				// TODO Auto-generated catch block
-//		  				e.printStackTrace();
-//		  			}
-//		  			  	try {
-//		  				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-//		  			} catch (AimException e) {
-//		  				// TODO Auto-generated catch block
-//		  				e.printStackTrace();
-//		  			}	
-//		  		 
-//			  		 double amountRate=0;
-//			  		 if(finalAmount1!=0){
-//				  		 if (eua.getTotalDisbursements() != null)
-//				  			 amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;
-//				  		 else
-//				  			 amountRate=0;
-//			  		 }
-			    	 //eua.setExecutionRate(amountRate);
-        	 	eua.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(eua, cc));
-         		}
-    	  		else eua.setExecutionRate(new Double(0));
          
          if (eaf.getContracts() != null && euaf.getIndexId() != null && euaf.getIndexId() != -1) {
              eaf.getContracts().set(euaf.getIndexId(), eua);

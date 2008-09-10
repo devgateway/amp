@@ -541,7 +541,7 @@
 <field:display name="Regional Percentage" feature="Location"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
 <field:display name="Remove Components Button" feature="Activity - Component Step"></field:display> 
-<field:display name="Remove Disbursements" feature="Contracting"></field:display> 
+<field:display name="Contracting Remove Disbursements" feature="Contracting"></field:display> 
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display> 
 <field:display name="Remove Donor Organization" feature="Funding Information"></field:display> 
 <field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display> 

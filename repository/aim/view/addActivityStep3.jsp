@@ -498,10 +498,10 @@ ${fn:replace(message,quote,escapedQuote)}
                                           &nbsp;&nbsp;&nbsp;&nbsp;
                                             <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
                                               <a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
-                                              <b>
-                                                <digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>
-                                              </b>
-</a><br /><br />
+	                                              <b>
+	                                                <digi:trn key="aim:fundingOrganizations">Funding Information</digi:trn>
+	                                              </b>
+											  </a><br /><br />
                                           </td>
                                         </tr>
 

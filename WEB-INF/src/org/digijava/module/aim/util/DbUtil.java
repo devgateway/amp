@@ -90,6 +90,7 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
@@ -380,6 +381,26 @@ public class DbUtil {
 
         } catch (Exception ex) {
             logger.error("Unable to get fundingDetails :" + ex);
+        }
+        return fundingDetails;
+    }
+    
+    public static Collection getDisbursementsFundingOfIPAContract(IPAContract c) {
+        Session session = null;
+        Collection<AmpFundingDetail> fundingDetails = new ArrayList<AmpFundingDetail>();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select f from "
+                + AmpFundingDetail.class.getName()
+                + " f "
+                + "where (f.contract=:cId) and f.transactionType=1";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("cId", c.getId(), Hibernate.LONG);
+            fundingDetails = qry.list();
+
+        } catch (Exception ex) {
+            logger.error("Unable to get fundingDetails (disbursements) of an IPA contract:" + ex);
         }
         return fundingDetails;
     }

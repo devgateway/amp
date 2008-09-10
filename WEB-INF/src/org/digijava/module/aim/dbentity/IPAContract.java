@@ -51,8 +51,14 @@ public class IPAContract implements Serializable {
     private AmpOrganisation organization;
     private Set<AmpOrganisation> organizations;
     private AmpCategoryValue status;
+    //this disbursements and executionRate are used in Montenegro
     private Double totalDisbursements;
     private Double executionRate;
+    //burkina mission - exchange rate is computed based on the disbursement entered in funding step and total amount
+    //of the contract (contractTotalValue)
+    private Double fundingTotalDisbursements;
+    private Double fundingExecutionRate;
+    
     private AmpCategoryValue type;
     private AmpCategoryValue contractType;
     
@@ -290,11 +296,11 @@ public class IPAContract implements Serializable {
 	}
 
 	public Double getExecutionRate() {
-		return FeaturesUtil.applyThousandsForVisibility(executionRate);
+		return executionRate;
 	}
 
 	public void setExecutionRate(Double executionRate) {
-		this.executionRate = FeaturesUtil.applyThousandsForEntry(executionRate);
+		this.executionRate = executionRate;
 	}
 
 	public AmpCurrency getDibusrsementsGlobalCurrency() {
@@ -387,6 +393,22 @@ public class IPAContract implements Serializable {
 
 	public void setContractTotalValue(Double contractTotalValue) {
 		this.contractTotalValue = FeaturesUtil.applyThousandsForEntry(contractTotalValue);
+	}
+
+	public Double getFundingTotalDisbursements() {
+		return FeaturesUtil.applyThousandsForVisibility(fundingTotalDisbursements);
+	}
+
+	public void setFundingTotalDisbursements(Double fundingTotalDisbursements) {
+		this.fundingTotalDisbursements = FeaturesUtil.applyThousandsForEntry(fundingTotalDisbursements);
+	}
+
+	public Double getFundingExecutionRate() {
+		return fundingExecutionRate;
+	}
+
+	public void setFundingExecutionRate(Double fundingExecutionRate) {
+		this.fundingExecutionRate = fundingExecutionRate;
 	}
 		
 }

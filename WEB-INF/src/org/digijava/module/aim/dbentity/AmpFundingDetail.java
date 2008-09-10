@@ -10,6 +10,14 @@ public class AmpFundingDetail implements Serializable
 	private Long ampFundDetailId ;
 	private Integer fiscalYear ;
 	private Integer fiscalQuarter;
+	/**
+	 * values of transactionType
+	 * public static final int COMMITMENT = 0 ;
+	public static final int DISBURSEMENT = 1 ;
+	public static final int EXPENDITURE = 2 ;
+    public static final int DISBURSEMENT_ORDER = 4 ;
+	public static final int MTEFPROJECTION = 3 ;
+	 */
 	private Integer transactionType ;
 	private Integer adjustmentType ;
 	private Date transactionDate ;

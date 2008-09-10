@@ -1029,12 +1029,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 			            Collection fundDetails = ampFunding.getFundingDetails();
 			            if (fundDetails != null && fundDetails.size() > 0) {
-			              Iterator fundDetItr = fundDetails.iterator();
-			            
-                         
-			              long indexId = System.currentTimeMillis();
-
-
+			            //  Iterator fundDetItr = fundDetails.iterator();
+			             // long indexId = System.currentTimeMillis();
 			        
 			            calculations.doCalculations(fundDetails, toCurrCode);
 			            
@@ -1046,6 +1042,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			              fund.setFundingDetails(fundDetail);
 			              fund.setAmpFundingDetails(fundDetails);
 			              eaForm.setFundingDetails(fundDetail);
+//			              if(eaForm.getAllFundingDetails()== null) eaForm.setAllFundingDetails(new ArrayList());
+//			              else eaForm.getAllFundingDetails().addAll(fundDetail);
 			              // funding.add(fund);
 			            }
 			            if (fundOrg.getFundings() == null)

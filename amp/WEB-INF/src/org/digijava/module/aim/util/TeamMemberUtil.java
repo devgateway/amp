@@ -42,6 +42,7 @@ import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 
 public class TeamMemberUtil {
 
@@ -1579,19 +1580,33 @@ public class TeamMemberUtil {
                         team.setTeamLead(null);
                         session.update(team);
                     }
+                    
                     Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
                     removeLinksFromATMToActivity(relatedActivities, ampMember);
-
+                   
+                    String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member=:Id ";
+                    qry = session.createQuery(queryString);
+                    qry.setParameter("Id", ampMember.getAmpTeamMemId(), Hibernate.LONG);
+                    Collection memevents=qry.list();
+                    if (memevents != null && !memevents.isEmpty()) {
+                    	for (Iterator iterator = memevents.iterator(); iterator
+								.hasNext();) {
+							AmpCalendarAttendee callatt = (AmpCalendarAttendee) iterator.next();
+							session.delete(callatt);
+							
+						}
+                    }
+                    
                     User user = (User) session.load(User.class, ampMember.getUser().getId());
                     Group group = (Group) session.load(Group.class, groupId);
                     user.getGroups().remove(group);
                     session.update(user);
                     // Verify for reports that are owned by this user and delete them
                     //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
-                    String queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
+                    queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
                     qry = session.createQuery(queryString);
                     qry.setParameter("oId", ampMember.getAmpTeamMemId(), Hibernate.LONG);
-
+                    
                     Collection memReports = qry.list();
                     if (memReports != null && !memReports.isEmpty()) {
                         for (Iterator rpIter = memReports.iterator(); rpIter.hasNext(); ) {
@@ -1609,7 +1624,7 @@ public class TeamMemberUtil {
                                     session.update(set);
                                 }
                             }
-
+                            		
                             // delete related information before we delete the report
                             String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName() + " tr where (tr.report=:ampReportId)";
                             Query qryaux = session.createQuery(deleteTeamReports);
@@ -1620,7 +1635,7 @@ public class TeamMemberUtil {
                                 AmpTeamReports atr = (AmpTeamReports) tmReports.iterator().next();
                                 session.delete(atr);
                             }
-
+                            
                             // session.delete(deleteTeamReports);
                             session.delete(rep);
                         }

@@ -297,7 +297,7 @@ html>body #mainEmpty {
 				<feature:display name="Preview Activity" module="Previews">
 					<field:display feature="Preview Activity" name="Preview Button">
 						<a href="" target="_blank" onclick="javascript:preview(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:preview'>Preview</digi:trn>"> 
-							<img src="/repository/aim/images/magnifier.png" border="0"></a>
+							<img src="/repository/aim/images/tangopack_preview.png" border="0"></a>
 					</field:display>
 				</feature:display>
 			</module:display>
@@ -307,7 +307,7 @@ html>body #mainEmpty {
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
 	                		<a href="" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
-								<img src="/repository/aim/images/application_edit.png" border="0"></a>&nbsp;
+								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>
 				</feature:display>
@@ -317,10 +317,9 @@ html>body #mainEmpty {
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Validate Activity Button">
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="validate">
-							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
-								<a href="#" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;">
-									<digi:trn key="aim:validate">Validate</digi:trn>
-								</a>&nbsp;|
+							<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
+								<a href="" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:validate'>Validate</digi:trn>">
+									<img src="/repository/aim/images/tangopack_validate2.png" border="0"></a>&nbsp;
 							</c:if>
 						</logic:equal>
 					</field:display>

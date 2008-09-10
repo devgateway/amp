@@ -131,7 +131,7 @@
                 <li>
                     <digi:link href="/nationalPlaningDashboard.do">
                         <div>
-	                        <digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
+	                        <digi:trn key="aim:nplDashboard">National Planning Dashboard</digi:trn>
                         </div>
                     </digi:link>
                 </li>

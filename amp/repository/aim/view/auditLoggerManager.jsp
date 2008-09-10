@@ -68,7 +68,7 @@ function showUser(email){
 		openURLinWindow("<%= information %>~edit=true~email="+email,480, 350);
 	}
 	else{
-		var trasnlation = '<digi:trn key="aim:userblankmail">The user does not have a valid email address</digi:trn>'
+		var trasnlation = "<digi:trn key='aim:userblankmail'>The user does not have a valid email address</digi:trn>";
 		alert (trasnlation);
 	}
 }

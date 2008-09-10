@@ -115,7 +115,7 @@ public class ViewMainProjectDetails extends TilesAction {
 		 		
 		 	}
 		 	else {
-		 		if (workingTeamFlag && teamMember.getWrite())
+		 		if (workingTeamFlag)
 		 			formBean.setButtonText("edit");	// In case of regular working teams
 		 		else
 		 			formBean.setButtonText("none");	// In case of management-workspace

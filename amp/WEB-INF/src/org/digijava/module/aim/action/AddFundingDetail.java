@@ -131,7 +131,7 @@ public class AddFundingDetail extends Action {
                }
 		fundingDetail.setCurrencyCode(currCode);
 		fundingDetail.setAdjustmentType(Constants.ACTUAL);
-                fundingDetail.setIndexId(System.currentTimeMillis());
+        fundingDetail.setIndexId(System.currentTimeMillis());
 		fundingDetail.setIndex(fundingDetails.size());
 		return fundingDetail;
 	}

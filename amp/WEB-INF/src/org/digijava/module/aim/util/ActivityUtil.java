@@ -2670,12 +2670,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     			  td+=cd.getAmount().doubleValue();
     	  }
     	  c.setTotalDisbursements(new Double(td));
-    	  if(c.getTotalAmount()!=null && (c.getTotalAmount().doubleValue()!=0.0) )
-    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
-    	  else 
-    		  if(c.getContractTotalValue()!=null)
-    		  	c.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, c.getTotalAmountCurrency().getCurrencyCode()));
-    		  else c.setExecutionRate(new Double(0));
+    	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
+		  c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, c.getTotalAmountCurrency().getCurrencyCode()));
+		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, c.getTotalAmountCurrency().getCurrencyCode()));
+    	  
       }
     }
      
@@ -2727,56 +2725,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
      			  }
 	    	  }
 	    	  c.setTotalDisbursements(new Double(td));
-	    	  if(c.getTotalAmount()!=null && c.getTotalAmount().doubleValue()!=0.0)
-	    	  {
-//	    		  double usdAmount1=0;  
-//	      		   double finalAmount1=0; 
-//	             	try {
-//	     				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
-//	     			} catch (AimException e) {
-//	     				// TODO Auto-generated catch block
-//	     				e.printStackTrace();
-//	     			}
-//	     			  	try {
-//	     				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-//	     			} catch (AimException e) {
-//	     				// TODO Auto-generated catch block
-//	     				e.printStackTrace();
-//	     			}	
-//	    		  
-//	    		  double execRate=0;
-//	    		  if(finalAmount1!=0)
-//	    			  execRate=c.getTotalDisbursements()/finalAmount1;
-//	    		  //System.out.println("1 execution rate: "+execRate);
-	    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, cc));
-	    		  System.out.println("1 execution rate: "+c.getExecutionRate());
-	    	  }
-	    	  else if(c.getContractTotalValue()!=null){
-//		    		   double usdAmount1=0;  
-//		      		   double finalAmount1=0; 
-//		             	try {
-//		     				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
-//		     			} catch (AimException e) {
-//		     				// TODO Auto-generated catch block
-//		     				e.printStackTrace();
-//		     			}
-//		     			  	try {
-//		     				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-//		     			} catch (AimException e) {
-//		     				// TODO Auto-generated catch block
-//		     				e.printStackTrace();
-//		     			}	
-//		    		  
-//		    		  double execRate=0;
-//		    		  if(finalAmount1!=0)
-//		    			  execRate=c.getTotalDisbursements()/finalAmount1;
-		    		  c.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
-		    		  System.out.println("	222 execution rate: "+c.getExecutionRate());
-	    	  		}
-	    	  		else {
-	    	  			c.setExecutionRate(new Double(0));
-	    	  			System.out.println("333 execution rate: "+c.getExecutionRate());
-	    	  		}
+	    	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, cc));
+ 		      c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
+			  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
+	    	  
 	    	  
 	      }
 	    }
@@ -2789,6 +2741,43 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	    
 	    return  contrcats ;
 	  } 
+  
+  	public static double computeFundingDisbursementIPA(IPAContract contract, String cc){
+  		
+  		ArrayList<AmpFundingDetail> disbs1 = (ArrayList<AmpFundingDetail>) DbUtil.getDisbursementsFundingOfIPAContract(contract);	             
+        //if there is no disbursement global currency saved in db we'll use the default from edit activity form
+        
+       if(contract.getTotalAmountCurrency()!=null)
+    	   cc=contract.getTotalAmountCurrency().getCurrencyCode();
+        double td=0;
+        double usdAmount=0;  
+		double finalAmount=0; 
+
+		for(Iterator<AmpFundingDetail> j=disbs1.iterator();j.hasNext();)
+  	  	{
+			AmpFundingDetail fd=(AmpFundingDetail) j.next();
+  		  // converting the amount to the currency from the top and adding to the final sum.
+  		  if(fd.getTransactionAmount()!=null)
+  			  {
+  			  	try {
+					usdAmount = CurrencyWorker.convertToUSD(fd.getTransactionAmount().doubleValue(),fd.getAmpCurrencyId().getCurrencyCode());
+				} catch (AimException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+  			  	try {
+					finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
+				} catch (AimException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+  			  	td+=finalAmount;
+  			  }
+  	  	 }
+//      	contract.setFundingTotalDisbursements(td);
+//      	contract.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
+  		return td;
+  	}
   
   	public static double computeExecutionRateFromContractTotalValue(IPAContract c, String currCode){
   		double usdAmount1=0;  
@@ -2808,7 +2797,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		  
 		  double execRate=0;
 		  if(finalAmount1!=0)
-			  execRate=c.getTotalDisbursements()/finalAmount1;
+			  execRate=c.getFundingTotalDisbursements()/finalAmount1;
 		  c.setExecutionRate(execRate);
 		  return execRate;
   	}
@@ -2817,7 +2806,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
   		double usdAmount1=0;  
 		   double finalAmount1=0; 
       	try {
+			if(c.getTotalAmount()!=null && c.getTotalAmountCurrency()!=null )	
 				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			else usdAmount1=0.0;
 			} catch (AimException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

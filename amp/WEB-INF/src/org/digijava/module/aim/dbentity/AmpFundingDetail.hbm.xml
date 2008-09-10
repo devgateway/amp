@@ -25,7 +25,7 @@
 		<property name="orgRoleCode" column="org_role_code" type="java.lang.String"/>
 		<property name="expCategory" column="exp_category" type="java.lang.String"/>
 		<property name="fixedExchangeRate" column="fixed_exchange_rate"  type="java.lang.Double"/>
-                <property name="disbOrderId" column="disb_order_id" type="java.lang.String"/>
+        <property name="disbOrderId" column="disb_order_id" type="java.lang.String"/>
 
 
 		<many-to-one name="reportingOrgId" column="reporting_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>

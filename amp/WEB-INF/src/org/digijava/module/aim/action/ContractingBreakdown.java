@@ -19,7 +19,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.dgfoundation.amp.harvest.DBUtil;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.exception.AimException;
@@ -28,6 +30,7 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 
@@ -78,8 +81,7 @@ public class ContractingBreakdown extends TilesAction {
 			for(Iterator<IPAContract> it= contracts.iterator(); it.hasNext();)
 			{
 				IPAContract contract=(IPAContract) it.next();
-				double usdAmount1=0;  
-	    		double finalAmount1=0; 
+	    		
 				if (contract.getDisbursements() != null) {
 		             ArrayList<IPAContractDisbursement> disbs = new ArrayList<IPAContractDisbursement>(contract.getDisbursements());
 		             
@@ -91,7 +93,7 @@ public class ContractingBreakdown extends TilesAction {
 		            double usdAmount=0;  
 		    		double finalAmount=0; 
 
-		    		   for(Iterator<IPAContractDisbursement> j=disbs.iterator();j.hasNext();)
+		    		for(Iterator<IPAContractDisbursement> j=disbs.iterator();j.hasNext();)
 		       	  	{
 		       		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
 		       		  // converting the amount to the currency from the top and adding to the final sum.
@@ -115,51 +117,12 @@ public class ContractingBreakdown extends TilesAction {
 		       	  	
 		       	  	//eaf.getCurrCode();
 		    		   
-		       	  	contract.setTotalDisbursements(td);
-				}
-				
-//				 if(contract.getTotalAmount()!=null)
-//			   	  	{
-//					 try {
-//							usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
-//						} catch (AimException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//	       			  	try {
-//							finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-//						} catch (AimException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}	
-//					 
-//					 double amountRate=0;
-//					 if(finalAmount1!=0) amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
-					 
-//			   	  	contract.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(contract, cc));
-//			   	  	//System.out.println("2 execution rate: "+amountRate);
-//			   	  	}
-//				 else if(contract.getContractTotalValue()!=null){
-	//					 try {
-	//							usdAmount1 = CurrencyWorker.convertToUSD(contract.getContractTotalValue().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
-	//						} catch (AimException e) {
-	//							// TODO Auto-generated catch block
-	//							e.printStackTrace();
-	//						}
-	//	       			  	try {
-	//							finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
-	//						} catch (AimException e) {
-	//							// TODO Auto-generated catch block
-	//							e.printStackTrace();
-	//						}	
-	//					 
-	//					 double amountRate=0;
-	//					 if(finalAmount1!=0) amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
-					 
-//			   	  		contract.setExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
-//			   	  	//System.out.println("2 execution rate: "+amountRate);
-//				 	}
-//			   	  		else contract.setExecutionRate(new Double(0));
+				    contract.setTotalDisbursements(td);
+				    contract.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(contract, cc));
+				       	
+				    contract.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(contract, cc));
+				    contract.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
+			}
 				
 				newContracts.add(contract);
 			}

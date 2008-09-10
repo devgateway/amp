@@ -8,8 +8,9 @@ import org.digijava.module.aim.dbentity.IPAContract;
  * @author jose
  *
  */
-public class FundingDetail implements Serializable
+public class FundingDetail implements Serializable, Comparable
 {
+	private Long fundingId;
 	private long indexId;
 	private boolean checked;
 	private int transactionType;
@@ -257,6 +258,20 @@ public class FundingDetail implements Serializable
 	 }
 	 return returnValue;
  }
+
+		public int compareTo(Object o) {
+			// TODO Auto-generated method stub
+			FundingDetail obj=(FundingDetail) o;
+			return this.getFundingId().compareTo(obj.getFundingId());
+		}
+
+		public Long getFundingId() {
+			return fundingId;
+		}
+
+		public void setFundingId(Long fundingId) {
+			this.fundingId = fundingId;
+		}
        
         
         

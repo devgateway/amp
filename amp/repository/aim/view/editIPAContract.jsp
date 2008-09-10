@@ -769,7 +769,7 @@ window.onload=autosum;
 				</html:button>
 			</field:display>
 			&nbsp;	
-			<field:display name="Remove Disbursements" feature="Contracting">
+			<field:display name="Contracting Remove Disbursements" feature="Contracting">
 				<html:button styleClass="dr-menu" property="deldisbursement" onclick="delDisb();">
 					<digi:trn key="aim:IPA:newPopup:removeDisbursements">Remove Disbursements</digi:trn>
 				</html:button>			

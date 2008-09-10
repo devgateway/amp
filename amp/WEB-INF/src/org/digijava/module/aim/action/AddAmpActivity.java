@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -56,6 +57,8 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.Funding;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
@@ -129,7 +132,19 @@ public class AddAmpActivity extends Action {
     } else {
        eaForm.setGovFlag(false);
    }*/
-
+    
+    if(eaForm.getFundingOrganizations()!=null){
+    	eaForm.setAllFundingDetails(new ArrayList());
+	    for (Iterator itOrg = eaForm.getFundingOrganizations().iterator(); itOrg.hasNext();) {
+			FundingOrganization org = (FundingOrganization) itOrg.next();
+			if(org.getFundings()!=null)
+	         for (Iterator itFD = org.getFundings().iterator(); itFD.hasNext();) {
+					Funding funding = (Funding) itFD.next();
+					if(funding!=null && funding.getFundingDetails()!=null) 
+						eaForm.getAllFundingDetails().addAll(funding.getFundingDetails());
+	         }
+		}
+    }
   
       
     if(eaForm.getClassificationConfigs()==null){

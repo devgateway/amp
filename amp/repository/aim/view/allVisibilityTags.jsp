@@ -67,7 +67,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <feature:display  name="Tab Generator" module="New Report Wizard"></feature:display>
 <feature:display  name="Report Generator" module="New Report Wizard"></feature:display>
-
+<field:display name="Contracting Remove Disbursements" feature="Contracting"></field:display>
 <feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
 <feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
 <feature:display  name="Target Value" module="PI Reports"></feature:display>

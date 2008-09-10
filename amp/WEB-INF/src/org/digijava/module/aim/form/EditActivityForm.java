@@ -370,6 +370,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection <AmpCurrency> validcurrencies;
 	private Collection organizations;
 	private List fundingDetails; //Collection of FundingDetail objects
+	private List allFundingDetails;
 	private List<MTEFProjection> fundingMTEFProjections; //collection of funding mtefprojections objects
 	private Collection projections; //the values in the category manager for the projections
 	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
@@ -813,6 +814,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			validcurrencies=null;
 			organizations = null;
 			fundingDetails = null;
+			allFundingDetails = null;
 			editFunding = false;
 			offset = 0;
 			selFundingOrgs = null;
@@ -5471,6 +5473,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setCrisNumber(String crisNumber) {
 		this.crisNumber = crisNumber;
+	}
+
+	public List getAllFundingDetails() {
+		return allFundingDetails;
+	}
+
+	public void setAllFundingDetails(List allFundingDetails) {
+		this.allFundingDetails = allFundingDetails;
 	}
 
 }

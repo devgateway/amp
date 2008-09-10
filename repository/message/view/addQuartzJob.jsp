@@ -138,7 +138,7 @@ function typeChanged(value){
                     <c:if test="${!empty quartzJobManagerForm.jcCol}">
                       <html:select name="quartzJobManagerForm" property="classFullname" value="classFullname" styleId="cmbJc" style="font-family:Verdana;font-size:10px;width:250px;">
                         <c:forEach var="jc" items="${quartzJobManagerForm.jcCol}">
-                          <html:option value="${jc.classFullname}">${jc.name}</html:option>
+                            <html:option value="${jc.classFullname}"><digi:trn key="aim:job:${jc.name}">${jc.name}</digi:trn></html:option>
                         </c:forEach>
                       </html:select>
                     </c:if>

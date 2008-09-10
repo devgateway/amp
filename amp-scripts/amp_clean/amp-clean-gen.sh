@@ -4,7 +4,7 @@
 # Copyright (c) 2008 Development Gateway Foundation
 # @author - Mihai Postelnicu - mpostelnicu@dginternational.org
 
-version=0.1
+version=0.2
 usage="usage: $0 [mysqldump extra params] database"
 
 if [ ! -n "$1" ]; then
@@ -40,4 +40,4 @@ mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e $e
 
 #DUMPIG THE VIEWS AND QRTZ TABLES
 mysqldump --hex-blob  --default-character-set=utf8 --skip-add-drop-table --single-transaction -c -e $extra $database --tables \
-`mysql -u root $1 -e 'show tables' | grep -E '(v_|qrtz_)' | tr -d '|' | tr '\n' ' '`
+`mysql $extra $database -e 'show tables' | grep -E '(v_|qrtz_)' | tr -d '|' | tr '\n' ' '`

@@ -227,7 +227,9 @@ public class ViewNewAdvancedReport extends Action {
 	
 		if(startRow==null && endRow==null) {
 		    startRow="0";
-		    endRow=((Integer) request.getAttribute("recordsPerPage")).toString();
+		    Integer rpp = (Integer)request.getAttribute("recordsPerPage");
+		    rpp = rpp - 1; //Zero indexed array 
+		    endRow=rpp.toString();
 		}
 		
 //		apply pagination if exists

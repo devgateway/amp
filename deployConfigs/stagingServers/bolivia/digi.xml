@@ -6,6 +6,7 @@
 	</smtp>
 
     <logon-site id="dglogin" host="amp-login.code.ro">http://bolivia.staging.ampdev.net/login</logon-site>
+     <site-domain id="dgDomain" host="bolivia.staging.ampdev.net">http://bolivia.staging.ampdev.net/</site-domain>
     
         <server-type caseSensitiveTranslatioKeys="false"/>
     

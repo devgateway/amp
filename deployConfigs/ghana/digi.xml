@@ -6,6 +6,7 @@
 	</smtp>
 
     <logon-site id="dglogin" host="amp-login.code.ro">http://ghana.ampdev.net/login</logon-site>
+    <site-domain id="dgDomain" host="ghana.ampdev.net">http://ghana.ampdev.net/</site-domain>
     
         <server-type caseSensitiveTranslatioKeys="false"/>
     

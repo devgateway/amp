@@ -328,7 +328,7 @@ public class DigiConfigManager {
             "digi-config/hibernate-classes/hibernate-class", HibernateClass.class);
         digester.addObjectCreate("digi-config/smtp", Smtp.class);
         digester.addObjectCreate("digi-config/logon-site", LogonSite.class);
-
+        digester.addObjectCreate("digi-config/site-domain", LogonSite.class);
         digester.addObjectCreate("digi-config/module", Module.class);
         digester.addSetNext("digi-config/module", "addModule");
         digester.addSetProperties("digi-config/module", "name", "name");
@@ -339,6 +339,12 @@ public class DigiConfigManager {
         digester.addSetProperties("digi-config/logon-site", "host", "host");
         digester.addSetProperties("digi-config/logon-site", "path", "path");
         digester.addBeanPropertySetter("digi-config/logon-site", "content");
+        
+        digester.addSetNext("digi-config/site-domain", "setSiteDomain");
+        digester.addSetProperties("digi-config/site-domain", "id", "id");
+        digester.addSetProperties("digi-config/site-domain", "host", "host");
+        digester.addSetProperties("digi-config/site-domain", "path", "path");
+        digester.addBeanPropertySetter("digi-config/site-domain", "content");
 
         digester.addSetNext("digi-config/hibernate-classes",
                             "setHibernateClasses");

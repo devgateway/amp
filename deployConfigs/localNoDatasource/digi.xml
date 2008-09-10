@@ -6,6 +6,7 @@
 	</smtp>
 	
     <logon-site id="dglogin" host="amp-login.code.ro">http://localhost:8080/login</logon-site>
+    <site-domain id="dgDomain" host="localhost">http://localhost:8080/</site-domain>
 
 <!-- 
 

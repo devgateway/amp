@@ -69,6 +69,7 @@ public class DigiConfig {
     private SingleServerJobs singleServerJobs;
     private Map configBeans;
     private Map services;
+    private LogonSite siteDomain;
 
     public DigiConfig() {
         this.modules = new HashMap();
@@ -342,5 +343,12 @@ public class DigiConfig {
 	public void setCaseSensitiveTranslatioKeys(boolean caseSensitiveTranslatioKeys) {
 		this.caseSensitiveTranslatioKeys = caseSensitiveTranslatioKeys;
 	}
+    public LogonSite getSiteDomain() {
+        return siteDomain;
+    }
+
+    public void setSiteDomain(LogonSite siteDomain) {
+        this.siteDomain = siteDomain;
+    }
 
 }

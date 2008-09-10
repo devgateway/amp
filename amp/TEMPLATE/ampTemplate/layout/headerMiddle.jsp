@@ -336,7 +336,7 @@ border-right:1px solid white;
 		                                            </a>
 												</li>
 	                                        </feature:display>
-                                        <li class="yuiampmenuitem">
+                                        <li class="yuiampmenuitem" style="_width:230px;">
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
                                             </a>
@@ -505,7 +505,7 @@ border-right:1px solid white;
                                         <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
                                         </a>
                                         </li>
-                                        <li style="_width:235px">
+                                        <li style="_width:300px">
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:deflanguage">Language</digi:trn>
                                         </a>

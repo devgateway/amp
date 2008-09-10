@@ -6,6 +6,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<logic:notEmpty name="filterCurrentReport" scope="session">
+    <logic:equal name="filterCurrentReport" property="drilldownTab" value="false">
+    	<c:remove var="filterCurrentReport" scope="session" />
+	</logic:equal>
+</logic:notEmpty>
 
 <script language="JavaScript">
     var continueExecution = true;
@@ -131,7 +136,7 @@ var myTabsObject;
 		allTabsPanel.setBody(divAllTabs);
 		<logic:notEmpty name="filterCurrentReport" scope="session">
 		if(!tabExists('Tab-<c:out value="${filterCurrentReport.name}"/>'))
-			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />");
+			setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="filterCurrentReport" property="ampReportId"/>~widget=true", "<c:out value="${filterCurrentReport.name}" />", "<c:out value="${fn:substring(filterCurrentReport.name, 0, 25)}" />", "Tab-<c:out value="${filterCurrentReport.name}" />");
 		</logic:notEmpty>	
 	}
 	function tabExists(tabCheckName){

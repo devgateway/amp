@@ -88,10 +88,10 @@ cursor:pointer;
 			</li>
             
             <li style="float:left;">
-                <a class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
-                </a>
-                 <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                </span>
+                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                    <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                 </a>               
                 <div id="reports2" class="yuiampmenu">
@@ -129,10 +129,10 @@ border-right:1px solid white;
 	            </digi:link>
             </li>
             <li>
-                <a class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
-                </a>
-                <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                </span>
+                <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                    <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                 </a>
                 <div id="reports2" class="yuiampmenu">
@@ -166,10 +166,10 @@ border-right:1px solid white;
 					                    </digi:link>
                                         </li>
                           <li class="yuiampmenuitem">
-                              <a class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
-                              </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              </span>
+                              <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -198,10 +198,10 @@ border-right:1px solid white;
                           </li>
                           <module:display name="HELP">
                           <li class="yuiampmenuitem">
-                              <a class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                              <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="help:help">HELP</digi:trn>
-                              </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              </span>
+                              <a  onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
@@ -297,7 +297,7 @@ border-right:1px solid white;
                               <a class="yuiampmenuitemlabel" href="/showDesktop.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:mydesktop">My Desktop</digi:trn>
                               </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="mydesktop" class="yuiampmenu" style="opacity:0.9;">
@@ -336,24 +336,24 @@ border-right:1px solid white;
 		                                            </a>
 												</li>
 	                                        </feature:display>
-                                        <li class="yuiampmenuitem" style="_width:100px">
+                                        <li class="yuiampmenuitem">
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
                                             </a>
                                             <div id="workspaceSubmenu" class="yuiampmenu">
                                           	<div class="bd">                    
-                                                      <ul class="first-of-type">
+                                                      <ul>
                                                       
                                                         <logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
                                             		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
                                             		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked ">
+                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="_width:200px;">
                                                             	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:equal>
                                             		    
                                             		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-                                            		   	   <li class="yuiampmenuitem ">
+                                            		   	   <li class="yuiampmenuitem " style="_width:200px;">
                                                             	 <a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:notEqual>
@@ -371,29 +371,22 @@ border-right:1px solid white;
                               <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:reports">Reports</digi:trn>
                               </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
                                         <feature:display  name="Report Generator" module="New Report Wizard">
-	                                        <li title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
+	                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true">
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
-<!-- 
-	                                        <li title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
-	                                            <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false">
-	                                                <digi:trn key="aim:ReportManager">Report Manager</digi:trn>
-	                                            </a>
-											</li>
- -->
                                         </feature:display>
 										
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
-                                                <li title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+                                                <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
                                                     <a class="yuiampmenuitemlabel" href="/parisIndicatorReport.do">
                                                         <b><digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn></b>
                                                     </a>
@@ -416,7 +409,7 @@ border-right:1px solid white;
                               <a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
@@ -433,13 +426,13 @@ border-right:1px solid white;
                           </li>
                           </feature:display>
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
+                              <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
-                              </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              </span>
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
-                              <div id="dashboards" class="yuiampmenu" style="opacity:0.9;width:170px;">
+                              <div id="dashboards" class="yuiampmenu" style="opacity:0.9;min-width:170px;_width:250px;">
                                   <div class="bd">                    
                                       <ul>
                                        <feature:display name="NPD Dashboard" module="National Planning Dashboard">
@@ -473,7 +466,7 @@ border-right:1px solid white;
                               <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="fm:messages">Messages</digi:trn>
                               </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="messages" class="yuiampmenu" style="opacity:0.9;">
@@ -498,10 +491,10 @@ border-right:1px solid white;
                           </module:display>
                           
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
+                              <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:tools">TOOLS</digi:trn>
-                              </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              </span>
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
@@ -512,7 +505,7 @@ border-right:1px solid white;
                                         <digi:trn key="aim:workspaceinfo">Workspace Info</digi:trn>
                                         </a>
                                         </li>
-                                        <li style="_width:200px">
+                                        <li style="_width:235px">
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:deflanguage">Language</digi:trn>
                                         </a>
@@ -535,10 +528,10 @@ border-right:1px solid white;
                           </li>
                           <module:display name="HELP">
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
+                              <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px;">
                                   <digi:trn key="help:help">HELP</digi:trn>
-                              </a>
-                              <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                              </span>
+                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="help" class="yuiampmenu" style="opacity:0.9;">
@@ -583,14 +576,47 @@ border-right:1px solid white;
             
 		</logic:equal>
 </logic:present>
+
+
 <script language="javascript">
+
+var arrowClicked = false;
 //Run initialization for menu
 var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
+
  });
+
+for(var i = 0; i < oMenuBar.getItems().length; i++){
+	oMenuBar.getItem(i).cfg.setProperty("onclick", { fn: onMenuItemClick });
+}
+
 oMenuBar.render();
-//Define location of monitoring iframe
-document.getElementById("_yuiResizeMonitor").style.top = "-135px";
-document.getElementById("_yuiResizeMonitor").style.left = "-135px";
+
+function onMenuItemClick(p_sType, p_aArgs, p_oValue) { 
+	if(arrowClicked){
+//		alert(oMenuBar.activeItem);
+		oSubmenu = this.cfg.getProperty("submenu");
+		if(oSubmenu.cfg.getProperty("visible"));
+		if(oSubmenu)
+		{
+			if(oSubmenu.cfg.getProperty("visible"))
+			{
+				oSubmenu.hide();
+			}
+			else
+			{
+				oSubmenu.show();
+			}
+				
+		}
+		arrowClicked = false;
+	}
+	else
+	{
+		oSubmenu.hide();		
+	}
+}
 
 
-</script>      
+
+</script>

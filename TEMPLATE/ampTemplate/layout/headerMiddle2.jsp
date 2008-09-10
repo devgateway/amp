@@ -72,10 +72,10 @@ border-right:1px solid white;
 	            </digi:link>
             </li>
             <li>
-                <a href="#" class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;border-right:0px;">
+                <span class="yuiampmenuitemlabel" style="float:left;position:relative;top:0px;_top:1px;border-right:0px;">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
-                </a>
-                 <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                </span>
+                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                    <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                 </a>               
                 <div id="reports2" class="yuiampmenu" style="width:120px;">
@@ -116,7 +116,7 @@ border-right:1px solid white;
                 <a href="#" class="yuiampmenuitemlabel" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px;border-right:0px;">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
                 </a>
-                 <a href="#" onclick="return false;" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                 <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                    <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                 </a>               
                 <div id="reports2" class="yuiampmenu" style="width:120px;">
@@ -136,10 +136,44 @@ border-right:1px solid white;
 %>
 </logic:notPresent>
 <script language="javascript">
+
+var arrowClicked = false;
 //Run initialization for menu
+
 var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
 
  });
+
+for(var i = 0; i < oMenuBar.getItems().length; i++){
+	oMenuBar.getItem(i).cfg.setProperty("onclick", { fn: onMenuItemClick });
+}
+
 oMenuBar.render();
 
-</script>      
+function onMenuItemClick(p_sType, p_aArgs, p_oValue) { 
+	if(arrowClicked){
+		oSubmenu = this.cfg.getProperty("submenu");
+		if(oSubmenu.cfg.getProperty("visible"));
+		if(oSubmenu)
+		{
+			if(oSubmenu.cfg.getProperty("visible"))
+			{
+				oSubmenu.hide();
+			}
+			else
+			{
+				oSubmenu.show();
+			}
+				
+		}
+		arrowClicked = false;
+	}
+	else
+	{
+		oSubmenu.hide();		
+	}
+}
+
+
+
+</script>

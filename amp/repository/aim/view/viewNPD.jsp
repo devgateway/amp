@@ -1282,7 +1282,7 @@
                 <li class="selected">
                     <a style="cursor:default">
                         <div>
-	                        <digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
+	                        <digi:trn key="aim:nplDashboard">National Planning Dashboard</digi:trn>
                         </div>
                     </a>
                 </li>

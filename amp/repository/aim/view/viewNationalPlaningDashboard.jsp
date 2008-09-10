@@ -337,7 +337,7 @@ function doFilter() {
                   </TD>
                   <TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
                   <TD bgColor="#c9c9c7" class="box-title" width="220" >                    &nbsp;
-                    <digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
+                    <digi:trn key="aim:nplDashboard">National Planning Dashboard</digi:trn>
                   </TD>
                   <TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
                 </TR>

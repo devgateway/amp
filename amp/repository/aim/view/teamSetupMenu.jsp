@@ -263,7 +263,7 @@ html>body #mainEmpty {
 							<LI>
 						   		<a name="node">
 						   		<div>
-								<digi:trn key="fm:documentsmanagement">Resources</digi:trn>	
+								<digi:trn key="fm:documentmanagement">Document Management</digi:trn>	
 								</div>
 								</a>
 							</LI>
@@ -275,7 +275,7 @@ html>body #mainEmpty {
 								<bean:define id="subtabLink" value="0" />
 								<digi:link href="/relatedLinksList.do" paramId="subtab" paramProperty="subtabLink" >	
 								<div title='<digi:trn key="aim:clickToViewResources">Click here to view resources</digi:trn>'>	
-									<digi:trn key="fm:documentsmanagement">Resources</digi:trn>	
+									<digi:trn key="fm:documentmanagement">Document Management</digi:trn>	
 								</div>
 								</digi:link>	
 							</span>
@@ -312,7 +312,7 @@ html>body #mainEmpty {
 						   	<LI>
 						   		<a name="node">
 								<div>
-									<digi:trn key="aim:workspaceaudittrial">Audit Trial</digi:trn>								
+									<digi:trn key="aim:workspaceaudittrail">Audit Trail</digi:trn>								
 								</div>
 								</a>
 							</LI>
@@ -322,8 +322,8 @@ html>body #mainEmpty {
 							<LI>
 						   		<span>
 									<digi:link href="/teamAuditList.do">
-									<div title='<digi:trn key="aim:clickToViewWorkspaceaudit">Click here to view Audit Trial</digi:trn>'>
-										<digi:trn key="aim:aim:workspaceaudittrial">Audit Trial</digi:trn>
+									<div title='<digi:trn key="aim:clickToViewWorkspaceaudittrail">Click here to view Audit Trail</digi:trn>'>
+										<digi:trn key="aim:aim:workspaceaudittrail">Audit Trail</digi:trn>
 									</div>	
 									</digi:link>							
 						   		</span>
@@ -557,7 +557,7 @@ html>body #mainEmpty {
 						<c:if test="${selectedSubTab  == '1'}">
 						   	<LI>
 							   	<span>
-									<digi:trn key="aim:workspaceApplicationsSettings">Applications Settings</digi:trn>								
+									<digi:trn key="aim:workspaceApplicationSettings">Application Settings</digi:trn>								
 							   	</span>
 							</LI>
 						</c:if>
@@ -566,7 +566,7 @@ html>body #mainEmpty {
 								<div title='<digi:trn key="aim:clickToViewWorkspaceApplicationsSettings">Click here to view Applications Settings</digi:trn>'>
 									<span>
 										<digi:link href="/defaultSettings.do">
-											<digi:trn key="aim:workspaceApplicationsSettings">Applications Settings</digi:trn>
+											<digi:trn key="aim:workspaceApplicationSettings">Application Settings</digi:trn>
 										</digi:link>							
 									</span>	
 								</div>

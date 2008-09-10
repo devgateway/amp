@@ -142,7 +142,7 @@
 	<page name="editReports" title=" - Edit Reports " />
 	<page name="deleteReports" title=" - Delete Reports" />
 	<page name="teamReports" title=" - Team Report List" />
-	<page name="teamAuditList" title=" - Team Audit Trial" />
+	<page name="teamAuditList" title=" - Team Audit Trail" />
 	<page name="activityManager" title=" - Activity Manager" />
 	<page name="addTeamReports" title=" - Add Reports" />
 	<page name="teamMemberReports" title=" - Member Reports" />
@@ -378,8 +378,8 @@
     <page name="printMyDesktop" title="Print Desktop" />
     <page name="addProgramPopup" title="Add Program" />
         <!-- National Planing Dashboard -->
-	<page page="viewNationalPlaningDashboard" name="amp_viewNationalPlaningDashboard" title=" : National Planing Dashboard" />
-	<page page="viewNPD" name="amp_viewNPD" title=" : National Planing Dashboard" />
+	<page page="viewNationalPlaningDashboard" name="amp_viewNationalPlaningDashboard" title=" : National Planning Dashboard" />
+	<page page="viewNPD" name="amp_viewNPD" title=" : National Planning Dashboard" />
     <page page="viewNPDoptions" name="amp_viewNPDoptions" title="Change Options" />
     <page page="viewNPDgrid" name="amp_viewNPDgrid" title=" : NPD Print" />
     <page page="selectOrganisationForAhsurvey" name="selectOrganisationForAhsurvey" title="Select Organization" />

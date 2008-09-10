@@ -261,7 +261,7 @@ function toggleSettings(){
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
 	                    </c:set> --%>
 	                   
-	                    <c:if test="${counter < 6}">
+	                    <c:if test="${counter <= 6}">
 	                    <li>
 	                    <c:if test="${fn:length(report.name) > 25}" >
 							<a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea" title='<c:out value="${report.name}" />'><div><c:out value="${fn:substring(report.name, 0, 25)}" />...</div></a>

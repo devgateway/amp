@@ -111,7 +111,7 @@ public class HelpUtil {
 			if ((keyWords == null || keyWords.equals(""))&&(locale==null)) {
 				String queryString = "from "
 						+ HelpTopic.class.getName()
-						+ " topics where (topics.siteId=:siteId) and (topics.moduleInstance=:moduleInstance)";
+						+ " topics where (topics.siteId=:siteId) and (topics.moduleInstance=:moduleInstance) order by topics.keywordsTrnKey";
 				query = session.createQuery(queryString);
 			} else {
 				String queryString = "select distinct t from "

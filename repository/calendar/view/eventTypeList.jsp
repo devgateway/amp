@@ -8,6 +8,59 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<style>
+
+.tableEven {
+	background-color:#dbe5f1;
+	font-size:8pt;
+	padding:2px;
+}
+
+.tableOdd {
+	background-color:#FFFFFF;
+	font-size:8pt;!important
+	padding:2px;
+}
+ 
+.Hovered {
+	background-color:#a5bcf2;
+}
+</style>
+
+<script language="javascript">
+function setStripsTable(tableId, classOdd, classEven) {
+	var tableElement = document.getElementById(tableId);
+	rows = tableElement.getElementsByTagName('tr');
+	for(var i = 0, n = rows.length; i < n; ++i) {
+		if(i%2 == 0)
+			rows[i].className = classEven;
+		else
+			rows[i].className = classOdd;
+	}
+	rows = null;
+}
+function setHoveredTable(tableId, hasHeaders) {
+
+	var tableElement = document.getElementById(tableId);
+	if(tableElement){
+    var className = 'Hovered',
+        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
+        rows      = tableElement.getElementsByTagName('tr');
+
+		for(var i = 0, n = rows.length; i < n; ++i) {
+			rows[i].onmouseover = function() {
+				this.className += ' ' + className;
+			};
+			rows[i].onmouseout = function() {
+				this.className = this.className.replace(pattern, ' ');
+
+			};
+		}
+		rows = null;
+	}
+}
+</script>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/colorPicker.js"/>"></script>
 
 <script language="javaScript" type="">
@@ -112,23 +165,26 @@ function chooseColor(){
                 <tr>
                   <td>
                     <!--<fieldset>-->
-                      <table>
+                      <table id="dataTable" cellPadding="3" cellSpacing="3">
                         <c:if test="${!empty calendarEventTypeForm.eventTypes}">
                           <tr>
-                            <td style="font-size:14pt;"><digi:trn key="calendar:typeName"><b>Name</b></digi:trn></td>
-                            <td style="font-size:14pt;"><digi:trn key="calendar:typeColor"><b>Color</b></digi:trn></td>
-                            <td>&nbsp;</td>
+                            <td bgcolor="#999999" style="color:black"><digi:trn key="calendar:typeName"><b>Name</b></digi:trn></td>
+                            <td bgcolor="#999999" style="color:black"><digi:trn key="calendar:typeColor"><b>Color</b></digi:trn></td>
+                            <td bgcolor="#999999" style="color:black">&nbsp;</td>
+							<td bgcolor="#999999" style="color:black">&nbsp;</td>
+							<td bgcolor="#999999" style="color:black">&nbsp;</td>
+							<td bgcolor="#999999" style="color:black">&nbsp;</td>
                           </tr>
                           <c:forEach items="${calendarEventTypeForm.eventTypes}" var="eventType" varStatus="varSt">
                             <tr>
                               <td>
-                                <html:text name="eventType" styleId="eventTypeName${varSt.count}" property="name" indexed="true" style="font-family:verdana;font-size:11px;"/>
+                                <html:text name="eventType" styleId="eventTypeName${varSt.count}" property="name" indexed="true" />
                               </td>
                               <td>
-                                <html:text name="eventType" styleId="eventTypeNameColor${varSt.count}" property="color" indexed="true" style="font-family:verdana;font-size:11px;"/>
+                                <html:text name="eventType" styleId="eventTypeNameColor${varSt.count}" property="color" indexed="true"/>
                               </td>
                               <td>
-                                <input type="text" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" style="width:25px;font-family:verdana;font-size:11px;background:${eventType.color}" disabled="disabled" />
+                                <input type="text" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" disabled="disabled" />
                               </td>
                               <td>
                                 <a href=javascript:showColors("colorViwe${varSt.count}","eventTypeNameColor${varSt.count}"); >
@@ -141,7 +197,7 @@ function chooseColor(){
                                   Save
                                   </digi:trn>
                                 </c:set>
-                                <input type="button" value="${translation}" onclick="saveEventType('${eventType.id}');" style="font-family:verdana;font-size:11px;"/>
+                                <input type="button" value="${translation}" onclick="saveEventType('${eventType.id}');" />
                               </td>
                               <td>
                                 <c:set var="translation">
@@ -149,7 +205,7 @@ function chooseColor(){
                                   Delete
                                   </digi:trn>
                                 </c:set>
-                                <input type="button" value="${translation}" onclick="setDeleteId('${eventType.id}');" style="font-family:verdana;font-size:11px;"/>
+                                <input type="button" value="${translation}" onclick="setDeleteId('${eventType.id}');" />
                               </td>
                             </tr>
                           </c:forEach>
@@ -229,3 +285,8 @@ function chooseColor(){
 </tr>
 </table>
 </digi:form>
+
+<script language="javascript">
+setStripsTable("dataTable", "tableEven", "tableOdd");
+setHoveredTable("dataTable", false);
+</script>

@@ -187,33 +187,36 @@ function getContractDisbursments(){
 function generateFields(){
 	var ret = "";
 	ret =			    
-						<field:display name="Contract Name" feature="Contracting">
+						
 							"contractName="+document.getElementsByName("contractName")[0].value+"&"
-						</field:display>
 						<field:display name="Contract Description" feature="Contracting">
 							+ "description="+document.getElementsByName("description")[0].value+"&"
 						</field:display>
-						
-						+ "activityCategoryId="+document.getElementsByName("activityCategoryId")[0].value+"&"
-						+ "typeId="+document.getElementsByName("typeId")[0].value+"&"
-						
+						<field:display name="Contracting IPA Activity Category" feature="Contracting">
+							+ "activityCategoryId="+document.getElementsByName("activityCategoryId")[0].value+"&"
+						</field:display>
+						<field:display name="Contracting IPA Contract Type" feature="Contracting">
+							+ "typeId="+document.getElementsByName("typeId")[0].value+"&"
+						</field:display>
 						<field:display name="Contracting Start of Tendering" feature="Contracting"> 
 							+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
 						</field:display>
 						<field:display name="Contract Validity Date" feature="Contracting">
 							+ "contractValidity="+document.getElementsByName("contractValidity")[0].value+"&"
 						</field:display>
-						
-						+ "statusId="+document.getElementsByName("statusId")[0].value+"&"
-						
-						+ "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
+						<field:display name="Contracting Tab Status" feature="Contracting">
+							+ "statusId="+document.getElementsByName("statusId")[0].value+"&"
+						</field:display>
+						<field:display name="Contracting IPA Contract Type" feature="Contracting">
+							+ "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
+						</field:display>
 						<field:display name="Signature of Contract" feature="Contracting">
 							+ "signatureOfContract="+document.getElementsByName("signatureOfContract")[0].value+"&"
 						</field:display>
 						<field:display name="Contract Completion" feature="Contracting">
 							+ "contractCompletion="+document.getElementsByName("contractCompletion")[0].value+"&"
 						</field:display>
-						<field:display name="Contracting Organization Text" feature="Contracting">
+						<field:display name="Contracting Contractor Name" feature="Contracting">
 							+ "contractingOrganizationText="+document.getElementsByName("contractingOrganizationText")[0].value+"&"
 						</field:display>
 						<field:display name="Contracting Total Amount" feature="Contracting">
@@ -382,29 +385,34 @@ window.onload=autosum;
 </field:display>
 <field:display name="Contracting Activity Category" feature="Contracting">
 	<tr>
-		<td align="left"  nowrap>
-			<digi:trn key="aim:IPA:newPopup:actCat">Activity Category</digi:trn>
-		</td>
-		<td>
-			<category:showoptions name="aimIPAContractForm" property="activityCategoryId"  
-								  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY %>" 
-								  styleClass="inp-text" />
-			
-			&nbsp;&nbsp;&nbsp;
-			<digi:trn key="aim:IPA:newPopup:contractType">Contract Type</digi:trn>
-			&nbsp;&nbsp;
-
-			<category:showoptions name="aimIPAContractForm" property="contractTypeId"  
-								  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_TYPE_KEY %>" 
-								  styleClass="inp-text" />
-
-			&nbsp;&nbsp;&nbsp;
-			<digi:trn key="aim:IPA:newPopup:actType">Activity Type</digi:trn>
-			&nbsp;&nbsp;
-			
-			<category:showoptions name="aimIPAContractForm" property="typeId"  
-								  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_TYPE_KEY %>" 
-								  styleClass="inp-text" />
+		
+		<td colspan="2">
+			<field:display name="Contracting IPA Activity Category" feature="Contracting">
+				<digi:trn key="aim:IPA:newPopup:actCat">Activity Category</digi:trn>&nbsp;&nbsp;
+				<category:showoptions name="aimIPAContractForm" property="activityCategoryId"  
+									  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY %>" 
+									  styleClass="inp-text" />
+				
+				&nbsp;&nbsp;&nbsp;
+			</field:display>
+			<field:display name="Contracting IPA Contract Type" feature="Contracting">
+				<digi:trn key="aim:IPA:newPopup:contractType">Contract Type</digi:trn>
+				&nbsp;&nbsp;
+	
+				<category:showoptions name="aimIPAContractForm" property="contractTypeId"  
+									  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_TYPE_KEY %>" 
+									  styleClass="inp-text" />
+	
+				&nbsp;&nbsp;&nbsp;
+			</field:display>
+			<field:display name="Contracting IPA Contract Type" feature="Contracting">
+				<digi:trn key="aim:IPA:newPopup:actType">Activity Type</digi:trn>
+				&nbsp;&nbsp;
+				
+				<category:showoptions name="aimIPAContractForm" property="typeId"  
+									  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_TYPE_KEY %>" 
+									  styleClass="inp-text" />
+			</field:display>
 			
 		</td>
 	</tr>
@@ -480,13 +488,13 @@ window.onload=autosum;
 	</tr>
 
 	
-	<field:display name="Contracting Organization Text" feature="Contracting">
+	<field:display name="Contracting Contractor Name" feature="Contracting">
 		<tr>
 			<td align="left">
-				<digi:trn key="aim:IPA:newPopup:contractingOrganizationDescription">Description</digi:trn>
+				<digi:trn key="aim:IPA:newPopup:contractingContractorName">Contractor Name</digi:trn>
 			</td>
 			<td colspan="5" align="left">
-				<html:textarea property="contractingOrganizationText" rows="5" cols="85" styleClass="inp-text"/>
+				<html:text  property="contractingOrganizationText" size="75" styleClass="inp-text"/>
 			</td>
 		</tr>				
 	</field:display>

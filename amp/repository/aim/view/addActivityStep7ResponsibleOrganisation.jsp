@@ -44,7 +44,7 @@
 													<table cellSpacing=1 cellPadding=1>
 														<tr><td>
 															<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
-															<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 															</field:display>
 														</td><td>
 															<field:display name="Responsible Organization Organizations Button" feature="Responsible Organization">

@@ -216,7 +216,7 @@ public class TranslatorManager extends Action {
 											msg.setMessage(element.getValue());
 											msg.setCreated(new java.sql.Timestamp(element.getCreated().getTime().getTime()));//element.getCreated());
 											this.updateNewTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i]);
-											
+											logger.info("updating new tr msg...."+msg.getKey());
 										}
 									}
 								}
@@ -227,11 +227,13 @@ public class TranslatorManager extends Action {
 									while(it.hasNext())
 									{
 										TrnHashMap tHP=(TrnHashMap)it.next();
+										logger.info("starting to insert first while....");
 										if(tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i])==0)
 										{
 											Iterator iti=tHP.getTranslations().iterator();
 											while(iti.hasNext())
 											{
+												logger.info("starting to insert....");
 												Trn element = (Trn) iti.next();
 												Message msg= new Message();
 												msg.setKey(element.getMessageKey());
@@ -240,6 +242,7 @@ public class TranslatorManager extends Action {
 												msg.setMessage(element.getValue());
 												msg.setCreated(new java.sql.Timestamp(element.getCreated().getTime().getTime()));
 												insertTranslationMessage(msg);
+												logger.info("inserting...."+msg.getKey());
 											}
 										}
 									}
@@ -265,6 +268,7 @@ public class TranslatorManager extends Action {
 													msg.setMessage(element.getValue());
 													msg.setCreated(new java.sql.Timestamp(element.getCreated().getTime().getTime()));//element.getCreated());
 													this.updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i]);
+													logger.info("updating non existing...."+msg.getKey());
 													
 												}
 											}

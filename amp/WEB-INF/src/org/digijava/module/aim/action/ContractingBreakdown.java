@@ -81,7 +81,7 @@ public class ContractingBreakdown extends TilesAction {
 			for(Iterator<IPAContract> it= contracts.iterator(); it.hasNext();)
 			{
 				IPAContract contract=(IPAContract) it.next();
-	    		
+	    		cc=contract.getTotalAmountCurrency().getCurrencyCode();
 				if (contract.getDisbursements() != null) {
 		             ArrayList<IPAContractDisbursement> disbs = new ArrayList<IPAContractDisbursement>(contract.getDisbursements());
 		             

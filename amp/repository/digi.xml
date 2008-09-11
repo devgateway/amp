@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <digi-config>
     <smtp>
-		 <host>gnyan.ncb.ernet.in</host>
+		 <host>localhost</host>
 		 <from>system@digijava.org</from>
 	</smtp>
 	
-    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-drc.local:8080/login</logon-site>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-burkina.local:8080/login</logon-site>
+    <site-domain id="dgDomain" host="http://amp-burkina.local:8080">http://amp-burkina.local:8080/</site-domain>
 
 <!-- 
 
@@ -141,7 +142,10 @@
 	 <service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
             <description>Daily Currency Rates Service</description>
      </service>
-
+  
+	<service id="digiAuditClenaerService" class="org.digijava.module.aim.services.auditcleaner.AuditCleanerService">
+            <description>This service will delete the audit log</description>
+     </service>
 <!--
     <service id="jcrRespositoryService" class="org.digijava.module.dm.service.RMIDocumentManagementService">
         <description>This service provides RMI access to external JCR repository</description>

@@ -137,6 +137,15 @@ public class SelectTeam extends Action {
             PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
             session.setMaxInactiveInterval(-1);
             lForm.setLogin(true);
+
+            //AMP-4256 - Removing all settings that might come from the other workspace
+            session.removeAttribute(Constants.FILTER_CURRENT_REPORT);
+            session.removeAttribute(Constants.DEFAULT_TEAM_REPORT);
+			session.removeAttribute(Constants.MY_REPORTS);
+			session.removeAttribute(Constants.MY_ACTIVE_TABS);
+			session.removeAttribute(Constants.TEAM_ID);
+            session.removeAttribute(Constants.MY_REPORTS_PER_PAGE);
+
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }

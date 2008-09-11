@@ -21,6 +21,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
@@ -331,6 +332,7 @@ public class HelpUtil {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		String retVal = "";
 		Iterator iter = topics.iterator();
+                String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
 		while (iter.hasNext()) {
 			HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
 			HelpTopic topic = (HelpTopic) item.getMember();
@@ -343,7 +345,7 @@ public class HelpUtil {
 			}
 			retVal += "<img id=\"imgh_"+ topic.getHelpTopicId()+ "\" onclick=\"collapseProgram(" +topic.getHelpTopicId()+ ")\"  src=\"../ampTemplate/images/tree_minus.gif\" style=\"display : none;\">\n";
 			if(topic.getTitleTrnKey()!=null && topic.getTopicKey()!=null){
-			retVal += "<a href=\"../../help/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
+			retVal += "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+topic.getTopicKey()+"\">"+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"</a>";
 			}
 			retVal += "</div>\n";
 			// hidden div start

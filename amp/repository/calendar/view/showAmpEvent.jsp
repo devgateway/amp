@@ -255,7 +255,7 @@ function addOrganisation(orgId, orgName){
   }
 
   function deleteEvent(){
-    if(confirm('Are You sure?')){
+    if(confirm('<digi:trn key="calendar:deleteEventComfirmMsg">Are You sure?</digi:trn>')){
       setMethod("delete");
       return true;
     }

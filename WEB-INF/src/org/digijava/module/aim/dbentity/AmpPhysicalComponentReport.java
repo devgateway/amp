@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class AmpPhysicalComponentReport {
 
 			private Long ampReportId;
@@ -70,7 +72,7 @@ public class AmpPhysicalComponentReport {
 		}
 
 		public Double getActualCommitment() {
-					 return actualCommitment;
+					 return FeaturesUtil.applyThousandsForVisibility(actualCommitment);
 		  }
 
 		   public String getCommCurrencyCode() {
@@ -79,7 +81,7 @@ public class AmpPhysicalComponentReport {
 
 		 
 		  public Double getActualExpenditure() {
-					 return actualExpenditure;
+					 return FeaturesUtil.applyThousandsForVisibility(actualExpenditure);
 		  }
 
 		   public String getExpCurrencyCode() {
@@ -171,7 +173,7 @@ public class AmpPhysicalComponentReport {
 		}
 
 		  public void setActualCommitment(Double actualCommitment) {
-					 this.actualCommitment = actualCommitment;
+					 this.actualCommitment = FeaturesUtil.applyThousandsForEntry(actualCommitment);
 		  }
 
 		   public void setCommCurrencyCode(String commCurrencyCode) {
@@ -180,7 +182,7 @@ public class AmpPhysicalComponentReport {
 
 	
 		  public void setActualExpenditure(Double actualExpenditure) {
-					 this.actualExpenditure = actualExpenditure;
+					 this.actualExpenditure = FeaturesUtil.applyThousandsForEntry(actualExpenditure);
 		  }
 
 		   public void setExpCurrencyCode(String expCurrencyCode) {

@@ -18,9 +18,9 @@
 		<property name="signatureDate" column="signature_date" type="java.util.Date" />
 		<property name="actualStartDate" column="actual_start_date" type="java.util.Date" />
 		<property name="plannedCompletionDate" column="planned_completion_date" type="java.util.Date" />
-		<property name="actualCommitment" column="actual_commitment" type="java.lang.Double"/>
+		<property access="field" name="actualCommitment" column="actual_commitment" type="java.lang.Double"/>
 		<property name="commCurrencyCode" column="comm_currency_code" type="java.lang.String"/>
-		<property name="actualExpenditure" column="actual_expenditure" type="java.lang.Double"/>
+		<property access="field" name="actualExpenditure" column="actual_expenditure" type="java.lang.Double"/>
 		<property name="expCurrencyCode" column="exp_currency_code" type="java.lang.String"/>
 		<property name="status" column="status" type="java.lang.String"/>
 		<property name="reportingDate" column="reporting_date" type="java.util.Date" />

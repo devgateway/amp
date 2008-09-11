@@ -9,7 +9,7 @@
 			</id>
 	        <property name="comment" column="comment" type="java.lang.String"/>
 			<property name="valueDate" column="value_date" type="java.util.Date"/>
-			<property name="value" column="value" type="java.lang.Double"/>
+			<property access="field" name="value" column="value" type="java.lang.Double"/>
 			<property name="valueType" column="value_type" type="int"/>
 			<many-to-one name="logFrame" column="ind_val_category" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/> 
 			<many-to-one name="risk" column="risk" 	class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none"/>

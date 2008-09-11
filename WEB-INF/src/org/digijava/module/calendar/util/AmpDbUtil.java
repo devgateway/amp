@@ -411,7 +411,7 @@ public class AmpDbUtil {
 
                       AmpTeam calTeam = ampCal.getMember().getAmpTeam();
 
-                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMember.getAmpTeam().getAmpTeamId())) {
+                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMemTeam.getAmpTeamId())) {
                           retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
                           continue;
                       }
@@ -438,6 +438,7 @@ public class AmpDbUtil {
           throw new RuntimeException(ex);
       }
   }
+
   public static List getAmpCalendarEvents(GregorianCalendar startDate,
                                           GregorianCalendar endDate,
                                           String[] selectedEventTypeIds,
@@ -446,120 +447,71 @@ public class AmpDbUtil {
                                           boolean showPublicEvents,
                                           String instanceId, String siteId) throws
       CalendarException {
-    try {
-      Session session = PersistenceManager.getRequestDBSession();
-      String queryString = "select ac from " +
-          AmpCalendar.class.getName() + " ac left  join  ac.eventType et left  join ac.organisations don, "+ Calendar.class.getName()   +" c ";
-      /*String queryString = "select ac from " +
-          AmpCalendar.class.getName() + " ac, " +
-          Calendar.class.getName() + " c";
-       */
-      /*if(userId != null && !showPublicEvents) {
-          queryString += ", " + AmpTeamMember.class.getName() + " t1" +
-              ", " + AmpTeamMember.class.getName() + " t2";
-                   }
-       */
-     /* if (userId != null) {
-        queryString += "join ac.user u";
-      }
-      */
+      try {
+          Session session = PersistenceManager.getRequestDBSession();
+          String queryString = "select ac from "+AmpCalendar.class.getName()+" ac left join ac.organisations org, "+Calendar.class.getName()+" c ";
 
-      queryString += " where c.id=ac.calendarPK.calendar.id and " +
-          "(:startDate <= c.startDate and c.startDate <= :endDate or " +
-          ":startDate <= c.endDate and c.endDate <= :endDate or " +
-          "c.startDate <= :startDate and :endDate <= c.endDate)";
-      if (!showPublicEvents) {
-        queryString += " and ac.privateEvent=true";
-      }
+          queryString += "where c.id=ac.calendarPK.calendar.id and " +
+                         "((:startDate <= c.startDate and c.startDate <= :endDate) or " +
+                         "(:startDate <= c.endDate and c.endDate <= :endDate) or " +
+                         "(c.startDate <= :startDate and :endDate <= c.endDate))";
 
-      /* queryString += " where " +
-           "ac.calendarPK.calendar.id = c.id and " +
-           "(:startDate <= c.startDate and c.startDate <= :endDate or " +
-           ":startDate <= c.endDate and c.endDate <= :endDate or " +
-           "c.startDate <= :startDate and :endDate <= c.endDate)";
-       */
-      if (selectedEventTypeIds != null) {
-        queryString += " and et.id in (:selectedEventTypes)";
-      }
-      else {
-        queryString += " and 0 = 1";
-      }
+          if(showPublicEvents){
+              queryString += " and ac.privateEvent=false";
+          }else{
+              queryString += " and ac.privateEvent=true";
+          }
 
-		if (selectedDonorIds != null && selectedDonorIds.length != 0) {
-			queryString += " and (don.id in (:selectedDonorIds)";
+          if(selectedEventTypeIds != null){
+              queryString += " and ac.eventType.id in (:selectedEventTypes)";
+          }else{
+              queryString += " and 0 = 1";
+          }
 
-			// FFerreyra: Add clause to where for "None" donor selected. See AMP-2691
+          if(selectedDonorIds != null && selectedDonorIds.length != 0){
+              queryString += " and (org.id in (:selectedDonorIds)";
 
-			for(int index=0;index<selectedDonorIds.length;index++){
-				if(selectedDonorIds[index].equals("None")){
-					queryString += " or don.id is null ";
-					break;
-				}
-			}
-			queryString += ") ";
-		}
+              // FFerreyra: Add clause to where for "None" donor selected. See AMP-2691
 
-      /* if(userId != null && !showPublicEvents) {
-           queryString += " and ac.user.id = t1.user.id" +
-               " and t1.ampTeam.ampTeamId = t2.ampTeam.ampTeamId" +
-               " and t2.user.id = :userId and ac.privateEvent = true";
-       } else if(userId == null) {
-           queryString += " and ac.privateEvent = false";
-       }
-       */
-      if (instanceId != null) {
-        queryString += " and c.instanceId = :instanceId";
-      }
-      if (siteId != null) {
-        queryString += " and c.siteId = :siteId";
-      }
-      queryString +=" group by c.id";
-      Query query = session.createQuery(queryString);
-      query.setCalendar("startDate", startDate);
-      query.setCalendar("endDate", endDate);
-      if (selectedEventTypeIds != null) {
-        query.setParameterList("selectedEventTypes",
-                               selectedEventTypeIds);
-      }
-      if (selectedDonorIds != null && selectedDonorIds.length != 0 ) {
-        query.setParameterList("selectedDonorIds",
-                               selectedDonorIds);
-      }
-
-      /*   if(userId != null && !showPublicEvents) {
-             query.setLong("userId", userId.longValue());
-         }
-       */
-      if (instanceId != null) {
-        query.setString("instanceId", instanceId);
-      }
-      if (siteId != null) {
-        query.setString("siteId", siteId);
-      }
-
-      //System.out.println("\n\n\n\n\n\n" + query.getQueryString());
-
-
-      List events = query.list();
-      /*if(events != null && !events.isEmpty() && selectedDonorIds != null &&
-         selectedDonorIds.length != 0) {
-          Iterator it = events.iterator();
-          while(it.hasNext()) {
-              Set donors = ((AmpCalendar) it.next()).getDonors();
-              if(donors != null && !donors.isEmpty()) {
-                  Set selectedDonors = AmpUtil.getSelectedDonors(donors,
-                      selectedDonorIds);
-                  if(selectedDonors.isEmpty()) {
-                      it.remove();
+              for(int index = 0; index < selectedDonorIds.length; index++){
+                  if(selectedDonorIds[index].equals("None")){
+                      queryString += " or org is null";
+                      break;
                   }
               }
+              queryString += ")";
           }
-                   }*/
-      return events;
-    }
-    catch (Exception ex) {
-      logger.debug("Unable to get amp calendar events", ex);
-      throw new CalendarException("Unable to get amp calendar events", ex);
-    }
+
+          if (instanceId != null) {
+              queryString += " and c.instanceId = :instanceId";
+          }
+          if (siteId != null) {
+              queryString += " and c.siteId = :siteId";
+          }
+          //queryString += " group by c.id";
+          Query query = session.createQuery(queryString);
+          query.setCalendar("startDate", startDate);
+          query.setCalendar("endDate", endDate);
+          if (selectedEventTypeIds != null) {
+              query.setParameterList("selectedEventTypes", selectedEventTypeIds);
+          }
+          if (selectedDonorIds != null && selectedDonorIds.length != 0) {
+              query.setParameterList("selectedDonorIds", selectedDonorIds);
+          }
+
+          if (instanceId != null) {
+              query.setString("instanceId", instanceId);
+          }
+          if (siteId != null) {
+              query.setString("siteId", siteId);
+          }
+
+          //System.out.println("\n\n\n\n\n\n" + query.getQueryString());
+
+          return query.list();
+      } catch (Exception ex) {
+          logger.debug("Unable to get amp calendar events", ex);
+          throw new CalendarException("Unable to get amp calendar events", ex);
+      }
   }
 }

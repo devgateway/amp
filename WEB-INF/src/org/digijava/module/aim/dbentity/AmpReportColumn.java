@@ -2,6 +2,11 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import net.sf.hibernate.Session;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
@@ -11,6 +16,7 @@ import org.digijava.module.aim.helper.CategoryManagerUtil;
 
 public class AmpReportColumn  implements Serializable, Comparable
 {
+	private static Logger logger = Logger.getLogger(AmpReportColumn.class);
 	@ColumnLike
 	private AmpColumns column;
 	@Order
@@ -18,11 +24,22 @@ public class AmpReportColumn  implements Serializable, Comparable
 	@Level
 	private AmpCategoryValue level;
 	
+	private boolean generated;
+	
 	private static AmpCategoryValue defaultLevel = null;
 	
 	public AmpReportColumn() {
-		if ( defaultLevel==null )
-			defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+		
+		try {
+			Session dbSession = PersistenceManager.getRequestDBSession();
+			if ( defaultLevel==null )
+				defaultLevel=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e);
+		}
+		
 		
 		level	= defaultLevel;
 	}

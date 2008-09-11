@@ -57,7 +57,8 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrency</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpCurrencyRate</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeam</hibernate-class>
-
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicatorValue</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpMEIndicators</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMemberRoles</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamMember</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpApplicationSettings</hibernate-class>

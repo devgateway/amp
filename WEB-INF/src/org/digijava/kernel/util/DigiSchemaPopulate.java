@@ -34,6 +34,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.LogonSite;
 import org.digijava.kernel.entity.Locale;
@@ -41,16 +45,12 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.security.DigiPolicy;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
-import java.net.URL;
-import org.digijava.kernel.service.WebappServiceContext;
-import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.service.ServiceContext;
+import org.digijava.kernel.service.ServiceManager;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
+import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.digijava.module.autopatcher.core.AutopatcherService;
 
 public class DigiSchemaPopulate {
 
@@ -75,34 +75,39 @@ public class DigiSchemaPopulate {
         try {
             logger.debug(" ### [ Begining Data population ] ###");
 
-            File sqlDir = new File("./WEB-INF/classes/initSQL");
-            //-- logger.debug ( sqlDir.getAbsolutePath() );
-
-            DigiFileFilter sqlFilter = new DigiFileFilter(".sql");
-            String[] sqlFiles = sqlDir.list(sqlFilter);
-            String path = "";
-
-            for (int i = 0; i < sqlFiles.length; i++) {
-                path = sqlDir.getAbsolutePath() + sqlDir.separator + sqlFiles[i];
-                logger.debug("Processing: " + path);
-
-                DigiInitUtil.process(path);
-            }
-
+            //using autopatcher to apply initSQL patches
+            AutopatcherService aps=new AutopatcherService();
+            aps.setPatchesDir("/init_patches");
+            aps.processInitEvent(serviceContext);
+            
+//            File sqlDir = new File("./WEB-INF/classes/initSQL");
+//            //-- logger.debug ( sqlDir.getAbsolutePath() );
+//
+//            DigiFileFilter sqlFilter = new DigiFileFilter(".sql");
+//            String[] sqlFiles = sqlDir.list(sqlFilter);
+//            String path = "";
+//
+//            for (int i = 0; i < sqlFiles.length; i++) {
+//                path = sqlDir.getAbsolutePath() + sqlDir.separator + sqlFiles[i];
+//                logger.info("Processing: " + path);
+//
+//                DigiInitUtil.process(path);
+//            }
+//
             DigiPolicy policy = new DigiPolicy();
             policy.install();
 
             // Create login site
-            DigiInitUtil.createLoginSite();
+           // DigiInitUtil.createLoginSite();
 
             // Create demo site
-            DigiInitUtil.createDemoSite();
+            //DigiInitUtil.createDemoSite();
 
             // Create um/user and admin/default instances
-            DigiInitUtil.createCommonInstances();
+            //DigiInitUtil.createCommonInstances();
 
             // Greate system user
-            DigiInitUtil.createGlobalAdmin();
+            //DigiInitUtil.createGlobalAdmin();
         }
         finally {
             PersistenceManager.cleanup();
@@ -181,14 +186,15 @@ class DigiInitUtil {
     }
 
     static boolean process(String path) {
-
-        String s, szFInput = "";
+    	StringBuffer szFInput=new StringBuffer();
+        String s;
         String[] commands;
 
         try {
             BufferedReader in = new BufferedReader(new FileReader(path));
             while ( (s = in.readLine()) != null) {
-                szFInput += s + "\n";
+            	
+                szFInput.append(s).append('\n');
             }
             in.close();
         }
@@ -204,7 +210,7 @@ class DigiInitUtil {
         //-- approach is safer. Of course ";" may theoretically be part of the sql
         //-- and that can ruin our logic, but we know that our data won't have things like that.
 
-        commands = szFInput.split(";");
+        commands = szFInput.toString().split(";");
 
         //-- Just a test
         Session session = null;
@@ -218,7 +224,7 @@ class DigiInitUtil {
             for (int i = 0; i < commands.length; i++) {
 
                 if (commands[i].trim().length() != 0) {
-                    logger.debug("Processing command: " + commands[i]);
+                    logger.info("Processing SQL command: " + commands[i]);
                     st.execute(commands[i]);
                 }
 
@@ -351,19 +357,19 @@ class DigiInitUtil {
             loginSite.getHost() != null &&
             loginSite.getHost().trim().length() != 0) {
 
-            String loginSiteHost = loginSite.getHost().trim();
-            if (loginSite.getPath() == null || loginSite.getPath().trim().length() == 0) {
-                for (int i = 0; i < hostIpAddresses.length; i++) {
-                    if (hostIpAddresses[i].equals(loginSiteHost)) {
-                        logger.error("Login site must be different than " +
-                                     "\"localhost\" and any non-local IP " +
-                                     "addresses for the machine. The current " +
-                                     "setting (" + loginSiteHost +
-                                     ") violates this rule");
-                        return false;
-                    }
-                }
-            }
+//            String loginSiteHost = loginSite.getHost().trim();
+//            if (loginSite.getPath() == null || loginSite.getPath().trim().length() == 0) {
+//                for (int i = 0; i < hostIpAddresses.length; i++) {
+//                    if (hostIpAddresses[i].equals(loginSiteHost)) {
+//                        logger.error("Login site must be different than " +
+//                                     "\"localhost\" and any non-local IP " +
+//                                     "addresses for the machine. The current " +
+//                                     "setting (" + loginSiteHost +
+//                                     ") violates this rule");
+//                        return false;
+//                    }
+//                }
+//            }
         }
         return true;
     }

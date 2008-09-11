@@ -113,7 +113,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		List<AmpTheme> nationalPlanningObjectives;
 		AmpActivityProgramSettings natPlanSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
-		if (natPlanSetting.getDefaultHierarchy() != null) {
+		if (natPlanSetting!=null && natPlanSetting.getDefaultHierarchy() != null) {
 			nationalPlanningObjectives = ProgramUtil.getAmpThemesAndSubThemes(natPlanSetting.getDefaultHierarchy());
 		} else {
 			nationalPlanningObjectives = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
@@ -121,7 +121,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		List<AmpTheme> primaryPrograms;
 		AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
-		if (primaryPrgSetting.getDefaultHierarchy() != null) {
+		if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
 			primaryPrograms = ProgramUtil.getAmpThemesAndSubThemes(primaryPrgSetting.getDefaultHierarchy());
 		} else {
 			primaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
@@ -130,7 +130,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		List<AmpTheme> secondaryPrograms;
 		AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
-		if (secondaryPrg.getDefaultHierarchy() != null) {
+		if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
 			secondaryPrograms = ProgramUtil.getAmpThemesAndSubThemes(secondaryPrg.getDefaultHierarchy());
 		} else {
 			secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
@@ -167,7 +167,7 @@ public class ReportsFilterPicker extends MultiAction {
 			if (filterForm.getCurrency() == null) {
 				filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
 			}
-			if (filterForm.getCalendar() == null) {
+			if (tempSettings.getFiscalCalendar()!=null && filterForm.getCalendar() == null) {
 				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 			}
 		} else {
@@ -790,7 +790,9 @@ public class ReportsFilterPicker extends MultiAction {
 			String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 			defauCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calValue));
 		}
-			
+		
+		if(defauCalendar==null) return 0;
+		
 		Integer year=getYearOnCalendar(cal, pyear,defauCalendar);
 		cal=null;
 		return year;

@@ -2,7 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.digijava.module.aim.helper.DateConversion;
+
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -65,10 +66,10 @@ public class AmpIndicatorValue implements Serializable{
 		this.valueDate = valueDate;
 	}
 	public Double getValue() {
-		return value;
+		return FeaturesUtil.applyThousandsForVisibility(value);
 	}
 	public void setValue(Double value) {
-		this.value = value;
+		this.value = FeaturesUtil.applyThousandsForEntry(value);
 	}
 	public int getValueType() {
 		return valueType;

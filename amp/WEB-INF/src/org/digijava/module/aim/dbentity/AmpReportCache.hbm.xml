@@ -20,12 +20,12 @@
 		<property name="ampDonorId" column="amp_donor_id" type="java.lang.Long"/>
 		<property name="orgType" column="org_type" type="java.lang.String"/>
 		<property name="ampFundingId" column="amp_funding_id" type="java.lang.Long"/>
-		<property name="plannedCommitment" column="planned_commitment" type="java.lang.Double"/>
-		<property name="plannedDisbursement" column="planned_disbursement" type="java.lang.Double"/>
-		<property name="plannedExpenditure" column="planned_expenditure" type="java.lang.Double"/>
-		<property name="actualCommitment" column="actual_commitment" type="java.lang.Double"/>
-		<property name="actualDisbursement" column="actual_disbursement" type="java.lang.Double"/>
-		<property name="actualExpenditure" column="actual_expenditure" type="java.lang.Double"/>
+		<property access="field" name="plannedCommitment" column="planned_commitment" type="java.lang.Double"/>
+		<property access="field" name="plannedDisbursement" column="planned_disbursement" type="java.lang.Double"/>
+		<property access="field" name="plannedExpenditure" column="planned_expenditure" type="java.lang.Double"/>
+		<property access="field" name="actualCommitment" column="actual_commitment" type="java.lang.Double"/>
+		<property access="field" name="actualDisbursement" column="actual_disbursement" type="java.lang.Double"/>
+		<property access="field" name="actualExpenditure" column="actual_expenditure" type="java.lang.Double"/>
 		<property name="currencyCode" column="currency_code" type="java.lang.String"/>
 		<property name="actualStartDate" column="actual_start_date" type="java.util.Date" />
 		<property name="actualCompletionDate" column="actual_completion_date" type="java.util.Date" />

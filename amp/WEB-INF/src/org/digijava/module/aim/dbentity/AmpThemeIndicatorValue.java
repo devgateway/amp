@@ -3,6 +3,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 @Deprecated
 public class AmpThemeIndicatorValue implements Comparable, Serializable 
 {
@@ -52,13 +54,13 @@ public class AmpThemeIndicatorValue implements Comparable, Serializable
 	 * @return Returns the valueAmount.
 	 */
 	public Double getValueAmount() {
-		return valueAmount;
+		return FeaturesUtil.applyThousandsForVisibility(valueAmount);
 	}
 	/**
 	 * @param valueAmount The valueAmount to set.
 	 */
 	public void setValueAmount(Double valueAmount) {
-		this.valueAmount = valueAmount;
+		this.valueAmount = FeaturesUtil.applyThousandsForEntry(valueAmount);
 	}
 	/**
 	 * @return Returns the valueType.

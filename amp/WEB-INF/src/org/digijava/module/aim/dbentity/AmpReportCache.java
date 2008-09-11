@@ -2,6 +2,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
 
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class AmpReportCache {
 
 		  private Long ampReportId;
@@ -96,27 +98,27 @@ public class AmpReportCache {
 		  }
 
 		  public Double getPlannedCommitment() {
-					 return plannedCommitment;
+					 return FeaturesUtil.applyThousandsForVisibility(plannedCommitment);
 		  }
 
 		  public Double getPlannedDisbursement() {
-					 return plannedDisbursement;
+					 return FeaturesUtil.applyThousandsForVisibility(plannedDisbursement);
 		  }
 
 		  public Double getPlannedExpenditure() {
-					 return plannedExpenditure;
+					 return FeaturesUtil.applyThousandsForVisibility(plannedExpenditure);
 		  }
 
 		  public Double getActualCommitment() {
-					 return actualCommitment;
+					 return FeaturesUtil.applyThousandsForVisibility(actualCommitment);
 		  }
 
 		  public Double getActualDisbursement() {
-					 return actualDisbursement;
+					 return FeaturesUtil.applyThousandsForVisibility(actualDisbursement);
 		  }
 
 		  public Double getActualExpenditure() {
-					 return actualExpenditure;
+					 return FeaturesUtil.applyThousandsForVisibility(actualExpenditure);
 		  }
 
 		  public String getCurrencyCode() {
@@ -241,27 +243,27 @@ public class AmpReportCache {
 		  }
 
 		  public void setPlannedCommitment(Double plannedCommitment) {
-					 this.plannedCommitment = plannedCommitment;
+					 this.plannedCommitment = FeaturesUtil.applyThousandsForEntry(plannedCommitment);
 		  }
 
 		  public void setPlannedDisbursement(Double plannedDisbursement) {
-					 this.plannedDisbursement = plannedDisbursement;
+					 this.plannedDisbursement = FeaturesUtil.applyThousandsForEntry(plannedDisbursement);
 		  }
 
 		  public void setPlannedExpenditure(Double plannedExpenditure) {
-					 this.plannedExpenditure = plannedExpenditure;
+					 this.plannedExpenditure = FeaturesUtil.applyThousandsForEntry(plannedExpenditure);
 		  }
 
 		  public void setActualCommitment(Double actualCommitment) {
-					 this.actualCommitment = actualCommitment;
+					 this.actualCommitment = FeaturesUtil.applyThousandsForEntry(actualCommitment);
 		  }
 
 		  public void setActualDisbursement(Double actualDisbursement) {
-					 this.actualDisbursement = actualDisbursement;
+					 this.actualDisbursement = FeaturesUtil.applyThousandsForEntry(actualDisbursement);
 		  }
 
 		  public void setActualExpenditure(Double actualExpenditure) {
-					 this.actualExpenditure = actualExpenditure;
+					 this.actualExpenditure = FeaturesUtil.applyThousandsForEntry(actualExpenditure);
 		  }
 
 		  public void setCurrencyCode(String currencyCode) {

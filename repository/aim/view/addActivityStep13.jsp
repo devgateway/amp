@@ -476,7 +476,7 @@
 			                                            </td>
 			                                        </tr>	
 		                                         </field:display>
-			                                     <field:display name="Contract Validity" feature="Contracting">
+			                                     <field:display name="Contract Validity Date" feature="Contracting">
 			                                        <tr>
 			                                            <td align="left">
 			                                                <b><digi:trn key="aim:IPA:popup:contractValidityDate">Contract Validity Date</digi:trn>:</b>
@@ -499,10 +499,10 @@
 			                                            </td>
 			                                        </tr>	
 		                                         </field:display>
-		                                        <field:display name="Contracting Organization Text" feature="Contracting">
+		                                        <field:display name="Contracting Contractor Name" feature="Contracting">
 			                                         <tr>
 			                                            <td align="left">
-			                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
+			                                                 <b><digi:trn key="aim:IPA:newPopup:contractingContractorName">Contractor Name</digi:trn>:</b>
 			                                             </td>
 			                                             <td>
 			                                                      ${contract.contractingOrganizationText}
@@ -649,7 +649,7 @@
 			                                              <td>
 			              									${contract.totalDisbursements} &nbsp;
 			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-			              										&nbsp; ${aimEditActivityForm.currCode}
+			              										&nbsp; ${contract.totalAmountCurrency}
 			              									</logic:empty>
 			              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
 			              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
@@ -674,11 +674,11 @@
 			                                              </td>
 			                                              <td>
 			              									${contract.fundingTotalDisbursements} &nbsp;
-			              									<logic:empty name="contract" property="totalAmountCurrency">
-			              										&nbsp; ${aimEditActivityForm.currCode}
-			              									</logic:empty>
-			              									<logic:notEmpty name="contract" property="totalAmountCurrency">
+			              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
 			              										&nbsp; ${contract.totalAmountCurrency}
+			              									</logic:empty>
+			              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
+			              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
 			              									</logic:notEmpty>
 			                                              </td>
 			                                          </tr>

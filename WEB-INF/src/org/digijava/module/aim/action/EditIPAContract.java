@@ -110,7 +110,7 @@ public class EditIPAContract extends MultiAction {
         euaf.reset(mapping, request);
         Integer indexId = new Integer(request.getParameter("indexId")) - 1;
         IPAContract contract = (IPAContract) eaf.getContracts().get(indexId);
-        
+        if(eaf.getFundingDetails()!=null)
         for (Iterator it = eaf.getFundingDetails().iterator(); it.hasNext();) {
 			FundingDetail afd = (FundingDetail) it.next();
 			if(afd.getContract()!=null)
@@ -649,6 +649,7 @@ public class EditIPAContract extends MultiAction {
          
         String cc=eaf.getCurrCode();
          if (eua.getDisbursements() != null) {
+        	 cc=eua.getTotalAmountCurrency().getCurrencyCode();
              ArrayList<IPAContractDisbursement> disbs = new ArrayList(eua.getDisbursements());
              
              //if there is no disbursement global currency saved in db we'll use the default from edit activity form

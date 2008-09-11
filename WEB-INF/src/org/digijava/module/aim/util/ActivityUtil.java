@@ -2659,9 +2659,11 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       qry.setLong("activityId",activityId );
       contrcats = qry.list();
       ArrayList<IPAContract> fullContracts=new ArrayList<IPAContract>();
+      String cc="";
       for(Iterator i=contrcats.iterator();i.hasNext();)
       {
     	  IPAContract c=(IPAContract) i.next();
+    	  cc=c.getTotalAmountCurrency().getCurrencyCode();
     	  double td=0;
     	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
     	  {
@@ -2669,10 +2671,12 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     		  if(cd.getAmount()!=null)
     			  td+=cd.getAmount().doubleValue();
     	  }
+    	  if(c.getDibusrsementsGlobalCurrency()!=null)
+        	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
     	  c.setTotalDisbursements(new Double(td));
     	  c.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(c, c.getTotalAmountCurrency().getCurrencyCode()));
-		  c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, c.getTotalAmountCurrency().getCurrencyCode()));
-		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, c.getTotalAmountCurrency().getCurrencyCode()));
+		  c.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(c, cc));
+		  c.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(c, cc));
     	  
       }
     }
@@ -2711,6 +2715,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	      for(Iterator i=contrcats.iterator();i.hasNext();)
 	      {
 	    	  IPAContract c=(IPAContract) i.next();
+	    	  cc=c.getTotalAmountCurrency().getCurrencyCode();
 	    	  if(c.getDibusrsementsGlobalCurrency()!=null)
 	          	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
 	    	  double td=0;

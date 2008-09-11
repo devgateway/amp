@@ -298,7 +298,7 @@
 <field:display name="Contract Number" feature="Planning"></field:display> 
 <field:display name="Contract Organization" feature="Contracting"></field:display> 
 <field:display name="Contract Validity Date" feature="Contracting"></field:display> 
-<field:display name="Contract Validity" feature="Contracting"></field:display> 
+<field:display name="Contract Validity Date" feature="Contracting"></field:display> 
 <field:display name="Contract of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Contract of Disbursement Order" feature="Disbursement"></field:display> 
 <field:display name="Contract type" feature="Contracting"></field:display> 
@@ -314,7 +314,7 @@
 <field:display name="Contracting IB" feature="Contracting"></field:display> 
 <field:display name="Contracting IFIs" feature="Contracting"></field:display> 
 <field:display name="Contracting INV" feature="Contracting"></field:display> 
-<field:display name="Contracting Organization Text" feature="Contracting"></field:display> 
+<field:display name="Contracting Contractor Name" feature="Contracting"></field:display> 
 <field:display name="Contracting Regional Amount" feature="Contracting"></field:display> 
 <field:display name="Contracting Save Button" feature="Contracting"></field:display> 
 <field:display name="Contracting Start of Tendering" feature="Contracting"></field:display> 

@@ -195,7 +195,7 @@ function projectFiche(id)
                                                                                         </tr>	
                                                                                     </field:display>
                                                                                    
-                                                                                    <field:display name="Contracting Organization Text" feature="Contracting">
+                                                                                    <field:display name="Contracting Contractor Name" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>

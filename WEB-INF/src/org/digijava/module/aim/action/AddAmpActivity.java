@@ -174,6 +174,16 @@ public class AddAmpActivity extends Action {
            List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
            eaForm.setContracts(contracts);
      }
+    //refreshing the execution rate...
+    else {
+//    	for (Iterator it = eaForm.getContracts().iterator(); it.hasNext();) {
+//			IPAContract contract = (IPAContract) it.next();
+//			contract.setExecutionRate(ActivityUtil.computeExecutionRateFromTotalAmount(contract, cc));
+//		    contract.setFundingTotalDisbursements(ActivityUtil.computeFundingDisbursementIPA(contract, cc));
+//		    contract.setFundingExecutionRate(ActivityUtil.computeExecutionRateFromContractTotalValue(contract, cc));
+//			
+//		}
+    }
 
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());

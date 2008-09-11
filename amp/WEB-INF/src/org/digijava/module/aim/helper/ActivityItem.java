@@ -108,10 +108,15 @@ public class ActivityItem {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			if (entity.getCreatedDate() != null){
-				startDate = frmt.format(entity.getCreatedDate());
+			if (entity.getActualStartDate() != null){
+				startDate = frmt.format(entity.getActualStartDate());
 			}else{
-				startDate = "";
+                            if(entity.getProposedStartDate()!=null){
+				startDate = frmt.format(entity.getProposedStartDate());
+                            }
+                            else{
+                                startDate="";
+                            }
 			}
 			donors = getDonorsFromFundings(entity.getFunding());
 		}

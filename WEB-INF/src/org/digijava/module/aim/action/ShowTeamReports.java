@@ -170,7 +170,7 @@ public class ShowTeamReports extends Action {
 					}
 				}
 			}
-			if (!found && defaultTeamReport!=null){
+			if (!found && defaultTeamReport!=null && rf.getShowTabs()){
 				teamResults.add(defaultTeamReport);
 			}
 			if(teamResults!=null){

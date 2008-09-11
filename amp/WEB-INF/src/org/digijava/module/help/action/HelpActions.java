@@ -1,6 +1,8 @@
 package org.digijava.module.help.action;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,8 +12,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -25,6 +29,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.help.dbentity.HelpTopic;
@@ -69,17 +74,54 @@ public class HelpActions extends DispatchAction {
 		return result;
 	}
 
+	public ActionForward vewSearchKey(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		  	OutputStreamWriter os = null;	
+		    PrintWriter out = null;
+		    String loadStatus =request.getParameter("loadKey");
+		    Editor item = new Editor();
+			 
+			 try {
+				 os = new OutputStreamWriter(response.getOutputStream());
+				 if(loadStatus != null){
+						 List<Editor> data =  HelpUtil.getAllHelpData();
+						 
+						 for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
+							  item = (Editor) iter.next();
+				 			
+				             int editkey = item.getEditorKey().indexOf("body:");
+				             String title = item.getEditorKey().substring(editkey+5);
+				             if(title.length()>=loadStatus.length()){
+				             if(loadStatus.toLowerCase().equals(title.toLowerCase().substring(0,loadStatus.length()))){
+				            	
+				            	out = new PrintWriter(os, true);	 
+				                out.println("<div id="+title+" onclick=\"select("+title+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+title+"</div>");
+				             }
+				           }
+						}
+					 }
+				 out.flush();
+				 out.close();	
+	} catch (Exception e) {
+	     e.printStackTrace();
+	 }
+	 return null;
+ }
+	
+	
 	public ActionForward searchHelpTopic(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		 HelpForm helpForm = (HelpForm) form;
+			HelpForm helpForm = (HelpForm) form;
 		 String siteId = RequestUtils.getSite(request).getSiteId();
 		 String moduleInstance = RequestUtils.getRealModuleInstance(request)
 		 .getInstanceName();
 		 String locale=RequestUtils.getNavigationLanguage(request).getCode();
 		 String keywords = helpForm.getKeywords();
-		 
-		 if(keywords != ""){
+		
+	 	
+		 if(keywords != null){
 		 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
 		
 		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords());
@@ -108,8 +150,8 @@ public class HelpActions extends DispatchAction {
     	  }
     	}
    	}
-		 helpForm.setHelpTopics(HelpUtil.getHelpTopics(siteId, moduleInstance,locale,
-		 keywords));
+		// helpForm.setHelpTopics(HelpUtil.getHelpTopics(siteId, moduleInstance,locale,
+		// keywords));
 		 return mapping.findForward("help");		
 	}
 

@@ -217,6 +217,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         
         private boolean createdAsDraft;
 
+        
+        public AmpActivity() {
+			// TODO Auto-generated constructor stub
+		}
+       
+        public AmpActivity(Long ampActivityId, String name,Boolean budget, Date updatedDate, AmpTeamMember updateBy, String ampid) {
+        	this.ampActivityId=ampActivityId;
+			this.name=name;
+			this.budget=budget;
+			this.updatedDate=updatedDate;
+			this.updatedBy=updateBy;
+			this.ampId=ampid;
+		}
+        
         public boolean isCreatedAsDraft() {
             return createdAsDraft;
         }

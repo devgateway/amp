@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -1678,87 +1680,95 @@ public class TeamUtil {
         return col;
     }
 
+ 
+    
     public static Collection getAllTeamActivities(Long teamId) {
-        Session session = null;
-        Collection col = new ArrayList();
+		Session session = null;
+		Collection col = new ArrayList();
 
-        try {
-            session = PersistenceManager.getSession();
+		try {
+			session = PersistenceManager.getSession();
 
-            String queryString = "";
-            Query qry = null;
+			String queryString = "";
+			Query qry = null;
+			if (teamId != null) {
+				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
+						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
+				qry = session.createQuery(queryString);
+				qry.setParameter("teamId", teamId, Hibernate.LONG);
+			} else {
+				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy,role.role.roleCode,role.organisation.name  , act.ampId from " + AmpActivity.class.getName()
+						+ " act left join act.orgrole role left join  act.updatedBy   where act.team is null ";
+				qry = session.createQuery(queryString);
 
-            if(teamId != null) {
-                queryString = "select act from " + AmpActivity.class.getName()
-                    + " act where (act.team=:teamId)";
-                qry = session.createQuery(queryString);
-                qry.setParameter("teamId", teamId, Hibernate.LONG);
+			}
+			
+			qry.setFetchSize(100);
+			Iterator itr = qry.list().iterator();
 
-            } else {
-                queryString = "select act from " + AmpActivity.class.getName()
-                    + " act where act.team is null";
-                qry = session.createQuery(queryString);
-            }
+			HashMap<Long, AmpActivity> holder = new HashMap<Long, AmpActivity>();
+			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
+			while (itr.hasNext()) {
 
-            Iterator itr = qry.list().iterator();
+				Object[] act = (Object[]) itr.next();
+				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
+				AmpActivity tmp = holder.get(activity.getAmpActivityId());
+				if (tmp==null){
+					holder.put(activity.getAmpActivityId().longValue(), activity);
+				}
+				String roleCode=(String) act[5];
+				String name=(String) act[6];
+				
+				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
+				donnorList =(donnorList==null)?new ArrayList<String>():donnorList;
+				if (roleCode != null && roleCode.equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name)) {
+					donnorList.add(name);
+				}
+				
+				donnors.put(activity.getAmpActivityId().longValue(), donnorList);
+			}
 
-            while(itr.hasNext()) {
+			for (AmpActivity activity : holder.values()) {
 
-                AmpActivity activity = (AmpActivity) itr.next();
-                Collection temp1 = activity.getOrgrole();
-                Collection temp2 = new ArrayList();
-                Iterator temp1Itr = temp1.iterator();
-                while(temp1Itr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
-                    if(!temp2.contains(orgRole))
-                        temp2.add(orgRole);
-                }
+				Activity act = new Activity();
+				act.setActivityId(activity.getAmpActivityId());
+				act.setName(activity.getName());
+				act.setBudget(activity.getBudget());
+				act.setAmpId(activity.getAmpId());
+				act.setUpdatedBy(activity.getUpdatedBy());
+				act.setUpdatedDate(activity.getUpdatedDate());
+				String donors = "";
 
-                Iterator orgItr = temp2.iterator();
+				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
+				
+				for (String string : donnorList) {
+					if (donors.trim().length() > 0) {
+						donors += ", ";
+					}
+					donors += string;
+				}
+				
+				act.setDonors(donors);
+				col.add(act);
 
-                Activity act = new Activity();
-                act.setActivityId(activity.getAmpActivityId());
-                act.setName(activity.getName());
-                act.setBudget(activity.getBudget());
-                act.setAmpId(activity.getAmpId());
-                act.setUpdatedBy(activity.getUpdatedBy());
-                act.setUpdatedDate(activity.getUpdatedDate());
-                String donors = "";
+			}
 
-                while(orgItr.hasNext()) {
-                  AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                  AmpRole ampRole = orgRole.getRole();
-                  if (ampRole != null) {
-                    String roleCode = ampRole.getRoleCode();
-                    if (roleCode != null && roleCode.equals(Constants.FUNDING_AGENCY)) {
-                      if (donors.trim().length() > 0) {
-                        donors += ", ";
-                      }
-                      donors += orgRole.getOrganisation().getName();
-                    }
-                  }
-                }
-                act.setDonors(donors);
-                col.add(act);
-
-            }
-
-        } catch(Exception e) {
-            logger.debug("Exception from getAllTeamActivities()");
-            logger.debug(e.toString());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.debug("releaseSession() failed");
-                logger.debug(ex.toString());
-            }
-        }
-        return col;
-    }
+		} catch (Exception e) {
+			logger.debug("Exception from getAllTeamActivities()");
+			logger.debug(e.toString());
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
 
     /*
      * return ReportsCollection Object

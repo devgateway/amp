@@ -8,12 +8,12 @@
 
 <digi:instance property="aimUserEmailForm" />
 
-<jsp:include page="header.jsp" flush="true" />			
+
 <table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
 	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;
+		<td width=14>&nbsp;
 		</td>
-		<td align=left class=r-dotted-lg vAlign=top width=520><br>
+		<td align=left vAlign=top width=520><br>
 			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td width="3%">&nbsp;</td>				
@@ -33,11 +33,10 @@
 				</tr>				
 			</table>
 		</td>
-		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top>
+		<td bgColor=#dbe5f1 vAlign=top>
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
-		          <td class=r-dotted-lg-buttom vAlign=top><br>
-						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+		          <td vAlign=top><br>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewFactsAboutMOFED">Click here to view Facts about MOFED</digi:trn>
 						</c:set>
@@ -47,7 +46,6 @@
 						</digi:trn>
 						</digi:link>
 						<BR><BR><BR>
-						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToGetStarted">Click here to Get Started</digi:trn>
 						</c:set>
@@ -57,7 +55,6 @@
 						</digi:trn>						
 						</digi:link>
 						<BR><BR><BR>
-						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToUseAmpEthiopia">Click here to Use AMP Ethiopia now</digi:trn>
 						</c:set>
@@ -73,8 +70,8 @@
 		          <td vAlign=top>&nbsp;</td>
         		</tr>
         		<tr>
-	          	<td class=r-dotted-lg-buttom vAlign=top>
-						<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
+	          	<td vAlign=top>
+						 <strong>
 						 <digi:trn key="aim:loginWarning">
 						 You are signing-in to one or more secure applications for        
 	        		     official business. You have been granted the right to access these        
@@ -82,6 +79,7 @@
         	   			 your official business. Your accounts and passwords are your        
 						 responsibility. Do not share them with anyone.        
 						 </digi:trn>
+						 </strong>
 						<BR><BR>
           		</td>
   				</tr> 
@@ -89,11 +87,6 @@
           		<td vAlign=top>&nbsp;</td>
   				</tr>
 	      </table>
-		  <TR>
 		</td>
-	</tr>
+		</tr>
 </table>
-
-
-
-

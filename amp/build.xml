@@ -52,6 +52,9 @@
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
+        <fileset dir="${jboss-lib}">
+        	<include name="**/*.jar"/>
+         </fileset>
         <fileset dir="${system.lib}">
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>

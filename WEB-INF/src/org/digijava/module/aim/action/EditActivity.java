@@ -1000,6 +1000,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			            fund.setOrgFundingId(ampFunding.getFinancingId());
 			            fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 			            fund.setConditions(ampFunding.getConditions());
+			            fund.setDonorObjective(ampFunding.getDonorObjective());
 
 			            /* Get MTEF Projections */
 			            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();

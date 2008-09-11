@@ -90,7 +90,8 @@ public class FundingAdded extends Action {
 		newFund.setOrgFundingId(eaForm.getOrgFundingId());
 		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getModality()));
 		newFund.setConditions(eaForm.getFundingConditions());
-
+		newFund.setDonorObjective(eaForm.getDonorObjective());
+		
 		Collection fundDetails = new ArrayList();
 		if (eaForm.getFundingDetails() != null) {
 			Iterator itr = eaForm.getFundingDetails().iterator();

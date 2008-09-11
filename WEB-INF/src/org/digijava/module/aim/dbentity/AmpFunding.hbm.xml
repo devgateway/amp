@@ -25,6 +25,7 @@
 		<property name="lastAuditDate" column="last_audit_date" type="java.util.Date" />
 		<property name="reportingDate" column="reporting_date" type="java.util.Date"/>
 		<property name="conditions" column="conditions" type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="donorObjective" column="donor_objective" type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="calType" column="cal_type" type="java.lang.String"/>

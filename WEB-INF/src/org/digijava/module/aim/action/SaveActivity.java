@@ -1234,6 +1234,12 @@ public class SaveActivity extends Action {
 								} else {
 									ampFunding.setConditions(new String(" "));
 								}
+								if (fund.getDonorObjective() != null
+										&& fund.getDonorObjective().trim().length() != 0) {
+									ampFunding.setDonorObjective(fund.getDonorObjective());
+								} else {
+									ampFunding.setDonorObjective(new String(" "));
+								}
 								ampFunding.setComments(new String(" "));
 								/*ampFunding.setAmpTermsAssistId(fund.getAmpTermsAssist());*/
 								ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );

@@ -366,6 +366,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String actualStartDate;
 	private String actualCompletionDate;
 	private String fundingConditions;
+	private String donorObjective;
 	private Collection currencies;
 	private Collection <AmpCurrency> validcurrencies;
 	private Collection organizations;
@@ -809,6 +810,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			actualStartDate = null;
 			actualCompletionDate = null;
 			fundingConditions = null;
+			donorObjective = null;
 			event = null;
 			currencies = null;
 			validcurrencies=null;
@@ -5481,6 +5483,20 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setAllFundingDetails(List allFundingDetails) {
 		this.allFundingDetails = allFundingDetails;
+	}
+
+	/**
+	 * @return the donorObjective
+	 */
+	public String getDonorObjective() {
+		return this.donorObjective;
+	}
+
+	/**
+	 * @param donorObjective the donorObjective to set
+	 */
+	public void setDonorObjective(String donorObjective) {
+		this.donorObjective = donorObjective;
 	}
 
 }

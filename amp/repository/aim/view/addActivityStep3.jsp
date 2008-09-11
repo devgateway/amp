@@ -622,6 +622,18 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                               </tr>
                                                                               </field:display>
+                                                                            <field:display name="Donor Objective" feature="Funding Information">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>"><digi:trn key="aim:donorobjective">Donor Objective</digi:trn>
+</a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <bean:write name="funding"	property="donorObjective"/>
+                                                                                </td>
+                                                                              </tr>
+                                                                              </field:display>
                                                                             </table>
                                           </td>
                                                                         </tr>

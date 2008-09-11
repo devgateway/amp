@@ -24,6 +24,7 @@ public class AmpFunding implements Serializable
 	private Date lastAuditDate;
 	private Date reportingDate ;
 	private String conditions ;
+	private String donorObjective ;
 	private String language ;
 	private String version ;
 	private String calType;
@@ -385,6 +386,20 @@ public class AmpFunding implements Serializable
 
 	public void setMtefProjections(Set<AmpFundingMTEFProjection> mtefProjections) {
 		this.mtefProjections = mtefProjections;
+	}
+
+	/**
+	 * @return the donorObjective
+	 */
+	public String getDonorObjective() {
+		return this.donorObjective;
+	}
+
+	/**
+	 * @param donorObjective the donorObjective to set
+	 */
+	public void setDonorObjective(String donorObjective) {
+		this.donorObjective = donorObjective;
 	}
 	
 	

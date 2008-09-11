@@ -32,6 +32,7 @@ public class Funding implements Serializable
    	private String actCloseDate;
    	private String reportingDate;
    	private String conditions;
+   	private String donorObjective;
 
 	private Collection ampFundingDetails;
 
@@ -260,4 +261,19 @@ public class Funding implements Serializable
 	public String getUnDisbursementBalance(){
 		return this.undisbursementbalance;
 	}
+
+	/**
+	 * @return the donorObjective
+	 */
+	public String getDonorObjective() {
+		return this.donorObjective;
+	}
+
+	/**
+	 * @param donorObjective the donorObjective to set
+	 */
+	public void setDonorObjective(String donorObjective) {
+		this.donorObjective = donorObjective;
+	}
+	
 }

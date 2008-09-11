@@ -1121,6 +1121,7 @@
 	</tr>
     <!--end expenditures-->
     </feature:display>
+    <field:display name="Conditions for Fund Release" feature="Funding Information">
 	<tr>
 		<td>
 			<table width="100%" cellSpacing=1 cellPadding=1>
@@ -1139,7 +1140,27 @@
 			</table>
 		</td>
 	</tr>
-
+	</field:display>
+	<field:display name="Donor Objective" feature="Funding Information">
+	<tr>
+		<td>
+			<table width="100%" cellSpacing=1 cellPadding=1>
+				<tr>
+					<td align="left" bgcolor=#ECF3FD valign="top" width="80">
+						<b>
+						<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">
+						<digi:trn key="aim:donorobjective">Donor Objective</digi:trn></b></a>
+					</td>
+					<td align="left" bgcolor=#ECF3FD>
+					<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">
+						<html:textarea property="donorObjective" rows="3" cols="75" styleClass="inp-text"/>
+					</a>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	</field:display>
 	<tr>
 		<td width="100%" vAlign="top">
 			<table width="100%" cellpadding=0 cellspacing=0>

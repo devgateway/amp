@@ -118,6 +118,18 @@
 																		</logic:notEmpty></td>
 																	</tr>
 																</field:display>
+																<field:display name="Donor Objective" feature="Funding Information">
+																	<tr>
+																		<td align="left" width="150"><a
+																			title='<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>'>
+																		<digi:trn key="aim:donorobjective">Donor Objective</digi:trn>
+																		</a></td>
+																		<td width="1">:</td>
+																		<td align="left">
+																			<bean:write name="funding" property="donorObjective" />
+																		</td>
+																	</tr>
+																</field:display>
 															</table>
 															</td>
 														</tr>

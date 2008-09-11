@@ -8,12 +8,12 @@
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-
-
 <%int rowIdx = 2;%>
+
 
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
+<thead class="fixedHeader"> 
   <%int maxDepth = columnReport.getMaxColumnDepth();
   columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
   %>
@@ -100,4 +100,8 @@
 
   <%}
   %>
+  </thead>
+ 
+	<tbody>
+
   </logic:equal>

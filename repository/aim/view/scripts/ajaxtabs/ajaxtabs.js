@@ -47,12 +47,14 @@ if (page_request.readyState == 4 && (page_request.status==200 || window.location
 document.getElementById(containerid).innerHTML=page_request.responseText;
 	try
 	{
+		generateTableScrollbars('reportTable',350);
 		continueExecution = false;
 	}catch(e)
 	{
 	}
 }
 }
+
 
 function loadobjs(revattribute){
 if (revattribute!=null && revattribute!=""){ //if "rev" attribute is defined (load external .js or .css files)

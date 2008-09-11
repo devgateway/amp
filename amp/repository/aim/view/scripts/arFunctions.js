@@ -40,6 +40,10 @@ function toggleRows(caller,hideId){
 	var notLevelTooGreat = false;
 	var areGreaterLevels = false;
 	for(i=1 ; i< len; i++){
+		if (tb.rows[i].id=="ignoreToggle"){
+			continue;
+		}
+		
 		var rowDepth=getRowLevel(tb.rows[i].title);
 		var rowRelat=getRowRelativeNo(tb.rows[i].title);
  		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {

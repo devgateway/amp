@@ -12,6 +12,8 @@
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="../reportHeadings.jsp"/>
+
+
 <% String display=columnReport.getLevelDepth()>1?"display:none":"";%>
 
 
@@ -47,6 +49,7 @@
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 	</logic:iterate>
 </tr>
+
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
 <tr onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#dbe5f1', '#a5bcf2', '#FFFF00');" onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#dbe5f1', '#a5bcf2', '#FFFF00');" style="<%=display%>">
@@ -65,3 +68,5 @@
 	<%rowIdx++;	%>
 </logic:iterate>
 </logic:notEqual>
+
+

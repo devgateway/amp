@@ -7,8 +7,6 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-
-
 <%@ page import="org.dgfoundation.amp.ar.AmpARFilter"%>
   <!-- Dependencies --> 
         <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
@@ -73,7 +71,6 @@ function toggleSettings(){
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <div id="mySorter" style="display: none">
-
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
         <!--
 		<a href='#' onclick='hideSorter();return false'>
@@ -109,7 +106,7 @@ session.setAttribute("progressValue", counter);
 
 <logic:notEqual name="widget" scope="request" value="true">
 <logic:notEqual name="viewFormat" scope="request" value="print">
-	<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
+<jsp:include page="/repository/aim/view/ar/toolBar.jsp" />
 
 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
@@ -444,12 +441,21 @@ session.setAttribute("progressValue", counter);
 			</table>
 		</logic:equal>
 		<logic:notEqual name="viewFormat" value="print">
-			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
-				<bean:define id="viewable" name="report"
-					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+	<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
+				
+			<bean:define id="viewable" name="report" type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" flush="true"/>
-		</table>
-		</logic:notEqual>
+			
+	</tr>
+		
+			</tbody>
+	</table>
+
+		
+
+
+
+	</logic:notEqual>
 		</td>
 		</tr>
 		</table>
@@ -571,9 +577,18 @@ session.setAttribute("progressValue", counter);
 			</td>
 		</tr>
 	</logic:equal>
+
+
 </table>
+
 
 <%
 	session.setAttribute(" ", null);
 	session.setAttribute("progressValue", -1);
 %>
+
+
+
+
+
+

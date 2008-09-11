@@ -5,12 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
 <%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
-
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/scrollableTable.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
-
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
@@ -284,6 +282,7 @@ background-color: yellow;
 	myPanel5.beforeHideEvent.subscribe(YAHOOAmp.amptab.handleCloseAbout);
 		    
 	function initScripts() {
+	
 	    var msg='\n<digi:trn key="rep:filter:filters">Filters</digi:trn>';
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("");
@@ -332,6 +331,8 @@ background-color: yellow;
 //				alert(e);
 			}
 		</field:display>
+		
+		
 	}
 	
 	function addTitleSelect(selectName){
@@ -668,8 +669,14 @@ function validateFormat(){
 	return true;
 }
 
+
 	window.onload=initScripts;
+
+
+
 </script>
+
+
 
 
 
@@ -683,11 +690,6 @@ function validateFormat(){
   background-color:#2f2f2f;
 }
 </style>
-
-
-
-
-
 
 
 

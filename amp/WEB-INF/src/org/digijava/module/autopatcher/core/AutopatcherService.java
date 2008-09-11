@@ -43,7 +43,8 @@ public class AutopatcherService extends AbstractServiceImpl {
 	private Collection appliedPatches;
 	private static Logger logger = Logger.getLogger(AutopatcherService.class);
 
-	protected void processInitEvent(ServiceContext serviceContext)
+	
+	public void processInitEvent(ServiceContext serviceContext)
 			throws ServiceException {
 
 		Session session;
@@ -57,8 +58,10 @@ public class AutopatcherService extends AbstractServiceImpl {
 			Collection<File> allPatchesFiles = PatcherUtil
 					.getAllPatchesFiles(serviceContext.getRealPath(patchesDir));
 			Set allAppliedPatches = PatcherUtil.getAllAppliedPatches(session);
+			PersistenceManager.releaseSession(session);
 			Iterator i = allPatchesFiles.iterator();
 			while (i.hasNext()) {
+				session = PersistenceManager.getSession();
 				File element = (File) i.next();
 				String localPatchPath = element.getAbsolutePath().substring(
 						realRootPath.length() + 1,
@@ -92,9 +95,9 @@ public class AutopatcherService extends AbstractServiceImpl {
 					StringTokenizer stok = new StringTokenizer(sb.toString(),
 							delimiter);
 					logger.info("Applying patch " + element.getAbsolutePath());
-					logger.info("Executing sql commands: " + sb.toString());
+					logger.debug("Executing sql commands: " + sb.toString());
 
-					Connection connection = PersistenceManager.getSession()
+					Connection connection = session
 							.connection();
 					connection.setAutoCommit(false);
 
@@ -113,7 +116,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 
 						st.executeBatch();
 						connection.commit();
-						st.close();
+						//st.close();
 
 						PatchFile pf = new PatchFile();
 						pf.setAbsolutePatchName(localPatchPath);
@@ -134,7 +137,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 
 					} finally {
 						connection.setAutoCommit(true);
-						connection.close();
+						PersistenceManager.releaseSession(session);
 					}
 
 				} catch (Exception e) {
@@ -142,8 +145,8 @@ public class AutopatcherService extends AbstractServiceImpl {
 					e.printStackTrace();
 				}
 
+				
 			}
-			PersistenceManager.releaseSession(session);
 
 		} catch (HibernateException e1) {
 			// TODO Auto-generated catch block

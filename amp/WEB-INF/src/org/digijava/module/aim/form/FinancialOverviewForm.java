@@ -7,6 +7,7 @@ public class FinancialOverviewForm extends MainProjectDetailsForm
 	private String ampId;
 	private String comments;
 	private String conditions;
+	private String donorObjective;
 	private String donor;
 	private String donorFundingId;
 	private String lastAuditDate;
@@ -212,6 +213,20 @@ public class FinancialOverviewForm extends MainProjectDetailsForm
 	 */
 	public void setGoeId(String string) {
 		goeId = string;
+	}
+
+	/**
+	 * @return the donorObjective
+	 */
+	public String getDonorObjective() {
+		return this.donorObjective;
+	}
+
+	/**
+	 * @param donorObjective the donorObjective to set
+	 */
+	public void setDonorObjective(String donorObjective) {
+		this.donorObjective = donorObjective;
 	}
 
 }

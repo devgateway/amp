@@ -215,6 +215,15 @@
 															<bean:write name="aimFinancialOverviewForm" property="conditions" />
 														</TD>
 													</TR>
+													<TR>
+														<TD width="150" bgcolor="#f4f4f2">
+															<b><digi:trn key="aim:donorobjective">
+															Donor Objective</digi:trn></b>
+														</TD>
+														<TD bgcolor="#f4f4f2">
+															<bean:write name="aimFinancialOverviewForm" property="donorObjective" />
+														</TD>
+													</TR>
 												</TABLE>
 											</TD>
 										</TR>

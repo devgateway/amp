@@ -1,5 +1,7 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+<%@ page import="org.digijava.kernel.config.DigiConfig" %>
+<%@ page import="org.digijava.kernel.util.DigiConfigManager" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -135,7 +137,14 @@
                       </digi:trn>
                     </digi:link>
                   </td>
-    </tr>
+    
+	
+		<td>
+			<%if(DigiConfigManager.getConfig().isEnableAutoLogin()){%>
+				<font color="red"><digi:trn key="aim:warningAutoLogin">Warning: Auto Login option is enabled, please disable it in production environments.</digi:trn></font>
+			<%}%>
+		</td>
+	
 				<tr>
 					<td colspan=3>&nbsp;
 					</td>

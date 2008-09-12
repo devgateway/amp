@@ -394,6 +394,8 @@ public class DigiConfigManager {
         digester.addSetProperties("digi-config/enable-logging", "bufferSize",
                                   "accessLogBuffSize");
 
+        digester.addBeanPropertySetter("digi-config/enable-autologin", "enableAutoLogin");
+        
         digester.addBeanPropertySetter("digi-config/site-config",
                                        "siteConfigImpl");
         digester.addBeanPropertySetter("digi-config/job-delay-sec",

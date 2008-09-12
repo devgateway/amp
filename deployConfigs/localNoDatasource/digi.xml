@@ -41,6 +41,8 @@
 
     <!-- Enable/disable AccessLogger -->
 	<enable-logging>true</enable-logging>
+	
+	<enable-autologin>true</enable-autologin>
 
 	<!-- Hibernate class -->
 	<hibernate-classes required="false">              

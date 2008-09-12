@@ -29,12 +29,18 @@ import org.acegisecurity.BadCredentialsException;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.acegisecurity.providers.dao.DaoAuthenticationProvider;
 import org.acegisecurity.providers.dao.SaltSource;
+import org.acegisecurity.ui.session.HttpSessionEventPublisher;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.UnixCrypt;
+import org.digijava.module.aim.action.GetTeamActivities;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
 import net.sf.hibernate.Query;
@@ -65,57 +71,67 @@ public class DigiDaoAuthenticationProvider
             }
         }
 
-        boolean passwordMatched = false;
-        for (int i = 0; i < 3; i++) {
+		boolean passwordMatched = false;
+		
+		// TODO: AGREGAR EL RESTO DE LAS VALIDACIONES!!!
+		DigiConfig config = DigiConfigManager.getConfig();
+		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
+		if (pass.length() == 40 && "true".equalsIgnoreCase(value) && config.isEnableAutoLogin()) {
+			String auxToCompare = ShaCrypt.crypt(userDetails.getUsername().trim() + "_" + userPassword);
+			if (!auxToCompare.equals(pass)) {
+				throw new BadCredentialsException(
+						"Invalid username/password, autologin denied");
+			}
+		} else {
+			for (int i = 0; i < 3; i++) {
 
-            switch (i) {
-                case 0:
+				switch (i) {
+				case 0:
 
-                    compare = pass.trim() + salt;
+					compare = pass.trim() + salt;
 
-                    // first try new user ( using SHA1 )
-                    encryptPassword = ShaCrypt.crypt(compare.trim()).trim().
-                        toUpperCase();
-                    break;
+					// first try new user ( using SHA1 )
+					encryptPassword = ShaCrypt.crypt(compare.trim()).trim()
+							.toUpperCase();
+					break;
 
-                case 1:
+				case 1:
 
-                    compare = pass.trim();
+					compare = pass.trim();
 
-                    // first try new user ( using SHA1 )
-                    encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
-                    break;
+					// first try new user ( using SHA1 )
+					encryptPassword = ShaCrypt.crypt(compare.trim()).trim();
+					break;
 
-                case 2:
+				case 2:
 
-                    // second try old user ( using unix crypt )
-                    if (!pass.startsWith("8x")) {
-                        encryptPassword = UnixCrypt.crypt("8x", pass.trim()).
-                            trim();
-                    }
-                    else {
-                        encryptPassword = pass.trim();
-                    }
-                    break;
-            }
+					// second try old user ( using unix crypt )
+					if (!pass.startsWith("8x")) {
+						encryptPassword = UnixCrypt.crypt("8x", pass.trim())
+								.trim();
+					} else {
+						encryptPassword = pass.trim();
+					}
+					break;
+				}
 
-            // check user in database
-            if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
-                passwordMatched = true;
-            }
-        }
+				// check user in database
+				if (encryptPassword.equalsIgnoreCase(userPassword.trim())) {
+					passwordMatched = true;
+				}
+			}
 
-        if (!passwordMatched) {
-            throw new BadCredentialsException(
-                "Invalid username/password, login denied");
-        }
+			if (!passwordMatched) {
+				throw new BadCredentialsException(
+						"Invalid username/password, login denied");
+			}
+		}
+	}
 
-    }
-
-    public boolean supports(Class authentication) {
-        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(
-            authentication));
-    }
+	public boolean supports(Class authentication) {
+		return (UsernamePasswordAuthenticationToken.class
+				.isAssignableFrom(authentication));
+	}
 
     public Object getSalt(UserDetails userDetails) {
         String email = userDetails.getUsername();

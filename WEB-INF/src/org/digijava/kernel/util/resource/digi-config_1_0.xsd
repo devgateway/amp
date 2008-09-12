@@ -52,6 +52,7 @@
 				<xs:element ref="cfg:param-safeHTML"/>
 				<xs:element ref="cfg:param-bbTag"/>
 				<xs:element ref="cfg:enable-logging" minOccurs="0"/>
+				<xs:element ref="cfg:enable-autologin" minOccurs="0"/>
 				<xs:element ref="cfg:nonSSOPath" minOccurs="0"/>
 				<xs:element ref="cfg:hibernate-classes" minOccurs="0"/>
 				<xs:element ref="cfg:service" minOccurs="0" maxOccurs="unbounded"/>
@@ -61,6 +62,7 @@
 	</xs:element>
 	<xs:element name="email" type="xs:string"/>
 	<xs:element name="enable-logging" type="xs:boolean"/>
+	<xs:element name="enable-autologin" type="xs:boolean"/>
 	<xs:element name="forward-emails">
 		<xs:complexType>
 			<xs:sequence>

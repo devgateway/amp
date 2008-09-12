@@ -73,7 +73,6 @@ public class DigiDaoAuthenticationProvider
 
 		boolean passwordMatched = false;
 		
-		// TODO: AGREGAR EL RESTO DE LAS VALIDACIONES!!!
 		DigiConfig config = DigiConfigManager.getConfig();
 		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
 		if (pass.length() == 40 && "true".equalsIgnoreCase(value) && config.isEnableAutoLogin()) {

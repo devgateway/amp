@@ -45,14 +45,12 @@
 															</td>
 															<td align="left" width="367">
 																<c:out value="${selectedOrganizations.organisation.name}"/>
-															</td>
-															
+															</td>															
 															<td align="left" width="130">
 																<html:text name="selectedOrganizations"
 																property="projectId" indexed="true"
 																styleClass="inp-text" size="15"/>
-															</td>
-														</td>
+															</td>														
 													  </c:if>	
 													</tr>
 													</c:forEach>
@@ -60,7 +58,7 @@
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${aimEditActivityForm}" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${aimEditActivityForm}" refreshParentDocument="false" callBackFunction="document.aimEditActivityForm.submit();"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</td>
 																<td>
 																	<input type="button" value="<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>" class="dr-menu"

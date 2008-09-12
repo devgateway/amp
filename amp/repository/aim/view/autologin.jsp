@@ -17,4 +17,4 @@ function delayer(){
 	<input type="hidden" name="j_autoLogin" value="true" />
 </form>
 </body>
-</html>
+</html> 

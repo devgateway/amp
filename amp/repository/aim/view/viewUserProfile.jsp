@@ -1,4 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+<%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -114,15 +116,19 @@ function unload() {
 							</td>
 						</tr>
 						<tr>
-							<td class="text1">
+							<td><digi:trn key="aim:autologinlink"><b>Autologin Link</b></digi:trn></td>
+							<td>
 								<%
-								org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
-								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getTeamId();
-								String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());
+								String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTO_LOGIN);
+								if(value.equalsIgnoreCase("true")){
+									org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
+									Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getTeamId();
+									String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());
 								%>
-								<a href="/<%=request.getContextPath()%>repository/aim/view/autologin.jsp?user=<%=user.getEmail()%>&password=<%=encryptedPass%>&workspaceId=<%=id%>">
-									<digi:trn key="aim:autologin"><b>Autologin</b></digi:trn>
-								</a>
+									<a href="/<%=request.getContextPath()%>repository/aim/view/autologin.jsp?user=<%=user.getEmail()%>&password=<%=encryptedPass%>&workspaceId=<%=id%>">
+										<digi:trn key="aim:autologin"><b>Autologin</b></digi:trn>
+									</a>
+								<%}%>
 							</td>
 						</tr>
 						<tr>

@@ -12,21 +12,21 @@
       return flag;
     }
 
-    function editDocument(docId,actId) {
+    function editDocument(uuid,actId) {
       document.aimRelatedLinksForm.activityId.value=actId;
-      document.aimRelatedLinksForm.docId.value=docId;
+      document.aimRelatedLinksForm.uuid.value=uuid;
       <digi:context name="editDoc" property="context/module/moduleinstance/updateDocumentDetails.do" />
       document.aimRelatedLinksForm.action = "<%= editDoc %>";
       document.aimRelatedLinksForm.target = "_self";
       document.aimRelatedLinksForm.submit();
     }
 
-    function deleteDocument(docId,actId) {
+    function deleteDocument(uuid,actId) {
       if(!confirmDelete()){
         return false;
       }
       document.aimRelatedLinksForm.activityId.value=actId;
-      document.aimRelatedLinksForm.docId.value=docId;
+      document.aimRelatedLinksForm.uuid.value=uuid;
       <digi:context name="deleteDoc" property="context/module/moduleinstance/deleteDocument.do" />
       document.aimRelatedLinksForm.action = "<%= deleteDoc %>";
       document.aimRelatedLinksForm.target = "_self";
@@ -43,7 +43,7 @@
 <digi:form action="/getDocumentDetails.do" method="post">
 
 <html:hidden property="activityId" />
-<html:hidden property="docId" />
+<html:hidden property="uuid" />
 <html:hidden property="pageId" />
 <html:hidden property="valuesSet" value="false"/>
 
@@ -105,7 +105,7 @@
 					</td>
 					<td width="80%" align="left" bgcolor="#f4f4f4">
 						<c:if test="${aimRelatedLinksForm.document.isFile == true}">
-							<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<c:out value="${aimRelatedLinksForm.document.docId}"/>">
+							<a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<c:out value="${aimRelatedLinksForm.document.uuid}"/>">
 								<c:out value="${aimRelatedLinksForm.document.fileName}" />
 								<i><bean:write name="relatedLink" property="fileName" /></i></a>
 						</c:if>
@@ -121,24 +121,36 @@
 	<c:if test="${aimRelatedLinksForm.pageId == 1}">
 	<tr>
 		<td vAlign="top" align="center">
+						<c:set var="translation">
+							<digi:trn key="btn:back">Edit</digi:trn>
+						</c:set>					
+						<input type="button" value="${translation}" class="dr-menu" onclick="history.back()">
+
+		</td>
+	</tr>
+    
+<!-- Removed since DM is done via Resources (AMP-4243)
+	<tr>
+		<td vAlign="top" align="center">
 			<table cellSpacing="3" cellPadding="3">
 				<tr>
 					<td>
 						<c:set var="translation">
 							<digi:trn key="aim:btnEdit">Edit</digi:trn>
 						</c:set>					
-						<input type="button" value="${translation}" class="dr-menu" onclick="editDocument(${aimRelatedLinksForm.document.docId},${aimRelatedLinksForm.document.activityId})")">
+						<input type="button" value="${translation}" class="dr-menu" onclick="editDocument('${aimRelatedLinksForm.document.uuid}',${aimRelatedLinksForm.document.activityId})")">
 					</td>
 					<td>
 						<c:set var="translation">
 							<digi:trn key="aim:btnRemove">Remove</digi:trn>
 						</c:set>										
-						<input type="button" value="${translation}" class="dr-menu"	onclick="deleteDocument(${aimRelatedLinksForm.document.docId},${aimRelatedLinksForm.document.activityId})">
+						<input type="button" value="${translation}" class="dr-menu"	onclick="deleteDocument('${aimRelatedLinksForm.document.uuid}',${aimRelatedLinksForm.document.activityId})">
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
+-->
 	</c:if>
 </table>
 </digi:form>

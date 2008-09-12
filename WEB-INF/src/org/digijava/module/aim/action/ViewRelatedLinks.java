@@ -21,11 +21,15 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
+import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class ViewRelatedLinks extends Action {
 	
@@ -79,7 +83,35 @@ public class ViewRelatedLinks extends Action {
 
 		if (pagedCol == null || pagedCol.size() == 0) {
 			pagedCol = new ArrayList();
-			pagedCol =DbUtil.getAllDocuments(teamId);
+			
+			Collection collectionActivities = TeamUtil.getAllTeamAmpActivities(teamId);
+			Iterator activitiesIterator = collectionActivities.iterator();
+			while(activitiesIterator.hasNext())
+			{
+				AmpActivity currentActivity = (AmpActivity)activitiesIterator.next();
+		        /* Injecting documents into session */
+		        SelectDocumentDM.clearContentRepositoryHashMap(request);
+		        if (currentActivity.getActivityDocuments() != null && currentActivity.getActivityDocuments().size() > 0 )
+		        		ActivityDocumentsUtil.injectActivityDocuments(request, currentActivity.getActivityDocuments());
+
+		        Collection docCollection = DocumentManagerUtil.createDocumentDataCollectionFromSession(request);
+		        if(docCollection != null )
+		        {
+		        	Iterator docIterator = docCollection.iterator();
+			        while(docIterator.hasNext()){
+			        	 org.digijava.module.contentrepository.helper.DocumentData documentData = (org.digijava.module.contentrepository.helper.DocumentData)docIterator.next();
+			        	 Documents document = new Documents();
+			        	 document.setTitle(documentData.getTitle());
+			        	 document.setUuid(documentData.getUuid());
+			        	 document.setFile((documentData.getWebLink() == null)?true:false);
+			        	 document.setFileName(documentData.getName());
+			        	 document.setActivityName(currentActivity.getName());
+			        	 document.setActivityId(currentActivity.getAmpActivityId());
+			        	 document.setUrl(documentData.getWebLink());
+			        	 pagedCol.add(document);
+			        }
+		        }
+			}
 			rlForm.setAllDocuments(pagedCol);
 		}
 	

@@ -15,6 +15,7 @@ public class Documents {
 	private String url;
 	private Long activityId;
 	private String activityName;
+	private String uuid;
 	
 	private String docType;
 	
@@ -167,6 +168,14 @@ public class Documents {
 
 	public void setDocLanguage(String docLanguage) {
 		this.docLanguage = docLanguage;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getUuid() {
+		return uuid;
 	}
 	
 	

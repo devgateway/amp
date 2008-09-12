@@ -192,10 +192,10 @@ function setHoveredTable(tableId, hasHeaders) {
 														<c:if test="${relatedLink.isFile == true}">
 														<tr>
 															<td>
-																<input style="vertical-align:middle;" type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
+<!--																<input style="vertical-align:middle;" type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>-->
                                                                 <jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
-																<c:set target="${docParams}" property="docId">
-																	<c:out value="${relatedLink.docId}"/>
+																<c:set target="${docParams}" property="uuid">
+																	<c:out value="${relatedLink.uuid}"/>
 																</c:set>
 																<c:set target="${docParams}" property="actId">
 																	<c:out value="${relatedLink.activityId}"/>
@@ -218,7 +218,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                     <logic:notEmpty name="relatedLink" property="fileName">
                                                                         <bean:define name="relatedLink" property="fileName" id="fileName"/>
                                                                     </logic:notEmpty>
-                                                                    <a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />" title="<c:out value='${relatedLink.fileName}' />">
+                                                                    <a href="<%=digiContext%>/contentrepository/downloadFile.do?uuid=<bean:write name="relatedLink" property="uuid" />" title="<c:out value='${relatedLink.fileName}' />">
                                                                         <i>
                                                                             <c:if test="${fn:length(relatedLink.fileName) > 30}" >
                                                                                 <c:out value="${fn:substring(relatedLink.fileName, 0, 30)}" />...
@@ -231,12 +231,21 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                 </c:if>
 															</td>
 															<td title="<c:out value="${relatedLink.activityName}" />">
-                                                                <c:if test="${fn:length(relatedLink.activityName) > 30}" >
-                                                                    <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
-                                                                </c:if>
-                                                                <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
-                                                                    <c:out value="${relatedLink.activityName}" />
-                                                                </c:if>
+																	<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+																	<c:set target="${urlParams2}" property="ampActivityId">
+																		<bean:write name="relatedLink" property="activityId" />
+																	</c:set>
+																	<digi:link href="/selectActivityTabs.do" name="urlParams2"
+																	title="${translation}">
+
+                                                                    <c:if test="${fn:length(relatedLink.activityName) > 30}" >
+                                                                        <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
+                                                                    </c:if>
+                                                                    <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
+                                                                        <c:out value="${relatedLink.activityName}" />
+                                                                    </c:if>
+																	</digi:link>
+
 															</td>
 														</tr>
 														</c:if>
@@ -279,10 +288,10 @@ function setHoveredTable(tableId, hasHeaders) {
 														<c:if test="${relatedLink.isFile == false}">
                                                             <tr>
                                                                 <td>
-                                                                    <input style="vertical-align:middle;" type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
+<!--                                                                    <input style="vertical-align:middle;" type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>-->
                                                                     <jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
-                                                                    <c:set target="${docPars}" property="docId">
-                                                                        <c:out value="${relatedLink.docId}"/>
+                                                                    <c:set target="${docPars}" property="uuid">
+                                                                        <c:out value="${relatedLink.uuid}"/>
                                                                     </c:set>
                                                                     <c:set target="${docPars}" property="actId">
                                                                         <c:out value="${relatedLink.activityId}"/>
@@ -306,12 +315,21 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                     </c:if>
                                                                 </td>
                                                                 <td title="<c:out value="${relatedLink.activityName}" />">
+																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																	<c:set target="${urlParams}" property="ampActivityId">
+																		<bean:write name="relatedLink" property="activityId" />
+																	</c:set>
+																	<digi:link href="/selectActivityTabs.do" name="urlParams"
+																	title="${translation}">
+
                                                                     <c:if test="${fn:length(relatedLink.activityName) > 30}" >
                                                                         <c:out value="${fn:substring(relatedLink.activityName, 0, 30)}" />...
                                                                     </c:if>
                                                                     <c:if test="${fn:length(relatedLink.activityName) <= 30}" >
                                                                         <c:out value="${relatedLink.activityName}" />
                                                                     </c:if>
+																	</digi:link>
+
                                                                 </td>
                                                             </tr>
 														</c:if>
@@ -334,9 +352,9 @@ function setHoveredTable(tableId, hasHeaders) {
 												<tr>
 
 													<td align="center">
-
+<!--
 														<html:submit onclick="return confirmDelete();" styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
-
+-->
 													</td>
 
 												</tr>

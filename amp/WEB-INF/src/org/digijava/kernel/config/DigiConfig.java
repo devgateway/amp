@@ -58,7 +58,8 @@ public class DigiConfig {
 
     private boolean ignore;
     private boolean enableLogging;
-    private Integer accessLogPoolSize;
+    private boolean enableAutoLogin;
+	private Integer accessLogPoolSize;
     private Integer accessLogBuffSize;
     private String domainPrefix;
     private boolean enableOmniture;
@@ -350,5 +351,13 @@ public class DigiConfig {
     public void setSiteDomain(LogonSite siteDomain) {
         this.siteDomain = siteDomain;
     }
+    
+    public boolean isEnableAutoLogin() {
+		return enableAutoLogin;
+	}
+
+	public void setEnableAutoLogin(boolean enableAutoLogin) {
+		this.enableAutoLogin = enableAutoLogin;
+	}
 
 }

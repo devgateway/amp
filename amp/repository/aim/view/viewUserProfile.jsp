@@ -114,6 +114,18 @@ function unload() {
 							</td>
 						</tr>
 						<tr>
+							<td class="text1">
+								<%
+								org.digijava.kernel.user.User user = (org.digijava.kernel.user.User) session.getAttribute("org.digijava.kernel.user");
+								Long id = ((org.digijava.module.aim.helper.TeamMember) session.getAttribute("currentMember")).getTeamId();
+								String encryptedPass = org.digijava.kernel.util.ShaCrypt.crypt(user.getEmail() + "_" + user.getPassword());
+								%>
+								<a href="/<%=request.getContextPath()%>repository/aim/view/autologin.jsp?user=<%=user.getEmail()%>&password=<%=encryptedPass%>&workspaceId=<%=id%>">
+									<digi:trn key="aim:autologin"><b>Autologin</b></digi:trn>
+								</a>
+							</td>
+						</tr>
+						<tr>
 							<td bgcolor="#f4f4f2" colspan="2" class="text1">
 								<table width="97%" cellPadding=2 cellSpacing="2" bgcolor="#aaaaaa" align="center" border=0>
 									<tr>

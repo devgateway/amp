@@ -170,6 +170,27 @@ html>body #mainEmpty {
 }
 
 </style>
+<c:set var="loadstatustext">
+	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
+</c:set>
+
+<script language="javascript">
+function putLoading(){
+
+	var mainDiv = document.getElementsByClassName("contentbox_border");
+	var subtabs = document.getElementById("subtabs");
+	
+	if(mainDiv[0]){
+		loadstatustext='&nbsp;&nbsp;&nbsp;<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
+		mainDiv[0].innerHTML = loadstatustext;
+	}
+	if(subtabs){
+		subtabs.style.display = "none";
+	}
+	
+	return true;
+}
+</script>
 <div style="width:750">
 				<DIV id="tabs">
 					<UL>
@@ -273,7 +294,7 @@ html>body #mainEmpty {
 							<LI>
 							<span>
 								<bean:define id="subtabLink" value="0" />
-								<digi:link href="/relatedLinksList.do" paramId="subtab" paramProperty="subtabLink" >	
+								<digi:link href="/relatedLinksList.do" onclick="return putLoading();" paramId="subtab" paramProperty="subtabLink" >	
 								<div title='<digi:trn key="aim:clickToViewResources">Click here to view resources</digi:trn>'>	
 									<digi:trn key="fm:documentmanagement">Document Management</digi:trn>	
 								</div>

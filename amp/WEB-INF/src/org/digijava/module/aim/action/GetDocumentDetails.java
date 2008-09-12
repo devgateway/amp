@@ -5,6 +5,7 @@
   
 package org.digijava.module.aim.action;
 
+import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +20,7 @@ import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 
 /***
  * Fetch the Document and activity details provided the document Id and activity Id 
@@ -37,16 +39,14 @@ extends Action {
 		if (session.getAttribute("currentMember") == null) // User not logged in
 			return mapping.findForward("index");
 		
-		if (request.getParameter("docId") == null || 
+		if (request.getParameter("uuid") == null || 
 				request.getParameter("actId") == null) // invalid url parameters specified 
 			return mapping.findForward("index");
 		
-		Long dId = null;
 		Long aId = null;
 		int pageId = 0;
+		String uuid = request.getParameter("uuid");
 		try {
-			String docId = request.getParameter("docId");
-			dId = new Long(Long.parseLong(docId));
 			String actId = request.getParameter("actId");
 			aId = new Long(Long.parseLong(actId));
 			pageId = Integer.parseInt(request.getParameter("pageId"));
@@ -56,19 +56,20 @@ extends Action {
 		
 		RelatedLinksForm rlForm = (RelatedLinksForm) form;
 		
-		if (dId != null) {
+		if (uuid != null) {
 			Documents document = new Documents();
-			CMSContentItem cmsItem = DbUtil.getCMSContentItem(dId);
+			NodeWrapper nodeWrapper = new NodeWrapper(org.digijava.module.contentrepository.util.DocumentManagerUtil.getReadNode(uuid, request));
+			
 			AmpActivity activity = ActivityUtil.getProjectChannelOverview(aId);
 			document.setActivityId(activity.getAmpActivityId());
 			document.setActivityName(activity.getName());
-			document.setTitle(cmsItem.getTitle());
-			document.setDocDescription(cmsItem.getDescription());
-			document.setDate(cmsItem.getDate());
-			document.setDocId(new Long(cmsItem.getId()));
-			document.setIsFile(cmsItem.getIsFile());
-			document.setFileName(cmsItem.getFileName());
-			document.setUrl(cmsItem.getUrl());
+			document.setTitle(nodeWrapper.getTitle());
+			document.setDocDescription(nodeWrapper.getDescription());
+			document.setDate(nodeWrapper.getDate());
+			document.setUuid(nodeWrapper.getUuid());
+			document.setIsFile((nodeWrapper.getWebLink() == null)?true:false);
+			document.setFileName(nodeWrapper.getName());
+			document.setUrl(nodeWrapper.getWebLink());
 			rlForm.setDocument(document);
 		}
 

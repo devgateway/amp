@@ -38,6 +38,7 @@ extends ActionForm {
 	private String fileName;
 	private boolean validLogin;
 	private String[] deleteLinks;
+	private String uuid;
 	
 	
 	private Documents document;
@@ -322,5 +323,11 @@ extends ActionForm {
 	}
 	public void setDeleteLinks(String[] deleteLinks) {
 		this.deleteLinks = deleteLinks;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getUuid() {
+		return uuid;
 	}
 }

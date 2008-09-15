@@ -1726,9 +1726,15 @@ public class TeamUtil {
 				
 				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
 				donnorList =(donnorList==null)?new ArrayList<String>():donnorList;
-				if (roleCode != null &&  !donnorList.contains(name)) {
-					donnorList.add(name);
+				for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
+					AmpOrgRole aor = (AmpOrgRole) it.next();
+					name=aor.getOrganisation().getName();
+					if(aor.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name))
+						{
+						donnorList.add(name);
+						}
 				}
+
 				
 				donnors.put(activity.getAmpActivityId().longValue(), donnorList);
 			}

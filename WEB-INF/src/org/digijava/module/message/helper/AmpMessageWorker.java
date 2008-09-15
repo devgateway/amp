@@ -111,10 +111,15 @@ public class AmpMessageWorker {
                 }else{ //<-- currently for else is left user registration or activity disbursement date triggers
                     List<AmpMessageState> statesRelatedToTemplate = null;
                     statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
+                    HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState> ();
                     if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
                         for (AmpMessageState state : statesRelatedToTemplate) {
                             createMsgState(state, newMsg);
+                            if (!msgStateMap.containsKey(state.getMemberId())) {
+                                msgStateMap.put(state.getMemberId(), state);
+                            }
                         }
+                        sendMailes(msgStateMap.values());
                     }
                 }
             }
@@ -122,7 +127,7 @@ public class AmpMessageWorker {
     }
 
     /**
-     *	Calendar Event Event processing
+     *	Calendar Event processing
      */
     private static CalendarEvent proccessCalendarEvent(Event e, CalendarEvent event, TemplateAlert template) {
         DigiConfig config = DigiConfigManager.getConfig();
@@ -142,7 +147,7 @@ public class AmpMessageWorker {
 
         String receivers = new String();
 
-        HashMap emailes=new HashMap();
+        HashMap<String, String> emailes=new HashMap<String, String>();
 
         Long calId = new Long(e.getParameters().get(CalendarEventTrigger.PARAM_ID).toString());
         AmpCalendar ampCal = AmpDbUtil.getAmpCalendar(calId);
@@ -154,12 +159,8 @@ public class AmpMessageWorker {
                 receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
 
                 if(!emailes.containsKey(user.getEmail())){
-                    emailes.put(user.getEmail(),user.getEmail());
+                    emailes.put(user.getEmail(),ampCal.getCalendarPK().getCalendar().getFirstCalendarItem().getTitle());
                 }
-            }
-            for (Iterator iter = emailes.values().iterator(); iter.hasNext(); ) {
-                String email = (String) iter.next();
-
             }
         }
 
@@ -217,22 +218,22 @@ public class AmpMessageWorker {
     private static AmpAlert processActivitySaveEvent(Event e, AmpAlert alert, TemplateAlert template) {
         DigiConfig config = DigiConfigManager.getConfig();
         String partialURL = config.getSiteDomain().getContent();
-            /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-                partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-            }*/
+        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
+            partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
+                     }*/
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
-            myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivitySaveTrigger.PARAM_NAME));
+        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivitySaveTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getUser().getName());
-            //url
-            if (partialURL != null) {
-                myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL) + "\">activity URL</a>");
-                alert.setObjectURL(partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
-            }
-        alert.setSenderId( ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getAmpTeamMemId());
-            alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
-            return createAlertFromTemplate(template, myHashMap, alert);
-
+        //url
+        if (partialURL != null) {
+            myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL) + "\">activity URL</a>");
+            alert.setObjectURL(partialURL + e.getParameters().get(ActivitySaveTrigger.PARAM_URL));
         }
+        alert.setSenderId( ( (AmpTeamMember) e.getParameters().get(ActivitySaveTrigger.PARAM_CREATED_BY)).getAmpTeamMemId());
+        alert.setSenderType(MessageConstants.SENDER_TYPE_SYSTEM);
+        return createAlertFromTemplate(template, myHashMap, alert);
+
+    }
 
     private static AmpAlert processActivityActualStartDateEvent(Event e, AmpAlert alert, TemplateAlert template) {
         DigiConfig config = DigiConfigManager.getConfig();
@@ -476,8 +477,6 @@ public class AmpMessageWorker {
     private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent) throws Exception {
         HashMap<Long, AmpMessageState> temMsgStateMap = new HashMap<Long, AmpMessageState> ();
 
-        List<AmpMessageState> mlMsgStates=new ArrayList<AmpMessageState>();
-
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
         if (lstMsgStates != null) {
             for (AmpMessageState state : lstMsgStates) {
@@ -513,7 +512,6 @@ public class AmpMessageWorker {
         for (AmpMessageState state : msgStateMap.values()) {
             createMsgState(state, calEvent);
         }
-        sendMailes(msgStateMap.values());
     }
 
     /**
@@ -542,7 +540,6 @@ public class AmpMessageWorker {
                     createMsgState(state, alert);
                 }
             }
-            sendMailes(statesRelatedToTemplate);
         }
     }
 
@@ -569,7 +566,6 @@ public class AmpMessageWorker {
                     createMsgState(state, alert);
                 }
             }
-            sendMailes(statesRelatedToTemplate);
         }
     }
 
@@ -586,6 +582,7 @@ public class AmpMessageWorker {
         }
         try {
             AmpMessageUtil.saveOrUpdateMessageState(newState);
+            sendMail(newState);
         } catch (AimException e) {
             e.printStackTrace();
         }
@@ -607,33 +604,40 @@ public class AmpMessageWorker {
     }
 
     private static void sendMailes(Collection<AmpMessageState> statesRelatedToTemplate){
-        HashMap<String, String> mailes=new HashMap<String,String>();
         for(AmpMessageState state:statesRelatedToTemplate){
-            AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-            if(teamMember!=null){
-                User user=teamMember.getUser();
-                if(!mailes.containsKey(user.getEmail())){
-                    mailes.put(user.getEmail(),state.getMessage().getDescription());
-                }
+            sendMail(state);
+        }
+    }
+
+    private static void sendMailes(HashMap<String, String> emails){
+        if(emails!=null){
+            for (String email : emails.keySet()) {
+                sendMail("system@digijava.org",email,"New alert","UTF8",emails.get(email));
             }
         }
-        for(String email:mailes.keySet()){
-            try{
-                InternetAddress[] to = new InternetAddress[] {new InternetAddress(email)};
-                String from = "system@digijava.org";
-                Address[] cc = null;
-                Address[] bcc = null;
-                String subject = "New alert";
-                String text = mailes.get(email);
-                String charset = "UTF8";
-                boolean asHtml = true;
-                boolean log = true;
-                boolean rtl = false;
+    }
 
-                DgEmailManager.sendMail(to, from, cc, bcc, subject, text, charset, asHtml, log, rtl);
-            }catch(Exception ex){
+    private static void sendMail(AmpMessageState state) {
+        AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+        if (teamMember != null) {
+            User user = teamMember.getUser();
+            sendMail("system@digijava.org",user.getEmail(),"New alert","UTF8",state.getMessage().getDescription());
+        }
+    }
 
-            }
+    private static void sendMail(String from, String to, String subject, String charset, String text) {
+        try {
+            InternetAddress[] ito = new InternetAddress[] {new InternetAddress(to)};
+
+            Address[] cc = null;
+            Address[] bcc = null;
+            boolean asHtml = true;
+            boolean log = true;
+            boolean rtl = false;
+
+            DgEmailManager.sendMail(ito, from, cc, bcc, subject, text, charset, asHtml, log, rtl);
+        } catch (Exception ex) {
+
         }
     }
 }

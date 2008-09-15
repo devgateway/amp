@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.apache.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -17,6 +18,9 @@ import org.quartz.impl.StdSchedulerFactory;
  * 
  */
 public class CurrencyRatesRunner {
+	private static Logger logger = Logger
+	.getLogger(CurrencyRatesRunner.class);
+	
 	private SchedulerFactory schedulerFactory;
 	private Scheduler scheduler;
 	private JobDetail jobDetail;
@@ -80,7 +84,8 @@ public class CurrencyRatesRunner {
 			scheduler.scheduleJob(jobDetail, simpleTrigger);
 			scheduler.start();
 		} catch (SchedulerException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logger.info("currency job already registered");
 		}
 	}
 

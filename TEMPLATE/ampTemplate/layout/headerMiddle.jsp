@@ -582,7 +582,7 @@ border-right:1px solid white;
 var arrowClicked = false;
 //Run initialization for menu
 var oMenuBar = new YAHOOAmp.widget.MenuBar("mainmenuHeader", { 
-
+constraintoviewport:false
  });
 
 for(var i = 0; i < oMenuBar.getItems().length; i++){

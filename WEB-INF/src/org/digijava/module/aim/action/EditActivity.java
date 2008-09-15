@@ -1071,22 +1071,24 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  Iterator<Funding> iterFunding = currFundingOrganization.getFundings().iterator();
         	  while(iterFunding.hasNext()){
         		  Funding currFunding = iterFunding.next();
-                  FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();    
-                  try{
-                  calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
-        		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
-        		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
-        		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
-        		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
-        		  currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
-        		  currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
-        		  currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
-        		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
-        		  currFunding.setAmpFundingDetails(null);
-        		  //TODO:aca se setearia el resto
-                  }
-                  catch(Exception ex){
-                	  ex.printStackTrace();
+                  FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();  
+                  if(currFunding.getAmpFundingDetails()!=null){
+	                  try{
+		                  calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
+		        		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
+		        		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
+		        		  currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
+		        		  currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
+		        		  currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
+		        		  currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
+		        		  currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
+		        		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
+		        		  currFunding.setAmpFundingDetails(null);
+		        		  //TODO:aca se setearia el resto
+	                  }
+	                  catch(Exception ex){
+	                	  ex.printStackTrace();
+	                  }
                   }
         	  }
           }

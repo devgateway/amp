@@ -135,8 +135,8 @@ function resetFormula(){
 
       </td>
       <td>
-        <input type="button" value="Save" onclick="saveFormula();" style="font-family:verdana;font-size:8pt;">
-        <input type="button" value="Reset" onclick="resetFormula();" style="font-family:verdana;font-size:8pt;">
+        <input type="button" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="saveFormula();" style="font-family:verdana;font-size:8pt;">
+        <input type="button" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" onclick="resetFormula();" style="font-family:verdana;font-size:8pt;">
       </td>
     </tr>
   </table>

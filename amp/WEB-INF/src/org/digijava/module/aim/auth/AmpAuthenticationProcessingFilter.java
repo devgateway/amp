@@ -41,6 +41,8 @@ public class AmpAuthenticationProcessingFilter
     public Authentication attemptAuthentication(HttpServletRequest request) throws
         AuthenticationException {
 
+    	String id = request.getParameter("j_autoWorkspaceId");
+    	request.getSession().setAttribute("j_autoWorkspaceId", id);
         Authentication authResult = super.attemptAuthentication(request);
         User currentUser = null;
         try {

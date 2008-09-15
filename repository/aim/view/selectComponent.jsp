@@ -131,7 +131,9 @@ function addComponent(){
 						</tr>
 						<feature:display name="Admin - Component Type" module="Components">
 							<tr>
-								<td align="right">Component Type</td>
+								<td align="right"><digi:trn key="aim:comptype">
+									              Component Type
+									              </digi:trn></td>
 								<td><html:select property="selectedType"
 									styleClass="inp-text" onchange="switchType()">
 									<html:option value="-1">
@@ -158,7 +160,9 @@ function addComponent(){
 						</tr>
 						<tr>
 						
-							<td align="right">Add a New Compoenent</td>
+							<td align="right"><digi:trn key="aim:addNewComponent">
+									              Add A New Component
+									              </digi:trn></td>
 							<td><html:text property="newCompoenentName" onchange="componentTitle.value=-1;switchComponent()"  /> <html:button
 								property="addNewCompoenent" onclick="addComponent()">
 								<digi:trn key="aim:add">Add</digi:trn>

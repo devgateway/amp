@@ -330,8 +330,8 @@
 													<td><digi:trn key="aim:indicatorType">Indicator Type</digi:trn></td>
 													<td>
 														<html:select property="ascendingInd" styleClass="inp-text">
-															<html:option value="A">Ascending</html:option>
-															<html:option value="D">Descending</html:option>
+															<html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
+          													<html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
 														</html:select>
 													</td>
 												</tr>	

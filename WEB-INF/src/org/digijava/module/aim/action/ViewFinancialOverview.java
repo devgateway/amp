@@ -111,6 +111,7 @@ public class ViewFinancialOverview extends TilesAction {
 					}
 
 					formBean.setConditions(ampFunding.getConditions());
+					formBean.setDonorObjective(ampFunding.getDonorObjective());
 					//AmpTermsAssist ampTermsAssist = ampFunding
 					//		.getAmpTermsAssistId();
 					AmpCategoryValue typeOfAssistance	= ampFunding.getTypeOfAssistance();
@@ -150,7 +151,10 @@ public class ViewFinancialOverview extends TilesAction {
 					}
 					
 					if(ampFunding.getConditions() != null){
-					formBean.setConditions(ampFunding.getConditions().trim());
+						formBean.setConditions(ampFunding.getConditions().trim());
+					}
+					if(ampFunding.getDonorObjective() != null){
+						formBean.setDonorObjective(ampFunding.getDonorObjective());
 					}
 					
 					if (logger.isDebugEnabled())

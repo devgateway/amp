@@ -70,8 +70,7 @@ function setHoveredTable(tableId, hasHeaders) {
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<DIV id="TipLayer"
-	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+<DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
 
 <script type="text/javascript">

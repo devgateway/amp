@@ -105,7 +105,7 @@ public class GetTeamActivities
                             col = TeamUtil.getManagementTeamActivities(id);
                             taForm.setDonorFlag(true);
                         } else if(ampTeam.getTeamCategory() != null) {
-                            col = TeamUtil.getDonorTeamActivities(id);
+                            col = TeamUtil.getAllTeamActivities(id);
                             taForm.setDonorFlag(true);
                         } else {
                             col = TeamUtil.getAllTeamActivities(id);

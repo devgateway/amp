@@ -1692,36 +1692,41 @@ public class TeamUtil {
 			String queryString = "";
 			Query qry = null;
 			if (teamId != null) {
-				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
-						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
+//				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
+//						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
+				queryString = "select act from " + AmpActivity.class.getName()
+				+ " act where (act.team=:teamId) ";
 				qry = session.createQuery(queryString);
 				qry.setParameter("teamId", teamId, Hibernate.LONG);
 			} else {
 				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy,role.role.roleCode,role.organisation.name  , act.ampId from " + AmpActivity.class.getName()
-						+ " act left join act.orgrole role left join  act.updatedBy   where act.team is null ";
+						+ " act left join act.orgrole role join  act.updatedBy   where act.team is null ";
 				qry = session.createQuery(queryString);
 
 			}
 			
 			qry.setFetchSize(100);
-			Iterator itr = qry.list().iterator();
+			ArrayList al=(ArrayList) qry.list();
+			Iterator itr = al.iterator();
 
 			HashMap<Long, AmpActivity> holder = new HashMap<Long, AmpActivity>();
 			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
 			while (itr.hasNext()) {
 
-				Object[] act = (Object[]) itr.next();
-				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
+				//Object[] act = (Object[]) itr.next();
+				//AmpActivity act = (AmpActivity) itr.next();
+				//AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
+				AmpActivity activity =(AmpActivity) itr.next();
 				AmpActivity tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){
 					holder.put(activity.getAmpActivityId().longValue(), activity);
 				}
-				String roleCode=(String) act[5];
-				String name=(String) act[6];
+				String roleCode="";//(String)activity.geto;
+				String name="";//(String) act[6];
 				
 				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
 				donnorList =(donnorList==null)?new ArrayList<String>():donnorList;
-				if (roleCode != null && roleCode.equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name)) {
+				if (roleCode != null &&  !donnorList.contains(name)) {
 					donnorList.add(name);
 				}
 				

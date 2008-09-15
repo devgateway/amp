@@ -30,6 +30,7 @@ function saveClicked() {
     draftStatus.value=false;
   }
   save();
+ 
 }
 
 function saveAsDraftClicked() {
@@ -41,7 +42,8 @@ function saveAsDraftClicked() {
 }
 
 function save() {
-  var flag = validateForm();
+   
+  var flag = true;//validateForm();
   if (flag == true) {
    /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
     <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
@@ -94,11 +96,22 @@ function gotoStep(value) {
   }
 }
 
-function fnGetSurvey() {
+function fnGetSurvey(value) {
+var draftStatus=document.getElementById("draftFlag");
+  var flag;
+  if(draftStatus!=null && draftStatus.value!="true"
+  && document.aimEditActivityForm.step.value<value){
+    flag=true;//validateForm();
+  }else{
+    flag=true;
+  }
+  if (flag == true) {
+  	document.aimEditActivityForm.step.value = value;
 	<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= step %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
+	}
 }
 -->
 </script>
@@ -571,15 +584,37 @@ function fnGetSurvey() {
 				</tr>
 			    <feature:display  name="Paris Indicator" module="Add & Edit Activity">
 			      <tr>
+			      <c:if test="${aimEditActivityForm.step != 17}">
 			        <td>
 			          <IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			            <c:set var="translation">
 							<digi:trn key="aim:clickToAdd/UpdateParisIndicators">Add / Update Paris Indicators</digi:trn>
 			            </c:set>
-			            <a href="javascript:fnGetSurvey()" class="menu" title="${translation}">
+			            <a href="javascript:fnGetSurvey(17)" class="menu" title="${translation}">
 			              <digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
 			            </a>
 			        </td>
+			        </c:if>
+			        
+			        <c:if test="${aimEditActivityForm.step == 17}">
+					<td nowrap="nowrap">
+						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+							<tr>
+								<td width="10" height="19" background="module/aim/images/left-arc.gif">
+								</td>
+								<td bgcolor="#3399ff" height="19">
+									<IMG alt="Link" height="10" src="../ampTemplate/images/arrow-th-BABAB9.gif" width="15">
+										<span class="textalb">
+											<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
+										</span>
+									</td>
+								<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+								</td>
+							</tr>
+						</table>
+					</td>
+					</c:if>
+			        
 			      </tr>
 			    </feature:display>
 			    <module:display name="M & E" parentModule="MONITORING AND EVALUATING">

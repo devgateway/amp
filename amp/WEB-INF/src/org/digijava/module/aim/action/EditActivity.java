@@ -1072,6 +1072,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         	  while(iterFunding.hasNext()){
         		  Funding currFunding = iterFunding.next();
                   FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();    
+                  try{
                   calculationsSubtotal.doCalculations(currFunding.getAmpFundingDetails(), toCurrCode);
         		  currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
         		  currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
@@ -1083,7 +1084,10 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         		  currFunding.setUnDisbursementBalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
         		  currFunding.setAmpFundingDetails(null);
         		  //TODO:aca se setearia el resto
-        		  
+                  }
+                  catch(Exception ex){
+                	  ex.printStackTrace();
+                  }
         	  }
           }
 

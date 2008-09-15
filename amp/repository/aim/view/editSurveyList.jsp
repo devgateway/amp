@@ -247,7 +247,7 @@
 
 				</td></tr>
 
-				<tr><td style="vertical-align:top;>
+				<tr><td style="vertical-align:top;">
 
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 

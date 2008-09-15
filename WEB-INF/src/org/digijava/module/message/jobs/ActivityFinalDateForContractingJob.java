@@ -18,6 +18,7 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ActivityFinalDateForContractingJob implements StatefulJob {
     public void execute(JobExecutionContext context) throws JobExecutionException{

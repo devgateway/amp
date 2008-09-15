@@ -92,6 +92,13 @@ public abstract class ReportData extends Viewable {
 	
 	protected Boolean globalHeadingsDisplayed;
 	
+	protected List<String> columnsToBeRemoved; 
+	
+	public List<String> getColumnsToBeRemoved() {
+		if(this.getParent()!=null) return this.getParent().getColumnsToBeRemoved();
+		return this.columnsToBeRemoved;
+	}
+	
 	public int getCurrentRowNumber() {
 		if(this.getParent()!=null) return this.getParent().getCurrentRowNumber();
 		return this.currentRowNumber;
@@ -249,7 +256,7 @@ public abstract class ReportData extends Viewable {
 	 *
 	 */
 	public abstract void postProcess();
-		
+	
 	public ReportData(String name) {
 		this.name=name;
 		items=new ArrayList();
@@ -365,6 +372,10 @@ public abstract class ReportData extends Viewable {
 	
 	public String toString() {
 		return name;
+	}
+
+	public void setColumnsToBeRemoved(List<String> columnsToBeRemoved) {
+	    this.columnsToBeRemoved = columnsToBeRemoved;
 	}
 	
 	

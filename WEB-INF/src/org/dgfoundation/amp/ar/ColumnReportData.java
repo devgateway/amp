@@ -186,6 +186,15 @@ public class ColumnReportData extends ReportData {
 			if (l != null)
 				trailCells.addAll(l);
 		}
+		
+		//remove columns to be removed		
+		List<String> ctbr = this.getColumnsToBeRemoved();
+		i=ctbr.iterator();
+		while (i.hasNext()) {
+		    String name = (String) i.next();
+		    items.remove(this.getColumn(name));		
+		    logger.info("Removed previously added column "+name+" for filtering purposes");
+		}
 	}
 
 	/*

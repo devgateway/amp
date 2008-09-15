@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -167,11 +168,11 @@ public class ColumnFilterGenerator {
 	 * @param filter
 	 * @return the no of cols added
 	 */
-	public static int appendFilterRetrievableColumns(
+	public static List<String> appendFilterRetrievableColumns(
 			List<AmpReportColumn> extractable, AmpARFilter filter) {
 		// check which columns are selected in the filter and have attached
 		// columns that are filter retrievable
-		int ret=0;
+		List<String> addedColumnNames=new ArrayList<String>();
 		TreeSet<String> colNames = new TreeSet<String>();
 		Iterator<AmpReportColumn> iterator2 = extractable.iterator();
 		while (iterator2.hasNext()) {
@@ -201,7 +202,7 @@ public class ColumnFilterGenerator {
 					arc.setOrderId(new String("1"));
 					logger.info("Adding additional column "+cf.getColumn().getColumnName()+" because selected filter "+cf.getBeanFieldName()+" is filterRetrievable");
 					extractable.add(arc);
-					ret++;
+					addedColumnNames.add(arc.getColumn().getColumnName());
 				}
 				
 			}
@@ -227,6 +228,6 @@ public class ColumnFilterGenerator {
 			e.printStackTrace();
 			ARUtil.logger.error(e);
 		}
-		return ret;
+		return addedColumnNames;
 	}
 }

@@ -47,6 +47,10 @@ public class AmpReportGenerator extends ReportGenerator {
 
 	List<AmpReportColumn> extractable;
 	protected int extractableCount;
+	private List<String> columnsToBeRemoved;
+	
+	
+	
 
 	/**
 	 * returns categories for a given column. If the column has no categories,
@@ -140,8 +144,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			extractable.add(arc);
 		}
 		if(!filter.isJustSearch()){
-		extractableCount += ColumnFilterGenerator
-				.appendFilterRetrievableColumns(extractable, filter);
+		    this.columnsToBeRemoved=
+		    ColumnFilterGenerator
+			.appendFilterRetrievableColumns(extractable, filter);
+		   // extractableCount += this.columnsToBeRemoved.size(); 
 		}
 		
 		if (extractable.size() > 0) {
@@ -547,6 +553,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);
 		report.setSourceColsCount(new Integer(extractableCount - 1));
+		report.setColumnsToBeRemoved(columnsToBeRemoved);
 		// ensure acess to the report metadata from the raw columns. we should
 		// not need this but ...
 		rawColumns.setParent(report);

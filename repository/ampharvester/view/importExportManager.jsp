@@ -7,8 +7,92 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="javascript">
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+input.file {
+	width: 300px;
+	margin: 0;
+}
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
 
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
 </script>
 
 <digi:instance property="aHarManagerForm" />
@@ -46,13 +130,15 @@
 					<tr>
 						<td><digi:trn key="ie:selectfile">Select File</digi:trn>  </td>
 						<td>
-							<html:file property="uploadFile"/>
-						</td>
-					</tr>
-					<tr>
-						<td>&nbsp;</td>
-						<td>
-							<html:submit style="dr-menu" value="Upload"/>				
+							<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+									<input id="uploadFile" name="uploadFile" type="file" class="file"/>
+								</div>
+							</a>
+							<c:set var="translation">
+								<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>
+							</c:set>
+							<html:submit style="dr-menu" value="${translation}" property="importTreeVisibility" />
 						</td>
 					</tr>
 				</table>
@@ -66,3 +152,10 @@
 	</tr>
 </table>
 
+<script type="text/javascript">
+	initFileUploads();
+ 	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
+ 		window.opener.location.replace(window.opener.location.href);
+ 	 	window.close();
+ 	}
+ </script>

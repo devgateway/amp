@@ -320,7 +320,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</html:multibox>
 																	</td>
 																	<td width="73%">
-																		<bean:write name="ampReports" property="name" />
+																		<digi:trn key="aim:reportMemberSpecificName:${ampReports.name}"><bean:write name="ampReports" property="name" /></digi:trn>
 																	</td>
 																	<jsp:useBean id="urlParams" type="java.util.Map"
 																	class="java.util.HashMap"/>

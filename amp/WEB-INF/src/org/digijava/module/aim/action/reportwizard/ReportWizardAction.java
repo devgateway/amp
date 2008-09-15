@@ -277,16 +277,19 @@ public class ReportWizardAction extends MultiAction {
 			//rc.setOrderId(""+i);
 			
 			Iterator<?> iter	= availableFields.iterator();
+			boolean foundCol	= false;
 			while( iter.hasNext() ) {
 				Object field			= iter.next();
 				if ( sourceVector[i].equals( invokeGetterForBeanPropertyWithAnnotation(field, Identificator.class, new Object[0]) ) ) {
 					Object [] param3			= new Object[1];
 					param3[0]					= field;
 					invokeSetterForBeanPropertyWithAnnotation(reportField, ColumnLike.class, param3);
+					foundCol					= true;
 					break;
 				}
 			}
-			container.add(reportField);
+			if (foundCol)
+				container.add(reportField);
 		}
 	}
 	

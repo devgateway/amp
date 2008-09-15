@@ -62,6 +62,10 @@ function getSelectedFields( ulId, name ) {
 		if ( i < fields.length-1 )
 			ret		+= "&";
 	}
+	if ( fields.length == 0 ) { 
+			ret	= name + "=0";
+			alert (ret);
+	}
 	return ret;	
 }
 

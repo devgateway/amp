@@ -38,7 +38,16 @@ public class SelectTeam extends Action {
 
         HttpSession session = request.getSession();
         LoginForm lForm = (LoginForm) form;
-        String temp = request.getParameter("id");
+        
+        //This is for the auto login.
+        String temp = "";
+        String workspaceId = (String) request.getSession().getAttribute("j_autoWorkspaceId");
+        request.getSession().removeAttribute("j_autoWorkspaceId");
+        if(workspaceId != null){
+        	temp = workspaceId;
+        } else {
+        	temp = request.getParameter("id");
+        }
         TeamMember currentTeamMember = (TeamMember)session.getAttribute("currentMember");
 
         

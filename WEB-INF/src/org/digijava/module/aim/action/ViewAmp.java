@@ -57,6 +57,7 @@ public class ViewAmp
                                  HttpServletResponse response) throws java.lang.
             Exception {
 
+    	String workspaceId = (String) request.getSession().getAttribute("j_autoWorkspaceId");
         User user = RequestUtils.getUser(request);
         Site site = RequestUtils.getSite(request);
 
@@ -85,6 +86,9 @@ public class ViewAmp
             String fwdUrl = "admin.do";
             response.sendRedirect(fwdUrl);
             return null;
+        } else if(workspaceId != null){
+        	response.sendRedirect("selectTeam.do");
+        	return null;
         }
 
 

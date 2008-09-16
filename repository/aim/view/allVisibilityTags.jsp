@@ -220,6 +220,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Commitment Button" feature="Commitments"></field:display>
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display>
 <field:display name="Add Disbursement Button" feature="Disbursement"></field:display>
+<field:display name="Contract of Disbursement" feature="Disbursement"></field:display>
+<field:display name="Link to Disbursement Order ID" feature="Disbursement"></field:display> 
 <field:display name="Add Documents Button" feature="Related Documents"></field:display>
 <field:display name="Add Donor Funding Button" feature="Funding Information"></field:display>
 <field:display name="Add Donor Organization" feature="Funding Information"></field:display>

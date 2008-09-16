@@ -986,7 +986,8 @@ public class TranslatorWorker {
             }
             ses.saveOrUpdate(message);
             tx.commit();
-        }
+            
+        } 
         catch (SQLException se) {
             logger.error("Error saving translation. siteId="
                          + message.getSiteId() + ", key = " + message.getKey() +
@@ -1002,20 +1003,27 @@ public class TranslatorWorker {
             throw new WorkerException("TranslatorWorker.SqlExSaveMessage.err", se);
 
         }
-        catch (HibernateException e) {
-            logger.error("Error saving translation. siteId="
-                         + message.getSiteId() + ", key = " + message.getKey() +
-                         ",locale=" + message.getLocale(), e);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
+        catch (HibernateException e) {        	
+        	try {
+        		ses.save(message);
+                tx.commit();
+        	} catch (Exception e1) {
+        		logger.error("Error saving translation. siteId="
+                        + message.getSiteId() + ", key = " + message.getKey() +
+                        ",locale=" + message.getLocale(), e1);
+        		//
+              	 if (tx != null) {
+                       try {
+                           tx.rollback();
+                       }
+                       catch (HibernateException ex1) {
+                           logger.warn("rollback() failed", ex1);
+                       }
+                   }
 
-            throw new WorkerException("TranslatorWorker.HibExSaveMessage.err", e);
+                   throw new WorkerException("TranslatorWorker.HibExSaveMessage.err", e); 
+			}
+       	        
         }
         finally {
             try {

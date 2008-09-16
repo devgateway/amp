@@ -685,7 +685,8 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                                                 </logic:notEmpty>
 																				</feature:display>
 																			  <%-- Rendering projections --%>
-                                                                             <tr bgcolor="#ffffff">
+                                                                       	<feature:display module="Funding" name="Commitments"> 
+																			<tr bgcolor="#ffffff">
                                                                                  <td colspan="5">
                                                                                 	<b>
                                                                                   	<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>" >
@@ -729,6 +730,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </logic:equal>
                                                                               </logic:iterate>
                                                                               </c:if>
+																			</feature:display>
 
                                                                               <!--Disbursement order-->
                                                                                <feature:display module="Funding" name="Disbursement Orders">

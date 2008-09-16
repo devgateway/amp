@@ -442,6 +442,7 @@
 	</feature:display>
 
 	<!-- commitments -->
+<feature:display module="Funding" name="Commitments">
 	<tr>
 		<td width="100%" vAlign="top">
 
@@ -615,6 +616,7 @@
 			</table>
 		</td>
 	</tr>
+</feature:display>
 
 
 
@@ -791,6 +793,7 @@
 
 
 	<!-- disbursements -->
+<feature:display module="Funding" name="Disbursement">
 	<tr>
 		<td width="100%" vAlign="top">
 
@@ -836,17 +839,18 @@
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
                                 </field:display>
-                                <feature:display module="Funding" name="Disbursement Orders">
-                                <td align="center" valign="middle" >
-	                                <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
-                                </td>
-                                </feature:display>
                                 
-                                <field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+                                <td align="center" valign="middle" >
+									<field:display name="Link to Disbursement Order ID" feature="Disbursement">
+	                                <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
+									</field:display>
+                                </td>
+                                
 								<td align="center" valign="middle" colspan="2">&nbsp;
+									<field:display name="Contract of Disbursement" feature="Disbursement">
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
+									</field:display>
 								</td>
-                                </field:display>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
@@ -925,9 +929,9 @@
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
 											 -->        
-											 
+											 <field:display name="Link to Disbursement Order ID" feature="Disbursement">
 											 <td align="center">
-                                                                                        <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+                                                                                        
                                                                                               <c:if test="${empty fundingDetail.contract}">
                                                                                             
 												<input type="text" value="" readonly="true"/>
@@ -936,12 +940,14 @@
                                                                                             
 												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
                                                                                              </c:if>
-                                                                                            </field:display>
 											</td>
+											</field:display>
+											<field:display name="Contract of Disbursement" feature="Disbursement">
                                             <td>
                                                <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
 											</td>
+											</field:display>
 											 
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
@@ -980,6 +986,7 @@
 			</table>
 		</td>
 	</tr>
+</feature:display>
 
 	<!-- expenditures -->
 	<feature:display module="Funding" name="Expenditures">

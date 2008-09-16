@@ -27,6 +27,7 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ViewContractingForm;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -77,10 +78,22 @@ public class ContractingBreakdown extends TilesAction {
 			
 			List<IPAContract> contracts = ActivityUtil.getIPAContracts(actId);
 			ArrayList<IPAContract> newContracts=new ArrayList<IPAContract>();
+			
 			String cc=contrForm.getCurrCode();
 			for(Iterator<IPAContract> it= contracts.iterator(); it.hasNext();)
 			{
 				IPAContract contract=(IPAContract) it.next();
+				//AMP-2832
+				ArrayList<AmpFundingDetail> disbs1 = (ArrayList<AmpFundingDetail>) DbUtil.getDisbursementsFundingOfIPAContract(contract);
+				if(contrForm.getFundingDetailsLinked()==null) contrForm.setFundingDetailsLinked(new ArrayList<AmpFundingDetail>());
+				if(disbs1!=null)
+			        for (Iterator itd = disbs1.iterator(); itd.hasNext();) {
+						AmpFundingDetail afd = (AmpFundingDetail) itd.next();
+						if(afd.getContract()!=null)
+							if(afd.getContract().getContractName().equals(contract.getContractName()))
+								contrForm.getFundingDetailsLinked().add(afd);
+					}
+				
 	    		cc=contract.getTotalAmountCurrency().getCurrencyCode();
 				if (contract.getDisbursements() != null) {
 		             ArrayList<IPAContractDisbursement> disbs = new ArrayList<IPAContractDisbursement>(contract.getDisbursements());

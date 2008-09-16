@@ -6,7 +6,9 @@
 package org.digijava.module.aim.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 
 /**
  *
@@ -20,7 +22,14 @@ public class ViewContractingForm extends ActionForm {
 	private Long ampActivityId;
 	private String tabIndex;
 	private String currCode;
+	private List<AmpFundingDetail> fundingDetailsLinked;
 	
+	public List<AmpFundingDetail> getFundingDetailsLinked() {
+		return fundingDetailsLinked;
+	}
+	public void setFundingDetailsLinked(List<AmpFundingDetail> fundingDetailsLinked) {
+		this.fundingDetailsLinked = fundingDetailsLinked;
+	}
 	public String getCurrCode() {
 		return currCode;
 	}

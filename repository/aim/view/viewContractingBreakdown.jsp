@@ -474,42 +474,40 @@ function projectFiche(id)
 											                                              <td>&nbsp;
 											                                              </td>
 											                                              <td>
-										                                                      <logic:notEmpty name="aimEditActivityForm" property="allFundingDetails">
-										                                                           <table width="100%">
-																								    <tr>
-																										<th><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></th>
-																										<th><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn></field:display></th>
-																										<th><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn></field:display></th>
-																										<th><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></th>
-																										
-																									</tr>
-											                                                           <c:forEach  items="${aimEditActivityForm.allFundingDetails}" var="fundingDetail" >
-											                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
-											                                                           		<c:if test="${fundingDetail.transactionType == 1}">
-											                                                               <tr>
-											                                                                   <td align="center" valign="top">
-											                                                                       <c:if test="${fundingDetail.adjustmentType==0}">
-										                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
-											                                                                       </c:if>
-											                                                                       <c:if test="${fundingDetail.adjustmentType==1}">
-										                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
-											                                                                       </c:if>
-											                                                                   </td>
-											                                                                   <td align="center" valign="top">
-											                                                                       ${fundingDetail.transactionAmount}
-											                                                                   </td>
-											                                                                   <td align="center" valign="top">
-											                                                                      ${fundingDetail.currencyCode} 
-											                                                                   </td>
-											                                                                   <td align="center" valign="top">
-											                                                                       ${fundingDetail.transactionDate}
-											                                                                   </td>
-											                                                               </tr>
-											                                                               </c:if>
-											                                                               </logic:equal>
-											                                                           </c:forEach>
-										                                                           </table>
-										                                                       </logic:notEmpty>						
+										                                                     <table width="100%">
+																							    <tr>
+																									<td><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></td>
+																									<td><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn></field:display></td>
+																									<td><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn></field:display></td>
+																									<td><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></td>
+																									
+																								</tr>
+										                                                           <c:forEach  items="${aimViewContractingForm.fundingDetailsLinked}" var="fundingDetail" >
+										                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
+										                                                           		<c:if test="${fundingDetail.transactionType == 1}">
+										                                                               <tr>
+										                                                                   <td align="center" valign="top">
+										                                                                       <c:if test="${fundingDetail.adjustmentType==0}">
+									                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
+										                                                                       </c:if>
+										                                                                       <c:if test="${fundingDetail.adjustmentType==1}">
+									                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
+										                                                                       </c:if>
+										                                                                   </td>
+										                                                                   <td align="center" valign="top">
+										                                                                       ${fundingDetail.transactionAmount}
+										                                                                   </td>
+										                                                                   <td align="center" valign="top">
+										                                                                      ${fundingDetail.ampCurrencyId.currencyCode} 
+										                                                                   </td>
+										                                                                   <td align="center" valign="top">
+										                                                                       ${fundingDetail.transactionDate}
+										                                                                   </td>
+										                                                               </tr>
+										                                                               </c:if>
+										                                                               </logic:equal>
+										                                                           </c:forEach>
+									                                                           </table>
 											                                               </td>		
 											                                           </tr>
 										                                            </field:display>

@@ -2682,9 +2682,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
      
     catch (Exception ex) {
-      logger
-          .error("Unable to get IPAContracts :"
-                 + ex);
+      logger.error(" [getIPAContracts(Long activityId)] Unable to get IPAContracts :"  + ex);
     }
     
     return  contrcats ;
@@ -2715,7 +2713,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	      for(Iterator i=contrcats.iterator();i.hasNext();)
 	      {
 	    	  IPAContract c=(IPAContract) i.next();
-	    	  cc=c.getTotalAmountCurrency().getCurrencyCode();
+	    	  if(c.getTotalAmountCurrency()!=null)
+	    		  cc=c.getTotalAmountCurrency().getCurrencyCode();
 	    	  if(c.getDibusrsementsGlobalCurrency()!=null)
 	          	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
 	    	  double td=0;
@@ -2739,9 +2738,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	    }
 	     
 	    catch (Exception ex) {
-	      logger
-	          .error("Unable to get IPAContracts :"
-	                 + ex);
+	      logger.error(" [getIPAContracts(Long activityId, String currCode)] Unable to get IPAContracts :" + ex);
+	      ex.printStackTrace();
 	    }
 	    
 	    return  contrcats ;
@@ -2788,7 +2786,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
   		double usdAmount1=0;  
 		   double finalAmount1=0; 
       	try {
+			if(c.getContractTotalValue()!=null && c.getTotalAmountCurrency().getCurrencyCode()!=null)	
 				usdAmount1 = CurrencyWorker.convertToUSD(c.getContractTotalValue().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+			else usdAmount1 = 0.0;
 			} catch (AimException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

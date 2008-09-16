@@ -274,7 +274,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 						                <field:display name="Total Committed" feature="Funding Information">
 											<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalCommitmentsActual">Total Commitments (Actual)</digi:trn></TD>
 										</field:display>
-                                                                              <field:display name="Total Ordered" feature="Disbursement Orders">
+                                        <field:display name="Total Ordered" feature="Disbursement Orders">
 			                	         	<TD bgcolor="#999999" style="color:black;font-weight:bold;"><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
 			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Funding Information">
@@ -299,7 +299,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										</feature:display>
 
 									</TR>
-													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
+								<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">
                                     <TD align="center" colspan="7"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
 			                     </TR>

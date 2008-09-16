@@ -124,6 +124,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer customGroupSize;
 	private String resetFormat;
 	
+	private Boolean sourceIsReportWizard;
+	
 	public String getResetFormat() {
 		return resetFormat;
 	}
@@ -795,6 +797,16 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public Object[] getSelectedProjectCategory() {
 		return selectedProjectCategory;
 	}
+
+	public Boolean getSourceIsReportWizard() {
+		return sourceIsReportWizard;
+	}
+
+	public void setSourceIsReportWizard(Boolean sourceIsReportWizard) {
+		this.sourceIsReportWizard = sourceIsReportWizard;
+	}
+
+	
 
 	
 }

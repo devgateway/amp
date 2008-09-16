@@ -30,6 +30,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -45,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
+import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -75,7 +77,16 @@ public class ReportsFilterPicker extends MultiAction {
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
-		String ampReportId = request.getParameter("ampReportId");
+		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
+		if ("true".equals(sourceIsReportWizard) ) {
+			filterForm.setSourceIsReportWizard(true);
+		}
+		else
+			filterForm.setSourceIsReportWizard(false);
+		
+		String ampReportId 	= request.getParameter("ampReportId");
+		if ( "".equals(ampReportId) )
+			ampReportId		= null;
 
 		if (ampReportId != null && filterForm.getAmpReportId() != null) {
 			if (!filterForm.getAmpReportId().toString().equalsIgnoreCase(ampReportId)) {
@@ -84,7 +95,8 @@ public class ReportsFilterPicker extends MultiAction {
 				filterForm.setAmpReportId(new Long(ampReportId));
 				filterForm.setIsnewreport(false);
 			}
-		} else {
+		} 
+		else if( ampReportId != null ){
 			filterForm.setIsnewreport(true);
 			filterForm.setAmpReportId(new Long(ampReportId));
 			filterForm.setIsnewreport(false);
@@ -438,9 +450,15 @@ public class ReportsFilterPicker extends MultiAction {
 		Session session = PersistenceManager.getSession();
 
 		request.setAttribute("apply", "apply");
-		AmpARFilter arf = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-		if (arf == null)
-			arf = new AmpARFilter();
+		AmpARFilter arf;
+		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
+			arf	= new AmpARFilter();
+		}
+		else {
+			arf 	= (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+			if (arf == null)
+				arf = new AmpARFilter();
+		}
 		arf.readRequestData(request);
 
 		// for each sector we have also to add the subsectors
@@ -662,6 +680,11 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpOrganisation.class));
 
+		if ( filterForm.getSourceIsReportWizard() != null && filterForm.getSourceIsReportWizard() ) {
+			request.getSession().setAttribute(ReportWizardAction.SESSION_FILTER, arf);
+			return null;
+		}
+			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
 		if (arf.isPublicView())
 			return mapping.findForward("publicView");
@@ -798,7 +821,7 @@ public class ReportsFilterPicker extends MultiAction {
 		return year;
 	}
 	
-	private AmpApplicationSettings getAppSetting(HttpServletRequest request) {
+	public static AmpApplicationSettings getAppSetting(HttpServletRequest request) {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		AmpApplicationSettings tempSettings = null;

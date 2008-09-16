@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.apache.struts.action.ActionForm;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 /**
@@ -35,8 +36,8 @@ public class ReportWizardForm extends ActionForm {
 
 	private Boolean duplicateName		= false;
 	
-	private Boolean publicReport = false;
-	
+	private Boolean publicReport 		= false;
+		
 	public Long getReportId() {
 		return reportId;
 	}
@@ -166,7 +167,5 @@ public class ReportWizardForm extends ActionForm {
 	public Boolean getPublicReport() {
 		return publicReport;
 	}
-	
-	
 	
 }

@@ -27,16 +27,15 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.AmpDonors;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -119,7 +118,7 @@ public final class ARUtil {
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
-
+		
 		// the siteid and locale are set for translation purposes
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
@@ -140,6 +139,11 @@ public final class ARUtil {
 				.getAttribute(ArConstants.REPORTS_FILTER);
 		if (af == null)
 			af = new AmpARFilter();
+		Object initFilter	= request.getAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB);
+		if ( initFilter!=null && "true".equals(initFilter) ) {
+			FilterUtil.populateFilter(r, af);
+			FilterUtil.prepare(request, af);
+		}
 		af.readRequestData(request);
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);
 

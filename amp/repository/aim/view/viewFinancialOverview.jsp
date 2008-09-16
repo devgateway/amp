@@ -20,6 +20,24 @@
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="false">
 
+<script type="text/javascript">
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=3&surveyFlag=true&activityId=" + id;
+}
+
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+	  var urlToGo = "<%=addUrl%>~pageId=2~activityId=" + id;
+	    document.location.href = urlToGo;
+}
+
+</script>
+
+
 <jsp:useBean id="urlSubTabs" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${urlSubTabs}" property="ampActivityId">
 	<bean:write name="aimFinancialOverviewForm" property="ampActivityId"/>

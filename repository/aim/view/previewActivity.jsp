@@ -2140,7 +2140,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             <td>
                                                                                                  ${contract.totalECContribIBAmount}
-                                                                                                ${contract.totalECContribIBCurrency} 
+                                                                                                ${contract.totalAmountCurrency} 
                                                                                             </td>
                                                                                         </tr>
                                                                                         </field:display>
@@ -2152,7 +2152,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalECContribINVAmount}
-                                                                                               ${contract.totalECContribINVCurrency}
+                                                                                               ${contract.totalAmountCurrency}
                                                                                             </td>
                                                                                         </tr>
                                                                                         </field:display>
@@ -2175,7 +2175,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalNationalContribCentralAmount}
-                                                                                                ${contract.totalNationalContribCentralCurrency} 
+                                                                                                ${contract.totalAmountCurrency} 
                                                                                             </td>
                                                                                         </tr>
                                                                                         </field:display>
@@ -2187,7 +2187,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalNationalContribRegionalAmount} 
-                                                                                              ${contract.totalNationalContribRegionalCurrency}
+                                                                                              ${contract.totalAmountCurrency}
                                                                                    
                                                                                             </td>
                                                                                         </tr>
@@ -2200,7 +2200,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalNationalContribIFIAmount}
-                                                                                               ${contract.totalNationalContribIFICurrency}
+                                                                                               ${contract.totalAmountCurrency}
                                                                                             </td>
                                                                                         </tr>
                                                                                         </field:display>
@@ -2221,7 +2221,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalPrivateContribAmount}
-                                                                                                ${contract.totalPrivateContribCurrency}
+                                                                                                ${contract.totalAmountCurrency}
                                                                                             </td>
                                                                                         </tr>
                                                                                         </field:display>

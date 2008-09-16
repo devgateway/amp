@@ -2242,7 +2242,23 @@ function collapseAll() {
                                                             									</logic:notEmpty>
                                                                                             </td>
                                                                                         </tr>
-                                                                                    </field:display>    
+                                                                                    </field:display>  
+                                                                                    <field:display name="Total Funding Disbursements of Contract" feature="Contracting">
+											                                          <tr>
+											                                              <td align="left">
+											                                                  <b><digi:trn key="aim:IPA:popup:totalFundingDisbursements">Total Funding Disbursements</digi:trn>:</b>
+											                                              </td>
+											                                              <td>
+											              									${contract.fundingTotalDisbursements} &nbsp;
+											              									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
+											              										&nbsp; ${contract.totalAmountCurrency}
+											              									</logic:empty>
+											              									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
+											              										&nbsp; ${contract.dibusrsementsGlobalCurrency}
+											              									</logic:notEmpty>
+											                                              </td>
+											                                          </tr>
+											                                      </field:display>  
                                                                                     <field:display name="Contract Execution Rate" feature="Contracting">
                                                                                 
                                                                                         <tr>
@@ -2254,6 +2270,17 @@ function collapseAll() {
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
+                                                                                    
+                                                                                    <field:display name="Contract Funding Execution Rate" feature="Contracting">
+											                                          <tr>
+											                                              <td align="left">
+											                                                  <b><digi:trn key="aim:IPA:popup:contractExecutionRate">Contract Execution Rate</digi:trn>:</b>
+											                                              </td>
+											                                              <td>
+											              										&nbsp; ${contract.fundingExecutionRate}
+											                                              </td>
+											                                          </tr>
+											                                      </field:display>   
                                                                                         
                                                                                         <field:display name="Disbursements" feature="Contracting">
                                                                                         <tr>
@@ -2304,6 +2331,64 @@ function collapseAll() {
                                                                                                 		
                                                                                             </td>		
                                                                                         </tr>		
+                                                                                        
+                                                                                        
+                                                                                        <field:display name="Contracting Funding Disbursements" feature="Contracting">
+                                                                                        <tr>
+                                                                                    
+                                                                                            <td colspan="2">
+                                                                                                <b><digi:trn key="aim:IPA:popup:fundingDisbursements">Funding Disbursements:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td>&nbsp;
+                                                                                            </td>
+                                                                                            <td>
+                                                                                               
+                                                                                    
+                                                                                                    <logic:notEmpty name="aimEditActivityForm" property="allFundingDetails">
+										                                                           <table width="100%">
+																								    <tr>
+																										<td><field:display name="Adjustment Type Disbursement" feature="Disbursement"><digi:trn key="aim:adjustmentTyeDisbursement">Adjustment Type Disbursement</digi:trn></field:display></td>
+																										<td><field:display name="Amount Disbursement" feature="Disbursement"><digi:trn key="aim:amountDisbursement">Amount Disbursement</digi:trn></field:display></td>
+																										<td><field:display name="Currency Disbursement" feature="Disbursement"><digi:trn key="aim:currencyDisbursement">Currency Disbursement</digi:trn></field:display></td>
+																										<td><field:display name="Date Disbursement" feature="Disbursement"><digi:trn key="aim:dateDisbursement">Date Disbursement</digi:trn></field:display></td>
+																										
+																									</tr>
+											                                                           <c:forEach  items="${aimEditActivityForm.allFundingDetails}" var="fundingDetail" >
+											                                                           		<logic:equal name="contract" property="contractName" value="${fundingDetail.contract.contractName}">
+											                                                           		<c:if test="${fundingDetail.transactionType == 1}">
+											                                                               <tr>
+											                                                                   <td align="center" valign="top">
+											                                                                       <c:if test="${fundingDetail.adjustmentType==0}">
+										                                                                             <digi:trn key="aim:actual">Actual</digi:trn>
+											                                                                       </c:if>
+											                                                                       <c:if test="${fundingDetail.adjustmentType==1}">
+										                                                                             <digi:trn key="aim:planned">Planned</digi:trn>
+											                                                                       </c:if>
+											                                                                   </td>
+											                                                                   <td align="center" valign="top">
+											                                                                       ${fundingDetail.transactionAmount}
+											                                                                   </td>
+											                                                                   <td align="center" valign="top">
+											                                                                      ${fundingDetail.currencyCode} 
+											                                                                   </td>
+											                                                                   <td align="center" valign="top">
+											                                                                       ${fundingDetail.transactionDate}
+											                                                                   </td>
+											                                                               </tr>
+											                                                               </c:if>
+											                                                               </logic:equal>
+											                                                           </c:forEach>
+										                                                           </table>
+										                                                       </logic:notEmpty>					
+                                                                                                		
+                                                                                            </td>		
+                                                                                        </tr>		
+                                                                                        
                                                                                         
                                                                                     </table>
                                                                                     

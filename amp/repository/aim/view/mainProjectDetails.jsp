@@ -301,8 +301,7 @@ html>body #mainEmpty {
 					</field:display>
 				</feature:display>
 			</module:display>
-			<module:display name="Previews"
-				parentModule="PROJECT MANAGEMENT">
+			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">

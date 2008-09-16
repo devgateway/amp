@@ -203,12 +203,13 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 				<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
 
 			</c:set>
-
+<feature:display module="Funding" name="Commitments">
 			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 
 			  			</digi:link> |
+</feature:display>
 
 			
                                                     <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
@@ -235,12 +236,13 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 				<digi:trn key="aim:clickToViewDisbursements">Click here to view Disbursements</digi:trn>
 
 			</c:set>
-
+<feature:display module="Funding" name="Disbursement">
 			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 			  					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
 			  			</digi:link> |
+</feature:display>
 
 			  			<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
 

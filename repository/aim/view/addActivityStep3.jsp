@@ -699,25 +699,25 @@ ${fn:replace(message,quote,escapedQuote)}
 
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
-                                                                                        <field:display name="Adjustment Type Commitment" feature="Funding Information">
+                                                                                        <field:display name="Adjustment Type Commitment" feature="Commitments">
                                                                                           <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
 																							</field:display>
                                                                                         </td>
                                                                                         <td width="120" align="right">
-                                                                                        <field:display name="Amount Commitment" feature="Funding Information">
+                                                                                        <field:display name="Amount Commitment" feature="Commitments">
                                                                                           <FONT color=blue>*</FONT>
                                                                                           <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
                                                                                           </field:display>
                                                                                         </td>
                                                                                         <td width="150">
-                                                                                        <field:display name="Currency Commitment" feature="Funding Information">
+                                                                                        <field:display name="Currency Commitment" feature="Commitments">
                                                                                           <bean:write name="fundingDetail" property="currencyCode"/>
                                                                                           </field:display>
                                                                                         </td>
                                                                                         <td width="70">
-                                                                                       	 	<field:display name="Date Commitment" feature="Funding Information">
+                                                                                       	 	<field:display name="Date Commitment" feature="Commitments">
                                                                                           		<bean:write name="fundingDetail" property="transactionDate"/>
                                                                                           	</field:display>
                                                                                         </td>
@@ -831,7 +831,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																										</td>
 																										<td>
 																										
-																										<field:display name="Contract of Disbursement Order" feature="Disbursement">
+																										<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
 			                                                                                             	 <c:if test="${not empty fundingDetail.contract}">
 					                                                                                     		${fundingDetail.contract.contractName}
 			                                                                                                   </c:if>
@@ -859,25 +859,25 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																								<tr bgcolor="#ffffff">
 																									<td width="50">
-																									<field:display name="Adjustment Type Expenditure" feature="Funding Information">
+																									<field:display name="Adjustment Type Expenditure" feature="Expenditures">
 																										<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																											<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																										</digi:trn>
 																									</field:display>
 																									</td>
 																									<td width="120" align="right">
-																										<field:display name="Amount Expenditure" feature="Funding Information">
+																										<field:display name="Amount Expenditure" feature="Expenditures">
 																											<FONT color=blue>*</FONT>
 																											<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																										</field:display>
 																									</td>
 																									<td width="150">
-																										<field:display name="Currency Expenditure" feature="Funding Information">
+																										<field:display name="Currency Expenditure" feature="Expenditures">
 																											<bean:write name="fundingDetail" property="currencyCode"/>
 																										</field:display>
 																									</td>
 																									<td width="70">
-																										<field:display name="Date Expenditure" feature="Funding Information">
+																										<field:display name="Date Expenditure" feature="Expenditures">
 																											<bean:write name="fundingDetail" property="transactionDate"/>
 																										</field:display>
 																									</td>

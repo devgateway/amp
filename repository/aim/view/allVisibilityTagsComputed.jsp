@@ -58,7 +58,6 @@
 <feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Disbursement Orders"></feature:display> 
 <feature:display module="Funding" name="Disbursement"></feature:display> 
-<feature:display module="Funding" name="Disbursements"></feature:display> 
 <feature:display module="Funding" name="Expenditures"></feature:display> 
 <feature:display module="Funding" name="Funding Information"></feature:display> 
 <feature:display module="Funding" name="MTEF Projections"></feature:display> 
@@ -211,9 +210,9 @@
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
-<field:display name="Add Commitment Button" feature="Funding Information"></field:display> 
+<field:display name="Add Commitment Button" feature="Commitments"></field:display> 
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display> 
-<field:display name="Add Disbursement Button" feature="Funding Information"></field:display> 
+<field:display name="Add Disbursement Button" feature="Disbursement"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 
 <field:display name="Add Documents Button" feature="Related Documents"></field:display> 
 <field:display name="Add Donor Funding Button" feature="Funding Information"></field:display> 
@@ -240,15 +239,19 @@
 <field:display name="Add Sector Level 3 Link" feature="Sectors"></field:display> 
 <field:display name="Add Sectors Button" feature="Sectors"></field:display> 
 <field:display name="Add Web Resource Button" feature="Web Resources"></field:display> 
-<field:display name="Adjustment Type Commitment" feature="Funding Information"></field:display> 
+<field:display name="Adjustment Type Commitment" feature="Commitments"></field:display>
+
+<field:display name="Contract of Disbursement" feature="Disbursement"></field:display>
+<field:display name="Link to Disbursement Order ID" feature="Disbursement"></field:display> 
+ 
 <field:display name="Adjustment Type Disbursement" feature="Disbursement"></field:display> 
 <field:display name="Adjustment Type Disbursement" feature="Funding Information"></field:display> 
-<field:display name="Adjustment Type Expenditure" feature="Funding Information"></field:display> 
+<field:display name="Adjustment Type Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Amount Commitment" feature="Funding Information"></field:display> 
+<field:display name="Amount Commitment" feature="Commitments"></field:display> 
 <field:display name="Amount Disbursement" feature="Disbursement"></field:display> 
 <field:display name="Amount Disbursement" feature="Funding Information"></field:display> 
-<field:display name="Amount Expenditure" feature="Funding Information"></field:display> 
+<field:display name="Amount Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Amount of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Assumptions" feature="Identification"></field:display> 
 <field:display name="Base Value" feature="Activity"></field:display> 
@@ -300,7 +303,6 @@
 <field:display name="Contract Validity Date" feature="Contracting"></field:display> 
 <field:display name="Contract Validity Date" feature="Contracting"></field:display> 
 <field:display name="Contract of Disbursement Order" feature="Disbursement Orders"></field:display> 
-<field:display name="Contract of Disbursement Order" feature="Disbursement"></field:display> 
 <field:display name="Contract type" feature="Contracting"></field:display> 
 <field:display name="Contracting Activity Category" feature="Contracting"></field:display> 
 <field:display name="Contracting Add Disbursement" feature="Contracting"></field:display> 
@@ -342,14 +344,14 @@
 <field:display name="Costing Total Cost" feature="Costing"></field:display> 
 <field:display name="Creation date" feature="Admin"></field:display> 
 <field:display name="Credit/Donation" feature="Planning"></field:display> 
-<field:display name="Cumulative Commitment" feature="Funding Information"></field:display> 
-<field:display name="Cumulative Disbursement" feature="Funding Information"></field:display> 
-<field:display name="Currency Commitment" feature="Funding Information"></field:display> 
+<field:display name="Cumulative Commitment" feature="Commitments"></field:display> 
+<field:display name="Cumulative Disbursement" feature="Disbursement"></field:display> 
+<field:display name="Currency Commitment" feature="Commitments"></field:display> 
 <field:display name="Currency Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Currency Disbursement" feature="Disbursement"></field:display> 
 <field:display name="Currency Disbursement" feature="Funding Information"></field:display> 
 <field:display name="Currency Disbursements" feature="Regional Funding"></field:display> 
-<field:display name="Currency Expenditure" feature="Funding Information"></field:display> 
+<field:display name="Currency Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display> 
 <field:display name="Current Completion Date" feature="Planning"></field:display> 
@@ -357,13 +359,13 @@
 <field:display name="Data Source" feature="Identification"></field:display> 
 <field:display name="Data Team Leader" feature="Identification"></field:display> 
 <field:display name="Date Base Value" feature="Activity"></field:display> 
-<field:display name="Date Commitment" feature="Funding Information"></field:display> 
+<field:display name="Date Commitment" feature="Commitments"></field:display> 
 <field:display name="Date Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Date Current Value" feature="Activity"></field:display> 
 <field:display name="Date Disbursement" feature="Disbursement"></field:display> 
 <field:display name="Date Disbursement" feature="Funding Information"></field:display> 
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display> 
-<field:display name="Date Expenditure" feature="Funding Information"></field:display> 
+<field:display name="Date Expenditure" feature="Expenditures"></field:display> 
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Date Of Last Activity Change" feature="Identification"></field:display> 
 <field:display name="Date Revised Target Value" feature="Activity"></field:display> 
@@ -418,7 +420,7 @@
 <field:display name="Final Date for Contracting" feature="Planning"></field:display> 
 <field:display name="Final Date for Disbursements" feature="Planning"></field:display> 
 <field:display name="Financial Instrument" feature="Budget"></field:display> 
-<field:display name="Financial Progress Tab" feature="Financial Progress"></field:display> 
+<feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <field:display name="Financing Instrument" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Id" feature="Funding Information"></field:display> 
 <field:display name="Funding Organization Name" feature="Funding Information"></field:display> 
@@ -599,14 +601,14 @@
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount" feature="Contracting"></field:display> 
 <field:display name="Total Commitments" feature="Measures"></field:display> 
-<field:display name="Total Committed" feature="Funding Information"></field:display> 
-<field:display name="Total Disbursed" feature="Funding Information"></field:display> 
+<field:display name="Total Committed" feature="Commitments"></field:display> 
+<field:display name="Total Disbursed" feature="Disbursement"></field:display> 
 <field:display name="Total Disbursements of Contract" feature="Contracting"></field:display> 
 <field:display name="Total Donor Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Donor Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Total Donor Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Total EC Contribution" feature="Contracting"></field:display> 
-<field:display name="Total Expended" feature="Funding Information"></field:display> 
+<field:display name="Total Expended" feature="Expenditures"></field:display> 
 <field:display name="Total Financing Required" feature="Admin NPD"></field:display> 
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display> 
 <field:display name="Total Private Contribution" feature="Contracting"></field:display> 

@@ -203,7 +203,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 			  				<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 
 			  			</digi:link> |
-
+<feature:display module="Funding" name="Commitments">
 			<c:set var="translation">
 
 				<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
@@ -215,6 +215,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 			  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 
 			  			</digi:link> |
+</feature:display>
                                                     <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
 
                                                 <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
@@ -231,7 +232,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			  			</digi:link> |
                                                 </field:display>
-
+<feature:display module="Funding" name="Disbursement">
 			  			<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
 
 			<c:set var="translation">
@@ -245,6 +246,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 			  					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
 			  			</digi:link> |
+</feature:display>
 
 			  			<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
 

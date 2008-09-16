@@ -34,7 +34,7 @@
 						<tr bgcolor="#ffffff">
 							<td height="18" width="40%" align="right" bgcolor="#ffffff"><field:display
 								name="Adjustment Type Commitment"
-								feature="Funding Information">
+								feature="Commitments">
 								<digi:trn
 									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
@@ -43,16 +43,16 @@
 
 
 							<td height="18" align="right"><field:display
-								name="Date Commitment" feature="Funding Information">
+								name="Date Commitment" feature="Commitments">
 								<bean:write name="fundingDetail" property="transactionDate" />
 							</field:display></td>
 							<td height="18" align="right" bgcolor="#ffffff">
 							<field:display name="Amount Commitment"
-								feature="Funding Information">
+								feature="Commitments">
 								<!-- <font color="blue">*</font> -->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Commitment"
-								feature="Funding Information">
+								feature="Commitments">
 								<bean:write name="fundingDetail" property="currencyCode" />
 							</field:display></td>
 							<td height="18"><field:display
@@ -94,7 +94,7 @@
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Commitment"
-								feature="Funding Information">
+								feature="Commitments">
 								<digi:trn
 									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 									<bean:write name="fundingDetail" property="adjustmentTypeName" />
@@ -103,15 +103,15 @@
 
 
 							<td height="18" align="right"><field:display name="Date Commitment"
-								feature="Funding Information">
+								feature="Commitments">
 								<bean:write name="fundingDetail" property="transactionDate" />
 							</field:display></td>
 							<td height="18" align="right"><field:display
-								name="Amount Commitment" feature="Funding Information">
+								name="Amount Commitment" feature="Commitments">
 								<!-- <font color="blue">*</font>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Commitment"
-								feature="Funding Information">
+								feature="Commitments">
 								<bean:write name="fundingDetail" property="currencyCode" />
 							</field:display></td>
 							<td height="18"><field:display name="Exchange Rate"

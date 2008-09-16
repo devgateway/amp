@@ -84,13 +84,15 @@ function preview(id)
 	            	<span>
 	              		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 	              	</span> | 
-	              	<!-- /logic:notEqual--> 
+	              	<!-- /logic:notEqual-->
+					<feature:display module="Funding" name="Commitments"> 
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
 					</c:set>
 					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 					<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 					</digi:link> | 
+					</feature:display>
                      <field:display feature="Disbursement Orders" name="Disbursement Orders Tab">
                      <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
 					<c:set var="translation">
@@ -100,6 +102,7 @@ function preview(id)
 					<digi:trn key="aim:disbursementOrders">DISBURSEMENT ORDERS</digi:trn>
 					</digi:link> | 
                                         </field:display>
+					<feature:display module="Funding" name="Disbursement">
 					<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewDisbursements">Click here to view Disbursements</digi:trn>
@@ -111,6 +114,7 @@ function preview(id)
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 					</c:set>
+					</feature:display>
 					
                     <feature:display module="Funding" name="Expenditures">
                     	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >

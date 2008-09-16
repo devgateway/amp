@@ -1120,7 +1120,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				if(filter != null && column.getId() == filter.getId())
 					column = filter;
 				
-				if (column instanceof WiColumnDropDownFilter)
+				if (column instanceof WiColumnDropDownFilter && filter != null)
 					columnName = filter.getProvider().getItem(filter.getActiveItemId()).getName();
 				else
 					columnName = column.getName();

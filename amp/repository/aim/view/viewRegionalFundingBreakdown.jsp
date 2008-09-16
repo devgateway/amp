@@ -138,12 +138,12 @@ function projectFiche(id)
 	            						            	<TD>
 	            						            		<digi:trn key="aim:region">Region</digi:trn>
 	            						            	</TD>
-	            						            	<field:display name="Total Committed" feature="Funding Information">
+	            						            	<field:display name="Total Committed" feature="Commitments">
 															<TD>
 																<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>
 															</TD>
 														</field:display>
-														<field:display name="Total Disbursed" feature="Funding Information">
+														<field:display name="Total Disbursed" feature="Disbursement">
 								                         	<TD>
 								                         		<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>
 								                         	</TD>
@@ -153,7 +153,7 @@ function projectFiche(id)
 																<digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn>
 															</TD>
 														</field:display>
-														<field:display name="Total Expended" feature="Funding Information">
+														<field:display name="Total Expended" feature="Expenditures">
 								                         	<TD>
 								                         		<digi:trn key="aim:totalExpended">Total Expended</digi:trn>
 								                         	</TD>
@@ -175,12 +175,12 @@ function projectFiche(id)
 																	<digi:link href="/viewRegFundDetails.do" name="url">
 																	<bean:write name="fd" property="regionName"/></digi:link>
 																</TD>
-																<field:display name="Total Committed" feature="Funding Information">
+																<field:display name="Total Committed" feature="Commitments">
 													                <TD align="right">
 													                <%=FormatHelper.formatNumber(fd.getTotCommitments())  %>
 													                </TD>
 													            </field:display>
-																<field:display name="Total Disbursed" feature="Funding Information">
+																<field:display name="Total Disbursed" feature="Disbursement">
 													                <TD align="right">
 													                	<%=FormatHelper.formatNumber(fd.getTotDisbursements())  %>
 												
@@ -192,7 +192,7 @@ function projectFiche(id)
 											      			        	
 											      			        </TD>
 											      			    </field:display>
-																<field:display name="Total Expended" feature="Funding Information">
+																<field:display name="Total Expended" feature="Expenditures">
 														            <TD align="right">
 														            <%=FormatHelper.formatNumber(fd.getTotExpenditures())  %>
 														            </TD>
@@ -210,13 +210,13 @@ function projectFiche(id)
 														<TD>
 															<digi:trn key="aim:total">Total</digi:trn>
 														</TD>
-														<field:display name="Total Committed" feature="Funding Information">
+														<field:display name="Total Committed" feature="Commitments">
 															<TD align="right">
 															<% %>
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotCommitments())%>
 															</TD>
 														</field:display>
-														<field:display name="Total Disbursed" feature="Funding Information">
+														<field:display name="Total Disbursed" feature="Disbursement">
 															<TD align="right">
 																<%//=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotDisbursements())%>
 															</TD>
@@ -226,7 +226,7 @@ function projectFiche(id)
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotUnDisbursed())%>
 														</TD>
 														</field:display>
-														<field:display name="Total Expended" feature="Funding Information">
+														<field:display name="Total Expended" feature="Expenditures">
 															<TD align="right">
 															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotExpenditures())%>
 									

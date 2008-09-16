@@ -159,7 +159,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display>
 <feature:display name="Widget Places" module="WIDGETS"></feature:display>
 <feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display>
-<feature:display module="Funding" name="Disbursements"></feature:display>
 
 
 <feature:display name="AddMessageButton" module="Messages"></feature:display>
@@ -175,7 +174,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 
 <field:display name="Channel Overview Tab" feature="Channel Overview"></field:display>
-<field:display name="Financial Progress Tab" feature="Financial Progress"></field:display>
+<feature:display name="Financial Progress Tab" module="Funding"></feature:display>
 <field:display name="Funding Organizations Tab" feature="Funding Information"></field:display>
 <field:display name="Physical Progress Tab" feature="Physical Progress"></field:display>
 <field:display name="Regional Funding Tab" feature="Regional Funding"></field:display>
@@ -218,9 +217,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Add Actors Link" feature="Issues"></field:display>
-<field:display name="Add Commitment Button" feature="Funding Information"></field:display>
+<field:display name="Add Commitment Button" feature="Commitments"></field:display>
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display>
-<field:display name="Add Disbursement Button" feature="Funding Information"></field:display>
+<field:display name="Add Disbursement Button" feature="Disbursement"></field:display>
 <field:display name="Add Documents Button" feature="Related Documents"></field:display>
 <field:display name="Add Donor Funding Button" feature="Funding Information"></field:display>
 <field:display name="Add Donor Organization" feature="Funding Information"></field:display>
@@ -250,12 +249,12 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Web Resource Button" feature="Web Resources"></field:display>
 <field:display name="Web Resources Notes" feature="Web Resources"></field:display>
 <field:display name="Web Resources Document Type" feature="Web Resources"></field:display>
-<field:display name="Adjustment Type Commitment" feature="Funding Information"></field:display>
+<field:display name="Adjustment Type Commitment" feature="Commitments"></field:display>
 <field:display name="Adjustment Type Disbursement" feature="Disbursement"></field:display>
-<field:display name="Adjustment Type Expenditure" feature="Funding Information"></field:display>
-<field:display name="Amount Commitment" feature="Funding Information"></field:display>
+<field:display name="Adjustment Type Expenditure" feature="Expenditures"></field:display>
+<field:display name="Amount Commitment" feature="Commitments"></field:display>
 <field:display name="Amount Disbursement" feature="Disbursement"></field:display>
-<field:display name="Amount Expenditure" feature="Funding Information"></field:display>
+<field:display name="Amount Expenditure" feature="Expenditures"></field:display>
 <field:display name="Base Value" feature="Activity"></field:display>
 <field:display name="Beneficiary Agency Add Button" feature="Beneficiary Agency"></field:display>
 <field:display name="Beneficiary Agency Remove Button" feature="Beneficiary Agency"></field:display>
@@ -304,25 +303,25 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Contribution Donors" feature="Costing"></field:display>
 <field:display name="Contribution Financing Type" feature="Costing"></field:display>
 
-<field:display name="Cumulative Commitment" feature="Funding Information"></field:display>
-<field:display name="Cumulative Disbursement" feature="Funding Information"></field:display>
+<field:display name="Cumulative Commitment" feature="Commitments"></field:display>
+<field:display name="Cumulative Disbursement" feature="Disbursement"></field:display>
 <field:display name="Undisbursed Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
 <field:display name="Uncommitted Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
-<field:display name="Currency Commitment" feature="Funding Information"></field:display>
+<field:display name="Currency Commitment" feature="Commitments"></field:display>
 <field:display name="Currency Commitments" feature="Regional Funding"></field:display>
 <field:display name="Currency Disbursement" feature="Disbursement"></field:display>
 <field:display name="Currency Disbursements" feature="Regional Funding"></field:display>
-<field:display name="Currency Expenditure" feature="Funding Information"></field:display>
+<field:display name="Currency Expenditure" feature="Expenditures"></field:display>
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Current Value" feature="Activity"></field:display>
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Date Base Value" feature="Activity"></field:display>
-<field:display name="Date Commitment" feature="Funding Information"></field:display>
+<field:display name="Date Commitment" feature="Commitments"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display>
 <field:display name="Date Current Value" feature="Activity"></field:display>
 <field:display name="Date Disbursement" feature="Disbursement"></field:display>
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display>
-<field:display name="Date Expenditure" feature="Funding Information"></field:display>
+<field:display name="Date Expenditure" feature="Expenditures"></field:display>
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Date Revised Target Value" feature="Activity"></field:display>
 <field:display name="Date Target Value" feature="Activity"></field:display>
@@ -493,13 +492,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display>
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display>
-<field:display name="Total Committed" feature="Funding Information"></field:display>
+<field:display name="Total Committed" feature="Commitments"></field:display>
 <field:display name="Grand Total Cost" feature="Costing"></field:display>
-<field:display name="Total Disbursed" feature="Funding Information"></field:display>
+<field:display name="Total Disbursed" feature="Disbursement"></field:display>
 <field:display name="Total Donor Commitments" feature="Regional Funding"></field:display>
 <field:display name="Total Donor Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Total Donor Expenditures" feature="Regional Funding"></field:display>
-<field:display name="Total Expended" feature="Funding Information"></field:display>
+<field:display name="Total Expended" feature="Expenditures"></field:display>
 <field:display name="Type Of Assistance" feature="Funding Information"></field:display>
 <field:display name="Undisbursed Funds" feature="Funding Information"></field:display>
 <field:display name="Unexpended Funds" feature="Funding Information"></field:display>

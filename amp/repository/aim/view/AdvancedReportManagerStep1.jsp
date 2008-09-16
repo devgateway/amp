@@ -299,8 +299,8 @@ function checkUncheckAll2() {
 											<field:display name="AMP ID" feature="Identification">&nbsp;</field:display>
 											<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
 											<field:display name="Description" feature="Identification">&nbsp;</field:display>
-												<field:display name="Cumulative Commitment" feature="Funding Information">&nbsp;</field:display>
-												<field:display name="Cumulative Disbursement" feature="Funding Information">&nbsp;</field:display>
+												<field:display name="Cumulative Commitment" feature="Commitments">&nbsp;</field:display>
+												<field:display name="Cumulative Disbursement" feature="Disbursement">&nbsp;</field:display>
 											<field:display name="Component Name" feature="Activity - Component Step">&nbsp;</field:display>
 											<field:display name="Undisbursed Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
 											<field:display name="Uncommitted Cumulative Balance" feature="Funding Information">&nbsp;</field:display>

@@ -457,12 +457,12 @@
 					<td>
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 							<tr bgcolor="#003366" class="textalb">
-								<field:display name="Adjustment Type Commitment" feature="Funding Information">
+								<field:display name="Adjustment Type Commitment" feature="Commitments">
 								<td align="center" valign="middle" width="75">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								</field:display>
-								<field:display name="Amount Commitment" feature="Funding Information">
+								<field:display name="Amount Commitment" feature="Commitments">
 								<td align="center" valign="middle" width="120">
 									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
@@ -474,7 +474,7 @@
 									</gs:test>
 								</td>
 								</field:display>
-								<field:display name="Currency Commitment" feature="Funding Information">
+								<field:display name="Currency Commitment" feature="Commitments">
 								<td align="center" valign="middle" width="170">
 								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">											  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
@@ -599,7 +599,7 @@
 									<input class="dr-menu" type="button" name="xx1" value="Delete Commitments"
 									onclick="this.form.event.value='delCommitments';addFundingDetail();">
 								</td> --%>
-								<field:display name="Add Commitment Button" feature="Funding Information">
+								<field:display name="Add Commitment Button" feature="Commitments">
 								<td>
 									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>"
 								   onclick="addFundingDetail(0)">
@@ -842,7 +842,7 @@
                                 </td>
                                 </feature:display>
                                 
-                                <field:display name="Contract of Disbursement Order" feature="Disbursement">
+                                <field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
 								<td align="center" valign="middle" colspan="2">&nbsp;
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 								</td>
@@ -964,7 +964,7 @@
 									<input class="dr-menu" type="button" name="xx1" value="Delete Disbursements"
 								   onclick="this.form.event.value='delDisbursements';addFundingDetail();">
 								</td>--%>
-								<field:display name="Add Disbursement Button" feature="Funding Information">
+								<field:display name="Add Disbursement Button" feature="Disbursement">
 								<td>
 									<input class="dr-menu" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>"
 								   onclick="addFundingDetail(1)">
@@ -998,12 +998,12 @@
 					<td>
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 							<tr bgcolor="#003366" class="textalb">
-								<field:display name="Adjustment Type Expenditure" feature="Funding Information">
+								<field:display name="Adjustment Type Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" width="75">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								</field:display>
-								<field:display name="Amount Expenditure" feature="Funding Information">
+								<field:display name="Amount Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" width="120">
 									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
@@ -1016,12 +1016,12 @@
 								</td>
 								</field:display>
 								
-								<field:display name="Currency Expenditure" feature="Funding Information">
+								<field:display name="Currency Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" titl}" /></td>
 								</field:display>
-								<field:display name="Date Expenditure" feature="Funding Information">
+								<field:display name="Date Expenditure" feature="Expenditures">
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>

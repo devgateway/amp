@@ -1156,7 +1156,7 @@ function collapseAll() {
 																</td></tr>
 															</c:if>
 															</feature:display>
-															<feature:display module="Funding" name="Disbursements">
+															<feature:display module="Funding" name="Disbursement">
 															<c:if test="${!empty regFunds.disbursements}">
 																<tr><td bgcolor="#ffffff">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">

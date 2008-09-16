@@ -154,13 +154,16 @@ public class AmpMessageWorker {
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
         if (att != null) {
             for (AmpCalendarAttendee ampAtt : att) {
-                AmpTeamMember member=ampAtt.getMember();
-                User user = member.getUser();
-                receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
+                if (ampAtt.getMember() != null) {
+                    AmpTeamMember member = ampAtt.getMember();
+                    User user = member.getUser();
+                    receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
 
-                if(!emailes.containsKey(user.getEmail())){
-                    emailes.put(user.getEmail(),ampCal.getCalendarPK().getCalendar().getFirstCalendarItem().getTitle());
+                    if (!emailes.containsKey(user.getEmail())) {
+                        emailes.put(user.getEmail(), ampCal.getCalendarPK().getCalendar().getFirstCalendarItem().getTitle());
+                    }
                 }
+
             }
         }
 
@@ -492,13 +495,16 @@ public class AmpMessageWorker {
         Set<AmpCalendarAttendee> att = ampCal.getAttendees();
         if (att != null) {
             for (AmpCalendarAttendee ampAtt : att) {
-                AmpTeamMember member=ampAtt.getMember();
-                if (!eventMsgStateMap.containsKey(member.getAmpTeamMemId())) {
-                    AmpMessageState state = new AmpMessageState();
-                    state.setMemberId(member.getAmpTeamMemId());
-                    state.setSenderId(calEvent.getSenderId());
-                    eventMsgStateMap.put(state.getMemberId(), state);
+                if (ampAtt.getMember() != null) {
+                    AmpTeamMember member = ampAtt.getMember();
+                    if (!eventMsgStateMap.containsKey(member.getAmpTeamMemId())) {
+                        AmpMessageState state = new AmpMessageState();
+                        state.setMemberId(member.getAmpTeamMemId());
+                        state.setSenderId(calEvent.getSenderId());
+                        eventMsgStateMap.put(state.getMemberId(), state);
+                    }
                 }
+
             }
         }
 

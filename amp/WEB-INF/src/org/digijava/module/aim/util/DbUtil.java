@@ -2944,8 +2944,11 @@ public class DbUtil {
             String queryString = new String();
             queryString = "select a.internalId from "
                 + AmpActivityInternalId.class.getName()
-                + " a where (a.ampActivityId=:ampActivityId) "
-                + " and (a.ampOrgId=:ampDonorOrgId)";
+                + " a inner join a.ampActivityId ampAct "  
+                + " inner join a.ampOrgId ampOrg "  
+                + " where (ampAct.ampActivityId=:ampActivityId) "
+                + " and (ampOrg.ampOrgId=:ampDonorOrgId)";
+    
             q = session.createQuery(queryString);
             q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
             q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);

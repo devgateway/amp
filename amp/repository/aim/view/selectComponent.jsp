@@ -244,7 +244,7 @@ function addComponent(){
 												class='amt'>&nbsp; <select name="<%=field3%>"
 												class="inp-text">
 												<c:forEach var="currency"
-													items="${aimEditActivityForm.currencies}">
+													items="${aimEditActivityForm.validcurrencies}">
 													<c:if test="${comm.currencyCode == currency.currencyCode}">
 														<option selected="true"
 															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
@@ -319,7 +319,7 @@ function addComponent(){
 												class='amt'>&nbsp;<select name="<%=field3%>"
 												class="inp-text">
 												<c:forEach var="currency"
-													items="${aimEditActivityForm.currencies}">
+													items="${aimEditActivityForm.validcurrencies}">
 													<c:if test="${comm.currencyCode == currency.currencyCode}">
 														<option selected="true"
 															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
@@ -406,7 +406,7 @@ function addComponent(){
 													size="15" class='amt'>&nbsp;<select
 													name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency"
-														items="${aimEditActivityForm.currencies}">
+														items="${aimEditActivityForm.validcurrencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
 															<option selected="true"
 																value="<c:out value="${currency.currencyCode}"/>">														</c:if>
@@ -479,7 +479,7 @@ function addCommitments()
 	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
 
-	<% Collection col = eaForm.getCurrencies();
+	<% Collection col = eaForm.getValidcurrencies();
 		Iterator itr = col.iterator();
 		while (itr.hasNext())
 		{
@@ -526,7 +526,7 @@ function addDisbursement()
 	s += "<input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
 
-	<% col = eaForm.getCurrencies();
+	<% col = eaForm.getValidcurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();
@@ -573,7 +573,7 @@ function addExpenditure()
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
 
-	<% col = eaForm.getCurrencies();
+	<% col = eaForm.getValidcurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();

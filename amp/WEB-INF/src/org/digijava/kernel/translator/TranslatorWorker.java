@@ -350,7 +350,7 @@ public class TranslatorWorker {
         finally {
             try {
                 if (session != null) {
-
+                	
                     PersistenceManager.releaseSession(session);
                 }
             }
@@ -984,7 +984,7 @@ public class TranslatorWorker {
             } else {
                 message.setCreated(new Timestamp( -1000));
             }
-            ses.save(message);
+            ses.saveOrUpdate(message);
             tx.commit();
         }
         catch (SQLException se) {

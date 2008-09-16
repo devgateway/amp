@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -24,7 +25,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	private Long id; // for logging
 
-	private AmpARFilter defaultFilter;
+	//private AmpARFilter defaultFilter;
 
 	private String name;
 
@@ -77,6 +78,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private Set<AmpDesktopTabSelection> desktopTabSelections;
 	
 	private Set logs;
+	
+	private Set<AmpFilterData> filterDataSet;
 
 	// public static final String NOTE="NOTE: All shown funding items are in USD
 	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
@@ -235,17 +238,17 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	/**
 	 * @return Returns the defaultFilter.
 	 */
-	public AmpARFilter getDefaultFilter() {
-		return defaultFilter;
-	}
+//	public AmpARFilter getDefaultFilter() {
+//		return defaultFilter;
+//	}
 
 	/**
 	 * @param defaultFilter
 	 *            The defaultFilter to set.
 	 */
-	public void setDefaultFilter(AmpARFilter defaultFilter) {
-		this.defaultFilter = defaultFilter;
-	}
+//	public void setDefaultFilter(AmpARFilter defaultFilter) {
+//		this.defaultFilter = defaultFilter;
+//	}
 
 	/**
 	 * @return Returns the hideActivities.
@@ -380,6 +383,15 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	public void setDesktopTabSelections(
 			Set<AmpDesktopTabSelection> desktopTabSelections) {
 		this.desktopTabSelections = desktopTabSelections;
+	}
+	
+
+	public Set<AmpFilterData> getFilterDataSet() {
+		return filterDataSet;
+	}
+
+	public void setFilterDataSet(Set<AmpFilterData> filterDataSet) {
+		this.filterDataSet = filterDataSet;
 	}
 
 	public String getUser() {

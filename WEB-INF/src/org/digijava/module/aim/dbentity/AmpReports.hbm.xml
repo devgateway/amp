@@ -76,6 +76,11 @@
 			<key column="amp_report_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection"  />
 		</set>
+		<set name="filterDataSet" lazy="false" inverse="true" cascade="all-delete-orphan">
+			<cache usage="read-write"/>
+			<key column="amp_report_id" />
+			<one-to-many class="org.dgfoundation.amp.ar.dbentity.AmpFilterData"/>
+		</set>
 <!--  <many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>-->
 					
 	</class>

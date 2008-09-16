@@ -14,14 +14,15 @@
 <%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
 <%@page import="java.util.Collections"%>
 
-<bean:define id="reportMeta" name="reportMeta"
+<%-- <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
-	toScope="page" />
+	toScope="page" /> --%>
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
 <digi:form action="/reportsFilterPicker.do">
 
+<html:hidden property="sourceIsReportWizard"/>
 	
 
 <div id="tabview_container" class="yui-navset">
@@ -694,10 +695,14 @@
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<html:submit styleClass="dr-menu"
+			<%--<html:submit styleClass="dr-menu"  
 				property="apply">
 				<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>
-			</html:submit>&nbsp; <html:button onclick="resetFilter();" styleClass="dr-menu"
+			</html:submit> --%>
+			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="submitFilters()" 
+				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters to the Report</digi:trn>" />
+			&nbsp; 
+			<html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 			</html:button> </td>

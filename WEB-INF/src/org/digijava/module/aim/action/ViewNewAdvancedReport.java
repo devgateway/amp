@@ -33,6 +33,7 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
@@ -127,7 +128,7 @@ public class ViewNewAdvancedReport extends Action {
 		boolean cached=false;
 		if(cachedStr!=null) cached=Boolean.parseBoolean(cachedStr);
 		
-		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+		AmpARFilter filter 			= (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
 			if(filter != null && filter.isPublicView())
 			{
@@ -143,6 +144,7 @@ public class ViewNewAdvancedReport extends Action {
 				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
 				filter.readRequestData(request);
 			}
+			request.setAttribute(ArConstants.INITIALIZE_FILTER_FROM_DB, "true");
 		}
 
 		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||

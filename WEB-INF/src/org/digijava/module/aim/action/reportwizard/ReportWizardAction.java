@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
@@ -27,6 +28,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -60,6 +62,9 @@ import org.digijava.module.aim.util.TeamUtil;
  *
  */
 public class ReportWizardAction extends MultiAction {
+	
+	public static final String SESSION_FILTER	= "reportWizardFilter";
+	
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, 
@@ -127,6 +132,9 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setDesktopTab( false );
 		myForm.setDuplicateName(false);
 		myForm.setPublicReport(false);
+		
+		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
+
 	}
 	
 	public ActionForward modeShow(ActionMapping mapping, ActionForm form, 
@@ -252,7 +260,22 @@ public class ReportWizardAction extends MultiAction {
 		this.addFields(myForm.getSelectedHierarchies(), availableCols, ampReport.getHierarchies(), AmpReportHierarchy.class, level1);
 		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
 		
-		
+		Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
+		if ( filter != null ) {
+			Set<AmpFilterData> fdSet	= AmpFilterData.createFilterDataSet(ampReport, filter);
+			if ( ampReport.getFilterDataSet() == null )
+				ampReport.setFilterDataSet(fdSet);
+			else {
+				ampReport.getFilterDataSet().clear();
+				ampReport.getFilterDataSet().addAll(fdSet);
+			}
+			
+			if ( ampReport.getAmpReportId()!=null )
+				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
+				
+		}
+			
+		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 		
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		

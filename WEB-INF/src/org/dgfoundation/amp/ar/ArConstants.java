@@ -127,4 +127,6 @@ public final class ArConstants {
 	public final static String SELECTED_CURRENCY="SelectedCurrency";
 
 	public static final String DISBURSEMENT_ORDERS = "Disbursement Orders";
+	
+	public static final String INITIALIZE_FILTER_FROM_DB	= "Initialize filter from db";
 }

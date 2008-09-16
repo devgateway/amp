@@ -29,10 +29,13 @@
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/reportManager.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/fundingGroups.js'/>" >.</script>
 	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/saving.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" >.</script>
+	<script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
 	
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
+	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
 	
 	<digi:instance property="aimReportWizardForm" />
 	<bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
@@ -40,7 +43,18 @@
 	<c:set var="failureMessage">
 		<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>
 	</c:set>
-	
+	<c:set var="loadingDataMessage">
+		<digi:trn key="aim:reportwizard:loadingData">Loading data. Please wait.</digi:trn>
+	</c:set>
+	<c:set var="savingDataMessage">
+		<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>
+	</c:set>
+	<c:set var="filterPanelName">
+		<digi:trn key="rep:filter:filters">Filters</digi:trn>
+	</c:set>
+	<c:set var="cannotSaveFiltersMessage">
+		<digi:trn key="aim:reportwizard:cannotSaveFilters">There was a problem saving the filters. Please try again.</digi:trn>
+	</c:set>
 	<c:if test="${myForm.desktopTab}">
 		<c:set var="pageTitle">
 			<digi:trn key="aim:reportwizard:tabgenerator">Tab Generator</digi:trn>
@@ -160,6 +174,7 @@
 			for (var i=0; i<YAHOO.amp.reportwizard.numOfSteps; i++) {
 				repManager.addStyleToButton("step"+ i +"_prev_button");
 				repManager.addStyleToButton("step"+ i +"_next_button");
+				repManager.addStyleToButton("step"+ i +"_add_filters_button");
 			}
 			
 			columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');
@@ -187,6 +202,8 @@
 			MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
 			MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
 			
+			repFilters					= new Filters("${filterPanelName}", "${failureMessage}", 
+												"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
 			
 			var dg			= document.getElementById("DHTMLSuite_treeNode1");
@@ -261,6 +278,10 @@
 							 onclick="repManager.nextStep()" disabled="disabled">
 							<img src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
 							<digi:trn key="btn:next">Next</digi:trn>
+						</button>
+						<button id="step0_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
+							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
+							<digi:trn key="btn:repFilters">Filters</digi:trn>
 						</button>
 						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
 																					onclick="saveReportEngine.decideToShowTitlePanel()" >
@@ -394,6 +415,10 @@
 							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
 							<digi:trn key="btn:next">Next</digi:trn>
 						</button>
+						<button id="step1_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
+							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
+							<digi:trn key="btn:repFilters">Filters</digi:trn>
+						</button>
 						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
 												onclick="saveReportEngine.decideToShowTitlePanel()" >
 							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
@@ -470,6 +495,10 @@
 							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
 							<digi:trn key="btn:next">Next</digi:trn>
 						</button>
+						<button id="step2_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
+							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
+							<digi:trn key="btn:repFilters">Filters</digi:trn>
+						</button>
 						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
 										onclick="saveReportEngine.decideToShowTitlePanel()" >
 							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar" />
@@ -533,6 +562,10 @@
 							onclick="repManager.nextStep()" disabled="disabled">
 							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
 							<digi:trn key="btn:next">Next</digi:trn>
+						</button>
+						<button id="step3_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
+							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
+							<digi:trn key="btn:repFilters">Filters</digi:trn>
 						</button>
 						<button type="button" class="toolbar-dis" onclick="saveReportEngine.decideToShowTitlePanel()" 
 								disabled="disabled" name="save">
@@ -601,24 +634,26 @@
 		<%-- <div id="logDiv" style="border: medium solid red; width: 20%;">
 		</div> --%>
 			
-		<div id="titlePanel" style="display: none">
-			<div class="hd" style="font-size: 8pt">
-				${plsEnterTitle}
+			<div id="titlePanel" style="display: none">
+				<div class="hd" style="font-size: 8pt">
+					${plsEnterTitle}
+				</div>
+				<div class="bd" id="titlePanelBody">
+				<html:text onkeyup="repManager.checkSteps()" property="reportTitle" styleClass="inp-text" 
+						style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
+				</div>
+				<div class="ft" align="right">
+					<button id="last_save_button" type="button" class="buton repbuton" 
+						style="color: lightgray" onclick="saveReportEngine.saveReport();" disabled="disabled">
+							${saveBtn}
+					</button>
+					&nbsp;&nbsp;&nbsp;
+				</div>
 			</div>
-			<div class="bd" id="titlePanelBody">
-			<html:text onkeyup="repManager.checkSteps()" property="reportTitle" styleClass="inp-text" 
-					style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
-			</div>
-			<div class="ft" align="right">
-				<button id="last_save_button" type="button" class="buton repbuton" 
-					style="color: lightgray" onclick="saveReportEngine.saveReport();" disabled="disabled">
-						${saveBtn}
-				</button>
-				&nbsp;&nbsp;&nbsp;
-			</div>
-		</div>
 		</digi:form>
 	</td>
 	</tr>
 </table>
+
+<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
 	

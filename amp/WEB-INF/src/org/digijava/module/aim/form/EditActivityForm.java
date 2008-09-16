@@ -1294,6 +1294,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 * @return Returns the fundingOrganizations.
 	 */
 	public FundingOrganization getFundingOrganization(int index) {
+		if(fundingOrganizations==null) return new FundingOrganization();
 		int currentSize = fundingOrganizations.size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {

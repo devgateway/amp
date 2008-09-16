@@ -33,7 +33,7 @@ public class CalendarEventTrigger extends Trigger {
             CalendarItem ci=(CalendarItem)cal.getCalendarItem().iterator().next();
             e.getParameters().put(PARAM_ID,cal.getId());
             e.getParameters().put(PARAM_NAME,ci.getTitle());
-            e.getParameters().put(PARAM_URL,"calendar/showCalendarEvent.do~method=preview~reset=true~ampCalendarId="+cal.getId().toString());
+            e.getParameters().put(PARAM_URL,"calendar/showCalendarEvent.do~method=preview~resetForm=true~ampCalendarId="+cal.getId().toString());
         }
     return e;
     }

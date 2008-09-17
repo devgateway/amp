@@ -61,7 +61,10 @@ if("On".equals(publicView)) {
 border-right:1px solid white;
 cursor:pointer;
 }
+
+
 </style>
+
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
@@ -151,7 +154,17 @@ border-right:1px solid white;
 %>
 </logic:notPresent>
 <logic:present name="ampAdmin" scope="session">
-	<logic:equal name="ampAdmin" value="yes">
+<logic:equal name="ampAdmin" value="yes">
+<script language="JavaScript">
+function help(){
+	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
+		openURLinWindow("<%=rev%>",1024,768);
+	}
+function adminHelp(){
+		 <digi:context name="rev" property="/help/admin/help.do~blankPage=true" />
+		openURLinWindow("<%=rev%>",1024,768);
+}
+</script>
 			 <div class="yuiamp-skin-amp" style="clear:both;">
               <div id="mainmenuHeader" class="yuiampmenu">
                   <div class="bd">
@@ -208,16 +221,16 @@ border-right:1px solid white;
                                       <ul>
 										<feature:display name="Admin Help" module="HELP">
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="/help/admin/help.do~blankPage=true">
-                                        <digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
+                                        <a class="yuiampmenuitemlabel" href="#" onClick="adminHelp();" >
+                                        	<digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
                                         </a>
                                         </li>
 										</feature:display>
 										<feature:display name="User Help" module="HELP">
                                         <li>
-                                        <a class="yuiampmenuitemlabel" href="#" onClick="help();">
-                                        <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
-                                        </a>
+                                       	 <a class="yuiampmenuitemlabel" href="#" onClick="help();">
+                                        	<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                         </a>
                                         </li>
 										</feature:display>
 										<feature:display name="Support Request Form" module="HELP">
@@ -540,7 +553,7 @@ border-right:1px solid white;
                                         <li>
                                          <a class="yuiampmenuitemlabel" href="#" onClick="help();">
                                         	<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
-                                        </a>
+                                         </a>
                                         </li>
 										</feature:display>
 										<feature:display name="Support Request Form" module="HELP">

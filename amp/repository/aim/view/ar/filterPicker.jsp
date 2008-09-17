@@ -74,7 +74,7 @@
 					<c:set var="accessType">false</c:set>
 				</logic:notEqual>
 				<td colspan="5">
-					<html:select property="approvalStatusSelected"
+					<html:select property="approvalStatusSelected" multiple="true"
 						style="width: 300px" styleClass="inp-text" >
 						<html:option value="-1">
 							<digi:trn key="rep:filer:All">All</digi:trn>

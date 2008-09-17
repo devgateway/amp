@@ -37,7 +37,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -124,8 +123,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Location" module="Project ID and Planning"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display>
-<feature:display name="My Messages" module="Desktop Sections"></feature:display>
-<feature:display name="My Tasks" module="Desktop Sections"></feature:display>
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display>

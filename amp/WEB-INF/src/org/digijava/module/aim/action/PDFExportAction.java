@@ -283,14 +283,14 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	        	}
 			
 	        	strFilters.delete(strFilters.length()-2,strFilters.length());
-			
-			pdfc = new PdfPCell(new Paragraph(translatedCurrentFilter +" "+ strFilters.toString(),currencyFont));
-			pdfc.setPaddingBottom(2);
-			pdfc.setPaddingTop(2);
-			pdfc.setPaddingLeft(20);
-			pdfc.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
-			pdfc.setColspan(rd.getTotalDepth());
-			table.addCell(pdfc);
+			// AMP-4289 
+//			pdfc = new PdfPCell(new Paragraph(translatedCurrentFilter +" "+ strFilters.toString(),currencyFont));
+//			pdfc.setPaddingBottom(2);
+//			pdfc.setPaddingTop(2);
+//			pdfc.setPaddingLeft(20);
+//			pdfc.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+//			pdfc.setColspan(rd.getTotalDepth());
+//			table.addCell(pdfc);
 		  
 			//if(writer.getPageNumber()!=1) {
         			Iterator i=PDFExporter.headingCells.iterator();

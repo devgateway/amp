@@ -170,7 +170,7 @@ public Cell filter(Cell metaCell,Set ids) {
 		return null;
 	
 		if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
-				this.getNearestReportData().getReportMetadata().getType().equals(ArConstants.REGIONAL_TYPE)) 
+				this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE) 
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
 		return null;
 		
@@ -206,7 +206,7 @@ public Cell filter(Cell metaCell,Set ids) {
 				AmpReportHierarchy col = (AmpReportHierarchy) iterator.next();
 				if(col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName()))
 					//NEVER apply this for regional reports with regional metaCell:
-					if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType().equals(ArConstants.REGIONAL_TYPE))
+					if(metaCell.getColumn().getName().equals(ArConstants.REGION) && this.getNearestReportData().getReportMetadata().getType()==ArConstants.REGIONAL_TYPE)
 						continue;
 					applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret);
 			}

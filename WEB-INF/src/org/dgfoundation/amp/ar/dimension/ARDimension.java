@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,6 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -30,8 +30,8 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 
 public abstract class ARDimension {
 
-    public static final Map<String,Class> COLUMN_DB_TYPE=new HashMap<String, Class>();
-    public static final Map<Class,ARDimension> DIMENSIONS=new HashMap<Class, ARDimension>();
+    public static final Map<String,Class> COLUMN_DB_TYPE=new Hashtable<String, Class>();
+    public static final Map<Class,ARDimension> DIMENSIONS=new Hashtable<Class, ARDimension>();
 
     protected HashMap<Class,HashMap<Long,Long>> links;
     

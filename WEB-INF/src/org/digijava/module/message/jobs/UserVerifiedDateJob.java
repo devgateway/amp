@@ -13,6 +13,14 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
+import com.sun.xml.internal.bind.v2.TODO;
+
+/**
+ * Quartz job
+ * TODO lets review this job!
+ * @author Vazha Ezugbaia
+ *
+ */
 public class UserVerifiedDateJob implements StatefulJob {
     public void execute(JobExecutionContext context) throws JobExecutionException{
 
@@ -29,7 +37,7 @@ public class UserVerifiedDateJob implements StatefulJob {
                 if (user.getCreationDate()!= null) {
                     String dt = sdf.format(user.getCreationDate());
                     if (dt.equals(exDt)) {
-                        AmpUserUtil.deleteUser(user.getId());
+                        AmpUserUtil.deleteUser(user.getId());//TODO Why delete user? is this safe?
                     }
                 }
             }

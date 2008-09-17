@@ -549,15 +549,6 @@ function validateFormat(){
 	  }
 	}
 
-	<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
-	
-	var msg0='<digi:trn key="rep:pop:pleasewait..."> Please wait...</digi:trn>';
-	
-	var msg1='<digi:trn key="rep:pop:freezeReportHeading">Freeze Report Heading</digi:trn>';
-	
-	var msg2='<digi:trn key="rep:pop:unFreezeReportHeading">Unfreeze Report Heading</digi:trn>';
-	
-	var msg3='<digi:trn key="rep:pop:freezingReportHeading"> Freezing Report Heading </digi:trn>';
 	
 	var scrolling=readCookie('<bean:write name="reportMeta" property="name"/>_scrolling');
 		scrolling=(scrolling==null)?false:(scrolling=="true")?true:false;

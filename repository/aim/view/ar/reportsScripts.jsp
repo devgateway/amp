@@ -151,7 +151,7 @@ background-color: yellow;
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" ></script>
 
 
 <!-- END - For DHTML Tab View of Filters -->
@@ -239,7 +239,7 @@ background-color: yellow;
 		myPanel1.render(document.body);
 		
 		var msgP2='\n<digi:trn key="rep:filter:selectsorter">Please select hierarchy sorter criteria</digi:trn>';
-;
+
 		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("");
 		myPanel2.render(document.body);
@@ -258,7 +258,8 @@ background-color: yellow;
 		var msgP5='\n<digi:trn key="aim:aboutamp">About AMP</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
-		myPanel5.render(document.body);				
+		myPanel5.render(document.body);
+						
 	}
 	
 	function submitFilters() {
@@ -413,6 +414,106 @@ background-color: yellow;
     	return true;
 	}
 	
+	function resetFilter(){
+		if (aimReportsFilterPickerForm.text)
+			aimReportsFilterPickerForm.text.value="";
+
+		if (aimReportsFilterPickerForm.indexString)
+			aimReportsFilterPickerForm.indexString.value="";
+			
+		if (aimReportsFilterPickerForm.fromDate)
+			aimReportsFilterPickerForm.fromDate.value="";
+		
+		if (aimReportsFilterPickerForm.toDate)
+			aimReportsFilterPickerForm.toDate.value="";
+			
+		if (aimReportsFilterPickerForm.currency)
+			aimReportsFilterPickerForm.currency.value=aimReportsFilterPickerForm.defaultCurrency.value;
+		
+		if (aimReportsFilterPickerForm.fromYear)		
+			aimReportsFilterPickerForm.fromYear.selectedIndex=0;
+		
+		if (aimReportsFilterPickerForm.toYear)
+			aimReportsFilterPickerForm.toYear.selectedIndex=0
+			
+		if (aimReportsFilterPickerForm.fromMonth)
+			aimReportsFilterPickerForm.fromMonth.selectedIndex=0;
+			
+		if (aimReportsFilterPickerForm.toMonth)
+			aimReportsFilterPickerForm.toMonth.selectedIndex=0;
+		
+		if (aimReportsFilterPickerForm.selectedSectors)
+			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedSecondarySectors)
+			aimReportsFilterPickerForm.selectedSecondarySectors.selectedIndex=-1;
+                    
+          
+          if (aimReportsFilterPickerForm.selectedNatPlanObj)
+              aimReportsFilterPickerForm.selectedNatPlanObj.selectedIndex=-1;
+          if (aimReportsFilterPickerForm.selectedPrimaryPrograms)
+              aimReportsFilterPickerForm.selectedPrimaryPrograms.selectedIndex=-1;
+          if (aimReportsFilterPickerForm.selectedSecondaryPrograms)
+              aimReportsFilterPickerForm.selectedSecondaryPrograms.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedBudget)
+			aimReportsFilterPickerForm.selectedBudget.checked=false;
+		
+		/*if (aimReportsFilterPickerForm.selectedDonors)
+			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1; */
+		
+		if (aimReportsFilterPickerForm.selectedRisks)
+			aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.regionSelected)
+			aimReportsFilterPickerForm.regionSelected.selectedIndex=0;
+		
+		if(aimReportsFilterPickerForm.approvalStatusSelected)
+			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=0;
+		
+		if (aimReportsFilterPickerForm.lineMinRank)
+			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
+			
+		if (aimReportsFilterPickerForm.planMinRank)
+			aimReportsFilterPickerForm.planMinRank.selectedIndex=0;
+		
+		if (aimReportsFilterPickerForm.selectedStatuses)
+			aimReportsFilterPickerForm.selectedStatuses.selectedIndex=-1;
+		
+		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
+			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedTypeOfAssistance)
+			aimReportsFilterPickerForm.selectedTypeOfAssistance.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedDonorGroups)
+			aimReportsFilterPickerForm.selectedDonorGroups.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedDonorTypes)
+			aimReportsFilterPickerForm.selectedDonorTypes.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedProjectCategory)
+			aimReportsFilterPickerForm.selectedProjectCategory.selectedIndex=-1;
+
+		if (aimReportsFilterPickerForm.selectedBeneficiaryAgency)
+			aimReportsFilterPickerForm.selectedBeneficiaryAgency.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedExecutingAgency)
+			aimReportsFilterPickerForm.selectedExecutingAgency.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedImplementingAgency)
+			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
+		
+		if (aimReportsFilterPickerForm.selectedDonnorAgency)
+			aimReportsFilterPickerForm.selectedDonnorAgency.selectedIndex=-1;
+		
+		
+		if (aimReportsFilterPickerForm.jointCriteria){
+			aimReportsFilterPickerForm.jointCriteria.checked=false;
+		}
+
+		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
+			aimReportsFilterPickerForm.governmentApprovalProcedures.checked=false;
+		}
+	}
+	
+
 
 function resetFormat(){
 	document.aimReportsFilterPickerForm3.action=document.aimReportsFilterPickerForm3.action+'&resetFormat=true';

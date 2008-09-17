@@ -13,6 +13,7 @@
 
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
+ <thead class="fixedHeader"> 
   <%int maxDepth = columnReport.getMaxColumnDepth();
   	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
   %>
@@ -96,4 +97,8 @@
    </logic:iterate>
   </tr>
   <%} %>
+    </thead>
+ 
+	<tbody>
+  
   </logic:equal>

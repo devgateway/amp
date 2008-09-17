@@ -93,6 +93,21 @@ function toggleRows(caller,hideId){
 	
 }
 
+function showAllRows() {
+	
+	tb = document.getElementById('reportTable');
+	for(i=1 ; i< tb.rows.length; i++){
+		 tb.rows[i].style.display = '';
+	}
+	//change  +/- images now...
+	imgs = tb.getElementsByTagName('img');
+	for(i=0 ; i< imgs.length; i++){
+		if(imgs[i].id=='toggleImage')  {
+			imgs[i].alt='shown';
+			imgs[i].src=minus_sign;
+		}
+	}
+}
 
 function hideAllRows() {
 	tb = document.getElementById('reportTable');

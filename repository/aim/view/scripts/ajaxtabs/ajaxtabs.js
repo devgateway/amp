@@ -46,12 +46,18 @@ function loadpage(page_request, containerid){
 if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1)){
 document.getElementById(containerid).innerHTML=page_request.responseText;
 	try
-	{
-		generateTableScrollbars('reportTable',350);
-		continueExecution = false;
+	{	var reporTable=new scrollableTable("reportTable",300);
+			reporTable.debug=false;
+			reporTable.usePercentage=false;
+			reporTable.maxRowDepth=4;
+			reporTable.useFixForDisplayNoneRows=true;
+			reporTable.scroll();
+			continueExecution = false;
 	}catch(e)
 	{
+		//alert(e);
 	}
+	
 }
 }
 
@@ -156,3 +162,4 @@ function startProgressCheck(){
 		//Fail silently
 	}
 }
+

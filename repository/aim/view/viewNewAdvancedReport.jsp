@@ -72,27 +72,7 @@ function toggleSettings(){
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
-<feature:display module="Reports" name="Enable Scrolling Reports">
-<script language="javascript">
-var wait =  
-    new YAHOOAmp.widget.Panel("wait",   
-        { width:"240px",  
-          fixedcenter:true,  
-          close:false,  
-          draggable:false,  
-          zindex:99, 
-          modal:true, 
-          visible:false,
-          underlay:"shadow"
-        }  
-    ); 
 
-wait.setHeader("Loading, please wait..."); 
-wait.setBody("<img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' /> Loading report..."); 
-wait.render(document.body); 
-wait.show();
-</script>
-</feature:display>
 <div id="mySorter" style="display: none">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
         <!--
@@ -212,9 +192,16 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
-           	
+          	 	|
            	  <logic:notEqual name="viewFormat" value="foldable">
-            	|<a class="settingsLink" onClick="showRange(); " >
+				<a  id="frezzlink" class="settingsLinkDisable">
+               		<script language="javascript">
+						document.write((scrolling)?msg2:msg1);
+					</script>
+                </a>
+                      	
+                      	
+           	|<a class="settingsLink" onClick="showRange(); " >
                		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
                  </a>
               </logic:notEqual>
@@ -279,6 +266,13 @@ session.setAttribute("progressValue", counter);
                 </a>
            	
            	  <logic:notEqual name="viewFormat" value="foldable">
+           	  |
+           	  	<a  id="frezzlink" class="settingsLinkDisable">
+               		<script language="javascript">
+						document.write((scrolling)?msg2:msg1);
+					</script>
+                </a>
+           	  
             	|<a class="settingsLink" onClick="showRange(); " >
                		 <digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn>
                  </a>
@@ -583,59 +577,6 @@ session.setAttribute("progressValue", counter);
 </table>
 
 
-<feature:display module="Reports" name="Enable Scrolling Reports">
-<script language="javascript">
-
-function addOnloadEvent(fnc){
-	  if ( typeof window.addEventListener != "undefined" )
-	    window.addEventListener( "load", fnc, false );
-	  else if ( typeof window.attachEvent != "undefined" ) {
-	    window.attachEvent( "onload", fnc );
-	  }
-	  else {
-	    if ( window.onload != null ) {
-	      var oldOnload = window.onload;
-	      window.onload = function ( e ) {
-	        oldOnload( e );
-	        window[fnc]();
-	      };
-	    }
-	    else
-	      window.onload = fnc;
-	  }
-	}
-	
-var winH;
- if (navigator.appName.indexOf("Microsoft")!=-1) {
-  winH = document.body.offsetHeight;
- }else{
- winH=window.innerHeight;
- }
-
-	
-	
-function preScroll(){
-	var call=function(){
-		var reporTable=new scrollableTable("reportTable",winH -320);
-		reporTable.debug=false;
-		reporTable.maxRowDepth=1;
-		reporTable.scroll();
-		wait.hide();
-	}
-	
-	window.setTimeout(call,200);
-	
-}
-
-
-
-addOnloadEvent(preScroll);
-
-
-	
-	
-</script>
-</feature:display>
 <%
 	session.setAttribute(" ", null);
 	session.setAttribute("progressValue", -1);

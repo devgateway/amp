@@ -64,6 +64,22 @@ public final class AdvancedReportUtil {
 			
 			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			
+			String tempQry = "select teamRep from "
+				+ AmpTeamReports.class.getName()
+				+ " teamRep where (teamRep.team=:tId) and "
+				+ " (teamRep.report=:rId)";
+			Query tmpQry = session.createQuery(tempQry);
+			tmpQry.setParameter("tId",ampTeamId,Hibernate.LONG);
+			tmpQry.setParameter("rId",ampReports.getAmpReportId(),Hibernate.LONG);
+			Iterator tmpItr = tmpQry.list().iterator();
+			if (!tmpItr.hasNext()) {
+				AmpTeamReports tr = new AmpTeamReports();
+				tr.setTeam(ampTeam);
+				tr.setReport(ampReports);
+				tr.setTeamView(false);
+				session.save(tr);
+			}
+			
 			//amp-3304
 			/*
 			if(teamLead == true&&(ampReports.getOwnerId()==null||(ampReports.getOwnerId().getAmpTeam().getTeamLead()!=null && 

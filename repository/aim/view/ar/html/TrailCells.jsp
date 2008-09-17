@@ -14,7 +14,7 @@
 	<c:if test="${reportData.levelDepth == 1}">
 		<td nowrap="nowrap" style="border-bottom:#E2E2E2 1px solid;border-right:#E2E2E2 1px solid;" height="18px" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
 		<span style="font-family: Arial;color:black; font-weight: bold;font-size: 12px;margin-left: 2px">
-				<digi:trn key="rep:popup:reporttotals ">Report Totals:</digi:trn>
+				<digi:trn key="rep:popup:reporttotals">Report Totals:</digi:trn>
 			</span>
 	</c:if>
 	

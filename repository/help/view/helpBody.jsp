@@ -26,26 +26,32 @@
   </tr>
           <tr>
             <td>
-                     <c:if test="${empty helpForm.topicKey}"><b>
-                       <digi:edit key="help:topic:default">no topic selected</digi:edit></b> </c:if>
-                        <c:if test="${not empty helpForm.topicKey}">
-                          <c:if test="${helpForm.topicKey!=''}"><b><digi:trn key="${helpForm.titleTrnKey}" ></digi:trn></b></c:if>
-                      </c:if>                  
+                                
                       
 		               <c:forEach var="sarched" items="${helpForm.searched}">
-		              <div style="border-bottom-style:solid;border-bottom-color: silver; ">
-			               <c:if test="${not empty sarched}">
-			                	<h3>${sarched.label}</h3>
-			                
-		              		     	${sarched.value}
-		               		</c:if>
-		              </div>
+			              <div style="border-bottom-style:solid;border-bottom-color: silver; ">
+				               <c:if test="${not empty sarched}">
+				                	<b>${sarched.label}</b>
+				                
+			              		     	${sarched.value}
+			              	   </c:if>
+			              </div>
 		              </c:forEach> 
-                  	<c:if test="${not empty helpForm.topicKey}">
-                      <c:if test="${helpForm.topicKey!=''}">
-                        <digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit>
+                   
+                      	<c:if test="${!helpForm.flag && empty helpForm.searched}"><b>
+                       		<digi:edit key="help:topic:default">no topic selected</digi:edit></b>
+                        </c:if>
+                   
+                      <c:if test="${helpForm.flag}">
+                          <c:if test="${helpForm.topicKey!=''}"><b><digi:trn key="${helpForm.titleTrnKey}" ></digi:trn></b></c:if>
                       </c:if>
-                    </c:if>                 
+                          
+                  	  <c:if test="${helpForm.flag}">
+                      	<c:if test="${helpForm.topicKey!=''}">
+                        	<digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit>
+                    	</c:if>
+                      </c:if>                 
+                    
                     </td>
           </tr>
         </table>

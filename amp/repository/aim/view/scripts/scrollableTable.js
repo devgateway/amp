@@ -1,19 +1,16 @@
 
 function scrollableTable(tableId,height){
-this.debug=false;
-this.usePercentage=false;
-this.table=document.getElementById(tableId);
-this.theader=null;
-this.lastHeaderCell=null;
-this.tbody=null;
-this.maxRowDepth=-1;
-this.headerValues=new Array();
-this.useFixForDisplayNoneRows=false;
-
-
+	this.debug=false;
+	this.usePercentage=false;
+	this.table=document.getElementById(tableId);
+	this.theader=null;
+	this.lastHeaderCell=null;
+	this.tbody=null;
+	this.maxRowDepth=-1;
+	this.headerValues=new Array();
+	this.useFixForDisplayNoneRows=false;
 	this.scroll=function(){
-		
-		var isIE=navigator.appName.indexOf("Microsoft")!=-1;
+	var isIE=navigator.appName.indexOf("Microsoft")!=-1;
 		try{
 			this.table.style.visibility="hidden";
 			//find header rows
@@ -25,9 +22,6 @@ this.useFixForDisplayNoneRows=false;
 				}
 			}
 	
-	
-			
-			
 			for (i=0;i< this.table.childNodes.length;i++){
 				var node=this.table.childNodes[i];
 				if (node.nodeName=="TBODY"){
@@ -208,7 +202,7 @@ this.useFixForDisplayNoneRows=false;
 		//append the original table to the content div
 		divContent.appendChild(this.table);
 		
-		//create a new table for teh header
+		//create a new table for the header
 		var newTable=document.createElement("table");
 		 newTable.setAttribute("cellSpacing",this.table.getAttribute("cellSpacing")); 
 		 newTable.setAttribute("cellPadding",this.table.getAttribute("cellPadding"));
@@ -221,6 +215,7 @@ this.useFixForDisplayNoneRows=false;
 		//	alert(e);
 		}
 	}
+	
 	//end scroll function
 
 }//end scrollable table

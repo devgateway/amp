@@ -13,11 +13,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
 
-
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
@@ -151,7 +149,7 @@ background-color: yellow;
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" ></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
 
 
 <!-- END - For DHTML Tab View of Filters -->
@@ -239,7 +237,7 @@ background-color: yellow;
 		myPanel1.render(document.body);
 		
 		var msgP2='\n<digi:trn key="rep:filter:selectsorter">Please select hierarchy sorter criteria</digi:trn>';
-
+;
 		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("");
 		myPanel2.render(document.body);
@@ -258,8 +256,7 @@ background-color: yellow;
 		var msgP5='\n<digi:trn key="aim:aboutamp">About AMP</digi:trn>';
 		myPanel5.setHeader(msgP5);
 		myPanel5.setBody("");
-		myPanel5.render(document.body);
-						
+		myPanel5.render(document.body);				
 	}
 	
 	function submitFilters() {
@@ -414,106 +411,6 @@ background-color: yellow;
     	return true;
 	}
 	
-	function resetFilter(){
-		if (aimReportsFilterPickerForm.text)
-			aimReportsFilterPickerForm.text.value="";
-
-		if (aimReportsFilterPickerForm.indexString)
-			aimReportsFilterPickerForm.indexString.value="";
-			
-		if (aimReportsFilterPickerForm.fromDate)
-			aimReportsFilterPickerForm.fromDate.value="";
-		
-		if (aimReportsFilterPickerForm.toDate)
-			aimReportsFilterPickerForm.toDate.value="";
-			
-		if (aimReportsFilterPickerForm.currency)
-			aimReportsFilterPickerForm.currency.value=aimReportsFilterPickerForm.defaultCurrency.value;
-		
-		if (aimReportsFilterPickerForm.fromYear)		
-			aimReportsFilterPickerForm.fromYear.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.toYear)
-			aimReportsFilterPickerForm.toYear.selectedIndex=0
-			
-		if (aimReportsFilterPickerForm.fromMonth)
-			aimReportsFilterPickerForm.fromMonth.selectedIndex=0;
-			
-		if (aimReportsFilterPickerForm.toMonth)
-			aimReportsFilterPickerForm.toMonth.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.selectedSectors)
-			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
-		if (aimReportsFilterPickerForm.selectedSecondarySectors)
-			aimReportsFilterPickerForm.selectedSecondarySectors.selectedIndex=-1;
-                    
-          
-          if (aimReportsFilterPickerForm.selectedNatPlanObj)
-              aimReportsFilterPickerForm.selectedNatPlanObj.selectedIndex=-1;
-          if (aimReportsFilterPickerForm.selectedPrimaryPrograms)
-              aimReportsFilterPickerForm.selectedPrimaryPrograms.selectedIndex=-1;
-          if (aimReportsFilterPickerForm.selectedSecondaryPrograms)
-              aimReportsFilterPickerForm.selectedSecondaryPrograms.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedBudget)
-			aimReportsFilterPickerForm.selectedBudget.checked=false;
-		
-		/*if (aimReportsFilterPickerForm.selectedDonors)
-			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1; */
-		
-		if (aimReportsFilterPickerForm.selectedRisks)
-			aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.regionSelected)
-			aimReportsFilterPickerForm.regionSelected.selectedIndex=0;
-		
-		if(aimReportsFilterPickerForm.approvalStatusSelected)
-			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.lineMinRank)
-			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
-			
-		if (aimReportsFilterPickerForm.planMinRank)
-			aimReportsFilterPickerForm.planMinRank.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.selectedStatuses)
-			aimReportsFilterPickerForm.selectedStatuses.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
-			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
-		if (aimReportsFilterPickerForm.selectedTypeOfAssistance)
-			aimReportsFilterPickerForm.selectedTypeOfAssistance.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedDonorGroups)
-			aimReportsFilterPickerForm.selectedDonorGroups.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedDonorTypes)
-			aimReportsFilterPickerForm.selectedDonorTypes.selectedIndex=-1;
-			
-		if (aimReportsFilterPickerForm.selectedProjectCategory)
-			aimReportsFilterPickerForm.selectedProjectCategory.selectedIndex=-1;
-
-		if (aimReportsFilterPickerForm.selectedBeneficiaryAgency)
-			aimReportsFilterPickerForm.selectedBeneficiaryAgency.selectedIndex=-1;
-		if (aimReportsFilterPickerForm.selectedExecutingAgency)
-			aimReportsFilterPickerForm.selectedExecutingAgency.selectedIndex=-1;
-		if (aimReportsFilterPickerForm.selectedImplementingAgency)
-			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedDonnorAgency)
-			aimReportsFilterPickerForm.selectedDonnorAgency.selectedIndex=-1;
-		
-		
-		if (aimReportsFilterPickerForm.jointCriteria){
-			aimReportsFilterPickerForm.jointCriteria.checked=false;
-		}
-
-		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
-			aimReportsFilterPickerForm.governmentApprovalProcedures.checked=false;
-		}
-	}
-	
-
 
 function resetFormat(){
 	document.aimReportsFilterPickerForm3.action=document.aimReportsFilterPickerForm3.action+'&resetFormat=true';
@@ -631,6 +528,107 @@ function validateFormat(){
 	window.onload=initScripts;
 
 
+
+
+	function addOnloadEvent(fnc){
+	  if ( typeof window.addEventListener != "undefined" )
+	    window.addEventListener( "load", fnc, false );
+	  else if ( typeof window.attachEvent != "undefined" ) {
+	    window.attachEvent( "onload", fnc );
+	  }
+	  else {
+	    if ( window.onload != null ) {
+	      var oldOnload = window.onload;
+	      window.onload = function ( e ) {
+	        oldOnload( e );
+	        window[fnc]();
+	      };
+	    }
+	    else
+	      window.onload = fnc;
+	  }
+	}
+
+	<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page" />
+	
+	var msg0='<digi:trn key="rep:pop:pleasewait..."> Please wait...</digi:trn>';
+	
+	var msg1='<digi:trn key="rep:pop:freezeReportHeading">Freeze Report Heading</digi:trn>';
+	
+	var msg2='<digi:trn key="rep:pop:unFreezeReportHeading">Unfreeze Report Heading</digi:trn>';
+	
+	var msg3='<digi:trn key="rep:pop:freezingReportHeading"> Freezing Report Heading </digi:trn>';
+	
+	var scrolling=readCookie('<bean:write name="reportMeta" property="name"/>_scrolling');
+		scrolling=(scrolling==null)?false:(scrolling=="true")?true:false;
+		
+		
+		
+	function makeScroll(){
+		createCookie('<bean:write name="reportMeta" property="name"/>_scrolling',true,1);
+		showScroll();
+		document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
+		document.getElementById("frezzlink").setAttribute("class","settingsLink");
+		document.getElementById("frezzlink").innerHTML=msg2;
+		
+	}
+	function hiddeScroll(){
+		eraseCookie('<bean:write name="reportMeta" property="name"/>_scrolling',true,1);
+		document.location=document.location;
+	}
+	
+	var enableLink=function(){
+		if (scrolling){
+			document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
+			document.getElementById("frezzlink").setAttribute("class","settingsLink");
+			document.getElementById("frezzlink").innerHTML=msg2;
+			showScroll();
+		}else{
+			document.getElementById("frezzlink").setAttribute("onClick","makeScroll()");
+			document.getElementById("frezzlink").setAttribute("class","settingsLink");
+			document.getElementById("frezzlink").innerHTML=msg1;
+		}
+	}
+	
+	addOnloadEvent(enableLink);
+	
+	
+		
+	//-----------------------
+	function showScroll(){
+		var wait = new YAHOOAmp.widget.Panel("wait",   
+	        { width:"240px",  
+	          fixedcenter:true,  
+	          close:false,  
+	          draggable:false,  
+	          zindex:99, 
+	          modal:true, 
+	          visible:false,
+	          underlay:"shadow"
+	        }  
+	    ); 
+
+		wait.setHeader(msg0); 
+		wait.setBody("<div align='center'>"+msg3+"</div>"); 
+		wait.render(document.body);
+		wait.show();
+		var winH;
+		
+		if (navigator.appName.indexOf("Microsoft")!=-1) {
+			winH = document.body.offsetHeight;
+		}else{
+			winH=window.innerHeight;
+		}
+		var call=function(){
+			var reporTable=new scrollableTable("reportTable",winH -320);
+			reporTable.debug=false;
+			reporTable.maxRowDepth=1;
+			reporTable.scroll();
+			wait.hide();		
+		}
+		
+			window.setTimeout(call,200);
+		}
 
 </script>
 

@@ -423,7 +423,6 @@ html>body #mainEmpty {
 							</logic:notEqual>
 						</module:display>
 						
-						<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 						<feature:display name="Financial Progress Tab" module="Funding">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 							   <LI>

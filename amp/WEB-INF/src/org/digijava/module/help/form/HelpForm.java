@@ -28,6 +28,7 @@ public class HelpForm extends ActionForm {
 	private String body;
 	private Long childId;
 	private Collection<LabelValueBean> searched; 
+	private boolean flag;
 	
 
 	public Boolean getBlankPage() {
@@ -174,6 +175,14 @@ public class HelpForm extends ActionForm {
 
 	public void setSearched(Collection<LabelValueBean> searched) {
 		this.searched = searched;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}
 
 

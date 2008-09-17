@@ -145,8 +145,8 @@ public class HelpActions extends DispatchAction {
 			   String article = doc.get("article");
 			   Searched.add(new LabelValueBean(title,article));
 			   help.setSearched(Searched);
-			   help.setTopicKey(null);
-			   
+			   help.setTopicKey(title);
+			   help.setFlag(false);
     	  }
     	}
    	}
@@ -168,6 +168,7 @@ public class HelpActions extends DispatchAction {
 		helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
 		helpForm.setHelpErrors(null);
 		helpForm.setSearched(null);
+		helpForm.setFlag(true);
 		LuceneUtil.addUpdatehelp(true);
 		if(helpTopic.getParent()!=null){
 			helpForm.setParentId(helpTopic.getParent().getHelpTopicId());
@@ -331,6 +332,10 @@ public class HelpActions extends DispatchAction {
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HelpForm helpForm = (HelpForm) form;
+		
+		 int editkey = helpForm.getBodyEditKey().indexOf("body:");
+         String topickey = helpForm.getBodyEditKey().substring(editkey+5);
+		helpForm.setTopicKey(topickey);
 		setDefaultValues(helpForm);
 		return mapping.findForward("help");
 	}
@@ -443,9 +448,9 @@ public class HelpActions extends DispatchAction {
 	 * @param form
 	 */
 	private void setDefaultValues(HelpForm form) {
-		form.setTopicKey(null);
+		//form.setTopicKey(null);
 		form.setKeywordsTrnKey(null);
-		form.setTitleTrnKey(null);
+		//form.setTitleTrnKey(null);
 		form.setParentId(null);
 		form.setFirstLevelTopics(null);
 	}

@@ -67,6 +67,9 @@ function checkSelectedHierarchies() {
 	var cols			= selColEl.getElementsByTagName("li");
 	var hiers			= selHierEl.getElementsByTagName("li");
 	
+	var srcHierEl		= document.getElementById("source_hierarchies_ul") ;
+	var srcHiers		= srcHierEl.getElementsByTagName("li");
+	
 	for ( var i=0; i<hiers.length; i++ ) {
 		var isInSelectedColumns = false;
 		for ( var j=0; j<cols.length; j++ ) {
@@ -81,6 +84,20 @@ function checkSelectedHierarchies() {
 		}
 			
 	}
+	for ( var i=0; i<srcHiers.length; i++ ) {
+		var isInSelectedColumns = false;
+		for ( var j=0; j<cols.length; j++ ) {
+			if ( getColDbId(srcHiers[i]) == getColDbId(cols[j]) ) {
+				isInSelectedColumns	= true;
+				break;
+			}
+		}
+		if ( !isInSelectedColumns ) {
+			srcHierEl.removeChild( srcHiers[i] );
+			i=i-1;
+		}
+			
+	}
 	
 }
 
@@ -89,6 +106,8 @@ function getColDbId( liEl ) {
 }
 
 function generateHierarchies(e) {
+	checkSelectedHierarchies();
+	
 	var newDDObj		= new MyDragAndDropObject();
 	var ulEl			= document.getElementById("dest_col_ul") ;
 	var hierUlEl		= document.getElementById("source_hierarchies_ul") ;
@@ -113,6 +132,5 @@ function generateHierarchies(e) {
 		}
 	}
 	
-	checkSelectedHierarchies();
 }
 

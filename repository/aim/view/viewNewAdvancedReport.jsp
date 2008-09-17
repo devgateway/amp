@@ -202,7 +202,7 @@ session.setAttribute("progressValue", counter);
 	<tr>
 		<td>
 		<div style="margin-left:5px;background-color:#ccdbff;padding:2px 2px 2px 2px;Font-size:8pt;font-family:Arial,Helvetica,sans-serif;">
-	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${hideCurrSettings} &lt;&lt;</span>
+	        <span style="cursor:pointer;font-style: italic;float:right;" onClick="toggleSettings();" id="displaySettingsButton">${showCurrSettings} &lt;&lt;</span>
             <span style="cursor:pointer;float:left;">
             <logic:notEmpty name="reportMeta" property="hierarchies">
                 <a class="settingsLink" onClick="showSorter();">
@@ -225,7 +225,7 @@ session.setAttribute("progressValue", counter);
            
             </span>
              &nbsp;<br>
-             <div style="display:block;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">

@@ -18,7 +18,9 @@ public class DefaultCommitmentCalculator implements AmountCalculator{
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			if( ArConstants.DISBURSEMENT.equals(element.getMetaValueString(ArConstants.TRANSACTION_TYPE)) ) continue;
+			if( ArConstants.DISBURSEMENT.equals(element.getMetaValueString(ArConstants.TRANSACTION_TYPE)) ||
+				ArConstants.EXPENDITURE.equals(element.getMetaValueString(ArConstants.TRANSACTION_TYPE))) continue;
+			
 			
 			 if( ArConstants.ACTUAL.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) || 
 					 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )

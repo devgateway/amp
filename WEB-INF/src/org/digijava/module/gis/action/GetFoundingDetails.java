@@ -39,6 +39,7 @@ import org.digijava.module.aim.exception.*;
 import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.aim.helper.Constants;
 import java.util.HashSet;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 
 /**
  * <p>Title: </p>
@@ -548,50 +549,30 @@ public class GetFoundingDetails extends Action {
         Set fundSet = activity.getFunding();
         Iterator <AmpFunding> fundIt = fundSet.iterator();
 
-        Double commitment = new Double (0);
-        Double disbursement = new Double (0);
-        Double expenditure = new Double (0);
+
+        Double commitment = null;
+        Double disbursement = null;
+        Double expenditure = null;
+
+
+        FundingCalculationsHelper fch = new FundingCalculationsHelper();
+//        fch.doCalculations();
+
+        Set fundDetSet = new HashSet();
 
         try {
             while (fundIt.hasNext()) {
                 AmpFunding fund = fundIt.next();
                 Set fundDetaiuls = fund.getFundingDetails();
+
+                fundDetSet.addAll(fundDetaiuls);
+
+                /*
                 Iterator<AmpFundingDetail> fundDetIt = fundDetaiuls.iterator();
                 while (fundDetIt.hasNext()) {
                     AmpFundingDetail fundDet = fundDetIt.next();
                     Double exchangeRate = null;
-                    /*
-                    try {
-
-                        exchangeRate = CurrencyUtil.getLatestExchangeRate(
-                                fundDet.getAmpCurrencyId().getCurrencyCode());
-
-                    } catch (AimException ex) {
-                        //Add exception reporting
-                    }
-                    */
                     exchangeRate = fundDet.getFixedExchangeRate();
-
-
-                    /*
-                    switch (fundDet.getTransactionType().intValue()) {
-                    case Constants.COMMITMENT:
-                        commitment += fundDet.getTransactionAmount() /
-                                exchangeRate;
-                        break;
-
-                    case Constants.DISBURSEMENT:
-                        disbursement += fundDet.getTransactionAmount() /
-                                exchangeRate;
-                        break;
-
-                    case Constants.EXPENDITURE:
-                        expenditure += fundDet.getTransactionAmount() /
-                                exchangeRate;
-                        break;
-                    }
-                    */
-
                    if (fundDet.getTransactionType().intValue() ==
                        Constants.COMMITMENT) {
                        commitment += fundDet.getTransactionAmount() /
@@ -606,8 +587,16 @@ public class GetFoundingDetails extends Action {
                                exchangeRate;
                    }
 
-                }
+                }*/
             }
+
+            fch.doCalculations(fundDetSet, "usd");
+
+            commitment = fch.getTotActualComm().doubleValue();
+            disbursement = fch.getTotActualDisb().doubleValue();
+            expenditure = fch.getTotActualExp().doubleValue();
+
+
         } catch (Exception ex1) {
             String ggg="gadfg";
             //Add exception reporting

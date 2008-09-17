@@ -28,8 +28,7 @@
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
+
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>

@@ -31,7 +31,7 @@
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>
+
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>

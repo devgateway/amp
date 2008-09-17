@@ -39,7 +39,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
+
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -115,7 +115,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Donor Report" module="Reports"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
 <feature:display name="Executing Agency" module="Organizations"></feature:display>
-<feature:display name="Financial Progress" module="Financial Progress"></feature:display>
+
 <feature:display name="Funding Information" module="Funding"></feature:display>
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Identification" module="Project ID and Planning"></feature:display>

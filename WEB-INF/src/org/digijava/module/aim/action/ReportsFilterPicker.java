@@ -565,9 +565,19 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setPlanMinRank(filterForm.getPlanMinRank());
 		if (!all.equals(filterForm.getRegionSelected()))
 			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? null : filterForm.getRegionSelected());
-		if (!all.equals(filterForm.getApprovalStatusSelected()))
-			arf.setApprovalStatusSelected(filterForm.getApprovalStatusSelected() == null || filterForm.getApprovalStatusSelected() == -1 ? null : filterForm.getApprovalStatusSelected());
-
+		if (!all.equals(filterForm.getApprovalStatusSelected())){
+			if(filterForm.getApprovalStatusSelected() != null){
+				ArrayList<String> appvals = new ArrayList<String>();
+				for (int i = 0; i < filterForm.getApprovalStatusSelected().length; i++) {
+					String id = String.valueOf("" + filterForm.getApprovalStatusSelected()[i]);
+					appvals.add(id);
+				}
+			    arf.setApprovalStatusSelected(appvals);
+			}
+			else{
+				arf.setApprovalStatusSelected(null);
+			}
+		}
 		if (filterForm.getSelectedStatuses() != null && filterForm.getSelectedStatuses().length > 0)
 			arf.setStatuses(new HashSet());
 		else

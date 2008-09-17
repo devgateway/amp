@@ -45,7 +45,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection implementingAgency;
 	private Collection beneficiaryAgency;
 	private Long regionSelected;
-	private Long approvalStatusSelected; //AMP-3386
+	private Object[] approvalStatusSelected;
 
 	private String teamAccessType;
 	
@@ -739,11 +739,11 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.toDate = toDate;
 	}
 
-	public Long getApprovalStatusSelected() {
+	public Object[] getApprovalStatusSelected() {
 		return approvalStatusSelected;
 	}
 
-	public void setApprovalStatusSelected(Long approvalStatusSelected) {
+	public void setApprovalStatusSelected(Object[] approvalStatusSelected) {
 		this.approvalStatusSelected = approvalStatusSelected;
 	}
 

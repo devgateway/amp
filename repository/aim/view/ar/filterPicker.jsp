@@ -627,8 +627,8 @@
 		</td>
 		<td>
 				<table align="center" cellpadding="1" cellspacing="1" >
+					<field:display name="Line Ministry Rank" feature="Planning">					
 					<tr><td><b><digi:trn key="rep:filer:MinistryRankTitle">Ministry Rank</digi:trn></b></td></tr>
-					<field:display name="Line Ministry Rank" feature="Planning">
 					<tr>
 						<td>
 							<digi:trn key="rep:filer:LineMinRank">Line Ministry Rank</digi:trn>

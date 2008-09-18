@@ -144,16 +144,16 @@
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
-													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
-														<c:if test="${comm.currencyCode == currency.currencyCode}">
-															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-														<c:if test="${comm.currencyCode != currency.currencyCode}">
-															<option value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-															<c:out value="${currency.currencyName}"/>
-														</option>
-													</c:forEach>
+													<c:forEach var="currency"
+													items="${aimEditActivityForm.validcurrencies}">
+													<c:if test="${comm.currencyCode == currency.currencyCode}">
+														<option selected="true"
+															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
+													<c:if test="${comm.currencyCode != currency.currencyCode}">
+														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
+													<c:out value="${currency.currencyName}" />
+													</option>
+												</c:forEach>
 												</select>&nbsp;
 												<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
 												&nbsp;
@@ -222,16 +222,16 @@
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
-													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
-														<c:if test="${comm.currencyCode == currency.currencyCode}">
-															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-														<c:if test="${comm.currencyCode != currency.currencyCode}">
-															<option value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-															<c:out value="${currency.currencyName}"/>
-														</option>
-													</c:forEach>
+													<c:forEach var="currency"
+													items="${aimEditActivityForm.validcurrencies}">
+													<c:if test="${comm.currencyCode == currency.currencyCode}">
+														<option selected="true"
+															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
+													<c:if test="${comm.currencyCode != currency.currencyCode}">
+														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
+													<c:out value="${currency.currencyName}" />
+													</option>
+												</c:forEach>
 												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">
 												&nbsp;
@@ -301,16 +301,16 @@
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
-													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
-														<c:if test="${comm.currencyCode == currency.currencyCode}">
-															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-														<c:if test="${comm.currencyCode != currency.currencyCode}">
-															<option value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-															<c:out value="${currency.currencyName}"/>
-														</option>
-													</c:forEach>
+													<c:forEach var="currency"
+													items="${aimEditActivityForm.validcurrencies}">
+													<c:if test="${comm.currencyCode == currency.currencyCode}">
+														<option selected="true"
+															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
+													<c:if test="${comm.currencyCode != currency.currencyCode}">
+														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
+													<c:out value="${currency.currencyName}" />
+													</option>
+												</c:forEach>
 												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
 												<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
@@ -406,7 +406,7 @@ function addCommitments() {
 	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
 	
-	<% Collection col = eaForm.getCurrencies();
+	<% Collection col = eaForm.getValidcurrencies();
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();	
@@ -455,7 +455,7 @@ function addDisbursement() {
 	s += "<input type='text' name='disb_" + numDisb + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
 	
-	<% col = eaForm.getCurrencies();
+	<% col = eaForm.getValidcurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();	
@@ -502,7 +502,7 @@ function addExpenditure() {
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
 	
-	<% col = eaForm.getCurrencies();
+	<% col = eaForm.getValidcurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();	

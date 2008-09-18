@@ -267,32 +267,8 @@
 		</ul>
 			<div class="yui-content" style="background-color: #EEEEEE">
 				<div id="type_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px;" >
-					<div class="subtabs">
-						
-						<button id="step0_prev_button" type="button" class="toolbar-dis" disabled="disabled"
-							onclick="repManager.previousStep();">
-							<img src="/TEMPLATE/ampTemplate/images/prev_dis.png" class="toolbar" />
-							<digi:trn key="btn:previous">Previous</digi:trn>
-						</button>
-						<button id="step0_next_button" type="button" class="toolbar-dis" 
-							 onclick="repManager.nextStep()" disabled="disabled">
-							<img src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
-							<digi:trn key="btn:next">Next</digi:trn>
-						</button>
-						<button id="step0_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
-							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
-							<digi:trn key="btn:repFilters">Filters</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
-																					onclick="saveReportEngine.decideToShowTitlePanel()" >
-							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:Save">Save</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
-							<img height="16" src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
-						</button>
-					</div>
+					<c:set var="stepNum" value="0" scope="request" />
+					<jsp:include page="toolbar.jsp" />
 					<div style="height: 355px;">
 					<br />
 					<table cellpadding="15px" width="100%" align="center" border="0" >
@@ -404,32 +380,8 @@
 					</div>
 				</div>
 				<div id="columns_step_div"  class="yui-tab-content" align="center" style="padding: 0px 0px 1px 0px; display: none;">
-					<div class="subtabs">
-						<button id="step1_prev_button" type="button" class="toolbar"
-							onclick="repManager.previousStep();">
-							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
-							<digi:trn key="btn:previous">Previous</digi:trn>
-						</button>
-						<button id="step1_next_button" type="button" class="toolbar-dis" 
-							onclick="repManager.nextStep()" disabled="disabled">
-							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
-							<digi:trn key="btn:next">Next</digi:trn>
-						</button>
-						<button id="step1_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
-							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
-							<digi:trn key="btn:repFilters">Filters</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
-												onclick="saveReportEngine.decideToShowTitlePanel()" >
-							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:Save">Save</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
-							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
-						</button>
-						
-					</div>
+					<c:set var="stepNum" value="1"  scope="request" />
+					<jsp:include page="toolbar.jsp" />
 					<div style="height: 355px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
@@ -484,32 +436,8 @@
 					</div>
 				</div>
 				<div id="hierarchies_step_div"  class="yui-tab-content"  style="padding: 0px 0px 1px 0px; display: none;">
-					<div class="subtabs">
-						<button id="step2_prev_button" type="button" class="toolbar"
-							onclick="repManager.previousStep();">
-							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" /> 
-							<digi:trn key="btn:previous">Previous</digi:trn>
-						</button>
-						<button id="step2_next_button" type="button" class="toolbar-dis" 
-							onclick="repManager.nextStep()" disabled="disabled">
-							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
-							<digi:trn key="btn:next">Next</digi:trn>
-						</button>
-						<button id="step2_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
-							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
-							<digi:trn key="btn:repFilters">Filters</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
-										onclick="saveReportEngine.decideToShowTitlePanel()" >
-							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar" />
-							<digi:trn key="rep:wizard:Save">Save</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
-							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
-						</button>
-						
-					</div>
+					<c:set var="stepNum" value="2" scope="request" />
+					<jsp:include page="toolbar.jsp" />
 					<div style="height: 355px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%" >
 						<tr>
@@ -534,7 +462,8 @@
 								<digi:trn key="rep:wizard:selectedHierarchies">Selected Hierarchies</digi:trn>
 							</span>
 							<ol id="dest_hierarchies_ul" class="draglist">
-							</ol>					
+							</ol>
+						</td>					
 						</tr>
 						<tr>
 							<td colspan="3">
@@ -551,32 +480,8 @@
 					</div>
 				</div>
 				<div id="measures_step_div" class="yui-tab-content" style="padding: 0px 0px 1px 0px; display: none;" >
-					<div class="subtabs">
-						
-						<button id="step3_prev_button" type="button" class="toolbar"
-							onclick="repManager.previousStep();">
-							<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
-							<digi:trn key="btn:previous">Previous</digi:trn>
-						</button>
-						<button id="step3_next_button" type="button" class="toolbar-dis" 
-							onclick="repManager.nextStep()" disabled="disabled">
-							<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" />
-							<digi:trn key="btn:next">Next</digi:trn>
-						</button>
-						<button id="step3_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
-							<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
-							<digi:trn key="btn:repFilters">Filters</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" onclick="saveReportEngine.decideToShowTitlePanel()" 
-								disabled="disabled" name="save">
-							<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:Save">Save</digi:trn>
-						</button>
-						<button type="button" class="toolbar-dis" onclick="saveReportEngine.showTitlePanel()" disabled="disabled" name="save">
-							<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
-							<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
-						</button>
-					</div>
+					<c:set var="stepNum" value="3" scope="request" />
+					<jsp:include page="toolbar.jsp" />
 					<div style="height: 355px;">
 					<table cellpadding="5px" style="vertical-align: middle" width="100%">
 						<tr>
@@ -602,7 +507,8 @@
 								<digi:trn key="rep:wizard:selectedMeasures">Selected Measures</digi:trn>
 							</span>
 							<ul id="dest_measures_ul" class="draglist">
-							</ul>					
+							</ul>
+						</td>					
 						</tr>
 						<tr>
 							<td>

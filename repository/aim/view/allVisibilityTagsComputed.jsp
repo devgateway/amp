@@ -125,6 +125,7 @@
 <feature:display name="PI report 6" module="PI Reports"></feature:display> 
 <feature:display name="PI report 7" module="PI Reports"></feature:display> 
 <feature:display name="PI report 9" module="PI Reports"></feature:display> 
+<feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display name="Paris Indicator" module="Add & Edit Activity"></feature:display> 
 <feature:display name="Paris Indicators Reports" module="Portfolio"></feature:display> 
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 

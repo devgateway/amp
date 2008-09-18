@@ -81,6 +81,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display  name="PI report 10a" module="PI Reports"></feature:display>
 
 <feature:display  name="Funding Information" module="Funding"></feature:display>
+<feature:display module="Funding" name="Commitments"></feature:display>
 <feature:display module="Funding" name="Funding Information"></feature:display>
 <feature:display module="Funding" name="MTEF Projections"></feature:display>
 <feature:display module="Organizations" name="Beneficiary Agency"></feature:display>

@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<<script type="text/javascript">
+<script type="text/javascript">
 <!--
 
 function validate(topickey){

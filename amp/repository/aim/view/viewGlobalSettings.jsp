@@ -214,6 +214,7 @@ function setIndex(index){
 					</span>
 				</td>
 			</tr>
+				
 			<tr>
           		<td height=16 vAlign=center>
 			            <div id="demo" class="yui-navset" style="width:800px">
@@ -276,17 +277,18 @@ function setIndex(index){
 			                                 </logic:notEmpty>
 			                                 <digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>                              
 										   </td>
-											
-											<digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
+										<digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
 			                                <td width="40%">
 			                                  <html:hidden property="globalId" name="globalSett"/>
 			                                  <html:hidden property="globalSettingsName" name="globalSett"/>
-											 <input type="hidden" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globaLset}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
-												
+											
+											 <input type="hidden" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globalSett.globalSettingsName}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
+										
 			                                  <% 
 			                                  	String possibleValues 	= "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; 
 			                                  	String gsType			= globalSett.getGlobalSettingsPossibleValues();
 			                                  %>
+			
 			
 			                                  <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 											

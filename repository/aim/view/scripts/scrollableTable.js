@@ -172,9 +172,10 @@ function scrollableTable(tableId,height){
 		
 		
 			
-		if(this.useFixForDisplayNoneRows && isIE){
+		if(this.useFixForDisplayNoneRows){
 			this.setBodyForIE();
 		}
+		
 		this.setHeaderWidth();
 		this.setBodyWidth();
 		

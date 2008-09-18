@@ -6,6 +6,19 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<<script type="text/javascript">
+<!--
+
+function validate(topickey){
+		if(!topickey){
+			alert("Default topic is not tree topic");
+		return false;
+	}
+}
+
+//-->
+</script>
+
 <digi:instance property="helpForm"/>
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 
 	<div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
@@ -26,10 +39,12 @@
       <digi:trn key="aim:help:clickToEditHelpTopic">Click here to Edit Help Topic</digi:trn>
     </c:set>
       
-      <digi:link href="/helpActions.do?actionType=editHelpTopic&amp;topicKey=${helpForm.topicKey}&amp;wizardStep=0" 
+      <digi:link onclick="return validate(${helpForm.topicKey})" href="/helpActions.do?actionType=editHelpTopic&amp;topicKey=${helpForm.topicKey}&amp;wizardStep=0" 
 								title="${topicEdit}" >
         <digi:trn key="aim:help:editTopic">Edit Topic</digi:trn>
       </digi:link>
+      
+       
       | <c:set var="topicCreate">
       <digi:trn key="aim:help:clickToAddHelpTopic">Click here to Create Help Topic</digi:trn>
     </c:set>
@@ -41,11 +56,12 @@
       | <c:set var="topicDelete">
       <digi:trn key="aim:help:clickToDeleteHelpTopic">Click here to Delete Help Topic</digi:trn>
     </c:set>
-      
-      <digi:link href="/helpActions.do?actionType=deleteHelpTopic&amp;topicKey=${helpForm.topicKey}" 
-								title="${topicDelete}" >
-        <digi:trn key="aim:help:removeTopic">Remove Topic</digi:trn>
-      </digi:link>
+     
+	      <digi:link href="/helpActions.do?actionType=deleteHelpTopic&amp;topicKey=${helpForm.topicKey}" 
+									title="${topicDelete}" >
+	        <digi:trn key="aim:help:removeTopic">Remove Topic</digi:trn>
+	      </digi:link>
+     
     </div> 
       					</div>     
 	</div>

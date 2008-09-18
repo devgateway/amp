@@ -64,6 +64,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Date contractingDate;
 	private Date disbursmentsDate;
 	private Set sectors ;
+	private Set contracts;
 	private Set componentes; //for bolivia;
 	private Set locations ;
 	private Set orgrole;
@@ -1605,6 +1606,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setCrisNumber(String crisNumber) {
 		this.crisNumber = crisNumber;
+	}
+
+	public Set getContracts() {
+		return contracts;
+	}
+
+	public void setContracts(Set contracts) {
+		this.contracts = contracts;
 	}
 
 	

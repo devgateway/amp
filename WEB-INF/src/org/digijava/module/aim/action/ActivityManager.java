@@ -181,8 +181,7 @@ public class ActivityManager extends Action {
 		Long ampActId = new Long(Long.parseLong(request.getParameter("id")));
 		AmpActivity activity = ActivityUtil.getAmpActivity(ampActId);
 		AuditLoggerUtil.logObject(session, request, activity, "delete");
-		ActivityUtil.deleteActivityAmpComments(DbUtil
-				.getActivityAmpComments(ampActId));
+		ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId));
 		ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil
 				.getActivityPhysicalComponentReport(ampActId));
 		ActivityUtil.deleteActivityAmpReportCache(DbUtil

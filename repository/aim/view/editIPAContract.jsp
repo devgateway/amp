@@ -784,7 +784,7 @@ window.onload=autosum;
 			</field:display>				
 		</td>
 	</tr>
-	
+	</field:display>
 	<field:display name="Contracting Disbursements Global Currency" feature="Contracting">
 	<tr>
 		<td colspan="2">
@@ -805,7 +805,7 @@ window.onload=autosum;
 	</tr>
 	</field:display>
 	
-	
+	<field:display name="Contracting Disbursements" feature="Contracting">
 	<logic:notEmpty name="aimIPAContractForm" property="contractDisbursements">
 		<tr>
 			<td colspan="2">

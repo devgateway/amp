@@ -15,7 +15,6 @@
     <property name="project.version" value="1.1"/>
     <property name="lib" location="./WEB-INF/lib" />
     <property name="webinf" location="./WEB-INF" />
-    <property name="system.lib" location="./WEB-INF/system-lib" />
     <property name="classes" location="./WEB-INF/classes" />
     <property name="src" location="./WEB-INF/src" />
     <property name="test" location="./WEB-INF/test" />
@@ -38,10 +37,6 @@
         <fileset dir="${jboss-lib}">
           <include name="**/*.jar"/>
         </fileset>
-        <fileset dir="${system.lib}">
-          <include name="**/*.jar"/>
-          <include name="**/*.zip"/>
-        </fileset>
     </path>
 
     <!-- classpath for Struts 1.1 -->
@@ -55,10 +50,6 @@
         <fileset dir="${jboss-lib}">
         	<include name="**/*.jar"/>
          </fileset>
-        <fileset dir="${system.lib}">
-          <include name="**/*.jar"/>
-          <include name="**/*.zip"/>
-        </fileset>
     </path>
 
 

@@ -36,6 +36,7 @@ import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import java.util.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.Address;
+import org.apache.bcel.util.Class2HTML;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -581,7 +582,7 @@ public class AmpMessageWorker {
         newState.setMemberId(state.getMemberId());
         newState.setRead(false);
         //will this message be visible in user's mailbox
-        if (AmpMessageUtil.isInboxFull(Approval.class, state.getMemberId())) {
+        if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getMemberId())) {
             newState.setMessageHidden(true);
         } else {
             newState.setMessageHidden(false);

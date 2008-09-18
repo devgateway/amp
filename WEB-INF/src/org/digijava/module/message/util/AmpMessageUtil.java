@@ -234,7 +234,7 @@ public class AmpMessageUtil {
                        /* Someone may change msgStoragePerMsgType (make it more then it was previously). 
                         In this case we need to unhide some states which are marked as hidden in db*/
                         
-                        if(retValue<msgStoragePerMsgType){
+                        if(retValue<msgStoragePerMsgType&&!onlyUnread){ //temporary fix @todo change code, but not today
                             int limit=msgStoragePerMsgType-retValue;
                             int numUnhidden=unhideMessageStates(clazz,tmId,limit);
                             retValue+=numUnhidden;

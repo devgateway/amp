@@ -95,32 +95,6 @@ public class TemplateAlertActions extends DispatchAction {
 	    	        	 	
 	    	//saving template
 	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);    	
-	    	
-	    	
-	    	List<AmpMessageState> statesList=AmpMessageUtil.loadMessageStates(msgForm.getTemplateId());  
-	    	List<Long> statesMemberIds=new ArrayList<Long>();
-	    	if(statesList==null){
-	    		statesList=new ArrayList<AmpMessageState>();
-	    	}
-	    	
-	    	if(statesList!=null && statesList.size()>0){
-				//getting members Ids from states list			
-				for (AmpMessageState mId : statesList) {
-					statesMemberIds.add(mId.getMemberId());
-				}    			    			
-	    	}	
-			if(messageReceivers!=null && messageReceivers.length>0){				
-				for (String receiver : messageReceivers) {				
-					if(receiver.startsWith("m")){//<--this means that receiver is team				
-					//<--receiver is team member
-							Long memId=new Long(receiver.substring(2));
-							String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
-							createMessageState(newTemplate,memId,teamName);							
-						
-					}				
-				}		
-			}
-			
 	    	//cleaning form values
 	    	setDefaultValues(msgForm);
 

@@ -1081,13 +1081,18 @@ public class CurrencyUtil {
 				return true;
 			}
 			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select f.exchangeRate from "
-					+ AmpCurrencyRate.class.getName()
-					+ " f where (f.toCurrencyCode=:currencyCode) and f.exchangeRateDate between :fromDate and :toDate order by f.exchangeRateDate desc";
+//			AMP-4299			
+//			String queryString = "select f.exchangeRate from "
+//					+ AmpCurrencyRate.class.getName()
+//					+ " f where (f.toCurrencyCode=:currencyCode) and f.exchangeRateDate between :fromDate and :toDate order by f.exchangeRateDate desc";
+			String queryString = "select f.exchangeRate from " + AmpCurrencyRate.class.getName() +
+					" f where f.toCurrencyCode=:currencyCode " +
+					" order by f.exchangeRateDate desc";
 			q = session.createQuery(queryString);
 			q.setString("currencyCode", currencyCode);
-			q.setParameter("fromDate",fromdate,Hibernate.DATE);
-			q.setParameter("toDate",todate,Hibernate.DATE);
+//			AMP-4299			
+//			q.setParameter("fromDate",fromdate,Hibernate.DATE);
+//			q.setParameter("toDate",todate,Hibernate.DATE);
 			List rates = q.list();
 			boolean result = false;
 			for (Iterator iter = rates.iterator(); iter.hasNext();) {

@@ -117,6 +117,17 @@ public class ReportsFilterPicker extends MultiAction {
 
 		// create filter dropdowns
 		Collection currency = CurrencyUtil.getAmpCurrency();
+	     //Only currencies havening exchanges rates AMP-2620
+	      Collection<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+	      filterForm.setCurrencies(validcurrencies);
+	      for (Iterator iter = currency.iterator(); iter.hasNext();) {
+			AmpCurrency element = (AmpCurrency) iter.next();
+			 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
+					{
+				 filterForm.getCurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+					}
+			}
+	      
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
 
 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectors(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME);
@@ -217,7 +228,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection allIndicatorRisks = meRisks;
 		Collection regions = LocationUtil.getAllDefCountryArRegions();
 		// Collection regions=LocationUtil.getAllVRegions();
-		filterForm.setCurrencies(currency);
+		//filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);
 		// filterForm.setDonors(donors);
 		filterForm.setRisks(allIndicatorRisks);

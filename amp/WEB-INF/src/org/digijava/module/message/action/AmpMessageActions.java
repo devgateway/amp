@@ -436,8 +436,8 @@ public class AmpMessageActions extends DispatchAction {
 
 		//checking if Any of the inbox is full
 		Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
-		for (Class<AmpMessage> clazz : allTypesOfMessages) {
-			if(AmpMessageUtil.isInboxFull(clazz, teamMember.getMemberId())){
+		for (Class<AmpMessage> cls : allTypesOfMessages) {
+			if(AmpMessageUtil.isInboxFull(cls, teamMember.getMemberId())){
 				messagesForm.setInboxFull(true);
 				break;
 			}

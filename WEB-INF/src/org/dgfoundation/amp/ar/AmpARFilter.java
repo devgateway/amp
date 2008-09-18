@@ -505,33 +505,28 @@ public class AmpARFilter extends PropertyListable {
 				+ regionSelected;
 		StringBuffer actStatusValue = new StringBuffer("");
 		if(approvalStatusSelected!=null){
-			if(approvalStatusSelected.contains("-1")){
-				actStatusValue.append("1");
-			}
-			else{
-				for(String valOption:approvalStatusSelected){
-					switch (Integer.parseInt(valOption)) {
-					case -1:
-						actStatusValue.append("1");					
-						break;
-					case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-						actStatusValue.append(" approval_status='edited' and draft <>true");break;
-					case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
-						actStatusValue.append(" approval_status='started' and draft=true ");break;
-					case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
-						actStatusValue.append(" approval_status='started' and draft<>true");break;
-					case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
-						actStatusValue.append(" approval_status='edited' and draft= true ");break;
-					case 4://Validated Activities 
-						actStatusValue.append("approval_status='approved' and draft<>true");break;
-					default:actStatusValue.append("1");	break;
-					}
-					actStatusValue.append(" AND ");
+			for(String valOption:approvalStatusSelected){
+				switch (Integer.parseInt(valOption)) {
+				case -1:
+					actStatusValue.append("1");					
+					break;
+				case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
+					actStatusValue.append(" (approval_status='edited' and draft <>true)");break;
+				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
+					actStatusValue.append(" (approval_status='started' and draft=true) ");break;
+				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
+					actStatusValue.append(" (approval_status='started' and draft<>true)");break;
+				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
+					actStatusValue.append(" (approval_status='edited' and draft= true) ");break;
+				case 4://Validated Activities 
+					actStatusValue.append("(approval_status='approved' and draft<>true)");break;
+				default:actStatusValue.append("1");	break;
 				}
-			    int posi = actStatusValue.lastIndexOf("AND");
-			    if(posi>0)
-			    	actStatusValue.delete(posi, posi+3);
+				actStatusValue.append(" OR ");
 			}
+		    int posi = actStatusValue.lastIndexOf("OR");
+		    if(posi>0)
+		    	actStatusValue.delete(posi, posi+2);
 		}    
 		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue.toString();
 		String APPROVED_FILTER = "";

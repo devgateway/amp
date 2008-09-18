@@ -76,9 +76,6 @@
 				<td colspan="5">
 					<html:select property="approvalStatusSelected" multiple="true"
 						style="width: 300px" styleClass="inp-text" >
-						<html:option value="-1">
-							<digi:trn key="rep:filer:All">All</digi:trn>
-						</html:option>
 						<html:option value="0" style="color:green">
 							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 						</html:option>

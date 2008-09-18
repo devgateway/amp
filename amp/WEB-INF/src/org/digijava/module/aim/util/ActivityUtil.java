@@ -2918,8 +2918,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             if (fundDetSet != null) {
               Iterator fundDetItr = fundDetSet.iterator();
               while (fundDetItr.hasNext()) {
-                AmpFundingDetail ampFundingDetail = (AmpFundingDetail)
-                    fundDetItr.next();
+                AmpFundingDetail ampFundingDetail = (AmpFundingDetail)fundDetItr.next();
+                if(ampFundingDetail.getContract()!=null) session.delete(ampFundingDetail.getContract());
                 session.delete(ampFundingDetail);
               }
             }
@@ -2936,6 +2936,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }
 
+        Set contracts=ampAct.getContracts();
+        if(contracts!=null){
+        	for (Iterator it = contracts.iterator(); it.hasNext();) {
+				IPAContract c = (IPAContract) it.next();
+				session.delete(c);
+			}
+        }
+        
         /* delete regional fundings */
         fundSet = ampAct.getRegionalFundings();
         if (fundSet != null) {
@@ -3067,11 +3075,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             
           }
         }
-        
        
-        
-
-        
         //	 delete all previous comments
         ArrayList col = org.digijava.module.aim.util.DbUtil.
             getAllCommentsByActivityId(ampAct.getAmpActivityId());
@@ -3084,6 +3088,17 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }
         logger.debug("comments deleted");
+        
+//        ArrayList ipacontracts = org.digijava.module.aim.util.DbUtil.getAllIPAContractsByActivityId(ampAct.getAmpActivityId());
+//	    logger.debug("contracts number [Inside deleting]: " + ipacontracts.size());
+//	    if (ipacontracts != null) {
+//	      Iterator itr = ipacontracts.iterator();
+//	      while (itr.hasNext()) {
+//	        IPAContract contract = (IPAContract) itr.next();
+//	        session.delete(contract);
+//	      }
+//	    }
+//	    logger.debug("contracts deleted");
 
       }
       session.delete(ampAct);

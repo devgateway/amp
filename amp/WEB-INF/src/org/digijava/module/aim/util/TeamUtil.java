@@ -749,18 +749,21 @@ public class TeamUtil {
                 AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
                 session.delete(tpf);
             }
-
-            // Remove reference from AmpTeamReports
-            qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr"
-                + " where (tr.team=:teamId)";
-            qry = session.createQuery(qryStr);
-            qry.setLong("teamId", teamId);
-            itr = qry.list().iterator();
-            while(itr.hasNext()) {
-                AmpTeamReports tr = (AmpTeamReports) itr.next();
-                session.delete(tr);
+            
+            try{
+	            // Remove reference from AmpTeamReports
+	            qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr"
+	                + " where (tr.team=:teamId)";
+	            qry = session.createQuery(qryStr);
+	            qry.setLong("teamId", teamId);
+	            itr = qry.list().iterator();
+	            while(itr.hasNext()) {
+	                AmpTeamReports tr = (AmpTeamReports) itr.next();
+	                session.delete(tr);
+	            }
+            }catch(Exception ex){
+            	ex.printStackTrace();
             }
-
             // Remove reference from AmpTeam
             qryStr = "select t from " + AmpTeam.class.getName() + " t"
                 + " where (t.parentTeamId=:teamId)";

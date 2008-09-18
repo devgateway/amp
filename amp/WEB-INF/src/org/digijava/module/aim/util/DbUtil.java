@@ -4801,6 +4801,31 @@ public class DbUtil {
         }
         return comments;
     }
+    
+    public static ArrayList getAllIPAContractsByActivityId(Long aid) {
+        Session session = null;
+        Query qry = null;
+        ArrayList contracts = new ArrayList();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select o from " + IPAContract.class.getName()
+                + " o "
+                + "where (o.activity=:aid)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("aid", aid, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+            	IPAContract com = (IPAContract) itr.next();
+            	contracts.add(com);
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get all contracts");
+            logger.debug("Exceptiion " + e);
+        }
+        return contracts;
+    }
+    
 
     public static AmpComments getAmpComment(Long id) {
         Session session = null;

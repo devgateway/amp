@@ -1632,8 +1632,10 @@ public class TeamMemberUtil {
 
                             Collection tmReports= qryaux.list();
                             if(tmReports!=null && !tmReports.isEmpty()){
-                                AmpTeamReports atr = (AmpTeamReports) tmReports.iterator().next();
-                                session.delete(atr);
+                            	for (Iterator itReports = tmReports.iterator(); itReports.hasNext();) {
+                            		AmpTeamReports atr = (AmpTeamReports) itReports.next();
+                            		session.delete(atr);
+								}
                             }
                             
                             // session.delete(deleteTeamReports);

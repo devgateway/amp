@@ -37,6 +37,8 @@
 	}
 
 	function removeRegFundings() {
+		var flag = validate();
+		if (flag == false) return false;
 		<digi:context name="rem" property="context/module/moduleinstance/removeRegionalFunding.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= rem %>";
 		document.aimEditActivityForm.target = "_self";
@@ -47,6 +49,34 @@
 		return true;
 	}
 
+
+	function validate() {
+		<c:set var="msgErr">
+			<digi:trn key="aim:pleaseChooseRegionalFundingToRemove">Please choose a regional funding to remove</digi:trn>
+		</c:set>
+		if (document.aimEditActivityForm.selRegFundings.checked != null) {
+			if (document.aimEditActivityForm.selRegFundings.checked == false) {
+				alert("${msgErr}");
+				return false;
+			}
+		} else { // many reg fund present
+			var length = document.aimEditActivityForm.selRegFundings.length;
+			var flag = 0;
+			for (i = 0;i < length;i ++) {
+				if (document.aimEditActivityForm.selRegFundings[i].checked == true) {
+					flag = 1;
+					break;
+				}
+			}
+
+			if (flag == 0) {
+				alert("${msgErr}");
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	-->
 
 </script>

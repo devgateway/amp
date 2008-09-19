@@ -27,25 +27,25 @@ INSERT INTO tempStateId (select message_state_Id from amp_message_state
 inner join amp_message on amp_message_Id=message_id 
 where member_Id=memberId  and (is_message_hidden=false or is_message_hidden is NULL) 
 and   message_clazz='a' 
-order by creation_date desc LIMIT 20);    
+order by creation_date asc LIMIT 20);    
 
 INSERT INTO tempStateId (select message_state_Id from amp_message_state 
 inner join amp_message on amp_message_Id=message_id 
 where member_Id=memberId  and (is_message_hidden=false or is_message_hidden is NULL) 
 and   message_clazz='c' 
-order by creation_date desc LIMIT 20); 
+order by creation_date asc LIMIT 20); 
 
 INSERT INTO tempStateId (select message_state_Id from amp_message_state 
 inner join amp_message on amp_message_Id=message_id 
 where member_Id=memberId  and (is_message_hidden=false or is_message_hidden is NULL) 
 and   message_clazz='p' 
-order by creation_date desc LIMIT 20); 
+order by creation_date asc LIMIT 20); 
 
 INSERT INTO tempStateId (select message_state_Id from amp_message_state 
 inner join amp_message on amp_message_Id=message_id 
 where member_Id=memberId  and (is_message_hidden=false or is_message_hidden is NULL) 
 and   message_clazz='u' 
-order by creation_date desc LIMIT 20); 
+order by creation_date asc LIMIT 20); 
 
 END IF; 
 UNTIL done END REPEAT; 

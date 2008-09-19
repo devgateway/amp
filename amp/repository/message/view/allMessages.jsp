@@ -622,7 +622,7 @@ background-color:yellow;
 		while(paginationTR.firstChild != null){
 			paginationTR.removeChild(paginationTR.firstChild);
 		}
-		var paginationTag=mainTag.getElementsByTagName('Pagination')[0];
+		
 			var paginationParams=paginationTag.childNodes[0];
 			if(paginationParams!=null){
 				var paginationTD=document.createElement('TD');
@@ -642,7 +642,7 @@ background-color:yellow;
 						}
 						var toIndex;
 						if(currentPage+2>allPages){
-							toIndex=lastPage;
+							toIndex=allPages;
 						}else{
 							toIndex=currentPage+2;
 						}
@@ -651,12 +651,12 @@ background-color:yellow;
 							if(i<=allPages && i!=page) {paginationTDContent+='<a href="javascript:goToPage('+i+')" title="'+nextPage+'">'+i+'</a>|&nbsp;'; }
 						}
 					}
-					if(page<lastPage){
+					if(page<allPages){
 						var nextPg=page+1;									
 						paginationTDContent+='<a href="javascript:goToPage('+nextPg+')" title="'+nextPage+'">&gt;</a>';
-						paginationTDContent+='<a href="javascript:goToPage('+lastPage+')" title="'+lastPg+'">&gt;&gt;</a>|';
+						paginationTDContent+='<a href="javascript:goToPage('+allPages+')" title="'+lastPg+'">&gt;&gt;</a>|';
 					}	
-					paginationTDContent+='&nbsp;'+page+'of'+lastPage;
+					paginationTDContent+='&nbsp;'+page+'of'+allPages;
 				paginationTD.innerHTML=	paginationTDContent;						
 				paginationTR.appendChild(paginationTD);						
 			}

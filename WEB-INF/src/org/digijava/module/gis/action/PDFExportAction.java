@@ -1094,7 +1094,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			if(currentTableIdIndex > -1)
 			{
 				table = new WiTable.TableBuilder(this.tableId[currentTableIdIndex]).build();
-				if (columnId[currentTableIdIndex]!=null && itemId[currentTableIdIndex]!=null && columnId[currentTableIdIndex].longValue()>0 && itemId[currentTableIdIndex].longValue()>0){
+				if (itemId != null && columnId != null && columnId[currentTableIdIndex]!=null && itemId[currentTableIdIndex]!=null && columnId[currentTableIdIndex].longValue()>0 && itemId[currentTableIdIndex].longValue()>0){
 					filter = (WiColumnDropDownFilter) table.getColumnById(columnId[currentTableIdIndex]);
 					//TODO this is not correct, check why columnId and itemId are not null when table is normal table.
 					if (filter!=null){

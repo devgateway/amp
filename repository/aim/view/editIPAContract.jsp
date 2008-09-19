@@ -194,21 +194,15 @@ function generateFields(){
 						</field:display>
 						<field:display name="Contracting IPA Activity Category" feature="Contracting">
 							+ "activityCategoryId="+document.getElementsByName("activityCategoryId")[0].value+"&"
-						</field:display>
-						<field:display name="Contracting IPA Contract Type" feature="Contracting">
-							+ "typeId="+document.getElementsByName("typeId")[0].value+"&"
-						</field:display>
+						</field:display>						
 						<field:display name="Contracting Start of Tendering" feature="Contracting"> 
-							+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
+			 				+ "startOfTendering="+document.getElementsByName("startOfTendering")[0].value+"&"
 						</field:display>
 						<field:display name="Contract Validity Date" feature="Contracting">
 							+ "contractValidity="+document.getElementsByName("contractValidity")[0].value+"&"
 						</field:display>
 						<field:display name="Contracting Tab Status" feature="Contracting">
 							+ "statusId="+document.getElementsByName("statusId")[0].value+"&"
-						</field:display>
-						<field:display name="Contracting IPA Contract Type" feature="Contracting">
-							+ "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
 						</field:display>
 						<field:display name="Signature of Contract" feature="Contracting">
 							+ "signatureOfContract="+document.getElementsByName("signatureOfContract")[0].value+"&"
@@ -263,7 +257,17 @@ function generateFields(){
 						</field:display>
 						 + getContractDisbursments();
 	
-	return ret;
+		//alert(ret);
+		<field:display name="Contracting IPA Contract Type" feature="Contracting">
+			if(document.getElementsByName("typeId")[0] != null){
+				ret = ret + "typeId="+document.getElementsByName("typeId")[0].value+"&";
+			}
+			if(document.getElementsByName("contractTypeId")[0] != null){
+				ret = ret + + "contractTypeId="+document.getElementsByName("contractTypeId")[0].value+"&"
+			}
+		</field:display>
+		//alert(ret);
+		return ret;
 }
 
 function addDisb() {

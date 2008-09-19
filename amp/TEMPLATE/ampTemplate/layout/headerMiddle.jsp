@@ -454,14 +454,6 @@ function adminHelp(){
                                             </a>
                                         </li>
                                        </feature:display>
-                                        
-                                        <feature:display name="Programs" module="GIS DASHBOARD">
-                                        <li class="yuiampmenuitem">
-                                            <a class="yuiampmenuitemlabel" href="#">
-                                            <digi:trn key="aim:programs">Programs</digi:trn>
-                                            </a>
-                                        </li>
-                                        </feature:display>
                                         <module:display name="GIS DASHBOARD">
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/gis/showGisDashboard.do">

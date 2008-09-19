@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
@@ -416,7 +417,8 @@ public final class AdvancedReportUtil {
 	                "where tr.report=:qid ";
 	            qry = session.createQuery(queryString);
 	            qry.setParameter("qid", qid, Hibernate.LONG);
-	            Iterator itr = qry.list().iterator();
+	            List lst	= qry.list();
+	            Iterator itr = lst.iterator();
 	            Collection col = new ArrayList();
 	            while (itr.hasNext()) {
 	                ampTeamReports = (AmpTeamReports) itr.next();

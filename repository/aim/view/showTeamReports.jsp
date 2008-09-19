@@ -2,10 +2,10 @@
 <%@ page import="org.digijava.module.aim.form.ReportsForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
@@ -122,6 +122,7 @@ function confirmFunc() {
           </digi:link> &gt; ${breadCrumb}</td></tr>
         <tr>
           <td height=16 align="left" vAlign=center>
+          	<digi:errors/>
           	<span class=subtitle-blue>
             	${pageTitle}
             </span>
@@ -249,7 +250,6 @@ function confirmFunc() {
                   <table align=center cellPadding=0 cellSpacing=0 width="100%">
                     <tr>                    
                       <td>
-                        <digi:errors/>
                         <table border=0 cellPadding=3 cellSpacing=3 width="100%" >
                           <tr bgColor=#999999>
                             <td bgColor=#999999 align="center" height="20">

@@ -873,8 +873,8 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimTeamReportsForm" path="/aim/deleteAllReports" scope="session" type="org.digijava.module.aim.action.DeleteAllReports" validate="false">
-      <forward name="forwardReports" path="/aim/viewTeamReports.do?tabs=false" redirect="true" />
-      <forward name="forwardTabs" path="/aim/viewTeamReports.do?tabs=true" redirect="true" /> 
+      <forward name="forwardReports" path="/aim/viewTeamReports.do?tabs=false" redirect="false" />
+      <forward name="forwardTabs" path="/aim/viewTeamReports.do?tabs=true" redirect="false" /> 
     </action>
     <action input="/showLayout.do?layout=teamActivities" name="aimTeamActivitiesForm" path="/aim/updateTeamActivity" scope="session" type="org.digijava.module.aim.action.UpdateTeamActivities" validate="false">
       <forward name="showAddActivity" path="/showLayout.do?layout=addTeamActivities" />

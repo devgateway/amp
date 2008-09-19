@@ -1,7 +1,18 @@
+	<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+	
+	<c:set var="className" value="toolbar"/>
+	<c:set var="imgName" value="prev.png"/>
+	<c:set var="disabledString" value=" "/>
+	<c:if test="${stepNum==0}">
+		<c:set var="className" value="toolbar-dis"/>
+		<c:set var="imgName" value="prev_dis.png"/>
+		<c:set var="disabledString" value="disabled='disabled'"/>
+	</c:if>
+		
 	<div class="subtabs">
-		<button id="step${stepNum}_prev_button" type="button" class="toolbar"
+		<button id="step${stepNum}_prev_button" type="button" class="${className}" ${disabledString}
 			onclick="repManager.previousStep();">
-			<img src="/TEMPLATE/ampTemplate/images/prev.png" class="toolbar" />
+			<img src="/TEMPLATE/ampTemplate/images/${imgName}" class="toolbar" />
 			<digi:trn key="btn:previous">Previous</digi:trn>
 		</button>
 		<button id="step${stepNum}_next_button" type="button" class="toolbar-dis" 

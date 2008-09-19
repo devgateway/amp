@@ -2013,7 +2013,7 @@ public class TeamUtil {
                    queryString = "select DISTINCT r from " + AmpReports.class.getName()
                        + " r " + " where " + tabFilter + " (r.ownerId=:p.memberid or r.ampReportId IN (select r2.report from " 
                        + AmpTeamReports.class.getName() 
-                       + " r2 " + " where r2.team=:p.teamid)) order by r.name";
+                       + " r2 " + " where r2.team=:p.teamid and r2.teamView = true)) order by r.name";
                    qry = session.createQuery(queryString);
                    qry.setParameter("p.memberid", ampteammember.getAmpTeamMemId());
                    qry.setParameter("p.teamid", teamId);

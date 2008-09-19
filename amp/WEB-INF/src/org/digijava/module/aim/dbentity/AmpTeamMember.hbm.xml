@@ -45,7 +45,7 @@
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>
 		</set>
 		
-		<set name="desktopTabSelections" lazy="false" inverse="true" cascade="all-delete-orphan" >
+		<set name="desktopTabSelections" lazy="true" inverse="true" cascade="all-delete-orphan" >
 			<key column="owner_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpDesktopTabSelection"  />
 		</set>

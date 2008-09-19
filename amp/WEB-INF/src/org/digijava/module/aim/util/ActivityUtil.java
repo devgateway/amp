@@ -87,6 +87,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
@@ -757,11 +758,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           //try to find connection of current activity with current indicator
           IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
           //if no connection found then create new one. Else clear old values for the connection.
+          boolean newIndicator = false;
           if (indConn==null){
         	  indConn=new IndicatorActivity();
               indConn.setActivity(activity);
               indConn.setIndicator(ind);
               indConn.setValues(new HashSet<AmpIndicatorValue>());
+              newIndicator = true;
           }else{
         	  if (indConn.getValues()!=null && indConn.getValues().size()>0){
         		 /* for (AmpIndicatorValue value : indConn.getValues()) {
@@ -814,7 +817,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  indConn.getValues().add(indValRevised);
           }
           // save connection with its new values.
-          IndicatorUtil.saveConnectionToActivity(indConn, session);
+          if(newIndicator){
+        	  // Save the new indicator that is NOT present in the indicators collection from the Activity.
+        	  IndicatorUtil.saveConnectionToActivity(indConn, session);
+          } else {
+        	  // Save the activity in order to save the indicators collection and its changes (values).
+        	  // This is for AMP-4317, you can't save the collection because is in the Activity.
+        	  session.saveOrUpdate(activity);
+          }
         }
       }
         String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;

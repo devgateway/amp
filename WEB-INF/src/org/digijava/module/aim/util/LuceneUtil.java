@@ -501,12 +501,12 @@ public class LuceneUtil {
 	
 	public static void createHelp() throws IOException , EditorException, Exception{
 	
-		//boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir","isDir"));
+		boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir","isDir"));
 	
-		//if(!createDir){
+		if(!createDir){
 			logger.info("Building the help");
 				  LuceneUtil.addUpdatehelp(false);
-		//  }
+		  }
 	
 }
 

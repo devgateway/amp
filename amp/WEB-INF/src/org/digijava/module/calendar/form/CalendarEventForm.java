@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.helper.Team;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
 
 public class CalendarEventForm
@@ -316,8 +317,14 @@ public class CalendarEventForm
         organisations=null;
         selectedOrganisations=null;
         selectedOrganisationsCol=null;
+        
+       String dtformat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+	if (dtformat == null){
+		dtformat = "dd/mm/yyyy";
+        }
+	
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
 
         selectedStartDate=sdf.format(new Date());
         selectedStartTime="00:00";

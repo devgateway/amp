@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -21,6 +22,7 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -33,6 +35,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.Util;
@@ -49,6 +52,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.DbUtil;
+import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
 
 /**
@@ -497,7 +501,7 @@ public class LuceneUtil {
 	
 	public static void createHelp() throws IOException , EditorException, Exception{
 	
-		boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir"));
+		boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir","isDir"));
 	
 		if(!createDir){
 			logger.info("Building the help");
@@ -508,7 +512,7 @@ public class LuceneUtil {
 
 	 public static void addUpdatehelp(boolean update) throws IOException , EditorException, Exception{
 	 
-		Editor item = new Editor(); 
+		 HelpSearchData item = new HelpSearchData(); 
 		DateFormat formatter ; 
 	    Date date ; 
 	    
@@ -520,28 +524,32 @@ public class LuceneUtil {
 	    String leastUpDate = formatter.format(lastLucModDay);
 	    date = (Date)formatter.parse(leastUpDate);
 	
-  	    List<Editor> data =  HelpUtil.getAllHelpData();
+  	    Collection data =  HelpUtil.getAllHelpData();
 		  
-		for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
+		for(Iterator<HelpSearchData> iter = data.iterator(); iter.hasNext(); ) {
 		
-			 item = (Editor) iter.next();
+			 item = (HelpSearchData) iter.next();
  			 
              String article =  item.getBody();
-             int editkey = item.getEditorKey().indexOf("body:");
-             String title = item.getEditorKey().substring(editkey+5);
+             String title = item.getTopicKey();
+             String titTrnKey = item.getTitleTrnKey();
+             
+             String newCode = article.replaceAll("\\<.*?\\>","");
+            
              if(update){
             	 if(item.getLastModDate().after(date)){
             		 deleteHelp("title",title);
-            		 indexArticle(article, title);
+            		 indexArticle(newCode, title,titTrnKey);
             	 }
              	}else if(!update){
-             		indexArticle(article, title);	
+             		indexArticle(newCode, title,titTrnKey);	
              	}
             }
  	}
 	
 	
 	
+	 
 	
 	
 	public static Hits helpSearch(String field, String searchString){
@@ -549,7 +557,7 @@ public class LuceneUtil {
 		QueryParser parser = new QueryParser(field, analyzer);
 		Query query = null;
 		Hits hits = null;
-	
+		Document document = new Document();
 		
 		Searcher indexSearcher = null;
 		try {
@@ -557,6 +565,7 @@ public class LuceneUtil {
 			indexSearcher = new IndexSearcher(indexDirectory);
 			searchString = searchString.trim();
 			query = parser.parse("+"+searchString+"*");
+		
 			hits = indexSearcher.search(query);
 			}
 		} catch (Exception e1) {
@@ -566,22 +575,50 @@ public class LuceneUtil {
 		return hits;
 	}
 	
+	public static Object Highlighter(Field field,String searchString) throws IOException, ParseException{
+		Query query = null;
+		QueryParser parser = new QueryParser(field.getClass().getName(), analyzer);
 	
+		query = parser.parse(searchString);
+		
+		Object hA= highlight(field,query);
+		return hA;
+	}
 	
-	public static void indexArticle(String article, String title)
+	 private static Object highlight(Field field, Query query) throws IOException {
+
+		    query.rewrite(IndexReader.open(indexDirectory));
+		    QueryScorer scorer = new QueryScorer(query);
+		     SimpleHTMLFormatter formatter =
+		        new SimpleHTMLFormatter("<span class=\"highlight\">",
+		            "</span>");
+		    Highlighter highlighter = new Highlighter(formatter, scorer);
+		    Fragmenter fragmenter = new SimpleFragmenter(50);
+		    highlighter.setTextFragmenter(fragmenter);
+		
+		    String value = field.stringValue();
+		    TokenStream tokenStream = new StandardAnalyzer()
+		        .tokenStream(field.name(), new StringReader(value));
+		
+		    return highlighter.getBestFragments(tokenStream, value, 5, "...");
+		 }
+
+	
+	public static void indexArticle(String article, String title,String titTrnKey)
     throws Exception {
-		Document document = LuceneUtil.createDocument(article,title);
+		Document document = LuceneUtil.createDocument(article,title,titTrnKey);
 		LuceneUtil.indexDocument(document);
 		
 }	
 	
    
-	public static Document createDocument(String article, String title){
+	public static Document createDocument(String article, String title,String titTrnKey){
 
 		 Document document = new Document();
 		 document.add(new Field("title",title,Field.Store.YES,Field.Index.TOKENIZED));
+		 document.add(new Field("titletrnKey",titTrnKey,Field.Store.YES,Field.Index.TOKENIZED));
 		 document.add(new Field("article",article,Field.Store.YES,Field.Index.TOKENIZED));
-		 return document;
+	 return document;
 		
 	}
 

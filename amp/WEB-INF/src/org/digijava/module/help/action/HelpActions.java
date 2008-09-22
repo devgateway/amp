@@ -3,6 +3,8 @@ package org.digijava.module.help.action;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,10 +14,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -34,6 +38,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
+import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -49,6 +54,8 @@ import org.apache.lucene.store.Directory;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+
+import sun.misc.Regexp;
 
 
 
@@ -84,25 +91,34 @@ public class HelpActions extends DispatchAction {
 			 
 			 try {
 				 os = new OutputStreamWriter(response.getOutputStream());
+				 out = new PrintWriter(os, true);	 
 				 if(loadStatus != null){
-						 List<Editor> data =  HelpUtil.getAllHelpData();
+						 List<Editor> data =  HelpUtil.getAllHelpKey();
 						 
-						 for(Iterator<Editor> iter = data.iterator(); iter.hasNext(); ) {
+						 for(Iterator iter = data.iterator(); iter.hasNext(); ) {
 							  item = (Editor) iter.next();
 				 			
-				             int editkey = item.getEditorKey().indexOf("body:");
-				             String title = item.getEditorKey().substring(editkey+5);
+				           
+							  int editkey = item.getEditorKey().indexOf("body:");
+					          String title = item.getEditorKey().substring(editkey+5);
 				             if(title.length()>=loadStatus.length()){
 				             if(loadStatus.toLowerCase().equals(title.toLowerCase().substring(0,loadStatus.length()))){
 				            	
-				            	out = new PrintWriter(os, true);	 
+				            	
 				                out.println("<div id="+title+" onclick=\"select("+title+")\" onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">"+title+"</div>");
 				             }
 				           }
 						}
 					 }
+			      if(out == null){
+			    	 
+			    	  out.println("<div onmouseover=\"this.className='silverThing'\" onmouseout=\"this.className='whiteThing'\">Not found</div>");
+			    	  out.flush();
+					  out.close();	
+			      }else{
 				 out.flush();
-				 out.close();	
+				 out.close();
+			    }
 	} catch (Exception e) {
 	     e.printStackTrace();
 	 }
@@ -123,8 +139,9 @@ public class HelpActions extends DispatchAction {
 	 	
 		 if(keywords != null){
 		 Collection<LabelValueBean> Searched = new ArrayList<LabelValueBean>();
-		
+		 String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
 		 Hits hits =  LuceneUtil.helpSearch("title", helpForm.getKeywords());
+		 String artikleTitle;
 		 
 		 HelpForm help = (HelpForm) form;
 		 
@@ -142,8 +159,23 @@ public class HelpActions extends DispatchAction {
     		  Document doc = hits.doc(i);
 
 			   String title = doc.get("title");
-			   String article = doc.get("article");
-			   Searched.add(new LabelValueBean(title,article));
+			   String titletrnKey = doc.get("titletrnKey");
+			   String artikle = doc.get("article");
+			   Field field = doc.getField("article");
+			   Object artidcle = LuceneUtil.Highlighter(field,title);
+			   
+			   if(!artidcle.equals("")){
+			   
+				   artikleTitle = artidcle.toString();
+			   }else{
+				   artikleTitle = doc.get("article");
+				   artikleTitle.substring(0, 50);
+				   
+			   }
+			     
+			   String titlelink = 
+				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+HelpUtil.getTrn(titletrnKey,title, request)+"</a>";
+			   Searched.add(new LabelValueBean(titlelink,artikleTitle+"..."));
 			   help.setSearched(Searched);
 			   help.setTopicKey(title);
 			   help.setFlag(false);
@@ -155,6 +187,8 @@ public class HelpActions extends DispatchAction {
 		 return mapping.findForward("help");		
 	}
 
+	
+	
 	public ActionForward viewSelectedHelpTopic(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -164,15 +198,22 @@ public class HelpActions extends DispatchAction {
 				.getInstanceName();
 		HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
 				siteId, moduleInstance);
-		helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
-		helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
-		helpForm.setHelpErrors(null);
-		helpForm.setSearched(null);
-		helpForm.setFlag(true);
-		LuceneUtil.addUpdatehelp(true);
+		if(helpTopic != null){
+			helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
+			helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
+			
+			helpForm.setHelpErrors(null);
+			helpForm.setSearched(null);
+			helpForm.setFlag(true);
+			LuceneUtil.addUpdatehelp(true);
+	  
 		if(helpTopic.getParent()!=null){
 			helpForm.setParentId(helpTopic.getParent().getHelpTopicId());
-		}		
+		}
+		}else{
+		helpForm.setBodyEditKey("");
+		helpForm.setTitleTrnKey("");
+		}
 		return mapping.findForward("help");
 	}
 

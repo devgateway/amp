@@ -36,6 +36,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
+import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.translation.util.DbUtil;
 
@@ -293,7 +294,8 @@ public class HelpUtil {
 	return true;	
 	}
 	
-    public static List<Editor> getAllHelpData() throws 
+	
+	public static List<Editor> getAllHelpKey() throws 
     EditorException {
 	
 	Session session = null;
@@ -313,7 +315,77 @@ public class HelpUtil {
 	}
 	return helpTopics;
 }
+
 	
+    public static Collection getAllHelpData() throws 
+    EditorException {
+	
+	Session session = null;
+	Query query = null;
+	
+	Collection helpTopics = new ArrayList();
+	
+	try {
+		session = PersistenceManager.getRequestDBSession();
+		String queryString = "select t from "
+			+ HelpTopic.class.getName()+ " t, "+ Editor.class.getName()+ " e "
+			+"where (t.bodyEditKey=e.editorKey) order by e.lastModDate";
+		 query = session.createQuery(queryString);
+
+		
+		//		 Query q = session.createQuery(" from e in class " +
+//                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
+//
+		//helpTopics = query.list();
+		Iterator itr = query.list().iterator();
+		HelpSearchData helpsearch;
+		
+		while (itr.hasNext()) {
+			HelpTopic help = (HelpTopic) itr.next();
+			helpsearch = new HelpSearchData();
+			helpsearch.setTitleTrnKey(help.getTitleTrnKey());
+			helpsearch.setTopicKey(help.getTopicKey());
+			List<Editor> Body = getbody(help.getBodyEditKey());
+			Iterator iter = Body.iterator();
+			while (iter.hasNext()) {
+				Editor item = (Editor) iter.next();
+				helpsearch.setBody(item.getBody());
+				helpsearch.setLastModDate(item.getLastModDate());
+			}
+
+			helpTopics.add(helpsearch);	
+		}
+		
+		
+	} catch (Exception e) {
+		logger.error("Unable to load help data");
+			throw new EditorException("Unable to Load Help data", e);
+	}
+	return helpTopics;
+}
+	
+    
+    public static List<Editor> getbody(String bodyKey){
+    	List<Editor> result = null;
+    	Session session = null;
+    	Query query = null;	
+    
+    	try {
+    	session = PersistenceManager.getRequestDBSession();
+    	
+    	String queryString = "select topic from "+ Editor.class.getName() + " topic where (topic.editorKey=:bodyKey)";
+    	     query = session.createQuery(queryString);
+    	     query.setParameter("bodyKey", bodyKey);
+    	     result = query.list();
+    	     
+		} catch (Exception e) {
+			logger.error("Unable to load help data");
+		}
+    
+    	return result;
+    }
+    
+    
 	 public static String renderLevelGroup(Collection topics) {
 		String retVal="";
 		Iterator iter = topics.iterator();

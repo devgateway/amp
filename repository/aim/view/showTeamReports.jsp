@@ -142,6 +142,9 @@ function confirmFunc() {
             <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%">
               <tr>
                 <td>
+                <c:set var="reportNumber" value="${fn:length(aimTeamReportsForm.reports)}">
+                  </c:set>
+                  <c:if test="${reportNumber != 0}">
                   <table cellpadding="3" cellspacing="3" border="0" width="100%" height="20">
                     <tr>
                       <td>                                     
@@ -243,6 +246,7 @@ function confirmFunc() {
                       </td>
                     </tr>
                   </table>
+                  </c:if>
                 </td>
               </tr>
               <tr bgColor=#f4f4f2>
@@ -302,10 +306,8 @@ function confirmFunc() {
                                 </b>
                               </td>
                             <% } %>
-                          </tr>
-                          <c:set var="count" value="${fn:length(aimTeamReportsForm.reports)}">
-                          </c:set>
-                          <c:if test="${count == 0}">
+                          </tr>                          
+                          <c:if test="${reportNumber == 0}">
                           <tr>
                             <td colspan="4">
                             <digi:trn key="aim:noreportspresent">
@@ -520,6 +522,7 @@ function confirmFunc() {
                 </td>
               </tr>
               <tr><td valign="top">
+              <c:if test="${reportNumber != 0}">
                   <table cellpadding="3" cellspacing="3" border="0" width="100%" height="20">
                     <tr>
                       <td>                                     
@@ -607,6 +610,7 @@ function confirmFunc() {
                       </td>
                     </tr>
                   </table>
+                  </c:if>
               </td></tr>
             </table>
           

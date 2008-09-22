@@ -174,7 +174,7 @@ public class HelpActions extends DispatchAction {
 			   }
 			     
 			   String titlelink = 
-				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+HelpUtil.getTrn(titletrnKey,title, request)+"</a>";
+				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+title+"</a>";
 			   Searched.add(new LabelValueBean(titlelink,artikleTitle+"..."));
 			   help.setSearched(Searched);
 			   help.setTopicKey(title);

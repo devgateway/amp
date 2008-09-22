@@ -644,7 +644,7 @@ public class LuceneUtil {
 			}
 		
 		StandardAnalyzer analyzer  = new StandardAnalyzer();
-        IndexWriter writer = new IndexWriter(indexDirectory, analyzer, true);
+        IndexWriter writer = new IndexWriter(indexDirectory, analyzer, createDir);
         writer.addDocument(document);
         writer.optimize();
         writer.close();

@@ -13,6 +13,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
+import org.digijava.module.aim.helper.Constants;
 
 public class CalendarEventForm
     extends ActionForm {
@@ -318,7 +319,7 @@ public class CalendarEventForm
         selectedOrganisations=null;
         selectedOrganisationsCol=null;
         
-       String dtformat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+       String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 	if (dtformat == null){
 		dtformat = "dd/mm/yyyy";
         }

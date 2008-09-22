@@ -501,12 +501,12 @@ public class LuceneUtil {
 	
 	public static void createHelp() throws IOException , EditorException, Exception{
 	
-		boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir","isDir"));
+		//boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir","isDir"));
 	
-		if(!createDir){
+		//if(!createDir){
 			logger.info("Building the help");
 				  LuceneUtil.addUpdatehelp(false);
-		  }
+		//  }
 	
 }
 
@@ -634,7 +634,7 @@ public class LuceneUtil {
     	
 		boolean createDir = IndexReader.indexExists(indexDirectory);
 			
-			if(createDir == false){
+    	if(createDir == false){
 		
 				createDir= true;
 		
@@ -644,7 +644,7 @@ public class LuceneUtil {
 			}
 		
 		StandardAnalyzer analyzer  = new StandardAnalyzer();
-        IndexWriter writer = new IndexWriter(indexDirectory, analyzer, createDir);
+        IndexWriter writer = new IndexWriter(indexDirectory, analyzer, true);
         writer.addDocument(document);
         writer.optimize();
         writer.close();

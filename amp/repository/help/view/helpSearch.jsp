@@ -66,7 +66,7 @@ function GetXmlHttpObject()	{
 
 function select(title){
 		document.getElementById("selected").value=document.getElementById(title.innerHTML).innerHTML;
-   		$("#livesearch").hide();
+		$("#livesearch").hide();
 }  
 
 </script>

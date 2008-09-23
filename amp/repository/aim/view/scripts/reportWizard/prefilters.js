@@ -1,8 +1,12 @@
-function Filters (filterPanelName, connectionFailureMessage, loadingDataMessage, savingDataMessage, cannotSaveFiltersMessage) {
+function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessage, loadingDataMessage, 
+				savingDataMessage, cannotSaveFiltersMessage) {
 	this.connectionFailureMessage	= connectionFailureMessage;
+	this.filterProblemsMessage		= filterProblemsMessage;
 	this.loadingDataMessage			= loadingDataMessage;
 	this.savingDataMessage			= savingDataMessage;
 	this.cannotSaveFiltersMessage	= cannotSaveFiltersMessage;
+	
+	this.resetString				= "&doreset=true";
 	
 	this.filterPanel = new YAHOO.widget.Panel("new", {
 			width:"700px",
@@ -32,6 +36,9 @@ Filters.prototype.success	= function (o) {
 		YAHOO.util.Event.addListener( "filterPickerSubmitButton", "click", this.saveFilters.saveFilters, this.saveFilters ) ;
 		
 	}
+	else {
+		this.filterPanel.setBody ( "<font color='red'>" + this.filterProblemsMessage + "</font>");
+	}
 }
 Filters.prototype.failure	= function (o) {
 	this.filterPanel.setBody( "<font color='red'>" + this.connectionFailureMessage + "</font>");
@@ -41,7 +48,8 @@ Filters.prototype.showFilters	= function() {
 	this.filterPanel.setBody( "<div style='text-align: center'>" + this.loadingDataMessage + 
 			"... <br /> <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/></div>" );
 	this.filterPanel.show();
-	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true", this);
+	YAHOO.util.Connect.asyncRequest("GET", "/aim/reportsFilterPicker.do?sourceIsReportWizard=true"+this.resetString, this);
+	this.resetString		= "";
 }
 
 function SaveFilters (filterObj) {

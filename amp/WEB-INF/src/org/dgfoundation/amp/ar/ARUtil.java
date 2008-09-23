@@ -27,6 +27,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -143,6 +144,7 @@ public final class ARUtil {
 		if ( initFilter!=null && "true".equals(initFilter) ) {
 			FilterUtil.populateFilter(r, af);
 			FilterUtil.prepare(request, af);
+			httpSession.setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, af);
 		}
 		af.readRequestData(request);
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, af);

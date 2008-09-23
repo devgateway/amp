@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -80,6 +81,11 @@ public class ReportsFilterPicker extends MultiAction {
 		String sourceIsReportWizard			= request.getParameter("sourceIsReportWizard");
 		if ("true".equals(sourceIsReportWizard) ) {
 			filterForm.setSourceIsReportWizard(true);
+			if ( request.getParameter("doreset") != null ) {
+				filterForm.setIsnewreport(true);
+				reset(form, request, mapping);
+				filterForm.setIsnewreport(false);
+			}
 		}
 		else
 			filterForm.setSourceIsReportWizard(false);
@@ -108,6 +114,12 @@ public class ReportsFilterPicker extends MultiAction {
 
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession.getAttribute(Constants.CURRENT_MEMBER);
+		
+		AmpARFilter existingFilter		= (AmpARFilter)request.getSession().getAttribute(ReportWizardAction.EXISTING_SESSION_FILTER);
+		if ( existingFilter != null ) { 
+			FilterUtil.populateForm(filterForm, existingFilter);
+			request.getSession().setAttribute(ReportWizardAction.EXISTING_SESSION_FILTER, null);
+		}
 
 		Long ampTeamId = null;
 		if (teamMember != null)
@@ -576,6 +588,7 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setPlanMinRank(filterForm.getPlanMinRank());
 		if (!all.equals(filterForm.getRegionSelected()))
 			arf.setRegionSelected(filterForm.getRegionSelected() == null || filterForm.getRegionSelected() == -1 ? null : filterForm.getRegionSelected());
+		
 		if (!all.equals(filterForm.getApprovalStatusSelected())){
 			if(filterForm.getApprovalStatusSelected() != null){
 				ArrayList<String> appvals = new ArrayList<String>();
@@ -589,6 +602,9 @@ public class ReportsFilterPicker extends MultiAction {
 				arf.setApprovalStatusSelected(null);
 			}
 		}
+		else 
+			arf.setApprovalStatusSelected(null);
+		
 		if (filterForm.getSelectedStatuses() != null && filterForm.getSelectedStatuses().length > 0)
 			arf.setStatuses(new HashSet());
 		else
@@ -676,6 +692,8 @@ public class ReportsFilterPicker extends MultiAction {
 
 			}
 		}
+		else 
+			arf.setBudget(null);
 		
 		arf.setJustSearch(filterForm.getJustSearch());
 

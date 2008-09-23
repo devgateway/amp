@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
@@ -36,6 +37,7 @@ import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Identificator;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
@@ -63,7 +65,8 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public class ReportWizardAction extends MultiAction {
 	
-	public static final String SESSION_FILTER	= "reportWizardFilter";
+	public static final String SESSION_FILTER			= "reportWizardFilter";
+	public static final String EXISTING_SESSION_FILTER	= "existingReportWizardFilter";
 	
 	private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 	
@@ -134,6 +137,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setPublicReport(false);
 		
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
+		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 
 	}
 	
@@ -199,6 +203,14 @@ public class ReportWizardAction extends MultiAction {
 		this.getFieldIds(myForm.getSelectedColumns(), cols);
 		this.getFieldIds(myForm.getSelectedHierarchies(), hiers);
 		this.getFieldIds(myForm.getSelectedMeasures(), meas);
+		
+		Set<AmpFilterData> fdSet	= ampReport.getFilterDataSet();
+		if ( fdSet != null && fdSet.size() > 0 ) {
+			AmpARFilter filter		= new AmpARFilter();
+			FilterUtil.populateFilter(ampReport, filter);
+			FilterUtil.prepare(request, filter);
+			request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
+		}
 				
 		
 		return this.modeShow(mapping, form, request, response);
@@ -276,6 +288,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 			
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
+		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		

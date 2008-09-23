@@ -43,6 +43,9 @@
 	<c:set var="failureMessage">
 		<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>
 	</c:set>
+	<c:set var="filterProblemsMessage">
+		<digi:trn key="aim:reportwizard:filterProblems">Apparently there are some problems displaying filters pop-up. Please try again.</digi:trn>
+	</c:set>
 	<c:set var="loadingDataMessage">
 		<digi:trn key="aim:reportwizard:loadingData">Loading data. Please wait.</digi:trn>
 	</c:set>
@@ -202,7 +205,7 @@
 			MyDragAndDropObject.selectObjsByDbId ("source_hierarchies_ul", "dest_hierarchies_ul", selectedHiers);
 			MyDragAndDropObject.selectObjsByDbId ("source_measures_ul", "dest_measures_ul", selectedMeas);
 			
-			repFilters					= new Filters("${filterPanelName}", "${failureMessage}", 
+			repFilters					= new Filters("${filterPanelName}", "${failureMessage}", "${filterProblemsMessage}", 
 												"${loadingDataMessage}", "${savingDataMessage}", "${cannotSaveFiltersMessage}");
 			saveReportEngine			= new SaveReportEngine("${savingMessage}","${failureMessage}");
 			

@@ -327,6 +327,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedNatPlanObj = null;
 			this.selectedPrimaryPrograms = null;
 			this.selectedSecondaryPrograms = null;
+			this.approvalStatusSelected	= null;
 			if (request.getParameter("applyFormat")!=null)
 				this.customUseGrouping=false;
 		}

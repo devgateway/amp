@@ -3,20 +3,20 @@ package org.digijava.module.aim.ar.util;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.Session;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class FilterUtil {
@@ -105,4 +105,89 @@ public class FilterUtil {
 			
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER, arf);
 	}
+	
+	public static Long[] getObjectsIds (Collection<? extends Identifiable> col) {
+		if ( col == null )
+			return null;
+		
+		Long [] ret	= new Long[col.size()];
+		Iterator<? extends Identifiable> iter	= col.iterator();
+		for (int i=0; iter.hasNext(); i++) {
+			Object id	= iter.next().getIdentifier();
+			try {
+				ret[i]		= Long.parseLong( id.toString() );
+			}
+			catch(NumberFormatException e) {
+				e.printStackTrace();
+				return null;
+			}
+				
+		}
+		
+		return ret;
+	}
+	
+	public static void populateForm ( ReportsFilterPickerForm form, AmpARFilter filter ) {
+
+		// for each sector we have also to add the subsectors
+		form.setSelectedSectors( FilterUtil.getObjectsIds(filter.getSelectedSectors()) );
+		form.setSelectedSecondarySectors( FilterUtil.getObjectsIds(filter.getSelectedSecondarySectors()) );
+	
+		form.setSelectedNatPlanObj( FilterUtil.getObjectsIds(filter.getSelectedNatPlanObj()) );
+		form.setSelectedPrimaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedPrimaryPrograms()) );
+		form.setSelectedSecondaryPrograms( FilterUtil.getObjectsIds(filter.getSelectedSecondaryPrograms()) );
+		
+		form.setText( filter.getText() );
+		form.setIndexString( filter.getIndexText() );
+		
+		form.setFromYear( filter.getYearFrom()!=null ? filter.getYearFrom().longValue() : null );
+		form.setToYear( filter.getYearTo()!=null ? filter.getYearTo().longValue() : null );
+		form.setFromMonth( filter.getFromMonth() );
+		form.setToMonth( filter.getToMonth() );
+		form.setFromDate( filter.getFromDate() );
+		form.setToDate( filter.getToDate() );
+
+		if (filter.getCurrency() != null)
+			form.setCurrency( filter.getCurrency().getAmpCurrencyId() );
+		
+		form.setLineMinRank( filter.getLineMinRank() );
+		form.setPlanMinRank( filter.getPlanMinRank() );
+		form.setRegionSelected( filter.getRegionSelected() );
+		
+		Collection<String> appStatuses		= filter.getApprovalStatusSelected();
+		if ( appStatuses!=null && appStatuses.size()>0  ) {
+			form.setApprovalStatusSelected( appStatuses.toArray() );
+		}
+		
+		form.setSelectedStatuses( FilterUtil.getObjectsIds(filter.getStatuses()) ) ;
+
+		form.setSelectedProjectCategory( FilterUtil.getObjectsIds(filter.getProjectCategory()) );
+		
+		form.setSelectedFinancingInstruments( FilterUtil.getObjectsIds(filter.getFinancingInstruments()) ); 
+
+		form.setSelectedTypeOfAssistance( FilterUtil.getObjectsIds(filter.getTypeOfAssistance()) );
+
+		form.setPageSize( filter.getPageSize() );
+
+		form.setSelectedRisks( FilterUtil.getObjectsIds(filter.getRisks()) ); 
+		form.setGovernmentApprovalProcedures( filter.getGovernmentApprovalProcedures() );
+		form.setJointCriteria( filter.getJointCriteria() );
+
+		form.setSelectedDonorTypes( FilterUtil.getObjectsIds(filter.getDonorTypes()) );
+		form.setSelectedDonorGroups( FilterUtil.getObjectsIds(filter.getDonorGroups()) );
+
+		if (filter.getBudget() != null)
+			form.setSelectedBudget( filter.getBudget()?1:2 );
+		
+		form.setJustSearch( filter.isJustSearch() );
+		form.setRenderStartYear( filter.getRenderStartYear()>0 ? filter.getRenderStartYear() : -1 );
+		form.setRenderEndYear( filter.getRenderEndYear()>0 ? filter.getRenderEndYear() : -1 );
+		
+		form.setSelectedBeneficiaryAgency( FilterUtil.getObjectsIds(filter.getBeneficiaryAgency()) );
+		form.setSelectedDonnorAgency( FilterUtil.getObjectsIds(filter.getDonnorgAgency()) );
+		form.setSelectedImplementingAgency( FilterUtil.getObjectsIds(filter.getImplementingAgency()) );
+		form.setSelectedExecutingAgency( FilterUtil.getObjectsIds(filter.getExecutingAgency()) );
+		
+	}
+	
 }

@@ -46,6 +46,7 @@ import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
 import java.util.*;
+import org.digijava.module.aim.helper.Constants;
 
 public class ShowCalendarEvent extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -226,7 +227,13 @@ public class ShowCalendarEvent extends Action {
             calendar.setSiteId(moduleInstance.getSite().getSiteId());
 
             // selected start date and selected end date
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            if (dtformat == null) {
+                dtformat = "dd/mm/yyyy";
+            }
+
+
+            SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
 
             String startDateTime = ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
             String endDateTime = ceform.getSelectedEndDate() + " " + ceform.getSelectedEndTime();

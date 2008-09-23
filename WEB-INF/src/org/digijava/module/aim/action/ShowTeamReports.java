@@ -18,8 +18,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.harvest.DBUtil;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ActivityForm;
@@ -65,7 +70,7 @@ public class ShowTeamReports extends Action {
 		rf.setCurrentMemberId(tm.getMemberId());
 		
 		if(action==null){
-			getAllReports(appSettingSet, rf, tm);
+			getAllReports(appSettingSet, rf, tm, request);
 		}
 		                                             
 		int page = 0;
@@ -126,7 +131,7 @@ public class ShowTeamReports extends Action {
 		rf.setTotalPages(totalPages.intValue());
 	}
 
-	private void getAllReports(boolean appSettingSet, ReportsForm rf, TeamMember tm) {
+	private void getAllReports(boolean appSettingSet, ReportsForm rf, TeamMember tm, HttpServletRequest request) {
 		if (rf.getCurrentPage() == 0) {
 			rf.setCurrentPage(FIRST_PAGE);
 		}
@@ -176,10 +181,46 @@ public class ShowTeamReports extends Action {
 			if(teamResults!=null){
 				reps.addAll(teamResults);
 			}
-
+			//
+			// requirements for translation purposes of hierarchies
+			AmpReports el = null;
+			String siteId = RequestUtils.getSite(request).getSiteId();
+			String locale = RequestUtils.getNavigationLanguage(request).getCode();
+			String text = null;
+			String translatedText = null;
+			String prefix = "aim:reportbuilder:";
+			Iterator iterator = reps.iterator();
+			Set<AmpReports> transReport = new TreeSet<AmpReports>(
+					new AdvancedReportUtil.AmpReportIdComparator());			
+			while (iterator.hasNext()) {
+				el = (AmpReports) iterator.next(); 
+				if (el.getHierarchies() != null) {
+					AmpReportHierarchy arh = null;
+					Set h = new TreeSet<AmpReportHierarchy>();
+					Iterator iterator2 = el.getHierarchies().iterator();					
+					while (iterator2.hasNext()) {
+						arh = (AmpReportHierarchy) iterator2.next();
+						text = arh.getColumn().getColumnName();
+						try {
+							translatedText = TranslatorWorker.translate(prefix
+									+ text.toLowerCase(), locale, siteId);
+						} catch (WorkerException e) {
+							e.printStackTrace();
+						}
+						if (translatedText.compareTo("") == 0)
+							translatedText = text;
+						arh.getColumn().setColumnName(translatedText);
+						//
+						h.add(arh);
+					}
+					el.setHierarchies(h);					
+				}
+				transReport.add(el);
+			}					
+			//
 			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
 			//do not add this in ArrayList constructor.
-			sortedReports.addAll(reps);
+			sortedReports.addAll(transReport);
 			//AmpReports are comparable by name, so this will sort by name.
 			Collections.sort(sortedReports);
 			rf.setReports(sortedReports);

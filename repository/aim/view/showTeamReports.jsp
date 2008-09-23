@@ -401,17 +401,17 @@ function confirmFunc() {
                                   </logic:equal>                                  
                                   <logic:equal name="report" property="options" value="A">
                                     <li>
-                                      Annual
+                                      <digi:trn key="aim:annualreport">Annual</digi:trn>
                                     </li>
                                   </logic:equal>
                                   <logic:equal name="report" property="options" value="Q">
                                     <li>
-                                      Quarterly
+                                      <digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>                                      
                                     </li>
                                   </logic:equal>
                                   <logic:equal name="report" property="options" value="M">
                                     <li>
-                                      Monthly
+                                    <digi:trn key="aim:monthlyreport">Monthly</digi:trn>                                      
                                     </li>
                                   </logic:equal>
                                 </p>

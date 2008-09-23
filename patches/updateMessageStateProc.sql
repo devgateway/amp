@@ -9,7 +9,7 @@ CREATE PROCEDURE updateMessageStates()  MODIFIES SQL DATA
  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 
  UPDATE amp_message_settings SET msg_storage_per_msg_type=20;
- DELETE from amp_message_state where message_id in(SELECT amp_message_Id from amp_message where message_clazz='t');
+
  CREATE TEMPORARY TABLE tempStateId(message_state_id bigint(20) NOT NULL);
 
  UPDATE amp_message_state set   is_message_hidden=true where is_message_hidden is NULL;

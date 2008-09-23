@@ -35,6 +35,13 @@ mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e --
 mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables dg_group --where 'id IN (SELECT ug.group_id FROM dg_user_group ug, dg_user u where u.id=ug.user_id and u.email="admin@amp.org")';
 mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables dg_user_group --where 'user_id IN (SELECT ug.user_id FROM dg_user_group ug, dg_user u where u.id=ug.user_id and u.email="admin@amp.org")';
 
+#DUMPING THE APPLICATION SETTINGS
+mysqldump --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables amp_application_settings --where 'fis_cal_id IN (SELECT id FROM amp_global_settings WHERE settingsName="Default Calendar")';
+
+#DUMPING THE PROGRAM SETTINGS
+mysqldump --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables amp_program_settings --where 'default_hierarchy=2';
+mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e --no-create-info $extra $database --tables amp_theme --where 'amp_theme_id IN (SELECT at.amp_theme_id FROM amp_theme at, amp_program_settings aps WHERE at.amp_theme_id=aps.default_hierarchy AND aps.default_hierarhcy=2)'; 
+
 #DUMPIG EXTRA TABLES
 mysqldump --hex-blob  --default-character-set=utf8 --single-transaction -c -e $extra $database --tables util_global_settings_possible_values;
 

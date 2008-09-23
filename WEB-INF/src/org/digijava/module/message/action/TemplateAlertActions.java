@@ -95,6 +95,19 @@ public class TemplateAlertActions extends DispatchAction {
 	    	        	 	
 	    	//saving template
 	    	AmpMessageUtil.saveOrUpdateMessage(newTemplate);    	
+                	
+	    //the code below is used to create messagesStates in the AmpMessageWorker.java
+			if(messageReceivers!=null && messageReceivers.length>0){				
+				for (String receiver : messageReceivers) {				
+					if(receiver.startsWith("m")){//<--this means that receiver is team				
+					//<--receiver is team member
+							Long memId=new Long(receiver.substring(2));
+							String teamName = TeamMemberUtil.getAmpTeamMember(memId).getAmpTeam().getName();
+							createMessageState(newTemplate,memId,teamName);							
+						
+					}				
+				}		
+			}
 	    	//cleaning form values
 	    	setDefaultValues(msgForm);
 

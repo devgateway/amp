@@ -1037,6 +1037,11 @@
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>group</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>actions</name>
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>

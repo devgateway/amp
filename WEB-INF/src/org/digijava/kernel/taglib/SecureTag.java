@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import javax.security.auth.Subject;
@@ -41,6 +42,7 @@ import org.digijava.kernel.security.ModuleInstancePermission;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.security.SitePermission;
 import org.digijava.kernel.security.permission.ObjectPermission;
+import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 
@@ -51,6 +53,7 @@ public class SecureTag
 
     private Boolean globalAdmin = null;
     private String actions;
+    private String group;
     private Boolean authenticated = null;
     private Boolean granted = new Boolean(true);
     private String idName = null;
@@ -74,6 +77,9 @@ public class SecureTag
             paramCount++;
         }
         if (authenticated != null) {
+            paramCount++;
+        }
+        if (getGroup() != null) {
             paramCount++;
         }
 
@@ -115,8 +121,25 @@ public class SecureTag
                 else {
                     return SKIP_BODY;
                 }
-            }
-            else {
+            } else if (getGroup() != null){
+            	Site site = RequestUtils.getSite(request);
+            	Iterator siteGroupIter = site.getGroups().iterator();
+            	while (siteGroupIter.hasNext()){
+            		Group siteGroup = (Group) siteGroupIter.next();
+            		if (siteGroup.getName().equals(this.getGroup())){
+            			User user = RequestUtils.getUser(request);
+            			Iterator userGroupIter = user.getGroups().iterator();
+            			while(userGroupIter.hasNext()){
+            				Group userGroup = (Group)userGroupIter.next();
+            				if (userGroup.getName().equals(this.getGroup())){
+            					return EVAL_BODY_INCLUDE;
+            				}
+            			}
+            			return SKIP_BODY;
+            		}
+            	}
+            	return SKIP_BODY;
+            } else {
                 try {
                     Subject subject = RequestUtils.getSubject(request);
                     StringTokenizer st = new StringTokenizer(actions, ",");
@@ -262,5 +285,13 @@ public class SecureTag
     public void setPermissionClass(String permissionClass) {
         this.permissionClass = permissionClass;
     }
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	public String getGroup() {
+		return group;
+	}
 
 }

@@ -1662,6 +1662,7 @@
 	<action path="/aim/insertDocumentsInSession" scope="session" type="org.digijava.module.aim.action.InsertDocumentsInSession" >
 		<forward name="forward" path="/showLayout.do?layout=aim_showDocumentsInPopup" />
 	</action>
+    <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
   </action-mappings>
 </struts-config>
 

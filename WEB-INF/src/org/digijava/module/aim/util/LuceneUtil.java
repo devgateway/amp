@@ -576,7 +576,7 @@ public class LuceneUtil {
 		return hits;
 	}
 	
-	public static Object Highlighter(Field field,String searchString) throws IOException, ParseException{
+	public static Object highlighter(Field field,String searchString) throws IOException, ParseException{
 		Query query = null;
 		QueryParser parser = new QueryParser(field.getClass().getName(), analyzer);
 	

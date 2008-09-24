@@ -162,7 +162,7 @@ public class HelpActions extends DispatchAction {
 			   String titletrnKey = doc.get("titletrnKey");
 			   String art;
 			   Field field = doc.getField("article");
-			   Object artidcle = LuceneUtil.Highlighter(field,title);
+			   Object artidcle = LuceneUtil.highlighter(field,title);
 			
                       if (!artidcle.equals("")) {
 

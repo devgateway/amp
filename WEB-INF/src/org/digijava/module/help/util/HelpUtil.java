@@ -436,6 +436,9 @@ public class HelpUtil {
 		Long	siteId	= RequestUtils.getSite(request).getId();
 		
 		Message m = null;
+                if(key==null){
+                    return defResult;
+                }
 		
 		try {
 			m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);

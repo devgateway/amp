@@ -500,13 +500,14 @@ public class LuceneUtil {
 	
 	
 	public static void createHelp() throws IOException , EditorException, Exception{
+            
 	
-		boolean createDir = LuceneUtil.isDir(LuceneUtil.createDocument("isDir","isDir","isDir"));
+		boolean createDir = LuceneUtil.isDir();
 	
 		if(!createDir){
 			logger.info("Building the help");
 				  LuceneUtil.addUpdatehelp(false);
-		  }
+		 }
 	
 }
 
@@ -623,7 +624,7 @@ public class LuceneUtil {
 	}
 
 	
-	public static boolean isDir(Document document){
+	public static boolean isDir(){
 		boolean createDir = IndexReader.indexExists(indexDirectory);
 		return createDir;
 	}

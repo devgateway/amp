@@ -61,10 +61,7 @@ if("On".equals(publicView)) {
 border-right:1px solid white;
 cursor:pointer;
 }
-
-
 </style>
-
 <div class="yuiamp-skin-amp" style="clear:both;">
     <div id="mainmenuHeader" class="yuiampmenu">
       <div class="bd">
@@ -154,7 +151,7 @@ border-right:1px solid white;
 %>
 </logic:notPresent>
 <logic:present name="ampAdmin" scope="session">
-<logic:equal name="ampAdmin" value="yes">
+	<logic:equal name="ampAdmin" value="yes">
 <script language="JavaScript">
 function help(){
 	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
@@ -222,15 +219,15 @@ function adminHelp(){
 										<feature:display name="Admin Help" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#" onClick="adminHelp();" >
-                                        	<digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
+                                        <digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
                                         </a>
                                         </li>
 										</feature:display>
 										<feature:display name="User Help" module="HELP">
                                         <li>
-                                       	 <a class="yuiampmenuitemlabel" href="#" onClick="help();">
-                                        	<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
-                                         </a>
+                                        <a class="yuiampmenuitemlabel" href="#" onClick="help();">
+                                        <digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                        </a>
                                         </li>
 										</feature:display>
 										<feature:display name="Support Request Form" module="HELP">
@@ -526,6 +523,15 @@ function adminHelp(){
                                                     <digi:insert attribute="transmode"/>
                                             </digi:secure>
                                         </logic:notEmpty>                                        
+                                        <logic:notEmpty name="currentMember" scope="session">
+                                            <digi:secure group="UserSideAdmins">
+		                                        <li>
+			                                        <a class="yuiampmenuitemlabel" href="/aim/switchDevelopmentMode.do">
+														<digi:trn key="admin:userdevmode">Developer Mode</digi:trn>
+			                                        </a>
+		                                        </li>
+                                            </digi:secure>
+                                        </logic:notEmpty>                                        
                                       </ul>
                                   </div>
                               </div>                    
@@ -545,7 +551,7 @@ function adminHelp(){
                                         <li>
                                          <a class="yuiampmenuitemlabel" href="#" onClick="help();">
                                         	<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
-                                         </a>
+                                        </a>
                                         </li>
 										</feature:display>
 										<feature:display name="Support Request Form" module="HELP">

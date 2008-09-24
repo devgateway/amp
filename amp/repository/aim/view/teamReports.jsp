@@ -214,9 +214,11 @@ function setHoveredTable(tableId, hasHeaders) {
 											<td valign="top">
 												<table width="100%">
 													<tr>
-														<td colspan="2">
-															<font color="blue">
-															<digi:trn key="aim:reportTeamSpecific">*T</digi:trn>
+														<td valign="top">
+															<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="absmiddle" />															
+                    									</td>
+                    									<td>	
+                    										<font color="blue">
 															<c:if test="${aimTeamReportsForm.showReportList == true}">
 																<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
 																	Indicates the report is viewable by all workspace members.
@@ -227,36 +229,29 @@ function setHoveredTable(tableId, hasHeaders) {
 																	Indicates the tab is viewable by all workspace members.
 																</digi:trn>
 															</c:if>
-															</font>
+															<br/>
+                    										<digi:trn key="aim:clicktomakethisprivate">Click here to make this private</digi:trn>	
+                    										</font>														
+                    									</td>
+														<td valign="top">
+															<img src= "/repository/contentrepository/view/images/make_private.gif" border="0" align="absmiddle" />
+															
 														</td>
-													</tr>
-													<tr>
-													<td colspan="2">
+														<td>	
 															<font color="blue">
-															<digi:trn key="aim:reportMemberSpecific">*M</digi:trn>
 															<c:if test="${aimTeamReportsForm.showReportList == true}">
-																<digi:trn key="aim:teamReportListViewableBySelected">
-																Indicates the report is viewable by selected team members,
-																whom the team leader assigns.
+																<digi:trn key="aim:teamReportListViewableByManagerdAndCreator">
+																Indicates the report is viewable by the Workspace Manager and the Creator of the Report
 																</digi:trn>
 															</c:if>
 															<c:if test="${aimTeamReportsForm.showReportList == false}">
-																<digi:trn key="aim:teamTabListViewableBySelected">
-																Indicates the tab is viewable by selected team members,
-																whom the team leader assigns.
+																<digi:trn key="aim:teamTabListViewableByManagerAndCreator">
+																Indicates the tab  viewable by the Workspace Manager and the Creator of the Report
 																</digi:trn>
 															</c:if>	
-															</font>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<img src= "/repository/contentrepository/view/images/make_private.gif" border="0" align="absmiddle" />
-                    										<digi:trn key="aim:clicktomakethisprivate">Click here to make this private</digi:trn>															
-                    									</td>
-														<td>
-															<img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="absmiddle" />
+															</br>
                     										<digi:trn key="aim:clicktomakethispublic">Click here to make this public</digi:trn>
+                    										</font>
                        									</td>
 													</tr>
 												</table>
@@ -285,7 +280,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																	</b>
 																</td>
 																<td valign="center" align="center" bgcolor="#999999" style="color:black" width="20%">
-																	<b><digi:trn key="aim:action">Action</digi:trn></b>
+																	<b><digi:trn key="aim:visibility">Visibility</digi:trn></b>
 																</td>
 															</table>
 														</td>
@@ -329,9 +324,6 @@ function setHoveredTable(tableId, hasHeaders) {
 																	</c:set>
 																	<logic:equal name="reports" property="teamView" value="false">
 																		<td width="3%">
-																			<font color="blue">
-																			<digi:trn key="aim:reportMemberSpecific">*M</digi:trn>
-																			</font>
 																		</td>
 																		<c:set target="${urlParams}" property="status" value="team" />
 																		<td width="24%" align="center">
@@ -347,23 +339,20 @@ function setHoveredTable(tableId, hasHeaders) {
 																			</c:if>	
 																			
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border=0>
+																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border=0>
 																			</digi:link>
 																		</td>
 																	</logic:equal>
 																	<logic:equal name="reports" property="teamView" value="true">
 																		<td width="3%">
-																			<font color="blue">
-																			<digi:trn key="aim:reportTeamSpecific">*T</digi:trn>
-																			</font>
 																		</td>
 																		<c:set target="${urlParams}" property="status" value="member" />
 																		<td width="24%" align="center">
 																			<c:set var="translation">
-																				<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
+																				
 																			</c:set>
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																					<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_private.gif" border=0>
+																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border=0>
 																			</digi:link>
 																		</td>
 																	</logic:equal>

@@ -160,20 +160,25 @@ public class HelpActions extends DispatchAction {
 
 			   String title = doc.get("title");
 			   String titletrnKey = doc.get("titletrnKey");
-			   String artikle = doc.get("article");
 			   String art;
 			   Field field = doc.getField("article");
 			   Object artidcle = LuceneUtil.Highlighter(field,title);
-			   
-			   if(!artidcle.equals("")){
-			   
-				   art = artidcle.toString();
-			   }else{
-				   artikleTitle = doc.get("article");
-				   art = artikleTitle.substring(0, 100);
-				   
-			   }
-			     
+			
+                      if (!artidcle.equals("")) {
+
+                          art = artidcle.toString();
+                      } else {
+                          artikleTitle = doc.get("article");
+                          if (artikleTitle == null) {
+                              artikleTitle = "";
+                          }
+                          if (artikleTitle.length() > 100) {
+                              art = artikleTitle.substring(0, 100);
+                          } else {
+                              art = artikleTitle;
+                          }
+                      }
+
 			   String titlelink = 
 				   "<a href=\"../../help/"+instanceName+"/helpActions.do?actionType=viewSelectedHelpTopic&topicKey="+title+"\">"+HelpUtil.getTrn(titletrnKey,title,request)+"</a>";
 			   Searched.add(new LabelValueBean(titlelink,art+"..."));

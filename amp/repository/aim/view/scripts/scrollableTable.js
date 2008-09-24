@@ -82,7 +82,10 @@ function scrollableTable(tableId,height){
 				
 			//this function should be used only in the case that the rows are using display = none
 			 this.setBodyForIE=function(){
-						var nclone=this.tbody.rows[3].cloneNode(true);//the clone of the first  full row
+			 			var rowIndex	= 3;
+			 			if ( this.tbody.rows.length <= 3 )
+			 				rowIndex	= this.tbody.rows.length -1;
+						var nclone=this.tbody.rows[rowIndex].cloneNode(true);//the clone of the first  full row
 						nclone.style.display='';
 						
 						nclone.setAttribute("id","ignoreToggle");

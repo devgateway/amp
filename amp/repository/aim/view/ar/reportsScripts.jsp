@@ -150,9 +150,18 @@ background-color: yellow;
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>" ></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/saveReports.js'/>" ></script>
 
 <!-- END - For DHTML Tab View of Filters -->
+
+
+<script type="text/javascript">
+SaveReportEngine.connectionErrorMessage = 
+	'<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>';
+SaveReportEngine.savingMessage =
+	'<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>';
+saveReportEngine	= null;	
+</script>
 
 <script type="text/javascript">
 		YAHOOAmp.namespace("YAHOOAmp.amptab");

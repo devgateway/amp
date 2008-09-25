@@ -100,7 +100,10 @@ public class ReportWizardAction extends MultiAction {
 		}
 		else {
 			try{
-				return this.modeSave(mapping, form, request, response);
+				if ( "true".equalsIgnoreCase( request.getParameter("dynamicSaveReport") ) ) 
+					return this.modeDynamicSave(mapping, form, request, response);
+				else
+					return this.modeSave(mapping, form, request, response);
 			}
 			catch (RuntimeException e) {
 				logger.error( e.getMessage() );
@@ -287,8 +290,45 @@ public class ReportWizardAction extends MultiAction {
 				
 		}
 			
-		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
-		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
+		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
+		
+		modeReset(mapping, form, request, response);
+		
+		return null;
+	}
+	
+	public ActionForward modeDynamicSave(ActionMapping mapping, ActionForm form, 
+			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception { 
+		
+		ReportWizardForm myForm		= (ReportWizardForm) form;
+		
+		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
+		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+		
+		AmpARFilter	filter		= (AmpARFilter)request.getSession().getAttribute(ArConstants.REPORTS_FILTER);
+		if (filter == null)
+			throw new Exception ("No filter object found in http Session");
+		String ampReportId			= request.getParameter("reportId");
+		if ( ampReportId == null ||ampReportId.length() == 0 )
+			throw new Exception ("No reportId found in request");
+		
+		String ampReportTitle			= request.getParameter("reportTitle");
+		if ( ampReportTitle == null || ampReportTitle.length() == 0 )
+			throw new Exception ("No reportTitle found in request");
+		
+		AmpReports ampReport			= ReportWizardAction.duplicateReportData( Long.parseLong(ampReportId) );
+		if (ampReport == null || ampReportTitle.length() == 0)
+			throw new Exception ("There was a problem getting the original report from the database");
+		
+		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), Long.parseLong(ampReportId) ) ) {
+			myForm.setDuplicateName(true);
+			throw new Exception("The name " + ampReportTitle + " is already used by another report");
+		}
+		
+		ampReport.setName( ampReportTitle );
+		ampReport.setOwnerId( ampTeamMember );
+		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
+		ampReport.setFilterDataSet( AmpFilterData.createFilterDataSet(ampReport, filter) );
 		
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		
@@ -448,6 +488,50 @@ public class ReportWizardAction extends MultiAction {
 		throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() + 
 				"' with annotation '" + annotationClass.getCanonicalName() 
 				+ "'");
+	}
+	
+	public static AmpReports duplicateReportData (Long ampReportId) {
+		AmpReports ampReport	= null;
+		try{
+			Session session				= PersistenceManager.getSession();
+			ampReport	= (AmpReports) session.load(AmpReports.class, ampReportId );
+			session.close();
+			
+			ampReport.setAmpReportId(null);
+			ampReport.setAmpPage(null);
+			ampReport.setFilterDataSet(null);
+			ampReport.setUpdatedDate(null);
+			ampReport.setLogs(null);
+			ampReport.setLocale(null);
+			ampReport.setSiteId(null);
+			ampReport.setMembers(null);
+			ampReport.setNameTrn(null);
+			ampReport.setOwnerId(null);
+			ampReport.setDesktopTabSelections(null);
+			
+			HashSet columns		= new HashSet();
+			columns.addAll( ampReport.getColumns() );
+			
+			HashSet hierarchies	= new HashSet();
+			hierarchies.addAll( ampReport.getHierarchies() );
+			
+			HashSet measures	= new HashSet();
+			measures.addAll( ampReport.getMeasures() );
+			
+			HashSet reportMeasures	= new HashSet();
+			reportMeasures.addAll( ampReport.getReportMeasures() );
+			
+			ampReport.setColumns( columns );
+			ampReport.setHierarchies( hierarchies );
+			ampReport.setMeasures( measures );
+			ampReport.setReportMeasures( reportMeasures );
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return ampReport;
 	}
 	
 	private class FieldsComparator implements Comparator<Object> {

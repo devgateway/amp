@@ -75,6 +75,20 @@ function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.titlePanel		= null;
 }
 
+SaveReportEngine.prototype.checkEnter		= function (e) {
+	if (e != null) {
+		var keyCode	= -1;
+		if (e.which != null)
+			keyCode	= e.which;
+		if (e.keyCode != null)
+			keyCode	= e.keyCode;
+		if ( keyCode == 13 && getReportTitle() != "" ) {
+			saveReportEngine.saveReport();
+			return false;
+		}
+	}
+	return true;
+}
 SaveReportEngine.prototype.success		= function (o) {
 	if ( o.responseText.length > 2 ) {
 		this.divEl.innerHTML	= o.responseText;

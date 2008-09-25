@@ -12,7 +12,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;

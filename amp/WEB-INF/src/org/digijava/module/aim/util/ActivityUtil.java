@@ -5,6 +5,8 @@
 
 package org.digijava.module.aim.util;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -2970,8 +2972,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           Iterator compItr = comp.iterator();
           while (compItr.hasNext()) {
             AmpComponent ampComp = (AmpComponent) compItr.next();
-            session.delete(ampComp);
+            ampComp.getActivities().remove(ampAct);           
+            //session.delete(ampComp);
           }
+          ampAct.setComponents(null);
         }
 
 
@@ -3099,6 +3103,24 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         logger.debug("comments deleted");
         
+        //Delete the connection with Team.
+        String deleteActivityTeam = "DELETE FROM amp_team_activities WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        Connection con = session.connection();
+        Statement stmt = con.createStatement();
+        int deletedRows = stmt.executeUpdate(deleteActivityTeam);
+        
+        //Delete the connection with amp_physical_performance.
+        String deletePhysicalPerformance = "DELETE FROM amp_physical_performance WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        con = session.connection();
+        stmt = con.createStatement();
+        deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
+        
+        //Delete the connection with Indicator Project.
+        String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        con = session.connection();
+        stmt = con.createStatement();
+        deletedRows = stmt.executeUpdate(deleteIndicatorProject);
+        
 //        ArrayList ipacontracts = org.digijava.module.aim.util.DbUtil.getAllIPAContractsByActivityId(ampAct.getAmpActivityId());
 //	    logger.debug("contracts number [Inside deleting]: " + ipacontracts.size());
 //	    if (ipacontracts != null) {
@@ -3111,7 +3133,18 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 //	    logger.debug("contracts deleted");
 
       }
-      session.delete(ampAct);
+      
+    //Section moved here from ActivityManager.java because it didn't worked there.
+	ActivityUtil.deleteActivityAmpComments(DbUtil.getActivityAmpComments(ampActId), session);
+	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
+	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
+	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
+	ActivityUtil.deleteActivityReportPhyPerformance(DbUtil.getActivityRepPhyPerformance(ampActId), session);
+	ActivityUtil.deleteActivityReportSector(DbUtil.getActivityReportSector(ampActId), session);
+	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
+      
+	  session.delete(ampAct);
       tx.commit();
       session.flush();
     }
@@ -3131,214 +3164,102 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
   }
 
-  public static void deleteActivityAmpComments(Collection commentId) {
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
-      if (commentId != null) {
+  public static void deleteActivityAmpComments(Collection commentId, Session session) throws Exception{
+     if (commentId != null) {
         Iterator commentItr = commentId.iterator();
         while (commentItr.hasNext()) {
           AmpComments ampComment = (AmpComments) commentItr.next();
-          AmpComments ampComm = (AmpComments) session.load
-              (AmpComments.class, ampComment.getAmpCommentId());
-          session.delete(ampComm);
+          /*AmpComments ampComm = (AmpComments) session.load
+              (AmpComments.class, ampComment.getAmpCommentId());*/
+          session.delete(ampComment);
         }
-      }
-    }
-    catch (Exception e1) {
-      logger.error(
-          "Could not delete/find the comments revelant to the activity");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
+     }
   }
 
   public static void deleteActivityPhysicalComponentReport(Collection
-      phyCompReport) {
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
+      phyCompReport, Session session) throws Exception{
       if (phyCompReport != null) {
         Iterator phyReportItr = phyCompReport.iterator();
         while (phyReportItr.hasNext()) {
-          AmpPhysicalComponentReport phyReport = (AmpPhysicalComponentReport)
-              phyReportItr.next();
-          AmpPhysicalComponentReport physicalReport = (
-              AmpPhysicalComponentReport) session.load
-              (AmpPhysicalComponentReport.class, phyReport.getAmpReportId());
-          session.delete(physicalReport);
+          AmpPhysicalComponentReport phyReport = (AmpPhysicalComponentReport) phyReportItr.next();
+          //AmpPhysicalComponentReport physicalReport = (AmpPhysicalComponentReport) session.load(AmpPhysicalComponentReport.class, phyReport.getAmpReportId());
+          session.delete(phyReport);
         }
       }
-    }
-    catch (Exception e1) {
-      logger.error(
-          "could not delete/find the physical component report activities");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
   }
 
-  public static void deleteActivityAmpReportCache(Collection repCache) {
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
+  public static void deleteActivityAmpReportCache(Collection repCache, Session session) throws Exception {
       if (repCache != null) {
         Iterator repCacheItr = repCache.iterator();
         while (repCacheItr.hasNext()) {
           AmpReportCache reportCache = (AmpReportCache) repCacheItr.next();
-          AmpReportCache ampReportCache = (AmpReportCache) session.load
-              (AmpReportCache.class, reportCache.getAmpReportId());
-          session.delete(ampReportCache);
+          /*AmpReportCache ampReportCache = (AmpReportCache) session.load
+              (AmpReportCache.class, reportCache.getAmpReportId());*/
+          session.delete(reportCache);
         }
       }
-    }
-    catch (Exception e1) {
-      logger.error(
-          "could not delete/find the physical component report activities");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
   }
 
-  public static void deleteActivityReportLocation(Collection repLoc) {
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
+  public static void deleteActivityReportLocation(Collection repLoc, Session session) throws Exception {
       if (repLoc != null) {
         Iterator repLocItr = repLoc.iterator();
         while (repLocItr.hasNext()) {
           AmpReportLocation repLocTemp = (AmpReportLocation) repLocItr.next();
-          AmpReportLocation amprepLoc = (AmpReportLocation) session.load
-              (AmpReportLocation.class, repLocTemp.getAmpReportId());
-          session.delete(amprepLoc);
+          /*AmpReportLocation amprepLoc = (AmpReportLocation) session.load
+              (AmpReportLocation.class, repLocTemp.getAmpReportId());*/
+          session.delete(repLocTemp);
         }
       }
-    }
-    catch (Exception e1) {
-      logger.error(
-          "could not delete/find the physical component report activities");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
   }
 
-  public static void deleteActivityReportPhyPerformance(Collection phyPerform) {
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
+  public static void deleteActivityReportPhyPerformance(Collection phyPerform, Session session) throws Exception {
       if (phyPerform != null) {
         Iterator phyPerformItr = phyPerform.iterator();
         while (phyPerformItr.hasNext()) {
           AmpReportPhysicalPerformance repPhyTemp = (
               AmpReportPhysicalPerformance) phyPerformItr.next();
-          AmpReportPhysicalPerformance repPhyPerform = (
+          /*AmpReportPhysicalPerformance repPhyPerform = (
               AmpReportPhysicalPerformance) session.load
-              (AmpReportPhysicalPerformance.class, repPhyTemp.getAmpPpId());
-          session.delete(repPhyPerform);
+              (AmpReportPhysicalPerformance.class, repPhyTemp.getAmpPpId());*/
+          session.delete(repPhyTemp);
         }
       }
-    }
-    catch (Exception e1) {
-      logger.error(
-          "could not delete/find the physical component report activities");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
   }
 
-  public static void deleteActivityReportSector(Collection repSector) {
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
+  public static void deleteActivityReportSector(Collection repSector, Session session) throws Exception {
       if (repSector != null) {
         Iterator repSectorItr = repSector.iterator();
         while (repSectorItr.hasNext()) {
           AmpReportSector repSecTemp = (AmpReportSector) repSectorItr.next();
-          AmpReportSector ampRepSector = (AmpReportSector) session.load
-              (AmpReportSector.class, repSecTemp.getAmpReportId());
-          session.delete(ampRepSector);
+          /*AmpReportSector ampRepSector = (AmpReportSector) session.load
+              (AmpReportSector.class, repSecTemp.getAmpReportId());*/
+          session.delete(repSecTemp);
         }
       }
-    }
-    catch (Exception e1) {
-      logger.error(
-          "could not delete/find the physical component report activities");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
   }
 
-  public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity) {
-    Session session = null;
-    try {
-			session = PersistenceManager.getSession();
-			Transaction tx = session.beginTransaction();
+  public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity, Session session) throws Exception {
+    
 			if (activityInd != null && activityInd.size() > 0) {
 				for (Object indAct : activityInd) {
 
-					AmpIndicator ind = (AmpIndicator) session.get(
-							AmpIndicator.class, ((IndicatorActivity) indAct)
-									.getIndicator().getIndicatorId());
-					IndicatorActivity indConn = IndicatorUtil
-							.findActivityIndicatorConnection(activity, ind);
+					AmpIndicator ind = (AmpIndicator) session.get(AmpIndicator.class, ((IndicatorActivity) indAct).getIndicator().getIndicatorId());
+					IndicatorActivity indConn = IndicatorUtil.findActivityIndicatorConnection(activity, ind);
 					IndicatorUtil.removeConnection(indConn);
+					
+					
+					/*IndicatorActivity result = null;
+					Long activityId = activity.getAmpActivityId();
+					Long indicatorId = ind.getIndicatorId();
+					String oql = "from "+IndicatorActivity.class.getName() + " conn ";
+					oql += " where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
+					Query query = session.createQuery(oql);
+					query.setLong("actId", activityId);
+					query.setLong("indicId", indicatorId);
+					result = (IndicatorActivity) query.uniqueResult();
+					session.delete(result);*/
 				}
 			}
-			tx.commit();
-			session.flush();
-		} catch (Exception e1) {
-			logger
-					.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception e2) {
-				logger.error("Release session failed");
-			}
-		}
   }
 
   /* functions to DELETE an activity by Admin end here.... */

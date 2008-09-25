@@ -6,6 +6,28 @@
 
 <digi:instance property="gisDashboardForm"/>
 
+<style>
+	div.navHiden{
+		background-color : #8C8C8C;
+		color : #494949;
+		border-left: 1px solid white;
+		border-top: 1px solid white;
+		border-right: 1px solid black;
+		border-bottom: 1px solid black;
+		cursor:pointer;
+	}
+	
+	div.navVisible{
+		background-color : #C4C4C4;
+		color : Black;
+		border-left: 1px solid black;
+		border-top: 1px solid black;
+		border-right: 1px solid white;
+		border-bottom: 1px solid white;
+		cursor:pointer;
+	}
+</style>
+
 <div id="content" class="yui-skin-sam" style="width:100%;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
     <ul class="yui-nav">
@@ -19,14 +41,28 @@
     </ul>
     <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
+
+<div id="ctrlContainer" style="display:none">
+	<div style="width:300px; height:300px; position: absolute; left: 15px; top: 35px; border: 1px solid black"><img width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapCode=TZA"></div>
+	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 23px; top: 43px; border: 1px solid white; cursor:pointer;">
+		<div style="width:100%; height:100%; background:white; filter:alpha(opacity=30); -moz-opacity:0.3;"></div>
+	</div>
+</div>
+
+<div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)">Map navigation</div>
+
+	
 <table>
 	<tr>
 		<td colspan="2">
-			<img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA">
+			<!-- onscroll="mapScroll(this)"-->
+			<div id="mapCanvasContainer" style="border:1px solid black; width:450px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA"></div>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
+			<digi:img src="module/gis/images/fundingLegend.png" border="0"/>
+			<%--
 			<digi:img usemap="#legendMap" src="module/gis/images/fundingLegend.png" border="0"/>
 
 			<MAP NAME="legendMap">
@@ -41,8 +77,23 @@
 				<AREA TITLE="80-90%" SHAPE=RECT COORDS="560,0,630,20">
 				<AREA TITLE="90-100%" SHAPE=RECT COORDS="630,0,700,20">
 			</MAP>
+			--%>
 		</td>
 	</tr>
+	
+		
+	<%--
+	<tr>
+		<td colspan="2">
+			<textarea cols="50" rows="3" id="debugtxt">oeee</textarea>
+		</td>
+	</tr>
+	--%>
+	
+	
+	
+	
+	
 	<tr>
 		<td colspan="2">
 			<span>
@@ -140,6 +191,23 @@
 
 
 <script language="JavaScript">
+
+	var canvasWidth = 700;
+	var canvasHeight = 700;
+	
+	var canvasContainerWidth = 450;
+	var canvasContainerHeight = 450;
+	
+	var navigationWidth = 300;
+	var navigationHeight = 300;
+	
+	
+	
+	var navCursorWidth=1;
+	var navCursorHeight=1;
+	
+
+	
 	
 	function initMouseOverEvt() {
 		document.onmousemove = mouseMoveTranslatorIE;
@@ -354,6 +422,125 @@
 			document.getElementById("busyIndicator").style.visibility = "visible";
 		} else {
 			document.getElementById("busyIndicator").style.visibility = "hidden";
+		}
+	}
+	
+	function mapScroll(obj) {
+		
+	}
+
+	var navAreaLeft=0;
+	var navAreaTop=0;
+
+	var isKeyPressed = false;
+	var initialOffsetX, initialOffsetY;
+
+	function navCursorKeyDown (evt) {
+		if (evt == null) {
+			evt = window.event;
+		}
+		isKeyPressed = true;
+		if (evt.offsetX != null) {
+			initialOffsetX = evt.offsetX;
+			initialOffsetY = evt.offsetY;
+		} else {
+			initialOffsetX = evt.layerX + 10;
+			initialOffsetY = evt.layerY + 10;
+		}
+	}
+	
+	function navCursorKeyUp (evt) {
+		isKeyPressed = false;
+	}
+	
+	
+	
+	function navCursorOnMove (evt) {
+			if (evt == null) {
+				evt = window.event;
+			} else {
+				evt.stopPropagation();
+			}
+			
+			if (isKeyPressed) {
+				
+				var pLeft = 0;
+				var pTop = 0;
+				
+				if (evt.x != null) {
+					pLeft = evt.x - initialOffsetX; 
+					pTop = evt.y - initialOffsetY; 
+				} else {
+					pLeft = evt.pageX - initialOffsetX;
+					pTop = evt.pageY - initialOffsetY - 100;
+					evt.stopPropagation();
+				}
+
+				if (pLeft >= 23 && pLeft -23 + navCursorWidth <= navigationWidth - 14) {
+					navAreaLeft = pLeft - 23;
+				} else if (pLeft < 23) {
+					navAreaLeft = 0;
+				} else {
+					navAreaLeft = navigationWidth - navCursorWidth - 14;
+				}
+				
+				if (pTop >= 43 && pTop - 43 + navCursorHeight <= navigationHeight - 14) {
+					navAreaTop = pTop - 43;
+				} else if (pTop < 43) {
+					navAreaTop = 0;
+				} else {
+					navAreaTop = navigationHeight - navCursorHeight - 14;
+				}
+				
+				
+
+				document.getElementById("navCursor").style.left = navAreaLeft + 23 + "px";
+				document.getElementById("navCursor").style.top = navAreaTop + 43 + "px";
+				
+				
+				scrollMap (navAreaLeft, navAreaTop);
+				
+			}
+	}
+	
+	function initNavCursorEvents() {
+		var navCursorObj = document.getElementById("navCursor");
+		navCursorObj.onmousedown = navCursorKeyDown;
+		navCursorObj.onmouseup = navCursorKeyUp;
+		navCursorObj.onmousemove = navCursorOnMove;
+		navCursorObj.onmouseout = navCursorKeyUp;
+	}
+
+	function initNavCursorSize() {
+		navCursorWidth = Math.round(navigationWidth * canvasContainerWidth / canvasWidth) - 14;
+		navCursorHeight = Math.round(navigationHeight * canvasContainerHeight / canvasHeight) - 14;
+		document.getElementById("navCursor").style.width = navCursorWidth + "px";
+		document.getElementById("navCursor").style.height = navCursorHeight + "px";
+	}
+	
+	function scrollMap(x, y){
+		
+		var deltaCanvasWidth = canvasWidth - canvasContainerWidth;
+		var deltaCursorWidth = navigationWidth - 14 - navCursorWidth;
+		
+		var deltaCanvasHeight = canvasHeight - canvasContainerHeight;
+		var deltaCursorHeight = navigationHeight - 14 - navCursorHeight;
+		
+		
+		document.getElementById("mapCanvasContainer").scrollLeft = x * deltaCanvasWidth / deltaCursorWidth;
+		document.getElementById("mapCanvasContainer").scrollTop = y * deltaCanvasHeight / deltaCursorHeight;
+	}
+	
+	initNavCursorSize();
+	initNavCursorEvents();
+	
+	function showNavigation(obj){
+		if (obj.className=="navHiden") {
+			document.getElementById("ctrlContainer").style.display="block";
+			obj.className = "navVisible";
+		} else {
+			document.getElementById("ctrlContainer").style.display="none";
+			obj.className="navHiden";
 		}
 	}
 	

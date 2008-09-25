@@ -75,6 +75,15 @@ public class GetFoundingDetails extends Action {
             int canvasWidth = 700;
             int canvasHeight = 700;
 
+            if (request.getParameter("width") != null) {
+                canvasWidth = Integer.parseInt(request.getParameter("width"));
+            }
+
+            if (request.getParameter("height") != null) {
+                canvasHeight = Integer.parseInt(request.getParameter("height"));
+            }
+
+
             CoordinateRect rect = gisUtil.getMapRect(map);
 
             if (action.equalsIgnoreCase(GisService.ACTION_PAINT_MAP)) {
@@ -89,19 +98,26 @@ public class GetFoundingDetails extends Action {
 
                 g2d.clearRect(0, 0, canvasWidth, canvasHeight);
 
+                boolean fill = true;
+                 if (request.getParameter("noFill") != null) {
+                     fill = false;
+                 }
+
                 gisUtil.addDataToImage(g2d,
                                        map.getSegments(),
                                        -1,
                                        canvasWidth, canvasHeight,
                                        rect.getLeft(), rect.getRight(),
-                                       rect.getTop(), rect.getBottom(), true);
+                                       rect.getTop(), rect.getBottom(), fill);
 
-                gisUtil.addCaptionsToImage(g2d,
-                                           map.getSegments(),
-                                           canvasWidth, canvasHeight,
-                                           rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom());
+                if (request.getParameter("noCapt") == null) {
 
+                    gisUtil.addCaptionsToImage(g2d,
+                                               map.getSegments(),
+                                               canvasWidth, canvasHeight,
+                                               rect.getLeft(), rect.getRight(),
+                                               rect.getTop(), rect.getBottom());
+                }
                 g2d.dispose();
 
                 RenderedImage ri = graph;

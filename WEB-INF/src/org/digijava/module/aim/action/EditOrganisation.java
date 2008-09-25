@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.DateFormatter;
 
+import net.sf.hibernate.JDBCException;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -865,7 +867,17 @@ public class EditOrganisation
         }
         
         //org.setSurvey(null);
-        DbUtil.delete(org);
+        try{
+        	DbUtil.delete(org);
+        }catch(JDBCException e){
+        	// this is a quick solution
+        	// due to there is a integrity referencial issue
+        	// related to table amp_activity_internal_id,
+        	// which does not have a hibernate mapping.
+            editForm.setFlag("activityReferences");
+            editForm.setActionFlag("edit");
+        	return mapping.findForward("forward");
+        }
         logger.debug("Organisation deleted");
 
         return mapping.findForward("added");

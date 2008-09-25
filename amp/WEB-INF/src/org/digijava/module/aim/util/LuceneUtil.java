@@ -40,6 +40,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
@@ -62,9 +63,18 @@ import org.digijava.module.help.util.HelpUtil;
 
 public class LuceneUtil {
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
-	public final static Analyzer analyzer = new StandardAnalyzer();
-	public final static String idField = "id";
-	public final static String indexDirectory = "lucene-index";
+        /**
+         * StandardAnalyzer used to analyse text 
+         */
+        public final static Analyzer analyzer = new StandardAnalyzer();
+        /**
+         * 
+         */
+        public final static String idField = "id";
+        /**
+         * name of index directory
+         */
+        public final static String indexDirectory = "lucene-index";
 //	/**
 //	 * Opens the writer so information can be added to the index
 //	 * @param create set it to true to create the index filestructure
@@ -134,7 +144,7 @@ public class LuceneUtil {
 //	}
 	
 	
-	public static Directory createIndex(){ 
+        public static Directory createIndex(){
 		RAMDirectory index = new RAMDirectory();
 		IndexWriter indexWriter = null;
 		try {
@@ -384,7 +394,7 @@ public class LuceneUtil {
 		return doc;
 	}
 	
-	public static void deleteActivity(Directory idx, String field, String search){
+        public static void deleteActivity(Directory idx, String field, String search){
 		Term term = new Term(field, search);
 		IndexReader indexReader;
 		try {
@@ -396,7 +406,7 @@ public class LuceneUtil {
 		}
 	}
 	
-	public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id){
+        public static void addUpdateActivity(HttpServletRequest request, boolean update, Long id){
 		ServletContext ampContext = request.getSession().getServletContext();
 		Directory idx = (Directory) ampContext.getAttribute(Constants.LUCENE_INDEX);
 		logger.info("Updating activity!");
@@ -497,9 +507,18 @@ public class LuceneUtil {
 		}
 		return hits;
 	}
-	
-	
-	public static void createHelp() throws IOException , EditorException, Exception{
+         
+        
+        /**
+         * Uses {@link isDir()} method to determine whether 
+         * index directory exists or not. 
+         * If directory doesn't exist create new one using
+         * {@link addUpdatehelp(boolean)}
+         * 
+         * @throws org.digijava.kernel.exception.DgException
+         * 
+         */
+        public static void createHelp() throws  DgException{
             
 	
 		boolean createDir = LuceneUtil.isDir();
@@ -511,49 +530,76 @@ public class LuceneUtil {
 	
 }
 
-	 public static void addUpdatehelp(boolean update) throws IOException , EditorException, Exception{
-	 
-		 HelpSearchData item = new HelpSearchData(); 
+        /**
+         * Converts html formatted help topics body to plain text format.
+         * Creates lucene-index directory if it doesn't exist.
+         * Adds or updates converted data to lucene-index directory
+         * using {@link indexArticle(String,String,String)} method.
+         * <p>
+         * In update mode method updates only  data which have last 
+         * modified date is greater than the  last modified date of lucene-index directory.
+         * 
+         * @param update if true then method is used to update the lucene-index directory
+         * otherwise to create new lucene-index directory and add data to it.
+         * 
+         * @throws org.digijava.kernel.exception.DgException
+         * 
+         * @see org.digijava.module.help.helper.HelpSearchData
+         */
+        public static void addUpdatehelp(boolean update) throws DgException {
+
+        HelpSearchData item = new HelpSearchData();
 		DateFormat formatter ; 
 	    Date date ; 
 	    
-	    boolean createDir = IndexReader.indexExists("indexDirectory");
-		Long irde = IndexReader.lastModified("indexDirectory");
- 	    Long lastLucModDay = IndexReader.lastModified("lucene-index");
-	
+	  try{
+            Long lastLucModDay = IndexReader.lastModified("lucene-index");
+
  	    formatter  = new SimpleDateFormat();
-	    String leastUpDate = formatter.format(lastLucModDay);
+            String leastUpDate = formatter.format(lastLucModDay);
 	    date = (Date)formatter.parse(leastUpDate);
-	
+
   	    Collection data =  HelpUtil.getAllHelpData();
-		  
+
 		for(Iterator<HelpSearchData> iter = data.iterator(); iter.hasNext(); ) {
-		
-			 item = (HelpSearchData) iter.next();
- 			 
+
+                item = (HelpSearchData) iter.next();
+
              String article =  item.getBody();
-             String title = item.getTopicKey();
-             String titTrnKey = item.getTitleTrnKey();
-             
+                String title = item.getTopicKey();
+                String titTrnKey = item.getTitleTrnKey();
+                // Converts html formatted help topics body to plain text format.
              String newCode = article.replaceAll("\\<.*?\\>","");
-            
+
              if(update){
             	 if(item.getLastModDate().after(date)){
             		 deleteHelp("title",title);
             		 indexArticle(newCode, title,titTrnKey);
-            	 }
+                    }
              	}else if(!update){
              		indexArticle(newCode, title,titTrnKey);	
-             	}
+                }
             }
- 	}
+        } catch (Exception ex) {
+            logger.error(ex);
+            throw new DgException(ex);
+        }
+    }
+
+ 	
 	
 	
 	
-	 
-	
-	
-	public static Hits helpSearch(String field, String searchString){
+	 	
+    /**
+     * Searches searchString in the indexDirectory for fields.
+     * Returns founded hits
+     * 
+     * @param field
+     * @param searchString
+     * @return founded hits
+     */
+    public static Hits helpSearch(String field, String searchString){
 		
 		QueryParser parser = new QueryParser(field, analyzer);
 		Query query = null;
@@ -576,7 +622,16 @@ public class LuceneUtil {
 		return hits;
 	}
 	
-	public static Object highlighter(Field field,String searchString) throws IOException, ParseException{
+        /**
+         * Returns highlighted object
+         * 
+         * @param field
+         * @param searchString
+         * @return highlight object
+         * @throws java.io.IOException
+         * @throws org.apache.lucene.queryParser.ParseException
+         */
+        public static Object highlighter(Field field,String searchString) throws IOException, ParseException{
 		Query query = null;
 		QueryParser parser = new QueryParser(field.getClass().getName(), analyzer);
 	
@@ -586,6 +641,10 @@ public class LuceneUtil {
 		return hA;
 	}
 	
+         /**
+         * Returns highlighted object
+         * 
+         */
 	 private static Object highlight(Field field, Query query) throws IOException {
 
 		    query.rewrite(IndexReader.open(indexDirectory));
@@ -605,15 +664,33 @@ public class LuceneUtil {
 		 }
 
 	
-	public static void indexArticle(String article, String title,String titTrnKey)
+         /**
+          * Creates {@link Document} using {@link createDocument(String,String,String)}.
+          * Adds newly created document to lucene-index directory
+          *  
+          * @param article body of help topic
+          * @param title title of help topic
+          * @param titTrnKey translation key used to translate title
+          * @throws java.lang.Exception
+          */
+         public static void indexArticle(String article, String title,String titTrnKey)
     throws Exception {
 		Document document = LuceneUtil.createDocument(article,title,titTrnKey);
 		LuceneUtil.indexDocument(document);
 		
 }	
 	
-   
-	public static Document createDocument(String article, String title,String titTrnKey){
+     /**
+     * Creates new {@link Document}. 
+     * Adds fields title,titletrnKey,article 
+     * to document using passed parameters.
+      * 
+     * @param article body of help topic
+     * @param title title of help topic
+     * @param titTrnKey translation key used to translate title
+     * @return newly created document
+     */
+        public static Document createDocument(String article, String title,String titTrnKey){
 
 		 Document document = new Document();
 		 document.add(new Field("title",title,Field.Store.YES,Field.Index.TOKENIZED));
@@ -624,13 +701,27 @@ public class LuceneUtil {
 	}
 
 	
-	public static boolean isDir(){
+        /**
+         * Shows whether lucene-index
+         * directory exists or no
+         * 
+         * @return true if lucene-index directory exists otherwise false
+         */
+        public static boolean isDir(){
 		boolean createDir = IndexReader.indexExists(indexDirectory);
 		return createDir;
 	}
 	
 	
-	public static void indexDocument(Document document) throws IOException {
+        /**
+         * Creates lucene-index
+         * directory if it doesn't exist.
+         * Adds document to it 
+         * 
+         * @param document
+         * @throws java.io.IOException
+         */
+        public static void indexDocument(Document document) throws IOException {
 		try{
     	
 		boolean createDir = IndexReader.indexExists(indexDirectory);
@@ -651,13 +742,18 @@ public class LuceneUtil {
         writer.close();
         
     } catch (IOException e) {
+                logger.error(e);
+                throw e;
 
-    	System.out.println("IOException opening Lucene IndexWriter: " + e.getMessage());
-
-    }
+            }
     
   }
-	public static void deleteHelp(String field, String search){
+        /**
+         * 
+         * @param field
+         * @param search
+         */
+        public static void deleteHelp(String field, String search){
 		Term term = new Term(field,search);
 		Directory directory;
 		IndexReader indexReader;

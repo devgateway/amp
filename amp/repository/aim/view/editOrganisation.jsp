@@ -399,30 +399,42 @@ function loadPage()
 						key="aim:organizationManager">Organization Manager
 						</digi:trn> </span> <br>
 					<logic:equal name="aimAddOrgForm" property="flag"
+						value="activityReferences">
+						<b><digi:trn key="aim:cannotDeleteOrgMsg">
+							<font color="#FF0000"> Can not delete this organization as
+							it is currently rererenced by Activities !</font>
+						</digi:trn> </b>
+					</logic:equal> 
+
+					<logic:equal name="aimAddOrgForm" property="flag"
 						value="orgReferences">
 						<b><digi:trn key="aim:cannotDeleteOrgMsg">
 							<font color="#FF0000"> Can not delete this organization as
 							it is currently in use !</font>
 						</digi:trn> </b>
-					</logic:equal> <logic:equal name="aimAddOrgForm" property="flag"
+					</logic:equal> 
+					<logic:equal name="aimAddOrgForm" property="flag"
 						value="fundReferences">
 						<b><digi:trn key="aim:cannotDeleteOrgMsg">
 							<font color="#FF0000"> Can not delete this organization as
 							it is currently referenced by fundings !</font>
 						</digi:trn> </b>
-					</logic:equal> <logic:equal name="aimAddOrgForm" property="flag"
+					</logic:equal> 
+					<logic:equal name="aimAddOrgForm" property="flag"
 						value="orgCodeExist">
 						<b><digi:trn key="aim:orgCodeExistMsg">
 							<font color="#FF0000"> Please choose other organization
 							code as it is currently in use by some other organization !</font>
 						</digi:trn> </b>
-					</logic:equal> <logic:equal name="aimAddOrgForm" property="flag"
+					</logic:equal> 
+					<logic:equal name="aimAddOrgForm" property="flag"
 						value="completePledges">
 						<b><digi:trn key="aim:completePledges">
 							<font color="#FF0000"> Please complete the fields program,
 							ammount and date for each Pledge!</font>
 						</digi:trn> </b>
-					</logic:equal> <logic:equal name="aimAddOrgForm" property="flag"
+					</logic:equal> 
+					<logic:equal name="aimAddOrgForm" property="flag"
 						value="orgNameExist">
 						<b><digi:trn key="aim:orgNameExistMsg">
 							<font color="#FF0000"> Please choose other organization

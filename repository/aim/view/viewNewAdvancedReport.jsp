@@ -102,6 +102,8 @@ session.setAttribute("progressValue", counter);
 </div>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+
+<jsp:include page="/repository/aim/view/saveReports/dynamicSaveReportsAndFilters.jsp" />
 <%
 counter++;
 session.setAttribute("progressValue", counter);
@@ -132,7 +134,6 @@ session.setAttribute("progressValue", counter);
 		</table>
 	</div>
 </logic:notEqual>
-
 
 <table width="100%" cellpadding="3" cellspacing="1" rules="rows" frame="box" style="margin-left: 5px;border-color:#999999;">
 	<logic:notEmpty property="reportDescription" name="reportMeta">
@@ -194,8 +195,14 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
-          	 	|
+                <feature:display name="Save Filters from Desktop" module="Reports">
+	          	 	|
+	          	 	<a class="settingsLink" onClick="initSaveReportEngine();saveReportEngine.showPanel(); " >
+	                	${saveFilters}
+	                </a>
+                </feature:display>
            	  <logic:notEqual name="viewFormat" value="foldable">
+           	  	|
 				<a  id="frezzlink" class="settingsLinkDisable">
                		<script language="javascript">
 						document.write((scrolling)?msg2:msg1);
@@ -266,7 +273,12 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
-           	
+                <feature:display name="Save Filters from Desktop" module="Reports">
+	                |
+	          	 	<a class="settingsLink" onClick="initSaveReportEngine();saveReportEngine.showPanel(); " >
+	                	${saveFilters}
+	                </a>
+           		</feature:display>
            	  <logic:notEqual name="viewFormat" value="foldable">
            	  |
            	  	<a  id="frezzlink" class="settingsLinkDisable">

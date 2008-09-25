@@ -548,7 +548,7 @@
 					${plsEnterTitle}
 				</div>
 				<div class="bd" id="titlePanelBody">
-				<html:text onkeyup="repManager.checkSteps()" property="reportTitle" styleClass="inp-text" 
+				<html:text onkeyup="repManager.checkSteps()" onkeypress="return saveReportEngine.checkEnter(event);" property="reportTitle" styleClass="inp-text" 
 						style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" />
 				</div>
 				<div class="ft" align="right">

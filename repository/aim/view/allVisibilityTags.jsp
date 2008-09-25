@@ -66,6 +66,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <feature:display  name="Tab Generator" module="New Report Wizard"></feature:display>
 <feature:display  name="Report Generator" module="New Report Wizard"></feature:display>
+<feature:display  name="Report and Tab Options" module="New Report Wizard"></feature:display>
 <field:display name="Contracting Remove Disbursements" feature="Contracting"></field:display>
 <feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
 <feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
@@ -104,6 +105,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Calendar" module="Calendar"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Component Report" module="Reports"></feature:display>
+<feature:display name="Save Filters from Desktop" module="Reports"></feature:display>
 <feature:display name="Activity - Component Step" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>
@@ -616,7 +618,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="Template Manager" feature="Message Manager"></field:display>
 
-
+<field:display  name="Filter Button" feature="Report and Tab Options"></field:display>
 
 
 

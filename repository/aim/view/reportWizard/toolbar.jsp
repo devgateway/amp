@@ -1,4 +1,7 @@
-	<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 	
 	<c:set var="className" value="toolbar"/>
 	<c:set var="imgName" value="prev.png"/>
@@ -20,10 +23,14 @@
 			<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
 			<digi:trn key="btn:next">Next</digi:trn>
 		</button>
-		<button id="step${stepNum}_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
-			<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
-			<digi:trn key="btn:repFilters">Filters</digi:trn>
-		</button>
+		<feature:display  name="Report and Tab Options" module="New Report Wizard">
+			<field:display  name="Filter Button" feature="Report and Tab Options">
+				<button id="step${stepNum}_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
+					<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
+					<digi:trn key="btn:repFilters">Filters</digi:trn>
+				</button>
+			</field:display>
+		</feature:display>
 		<button type="button" class="toolbar-dis" disabled="disabled" name="save" 
 								onclick="saveReportEngine.decideToShowTitlePanel()" >
 			<img height="16" src="/TEMPLATE/ampTemplate/images/save_dis.png" class="toolbar"/>

@@ -1468,21 +1468,21 @@
     	 <forward name="showTab" path="/showLayout.do?layout=aim_dhtmlTabWizard" />
     	 <forward name="save" path="/showLayout.do?layout=aim_saveMessage" />
     </action>
-    <action name="aimAdvancedReportForm" parameter="/aim/advancedReportManager" path="/aim/advancedReportManager" scope="session" type="org.digijava.module.aim.action.AdvancedReport">
-      <forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />
-      <forward name="SelectCols" path="/showLayout.do?layout=AdvancedReportManagerStep1" />
-      <forward name="GenerateReport" path="/showLayout.do?layout=AdvancedReportManagerStep2" />
-      <forward name="ReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />
-      <forward name="GenerateChart" path="/showLayout.do?layout=AdvancedReportManagerStep3" />
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
-      <forward name="MissingReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />
-      <forward name="SelectRows" path="/showLayout.do?layout=AdvancedReportManagerStep5" />
-      <forward name="SelectRowsXLevel" path="/showLayout.do?layout=AdvancedReportManagerStep5New" />
-      <forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />
-    </action>
-    <action name="aimAdvancedReportForm" path="/aim/editReport" scope="session" type="org.digijava.module.aim.action.EditReport">
-      <forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />
-    </action>
+<!--    <action name="aimAdvancedReportForm" parameter="/aim/advancedReportManager" path="/aim/advancedReportManager" scope="session" type="org.digijava.module.aim.action.AdvancedReport">-->
+<!--      <forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />-->
+<!--      <forward name="SelectCols" path="/showLayout.do?layout=AdvancedReportManagerStep1" />-->
+<!--      <forward name="GenerateReport" path="/showLayout.do?layout=AdvancedReportManagerStep2" />-->
+<!--      <forward name="ReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />-->
+<!--      <forward name="GenerateChart" path="/showLayout.do?layout=AdvancedReportManagerStep3" />-->
+<!--      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />-->
+<!--      <forward name="MissingReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />-->
+<!--      <forward name="SelectRows" path="/showLayout.do?layout=AdvancedReportManagerStep5" />-->
+<!--      <forward name="SelectRowsXLevel" path="/showLayout.do?layout=AdvancedReportManagerStep5New" />-->
+<!--      <forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />-->
+<!--    </action>-->
+<!--    <action name="aimAdvancedReportForm" path="/aim/editReport" scope="session" type="org.digijava.module.aim.action.EditReport">-->
+<!--      <forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />-->
+<!--    </action>-->
     <action path="/aim/printableActivityChart" scope="request" type="org.digijava.module.aim.action.ViewPrintableActivityChart">
       <forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
       <forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />

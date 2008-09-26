@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<table border="0"  width="100%" cellPadding=0 cellSpacing=0>
+<table border="0"  width="100%">
        <tr>
           <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
        </tr>
@@ -15,13 +15,25 @@
             <digi:form action="/showCalendarView.do" styleId="filterForm">
             <table border="0" width="100%">
                 <tr>
-                    <td valign="top"><jsp:include page="viewEventsNavigator.jsp" flush="true"/><td>
+                    <td valign="top" style="padding:10px;">
+                      <table>
+                        <tr>
+                          <td style="font-size:14px;font-weight:Bold;font-family:Tahoma;padding:10px;">
+                            <digi:trn key="calendar:navToday"> Today&nbsp;is:</digi:trn>
+                            ${calendarViewForm.currentDateBreakDown.dayOfMonth}/${calendarViewForm.currentDateBreakDown.month}/${calendarViewForm.currentDateBreakDown.year}
+                          </td>
+                          <tr>
+                      </table>
+                    <td>
                 </tr>
                 <tr>
-                    <td valign="top"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
+                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
                 </tr>
                	<tr>
-                    <td valign="top"><jsp:include page="viewEventsCreateNewEvent.jsp" flush="true"/></td>
+                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsCreateNewEvent.jsp" flush="true"/></td>
+                </tr>
+                <tr>
+                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsNavigator.jsp" flush="true"/><td>
                 </tr>
             </table>
             </digi:form>
@@ -29,10 +41,10 @@
         <td valign="top" width="100%">
             <table border="0" width="100%">
                 <tr>
-                    <td valign="top"><jsp:include page="viewEventsButtons.jsp" flush="true"/></td>
+                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsButtons.jsp" flush="true"/></td>
                 </tr>
                 <tr>
-                    <td valign="top"><jsp:include page="viewEventsBody.jsp" flush="true"/></td>
+                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsBody.jsp" flush="true"/></td>
                 </tr>
             </table>
         </td>

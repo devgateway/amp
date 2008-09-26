@@ -8,10 +8,277 @@
 <%@page import="java.util.*"%>
 
 <digi:instance property="calendarViewForm"/>
-<table border="0" border-color="red" bgcolor="f5f8e5" width="100%" cellspacing="" cellpadding="1" >
+<div>
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Jan
+                </div>
+            </td>
+            <td style="border-top: solid 1px #CCECFF; padding: 7px; font-family: Tahoma;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="border-top: solid 1px #CCECFF; padding: 7px; font-family: Tahoma;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Feb
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Mar
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Apr
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    May</div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Jun
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Jul
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Aug
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Sep
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Oct
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Nov
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-family: Tahoma; border-top: 1px solid #CCECFF; font-family: Tahoma; padding: 7px; font-size: 16px; font-weight: bold; color: White; background-color: #7B9EBD">
+                <div style="width: 60px; padding: 2px; font-weight: bold;">
+                    Dec
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-bottom: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; background-color: Red; border: solid 1px Black;">
+                    Event 1
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-bottom: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 2
+                </div>
+            </td>
+            <td style="font-family: Tahoma; border-top: solid 1px #CCECFF; border-right: solid 1px #CCECFF; border-bottom: solid 1px #CCECFF; padding: 7px;">
+                <div style="font-size: 12px; width: 160px; padding: 2px; text-align: center; font-weight: bold; border: solid 1px Black;">
+                    Event 3
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<table border="0" border-color="red" width="100%" cellspacing="" cellpadding="1" >
   <tr>
     <td >
-      <table border="0" width="100%" height="40px" bgcolor="f5f8e5">
+      <table border="0" width="100%" height="40px">
         <tr >
           <c:if test="${calendarViewForm.view != 'custom'}">
 
@@ -73,32 +340,12 @@
     <td align="center" vAlign="center">
 
 
-      <table border="0"   width="100%" cellpadding="1" cellspacing="1" bgcolor=#f5f8e5 ailgn="center">
-
-        <%--   f5f8e5     <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>><digi:trn key="calendar:EventName">Event Name</digi:trn></td>
-        <c:if test="${calendarViewForm.view != 'custom'}">
-          <c:if test="${calendarViewForm.view == 'monthly'}">
-            <c:forEach var="row" name="calendarViewForm" property="dateNavigator.items">
-              <c:set var="firstItem" value="true"/>
-              <c:forEach var="item" name="row">
-                <c:if test="${firstItem}">
-                  <td colspan="7" style="border-left:1px solid;">&nbsp;<digi:trn key="aim:calendar:month:${item.month}">${item.month}</digi:trn>&nbsp;${item.dayOfMonth} :(</td>
-                </c:if>
-                <c:set var="firstItem" value="false"/>
-              </c:forEach>
-            </c:forEach>
-  </tr><tr>
-          </c:if>--%>
-
-
-
-
-
+      <table border="0" width="100%" cellpadding="1" cellspacing="1" ailgn="center">
           <c:if test="${calendarViewForm.view != 'custom'}">
             <c:if test="${calendarViewForm.view == 'monthly'}">
-              <tr width="99%" align="center" vAlign="center" bgcolor="#f5f8e5">
+              <tr width="99%" align="center" vAlign="center">
                 <td>
-                  <table width="99%" border="0" bordercolor="blue" align="center" >
+                  <table width="99%" border="0" align="center" >
                     <tr width="100%">
                       <td valign="left"><digi:trn key="aim:m">M</digi:trn></td>
                       <td valign="left"><digi:trn key="aim:t">T</digi:trn></td>
@@ -109,9 +356,7 @@
                       <td valign="left"><digi:trn key="aim:s">S</digi:trn></td>
                     </tr>
                     <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
-
                       <tr vAlign="center" bgcolor="#ffffff">
-
                         <c:forEach var="item" items="${row}" >
                           <td align="top" vAlign="top">
                             <c:if test="${!item.enabled}"><span style="color:#cbcbcb"></c:if>
@@ -119,17 +364,13 @@
                             <c:if test="${!item.enabled}"></span></c:if>
                           </td>
                         </c:forEach>
-
                       </tr>
                       <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
-
-
-
                         <c:set var="startDay">
-                         ${ampCalendarGraph.ampCalendar.calendarPK.startDay}
+                        ${ampCalendarGraph.ampCalendar.calendarPK.startDay}
                         </c:set>
                         <c:set var="endDay">
-                         ${ampCalendarGraph.ampCalendar.calendarPK.endDay}
+                        ${ampCalendarGraph.ampCalendar.calendarPK.endDay}
                         </c:set>
                         <c:set var="endMonth">
                         ${ampCalendarGraph.ampCalendar.calendarPK.endMonth+1}
@@ -137,18 +378,18 @@
                         <c:set var="startMonth">
                         ${ampCalendarGraph.ampCalendar.calendarPK.startMonth+1}
                         </c:set>
-                         <c:set var="currentMonth">
-                         ${calendarViewForm.baseDateBreakDown.month}
+                        <c:set var="currentMonth">
+                        ${calendarViewForm.baseDateBreakDown.month}
                         </c:set>
                         <tr vAlign="center" bgcolor="#ffffff">
                           <c:forEach var="item" items="${row}" >
-                            <td align="top" vAlign="top" width="14%" >
+                            <td align="top" vAlign="top" width="14%" style="padding:6px;" >
 
                               <c:if test="${startMonth==currentMonth}">
                                 <c:if test="${item.dayOfMonth==startDay&&item.enabled}">
                                   <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
                                     <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                    ${ampCalendarEventItem.title}
+                                    ${ampCalendarEventItem.title}-VVV1
                                     </c:forEach>
                                   </digi:link>
                                 </c:if>
@@ -158,7 +399,7 @@
                                 <c:if test="${item.dayOfMonth==startDay&&!item.enabled}">
                                   <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
                                     <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                    ${ampCalendarEventItem.title}
+                                    ${ampCalendarEventItem.title}-VVV2
                                     </c:forEach>
                                   </digi:link>
                                 </c:if>
@@ -167,38 +408,29 @@
 
 
                               <c:if test="${startMonth!=currentMonth&&endMonth!=currentMonth}">
-
                                 <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
-                                  <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
+                                  <digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
                                 </c:forEach>
-
-
                               </c:if>
 
                               <c:if test="${startMonth==currentMonth&&endMonth==currentMonth}">
                                 <c:if test="${item.dayOfMonth>startDay && item.dayOfMonth<=endDay && item.enabled}">
-
                                   <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
                                   </c:forEach>
-
                                 </c:if>
                               </c:if>
 
                               <c:if test="${startMonth==currentMonth&&endMonth!=currentMonth}">
                                 <c:if test="${item.dayOfMonth>startDay&&item.enabled}">
-
                                   <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
                                   </c:forEach>
-
                                 </c:if>
                                 <c:if test="${item.dayOfMonth<endDay && !item.enabled}">
-
                                   <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
                                   </c:forEach>
-
                                 </c:if>
                               </c:if>
 
@@ -207,13 +439,11 @@
                                   <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
                                   </c:forEach>
-
                                 </c:if>
                                 <c:if test="${item.dayOfMonth<=endDay&&item.enabled}">
                                   <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
                                     <digi:img src="module/calendar/images/spacer.gif"  style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/>
                                   </c:forEach>
-
                                 </c:if>
                               </c:if>
 
@@ -232,7 +462,10 @@
 
 
 
-                      <tr height="1px" bgcolor="f5f8e5"><td colspan="7" ></td></tr>
+                      <tr height="1px" bgcolor="f5f8e5">
+                        <td colspan="7" >
+                        </td>
+                      </tr>
                     </c:forEach>
                   </table>
     </td>
@@ -242,7 +475,7 @@
                               <tr width="100%">
                                 <td width="100%">
                                   <table width="100%" bgcolor="ffffff" >
-                                    <tr width="100%" bgcolor="f5f8e5">
+                                    <tr width="100%">
                                       <td colspan="3">
                                       &nbsp;
                                       </td>
@@ -290,7 +523,7 @@
 
                                                     <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
                                                       <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                                      ${ampCalendarEventItem.title}
+                                                      ${ampCalendarEventItem.title}-VVV3
                                                       </c:forEach>
                                                     </digi:link>
                                                     <br/>
@@ -325,7 +558,7 @@
 
 
 
-              <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>>
+              <td style="font-size:14px;padding:4px;font-weight:Bold;background-color:#7B9EBD;color:White;" align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>>
               <c:if test="${calendarViewForm.view != 'daily' && calendarViewForm.view != 'monthly'}">
                 <digi:trn key="calendar:EventName">Event Name</digi:trn>
               </c:if>
@@ -338,8 +571,9 @@
 
     <c:choose>
       <c:when test="${calendarViewForm.view == 'yearly'}">
-        <td align="center" style="width:7%;border-left:1px solid" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
-        <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);"><digi:trn key="aim:calendar${item.month}">${item.month}</digi:trn></a>
+        <td align="center" style="padding:4px;font-weight:Bold;background-color:#7B9EBD;color:White;width:7%;border-left:1px solid #CCECFF;" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
+        <a href="#" style="text-decoration:none;color:White;font-size:14px;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);"><digi:trn key="aim:calendar${item.month}">${item.month}</digi:trn></a>
+
 </td>
       </c:when>
       <%-- <c:when test="${calendarViewForm.view == 'monthly'}">
@@ -387,8 +621,8 @@
             <c:if test="${calendarViewForm.view != 'daily'&&calendarViewForm.view != 'monthly'}">
               <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
                 <tr>
-                  <td align="center" style="border-top:1px solid;" width="80">
-                    <div style="width:140;overflow:hidden">
+                  <td align="center" style="border-top:solid 1px #CCECFF;padding:6px;" width="80">
+                    <div style="width:140;overflow:hidden;">
                       <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
                         <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
                         ${ampCalendarEventItem.title}
@@ -397,7 +631,7 @@
                     </div>
                   </td>
                   <c:if test="${calendarViewForm.view == 'custom'}">
-                    <td align="center" style="border-top:1px solid" width="80">
+                    <td align="center" style="border-top:solid 1px #CCECFF;" width="80">
                     ${ampCalendarGraph.ampCalendar.eventType.name}
                     </td>
                     <td align="center" style="border-top:1px solid">
@@ -409,7 +643,7 @@
                         </c:if>
                       </select>
                     </td>
-                    <td align="center" style="border-top:1px solid" width="80">
+                    <td align="center" style="border-top:solid 1px #CCECFF;" width="80">
                       <select style="width:80">
                         <c:forEach var="attendee" items="${ampCalendarGraph.ampCalendar.attendees}">
                           <c:if test="${!empty attendee.member}">
@@ -424,13 +658,13 @@
                         </c:forEach>
                       </select>
                     </td>
-                    <td align="center" style="border-top:1px solid">
+                    <td align="center" style="border-top:solid 1px #CCECFF;">
                       <table width="100%" cellspacing="0" cellpadding="0" border="0">
                         <tr>
                   </c:if>
 
                   <c:forEach var="ampCalendarGraphItem" items="${ampCalendarGraph.graphItems}">
-                    <td align="center" valign="middle" <c:if test="${calendarViewForm.view == 'custom'}">width="25%"</c:if><c:if test="${calendarViewForm.view != 'custom'}">style="border-top:1px solid; border-left:1px solid"</c:if>>
+                    <td align="center" valign="middle" <c:if test="${calendarViewForm.view == 'custom'}">width="25%"</c:if><c:if test="${calendarViewForm.view != 'custom'}">style="border-top:1px solid #CCECFF;"</c:if>>
                     <table cellpadding="0" cellspacing="0" width="100%" border="0">
                       <tr>
                         <c:if test="${ampCalendarGraphItem.left > 0}">

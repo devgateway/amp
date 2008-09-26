@@ -23,7 +23,7 @@ function selectCalendarType(view, type) {
 }
 </script>
 
-<table border="0" width="100%" style="border:1px solid; border-color: #484846;">
+<table border="0" width="100%" style="border:1px solid; border-color: #CCECFF;">
     <tr>
         <td nowrap="nowrap">
             <table border="0" cellpadding="0" cellspacing="0">
@@ -66,8 +66,8 @@ function selectCalendarType(view, type) {
                                 </table>
                             </td>
                         </c:if>
-                        
-                        
+
+
           				<c:if test="${calendarViewForm.selectedCalendarType != 0}">
                             <html:hidden styleId="customViewStartDate" name="calendarViewForm" property="customViewStartDate"/>
                             <td nowrap="nowrap">
@@ -159,18 +159,20 @@ function selectCalendarType(view, type) {
     </table>
 </c:if>
 <c:if test="${calendarViewForm.view != 'custom'}">
-    <table border="0" width="100%" style="BORDER-LEFT: #484846 1px solid; BORDER-RIGHT: #484846 1px solid;">
+    <table border="0" width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:5px;background-color:#7B9EBD;color:White;">
         <tr>
-            <td>
-                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">&lt;</a>
+            <td style="text-align:right;">
+                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
+                  <img alt="" src="../ampTemplate/images/yearLeft.jpg" border="0"/>
+                </a>
             </td>
-            <td align="center">
+            <td align="center" style="font-size:14px;font-weight:bold;">
                 <c:if test="${calendarViewForm.view == 'yearly'}">
-                    ${calendarViewForm.baseDateBreakDown.year - 1}
-                    &nbsp;
-                    <b>${calendarViewForm.baseDateBreakDown.year}</b>
-                    &nbsp;
-                    ${calendarViewForm.baseDateBreakDown.year + 1}
+                  <%-- ${calendarViewForm.baseDateBreakDown.year - 1}--%>
+                  &nbsp;
+                  <b>${calendarViewForm.baseDateBreakDown.year}</b>
+                  &nbsp;
+                  <%-- ${calendarViewForm.baseDateBreakDown.year + 1}--%>
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'monthly'}">
                     <b>
@@ -194,42 +196,36 @@ function selectCalendarType(view, type) {
                 </c:if>
             </td>
             <td>
-                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);">&gt;</a>
+                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);">
+                  <img alt="" src="../ampTemplate/images/yearRight.jpg" border="0"/>
+                </a>
             </td>
         </tr>
     </table>
-    <table border="0" width="100%" style="border:1px solid; border-color: #484846; border-bottom:none">
-        <logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
+    <table border="0" width="100%" style="border: solid 1px #CCECFF;">
+        <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
             <tr>
-                <logic:iterate id="item" name="row">
-                    <td align="center" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if> <c:if test="${item.selected}">style="border:1px solid"</c:if>>
-                        <c:if test="${!item.nolink}">
-                            <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}'); return(false);">
-                        </c:if>
-                        <c:if test="${!item.enabled}"><span style="color:#cbcbcb"></c:if>
-                        <c:choose>
-                            <c:when test="${calendarViewForm.view == 'yearly'}">
-                            	<digi:trn key="aim:cal${item.month}">
-                            		${item.month}
-                            	</digi:trn>
-                           </c:when>
-                            <c:otherwise>${item.dayOfMonth}</c:otherwise>
-                        </c:choose>
-                        <c:if test="${!item.enabled}"></span></c:if>
-                        <c:if test="${!item.nolink}">
-                            </a>
-                         </c:if>
-                    </td>
-                </logic:iterate>
+                <c:forEach var="item" items="${row}">
+                  <td align="center" style='font-size:14px;font-weight:bold;padding:4px;<c:if test="${item.nolink}">color:Black;</c:if><c:if test="${item.selected}">color:Red;</c:if>'>
+                    <c:if test="${!item.nolink}">
+                      <a href="#" style="text-decoration:none;color:black;font-size:13px;font-weight:bold;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}'); return(false);">
+                    </c:if>
+                    <c:if test="${!item.enabled}">
+                      <span style="color:LightGrey;">
+                    </c:if>
+                    <c:choose>
+                      <c:when test="${calendarViewForm.view == 'yearly'}">
+                        <digi:trn key="aim:cal${item.month}">
+                        ${item.month}
+                        </digi:trn>
+                      </c:when>
+                      <c:otherwise>${item.dayOfMonth}</c:otherwise>
+                    </c:choose>
+                    <c:if test="${!item.enabled}"></span></c:if>
+                    <c:if test="${!item.nolink}"></a></c:if>
+                  </td>
+                </c:forEach>
             </tr>
-        </logic:iterate>
+        </c:forEach>
     </table>
 </c:if>
-<table border="0" width="100%" style="border:1px solid; border-color: #484846;">
-    <tr>
-        <td>
-           <digi:trn key="calendar:navToday"> &nbsp;Today&nbsp;is:&nbsp;</digi:trn>
-            ${calendarViewForm.currentDateBreakDown.dayOfMonth}/${calendarViewForm.currentDateBreakDown.month}/${calendarViewForm.currentDateBreakDown.year}
-        </td>
-    <tr>
-</table>

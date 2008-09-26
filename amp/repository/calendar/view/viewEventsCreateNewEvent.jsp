@@ -11,7 +11,7 @@
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td>
-            <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
+            <table border="0" width="100%">
                 <tr>
                     <td colspan="2">&nbsp;<digi:link href="/showCalendarEvent.do~selectedCalendarTypeId=${calendarViewForm.selectedCalendarType}~method=new" style="text-decoration:none"><b><digi:trn key="calendar:CreateNewEvent">Create New Event</digi:trn></b></digi:link></td>
                 </tr>

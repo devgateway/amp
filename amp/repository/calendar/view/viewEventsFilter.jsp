@@ -17,92 +17,93 @@ function submitFilterForm(view, timestamp) {
     form.submit();
   }
 }
-  function changeState() {
-    var showPublicEvents = document.getElementById('showPublicEvents');
-    if ( showPublicEvents.checked==true) {
+function changeState() {
+  var showPublicEvents = document.getElementById('showPublicEvents');
+  if ( showPublicEvents.checked==true) {
     document.calendarViewForm.resetFilter.value=true;
-    }
-    else{
-     document.calendarViewForm.resetFilter.value= false;
-
-    }
   }
+  else{
+    document.calendarViewForm.resetFilter.value= false;
+
+  }
+}
 
 
 
 </script>
 
-<table border="0" width="100%" cellpadding="0" cellspacing="0">
-  <tr><td><digi:trn key="calendar:filter">Filter</digi:trn></td></tr>
-  <tr>
-    <td>
-      <html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
-      <html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
-      <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
-       <html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
-        <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
+<html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
+<html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
+<html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
+<html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
+<html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
-      <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
-        <tr>
-          <td colspan="2"><digi:trn key="calendar:fltEventTypes">&nbsp;Event Types</digi:trn></td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <div style="width:200px;height:80px;border:1px solid;overflow:auto; border-color: #484846;">
-              <logic:notEmpty name="calendarViewForm" property="filter.eventTypes">
-                <table border="0">
-                  <logic:iterate id="eventType" name="calendarViewForm" property="filter.eventTypes">
-                    <tr>
-                      <td valign="middle"><html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/></td>
-                      <td valign="middle"><div style="width:10px;height:10px;background-color:${eventType.color};border:1x solid"></div></td>
-                      <td valign="middle" nowrap="nowrap">${eventType.name}</td>
-                    </tr>
-                  </logic:iterate>
-                </table>
-              </logic:notEmpty>
-</div>
-</td>
-        </tr>
-        <tr>
-          <td colspan="2"><digi:trn key="calendar:FltDonors">&nbsp;Donors</digi:trn></td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <div style="width:200px;height:80px;border:1px solid;overflow:auto; border-color: #484846;">
-              <logic:notEmpty name="calendarViewForm" property="filter.donors">
-                <table border="0">
-                   <tr>
-                     <td valign="middle"><html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" /></td>
-                     <td valign="middle" nowrap="nowrap"><digi:trn key="calendar:donorsNone">None</digi:trn></td>
-                   </tr>
-                  <logic:iterate id="donor" name="calendarViewForm" property="filter.donors">
-                    <tr>
-                      <td valign="middle"><html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/></td>
-                      <td valign="middle" nowrap="nowrap">${donor.label}</td>
-                    </tr>
-                  </logic:iterate>
-                </table>
-              </logic:notEmpty>
-            </div>
-</td>
-        </tr>
-        <digi:secure authenticated="true">
+<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
+  <div style="padding:5px;font-size:13px;font-weight:bold;color:White;background-color: #7B9EBD">
+  Event Types
+  </div>
+  <div style="overflow:auto;width:200px;height:92px;font-size:13px;font-weight:bold;">
+    <c:if test="${!empty calendarViewForm.filter.eventTypes}">
+      <table cellpadding="0" cellspacing="0">
+        <c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}">
           <tr>
-            <td colspan="2">
-
-              <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/><digi:trn key="calendar:showPublicEvents">&nbsp;Show public events</digi:trn>
+            <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
+              <div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
+              </div>
+            </td>
+            <td style="padding:5px;width:115px;text-align:center;font-weight:bold;">
+            ${eventType.name}
+            </td>
+            <td>
+              <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/>
             </td>
           </tr>
-        </digi:secure>
+        </c:forEach>
+      </table>
+    </c:if>
+  </div>
+</div>
+<div style="width:200px;height:5px;font-family:Tahoma;">
+&nbsp;
+</div>
+<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
+  <div style="padding:5px;font-size:13px;font-weight:bold;color:White;background-color: #7B9EBD">
+  Donors
+  </div>
+  <div style="overflow:auto;width:200px;height:92px;font-size:13px;font-weight:bold;">
+    <c:if test="${!empty calendarViewForm.filter.donors}">
+      <table cellpadding="0" cellspacing="0">
         <tr>
-          <td colspan="2">
-            <html:submit><digi:trn key="calendar:showBtn">Show</digi:trn></html:submit>
-            &nbsp;
-            <html:reset><digi:trn key="calendar:resetBtn">Reset</digi:trn></html:reset>
+          <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
+            <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" />
+          </td>
+          <td style="padding:5px;width:115px;text-align:center;font-weight:bold;">
+            <digi:trn key="calendar:donorsNone">None</digi:trn>
           </td>
         </tr>
+        <c:forEach var="donor" items="${calendarViewForm.filter.donors}">
+          <tr>
+            <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;font-weight:bold;">
+              <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
+            </td>
+            <td style="padding:5px;width:115px;text-align:center;font-weight:bold;">
+              ${donor.label}
+            </td>
+          </tr>
+        </c:forEach>
       </table>
-</td>
-<tr>
-</table>
+    </c:if>
+  </div>
+</div>
+<div style="padding:5px;width:190px;height:28px;">
+  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
+  <digi:trn key="calendar:showPublicEvents">
+  &nbsp;Public events
+  </digi:trn>
+</div>
+<div style="padding:5px;width:190px;height:28px;">
+    <input type="submit" value="Run Filter" style="width:88px;" />
+    &nbsp;
+    <input type="reset" value="Reset" style="width:88px;" />
+</div>

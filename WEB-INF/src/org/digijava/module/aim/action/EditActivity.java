@@ -99,6 +99,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -1259,7 +1260,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.setCompTotalDisb(0);
 
           if (activity.getComponents() != null && activity.getComponents().size() > 0) {
-            getComponents(activity, eaForm);
+            getComponents(activity, eaForm, toCurrCode);
           }
 
           Collection memLinks = null;
@@ -1765,7 +1766,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
  * @param eaForm
  * @param componets
  */
-	private void getComponents(AmpActivity activity, EditActivityForm eaForm) {
+	private void getComponents(AmpActivity activity, EditActivityForm eaForm, String toCurrCode) {
+
 		Collection componets = activity.getComponents();
 		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
 		Iterator compItr = componets.iterator();
@@ -1774,7 +1776,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			Components<FundingDetail> tempComp = new Components<FundingDetail>();
 			tempComp.setTitle(temp.getTitle());
 			tempComp.setComponentId(temp.getAmpComponentId());
-			tempComp.setType_Id((temp.getType()!=null)?temp.getType().getType_id():null);
+			tempComp.setType_Id((temp.getType() != null) ? temp.getType().getType_id() : null);
+		
 			if (temp.getDescription() == null) {
 				tempComp.setDescription(" ");
 			} else {
@@ -1782,63 +1785,79 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 			}
 			tempComp.setCode(temp.getCode());
 			tempComp.setUrl(temp.getUrl());
-			
 			tempComp.setCommitments(new ArrayList<FundingDetail>());
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
-
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), activity.getAmpActivityId());
+			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
 			Iterator cItr = fundingComponentActivity.iterator();
+		
 			while (cItr.hasNext()) {
-				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
-						.next();
+				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
 
 				double disb = 0;
-				if (ampCompFund.getAdjustmentType().intValue() == 1
-					&& ampCompFund.getTransactionType().intValue() == 1)
-					disb = ampCompFund.getTransactionAmount().doubleValue();
+				
+				if (ampCompFund.getAdjustmentType().intValue() == 1 && ampCompFund.getTransactionType().intValue() == 1) 
+				disb = ampCompFund.getTransactionAmount().doubleValue();
 
 				eaForm.setCompTotalDisb(eaForm.getCompTotalDisb() + disb);
+				
 				FundingDetail fd = new FundingDetail();
+				
 				fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
+				
 				if (fd.getAdjustmentType() == 1) {
 					fd.setAdjustmentTypeName("Actual");
 				} else if (fd.getAdjustmentType() == 0) {
 					fd.setAdjustmentTypeName("Planned");
 				}
+		
 				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
-				fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
+				
+				//convert to  default currency 
+				
+				java.sql.Date dt = new java.sql.Date(ampCompFund.getTransactionDate().getTime());
+
+				double frmExRt = ampCompFund.getExchangeRate() != null ? ampCompFund.getExchangeRate() : Util.getExchange(ampCompFund.getCurrency().getCurrencyCode(), dt);
+				double toExRt = Util.getExchange(toCurrCode, dt);
+				DecimalWraper amt = CurrencyWorker.convertWrapper(ampCompFund.getTransactionAmount(), frmExRt, toExRt, dt);
+
+				
+				fd.setCurrencyCode(toCurrCode);
+				fd.setTransactionAmount(FormatHelper.formatNumber( amt.getValue()));
+				
+				
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
-				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
+				
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+				
 				if (fd.getTransactionType() == 0) {
+				
 					tempComp.getCommitments().add(fd);
 				} else if (fd.getTransactionType() == 1) {
 					tempComp.getDisbursements().add(fd);
+					
 				} else if (fd.getTransactionType() == 2) {
 					tempComp.getExpenditures().add(fd);
-				}				
+				}
+				
+				
 			}
-		
-			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
 
-			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
-						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
+			ComponentsUtil.calculateFinanceByYearInfo(tempComp, fundingComponentActivity);
+
+			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
 
 			if (phyProgress != null && phyProgress.size() > 0) {
 				Collection physicalProgress = new ArrayList();
 				Iterator phyProgItr = phyProgress.iterator();
 				while (phyProgItr.hasNext()) {
-					AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr
-							.next();
+					AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr.next();
 					PhysicalProgress phyProg = new PhysicalProgress();
 					phyProg.setPid(phyPerf.getAmpPpId());
 					phyProg.setDescription(phyPerf.getDescription());
-					phyProg.setReportingDate(DateConversion
-							.ConvertDateToString(phyPerf.getReportingDate()));
+					phyProg.setReportingDate(DateConversion.ConvertDateToString(phyPerf.getReportingDate()));
 					phyProg.setTitle(phyPerf.getTitle());
 					physicalProgress.add(phyProg);
 				}
@@ -1847,7 +1866,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 			selectedComponents.add(tempComp);
 		}
-
 
 		// Sort the funding details based on Transaction date.
 		Iterator compIterator = selectedComponents.iterator();

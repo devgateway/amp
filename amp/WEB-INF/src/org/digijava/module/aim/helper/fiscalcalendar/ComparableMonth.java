@@ -42,4 +42,17 @@ public class ComparableMonth implements Comparable<ComparableMonth> {
 	public Date gregorianToDefault(Date date) {
 		return null;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ComparableMonth) {
+			ComparableMonth m = (ComparableMonth) obj;
+			return m.monthStr.equalsIgnoreCase(this.monthStr) && m.monthId==this.monthId;
+		}else{
+			
+			return false;
+		}
+	}
+	
+	
 }

@@ -22,7 +22,7 @@
 
 <digi:instance property="aimReportWizardForm" />
 <bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm"/>
-<digi:form action="/advancedReportManager.do" method="post">
+<digi:form action="/viewNewAdvancedReport.do" method="post">
 																
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 

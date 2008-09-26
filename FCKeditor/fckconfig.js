@@ -253,7 +253,7 @@ FCKConfig.ToolbarSets["AMP"] = [
 
 	'/',
 
-	['FontFormat','FontName','FontSize'],
+	['FontFormat','FontName'],
 
 	['TextColor','BGColor'],
 

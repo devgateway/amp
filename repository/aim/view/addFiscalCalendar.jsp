@@ -72,8 +72,7 @@
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
         }
-        
-		/* AMP-3944
+        /*
         else if(yr>0){
           msg='<digi:trn key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
           alert(msg);
@@ -81,6 +80,7 @@
           return false;
         }
         */
+
 
         document.aimAddFiscalCalForm.fiscalCalName.value = str;
         document.aimAddFiscalCalForm.submit();

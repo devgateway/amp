@@ -42,11 +42,12 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		internalCalendar.setTime(time);
 		if (fiscalCalendar!=null){
 		// set offset from fiscal calendar
+			
 			internalCalendar.add(GregorianCalendar.YEAR, fiscalCalendar.getYearOffset());
-			int toAdd = -(fiscalCalendar.getStartMonthNum() - 1);
+			int toAdd = (fiscalCalendar.getStartMonthNum() - 1);
 			internalCalendar.add(GregorianCalendar.MONTH, toAdd);
-			toAdd = -(fiscalCalendar.getStartDayNum() - 1);
-			internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, fiscalCalendar.getYearOffset());
+			toAdd = (fiscalCalendar.getStartDayNum() - 1);
+			internalCalendar.add(GregorianCalendar.DAY_OF_MONTH, toAdd);
 		}
 	}
 

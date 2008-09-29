@@ -75,7 +75,16 @@
 						 	${indSecReg.sector.name}
 						</td>
                                                 <td nowrap="nowrap">
-						 	${indSecReg.location.ampRegion.name}
+                                                    <c:choose>
+                                                        <c:when test="${empty indSecReg.location.ampRegion&& not empty indSecReg.location.dgCountry}">
+                                                            National
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            ${indSecReg.location.ampRegion.name}
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                               
+						 	
 						</td>
                                                 
 						<td nowrap="nowrap">

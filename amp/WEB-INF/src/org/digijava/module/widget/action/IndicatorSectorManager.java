@@ -37,6 +37,7 @@ public class IndicatorSectorManager extends DispatchAction {
     
     public final static int RECORDS_PER_PAGE=15;
     public final static long ALL_REGIONS_SELECTED=-2l;
+    public final static long NATIONAL_SELECTED=-3l;
 
     @Override
     protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
@@ -85,7 +86,7 @@ public class IndicatorSectorManager extends DispatchAction {
     public ActionForward save(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        
+
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
         ActionErrors errors = new ActionErrors();
         IndicatorSector indSec;
@@ -93,21 +94,34 @@ public class IndicatorSectorManager extends DispatchAction {
         AmpSector selectedSector = indSecForm.getSector();
         Long indId = indSecForm.getSelIndicator();
         AmpIndicator selectedIndicator = IndicatorUtil.getIndicator(indId);
+        AmpLocation locNational = null;
 
 
-        // true if "all" is selcted in region dropdown
+        // true if "all" is selected in region dropdown
         boolean allRegionsSelected = indSecForm.getSelRegionId().equals(ALL_REGIONS_SELECTED);
+        //true if "national" is selected in region dropdown
+        boolean nationalSelected = (allRegionsSelected ? false : indSecForm.getSelRegionId().equals(NATIONAL_SELECTED));
 
         if (allRegionsSelected) {
             regions.addAll(indSecForm.getRegions());
         } else {
-            regions.add(LocationUtil.getAmpRegion(indSecForm.getSelRegionId()));
+            if (!nationalSelected) {
+                regions.add(LocationUtil.getAmpRegion(indSecForm.getSelRegionId()));
+            } else {
+                locNational = LocationUtil.getAmpLocation(FeaturesUtil.getDefaultCountryIso(), null, null, null);
+                if (locNational == null) {
+                    locNational = new AmpLocation();
+                    locNational.setCountry(FeaturesUtil.getDefaultCountryIso());
+                    locNational.setDgCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(FeaturesUtil.getDefaultCountryIso()));
+                    LocationUtil.saveLocation(locNational);
+                }
+            }
         }
 
-       
+
         if (indSecForm.getIndSectId() != null && indSecForm.getIndSectId() > 0) {
-             // we are editing IndicatorSector
-            
+            // we are editing IndicatorSector
+
             indSec = IndicatorUtil.getConnectionToSector(indSecForm.getIndSectId());
             indSec.setSector(selectedSector);
             indSec.setIndicator(selectedIndicator);
@@ -119,9 +133,13 @@ public class IndicatorSectorManager extends DispatchAction {
                  * for all regions except region which initially is assigned to IndicatorSector
                  * that is why we are removing it from list of regions
                  */
-                
+
                 regions.remove(indSec.getLocation().getAmpRegion());
                 IndicatorUtil.saveIndicatorConnection(indSec);
+            } else if (nationalSelected) {
+                indSec.setLocation(locNational);
+                IndicatorUtil.saveIndicatorConnection(indSec);
+                return viewAll(mapping, form, request, response);
             } else {
                 AmpLocation ampLoc = getAmpLocation(regions.get(0));
                 indSec.setLocation(ampLoc);
@@ -138,32 +156,39 @@ public class IndicatorSectorManager extends DispatchAction {
             }
 
         }
-        for (AmpRegion region : regions) {
-
+        if (locNational != null) {
             IndicatorSector ind = new IndicatorSector();
-            AmpLocation ampLoc = getAmpLocation(region);
-            ind.setLocation(ampLoc);
+            ind.setLocation(locNational);
             ind.setSector(selectedSector);
             ind.setIndicator(selectedIndicator);
+            IndicatorUtil.saveIndicatorConnection(ind);
+        } else {
+            for (AmpRegion region : regions) {
 
-            if (!WidgetUtil.indicarorSectorExist(indSecForm.getSector().getAmpSectorId(), ampLoc.getAmpLocationId(), indId, null)) {
-                IndicatorUtil.saveIndicatorConnection(ind);
-            } else {
+                IndicatorSector ind = new IndicatorSector();
+                AmpLocation ampLoc = getAmpLocation(region);
+                ind.setLocation(ampLoc);
+                ind.setSector(selectedSector);
+                ind.setIndicator(selectedIndicator);
 
-                if (allRegionsSelected) {
-                    if (errors.size() == 0) {
-                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorSkipped"));
-                        saveErrors(request, errors);
-                    }
+                if (!WidgetUtil.indicarorSectorExist(indSecForm.getSector().getAmpSectorId(), ampLoc.getAmpLocationId(), indId, null)) {
+                    IndicatorUtil.saveIndicatorConnection(ind);
                 } else {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorExists"));
-                    saveErrors(request, errors);
-                    return mapping.findForward("create");
+
+                    if (allRegionsSelected) {
+                        if (errors.size() == 0) {
+                            errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorSkipped"));
+                            saveErrors(request, errors);
+                        }
+                    } else {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.widget.indicatorSector.indicatorSectorExists"));
+                        saveErrors(request, errors);
+                        return mapping.findForward("create");
+                    }
                 }
+
             }
-
         }
-
         return viewAll(mapping, form, request, response);
 
     }
@@ -236,11 +261,22 @@ public class IndicatorSectorManager extends DispatchAction {
         } else {
             indSecForm.setSelIndicator(null);
         }
-        if (indSec.getLocation() != null && indSec.getLocation().getAmpRegion() != null) {
-            indSecForm.setSelRegionId(indSec.getLocation().getAmpRegion().getAmpRegionId());
-        } else {
+        if (indSec.getLocation() == null) {
             indSecForm.setSelRegionId(null);
+        } else {
+            if (indSec.getLocation().getAmpRegion() != null) {
+                indSecForm.setSelRegionId(indSec.getLocation().getAmpRegion().getAmpRegionId());
+            } else {
+                if (indSec.getLocation().getDgCountry() != null) {
+                    //National is selected
+                    indSecForm.setSelRegionId(-3L); 
+                } else {
+                    indSecForm.setSelIndicator(null);
+                }
+
+            }
         }
+
         indSecForm.setSector(indSec.getSector());
         return mapping.findForward("create");
 

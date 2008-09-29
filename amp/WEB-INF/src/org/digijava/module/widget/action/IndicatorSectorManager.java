@@ -108,6 +108,7 @@ public class IndicatorSectorManager extends DispatchAction {
             if (!nationalSelected) {
                 regions.add(LocationUtil.getAmpRegion(indSecForm.getSelRegionId()));
             } else {
+                //National means no region, zone, district are selected
                 locNational = LocationUtil.getAmpLocation(FeaturesUtil.getDefaultCountryIso(), null, null, null);
                 if (locNational == null) {
                     locNational = new AmpLocation();

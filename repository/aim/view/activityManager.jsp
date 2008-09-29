@@ -177,6 +177,17 @@
 																			</digi:link>                                                                          
                                                                           </b>
 																		</td>
+																		<td width="200">
+                                                                          <b>
+                                                                          	<c:set target="${urlParamsSort}" property="sortByColumn" value="activityTeamName"/>	
+																			 <digi:link href="/activityManager.do" name="urlParamsSort">
+	                                                                            <digi:trn key="aim:ActivityTeamName">
+	                                                                            	Team Name
+	                                                                            </digi:trn>
+	                                                                        </digi:link> 
+                                                                          </b>
+																		</td>
+
 																		<td width="100">
                                                                           <b>
                                                                           	<c:set target="${urlParamsSort}" property="sortByColumn" value="activityId"/>	
@@ -206,6 +217,9 @@
 																	<td>
 																		<bean:write name="activities" property="name"/>
 																	</td>
+																	<td width="100">
+																		<bean:write name="activities" property="team.name"/>
+																	</td>																	
 																	<td width="100">
 																		<bean:write name="activities" property="ampId"/>
 																	</td>

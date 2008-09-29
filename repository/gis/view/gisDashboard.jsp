@@ -56,7 +56,7 @@
 	<tr>
 		<td colspan="2">
 			<!-- onscroll="mapScroll(this)"-->
-			<div id="mapCanvasContainer" style="border:1px solid black; width:450px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap()" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA"></div>
+			<div id="mapCanvasContainer" style="border:1px solid black; width:450px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues();" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA"></div>
 		</td>
 	</tr>
 	<tr>
@@ -183,7 +183,13 @@
 			<td nowrap width="50%">Expenditure</td>
 			<td width="50%" id="tooltipCurrentExpenditureContainer">&nbsp;</td>
 		</tr>
-		
+		<tr>
+			<td nowrap bgcolor="#D9DAC9" colspan="2">Indicator</td>
+		</tr>
+		<tr>
+			<td nowrap width="50%" id="tooltipIndVal">value</td>
+			<td width="50%" id="tooltipIndUnit">&nbsp;</td>
+		</tr>
 	</table>
 	</div>
 </div>
@@ -240,6 +246,8 @@
 	var imageMapLoaded = false;
 	
 	var fundingDataByRegion = new Array();
+	var indicatorDataByRegion = new Array();
+	var selIndicatorUnit = "N/A";
 
 	var totalCommitmentFund = "0";
 	var totalDisbursementFund = "0";
@@ -247,6 +255,7 @@
 
 	var selSector = 0;
 	
+	var getIndValuesAction = false;
 	
 	function sectorSelected(sec) {
 		selSector = sec.value;
@@ -260,6 +269,7 @@
 		setBusy(true);
 		var uniqueStr = (new Date()).getTime();
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr;
+		getIndValuesAction = true;
 	}
 
 	
@@ -310,7 +320,7 @@
 
 				fundingDataByRegion[fundingDataByRegion.length] = regionDataMap;
 			}
-			
+			initIndicatorValues();
 			window.setTimeout(getSectorIndicators, 100);
 		}
 		
@@ -347,8 +357,54 @@
 				selectCmb.options.add(opt);
 				
 			}
-			
+			initIndicatorValues();
 			setBusy(false);
+		}
+	}
+	
+	function getIndicatorsValues() {
+			var uniqueStr = (new Date()).getTime();
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&uniqueStr=" + uniqueStr, true);
+			xmlhttp.onreadystatechange = indicatorsValuesReady;
+			xmlhttp.send(null);
+	}
+	
+	function indicatorsValuesReady () {
+		if (xmlhttp.readyState == 4) {
+			selIndicatorUnit  = xmlhttp.responseXML.getElementsByTagName('indicatorData')[0].attributes.getNamedItem("indUnit").value;
+			
+			if (selIndicatorUnit == null) {
+				selIndicatorUnit = "N/A";
+			}
+			
+			var regionIndicatorList = xmlhttp.responseXML.getElementsByTagName('indVal');
+			indicatorDataByRegion = new Array();
+			var regIndex = 0;
+			
+			
+			
+			for (regIndex = 0; regIndex < regionIndicatorList.length; regIndex ++) {
+				var indData = regionIndicatorList[regIndex];
+				var regionIndicatorMap = new Array();
+				regionIndicatorMap[0] = indData.attributes.getNamedItem("reg").value;
+				regionIndicatorMap[1] = indData.attributes.getNamedItem("val").value;
+
+				indicatorDataByRegion[indicatorDataByRegion.length] = regionIndicatorMap;
+			}
+			setBusy(false);
+		}
+	}
+	
+	function initIndicatorValues() {
+		indicatorDataByRegion = new Array();
+		selIndicatorUnit = "N/A";
+		
+	}
+	
+	function checkIndicatorValues() {
+		if (getIndValuesAction) {
+			getIndValuesAction = false;
+			getIndicatorsValues();
 		}
 	}
 	
@@ -395,6 +451,12 @@
 			document.getElementById("tooltipCurrentCommitmentContainer").innerHTML = regData[0];
 			document.getElementById("tooltipCurrentDisbursementContainer").innerHTML = regData[1];
 			document.getElementById("tooltipCurrentExpenditureContainer").innerHTML = regData[2];
+			
+			
+			document.getElementById("tooltipIndUnit").innerHTML = selIndicatorUnit;
+			document.getElementById("tooltipIndVal").innerHTML = getRegIndicatorValue(regCode);
+		
+			
 		
 			document.getElementById("tooltipContainer").style.display = "block";
 		}
@@ -405,12 +467,25 @@
 	}
 	
 	function getRegFounding (regCode) {
-		var retVal = new Array (0, 0, 0);;
+		var retVal = new Array (0, 0, 0);
 		var dataIndex = 0;
 		for (dataIndex = 0; dataIndex < fundingDataByRegion.length; dataIndex ++) {
 			var dataItem = fundingDataByRegion[dataIndex];
 			if (dataItem[0] == regCode) {
 				retVal = new Array (dataItem[1], dataItem[2], dataItem[3]);
+				break;
+			}
+		}
+		return retVal;
+	}
+	
+	function getRegIndicatorValue (regCode) {
+		var retVal = "N/A";
+		var dataIndex = 0;
+		for (dataIndex = 0; dataIndex < indicatorDataByRegion.length; dataIndex ++) {
+			var dataItem = indicatorDataByRegion[dataIndex];
+			if (dataItem[0] == regCode) {
+				retVal = dataItem[1];
 				break;
 			}
 		}

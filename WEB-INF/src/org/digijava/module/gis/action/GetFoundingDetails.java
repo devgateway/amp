@@ -40,6 +40,8 @@ import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.aim.helper.Constants;
 import java.util.HashSet;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 /**
  * <p>Title: </p>
@@ -260,6 +262,8 @@ public class GetFoundingDetails extends Action {
                 String indIdStr = request.getParameter("indicatorId");
                 Long indId = new Long(indIdStr);
 
+                AmpIndicator selIndicator = IndicatorUtil.getIndicator(indId);
+
                 //Get segments with funding for dashed paint map
                 List secFundings = DbUtil.getSectorFoundings(secId);
                 Iterator it = secFundings.iterator();
@@ -296,7 +300,7 @@ public class GetFoundingDetails extends Action {
                     String segmentCode = (String) indData[1];
                     Double indValue = (Double) indData[0];
 
-                    if (isRegion(map,segmentCode)) {
+                    if (isRegion(map,segmentCode) && !regSet.contains(segmentCode)) {
 
                     SegmentData indHilightData = new SegmentData();
                     indHilightData.setSegmentCode(segmentCode);
@@ -315,7 +319,7 @@ public class GetFoundingDetails extends Action {
                         max = indValue;
                     }
 
-            //                        regSet.add(segmentCode);
+                    regSet.add(segmentCode);
                     segmentDataList.add(indHilightData);
                    }
 
@@ -325,6 +329,20 @@ public class GetFoundingDetails extends Action {
                 if (min == null) {
                     min = new Double(0);
                     max = new Double(0);
+                }
+
+                //Save data in session for future use (next action should be get indicator values and unit)
+                if (selIndicator != null) {
+                    String indUnit = null;
+
+                    if (selIndicator.getUnit() != null && selIndicator.getUnit().trim().length() > 0) {
+                        indUnit = selIndicator.getUnit();
+                    } else {
+                        indUnit = "N/A";
+                    }
+
+                    request.getSession().setAttribute("AMP_INDICATOR_UNIT", indUnit);
+                    request.getSession().setAttribute("AMP_INDICATOR_VALUES", segmentDataList);
                 }
 
                 List hilightData = prepareHilightSegments(segmentDataList, map, min, max);
@@ -416,11 +434,38 @@ public class GetFoundingDetails extends Action {
 
                 }
                 sos.print(sectorIndicators.toString());
+            } else if (action.equalsIgnoreCase("getIndicatorValues")) {
+
+                response.setContentType("text/xml");
+
+                String indicatorUnit = (String) request.getSession().getAttribute("AMP_INDICATOR_UNIT");
+                request.getSession().removeAttribute("AMP_INDICATOR_UNIT");
+
+                List indicatorVals = (List) request.getSession().getAttribute("AMP_INDICATOR_VALUES");
+
+                XMLDocument indicators = new XMLDocument();
+                XML root = new XML("indicatorData");
+                root.addAttribute("indUnit", indicatorUnit);
+                indicators.addElement(root);
+
+                if (indicatorVals != null && !indicatorVals.isEmpty()) {
+                    request.getSession().removeAttribute("AMP_INDICATOR_VALUES");
+                    Iterator <SegmentData> it = indicatorVals.iterator();
+                    while (it.hasNext()) {
+                        SegmentData sd = it.next();
+                        XML indVal = new XML("indVal");
+                        indVal.addAttribute("val", sd.getSegmentValue());
+                        indVal.addAttribute("reg", sd.getSegmentCode());
+                        root.addElement(indVal);
+                    }
+                }
+
+                sos.print(indicators.toString());
+
             }
 
         } catch (Exception e) {
-            String ggg="gadfg";
-            //Add exception reporting
+            e.printStackTrace();
         } finally {
             sos.flush();
             sos.close();

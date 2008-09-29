@@ -26,8 +26,16 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.ObjectNotFoundException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.UserLangPreferences;
@@ -41,12 +49,6 @@ import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.security.principal.UserPrincipal;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.Type;
 
 /**
  * This class containts user-related utillity functions. User must be
@@ -404,8 +406,8 @@ tx.rollback();
 	    criteriaLow = "%" + criteriaLow + "%";
 	    criteriaLowConcat = "%" + criteriaLowConcat + "%";
 
-	    String queryString = "from usr in class " + User.class.getName() +
-		  " where usr.email like ? or lower(usr.firstNames) like ? or lower(usr.lastName) like ? or lower(usr.firstNames || usr.lastName) like ?";
+	    String queryString = "from " + User.class.getName() +
+		  " usr where usr.email like ? or lower(usr.firstNames) like ? or lower(usr.lastName) like ? or lower(usr.firstNames || usr.lastName) like ?";
 
 	    if (orderBy != null && orderBy.length != 0) {
 		String orderStr = " order by " + "usr." + orderBy[0];
@@ -501,9 +503,9 @@ tx.rollback();
         try {
             sess = PersistenceManager.getRequestDBSession();
 
-            Iterator iter = sess.find("from rs in class " +
+            Iterator iter = sess.find("from " +
                                          User.class.getName() +
-                                         " where rs.email =? ", email,
+                                         " rs where rs.email =? ", email,
                                          Hibernate.STRING).iterator();
             while (iter.hasNext()) {
                 user = (User) iter.next();

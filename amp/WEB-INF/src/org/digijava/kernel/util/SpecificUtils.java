@@ -22,24 +22,24 @@
 
 package org.digijava.kernel.util;
 
+import java.util.Enumeration;
+import java.util.Iterator;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.digijava.kernel.entity.Locale;
-import javax.servlet.http.Cookie;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.entity.OracleLocale;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
-import java.util.Enumeration;
-import net.sf.hibernate.Session;
-import java.util.List;
-import org.digijava.kernel.persistence.PersistenceManager;
-import net.sf.hibernate.Query;
-import org.digijava.kernel.exception.DgException;
-import java.util.Iterator;
-import org.apache.log4j.Logger;
+
 import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.OracleLocale;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
 
 /**
  * This class was created to concentrate <b>ALL</b> utillities, needed for
@@ -223,9 +223,9 @@ public class SpecificUtils {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            Query q = session.createQuery("from rs in class " +
+            Query q = session.createQuery("from " +
                                           OracleLocale.class.getName() +
-                                          " where rs.locale.code=?");
+                                          " rs where rs.locale.code=?");
             q.setString(0, locale.getCode());
             q.setCacheable(true);
             q.setCacheRegion(SpecificUtils.class.getName() + ".queries");

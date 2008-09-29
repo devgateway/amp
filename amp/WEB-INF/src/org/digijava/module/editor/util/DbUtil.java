@@ -26,7 +26,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.ObjectNotFoundException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -34,17 +42,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
-import org.digijava.module.help.dbentity.HelpTopic;
-
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.ObjectNotFoundException;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -74,9 +73,9 @@ public class DbUtil {
         List items = new ArrayList();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from e in class " +
+            Query q = session.createQuery("from " +
                                           Editor.class.getName() +
-                                          " where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
+                                          " e where (e.siteId=:siteId) and (e.editorKey=:editorKey) and (e.language!=:language)");
 
             q.setParameter("siteId", siteId, Hibernate.STRING);
             q.setParameter("editorKey", editorKey, Hibernate.STRING);
@@ -127,9 +126,9 @@ public class DbUtil {
         List items = new ArrayList();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from e in class " +
+            Query q = session.createQuery("from " +
                                           Editor.class.getName() +
-                " where (e.siteId=:siteId) order by e.orderIndex");
+                " e where (e.siteId=:siteId) order by e.orderIndex");
 
             q.setParameter("siteId", siteId, Hibernate.STRING);
 
@@ -159,9 +158,9 @@ public class DbUtil {
         List items = new ArrayList();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from e in class " +
+            Query q = session.createQuery("from " +
                                           Editor.class.getName() +
-                " where e.siteId=:siteId and e.groupName=:groupName " +
+                " e where e.siteId=:siteId and e.groupName=:groupName " +
                 "and e.language=:language " +
                 "order by e.orderIndex");
 
@@ -227,9 +226,9 @@ public class DbUtil {
         Editor item = new Editor();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from e in class " +
+            Query q = session.createQuery("from " +
                                           Editor.class.getName() +
-                                          " where (e.siteId=:siteId) and " +
+                                          " e where (e.siteId=:siteId) and " +
                                           "(e.orderIndex=:orderIndex)");
 
             q.setParameter("siteId", siteId, Hibernate.STRING);
@@ -271,9 +270,9 @@ public class DbUtil {
         Editor item = new Editor();
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from e in class " +
+            Query q = session.createQuery("from " +
                                           Editor.class.getName() +
-                " where (e.editorKey=:editorKey) and (e.language=:language)");
+                " e where (e.editorKey=:editorKey) and (e.language=:language)");
 
             q.setParameter("editorKey", editorKey, Hibernate.STRING);
             q.setParameter("language", language, Hibernate.STRING);

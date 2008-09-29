@@ -22,21 +22,24 @@
 
 package org.digijava.kernel.mail.util;
 
-import org.apache.log4j.Logger;
-import javax.mail.Address;
-import org.digijava.kernel.mail.exception.MailSpoolException;
-import java.util.List;
-import org.digijava.kernel.persistence.PersistenceManager;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import org.digijava.kernel.entity.MailSpool;
-import javax.mail.internet.InternetAddress;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Calendar;
+import java.util.List;
+
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
+
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
+import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.MailSpool;
+import org.digijava.kernel.mail.exception.MailSpoolException;
+import org.digijava.kernel.persistence.PersistenceManager;
 
 public class DbUtil {
   private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -207,9 +210,9 @@ public class DbUtil {
         GregorianCalendar date = new GregorianCalendar();
         try {
 
-            querryString = "from rs in class " +
+            querryString = "from " +
             MailSpool.class.getName() +
-            " where rs.dateSend <= :dateSend";
+            " rs where rs.dateSend <= :dateSend";
 
             session = PersistenceManager.getSession();
             tx = session.beginTransaction();
@@ -261,9 +264,9 @@ public class DbUtil {
       try {
         session = PersistenceManager.getSession();
         String querryString = "";
-        querryString = "from rs in class " +
+        querryString = "from " +
             MailSpool.class.getName() +
-            " where rs.dateLastSend >= :dateParam and rs.dateSend is null order by rs.dateLastSend desc";
+            " rs where rs.dateLastSend >= :dateParam and rs.dateSend is null order by rs.dateLastSend desc";
 
         Query q = session.createQuery(querryString);
         date.add(Calendar.MINUTE,(minute.intValue() * -1));
@@ -292,13 +295,12 @@ public class DbUtil {
       List spoolList = null;
 
       Session session = null;
-      GregorianCalendar date = new GregorianCalendar();
       try {
         session = PersistenceManager.getSession();
         String querryString = "";
-        querryString = "from rs in class " +
+        querryString = "from " +
             MailSpool.class.getName() +
-            " where rs.dateSend is null order by rs.dateLastSend asc";
+            " rs where rs.dateSend is null order by rs.dateLastSend asc";
 
         Query q = session.createQuery(querryString);
         spoolList = q.list();

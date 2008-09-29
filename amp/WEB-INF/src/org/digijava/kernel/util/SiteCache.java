@@ -203,9 +203,9 @@ public class SiteCache implements Runnable {
         try {
             session = PersistenceManager.getSession();
 
-            newSharedInstances = new ArrayList(session.find(" from mi in class " +
+            newSharedInstances = new ArrayList(session.find("from " +
                 ModuleInstance.class.getName() +
-                " where mi.site is null "));
+                " mi where mi.site is null "));
 
             Collections.sort(newSharedInstances, moduleInstanceComparator);
 

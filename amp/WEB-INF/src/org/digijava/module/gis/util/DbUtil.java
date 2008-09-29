@@ -1,5 +1,6 @@
 package org.digijava.module.gis.util;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,17 +13,14 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.gis.dbentity.GisMap;
-import org.digijava.module.aim.dbentity.IndicatorConnection;
-import org.digijava.module.aim.dbentity.IndicatorSector;
-import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.SectorUtil;
-import java.util.Collection;
+import org.digijava.module.gis.dbentity.GisMap;
 
 /**
  * <p>Title: </p>
@@ -96,9 +94,9 @@ public class DbUtil {
         GisMap map = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            Query q = session.createQuery("from rs in class " +
+            Query q = session.createQuery("from " +
                                           GisMap.class.getName() +
-                                          " where (rs.mapCode=:mapCode)");
+                                          " rs where (rs.mapCode=:mapCode)");
             q.setParameter("mapCode", code, Hibernate.STRING);
             Iterator it = q.iterate();
             if (it.hasNext()) {
@@ -119,24 +117,15 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            /*
-            Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
-                                          AmpActivitySector.class.getName() +
-                                          ", loc in class " +
-                                          AmpActivityLocation.class.getName() +
-                                          " where sec.activityId.ampActivityId=loc.activity.ampActivityId and" +
-                                          " loc.location.region is not null and size(sec.activityId.locations)>0" +
-                                          " group by sec.sectorId");
-*/
 
-            Query q = session.createQuery("select sec.sectorId, count(*) from sec in class " +
+            Query q = session.createQuery("select sec.sectorId, count(*) from " +
                                           AmpActivitySector.class.getName() +
-                                          " where exists (from fnd in class " +
+                                          " sec where exists (from " +
                                           AmpFunding.class.getName() +
-                                          " where sec.activityId.ampActivityId=fnd.ampActivityId.ampActivityId)" +
-                                          " and exists (from loc in class " +
+                                          " fnd where sec.activityId.ampActivityId=fnd.ampActivityId.ampActivityId)" +
+                                          " and exists (from " +
                                           AmpActivityLocation.class.getName() +
-                                          " where sec.activityId.ampActivityId=loc.activity.ampActivityId and" +
+                                          " loc where sec.activityId.ampActivityId=loc.activity.ampActivityId and" +
                                           " loc.location.region is not null)" +
                                           " and size(sec.activityId.locations)>0" +
                                           " group by sec.sectorId");
@@ -168,14 +157,14 @@ public class DbUtil {
             Query q = null;
             if (sectorId > -1) {
                 q = session.createQuery(
-                        "select sec.activityId, sec.sectorPercentage from sec in class " +
+                        "select sec.activityId, sec.sectorPercentage from " +
                         AmpActivitySector.class.getName() +
-                        " where sec.sectorId=:sectorId");
+                        " sec where sec.sectorId=:sectorId");
                 q.setParameter("sectorId", sectorId, Hibernate.LONG);
             } else {
                 q = session.createQuery(
-                        "select sec.activityId, sec.sectorPercentage from sec in class " +
-                        AmpActivitySector.class.getName());
+                        "select sec.activityId, sec.sectorPercentage from " +
+                        AmpActivitySector.class.getName() + " sec");
 
 
             }
@@ -191,9 +180,9 @@ public class DbUtil {
        Session session = null;
        try {
            session = PersistenceManager.getRequestDBSession();
-           Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from ds in class " +
+           Query q = session.createQuery("select ds.indicator.indicatorId, ds.indicator.name from " +
                                          IndicatorSector.class.getName() +
-                                         " where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
+                                         " ds where ds.sector.ampSectorId=:sectorId group by ds.indicator.indicatorId order by ds.indicator.name");
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
            retVal = q.list();
        } catch (Exception ex) {
@@ -210,11 +199,11 @@ public class DbUtil {
            session = PersistenceManager.getRequestDBSession();
 //
 
-           Query q = session.createQuery("select indVal.value, indConn.location.region from indVal in class " +
+           Query q = session.createQuery("select indVal.value, indConn.location.region from " +
                                          AmpIndicatorValue.class.getName() +
-                                         " , indConn in class " +
+                                         " indVal, " +
                                          IndicatorSector.class.getName() +
-                                         " where indConn.sector.ampSectorId=:sectorId" +
+                                         " indConn where indConn.sector.ampSectorId=:sectorId" +
                                          " and indConn.indicator.indicatorId=:indicatorId " +
                                          " and indConn.id=indVal.indicatorConnection.id");
            q.setParameter("sectorId", sectorId, Hibernate.LONG);
@@ -234,14 +223,9 @@ public class DbUtil {
         GisMap map = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            /*
-            Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
-                                          AmpActivitySector.class.getName() +
-                                          " where sec.sectorId=:sectorId");
-            */
-           Query q = session.createQuery("select sum(fd.transactionAmount) from fd in class " +
+            Query q = session.createQuery("select sum(fd.transactionAmount) from " +
                                           AmpFundingDetail.class.getName() +
-                                          " where fd.ampFundingId.ampActivityId.ampActivityId=:activityId");
+                                          " fd where fd.ampFundingId.ampActivityId.ampActivityId=:activityId");
 
             q.setParameter("activityId", activityId, Hibernate.LONG);
             List tmpLst = q.list();
@@ -256,20 +240,12 @@ public class DbUtil {
     public static Double getTotalActivityFoundings(String ActIdWhereclause) {
             Double retVal = null;
             Session session = null;
-            GisMap map = null;
             try {
                 session = PersistenceManager.getRequestDBSession();
-                /*
-                Query q = session.createQuery("select sec.activityId, sec.sectorPercentage from sec in class " +
-                                              AmpActivitySector.class.getName() +
-                                              " where sec.sectorId=:sectorId");
-                */
-               Query q = session.createQuery("select sum(fd.transactionAmount) from fd in class " +
+                Query q = session.createQuery("select sum(fd.transactionAmount) from " +
                                               AmpFundingDetail.class.getName() +
-                                              " where fd.ampFundingId.ampActivityId.ampActivityId in ("+
+                                              " fd where fd.ampFundingId.ampActivityId.ampActivityId in ("+
                                               ActIdWhereclause + ")");
-
-                //q.setParameter("activityId", activityId, Hibernate.LONG);
                 List tmpLst = q.list();
                 if (!tmpLst.isEmpty())
                 retVal = (Double)tmpLst.get(0);

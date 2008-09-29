@@ -380,4 +380,5 @@ public class AdvancedReport
 	public void setAssistanceCopy(Collection assistanceCopy) {
 		this.assistanceCopy = assistanceCopy;
 	}
+	
 }

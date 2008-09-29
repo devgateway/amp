@@ -128,6 +128,8 @@ public class ActivityManager extends Action {
 			sortBy = 1;
 		}else if("activityId".equals(actForm.getSortByColumn())){
 			sortBy = 2;
+		}else if("activityTeamName".equals(actForm.getSortByColumn())){
+			sortBy = 3;
 		}
 
 		switch (sortBy) {
@@ -157,6 +159,21 @@ public class ActivityManager extends Action {
 					if(a2.getAmpId()!=null) c2=a2.getAmpId();
 					
 					return c1.compareTo(c2);
+				}
+			});
+			break;
+		case 3:
+			Collections.sort(activities, new Comparator<AmpActivity>(){
+				public int compare(AmpActivity a1, AmpActivity a2) {
+					String s1	= a1.getTeam().getName();
+					String s2	= a2.getTeam().getName();
+					if ( s1 == null )
+						s1	= "";
+					if ( s2 == null )
+						s2	= "";
+					
+					return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
+					//return a1.getName().compareTo(a2.getName());
 				}
 			});
 			break;

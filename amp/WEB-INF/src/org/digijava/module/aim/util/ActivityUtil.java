@@ -7,7 +7,6 @@ package org.digijava.module.aim.util;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -89,7 +88,6 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
@@ -151,8 +149,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     AmpActivity oldActivity = null;
 
     Long activityId = null;
-    Set fundSet		= null;
-
     try {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
@@ -1219,9 +1215,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     	  oql+=" join  act.categories as categories ";
       }
       oql+=" where 1=1 ";
-//      if (ampThemeId != null) {
-//        oql += " and ( :ampThemeId in elements(act.activityPrograms )) ";
-//      }
       if (ampThemeId != null) {
           oql += " and ( theme.ampThemeId = :ampThemeId) ";
         }
@@ -3510,9 +3503,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	
 	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
 		  try {
-	            String queryStr	= "SELECT a FROM " + AmpActivity.class.getName() + " a WHERE " +
-	            			"(a.activityCreator=:atmId)  OR  (a.updatedBy=:atmId) OR (:atmId IN ELEMENTS(a.member))";
-	            Query qry 		= session.createQuery(queryStr);
+	            String queryStr	= "SELECT a FROM " + AmpActivity.class.getName() + " a left join a.member m WHERE " +
+	            			"(a.activityCreator=:atmId) OR (a.updatedBy=:atmId) OR (m.ampTeamMemId = :atmId)";
+	            Query qry = session.createQuery(queryStr);
 	            qry.setLong("atmId", ampTeamMemberId);
 	            
 	            return qry.list();

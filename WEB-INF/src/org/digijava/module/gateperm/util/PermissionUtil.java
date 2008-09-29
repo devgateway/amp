@@ -556,10 +556,9 @@ public final class PermissionUtil {
     
     public static List<PermissionMap> getAllPermissionMapsForPermission(Long permissionId) throws DgException, HibernateException {	
 	    Session session = PersistenceManager.getRequestDBSession();
-	    Query q = session.createQuery("SELECT elements(p.permissibleObjects) from "+Permission.class.getName()+" p WHERE p.id=:permissionId");
+	    Query q = session.createQuery("from "+PermissionMap.class.getName()+" p WHERE p.permission.id = :permissionId");
 	    q.setParameter("permissionId", permissionId);
-	    List list = q.list();
-	    return list;
+	    return q.list();
     }
     
     

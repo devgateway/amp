@@ -377,7 +377,7 @@ public class TranslatorWorker {
 
         List messages = null;
         String query =
-            "select distinct message.key from message in class org.digijava.kernel.entity.Message where message.siteId='"
+            "select distinct message.key from org.digijava.kernel.entity.Message message where message.siteId='"
             + siteId.trim()
             + "' or message.siteId='"
             + rootSiteId
@@ -432,7 +432,7 @@ public class TranslatorWorker {
         Map messageMap = new HashMap();
         try {
             String query =
-                "select  message from message in class org.digijava.kernel.entity.Message where message.siteId='"
+                "select  message from org.digijava.kernel.entity.Message message where message.siteId='"
                 + siteId
                 + "' and message.key like '"
                 + ((caseSensitiveKeys)?prefix:prefix.toLowerCase())
@@ -532,7 +532,7 @@ public class TranslatorWorker {
         List rtList;
         try {
             String query =
-                "select distinct message.key from message in class org.digijava.kernel.entity.Message where ( message.siteId='"
+                "select distinct message.key from org.digijava.kernel.entity.Message message where ( message.siteId='"
                 + siteId
                 + "' or message.siteId='"
                 + rootSiteId
@@ -761,7 +761,7 @@ public class TranslatorWorker {
         }
         try {
             String query =
-                "select distinct message.key from message in class org.digijava.kernel.entity.Message where ( message.siteId='"
+                "select distinct message.key from org.digijava.kernel.entity.Message message where ( message.siteId='"
                 + siteId
                 + "' or message.siteId='"
                 + rootSiteId
@@ -882,7 +882,7 @@ public class TranslatorWorker {
 
         try {
             String query =
-                "select distinct message.key from message in class org.digijava.kernel.entity.Message where ( message.siteId='"
+                "select distinct message.key from org.digijava.kernel.entity.Message message where ( message.siteId='"
                 + siteId
                 + "' or message.siteId='"
                 + rootSiteId

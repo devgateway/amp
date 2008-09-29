@@ -19,10 +19,21 @@ package org.digijava.module.um.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.ObjectNotFoundException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
@@ -39,26 +50,16 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.ProxyHelper;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.UnixCrypt;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.exception.UMException;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.Type;
-import net.sf.hibernate.ObjectNotFoundException;
-import java.util.Date;
-import org.digijava.kernel.util.RequestUtils;
-import net.sf.hibernate.Query;
-import java.util.*;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -68,8 +69,6 @@ public class DbUtil {
         UMException {
         boolean permitted = false;
         Session sess = null;
-        User userobj = new User();
-
         Transaction tx = null;
 
         try {
@@ -127,9 +126,9 @@ public class DbUtil {
             sess = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
 
-            Iterator iter = sess.iterate("from rs in class " +
+            Iterator iter = sess.iterate("from " +
                                          User.class.getName() +
-                                         " where rs.email =? ", email,
+                                         " rs where rs.email =? ", email,
                                          Hibernate.STRING);
             while(iter.hasNext()) {
                 User iterUser = (User) iter.next();
@@ -171,9 +170,9 @@ public class DbUtil {
             sess = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
 
-            Iterator iter = sess.iterate("from rs in class " +
+            Iterator iter = sess.iterate("from " +
                                          User.class.getName() +
-                                         " where rs.email =? ", user,
+                                         " rs where rs.email =? ", user,
                                          Hibernate.STRING);
 //////////////////////
             while(iter.hasNext()) {
@@ -254,9 +253,9 @@ public class DbUtil {
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
-            Iterator iter = session.iterate("from rs in class " +
+            Iterator iter = session.iterate("from " +
                                             User.class.getName() +
-                                            " where rs.email =? ", email,
+                                            " rs where rs.email =? ", email,
                                             Hibernate.STRING);
             User iterUser = null;
             while(iter.hasNext()) {
@@ -310,9 +309,9 @@ public class DbUtil {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
             tx = session.beginTransaction();
-            Iterator iter = session.iterate("from rs in class " +
+            Iterator iter = session.iterate("from " +
                                             User.class.getName() +
-                                            " where rs.email =? ", email,
+                                            " rs where rs.email =? ", email,
                                             Hibernate.STRING);
             User iterUser = null;
             while(iter.hasNext()) {
@@ -386,9 +385,9 @@ public class DbUtil {
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
-            Iterator iter = session.iterate("from rs in class " +
+            Iterator iter = session.iterate("from " +
                                             User.class.getName() +
-                                            " where rs.email =? ", user,
+                                            " rs where rs.email =? ", user,
                                             Hibernate.STRING);
             User iterUser = null;
             while(iter.hasNext()) {
@@ -707,9 +706,9 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getSession();
 
-            Iterator usIter = sess.iterate("from rs in class " +
+            Iterator usIter = sess.iterate("from " +
                     User.class.getName() +
-                    " where sha(concat(rs.email,rs.id))=? and rs.emailVerified=false", id,
+                    " rs where sha(concat(rs.email,rs.id))=? and rs.emailVerified=false", id,
                     Hibernate.STRING);
             if (usIter.hasNext()) {
                 User user = (User) usIter.next();
@@ -750,9 +749,9 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getSession();
 
-            Iterator iter = sess.iterate("from rs in class " +
+            Iterator iter = sess.iterate("from " +
                                          User.class.getName() +
-                                         " where lower(rs.email)=? ", email,
+                                         " rs where lower(rs.email)=? ", email,
                                          Hibernate.STRING);
             if(iter.hasNext()) {
                 iscorrect = true;
@@ -835,7 +834,6 @@ public class DbUtil {
      */
     public static UserPreferences getUserPreferences(User user, Site site) throws
         UMException {
-        long userId = 0;
         Session session = null;
         UserPreferences userPreferences = null;
         try {
@@ -846,9 +844,9 @@ public class DbUtil {
                 user.getId(), site.getId()};
             Type[] paramTypes = {
                 Hibernate.LONG, Hibernate.LONG};
-            Iterator iter = session.iterate("from p in class " +
+            Iterator iter = session.iterate("from " +
                                             UserPreferences.class.getName() +
-                                            " where p.user.id =? and p.site.id=?", params,
+                                            " p where p.user.id =? and p.site.id=?", params,
                                             paramTypes);
             while(iter.hasNext()) {
                 userPreferences = (UserPreferences) iter.next();
@@ -964,10 +962,10 @@ public class DbUtil {
             session = PersistenceManager.getSession();
 
             if(order != null && order.trim().length() > 0) {
-                find = new String("from rs in class " + className +
-                                  " order by rs." + order);
+                find = new String("from " + className +
+                                  " rs order by rs." + order);
             } else {
-                find = new String("from rs in class " + className);
+                find = new String("from " + className);
             }
 
             list = session.find(find);
@@ -1058,8 +1056,8 @@ public class DbUtil {
                         }
              */
 
-            userList = session.find("from rs in class " + User.class.getName() +
-                                    " where rs.email like ? or lower(rs.firstNames) like ? or lower(rs.lastName) like ? or lower(rs.firstNames || rs.lastName) like ?",
+            userList = session.find("from " + User.class.getName() +
+                                    " rs where rs.email like ? or lower(rs.firstNames) like ? or lower(rs.lastName) like ? or lower(rs.firstNames || rs.lastName) like ?",
                                     new Object[] {
                 userLow, userLow, userLow, userLowConcat
 
@@ -1176,8 +1174,8 @@ public class DbUtil {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            groups = session.find(" from s in class " + Group.class.getName() +
-                                  " where s.site.id = ?", new Object[] {
+            groups = session.find(" from " + Group.class.getName() +
+                                  " s where s.site.id = ?", new Object[] {
                 siteId
             }, new Type[] {
                 Hibernate.LONG});

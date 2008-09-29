@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -17,25 +15,15 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.TreeItem;
-import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.help.dbentity.HelpTopic;
-import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.translation.util.DbUtil;
@@ -303,8 +291,8 @@ public class HelpUtil {
 	
 	try {
 		session = PersistenceManager.getRequestDBSession();
-		 Query q = session.createQuery(" from e in class " +
-                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
+		 Query q = session.createQuery("from " +
+                 Editor.class.getName() +" e where e.editorKey like 'help%' order by e.lastModDate");
 
 		helpTopics = q.list();
 		
@@ -332,11 +320,6 @@ public class HelpUtil {
 			+"where (t.bodyEditKey=e.editorKey) order by e.lastModDate";
 		 query = session.createQuery(queryString);
 
-		
-		//		 Query q = session.createQuery(" from e in class " +
-//                 Editor.class.getName() +" where e.editorKey like 'help%' order by e.lastModDate");
-//
-		//helpTopics = query.list();
 		Iterator itr = query.list().iterator();
 		HelpSearchData helpsearch;
 		

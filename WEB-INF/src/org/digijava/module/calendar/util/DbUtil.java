@@ -28,7 +28,15 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;
@@ -40,12 +48,6 @@ import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.CalendarSettings;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.common.dbentity.ItemStatus;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.Type;
 
 public class DbUtil {
 
@@ -109,10 +111,10 @@ public class DbUtil {
 	try {
 	    session = PersistenceManager.getSession();
 
-	    String queryString = "select c from ci in class " +
+	    String queryString = "select c from " +
 		  CalendarItem.class.getName() +
-		  ",c in class " + Calendar.class.getName() +
-		  " where (ci.calendar.id=c.id) and (c.siteId=:siteId) and (c.instanceId=:instanceId) ";
+		  " ci, " + Calendar.class.getName() +
+		  " c where (ci.calendar.id=c.id) and (c.siteId=:siteId) and (c.instanceId=:instanceId) ";
 
 	    if (userId != null) {
 		queryString += " and (ci.userId=:userId) ";
@@ -201,9 +203,9 @@ queryString +=
 	try {
 	    session = PersistenceManager.getSession();
 
-	    String queryString = "from c in class " +
+	    String queryString = "from " +
 		  Calendar.class.getName() +
-		  " where (c.siteId=:siteId) and (c.instanceId=:instanceId) ";
+		  " c where (c.siteId=:siteId) and (c.instanceId=:instanceId) ";
 
 	    if (status != null) {
 		queryString += "and (c.status=:status) ";
@@ -350,9 +352,9 @@ queryString +=
 	try {
 	    session = PersistenceManager.getSession();
 
-	    Query q = session.createQuery("from rs in class " +
+	    Query q = session.createQuery("from " +
 					  Calendar.class.getName() +
-					  " where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
+					  " rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
 					  " and (rs.startDate <=:curDate1 and rs.endDate >=:curDate2) order by rs.startDate desc");
 
 	    java.util.Calendar currentDate = java.util.Calendar.getInstance();
@@ -561,9 +563,9 @@ queryString +=
 	    session = PersistenceManager.getSession();
 
 	    // @toto Fix bug
-	    Query q = session.createQuery("from rs in class " +
+	    Query q = session.createQuery("from " +
 					  Calendar.class.getName() +
-					  " where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
+					  " rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
 					  " and ( ((rs.endDate >= :fromDate) and (rs.endDate <= :toDate)) or ((rs.startDate >= :fromDate) and (rs.startDate <= :toDate)) ) order by rs.startDate desc");
 
 	    q.setFirstResult(firstResult);
@@ -624,9 +626,9 @@ queryString +=
 	    session = PersistenceManager.getSession();
 
 	    // @toto Fix bug
-	    Query q = session.createQuery("from rs in class " +
+	    Query q = session.createQuery("from " +
 					  Calendar.class.getName() +
-					  " where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
+					  " rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) and (rs.status=:status) " +
 					  " and ( ((rs.endDate >= :fromDate) and (rs.endDate <= :toDate)) or ((rs.startDate >= :fromDate) and (rs.startDate <= :toDate)) ) order by rs.startDate desc");
 
 	    q.setParameter("siteId", siteId, Hibernate.STRING);
@@ -679,9 +681,9 @@ queryString +=
 	try {
 	    session = PersistenceManager.getSession();
 
-	    Query q = session.createQuery("from rs in class " +
+	    Query q = session.createQuery("from " +
 					  Calendar.class.getName() +
-					  " where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) " +
+					  " rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) " +
 					  " and (rs.startDate <=:curDate1 and rs.endDate >=:curDate2) order by rs.startDate desc");
 
 	    q.setParameter("siteId", siteId, Hibernate.STRING);
@@ -733,9 +735,9 @@ String instanceId, int firstResult,
 	try {
 	    session = PersistenceManager.getSession();
 
-	    Query q = session.createQuery("from rs in class " +
+	    Query q = session.createQuery("from " +
 					  Calendar.class.getName() +
-					  " where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) " +
+					  " rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId) " +
 					  " and (rs.startDate <=:curDate1 and rs.endDate >=:curDate2) order by rs.startDate desc");
 
 	    q.setFirstResult(firstResult);
@@ -792,19 +794,19 @@ String instanceId, int firstResult,
 
 	    if (status != null) {
 
-		q = session.createQuery("select c from ci in class " +
+		q = session.createQuery("select c from " +
 					CalendarItem.class.getName() +
-					",c in class " + Calendar.class.getName() +
-					" where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
+					" ci, " + Calendar.class.getName() +
+					" c where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
 					"(c.startDate <=:curDate1 and c.endDate >=:curDate2) order by c.startDate desc");
 
 		q.setParameter("status", status, Hibernate.STRING);
 	    }
 	    else {
-		q = session.createQuery("select c from ci in class " +
+		q = session.createQuery("select c from " +
 					CalendarItem.class.getName() +
-					",c in class " + Calendar.class.getName() +
-					" where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
+					" ci, " + Calendar.class.getName() +
+					" c where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
 					"(c.startDate <=:curDate1 and c.endDate >=:curDate2) order by c.startDate desc");
 
 	    }
@@ -866,19 +868,19 @@ String instanceId, int firstResult,
 	    session = PersistenceManager.getSession();
 
 	    if (status != null) {
-		q = session.createQuery("select c from ci in class " +
+		q = session.createQuery("select c from " +
 					CalendarItem.class.getName() +
-					",c in class " + Calendar.class.getName() +
-					" where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
+					" ci, " + Calendar.class.getName() +
+					" c where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
 					"( ((c.endDate >= :fromDate) and (c.endDate <= :toDate)) or ((c.startDate >= :fromDate) and  (c.startDate <= :toDate)) ) order by c.startDate desc");
 
 		q.setParameter("status", status, Hibernate.STRING);
 	    }
 	    else {
-		q = session.createQuery("select c from ci in class " +
+		q = session.createQuery("select c from " +
 					CalendarItem.class.getName() +
-					",c in class " + Calendar.class.getName() +
-					" where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
+					" ci, " + Calendar.class.getName() +
+					" c where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
 					"( ((c.endDate >= :fromDate) and (c.endDate <= :toDate)) or ((c.startDate >= :fromDate) and  (c.startDate <= :toDate)) ) order by c.startDate desc");
 
 	    }
@@ -939,19 +941,19 @@ getInstance();
 	    session = PersistenceManager.getSession();
 
 	    if (status != null) {
-		q = session.createQuery("select c from ci in class " +
+		q = session.createQuery("select c from " +
 					CalendarItem.class.getName() +
-					",c in class " + Calendar.class.getName() +
-					" where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
+					" ci, " + Calendar.class.getName() +
+					" c where (ci.calendar.id=c.id) and (c.status = :status) and (ci.userId = :userId) and " +
 					"( ((c.endDate >= :fromDate) and (c.endDate <= :toDate)) or ((c.startDate >= :fromDate) and  (c.startDate <= :toDate)) ) order by c.startDate desc");
 
 		q.setParameter("status", status, Hibernate.STRING);
 	    }
 	    else {
-		q = session.createQuery("select c from ci in class " +
+		q = session.createQuery("select c from " +
 					CalendarItem.class.getName() +
-					",c in class " + Calendar.class.getName() +
-					" where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
+					" ci, " + Calendar.class.getName() +
+					" c where (ci.calendar.id=c.id) and (ci.userId = :userId) and " +
 					"( ((c.endDate >= :fromDate) and (c.endDate <= :toDate)) or ((c.startDate >= :fromDate) and  (c.startDate <= :toDate)) ) order by c.startDate desc");
 
 	    }
@@ -1000,9 +1002,9 @@ getInstance();
 	    StringBuffer queryString = new StringBuffer();
 	    logger.debug("CALENDAR NUMBER");
 	    queryString.append(
-		  "select rs.numberOfCharsInTitle from rs in class " +
+		  "select rs.numberOfCharsInTitle from " +
 		  CalendarSettings.class.getName() +
-		  " where (rs.siteId=:siteId) and (rs.instanceId=:instanceId)");
+		  " rs where (rs.siteId=:siteId) and (rs.instanceId=:instanceId)");
 
 	    Query q = session.createQuery(queryString.toString());
 
@@ -1074,9 +1076,9 @@ getInstance();
 	try {
 	    session = PersistenceManager.getSession();
 
-	    iter = session.iterate("from rs in class " +
+	    iter = session.iterate("from " +
 				   CalendarSettings.class.getName() +
-				   " where (rs.siteId=?) and (rs.instanceId=?)",
+				   " rs where (rs.siteId=?) and (rs.instanceId=?)",
 				   new Object[] {
 		siteId, instanceId
 

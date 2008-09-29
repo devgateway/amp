@@ -23,9 +23,17 @@
 package org.digijava.module.admin.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Locale;
@@ -40,13 +48,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.admin.exception.AdminException;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.Type;
-import java.util.HashMap;
 
 public class DbUtil {
 
@@ -58,7 +59,7 @@ public class DbUtil {
 	List languages = null;
 	try {
 	    session = PersistenceManager.getSession();
-	    languages = session.find("from rs in class " +
+	    languages = session.find("from " +
 				     Locale.class.getName());
 	}
 	catch (Exception ex) {
@@ -84,9 +85,9 @@ public class DbUtil {
 	List languages = null;
 	try {
 	    session = PersistenceManager.getSession();
-	    Query q = session.createQuery("from rs in class " +
+	    Query q = session.createQuery("from " +
 					  Locale.class.getName() +
-					  " where rs.available=true");
+					  " rs where rs.available=true");
 	    languages = q.list();
 	}
 	catch (Exception ex) {
@@ -243,9 +244,9 @@ tx.rollback();
 		  siteId, moduleName};
 	    Type[] types = {
 		  Hibernate.LONG, Hibernate.STRING};
-	    instances = session.find(" from i in class " +
+	    instances = session.find(" from " +
 				     ModuleInstance.class.getName() +
-		  " where i.site is not null and i.site.id !=? " +
+		  " i where i.site is not null and i.site.id !=? " +
 		  " and i.moduleName = ? " +
 		  " and i.realInstance is null",
 		  params, types);
@@ -345,8 +346,8 @@ tx.rollback();
 	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
-	    sites = session.find(" from s in class " + Site.class.getName() +
-				 " order by s.name");
+	    sites = session.find("from " + Site.class.getName() +
+				 " s order by s.name");
 	}
 	catch (Exception ex) {
 	    logger.debug("Unable to get sites list from database ", ex);
@@ -389,8 +390,8 @@ tx.rollback();
 	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
-	    sites = session.find(" from s in class " + Site.class.getName() +
-				 " where s.parentId is null order by s.name");
+	    sites = session.find(" from " + Site.class.getName() +
+				 " s where s.parentId is null order by s.name");
 	}
 	catch (Exception ex) {
 	    logger.debug("Unable to get top level sites list from database ",
@@ -536,10 +537,10 @@ tx.rollback();
 	    domainUrl = "%" + domainUrl + "%";
 
 	    Iterator iterator = session.iterate(
-		  "select distinct s from d in class " +
+		  "select distinct s from " +
 		  SiteDomain.class.getName() +
-		  ",s in class " + Site.class.getName() +
-		  " where (d.site.id=s.id) and (lower(s.name) like ? or lower(s.siteId) like ? or lower(d.siteDbDomain) like ? or lower(d.sitePath) like ? or lower(d.siteDbDomain || d.sitePath) like ?)",
+		  " d, " + Site.class.getName() +
+		  " s where (d.site.id=s.id) and (lower(s.name) like ? or lower(s.siteId) like ? or lower(d.siteDbDomain) like ? or lower(d.sitePath) like ? or lower(d.siteDbDomain || d.sitePath) like ?)",
 new Object[] {
 		siteKey, siteKey, siteKey, siteKey, domainUrl
 
@@ -683,9 +684,9 @@ new Object[] {
 		      domain};
 		Type[] types = {
 		      Hibernate.STRING};
-		iter = session.iterate("select sd.site from sd in class " +
+		iter = session.iterate("select sd.site from " +
 SiteDomain.class.getName() +
-" where sd.siteDbDomain=?" +
+" sd where sd.siteDbDomain=?" +
 				       " and sd.sitePath is null", params,
 				       types);
 	    }
@@ -694,9 +695,9 @@ SiteDomain.class.getName() +
 domain, path};
 		Type[] types = {
 		      Hibernate.STRING, Hibernate.STRING};
-		iter = session.iterate("select sd.site from sd in class " +
+		iter = session.iterate("select sd.site from " +
 SiteDomain.class.getName() +
-" where sd.siteDbDomain=?" +
+" sd where sd.siteDbDomain=?" +
 				       " and sd.sitePath=?", params,
 				       types);
 	    }
@@ -761,9 +762,9 @@ siteId, siteId
 	    };
 	    Type[] types = {
 		  Hibernate.LONG, Hibernate.LONG};
-	    sites = session.find(" from m in class " +
+	    sites = session.find(" from " +
 				 ModuleInstance.class.getName() +
-		  " where m.site.id != ? and m.realInstance is not null" +
+		  " m where m.site.id != ? and m.realInstance is not null" +
 		  " and m.realInstance.site.id = ? " +
 		  " order by m.site.name, m.moduleName, m.instanceName",
 		  params, types);
@@ -799,9 +800,9 @@ siteId, module
 	    Type[] types = {
 		  Hibernate.LONG, Hibernate.STRING};
 
-	    sites = session.find("select distinct mi.site from mi in class " +
+	    sites = session.find("select distinct mi.site from " +
 				 ModuleInstance.class.getName() +
-		  " where mi.site.id != ? and mi.moduleName = ? " +
+		  " mi where mi.site.id != ? and mi.moduleName = ? " +
 		  " and mi.realInstance is null", params, types);
 
 	}
@@ -950,9 +951,9 @@ tx.rollback();
 		GroupPermission p;
 
 		groupList = session.find(
-		      "select distinct p.group from p in class " +
+		      "select distinct p.group from " +
 		      GroupPermission.class.getName() +
-		      " where p.group.site.id != ? and p.permissionType = ? and p.targetName in (" +
+		      " p where p.group.site.id != ? and p.permissionType = ? and p.targetName in (" +
 		      buff.toString() + ")",
 new Object[] {
 		    siteId,
@@ -1063,9 +1064,9 @@ new Object[] {
 	      Hibernate.BOOLEAN, Hibernate.LONG};
 
 	permissions = new ArrayList();
-	Iterator iter = session.iterate("from gr in class " +
+	Iterator iter = session.iterate("from " +
 					Group.class.getName() +
-	      " where gr.site.inheritSecurity = ? and gr.parentId = ? ",
+	      " gr where gr.site.inheritSecurity = ? and gr.parentId = ? ",
 	      params, types);
 	while (iter.hasNext()) {
 	    Group group = (Group) iter.next();
@@ -1083,7 +1084,7 @@ new Object[] {
 
 	try {
 	    session = PersistenceManager.getSession();
-	    locales = session.find("from loc in class " +
+	    locales = session.find("from " +
 				   Locale.class.getName());
 	}
 	catch (Exception ex) {
@@ -1110,9 +1111,9 @@ new Object[] {
 
 	try {
 	    session = PersistenceManager.getSession();
-	    Iterator iterator = session.iterate("from loc in class " +
+	    Iterator iterator = session.iterate("from " +
 						Locale.class.getName() +
-						" where (loc.code=?)",
+						" loc where (loc.code=?)",
 						code, Hibernate.STRING);
 	    while (iterator.hasNext()) {
 		locale = (Locale) iterator.next();
@@ -1191,8 +1192,8 @@ new Object[] {
 	Query q =null;
 	try {
 	    session = PersistenceManager.getSession();
-	    q = session.createQuery("from m in class " + ModuleInstance.class.getName() +
-				 " where m.site is null" +
+	    q = session.createQuery("from " + ModuleInstance.class.getName() +
+				 " m where m.site is null" +
 				 " order by m.moduleName");
 
 	    commonInstances = q.list();

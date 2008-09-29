@@ -22,37 +22,36 @@
 
 package org.digijava.kernel.util;
 
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.exception.DgException;
-import java.util.List;
-import org.digijava.kernel.persistence.PersistenceManager;
-import net.sf.hibernate.Session;
-import org.apache.log4j.Logger;
 import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.type.Type;
-import java.util.Collection;
-import org.digijava.kernel.request.SiteDomain;
-import java.util.ArrayList;
 import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+
+import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
-import java.util.HashMap;
-import org.digijava.kernel.user.Group;
-import java.util.*;
-import org.digijava.kernel.security.principal.GroupPrincipal;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.DigiSecurityManager;
-import java.security.Permissions;
-import java.security.PermissionCollection;
 import org.digijava.kernel.security.SitePermission;
-import java.security.Permission;
-import org.digijava.kernel.services.siteidentity.SiteIdentityService;
+import org.digijava.kernel.security.principal.GroupPrincipal;
 import org.digijava.kernel.service.ServiceManager;
+import org.digijava.kernel.services.siteidentity.SiteIdentityService;
+import org.digijava.kernel.user.Group;
 
 /**
  * This class containts site-related utillity functions. Site must be
@@ -145,9 +144,9 @@ public class SiteUtils {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            Query query = session.createQuery("from s in class " +
+            Query query = session.createQuery("from " +
                                               Site.class.getName() +
-                                              " where s.siteId=?");
+                                              " s where s.siteId=?");
             query.setParameter(0, siteId);
             query.setCacheable(true);
             query.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
@@ -405,9 +404,9 @@ public class SiteUtils {
         Session session = null;
         try {
             session = PersistenceManager.getSession();
-            Query query = session.createQuery("from s in class " +
+            Query query = session.createQuery("from " +
                                               Site.class.getName() +
-                " where s.parentId = ? order by s.name");
+                " s where s.parentId = ? order by s.name");
             query.setCacheable(true);
             query.setCacheRegion(Constants.KERNEL_QUERY_CACHE_REGION);
             query.setParameter(0, new Long(parentId));

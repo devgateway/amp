@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.action.AdvancedReport;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.aim.multistepwizard.exception.ClassNotAllowedForCheckbox;
 /**

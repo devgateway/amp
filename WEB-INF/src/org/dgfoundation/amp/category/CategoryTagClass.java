@@ -23,6 +23,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.springframework.beans.BeanWrapperImpl;
 
 /**
  * @author Alex Gartner
@@ -151,8 +152,8 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				else {
 					/* Getting the id of the current value of the category */
 					try{
-						PropertyDescriptor beanProperty	= new PropertyDescriptor(property, bean.getClass());
-						valueId							= (Long)(beanProperty.getReadMethod().invoke(bean,new Object[0]));
+					    BeanWrapperImpl beanWrapperImpl = new BeanWrapperImpl(bean);
+					    valueId=(Long) beanWrapperImpl.getPropertyValue(property);
 					}
 					catch(Exception E){
 						logger.error(E);

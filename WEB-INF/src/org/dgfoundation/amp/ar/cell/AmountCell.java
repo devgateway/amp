@@ -287,6 +287,10 @@ public class AmountCell extends Cell {
 
 	public Cell filter(Cell metaCell, Set ids) {
 		AmountCell ret = (AmountCell) super.filter(metaCell, ids);
+		
+		if(this.getColumnCellValue()!=null) ret.setColumnCellValue(new HashMap<String, Comparable>(this.getColumnCellValue()));
+		if(this.getColumnPercent()!=null) ret.setColumnPercent(new HashMap<String, Double>(this.getColumnPercent()));
+		
 		if (ret == null || ret.getMergedCells().size() == 0)
 			return ret;
 		// we need to filter the merged cells too...
@@ -322,7 +326,10 @@ public class AmountCell extends Cell {
 
 	public void setPercentage(double percentage, MetaTextCell source) {
 		Column sourceCol = source.getColumn();
+		
 		initializePercentageMaps();
+		logger.debug("percent "+percentage +" apply to "+this+" (hash"+this.getHashCode()+") with source "+sourceCol.getName());
+		logger.debug("...column already has "+columnPercent+" for "+columnCellValue);
 		// never apply same percentage of same value again
 		if (columnPercent.containsKey(sourceCol.getName()) && columnCellValue.get(sourceCol.getName()).equals(source.getValue())) return;
 
@@ -337,13 +344,19 @@ public class AmountCell extends Cell {
 			return;
 		}
 
-		if (columnPercent.containsKey(ArConstants.COLUMN_ANY_SECTOR)
+		String sectorPercentColName=null;
+		for (String colPercent : columnPercent.keySet()) 
+		    if(colPercent.endsWith(ArConstants.COLUMN_ANY_SECTOR)) sectorPercentColName=colPercent; 
+		
+		
+		if (sectorPercentColName!=null
 				&& sourceCol.getName().endsWith(ArConstants.COLUMN_SUB_SECTOR)) {
 			// we forget the sector percentage, and apply the sub-sector
 			// percentage:
-			columnPercent.remove(ArConstants.COLUMN_ANY_SECTOR);
-			columnPercent.put(ArConstants.COLUMN_SUB_SECTOR, percentage);
-			columnCellValue.put(ArConstants.COLUMN_SUB_SECTOR,
+			columnPercent.remove(sectorPercentColName);
+			columnCellValue.remove(sectorPercentColName);
+			columnPercent.put( sourceCol.getName(), percentage);
+			columnCellValue.put(sourceCol.getName(),
 					(Comparable) source.getValue());
 			return;
 		}

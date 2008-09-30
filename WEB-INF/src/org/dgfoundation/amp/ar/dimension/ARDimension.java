@@ -126,11 +126,19 @@ public abstract class ARDimension {
 	    Cell c = (Cell) i.next();
 	    Class relatedContentPersisterClass = c.getColumn().getRelatedContentPersisterClass();
 	    //this is the class of the parent object responsible for the hierarchy
-	    //we check if we have a mapping for that class
+	    //we check if we have a mapping for that class. the mapping will hold its children.
 	    Map<Long,Long> m=links.get(relatedContentPersisterClass);
 	    if(m!=null) {
-		Long relatedId=m.get(childCell.getId());
-		if( !(relatedId!=null && relatedId.equals(c.getId()))) return false;
+		Long childId=childCell.getId();
+		
+		Long parentId=null;
+		do {
+		    parentId = m.get(childId);
+		    childId=parentId;
+		    if(parentId!=null && parentId.equals(c.getId())) break;
+		}while(parentId!=null);
+		
+		if( !(parentId!=null && parentId.equals(c.getId()))) return false;
 	    } 	    
 	}
 	return true;

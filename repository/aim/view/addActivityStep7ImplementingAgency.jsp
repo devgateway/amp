@@ -46,6 +46,8 @@
 															<td>
 																<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
 																	<aim:addOrganizationButton form="${aimEditActivityForm}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm")).setDelegateClass(""); %>
+																	<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm")).setDelegateClass(""); %>
 																</field:display>
 															</td>
 															<td>

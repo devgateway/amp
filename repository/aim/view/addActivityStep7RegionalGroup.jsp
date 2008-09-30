@@ -67,6 +67,8 @@
 													<td bgcolor="#ffffff">
 													<field:display name="Regional Group Add Button" feature="Regional Group">
 														<aim:addOrganizationButton form="${aimEditActivityForm}" collection="regGroups" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm")).setDelegateClass(""); %>
+														<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm")).setDelegateClass(""); %>
 													</field:display>
 													</td>
 												</tr>

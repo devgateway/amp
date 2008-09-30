@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
@@ -46,8 +47,16 @@
 															<td>
 																<field:display name="Sector Group Add Button" feature="Sector Group">
 																	<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
-																	<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm")).setDelegateClass(""); %>
-																	<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm")).setDelegateClass(""); %>			
+																	<%
+																	selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
+																	selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");
+																	if(compForm1 != null){
+																		compForm1.setDelegateClass("");
+																	}
+																	if(compForm2 != null){
+																		compForm2.setDelegateClass("");
+																	}
+																	%>			
 																</field:display>
 															</td>
 															<td>

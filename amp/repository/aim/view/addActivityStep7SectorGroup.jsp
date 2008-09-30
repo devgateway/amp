@@ -45,7 +45,9 @@
 														<tr>
 															<td>
 																<field:display name="Sector Group Add Button" feature="Sector Group">
-																	<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+																	<aim:addOrganizationButton refreshParentDocument="true" collection="sectGroups" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm")).setDelegateClass(""); %>
+																	<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm")).setDelegateClass(""); %>			
 																</field:display>
 															</td>
 															<td>

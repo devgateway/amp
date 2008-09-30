@@ -67,6 +67,8 @@
                                                                                             <!-- aim:addOrganizationButton statement should be written in one line or you will get an enormous button. -->
 												<field:display name="Responsible Organization Add Button" feature="Responsible Organization">
 												<aim:addOrganizationButton form="${aimEditActivityForm}" collection="respOrganisations" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+												<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm")).setDelegateClass(""); %>
+												<%((org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm")).setDelegateClass(""); %>
 												</field:display>
 											</td>
 										</tr>

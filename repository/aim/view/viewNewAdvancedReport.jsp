@@ -221,7 +221,7 @@ session.setAttribute("progressValue", counter);
            
             </span>
              &nbsp;<br>
-             <div style="display:none;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
+             <div style="display:block;background-color:#FFFFCC;padding:2px 2px 2px 2px;" id="currentDisplaySettings" >
              <table cellpadding="0" cellspacing="0" border="0" width="80%">
              <tr>
              <td style="font-size:11px;font-family:Arial,Helvetica,sans-serif" valign="top">

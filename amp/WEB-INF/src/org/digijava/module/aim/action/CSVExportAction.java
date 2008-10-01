@@ -106,9 +106,9 @@ public class CSVExportAction
     String locale=navigationLanguage.getCode();	
     
     String translatedNotes = "";
-    
-	translatedNotes = TranslatorWorker.translate("rep:pop:AllAmount", locale, siteId);
-	
+    if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
+    	translatedNotes = TranslatorWorker.translate("rep:pop:AllAmount", locale, siteId);
+    }
 	if ("".equalsIgnoreCase(translatedNotes)) {
 	    translatedNotes = AmpReports.getNote(session);
 	}

@@ -1219,10 +1219,7 @@
 												${fn:toLowerCase(key)}
 											</c:set>
 											<strong>
-											<digi:trn key="aim:pi:${key}">
 												<nested:write property="donor" />
-											</digi:trn>
-
 											</strong>
 
 										</div>

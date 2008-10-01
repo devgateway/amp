@@ -31,11 +31,11 @@
 															<tr>
 																<td width="3">
 																	<html:multibox property="selRespOrganisations">
-																		<bean:write name="repOrganisation" property="ampOrgId" />
+																		<bean:write name="repOrganisation" property="ampOrgId"/>
 																	</html:multibox>
 																</td>
 																<td align="left">
-																	<bean:write name="repOrganisation" property="name" />
+																	<bean:write name="repOrganisation" property="name"/>
 																</td>
 															</tr>
 														</table>

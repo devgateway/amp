@@ -417,28 +417,28 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             <table cellSpacing=1 cellPadding="1"  width="100%">
                                                               <tr bgcolor="#ffffff">
                                                               	<field:display name="Proposed Project Planned" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="30">
+                                                                <td bgcolor="#FFFFFF" align="center" width="10%">
                                                                 <digi:trn key="aim:AvtivityFundingPlanned">
                                                   					Planned
                                                   				</digi:trn>
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="25">
+                                                                <td nowrap="nowrap" bgcolor="#FFFFFF" align="left" width="10%">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.funAmount && aimEditActivityForm.proProjCost.funAmount!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funAmount}
                                                                   </c:if>
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Currency" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="10">
+                                                                <td bgcolor="#FFFFFF" align="left" width="10%">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.currencyCode && aimEditActivityForm.proProjCost.currencyCode!=''}">
                                                                   ${aimEditActivityForm.proProjCost.currencyCode}
                                                                   </c:if>
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Date" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                <td bgcolor="#FFFFFF" align="left" width="60%">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.funDate && aimEditActivityForm.proProjCost.funDate!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funDate}
                                                                   </c:if>

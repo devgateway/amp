@@ -54,6 +54,9 @@ function resetFilter(){
 		if(aimReportsFilterPickerForm.approvalStatusSelected)
 			aimReportsFilterPickerForm.approvalStatusSelected.selectedIndex=-1;
 		
+		if(aimReportsFilterPickerForm.selectedresponsibleorg)
+			aimReportsFilterPickerForm.selectedresponsibleorg.selectedIndex=-1;
+			
 		if (aimReportsFilterPickerForm.lineMinRank)
 			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
 			

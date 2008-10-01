@@ -22,12 +22,9 @@
 
 
 <script type="text/javascript">
-	function  rangeReset(){
-		var start=<bean:write name="aimReportsFilterPickerForm"  property="resetRenderStartYear"/>;
-		var end=<bean:write name="aimReportsFilterPickerForm" property="resetRenderEndYear"/>;
-		
-		document.aimReportsFilterPickerForm2.renderStartYear.value=start;
-		document.aimReportsFilterPickerForm2.renderEndYear.value=end;
+	function rreset(){
+		document.aimReportsFilterPickerForm2.renderStartYear.value=-1;
+		document.aimReportsFilterPickerForm2.renderEndYear.value=-1;
 	}
 </script>
 
@@ -64,7 +61,7 @@
 			<html:submit styleClass="dr-menu" onclick="return checkRangeValues()"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyRanges">Apply Ranges</digi:trn>
-			</html:submit>&nbsp; <html:button onclick="rangeReset();" styleClass="dr-menu"
+			</html:submit>&nbsp; <html:button onclick="javascript:rreset();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetRanges">Reset</digi:trn>
 			</html:button></td>

@@ -122,11 +122,15 @@ public class XLSExportAction extends Action {
 			String translatedReportDescription="Description:";
 			
 			try{	
+				if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
 			    	translatedNotes=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);
-			    	if("".equalsIgnoreCase(translatedNotes)){
-			    	    translatedNotes=AmpReports.getNote(session);    
-			    	}
-				translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
+				}
+				
+			    if("".equalsIgnoreCase(translatedNotes)){
+			    	translatedNotes=AmpReports.getNote(session);    
+			    }
+			    
+			    translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
 				translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
 			}catch (WorkerException e){;}
 			

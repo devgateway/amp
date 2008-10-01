@@ -23,8 +23,8 @@ public class YearlyComparisonsWorker	{
 			YearlyInfo yearlyInfo = (YearlyInfo)iter.next();
 			YearlyComparison yearlyComparison = new YearlyComparison();
 			yearlyComparison.setFiscalYear(yearlyInfo.getFiscalYear());
-			yearlyComparison.setPlannedCommitment(Double.toString(yearlyInfo.getPlannedAmount()));
-			yearlyComparison.setActualCommitment(Double.toString(yearlyInfo.getActualAmount()));
+			yearlyComparison.setPlannedCommitment(FormatHelper.formatNumber(yearlyInfo.getPlannedAmount()));
+			yearlyComparison.setActualCommitment(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
 
 			arrList.add(yearlyComparison);
 		}
@@ -40,14 +40,14 @@ public class YearlyComparisonsWorker	{
                                 if ( yearlyInfo.getFiscalYear() == yearlyComparison.getFiscalYear() )	{
                                        flag = true;
 
-                                        yearlyComparison.setDisbOrders(Double.toString(yearlyInfo.getActualAmount()));
+                                        yearlyComparison.setDisbOrders(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
                                         break;
                                 }
                         }
                         if ( !flag  )	{
                                 YearlyComparison yearlyComparison = new YearlyComparison();
                                 yearlyComparison.setFiscalYear(yearlyInfo.getFiscalYear());
-                                yearlyComparison.setDisbOrders(Double.toString(yearlyInfo.getActualAmount()));
+                                yearlyComparison.setDisbOrders(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
                                 arrList.add(yearlyComparison);
                         }
               }
@@ -64,16 +64,16 @@ public class YearlyComparisonsWorker	{
 				YearlyComparison yearlyComparison = (YearlyComparison)arrList.get(i);
 				if ( yearlyInfo.getFiscalYear() == yearlyComparison.getFiscalYear() )	{
 					b = true;
-					yearlyComparison.setPlannedDisbursement(Double.toString(yearlyInfo.getPlannedAmount()));
-					yearlyComparison.setActualDisbursement(Double.toString(yearlyInfo.getActualAmount()));
+					yearlyComparison.setPlannedDisbursement(FormatHelper.formatNumber(yearlyInfo.getPlannedAmount()));
+					yearlyComparison.setActualDisbursement(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
 					break;
 				}
 			}
 			if ( !b )	{
 				YearlyComparison yearlyComparison = new YearlyComparison();
 				yearlyComparison.setFiscalYear(yearlyInfo.getFiscalYear());
-				yearlyComparison.setPlannedDisbursement(Double.toString(yearlyInfo.getPlannedAmount()));
-				yearlyComparison.setActualDisbursement(Double.toString(yearlyInfo.getActualAmount()));
+				yearlyComparison.setPlannedDisbursement(FormatHelper.formatNumber(yearlyInfo.getPlannedAmount()));
+				yearlyComparison.setActualDisbursement(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
 				arrList.add(yearlyComparison);
 			}
 		}
@@ -88,16 +88,16 @@ public class YearlyComparisonsWorker	{
 				YearlyComparison yearlyComparison = (YearlyComparison)arrList.get(i);
 				if ( yearlyInfo.getFiscalYear() == yearlyComparison.getFiscalYear() )	{
 					b = true;
-					yearlyComparison.setPlannedExpenditure(Double.toString(yearlyInfo.getPlannedAmount()));
-					yearlyComparison.setActualExpenditure(Double.toString(yearlyInfo.getActualAmount()));
+					yearlyComparison.setPlannedExpenditure(FormatHelper.formatNumber(yearlyInfo.getPlannedAmount()));
+					yearlyComparison.setActualExpenditure(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
 					break;
 				}
 			}
 			if ( !b )	{
 				YearlyComparison yearlyComparison = new YearlyComparison();
 				yearlyComparison.setFiscalYear(yearlyInfo.getFiscalYear());
-				yearlyComparison.setPlannedExpenditure(Double.toString(yearlyInfo.getPlannedAmount()));
-				yearlyComparison.setActualExpenditure(Double.toString(yearlyInfo.getActualAmount()));
+				yearlyComparison.setPlannedExpenditure(FormatHelper.formatNumber(yearlyInfo.getPlannedAmount()));
+				yearlyComparison.setActualExpenditure(FormatHelper.formatNumber(yearlyInfo.getActualAmount()));
 				arrList.add(yearlyComparison);
 			}
 		}

@@ -76,6 +76,9 @@
 				<td colspan="5">
 					<html:select property="approvalStatusSelected" multiple="true"
 						style="width: 300px" styleClass="inp-text" >
+						<html:option value="-1">
+							<digi:trn key="rep:filer:All">All</digi:trn>
+						</html:option>
 						<html:option value="0" style="color:green">
 							<digi:trn key="rep:filter:ExistingUnvalidated">Existing Un-validated</digi:trn>
 						</html:option>
@@ -491,6 +494,25 @@
 								</html:select>
 							</td>
 						</tr>
+						<tr><td colspan="5">&nbsp; </td></tr>
+						<field:display name="Donor Agency" feature="Funding Information">
+							<tr>
+								<td>
+									<digi:trn key="rep:filer:donnorAgency">Donor Agency</digi:trn>
+								</td>
+							</tr>
+							<tr>
+  								<td>	
+  									<html:select style="width: 300px" multiple="true"
+									property="selectedDonnorAgency" size="3"
+									styleClass="inp-text">
+									<html:optionsCollection property="donnorAgency" label="acronymAndName"
+										value="ampOrgId" />
+									</html:select>
+								</td>
+							</tr>
+					   </field:display>
+					   <tr><td colspan="5">&nbsp; </td></tr>
 					</table>
 					</td>
 					<td align="center">
@@ -505,7 +527,22 @@
 									<br />									
 							</td>
 						</tr>
-						<tr><td colspan="5">&nbsp; </td></tr>
+						<tr><td colspan="5">&nbsp;</td></tr>
+						<feature:display name="Responsible Organization" module="Organizations">
+						<tr>
+							<td>
+								<digi:trn key="rep:filer:responsibleorganization">Responsible Organization</digi:trn>
+							</td>
+						</tr>
+						<tr>
+  							<td>
+  								<html:select style="width:350px" multiple="true" property="selectedresponsibleorg" size="3" styleClass="inp-text">
+									<html:optionsCollection property="responsibleorg" label="acronymAndName" value="ampOrgId" />
+								</html:select>
+							</td>
+						</tr>
+					   </feature:display>
+					   <tr><td colspan="5">&nbsp; </td></tr>
 						<feature:display name="Beneficiary Agency" module="Organizations">
 						<tr bgcolor="#EEEEEE">
 				         	<td>
@@ -524,7 +561,7 @@
 									</td>
 						</tr>
 						</feature:display>
-							
+						<tr><td colspan="5">&nbsp; </td></tr>
 						<feature:display name="Executing Agency" module="Organizations">
 				        <tr bgcolor="#EEEEEE">
 								<td>
@@ -544,6 +581,7 @@
 								</td>
 						</tr>
 						</feature:display>
+						<tr><td colspan="5">&nbsp; </td></tr>
 						<feature:display name="Implementing Agency" module="Organizations">
 						<tr>
 								<td>
@@ -559,23 +597,7 @@
 							</td>
 						</tr>
 					   </feature:display>
-					   <field:display name="Donor Agency" feature="Funding Information">
-							<tr>
-								<td>
-									<digi:trn key="rep:filer:donnorAgency">Donor Agency</digi:trn>
-								</td>
-							</tr>
-							<tr>
-  								<td>	
-  									<html:select style="width: 350px" multiple="true"
-									property="selectedDonnorAgency" size="3"
-									styleClass="inp-text">
-									<html:optionsCollection property="donnorAgency" label="acronymAndName"
-										value="ampOrgId" />
-									</html:select>
-								</td>
-							</tr>
-					   </field:display>
+					   <tr><td colspan="5">&nbsp; </td></tr
 				</table>
           </td></tr>
           </table>
@@ -624,8 +646,8 @@
 		</td>
 		<td>
 				<table align="center" cellpadding="1" cellspacing="1" >
-					<field:display name="Line Ministry Rank" feature="Planning">					
 					<tr><td><b><digi:trn key="rep:filer:MinistryRankTitle">Ministry Rank</digi:trn></b></td></tr>
+					<field:display name="Line Ministry Rank" feature="Planning">
 					<tr>
 						<td>
 							<digi:trn key="rep:filer:LineMinRank">Line Ministry Rank</digi:trn>
@@ -692,14 +714,10 @@
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<%--<html:submit styleClass="dr-menu"  
+			<html:submit styleClass="dr-menu"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>
-			</html:submit> --%>
-			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="submitFilters()" 
-				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters to the Report</digi:trn>" />
-			&nbsp; 
-			<html:button onclick="resetFilter();" styleClass="dr-menu"
+			</html:submit>&nbsp; <html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 			</html:button> </td>

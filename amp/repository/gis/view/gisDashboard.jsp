@@ -47,16 +47,25 @@
 	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 23px; top: 43px; border: 1px solid white; cursor:pointer;">
 		<div style="width:100%; height:100%; background:white; filter:alpha(opacity=30); -moz-opacity:0.3;"></div>
 	</div>
+	
+		<div title="Zoom 1.0X" onClick="zoomMap (this, 1)" id="mapZoom10" class="navVisible" style="width:30px; position: absolute; top:310px; left:25px;" align="center">1.0X</div>
+		<div title="Zoom 1.5X" onClick="zoomMap (this, 1.5)" id="mapZoom15" class="navHiden" style="width:30px; position: absolute; top:310px; left:60px;" align="center">1.5X</div>
+		<div title="Zoom 2.0X" onClick="zoomMap (this, 2)" id="mapZoom20" class="navHiden" style="width:30px; position: absolute; top:310px; left:95px;" align="center">2.0X</div>
+	
+	
+
 </div>
 
 <div class="navHiden" align="center" style="position: absolute; left:10px; top:32px; width:150px;" onClick="showNavigation(this)">Map navigation</div>
+
+
 
 	
 <table>
 	<tr>
 		<td colspan="2">
 			<!-- onscroll="mapScroll(this)"-->
-			<div id="mapCanvasContainer" style="border:1px solid black; width:450px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues();" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA"></div>
+			<div id="mapCanvasContainer" style="border:1px solid black; width:700px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues();" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&width=700&height=700"></div>
 		</td>
 	</tr>
 	<tr>
@@ -201,7 +210,7 @@
 	var canvasWidth = 700;
 	var canvasHeight = 700;
 	
-	var canvasContainerWidth = 450;
+	var canvasContainerWidth = 700;
 	var canvasContainerHeight = 450;
 	
 	var navigationWidth = 300;
@@ -209,11 +218,12 @@
 	
 	
 	
-	var navCursorWidth=1;
-	var navCursorHeight=1;
+	var navCursorWidth = 1;
+	var navCursorHeight = 1;
 	
+	var currentZoomRatio = 1;
+	var currentZoomObj = document.getElementById("mapZoom10");
 
-	
 	
 	function initMouseOverEvt() {
 		document.onmousemove = mouseMoveTranslatorIE;
@@ -261,14 +271,14 @@
 		selSector = sec.value;
 		setBusy(true);
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getDataForSector(sec);
 	}
 	
 	function indicatorSelected(ind) {
 		setBusy(true);
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getIndValuesAction = true;
 	}
 
@@ -276,7 +286,7 @@
 	function getImageMap() {
 		if (!imageMapLoaded) {
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&uniqueStr=" + uniqueStr, true);
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 			xmlhttp.onreadystatechange = addImageMap;
 			xmlhttp.send(null);
 		} else {
@@ -289,13 +299,16 @@
 			imageMapLoaded = true;
 			document.getElementById("imageMapContainer").innerHTML = null;
 			document.getElementById("imageMapContainer").innerHTML = generateImageMap (xmlhttp.responseXML);
+			
+			document.getElementById("testMap").removeAttribute("useMap");
+			document.getElementById("testMap").setAttribute("useMap", "#areaMap");
 		}
 	}
 	
 	function getDataForSector(sec) {
 			selSector = sec.value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr, true);
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 			xmlhttp.onreadystatechange = dataForSectorReady;
 			xmlhttp.send(null);
 	}
@@ -492,6 +505,68 @@
 		return retVal;
 	}
 	
+	function zoomMap (pressedObj, zoomRation) {
+		if (pressedObj != currentZoomObj) {
+			currentZoomObj.className = "navHiden";
+			pressedObj.className = "navVisible";
+			currentZoomObj = pressedObj;
+			
+			reloadZoomedMap (zoomRation);
+		}
+	}
+	
+	function reloadZoomedMap (zoomRation) {
+		var mapObj = document.getElementById("testMap");
+		var mapSrc = mapObj.src;
+		
+		if (zoomRation == 1) {
+			canvasWidth = 700;
+			canvasHeight = 700;
+		} else if (zoomRation == 1.5) {
+			canvasWidth = 1050;
+			canvasHeight = 1050;
+		} else if (zoomRation == 2) {
+			canvasWidth = 1400;
+			canvasHeight = 1400;
+		}
+		
+		var newUrl = modifyZoomedMapURL (mapSrc, canvasWidth, canvasHeight);
+		
+		
+		setBusy(true);
+		
+		initNavCursorSize();
+		imageMapLoaded = false;
+		mapObj.src = newUrl;
+		getImageMap();
+		
+	}
+	
+	function modifyZoomedMapURL (url, newWidth, newHeight) {
+		var retVal = null;
+		
+		var widthStartPos = url.indexOf ("width");
+		var widthEndtPos = url.indexOf ("&", widthStartPos);
+		if (widthEndtPos == -1) {
+			widthEndtPos = url.length;
+		}
+		
+		var heightStartPos = url.indexOf ("height");
+		var heightEndPos = url.indexOf ("&", heightStartPos);
+		if (heightEndPos == -1) {
+			heightEndPos = url.length;
+		}
+
+		if (widthEndtPos < heightStartPos) { 
+			retVal = url.substring(0, widthStartPos) +
+			"width=" + newWidth + url.substring(widthEndtPos, heightStartPos) + 
+			"height=" + newHeight;
+		}
+		
+		return retVal;
+	}
+	
+	
 	function setBusy(busy) {
 		if (busy) {
 			document.getElementById("busyIndicator").style.visibility = "visible";
@@ -591,6 +666,12 @@
 		navCursorHeight = Math.round(navigationHeight * canvasContainerHeight / canvasHeight) - 14;
 		document.getElementById("navCursor").style.width = navCursorWidth + "px";
 		document.getElementById("navCursor").style.height = navCursorHeight + "px";
+		
+		navAreaLeft=0;
+		navAreaTop=0;
+		scrollMap(0, 0);
+		document.getElementById("navCursor").style.left = 23 + "px";
+		document.getElementById("navCursor").style.top = 43 + "px";
 	}
 	
 	function scrollMap(x, y){

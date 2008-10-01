@@ -217,10 +217,9 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                     translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
                 }
                 	
-
-			    
-			    
-			    translatedAmount=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);
+                if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){	
+                	translatedAmount=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);
+                }
 			    translatedAmount=("".equalsIgnoreCase(translatedAmount))?AmpReports.getNote(session):translatedAmount;
 			    translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
 			

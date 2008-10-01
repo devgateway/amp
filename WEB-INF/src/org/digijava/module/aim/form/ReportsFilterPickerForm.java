@@ -42,6 +42,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection executingAgency;
 	private Collection<AmpOrganisation> donnorAgency;
 	
+	private Collection<AmpOrganisation> responsibleorg;
 	private Collection implementingAgency;
 	private Collection beneficiaryAgency;
 	private Long regionSelected;
@@ -63,7 +64,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedBeneficiaryAgency;
 	private Object[] selectedDonnorAgency;
 	private Object[] selectedProjectCategory;
-
+	private Object[] selectedresponsibleorg;
+	
 	private Collection regionSelectedCollection;
 	private Collection approvalStatusSelectedCollection;//AMP-3386
 
@@ -327,6 +329,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedNatPlanObj = null;
 			this.selectedPrimaryPrograms = null;
 			this.selectedSecondaryPrograms = null;
+			this.selectedresponsibleorg=null;
 			this.approvalStatusSelected	= null;
 			if (request.getParameter("applyFormat")!=null)
 				this.customUseGrouping=false;
@@ -626,6 +629,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.implementingAgency = implementingAgency;
 	}
 
+	public Collection<AmpOrganisation> getResponsibleorg() {
+		return responsibleorg;
+	}
+
+	public void setResponsibleorg(Collection<AmpOrganisation> responsibleorg) {
+		this.responsibleorg = responsibleorg;
+	}
+
 	public Object[] getSelectedBeneficiaryAgency() {
 		return selectedBeneficiaryAgency;
 	}
@@ -797,6 +808,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public Object[] getSelectedProjectCategory() {
 		return selectedProjectCategory;
+	}
+
+	public Object[] getSelectedresponsibleorg() {
+		return selectedresponsibleorg;
+	}
+
+	public void setSelectedresponsibleorg(Object[] selectedresponsibleorg) {
+		this.selectedresponsibleorg = selectedresponsibleorg;
 	}
 
 	public Boolean getSourceIsReportWizard() {

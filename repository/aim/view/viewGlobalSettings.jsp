@@ -317,12 +317,15 @@ function setIndex(index){
 			                                    <html:select   property="gsfValue" alt="prueba"  style="width:100%"  styleClass="inp-text;width:100%" value='<%= globalSett.getGlobalSettingsValue() %>'>
 			                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
 			                                      	<% String key2	= "aim:globalSettings:" + globalSett.getGlobalSettingsName() + ":" + global.getValue(); %>
-			                                      	<c:set var="newKey"><%= key2 %></c:set>
+			                                      	<%if (key2.length()>100){
+			                                      		key2 = key2.substring(0,50);	
+			                                      	}%>
+			                                      	<c:set var="newKey"><%=key2%></c:set>
 			                                        <c:set var="globSettings">
-			                                          <digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
+			                                          	<digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
 			                                        </c:set>
 			
-			                                        <html:option value="${global.key}"><digi:trn key="aim:globalsettings:${global.value}">${global.value}</digi:trn></html:option>
+			                                        <html:option value="${global.key}"><digi:trn key='aim:globalsettings:${fn:replace(fn:substring(global.value, 0, 50), " ", "_")}'>${global.value}</digi:trn></html:option>
 			                                      </logic:iterate>
 			                                    </html:select>
 			                                    <%} %>										
@@ -450,7 +453,9 @@ function setIndex(index){
 				                                    		%>
 				                                    		
 				                                    		<select styleClass="inp-text" name="gsfValue">
-				                                    			<% for (int k=1; k<=10; k+=1) {
+				                                    			<% 
+				                                    			int [] min_array = {1,2,3,4,5,6,7,8,9,10,15,20,25,30};
+				                                    				for (int k: min_array) {
 				                                    					if ( k == timeout ) {
 				                                    			%>
 				                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
@@ -463,10 +468,7 @@ function setIndex(index){
 					                                    				}
 				                                    				} 
 				                                    			%>
-				                                    			<option value="15">15</option>
-				                                    			<option value="20">20</option>
-				                                    			<option value="25">25</option>
-				                                    			<option value="30">30</option>
+				                                    			
 				                                    		</select>
 				                                    	    <digi:trn key="aim:globalSettings:minutes">(Minutes)</digi:trn>
 				                                    	</c:when>

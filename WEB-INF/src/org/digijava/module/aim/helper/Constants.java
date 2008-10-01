@@ -300,6 +300,7 @@ public class Constants
     public static final String ROLE_CODE_REPORTING_AGENCY			= "RA";
     public static final String ROLE_CODE_BENEFICIARY_AGENCY			= "BA";
     public static final String ROLE_CODE_EXECUTING_AGENCY			= "EA";
+    public static final String ROLE_CODE_RESPONSIBLE_ORG			= "RO";
 
 	//global settings
 	public static final String GLOBAL_BUDGET_FILTER = "Public View Budget Filter";

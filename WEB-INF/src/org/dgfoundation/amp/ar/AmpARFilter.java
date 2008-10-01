@@ -156,7 +156,7 @@ public class AmpARFilter extends PropertyListable {
 	private Set risks = null;
 	private Set donorTypes = null;
 	private Set donorGroups = null;
-
+	private Set responsibleorg = null;
 	private Set executingAgency;
 	private Set implementingAgency;
 	private Set beneficiaryAgency;
@@ -560,13 +560,17 @@ public class AmpARFilter extends PropertyListable {
 		String EXECUTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_executing_agency v  "
 				+ "WHERE v.amp_org_id IN ("
 				+ Util.toCSString(executingAgency) + ")";
+		
 		String BENEFICIARY_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_beneficiary_agency v  "
 				+ "WHERE v.amp_org_id IN ("
 				+ Util.toCSString(beneficiaryAgency) + ")";
+		
 		String IMPLEMENTING_AGENCY_FILTER = "SELECT v.amp_activity_id FROM v_implementing_agency v  "
 				+ "WHERE v.amp_org_id IN ("
 				+ Util.toCSString(implementingAgency) + ")";
-
+		
+		String RESPONSIBLE_ORGANIZATION_FILTER = " SELECT v.amp_activity_id FROM v_responsible_organisation v  WHERE v.amp_org_id IN ("
+			+ Util.toCSString(responsibleorg) + ")";
 
 		String DONNOR_AGENCY_FILTER = " SELECT v.amp_activity_id FROM v_donors v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSString(donnorgAgency) + ")";
@@ -767,7 +771,11 @@ public class AmpARFilter extends PropertyListable {
 
 		if (donnorgAgency != null && donnorgAgency.size() > 0)
 			queryAppend(DONNOR_AGENCY_FILTER);
-
+		
+		if (responsibleorg!=null && responsibleorg.size() >0){
+			queryAppend(RESPONSIBLE_ORGANIZATION_FILTER);
+		}
+		
 		if (governmentApprovalProcedures != null) {
 			String GOVERNMENT_APPROVAL_FILTER = "SELECT a.amp_activity_id from amp_activity a where governmentApprovalProcedures="
 					+ governmentApprovalProcedures.toString();
@@ -1332,6 +1340,14 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	public ArrayList<FilterParam> getIndexedParams() {
 		return indexedParams;
+	}
+
+	public Set getResponsibleorg() {
+		return responsibleorg;
+	}
+
+	public void setResponsibleorg(Set responsibleorg) {
+		this.responsibleorg = responsibleorg;
 	}
 
 }

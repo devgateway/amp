@@ -671,9 +671,12 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 										                          	</logic:equal>
 
 				            						              	<logic:notEqual  name="quarterlyComparison" property="fiscalQuarter" value="0">
-
-																				<bean:write name="quarterlyComparison" property="fiscalQuarter" />
-
+																				<c:set var="key">
+																					aim:quarter_:<bean:write name="quarterlyComparison" property="fiscalQuarter"/>
+																				</c:set>
+																				<digi:trn key="${key}">
+																					<bean:write name="quarterlyComparison" property="fiscalQuarter"/>
+																				</digi:trn>
 																			</logic:notEqual>
 
 																		</td>

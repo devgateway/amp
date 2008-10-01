@@ -134,8 +134,8 @@ public class CurrencyRatesQuartzJob implements Job {
 			
 			Date aDate=new Date();
 			try {
-				String sDate = this.formatter.format(new Date());
-				aDate = DateTimeUtil.parseDate(sDate);
+				//String sDate = this.formatter.format(new Date());
+				//aDate = DateTimeUtil.parseDate(sDate);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -267,7 +267,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setDonnorAgency((ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_DONOR)));
 		filterForm.setBeneficiaryAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_BENEFICIARY_AGENCY));
 		filterForm.setImplementingAgency(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_IMPLEMENTING_AGENCY));
-
+		filterForm.setResponsibleorg(ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_RESPONSIBLE_ORG));
+		
 		String calValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
 		if (filterForm.getCalendar() == null && calValue != null) {
 			filterForm.setCalendar(Long.parseLong(calValue));
@@ -340,6 +341,7 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getRenderEndYear() == null) {
 			filterForm.setRenderEndYear(rEnd);
 		}
+		
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A0")));
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A1")));
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A2")));
@@ -714,7 +716,8 @@ public class ReportsFilterPicker extends MultiAction {
 
 		arf.setBeneficiaryAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedBeneficiaryAgency(), AmpOrganisation.class));
 		arf.setDonnorgAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedDonnorAgency(), AmpOrganisation.class));
-
+		arf.setResponsibleorg(ReportsUtil.processSelectedFilters(filterForm.getSelectedresponsibleorg(), AmpOrganisation.class));
+		
 		arf.setImplementingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedImplementingAgency(), AmpOrganisation.class));
 		arf.setExecutingAgency(ReportsUtil.processSelectedFilters(filterForm.getSelectedExecutingAgency(), AmpOrganisation.class));
 		arf.setProjectCategory(ReportsUtil.processSelectedFilters(filterForm.getSelectedProjectCategory(), AmpOrganisation.class));

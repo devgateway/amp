@@ -739,28 +739,20 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			      	   		                 			 	</logic:equal>
 
 			         	      		           			 	<logic:equal name="qtr" property="fiscalQuarter" value="1">
-
-			            	         		     			 		1st quarter
-
-			               	           					 	</logic:equal>
+			         	      		           			 	sdas
+																<digi:trn key="aim:1st_quarter">1st quarter</digi:trn>
+			            	         		     			 </logic:equal>
 
 			                  	         				 	<logic:equal name="qtr" property="fiscalQuarter" value="2">
-
-			                     	     			 				2nd quarter
-
-					                  	        			 	</logic:equal>
-
-					                     	     			 	<logic:equal name="qtr" property="fiscalQuarter" value="3">
-
-			   		                     	  			 		3rd quarter
-
-			         		                 				 	</logic:equal>
-
-			               		           				 	<logic:equal name="qtr" property="fiscalQuarter" value="4">
-
-			                     		     				 		4th quarter
-
-			                          					 		</logic:equal>
+																<digi:trn key="aim:2nd_quarter">2nd quarter</digi:trn>
+			                     	     			 		</logic:equal>
+															<logic:equal name="qtr" property="fiscalQuarter" value="3">
+															sdsdasdasd
+																<digi:trn key="aim:3rd_quarter">3rd quarter</digi:trn>
+			   		                     	  			 	</logic:equal>
+															<logic:equal name="qtr" property="fiscalQuarter" value="4">
+																<digi:trn key="aim:4th_quarter">4th quarter</digi:trn>
+															</logic:equal>
 
 							                          		</logic:equal>
 

@@ -25,11 +25,11 @@
     <script type="text/javascript">
     var inboxFull='<digi:trn key="message:fullMailBox">Your MailBox Is Full</digi:trn>';
     var deleteData='<digi:trn key="message:plzDeleteData">Please delete messages or you will not get newer ones</digi:trn>';
-    var newmessages='<digi:trn key="message:newmessages">New Messages</digi:trn>';
-    var newalerts='<digi:trn key="message:newalerts">New Alerts</digi:trn>';
-    var newapprovals='<digi:trn key="message:newaprovals">New Approvals</digi:trn>;'
-    var newcalevents='<digi:trn key="message:newcalevents">New Calendar Events</digi:trn>;'
-    var moremessages='<digi:trn key="message:moremessages">More messages</digi:trn>;'
+    var newmessages=' <digi:trn key="message:newmessages">New Messages</digi:trn>';
+    var newalerts=' <digi:trn key="message:newalerts">New Alerts</digi:trn>';
+    var newapprovals=' <digi:trn key="message:newaprovals">New Approvals</digi:trn>;'
+    var newcalevents=' <digi:trn key="message:newcalevents">New Calendar Events</digi:trn>;'
+    var moremessages=' <digi:trn key="message:moremessages">More messages</digi:trn>;'
     var newCount=0;
     var prevCount=0;
     var isInboxFull='false';

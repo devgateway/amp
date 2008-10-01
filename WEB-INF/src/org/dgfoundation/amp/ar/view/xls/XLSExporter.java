@@ -120,7 +120,7 @@ public abstract class XLSExporter extends Exporter {
 		HSSFFont font = wb.createFont();
 		font.setFontName(HSSFFont.FONT_ARIAL);
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		cs.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 		if (border){
 			cs.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
 			cs.setBorderLeft(HSSFCellStyle.BORDER_MEDIUM);
@@ -163,6 +163,7 @@ public abstract class XLSExporter extends Exporter {
 		}
 				
 		sheet.addMergedRegion(r);
+		sheet.autoSizeColumn(r.getColumnFrom());
 		
 		colId.inc(++size);
 	}

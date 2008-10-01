@@ -1011,7 +1011,7 @@ $(document).ready(function(){
 				<tr>
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
-							<digi:trn key="aim:MessageModule ">
+							<digi:trn key="aim:MessageModule">
 								Message Module 
 							</digi:trn>
 						</span>

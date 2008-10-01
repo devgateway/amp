@@ -401,17 +401,17 @@ function confirmFunc() {
                                   </logic:equal>                                  
                                   <logic:equal name="report" property="options" value="A">
                                     <li>
-                                      <digi:trn key="aim:annualreport">Annual</digi:trn>
+                                    	<digi:trn key="aim:annualreport">Annual</digi:trn>
                                     </li>
                                   </logic:equal>
                                   <logic:equal name="report" property="options" value="Q">
                                     <li>
-                                      <digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>                                      
+                                    	<digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>
                                     </li>
                                   </logic:equal>
                                   <logic:equal name="report" property="options" value="M">
                                     <li>
-                                    <digi:trn key="aim:monthlyreport">Monthly</digi:trn>                                      
+                                    	<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
                                     </li>
                                   </logic:equal>
                                 </p>
@@ -434,11 +434,14 @@ function confirmFunc() {
 	                                  <logic:iterate name="report" property="columns" id="column" indexId="index"  >
 	                                    <%if (index.intValue()%2==0){ %>
 	                                      <li>                                      
-	                                        <bean:write name="column" property="column.columnName" />
-	                                      
+	                                      	<digi:trn key="aim:report:${column.column.columnName}">
+	                                        	<bean:write name="column" property="column.columnName" />
+	                                      	</digi:trn>
 	                                    <% } else {%>
 	                                      ,
-	                                      <bean:write name="column" property="column.columnName" />
+	                                      	<digi:trn key="aim:report:${column.column.columnName}">
+	                                        	<bean:write name="column" property="column.columnName" />
+	                                      	</digi:trn>
 	                                      </li>
 	                                    <%} %>
 	                                  </logic:iterate>
@@ -449,8 +452,10 @@ function confirmFunc() {
                                 
 	                                <div style='position:relative;display:none;' id='measure-<bean:write name="report" property="measures"/>'> 
 	                                  <logic:iterate name="report" property="measures" id="measure" indexId="index"  >
-	                                    <li>                                      
-	                                      ${measure.measure.measureName}
+	                                    <li>
+	                                    	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">                                      
+	                                      		${measure.measure.aliasName}
+	                                      	</digi:trn>
 	                                    </li>
 	                                  </logic:iterate>
 	                                </div>

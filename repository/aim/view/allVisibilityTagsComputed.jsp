@@ -212,6 +212,7 @@
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Commitments"></field:display> 
+<field:display name="Add A New Component Button" feature="Admin - Component Type"></field:display>
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display> 
 <field:display name="Add Disbursement Button" feature="Disbursement"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 

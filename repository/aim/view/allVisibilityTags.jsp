@@ -219,6 +219,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add Actors Link" feature="Issues"></field:display>
 <field:display name="Add Commitment Button" feature="Commitments"></field:display>
 <field:display name="Add Components Button" feature="Activity - Component Step"></field:display>
+<field:display name="Add A New Component Button" feature="Admin - Component Type"></field:display>
 <field:display name="Add Disbursement Button" feature="Disbursement"></field:display>
 <field:display name="Contract of Disbursement" feature="Disbursement"></field:display>
 <field:display name="Link to Disbursement Order ID" feature="Disbursement"></field:display> 

@@ -59,12 +59,6 @@
 			return false;
 		}
 
-		if (document.aimIndicatorForm.indicatorCode.value.length == 0) {
-			alert("Please enter indicator code");
-			document.aimIndicatorForm.indicatorCode.focus();
-			return false;
-		}
-		
 		if(selectedSectsSize!=1) {
 		alert("Please add Sectors");
 		return false;
@@ -321,7 +315,9 @@
 													</td>
 												</tr>
 												<tr>
-													<td><digi:trn key="aim:indicatorCode">Indicator Code</digi:trn><font color="red">*</font></td>
+													<td>
+														<digi:trn key="aim:indicatorCode">Indicator Code</digi:trn>
+													</td>
 													<td>
 														<html:text property="indicatorCode" size="20" styleClass="inp-text"/>
 													</td>

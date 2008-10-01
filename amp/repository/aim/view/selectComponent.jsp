@@ -158,16 +158,19 @@ function addComponent(){
 								</c:forEach>
 							</html:select></td>
 						</tr>
+						<field:display name="Add A New Component Button" feature="Admin - Component Type">
 						<tr>
-						
-							<td align="right"><digi:trn key="aim:addNewComponent">
-									              Add A New Component
-									              </digi:trn></td>
-							<td><html:text property="newCompoenentName" onchange="componentTitle.value=-1;switchComponent()"  /> <html:button
-								property="addNewCompoenent" onclick="addComponent()">
-								<digi:trn key="aim:add">Add</digi:trn>
-							</html:button></td>
+							<td align="right">
+								<digi:trn key="aim:addNewComponent">Add A New Component</digi:trn>
+							</td>
+							<td>
+								<html:text property="newCompoenentName" onchange="componentTitle.value=-1;switchComponent()"/> 
+								<html:button property="addNewCompoenent" onclick="addComponent()">
+									<digi:trn key="aim:add">Add</digi:trn>
+								</html:button>
+							</td>
 						</tr>
+						</field:display>
 					</table>
 
 

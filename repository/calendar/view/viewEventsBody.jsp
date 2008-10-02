@@ -21,7 +21,7 @@
             </td>
           </c:if>
           <td align="center" >
-            <span id="calendarFont">
+            <span id="calendarFont" style="font-size:14px;font-weight:bold;">
               <c:if test="${calendarViewForm.view == 'yearly'}">
               ${calendarViewForm.baseDateBreakDown.year}
               </c:if>
@@ -195,7 +195,7 @@
 
 
 
-                      <tr height="1px" bgcolor="f5f8e5">
+                      <tr height="1px">
                         <td colspan="7" >
                         </td>
                       </tr>
@@ -205,90 +205,79 @@
               </tr>
                             </c:if>
                             <c:if test="${calendarViewForm.view == 'daily'}">
-                              <tr width="100%">
-                                <td width="100%">
-                                  <table width="100%" bgcolor="ffffff" >
-                                    <tr width="100%">
-                                      <td colspan="3">
-                                      &nbsp;
-                                      </td>
-                                    </tr>
-                                    <tr width="100%">
-                                      <td width="75%">
-                                        <table width="100%">
-                                          <tr>
-                                            <td align="center" vAlign="center">
-                                              <digi:trn key="aim:regular">Regular Tasks or events</digi:trn>
-                                            </td>
-                                          </tr>
-                                          <c:forEach var="hour" begin="6" end="18">
-                                            <tr height="40px">
-                                              <td align="left" width="20%" valign="top">
-                                                <c:if test="${hour < 12}">
-                                                  <c:if test="${hour < 10}">
-                                                    <c:set var="hoursToDisplay" value="0${hour}"/>
+                              <tr>
+                                <td style="padding:30px;text-align:center;">
+                                  <table align="center" style="min-width:700px;">
+                                    <tr>
+                                      <td>
+                                        <div style="overflow:auto;height:500px;border:2px solid #CCECFF;">
+                                          <table width="100%">
+                                            <c:forEach var="hour" begin="0" end="24">
+                                              <tr style="height:40px;">
+                                                <td align="left" style="border-top:1px solid #CCECFF;color:White;background-color:#7B9EBD;vertical-align:top;width:70px;padding:6px;font-size:12px;font-weight:bold;">
+                                                  <c:if test="${hour < 12}">
+                                                    <c:if test="${hour < 10}">
+                                                      <c:set var="hoursToDisplay" value="0${hour}:00"/>
+                                                    </c:if>
+                                                    <c:if test="${hour > 9}">
+                                                      <c:set var="hoursToDisplay" value="${hour}:00"/>
+                                                    </c:if>
                                                     ${hoursToDisplay} <digi:trn key="aim:am">AM</digi:trn>
                                                   </c:if>
-                                                  <c:if test="${hour > 9}">
-                                                    ${hour} <digi:trn key="aim:am">AM</digi:trn>
+                                                  <c:if test="${hour > 11}">
+                                                    <c:if test="${hour < 13}">
+                                                      ${hour}:00 <digi:trn key="aim:mp">PM</digi:trn>
+                                                    </c:if>
+                                                    <c:if test="${hour > 12}">
+                                                      <c:if test="${(hour - 12) < 10}">
+                                                        <c:set var="hoursToDisplay" value="0${hour - 12}:00"/>
+                                                      </c:if>
+                                                      <c:if test="${(hour - 12) > 9}">
+                                                        <c:set var="hoursToDisplay" value="${hour - 12}:00"/>
+                                                      </c:if>
+                                                      ${hoursToDisplay} <digi:trn key="aim:am">PM</digi:trn>
+                                                    </c:if>
                                                   </c:if>
-                                                </c:if>
-                                                <c:if test="${hour > 11}">
-                                                  <c:if test="${hour < 13}">
-                                                    ${hour} <digi:trn key="aim:mp">PM</digi:trn>
-                                                  </c:if>
-                                                  <c:if test="${hour > 12}">
-                                                    <c:set var="hoursToDisplay" value="0${hour - 12}"/>
-                                                    ${hoursToDisplay} <digi:trn key="aim:mp">PM</digi:trn>
-                                                  </c:if>
-                                                </c:if>
+                                                </td>
+                                                <td style="border-top:1px solid #CCECFF;">
+                                                  <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
+                                                    <c:set var="startHours">
+                                                    ${ampCalendarGraph.ampCalendar.calendarPK.startHour}
+                                                    </c:set>
+                                                    <c:if test="${hour==startHours}">
+                                                      <div style="margin:2px;padding:2px;font-weight:Bold;text-align:center;color:Black;border:1px solid Black;background-color:${ampCalendarGraph.ampCalendar.eventType.color};">
+                                                        <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+                                                        ${ampCalendarEventItem.title}
+                                                        </c:forEach>
+                                                        <%--
+                                                         <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
+
+                                                        </digi:link>--%>
+                                                      </div>
+                                                    </c:if>
+                                                  </c:forEach>
+                                                  &nbsp;
+                                                </td>
+                                              </tr>
+                                            </c:forEach>
+                                            <tr>
+                                              <td style="border-top:1px solid #CCECFF;color:White;">
+                                              &nbsp;
                                               </td>
-                                              <td>
-                                                <c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
-
-                                                  <c:set var="startHours">
-                                                  ${ampCalendarGraph.ampCalendar.calendarPK.startHour}
-                                                  </c:set>
-
-
-
-                                                  <c:if test="${hour==startHours}">
-
-                                                    <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
-                                                      <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
-                                                      ${ampCalendarEventItem.title}-VVV3
-                                                      </c:forEach>
-                                                    </digi:link>
-                                                    <br/>
-
-                                                  </c:if>
-                                                </c:forEach>
-
-
+                                              <td style="border-top:1px solid #CCECFF;color:White;">
+                                              &nbsp;
                                               </td>
                                             </tr>
-                                            <tr height="1px" bgcolor="f5f8e5"><td colspan="2"></td></tr>
-                                          </c:forEach>
-                                        </table>
-                                </td>
-                                <td width="1px" bgcolor="f5f8e5">
-
-                                </td>
-                                <td>
-                                &nbsp;
-                                </td>
+                                          </table>
+                                        </div>
+                                      </td>
                                     </tr>
-
                                   </table>
-</td>
+                                </td>
                               </tr>
                             </c:if>
   </tr>
             </c:if>
-            <tr width="100%" >
-
-
-
 
 
               <td style="font-size:14px;padding:4px;font-weight:Bold;background-color:#7B9EBD;color:White;" align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>>
@@ -299,7 +288,6 @@
 <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 
   <c:forEach var="item" items="${row}">
-
 
 
     <c:choose>
@@ -404,7 +392,7 @@
                           <td width="${ampCalendarGraphItem.left}%"><digi:img src="module/calendar/images/spacer.gif"/></td>
                         </c:if>
                         <c:if test="${ampCalendarGraphItem.center > 0}">
-                          <td width="${ampCalendarGraphItem.center}%"><digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/></td>
+                          <td width="${ampCalendarGraphItem.center}%"><digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color};"/></td>
                         </c:if>
                         <c:if test="${ampCalendarGraphItem.right > 0}">
                           <td width="${ampCalendarGraphItem.right}%"><digi:img src="module/calendar/images/spacer.gif"/></td>
@@ -422,5 +410,5 @@
 </c:if>
                       </table>
 </td>
-  </tr>
+</tr>
       </table>

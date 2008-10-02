@@ -330,7 +330,9 @@ function addOrganisation(orgId, orgName){
                                         <td>
                                           <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId">
                                             <c:if test="${!empty calendarEventForm.eventTypesList}">
-                                              <html:optionsCollection name="calendarEventForm" property="eventTypesList" value="id" label="name" />
+                                              <c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
+                                                <html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
+                                              </c:forEach>
                                             </c:if>
                                           </html:select>
                                         </td>

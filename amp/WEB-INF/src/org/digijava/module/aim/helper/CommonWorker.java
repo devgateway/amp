@@ -15,9 +15,9 @@ public  class CommonWorker	{
 		FinancialFilters ff = new FinancialFilters();
 		Iterator iter = c.iterator();
 		ff.setCalendarPresent(false);
-		ff.setCurrencyPresent(false);
+		ff.setCurrencyPresent(true);
 		ff.setYearRangePresent(false);
-		ff.setGoButtonPresent(false);
+		ff.setGoButtonPresent(true);
 		while ( iter.hasNext() )	{
 			Long ampFilterId = (Long)iter.next();
 			if ( ampFilterId.equals(Constants.CALENDAR) )	{

@@ -31,10 +31,13 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
@@ -482,7 +485,6 @@ public class LuceneUtil {
 		Query query = null;
 		Hits hits = null;
 		
-		
 		Searcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(index);
@@ -499,9 +501,13 @@ public class LuceneUtil {
 			searchString = searchString.replace("{","\\}");
 			searchString = searchString.replace("[","\\[");
 			searchString = searchString.replace("]","\\]");
-		
+			
 			query = parser.parse("+"+searchString+"*");
-			hits = indexSearcher.search(query);
+			BooleanQuery bol = new BooleanQuery();
+			bol.add(query,BooleanClause.Occur.MUST);
+			bol.setMaxClauseCount(2000);
+			hits = indexSearcher.search(bol);
+			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

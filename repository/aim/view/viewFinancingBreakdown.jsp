@@ -156,9 +156,6 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												</SPAN>
 												 -->
 											</TD>
-											<TD align="right">&nbsp;
-												
-											</TD>
 										</TR>
 									</TABLE>
 								</TD>
@@ -190,9 +187,6 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 														</STRONG>
 													</TD>
 												</logic:equal>
-												<TD width="5">&nbsp;
-													
-												</TD>
 											</TR>
 											<TR>
 			               			<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">

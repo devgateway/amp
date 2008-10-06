@@ -1,6 +1,8 @@
 package org.digijava.module.help.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -13,12 +15,19 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.TreeSet;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 
+import javax.jcr.Session;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 
 import org.apache.struts.action.ActionErrors;
@@ -27,15 +36,23 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.actions.DispatchAction;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.help.jaxb.HelpType;
+import org.digijava.module.help.jaxb.Helps;
+import org.digijava.module.help.jaxb.HelpsType;
+import org.digijava.module.help.jaxb.ObjectFactory;
+import org.dgfoundation.amp.te.ampte.Translations;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.action.TranslatorManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.helper.HelpSearchData;
@@ -63,7 +80,7 @@ import sun.misc.Regexp;
 
 
 public class HelpActions extends DispatchAction {
-
+	
 //	@Override
 //	protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
 //			HttpServletRequest request, HttpServletResponse response)
@@ -230,10 +247,12 @@ public class HelpActions extends DispatchAction {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();	
+		String page  = request.getParameter("page");
 		helpForm.setHelpErrors(null);
 		if (helpForm.getTopicKey() != null) {
 			HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
 					siteId, moduleInstance);
+			if(helpTopic!=null){
 			if(HelpUtil.hasChildren(siteId, moduleInstance, helpTopic.getHelpTopicId())){
 				
 				List<String> helpErrors=new ArrayList<String>();
@@ -245,11 +264,21 @@ public class HelpActions extends DispatchAction {
 				HelpUtil.deleteHelpTopic(helpTopic);
 				helpForm.setTopicKey("");	
 				helpForm.setBlankPage(false);
-			}			
+			}
+		  }
 		}
-
-		return mapping.findForward("helpHome");
+		if(!page.equals("admin")){
+			return mapping.findForward("helpHome");
+		}else{
+			if(helpForm.getAdminTopicTree()!=null){
+			helpForm.getAdminTopicTree().clear();
+			}
+			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, "default"));
+			return mapping.findForward("admin");
+		}
 	}
+	
 
 	public ActionForward createHelpTopic(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
@@ -290,6 +319,8 @@ public class HelpActions extends DispatchAction {
 		String siteId = RequestUtils.getSite(request).getSiteId();
 		String moduleInstance = RequestUtils.getRealModuleInstance(request)
 				.getInstanceName();
+		String page  = request.getParameter("page");
+		helpForm.setPage(page);
 		HelpTopic helpTopic = HelpUtil.getHelpTopic(helpForm.getTopicKey(),
 				siteId, moduleInstance);
 		if (helpTopic == null) {
@@ -311,9 +342,15 @@ public class HelpActions extends DispatchAction {
 				break;
 			}
 		}
-
-		return mapping.findForward("help");
-	}
+		
+		if(page == null){
+				return mapping.findForward("help");
+			
+		}else{
+				return mapping.findForward("admin");	
+			}
+		
+}
 
 	/**
 	 * Edit wizard: step 0
@@ -501,4 +538,73 @@ public class HelpActions extends DispatchAction {
 		form.setParentId(null);
 		form.setFirstLevelTopics(null);
 	}
+	
+	public ActionForward viewAdmin(ActionMapping mapping,
+			ActionForm form, 
+			HttpServletRequest request,
+	HttpServletResponse response) throws Exception {
+		HelpForm helpForm = (HelpForm) form;
+		String siteId=RequestUtils.getSite(request).getSiteId();
+		String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+		helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+		helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
+
+    
+	
+	  return mapping.findForward("admin");
+	}
+	
+	
+	public ActionForward export(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		
+		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+		JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+		Marshaller m = jc.createMarshaller();
+		response.setContentType("text/xml");
+		response.setHeader("content-disposition", "attachment; filename=exportHelp.xml");
+		ObjectFactory objFactory = new ObjectFactory();
+		Helps help_out =  objFactory.createHelps();
+		Vector rsAux=new Vector();
+	
+		
+		rsAux= HelpUtil.getAllHelpdataForExport(lang);
+		help_out.getHelp().addAll(rsAux);
+		m.marshal(help_out,response.getOutputStream());
+	    return null;
+
+	}
+	
+	public ActionForward importing(ActionMapping mapping,
+			ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+			HelpForm helpForm = (HelpForm) form;
+			String siteId=RequestUtils.getSite(request).getSiteId();
+			String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
+			
+		FormFile myFile = helpForm.getFileUploaded();
+        byte[] fileData    = myFile.getFileData();
+        InputStream inputStream= new ByteArrayInputStream(fileData);
+        
+        
+        JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
+        Unmarshaller m = jc.createUnmarshaller();
+        Helps help_in;
+    
+        
+			help_in = (Helps) m.unmarshal(inputStream);
+			if (help_in.getHelp() != null) {
+				Iterator it = help_in.getHelp().iterator();
+				while(it.hasNext())
+				{
+					HelpType element  = (HelpType) it.next();
+					HelpUtil.updateNewEditHelpData(element);
+				}
+			}
+			helpForm.getTopicTree().clear();
+			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+			return mapping.findForward("admin");
+	}
+	
 }

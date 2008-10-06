@@ -147,8 +147,11 @@ function addComponent(){
 						<tr>
 							<td align="right"><a
 								title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
-							<digi:trn key="aim:title">Title</digi:trn> </ a> </td>
-							<td><html:select property="componentTitle"
+								<digi:trn key="aim:title">Title</digi:trn> </ a> 
+							</td>
+							<td>
+							
+							<html:select property="componentTitle"
 								styleClass="inp-text" onchange="switchComponent()">
 								<html:option value="-1">
 									<digi:trn key="aim:selectComponent">-Select Component-</digi:trn>
@@ -156,8 +159,10 @@ function addComponent(){
 								<c:forEach var="comp" items="${aimEditActivityForm.allComps}">
 									<html:option value="${comp.name}">${comp.shortName}</html:option>
 								</c:forEach>
-							</html:select></td>
+							</html:select>
+							</td>
 						</tr>
+						<!--
 						<field:display name="Add A New Component Button" feature="Admin - Component Type">
 						<tr>
 							<td align="right">
@@ -171,6 +176,7 @@ function addComponent(){
 							</td>
 						</tr>
 						</field:display>
+					-->
 					</table>
 
 
@@ -269,7 +275,8 @@ function addComponent(){
 										</c:forEach>
 									</c:if>
 								</c:forEach>
-							</c:if></div>							</td>
+							</c:if></div>							
+							</td>
 						</tr>
 
 						<tr bgcolor="#ffffff">
@@ -482,7 +489,7 @@ function addCommitments()
 	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
 
-	<% Collection col = eaForm.getValidcurrencies();
+	<% Collection col = eaForm.getFunding().getValidcurrencies();
 		Iterator itr = col.iterator();
 		while (itr.hasNext())
 		{
@@ -529,7 +536,7 @@ function addDisbursement()
 	s += "<input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
 
-	<% col = eaForm.getValidcurrencies();
+	<% col = eaForm.getFunding().getValidcurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();
@@ -576,7 +583,7 @@ function addExpenditure()
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
 
-	<% col = eaForm.getValidcurrencies();
+	<% col = eaForm.getFunding().getva;
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();

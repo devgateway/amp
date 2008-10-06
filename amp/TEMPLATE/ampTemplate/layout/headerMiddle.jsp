@@ -333,7 +333,7 @@ function adminHelp(){
                                             <%--<a class="yuiampmenuitemlabel" href="/advancedReportManager.do?clear=true&reportEdit=false">
                                             <digi:trn key="aim:addTab">Add Tab</digi:trn>
                                             </a> --%>
-                                            <feature:display  name="Tab Generator" module="New Report Wizard">
+                                            <module:display name="Tab Generator" parentModule="REPORTING">
 		                                      	<li class="yuiampmenuitem" title='<digi:trn key="aim:createTab">Create Tab</digi:trn>'>
 		                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tab=true&reset=true">
 		                                                <b><digi:trn key="aim:addTab">Add Tab</digi:trn></b>
@@ -344,7 +344,7 @@ function adminHelp(){
 		                                                <digi:trn key="aim:tabManager">Tab Manager</digi:trn>
 		                                            </a>
 												</li>
-	                                        </feature:display>
+	                                        </module:display>
                                         <li class="yuiampmenuitem" style="_width:230px;">
                                         	<a class="yuiampmenuitemlabel" href="#">
                                             	<digi:trn key="aim:changeworkspace">Change workspace</digi:trn>
@@ -386,13 +386,13 @@ function adminHelp(){
                               <div id="reports" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
-                                        <feature:display  name="Report Generator" module="New Report Wizard">
+                                        <module:display  name="Report Generator" parentModule="REPORTING">
 	                                        <li class="yuiampmenuitem" title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 	                                            <a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true">
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
-                                        </feature:display>
+                                        </module:display>
 										
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>

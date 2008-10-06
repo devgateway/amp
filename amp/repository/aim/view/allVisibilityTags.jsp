@@ -51,6 +51,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Reports" parentModule="REPORTING"></module:display>
+<module:display name="Measures" parentModule="REPORTING"></module:display>
+<module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Tab Generator" parentModule="REPORTING"></module:display>
+<module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -64,8 +68,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 
 
-<feature:display  name="Tab Generator" module="New Report Wizard"></feature:display>
-<feature:display  name="Report Generator" module="New Report Wizard"></feature:display>
 <feature:display  name="Report and Tab Options" module="New Report Wizard"></feature:display>
 <field:display name="Contracting Remove Disbursements" feature="Contracting"></field:display>
 <feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
@@ -96,7 +98,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display>
-<feature:display module="Reports" name="Contribution Report"></feature:display>
+<feature:display module="Report Types" name="Contribution Report"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display>
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
 <feature:display name="Admin" module="M & E"></feature:display>
@@ -104,7 +106,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Budget" module="Project ID and Planning"></feature:display>
 <feature:display name="Calendar" module="Calendar"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
-<feature:display name="Component Report" module="Reports"></feature:display>
+<feature:display name="Component Report" module="Report Types"></feature:display>
 <feature:display name="Save Filters from Desktop" module="Reports"></feature:display>
 <feature:display name="Activity - Component Step" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
@@ -115,7 +117,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display>
 <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
-<feature:display name="Donor Report" module="Reports"></feature:display>
+<feature:display name="Donor Report" module="Report Types"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
 <feature:display name="Executing Agency" module="Organizations"></feature:display>
 
@@ -136,7 +138,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display>
 <feature:display name="Regional Funding" module="Funding"></feature:display>
 <feature:display name="Regional Group" module="Organizations"></feature:display>
-<feature:display name="Regional Report" module="Reports"></feature:display>
+<feature:display name="Regional Report" module="Report Types"></feature:display>
 <feature:display name="Related Documents" module="Document"></feature:display>
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Sector Group" module="Organizations"></feature:display>
@@ -152,7 +154,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <feature:display module="Contracting" name="Contracting"></feature:display>
 
-<feature:display name="Measures" module="Reports"></feature:display>
 
 
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display>
@@ -648,18 +649,18 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
-	<field:display name="${ampMeasures.aliasName}" feature="Measures"></field:display>
+	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
 </logic:iterate>
 
-<field:display name="Actual Commitments" feature="Measures"></field:display>
-<field:display name="Actual Disbursements" feature="Measures"></field:display>
-<field:display name="Actual Expenditures" feature="Measures"></field:display>
-<field:display name="Planned Commitments" feature="Measures"></field:display>
-<field:display name="Planned Disbursements" feature="Measures"></field:display>
-<field:display name="Planned Expenditures" feature="Measures"></field:display>
-<field:display name="Undisbursed Balance" feature="Measures"></field:display>
-<field:display name="Total Commitments" feature="Measures"></field:display>
-<field:display name="Actual Disbursement Orders Measure" feature="Measures"></field:display>
+<feature:display name="Actual Commitments" module="Measures"></feature:display>
+<feature:display name="Actual Disbursements" module="Measures"></feature:display>
+<feature:display name="Actual Expenditures" module="Measures"></feature:display>
+<feature:display name="Planned Commitments" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements" module="Measures"></feature:display>
+<feature:display name="Planned Expenditures" module="Measures"></feature:display>
+<feature:display name="Undisbursed Balance" module="Measures"></feature:display>
+<feature:display name="Total Commitments" module="Measures"></feature:display>
+<feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display>
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display>
 <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
 <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>

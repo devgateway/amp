@@ -149,7 +149,7 @@ function addComponent(){
 								<digi:trn key="aim:title">Title</digi:trn> </ a> 
 							</td>
 							<td>
-								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>"/> 
+								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>" size="40"/> 
 								<html:button property="addNewCompoenent" onclick="addComponent()">
 									<digi:trn key="aim:add">Add</digi:trn>
 								</html:button>

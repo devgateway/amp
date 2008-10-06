@@ -138,7 +138,7 @@ public class AddAmpActivity extends Action {
 			FundingOrganization org = (FundingOrganization) itOrg.next();
 			if(org.getFundings()!=null)
 	         for (Iterator itFD = org.getFundings().iterator(); itFD.hasNext();) {
-					Funding funding = (Funding) itFD.next();
+	        	 org.digijava.module.aim.helper.Funding funding = (org.digijava.module.aim.helper.Funding) itFD.next();
 					if(funding!=null && funding.getFundingDetails()!=null) 
 						eaForm.getFunding().getFundingDetails().addAll(funding.getFundingDetails());
 	         }

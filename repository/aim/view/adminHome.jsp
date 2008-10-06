@@ -443,6 +443,7 @@
                               </digi:link>         </td>
                           </tr>
 						 </feature:display>
+						 <!--
 						 <feature:display name="Admin - Component" module="Components">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
@@ -456,6 +457,7 @@
                             </td>
                           </tr>
 						 </feature:display>
+						 -->
 						 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
                           <tr>
                           <td class="f-names" nowrap="nowrap">

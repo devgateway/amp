@@ -212,6 +212,17 @@
                                 </digi:link>
                               </td>
                           	</tr>
+                          	<tr>
+                          		<td class="f-names" nowrap="nowrap">
+                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                <c:set var="trn">
+                                  <digi:trn key="help:viewSettings">Click here to view Help Topics Admin</digi:trn>
+                                </c:set>
+                               <digi:link module="help" href="/helpActions.do~actionType=viewAdmin" title="${trn}">
+                                  <digi:trn key="help:helpTopicAdmin">Help Topics Admin</digi:trn>
+                                </digi:link>
+                              </td>
+                          	</tr>
                             <!-- 
                             
                             <tr>

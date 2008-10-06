@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.help.dbentity.HelpTopic;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
@@ -22,6 +23,7 @@ public class HelpForm extends ActionForm {
 	private Boolean edit=null;
 	private String keywords;
 	private Collection topicTree;
+	private Collection adminTopicTree;
 	private List<String> helpErrors;
 	private Boolean blankPage;
 	private String title;
@@ -29,6 +31,8 @@ public class HelpForm extends ActionForm {
 	private Long childId;
 	private Collection<LabelValueBean> searched; 
 	private boolean flag;
+	private String page ;
+	FormFile fileUploaded;
 	
 
 	public Boolean getBlankPage() {
@@ -183,6 +187,30 @@ public class HelpForm extends ActionForm {
 
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+	}
+
+	public FormFile getFileUploaded() {
+		return fileUploaded;
+	}
+
+	public void setFileUploaded(FormFile fileUploaded) {
+		this.fileUploaded = fileUploaded;
+	}
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public Collection getAdminTopicTree() {
+		return adminTopicTree;
+	}
+
+	public void setAdminTopicTree(Collection adminTopicTree) {
+		this.adminTopicTree = adminTopicTree;
 	}
 
 

@@ -96,6 +96,7 @@
 .whiteThing { background-color: #FFF; }
 
 </style>
+<digi:form action="/helpActions.do" method="post" enctype="multipart/form-data">
 <digi:instance property="helpForm" />
 <table bgColor=#ffffff cellPadding=2 cellSpacing=2 width=772 border="0">
 	<tr>
@@ -137,12 +138,9 @@
               </c:if>
        </td>
   		<td align="right">
-  			 <digi:form action="/helpActions.do?actionType=importing" method="post" enctype="multipart/form-data">
-							  	<html:submit style="dr-menu" value="Import" property="import"/>
-							 <br>
-				 	           <input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
-			 </digi:form>
- 	    </td>
+  						 <input type="button" onclick="imp()" value="import"/>
+				 	         <input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
+	    </td>
     </tr>
 	 <tr id="img_1" onclick="expandHelp(1);"  src="/ampTemplate/images/tree_plus.gif"/>
 		<td colspan="2" bgcolor="silver">
@@ -190,3 +188,4 @@
 	</tr>
 	
 </table>
+ </digi:form>

@@ -274,11 +274,10 @@ function setHoveredTable(tableId, hasHeaders) {
 														<td align="left" width="100%" valign="center">
 															<table id="dataTable" width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
-															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities"
-															type="org.digijava.module.aim.helper.Activity">
+															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities">
 																<tr><td width=3>
 																	<html:multibox property="selActivities">
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 																	</html:multibox>
 																</td>
 																<td width="20%">
@@ -286,8 +285,9 @@ function setHoveredTable(tableId, hasHeaders) {
 																</td>
 																<td>
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlParams}" property="activityId">
-																		<bean:write name="activities" property="activityId" />
+
+																	<c:set target="${urlParams}" property="ampActivityId">
+																		<bean:write name="activities" property="ampActivityId" />
 																	</c:set>
 																	<c:set target="${urlParams}" property="pageId" value="3"/>
 																	<c:set var="translation">

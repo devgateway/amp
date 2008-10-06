@@ -198,6 +198,8 @@
 
 <html:hidden property="editAct" />
 
+<c:out value=""></c:out>
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr>
 <td width="100%" vAlign="top" align="left">
@@ -346,7 +348,7 @@ ${fn:replace(message,quote,escapedQuote)}
                             <digi:trn key="aim:editActivity">
                             Edit Activity
                             </digi:trn>:
-                            <bean:write name="aimEditActivityForm" property="title"/>
+                            <bean:write name="aimEditActivityForm" property="identification.title"/>
                           </c:if>
                         </td>
                       </tr>
@@ -413,7 +415,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                     <table cellSpacing=8 cellPadding=0 border=0 width="95%" class="box-border-nopadding" align="center">
                                                       <tr>
                                                         <td>
-                                                          <c:if test="${not empty aimEditActivityForm.proProjCost && aimEditActivityForm.proProjCost!=''}">
+                                                          <c:if test="${not empty aimEditActivityForm.funding.proProjCost && aimEditActivityForm.funding.proProjCost!=''}">
                                                             <table cellSpacing=1 cellPadding="1"  width="100%">
                                                               <tr bgcolor="#ffffff">
                                                               	<field:display name="Proposed Project Planned" feature="Proposed Project Cost">
@@ -424,23 +426,23 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
-                                                                <td nowrap="nowrap" bgcolor="#FFFFFF" align="left" width="10%">
-                                                                  <c:if test="${not empty aimEditActivityForm.proProjCost.funAmount && aimEditActivityForm.proProjCost.funAmount!=''}">
-                                                                  ${aimEditActivityForm.proProjCost.funAmount}
+                                                                <td bgcolor="#FFFFFF" align="left" width="25">
+                                                                  <c:if test="${not empty aimEditActivityForm.funding.proProjCost.funAmount && aimEditActivityForm.funding.proProjCost.funAmount!=''}">
+                                                                  ${aimEditActivityForm.funding.proProjCost.funAmount}
                                                                   </c:if>
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Currency" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="10%">
-                                                                  <c:if test="${not empty aimEditActivityForm.proProjCost.currencyCode && aimEditActivityForm.proProjCost.currencyCode!=''}">
-                                                                  ${aimEditActivityForm.proProjCost.currencyCode}
+                                                                <td bgcolor="#FFFFFF" align="left" width="10">
+                                                                  <c:if test="${not empty aimEditActivityForm.funding.proProjCost.currencyCode && aimEditActivityForm.funding.proProjCost.currencyCode!=''}">
+                                                                  ${aimEditActivityForm.funding.proProjCost.currencyCode}
                                                                   </c:if>
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Date" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="60%">
-                                                                  <c:if test="${not empty aimEditActivityForm.proProjCost.funDate && aimEditActivityForm.proProjCost.funDate!=''}">
-                                                                  ${aimEditActivityForm.proProjCost.funDate}
+                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                  <c:if test="${not empty aimEditActivityForm.funding.proProjCost.funDate && aimEditActivityForm.funding.proProjCost.funDate!=''}">
+                                                                  ${aimEditActivityForm.funding.proProjCost.funDate}
                                                                   </c:if>
                                                                 </td>
                                                                 </field:display>
@@ -452,7 +454,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                       <tr>
                                                         <td>
 
-                                                          <c:if test="${aimEditActivityForm.proProjCost==null}">
+                                                          <c:if test="${aimEditActivityForm.funding.proProjCost==null}">
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
                                                             </c:set>
@@ -461,7 +463,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                            </field:display>
                                                           </c:if>
 
-                                                          <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                          <c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:editFundings">Edit Funding</digi:trn>
                                                             </c:set>
@@ -511,8 +513,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                               <tr>
                                                 <td>
                                                   <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
-                                                    <logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
-                                                      <logic:iterate name="aimEditActivityForm" property="fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+                                                    <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
+                                                      <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
                                                         <tr>
                                                           <td>
                                                           	<field:display name="Organizations Selector" feature="Funding Information">
@@ -976,7 +978,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</tr>
 
 																</logic:notEmpty>
-																<logic:empty name="aimEditActivityForm" property="fundingOrganizations">
+																<logic:empty name="aimEditActivityForm" property="funding.fundingOrganizations">
 
 																<tr>
 																	<td>

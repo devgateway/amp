@@ -152,9 +152,15 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 				else {
 					/* Getting the id of the current value of the category */
 					try{
-					    BeanWrapperImpl beanWrapperImpl = new BeanWrapperImpl(bean);
-					    valueId=(Long) beanWrapperImpl.getPropertyValue(property);
+						if(bean!=null) {
+						BeanWrapperImpl beanWrapperImpl = new BeanWrapperImpl(bean);
+						valueId=(Long) beanWrapperImpl.getPropertyValue(property);
+						}
 					}
+//					try{
+//						PropertyDescriptor beanProperty	= new PropertyDescriptor(property, bean.getClass());
+//						valueId							= (Long)(beanProperty.getReadMethod().invoke(bean,new Object[0]));
+//					}
 					catch(Exception E){
 						logger.error(E);
 						E.printStackTrace();

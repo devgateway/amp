@@ -22,7 +22,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamActivitiesForm;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
@@ -179,15 +178,15 @@ public class UpdateTeamActivities extends Action {
 			
 			Comparator acronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
-					Activity r1 = (Activity) o1;
-					Activity r2 = (Activity) o2;
+					AmpActivity r1 = (AmpActivity) o1;
+					AmpActivity r2 = (AmpActivity) o2;
 			        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
 				}
 			};
 			Comparator racronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
-					Activity r1 = (Activity) o1;
-					Activity r2 = (Activity) o2;
+					AmpActivity r1 = (AmpActivity) o1;
+					AmpActivity r2 = (AmpActivity) o2;
 					return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
 				}
 			};

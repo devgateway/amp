@@ -37,99 +37,99 @@ public class RemoveSelRelatedOrgs extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 
 		logger.info("In RemoveSelRelatedOrgs");
-		logger.info("Item = " + eaForm.getItem());
+		logger.info("Item = " + eaForm.getAgencies().getItem());
 		
-		if (eaForm.getItem() != 0) {
-			if (eaForm.getItem() == 1) {
-				Long selOrgs[] = eaForm.getSelExAgencies();
+		if (eaForm.getAgencies().getItem() != 0) {
+			if (eaForm.getAgencies().getItem() == 1) {
+				Long selOrgs[] = eaForm.getAgencies().getSelExAgencies();
 				if (selOrgs != null) {
 					for (int i = 0;i < selOrgs.length;i ++) {
 						AmpOrganisation org = new AmpOrganisation();
 						org.setAmpOrgId(selOrgs[i]);
-						eaForm.getExecutingAgencies().remove(org);
+						eaForm.getAgencies().getExecutingAgencies().remove(org);
 					}
 				}				
-			} else if (eaForm.getItem() == 2) {
-				Long selOrgs[] = eaForm.getSelImpAgencies();
+			} else if (eaForm.getAgencies().getItem() == 2) {
+				Long selOrgs[] = eaForm.getAgencies().getSelImpAgencies();
 				if (selOrgs != null) {
 					for (int i = 0;i < selOrgs.length;i ++) {
 						AmpOrganisation org = new AmpOrganisation();
 						org.setAmpOrgId(selOrgs[i]);
-						eaForm.getImpAgencies().remove(org);
+						eaForm.getAgencies().getImpAgencies().remove(org);
 					}
 				}
-			} else if (eaForm.getItem() == 3) {
+			} else if (eaForm.getAgencies().getItem() == 3) {
 				/*
-				Long selOrgs[] = eaForm.getSelContractors();
+				Long selOrgs[] = eaForm.getAgencies().getSelContractors();
 				if (selOrgs != null) {
 					for (int i = 0;i < selOrgs.length;i ++) {
 						AmpOrganisation org = new AmpOrganisation();
 						org.setAmpOrgId(selOrgs[i]);
-						eaForm.getContractors().remove(org);
+						eaForm.getAgencies().getContractors().remove(org);
 					}
 				}*/				
-			} else if (eaForm.getItem() == 4) {
-				Long selOrgs[] = eaForm.getSelReportingOrgs();
+			} else if (eaForm.getAgencies().getItem() == 4) {
+				Long selOrgs[] = eaForm.getAgencies().getSelReportingOrgs();
 				if (selOrgs != null) {
 					for (int i = 0;i < selOrgs.length;i ++) {
 						AmpOrganisation org = new AmpOrganisation();
 						org.setAmpOrgId(selOrgs[i]);
-						eaForm.getReportingOrgs().remove(org);
+						eaForm.getAgencies().getReportingOrgs().remove(org);
 					}
 				}								
 			}
 			else
-				if (eaForm.getItem() == 5) {
-					Long selOrgs[] = eaForm.getSelBenAgencies();
+				if (eaForm.getAgencies().getItem() == 5) {
+					Long selOrgs[] = eaForm.getAgencies().getSelBenAgencies();
 					if (selOrgs != null) {
 						for (int i = 0;i < selOrgs.length;i ++) {
 							AmpOrganisation org = new AmpOrganisation();
 							org.setAmpOrgId(selOrgs[i]);
-							eaForm.getBenAgencies().remove(org);
+							eaForm.getAgencies().getBenAgencies().remove(org);
 						}
 					}
 				}
 				else
-					if (eaForm.getItem() == 6) {
-						Long selOrgs[] = eaForm.getSelConAgencies();
+					if (eaForm.getAgencies().getItem() == 6) {
+						Long selOrgs[] = eaForm.getAgencies().getSelConAgencies();
 						if (selOrgs != null) {
 							for (int i = 0;i < selOrgs.length;i ++) {
 								AmpOrganisation org = new AmpOrganisation();
 								org.setAmpOrgId(selOrgs[i]);
-								eaForm.getConAgencies().remove(org);
+								eaForm.getAgencies().getConAgencies().remove(org);
 							}
 						}
 					}
 					else
-						if (eaForm.getItem() == 7) {
-							Long selOrgs[] = eaForm.getSelRegGroups();
+						if (eaForm.getAgencies().getItem() == 7) {
+							Long selOrgs[] = eaForm.getAgencies().getSelRegGroups();
 							if (selOrgs != null) {
 								for (int i = 0;i < selOrgs.length;i ++) {
 									AmpOrganisation org = new AmpOrganisation();
 									org.setAmpOrgId(selOrgs[i]);
-									eaForm.getRegGroups().remove(org);
+									eaForm.getAgencies().getRegGroups().remove(org);
 							}
 						}
 					}
 						else
-							if (eaForm.getItem() == 8) {
-								Long selOrgs[] = eaForm.getSelSectGroups();
+							if (eaForm.getAgencies().getItem() == 8) {
+								Long selOrgs[] = eaForm.getAgencies().getSelSectGroups();
 								if (selOrgs != null) {
 									for (int i = 0;i < selOrgs.length;i ++) {
 										AmpOrganisation org = new AmpOrganisation();
 										org.setAmpOrgId(selOrgs[i]);
-										eaForm.getSectGroups().remove(org);
+										eaForm.getAgencies().getSectGroups().remove(org);
 								}
 							}
 						}		
 							else
-								if (eaForm.getItem() == 9) {
-									Long selOrgs[] = eaForm.getSelRespOrganisations();
+								if (eaForm.getAgencies().getItem() == 9) {
+									Long selOrgs[] = eaForm.getAgencies().getSelRespOrganisations();
 									if (selOrgs != null) {
 										for (int i = 0;i < selOrgs.length;i ++) {
 											AmpOrganisation org = new AmpOrganisation();
 											org.setAmpOrgId(selOrgs[i]);
-											eaForm.getRespOrganisations().remove(org);
+											eaForm.getAgencies().getRespOrganisations().remove(org);
 									}
 								}
 							}		

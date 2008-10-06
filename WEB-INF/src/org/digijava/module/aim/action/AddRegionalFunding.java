@@ -77,7 +77,7 @@ public class AddRegionalFunding extends Action {
 
 			RegionalFunding regFund = new RegionalFunding();
 			
-			Iterator itr = eaForm.getSelectedLocs().iterator();
+			Iterator itr = eaForm.getLocation().getSelectedLocs().iterator();
 			while (itr.hasNext()) {
 				Location loc = (Location) itr.next();
 				if (loc.getRegionId().equals(eaForm.getFundingRegionId())) {

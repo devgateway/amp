@@ -1,10 +1,13 @@
 package org.digijava.module.aim.form ;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.digijava.module.aim.helper.Activity;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
 
@@ -44,13 +47,14 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection modal;
 	private boolean canView;
 	private HashMap allComments;
-	private Activity activity;
-	private String implemLocationLevel;
+	private AmpActivity activity;
+	private Long implemLocationLevel;
 	private int numImplLocationLevels	= 0;
 	private String buttonText;  // added by Akash for activity approval
     private List primaryPrograms;
     private List secondaryPrograms;
     private List nationalPlanObjectivePrograms;
+	private Collection<ActivitySector> activitySectors;
         
     private String debugFM;
    
@@ -59,7 +63,29 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private    HashMap<String,String> messages = new HashMap<String, String>();
 
 	private List classificationConfigs;
-	
+	private Long impLocation;
+	private String projectCategory;
+	private String financialInstrument;
+	private String acChapter;
+	private String accessionInstrument;
+
+	private Collection closingDates;
+
+	/**
+	 * @return Returns the revCompDates.
+	 */
+	public Collection getClosingDates() {
+		return closingDates;
+	}
+
+	/**
+	 * @param revCompDates
+	 *            The revCompDates to set.
+	 */
+	public void setClosingDates(Collection closingDates) {
+		this.closingDates = closingDates;
+	}
+	  
 	public void addMessage(String key, String value) {
 	    this.messages.put(key, value) ;
 	}
@@ -76,7 +102,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
      * 
      * @return
      */
-    public String getImplemLocationLevel() {
+    public Long getImplemLocationLevel() {
 		return implemLocationLevel;
 	}
     
@@ -92,8 +118,8 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
      * 
      * @param implemLocationLevel
      */
-    
-	public void setImplemLocationLevel(String implemLocationLevel) {
+
+	public void setImplemLocationLevel(Long implemLocationLevel) {
 		this.implemLocationLevel = implemLocationLevel;
 	}
     
@@ -121,6 +147,10 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	}
 
 	private boolean add;  // added by Priyajith
+	private ArrayList<AmpCategoryValue> typesOfAssistance;
+	private ArrayList<AmpCategoryValue> modalities;
+
+	private Collection relOrgs;
 
 	public boolean getAdd() {
 			  return add;
@@ -424,13 +454,13 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	/**
 	 * @return Returns the activity.
 	 */
-	public Activity getActivity() {
+	public AmpActivity getActivity() {
 		return activity;
 	}
 	/**
 	 * @param activity The activity to set.
 	 */
-	public void setActivity(Activity activity) {
+	public void setActivity(AmpActivity activity) {
 		this.activity = activity;
 	}
 	/**
@@ -528,7 +558,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		}
                 
                 public boolean getImplLocationCountry(){
-                    boolean flag=ActivityUtil.isImplLocationCountry(activity.getActivityId());
+                    boolean flag=ActivityUtil.isImplLocationCountry(activity.getAmpActivityId());
                     return flag;
                 }
 
@@ -556,8 +586,86 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 			    public void setClassificationConfigs(List classificationConfigs) {
 			        this.classificationConfigs = classificationConfigs;
 			    }
+				/**
+				 * @return Returns the activitySectors.
+				 */
+				public Collection<ActivitySector> getActivitySectors() {
+					return activitySectors;
+				}
 
+				/**
+				 * @param activitySectors
+				 *            The activitySectors to set.
+				 */
+				public void setActivitySectors(Collection<ActivitySector> activitySectors) {
+					this.activitySectors = activitySectors;
+				}
 
-				
-				
+				public void setTypesOfAssistance(
+						ArrayList<AmpCategoryValue> typesOfAssistance) {
+					this.typesOfAssistance = typesOfAssistance;
+					
+				}
+				public ArrayList<AmpCategoryValue> getTypesOfAssistance(){
+					return this.typesOfAssistance;
+				}
+
+				public void setUniqueModalities(
+						ArrayList<AmpCategoryValue> modalities) {
+					this.modalities = modalities;
+					
+				}
+				public ArrayList<AmpCategoryValue> getUniqueModalities(){
+					return this.modalities;
+				}
+
+				public void setImpLocation(Long impLocation) {
+					this.impLocation = impLocation;
+				}
+
+				public Long getImpLocation() {
+					return impLocation;
+				}
+
+				public String getProjectCategory() {
+					return projectCategory;
+				}
+
+				public void setProjectCategory(String projectCategory) {
+					this.projectCategory = projectCategory;
+				}
+
+				public void setRelOrgs(Collection relOrgs) {
+					// TODO Auto-generated method stub
+					this.relOrgs = relOrgs;
+				}
+
+				public Collection getRelOrgs() {
+					return this.relOrgs;
+				}
+
+				public String getFinancialInstrument() {
+					return financialInstrument;
+				}
+			
+				public void setFinancialInstrument(String financialInformation) {
+					this.financialInstrument = financialInformation;
+				}
+  public String getAccessionInstrument() {
+	    return accessionInstrument;
+	  }
+
+	  public void setAccessionInstrument(String accessionInstrument) {
+	    this.accessionInstrument = accessionInstrument;
+	  }
+
+	  public String getAcChapter() {
+		    return acChapter;
+		  }
+
+		  public void setAcChapter(String acChapter) {
+		    this.acChapter = acChapter;
+		  }
+	  
+
 }

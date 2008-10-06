@@ -45,55 +45,41 @@
 
 	function validateEntryByLeader() {
 
-		if (isEmpty(document.aimEditActivityForm.baseVal.value) == true) {
+		if (isEmpty(document.getElementsByName('indicator.baseVal')[0].value) == true) {
 			alert(invalidBaseValue);
-			document.aimEditActivityForm.baseVal.focus();
+			document.getElementsByName('indicator.baseVal')[0].focus();
 			return false;
 		}
-		if (isEmpty(document.aimEditActivityForm.baseValDate.value) == true) {
+		if (isEmpty(document.getElementsByName('indicator.baseValDate')[0].value) == true) {
 			alert(baseValueDateNotEntered);
-			document.aimEditActivityForm.baseValDate.focus();
+			document.getElementsByName('indicator.baseValDate')[0].focus();
 			return false;
 		}
-		if (isEmpty(document.aimEditActivityForm.targetVal.value) == true) {
+		if (isEmpty(document.getElementsByName('indicator.targetVal')[0].value) == true) {
 			alert(targetValueNotEntered);
-			document.aimEditActivityForm.targetVal.focus();
+			document.getElementsByName('indicator.targetVal')[0].focus();
 			return false;
 		}
-		if (isEmpty(document.aimEditActivityForm.targetValDate.value) == true) {
+		if (isEmpty(document.getElementsByName('indicator.targetValDate')[0].value) == true) {
 			alert(targetValueDateNotEntered);
-			document.aimEditActivityForm.targetValDate.focus();
+			document.getElementsByName('indicator.targetValDate')[0].focus();
 			return false;
 		}
 
-		if (document.aimEditActivityForm.revTargetValDate != null) {
+		if (document.getElementsByName('indicator.revTargetValDate')[0] != null) {
 
-			if (isEmpty(document.aimEditActivityForm.revTargetVal.value) == true) {
+			if (isEmpty(document.getElementsByName('indicator.revTargetVal')[0].value) == true) {
 				alert(invalidRevisedTargetValue);
-				document.aimEditActivityForm.currentVal.focus();
+				document.getElementsByName('indicator.currentVal')[0].focus();
 				return false;
 			}
 
-			if (isEmpty(document.aimEditActivityForm.revTargetValDate.value) == true) {
+			if (isEmpty(document.getElementsByName('indicator.revTargetValDate')[0].value) == true) {
 				alert(revisedTargetValueDateNotEntered);
-				document.aimEditActivityForm.revTargetValDate.focus();
+				document.getElementsByName('indicator.revTargetValDate')[0].focus();
 				return false;
 			}
 		}
-
-/*
-		if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
-			alert("Invalid Current value or Current value not entered");
-			document.aimEditActivityForm.currentVal.focus();
-			return false;
-		}
-
-		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true ^ isEmpty(document.aimEditActivityForm.currentVal.value) == true) {
-			alert("Please fill Current Value and Current Value Date");
-			document.aimEditActivityForm.currValDate.focus();
-			return false;
-		}
-		*/
 		return true;
 	}
 
@@ -140,7 +126,7 @@
 			valid = validateEntryByLeader();
 		}
 		if (valid == true) {
-			document.aimEditActivityForm.indicatorId.value = val;
+			document.getElementsByName("indicator.indicatorId")[0].value = val;
 			document.aimEditActivityForm.submit();
 		}
 	}
@@ -169,8 +155,8 @@
 <digi:form action="/saveIndicatorValues.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="editAct" />
-<html:hidden property="indicatorId" />
-<html:hidden property="indicatorValId" />
+<html:hidden property="indicator.indicatorId" />
+<html:hidden property="indicator.indicatorValId" />
 <html:hidden property="activityId" />
 <html:hidden property="teamLead" />
 <input type="hidden" name="edit" value="true">
@@ -342,7 +328,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>:
-										<bean:write name="aimEditActivityForm" property="title"/>
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -391,7 +377,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													</b>
 												</td>
 											</tr>
-											<logic:empty name="aimEditActivityForm" property="indicatorsME">
+											<logic:empty name="aimEditActivityForm" property="indicator.indicatorsME">
 											<tr>
 												<td width="32%" bgcolor="#f4f4f2" align="center" colspan="6"><font color="red"><b>
 													<digi:trn key="aim:meNoActivityGlobalIndicators">No Activity specific Indicators & No Global Indicators present</digi:trn>
@@ -399,17 +385,17 @@ ${fn:replace(message,quote,escapedQuote)}
 												</td>
 											</tr>
 											</logic:empty>
-											<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-											<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator"type="org.digijava.module.aim.helper.ActivityIndicator">
+											<logic:notEmpty name="aimEditActivityForm" property="indicator.indicatorsME">
+											<logic:iterate name="aimEditActivityForm" property="indicator.indicatorsME" id="indicator"type="org.digijava.module.aim.helper.ActivityIndicator">
 											<tr>
 												<td bgcolor="#f4f4f2" align="left" colspan="5">&nbsp;&nbsp;
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-													<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
+													<c:if test="${aimEditActivityForm.indicator.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
 															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
 														</digi:link>
 													</c:if>
-													<c:if test="${aimEditActivityForm.expIndicatorId!=indicator.indicatorId}">
+													<c:if test="${aimEditActivityForm.indicator.expIndicatorId!=indicator.indicatorId}">
 														<c:set target="${urlParams}" property="indValId">
 															<bean:write name="indicator" property="indicatorId" />
 														</c:set>
@@ -444,7 +430,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												</td>
 											</tr>
 
-											<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
+											<c:if test="${aimEditActivityForm.indicator.expIndicatorId==indicator.indicatorId}">
 											<tr>
 												<td colspan="6">
 													<table cellspacing="0" cellpadding="6" valign="top" align="center" width="90%">
@@ -454,7 +440,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<digi:trn key="aim:logframeCategory">Logframe Category</digi:trn>
 																</td>
 																<td>
-																	<category:showoptions name="aimEditActivityForm" property="logframeCategory" keyName="logframe" styleClass="inp-text" />
+																	<category:showoptions name="aimEditActivityForm" property="indicator.logframeCategory" keyName="logframe" styleClass="inp-text" />
 																</td>
 															</tr>
 														</field:display>
@@ -466,11 +452,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																	<font color="red">*</font></td>
 																<td>
-																<html:text property="baseVal" size="10" maxlength="10" styleId="txtBaseValue"/>
-																	<!-- <input type="text" name="baseVal"
-																	value="<bean:write name="indicator" property="baseVal"/>"
-																	class="inp-text" size="10">
-																	-->
+																<html:text property="indicator.baseVal" size="10" maxlength="10" styleId="txtBaseValue"/>
+																	
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<field:display name="Date Base Value" feature="Activity"></field:display>
@@ -479,15 +462,20 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="baseValDate"
+																
+																
+																	<input type="text" name="indicator.baseValDate"
 																	value="<bean:write name="indicator" property="baseValDate" />"
 																	class="inp-text" size="10" readonly="true" id="txtBaseValDate">&nbsp;&nbsp;
-																	<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.baseValDate, 'clear1')">
+																
+																	<a id="clear1" href="javascript:clearDate(document.getElementById("txtBaseValDate"), 'clear1')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
-																	<a id="date1" href='javascript:pickDateWithClear("date1",document.aimEditActivityForm.baseValDate,"clear1")'>
+																
+																	<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtBaseValDate"),"clear1")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
+																
 																</td>
 															</tr>
 															<field:display name="Comments Base Value" feature="Activity"></field:display>
@@ -495,7 +483,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
-																<html:textarea property="baseValComments" cols="38" rows="2" styleClass="inp-text"/>
+																<html:textarea property="indicator.baseValComments" cols="38" rows="2" styleClass="inp-text"/>
 
 																</td>
 															</tr>
@@ -508,11 +496,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<c:if test="${indicator.targetValDate == null}">
 
 																<td>
-																<html:text property="targetVal" size="10" maxlength="10"/>
-																	<!-- <input type="text" name="targetVal"
-																	value="<bean:write name="indicator" property="targetVal" />"
-																	class="inp-text" size="10">
-																	-->
+																<html:text property="indicator.targetVal" size="10" maxlength="10"/>
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -520,29 +504,35 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="targetValDate"
+																	
+																	<input type="text" name="indicator.targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
-																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
-																	<a id="clear2" href="javascript:clearDate(document.aimEditActivityForm.targetValDate, 'clear2')">
+																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
+																	
+																	<a id="clear2" href="javascript:clearDate(document.getElementById('txtTargetValDate'), 'clear2')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
-																	<a id="date2" href='javascript:pickDateWithClear("date2",document.aimEditActivityForm.targetValDate,"clear2")'>
+																	
+																	<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("txtTargetValDate"),"clear2")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
+															
 																</td>
 																</c:if>
 																<c:if test="${indicator.targetValDate != null}">
 																<td>
-																	<input type="text" name="targetVal"
+																	<input type="text" name="indicator.targetVal"
 																	value="<bean:write name="indicator" property="targetVal" />"
 																	class="inp-text" size="10" disabled="true" id="txtTargetVal">
 																</td>
+																
+																
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
 																<td align="left">
-																	<input type="text" name="targetValDate"
+																	<input type="text" name="indicator.targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
 																</td>
@@ -552,11 +542,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
-																<html:textarea property="targetValComments" cols="38" rows="2" styleClass="inp-text"/>
+																<html:textarea property="indicator.targetValComments" cols="38" rows="2" styleClass="inp-text"/>
 
-																<!--
-																<textarea name="targetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="targetValComments" /></textarea>
-																-->
 																</td>
 															</tr>
 															<c:if test="${indicator.targetValDate != null}">
@@ -566,11 +553,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</b><font color="red">*</font>
 																</td>
 																<td>
-																<html:text property="revTargetVal" size="10" maxlength="10" styleId="txtRevTargetVal"/>
-																	<!-- <input type="text" name="revTargetVal"
-																	value="<bean:write name="indicator" property="revisedTargetVal" />"
-																	class="inp-text" size="10">
-																	-->
+																<html:text property="indicator.revTargetVal" size="10" maxlength="10" styleId="txtRevTargetVal"/>
+																	
 
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
@@ -579,14 +563,14 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="revTargetValDate"
+																	<input type="text" name="indicator.revTargetValDate"
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="txtRevisedTargetValDate">&nbsp;&nbsp;
 
-																	<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.revTargetValDate, 'clear3')">
+																	<a id="clear3" href="javascript:clearDate(document.getElementById('txtRevisedTargetValDate'), 'clear3')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
-																	<a id="date3" href='javascript:pickDateWithClear("date3",document.aimEditActivityForm.revTargetValDate,"clear3")'>
+																	<a id="date3" href='javascript:pickDateWithClear("date3",document.getElementById("txtRevisedTargetValDate"),"clear3")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
@@ -595,10 +579,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
-																<html:textarea property="revTargetValComments" cols="38" rows="2" styleClass="inp-text"/>
-																<!--
-																	<textarea name="revTargetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="revisedTargetValComments" /></textarea>
-																-->
+																<html:textarea property="indicator.revTargetValComments" cols="38" rows="2" styleClass="inp-text"/>
 																</td>
 															</tr>
 															</c:if>
@@ -637,10 +618,6 @@ ${fn:replace(message,quote,escapedQuote)}
 														</logic:notEmpty>
 
 
-
-														<%--
-														<logic:notEmpty name="indicator" property="baseValDate">
-														--%>
 															<tr>
 																<field:display name="Current Value" feature="Activity">
 																<td><b>
@@ -648,8 +625,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																</b></td>
 																<td>
-																	<!--<html:text property="currentVal" size="10" maxlength="10"/>-->
-																	<input type="text" name="currentVal"
+																	<input type="text" name="indicator.currentVal"
 																	value="<bean:write name="indicator" property="actualVal" />"
 																	class="inp-text" size="10">
 
@@ -662,14 +638,14 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																</td>
 																<td align="left">
-																	<input type="text" name="currValDate"
+																	<input type="text" name="indicator.currValDate"
 																	value="<bean:write name="indicator" property="currentValDate" />"
-																	class="inp-text" size="10" readonly="readonly" id="currValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="readonly" id="txtCurrValDate">&nbsp;&nbsp;
 
-																	<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.currValDate, 'clear4')">
+																	<a id="clear4" href="javascript:clearDate(document.getElementById('txtCurrValDate'), 'clear4')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
-																	<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.currValDate,"clear4")'>
+																	<a id="date4" href='javascript:pickDateWithClear("date4",document.getElementById("txtCurrValDate"),"clear4")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
@@ -680,32 +656,21 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
-																<html:textarea property="currentValComments" cols="38" rows="2" styleClass="inp-text"/>
+																<html:textarea property="indicator.currentValComments" cols="38" rows="2" styleClass="inp-text"/>
 
-																	<!--
-																	<textarea name="currentValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="currentValComments" /></textarea>
-																 -->
 																</td>
 															</tr>
 															</field:display>
 														<field:display name="Risk" feature="Activity">
 														<tr>
-															<%--
-															<td><b>
-																<digi:trn key="aim:meComments">Comments</digi:trn>
-															</b></td>
-															<td>
-																<html:textarea name="aimEditActivityForm" property="comments" styleClass="inp-text"/>
-															</td>
-															--%>
 															<td>&nbsp;&nbsp;&nbsp;</td>
 															<td><b>
 															<digi:trn key="aim:meRisk">Risk</digi:trn>
 															</b></td>
 															<td>
-																<html:select property="indicatorRisk" styleClass="inp-text">
+																<html:select property="indicator.indicatorRisk" styleClass="inp-text">
 																<option value="0"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
-																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="riskCollection">
+																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="indicator.riskCollection">
 																		<c:set var="trn">
 																			<digi:trn key="aim:risk:${currRisk.translatedRatingName}">${currRisk.ratingName}</digi:trn>
 																		</c:set>
@@ -803,8 +768,9 @@ ${fn:replace(message,quote,escapedQuote)}
 </digi:form>
 
 <script language="JavaScript">
-	clearDisplay(document.aimEditActivityForm.baseValDate, "clear1");
-	clearDisplay(document.aimEditActivityForm.targetValDate, "clear2");
-	clearDisplay(document.aimEditActivityForm.revTargetValDate, "clear3");
-	clearDisplay(document.aimEditActivityForm.currValDate, "clear4");
+
+	clearDisplay(document.getElementById('txtBaseValDate'), "clear1");
+	clearDisplay(document.getElementById('txtTargetValDate'), "clear2");
+	clearDisplay(document.getElementById('txtRevisedTargetValDate'), "clear3");
+	clearDisplay(document.getElementById('txtCurrValDate'), "clear4");
 </script>

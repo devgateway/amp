@@ -199,7 +199,7 @@ function addComponent(){
 							<td colspan="2" class="box-border-alt1"><span
 								class="f-names"> <digi:trn
 								key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn>
-							<%=eaForm.getTotalCommitments()%> <%=eaForm.getCurrCode()%> ) </span> <!-- Commented added by mouhamad for burkina AMP-2709 -->
+							<%=eaForm.getFunding().getTotalCommitments()%> <%=eaForm.getCurrCode()%> ) </span> <!-- Commented added by mouhamad for burkina AMP-2709 -->
 							<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
 							<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>
@@ -275,7 +275,7 @@ function addComponent(){
 						<tr bgcolor="#ffffff">
 							<td colspan="2" class="box-border"><span class="f-names"><digi:trn
 								key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn>
-							<%=eaForm.getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
+							<%=eaForm.getFunding().getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
 								href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>
 							<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn
@@ -355,7 +355,7 @@ function addComponent(){
 								<td colspan="2" class="box-border-alt1"><span
 									class="f-names"><digi:trn
 									key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn>
-								<%=eaForm.getTotalExpenditures()%> <%=eaForm.getCurrCode()%>)</span> <field:display
+								<%=eaForm.getFunding().getTotalExpenditures()%> <%=eaForm.getCurrCode()%>)</span> <field:display
 									name="Add Expenditure Button" feature="Expenditures">
 									<a href="javascript:addExpenditure()"> <digi:trn
 										key="btn:add">Add</digi:trn></a>

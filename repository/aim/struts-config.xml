@@ -257,8 +257,11 @@
     <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_euActivityDetails" />
     </action>
-     <action name="aimIPAContractForm" path="/aim/editIPAContract" scope="session" type="org.digijava.module.aim.action.EditIPAContract">
+    <action name="aimIPAContractForm" path="/aim/editIPAContract" scope="session" type="org.digijava.module.aim.action.EditIPAContract">
       <forward name="forward" path="/showLayout.do?layout=aim_editIPAContract" />
+    </action>
+    <action name="aimEditActivityForm" path="/aim/displaySave" scope="session" type="org.digijava.module.aim.action.DisplaySave">
+      <forward name="forward" path="/showLayout.do?layout=aim_displaySave" />
     </action>
 
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
@@ -1264,10 +1267,22 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="addActivity" path="/aim/addActivity.do?edit=true" />
       <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />
+      <forward name="addActivityStep1_5" path="/showLayout.do?layout=addActivityStep1_5" />
       <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
       <forward name="addActivityStep3" path="/showLayout.do?layout=addActivityStep3" />
+      <forward name="addActivityStep4" path="/showLayout.do?layout=addActivityStep4" />
+      <forward name="addActivityStep5" path="/showLayout.do?layout=addActivityStep5" />
+      <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
+      <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
+      <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
+      <forward name="addActivityStep10" path="/showLayout.do?layout=addActivityStep10" />
+      <forward name="addActivityStep11" path="/showLayout.do?layout=addActivityStep11" />
+      <forward name="addActivityStep12" path="/showLayout.do?layout=addActivityStep12" />
+      <forward name="addActivityStep13" path="/showLayout.do?layout=addActivityStep13" />
+      
       <forward name="activityExist" path="/showLayout.do?layout=activityExist" />
-      <forward name="addActivityStepX" path="/aim/addActivity.do?edit=true" redirect="true" />
+      <forward name="addActivityStepXNR" path="/aim/addActivity.do?edit=true"/>
+      <forward name="addActivityStepX" path="/aim/addActivity.do?edit=true" redirect="true"  />
     </action>
     <action name="aimEditActivityForm" path="/aim/compDateRevised" scope="session" type="org.digijava.module.aim.action.CompDateRevised">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />

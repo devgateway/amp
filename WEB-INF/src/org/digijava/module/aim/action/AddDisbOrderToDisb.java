@@ -18,17 +18,17 @@ public class AddDisbOrderToDisb  extends Action {
                         HttpServletRequest request, HttpServletResponse response)
                         throws java.lang.Exception {
                         EditActivityForm eaForm = (EditActivityForm) form;
-                        String event=eaForm.getEvent();
+                        String event=eaForm.getFunding().getEvent();
                         if(event.equals("Add")){
                                 long indexId = eaForm.getTransIndexId();
                                 FundingDetail fd = new FundingDetail();
                                 fd.setIndexId(indexId);
-                                int index = eaForm.getFundingDetails().indexOf(
+                                int index = eaForm.getFunding().getFundingDetails().indexOf(
                                     fd);
                                 FundingDetail disb = eaForm.getFundingDetail(
                                     index);
-                                disb.setDisbOrderId(eaForm.getDisbOrderId());
-                                eaForm.setEvent(null);
+                                disb.setDisbOrderId(eaForm.getFunding().getDisbOrderId());
+                                eaForm.getFunding().setEvent(null);
                                 request.setAttribute("close", "close");
                         }
                         return mapping.findForward("forward");

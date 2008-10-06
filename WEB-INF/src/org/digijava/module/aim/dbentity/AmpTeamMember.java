@@ -19,7 +19,7 @@ public class AmpTeamMember implements Serializable {
 	private Boolean readPermission;     /* whether the team member has read permission on the team pages */
 	private Boolean writePermission;    /* whether the team member has write permission on the team pages */
 	private Boolean deletePermission;   /* whether the team member has delete permission on the team pages */
-	private Set activities;
+	private Set<AmpActivity> activities;
 	private Set reports;
 	private Set links;
 	private Set logs;
@@ -117,11 +117,11 @@ public class AmpTeamMember implements Serializable {
 		this.deletePermission = deletePermission;
 	}
 
-	public Set getActivities() {
+	public Set<AmpActivity> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(Set activities) {
+	public void setActivities(Set<AmpActivity> activities) {
 		this.activities = activities;
 	}
 

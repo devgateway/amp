@@ -186,7 +186,7 @@ ${fn:replace(message,quote,escapedQuote)}
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
 :
-										<bean:write name="aimEditActivityForm" property="title"/>
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>

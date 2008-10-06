@@ -98,8 +98,8 @@ public class ViewMainProjectDetails extends TilesAction {
 			formBean.setDocumentsTabColor(documentsTabColor);
 			
 			//Long id = new Long(request.getParameter("ampActivityId"));
-			Activity activity = ActivityUtil.getChannelOverview(id);
-			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
+			AmpActivity activity = ActivityUtil.getAmpActivity(id);
+			//AmpActivity ampact = ActivityUtil.getAmpActivity(id);
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
 			TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 			Long ampTeamId = teamMember.getTeamId();
@@ -108,13 +108,13 @@ public class ViewMainProjectDetails extends TilesAction {
 			if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null &&
 		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  ))
 		 	{
-		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(ampact.getTeam().getAmpTeamId()))
+		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()))
 		 			formBean.setButtonText("validate");
 		 		else
 		 			formBean.setButtonText("approvalAwaited");
 		 		//burkina
 		 		// if an user save an activity he could edit it even it is not approved by team leader
-		 		if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(ampact.getCreatedBy().getAmpTeamMemId()))
+		 		if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
 		 			formBean.setButtonText("edit");
 		 		
 		 	}

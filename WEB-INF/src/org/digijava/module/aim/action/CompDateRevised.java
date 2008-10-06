@@ -43,8 +43,8 @@ public class CompDateRevised extends Action {
 		
 		if (eaForm.getRevisedCompDate().trim().length() > 0) {
 			if (eaForm.getActivityCloseDates() != null) {
-				eaForm.getActivityCloseDates().add(eaForm.getCurrentCompDate());
-				eaForm.setCurrentCompDate(eaForm.getRevisedCompDate());
+				eaForm.getActivityCloseDates().add(eaForm.getPlanning().getCurrentCompDate());
+				eaForm.getPlanning().setCurrentCompDate(eaForm.getRevisedCompDate());
 				eaForm.setRevisedCompDate("");
 			}
 		}

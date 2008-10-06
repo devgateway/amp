@@ -36,7 +36,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	// added for donor-access
 	private String teamCategory;	// Donor or Mofed team
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
-	private Set activityList;		// activities assigned to donor team
+	private Set<AmpActivity> activityList;		// activities assigned to donor team
 	
 	private Set organizations;		// activities assigned to donor team
 	private NpdSettings npdSettings;
@@ -153,13 +153,13 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	/**
 	 * @return Returns the activityList.
 	 */
-	public Set getActivityList() {
+	public Set<AmpActivity> getActivityList() {
 		return activityList;
 	}
 	/**
 	 * @param activityList The activityList to set.
 	 */
-	public void setActivityList(Set activityList) {
+	public void setActivityList(Set<AmpActivity> activityList) {
 		this.activityList = activityList;
 	}
 	/**

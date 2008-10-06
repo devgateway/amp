@@ -125,37 +125,24 @@ function validateProjection (errorMsg) {
 
 function validateFunding() {
 
-	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
+	var fundId = trim(document.getElementById("orgFundingId").value);
 
 	if (fundId.length == 0) {
 
 		alert ("Funding Id not entered");
 
-		document.aimEditActivityForm.orgFundingId.focus();
+		document.getElementById("orgFundingId").focus();
 
 		return false;
 
 	}
 
-	/*
 
-	var sigDate = trim(document.aimEditActivityForm.signatureDate.value);
+	var numComm = document.getElementById("numComm").value;
 
-	if (sigDate.length == 0) {
+	var numDisb = document.getElementById("numDisb").value;
 
-		alert ("Signature date not entered");
-
-		document.aimEditActivityForm.signatureDate.focus();
-
-		return false;
-
-	}*/
-
-	var numComm = document.aimEditActivityForm.numComm.value;
-
-	var numDisb = document.aimEditActivityForm.numDisb.value;
-
-	var numExp = document.aimEditActivityForm.numExp.value;
+	var numExp = document.getElementById("numExp").value;
 
 
 
@@ -188,11 +175,11 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 	this.groupSymbol=groupSymbol;
 
 	
-	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
+	var fundId = trim(document.getElementById("orgFundingId").value);
 
-	var assistType = trim(document.aimEditActivityForm.assistanceType.value);
+	var assistType = trim(document.getElementsByName("funding.assistanceType")[0].value);
 
-	var mod=trim(document.aimEditActivityForm.modality.value);
+	var mod=trim(document.getElementsByName("funding.modality")[0].value);
 
 	var errmsg='';
 
@@ -218,7 +205,7 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 		alert (errmsg);
 
-		document.aimEditActivityForm.orgFundingId.focus();
+		document.getElementById("orgFundingId").focus();
 
 		return false;
 
@@ -270,15 +257,15 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 function validateFundingExchangeRate() {
 
-	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
+	var fundId = trim(document.getElementById("orgFundingId").value);
 
 
 
-	var numComm = document.aimEditActivityForm.numComm.value;
+	var numComm = document.getElementById("numComm").value;
 
-	var numDisb = document.aimEditActivityForm.numDisb.value;
+	var numDisb = document.getElementById("numDisb").value;
 
-	var numExp = document.aimEditActivityForm.numExp.value;
+	var numExp = document.getElementById("numExp").value;
 
 
 

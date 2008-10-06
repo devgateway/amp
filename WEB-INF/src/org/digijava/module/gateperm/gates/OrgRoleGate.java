@@ -15,7 +15,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.Gate;
@@ -78,7 +77,7 @@ public class OrgRoleGate extends Gate {
     public boolean logic() throws Exception {
 	Session session = PersistenceManager.getSession();
 	AmpActivity ampa = null;
-	Activity a = null;
+//	Activity a = null;
 
 	Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 	if (o instanceof AmpActivity)
@@ -86,8 +85,8 @@ public class OrgRoleGate extends Gate {
 	Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 	if (oo instanceof AmpActivity)
 	    ampa = (AmpActivity) oo;
-	if (oo instanceof Activity)
-	    a = (Activity) oo;
+//	if (oo instanceof Activity)
+//	    a = (Activity) oo;
 
 	TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
 	//TODO AMP-2579 this IF was added to fix null pointer temporary.
@@ -115,19 +114,19 @@ public class OrgRoleGate extends Gate {
 	    
 
 	}
-	if (a != null) {
-	    if (a.getRelOrgs() == null)
-		return false;
-	    Iterator i = a.getRelOrgs().iterator();
-	    while (i.hasNext()) {
-		RelOrganization element = (RelOrganization) i.next();
-		String roleCode = element.getRole();
-		if (roleCode.equals(paramRoleCode) && element.getOrgId().equals(user.getAssignedOrgId()))
-		    return true;
-
-	    }
-	}
-	
+//	if (a != null) {
+//	    if (a.getRelOrgs() == null)
+//		return false;
+//	    Iterator i = a.getRelOrgs().iterator();
+//	    while (i.hasNext()) {
+//		RelOrganization element = (RelOrganization) i.next();
+//		String roleCode = element.getRole();
+//		if (roleCode.equals(paramRoleCode) && element.getOrgId().equals(user.getAssignedOrgId()))
+//		    return true;
+//
+//	    }
+//	}
+//	
 
 	return false;
     }

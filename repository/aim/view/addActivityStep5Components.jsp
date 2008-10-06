@@ -33,7 +33,7 @@
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
 																			allocation</digi:trn> = 
-																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalCommitments()%>
+																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getFunding().getTotalCommitments()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/></field:display>
@@ -42,7 +42,7 @@
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
-																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalDisbursements()%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getFunding().getTotalDisbursements()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
@@ -52,7 +52,7 @@
 																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
-																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalExpenditures()%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getFunding().getTotalExpenditures()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
@@ -60,7 +60,7 @@
 																		&nbsp;&nbsp;
 
 																		<font
-																		<c:if test="${aimEditActivityForm.totalCommitmentsDouble < aimEditActivityForm.compTotalDisb }">
+																		<c:if test="${aimEditActivityForm.funding.totalCommitmentsDouble < aimEditActivityForm.compTotalDisb }">
 																		 color="RED"
 																		</c:if>
 																		>

@@ -44,28 +44,28 @@ public class EditSurvey extends Action {
             String strSurvey = request.getParameter("surveyId");
             if (null != strSurvey && strSurvey.trim().length() > 0) {
                 surveyId = Long.parseLong(strSurvey);
-                if (null == svForm.getAmpSurveyId() || surveyId != svForm.getAmpSurveyId().longValue()) {
-                    svForm.setAmpSurveyId(new Long(surveyId));
+                if (null == svForm.getSurvey().getAmpSurveyId() || surveyId != svForm.getSurvey().getAmpSurveyId().longValue()) {
+                    svForm.getSurvey().setAmpSurveyId(new Long(surveyId));
                     flag = true;
                 }
             }
         } catch (NumberFormatException ex) {
-            svForm.setAmpSurveyId(null);
+            svForm.getSurvey().setAmpSurveyId(null);
         }
 
-        if (null != svForm.getAmpSurveyId() && flag) {
-            svForm.setIndicators(DbUtil.getResposesBySurvey(svForm.getAmpSurveyId(), svForm.getActivityId()));
-            logger.debug("svForm.getIndicator().size() : " + svForm.getIndicators().size());
-            AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getAmpSurveyId());
-            svForm.setAhsurvey(survey);
-            svForm.setFundingOrg(survey.getAmpDonorOrgId().getAcronym());
+        if (null != svForm.getSurvey().getAmpSurveyId() && flag) {
+            svForm.getSurvey().setIndicators(DbUtil.getResposesBySurvey(svForm.getSurvey().getAmpSurveyId(), svForm.getActivityId()));
+            logger.debug("svForm.getIndicator().size() : " + svForm.getSurvey().getIndicators().size());
+            AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getSurvey().getAmpSurveyId());
+            svForm.getSurvey().setAhsurvey(survey);
+            svForm.getSurvey().setFundingOrg(survey.getAmpDonorOrgId().getAcronym());
 
-            svForm.setPageColl(new ArrayList());
-            int numPages = svForm.getIndicators().size() / NUM_RECORDS;
-            numPages += (svForm.getIndicators().size() % NUM_RECORDS != 0) ? 1 : 0;
+            svForm.getSurvey().setPageColl(new ArrayList());
+            int numPages = svForm.getSurvey().getIndicators().size() / NUM_RECORDS;
+            numPages += (svForm.getSurvey().getIndicators().size() % NUM_RECORDS != 0) ? 1 : 0;
             if (numPages > 1) {
                 for (int i = 0; i < numPages; i++)
-                    svForm.getPageColl().add(new Integer(i + 1));
+                    svForm.getSurvey().getPageColl().add(new Integer(i + 1));
             }
         }
 
@@ -79,8 +79,8 @@ public class EditSurvey extends Action {
                 logger.debug("incorrect page in request scope : " + nex.getMessage());
             }
         }
-        svForm.setCurrPage(new Integer(page));
-        svForm.setStartIndex(new Integer(NUM_RECORDS * (page - 1)));
+        svForm.getSurvey().setCurrPage(new Integer(page));
+        svForm.getSurvey().setStartIndex(new Integer(NUM_RECORDS * (page - 1)));
 
         return mapping.findForward("forward");
     }

@@ -46,7 +46,7 @@ public class RemoveFunding extends Action {
 		}
 		
 		if (fundId > 0 && fundOrgId > 0) {
-			Iterator itr = eaForm.getFundingOrganizations().iterator();
+			Iterator itr = eaForm.getFunding().getFundingOrganizations().iterator();
 			while (itr.hasNext()) {
 				FundingOrganization fOrg = (FundingOrganization) itr.next();
 				if (fOrg.getAmpOrgId().longValue() == fundOrgId) {

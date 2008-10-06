@@ -45,56 +45,55 @@ public class AddFunding extends Action {
 		 if ( logger.isDebugEnabled() )
 		        logger.debug("< orgId=" + orgId);
 
-		formBean.setAssistanceType(null);
-		formBean.setOrgFundingId("");
-		formBean.setSignatureDate("");
-		formBean.setReportingDate("");
-		formBean.setPlannedCompletionDate("");
-		formBean.setPlannedStartDate("");
-		formBean.setActualCompletionDate("");
-		formBean.setActualStartDate("");
-		formBean.setFundingConditions("");
-		formBean.setFundingDetails(null);
-		//formBean.setFundingMTEFProjections(null);
-		formBean.setEditFunding(false);
-		formBean.setNumComm(0);
-		formBean.setNumDisb(0);
-		formBean.setNumExp(0);
-                formBean.setNumDisb(0);
+		formBean.getFunding().setAssistanceType(null);
+		formBean.getFunding().setOrgFundingId("");
+		formBean.getFunding().setSignatureDate("");
+		formBean.getFunding().setReportingDate("");
+		formBean.getFunding().setPlannedCompletionDate("");
+		formBean.getFunding().setPlannedStartDate("");
+		formBean.getFunding().setActualCompletionDate("");
+		formBean.getFunding().setActualStartDate("");
+		formBean.getFunding().setFundingConditions("");
+		formBean.getFunding().setEditFunding(false);
+		formBean.getFunding().setFundingDetails(null);
+		formBean.getFunding().setNumComm(0);
+		formBean.getFunding().setNumDisb(0);
+		formBean.getFunding().setNumExp(0);
+        formBean.getFunding().setNumDisb(0);
+        formBean.getFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection>() );
 
-		formBean.setFundingMTEFProjections( new ArrayList<MTEFProjection>() );
-		boolean afterFiscalYearStart	= isAfterFiscalYearStart(null);
+        boolean afterFiscalYearStart	= isAfterFiscalYearStart(null);
 		for (int i=0; i<3; i++) {
 			MTEFProjection me	= getMTEFProjection(request.getSession(), i, afterFiscalYearStart, null );
-			formBean.getFundingMTEFProjections().add( me );
+			formBean.getFunding().getFundingMTEFProjections().add( me );
 		}
-		formBean.setNumProjections(formBean.getFundingMTEFProjections().size());
+		formBean.getFunding().setNumProjections(formBean.getFunding().getFundingMTEFProjections().size());
 
-		Collection fundingOrganizations = formBean.getFundingOrganizations();
-		Iterator iter = fundingOrganizations.iterator();
+		Collection<FundingOrganization> fundingOrganizations = formBean.getFunding().getFundingOrganizations();
+		Iterator<FundingOrganization> iter = fundingOrganizations.iterator();
 		while ( iter.hasNext() )	{
 			FundingOrganization fundingOrganization = (FundingOrganization)iter.next();
 			if ( orgId.equals( fundingOrganization.getAmpOrgId() ) )	{
-				formBean.setOrgName(fundingOrganization.getOrgName());
+				formBean.getFunding().setOrgName(fundingOrganization.getOrgName());
 				break;
 			}
 		}
-		Collection c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+		Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
 								CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
 		if (c != null) {
-			Iterator tempItr = c.iterator();
+			Iterator<AmpCategoryValue> tempItr = c.iterator();
 			while (tempItr.hasNext()) {
 				AmpCategoryValue assistCategoryValue = (AmpCategoryValue) tempItr.next();
 				if (assistCategoryValue.getValue().equalsIgnoreCase("Grant")) {
-					formBean.setAssistanceType(assistCategoryValue.getId());
+					formBean.getFunding().setAssistanceType(assistCategoryValue.getId());
 					break;
 				}
 			}
 		}
-		formBean.setOrganizations(DbUtil.getAllOrganisation());
-		formBean.setEvent(null);
-		formBean.setDupFunding(true);
-		formBean.setFirstSubmit(false);
+		formBean.getFunding().setOrganizations(DbUtil.getAllOrganisation());
+		formBean.getFunding().setEvent(null);
+		formBean.getFunding().setDupFunding(true);
+		formBean.getFunding().setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}
 	public static String getFYDate(Integer numOfAddedYears, Integer year) {

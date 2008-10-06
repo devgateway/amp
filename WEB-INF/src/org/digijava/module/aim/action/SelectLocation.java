@@ -52,7 +52,7 @@ public class SelectLocation extends Action {
 		}		*/
 
 		Integer impLevelValue;
-		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getImplemLocationLevel() );
+		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getLocation().getImplemLocationLevel() );
 		if (implLocValue != null) {
 			impLevelValue	= new Integer ( implLocValue.getIndex() + 1 );
 		}
@@ -121,7 +121,7 @@ public class SelectLocation extends Action {
 
                   logger.info("Region = " + eaForm.getImpRegion());
                   logger.info("Imp. level value = " + eaForm.getImpLevelValue());
-                  logger.info("Imp. level = " + eaForm.getImplemLocationLevel());
+                  logger.info("Imp. level = " + eaForm.getLocation().getImplemLocationLevel());
 
                 }
                 else{

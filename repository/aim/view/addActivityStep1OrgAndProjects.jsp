@@ -13,6 +13,8 @@
 
 
 <digi:instance property="aimEditActivityForm" />
+<bean:define id="identification" name="aimEditActivityForm" property="identification"></bean:define>
+
 										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
 											<tr>
 												<td align="left"><b>
@@ -25,17 +27,19 @@
 												<td bgcolor="#ffffff" width="100%">
 
 										<table cellPadding=1 cellSpacing=1 border=0 bgcolor="#ffffff" width="100%">
-											<logic:empty name="aimEditActivityForm" property="selectedOrganizations">
+											<logic:empty name="identification" property="selectedOrganizations">
 												<td>
 													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
-														<input type="button" value="<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>" class="dr-menu" name="addOrgs" onclick="selectOrganisation()"></a>
+													
+												<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														
 													
 													</td>
 											</logic:empty>
-											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
+											<logic:notEmpty name="identification" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
-												<c:forEach items="${aimEditActivityForm.selectedOrganizations}" var="selectedOrganizations">
+												<c:forEach items="${identification.selectedOrganizations}" var="selectedOrganizations">
 													<tr>
 														<c:if test="${!empty selectedOrganizations.id}">
 															<td align="left" width=3>
@@ -58,7 +62,7 @@
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${aimEditActivityForm}" refreshParentDocument="false" callBackFunction="document.aimEditActivityForm.submit();"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</td>
 																<td>
 																	<input type="button" value="<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>" class="dr-menu"

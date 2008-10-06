@@ -38,7 +38,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.CMSContentItem;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
@@ -450,45 +449,22 @@ public class TeamMemberUtil {
 		return col;
 	}
 
-	public static Collection getAllMemberActivities(Long memberId) {
+	public static Collection<AmpActivity> getAllMemberActivities(Long memberId) {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpActivity> col = null;
 
 		try {
-
 			session = PersistenceManager.getRequestDBSession();
-			// modified by Priyajith
-			// Desc: removed the usage of session.load and used the select query
-			// start
-			String queryString = "select t from "
-					+ AmpTeamMember.class.getName() + " t "
-					+ "where (t.ampTeamMemId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", memberId, Hibernate.LONG);
+			AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, memberId);
 
-			Iterator itrTemp = qry.list().iterator();
-			AmpTeamMember ampMember = null;
-			while (itrTemp.hasNext()) {
-				ampMember = (AmpTeamMember) itrTemp.next();
-			}
-			// end
-
-			Iterator itr = ampMember.getActivities().iterator();
-			col = new ArrayList();
+			Iterator<AmpActivity> itr = ampMember.getActivities().iterator();
+			col = new ArrayList<AmpActivity>();
 			while (itr.hasNext()) {
-				AmpActivity activity = (AmpActivity) itr.next();
-				Iterator orgItr = activity.getOrgrole().iterator();
-				Activity act = new Activity();
-				act.setActivityId(activity.getAmpActivityId());
-				act.setAmpId(activity.getAmpId());
-				act.setName(activity.getName());
-				act.setBudget(activity.getBudget());
-				act.setUpdatedBy(activity.getUpdatedBy());
-				act.setUpdatedDate(activity.getUpdatedDate());
+				AmpActivity activity = itr.next();
+				Iterator<AmpOrgRole> orgItr = activity.getOrgrole().iterator();
 				String donors = "";
-
 				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+					AmpOrgRole orgRole = orgItr.next();
 					if(orgRole.getRole()!=null){
 						if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
 							if (donors.trim().length() > 0)
@@ -498,8 +474,8 @@ public class TeamMemberUtil {
 					}
 
 				}
-				act.setDonors(donors);
-				col.add(act);
+				activity.setDonors(donors);
+				col.add(activity);
 			}
 
 		} catch (Exception e) {
@@ -1097,56 +1073,6 @@ public class TeamMemberUtil {
             }
         }
 	}
-
-	public static Collection getUnassignedDonorMemberActivities(Long teamId,Long memberId) {
-		Collection col = new ArrayList();
-		Collection col1 = new ArrayList();
-		Session session = null;
-		try {
-			session = PersistenceManager.getSession();
-			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
-			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-
-			col1.addAll(team.getActivityList());
-			col1.removeAll(member.getActivities());
-
-			Iterator itr1 = col1.iterator();
-			while (itr1.hasNext()) {
-				AmpActivity act = (AmpActivity) itr1.next();
-				Iterator orgItr = act.getOrgrole().iterator();
-				Activity activity = new Activity();
-				activity.setActivityId(act.getAmpActivityId());
-				activity.setName(act.getName());
-				activity.setBudget(act.getBudget());
-				activity.setAmpId(act.getAmpId());
-				act.setUpdatedBy(activity.getUpdatedBy());
-				act.setUpdatedDate(activity.getUpdatedDate());
-				String donors = "";
-
-				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
-						if (donors.trim().length() > 0)
-							donors += ", ";
-						donors += orgRole.getOrganisation().getName();
-					}
-				}
-				activity.setDonors(donors);
-				col.add(activity);
-			}
-
-		} catch (Exception e) {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release seesion failed " + rsf.getMessage());
-				}
-			}
-		}
-		return col;
-	}
-
 	public static Collection getUnassignedMemberActivities(Long teamId,Long memberId) {
 		Collection col = null;
 		Collection col1 = new ArrayList();
@@ -1173,13 +1099,6 @@ public class TeamMemberUtil {
 			while (itr.hasNext()) {
 				AmpActivity activity = (AmpActivity) itr.next();
 				Iterator orgItr = activity.getOrgrole().iterator();
-				Activity act = new Activity();
-				act.setActivityId(activity.getAmpActivityId());
-				act.setName(activity.getName());
-				act.setBudget(activity.getBudget());
-				act.setAmpId(activity.getAmpId());
-				act.setUpdatedBy(activity.getUpdatedBy());
-				act.setUpdatedDate(activity.getUpdatedDate());
 				String donors = "";
 
 				while (orgItr.hasNext()) {
@@ -1190,8 +1109,8 @@ public class TeamMemberUtil {
 						donors += orgRole.getOrganisation().getName();
 					}
 				}
-				act.setDonors(donors);
-				col1.add(act);
+				activity.setDonors(donors);
+				col1.add(activity);
 			}
 
 		} catch (Exception e) {
@@ -1209,7 +1128,7 @@ public class TeamMemberUtil {
 		return col1;
 	}
 
-	public static Collection getMemberLinks(Long memberId) {
+    public static Collection getMemberLinks(Long memberId) {
 		Collection col = new ArrayList();
 
 		Session session = null;

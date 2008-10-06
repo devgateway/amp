@@ -81,12 +81,12 @@
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
                                                      <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
-                                  							<c:if test="${!empty aimEditActivityForm.nationalSetting}">
-                                  							${aimEditActivityForm.nationalSetting.defaultHierarchy.name}
+                                  							<c:if test="${!empty aimEditActivityForm.programs.nationalSetting}">
+                                  							${aimEditActivityForm.programs.nationalSetting.defaultHierarchy.name}
                                   							</c:if>
 															<br>
-                                                        <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
-                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                        <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+                                                          <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
                                                           <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
                                                             <tr>
                                                               <td>
@@ -118,14 +118,14 @@
                                                           <td>
                                                           
 															
-                                                          <c:if test="${!empty aimEditActivityForm.nationalSetting.defaultHierarchy.name && (aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms)}">
+                                                          <c:if test="${!empty aimEditActivityForm.programs.nationalSetting.defaultHierarchy.name && (aimEditActivityForm.programs.nationalSetting.allowMultiple||empty aimEditActivityForm.programs.nationalPlanObjectivePrograms)}">
                                                           <field:display name="Add Programs Button - National Plan Objective" feature="Program">
                                                             <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(1);">
 															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
 														</html:button>
                                                           </field:display>
                                                             </c:if>
-                                                            <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                            <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
                                                             <field:display name="Remove Program Button - National Plan Objective" feature="Program">
                                                               <html:button styleClass="dr-menu" property="submitButton" onclick="remProgram(1);">
 															<digi:trn key="btn:removeProgram">Remove program</digi:trn>
@@ -170,12 +170,12 @@
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
                                                      <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
-                                                      <c:if test="${!empty aimEditActivityForm.primarySetting}">
-                                                      	${aimEditActivityForm.primarySetting.defaultHierarchy.name}
+                                                      <c:if test="${!empty aimEditActivityForm.programs.primarySetting}">
+                                                      	${aimEditActivityForm.programs.primarySetting.defaultHierarchy.name}
                                                       </c:if>
                                                       <br>
-                                                        <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
-                                                          <c:forEach var="primaryPrograms" items="${aimEditActivityForm.primaryPrograms}">
+                                                        <c:if test="${!empty aimEditActivityForm.programs.primaryPrograms}">
+                                                          <c:forEach var="primaryPrograms" items="${aimEditActivityForm.programs.primaryPrograms}">
                                                                 <c:set var="program" value="${primaryPrograms.program}"/>
                                                             <tr>
                                                               <td>
@@ -199,14 +199,14 @@
                                                         </c:if>
                                                         <tr>
                                                           <td>
-                                                            <c:if test="${!empty aimEditActivityForm.primarySetting.defaultHierarchy&&(aimEditActivityForm.primarySetting.allowMultiple||empty aimEditActivityForm.primaryPrograms)}">
+                                                            <c:if test="${!empty aimEditActivityForm.programs.primarySetting.defaultHierarchy&&(aimEditActivityForm.programs.primarySetting.allowMultiple||empty aimEditActivityForm.programs.primaryPrograms)}">
                                                             <field:display name="Add Programs Button - Primary Programs" feature="Program">
                                                             <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(2);">
 															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
 														</html:button>
                                                             </field:display>
                                                             </c:if>
-                                                            <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
+                                                            <c:if test="${!empty aimEditActivityForm.programs.primaryPrograms}">
 																<field:display name="Remove Program Button - Primary Programs" feature="Program">
 																<html:button styleClass="dr-menu" property="submitButton" onclick="remProgram(2);">
 															<digi:trn key="btn:removeProgram">Remove program</digi:trn>
@@ -251,12 +251,12 @@
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
                                                        <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
-                                                      <c:if test="${!empty aimEditActivityForm.secondarySetting}">
-                                                       ${aimEditActivityForm.secondarySetting.defaultHierarchy.name}
+                                                      <c:if test="${!empty aimEditActivityForm.programs.secondarySetting}">
+                                                       ${aimEditActivityForm.programs.secondarySetting.defaultHierarchy.name}
                                                        </c:if>
                                                        <br>
-                                                        <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
-                                                          <c:forEach var="secondaryPrograms" items="${aimEditActivityForm.secondaryPrograms}" >
+                                                        <c:if test="${!empty aimEditActivityForm.programs.secondaryPrograms}">
+                                                          <c:forEach var="secondaryPrograms" items="${aimEditActivityForm.programs.secondaryPrograms}" >
                                                            <c:set var="program" value="${secondaryPrograms.program}"/>
                                                             <tr>
                                                               <td>
@@ -282,14 +282,14 @@
                                                         </c:if>
                                                         <tr>
                                                           <td>
-                                                            <c:if test="${!empty aimEditActivityForm.secondarySetting.defaultHierarchy&&(aimEditActivityForm.secondarySetting.allowMultiple||empty aimEditActivityForm.secondaryPrograms)}">
+                                                            <c:if test="${!empty aimEditActivityForm.programs.secondarySetting.defaultHierarchy&&(aimEditActivityForm.programs.secondarySetting.allowMultiple||empty aimEditActivityForm.programs.secondaryPrograms)}">
                                                             <field:display name="Add Programs Button - Secondary Programs" feature="Program">
                                                             <html:button styleClass="dr-menu" property="submitButton" onclick="addProgram(3);">
 															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
 														</html:button>
                                                             </field:display>
                                                             </c:if>
-                                                            <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
+                                                            <c:if test="${!empty aimEditActivityForm.programs.secondaryPrograms}">
                                                             <field:display name="Remove Program Button - Secondary Programs" feature="Program">
                                                               <html:button styleClass="dr-menu" property="submitButton" onclick="remProgram(3);">
 															<digi:trn key="btn:removeProgram">Remove program</digi:trn>

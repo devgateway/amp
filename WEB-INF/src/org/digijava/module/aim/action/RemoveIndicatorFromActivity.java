@@ -38,8 +38,8 @@ public class RemoveIndicatorFromActivity extends Action {
 						}
 					}				
 				}
-				if(actForm.getIndicatorsME()!=null && actForm.getIndicatorsME().size()>0){
-					Collection<ActivityIndicator> actIndicators=actForm.getIndicatorsME();
+				if(actForm.getIndicator().getIndicatorsME()!=null && actForm.getIndicator().getIndicatorsME().size()>0){
+					Collection<ActivityIndicator> actIndicators=actForm.getIndicator().getIndicatorsME();
 					for (ActivityIndicator actInd : actIndicators) {
 						if(actInd.getIndicatorId().equals(indicatorId)){
 							actIndicators.remove(actInd);
@@ -50,8 +50,8 @@ public class RemoveIndicatorFromActivity extends Action {
 			}
 		}			
 		
-		if(actForm.getIndicatorsME()!=null && actForm.getIndicatorsME().size()>0){
-			Collection<ActivityIndicator> actIndicators=actForm.getIndicatorsME();
+		if(actForm.getIndicator().getIndicatorsME()!=null && actForm.getIndicator().getIndicatorsME().size()>0){
+			Collection<ActivityIndicator> actIndicators=actForm.getIndicator().getIndicatorsME();
 			for (ActivityIndicator actInd : actIndicators) {
 				if(actInd.getIndicatorId().equals(indicatorId)){
 					actIndicators.remove(actInd);

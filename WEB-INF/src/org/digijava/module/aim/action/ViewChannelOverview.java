@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -24,25 +26,35 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ChannelOverviewForm;
-import org.digijava.module.aim.helper.Activity;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -94,8 +106,10 @@ public class ViewChannelOverview extends TilesAction {
 			Collection<AmpCategoryValue> implLocationLevels	=
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
 
-			if ( implLocationLevels != null)
-					formBean.setNumImplLocationLevels( implLocationLevels.size() );
+			if ( implLocationLevels != null){
+				formBean.setNumImplLocationLevels( implLocationLevels.size() );
+				
+			}
 
 			try{
 			    if(formBean.getClassificationConfigs()==null){
@@ -107,7 +121,13 @@ public class ViewChannelOverview extends TilesAction {
 			    logger.debug("Classification Config Not Found.");
 			}
 			
-			Activity activity = ActivityUtil.getChannelOverview(id);
+			AmpActivity activity = null;
+			try {
+				activity = ActivityUtil.loadActivity(id);
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			formBean.clearMessages();
 			AmpTeam ampTeam=TeamUtil.getAmpTeam(teamMember.getTeamId());
@@ -116,11 +136,10 @@ public class ViewChannelOverview extends TilesAction {
 			if(teamHead==null) hasTeamLead=false;
 			createWarnings(activity,teamMember.getTeamHead(), formBean,hasTeamLead);
 
-			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
 			
-			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY, ampact);
+			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY, activity);
 
-			Set orgProjIdsSet = ampact.getInternalIds();
+			Set orgProjIdsSet = activity.getInternalIds();
 	          if (orgProjIdsSet != null) {
 	            Iterator projIdItr = orgProjIdsSet.iterator();
 	            Collection temp = new ArrayList();
@@ -148,11 +167,11 @@ public class ViewChannelOverview extends TilesAction {
 
 	          AmpCategoryValue ampCategoryValue = CategoryManagerUtil
 					.getAmpCategoryValueFromListByKey(
-							CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
-							ampact.getCategories());
+							CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
+							activity.getCategories());
 
 			if (ampCategoryValue != null)
-				formBean.setImplemLocationLevel(ampCategoryValue.getValue());
+				formBean.setImplemLocationLevel(ampCategoryValue.getId());
 
 
 			//PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
@@ -181,7 +200,7 @@ public class ViewChannelOverview extends TilesAction {
 		 	if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null &&
 		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  ))
 		 	{
-		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(ampact.getTeam().getAmpTeamId()))
+		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()))
 		 			formBean.setButtonText("validate");
 		 		else
 		 			formBean.setButtonText("approvalAwaited");
@@ -209,7 +228,7 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setCurrCode(currCode);
 
     			// call the logic instance to perform the caculations, so it will depend of each implementancion how we will calculate the total inlcuding or not planned 
-    			DecimalWraper total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(activity.getActivityId(), currCode);
+    			DecimalWraper total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(activity.getAmpActivityId(), currCode);
             		if (!debug) {
             		    formBean.setGrandTotal(total.toString());
             		} else {
@@ -231,39 +250,168 @@ public class ViewChannelOverview extends TilesAction {
 
                         formBean.setNationalPlanObjectivePrograms(ActivityUtil.
                             getActivityProgramsByProgramType
-                            (activity.getActivityId(),
+                            (activity.getAmpActivityId(),
                              ProgramUtil.NATIONAL_PLAN_OBJECTIVE));
 
                         formBean.setPrimaryPrograms(ActivityUtil.
                             getActivityProgramsByProgramType
-                            (activity.getActivityId(),
+                            (activity.getAmpActivityId(),
                              ProgramUtil.PRIMARY_PROGRAM));
 
                         formBean.setSecondaryPrograms(ActivityUtil.
                             getActivityProgramsByProgramType
-                            (activity.getActivityId(),
+                            (activity.getAmpActivityId(),
                              ProgramUtil.SECONDARY_PROGRAM));
 
+                		//Refactoring
+                		//Sectors are set here, copied from EditActivityForm, maybe we can unify both Forms
+                		//After the merge, put this code in methods
+                		formBean=setSectorsToForm(formBean, activity);
+                		formBean=setTypesOfAssistanceToForm(formBean, activity);
+                		formBean=setUniqueModalitiesToForm(formBean, activity);
+
+						formBean.setImpLocation(CategoryManagerUtil
+									.getAmpCategoryValueFromListByKey(
+											CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
+											activity.getCategories()).getId());
+
+						formBean.setProjectCategory(
+						    CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+						        CategoryManagerUtil.getAmpCategoryValueFromList(
+						    CategoryConstants.PROJECT_CATEGORY_NAME, activity.getCategories())
+						    ));
+						
+				        Collection relOrgs = new ArrayList();
+				        if (activity.getOrgrole() != null) {
+				          Iterator orgItr = activity.getOrgrole().iterator();
+				          while (orgItr.hasNext()) {
+				            AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+				            AmpOrganisation auxOrgRel = orgRole.getOrganisation();
+				            if(auxOrgRel!=null)
+				            {
+				            	RelOrganization relOrg = new RelOrganization();
+				                relOrg.setOrgName(auxOrgRel.getName());
+				                relOrg.setRole(orgRole.getRole().getRoleCode());
+				                relOrg.setAcronym(auxOrgRel.getAcronym());
+				                relOrg.setOrgCode(auxOrgRel.getOrgCode());
+				                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+				                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+				                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
+				                if (!relOrgs.contains(relOrg)) {
+				                	relOrgs.add(relOrg);
+				                }
+				            }
+				          }
+				        }
+				        formBean.setRelOrgs(relOrgs);
+				        Collection col = activity.getClosingDates();
+				        List dates = new ArrayList();
+				        if (col != null && col.size() > 0) {
+				          Iterator itr = col.iterator();
+				          while (itr.hasNext()) {
+				            AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
+				                .next();
+				            if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
+				              dates.add(cDate.getClosingDate());
+				            }
+				          }
+				        }
+				        Collections.sort(dates, DateConversion.dtComp);
+				        formBean.setClosingDates(dates);
+
+				        formBean.setStatus(
+			            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+			                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+			            CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories())
+			            )
+			            );
+
+				        formBean.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+		                		CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories())
+				        ));
+
+				        formBean.setAccessionInstrument(
+		                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                    CategoryManagerUtil.getAmpCategoryValueFromList(
+		                CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories())
+		                )
+		                );
+
+				        formBean.setAcChapter(
+		            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+		                CategoryManagerUtil.getAmpCategoryValueFromList(
+		            CategoryConstants.ACCHAPTER_NAME, activity.getCategories())
+		            )
+		            );
 
 
-			// end $1
-
-
-			/*
-			boolean canView = ActivityUtil.canViewActivity(id,teamMember);
-			if (canView) {
-			} else {
-				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error.aim.illegalActivityAccess"));
-				saveErrors(request, errors);
-				formBean.setCanView(false);
-			}*/
+          	        
+          	        // queryString = "select distinct f.typeOfAssistance.value from " +
+//                      AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
+//          
+//                  qry = session.createQuery(queryString);
+//                  qry.setParameter("actId", actId, Hibernate.LONG);
+//          
+//                  Collection temp = new ArrayList();
+//                  Iterator typesItr = qry.list().iterator();
+//                  while (typesItr.hasNext()) {
+//                    String code = (String) typesItr.next();
+//                    temp.add(code);
+//                  }
+//                  activity.setAssistanceType(temp);
+          
+		
 		}
+		
 		return null;
 	}
 
-	private void createWarnings (Activity activity, boolean isTeamHead, ChannelOverviewForm formBean, boolean hasTeamLead) {
+	private ChannelOverviewForm setUniqueModalitiesToForm(
+			ChannelOverviewForm formBean, AmpActivity activity) {
+		Set<AmpFunding> fundings = activity.getFunding();
+		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
+		ArrayList<AmpCategoryValue> modalities = new ArrayList<AmpCategoryValue>();
+		while(fundingsIterator.hasNext()){
+			AmpFunding ampFunding = fundingsIterator.next();
+			if(!modalities.contains(ampFunding.getFinancingInstrument()))
+				modalities.add(ampFunding.getFinancingInstrument());
+		}
+		formBean.setUniqueModalities(modalities);
+
+//      Collection modalities = new ArrayList();
+//      queryString = "select fund from " + AmpFunding.class.getName() +
+//          " fund " +
+//          "where (fund.ampActivityId=:actId)";
+//      qry = session.createQuery(queryString);
+//      qry.setParameter("actId", actId, Hibernate.LONG);
+//      Iterator itr = qry.list().iterator();
+//      while (itr.hasNext()) {
+//        AmpFunding fund = (AmpFunding) itr.next();
+//        if (fund.getFinancingInstrument() != null)
+//      	  modalities.add( fund.getFinancingInstrument() );
+//      }
+//      activity.setModalities(modalities);
+//      activity.setUniqueModalities(new TreeSet(modalities));
+		
+		return formBean;
+	}
+
+	private ChannelOverviewForm setTypesOfAssistanceToForm(
+			ChannelOverviewForm formBean, AmpActivity activity) {
+		Set<AmpFunding> fundings = activity.getFunding();
+		Iterator<AmpFunding> fundingsIterator = fundings.iterator();
+		ArrayList<AmpCategoryValue> typesOfAssistance = new ArrayList<AmpCategoryValue>();
+		while(fundingsIterator.hasNext()){
+			AmpFunding ampFunding = fundingsIterator.next();
+			if(!typesOfAssistance.contains(ampFunding.getTypeOfAssistance()))
+				typesOfAssistance.add(ampFunding.getTypeOfAssistance());
+		}
+		formBean.setTypesOfAssistance(typesOfAssistance);
+		return formBean;
+	}
+
+	private void createWarnings (AmpActivity activity, boolean isTeamHead, ChannelOverviewForm formBean, boolean hasTeamLead) {
 		if (activity.getDraft()!=null && activity.getDraft()) {
 			formBean.addError("error.aim.draftActivity", 
 					"This is a draft activity");
@@ -278,4 +426,67 @@ public class ViewChannelOverview extends TilesAction {
 			}
 		}
 	}
+	  private ChannelOverviewForm setSectorsToForm(ChannelOverviewForm form, AmpActivity activity) {
+			Collection sectors = activity.getSectors();
+
+			if (sectors != null && sectors.size() > 0) {
+				List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();
+				Iterator sectItr = sectors.iterator();
+				while (sectItr.hasNext()) {
+					AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
+					if (ampActSect != null) {
+						AmpSector sec = ampActSect.getSectorId();
+						if (sec != null) {
+							AmpSector parent = null;
+							AmpSector subsectorLevel1 = null;
+							AmpSector subsectorLevel2 = null;
+							if (sec.getParentSectorId() != null) {
+								if (sec.getParentSectorId().getParentSectorId() != null) {
+									subsectorLevel2 = sec;
+									subsectorLevel1 = sec.getParentSectorId();
+									parent = sec.getParentSectorId().getParentSectorId();
+								} else {
+									subsectorLevel1 = sec;
+									parent = sec.getParentSectorId();
+								}
+							} else {
+								parent = sec;
+							}
+							ActivitySector actSect = new ActivitySector();
+	                                                actSect.setConfigId(ampActSect.getClassificationConfig().getId());
+							if (parent != null) {
+								actSect.setId(parent.getAmpSectorId());
+								String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
+								if (view != null)
+									if (view.equalsIgnoreCase("On")) {
+										actSect.setCount(1);
+									} else {
+										actSect.setCount(2);
+									}
+
+								actSect.setSectorId(parent.getAmpSectorId());
+								actSect.setSectorName(parent.getName());
+								if (subsectorLevel1 != null) {
+									actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
+									actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
+									if (subsectorLevel2 != null) {
+										actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
+										actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
+									}
+								}
+								actSect.setSectorPercentage(ampActSect.getSectorPercentage());
+	                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+	                                                        
+							}
+	                                               
+							activitySectors.add(actSect);
+						}
+					}
+				}
+				Collections.sort(activitySectors);
+				form.setActivitySectors(activitySectors);
+			}
+			return form;
+		}
+
 }

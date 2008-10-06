@@ -16,13 +16,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 public class OrganisationSelected extends Action {
 
@@ -45,11 +42,11 @@ public class OrganisationSelected extends Action {
 		int item = 0;
 
 		if (eaForm.getStep().equals("1")) {
-			prevOrgs = eaForm.getSelectedOrganizations();
+			prevOrgs = eaForm.getIdentification().getSelectedOrganizations();
 		} else if (eaForm.getStep().equals("3")) {
-			prevSelOrgs = eaForm.getFundingOrganizations();
+			prevSelOrgs = eaForm.getFunding().getFundingOrganizations();
 		} else if (eaForm.getStep().equals("7")) {
-			item = eaForm.getItem();
+			item = eaForm.getAgencies().getItem();
 		} else {
 			mapping.findForward("index");
 		}
@@ -101,7 +98,7 @@ public class OrganisationSelected extends Action {
 				}
 
 			}
-			eaForm.setSelectedOrganizations(currOrgs);
+			eaForm.getIdentification().setSelectedOrganizations(currOrgs);
 			eaForm.setNumResults(0);
 			eaForm.setOrgPopupReset(true);
 			return mapping.findForward("forward");
@@ -152,7 +149,7 @@ public class OrganisationSelected extends Action {
 				}
 			}
 			eaForm.setPrevOrg(null);
-			eaForm.setFundingOrganizations(orgs);
+			eaForm.getFunding().setFundingOrganizations(orgs);
 			return mapping.findForward("step3");
 
 		} else {
@@ -177,11 +174,11 @@ public class OrganisationSelected extends Action {
                                                       //  role.setActivity(ActivityUtil.getAmpActivity(eaForm.getActivityId()));
                                                         }
                                                        // role.setRole( DbUtil.getAmpRole(Constants.EXECUTING_AGENCY));
-                                                        if(eaForm.getExecutingAgencies()==null){
-                                                                            eaForm.setExecutingAgencies(new ArrayList());
+                                                        if(eaForm.getAgencies().getExecutingAgencies()==null){
+                                                                            eaForm.getAgencies().setExecutingAgencies(new ArrayList<AmpOrganisation>());
                                                          }
-                                                        if(!eaForm.getExecutingAgencies().contains(newOrg)){
-                                                            eaForm.getExecutingAgencies().add(newOrg);
+                                                        if(!eaForm.getAgencies().getExecutingAgencies().contains(newOrg)){
+                                                            eaForm.getAgencies().getExecutingAgencies().add(newOrg);
                                                         }
                                                         
 							/*if (newOrg != null) {
@@ -213,12 +210,12 @@ public class OrganisationSelected extends Action {
                                               }
 					
 				} else if (item == 2) {
-					if (eaForm.getImpAgencies() != null) {
+					if (eaForm.getAgencies().getImpAgencies() != null) {
 						for (int i = 0;i < temp.size();i ++) {
 							AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 							if (newOrg != null) {
 								boolean flag = false;
-								Iterator itr = eaForm.getImpAgencies().iterator();
+								Iterator itr = eaForm.getAgencies().getImpAgencies().iterator();
 								while (itr.hasNext()) {
 									AmpOrganisation org = (AmpOrganisation) itr.next();
 									if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -227,23 +224,23 @@ public class OrganisationSelected extends Action {
 									}
 								}
 								if (!flag) {
-									eaForm.getImpAgencies().add(newOrg);
+									eaForm.getAgencies().getImpAgencies().add(newOrg);
 								}
 							}
 						}
 					} else {
 						Collection col = new ArrayList();
 						col.addAll(temp);
-						eaForm.setImpAgencies(col);						
+						eaForm.getAgencies().setImpAgencies(col);						
 					}
 				} else if (item == 3) {
 				} else if (item == 4) {
-					if (eaForm.getReportingOrgs() != null) {
+					if (eaForm.getAgencies().getReportingOrgs() != null) {
 						for (int i = 0;i < temp.size();i ++) {
 							AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 							if (newOrg != null) {
 								boolean flag = false;
-								Iterator itr = eaForm.getReportingOrgs().iterator();
+								Iterator itr = eaForm.getAgencies().getReportingOrgs().iterator();
 								while (itr.hasNext()) {
 									AmpOrganisation org = (AmpOrganisation) itr.next();
 									if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -252,24 +249,24 @@ public class OrganisationSelected extends Action {
 									}
 								}
 								if (!flag) {
-									eaForm.getReportingOrgs().add(newOrg);
+									eaForm.getAgencies().getReportingOrgs().add(newOrg);
 								}
 							}
 						}
 					} else {
 						Collection col = new ArrayList();
 						col.addAll(temp);
-						eaForm.setReportingOrgs(col);						
+						eaForm.getAgencies().setReportingOrgs(col);						
 					}
 				}
 				else
 					if (item == 5) { //Step 7 - Beneficiary Agency
-						if (eaForm.getBenAgencies()!= null) {
+						if (eaForm.getAgencies().getBenAgencies()!= null) {
 							for (int i = 0;i < temp.size();i ++) {
 								AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 								if (newOrg != null) {
 									boolean flag = false;
-									Iterator itr = eaForm.getBenAgencies().iterator();
+									Iterator itr = eaForm.getAgencies().getBenAgencies().iterator();
 									while (itr.hasNext()) {
 										AmpOrganisation org = (AmpOrganisation) itr.next();
 										if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -278,24 +275,24 @@ public class OrganisationSelected extends Action {
 										}
 									}
 									if (!flag) {
-										eaForm.getBenAgencies().add(newOrg);
+										eaForm.getAgencies().getBenAgencies().add(newOrg);
 									}
 								}
 							}
 						} else {
 							Collection col = new ArrayList();
 							col.addAll(temp);
-							eaForm.setBenAgencies(col);						
+							eaForm.getAgencies().setBenAgencies(col);						
 						}
 					}
 					else
 						if (item == 6) { //Step 7 - Contracting Agency
-							if (eaForm.getConAgencies()!= null) {
+							if (eaForm.getAgencies().getConAgencies()!= null) {
 								for (int i = 0;i < temp.size();i ++) {
 									AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 									if (newOrg != null) {
 										boolean flag = false;
-										Iterator itr = eaForm.getConAgencies().iterator();
+										Iterator itr = eaForm.getAgencies().getConAgencies().iterator();
 										while (itr.hasNext()) {
 											AmpOrganisation org = (AmpOrganisation) itr.next();
 											if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -304,24 +301,24 @@ public class OrganisationSelected extends Action {
 											}
 										}
 										if (!flag) {
-											eaForm.getConAgencies().add(newOrg);
+											eaForm.getAgencies().getConAgencies().add(newOrg);
 										}
 									}
 								}
 							} else {
 								Collection col = new ArrayList();
 								col.addAll(temp);
-								eaForm.setConAgencies(col);						
+								eaForm.getAgencies().setConAgencies(col);						
 							}
 						}
 						else
 							if (item == 7) {
-								if (eaForm.getRegGroups()!= null) {
+								if (eaForm.getAgencies().getRegGroups()!= null) {
 									for (int i = 0;i < temp.size();i ++) {
 										AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 										if (newOrg != null) {
 											boolean flag = false;
-											Iterator itr = eaForm.getRegGroups().iterator();
+											Iterator itr = eaForm.getAgencies().getRegGroups().iterator();
 											while (itr.hasNext()) {
 												AmpOrganisation org = (AmpOrganisation) itr.next();
 												if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -330,25 +327,25 @@ public class OrganisationSelected extends Action {
 												}
 											}
 											if (!flag) {
-												eaForm.getRegGroups().add(newOrg);
+												eaForm.getAgencies().getRegGroups().add(newOrg);
 											}
 										}
 									}
 								} else {
 									Collection col = new ArrayList();
 									col.addAll(temp);
-									eaForm.setRegGroups(col);						
+									eaForm.getAgencies().setRegGroups(col);						
 								}
 							}
 				
 							else
 								if (item == 8) {
-									if (eaForm.getSectGroups()!= null) {
+									if (eaForm.getAgencies().getSectGroups()!= null) {
 										for (int i = 0;i < temp.size();i ++) {
 											AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 											if (newOrg != null) {
 												boolean flag = false;
-												Iterator itr = eaForm.getSectGroups().iterator();
+												Iterator itr = eaForm.getAgencies().getSectGroups().iterator();
 												while (itr.hasNext()) {
 													AmpOrganisation org = (AmpOrganisation) itr.next();
 													if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -357,26 +354,26 @@ public class OrganisationSelected extends Action {
 													}
 												}
 												if (!flag) {
-													eaForm.getSectGroups().add(newOrg);
+													eaForm.getAgencies().getSectGroups().add(newOrg);
 												}
 											}
 										}
 									} else {
 										Collection col = new ArrayList();
 										col.addAll(temp);
-										eaForm.setSectGroups(col);						
+										eaForm.getAgencies().setSectGroups(col);						
 									}
 								} else
 									if (item == 9) { // Responsible Organisation
 										logger.info("1 ");
-										if (eaForm.getRespOrganisations()!= null) {
+										if (eaForm.getAgencies().getRespOrganisations()!= null) {
 											logger.info("2 ");
 											for (int i = 0;i < temp.size();i ++) {
 												logger.info("3 - "+i+" ");
 												AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
 												if (newOrg != null) {
 													boolean flag = false;
-													Iterator itr = eaForm.getRespOrganisations().iterator();
+													Iterator itr = eaForm.getAgencies().getRespOrganisations().iterator();
 													while (itr.hasNext()) {
 														AmpOrganisation org = (AmpOrganisation) itr.next();
 														if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
@@ -385,7 +382,7 @@ public class OrganisationSelected extends Action {
 														}
 													}
 													if (!flag) {
-														eaForm.getRespOrganisations().add(newOrg);
+														eaForm.getAgencies().getRespOrganisations().add(newOrg);
 													}
 												}
 											}
@@ -395,7 +392,7 @@ public class OrganisationSelected extends Action {
 											logger.info(temp);
 											Collection col = new ArrayList();
 											col.addAll(temp);
-											eaForm.setRespOrganisations(col);						
+											eaForm.getAgencies().setRespOrganisations(col);						
 										}
 									}
 				

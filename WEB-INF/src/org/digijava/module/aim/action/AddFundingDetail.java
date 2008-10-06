@@ -26,7 +26,7 @@ public class AddFundingDetail extends Action {
 
 	private static Logger logger = Logger.getLogger(AddFundingDetail.class);
 
-	private ArrayList fundingDetails = null;
+	private ArrayList<FundingDetail> fundingDetails = null;
 
 	private String event;
 
@@ -36,7 +36,7 @@ public class AddFundingDetail extends Action {
 		HttpSession session = request.getSession();
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
-		event = formBean.getEvent();
+		event = formBean.getFunding().getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 
 
@@ -53,12 +53,12 @@ public class AddFundingDetail extends Action {
 		String subEvent = event.substring(0,3);
 		FundingDetail fd = null;
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
-			if (formBean.getFundingDetails() == null) {
-				fundingDetails = new ArrayList();
+			if (formBean.getFunding().getFundingDetails() == null) {
+				fundingDetails = new ArrayList<FundingDetail>();
 				fd = getFundingDetail(currCode);
 				fundingDetails.add(fd);
 			} else {
-				fundingDetails = new ArrayList(formBean.getFundingDetails());
+				fundingDetails = new ArrayList<FundingDetail>(formBean.getFunding().getFundingDetails());
 				if (subEvent.equals("del")) {
 					FundingDetail temp = new FundingDetail();
 					temp.setIndexId(index);
@@ -79,15 +79,15 @@ public class AddFundingDetail extends Action {
 				}
 			}
 			if (fd != null && fd.getTransactionType() == 0) {
-				formBean.setNumComm(formBean.getNumComm() + 1);
+				formBean.getFunding().setNumComm(formBean.getFunding().getNumComm() + 1);
 			} else if (fd != null && fd.getTransactionType() == 1) {
-				formBean.setNumDisb(formBean.getNumDisb() + 1);
+				formBean.getFunding().setNumDisb(formBean.getFunding().getNumDisb() + 1);
 			} else if (fd != null && fd.getTransactionType() == 2) {
-				formBean.setNumExp(formBean.getNumExp() + 1);
+				formBean.getFunding().setNumExp(formBean.getFunding().getNumExp() + 1);
 			}
                         else if (fd != null && fd.getTransactionType() == 4) {
-                                int numDisbOrder=formBean.getNumDisbOrder() + 1;
-                                formBean.setNumDisbOrder(numDisbOrder);
+                                int numDisbOrder=formBean.getFunding().getNumDisbOrder() + 1;
+                                formBean.getFunding().setNumDisbOrder(numDisbOrder);
                                 Iterator<FundingDetail> iter=fundingDetails.iterator();
                                 long max=100;
                                 while(iter.hasNext()){
@@ -104,12 +104,12 @@ public class AddFundingDetail extends Action {
                                 }
                                 fd.setDisbOrderId(""+(++max));
                         }
-			formBean.setFundingDetails(fundingDetails);
+			formBean.getFunding().setFundingDetails(fundingDetails);
 		}
                 }
-		formBean.setEvent(null);
-		formBean.setDupFunding(true);
-		formBean.setFirstSubmit(false);
+		formBean.getFunding().setEvent(null);
+		formBean.getFunding().setDupFunding(true);
+		formBean.getFunding().setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}
 

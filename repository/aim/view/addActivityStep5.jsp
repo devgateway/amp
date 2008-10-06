@@ -476,41 +476,41 @@ function removeSelComponents() {
   ${aimEditActivityForm.stepNumberOnPage}
   </c:set>
       
-  <c:if test="${empty aimEditActivityForm.selectedLocs}">
+  <c:if test="${empty aimEditActivityForm.location.selectedLocs}">
     <input type="hidden" name="sizeLocs" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.selectedLocs}">
-    <input type="hidden" name="sizeLocs" value="${fn:length(aimEditActivityForm.selectedLocs)}">
+  <c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
+    <input type="hidden" name="sizeLocs" value="${fn:length(aimEditActivityForm.location.selectedLocs)}">
   </c:if>
 
 
-  <c:if test="${empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+  <c:if test="${empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
     <input type="hidden" name="sizeNPOPrograms" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
-    <input type="hidden" name="sizeNPOPrograms" value="${fn:length(aimEditActivityForm.nationalPlanObjectivePrograms)}">
+  <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+    <input type="hidden" name="sizeNPOPrograms" value="${fn:length(aimEditActivityForm.programs.nationalPlanObjectivePrograms)}">
   </c:if>
 
-   <c:if test="${empty aimEditActivityForm.primaryPrograms}">
+   <c:if test="${empty aimEditActivityForm.programs.primaryPrograms}">
     <input type="hidden" name="sizePPrograms" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
-    <input type="hidden" name="sizePPrograms" value="${fn:length(aimEditActivityForm.primaryPrograms)}">
+  <c:if test="${!empty aimEditActivityForm.programs.primaryPrograms}">
+    <input type="hidden" name="sizePPrograms" value="${fn:length(aimEditActivityForm.programs.primaryPrograms)}">
   </c:if>
 
-   <c:if test="${empty aimEditActivityForm.secondaryPrograms}">
+   <c:if test="${empty aimEditActivityForm.programs.secondaryPrograms}">
     <input type="hidden" name="sizeSPrograms" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
-    <input type="hidden" name="sizeSPrograms" value="${fn:length(aimEditActivityForm.secondaryPrograms)}">
+  <c:if test="${!empty aimEditActivityForm.programs.secondaryPrograms}">
+    <input type="hidden" name="sizeSPrograms" value="${fn:length(aimEditActivityForm.programs.secondaryPrograms)}">
   </c:if>
 
 
-  <c:if test="${empty aimEditActivityForm.activitySectors}">
+  <c:if test="${empty aimEditActivityForm.sectors.activitySectors}">
     <input type="hidden" name="sizeActSectors" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.activitySectors}">
-    <bean:size id ="actSectSize" name="aimEditActivityForm" property="activitySectors" />
+  <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
+    <bean:size id ="actSectSize" name="aimEditActivityForm" property="sectors.activitySectors" />
     <input type="hidden" name="sizeActSectors" value="${actSectSize}">
   </c:if>
 
@@ -670,7 +670,7 @@ function removeSelComponents() {
                               <digi:trn key="aim:editActivity">
                               Edit Activity
                               </digi:trn>:
-                              ${aimEditActivityForm.title}
+                              ${aimEditActivityForm.identification.title}
                             </c:if>
                           </span>
                         </td>

@@ -1,0 +1,21 @@
+package org.dgfoundation.amp.error;
+
+
+
+public class AMPActivityError extends AMPError {
+
+	private static final long serialVersionUID = -1625562870224489598L;
+
+	public AMPActivityError() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public AMPActivityError(int level, boolean continuable) {
+		super(level, continuable);
+		// TODO Auto-generated constructor stub
+	}
+
+	
+	
+}

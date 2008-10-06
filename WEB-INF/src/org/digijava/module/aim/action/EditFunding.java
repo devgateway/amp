@@ -38,40 +38,39 @@ public class EditFunding extends Action {
 		int numDisb = 0;
                 int numDisbOrder=0;
 		int numExp = 0;
-		formBean.setAssistanceType(null);
-		formBean.setOrgFundingId("");
-		formBean.setSignatureDate("");
-		formBean.setFundingDetails(null);
-		formBean.setFundingMTEFProjections(null);
-		ArrayList fundingOrganizations = new ArrayList(formBean.getFundingOrganizations());
+		formBean.getFunding().setAssistanceType(null);
+		formBean.getFunding().setOrgFundingId("");
+		formBean.getFunding().setSignatureDate("");
+		formBean.getFunding().setFundingDetails(null);
+		formBean.getFunding().setFundingMTEFProjections(null);
+		ArrayList<FundingOrganization> fundingOrganizations = new ArrayList<FundingOrganization>(formBean.getFunding().getFundingOrganizations());
 		if (fundingOrganizations != null) {
 			for (int i = 0; i < fundingOrganizations.size(); i++) {
 				FundingOrganization fundingOrganization = (FundingOrganization) fundingOrganizations.get(i);
 				if (fundingOrganization.getAmpOrgId().equals(orgId)) {
-					formBean.setOrgName(fundingOrganization.getOrgName());
+					formBean.getFunding().setOrgName(fundingOrganization.getOrgName());
 					int index = 0;
-					ArrayList fundings = new ArrayList(fundingOrganization.getFundings());
+					ArrayList<Funding> fundings = new ArrayList<Funding>(fundingOrganization.getFundings());
 					for (int j = 0; j < fundings.size(); j++) {
 						if (index == offset) {
 							Funding funding = (Funding) fundings.get(j);
 							if (funding != null) {
 								//formBean.setAssistanceType(funding.getAmpTermsAssist().getAmpTermsAssistId());
 								if (funding.getTypeOfAssistance()!=null)
-									formBean.setAssistanceType( funding.getTypeOfAssistance().getId() );
-								else formBean.setAssistanceType(new Long(0));
-								formBean.setOrgFundingId(funding.getOrgFundingId());
+									formBean.getFunding().setAssistanceType( funding.getTypeOfAssistance().getId() );
+								else formBean.getFunding().setAssistanceType(new Long(0));
+								formBean.getFunding().setOrgFundingId(funding.getOrgFundingId());
 								if (funding.getFinancingInstrument() != null)
-									formBean.setModality(funding.getFinancingInstrument().getId());
-								formBean.setFundingConditions(funding.getConditions());
+								formBean.getFunding().setModality(funding.getFinancingInstrument().getId());
+								formBean.getFunding().setFundingConditions(funding.getConditions());
+								formBean.getFunding().setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
+								formBean.getFunding().setFundingDetails(new ArrayList<FundingDetail>());
 
-								formBean.setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
-
-								formBean.setFundingDetails(new ArrayList());
 								if (funding.getFundingDetails() != null) {
-									formBean.getFundingDetails().addAll(funding.getFundingDetails());
-									Iterator itr = funding.getFundingDetails().iterator();
+									formBean.getFunding().getFundingDetails().addAll(funding.getFundingDetails());
+									Iterator<FundingDetail> itr = funding.getFundingDetails().iterator();
 									while (itr.hasNext()) {
-										FundingDetail fd = (FundingDetail) itr.next();
+										FundingDetail fd =itr.next();
 										if (fd.getTransactionType() == 0) {
 											numComm ++;
 										} else if (fd.getTransactionType() == 1) {
@@ -79,9 +78,9 @@ public class EditFunding extends Action {
 										} else if (fd.getTransactionType() == 2) {
 											numExp ++;
 										}
-                                                                                else if (fd.getTransactionType() == 4) {
-                                                                                        numDisbOrder ++;
-                                                                                }
+                                        else if (fd.getTransactionType() == 4) {
+                                          numDisbOrder ++;
+                                        }
 
 									}
 								}
@@ -94,18 +93,16 @@ public class EditFunding extends Action {
 				}
 			}
 		}
-		//Collection c = DbUtil.getAllAssistanceTypes();
-		formBean.setNumComm(numComm);
-		formBean.setNumDisb(numDisb);
-		formBean.setNumExp(numExp);
-                formBean.setNumDisbOrder(numDisbOrder);
-		//formBean.setAssistanceTypes(c);
+		formBean.getFunding().setNumComm(numComm);
+		formBean.getFunding().setNumDisb(numDisb);
+		formBean.getFunding().setNumExp(numExp);
+        formBean.getFunding().setNumDisbOrder(numDisbOrder);
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-		formBean.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
-		formBean.setOrganizations(DbUtil.getAllOrganisation());
-		formBean.setEditFunding(true);
-		formBean.setDupFunding(true);
-		formBean.setFirstSubmit(false);
+		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
+		formBean.getFunding().setOrganizations(DbUtil.getAllOrganisation());
+		formBean.getFunding().setEditFunding(true);
+		formBean.getFunding().setDupFunding(true);
+		formBean.getFunding().setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}
 }

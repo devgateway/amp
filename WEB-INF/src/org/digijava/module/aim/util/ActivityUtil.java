@@ -5,6 +5,8 @@
 
 package org.digijava.module.aim.util;
 
+import java.sql.Savepoint;
+import java.text.DecimalFormat;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -27,11 +29,14 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.error.AMPActivityError;
+import org.dgfoundation.amp.error.AMPError;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.action.RecoverySaveParameters;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -46,6 +51,7 @@ import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpExternalMapping;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -74,7 +80,6 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProjectDonor;
@@ -111,18 +116,20 @@ public class ActivityUtil {
    * This function is used to create a new activity
    * @param activity The activity to be persisted
    */
-  public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
-                                  boolean serializeFlag, Long field,
-                                  Collection relatedLinks, Long memberId,
-                                  Set<Components<AmpComponentFunding>> ampTempComp,List<IPAContract> contracts) {
-    /*
-     * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
-     * by passing null and false to the parameters oldActivityId and edit respectively
-     * since this is creating a new activity
-     */
-    return saveActivity(activity, null, false, commentsCol, serializeFlag,
-                        field, relatedLinks, memberId, null, ampTempComp, contracts);
-  }
+  //I've seen no references so I marked it deprecated
+  @Deprecated
+//  public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
+//                                  boolean serializeFlag, Long field,
+//                                  Collection relatedLinks, Long memberId,
+//                                  Set<Components<AmpComponentFunding>> ampTempComp,List<IPAContract> contracts) throws Exception {
+//    /*
+//     * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
+//     * by passing null and false to the paramindicatorseters oldActivityId and edit respectively
+//     * since this is creating a new activity
+//     */
+//    return saveActivity(activity, null, false, commentsCol, serializeFlag,
+//                        field, relatedLinks, memberId, null, ampTempComp, contracts, false);
+//  }
 
   /**
    * Persist an AmpActivity object to the database
@@ -136,21 +143,39 @@ public class ActivityUtil {
    * @param oldActivityId The id of the AmpActivity object which is to be updated
    * @param edit This boolean variable represents whether to create a new
    * activity object or to update the existing activity object
+   * @throws Exception 
    */
-public static Long saveActivity(AmpActivity activity, Long oldActivityId,
-                                  boolean edit,
-                                  ArrayList commentsCol, boolean serializeFlag,
-                                  Long field,
-                                  Collection relatedLinks, Long memberId,
-                                  Collection indicators, Set<Components<AmpComponentFunding>> componentsFunding, List<IPAContract> contracts) {
+public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
+	//Retrieving parameters
+	AmpActivity activity = rsp.getActivity();
+	Long oldActivityId = rsp.getOldActivityId();
+	boolean edit = rsp.isEdit();
+	ArrayList commentsCol = rsp.getEaForm().getCommentsCol();
+	boolean serializeFlag = rsp.getEaForm().isSerializeFlag();
+	Long field = rsp.getField();
+	Collection relatedLinks = rsp.getRelatedLinks();
+	Long memberId = rsp.getTm().getMemberId();
+	Collection indicators = rsp.getEaForm().getIndicator().getIndicatorsME();
+	Set<Components<AmpComponentFunding>> componentsFunding = rsp.getTempComp();
+	List<IPAContract> contracts = rsp.getEaForm().getContracts();
+	boolean alwaysRollback = rsp.isAlwaysRollback();
+	//***
+	
+	
+	
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
     AmpActivity oldActivity = null;
 
     Long activityId = null;
+    Set fundSet		= null;
+    boolean exceptionRaised = false;
+    Exception savedEx = new AMPActivityError(Constants.AMP_ERROR_LEVEL_WARNING, true);
+    
     try {
       session = PersistenceManager.getSession();
+      session.connection().setAutoCommit(false);
       tx = session.beginTransaction();
 
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
@@ -944,11 +969,20 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
        session.delete(queryString);
        //session.flush();
+       
+       if (alwaysRollback)
+    	   session.flush();
+       else{
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");
     }
+    }
     catch (Exception ex) {
       logger.error("Exception from saveActivity().", ex);
+      //we can't throw here the exception because we need to rollback the transaction
+      ex.printStackTrace();
+      exceptionRaised = true;
+      savedEx = new Exception(ex);
       if (tx != null) {
         try {
           tx.rollback();
@@ -960,14 +994,33 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       }
     }
     finally {
+    	if (alwaysRollback){
+    		if (tx != null) {
+    			try {
+    				tx.rollback();
+    				logger.debug("Transaction Rollbacked");
+    				logger.error("DBG-Transaction Rollbacked");
+    			}
+    			catch (HibernateException e) {
+    				logger.error("Rollback failed", e);
+    				exceptionRaised = true;
+    			}
+    		}
+    	}
 		if (session != null) {
+			session.connection().setAutoCommit(true);
 			try {
+				session.close();
 				PersistenceManager.releaseSession(session);
 			}
 			catch (Exception e) {
 				logger.error("Release session faliled.", e);
 			}
 		}
+		
+		if (exceptionRaised){
+			throw savedEx;
+    }
     }
 
     return activityId;
@@ -1384,170 +1437,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
   
   //WTF!!!!
   public static AmpActivity getAmpActivity(Long id) {
+	  //TODO: This is a mess, shouldn't be here. Check where it is used and change it.
+	  
     Session session = null;
     AmpActivity activity = null;
 
     try {
       session = PersistenceManager.getRequestDBSession();
 
-      AmpActivity ampActivity = (AmpActivity) session.load(AmpActivity.class,
+      activity = (AmpActivity) session.load(AmpActivity.class,
           id);
-
-      if (ampActivity != null) {
-        activity = new AmpActivity();
-        activity.setCreatedAsDraft(ampActivity.isCreatedAsDraft());
-        activity.setLineMinRank(ampActivity.getLineMinRank());
-        activity.setPlanMinRank(ampActivity.getPlanMinRank());
-        activity.setActivityApprovalDate(ampActivity.getActivityApprovalDate());
-        activity.setActivityCloseDate(ampActivity.getActivityCloseDate());
-        activity.setActivityCreator(ampActivity.getActivityCreator());
-        activity.setActivityStartDate(ampActivity.getActivityStartDate());
-        activity.setActualApprovalDate(ampActivity.getActualApprovalDate());
-        activity.setActualCompletionDate(ampActivity.getActualCompletionDate());
-        activity.setActualStartDate(ampActivity.getActualStartDate());
-        activity.setAmpActivityId(ampActivity.getAmpActivityId());
-        activity.setAmpId(ampActivity.getAmpId());
-        activity.setCalType(ampActivity.getCalType());
-        activity.setComments(ampActivity.getComments());
-        activity.setCondition(ampActivity.getCondition());
-        activity.setContactName(ampActivity.getContactName());
-        activity.setContFirstName(ampActivity.getContFirstName());
-        activity.setContLastName(ampActivity.getContLastName());
-        activity.setContractors(ampActivity.getContractors());
-        activity.setCountry(ampActivity.getCountry());
-        activity.setCreatedDate(ampActivity.getCreatedDate());
-        activity.setDescription(ampActivity.getDescription());
-        activity.setDocumentSpace(ampActivity.getDocumentSpace());
-        activity.setProposedCompletionDate(ampActivity.
-                                           getProposedCompletionDate());
-        activity.setApprovalStatus(ampActivity.getApprovalStatus());
-        
-        activity.setApprovedBy(ampActivity.getApprovedBy());
-        activity.setApprovalDate(ampActivity.getApprovalDate());
-        
-        activity.setBudget(ampActivity.getBudget());
-        activity.setUpdatedBy(ampActivity.getUpdatedBy());
-        activity.setGovAgreementNumber(ampActivity.getGovAgreementNumber());
-
-        activity.setDnrCntTitle(ampActivity.getDnrCntTitle());
-        activity.setDnrCntOrganization(ampActivity.getDnrCntOrganization());
-        activity.setDnrCntPhoneNumber(ampActivity.getDnrCntPhoneNumber());
-        activity.setDnrCntFaxNumber(ampActivity.getDnrCntFaxNumber());
-
-        activity.setMfdCntTitle(ampActivity.getMfdCntTitle());
-        activity.setMfdCntOrganization(ampActivity.getMfdCntOrganization());
-        activity.setMfdCntPhoneNumber(ampActivity.getMfdCntPhoneNumber());
-        activity.setMfdCntFaxNumber(ampActivity.getMfdCntFaxNumber());
-        
-        activity.setPrjCoFirstName(ampActivity.getPrjCoFirstName());
-        activity.setPrjCoLastName(ampActivity.getPrjCoLastName());
-        activity.setPrjCoEmail(ampActivity.getPrjCoEmail());
-        activity.setPrjCoTitle(ampActivity.getPrjCoTitle());
-        activity.setPrjCoOrganization(ampActivity.getPrjCoOrganization());
-        activity.setPrjCoPhoneNumber(ampActivity.getPrjCoPhoneNumber());
-        activity.setPrjCoFaxNumber(ampActivity.getPrjCoFaxNumber());
-        
-        activity.setSecMiCntFirstName(ampActivity.getSecMiCntFirstName());
-        activity.setSecMiCntLastName(ampActivity.getSecMiCntLastName());
-        activity.setSecMiCntEmail(ampActivity.getSecMiCntEmail());
-        activity.setSecMiCntTitle(ampActivity.getSecMiCntTitle());
-        activity.setSecMiCntOrganization(ampActivity.getSecMiCntOrganization());
-        activity.setSecMiCntPhoneNumber(ampActivity.getSecMiCntPhoneNumber());
-        activity.setSecMiCntFaxNumber(ampActivity.getSecMiCntFaxNumber());
-
-        activity.setEmail(ampActivity.getEmail());
-        activity.setLanguage(ampActivity.getLanguage());
-//			    activity.setLevel(ampActivity.getLevel()); // TO BE DELETED
-        activity.setModality(ampActivity.getModality());
-        activity.setMofedCntEmail(ampActivity.getMofedCntEmail());
-        activity.setMofedCntFirstName(ampActivity.getMofedCntFirstName());
-        activity.setMofedCntLastName(ampActivity.getMofedCntLastName());
-        activity.setName(ampActivity.getName());
-        activity.setObjective(ampActivity.getObjective());
-        activity.setPurpose(ampActivity.getPurpose());
-        activity.setResults(ampActivity.getResults());
-        activity.setOriginalCompDate(ampActivity.getOriginalCompDate());
-        activity.setContractingDate(ampActivity.getContractingDate());
-        activity.setDisbursmentsDate(ampActivity.getDisbursmentsDate());
-        activity.setProgramDescription(ampActivity.getProgramDescription());
-        activity.setProposedApprovalDate(ampActivity.getProposedApprovalDate());
-        activity.setProposedStartDate(ampActivity.getProposedStartDate());
-//			    activity.setStatus(ampActivity.getStatus()); // TO BE DELETED
-        activity.setStatusReason(ampActivity.getStatusReason());
-        activity.setTeam(ampActivity.getTeam());
-        activity.setThemeId(ampActivity.getThemeId());
-        activity.setUpdatedDate(ampActivity.getUpdatedDate());
-        activity.setVersion(ampActivity.getVersion());
-
-        activity.setActivityPrograms(ampActivity.getActivityPrograms());
-        activity.setFunAmount(ampActivity.getFunAmount());
-        activity.setFunDate(ampActivity.getFunDate());
-        activity.setCurrencyCode(ampActivity.getCurrencyCode());
-
-        activity.setClosingDates(new HashSet(ampActivity.getClosingDates()));
-        activity.setComponents(new HashSet(ampActivity.getComponents()));
-        activity.setDocuments(new HashSet(ampActivity.getDocuments()));
-        activity.setFunding(new HashSet(ampActivity.getFunding()));
-        activity.setRegionalFundings(new HashSet(ampActivity.
-                                                 getRegionalFundings()));
-        activity.setInternalIds(new HashSet(ampActivity.getInternalIds()));
-        activity.setLocations(new HashSet(ampActivity.getLocations()));
-        activity.setSectors(new HashSet(ampActivity.getSectors()));
-        activity.setComponentes(new HashSet(ampActivity.getComponentes())); // yes but why??? 
-        activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
-        activity.setIssues(new HashSet(ampActivity.getIssues()));
-        activity.setCosts(new HashSet(ampActivity.getCosts()));
-
-        /* Categories */
-        activity.setCategories(ampActivity.getCategories());
-
-        /* Content Repository */
-	    activity.setActivityDocuments( ampActivity.getActivityDocuments() );
-
-        /*
-         * tanzania adds
-         */
-        activity.setGbsSbs(ampActivity.getGbsSbs());
-        activity.setGovernmentApprovalProcedures(ampActivity.
-                                                 isGovernmentApprovalProcedures());
-        activity.setJointCriteria(ampActivity.isJointCriteria());
-        activity.setHumanitarianAid(ampActivity.isHumanitarianAid());
-        
-        activity.setVote(ampActivity.getVote());
-        activity.setSubProgram(ampActivity.getSubProgram());
-        activity.setSubVote(ampActivity.getSubVote());
-        activity.setFY(ampActivity.getFY());
-        activity.setProjectCode(ampActivity.getProjectCode());
-        activity.setEqualOpportunity(ampActivity.getEqualOpportunity());
-        activity.setEnvironment(ampActivity.getEnvironment());
-        activity.setMinorities(ampActivity.getMinorities());
-        if (ampActivity.getActivityCreator() != null) {
-          activity.setCreatedBy(ampActivity.getActivityCreator());
-        }
-        
-        activity.setCrisNumber(ampActivity.getCrisNumber());
-        
-        // get lessons learned
-		if (ampActivity.getLessonsLearned() != null) {
-			activity.setLessonsLearned(ampActivity.getLessonsLearned());
-		}
-		
-		activity.setReferenceDocs(ampActivity.getReferenceDocs());
-	      
-		
-		activity.setProjectImpact(ampActivity.getProjectImpact());
-        activity.setActivitySummary(ampActivity.getActivitySummary());
-        activity.setContractingArrangements(ampActivity.getContractingArrangements());
-        activity.setCondSeq(ampActivity.getCondSeq());
-        activity.setLinkedActivities(ampActivity.getLinkedActivities());
-        activity.setConditionality(ampActivity.getConditionality());
-        activity.setProjectManagement(ampActivity.getProjectManagement());
-        activity.setContractDetails(ampActivity.getContractDetails());
-        activity.setConvenioNumcont(ampActivity.getConvenioNumcont());
-        activity.setClasiNPD(ampActivity.getClasiNPD());
-        activity.setDraft(ampActivity.getDraft());
-
-      }
     }
     catch (Exception e) {
       logger.error("Unable to getAmpActivity");
@@ -1556,374 +1455,283 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     return activity;
   }
 
-  public static Activity getChannelOverview(Long actId) {
+  public static AmpActivity getChannelOverview(Long actId) {
     Session session = null;
-    Activity activity = null;
+    AmpActivity activity = null;
 
     try {
       session = PersistenceManager.getSession();
-      String queryString = "select act from " + AmpActivity.class.getName() +
-          " act where (act.ampActivityId=:actId)";
-      Query qry = session.createQuery(queryString);
-      qry.setParameter("actId", actId, Hibernate.LONG);
-      Collection act = qry.list();
-      Iterator actItr = act.iterator();
-      if (actItr.hasNext()) {
-        activity = new Activity();
-        AmpActivity ampAct = (AmpActivity) actItr.next();
-        activity.setActivityId(ampAct.getAmpActivityId());
-        activity.setAmpId(ampAct.getAmpId());
-
-
-//				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
-        if (ampAct.getStatusReason() != null)
-        	activity.setStatusReason(ampAct.getStatusReason().trim());
-        activity.setBudget(ampAct.getBudget());
-
-        activity.setObjective(ampAct.getObjective());
-        activity.setPurpose(ampAct.getPurpose());
-        activity.setResults(ampAct.getResults());
-        activity.setDescription(ampAct.getDescription());
-
-        activity.setLessonsLearned(ampAct.getLessonsLearned());
-        activity.setProjectImpact(ampAct.getProjectImpact());
-        activity.setActivitySummary(ampAct.getActivitySummary());
-        activity.setContractingArrangements(ampAct.getContractingArrangements());
-        activity.setCondSeq(ampAct.getCondSeq());
-        activity.setLinkedActivities(ampAct.getLinkedActivities());
-        activity.setConditionality(ampAct.getConditionality());
-        activity.setProjectManagement(ampAct.getProjectManagement());
-        activity.setTeam(ampAct.getTeam());
-      
-        
-        activity.setCurrCompDate(DateConversion.
-                                 ConvertDateToString(ampAct.
-            getActualCompletionDate()));
-        activity.setOrigAppDate(DateConversion.
-                                ConvertDateToString(ampAct.
-            getProposedApprovalDate()));
-        activity.setOrigStartDate(DateConversion.
-                                  ConvertDateToString(ampAct.
-            getProposedStartDate()));
-        activity.setPropCompDate(DateConversion.ConvertDateToString(ampAct.getProposedCompletionDate()));
-        activity.setRevAppDate(DateConversion.
-                               ConvertDateToString(ampAct.getActualApprovalDate()));
-        activity.setRevStartDate(DateConversion.
-                                 ConvertDateToString(ampAct.getActualStartDate()));
-        activity.setContractingDate(DateConversion.
-                                    ConvertDateToString(ampAct.
-            getContractingDate()));
-        activity.setDisbursmentsDate(DateConversion.
-                                     ConvertDateToString(ampAct.
-            getDisbursmentsDate()));
-        activity.setUpdatedBy(ampAct.getUpdatedBy());
-        activity.setUpdatedDate(ampAct.getUpdatedDate());
-
-        /* Set Categories */
-        activity.setProjectCategory(
-            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-                CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.PROJECT_CATEGORY_NAME, ampAct.getCategories())
-            )
-            );
-        activity.setAccessionInstrument(
-                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-                    CategoryManagerUtil.getAmpCategoryValueFromList(
-                CategoryConstants.ACCESSION_INSTRUMENT_NAME, ampAct.getCategories())
-                )
-                );
-        activity.setAcChapter(
-            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-                CategoryManagerUtil.getAmpCategoryValueFromList(
-            CategoryConstants.ACCHAPTER_NAME, ampAct.getCategories())
-            )
-            );
-        activity.setStatus(
-            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-            CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
-            )
-            );
-        activity.setImpLevel(
-            CategoryManagerUtil.getStringValueOfAmpCategoryValues(
-                CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
-            CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
-            )
-            );
-      
-        
-        activity.setImpLocation(
-                CategoryManagerUtil.getStringValueOfAmpCategoryValues(
-                    CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
-                CategoryConstants.IMPLEMENTATION_LOCATION_KEY, ampAct.getCategories())
-                )
-                );
-          
-        
-        /* END - Set Categories */
-        
-        activity.setDraft( ampAct.getDraft() );
-        activity.setApprovalStatus( ampAct.getApprovalStatus() );
-        activity.setApprovalDate(ampAct.getApprovalDate());
-        activity.setApprovedBy(ampAct.getApprovedBy());
-        
-        activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
-                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-            CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())
-            ));
-        /*
-         * Tanzania adds
-         */
-
-        activity.setFY(ampAct.getFY());
-
-        activity.setVote(ampAct.getVote());
-        activity.setSubProgram(ampAct.getSubProgram());
-        activity.setSubVote(ampAct.getSubVote());
-        activity.setJointCriteria(ampAct.isJointCriteria());
-        activity.setHumanitarianAid(ampAct.isHumanitarianAid());
-        activity.setGovernmentApprovalProcedures(ampAct.
-                                                 isGovernmentApprovalProcedures());
-        activity.setProjectCode(ampAct.getProjectCode());
-
-        activity.setCrisNumber(ampAct.getCrisNumber());
-
-        Collection col = ampAct.getClosingDates();
-        List dates = new ArrayList();
-        if (col != null && col.size() > 0) {
-          Iterator itr = col.iterator();
-          while (itr.hasNext()) {
-            AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
-                .next();
-            if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
-              dates.add(DateConversion.ConvertDateToString(cDate
-                  .getClosingDate()));
-            }
-          }
-        }
-        Collections.sort(dates, DateConversion.dtComp);
-        activity.setRevCompDates(dates);
-
-        if (ampAct.getThemeId() != null) {
-          activity.setProgram(ampAct.getThemeId().getName());
-          activity.setProgramDescription(ampAct.getProgramDescription());
-        }
-
-        activity.setContractors(ampAct.getContractors());
-
-        activity.setContFirstName(ampAct.getContFirstName());
-        activity.setContLastName(ampAct.getContLastName());
-        activity.setEmail(ampAct.getEmail());
-        activity.setDnrCntTitle(ampAct.getDnrCntTitle());
-        activity.setDnrCntOrganization(ampAct.getDnrCntOrganization());
-        activity.setDnrCntPhoneNumber(ampAct.getDnrCntPhoneNumber());
-        activity.setDnrCntFaxNumber(ampAct.getDnrCntFaxNumber());
-
-        activity.setMfdContFirstName(ampAct.getMofedCntFirstName());
-        activity.setMfdContLastName(ampAct.getMofedCntLastName());
-        activity.setMfdContEmail(ampAct.getMofedCntEmail());
-        activity.setMfdCntTitle(ampAct.getMfdCntTitle());
-        activity.setMfdCntOrganization(ampAct.getMfdCntOrganization());
-        activity.setMfdCntPhoneNumber(ampAct.getMfdCntPhoneNumber());
-        activity.setMfdCntFaxNumber(ampAct.getMfdCntFaxNumber());
-        
-        activity.setPrjCoFirstName(ampAct.getPrjCoFirstName());
-        activity.setPrjCoLastName(ampAct.getPrjCoLastName());
-        activity.setPrjCoEmail(ampAct.getPrjCoEmail());
-        activity.setPrjCoTitle(ampAct.getPrjCoTitle());
-        activity.setPrjCoOrganization(ampAct.getPrjCoOrganization());
-        activity.setPrjCoPhoneNumber(ampAct.getPrjCoPhoneNumber());
-        activity.setPrjCoFaxNumber(ampAct.getPrjCoFaxNumber());
-        
-        activity.setSecMiCntFirstName(ampAct.getSecMiCntFirstName());
-        activity.setSecMiCntLastName(ampAct.getSecMiCntLastName());
-        activity.setSecMiCntEmail(ampAct.getSecMiCntEmail());
-        activity.setSecMiCntTitle(ampAct.getSecMiCntTitle());
-        activity.setSecMiCntOrganization(ampAct.getSecMiCntOrganization());
-        activity.setSecMiCntPhoneNumber(ampAct.getSecMiCntPhoneNumber());
-        activity.setSecMiCntFaxNumber(ampAct.getSecMiCntFaxNumber());
-
-        if (ampAct.getCreatedDate() != null) {
-          activity.setCreatedDate(
-              DateConversion.ConvertDateToString(ampAct.getCreatedDate()));
-        }
-
-        if (ampAct.getActivityCreator() != null) {
-          activity.setCreatedBy(ampAct.getActivityCreator());
-          User usr = ampAct.getActivityCreator().getUser();
-          if (usr != null) {
-            activity.setActAthFirstName(usr.getFirstNames());
-            activity.setActAthLastName(usr.getLastName());
-            activity.setActAthEmail(usr.getEmail());
-            activity.setActAthAgencySource(usr.getOrganizationName());
-          }
-        }
-
-        if (ampAct.getModality() != null) {
-          activity.setModality(ampAct.getModality().getValue());
-          activity.setModalityCode(ampAct.getModality().getIndex() + "");
-        }
-
-        queryString = "select distinct f.typeOfAssistance.value from " +
-            AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
-
-        qry = session.createQuery(queryString);
-        qry.setParameter("actId", actId, Hibernate.LONG);
-
-        Collection temp = new ArrayList();
-        Iterator typesItr = qry.list().iterator();
-        while (typesItr.hasNext()) {
-          String code = (String) typesItr.next();
-          temp.add(code);
-        }
-        activity.setAssistanceType(temp);
-
-        Collection relOrgs = new ArrayList();
-        if (ampAct.getOrgrole() != null) {
-          Iterator orgItr = ampAct.getOrgrole().iterator();
-          while (orgItr.hasNext()) {
-            AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-            AmpOrganisation auxOrgRel = orgRole.getOrganisation();
-            if(auxOrgRel!=null)
-            {
-            	RelOrganization relOrg = new RelOrganization();
-                relOrg.setOrgName(auxOrgRel.getName());
-                relOrg.setRole(orgRole.getRole().getRoleCode());
-                relOrg.setAcronym(auxOrgRel.getAcronym());
-                relOrg.setOrgCode(auxOrgRel.getOrgCode());
-                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
-                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
-                if (!relOrgs.contains(relOrg)) {
-                	relOrgs.add(relOrg);
-                }
-            }
-          }
-        }
-        activity.setRelOrgs(relOrgs);
-
-        List<ActivitySector> sectors = new ArrayList<ActivitySector>();
-
-        if (ampAct.getSectors() != null) {
-          Iterator sectItr = ampAct.getSectors().iterator();
-			while (sectItr.hasNext()) {
-				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
-				if (ampActSect != null) {
-					AmpSector sec = ampActSect.getSectorId();
-					if (sec != null) {
-						AmpSector parent = null;
-						AmpSector subsectorLevel1 = null;
-						AmpSector subsectorLevel2 = null;
-						if (sec.getParentSectorId() != null) {
-							if (sec.getParentSectorId().getParentSectorId() != null) {
-								subsectorLevel2 = sec;
-								subsectorLevel1 = sec.getParentSectorId();
-								parent = sec.getParentSectorId().getParentSectorId();
-							} else {
-								subsectorLevel1 = sec;
-								parent = sec.getParentSectorId();
-							}
-						} else {
-							parent = sec;
-						}
-						ActivitySector actSect = new ActivitySector();
-                                                actSect.setConfigId(ampActSect.getClassificationConfig().getId());
-						if (parent != null) {
-							actSect.setId(parent.getAmpSectorId());
-							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
-							if (view != null)
-								if (view.equalsIgnoreCase("On")) {
-									actSect.setCount(1);
-								} else {
-									actSect.setCount(2);
-								}
-
-							actSect.setSectorId(parent.getAmpSectorId());
-							actSect.setSectorName(parent.getName());
-							if (subsectorLevel1 != null) {
-								actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
-								actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
-								if (subsectorLevel2 != null) {
-									actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
-									actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
-								}
-							}
-							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
-                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
-                                                        
-						}
-                                               
-						sectors.add(actSect);
-					}
-				}
-          }
-        }
-        
-        Collections.sort(sectors);
-        activity.setSectors(sectors);
-        
-        
-        if (ampAct.getActivityPrograms() != null) {
-          Collection programs = new ArrayList();
-          programs.addAll(ampAct.getActivityPrograms());
-          activity.setActPrograms(programs);
-        }
-
-        activity.setImpLevel(
-                CategoryManagerUtil.getStringValueOfAmpCategoryValues(
-                    CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
-                CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
-                )
-                );
-            
-        Collection locColl = new ArrayList();
-        if (ampAct.getLocations() != null) {
-          Iterator locItr = ampAct.getLocations().iterator();
-          while (locItr.hasNext()) {
-            AmpActivityLocation actLoc = (AmpActivityLocation) locItr.next();
-            if(actLoc!=null){
-            	AmpLocation ampLoc = actLoc.getLocation();
-                Location loc = new Location();
-                if (ampLoc.getAmpRegion() != null) {
-                  loc.setRegion(ampLoc.getAmpRegion().getName());
-                }
-                if (ampLoc.getAmpZone() != null) {
-                  loc.setZone(ampLoc.getAmpZone().getName());
-                }
-                if (ampLoc.getAmpWoreda() != null) {
-                  loc.setWoreda(ampLoc.getAmpWoreda().getName());
-                }
-                if(actLoc.getLocationPercentage()!=null)
-                	loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
-                locColl.add(loc);
-            }
-            
-          }
-        }
-        activity.setLocations(locColl);
-        //set lessons learned
-        //activity.setLessonsLearned(ampAct.getLessonsLearned());
-
-        activity.setProjectIds(ampAct.getInternalIds());
-
-        Collection modalities = new ArrayList();
-        queryString = "select fund from " + AmpFunding.class.getName() +
-            " fund " +
-            "where (fund.ampActivityId=:actId)";
-        qry = session.createQuery(queryString);
-        qry.setParameter("actId", actId, Hibernate.LONG);
-        Iterator itr = qry.list().iterator();
-        while (itr.hasNext()) {
-          AmpFunding fund = (AmpFunding) itr.next();
-          if (fund.getFinancingInstrument() != null)
-        	  modalities.add( fund.getFinancingInstrument() );
-        }
-        activity.setModalities(modalities);
-        activity.setUniqueModalities(new TreeSet(modalities));
+      activity = (AmpActivity) session.load( AmpActivity.class, actId);
+//      Collection act = qry.list();
+//      Iterator actItr = act.iterator();
+//
+//      activity.setCurrCompDate(DateConversion.
+//                                 ConvertDateToString(ampAct.
+//            getActualCompletionDate()));
+//        activity.setOrigAppDate(DateConversion.
+//                                ConvertDateToString(ampAct.
+//            getProposedApprovalDate()));
+//        activity.setOrigStartDate(DateConversion.
+//                                  ConvertDateToString(ampAct.
+//            getProposedStartDate()));
+//        activity.setPropCompDate(DateConversion.ConvertDateToString(ampAct.getProposedCompletionDate()));
+//        activity.setRevAppDate(DateConversion.
+//                               ConvertDateToString(ampAct.getActualApprovalDate()));
+//        activity.setRevStartDate(DateConversion.
+//                                 ConvertDateToString(ampAct.getActualStartDate()));
+//        activity.setContractingDate(DateConversion.
+//                                    ConvertDateToString(ampAct.
+//            getContractingDate()));
+//        activity.setDisbursmentsDate(DateConversion.
+//                                     ConvertDateToString(ampAct.
+//            getDisbursmentsDate()));
+//
+//        /* Set Categories */
+//        activity.setProjectCategory(
+//            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+//                CategoryManagerUtil.getAmpCategoryValueFromList(
+//            CategoryConstants.PROJECT_CATEGORY_NAME, ampAct.getCategories())
+//            )
+//            );
+//        activity.setAccessionInstrument(
+//                CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+//                    CategoryManagerUtil.getAmpCategoryValueFromList(
+//                CategoryConstants.ACCESSION_INSTRUMENT_NAME, ampAct.getCategories())
+//                )
+//                );
+//        activity.setAcChapter(
+//            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+//                CategoryManagerUtil.getAmpCategoryValueFromList(
+//            CategoryConstants.ACCHAPTER_NAME, ampAct.getCategories())
+//            )
+//            );
+//        activity.setStatus(
+//            CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+//                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+//            CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
+//            )
+//            );
+//        activity.setImpLevel(
+//            CategoryManagerUtil.getStringValueOfAmpCategoryValues(
+//                CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+//            CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
+//            )
+//            );
+//      
+//        
+//        activity.setImpLocation(
+//                CategoryManagerUtil.getStringValueOfAmpCategoryValues(
+//                    CategoryManagerUtil.getAmpCategoryValuesFromListByKey(
+//                CategoryConstants.IMPLEMENTATION_LOCATION_KEY, ampAct.getCategories())
+//                )
+//                );
+//          
+//        activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+//                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+//            CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())
+//            ));
+//        
+//        /* END - Set Categories */
+//        
+//        Collection col = ampAct.getClosingDates();
+//        List dates = new ArrayList();
+//        if (col != null && col.size() > 0) {
+//          Iterator itr = col.iterator();
+//          while (itr.hasNext()) {
+//            AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
+//                .next();
+//            if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
+//              dates.add(DateConversion.ConvertDateToString(cDate
+//                  .getClosingDate()));
+//            }
+//          }
+//        }
+//        Collections.sort(dates, DateConversion.dtComp);
+//        activity.setRevCompDates(dates);
+//
+//        if (ampAct.getThemeId() != null) {
+//          activity.setProgram(ampAct.getThemeId().getName());
+//          activity.setProgramDescription(ampAct.getProgramDescription());
+//        }
+//
+//
+//        activity.setMfdContFirstName(ampAct.getMofedCntFirstName());
+//        activity.setMfdContLastName(ampAct.getMofedCntLastName());
+//        activity.setMfdContEmail(ampAct.getMofedCntEmail());
+//        
+//        if (ampAct.getCreatedDate() != null) {
+//          activity.setCreatedDate(
+//              DateConversion.ConvertDateToString(ampAct.getCreatedDate()));
+//        }
+//
+//        if (ampAct.getActivityCreator() != null) {
+//          activity.setCreatedBy(ampAct.getActivityCreator());
+//          User usr = ampAct.getActivityCreator().getUser();
+//          if (usr != null) {
+//            activity.setActAthFirstName(usr.getFirstNames());
+//            activity.setActAthLastName(usr.getLastName());
+//            activity.setActAthEmail(usr.getEmail());
+//            activity.setActAthAgencySource(usr.getOrganizationName());
+//          }
+//        }
+//
+//        if (ampAct.getModality() != null) {
+//          activity.setModality(ampAct.getModality().getValue());
+//          activity.setModalityCode(ampAct.getModality().getIndex() + "");
+//        }
+//
+//        queryString = "select distinct f.typeOfAssistance.value from " +
+//            AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
+//
+//        qry = session.createQuery(queryString);
+//        qry.setParameter("actId", actId, Hibernate.LONG);
+//
+//        Collection temp = new ArrayList();
+//        Iterator typesItr = qry.list().iterator();
+//        while (typesItr.hasNext()) {
+//          String code = (String) typesItr.next();
+//          temp.add(code);
+//        }
+//        activity.setAssistanceType(temp);
+//
+//        Collection relOrgs = new ArrayList();
+//        if (ampAct.getOrgrole() != null) {
+//          Iterator orgItr = ampAct.getOrgrole().iterator();
+//          while (orgItr.hasNext()) {
+//            AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+//            AmpOrganisation auxOrgRel = orgRole.getOrganisation();
+//            if(auxOrgRel!=null)
+//            {
+//            	RelOrganization relOrg = new RelOrganization();
+//                relOrg.setOrgName(auxOrgRel.getName());
+//                relOrg.setRole(orgRole.getRole().getRoleCode());
+//                relOrg.setAcronym(auxOrgRel.getAcronym());
+//                relOrg.setOrgCode(auxOrgRel.getOrgCode());
+//                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+//                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+//                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
+//                if (!relOrgs.contains(relOrg)) {
+//                	relOrgs.add(relOrg);
+//                }
+//            }
+//          }
+//        }
+//        activity.setRelOrgs(relOrgs);
+//
+//        List<ActivitySector> sectors = new ArrayList<ActivitySector>();
+//
+//        if (ampAct.getSectors() != null) {
+//          Iterator sectItr = ampAct.getSectors().iterator();
+//			while (sectItr.hasNext()) {
+//				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
+//				if (ampActSect != null) {
+//					AmpSector sec = ampActSect.getSectorId();
+//					if (sec != null) {
+//						AmpSector parent = null;
+//						AmpSector subsectorLevel1 = null;
+//						AmpSector subsectorLevel2 = null;
+//						if (sec.getParentSectorId() != null) {
+//							if (sec.getParentSectorId().getParentSectorId() != null) {
+//								subsectorLevel2 = sec;
+//								subsectorLevel1 = sec.getParentSectorId();
+//								parent = sec.getParentSectorId().getParentSectorId();
+//							} else {
+//								subsectorLevel1 = sec;
+//								parent = sec.getParentSectorId();
+//							}
+//						} else {
+//							parent = sec;
+//						}
+//						ActivitySector actSect = new ActivitySector();
+//                                                actSect.setConfigId(ampActSect.getClassificationConfig().getId());
+//						if (parent != null) {
+//							actSect.setId(parent.getAmpSectorId());
+//							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
+//							if (view != null)
+//								if (view.equalsIgnoreCase("On")) {
+//									actSect.setCount(1);
+//								} else {
+//									actSect.setCount(2);
+//								}
+//
+//							actSect.setSectorId(parent.getAmpSectorId());
+//							actSect.setSectorName(parent.getName());
+//							if (subsectorLevel1 != null) {
+//								actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
+//								actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
+//								if (subsectorLevel2 != null) {
+//									actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
+//									actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
+//								}
+//							}
+//							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
+//                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+//                                                        
+//						}
+//                                               
+//						sectors.add(actSect);
+//					}
+//				}
+//          }
+//        }
+//        
+//        Collections.sort(sectors);
+//        activity.setSectors(sectors);
+//        
+//        
+//        if (ampAct.getActivityPrograms() != null) {
+//          Collection programs = new ArrayList();
+//          programs.addAll(ampAct.getActivityPrograms());
+//          activity.setActPrograms(programs);
+//        }
+//            
+//        Collection locColl = new ArrayList();
+//        if (ampAct.getLocations() != null) {
+//          Iterator locItr = ampAct.getLocations().iterator();
+//          while (locItr.hasNext()) {
+//            AmpActivityLocation actLoc = (AmpActivityLocation) locItr.next();
+//            if(actLoc!=null){
+//            	AmpLocation ampLoc = actLoc.getLocation();
+//                Location loc = new Location();
+//                if (ampLoc.getAmpRegion() != null) {
+//                  loc.setRegion(ampLoc.getAmpRegion().getName());
+//                }
+//                if (ampLoc.getAmpZone() != null) {
+//                  loc.setZone(ampLoc.getAmpZone().getName());
+//                }
+//                if (ampLoc.getAmpWoreda() != null) {
+//                  loc.setWoreda(ampLoc.getAmpWoreda().getName());
+//                }
+//                if(actLoc.getLocationPercentage()!=null)
+//                	loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
+//                locColl.add(loc);
+//            }
+//            
+//          }
+//        }
+//        activity.setLocations(locColl);
+//        //set lessons learned
+//        //activity.setLessonsLearned(ampAct.getLessonsLearned());
+//
+//        activity.setProjectIds(ampAct.getInternalIds());
+//
+//        Collection modalities = new ArrayList();
+//        queryString = "select fund from " + AmpFunding.class.getName() +
+//            " fund " +
+//            "where (fund.ampActivityId=:actId)";
+//        qry = session.createQuery(queryString);
+//        qry.setParameter("actId", actId, Hibernate.LONG);
+//        Iterator itr = qry.list().iterator();
+//        while (itr.hasNext()) {
+//          AmpFunding fund = (AmpFunding) itr.next();
+//          if (fund.getFinancingInstrument() != null)
+//        	  modalities.add( fund.getFinancingInstrument() );
+//        }
+//        activity.setModalities(modalities);
+//        activity.setUniqueModalities(new TreeSet(modalities));
 
 
       }
-    }
     catch (Exception e) {
       logger.error("Unable to get channnel overview");
       e.printStackTrace(System.out);

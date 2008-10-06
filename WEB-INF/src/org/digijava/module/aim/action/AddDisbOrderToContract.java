@@ -27,19 +27,19 @@ public class AddDisbOrderToContract  extends Action {
                         HttpServletRequest request, HttpServletResponse response)
                         throws java.lang.Exception {
                         EditActivityForm eaForm = (EditActivityForm) form;
-                        String event=eaForm.getEvent();
+                        String event=eaForm.getFunding().getEvent();
                         if(event.equals("Add")){
                                 long indexId = eaForm.getTransIndexId();
                                 Integer conId=eaForm.getSelContractId();
                                 FundingDetail fd = new FundingDetail();
                                 fd.setIndexId(indexId);
-                                int index = eaForm.getFundingDetails().indexOf(
+                                int index = eaForm.getFunding().getFundingDetails().indexOf(
                                     fd);
                                 FundingDetail disbOrder = eaForm.getFundingDetail(
                                     index);
                                 List<IPAContract> contracts=eaForm.getContracts();
                                 disbOrder.setContract(contracts.get(conId-1));
-                                eaForm.setEvent(null);
+                                eaForm.getFunding().setEvent(null);
                                 request.setAttribute("close", "close");
                         }
                            

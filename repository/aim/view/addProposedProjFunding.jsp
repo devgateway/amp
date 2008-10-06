@@ -117,15 +117,15 @@
                         <digi:trn key="aim:PlannedFIE">Planned</digi:trn>
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
+                          <html:text property="funding.proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
-                          	<html:select property="proProjCost.currencyCode" styleClass="inp-text">
-                            	<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
+                          	<html:select property="funding.proProjCost.currencyCode" styleClass="inp-text">
+                            	<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
                         	</html:select>
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
+                          <html:text property="funding.proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
 							<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,80)'>

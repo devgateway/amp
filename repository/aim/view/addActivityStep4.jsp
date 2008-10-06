@@ -236,7 +236,7 @@ ${fn:replace(message,quote,escapedQuote)}
 												<digi:trn key="aim:editActivity">
 													Edit Activity
 												</digi:trn>:
-													<bean:write name="aimEditActivityForm" property="title"/>
+													<bean:write name="aimEditActivityForm" property="identification.title"/>
 											</c:if>
 										</td>
 									</tr>
@@ -295,7 +295,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																							<digi:trn key="aim:donorcommitments">Donor Commitments</digi:trn> - (
 																							<digi:trn key="aim:totalActualAllocation">Total actual
 																							allocation</digi:trn> =
-																							<c:out value="${aimEditActivityForm.totalCommitments}"/>
+																							<c:out value="${aimEditActivityForm.funding.totalCommitments}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</b>
 																						</td></tr>
@@ -306,7 +306,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																							<digi:trn key="aim:donordisbursements">Donor Disbursements</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> =
-																							<c:out value="${aimEditActivityForm.totalDisbursements}"/>
+																							<c:out value="${aimEditActivityForm.funding.totalDisbursements}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</b>
 																						</td></tr>
@@ -317,7 +317,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																							<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> =
-																							<c:out value="${aimEditActivityForm.totalExpenditures}"/>
+																							<c:out value="${aimEditActivityForm.funding.totalExpenditures}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</b>
 																						</td></tr>
@@ -365,7 +365,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																							 - (
 																							<digi:trn key="aim:totalActualAllocation">Total actual
 																							allocation</digi:trn> =
-																							<c:out value="${aimEditActivityForm.totalCommitments}"/>
+																							<c:out value="${aimEditActivityForm.funding.totalCommitments}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</field:display>
 																							</b>

@@ -98,11 +98,11 @@
 												<logic:notEmpty name="aimAssignActivityForm" property="activities">
 														<table width="100%" cellpadding=5 cellspacing=0 border=0>
 														<logic:iterate name="aimAssignActivityForm" property="activities" id="activities" 
-														type="org.digijava.module.aim.helper.Activity">
+														>
 															<tr>
 																<td align="right" width=3>
 																	<html:multibox property="selectedActivities" >
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 																	</html:multibox>
 																</td>
 																<td align="left">

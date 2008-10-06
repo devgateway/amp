@@ -86,24 +86,25 @@ public class ResetAll extends Action
 	    	if(eaForm.getStep().equals("1"))
 	    	{
 				logger.info("In reset all method");
-			   eaForm.setTitle(null);
-			   eaForm.setTeam(null);
-				eaForm.setDescription(null);
-				eaForm.setLessonsLearned(null);
-				eaForm.setObjectives(null);
-                eaForm.setDocumentSpace(null);
-				eaForm.setSelectedOrganizations(null);
-				eaForm.setOriginalAppDate(null);
-				eaForm.setRevisedAppDate(null);
-				eaForm.setOriginalStartDate(null);
-				eaForm.setRevisedStartDate(null);
-				eaForm.setCurrentCompDate(null);
-				eaForm.setProposedCompDate(null);
+			    eaForm.getIdentification().setTitle(null);
+			    eaForm.setTeam(null);
+				eaForm.getIdentification().setDescription(null);
+				eaForm.getIdentification().setLessonsLearned(null);
+				eaForm.getIdentification().setObjectives(null);
+                
+				eaForm.setDocumentSpace(null);
+				eaForm.getIdentification().setSelectedOrganizations(null);
+				eaForm.getPlanning().setOriginalAppDate(null);
+				eaForm.getPlanning().setRevisedAppDate(null);
+				eaForm.getPlanning().setOriginalStartDate(null);
+				eaForm.getPlanning().setRevisedStartDate(null);
+				eaForm.getPlanning().setCurrentCompDate(null);
+				eaForm.getPlanning().setProposedCompDate(null);
 				eaForm.setRevisedCompDate(null);
 				eaForm.setCreatedDate(null);
 //				eaForm.setActivityCloseDates(null);
-				eaForm.setStatusId(new Long(0));
-				eaForm.setStatusReason(null);
+				eaForm.getPlanning().setStatusId(new Long(0));
+				eaForm.getPlanning().setStatusReason(null);
 				eaForm.setBudget(null);
 				
 				/*
@@ -115,30 +116,30 @@ public class ResetAll extends Action
 				eaForm.setSubProgram(null);
 				eaForm.setProjectCode(null);
 				eaForm.setGbsSbs(null);
-				eaForm.setGovernmentApprovalProcedures(new Boolean(false));
-				eaForm.setJointCriteria(new Boolean(false));
+				eaForm.getIdentification().setGovernmentApprovalProcedures(new Boolean(false));
+				eaForm.getIdentification().setJointCriteria(new Boolean(false));
 				
-				eaForm.setCrisNumber(null);
+				eaForm.getIdentification().setCrisNumber(null);
 	    	}
 	    	if(eaForm.getStep().equals("2"))
 	    	{
-	    		eaForm.setEqualOpportunity(null);
-	    		eaForm.setMinorities(null); 
-	    		eaForm.setEnvironment(null);
-	    		eaForm.setLevelId(new Long(0));
+	    		eaForm.getCrossIssues().setEqualOpportunity(null);
+	    		eaForm.getCrossIssues().setMinorities(null); 
+	    		eaForm.getCrossIssues().setEnvironment(null);
+	    		eaForm.getLocation().setLevelId(new Long(0));
 	    		eaForm.setActivityLevel(new Long(0));
 //	    		eaForm.setImplementationLevel(null);
-	    		eaForm.setImplemLocationLevel( 
+	    		eaForm.getLocation().setImplemLocationLevel( 
 	    				CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId() 
 	    		);
-	    		eaForm.setSelectedLocs(null);
-	    		eaForm.setActivitySectors(null);
+	    		eaForm.getLocation().setSelectedLocs(null);
+	    		eaForm.getSectors().setActivitySectors(null);
 	    		eaForm.setProgram(null);
 	    		eaForm.setProgramDescription(null);
 	    	}
 	    	if(eaForm.getStep().equals("3"))
 	    	{
-	    		eaForm.setFundingOrganizations(null);
+	    		eaForm.getFunding().setFundingOrganizations(null);
 	    	}
 	    	if(eaForm.getStep().equals("4"))
 	    	{
@@ -155,42 +156,42 @@ public class ResetAll extends Action
 	    	}
 	    	if(eaForm.getStep().equals("6"))
 	    	{
-	    		eaForm.setExecutingAgencies(null);
-	    		eaForm.setImpAgencies(null);
-	    		eaForm.setConAgencies(null);
-	    		eaForm.setBenAgencies(null);
-	    		eaForm.setContractors(null);
+	    		eaForm.getAgencies().setExecutingAgencies(null);
+	    		eaForm.getAgencies().setImpAgencies(null);
+	    		eaForm.getAgencies().setConAgencies(null);
+	    		eaForm.getAgencies().setBenAgencies(null);
+	    		
 	    	}
 	    	if(eaForm.getStep().equals("7"))
 	    	{
-				eaForm.setDnrCntFirstName(null);
-				eaForm.setDnrCntLastName(null);
-				eaForm.setDnrCntEmail(null);
-				eaForm.setDnrCntTitle(null);
-				eaForm.setDnrCntOrganization(null);
-				eaForm.setDnrCntPhoneNumber(null);
-				eaForm.setDnrCntFaxNumber(null);
-				eaForm.setMfdCntFirstName(null);
-				eaForm.setMfdCntLastName(null);
-				eaForm.setMfdCntEmail(null);
-				eaForm.setMfdCntTitle(null);
-				eaForm.setMfdCntOrganization(null);
-				eaForm.setMfdCntPhoneNumber(null);
-				eaForm.setMfdCntFaxNumber(null);
-				eaForm.setPrjCoFirstName(null);
-				eaForm.setPrjCoLastName(null);
-				eaForm.setPrjCoEmail(null);
-				eaForm.setPrjCoTitle(null);
-				eaForm.setPrjCoOrganization(null);
-				eaForm.setPrjCoPhoneNumber(null);
-				eaForm.setPrjCoFaxNumber(null);
-				eaForm.setSecMiCntFirstName(null);
-				eaForm.setSecMiCntLastName(null);
-				eaForm.setSecMiCntEmail(null);
-				eaForm.setSecMiCntTitle(null);
-				eaForm.setSecMiCntOrganization(null);
-				eaForm.setSecMiCntPhoneNumber(null);
-				eaForm.setSecMiCntFaxNumber(null);
+				eaForm.getContactInfo().setDnrCntFirstName(null);
+				eaForm.getContactInfo().setDnrCntLastName(null);
+				eaForm.getContactInfo().setDnrCntEmail(null);
+				eaForm.getContactInfo().setDnrCntTitle(null);
+				eaForm.getContactInfo().setDnrCntOrganization(null);
+				eaForm.getContactInfo().setDnrCntPhoneNumber(null);
+				eaForm.getContactInfo().setDnrCntFaxNumber(null);
+				eaForm.getContactInfo().setMfdCntFirstName(null);
+				eaForm.getContactInfo().setMfdCntLastName(null);
+				eaForm.getContactInfo().setMfdCntEmail(null);
+				eaForm.getContactInfo().setMfdCntTitle(null);
+				eaForm.getContactInfo().setMfdCntOrganization(null);
+				eaForm.getContactInfo().setMfdCntPhoneNumber(null);
+				eaForm.getContactInfo().setMfdCntFaxNumber(null);
+				eaForm.getContactInfo().setPrjCoFirstName(null);
+				eaForm.getContactInfo().setPrjCoLastName(null);
+				eaForm.getContactInfo().setPrjCoEmail(null);
+				eaForm.getContactInfo().setPrjCoTitle(null);
+				eaForm.getContactInfo().setPrjCoOrganization(null);
+				eaForm.getContactInfo().setPrjCoPhoneNumber(null);
+				eaForm.getContactInfo().setPrjCoFaxNumber(null);
+				eaForm.getContactInfo().setSecMiCntFirstName(null);
+				eaForm.getContactInfo().setSecMiCntLastName(null);
+				eaForm.getContactInfo().setSecMiCntEmail(null);
+				eaForm.getContactInfo().setSecMiCntTitle(null);
+				eaForm.getContactInfo().setSecMiCntOrganization(null);
+				eaForm.getContactInfo().setSecMiCntPhoneNumber(null);
+				eaForm.getContactInfo().setSecMiCntFaxNumber(null);
 				
 	    	}
 	    }
@@ -199,24 +200,24 @@ public class ResetAll extends Action
 	    	AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.getActivityId());
 			if(eaForm.getStep().equals("1"))
 		    {
-				eaForm.setTitle(activity.getName().trim());
-				eaForm.setDescription(activity.getDescription().trim());
-				eaForm.setObjectives(activity.getObjective().trim());
-				eaForm.setPurpose(activity.getPurpose().trim());
-				eaForm.setResults(activity.getResults().trim());
+				eaForm.getIdentification().setTitle(activity.getName().trim());
+				eaForm.getIdentification().setDescription(activity.getDescription().trim());
+				eaForm.getIdentification().setObjectives(activity.getObjective().trim());
+				eaForm.getIdentification().setPurpose(activity.getPurpose().trim());
+				eaForm.getIdentification().setResults(activity.getResults().trim());
                 eaForm.setDocumentSpace(activity.getDocumentSpace().trim());
 				eaForm.setCreatedDate(DateConversion.ConvertDateToString(activity.getCreatedDate()));
-				eaForm.setOriginalAppDate(DateConversion.ConvertDateToString(activity.getProposedApprovalDate()));
-				eaForm.setRevisedAppDate(DateConversion.ConvertDateToString(activity.getActualApprovalDate()));
-				eaForm.setOriginalStartDate(DateConversion.ConvertDateToString(activity.getProposedStartDate()));
-				eaForm.setRevisedStartDate(DateConversion.ConvertDateToString(activity.getActualStartDate()));
-				eaForm.setCurrentCompDate(DateConversion.ConvertDateToString(activity.getActualCompletionDate()));
-				eaForm.setDisbursementsDate(DateConversion.ConvertDateToString(activity.getDisbursmentsDate()));
-				eaForm.setContractingDate(DateConversion.ConvertDateToString(activity.getContractingDate()));
-				eaForm.setStatusReason(activity.getStatusReason());
+				eaForm.getPlanning().setOriginalAppDate(DateConversion.ConvertDateToString(activity.getProposedApprovalDate()));
+				eaForm.getPlanning().setRevisedAppDate(DateConversion.ConvertDateToString(activity.getActualApprovalDate()));
+				eaForm.getPlanning().setOriginalStartDate(DateConversion.ConvertDateToString(activity.getProposedStartDate()));
+				eaForm.getPlanning().setRevisedStartDate(DateConversion.ConvertDateToString(activity.getActualStartDate()));
+				eaForm.getPlanning().setCurrentCompDate(DateConversion.ConvertDateToString(activity.getActualCompletionDate()));
+				eaForm.getPlanning().setDisbursementsDate(DateConversion.ConvertDateToString(activity.getDisbursmentsDate()));
+				eaForm.getPlanning().setContractingDate(DateConversion.ConvertDateToString(activity.getContractingDate()));
+				eaForm.getPlanning().setStatusReason(activity.getStatusReason());
 				AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
                 if (ampCategoryValue != null)
-            		eaForm.setStatusId( ampCategoryValue.getId() );
+            		eaForm.getPlanning().setStatusId( ampCategoryValue.getId() );
 				
 				Set orgProjIdsSet = activity.getInternalIds();
 				if (orgProjIdsSet != null)
@@ -240,7 +241,7 @@ public class ResetAll extends Action
 						{
 							orgProjectIds[i] = (OrgProjectId) arr[i];
 						}
-						eaForm.setSelectedOrganizations(orgProjectIds);
+						eaForm.getIdentification().setSelectedOrganizations(orgProjectIds);
 					}
 				}
 			 }
@@ -250,7 +251,7 @@ public class ResetAll extends Action
 		    					CategoryManagerUtil.getAmpCategoryValueFromListByKey
 		    						(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories() );
 				if (ampCategoryValue != null)
-					eaForm.setLevelId(ampCategoryValue.getId());
+					eaForm.getLocation().setLevelId(ampCategoryValue.getId());
 				int impLevel = 0;
 				Collection ampLocs = activity.getLocations();
 				if (ampLocs != null && ampLocs.size() > 0)
@@ -312,7 +313,7 @@ public class ResetAll extends Action
 							locs.add(location);
 						}
 					}
-					eaForm.setSelectedLocs(locs);
+					eaForm.getLocation().setSelectedLocs(locs);
 				}
 				/*switch (impLevel)
 				{
@@ -332,13 +333,13 @@ public class ResetAll extends Action
 						eaForm.setImplementationLevel("country");
 				}*/
 				if (impLevel >= 0) {
-                	eaForm.setImplemLocationLevel( 
+                	eaForm.getLocation().setImplemLocationLevel( 
                 			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
                 													new Long(impLevel) ).getId()
                 	);
                 }
                 else
-                	eaForm.setImplemLocationLevel( 
+                	eaForm.getLocation().setImplemLocationLevel( 
                 			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
 									new Long(0) ).getId()
                 	);
@@ -400,7 +401,7 @@ public class ResetAll extends Action
 							activitySectors.add(actSect);
 						}
 					}
-					eaForm.setActivitySectors(activitySectors);
+					eaForm.getSectors().setActivitySectors(activitySectors);
 				}
 				if (activity.getThemeId() != null)
 				{
@@ -486,7 +487,7 @@ public class ResetAll extends Action
 					fundOrg.setFundings(funding);
 					fundingOrgs.add(fundOrg);
 				}
-				eaForm.setFundingOrganizations(fundingOrgs);
+				eaForm.getFunding().setFundingOrganizations(fundingOrgs);
 		    }
 		    if(eaForm.getStep().equals("4"))
 		    {
@@ -600,9 +601,9 @@ public class ResetAll extends Action
 		    }
 		    if(eaForm.getStep().equals("6"))
 		    {
-				eaForm.setExecutingAgencies(new ArrayList());
-				eaForm.setImpAgencies(new ArrayList());
-				eaForm.setReportingOrgs(new ArrayList());
+				eaForm.getAgencies().setExecutingAgencies(new ArrayList());
+				eaForm.getAgencies().setImpAgencies(new ArrayList());
+				eaForm.getAgencies().setReportingOrgs(new ArrayList());
 				Set relOrgs = activity.getOrgrole();
 				if (relOrgs != null)
 				{
@@ -611,76 +612,76 @@ public class ResetAll extends Action
 					{
 						AmpOrgRole orgRole = (AmpOrgRole) relOrgsItr.next();
 						if (orgRole.getRole().getRoleCode().equals(
-								Constants.EXECUTING_AGENCY) && (!eaForm.getExecutingAgencies().contains(orgRole.getOrganisation()))) 							{
-							eaForm.getExecutingAgencies().add(orgRole.getOrganisation());
+								Constants.EXECUTING_AGENCY) && (!eaForm.getAgencies().getExecutingAgencies().contains(orgRole.getOrganisation()))) 							{
+							eaForm.getAgencies().getExecutingAgencies().add(orgRole.getOrganisation());
 						}
 						else if (orgRole.getRole().getRoleCode().equals(
-								Constants.IMPLEMENTING_AGENCY) && (!eaForm.getImpAgencies().contains(orgRole.getOrganisation())))
+								Constants.IMPLEMENTING_AGENCY) && (!eaForm.getAgencies().getImpAgencies().contains(orgRole.getOrganisation())))
 						{
-							eaForm.getImpAgencies().add(orgRole.getOrganisation());
+							eaForm.getAgencies().getImpAgencies().add(orgRole.getOrganisation());
 						}
 						else if (orgRole.getRole().getRoleCode().equals(
-								Constants.BENEFICIARY_AGENCY) && (!eaForm.getBenAgencies().contains(orgRole.getOrganisation())))
+								Constants.BENEFICIARY_AGENCY) && (!eaForm.getAgencies().getBenAgencies().contains(orgRole.getOrganisation())))
 						{
-							eaForm.getBenAgencies().add(orgRole.getOrganisation());
+							eaForm.getAgencies().getBenAgencies().add(orgRole.getOrganisation());
 						}
 						else if (orgRole.getRole().getRoleCode().equals(
-								Constants.CONTRACTING_AGENCY) && (!eaForm.getConAgencies().contains(orgRole.getOrganisation())))
+								Constants.CONTRACTING_AGENCY) && (!eaForm.getAgencies().getConAgencies().contains(orgRole.getOrganisation())))
 						{
-							eaForm.getConAgencies().add(orgRole.getOrganisation());
+							eaForm.getAgencies().getConAgencies().add(orgRole.getOrganisation());
 						}
 						else if (orgRole.getRole().getRoleCode().equals(
-								Constants.REPORTING_AGENCY) && (!eaForm.getReportingOrgs().contains(orgRole.getOrganisation())))
+								Constants.REPORTING_AGENCY) && (!eaForm.getAgencies().getReportingOrgs().contains(orgRole.getOrganisation())))
 						{
-							eaForm.getReportingOrgs().add(orgRole.getOrganisation());
+							eaForm.getAgencies().getReportingOrgs().add(orgRole.getOrganisation());
 						}
 						else if (orgRole.getRole().getRoleCode().equals(
-							Constants.SECTOR_GROUP) && (!eaForm.getSectGroups().contains(orgRole.getOrganisation())))
+							Constants.SECTOR_GROUP) && (!eaForm.getAgencies().getSectGroups().contains(orgRole.getOrganisation())))
 						{
-						    eaForm.getSectGroups().add(orgRole.getOrganisation());
+						    eaForm.getAgencies().getSectGroups().add(orgRole.getOrganisation());
 						}					
 					else if (orgRole.getRole().getRoleCode().equals(
-						Constants.REGIONAL_GROUP) && (!eaForm.getRegGroups().contains(orgRole.getOrganisation())))
+						Constants.REGIONAL_GROUP) && (!eaForm.getAgencies().getRegGroups().contains(orgRole.getOrganisation())))
 				{
-					eaForm.getRegGroups().add(orgRole.getOrganisation());
+					eaForm.getAgencies().getRegGroups().add(orgRole.getOrganisation());
 				}
 				}
-					eaForm.setContractors(activity.getContractors().trim());
+				
 				}
 		    }
 		    if(eaForm.getStep().equals("7"))
 		    {
-				eaForm.setDnrCntFirstName(activity.getContFirstName());
-				eaForm.setDnrCntLastName(activity.getContLastName());
-				eaForm.setDnrCntEmail(activity.getEmail());
-				eaForm.setDnrCntTitle(activity.getDnrCntTitle());
-                eaForm.setDnrCntOrganization(activity.getDnrCntOrganization());
-                eaForm.setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
-                eaForm.setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
+		    	eaForm.getContactInfo().setDnrCntFirstName(activity.getContFirstName());
+		    	eaForm.getContactInfo().setDnrCntLastName(activity.getContLastName());
+		    	eaForm.getContactInfo().setDnrCntEmail(activity.getEmail());
+		    	eaForm.getContactInfo().setDnrCntTitle(activity.getDnrCntTitle());
+		    	eaForm.getContactInfo().setDnrCntOrganization(activity.getDnrCntOrganization());
+		    	eaForm.getContactInfo().setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
+		    	eaForm.getContactInfo().setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
 
-                eaForm.setMfdCntFirstName(activity.getMofedCntFirstName());
-				eaForm.setMfdCntLastName(activity.getMofedCntLastName());
-				eaForm.setMfdCntEmail(activity.getMofedCntEmail());
-                eaForm.setMfdCntTitle(activity.getMfdCntTitle());
-                eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
-                eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
-                eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+		    	eaForm.getContactInfo().setMfdCntFirstName(activity.getMofedCntFirstName());
+		    	eaForm.getContactInfo().setMfdCntLastName(activity.getMofedCntLastName());
+		    	eaForm.getContactInfo().setMfdCntEmail(activity.getMofedCntEmail());
+		    	eaForm.getContactInfo().setMfdCntTitle(activity.getMfdCntTitle());
+		    	eaForm.getContactInfo().setMfdCntOrganization(activity.getMfdCntOrganization());
+		    	eaForm.getContactInfo().setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
+		    	eaForm.getContactInfo().setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
                 
-                eaForm.setPrjCoFirstName(activity.getPrjCoFirstName());
-                eaForm.setPrjCoLastName(activity.getPrjCoLastName());
-                eaForm.setPrjCoEmail(activity.getPrjCoEmail());
-                eaForm.setPrjCoTitle(activity.getPrjCoTitle());
-                eaForm.setPrjCoOrganization(activity.getPrjCoOrganization());
-                eaForm.setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
-                eaForm.setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
+		    	eaForm.getContactInfo().setPrjCoFirstName(activity.getPrjCoFirstName());
+		    	eaForm.getContactInfo().setPrjCoLastName(activity.getPrjCoLastName());
+		    	eaForm.getContactInfo().setPrjCoEmail(activity.getPrjCoEmail());
+		    	eaForm.getContactInfo().setPrjCoTitle(activity.getPrjCoTitle());
+		    	eaForm.getContactInfo().setPrjCoOrganization(activity.getPrjCoOrganization());
+		    	eaForm.getContactInfo().setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
+		    	eaForm.getContactInfo().setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
                 
-                eaForm.setSecMiCntFirstName(activity.getSecMiCntFirstName());
-                eaForm.setSecMiCntLastName(activity.getSecMiCntLastName());
-                eaForm.setSecMiCntEmail(activity.getSecMiCntEmail());
-                eaForm.setSecMiCntTitle(activity.getSecMiCntTitle());
-                eaForm.setSecMiCntOrganization(activity.getSecMiCntOrganization());
-                eaForm.setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
-                eaForm.setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
+		    	eaForm.getContactInfo().setSecMiCntFirstName(activity.getSecMiCntFirstName());
+		    	eaForm.getContactInfo().setSecMiCntLastName(activity.getSecMiCntLastName());
+		    	eaForm.getContactInfo().setSecMiCntEmail(activity.getSecMiCntEmail());
+		    	eaForm.getContactInfo().setSecMiCntTitle(activity.getSecMiCntTitle());
+		    	eaForm.getContactInfo().setSecMiCntOrganization(activity.getSecMiCntOrganization());
+		    	eaForm.getContactInfo().setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
+		    	eaForm.getContactInfo().setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
 			}
 		}
 		return mapping.findForward("forward");

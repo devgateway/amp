@@ -89,17 +89,17 @@
                             <td bgcolor="#ffffff" width="100%">
                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
                                    
-                                    <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
+                                    <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
                                     <bean:define id="generalSector" value="false"/>
 									<c:if test="${config.name== 'Primary' }">
 										<bean:define id="auxSectorType" value="Primary Sector"></bean:define>
-										<logic:equal name="aimEditActivityForm" property="primarySectorVisible" value="true">
+										<logic:equal name="aimEditActivityForm" property="sectors.primarySectorVisible" value="true">
 											<bean:define id="generalSector" value="true"/>
 										</logic:equal>
 									</c:if>
 									<c:if test="${config.name== 'Secondary' }">
 										<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
-										<logic:equal name="aimEditActivityForm" property="secondarySectorVisible" value="true">
+										<logic:equal name="aimEditActivityForm" property="sectors.secondarySectorVisible" value="true">
 											<bean:define id="generalSector" value="true"/>
 										</logic:equal>
 									</c:if>
@@ -121,7 +121,7 @@
                                                      <b><digi:trn key="aim:addActivitySectors:${auxSectorType}">${auxSectorType}</digi:trn></b>
                                                 </td>
                                     	</tr>
-                                        <c:if test="${!empty aimEditActivityForm.activitySectors}">
+                                        <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
                                             <tr>
                                                 <td>
         											<bean:define id="auxSectorType" value="empty1"/>
@@ -134,7 +134,7 @@
 														</logic:equal>
                                                     <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
                                                        <tbody>
-                                                        <c:forEach var="activitySectors" items="${aimEditActivityForm.activitySectors}" varStatus="index">
+                                                        <c:forEach var="activitySectors" items="${aimEditActivityForm.sectors.activitySectors}" varStatus="index">
                                                             <c:if test="${activitySectors.configId==config.id}">
                                                                 <tr> 
                                                                     <td width="3%" vAlign="center">

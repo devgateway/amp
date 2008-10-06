@@ -22,15 +22,15 @@
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
+										<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="conAgencies"
+												<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
 												id="conAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
 															<td width="3">
-																<html:multibox property="selConAgencies">
+																<html:multibox property="agencies.selConAgencies">
 																	<bean:write name="conAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
@@ -46,7 +46,7 @@
 														<tr>
 															<td>
 															<field:display name="Contracting Agency Add Button" feature="Contracting Agency">
-															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm.agencies}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 															</field:display>
 															</td>
 															<td>
@@ -62,12 +62,12 @@
 											</table>
 										</logic:notEmpty>
 
-										<logic:empty name="aimEditActivityForm" property="conAgencies">
+										<logic:empty name="aimEditActivityForm" property="agencies.conAgencies">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Contracting Agency Add Button" feature="Contracting Agency">
-															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+															<aim:addOrganizationButton refreshParentDocument="true" collection="conAgencies" form="${aimEditActivityForm.agencies}"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
 															<%
 															selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 															selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");

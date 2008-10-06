@@ -34,7 +34,7 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 		Collection<AmpMEIndicatorValue> colampMEIndValbox = (Collection)session.getAttribute("ampMEIndValbox");
 		session.setAttribute("ampMEIndValbox",null);
 		String name=null,code=null;
-		Collection  tmpActivityIndicator = 	eaForm.getIndicatorsME();
+		Collection  tmpActivityIndicator = 	eaForm.getIndicator().getIndicatorsME();
 		if (tmpActivityIndicator==null){
 			tmpActivityIndicator=new ArrayList();
 		}
@@ -70,12 +70,12 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 			}
 			tmpActivityIndicator.add(actInd);
 		}
-		eaForm.setIndicatorsME(tmpActivityIndicator);
+		eaForm.getIndicator().setIndicatorsME(tmpActivityIndicator);
 		}
 	
-		if(!eaForm.getIndicatorsME().isEmpty())
-			eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
-		eaForm.setIndicatorRisk(null);
+		if(!eaForm.getIndicator().getIndicatorsME().isEmpty())
+			eaForm.getIndicator().setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+		eaForm.getIndicator().setIndicatorRisk(null);
 		return mapping.findForward("successfull");
 	}
 }

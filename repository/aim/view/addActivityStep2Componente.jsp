@@ -81,7 +81,7 @@
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
                                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
-                                                  <c:if test="${empty aimEditActivityForm.activityComponentes}">
+                                                  <c:if test="${empty aimEditActivityForm.components.activityComponentes}">
                                                     <tr>
                                                       <td bgcolor="#ffffff">
                                                   
@@ -90,17 +90,18 @@
                                                       </td>
                                                     </tr>
                                                   </c:if>
-                                                  <c:if test="${!empty aimEditActivityForm.activityComponentes}">
+                                                  <c:if test="${!empty aimEditActivityForm.components.activityComponentes}">
                                                     <tr>
                                                       <td>
                                                         <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-                                                          <c:forEach var="activitySectors" items="${aimEditActivityForm.activityComponentes}">
+                                                          <c:forEach var="activitySectors" items="${aimEditActivityForm.components.activityComponentes}">
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
                                                                   <tr>
                                                                     <td width="3%" vAlign="center">
-                                                                      <html:multibox property="selActivityComponentes">
+																	<bean:define id="components" name="aimEditActivityForm" property="components"></bean:define>
+                                                                      <html:multibox name="components" property="selActivityComponentes">
 	                                                                      <c:if test="${activitySectors.subsectorLevel1Id == -1}">
 	                                                                      ${activitySectors.sectorId}
 	                                                                      </c:if>
@@ -142,7 +143,7 @@
                                                             <td>
                                                               <table cellSpacing="2" cellPadding="2">
                                                                 <tr>
-																<logic:equal name="aimEditActivityForm" property="multiSectorSelecting" value="On">
+																<logic:equal name="aimEditActivityForm" property="components.multiSectorSelecting" value="On">
 																	<field:display name="Add Sectors Button" feature="Sectors">
     		                                                            <td>
             		                                                       <input type="button" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' class="dr-menu"  onclick="addComponente();">

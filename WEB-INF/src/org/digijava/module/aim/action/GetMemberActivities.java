@@ -16,10 +16,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.TeamActivitiesForm;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.dbentity.AmpActivity;
 
 public class GetMemberActivities extends Action {
 
@@ -68,18 +68,18 @@ public class GetMemberActivities extends Action {
 			AmpTeamMember ampMem = TeamMemberUtil.getAmpTeamMember(id);
 			Collection col = TeamMemberUtil.getAllMemberActivities(id);
 			
-			
+			//fferreyra. It seems that this action is not being used anymore, commented usage of activity bean as part of refactoring
 			Comparator acronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
-					Activity r1 = (Activity) o1;
-					Activity r2 = (Activity) o2;
+					AmpActivity r1 = (AmpActivity) o1;
+					AmpActivity r2 = (AmpActivity) o2;
 			        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
 				}
 			};
 			Comparator racronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
-					Activity r1 = (Activity) o1;
-					Activity r2 = (Activity) o2;
+					AmpActivity r1 = (AmpActivity) o1;
+					AmpActivity r2 = (AmpActivity) o2;
 					return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
 				}
 			};

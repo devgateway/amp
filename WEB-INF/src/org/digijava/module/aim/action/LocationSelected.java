@@ -62,9 +62,9 @@ public class LocationSelected extends Action {
 			location[0].setCountry(cntry.getCountryName());
 			location[0].setNewCountryId(cntry.getIso());
 			//determine whether activity already has 1 or more locations
-			if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
+			if(eaForm.getLocation().getSelectedLocs()!=null && eaForm.getLocation().getSelectedLocs().size()>0) {
 				//location[0].setPercent(null);
-				Iterator iter=eaForm.getSelectedLocs().iterator();
+				Iterator iter=eaForm.getLocation().getSelectedLocs().iterator();
 				while (iter.hasNext()) {
 					Location loc=(Location)iter.next();
 					//loc.setPercent(null);
@@ -117,9 +117,9 @@ public class LocationSelected extends Action {
 						location[i].setRegionId(reg.getAmpRegionId());
 						location[i].setRegion(reg.getName());
 						//determine whether activity already has 1 or more locations
-						if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
+						if(eaForm.getLocation().getSelectedLocs()!=null && eaForm.getLocation().getSelectedLocs().size()>0) {
 							//location[0].setPercent(null);
-							Iterator iter=eaForm.getSelectedLocs().iterator();
+							Iterator iter=eaForm.getLocation().getSelectedLocs().iterator();
 							while (iter.hasNext()) {
 								Location loc=(Location)iter.next();
 								//loc.setPercent(null);
@@ -181,9 +181,9 @@ public class LocationSelected extends Action {
 						location[i].setZoneId(zne.getAmpZoneId());
 						location[i].setZone(zne.getName());
 						//determine whether activity already has 1 or more locations
-						if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
+						if(eaForm.getLocation().getSelectedLocs()!=null && eaForm.getLocation().getSelectedLocs().size()>0) {
 							//location[0].setPercent(null);
-							Iterator iter=eaForm.getSelectedLocs().iterator();
+							Iterator iter=eaForm.getLocation().getSelectedLocs().iterator();
 							while (iter.hasNext()) {
 								Location loc=(Location)iter.next();
 								//loc.setPercent(null);
@@ -232,9 +232,9 @@ public class LocationSelected extends Action {
 						location[i].setWoredaId(wrda.getAmpWoredaId());
 						location[i].setWoreda(wrda.getName());
 						//determine whether activity already has 1 or more locations
-						if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
+						if(eaForm.getLocation().getSelectedLocs()!=null && eaForm.getLocation().getSelectedLocs().size()>0) {
 							//location[0].setPercent(null);
-							Iterator iter=eaForm.getSelectedLocs().iterator();
+							Iterator iter=eaForm.getLocation().getSelectedLocs().iterator();
 							while (iter.hasNext()) {
 								Location loc=(Location)iter.next();
 								//loc.setPercent(null);
@@ -254,10 +254,10 @@ public class LocationSelected extends Action {
 			return mapping.findForward("forward");
 		}
 		
-		if (eaForm.getSelectedLocs() != null) {
+		if (eaForm.getLocation().getSelectedLocs() != null) {
 			for (int i = 0;i < location.length;i ++) {
 				boolean present = false;
-				Iterator itr = eaForm.getSelectedLocs().iterator();
+				Iterator itr = eaForm.getLocation().getSelectedLocs().iterator();
 				while (itr.hasNext()) {
 					Location tempLoc = (Location) itr.next();
 					if (tempLoc.equals(location[i])) {
@@ -265,12 +265,12 @@ public class LocationSelected extends Action {
 						break;
 					}
 				}
-				if (!present) eaForm.getSelectedLocs().add(location[i]);				
+				if (!present) eaForm.getLocation().getSelectedLocs().add(location[i]);				
 			}
 		} else {
-			eaForm.setSelectedLocs(new ArrayList<Location>());
+			eaForm.getLocation().setSelectedLocs(new ArrayList<Location>());
 			for (int i = 0;i < location.length;i ++) {
-				eaForm.getSelectedLocs().add(location[i]);
+				eaForm.getLocation().getSelectedLocs().add(location[i]);
 			}
 		}
 		return mapping.findForward("forward");

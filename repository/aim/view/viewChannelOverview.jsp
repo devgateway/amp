@@ -11,6 +11,10 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ page import="org.digijava.module.aim.helper.CategoryConstants" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+
+
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -176,7 +180,7 @@ function commentWin(val) {
                                                                                <c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
                                                                                <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
                                                                                  -->  
-                                                                                       <a href="" target="_blank" onclick="javascript:fnEditProject(${activity.activityId}); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+                                                                                       <a href="" target="_blank" onclick="javascript:fnEditProject(${activity.ampActivityId}); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
 																							<img src="/repository/aim/images/application_edit.png" border="0"></a>
 
                                                                                <!--       
@@ -255,10 +259,15 @@ function commentWin(val) {
 									<TR>
 										<TD width="100%"><IMG height=10
 											src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<c:if test="${activity.status == 'Planned'}">
+                                            <c:set var="status">
+                                            	${aimChannelOverviewForm.status}
+                                            </c:set>
+                                            
+										<c:if test="${status == 'Planned'}">
 											<b><digi:trn key="aim:plannedCommitment">
 										Planned Commitment</digi:trn> : </b>
-										</c:if> <c:if test="${activity.status != 'Planned'}">
+										</c:if> 
+                                        <c:if test="${status != 'Planned'}">
 											<b><digi:trn key="aim:totalCommitmentsActual">
 										Total Commitments(Actual)</digi:trn> : </b>
 										</c:if> ${aimChannelOverviewForm.grandTotal}
@@ -351,7 +360,7 @@ function commentWin(val) {
 																		</TR>
 																		<TR>
 																			<TD bgcolor="#ffffff"><c:out
-																				value="${activity.status}" /></TD>
+																				value="${status}" /></TD>
 																		</TR>
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
@@ -427,8 +436,10 @@ function commentWin(val) {
 																						<tr>
 																							<td><digi:trn key="aim:actGBS">
 																					Financial Instrument
-																					</digi:trn>: <!-- this part is to be replaced when the category manager is ready -->
-																							${activity.financialInstrument}</td>
+																					</digi:trn>: 																							
+																					${aimChannelOverviewForm.financialInstrument}
+                                                                                            
+                                                                                            </td>
 																						</tr>
 																					</field:display>
 																					<field:display
@@ -510,7 +521,7 @@ function commentWin(val) {
 																					false
 																				</c:set>
 
-																				<c:forEach var="actSect" items="${activity.sectors}">
+																				<c:forEach var="actSect" items="${aimChannelOverviewForm.activitySectors}">
 																					<c:if test="${actSect.configId==config.id}">
 																						<c:set var="hasSectors">
 																							true
@@ -524,9 +535,9 @@ function commentWin(val) {
 													                                </digi:trn>
 													                                </strong>
 												                                </c:if>
-										                                        <c:if test="${!empty activity.sectors}">
+										                                        <c:if test="${!empty aimChannelOverviewForm.activitySectors}">
 																					<ul>
-																						<c:forEach var="actSect" items="${activity.sectors}">
+																						<c:forEach var="actSect" items="${aimChannelOverviewForm.activitySectors}">
 						                                                            		<c:if test="${actSect.configId==config.id}">
 																								<li>
 																									<field:display name="Sector Scheme Name" feature="Sectors">
@@ -604,7 +615,9 @@ function commentWin(val) {
 																						<TR>
 																							<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
 																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
-																								 :&nbsp;<c:out value="${activity.impLevel}"/>
+																								 :
+                                                                                                 [<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.implemLocationLevel}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>"  />]
+
 																							</TD>
 																						</TR>
 																					</field:display>
@@ -614,7 +627,7 @@ function commentWin(val) {
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
 																							:&nbsp;
 																						</i>
-																						<c:out value="${activity.impLocation}" />
+[<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.impLocation}" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />]
 
 																					</TD>
 																					</field:display>
@@ -657,27 +670,31 @@ function commentWin(val) {
 																							
                                                                                             
 																							
-																							<c:if test="${not empty loc.region || not empty loc.zone ||not empty loc.woreda}">
+																							<c:if test="${not empty loc.location.ampRegion || not empty loc.location.ampZone ||not empty loc.location.ampWoreda}">
 																							
-																							<c:set var="mapParam">${mapParam}${loc.region}/${loc.zone}/${loc.percent}</c:set>
+																							<c:set var="mapParam">${mapParam}${loc.location.region}/${loc.location.zone}/${loc.locationPercentage}</c:set>
 																							<c:if test="${not varSt.last}">
 																								<c:set var="mapParam">${mapParam}|</c:set>
 																							</c:if>
 																							
 																							<TR>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
-																									<c:out value="${loc.region}" />
+																									<c:out value="${loc.location.region}" />
 																								</TD>
 
 																								<TD width="30%" align="center" bgcolor="#ffffff">
-																									<c:out value="${loc.zone}" />
+																									<c:out value="${loc.location.zone}" />
 																								</TD>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
-																									<c:out value="${loc.woreda}" />
+																									<c:out value="${loc.location.woreda}" />
 																								</TD>
                                                                                                   <TD  align="center" bgcolor="#ffffff">
-                                                                                                     <c:if test='${loc.percent > 0}'>
-																									<c:out value="${loc.percent}%" />
+                                                                                                     <c:if test='${loc.locationPercentage > 0}'>
+
+<fmt:formatNumber type="number" value="${loc.locationPercentage}" />
+
+                                                                                                     %
+																									
                                                                                                      </c:if>
 																								</TD>
 																							</TR>
@@ -1026,8 +1043,8 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
 																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																				value="${activity.mfdContFirstName}" />&nbsp; <c:out
-																				value="${activity.mfdContLastName}" /></TD>
+																				value="${activity.mofedCntFirstName}" />&nbsp; <c:out
+																				value="${activity.mofedCntLastName}" /></TD>
 																		</TR>
 																	</field:display>
 																	<field:display feature="Government Contact Information"
@@ -1035,7 +1052,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><i><digi:trn
 																				key="aim:contactPersonEmail">Email</digi:trn></i>: <a
-																				href="mailto:${activity.mfdContEmail}">${activity.mfdContEmail}</a></TD>
+																				href="mailto:${activity.mofedCntEmail}">${activity.mofedCntEmail}</a></TD>
 																		</TR>
 																	</field:display>
 																</TABLE>
@@ -1118,7 +1135,10 @@ function commentWin(val) {
 														</feature:display>
 													</module:display>
 													<field:display name="Accession Instrument" feature="Identification">
-													<c:if test="${!empty activity.accessionInstrument}">
+                                                    <c:set var="accessionInstrument">
+														${aimChannelOverviewForm.accessionInstrument}
+                                                    </c:set>
+													<c:if test="${!empty accessionInstrument}">
 														<TR>
 															<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1
@@ -1132,7 +1152,7 @@ function commentWin(val) {
 																</TR>
 																<TR>
 																	<TD bgcolor="#ffffff">
-																	${activity.accessionInstrument}</TD>
+																	${accessionInstrument}</TD>
 																</TR>
 															</TABLE>
 															</TD>
@@ -1140,7 +1160,10 @@ function commentWin(val) {
 													</c:if>
 													</field:display>
 													<field:display name="A.C. Chapter" feature="Identification">
-													<c:if test="${!empty activity.acChapter}">
+                                                    <c:set var="acChapter">
+	                                                    ${aimChannelOverviewForm.acChapter}
+                                                    </c:set>
+													<c:if test="${!empty acChapter}">
 														<TR>
 															<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1
@@ -1152,7 +1175,7 @@ function commentWin(val) {
                                                               A.C. Chapter</digi:trn></b></TD>
 																</TR>
 																<TR>
-																	<TD bgcolor="#ffffff">${activity.acChapter}</TD>
+																	<TD bgcolor="#ffffff">${acChapter}</TD>
 																</TR>
 															</TABLE>
 															</TD>
@@ -1181,7 +1204,10 @@ function commentWin(val) {
 													</field:display>
 													
 													<field:display name="Project Category" feature="Identification">
-													<c:if test="${!empty activity.projectCategory}">
+                                                    <c:set var="projectCategory">
+														<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.projectCategory}" categoryKey="<%=CategoryConstants.PROJECT_CATEGORY_NAME %>"  />
+                                                    </c:set>
+													<c:if test="${!empty aimChannelOverviewForm.projectCategory}">
 														<TR>
 															<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1
@@ -1195,7 +1221,7 @@ function commentWin(val) {
 																</TR>
 																<TR>
 																	<TD bgcolor="#ffffff">
-																	${activity.projectCategory}</TD>
+																	${projectCategory}</TD>
 																</TR>
 															</TABLE>
 															</TD>
@@ -1245,9 +1271,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'DN'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1279,9 +1305,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'RO'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1311,9 +1337,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'EA'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1343,9 +1369,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'IA'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1374,9 +1400,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'BA'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1405,9 +1431,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'CA'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1436,9 +1462,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'RG'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1467,9 +1493,9 @@ function commentWin(val) {
 																					</TR>
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
+																							test="${!empty aimChannelOverviewForm.relOrgs}">
 																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
+																								items="${aimChannelOverviewForm.relOrgs}">
 																								<c:if test="${relOrg.role == 'SG'}">
 																									<c:set var="currentOrg" value="${relOrg}"
 																										target="request" scope="request" />
@@ -1511,15 +1537,14 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																			<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn> : 
-																				<c:out value="${activity.origAppDate}" />
+                                                                              <aim:formatDate value="${activity.proposedApprovalDate}" />
 																			</TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Actual Approval Date" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
-																				key="aim:actualapprovaldate">Actual Approval Date</digi:trn> : <c:out
-																				value="${activity.revAppDate}" /></TD>
+																				key="aim:actualapprovaldate">Actual Approval Date</digi:trn> : <aim:formatDate value="${activity.actualApprovalDate}" /></TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Proposed Start Date"
@@ -1527,15 +1552,14 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:originalStartDate">
-																			Original Start Date</digi:trn> : <c:out
-																				value="${activity.origStartDate}" /></TD>
+																			Original Start Date</digi:trn> : <aim:formatDate value="${activity.proposedStartDate}" /></TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Actual Start Date" feature="Planning">
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																				<digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn> : 
-																				<c:out value="${activity.revStartDate}" />
+																				<aim:formatDate value="${activity.actualStartDate}" />
 																			</TD>
 																		</TR>
 																	</field:display>
@@ -1544,8 +1568,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:FinalDateForContracting">
-																			Final Date for Contracting</digi:trn> : <c:out
-																				value="${activity.contractingDate}" /></TD>
+																			Final Date for Contracting</digi:trn> : <aim:formatDate value="${activity.contractingDate}" /></TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Final Date for Disbursements"
@@ -1553,8 +1576,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:FinalDateForDisbursments">
-																			Final Date for Disbursments</digi:trn> : <c:out
-																				value="${activity.disbursmentsDate}" /></TD>
+																			Final Date for Disbursments</digi:trn> : <aim:formatDate value="${activity.disbursmentsDate}" /></TD>
 																		</TR>
 																	</field:display>
 																	<field:display name="Current Completion Date"
@@ -1562,9 +1584,8 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:currentCompletionDate">
-																			Current Completion Date</digi:trn> : <c:out
-																				value="${activity.currCompDate}" /> &nbsp; <a
-																				href="javascript:commentWin('<c:out value="${activity.activityId}" />')">
+																			Current Completion Date</digi:trn> : <aim:formatDate value="${activity.actualCompletionDate}" /> &nbsp; <a
+																				href="javascript:commentWin('<c:out value="${activity.ampActivityId}" />')">
 																			<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
 																		</TR>
 																	</field:display>
@@ -1573,8 +1594,7 @@ function commentWin(val) {
 																		<tr>
 																			<TD bgcolor="#ffffff"><digi:trn
 																				key="aim:proposedCompletionDate">
-																			Proposed Completion Date</digi:trn> : <c:out
-																				value="${activity.propCompDate}" /></TD>
+																			Proposed Completion Date</digi:trn> : <aim:formatDate value="${activity.proposedCompletionDate}" /></TD>
 																		</tr>
 																		<TR>
 																			<TD bgcolor="#ffffff">
@@ -1587,9 +1607,9 @@ function commentWin(val) {
 																					<TD>
 																					<TABLE cellPadding=0 cellSpacing=0>
 																						<c:forEach var="closeDate"
-																							items="${activity.revCompDates}">
+																							items="${aimChannelOverviewForm.closingDates}">
 																							<TR>
-																								<TD><c:out value="${closeDate}" /></TD>
+																								<TD><aim:formatDate value="${closeDate}" /></TD>
 																							</TR>
 																						</c:forEach>
 																					</TABLE>
@@ -1623,9 +1643,9 @@ function commentWin(val) {
 																				key="aim:typeOfAssistance">
 																				Type Of Assistance</digi:trn></b></TD>
 																		</TR>
-																		<c:if test="${!empty activity.assistanceType}">
+																		<c:if test="${!empty aimChannelOverviewForm.typesOfAssistance}">
 																			<c:forEach var="asstType"
-																				items="${activity.assistanceType}">
+																				items="${aimChannelOverviewForm.typesOfAssistance}">
 																				<TR>
 																					<TD bgcolor="#ffffff"><c:out
 																						value="${asstType}" /></TD>
@@ -1655,10 +1675,10 @@ function commentWin(val) {
 																				key="aim:financingInstruments">
 																				Financing Instruments</digi:trn></b></TD>
 																		</TR>
-																		<c:if test="${!empty activity.uniqueModalities}">
+																		<c:if test="${!empty aimChannelOverviewForm.uniqueModalities}">
 
 																			<c:forEach var="modal"
-																				items="${activity.uniqueModalities}">
+																				items="${aimChannelOverviewForm.uniqueModalities}">
 																				<TR>
 																					<TD bgcolor="#ffffff"><c:out
 																						value="${modal.value}" /></TD>
@@ -1688,9 +1708,9 @@ function commentWin(val) {
 																<TR>
 																	<TD bgcolor="#ffffff"><i><digi:trn
 																		key="aim:createdBy">Created By</digi:trn></i>: <c:out
-																		value="${activity.createdBy.user.firstNames}" /> <c:out
-																		value="${activity.createdBy.user.lastName}" /> - <c:out
-																		value="${activity.createdBy.user.email}" />
+																		value="${activity.activityCreator.user.firstNames}" /> <c:out
+																		value="${activity.activityCreator.user.lastName}" /> - <c:out
+																		value="${activity.activityCreator.user.email}" />
 																	</TD>
 																</TR>
 															</field:display>
@@ -1698,15 +1718,15 @@ function commentWin(val) {
 																<TD bgcolor="#ffffff"><i><digi:trn
 																	key="aim:email">Email</digi:trn></i>: <bean:define
 																	id="mailTo">
-																		mailto:<c:out value="${activity.createdBy.user.email}" />
+																		mailto:<c:out value="${activity.activityCreator.user.email}" />
 																</bean:define> <a href="<%=mailTo%>"> <c:out
-																	value="${activity.createdBy.user.email}" /></a></TD>
+																	value="${activity.activityCreator.user.email}" /></a></TD>
 															</TR>
 															<field:display name="Activity Created On" feature="Identification">
 																<TR>
 																	<TD bgcolor="#ffffff"><i><digi:trn
-																		key="aim:createdDate">Created date</digi:trn></i>: <c:out
-																		value="${activity.createdDate}" />&nbsp;
+																		key="aim:createdDate">Created date</digi:trn></i>: 
+																		<aim:formatDate value="${activity.createdDate}" />&nbsp;
 																	</TD>
 																</TR>
 															</field:display>
@@ -1752,15 +1772,15 @@ function commentWin(val) {
 																			<i>
 																				<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>
 																			</i>:
-																			<c:out value="${activity.createdBy.ampTeam.name}" /> - <c:out value="${activity.createdBy.ampTeam.accessType}" />
+																			<c:out value="${activity.activityCreator.ampTeam.name}" /> - <c:out value="${activity.activityCreator.ampTeam.accessType}" />
 																			<br/>
 																			<i>
 																				<digi:trn key="aim:computation">Computation</digi:trn>
 																			</i>:
-																				<c:if test="${activity.createdBy.ampTeam.computation == 'true'}">
+																				<c:if test="${activity.activityCreator.ampTeam.computation == 'true'}">
 																				  <digi:trn key="aim:yes">Yes</digi:trn>
 																				</c:if>
-																				<c:if test="${activity.createdBy.ampTeam.computation == 'false'}">
+																				<c:if test="${activity.activityCreator.ampTeam.computation == 'false'}">
 																				  <digi:trn key="aim:no">No</digi:trn>
 																				</c:if>
 																			<br/>
@@ -1780,12 +1800,12 @@ function commentWin(val) {
 															</field:display>
 															<field:display name="Data Source"
 																feature="Identification">
-																<c:if test="${!empty activity.actAthAgencySource}">
+																<c:if test="${!empty activity.activityCreator.user.organizationName}">
 																	<TR>
 																		<TD bgcolor="#ffffff"><i><digi:trn
 																			key="aim:dataSource">
 																Data Source</digi:trn></i>: <c:out
-																			value="${activity.actAthAgencySource}" /> &nbsp;</TD>
+																			value="${activity.activityCreator.user.organizationName}" /> &nbsp;</TD>
 																	</TR>
 																</c:if>
 															</field:display>

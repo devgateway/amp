@@ -7,7 +7,22 @@
 	<jspversion>2.0</jspversion>
 	<shortname>globalsettings</shortname>
 	<uri>http://digijava.org/aim</uri>
-
+	<tag>
+		<description>
+			Formats a Date object as a string
+		</description>
+		<name>formatDate</name>
+		<tag-class>
+			org.digijava.module.aim.helper.FormatDateHelperTag
+		</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>Date value to be formatted.</description>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
 	<tag>
 		<description>
 			Formats a numeric value as a number, currency, or percentage

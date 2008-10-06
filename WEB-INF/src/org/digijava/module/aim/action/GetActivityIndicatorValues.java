@@ -38,16 +38,16 @@ public class GetActivityIndicatorValues extends Action
 			try
 			{
 				indValId = new Long(Long.parseLong(temp));
-				if(eaForm.getRiskCollection()!=null){
-					Iterator iter=eaForm.getRiskCollection().iterator();
+				if(eaForm.getIndicator().getRiskCollection()!=null){
+					Iterator iter=eaForm.getIndicator().getRiskCollection().iterator();
 	            	 while (iter.hasNext()){
 	    	       		 AmpIndicatorRiskRatings ampIndRisc=(AmpIndicatorRiskRatings) iter.next();
 	    	       		 ampIndRisc.setTranslatedRatingName(ampIndRisc.getRatingName().replace(" ",""));
 	    	       	 }
 				} 
-				if (eaForm.getIndicatorsME() != null) 
+				if (eaForm.getIndicator().getIndicatorsME() != null) 
 				{
-					Iterator itr = eaForm.getIndicatorsME().iterator();
+					Iterator itr = eaForm.getIndicator().getIndicatorsME().iterator();
 					while (itr.hasNext()) 
 					{
 						ActivityIndicator actInd = (ActivityIndicator) itr.next();
@@ -64,57 +64,57 @@ public class GetActivityIndicatorValues extends Action
 					          
 					        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);							
 							
-							eaForm.setIndicatorId(actInd.getIndicatorId());
-							eaForm.setExpIndicatorId(actInd.getIndicatorId());
-							eaForm.setBaseVal(actInd.getBaseVal());
+							eaForm.getIndicator().setIndicatorId(actInd.getIndicatorId());
+							eaForm.getIndicator().setExpIndicatorId(actInd.getIndicatorId());
+							eaForm.getIndicator().setBaseVal(actInd.getBaseVal());
 							if(actInd.getBaseValDate() != null){
-					     		eaForm.setBaseValDate(actInd.getBaseValDate());
+					     		eaForm.getIndicator().setBaseValDate(actInd.getBaseValDate());
 							}else{
-								eaForm.setBaseValDate(null);
+								eaForm.getIndicator().setBaseValDate(null);
 							}
-							eaForm.setBaseValComments(actInd.getBaseValComments());
-							eaForm.setTargetVal(actInd.getTargetVal());
-							eaForm.setTargetVal(actInd.getTargetVal());
+							eaForm.getIndicator().setBaseValComments(actInd.getBaseValComments());
+							eaForm.getIndicator().setTargetVal(actInd.getTargetVal());
+							eaForm.getIndicator().setTargetVal(actInd.getTargetVal());
 							if(actInd.getTargetValDate() != null){
-							     eaForm.setTargetValDate(actInd.getTargetValDate());
+							     eaForm.getIndicator().setTargetValDate(actInd.getTargetValDate());
 							}else{
-								eaForm.setTargetValDate(null);
+								eaForm.getIndicator().setTargetValDate(null);
 							}
-							eaForm.setTargetValComments(actInd.getTargetValComments());
-							eaForm.setRevTargetVal(actInd.getRevisedTargetVal());
+							eaForm.getIndicator().setTargetValComments(actInd.getTargetValComments());
+							eaForm.getIndicator().setRevTargetVal(actInd.getRevisedTargetVal());
 							if(actInd.getRevisedTargetValDate() != null){
-							eaForm.setRevTargetValDate(actInd.getRevisedTargetValDate());
+							eaForm.getIndicator().setRevTargetValDate(actInd.getRevisedTargetValDate());
 							}else{
-								eaForm.setRevTargetValDate(null);
+								eaForm.getIndicator().setRevTargetValDate(null);
 							}
-							eaForm.setRevTargetValComments(actInd.getRevisedTargetValComments());
+							eaForm.getIndicator().setRevTargetValComments(actInd.getRevisedTargetValComments());
 							if(actInd.getIndicatorsCategory()!=null){
-							eaForm.setLogframeCategory(actInd.getIndicatorsCategory().getId());
+							eaForm.getIndicator().setLogframeCategory(actInd.getIndicatorsCategory().getId());
 							}
 							if(actInd.getCurrentValDate() != null) {
-								eaForm.setCurrentValDate(actInd.getCurrentValDate());
+								eaForm.getIndicator().setCurrentValDate(actInd.getCurrentValDate());
 							}else{
-							    eaForm.setCurrentValDate(null);
+							    eaForm.getIndicator().setCurrentValDate(null);
 							}
-  							   eaForm.setCurrentValComments(actInd.getCurrentValComments());
+  							   eaForm.getIndicator().setCurrentValComments(actInd.getCurrentValComments());
 							
 							if(actInd.getRisk()!= null){
-								eaForm.setIndicatorRisk(actInd.getRisk());
+								eaForm.getIndicator().setIndicatorRisk(actInd.getRisk());
 							   
 							}else{
-								eaForm.setIndicatorRisk(null);
+								eaForm.getIndicator().setIndicatorRisk(null);
 							}
 							
-							eaForm.setCurrentValComments(actInd.getActualValComments());
+							eaForm.getIndicator().setCurrentValComments(actInd.getActualValComments());
 							if(actInd.getRisk() != null){
-							eaForm.setIndicatorRisk(actInd.getRisk());
+							eaForm.getIndicator().setIndicatorRisk(actInd.getRisk());
 							}else{
-								eaForm.setIndicatorRisk(new Long(0));
+								eaForm.getIndicator().setIndicatorRisk(new Long(0));
 							}
 							if(actInd.getIndicatorsCategory() != null){
-							eaForm.setLogframeCategory(actInd.getIndicatorsCategory().getId());
+							eaForm.getIndicator().setLogframeCategory(actInd.getIndicatorsCategory().getId());
 							}else{
-								eaForm.setLogframeCategory(new Long(0));
+								eaForm.getIndicator().setLogframeCategory(new Long(0));
 							}
 							break;
 						}
@@ -129,7 +129,7 @@ public class GetActivityIndicatorValues extends Action
 		}
 		else
 		{
-			eaForm.setExpIndicatorId(new Long(-1));
+			eaForm.getIndicator().setExpIndicatorId(new Long(-1));
 		}
 		return mapping.findForward("forward");
 	}

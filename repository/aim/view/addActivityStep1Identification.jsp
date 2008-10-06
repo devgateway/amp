@@ -13,28 +13,30 @@
 <script language="JavaScript">
 	function budgetCheckboxClick()
 	{
-	 if(document.aimEditActivityForm.budget.checked==false)
-	 {	
-	 	document.aimEditActivityForm.budgetCheckbox.value="unchecked";
-	 	document.getElementById("FY").style.display='none';
-	 	document.getElementById("Vote").style.display='none';
-	 	document.getElementById("Sub-Vote").style.display='none';
-	 	document.getElementById("Sub-Program").style.display='none';
-	 	document.getElementById("ProjectCode").style.display='none';
-	 	document.getElementById("financial").style.display='none';
-
-
-	 	}
-	 else if(document.aimEditActivityForm.budget.checked==true)
-		{
-		 	document.aimEditActivityForm.budgetCheckbox.value="checked";
-		 	document.getElementById("FY").style.display='';
-		 	document.getElementById("Vote").style.display='';
-		 	document.getElementById("Sub-Vote").style.display='';
-		 	document.getElementById("Sub-Program").style.display='';
-		 	document.getElementById("ProjectCode").style.display='';
-		 	document.getElementById("financial").style.display='';
+	 if (document.aimEditActivityForm.budget != null) {
+		 if((document.aimEditActivityForm.budget.checked==false))
+		 {
+		 	document.aimEditActivityForm.budgetCheckbox.value="unchecked";
+		 	document.getElementById("FY").style.display='none';
+		 	document.getElementById("Vote").style.display='none';
+		 	document.getElementById("Sub-Vote").style.display='none';
+		 	document.getElementById("Sub-Program").style.display='none';
+		 	document.getElementById("ProjectCode").style.display='none';
+		 	document.getElementById("financial").style.display='none';
+	
+	
 		 	}
+		 else if(document.aimEditActivityForm.budget.checked==true)
+			{
+			 	document.aimEditActivityForm.budgetCheckbox.value="checked";
+			 	document.getElementById("FY").style.display='';
+			 	document.getElementById("Vote").style.display='';
+			 	document.getElementById("Sub-Vote").style.display='';
+			 	document.getElementById("Sub-Program").style.display='';
+			 	document.getElementById("ProjectCode").style.display='';
+			 	document.getElementById("financial").style.display='';
+			 }
+		}
 	}
 
 function disableSelection(element) {
@@ -78,6 +80,7 @@ target.style.cursor = "default"
 
 
 <digi:instance property="aimEditActivityForm" />
+
 										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
 											<bean:define id="contentDisabled">false</bean:define>
 											<c:set var="contentDisabled"><field:display name="Project Title" feature="Identification">false</field:display>
@@ -98,7 +101,7 @@ target.style.cursor = "default"
 													<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">
 													Title used in donors or MoFED internal systems
 													</digi:trn>">
-													<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"  disabled="${contentDisabled}"/>
+													<html:textarea name="aimEditActivityForm" property="identification.title" cols="60" rows="2" styleClass="inp-text"  disabled="${contentDisabled}"/>
 													</a>
 												</td>											
 											</tr>
@@ -114,7 +117,7 @@ target.style.cursor = "default"
 													<tr>
 														<td>
 															<bean:define id="objKey">
-																<c:out value="${aimEditActivityForm.objectives}"/>
+																<c:out value="${aimEditActivityForm.identification.objectives}"/>
 															</bean:define>
 															<digi:edit key="<%=objKey%>"/>
 												
@@ -160,7 +163,7 @@ target.style.cursor = "default"
 													<tr>
 														<td>
 															<bean:define id="descKey">
-																<c:out value="${aimEditActivityForm.description}"/>
+																<c:out value="${aimEditActivityForm.identification.description}"/>
 															</bean:define>
 			
 															<digi:edit key="<%=descKey%>"/>
@@ -197,7 +200,7 @@ target.style.cursor = "default"
 													<tr>
 														<td>
 															<bean:define id="purpKey">
-																<c:out value="${aimEditActivityForm.purpose}"/>
+																<c:out value="${aimEditActivityForm.identification.purpose}"/>
 															</bean:define>
 			
 															<digi:edit key="<%=purpKey%>"/>
@@ -238,7 +241,7 @@ target.style.cursor = "default"
 													<tr>
 														<td>
 															<bean:define id="resKey">
-																<c:out value="${aimEditActivityForm.results}"/>
+																<c:out value="${aimEditActivityForm.identification.results}"/>
 															</bean:define>
 			
 															<digi:edit key="<%=resKey%>"/>
@@ -268,7 +271,7 @@ target.style.cursor = "default"
 										
 											<bean:define id="largeTextLabel" value="Lessons Learned" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.lessonsLearned}"/>
+												<c:out value="${aimEditActivityForm.identification.lessonsLearned}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
@@ -277,43 +280,43 @@ target.style.cursor = "default"
 			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.projectImpact}"/>
+												<c:out value="${aimEditActivityForm.identification.projectImpact}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.activitySummary}"/>
+												<c:out value="${aimEditActivityForm.identification.activitySummary}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.contractingArrangements}"/>
+												<c:out value="${aimEditActivityForm.identification.contractingArrangements}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.condSeq}"/>
+												<c:out value="${aimEditActivityForm.identification.condSeq}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.linkedActivities}"/>
+												<c:out value="${aimEditActivityForm.identification.linkedActivities}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.conditionality}"/>
+												<c:out value="${aimEditActivityForm.identification.conditionality}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 			
 											<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.projectManagement}"/>
+												<c:out value="${aimEditActivityForm.identification.projectManagement}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyEdit.jsp"/>
 											
@@ -333,7 +336,8 @@ target.style.cursor = "default"
 													<c:set var="translation">
 														<digi:trn key="aim:addActivityAccInstrFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
+													
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											</td></tr>	
 											</field:display>
 
@@ -350,7 +354,7 @@ target.style.cursor = "default"
 													<c:set var="translation">
 														<digi:trn key="aim:addActivityAccInstrFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="projectCategory" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_NAME %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.projectCategory" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_NAME %>" styleClass="inp-text" />													
 											</td></tr>	
 											</field:display>
 
@@ -364,7 +368,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<html:text name="aimEditActivityForm" property="govAgreementNumber"/>
+												<html:text name="aimEditActivityForm" property="identification.govAgreementNumber"/>
 											</td></tr>	
 											</field:display>
 											
@@ -500,7 +504,9 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left">
-												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="governmentApprovalProcedures" value="false"/>
+												<digi:trn key="aim:yes">Yes</digi:trn>
+												<html:radio name="aimEditActivityForm" property="identification.governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn>
+												<html:radio name="aimEditActivityForm" property="identification.governmentApprovalProcedures" value="false"/>
 									</td></tr>
 								</field:display>	
 								
@@ -513,7 +519,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left">
-												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="jointCriteria" value="false"/>
+												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="identification.jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="identification.jointCriteria" value="false"/>
 									</td></tr>
 								</field:display>
 								
@@ -527,7 +533,7 @@ target.style.cursor = "default"
 											</a>
 										</td>
 										<td valign="top" align="left">
-												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="humanitarianAid" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="humanitarianAid" value="false"/>
+												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="identification.humanitarianAid" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="identification.humanitarianAid" value="false"/>
 										</td>
 									</tr>
 								</field:display>	
@@ -542,7 +548,7 @@ target.style.cursor = "default"
 											</a>
 										</td>
 										<td valign="top" align="left">
-										    <html:text property="crisNumber" size="12"/>
+										    <html:text name="aimEditActivityForm" property="identification.crisNumber" size="12"/>
 										</td>
 									</tr>
 								</field:display>	

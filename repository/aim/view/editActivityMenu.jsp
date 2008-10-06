@@ -10,6 +10,91 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
+
+
+<div id="mySave" style="display: none">
+	<div id="mySaveContent" class="content">
+		<table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class="box-border-nopadding">
+			<tr>
+				<td>
+					<br/><br/><br/><br/><br/><br/>
+					<p align="center"><img align="top" src="/repository/aim/view/scripts/ajaxtabs/save-loader.gif" /></p>
+					<p align="center"><b><digi:trn key="aim:savePopup:title">Saving</digi:trn>...</b></p>
+					<br/><br/><br/><br/><br/><br/>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+		YAHOOAmp.namespace("YAHOOAmp.amptab");
+		YAHOOAmp.amptab.init = function() {
+		    		var tabView = new YAHOOAmp.widget.TabView('tabview_container');
+		};
+		
+	    var mySavePanel = new YAHOOAmp.widget.Panel("newmySave", {
+			width:"500px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:false,
+		    visible:false,
+		    modal:true,
+		    draggable:false,
+		    context: ["showbtn", "tl", "bl"] 
+		    }
+		     );
+	
+		function initScripts() {
+			var msgP5='\n<digi:trn key="aim:saving">Saving</digi:trn>';
+			mySavePanel.setHeader(msgP5);
+			mySavePanel.setBody("");
+			mySavePanel.render(document.body);
+			savePanelStart = 0;
+		}
+	
+		function showLoadingSave() {
+			//var content = document.getElementById("mySaveContent");
+			var element5 = document.getElementById("mySave"); 
+			//content.innerHTML = '';
+			//if (panelFirstShow == 1){ 
+				element5.style.display = "inline";
+				mySavePanel.setBody(element5);
+				panelFirstShow = 0;
+			//}
+			document.getElementById("mySaveContent").scrollTop=0;
+			mySavePanel.show();
+		}
+	
+	var current = window.onload;
+	
+	window.onload = function() {
+        //current.apply(current);
+		initScripts();
+   	};
+		
+</script>
+<style type="text/css">
+	.mask {
+	  -moz-opacity: 0.8;
+	  opacity:.80;
+	  filter: alpha(opacity=80);
+	  background-color:#2f2f2f;
+	}
+	
+	#myContract .content { 
+	    overflow:auto; 
+	    height:455px; 
+	    background-color:fff; 
+	    padding:10px; 
+	} 
+	
+</style>
+
+
+
 <script language="JavaScript">
 <!--
 function previewClicked() {
@@ -46,34 +131,11 @@ function save() {
   var flag = true;//validateForm();
   if (flag == true) {
    /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
-    <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
+  	showLoadingSave();
+  	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";
-    /* ===========   	 AMP-2143
-    var appstatus = document.aimEditActivityForm.approvalStatus.value;
-    var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
-    var msg='';
-    if (appstatus == "started") {
-      msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
-      if (wTLFlag == "yes") {
-        //if (confirm("Do you want to approve this activity ?"))
-        document.aimEditActivityForm.approvalStatus.value = "approved";
-      }
-      else if (confirm(msg))
-      document.aimEditActivityForm.approvalStatus.value = "created";
-    }
-    if (appstatus == "approved") {
-      if (wTLFlag != "yes")
-      document.aimEditActivityForm.approvalStatus.value = "edited";
-    }
-    else if (wTLFlag == "yes") {
-      msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
-      if (appstatus == "created" || appstatus == "edited") {
-        if (confirm(msg))
-        document.aimEditActivityForm.approvalStatus.value = "approved";
-      }
-    }
-    */
+
     document.aimEditActivityForm.submit();
   }
 }
@@ -119,7 +181,7 @@ var draftStatus=document.getElementById("draftFlag");
 <digi:instance property="aimEditActivityForm" />
 <html:hidden property="workingTeamLeadFlag" />
 <html:hidden property="pageId" />
-<html:hidden property="currentValDate" />
+<html:hidden property="indicator.currentValDate" />
 <html:hidden property="draft" styleId="draftFlag" />
 <html:hidden property="wasDraft" />
 

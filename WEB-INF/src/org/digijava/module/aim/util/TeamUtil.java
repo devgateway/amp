@@ -44,7 +44,6 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.ReportsCollection;
@@ -1260,13 +1259,6 @@ public class TeamUtil {
 
                 Iterator orgItr = temp2.iterator();
 
-                Activity act = new Activity();
-                act.setActivityId(activity.getAmpActivityId());
-                act.setName(activity.getName());
-                act.setAmpId(activity.getAmpId());
-                act.setBudget(activity.getBudget());
-                act.setUpdatedBy(activity.getUpdatedBy());
-                act.setUpdatedDate(activity.getUpdatedDate());
                 String donors = "";
 
                 while(orgItr.hasNext()) {
@@ -1283,8 +1275,8 @@ public class TeamUtil {
                     }
                 }
 
-                act.setDonors(donors);
-                col.add(act);
+                activity.setDonors(donors);
+                col.add(activity);
             }
 
         } catch(Exception e) {
@@ -1314,11 +1306,9 @@ public class TeamUtil {
                              Hibernate.STRING);
             Iterator itr = qry.list().iterator();
             while(itr.hasNext()) {
-                Activity act = new Activity();
                 AmpActivity activity = (AmpActivity) itr.next();
-                act.setActivityId(activity.getAmpActivityId());
 
-                if(temp.contains(act) == false) {
+                if(temp.contains(activity) == false) {
                     Collection temp1 = activity.getOrgrole();
                     Collection temp2 = new ArrayList();
                     Iterator temp1Itr = temp1.iterator();
@@ -1330,11 +1320,6 @@ public class TeamUtil {
 
                     Iterator orgItr = temp2.iterator();
 
-                    act.setName(activity.getName());
-                    act.setBudget(activity.getBudget());
-                    act.setAmpId(activity.getAmpId());
-                    act.setUpdatedBy(activity.getUpdatedBy());
-                    act.setUpdatedDate(activity.getUpdatedDate());
 
                     String donors = "";
 
@@ -1353,8 +1338,8 @@ public class TeamUtil {
                         }
                     }
 
-                    act.setDonors(donors);
-                    col.add(act);
+                    activity.setDonors(donors);
+                    col.add(activity);
                 }
             }
 
@@ -1640,13 +1625,6 @@ public class TeamUtil {
 
                     Iterator orgItr = temp2.iterator();
 
-                    Activity act = new Activity();
-                    act.setActivityId(activity.getAmpActivityId());
-                    act.setName(activity.getName());
-                    act.setAmpId(activity.getAmpId());
-                    act.setBudget(activity.getBudget());
-                    act.setUpdatedBy(activity.getUpdatedBy());
-                    act.setUpdatedDate(activity.getUpdatedDate());
                     String donors = "";
 
                     while(orgItr.hasNext()) {
@@ -1660,8 +1638,8 @@ public class TeamUtil {
                         }
                     }
 
-                    act.setDonors(donors);
-                    col.add(act);
+                    activity.setDonors(donors);
+                    col.add(activity);
 
                 }
 
@@ -1744,13 +1722,6 @@ public class TeamUtil {
 
 			for (AmpActivity activity : holder.values()) {
 
-				Activity act = new Activity();
-				act.setActivityId(activity.getAmpActivityId());
-				act.setName(activity.getName());
-				act.setBudget(activity.getBudget());
-				act.setAmpId(activity.getAmpId());
-				act.setUpdatedBy(activity.getUpdatedBy());
-				act.setUpdatedDate(activity.getUpdatedDate());
 				String donors = "";
 
 				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
@@ -1762,8 +1733,8 @@ public class TeamUtil {
 					donors += string;
 				}
 				
-				act.setDonors(donors);
-				col.add(act);
+				activity.setDonors(donors);
+				col.add(activity);
 
 			}
 

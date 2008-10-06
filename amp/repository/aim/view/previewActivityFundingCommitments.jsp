@@ -22,7 +22,7 @@
 	<digi:trn key="aim:plannedcommitments">PLANNED COMMITMENTS </digi:trn>
 	</a></td>
 	<td bgcolor="#FFFFCC"><c:if
-		test="${aimEditActivityForm.fixerate == true}">
+		test="${aimEditActivityForm.funding.fixerate == true}">
 		<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
 	</c:if></td>
 </tr>
@@ -70,8 +70,9 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">
-                  <c:out value="${funding.subtotalPlannedCommitments}"/>  <c:out value="${aimEditActivityForm.currCode}"/>
-		<td align="right" bgcolor="#eeeeee"
+                  ${funding.subtotalPlannedCommitments} ${aimEditActivityForm.currCode}
+            </td>
+      		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
 
@@ -83,7 +84,7 @@
 		<digi:trn key="aim:actualcommitments">ACTUAL COMMITMENTS </digi:trn> </a>
 		</td>
 		<td height="20" bgcolor="#FFFFCC"><c:if
-			test="${aimEditActivityForm.fixerate == true}">
+			test="${aimEditActivityForm.funding.fixerate == true}">
 			<b> <digi:trn key="aim:exchange">Exchange Rate</digi:trn> </b>
 		</c:if></td>
 	</tr>
@@ -129,7 +130,7 @@
 		</td>
 		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000;">
             ${funding.subtotalActualCommitments} ${aimEditActivityForm.currCode}
-            
+        </td>    
 		<td align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>

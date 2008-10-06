@@ -17,7 +17,6 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
@@ -76,7 +75,7 @@ public class ComputedTeamActivityGate extends Gate {
 	public boolean logic() throws Exception {
 		Session session = PersistenceManager.getSession();
 		AmpActivity ampa = null;
-		Activity a = null;
+//		Activity a = null;
 		
 		Object o = scope.get(GatePermConst.ScopeKeys.PERMISSIBLE);
 		if (o instanceof AmpActivity)
@@ -85,8 +84,8 @@ public class ComputedTeamActivityGate extends Gate {
 		Object oo = scope.get(GatePermConst.ScopeKeys.ACTIVITY);
 		if (oo instanceof AmpActivity)
 			ampa = (AmpActivity) oo;
-		if (oo instanceof Activity)
-			a = (Activity) oo;
+//		if (oo instanceof Activity)
+//			a = (Activity) oo;
 
 		TeamMember tm = (TeamMember) scope
 				.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
@@ -116,22 +115,22 @@ public class ComputedTeamActivityGate extends Gate {
 			}
 
 		}
-		if (a != null) {
-			if (a.getRelOrgs() == null)
-				return false;
-			Iterator i = a.getRelOrgs().iterator();
-			while (i.hasNext()) {
-				RelOrganization element = (RelOrganization) i.next();
-				Long orgId = element.getOrgId();
-				Iterator ii = computedOrgs.iterator();
-				while (ii.hasNext()) {
-					AmpOrganisation computedOrg = (AmpOrganisation) ii.next();
-					if (computedOrg.getAmpOrgId().equals(orgId))
-						return true;
-				}
-
-			}
-		}
+//		if (a != null) {
+//			if (a.getRelOrgs() == null)
+//				return false;
+//			Iterator i = a.getRelOrgs().iterator();
+//			while (i.hasNext()) {
+//				RelOrganization element = (RelOrganization) i.next();
+//				Long orgId = element.getOrgId();
+//				Iterator ii = computedOrgs.iterator();
+//				while (ii.hasNext()) {
+//					AmpOrganisation computedOrg = (AmpOrganisation) ii.next();
+//					if (computedOrg.getAmpOrgId().equals(orgId))
+//						return true;
+//				}
+//
+//			}
+//		}
 
 		return false;
 	}

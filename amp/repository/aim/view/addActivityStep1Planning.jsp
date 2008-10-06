@@ -32,11 +32,11 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
-																	<html:select name="aimEditActivityForm" property="lineMinRank" styleClass="inp-text">
+																	<html:select name="aimEditActivityForm" property="planning.lineMinRank" styleClass="inp-text">
 																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
-																		<c:forEach var="lmr" items="${aimEditActivityForm.actRankCollection}" >
+																		<c:forEach var="lmr" items="${planning.actRankCollection}" >
 																			<c:choose>
-																				<c:when test="${lmr == aimEditActivityForm.lineMinRank}">
+																				<c:when test="${lmr == planning.lineMinRank}">
 																					<option value='<c:out value="${lmr}" />' selected><c:out value="${lmr}"/></option>
 																				</c:when>
 																				<c:otherwise>
@@ -64,11 +64,11 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
-																	<html:select property="planMinRank" styleClass="inp-text">
+																	<html:select property="planning.planMinRank" styleClass="inp-text">
 																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
-																		<c:forEach var="mpr" items="${aimEditActivityForm.actRankCollection}" >
+																		<c:forEach var="mpr" items="${aimEditActivityForm.planning.actRankCollection}" >
 																			<c:choose>
-																				<c:when test="${mpr == aimEditActivityForm.planMinRank}">
+																				<c:when test="${mpr == aimEditActivityForm.planning.planMinRank}">
 																					<option value='<c:out value="${mpr}" />' selected><c:out value="${mpr}"/></option>
 																				</c:when>
 																				<c:otherwise>
@@ -130,15 +130,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">
-																<html:text name="aimEditActivityForm" property="originalAppDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.originalAppDate" size="10"
 																styleId="originalAppDate" styleClass="inp-text" readonly="true" />
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.originalAppDate, 'clear1')">
+																<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.planning.originalAppDate, 'clear1')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date1" href='javascript:pickDateWithClear("date1",document.aimEditActivityForm.originalAppDate,"clear1")'>
+																<a id="date1" href='javascript:pickDateWithClear("date1",document.planning.aimEditActivityForm.originalAppDate,"clear1")'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -159,15 +159,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
-																<html:text name="aimEditActivityForm" property="revisedAppDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.revisedAppDate" size="10"
 																styleId="revisedAppDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear2" href="javascript:clearDate(document.aimEditActivityForm.revisedAppDate, 'clear2')">
+																<a id="clear2" href="javascript:clearDate(document.aimEditActivityForm.planning.revisedAppDate, 'clear2')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date2" href='javascript:pickDateWithClear("date2",document.aimEditActivityForm.revisedAppDate,"clear2")'>
+																<a id="date2" href='javascript:pickDateWithClear("date2",document.aimEditActivityForm.planning.revisedAppDate,"clear2")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -195,15 +195,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">
-																<html:text name="aimEditActivityForm" property="originalStartDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.originalStartDate" size="10"
 																styleId="originalStartDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.originalStartDate, 'clear3')">
+																<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.planning.originalStartDate, 'clear3')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date3" href='javascript:pickDateWithClear("date3",document.aimEditActivityForm.originalStartDate, "clear3")'>
+																<a id="date3" href='javascript:pickDateWithClear("date3",document.aimEditActivityForm.planning.originalStartDate, "clear3")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -225,15 +225,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date)</digi:trn>">
-																<html:text name="aimEditActivityForm" property="revisedStartDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.revisedStartDate" size="10"
 																styleId="revisedStartDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.revisedStartDate, 'clear4')">
+																<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.planning.revisedStartDate, 'clear4')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.revisedStartDate,"clear4")'>
+																<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.planning.revisedStartDate,"clear4")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -261,15 +261,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ContractingDateofProject">Final Date (dd/mm/yy) for Contracting</digi:trn>">
-																<html:text name="aimEditActivityForm" property="contractingDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.contractingDate" size="10"
 																styleId="contractingDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear5" href="javascript:clearDate(document.aimEditActivityForm.contractingDate, 'clear5')">
+																<a id="clear5" href="javascript:clearDate(document.aimEditActivityForm.planning.contractingDate, 'clear5')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date5" href='javascript:pickDateWithClear("date5",document.aimEditActivityForm.contractingDate,"clear5")'>
+																<a id="date5" href='javascript:pickDateWithClear("date5",document.aimEditActivityForm.planning.contractingDate,"clear5")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -291,15 +291,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">
-																<html:text name="aimEditActivityForm" property="disbursementsDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.disbursementsDate" size="10"
 																styleId="disbursementsDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear6" href="javascript:clearDate(document.aimEditActivityForm.disbursementsDate, 'clear6')">
+																<a id="clear6" href="javascript:clearDate(document.aimEditActivityForm.planning.disbursementsDate, 'clear6')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.disbursementsDate,"clear6")'>
+																<a id="date6" href='javascript:pickDateWithClear("date6",document.aimEditActivityForm.planning.disbursementsDate,"clear6")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -324,15 +324,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed</digi:trn>">
-																<html:text name="aimEditActivityForm" property="proposedCompDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.proposedCompDate" size="10"
 																styleId="proposedCompDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear7" href="javascript:clearDate(document.aimEditActivityForm.proposedCompDate, 'clear7')">
+																<a id="clear7" href="javascript:clearDate(document.aimEditActivityForm.planning.proposedCompDate, 'clear7')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date7" href='javascript:pickDateWithClear("date7",document.aimEditActivityForm.proposedCompDate,"clear7")'>
+																<a id="date7" href='javascript:pickDateWithClear("date7",document.aimEditActivityForm.planning.proposedCompDate,"clear7")'>
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -354,15 +354,15 @@
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
-																<html:text name="aimEditActivityForm" property="currentCompDate" size="10"
+																<html:text name="aimEditActivityForm" property="planning.currentCompDate" size="10"
 																styleId="currentCompDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a id="clear8" href="javascript:clearDate(document.aimEditActivityForm.currentCompDate, 'clear8')">
+																<a id="clear8" href="javascript:clearDate(document.aimEditActivityForm.planning.currentCompDate, 'clear8')">
 																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																</a>
-																<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.currentCompDate,"clear8")'>
+																<a id="date8" href='javascript:pickDateWithClear("date8",document.aimEditActivityForm.planning.currentCompDate,"clear8")'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -394,22 +394,25 @@
 														<digi:trn key="aim:addActivityStatusFirstLine">Please select a status from below</digi:trn>
 													</c:set>
 													<c:if test="${contentDisabled=='true'}">
-	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
+	                                                	<category:showoptions   firstLine="${translation}" name="planning" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
 	                                                </c:if>
 	                                                <c:if test="${contentDisabled=='false'}">
-	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
+	                                                	<category:showoptions   firstLine="${translation}" name="planning" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
 	                                                </c:if>
                                                     <br/><br/>
 													<digi:trn key="aim:reasonsToChangeStatus">If there have been some changes in the status, explain below the reasons</digi:trn> :
 													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
                                                     <br/>
-													<html:textarea property="statusReason" cols="50" rows="3" styleClass="inp-text"   disabled="${contentDisabled}"/>
+													<html:textarea property="planning.statusReason" cols="50" rows="3" styleClass="inp-text"   disabled="${contentDisabled}"/>
 													</a>
 												</td>
 											</tr>
 											
 										</table>
 									</td></tr>
+
+
+
 
 <script language="JavaScript">
 	clearDisplay(document.aimEditActivityForm.originalAppDate, "clear1");

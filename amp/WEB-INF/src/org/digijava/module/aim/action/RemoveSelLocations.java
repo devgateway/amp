@@ -23,7 +23,7 @@ public class RemoveSelLocations extends Action {
 				EditActivityForm eaForm = (EditActivityForm) form;
 
 				Long selLocs[] = eaForm.getSelLocs();
-				Collection prevSelLocs = eaForm.getSelectedLocs(); 
+				Collection prevSelLocs = eaForm.getLocation().getSelectedLocs(); 
 				Collection locs = new ArrayList<Location>();
 
 				Iterator itr = prevSelLocs.iterator();
@@ -43,7 +43,7 @@ public class RemoveSelLocations extends Action {
 						  
 				}
 				
-				eaForm.setSelectedLocs(locs);
+				eaForm.getLocation().setSelectedLocs(locs);
 				eaForm.setSelLocs(null);
 				eaForm.setCols(null);
 				eaForm.setNumResults(0);

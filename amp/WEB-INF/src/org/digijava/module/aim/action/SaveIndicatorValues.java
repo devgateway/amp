@@ -25,61 +25,54 @@ public class SaveIndicatorValues extends Action
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		if (eaForm.getIndicatorsME() != null &&
-				eaForm.getIndicatorsME().size() > 0) {
+		if (eaForm.getIndicator().getIndicatorsME() != null &&
+				eaForm.getIndicator().getIndicatorsME().size() > 0) {
 			ActivityIndicator actInd = new ActivityIndicator();
-			actInd.setIndicatorId(eaForm.getIndicatorId());
-			Iterator itr = eaForm.getIndicatorsME().iterator();
+			actInd.setIndicatorId(eaForm.getIndicator().getIndicatorId());
+			Iterator itr = eaForm.getIndicator().getIndicatorsME().iterator();
 			while (itr.hasNext()) {
 				ActivityIndicator temp = (ActivityIndicator) itr.next();
 				if (temp.equals(actInd)) {
 					
 				
-						temp.setBaseVal(eaForm.getBaseVal());
-						temp.setBaseValDate(eaForm.getBaseValDate());
-						temp.setBaseValComments(eaForm.getBaseValComments());
-						temp.setTargetVal(eaForm.getTargetVal());
-						temp.setRevisedTargetVal(eaForm.getTargetVal());
-						temp.setTargetValDate(eaForm.getTargetValDate());
-						temp.setTargetValComments(eaForm.getTargetValComments());
-						if (eaForm.getRevTargetValDate() != null) {
-							//TODO INDIC : This two line temporary commented because of AMP-2562 and AMP-2900.
-							//temp.setTargetVal(eaForm.getRevTargetVal());
-                            //temp.setTargetValDate(eaForm.getRevTargetValDate());
-							temp.setRevisedTargetVal(eaForm.getRevTargetVal());
-							temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());
-							temp.setRevisedTargetValComments(eaForm.getRevTargetValComments());
+						temp.setBaseVal(eaForm.getIndicator().getBaseVal());
+						temp.setBaseValDate(eaForm.getIndicator().getBaseValDate());
+						temp.setBaseValComments(eaForm.getIndicator().getBaseValComments());
+						temp.setTargetVal(eaForm.getIndicator().getTargetVal());
+						temp.setRevisedTargetVal(eaForm.getIndicator().getTargetVal());
+						temp.setTargetValDate(eaForm.getIndicator().getTargetValDate());
+						temp.setTargetValComments(eaForm.getIndicator().getTargetValComments());
+						if (eaForm.getIndicator().getRevTargetValDate() != null) {
+							temp.setRevisedTargetVal(eaForm.getIndicator().getRevTargetVal());
+							temp.setRevisedTargetValDate(eaForm.getIndicator().getRevTargetValDate());
+							temp.setRevisedTargetValComments(eaForm.getIndicator().getRevTargetValComments());
 						} else {
-                                eaForm.setRevTargetVal(eaForm.getTargetVal());
-							temp.setRevisedTargetVal(eaForm.getTargetVal());
-							temp.setRevisedTargetValDate(eaForm.getTargetValDate());
-							temp.setRevisedTargetValComments(eaForm.getTargetValComments());
+                                eaForm.getIndicator().setRevTargetVal(eaForm.getIndicator().getTargetVal());
+							temp.setRevisedTargetVal(eaForm.getIndicator().getTargetVal());
+							temp.setRevisedTargetValDate(eaForm.getIndicator().getTargetValDate());
+							temp.setRevisedTargetValComments(eaForm.getIndicator().getTargetValComments());
 						}
 
-						if (eaForm.getCurrentValDate() != null) {
-							logger.debug("Setting currValComments :" + eaForm.getCurrentValComments());
-							if( eaForm.getCurrentVal() != null) {
-								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
+						if (eaForm.getIndicator().getCurrentValDate() != null) {
+							logger.debug("Setting currValComments :" + eaForm.getIndicator().getCurrentValComments());
+							if( eaForm.getIndicator().getCurrentVal() != null) {
+								temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
 							}
-							//temp.setCurrentVal(eaForm.getCurrentVal());
-                         if(eaForm.getCurrentValDate() != null){
-							temp.setCurrentValDate(eaForm.getCurrValDate());
+					     if(eaForm.getIndicator().getCurrentValDate() != null){
+							temp.setCurrentValDate(eaForm.getIndicator().getCurrValDate());
                           }
-							//temp.setActualValDate(eaForm.getCurrentValDate());
-							temp.setCurrentValComments(eaForm.getCurrentValComments());
-							temp.setActualValComments(eaForm.getCurrentValComments());
+							temp.setCurrentValComments(eaForm.getIndicator().getCurrentValComments());
+							temp.setActualValComments(eaForm.getIndicator().getCurrentValComments());
 							
 						}
-						if(eaForm.getCurrentVal() != null){
-						temp.setActualVal(Float.parseFloat(eaForm.getCurrentVal()));
+						if(eaForm.getIndicator().getCurrentVal() != null){
+						temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
 						
 						}else{
 							temp.setActualVal(null);
 						}
-						temp.setRisk(eaForm.getIndicatorRisk());
-						//////System.out.println(eaForm.getLogframeCategory());
-						//temp.setLogframeValueId(eaForm.getLogframeCategory());
-						AmpCategoryValue acv=CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getLogframeCategory());
+						temp.setRisk(eaForm.getIndicator().getIndicatorRisk());
+						AmpCategoryValue acv=CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getIndicator().getLogframeCategory());
 						temp.setIndicatorsCategory(acv);
 						break;
 					

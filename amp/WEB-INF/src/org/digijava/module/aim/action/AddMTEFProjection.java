@@ -34,32 +34,24 @@ public class AddMTEFProjection extends Action{
 		HttpSession session = request.getSession();
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
-		event = formBean.getEvent();
+		event = formBean.getFunding().getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
-		formBean.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
-		
-		/*String currCode = Constants.DEFAULT_CURRENCY;
-		if (teamMember.getAppSettings() != null) {
-			ApplicationSettings appSettings = teamMember.getAppSettings();
-			if (appSettings.getCurrencyId() != null) {
-				currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
-			}
-		}*/		
+		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		long index = formBean.getTransIndexId();
 		String subEvent = event.substring(0,3);
 		
 		
 		MTEFProjection mp = null;
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
-			if (formBean.getFundingMTEFProjections() == null || 
-					formBean.getFundingMTEFProjections().size() == 0) {
+			if (formBean.getFunding().getFundingMTEFProjections() == null || 
+					formBean.getFunding().getFundingMTEFProjections().size() == 0) {
 				boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( null );
 				mtefProjections = new ArrayList<MTEFProjection>();
 				mp = AddFunding.getMTEFProjection(request.getSession(), 0, afterFiscalYearStart, null);
 				mtefProjections.add(mp);		
 			} else {
-				MTEFProjection firstMtef		= formBean.getFundingMTEFProjections().get(0);
+				MTEFProjection firstMtef		= formBean.getFunding().getFundingMTEFProjections().get(0);
 				boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart( firstMtef.getProjectionDate() );
 				String [] dateSplit				= firstMtef.getProjectionDate().split("/");
 				Integer year;
@@ -71,7 +63,7 @@ public class AddMTEFProjection extends Action{
 					logger.error(E.getMessage());
 				}
 				
-				mtefProjections 			= formBean.getFundingMTEFProjections();
+				mtefProjections 			= formBean.getFunding().getFundingMTEFProjections();
 				if (subEvent.equals("del")) {
 					Iterator<MTEFProjection> iter	= mtefProjections.iterator();
 					int offset;
@@ -96,23 +88,11 @@ public class AddMTEFProjection extends Action{
 					mtefProjections.add(mp);							
 				}
 			}
-			formBean.setFundingMTEFProjections(mtefProjections);			
+			formBean.getFunding().setFundingMTEFProjections(mtefProjections);			
 		}
-		formBean.setEvent(null);
-		formBean.setDupFunding(true);
-		formBean.setFirstSubmit(false);
-
+		formBean.getFunding().setEvent(null);
+		formBean.getFunding().setDupFunding(true);
+		formBean.getFunding().setFirstSubmit(false);
 		return mapping.findForward("forward");
-		
 	}
-	
-	/*private MTEFProjection getMTEFProjection(String currCode) {
-		MTEFProjection mp = new MTEFProjection();
-		mp.setCurrencyCode(currCode);
-		
-		mp.setIndex(mtefProjections.size());
-		mp.setIndexId(System.currentTimeMillis());
-		return mp;
-	}*/
-	
 }

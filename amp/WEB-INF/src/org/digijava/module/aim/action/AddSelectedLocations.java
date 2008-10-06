@@ -23,8 +23,8 @@ public class AddSelectedLocations extends Action {
 		
 		eaForm = (EditActivityForm) form;
 		
-		if (eaForm.getSelectedLocs() == null) {
-			eaForm.setSelectedLocs(new TreeSet());
+		if (eaForm.getLocation().getSelectedLocs() == null) {
+			eaForm.getLocation().setSelectedLocs(new TreeSet());
 		}
 		
 		Long selsearchedLoc[] = eaForm.getSearchedLocs();
@@ -39,7 +39,7 @@ public class AddSelectedLocations extends Action {
 				if (loc.getLocId().equals(selsearchedLoc[i])) {
 					if(!checkDuplicate(loc)) {
 							logger.info("adding now...");
-							eaForm.getSelectedLocs().add(loc);
+							eaForm.getLocation().getSelectedLocs().add(loc);
 							count ++;
 							break;
 						}
@@ -58,7 +58,7 @@ public class AddSelectedLocations extends Action {
 	
 	public boolean checkDuplicate(Location loc)
 	{
-		Iterator itr=eaForm.getSelectedLocs().iterator();
+		Iterator itr=eaForm.getLocation().getSelectedLocs().iterator();
 		Location location;
 		boolean flag=false;
 		while(itr.hasNext()){

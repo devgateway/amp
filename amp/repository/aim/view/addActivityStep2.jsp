@@ -545,41 +545,41 @@ function remProgram(programType) {
   ${aimEditActivityForm.stepNumberOnPage}
   </c:set>
       
-  <c:if test="${empty aimEditActivityForm.selectedLocs}">
+  <c:if test="${empty aimEditActivityForm.location.selectedLocs}">
     <input type="hidden" name="sizeLocs" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.selectedLocs}">
-    <input type="hidden" name="sizeLocs" value="${fn:length(aimEditActivityForm.selectedLocs)}">
+  <c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
+    <input type="hidden" name="sizeLocs" value="${fn:length(aimEditActivityForm.location.selectedLocs)}">
   </c:if>
 
 
-  <c:if test="${empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+  <c:if test="${empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
     <input type="hidden" name="sizeNPOPrograms" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
-    <input type="hidden" name="sizeNPOPrograms" value="${fn:length(aimEditActivityForm.nationalPlanObjectivePrograms)}">
+  <c:if test="${!empty aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
+    <input type="hidden" name="sizeNPOPrograms" value="${fn:length(aimEditActivityForm.programs.nationalPlanObjectivePrograms)}">
   </c:if>
 
-   <c:if test="${empty aimEditActivityForm.primaryPrograms}">
+   <c:if test="${empty aimEditActivityForm.programs.primaryPrograms}">
     <input type="hidden" name="sizePPrograms" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
-    <input type="hidden" name="sizePPrograms" value="${fn:length(aimEditActivityForm.primaryPrograms)}">
+  <c:if test="${!empty aimEditActivityForm.programs.primaryPrograms}">
+    <input type="hidden" name="sizePPrograms" value="${fn:length(aimEditActivityForm.programs.primaryPrograms)}">
   </c:if>
 
-   <c:if test="${empty aimEditActivityForm.secondaryPrograms}">
+   <c:if test="${empty aimEditActivityForm.programs.secondaryPrograms}">
     <input type="hidden" name="sizeSPrograms" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
-    <input type="hidden" name="sizeSPrograms" value="${fn:length(aimEditActivityForm.secondaryPrograms)}">
+  <c:if test="${!empty aimEditActivityForm.programs.secondaryPrograms}">
+    <input type="hidden" name="sizeSPrograms" value="${fn:length(aimEditActivityForm.programs.secondaryPrograms)}">
   </c:if>
 
 
-  <c:if test="${empty aimEditActivityForm.classificationConfigs}">
+  <c:if test="${empty aimEditActivityForm.sectors.classificationConfigs}">
     <input type="hidden" name="sizeSectorConfigs" value="0">
   </c:if>
-  <c:if test="${!empty aimEditActivityForm.activitySectors}">
-     <input type="hidden" name="sizeSectorConfigs" value="${fn:length(aimEditActivityForm.classificationConfigs)}">
+  <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
+     <input type="hidden" name="sizeSectorConfigs" value="${fn:length(aimEditActivityForm.sectors.classificationConfigs)}">
   </c:if>
 
 
@@ -738,7 +738,7 @@ function remProgram(programType) {
                               <digi:trn key="aim:editActivity">
                               Edit Activity
                               </digi:trn>:
-                              ${aimEditActivityForm.title}
+                              ${aimEditActivityForm.identification.title}
                             </c:if>
                           </span>
                         </td>

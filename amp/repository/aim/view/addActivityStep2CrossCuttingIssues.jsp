@@ -16,7 +16,7 @@
 <script language="JavaScript" type="text/javascript">
 function edit(key) {
 	document.aimEditActivityForm.step.value = "2.2";
-        document.aimEditActivityForm.submit();
+    document.aimEditActivityForm.submit();
 	document.aimEditActivityForm.action = "/editor/showEditText.do?id=" + key + "&referrer=/aim/addActivity.do?edit=true";
 	document.aimEditActivityForm.editKey.value = key;
 	document.aimEditActivityForm.target = "_self";
@@ -70,9 +70,9 @@ function edit(key) {
                                                     <td>
                                                       <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
-														<c:if test="${!empty aimEditActivityForm.equalOpportunity}" >
+														<c:if test="${!empty aimEditActivityForm.crossIssues.equalOpportunity}" >
                                                                                                                             <bean:define id="eqOppKey">
-																	   <c:out value="${aimEditActivityForm.equalOpportunity}"/>
+																	   <c:out value="${aimEditActivityForm.crossIssues.equalOpportunity}"/>
 																</bean:define>
                                                         <tr>
 															<td>
@@ -93,9 +93,9 @@ function edit(key) {
 														</c:if>
 														</field:display>
 														<field:display name="Environment" feature="Cross Cutting Issues">
-														<c:if test="${!empty aimEditActivityForm.environment}" >
+														<c:if test="${!empty aimEditActivityForm.crossIssues.environment}" >
                                                         <tr>                                                                    <bean:define id="envKey">
-																	<c:out value="${aimEditActivityForm.environment}"/>
+																	<c:out value="${aimEditActivityForm.crossIssues.environment}"/>
 																</bean:define>
 															<td>
 															 <digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
@@ -116,9 +116,9 @@ function edit(key) {
 														</field:display>
 														
 														<field:display name="Minorities" feature="Cross Cutting Issues">
-														<c:if test="${!empty aimEditActivityForm.minorities}" >
+														<c:if test="${!empty aimEditActivityForm.crossIssues.minorities}" >
                                                                                                                      <bean:define id="minKey">
-																	<c:out value="${aimEditActivityForm.minorities}"/>
+																	<c:out value="${aimEditActivityForm.crossIssues.minorities}"/>
 																</bean:define>
 																
                                                         <tr>

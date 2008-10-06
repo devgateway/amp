@@ -23,8 +23,8 @@ public class AddSelectedSectorsForInd extends Action {
 
 		eaForm = (EditActivityForm) form;
 
-		if (eaForm.getActivitySectors() == null) {
-			eaForm.setActivitySectors(new ArrayList());
+		if (eaForm.getSectors().getActivitySectors() == null) {
+			eaForm.getSectors().setActivitySectors(new ArrayList());
 		}
 
 		Long selsearchedSector[] = eaForm.getSelSectors();
@@ -40,16 +40,16 @@ public class AddSelectedSectorsForInd extends Action {
 				if (sctr.getSectorId().equals(selsearchedSector[i])) {
 					if(!checkDuplicate(sctr)) {
 							logger.info("adding now...");
-                            if(eaForm.getActivitySectors()==null){
+                            if(eaForm.getSectors().getActivitySectors()==null){
                                 if(selsearchedSector.length==1){
                                     sctr.setSectorPercentage(new Float(100));
                                 }
-                            }else if(eaForm.getActivitySectors().size()==0){
+                            }else if(eaForm.getSectors().getActivitySectors().size()==0){
                                 if(selsearchedSector.length==1){
                                     sctr.setSectorPercentage(new Float(100));
                                 }
-                            }else if(eaForm.getActivitySectors().size()==1){
-                                Iterator sectItr=eaForm.getActivitySectors().iterator();
+                            }else if(eaForm.getSectors().getActivitySectors().size()==1){
+                                Iterator sectItr=eaForm.getSectors().getActivitySectors().iterator();
                                 while(sectItr.hasNext()){
                                     ActivitySector oldSect=(ActivitySector)sectItr.next();
 //                                    if(oldSect.getSectorPercentage().equals("100")){
@@ -58,7 +58,7 @@ public class AddSelectedSectorsForInd extends Action {
                                     break;
                                 }
                             }
-							eaForm.getActivitySectors().add(sctr);
+							eaForm.getSectors().getActivitySectors().add(sctr);
 							count ++;
 							break;
 						}
@@ -77,7 +77,7 @@ public class AddSelectedSectorsForInd extends Action {
 
 	public boolean checkDuplicate(ActivitySector dup)
 	{
-		Iterator itr=eaForm.getActivitySectors().iterator();
+		Iterator itr=eaForm.getSectors().getActivitySectors().iterator();
 		ActivitySector sector;
 		boolean flag=false;
 		while(itr.hasNext()){

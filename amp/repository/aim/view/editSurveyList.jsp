@@ -338,7 +338,7 @@
                                         <TD width="200"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
 									</TR>
 
-									<nested:empty name="aimEditActivityForm" property="survey">
+									<nested:empty name="aimEditActivityForm" property="survey.survey">
 
 			                    		<TR valign="top">
 
@@ -348,9 +348,9 @@
 
 			                    	</nested:empty>
 
-			                    	<nested:notEmpty name="aimEditActivityForm" property="survey">
+			                    	<nested:notEmpty name="aimEditActivityForm" property="survey.survey">
 
-										<nested:iterate name="aimEditActivityForm" property="survey" id="surveyFund" indexId="cntr"
+										<nested:iterate name="aimEditActivityForm" property="survey.survey" id="surveyFund" indexId="cntr"
 
 			  	                   					    type="org.digijava.module.aim.helper.SurveyFunding">
 
@@ -378,39 +378,6 @@
 
 						               			<TD width="210"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
                                                 <TD width="200"><nested:write name="surveyFund" property="deliveryDonorName" /></TD>
-
-											<%--
-
-					    	           			<TD width="212">
-
-					    	           				<nested:write name="surveyFund" property="fundingId" />
-
-						               			</TD>
-
-					                  		    <TD width="204"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
-
-							                    <TD align="left" width="114"><nested:write name="surveyFund" property="termAssist"/></TD>
-
-							                    <TD align="left" width="143">
-
-							                    	<nested:select property="surveyId" onchange='<%="move(" + cntr + ")" %>'>
-
-														<html:option value="-1">-- Select Year --</html:option>
-
-														<nested:notEmpty name="surveyFund" property="survey">
-
-															<nested:optionsCollection name="surveyFund" property="survey"
-
-																					value="surveyId" label="year" />
-
-														</nested:notEmpty>
-
-													</nested:select>
-
-							                    </TD>
-
-							                --%>
-
 											</TR>
 
 										</nested:iterate>
@@ -450,15 +417,9 @@
 						</td>
 
 						<td width="25%" vAlign="top" align="right">
-  <%-- edit activity form menu
-  <c:if test="${aimEditActivityForm.donorFlag == false}">
-    <jsp:include page="editActivityMenu.jsp" flush="true" />
-  </c:if>
-  <c:if test="${aimEditActivityForm.donorFlag == true}">
-    <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-  </c:if>--%>
-  <jsp:include page="editActivityMenu.jsp" flush="true" />
-  <!-- end of activity form menu -->
+							 
+							  <jsp:include page="editActivityMenu.jsp" flush="true" />
+  	
 
 						</td></tr>
 

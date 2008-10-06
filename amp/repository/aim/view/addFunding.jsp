@@ -79,14 +79,15 @@
 		if (flag == false) return false;
 
 		if (type == 0) {
-			document.aimEditActivityForm.event.value = "addCommitments";
+			
+			document.getElementsByName("funding.event")[0].value = "addCommitments";
 		} else if (type == 1) {
-			document.aimEditActivityForm.event.value = "addDisbursements";
+			document.getElementsByName("funding.event")[0].value = "addDisbursements";
 		} else if (type == 2) {
-			document.aimEditActivityForm.event.value = "addExpenditures";
+			document.getElementsByName("funding.event")[0].value = "addExpenditures";
 		}
                 else if (type == 4) {
-			document.aimEditActivityForm.event.value = "addDisbursementOrders";
+			document.getElementsByName("funding.event")[0].value = "addDisbursementOrders";
 		}
                 document.aimEditActivityForm.target = "_self";
 	 	document.aimEditActivityForm.action="/addFundingDetail.do";
@@ -116,7 +117,7 @@
 	//	var flag = validateFundingExchangeRate();
 	//	if (flag == false) return false;
 
-	document.aimEditActivityForm.event.value = "addProjections";
+	document.getElementsByName("funding.event")[0].value = "addProjections";
  	document.aimEditActivityForm.action="/addMTEFProjection.do";
  	document.aimEditActivityForm.submit();
 	}
@@ -130,14 +131,14 @@
 		var flag = confirm("${translation}");
 		if(flag != false) {
 			if (type == 0) {
-				document.aimEditActivityForm.event.value = "delCommitments";
+				document.getElementsByName("funding.event")[0].value = "delCommitments";
 			} else if (type == 1) {
-				document.aimEditActivityForm.event.value = "delDisbursements";
+				document.getElementsByName("funding.event")[0].value = "delDisbursements";
 			} else if (type == 2) {
-				document.aimEditActivityForm.event.value = "delExpenditures";
+				document.getElementsByName("funding.event")[0].value = "delExpenditures";
 			}
                          else if (type == 4) {
-				document.aimEditActivityForm.event.value = "delDisbursementOrders";
+				document.getElementsByName("funding.event")[0].value = "delDisbursementOrders";
 			}
 			document.aimEditActivityForm.transIndexId.value=index;
 		 	document.aimEditActivityForm.action="/addFundingDetail.do";
@@ -149,7 +150,7 @@
 	{
 		var flag = confirm("<digi:trn key="aim:addFunding:warn:removeproj">Are you sure you want to remove the selected projection ?</digi:trn>");
 		if(flag != false) {
-			document.aimEditActivityForm.event.value = "delProjection";
+			document.getElementsByName("funding.event")[0].value = "delProjection";
 			document.aimEditActivityForm.transIndexId.value=index;
 		 	document.aimEditActivityForm.action="/addMTEFProjection.do";
 			document.aimEditActivityForm.submit();
@@ -159,7 +160,7 @@
 	function load()
 	{
 		var Warn="<digi:trn key="aim:addFunding:warn:dup">This information is a duplicate of existing funding information. Do you wish to proceed?</digi:trn>";
-		if(document.aimEditActivityForm.dupFunding.value == "false")
+		if(document.getElementById("dupFunding").value == "false")
 		{
 				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
 				document.aimEditActivityForm.action = "<%=addAct%>";
@@ -167,9 +168,9 @@
 				document.aimEditActivityForm.submit();
 				window.close();
 		}
-		if(document.aimEditActivityForm.dupFunding.value == "true")
+		if(document.getElementById("dupFunding").value == "true")
 		{
-			if(document.aimEditActivityForm.firstSubmit.value == "true")
+			if(document.getElementsByName("funding.firstSubmit")[0].value == "true")
 			{
 				if(confirm(Warn))
 				{
@@ -206,18 +207,18 @@
 <digi:form action="/addFundingDetail.do" method="post">
 
 <input type="hidden" name="edit" value="true">
-<html:hidden name="aimEditActivityForm" property="dupFunding"/>
-<html:hidden property="event"/>
+<html:hidden styleId="dupFunding"  property="funding.dupFunding"/>
+<html:hidden styleId="event" property="funding.event"/>
 <html:hidden property="transIndexId"/>
-<html:hidden property="numComm"/>
-<html:hidden property="numDisb"/>
-<html:hidden property="numExp"/>
-<html:hidden property="numDisbOrder"/>
-<html:hidden property="numProjections"/>
+<html:hidden styleId="numComm" property="funding.numComm" />
+<html:hidden styleId="numDisb" property="funding.numDisb"/>
+<html:hidden styleId="numExp" property="funding.numExp"/>
+<html:hidden styleId="numDisbOrder" property="funding.numDisbOrder"/>
+<html:hidden styleId="numProjections" property="funding.numProjections"/>
 <html:hidden property="editAct"/>
-<html:hidden property="firstSubmit"/>
+<html:hidden property="funding.firstSubmit"/>
 
-<input type="hidden" name="isEditFunfing" value="true"/>
+<input type="hidden" name="funding.isEditFunfing" value="true"/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->
@@ -241,7 +242,7 @@
 			                	<b><digi:trn key="aim:organization">Organization</digi:trn></b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD width="50%">
-			                	<bean:write name="aimEditActivityForm" property="orgName"/>
+			                	<bean:write name="aimEditActivityForm" property="funding.orgName"/>
 								</td>
 							</tr>
 							<tr>
@@ -256,7 +257,7 @@
 										<digi:trn key="aim:addActivityTypeOfAssistenceFirstLine">Please select from below</digi:trn>
 									</c:set>
 
-										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 
 								</td>
 							</tr>
@@ -274,7 +275,7 @@
 										This item may be useful when one project has two or more different financial instruments.
 										If the project has a unique financial operation, the ID can be the same as the project ID
 										</digi:trn>">
-			   	             	<html:text property="orgFundingId" size="10"/>  </a>
+			   	             	<html:text  styleId="orgFundingId" property="funding.orgFundingId" size="10"/>  </a>
 
 								</td>
 							</tr>
@@ -285,7 +286,7 @@
 									<b><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></b></a>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="modality"
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="funding.modality"
 										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 
 								</td>
@@ -350,9 +351,9 @@
 				</tr>
 
 
-				<c:if test="${ !empty aimEditActivityForm.fundingMTEFProjections}">
+				<c:if test="${ !empty aimEditActivityForm.funding.fundingMTEFProjections}">
 				<c:set var="indexMTEF" value="-1"/>
-				<c:forEach var="mtefProjection" items="${aimEditActivityForm.fundingMTEFProjections}">
+				<c:forEach var="mtefProjection" items="${aimEditActivityForm.funding.fundingMTEFProjections}">
 
 				 	<tr>
 						<field:display name="Projection Name" feature="MTEF Projections">
@@ -361,7 +362,7 @@
 
 
 						<html:select indexed="true" name="mtefProjection" property="projected">
-							<logic:iterate name="aimEditActivityForm" property="projections" id="projection" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+							<logic:iterate name="aimEditActivityForm" property="funding.projections" id="projection" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
 							<html:option value="${projection.id}" >
 								<digi:trn key="<%= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
 									<bean:write name="projection" property="value"/>
@@ -379,7 +380,7 @@
 						<field:display name="Projection Currency Code" feature="MTEF Projections">
 							<td valign="bottom">
 							<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text">
-								<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
+								<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 							</html:select>
 							</td>
@@ -391,17 +392,7 @@
 								<td>
 								<html:hidden name="mtefProjection" indexed="true" property="projectionDate"/>
 								<html:text name="mtefProjection" indexed="true" property="projectionDateLabel" readonly="true" size="10"/>
-								<%--
-								<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-								<html:text name="mtefProjection" indexed="true" property="projectionDate"
-								styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 								</td>
-								<td align="left" vAlign="center">&nbsp;
-									<a id="trans7Date<%=tempIndexStr%>" href='javascript:pickDateById("trans7Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-									</a>
-								--%>
-									</td>
 							</tr>
 							</table>
 						</td>
@@ -486,20 +477,21 @@
 								</field:display>
 							</tr>
 
-							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
+							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
 							<c:set var="index" value="-1"/>
-						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
+						 
+						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==0}">
 									 	<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
-												<c:if test="${aimEditActivityForm.statusId==1}">
+												<c:if test="${aimEditActivityForm.planning.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
                                                 </c:if>
 
-											<c:if test="${aimEditActivityForm.statusId!=1}">
+											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -511,7 +503,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
-													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -681,8 +673,8 @@
 								</td>
 								</field:display>
 							</tr>
-							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
-							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
+							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
+							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==4}">
 
 
@@ -705,7 +697,7 @@
                                             <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -852,20 +844,20 @@
 									</field:display>
 								</td>
 							</tr>
-							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
-							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
+							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
+							<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==1}">
 										<tr>
 											<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
-											<c:if test="${aimEditActivityForm.statusId==1}">
+											<c:if test="${aimEditActivityForm.planning.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.statusId!=1}">
+											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -882,7 +874,7 @@
 											<field:display name="Currency Disbursement" feature="Disbursement">
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -908,10 +900,10 @@
 
                                                                                         <feature:display module="Funding" name="Disbursement Orders">
   											<td valign="bottom" align="center">
-                                                                                        <c:if test="${aimEditActivityForm.disbursementOrders}">
+                                                                                        <c:if test="${aimEditActivityForm.funding.disbursementOrders}">
 												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
 													<html:option value="">&nbsp;</html:option>
-		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
+		   										    <c:forEach var="funding" items="${aimEditActivityForm.funding.fundingDetails}">
 														<c:if test="${funding.transactionType==4}">
 															<html:option value="${funding.disbOrderId}">${funding.disbOrderId}</html:option>
 														</c:if>
@@ -1035,20 +1027,20 @@
 								</td>
 								</field:display>
 							</tr>
-							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
-						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
+							<c:if test="${ !empty aimEditActivityForm.funding.fundingDetails}">
+						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.funding.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==2}">
 
 									 	<tr bgcolor="#ffffff">
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
-													<c:if test="${aimEditActivityForm.statusId==1}">
+													<c:if test="${aimEditActivityForm.planning.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 																<html:option value="0">Planned</html:option>
 															</html:select>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.statusId!=1}">
+											<c:if test="${aimEditActivityForm.planning.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 																<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 																<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -1061,7 +1053,7 @@
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-																<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
+																<html:optionsCollection name="aimEditActivityForm" property="funding.validcurrencies" value="currencyCode"
 																label="currencyName"/>
 															</html:select>
 														</td>
@@ -1140,7 +1132,7 @@
 					</td>
 					<td align="left" bgcolor=#ECF3FD>
 					<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">
-						<html:textarea property="fundingConditions" rows="3" cols="75" styleClass="inp-text"/>
+						<html:textarea property="funding.fundingConditions" rows="3" cols="75" styleClass="inp-text"/>
 					</a>
 					</td>
 				</tr>
@@ -1195,3 +1187,5 @@
 </table>
 </digi:form>
 </body>
+
+

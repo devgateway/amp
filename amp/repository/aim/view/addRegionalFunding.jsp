@@ -93,14 +93,14 @@
 							<c:set var="translationAdd">
 									<digi:trn key="aim:addActivityRegionalFundingAddFundingItem">Add</digi:trn>
 							</c:set>
-							<logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
+							<logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
 							<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
 										<span class="f-names">						
 										<digi:trn key="aim:commitments">Commitments</digi:trn>
 										 - (
 										 <digi:trn key="aim:totalActualAllocation">Total Actual Allocation</digi:trn> 
-											<%=eaForm.getTotalCommitments()%> 
+											<%=eaForm.getFunding().getTotalCommitments()%> 
 											<%=eaForm.getCurrCode()%>
 											)
 										</span>
@@ -179,7 +179,7 @@
 										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 
 										- (
 											<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn> 
-											<%=eaForm.getTotalDisbursements()%>
+											<%=eaForm.getFunding().getTotalDisbursements()%>
 											<%=eaForm.getCurrCode()%>)
 										</span>
 										<field:display name="Add Regional Funding Link" feature="Regional Funding">										
@@ -258,7 +258,7 @@
 											<span class="f-names"><digi:trn key="aim:expenditure">Expenditure</digi:trn> 
 											- 	(
 												<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn>
-												<%=eaForm.getTotalExpenditures()%>
+												<%=eaForm.getFunding().getTotalExpenditures()%>
 												<%=eaForm.getCurrCode()%>
 												)
 											</span>

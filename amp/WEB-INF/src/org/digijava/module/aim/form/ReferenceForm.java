@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.digijava.module.aim.helper.Activity;
 
 public class ReferenceForm extends MainProjectDetailsForm
 {

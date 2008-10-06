@@ -81,19 +81,19 @@
 									<tr>
 										<td valign="top"  width="50%" vAlign="center" align ="left" height="20">
 											<digi:trn key="aim:plogframe:logframePlanningMatrix">Logframe Planning Matrix for</digi:trn>
-											<logic:notEmpty name="aimEditActivityForm" property="title">
-												<bean:write name="aimEditActivityForm" property="title"/>
+											<logic:notEmpty name="aimEditActivityForm" property="identification.title">
+												<bean:write name="aimEditActivityForm" property="identification.title"/>
 											</logic:notEmpty>
 											,
-											<c:forEach items="${aimEditActivityForm.selectedLocs}" var="loc">
+											<c:forEach items="${aimEditActivityForm.location.selectedLocs}" var="loc">
 												<c:out value="${loc.country}" />
 											</c:forEach>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20">
 											<digi:trn key="aim:plogframe:programNameAndNumber">Program name and number</digi:trn>:
-											<logic:notEmpty name="aimEditActivityForm" property="acChapter">
-												<logic:notEqual name="aimEditActivityForm" property="acChapter" value="0">
-													<category:getoptionvalue categoryValueId="${aimEditActivityForm.acChapter}"/>,
+											<logic:notEmpty name="aimEditActivityForm" property="identification.acChapter">
+												<logic:notEqual name="aimEditActivityForm" property="identification.acChapter" value="0">
+													<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>,
 												</logic:notEqual>
 											</logic:notEmpty>
 											<logic:notEmpty name="aimEditActivityForm" property="ampId">
@@ -111,14 +111,14 @@
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:contractingPeriodExpires">Contracting period expires</digi:trn>:
-											<logic:notEmpty name="aimEditActivityForm" property="contractingDate">
-												<bean:write name="aimEditActivityForm" property="contractingDate"/>
+											<logic:notEmpty name="aimEditActivityForm" property="planning.contractingDate">
+												<bean:write name="aimEditActivityForm" property="planning.contractingDate"/>
 											</logic:notEmpty>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="left" height="20" style="border-top: 1px solid #CCC; border-top-style: dashed;">
 											<digi:trn key="aim:plogframe:disbursementPeriodExpires">Disbursement period expires</digi:trn>:
-											<logic:notEmpty name="aimEditActivityForm" property="disbursementsDate">
-												<bean:write name="aimEditActivityForm" property="disbursementsDate"/>
+											<logic:notEmpty name="aimEditActivityForm" property="planning.disbursementsDate">
+												<bean:write name="aimEditActivityForm" property="planning.disbursementsDate"/>
 											</logic:notEmpty>
 										</td>
 									</tr>	
@@ -159,7 +159,7 @@
 									</tr>
 									<tr>
 										<td valign="top"  width="33%"  bgcolor="#ffffff" style="border:1px solid #CCC;">
-										<digi:edit key="${aimEditActivityForm.objectives}"/>
+										<digi:edit key="${aimEditActivityForm.identification.objectives}"/>
 										</td>
 										<td valign="top"  width="33%" bgcolor="#ffffff" style="border:1px solid #CCC;">
 											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
@@ -208,7 +208,7 @@
 									</tr>
 									<tr>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-												<digi:edit key="${aimEditActivityForm.purpose}"/>
+												<digi:edit key="${aimEditActivityForm.identification.purpose}"/>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">&nbsp;
 											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
@@ -262,10 +262,9 @@
 											<digi:trn key="aim:assumptions">Assumptions</digi:trn>
 										</td>
 										
-									</tr>
 									<tr>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-												<digi:edit key="${aimEditActivityForm.results}"/>
+												<digi:edit key="${aimEditActivityForm.identification.results}"/>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
 											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">

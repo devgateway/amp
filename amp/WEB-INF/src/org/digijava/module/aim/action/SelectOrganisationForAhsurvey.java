@@ -15,7 +15,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.dbentity.AmpOrgType;
-
+@Deprecated
 public class SelectOrganisationForAhsurvey extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -26,10 +26,10 @@ public class SelectOrganisationForAhsurvey extends Action {
         eaForm.setOrgPopupReset(false);
 
         if (eaForm.getSvAction().equals("sel")) {
-            AmpAhsurvey ahs = eaForm.getAhsurvey();
+            AmpAhsurvey ahs = eaForm.getSurvey().getAhsurvey();
             AmpOrganisation selOrg = DbUtil.getOrganisation(eaForm.getSurveyOrgId());
             ahs.setPointOfDeliveryDonor(selOrg);
-            eaForm.setAhsurvey(ahs);
+            eaForm.getSurvey().setAhsurvey(ahs);
 
             eaForm.setSvAction(null);
             return mapping.findForward("finish");

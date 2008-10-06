@@ -261,9 +261,9 @@
 
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 
-										<b><c:out value="${aimEditActivityForm.fundingOrg}" /></b>&nbsp;>&nbsp;
+										<b><c:out value="${aimEditActivityForm.survey.fundingOrg}" /></b>&nbsp;>&nbsp;
 
-										<b><c:out value="${aimEditActivityForm.title}" /></b>
+										<b><c:out value="${aimEditActivityForm.identification.title}" /></b>
 
 										</td>
 
@@ -291,23 +291,23 @@
                                       <TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
                                         <tr>
                                           <td>
-                                          ${aimEditActivityForm.ahsurvey.pointOfDeliveryDonor.name}
+                                          ${aimEditActivityForm.survey.ahsurvey.pointOfDeliveryDonor.name}
                                           </td>
                                           <td align="right">
-										  	 <aim:addOrganizationButton useClient="false" form="${aimEditActivityForm.ahsurvey}"  property="pointOfDeliveryDonor" refreshParentDocument="true"><digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn></aim:addOrganizationButton>                                          </td>
+										  	 <aim:addOrganizationButton useClient="false" form="${aimEditActivityForm.survey.ahsurvey}"  property="pointOfDeliveryDonor" refreshParentDocument="true"><digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn></aim:addOrganizationButton>                                          </td>
                                         </tr>
                                       </TABLE>
                                      </td>
                                    </tr>
                                 </table>
 
-										<logic:notEmpty name="aimEditActivityForm" property="indicators">
+										<logic:notEmpty name="aimEditActivityForm" property="survey.indicators">
 
 											<table width="100%" cellPadding=3>
 
-												<bean:define id="start" name="aimEditActivityForm" property="startIndex" />
+												<bean:define id="start" name="aimEditActivityForm" property="survey.startIndex" />
 
-													<nested:iterate name="aimEditActivityForm" property="indicators"
+													<nested:iterate name="aimEditActivityForm" property="survey.indicators"
 
 																    offset="start" length="5">
 
@@ -495,7 +495,7 @@
 
 
 
-											<logic:notEmpty name="aimEditActivityForm" property="pageColl">
+											<logic:notEmpty name="aimEditActivityForm" property="survey.pageColl">
 
 												<tr>
 
@@ -503,7 +503,7 @@
 
 														<digi:trn key="aim:surveyPages">Pages :</digi:trn>
 
-														<logic:iterate name="aimEditActivityForm" property="pageColl" id="pages" type="java.lang.Integer">
+														<logic:iterate name="aimEditActivityForm" property="survey.pageColl" id="pages" type="java.lang.Integer">
 
 														<%--
 
@@ -513,13 +513,13 @@
 
 														--%>
 
-															<c:if test="${aimEditActivityForm.currPage == pages}">
+															<c:if test="${aimEditActivityForm.survey.currPage == pages}">
 
 																<font color="#FF0000"><%=pages%></font>
 
 															</c:if>
 
-															<c:if test="${aimEditActivityForm.currPage != pages}">
+															<c:if test="${aimEditActivityForm.survey.currPage!= pages}">
 
 																<c:set var="translation">
 
@@ -580,16 +580,7 @@
 						</td>
 
 						<td width="25%" vAlign="top" align="right">
-
-  <%-- edit activity form menu -->
-  <c:if test="${aimEditActivityForm.donorFlag == false}">
-    <jsp:include page="editActivityMenu.jsp" flush="true" />
-  </c:if>
-  <c:if test="${aimEditActivityForm.donorFlag == true}">
-    <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-  </c:if>
-  <!-- end of activity form menu --%>
-<jsp:include page="editActivityMenu.jsp" flush="true" />
+							<jsp:include page="editActivityMenu.jsp" flush="true" />
 						</td></tr>
 
 					</table>

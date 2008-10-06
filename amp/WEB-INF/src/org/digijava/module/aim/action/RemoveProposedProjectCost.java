@@ -32,7 +32,7 @@ public class RemoveProposedProjectCost extends Action{
         propProjCost.setCurrencyCode(null);
         propProjCost.setFunAmount(null);
         propProjCost.setFunDate(null);
-        eaForm.setProProjCost(propProjCost);
+        eaForm.getFunding().setProProjCost(propProjCost);
 
         return mapping.findForward("forward");
     }

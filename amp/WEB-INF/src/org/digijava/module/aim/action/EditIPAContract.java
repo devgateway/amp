@@ -110,8 +110,8 @@ public class EditIPAContract extends MultiAction {
         euaf.reset(mapping, request);
         Integer indexId = new Integer(request.getParameter("indexId")) - 1;
         IPAContract contract = (IPAContract) eaf.getContracts().get(indexId);
-        if(eaf.getFundingDetails()!=null)
-        for (Iterator it = eaf.getFundingDetails().iterator(); it.hasNext();) {
+        if(eaf.getFunding().getFundingDetails()!=null)
+        for (Iterator it = eaf.getFunding().getFundingDetails().iterator(); it.hasNext();) {
 			FundingDetail afd = (FundingDetail) it.next();
 			if(afd.getContract()!=null)
 				if(afd.getContract().getContractName().equals(contract.getContractName()))

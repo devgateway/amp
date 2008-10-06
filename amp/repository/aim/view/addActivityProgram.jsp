@@ -136,10 +136,10 @@ Default Program
 										<c:when test="${aimEditActivityForm.programType==1}">
 											<c:choose>
 												<c:when
-													test="${aimEditActivityForm.nationalSetting.defaultHierarchy!=null}">
+													test="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
-														value="${aimEditActivityForm.nationalSetting.defaultHierarchy.name}" />
-														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.nationalSetting.defaultHierarchy.ampThemeId}"/>
+														value="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.programs.nationalSetting.defaultHierarchy.ampThemeId}"/>
 														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
@@ -153,10 +153,10 @@ Default Program
 
 											<c:choose>
 												<c:when
-													test="${aimEditActivityForm.primarySetting.defaultHierarchy!=null}">
+													test="${aimEditActivityForm.programs.primarySetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
-														value="${aimEditActivityForm.primarySetting.defaultHierarchy.name}" />
-														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.primarySetting.defaultHierarchy.ampThemeId}"/>
+														value="${aimEditActivityForm.programs.primarySetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.programs.primarySetting.defaultHierarchy.ampThemeId}"/>
 														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
@@ -171,10 +171,10 @@ Default Program
 
 											<c:choose>
 												<c:when
-													test="${aimEditActivityForm.secondarySetting.defaultHierarchy!=null}">
+													test="${aimEditActivityForm.programs.secondarySetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
-														value="${aimEditActivityForm.secondarySetting.defaultHierarchy.name}" />
-														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.secondarySetting.defaultHierarchy.ampThemeId}"/>
+														value="${aimEditActivityForm.programs.secondarySetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.programs.secondarySetting.defaultHierarchy.ampThemeId}"/>
 														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>

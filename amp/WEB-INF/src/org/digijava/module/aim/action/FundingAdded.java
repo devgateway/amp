@@ -48,7 +48,7 @@ public class FundingAdded extends Action {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 
-		Iterator fundOrgsItr = eaForm.getFundingOrganizations().iterator();
+		Iterator fundOrgsItr = eaForm.getFunding().getFundingOrganizations().iterator();
 		FundingOrganization fundOrg = null;
 		boolean found = false;
 		int fundOrgOffset = 0;
@@ -64,7 +64,7 @@ public class FundingAdded extends Action {
 		int offset = -1;
 		Collection oldFundDetails = null;
 		if (found) {
-			if (eaForm.isEditFunding()) {
+			if (eaForm.getFunding().isEditFunding()) {
 				offset = eaForm.getOffset();
 				ArrayList fundList = new ArrayList(fundOrg.getFundings());
 				Funding fs = (Funding) fundList.get(offset);
@@ -74,9 +74,6 @@ public class FundingAdded extends Action {
 			}
 		}
 
-		//double totComm = FormatHelper.parseDouble(eaForm.getTotalCommitments());
-		//double totDisb =FormatHelper.parseDouble(eaForm.getTotalDisbursements());
-		//double totExp = FormatHelper.parseDouble(eaForm.getTotalExpenditures());
 
 		Funding newFund = new Funding();
 
@@ -86,15 +83,20 @@ public class FundingAdded extends Action {
 			newFund.setFundingId(System.currentTimeMillis());
 		}
 		//newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm.getAssistanceType()));
-		newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getAssistanceType()) );
-		newFund.setOrgFundingId(eaForm.getOrgFundingId());
-		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getModality()));
-		newFund.setConditions(eaForm.getFundingConditions());
-		newFund.setDonorObjective(eaForm.getDonorObjective());
+		newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getAssistanceType()) );
+		newFund.setOrgFundingId(eaForm.getFunding().getOrgFundingId());
+		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getModality()));
+		newFund.setConditions(eaForm.getFunding().getFundingConditions());
+		//newFund.setDonorObjective(eaForm.getFunding().getDonorObjective());
+		newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getAssistanceType()) );
+		newFund.setOrgFundingId(eaForm.getFunding().getOrgFundingId());
+		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getModality()));
+		newFund.setConditions(eaForm.getFunding().getFundingConditions());
+		
 		
 		Collection fundDetails = new ArrayList();
-		if (eaForm.getFundingDetails() != null) {
-			Iterator itr = eaForm.getFundingDetails().iterator();
+		if (eaForm.getFunding().getFundingDetails() != null) {
+			Iterator itr = eaForm.getFunding().getFundingDetails().iterator();
 			while (itr.hasNext()) {
 				FundingDetail fundDet = (FundingDetail) itr.next();
 				String formattedAmt = CurrencyWorker.formatAmount(
@@ -128,8 +130,8 @@ public class FundingAdded extends Action {
 		}
 		
 		Collection mtefProjections=new ArrayList();
-		if (eaForm.getFundingMTEFProjections() != null) {
-			Iterator itr = eaForm.getFundingMTEFProjections().iterator();
+		if (eaForm.getFunding().getFundingMTEFProjections() != null) {
+			Iterator itr = eaForm.getFunding().getFundingMTEFProjections().iterator();
 			while (itr.hasNext()) {
 				MTEFProjection mtef = (MTEFProjection) itr.next();
 			
@@ -169,18 +171,18 @@ public class FundingAdded extends Action {
 		else
 			fundList.add(newFund);
 
-		eaForm.setDupFunding(false);
-		eaForm.setFirstSubmit(false);
+		eaForm.getFunding().setDupFunding(false);
+		eaForm.getFunding().setFirstSubmit(false);
 
-		if (eaForm.getFundingDetails() != null)
+		if (eaForm.getFunding().getFundingDetails() != null)
 		{
 			int i=0;
-			Iterator fundItr1 = eaForm.getFundingDetails().iterator();
+			Iterator fundItr1 = eaForm.getFunding().getFundingDetails().iterator();
 			while(fundItr1.hasNext())
 			{
 				i++;
 				FundingDetail fundDetItr1 = (FundingDetail) fundItr1.next();
-				Iterator fundItr2 = eaForm.getFundingDetails().iterator();
+				Iterator fundItr2 = eaForm.getFunding().getFundingDetails().iterator();
 				int j=0;
 				while(fundItr2.hasNext())
 				{
@@ -194,8 +196,8 @@ public class FundingAdded extends Action {
 						(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&
 						(fundDetItr2.getTransactionType()==fundDetItr1.getTransactionType()))
 						{
-							eaForm.setDupFunding(true);
-							eaForm.setFirstSubmit(true);
+							eaForm.getFunding().setDupFunding(true);
+							eaForm.getFunding().setFirstSubmit(true);
 						}
 					}
 				}
@@ -204,8 +206,8 @@ public class FundingAdded extends Action {
 
 		fundOrg.setFundings(fundList);
 		ArrayList fundingOrgs = new ArrayList();
-		if (eaForm.getFundingOrganizations() != null) {
-			fundingOrgs = new ArrayList(eaForm.getFundingOrganizations());
+		if (eaForm.getFunding().getFundingOrganizations() != null) {
+			fundingOrgs = new ArrayList(eaForm.getFunding().getFundingOrganizations());
 			fundingOrgs.set(fundOrgOffset, fundOrg);
 		}
 		/*eaForm.setTotalCommitments(FormatHelper.formatNumber(totComm));
@@ -227,7 +229,7 @@ public class FundingAdded extends Action {
 		double totalDisbs	= 0;
 		double totalExps	= 0;
 		
-		Collection <FundingOrganization> orgs	= form.getFundingOrganizations();
+		Collection <FundingOrganization> orgs	= form.getFunding().getFundingOrganizations();
 		if ( orgs != null ) {
 			Iterator<FundingOrganization> iterOrg	= orgs.iterator();
 			while ( iterOrg.hasNext() ) {
@@ -258,9 +260,9 @@ public class FundingAdded extends Action {
 				
 			}
 		}
-		form.setTotalCommitments( 	FormatHelper.formatNumber(totalComms) );
-		form.setTotalDisbursements(	FormatHelper.formatNumber(totalDisbs) );
-		form.setTotalExpenditures( 	FormatHelper.formatNumber(totalDisbs) );
+		form.getFunding().setTotalCommitments( 	FormatHelper.formatNumber(totalComms) );
+		form.getFunding().setTotalDisbursements(	FormatHelper.formatNumber(totalDisbs) );
+		form.getFunding().setTotalExpenditures( 	FormatHelper.formatNumber(totalDisbs) );
 	}
 	
 	private double getAmountInDefaultCurrency(FundingDetail fundDet, ApplicationSettings appSet) {

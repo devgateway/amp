@@ -322,4 +322,13 @@ public class Constants
     public static final String  TEAM_LEAD_ALREADY_EXISTS = "The already has a team leader. You should remove the actual team leader first";
     //Reports Export to Excel indent
     public static final String excelIndexString = "  "; //TABS do not show in Windows
+
+    //Error Priorities
+    public static final int AMP_ERROR_LEVEL_UNSTABLE = -10; //highest priority
+    public static final int AMP_ERROR_LEVEL_CRITICAL = -5;
+    	//errors bellow 0 are severe will get sent right away to the server
+        //and require a new user session or server restart
+    public static final int AMP_ERROR_LEVEL_ERROR = 0;
+    public static final int AMP_ERROR_LEVEL_WARNING = 5;    //lowest priority
+    //END Error Priorities
 }

@@ -190,6 +190,8 @@ function checkNumeric(objName,comma,period,hyphen)
 </script>
 
 <digi:instance property="aimEditActivityForm" />
+<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
+
 <digi:form action="/locationSelected.do" method="post">
 <html:hidden property="locationReset" value="false" />
 <html:hidden property="fill" />
@@ -346,7 +348,7 @@ function checkNumeric(objName,comma,period,hyphen)
 								Search Locations</digi:trn>
 							(<script language="JavaScript">
 								{
-										document.write('<category:getoptionvalue categoryValueId="${aimEditActivityForm.implemLocationLevel}"/>');
+										document.write('<category:getoptionvalue categoryValueId="${location.implemLocationLevel}"/>');
 								}
 							</script>)
 							</td></tr>

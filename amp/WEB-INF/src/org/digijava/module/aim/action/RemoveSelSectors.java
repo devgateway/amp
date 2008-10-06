@@ -21,7 +21,7 @@ public class RemoveSelSectors extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 
 		Long selSectors[] = eaForm.getSelActivitySectors();
-		Collection prevSelSectors = eaForm.getActivitySectors();
+		Collection prevSelSectors = eaForm.getSectors().getActivitySectors();
 		Collection newSectors = new ArrayList();
 
 		Iterator itr = prevSelSectors.iterator();
@@ -43,7 +43,7 @@ public class RemoveSelSectors extends Action {
             }
 		}
 
-		eaForm.setActivitySectors(newSectors);
+		eaForm.getSectors().setActivitySectors(newSectors);
 		eaForm.setStep("2");
 		return mapping.findForward("forward");
 	}

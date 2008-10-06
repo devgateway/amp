@@ -42,7 +42,7 @@ function resetAll()
 }
 
 function removeSelOrgs(value) {
-	document.aimEditActivityForm.item.value = value;
+	document.getElementsByName("agencies.item")[0].value = value;
 	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remOrgs %>";
 	document.aimEditActivityForm.target = "_self"
@@ -55,7 +55,7 @@ function removeSelOrgs(value) {
 
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step" />
-<html:hidden property="item" />
+<html:hidden property="agencies.item" />
 <input type="hidden" name="prevOrg">
 
 <html:hidden property="editAct" />
@@ -206,7 +206,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>:
-										<bean:write name="aimEditActivityForm" property="title"/>
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -294,48 +294,6 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr><td>&nbsp;</td></tr>
 
 
-<!--
-
-									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:ContractAgency">The third party outside of the implementing agency</digi:trn>">
-										<b><digi:trn key="aim:contractor">Contractor</digi:trn></b></a>
-									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										<a title="<digi:trn key="aim:ContractAgency">The third party outside of the implementing agency</digi:trn>">
-										<html:text property="contractors" size="60" styleClass="inp-text"/>
-										</a>
-									</td></tr>
-									<tr><td bgColor=#f4f4f2 align="center">&nbsp;
-									</td></tr>
- -->
-
-<!--
-									<tr><td bgColor=#f4f4f2 align="center">
-										<table cellPadding=3>
-											<tr>
-												<td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(6)">
-															<< <digi:trn key="btn:back">Back</digi:trn>
-													</html:button>
-
-
-												</td>
-												<td>
-														<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(8)">
-																<digi:trn key="btn:next">Next</digi:trn> >>
-														</html:submit>
-												</td>
-												<td>
-														<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
-																<digi:trn key="btn:reset">Reset</digi:trn>
-														</html:reset>
-
-												</td>
-											</tr>
-										</table>
-									</td></tr>
- -->
 							
 								</table>
 

@@ -32,7 +32,6 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.form.ReferenceForm;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;

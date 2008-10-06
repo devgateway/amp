@@ -250,10 +250,10 @@
 															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
 															<logic:iterate name="aimMemberActivitiesForm" property="activities" id="activities" 
-															type="org.digijava.module.aim.helper.Activity">
+															>
 																<tr><td width=3 bgcolor="#f4f4f2">
 																	<html:multibox property="selActivities" >
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 																	</html:multibox>
 																</td>
 																<td width="20%" bgcolor="#f4f4f2">
@@ -262,7 +262,7 @@
 																<td bgcolor="#f4f4f2">
 																	<jsp:useBean id="url" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${url}" property="activityId">
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 																	</c:set>
 																	<c:set target="${url}" property="pageId" value="3"/>
 																	<c:set var="translation">

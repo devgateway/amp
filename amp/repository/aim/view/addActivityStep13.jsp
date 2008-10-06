@@ -75,7 +75,7 @@
 		panelStart = 0;
 	}
 	
-	function showAddContract() {
+	function showSave() {
 		var element5 = document.getElementById("myContract");
 		element5.style.display = "inline";
 		if (panelStart < 1){
@@ -116,7 +116,7 @@
 			var current2 = window.onload;
 			window.onload = function() {
 	            current2.apply(current2);
-				showAddContract();
+				showSave();
         	};
 	</logic:present>
 	
@@ -182,7 +182,7 @@
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
 	    //content.style.visibility = "visible";
-		showAddContract();
+		showSave();
 	}
 		 
 	var responseFailure = function(o){ 
@@ -360,7 +360,7 @@
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
-									<bean:write name="aimEditActivityForm" property="title"/>
+									<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>

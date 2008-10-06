@@ -174,6 +174,7 @@ function checkNumeric(objName,comma,period,hyphen)
 </script>
 
 <digi:instance property="aimEditActivityForm" />
+<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
 <digi:form action="/addSelectedLocations.do" method="post">
 <html:hidden property="locationReset" value="false" />
 <html:hidden property="fill" />
@@ -233,7 +234,7 @@ function checkNumeric(objName,comma,period,hyphen)
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:locationList">
 								List of Locations</digi:trn> 
-					(<category:getoptionvalue categoryValueId="${aimEditActivityForm.implemLocationLevel}"/>)
+					(<category:getoptionvalue categoryValueId="${location.implemLocationLevel}"/>)
 					
 							</td>
 						</tr>

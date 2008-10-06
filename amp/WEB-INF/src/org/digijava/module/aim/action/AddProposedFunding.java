@@ -29,11 +29,11 @@ public class AddProposedFunding extends Action{
         EditActivityForm eaForm = (EditActivityForm) form;
         ProposedProjCost propProjCost=new ProposedProjCost();
         eaForm.setReset(false);
-        if(eaForm.getProProjCost()==null){
+        if(eaForm.getFunding().getProProjCost()==null){
             propProjCost.setCurrencyCode(null);
             propProjCost.setFunAmount(null);
             propProjCost.setFunDate(null);
-            eaForm.setProProjCost(propProjCost);
+            eaForm.getFunding().setProProjCost(propProjCost);
         }
 
         return mapping.findForward("forward");

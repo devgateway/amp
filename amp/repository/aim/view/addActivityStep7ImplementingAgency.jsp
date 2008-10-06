@@ -22,15 +22,15 @@
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
+										<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="impAgencies"
+												<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
 												id="impAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 														<tr>
 															<td width="3">
-																<html:multibox property="selImpAgencies">
+																<html:multibox property="agencies.selImpAgencies">
 																	<bean:write name="impAgency" property="ampOrgId" />
 																</html:multibox>
 															</td>
@@ -46,7 +46,7 @@
 														<tr>
 															<td>
 																<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
-																	<aim:addOrganizationButton form="${aimEditActivityForm}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																	<%
 																	selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 																	selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");
@@ -72,12 +72,12 @@
 											</table>
 										</logic:notEmpty>
 
-										<logic:empty name="aimEditActivityForm" property="impAgencies">
+										<logic:empty name="aimEditActivityForm" property="agencies.impAgencies">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Implementing Agency Add Button" feature="Implementing Agency">
-															<aim:addOrganizationButton form="${aimEditActivityForm}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+															<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="impAgencies" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													</field:display>
 													</td>
 												</tr>

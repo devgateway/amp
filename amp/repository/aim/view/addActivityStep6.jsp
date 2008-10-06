@@ -504,7 +504,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</digi:trn>:
 
-										<bean:write name="aimEditActivityForm" property="title"/>
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 
 								</c:if>
 

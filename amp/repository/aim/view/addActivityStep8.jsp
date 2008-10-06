@@ -174,7 +174,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>:
-										<bean:write name="aimEditActivityForm" property="title"/>
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -239,7 +239,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntFirstName" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntFirstName" styleClass="inp-text"/>
 															</td>
 															</field:display>
 														</tr>
@@ -254,7 +254,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntLastName" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntLastName" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -269,7 +269,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntEmail" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntEmail" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -284,7 +284,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntTitle" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntTitle" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -299,7 +299,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntOrganization" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntOrganization" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -314,7 +314,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntPhoneNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -329,7 +329,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="dnrCntFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.dnrCntFaxNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -351,7 +351,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntFirstName" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntFirstName" styleClass="inp-text"/>
 															</td>
 															</field:display>
 														</tr>
@@ -366,7 +366,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntLastName" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntLastName" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -381,7 +381,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntEmail" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntEmail" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -396,7 +396,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntTitle" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntTitle" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -411,7 +411,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntOrganization" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntOrganization" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -426,7 +426,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntPhoneNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -441,7 +441,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="mfdCntFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.mfdCntFaxNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -465,7 +465,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<b><digi:trn key="aim:projectCoordinator:firstName">First Name</digi:trn></b>
 																</td>
 																<td>
-																	<html:text property="prjCoFirstName" styleClass="inp-text"/>
+																	<html:text property="contactInfo.prjCoFirstName" styleClass="inp-text"/>
 																</td>
 															</field:display>
 														</tr>
@@ -476,7 +476,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:lastName">Last Name</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="prjCoLastName" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoLastName" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -487,7 +487,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:email">Email</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="prjCoEmail" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoEmail" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -498,7 +498,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:title">Title</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="prjCoTitle" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoTitle" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -509,7 +509,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:organization">Organization</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="prjCoOrganization" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoOrganization" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -520,7 +520,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:phoneNumber">Phone Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="prjCoPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoPhoneNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -531,7 +531,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:projectCoordinator:faxNumber">Fax Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="prjCoFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.prjCoFaxNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -549,7 +549,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<b><digi:trn key="aim:sectorMinistryCnt:firstName">First Name</digi:trn></b>
 																</td>
 																<td>
-																	<html:text property="secMiCntFirstName" styleClass="inp-text"/>
+																	<html:text property="contactInfo.secMiCntFirstName" styleClass="inp-text"/>
 																</td>
 															</field:display>
 														</tr>
@@ -560,7 +560,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:lastName">Last Name</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="secMiCntLastName" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntLastName" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -571,7 +571,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:email">Email</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="secMiCntEmail" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntEmail" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -582,7 +582,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:title">Title</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="secMiCntTitle" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntTitle" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -593,7 +593,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:organization">Organization</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="secMiCntOrganization" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntOrganization" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -604,7 +604,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:phoneNumber">Phone Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="secMiCntPhoneNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntPhoneNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -615,7 +615,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<b><digi:trn key="aim:sectorMinistryCnt:faxNumber">Fax Number</digi:trn></b>
 															</td>
 															<td>
-																<html:text property="secMiCntFaxNumber" styleClass="inp-text"/>
+																<html:text property="contactInfo.secMiCntFaxNumber" styleClass="inp-text"/>
 															</td>
 														</tr>
 														</field:display>
@@ -628,40 +628,7 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-<!--
-									<tr><td bgColor=#f4f4f2 align="center">
-										<table cellPadding=3>
-											<tr>
-												<td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(7)">
-															<< <digi:trn key="btn:back">Back</digi:trn>
-													</html:button>
-												</td>
-												<logic:notEmpty name="ME" scope="application">
-													<td>
-														<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(10)">
-																<digi:trn key="btn:next">Next</digi:trn> >>
-														</html:submit>
 
-													</td>
-												</logic:notEmpty>
-												<logic:empty name="ME" scope="application">
-													<td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
-															<digi:trn key="btn:preview">Preview</digi:trn>
-													</html:button>
-
-													</td>
-												</logic:empty>
-												<td>
-													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
-															<digi:trn key="btn:reset">Reset</digi:trn>
-													</html:reset>
-												</td>
-											</tr>
-										</table>
-									</td></tr>
- -->
 								</table>
 								<!-- end contents -->
 							</td></tr>

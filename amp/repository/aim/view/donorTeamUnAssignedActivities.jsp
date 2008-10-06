@@ -388,13 +388,13 @@
 
 															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities" 
 
-															type="org.digijava.module.aim.helper.Activity">
+															>
 
 																<tr><td width=3 bgcolor="#f4f4f2">
 
 																	<html:multibox property="selActivities">
 
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 
 																	</html:multibox>
 
@@ -412,7 +412,7 @@
 
 																	<c:set target="${urlParams}" property="activityId">
 
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 
 																	</c:set>
 

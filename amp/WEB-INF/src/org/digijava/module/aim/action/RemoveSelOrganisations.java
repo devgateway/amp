@@ -22,7 +22,7 @@ public class RemoveSelOrganisations extends Action {
 			return mapping.findForward("forward");
 		}
 		
-		OrgProjectId prevOrgs[] = eaForm.getSelectedOrganizations();
+		OrgProjectId prevOrgs[] = eaForm.getIdentification().getSelectedOrganizations();
 		OrgProjectId currOrgs[] = null;
 
 		if (prevOrgs != null && ((prevOrgs.length - selOrgs.length) != 0)) {
@@ -46,7 +46,7 @@ public class RemoveSelOrganisations extends Action {
 			}			
 		}
 		
-		eaForm.setSelectedOrganizations(currOrgs);
+		eaForm.getIdentification().setSelectedOrganizations(currOrgs);
 		eaForm.setSelOrgs(null);
 		eaForm.setCols(null);
 		eaForm.setNumResults(0);

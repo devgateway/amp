@@ -116,7 +116,7 @@
 <html:hidden property="step" />
 <html:hidden property="editAct" />
 <html:hidden property="indicatorId" />
-<html:hidden property="indicatorValId" />
+<html:hidden property="indicator.indicatorValId" />
 <html:hidden property="activityId" />
 <input type="hidden" name="edit" value="true">
  <c:set var="stepNm">
@@ -307,7 +307,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													</b>
 												</td>
 											</tr>
-											<logic:empty name="aimEditActivityForm" property="indicatorsME">
+											<logic:empty name="aimEditActivityForm" property="indicator.indicatorsME">
 											<tr>
 												<td width="32%" bgcolor=#f4f4f2 align="center" colspan="2"><font color="red"><b>
 													<digi:trn key="aim:meNoActivityGlobalIndicators">
@@ -317,8 +317,8 @@ ${fn:replace(message,quote,escapedQuote)}
 												</td>
 											</tr>
 											</logic:empty>
-											<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-											<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator"
+											<logic:notEmpty name="aimEditActivityForm" property="indicator.indicatorsME">
+											<logic:iterate name="aimEditActivityForm" property="indicator.indicatorsME" id="indicator"
 											type="org.digijava.module.aim.helper.ActivityIndicator">
 											<tr>
 												<td bgcolor=#f4f4f2 align="left" colspan="2">&nbsp;&nbsp;

@@ -67,7 +67,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Set contracts;
 	private Set componentes; //for bolivia;
 	private Set locations ;
-	private Set orgrole;
+	private Set<AmpOrgRole> orgrole;
 //	private AmpLevel level ; //TO BE DELETED
 	private Set internalIds ;
 	private Set funding ;
@@ -217,6 +217,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         private Set actPrograms;
         
         private boolean createdAsDraft;
+        
+       	private String donors;
 
         
         public AmpActivity() {
@@ -359,7 +361,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @return
 	 */
-	public Set getOrgrole() {
+	public Set<AmpOrgRole> getOrgrole() {
 		return orgrole;
 	}
 
@@ -471,7 +473,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	/**
 	 * @param set
 	 */
-	public void setOrgrole(Set set) {
+	public void setOrgrole(Set<AmpOrgRole> set) {
 		orgrole = set;
 	}
 
@@ -1617,6 +1619,12 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	}
 
 	
+	public String getDonors() {
+		return donors;
+	}
 
+	public void setDonors(String donors) {
+		this.donors = donors;
+	}
 
 }

@@ -191,7 +191,8 @@
 
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
 	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
-        <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />
+    <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />
+    <page page="displaySave" name="aim_displaySave" title="AMP - Save Activity" />
 	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
 	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
 	<page page="selectSectorForind" name="aim_selectSectorForind" title="AMP - Select Sector" />

@@ -36,9 +36,9 @@ public class AddProgram
     int settingsId = eaform.getProgramType();
     AmpActivityProgramSettings parent=null;
     switch(settingsId){
-      case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=eaform.getNationalSetting(); break;
-          case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=eaform.getPrimarySetting(); break;
-              case ProgramUtil.SECONDARY_PROGRAM_KEY: parent=eaform.getSecondarySetting(); break;
+      case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY: parent=eaform.getPrograms().getNationalSetting(); break;
+          case ProgramUtil.PRIMARY_PROGRAM_KEY: parent=eaform.getPrograms().getPrimarySetting(); break;
+              case ProgramUtil.SECONDARY_PROGRAM_KEY: parent=eaform.getPrograms().getSecondarySetting(); break;
     }
     if (selectedThemeId == null && opStatus == null && strLevel == null) {
 
@@ -94,14 +94,14 @@ public class AddProgram
         List npoPrograms = new ArrayList();
         List ppPrograms = new ArrayList();
         List spPrograms = new ArrayList();
-        if (eaform.getNationalPlanObjectivePrograms() != null) {
-          npoPrograms = eaform.getNationalPlanObjectivePrograms();
+        if (eaform.getPrograms().getNationalPlanObjectivePrograms() != null) {
+          npoPrograms = eaform.getPrograms().getNationalPlanObjectivePrograms();
         }
-        if (eaform.getPrimaryPrograms() != null) {
-          ppPrograms = eaform.getPrimaryPrograms();
+        if (eaform.getPrograms().getPrimaryPrograms() != null) {
+          ppPrograms = eaform.getPrograms().getPrimaryPrograms();
         }
-        if (eaform.getSecondaryPrograms() != null) {
-          spPrograms= eaform.getSecondaryPrograms();
+        if (eaform.getPrograms().getSecondaryPrograms() != null) {
+          spPrograms= eaform.getPrograms().getSecondaryPrograms();
         }
 
         AmpTheme prg = ProgramUtil.getThemeObject(Long.valueOf(
@@ -130,7 +130,7 @@ public class AddProgram
         	  npoPrograms.add(activityProgram);
           }
           // end 
-          eaform.setNationalPlanObjectivePrograms(npoPrograms);         
+          eaform.getPrograms().setNationalPlanObjectivePrograms(npoPrograms);         
         }
         else {
           if (settingsId ==ProgramUtil.PRIMARY_PROGRAM_KEY) {
@@ -153,7 +153,7 @@ public class AddProgram
             	 ppPrograms.add(activityProgram);
             }
             // end            
-            eaform.setPrimaryPrograms(ppPrograms);
+            eaform.getPrograms().setPrimaryPrograms(ppPrograms);
 
           }
           else {
@@ -176,7 +176,7 @@ public class AddProgram
             	spPrograms.add(activityProgram);
             }
             // end            
-            eaform.setSecondaryPrograms(spPrograms);
+            eaform.getPrograms().setSecondaryPrograms(spPrograms);
           }
         }
 

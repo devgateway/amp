@@ -306,7 +306,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities" 
 
-															type="org.digijava.module.aim.helper.Activity">
+															>
 
 																<tr bgcolor="#f4f4f2">
 
@@ -322,7 +322,7 @@ function setHoveredTable(tableId, hasHeaders) {
 
 																	<c:set target="${urlParams}" property="activityId">
 
-																		<bean:write name="activities" property="activityId" />
+																		<bean:write name="activities" property="ampActivityId" />
 
 																	</c:set>
 

@@ -16,7 +16,7 @@ import java.util.Vector;
 import org.digijava.module.aim.helper.OrgProjectId;
 import java.util.HashSet;
 import java.util.Arrays;
-
+@Deprecated
 public class SearchOrganisation extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -101,7 +101,7 @@ public class SearchOrganisation extends Action {
 				eaForm.setStartAlphaFlag(true);
 		}
 
-        OrgProjectId hvOrgs[] = eaForm.getSelectedOrganizations();
+        OrgProjectId hvOrgs[] = eaForm.getIdentification().getSelectedOrganizations();
 
         Collection newCol = new ArrayList();
         newCol=col;

@@ -59,7 +59,7 @@ public class EditSurveyList extends Action {
         List surveyColl = (List) DbUtil.getAllSurveysByActivity(svForm.getActivityId());
 
         Collections.sort(surveyColl, sfComp);
-        svForm.setSurvey(surveyColl);
+        svForm.getSurvey().setSurvey(surveyColl);
 
         return mapping.findForward("forward");
     }

@@ -146,11 +146,11 @@
 													</logic:empty>
 													<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
 													<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities" 
-													type="org.digijava.module.aim.helper.Activity">
+													>
 													<tr bgcolor="#ffffff">
 														<td width="3">
 															<html:multibox property="selActivities">
-																<bean:write name="activities" property="activityId" />
+																<bean:write name="activities" property="ampActivityId" />
 															</html:multibox>														
 														</td>													
 														<td width="98%">

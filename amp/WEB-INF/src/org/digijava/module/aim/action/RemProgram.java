@@ -31,21 +31,21 @@ public class RemProgram extends Action
          Long prgIds[]=null;
          switch (settingsId) {
            case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY:
-             prgLst = eaform.getNationalPlanObjectivePrograms();
+             prgLst = eaform.getPrograms().getNationalPlanObjectivePrograms();
              prgIds=eaform.getSelectedNPOPrograms();
-             eaform.setNationalPlanObjectivePrograms(removePrograms(prgLst, prgIds));
+             eaform.getPrograms().setNationalPlanObjectivePrograms(removePrograms(prgLst, prgIds));
              eaform.setSelectedNPOPrograms(null);
              break;
            case ProgramUtil.PRIMARY_PROGRAM_KEY:
-             prgLst = eaform.getPrimaryPrograms();
+             prgLst = eaform.getPrograms().getPrimaryPrograms();
              prgIds=eaform.getSelectedPPrograms();
-             eaform.setPrimaryPrograms(removePrograms(prgLst, prgIds));
+             eaform.getPrograms().setPrimaryPrograms(removePrograms(prgLst, prgIds));
              eaform.setSelectedPPrograms(null);
              break;
            case ProgramUtil.SECONDARY_PROGRAM_KEY:
-             prgLst = eaform.getSecondaryPrograms();
+             prgLst = eaform.getPrograms().getSecondaryPrograms();
              prgIds=eaform.getSelectedSPrograms();
-             eaform.setSecondaryPrograms(removePrograms(prgLst, prgIds));
+             eaform.getPrograms().setSecondaryPrograms(removePrograms(prgLst, prgIds));
              eaform.setSelectedSPrograms(null);
              break;
          }

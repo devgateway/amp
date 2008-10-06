@@ -5079,8 +5079,10 @@ public class DbUtil {
         boolean flag1 = false;
 
         try {
+        	if(activityId==null) return survey;
             session = PersistenceManager.getRequestDBSession();
 
+            if(activityId==null || activityId.longValue()==0) return survey;
             AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
             fundingSet = activity.getFunding();
             surveySet = activity.getSurvey();

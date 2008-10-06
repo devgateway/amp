@@ -35,7 +35,7 @@ public class EditProposedProjectCost extends Action{
         AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 
         eaForm.setReset(false);
-        if(eaForm.getProProjCost()==null){
+        if(eaForm.getFunding().getProProjCost()==null){
             ProposedProjCost propProjCost=new ProposedProjCost();
             if (tempSettings != null && tempSettings.getCurrency() != null)
             	propProjCost.setCurrencyCode( tempSettings.getCurrency().getCurrencyCode() );
@@ -43,7 +43,7 @@ public class EditProposedProjectCost extends Action{
             	propProjCost.setCurrencyCode(null);
             propProjCost.setFunAmount(null);
             propProjCost.setFunDate(null);
-            eaForm.setProProjCost(propProjCost);
+            eaForm.getFunding().setProProjCost(propProjCost);
         }
         return mapping.findForward("forward");
     }

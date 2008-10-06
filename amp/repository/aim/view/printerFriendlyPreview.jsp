@@ -65,7 +65,7 @@
 								<field:display feature="Identification" name="Project Title">
 									<tr>
 										<td class="head2-name" width="100%" align="left" bgcolor="#ffffff">
-                                			<c:if test="${aimEditActivityForm.title!=null}">${aimEditActivityForm.title}</c:if>
+                                			<c:if test="${aimEditActivityForm.identification.title!=null}">${aimEditActivityForm.identification.title}</c:if>
 										</td>
 									</tr>	
 								</field:display>
@@ -94,8 +94,8 @@
 										    Objectives</digi:trn>
 											</b>								</td>
 <td bgcolor="#ffffff">
-                                          <c:if test="${aimEditActivityForm.objectives!=null}">
-											<c:set var="objKey" value="${aimEditActivityForm.objectives}" />
+                                          <c:if test="${aimEditActivityForm.identification.objectives!=null}">
+											<c:set var="objKey" value="${aimEditActivityForm.identification.objectives}" />
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>    
@@ -170,8 +170,8 @@
 										    Description</digi:trn>		
 									  </b>								</td>
 									  <td bgcolor="#ffffff">
-                                        <c:if test="${aimEditActivityForm.description!=null}">
-											<c:set var="descKey" value="${aimEditActivityForm.description}" />
+                                        <c:if test="${aimEditActivityForm.identification.description!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.identification.description}" />
 											<digi:edit key="${descKey}"></digi:edit>
                                         </c:if>										</td>
 									</tr>
@@ -184,8 +184,8 @@
 										    Purpose</digi:trn> 
 									  </b>										</td>
 		    <td bgcolor="#ffffff">
-                                          <c:if test="${aimEditActivityForm.purpose!=null}">
-											<c:set var="objKey" value="${aimEditActivityForm.purpose}" />
+                                          <c:if test="${aimEditActivityForm.identification.purpose!=null}">
+											<c:set var="objKey" value="${aimEditActivityForm.identification.purpose}" />
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
@@ -232,8 +232,8 @@
 										    Results</digi:trn>	
 									  </b>									</td>
 		    <td bgcolor="#ffffff">
-                                          <c:if test="${aimEditActivityForm.results!=null}">
-											<c:set var="objKey" value="${aimEditActivityForm.results}" />
+                                          <c:if test="${aimEditActivityForm.identification.results!=null}">
+											<c:set var="objKey" value="${aimEditActivityForm.identification.results}" />
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
 									</tr>
@@ -277,8 +277,8 @@
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>		</b>								</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.accessionInstrument > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.accessionInstrument}"/>
+											<c:if test="${aimEditActivityForm.identification.accessionInstrument > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.accessionInstrument}"/>
 											</c:if>
 &nbsp;										</td>
 									</tr>
@@ -288,8 +288,8 @@
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
 									  <digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>	</b>										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.acChapter > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.acChapter}"/>
+											<c:if test="${aimEditActivityForm.identification.acChapter > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.acChapter}"/>
 											</c:if>
 &nbsp;										</td>
 									</tr>
@@ -299,7 +299,7 @@
 										<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
 									  <digi:trn key="aim:crisNumber">Cris Number</digi:trn>	</b>										</td>
 										<td bgcolor="#ffffff">
-										<c:out value="${aimEditActivityForm.crisNumber}"/>
+										<c:out value="${aimEditActivityForm.identification.crisNumber}"/>
 &nbsp;										</td>
 									</tr>
 									</field:display>
@@ -308,8 +308,8 @@
 										<td width="30%" align="right" valign="top" nowrap="nowrap"><b>
 									  <digi:trn key="aim:ProjectCategory">Project Category</digi:trn>		</b>								</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.projectCategory > 0}">
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.projectCategory}"/>
+											<c:if test="${aimEditActivityForm.identification.projectCategory > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.projectCategory}"/>
 											</c:if>
 &nbsp;										</td>
 									</tr>
@@ -327,20 +327,15 @@
 											</td>
 										  <td bgcolor="#ffffff">
 											<field:display name="On/Off Budget" feature="Budget">
-											<logic:equal name="aimEditActivityForm" property="budget" value="true">
+											<logic:equal name="aimEditActivityForm" property="identification.budget" value="true">
 											<digi:trn key="aim:actBudgeton">
 													Activity is On Budget										</digi:trn>
 											</logic:equal>
 	
-											<logic:equal name="aimEditActivityForm" property="budget" value="false">
+											<logic:equal name="aimEditActivityForm" property="identification.budget" value="false">
 											<digi:trn key="aim:actBudgetoff">
 													Activity is Off Budget										</digi:trn>
 											</logic:equal>
-	
-											<logic:equal name="aimEditActivityForm" property="budget" value="">
-											<digi:trn key="aim:actBudgetoff">
-													Activity is Off Budget										</digi:trn>
-											</logic:equal>										
 											</field:display>
 											</td>
 										</tr>
@@ -353,10 +348,10 @@
 													<digi:trn key="aim:humanitarianaid">
 													 Humanitarian Aid</digi:trn></b></td>
 												<td bgcolor="#ffffff">
-													<c:if test="${!aimEditActivityForm.humanitarianAid==true}">
+													<c:if test="${!aimEditActivityForm.identification.humanitarianAid==true}">
 														<digi:trn key="aim:no">No</digi:trn>
 													</c:if>
-													<c:if test="${aimEditActivityForm.humanitarianAid==true}">
+													<c:if test="${aimEditActivityForm.identification.humanitarianAid==true}">
 														<digi:trn key="aim:yes">Yes</digi:trn>
 													</c:if>
 	&nbsp;										</td>
@@ -372,9 +367,9 @@
 													<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs</digi:trn>
 												  </b>												</td>
 										  <td width="73%" bgcolor="#ffffff">
-<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
+<c:if test="${!empty aimEditActivityForm.identification.selectedOrganizations}">
 														<table cellSpacing=2 cellPadding=2 border=0>
-															<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
+															<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.identification.selectedOrganizations}" >
 																<c:if test="${not empty selectedOrganizations}">
 																	<tr><td>
 																		<c:out value="${selectedOrganizations.organisation.name}"/>:
@@ -401,9 +396,9 @@
 													Line Ministry Rank</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-													<c:if test="${aimEditActivityForm.lineMinRank == -1}">													</c:if>
-													<c:if test="${aimEditActivityForm.lineMinRank != -1}">
-													${aimEditActivityForm.lineMinRank}													</c:if>													</td>
+													<c:if test="${aimEditActivityForm.planning.lineMinRank == -1}">													</c:if>
+													<c:if test="${aimEditActivityForm.planning.lineMinRank != -1}">
+													${aimEditActivityForm.planning.lineMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
 												<field:display name="Ministry of Planning Rank" feature="Planning">
@@ -560,9 +555,9 @@
 										    Location</digi:trn>
 									  </b>										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
+											<c:if test="${!empty aimEditActivityForm.location.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
-												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
+												<c:forEach var="locations" items="${aimEditActivityForm.location.selectedLocs}">
 													<tr>
 													<td>
 													<c:if test="${!empty locations.country}">
@@ -598,8 +593,8 @@
 										  </b>
 										</td>
 <td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.levelId>0}" >
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
+											<c:if test="${aimEditActivityForm.location.levelId>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.location.levelId}"/>
 											</c:if>										</td>
 									</tr>
 									</field:display>
@@ -612,13 +607,13 @@
 									  		</b>
 										</td>
 										<td bgcolor="#ffffff">
-			                            <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
+			                            <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
 			                               <field:display name="${config.name} Sector" feature="Sectors">
 											<c:set var="hasSectors">
 												false
 											</c:set>
 
-											<c:forEach var="actSect" items="${aimEditActivityForm.activitySectors}">
+											<c:forEach var="actSect" items="${aimEditActivityForm.sectors.0}">
 												<c:if test="${actSect.configId==config.id}">
 													<c:set var="hasSectors">
 														true
@@ -632,9 +627,9 @@
 				                                </digi:trn>
 				                                </strong><br/>
 			                                </c:if>
-	                                        <c:if test="${!empty aimEditActivityForm.activitySectors}">
+	                                        <c:if test="${!empty aimEditActivityForm.sectors.activitySectors}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
-												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
+												<c:forEach var="sectors" items="${aimEditActivityForm.sectors.activitySectors}">
                                                  	<c:if test="${sectors.configId==config.id}">
 														<tr><td>
 														<c:if test="${!empty sectors.sectorName}">
@@ -666,14 +661,14 @@
 									</tr>
 									</feature:display>
                                           
-                                  <c:if test="${not empty aimEditActivityForm.activityComponentes}">
+                                  <c:if test="${not empty aimEditActivityForm.components.activityComponentes}">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 									  	<b><digi:trn key="aim:preview:component_Sector">Components</digi:trn></b>
 									  	</td>
 									  <td bgcolor="#ffffff">
 												<table>
-													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
+													<c:forEach var="compo" items="${aimEditActivityForm.components.activityComponentes}">
 													<tr>
 														<td width="100%">
 															${compo.sectorName}														</td>
@@ -698,7 +693,7 @@
 												</b></TD>
 
 <TD bgcolor="#ffffff">
-											<c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
+											<c:forEach var="program" items="${aimEditActivityForm.programs.nationalPlanObjectivePrograms}">
                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                              </c:forEach>
                                       </TD>
@@ -712,7 +707,7 @@
 																												</b></TD>
 
 						  <TD bgcolor="#ffffff">
-								<c:forEach var="program" items="${aimEditActivityForm.primaryPrograms}">
+								<c:forEach var="program" items="${aimEditActivityForm.programs.primaryPrograms}">
                                 	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                 </c:forEach>
                    		</TD>
@@ -725,7 +720,7 @@
 											  <digi:trn key="aim:secondary Programs"> Secondary Programs</digi:trn>
 													</b></TD>
 <TD bgcolor="#ffffff">
-                                                      <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
+                                                      <c:forEach var="program" items="${aimEditActivityForm.programs.secondaryPrograms}">
 	                                                      <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                       </c:forEach>
                                         		</TD>
@@ -747,8 +742,8 @@
                                               <tr>
                                                 <td>
                                                   <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
-                                                    <logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
-                                                      <logic:iterate name="aimEditActivityForm" property="fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+                                                    <logic:notEmpty name="aimEditActivityForm" property="funding.fundingOrganizations">
+                                                      <logic:iterate name="aimEditActivityForm" property="funding.fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 
                                                         <logic:notEmpty name="fundingOrganization" property="fundings">
                                                           <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
@@ -897,7 +892,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalPlannedCommitments" /> <bean:write
+                                name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" />
                         </td>
                         </tr>
@@ -909,7 +904,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalCommitments" /> <bean:write
+                                name="aimEditActivityForm" property="funding.totalCommitments" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                         </tr>
                         <feature:display module="Funding"
@@ -924,7 +919,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalPlannedDisbursements" /> <bean:write
+                                name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                         </tr>
                         <tr>
@@ -936,7 +931,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalDisbursements" /> <bean:write
+                                name="aimEditActivityForm" property="funding.totalDisbursements" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                         </tr>
                         </feature:display>
@@ -949,7 +944,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalPlannedExpenditures" /> <bean:write
+                                name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                         </tr>
                         <tr>
@@ -960,7 +955,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalExpenditures" /> <bean:write
+                                name="aimEditActivityForm" property="funding.totalExpenditures" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                         </tr>
                         </feature:display>
@@ -981,7 +976,7 @@
                           <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000; text-transform: uppercase;">
                                 <bean:write
-                                name="aimEditActivityForm" property="totalActualDisbursementsOrders" />	<bean:write
+                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                       	</tr>
                         </feature:display>
@@ -993,7 +988,7 @@
                                   UNDISBURSED BALANCE 	             </digi:trn></td>
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
                                 style="border-top: 1px solid #000000"><bean:write
-                                name="aimEditActivityForm" property="unDisbursementsBalance" /> <bean:write
+                                name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> <bean:write
                                 name="aimEditActivityForm" property="currCode" /></td>
                         </tr>
                         </feature:display>
@@ -1535,10 +1530,10 @@
 										
 										<feature:display name="Responsible Organization" module="Organizations">
 											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organization</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="respOrganisations"
+													<logic:iterate name="aimEditActivityForm" property="agencies.respOrganisations"
 													id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> <bean:write name="respOrg" property="name" /></li></ul>
 													</logic:iterate>
@@ -1550,10 +1545,10 @@
 										
                                            <feature:display name="Executing Agency" module="Organizations">
 											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="executingAgencies"
+													<logic:iterate name="aimEditActivityForm" property="agencies.executingAgencies"
 													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
 													</logic:iterate>
@@ -1565,10 +1560,10 @@
 
 											<feature:display name="Implementing Agency" module="Organizations">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="impAgencies"
+													<logic:iterate name="aimEditActivityForm" property="agencies.impAgencies"
 													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> <bean:write name="impAgencies" property="name" /></li></ul>
 													</logic:iterate>
@@ -1580,10 +1575,10 @@
 																			
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 									
-											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
-														<logic:iterate name="aimEditActivityForm" property="benAgencies"
+														<logic:iterate name="aimEditActivityForm" property="agencies.benAgencies"
 														id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 																<ul><li> <bean:write name="benAgency" property="name" /></li></ul>
 														</logic:iterate>
@@ -1594,10 +1589,10 @@
 
 											<feature:display name="Contracting Agency" module="Organizations">
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="conAgencies"
+													<logic:iterate name="aimEditActivityForm" property="agencies.conAgencies"
 													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 														<ul><li> <bean:write name="conAgencies" property="name" /></li></ul>
 													</logic:iterate>
@@ -1611,10 +1606,10 @@
 											<feature:display name="Sector Group" module="Organizations"></feature:display>
 											<field:display name="Sector Group" feature="Sector Group">
 											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
-														<logic:iterate name="aimEditActivityForm" property="sectGroups"
+														<logic:iterate name="aimEditActivityForm" property="agencies.sectGroups"
 														id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 															<ul><li> <bean:write name="sectGroup" property="name" /></li></ul>
 														</logic:iterate>
@@ -1626,10 +1621,10 @@
         									<feature:display name="Regional Group" module="Organizations">
 											<field:display name="Regional Group" feature="Regional Group">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="regGroups">
+											<logic:notEmpty name="aimEditActivityForm" property="agencies.regGroups">
 											<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="regGroups"
+													<logic:iterate name="aimEditActivityForm" property="agencies.regGroups"
 													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
 														<ul><li> <bean:write name="regGroup" property="name" /></li></ul>
 													</logic:iterate>
@@ -1656,9 +1651,9 @@
 										    Donor funding contact information</digi:trn>	
 									  </b>									</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.dnrCntFirstName}"/>
-											<c:out value="${aimEditActivityForm.dnrCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.dnrCntEmail}"/>										</td>
+											<c:out value="${aimEditActivityForm.contactInfo.dnrCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.dnrCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.dnrCntEmail}"/>										</td>
 									</tr>
 									</feature:display>
 									<feature:display name="Government Contact Information" module="Contact Information">
@@ -1668,9 +1663,9 @@
 										    MOFED contact information</digi:trn>	
 									  </b>									</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.mfdCntFirstName}"/>
-											<c:out value="${aimEditActivityForm.mfdCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>										</td>
+											<c:out value="${aimEditActivityForm.contactInfo.mfdCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.mfdCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.mfdCntEmail}"/>										</td>
 									</tr>
 									</feature:display>
 									<feature:display name="Project Coordinator Contact Information" module="Contact Information">
@@ -1681,9 +1676,9 @@
 										    Project Coordinator Contact Information</digi:trn>	
 									  </b>									</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.prjCoFirstName}"/>
-											<c:out value="${aimEditActivityForm.prjCoLastName}"/> -
-											<c:out value="${aimEditActivityForm.prjCoEmail}"/>										</td>
+											<c:out value="${aimEditActivityForm.contactInfo.prjCoFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.prjCoLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.prjCoEmail}"/>										</td>
 									</tr>
 									</feature:display>
 									<feature:display name="Sector Ministry Contact Information" module="Contact Information">
@@ -1694,9 +1689,9 @@
 										    Sector Ministry Contact Information</digi:trn>	
 									  </b>									</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.secMiCntFirstName}"/>
-											<c:out value="${aimEditActivityForm.secMiCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.secMiCntEmail}"/>										</td>
+											<c:out value="${aimEditActivityForm.contactInfo.secMiCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.contactInfo.secMiCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.contactInfo.secMiCntEmail}"/>										</td>
 									</tr>
 									</feature:display>
 									</module:display>
@@ -1752,24 +1747,24 @@
 									  <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn></b>
 									  </td>
 									<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.proProjCost!=null}">
+											<c:if test="${aimEditActivityForm.funding.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
 															<td>
 															<digi:trn key="aim:cost">Cost</digi:trn> 
 															</td>
                                                         <td bgcolor="#FFFFFF" align="left" >
-                                                          <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
-																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.proProjCost.funAmount}                                                          </c:if>&nbsp;
-																<c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.proProjCost.currencyCode} </c:if>                                                        </td>
+                                                          <c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
+																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          </c:if>&nbsp;
+																<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        </td>
 												    </tr>
 													<tr bgcolor="#ffffff">
 														<td>
 															<digi:trn key="aim:proposedcompletiondate">Proposed Completion Date</digi:trn>  
 														</td>
                                                         <td bgcolor="#FFFFFF" align="left" width="150">
-                                                          <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
-                                                             ${aimEditActivityForm.proProjCost.funDate}                                                          </c:if>                                                        </td>
+                                                          <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
+                                                             ${aimEditActivityForm.funding.proProjCost.funDate}                                                          </c:if>                                                        </td>
                                                       </tr>
                                               </table>
                             </c:if>										</td>

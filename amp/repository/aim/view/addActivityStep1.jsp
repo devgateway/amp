@@ -10,8 +10,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
-
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
@@ -267,7 +265,7 @@ ${fn:replace(message,quote,escapedQuote)}
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
 :
-										<bean:write name="aimEditActivityForm" property="title"/>
+										<bean:write name="aimEditActivityForm" property="identification.title"/>
 								</c:if>
 							</td>
 						</tr>

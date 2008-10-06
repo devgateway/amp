@@ -583,7 +583,7 @@ function addExpenditure()
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
 
-	<% col = eaForm.getFunding().getva;
+	<% col = eaForm.getFunding().getValidcurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();

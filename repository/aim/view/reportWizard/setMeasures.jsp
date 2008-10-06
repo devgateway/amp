@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 				<logic:iterate name="myForm" id="ampMeasures"property="ampMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
-					<field:display name="${ampMeasures.aliasName}" feature="Measures">
+					<feature:display name="${ampMeasures.aliasName}" module="Measures">
 							<li class="list1" id="measure_${ampMeasures.measureId}">
 								<input type="checkbox" value="${ampMeasures.measureId}" />
 								<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
@@ -22,5 +22,5 @@
 										<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn key="aim:report:UndisbursedBalanceToolip">Cumulative Commitment - Cumulative Disbursement (independent of filters)</digi:trn>">
 								</logic:equal>
 							</li>
-					</field:display>
+					</feature:display>
 				</logic:iterate>

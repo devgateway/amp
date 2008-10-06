@@ -284,7 +284,7 @@
 								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; 
 											vertical-align: bottom; padding-top: 5%; padding-left: 2%; padding-bottom: 5%; padding-right: 2%;">
 								<table>
-								<feature:display name="Donor Report" module="Reports">
+								<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>
                                                  <html:radio property="reportType" disabled="${disableFundingType}" value="donor"  onclick="repManager.checkSteps()">
@@ -293,7 +293,7 @@
                                                </td>
                                              </tr>
                                              </feature:display>
-                                             <feature:display name="Regional Report" module="Reports">										
+                                             <feature:display name="Regional Report" module="Report Types">										
                                              <tr>
                                                <td>
                                                  <html:radio property="reportType" disabled="${disableFundingType}" value="regional"  onclick="repManager.checkSteps()">
@@ -302,7 +302,7 @@
                                                </td>
                                              </tr>
                                              </feature:display>
-                                             <feature:display name="Component Report" module="Reports">
+                                             <feature:display name="Component Report" module="Report Types">
                                              <tr>
                                                <td>
                                  	            <html:radio property="reportType" disabled="${disableFundingType}" value="component"  onclick="repManager.checkSteps()">
@@ -311,7 +311,7 @@
                                                </td>
                                              </tr>
                                              </feature:display>
-                                               <feature:display module="Reports" name="Contribution Report">
+                                               <feature:display module="Report Types" name="Contribution Report">
                                                  <tr>
                                                    <td>
                                                      <html:radio property="reportType" disabled="${disableFundingType}" value="contribution"  onclick="repManager.checkSteps()">

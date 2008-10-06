@@ -49,11 +49,11 @@ function switchType(){
 }
 
 function switchComponent(){
-if (document.aimEditActivityForm.componentTitle.value!=-1){
+if (document.aimEditActivityForm.newCompoenentName.value!=''){
   	 document.getElementById('tblId').style.visibility="visible";                         		
      document.getElementById('tblId').style.position="relative";  
-     document.aimEditActivityForm.newCompoenentName.value="";
-		document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.aimEditActivityForm.componentTitle.value;
+     //document.aimEditActivityForm.newCompoenentName.value="";
+	document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.aimEditActivityForm.newCompoenentName.value;
   
   }else{
   	 document.getElementById('tblId').style.visibility="hidden";                         		
@@ -72,7 +72,6 @@ if (document.aimEditActivityForm.componentTitle.value!=-1){
    <feature:display name="Admin - Component Type" module="Components">
   }
 </feature:display>
-  
 }
 
 
@@ -150,35 +149,14 @@ function addComponent(){
 								<digi:trn key="aim:title">Title</digi:trn> </ a> 
 							</td>
 							<td>
-							
-							<html:select property="componentTitle"
-								styleClass="inp-text" onchange="switchComponent()">
-								<html:option value="-1">
-									<digi:trn key="aim:selectComponent">-Select Component-</digi:trn>
-								</html:option>
-								<c:forEach var="comp" items="${aimEditActivityForm.allComps}">
-									<html:option value="${comp.name}">${comp.shortName}</html:option>
-								</c:forEach>
-							</html:select>
-							</td>
-						</tr>
-						<!--
-						<field:display name="Add A New Component Button" feature="Admin - Component Type">
-						<tr>
-							<td align="right">
-								<digi:trn key="aim:addNewComponent">Add A New Component</digi:trn>
-							</td>
-							<td>
-								<html:text property="newCompoenentName" onchange="componentTitle.value=-1;switchComponent()"/> 
+								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>"/> 
 								<html:button property="addNewCompoenent" onclick="addComponent()">
 									<digi:trn key="aim:add">Add</digi:trn>
 								</html:button>
 							</td>
 						</tr>
-						</field:display>
-					-->
 					</table>
-
+					
 
 
 
@@ -642,15 +620,14 @@ function validate()
   var msgEnterCommitment="<digi:trn key="aim:selectComponent:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
   var msgEnterExpenditure="<digi:trn key="aim:selectComponent:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
 
-	var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
+	var titleFlag = isEmpty(document.aimEditActivityForm.newCompoenentName.value);
 	if(titleFlag == true) {
 		alert(msgEnterTitle);
-		document.aimEditActivityForm.componentTitle.focus();
 		return false;
 	}
 
 	var x = document.aimEditActivityForm;
-	if(document.aimEditActivityForm.componentTitle.value == -1)
+	if(document.aimEditActivityForm.newCompoenentName.value == '')
 	{
 		alert(msgSelectComponent);
 			return false;
@@ -740,8 +717,9 @@ function checkAmount(val){
 
 
 	function load() {
-		document.aimEditActivityForm.componentTitle.focus();
-		switchComponent();
+		if (document.aimEditActivityForm.newCompoenentName.value!=''){;
+			switchComponent();
+		}
 	}
 
 	

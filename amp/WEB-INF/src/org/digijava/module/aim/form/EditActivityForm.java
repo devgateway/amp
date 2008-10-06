@@ -3172,9 +3172,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String crisNumber;
 		private OrgProjectId selectedOrganizations[];
 
-		public OrgProjectId getSelectedOrganizations(int index) {
-			return selectedOrganizations[index];
-		}
+		
 
 		public void setSelectedOrganizations(int index, OrgProjectId orgProjectId) {
 			selectedOrganizations[index] = orgProjectId;
@@ -4766,7 +4764,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	}
 
+	
 	// indexed properties getter should be on the root form object
+	public OrgProjectId getSelectedOrganizations(int index) {
+		return identification.selectedOrganizations[index];
+	}
+	
 	public FundingDetail getFundingDetail(int index) {
 		int currentSize = funding.fundingDetails.size();
 		if (index >= currentSize) {

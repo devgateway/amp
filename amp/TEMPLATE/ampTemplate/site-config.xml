@@ -513,7 +513,7 @@
 				<!-- New Org Selector -->
 				<page>aim_orgSelectorSearchForm</page>
 				<page>aim_editIPAContract</page>
-                <page>aim_displaySave</page>
+				<page>aim_saveErrors</page>
                 
 				<page>previewLogframe</page>
 				<page>aim_fundingPopupLayout</page>

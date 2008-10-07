@@ -260,9 +260,6 @@
     <action name="aimIPAContractForm" path="/aim/editIPAContract" scope="session" type="org.digijava.module.aim.action.EditIPAContract">
       <forward name="forward" path="/showLayout.do?layout=aim_editIPAContract" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/displaySave" scope="session" type="org.digijava.module.aim.action.DisplaySave">
-      <forward name="forward" path="/showLayout.do?layout=aim_displaySave" />
-    </action>
 
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
@@ -1283,6 +1280,7 @@
       <forward name="activityExist" path="/showLayout.do?layout=activityExist" />
       <forward name="addActivityStepXNR" path="/aim/addActivity.do?edit=true"/>
       <forward name="addActivityStepX" path="/aim/addActivity.do?edit=true" redirect="true"  />
+      <forward name="saveErrors" path="/showLayout.do?layout=aim_saveErrors" />
     </action>
     <action name="aimEditActivityForm" path="/aim/compDateRevised" scope="session" type="org.digijava.module.aim.action.CompDateRevised">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />

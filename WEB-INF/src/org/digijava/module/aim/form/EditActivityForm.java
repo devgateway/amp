@@ -359,6 +359,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private Long[] selectedSPrograms;
 
 	
+	//*** Recovery Save
+	private String stepText[];
+	private Boolean stepFailure[];
+
+	//***
+	
 
 	
 	private List contracts;
@@ -5031,6 +5037,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public void setItem(int item) {
 		this.item = item;
+	}
+
+	public String[] getStepText() {
+		return stepText;
+	}
+
+	public void setStepText(String[] stepText) {
+		this.stepText = stepText;
+	}
+
+	public Boolean[] getStepFailure() {
+		return stepFailure;
+	}
+
+	public void setStepFailure(Boolean[] stepFailure) {
+		this.stepFailure = stepFailure;
 	}
 
 }

@@ -999,7 +999,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			try {
     				tx.rollback();
     				logger.debug("Transaction Rollbacked");
-    				logger.error("DBG-Transaction Rollbacked");
     			}
     			catch (HibernateException e) {
     				logger.error("Rollback failed", e);
@@ -1948,7 +1947,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
   public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId, Long activityId) {
     Collection col = null;
-    logger.info(" inside getting the funding.....");
+    logger.debug(" inside getting the funding.....");
     Session session = null;
 
     try {

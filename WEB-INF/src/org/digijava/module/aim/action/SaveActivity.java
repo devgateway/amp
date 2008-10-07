@@ -1893,11 +1893,11 @@ public class SaveActivity extends Action {
 		
 		AmpActivity recoveryActivity=null;
 		boolean recoveryMode = false;
-		logger.error("Attempting normal save!");
+		logger.debug("Attempting normal save!");
 		try {
 			rsp.setAlwaysRollback(false);
 			actId = switchSave(rsp);
-			logger.error("Succeeded!");
+			logger.debug("Succeeded!");
 			return actId;
 		} catch (Exception e) {
 			//TODO: Record error that initially caused save problems
@@ -1905,14 +1905,15 @@ public class SaveActivity extends Action {
 		}
 		
 		if (recoveryMode){
-			logger.error("<<<<RECOVERY MODE>>>>");
+			logger.debug("<<<<RECOVERY MODE>>>>");
+			rsp.setDidRecover(true);
 			int currentStep = 0;
 			int badSteps = 0;
 			
 			//we try to add each step to the amp activity and after adding each step we try to save
 			//if the save fails we exclude the step, and we rebuild the AmpActivity without that step
 			boolean rebuild = false;
-			logger.error("Building savable activity!");
+			logger.debug("Building savable activity!");
 			while (currentStep < rsp.getNoOfSteps() || rebuild){
 				recoveryActivity = new AmpActivity();
 				rsp.setActivity(recoveryActivity);
@@ -1934,13 +1935,12 @@ public class SaveActivity extends Action {
 						throw err;
 					}				
 					//We rebuild AmpActivity including all steps lower than currentStep
-					logger.error("Adding previous steps!");
+					logger.debug("Adding previous steps!");
 					for (int i = 0; i < currentStep; i++)
 						if (!rsp.getStepFailure()[i])
 							try {
 								processStepX(i, false, rsp.getEaForm(), recoveryActivity, rsp.getErrors(), rsp.getRequest(), rsp.getSession(), rsp.getTempComp(), rsp.getRelatedLinks(), rsp.getStepText());
 							} catch (Exception e) {
-								logger.error("---ERR");
 								// All steps till here should be validated, but let's take precaution
 								rsp.getStepFailure()[i] = true;
 								//TODO: Log a small error, that here I should never be
@@ -1957,7 +1957,7 @@ public class SaveActivity extends Action {
 							}
 					//no more problems with the steps ... we reset the counter
 					badSteps = 0;
-					logger.error("Activity built!");
+					logger.debug("Activity built!");
 					if (rebuild){ //if we needed just to rebuild the activity then exit
 						//adding final touches to activity
 						processPostStep(rsp.getEaForm(), recoveryActivity, rsp.getTm());
@@ -1966,12 +1966,12 @@ public class SaveActivity extends Action {
 						rebuild = false;
 						break thisStep;
 					}
-					logger.error("Adding step:" + String.valueOf(currentStep));
+					logger.debug("Adding step:" + String.valueOf(currentStep));
 					//we got to the step that we're trying to add 
 					try{
 						processStepX(currentStep, false, rsp.getEaForm(), recoveryActivity, rsp.getErrors(), rsp.getRequest(), rsp.getSession(), rsp.getTempComp(), rsp.getRelatedLinks(), rsp.getStepText());
 					} catch (Exception e) {
-						logger.error("    FAILED!");
+						logger.debug("    FAILED!");
 						//mark the step as failed 
 						rsp.getStepFailure()[currentStep] = true;
 						//no need to try saving ... because we didn't improve anything
@@ -1983,13 +1983,13 @@ public class SaveActivity extends Action {
 					processPostStep(rsp.getEaForm(), recoveryActivity, rsp.getTm());
 					recoveryActivity.setDraft(true);
 					
-					logger.error("Attempting partial save!");
+					logger.debug("Attempting partial save!");
 					//now let's try saving with the currently built AmpActivity
 					try {
 						rsp.setAlwaysRollback(true);
 						actId = switchSave(rsp);						
 					} catch (Exception e) {
-						logger.error("     FAILED!");
+						logger.debug("     FAILED!");
 						rsp.getStepFailure()[currentStep] = true;
 					}
 					if (currentStep == rsp.getNoOfSteps() - 1) //if the last added Step has failed then rebuild the activity
@@ -1999,7 +1999,7 @@ public class SaveActivity extends Action {
 			}
 			
 		}
-		logger.error("PARTIAL SAVE!");
+		logger.debug("PARTIAL SAVE!");
 		try {
 			if (recoveryActivity != null){
 				rsp.setAlwaysRollback(false);
@@ -2008,10 +2008,10 @@ public class SaveActivity extends Action {
 			else{
 				throw new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false);
 			}
-			logger.error("SUCCESS!");
+			logger.debug("SUCCESS!");
 			return actId;
 		} catch (Exception e) {
-			logger.error("FAILED!!!!!!!!!!!!");
+			logger.debug("FAILED!!!!!!!!!!!!");
 			err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false);
 			throw err;
 		}
@@ -2086,13 +2086,16 @@ public class SaveActivity extends Action {
 		//The number of processStep methods we have
 		final int noOfSteps = 11;
 		String stepText[] = new String[noOfSteps];
-		boolean stepFailure[] = new boolean[noOfSteps];
+		Boolean stepFailure[] = new Boolean[noOfSteps];
 		for (int i = 0; i < noOfSteps; i++){
 			stepFailure[i] = false;
 			stepText[i] = new String();
 		}
+		eaForm.setStepText(stepText);
+		eaForm.setStepFailure(stepFailure);
 
-		logger.error("No of steps:" + String.valueOf(eaForm.getSteps().size()));
+		
+		logger.debug("No of steps:" + String.valueOf(eaForm.getSteps().size()));
 		
 		int stepNumber = 0;
 		while (stepNumber < noOfSteps){
@@ -2103,7 +2106,7 @@ public class SaveActivity extends Action {
 					if (error.getLevel() == Constants.AMP_ERROR_LEVEL_WARNING){
 						//in this case user messed up, the ActionError was set-up in the method
 						//we just redirect him to the page where he needs to correct the input
-						logger.error(">>> EROARE mica redirect! Step:" + stepText[stepNumber]);
+						logger.debug(">>> Warning -> redirect to step:" + stepText[stepNumber]);
 						eaForm.setStep(stepText[stepNumber]);
 						request.setAttribute("step", stepText[stepNumber]);
 						String forwardText = "addActivityStep" + stepText[stepNumber];
@@ -2112,14 +2115,14 @@ public class SaveActivity extends Action {
 					}
 					else{
 						//TODO: redirect to custom error page
-						logger.error(">>> EROARE NIVEL MARE! Step:" + stepText[stepNumber]);
+						logger.error(">>> Error on step:" + stepText[stepNumber]);
 					}
 				}
 				else{
-					logger.error(">>> EROARE NECONT! Step:" + stepText[stepNumber]);
+					logger.error(">>> Error that is not continuable on step:" + stepText[stepNumber]);
 				}
 			} catch (Exception e) {
-				logger.error(">>> EROARE NASHPA !" + stepText[stepNumber]);
+				logger.error(">>> Unknown error on step:" + stepText[stepNumber]);
 			}
 			stepNumber++;
 		}
@@ -2141,12 +2144,12 @@ public class SaveActivity extends Action {
 		 * Both cases (when editing and when creating a new activity) are treated inside the method 
 		 */
 	    processPostStep(eaForm, activity, tm);
-		
+	    RecoverySaveParameters rsp;
 	    if (eaForm.isEditAct()) {
 			List<String> auditTrail = AuditLoggerUtil.generateLogs(
 					activity, eaForm.getActivityId());
 			//*** Preparing parameters for the recovery save
-			RecoverySaveParameters rsp = new RecoverySaveParameters();
+			rsp = new RecoverySaveParameters();
 			rsp.setNoOfSteps(noOfSteps);
 			rsp.setStepText(stepText);
 			rsp.setStepFailure(stepFailure);
@@ -2162,6 +2165,7 @@ public class SaveActivity extends Action {
 			
 			rsp.setRelatedLinks(relatedLinks);
 			rsp.setTempComp(tempComp);
+			rsp.setDidRecover(false);
 			//***
 			
 			// update an existing activity
@@ -2219,7 +2223,7 @@ public class SaveActivity extends Action {
 			
 
 			//*** Preparing parameters for the recovery save
-			RecoverySaveParameters rsp = new RecoverySaveParameters();
+			rsp = new RecoverySaveParameters();
 			rsp.setNoOfSteps(noOfSteps);
 			rsp.setStepText(stepText);
 			rsp.setStepFailure(stepFailure);
@@ -2235,6 +2239,7 @@ public class SaveActivity extends Action {
 			
 			rsp.setRelatedLinks(relatedLinks);
 			rsp.setTempComp(tempComp);
+			rsp.setDidRecover(false);
 			//***
 
 			actId = recoverySave(rsp);			
@@ -2342,7 +2347,10 @@ public class SaveActivity extends Action {
 				logger.debug("forwarding to edit survey action...");
 				return mapping.findForward("saveSurvey");
 			} else {*/
-				return mapping.findForward("viewMyDesktop");
+				if (rsp.isDidRecover())
+					return mapping.findForward("saveErrors");
+				else
+					return mapping.findForward("viewMyDesktop");
 			//}
 		} else {
 			logger.info("returning null....");

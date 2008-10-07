@@ -25,7 +25,7 @@ import org.digijava.module.aim.helper.TeamMember;
 public class RecoverySaveParameters {
 	private int noOfSteps;
 	private String stepText[];
-	private boolean stepFailure[];
+	private Boolean stepFailure[];
 	private EditActivityForm eaForm;
 	private TeamMember tm;
 	private AmpActivity activity;
@@ -39,7 +39,14 @@ public class RecoverySaveParameters {
 	private boolean alwaysRollback;
 	private Long oldActivityId;
 	private boolean edit;
+	private boolean didRecover;
 	
+	public boolean isDidRecover() {
+		return didRecover;
+	}
+	public void setDidRecover(boolean didRecover) {
+		this.didRecover = didRecover;
+	}
 	public Long getOldActivityId() {
 		return oldActivityId;
 	}
@@ -64,10 +71,10 @@ public class RecoverySaveParameters {
 	public void setStepText(String[] stepText) {
 		this.stepText = stepText;
 	}
-	public boolean[] getStepFailure() {
+	public Boolean[] getStepFailure() {
 		return stepFailure;
 	}
-	public void setStepFailure(boolean[] stepFailure) {
+	public void setStepFailure(Boolean[] stepFailure) {
 		this.stepFailure = stepFailure;
 	}
 	public EditActivityForm getEaForm() {

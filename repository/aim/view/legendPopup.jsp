@@ -13,6 +13,9 @@
 <div style='position:relative;display:none;' id='legendPopup'> 
 	<ul>
 		<li>
+			<font color="blue"> <digi:trn key="aim:bluetext">blue text</digi:trn></font> - <digi:trn key="aim:validatedText">Validated activities</digi:trn>
+		</li>
+		<li>
 			<font color="GREEN">* <digi:trn key="aim:greentext">green text</digi:trn></font> - <digi:trn key="aim:newUnvalidatedText">New Unvalidated. These are new activites that have never been approved by the workspace manager</digi:trn>
 		</li>
 		<li>

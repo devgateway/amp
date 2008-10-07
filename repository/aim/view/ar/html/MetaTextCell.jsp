@@ -7,11 +7,13 @@
 	toScope="page" />
 
 <c:set var="starFlag" value="false" target="request" scope="request" />
- <font color="${metaTextCell.colour}">
+ <font color="BLUE">
  		<c:if test="${metaTextCell.colour == 'GREEN' && metaTextCell.statusFlag == 'started'}">
+ 			 <font color="GREEN">
 	 		<c:set var="starFlag" value="true" target="request" scope="request" />
  		</c:if>
  		<c:if test="${metaTextCell.colour == 'RED' && metaTextCell.statusFlag == 'started'}">
+	 		<font color="RED">
 	 		<c:set var="starFlag" value="true" target="request" scope="request" />
  		</c:if>
 

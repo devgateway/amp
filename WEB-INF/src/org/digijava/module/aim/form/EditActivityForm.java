@@ -363,9 +363,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private String stepText[];
 	private Boolean stepFailure[];
 
-	//***
-	
-
 	
 	private List contracts;
 	private Integer selContractId;
@@ -3693,7 +3690,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Funding {
 		private ProposedProjCost proProjCost;
 		private Collection<FundingOrganization> fundingOrganizations;
-
+		private String donorObjective;
 		private List<FundingDetail> fundingDetails;
 
 		private String totalCommitted = "";
@@ -4151,6 +4148,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setReportingDate(String reportingDate) {
 			this.reportingDate = reportingDate;
+		}
+
+		public String getDonorObjective() {
+			return donorObjective;
+		}
+
+		public void setDonorObjective(String donorObjective) {
+			this.donorObjective = donorObjective;
 		}
 	}
 
@@ -5046,13 +5051,4 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setStepText(String[] stepText) {
 		this.stepText = stepText;
 	}
-
-	public Boolean[] getStepFailure() {
-		return stepFailure;
-	}
-
-	public void setStepFailure(Boolean[] stepFailure) {
-		this.stepFailure = stepFailure;
-	}
-
 }

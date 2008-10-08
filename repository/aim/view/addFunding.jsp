@@ -1152,7 +1152,7 @@
 					</td>
 					<td align="left" bgcolor=#ECF3FD>
 					<a title="<digi:trn key="aim:DonorObjectiveforFundRelease">Enter the donor objective attached to the release of the funds</digi:trn>">
-						<html:textarea property="donorObjective" rows="3" cols="75" styleClass="inp-text"/>
+						<html:textarea property="funding.donorObjective" rows="3" cols="75" styleClass="inp-text"/>
 					</a>
 					</td>
 				</tr>

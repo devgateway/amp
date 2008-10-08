@@ -5051,4 +5051,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setStepText(String[] stepText) {
 		this.stepText = stepText;
 	}
+
+	public Boolean[] getStepFailure() {
+		return stepFailure;
+	}
+
+	public void setStepFailure(Boolean[] stepFailure) {
+		this.stepFailure = stepFailure;
+	}
 }

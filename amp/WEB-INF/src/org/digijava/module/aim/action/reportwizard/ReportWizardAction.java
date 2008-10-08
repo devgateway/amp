@@ -312,15 +312,22 @@ public class ReportWizardAction extends MultiAction {
 		if ( ampReportId == null ||ampReportId.length() == 0 )
 			throw new Exception ("No reportId found in request");
 		
+		Long reportId				= Long.parseLong(ampReportId);
+		
 		String ampReportTitle			= request.getParameter("reportTitle");
 		if ( ampReportTitle == null || ampReportTitle.length() == 0 )
 			throw new Exception ("No reportTitle found in request");
 		
-		AmpReports ampReport			= ReportWizardAction.duplicateReportData( Long.parseLong(ampReportId) );
-		if (ampReport == null || ampReportTitle.length() == 0)
+		AmpReports ampReport			= ReportWizardAction.duplicateReportData( reportId );
+		if ( ampReport == null )
 			throw new Exception ("There was a problem getting the original report from the database");
 		
-		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), Long.parseLong(ampReportId) ) ) {
+		if ( ampReportTitle.equals(ampReport.getName()) ) { // we need to override the report
+			ampReport.setAmpReportId( reportId );
+			AmpFilterData.deleteOldFilterData( reportId );
+		}
+		
+		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId ) ) {
 			myForm.setDuplicateName(true);
 			throw new Exception("The name " + ampReportTitle + " is already used by another report");
 		}

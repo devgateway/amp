@@ -12,7 +12,6 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <digi:instance property="aimEditActivityForm" />
-								<field:display name="Responsible Organization" feature="Responsible Organization">
 								<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:OrganisationResponsible">The responsible Organization</digi:trn>">
@@ -64,7 +63,6 @@
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-										</field:display>
 
 										<logic:empty name="aimEditActivityForm" property="agencies.respOrganisations">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>

@@ -1682,7 +1682,9 @@ function collapseAll() {
 											<digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-										<field:display name="Responsible Organization" feature="Responsible Organization">
+										<feature:display module="Organizations" name="Responsible Organization"></feature:display>
+
+										<feature:display module="Organizations" name="Responsible Organization">
 											<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations">
 												<img id="implementing_agency_plus"  onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
                                             	<img id="implementing_agency_minus" onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
@@ -1700,7 +1702,7 @@ function collapseAll() {
 												</table>
 												</div>
 											</logic:notEmpty>
-                                            </field:display>
+                                            </feature:display>
 											<div id="orgz_dots">...</div>
 											<div id="act_orgz" style="display: none;">
 											   <feature:display name="Executing Agency" module="Organizations">

@@ -114,7 +114,8 @@ public class ViewMainProjectDetails extends TilesAction {
 		 			formBean.setButtonText("approvalAwaited");
 		 		//burkina
 		 		// if an user save an activity he could edit it even it is not approved by team leader
-		 		if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
+		 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
+		 		if(workingTeamFlag)
 		 			formBean.setButtonText("edit");
 		 		
 		 	}

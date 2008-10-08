@@ -243,7 +243,7 @@ function preview(id)
 															Donor Objective</digi:trn></b>
 														</TD>
 														<TD bgcolor="#f4f4f2">
-															<bean:write name="aimFinancialOverviewForm" property="donorObjective" />
+															<bean:write name="aimFinancialOverviewForm" property="funding.donorObjective"/>
 														</TD>
 													</TR>
 												</TABLE>

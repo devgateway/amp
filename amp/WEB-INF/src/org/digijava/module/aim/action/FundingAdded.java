@@ -87,7 +87,7 @@ public class FundingAdded extends Action {
 		newFund.setOrgFundingId(eaForm.getFunding().getOrgFundingId());
 		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getModality()));
 		newFund.setConditions(eaForm.getFunding().getFundingConditions());
-		//newFund.setDonorObjective(eaForm.getFunding().getDonorObjective());
+		newFund.setDonorObjective(eaForm.getFunding().getDonorObjective());
 		newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getAssistanceType()) );
 		newFund.setOrgFundingId(eaForm.getFunding().getOrgFundingId());
 		newFund.setFinancingInstrument(CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getFunding().getModality()));

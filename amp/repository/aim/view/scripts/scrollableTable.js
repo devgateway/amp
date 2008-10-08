@@ -71,8 +71,9 @@ function scrollableTable(tableId,height){
 							 				
 							var perValue=((this.theader.rows[i].cells[j].offsetWidth*100)/this.table.offsetWidth) -perPadding -perBorder;
 							var pxValue=this.theader.rows[i].cells[j].offsetWidth-padding-border;
-							
-							this.theader.rows[i].cells[j].width=(this.usePercentage)?(perValue+"%"):pxValue;
+							if(pxValue >0){
+								this.theader.rows[i].cells[j].width=(this.usePercentage)?(perValue+"%"):pxValue;
+							}
 							if (this.debug){
 								this.theader.rows[i].cells[j].innerHTML=this.theader.rows[i].cells[j].width
 							}
@@ -97,13 +98,17 @@ function scrollableTable(tableId,height){
 						var pxValue=nclone.cells[j].offsetWidth;
 						//nclone.cells[j].innerHTML="";
 						if (j==nclone.cells.length -1){
+								if(pxValue >0){
 									nclone.cells[j].width=(this.usePercentage)?((perValue-scrollSize)+"%"):pxValue-scrollSize;
+								}
 									nclone.cells[j].innerHTML="";
 								if (this.debug){
 									nclone.cells[j].innerHTML=nclone.cells[j].width;
 								}
 							}else{//no last row
+								if(pxValue >0){
 									nclone.cells[j].width=(this.usePercentage)?(perValue+"%"):pxValue;
+								}
 									nclone.cells[j].innerHTML="";
 								if (this.debug){
 									nclone.cells[j].innerHTML=nclone.cells[j].width;
@@ -219,7 +224,7 @@ function scrollableTable(tableId,height){
 		 divContent.parentNode.insertBefore(newTable,divContent);
 		 this.table.style.visibility="visible";
 		}catch(e){
-			//alert(e);
+			alert(e);
 		}
 	}
 	

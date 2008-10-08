@@ -126,7 +126,7 @@
 																		</a></td>
 																		<td width="1">:</td>
 																		<td align="left">
-																			<bean:write name="funding" property="funding.donorObjective" />
+																			<bean:write name="funding" property="donorObjective" />
 																		</td>
 																	</tr>
 																</field:display>

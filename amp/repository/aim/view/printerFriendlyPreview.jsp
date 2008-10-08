@@ -412,7 +412,7 @@
 													${aimEditActivityForm.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
-
+											
 												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
 													<td width="32%">
@@ -613,7 +613,7 @@
 												false
 											</c:set>
 
-											<c:forEach var="actSect" items="${aimEditActivityForm.sectors.0}">
+											<c:forEach var="actSect" items="${aimEditActivityForm.sectors}">
 												<c:if test="${actSect.configId==config.id}">
 													<c:set var="hasSectors">
 														true

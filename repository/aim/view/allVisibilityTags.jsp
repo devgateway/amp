@@ -307,8 +307,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Contribution Donors" feature="Costing"></field:display>
 <field:display name="Contribution Financing Type" feature="Costing"></field:display>
 
-<field:display name="Cumulative Commitment" feature="Commitments"></field:display>
-<field:display name="Cumulative Disbursement" feature="Disbursement"></field:display>
+<field:display name="Cumulative Commitment" feature="Funding Information"></field:display>
+<field:display name="Cumulative Disbursement" feature="Funding Information"></field:display>
 <field:display name="Undisbursed Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
 <field:display name="Uncommitted Cumulative Balance" feature="Funding Information">&nbsp;</field:display>
 <field:display name="Currency Commitment" feature="Commitments"></field:display>
@@ -679,21 +679,21 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Table Column Widgth" feature="Table Widgets"></field:display>
 <field:display name="Table Column HTML Style" feature="Table Widgets"></field:display>
 
-	<feature:display name="Admin - Component" module="Components"></feature:display>
-		<field:display name="Title" feature="Admin - Component"></field:display>
-		<field:display name="Code" feature="Admin - Component"></field:display>
-		<field:display name="Type" feature="Admin - Component"></field:display>
-		<field:display name="Description" feature="Admin - Component"></field:display>
-		<field:display name="Save Button" feature="Admin - Component"></field:display>
-		<field:display name="Cancel Button" feature="Admin - Component"></field:display>
+<feature:display name="Admin - Component" module="Components"></feature:display>
+<field:display name="Title" feature="Admin - Component"></field:display>
+<field:display name="Code" feature="Admin - Component"></field:display>
+<field:display name="Type" feature="Admin - Component"></field:display>
+<field:display name="Description" feature="Admin - Component"></field:display>
+<field:display name="Save Button" feature="Admin - Component"></field:display>
+<field:display name="Cancel Button" feature="Admin - Component"></field:display>
 
-	<feature:display name="Admin - Component Type" module="Components"></feature:display>
-		<field:display name="Name" feature="Admin - Component Type"></field:display>
-		<field:display name="Code" feature="Admin - Component Type"></field:display>
-		<field:display name="Enable checkbox" feature="Admin - Component Type"></field:display>
-		<field:display name="Save Button" feature="Admin - Component Type"></field:display>
-		<field:display name="Cancel Button" feature="Admin - Component Type"></field:display>
-		<field:display name="Close Button" feature="Admin - Component Type"></field:display>
+<feature:display name="Admin - Component Type" module="Components"></feature:display>
+<field:display name="Name" feature="Admin - Component Type"></field:display>
+<field:display name="Code" feature="Admin - Component Type"></field:display>
+<field:display name="Enable checkbox" feature="Admin - Component Type"></field:display>
+<field:display name="Save Button" feature="Admin - Component Type"></field:display>
+<field:display name="Cancel Button" feature="Admin - Component Type"></field:display>
+<field:display name="Close Button" feature="Admin - Component Type"></field:display>
 		
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display>

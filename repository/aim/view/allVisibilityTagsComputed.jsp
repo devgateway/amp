@@ -347,8 +347,8 @@
 <field:display name="Costing Total Cost" feature="Costing"></field:display> 
 <field:display name="Creation date" feature="Admin"></field:display> 
 <field:display name="Credit/Donation" feature="Planning"></field:display> 
-<field:display name="Cumulative Commitment" feature="Commitments"></field:display> 
-<field:display name="Cumulative Disbursement" feature="Disbursement"></field:display> 
+<field:display name="Cumulative Commitment" feature="Funding Information"></field:display> 
+<field:display name="Cumulative Disbursement" feature="Funding Information"></field:display> 
 <field:display name="Currency Commitment" feature="Commitments"></field:display> 
 <field:display name="Currency Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Currency Disbursement" feature="Disbursement"></field:display> 

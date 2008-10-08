@@ -115,9 +115,12 @@ function scrollableTable(tableId,height){
 			
 			//this is the normal setbodyWidthFUnction
 			 this.setBodyWidth=function(){
-				for (i=0;i < this.maxRowDepth;i++){
+			 	var maxRowNum	= this.maxRowDepth;
+			 	if ( this.maxRowDepth > this.tbody.rows.length ) 
+			 		maxRowNum	= this.tbody.rows.length;
+				for (i=0; i<maxRowNum  ;i++){
 						//set cells widths
-						for (j=0;j < this.tbody.rows[i].cells.length ;j++){
+						for (j=0; j<this.tbody.rows[i].cells.length ;j++){
 							var padding=0;
 							var border=0;
 							var perBorder=0;
@@ -216,7 +219,7 @@ function scrollableTable(tableId,height){
 		 divContent.parentNode.insertBefore(newTable,divContent);
 		 this.table.style.visibility="visible";
 		}catch(e){
-		//	alert(e);
+			//alert(e);
 		}
 	}
 	

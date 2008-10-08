@@ -714,10 +714,9 @@
 			<td align="center" colspan="5">
 			<html:hidden property="ampReportId" />
 			<html:hidden property="defaultCurrency" />
-			<html:submit styleClass="dr-menu"
-				property="apply">
-				<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>
-			</html:submit>&nbsp; <html:button onclick="resetFilter();" styleClass="dr-menu"
+			<input class="dr-menu" id="filterPickerSubmitButton" name="apply" type="button" onclick="submitFilters()"
+				value="<digi:trn key='rep:filer:ApplyFiltersToReport'>Apply Filters to the Report</digi:trn>" /> 
+			<html:button onclick="resetFilter();" styleClass="dr-menu"
 				property="reset">
 				<digi:trn key="rep:filer:ResetAndStartOver">Reset and Start Over</digi:trn>
 			</html:button> </td>

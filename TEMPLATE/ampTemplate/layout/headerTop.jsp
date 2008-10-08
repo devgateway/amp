@@ -69,7 +69,7 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
         <td valign="center" height="34" width="60%">&nbsp;
             <logic:notEmpty name="defFlagExist" scope="application">
                 <logic:equal name="defFlagExist" scope="application" value="true">
-                <img src="<%=displayFlag%>" border="1" width="30" vspace="2" hspace="2" align="absmiddle">
+                <img src="<%=displayFlag%>" border="0" width="30" vspace="2" hspace="2" align="absmiddle">
                 </logic:equal>
             </logic:notEmpty>
             <digi:link href="/" module="aim" styleClass="header_title" onclick="return quitRnot1('${msg}')" title="Aid Management Platform">

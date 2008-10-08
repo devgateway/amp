@@ -1,5 +1,10 @@
 package org.digijava.module.aim.action;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +42,16 @@ public class DisplayFlag extends Action {
 			Boolean defFalgExist = (Boolean) ampContext.getAttribute(Constants.DEF_FLAG_EXIST);
 			if (defFalgExist.booleanValue() == true) {
 				ServletOutputStream os = response.getOutputStream();
-				os.write(FeaturesUtil.getDefaultFlag());
+				byte[] defaultFlag = FeaturesUtil.getDefaultFlag();
+				if(defaultFlag != null)
+				{
+					os.write(defaultFlag);
+				}
+				else
+				{
+		            BufferedImage bufferedImage = new BufferedImage(30, 30, BufferedImage.TRANSLUCENT);
+		            ImageIO.write(bufferedImage, "png", os);
+				}
 				os.flush();									
 			}
 		}

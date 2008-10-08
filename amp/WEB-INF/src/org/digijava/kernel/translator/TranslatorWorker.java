@@ -1003,7 +1003,8 @@ public class TranslatorWorker {
             throw new WorkerException("TranslatorWorker.SqlExSaveMessage.err", se);
 
         }
-        catch (HibernateException e) {        	
+        catch (HibernateException e) {
+        	logger.warn("saveOrUpdate() failed for Message with siteId=" + message.getSiteId() + ", key = " + message.getKey() + ",locale=" + message.getLocale(), e);
         	try {
         		ses.save(message);
                 tx.commit();

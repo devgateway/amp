@@ -161,10 +161,20 @@ public abstract class XLSExporter extends Exporter {
 			logger.error(e);
 			e.printStackTrace();
 		}
-				
-		sheet.addMergedRegion(r);
-		sheet.autoSizeColumn(r.getColumnFrom());
-		
+			
+		try{
+			sheet.addMergedRegion(r);
+		} catch(Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		try{
+			sheet.autoSizeColumn(r.getColumnFrom());
+		} catch(Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+	
 		colId.inc(++size);
 	}
 

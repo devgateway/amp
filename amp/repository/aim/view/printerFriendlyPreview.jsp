@@ -407,9 +407,9 @@
 													Ministry of Planning Rank</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-													<c:if test="${aimEditActivityForm.planMinRank == -1}">													</c:if>
-													<c:if test="${aimEditActivityForm.planMinRank != -1}">
-													${aimEditActivityForm.planMinRank}													</c:if>													</td>
+													<c:if test="${aimEditActivityForm.planning.planMinRank == -1}">													</c:if>
+													<c:if test="${aimEditActivityForm.planning.planMinRank != -1}">
+													${aimEditActivityForm.planning.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
 											
@@ -420,7 +420,7 @@
 													</td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.originalAppDate}													</td>
+														${aimEditActivityForm.planning.originalAppDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Actual Approval Date" feature="Planning">
@@ -428,7 +428,7 @@
 													<td width="32%"><digi:trn key="aim:actualapprovaldate">Actual Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.revisedAppDate}													</td>
+														${aimEditActivityForm.planning.revisedAppDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Proposed Start Date" feature="Planning">
@@ -436,7 +436,7 @@
 													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.originalStartDate}													</td>
+														${aimEditActivityFormplanning.planning.originalStartDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Final Date for Contracting" feature="Planning">
@@ -445,7 +445,7 @@
 													<digi:trn key="aim:ContractingDateofProject1">Final Date for Contracting</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.contractingDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.contractingDate}"/>													</td>
 												</tr>
 												</field:display>
 												<field:display name="Final Date for Disbursements" feature="Planning">
@@ -453,7 +453,7 @@
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.disbursementsDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
 												</tr>
 												</field:display>
 												<field:display name="Actual Start Date" feature="Planning">
@@ -461,7 +461,7 @@
 													<td width="32%"><digi:trn key="aim:actualStartDate">Actual Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.revisedStartDate}													</td>
+														${aimEditActivityForm.planning.revisedStartDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Proposed Completion Date" feature="Planning">
@@ -471,7 +471,7 @@
 													Proposed Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.proposedCompDate}													</td>
+														${aimEditActivityForm.planning.proposedCompDate}													</td>
 												</tr>
 												</c:if>
 												</field:display>
@@ -481,7 +481,7 @@
 													Current Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.currentCompDate}"/>													</td>
+														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
 												</tr>
 												</field:display>
 												<c:if test="${aimEditActivityForm.editAct}">
@@ -519,8 +519,8 @@
                                                   	</b>                      	      
                                                   	</td>
 													<td bgcolor="#FFFFFF">
-												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/><br><br>
-                                                        <c:out value="${aimEditActivityForm.statusReason}"/>
+												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.planning.statusId}"/><br><br>
+                                                        <c:out value="${aimEditActivityForm.planning.statusReason}"/>
                                                    </td>									
                                          	 </tr>
 										</field:display>									
@@ -613,7 +613,7 @@
 												false
 											</c:set>
 
-											<c:forEach var="actSect" items="${aimEditActivityForm.sectors}">
+											<c:forEach var="actSect" items="${aimEditActivityForm.sectors.activitySectors}">
 												<c:if test="${actSect.configId==config.id}">
 													<c:set var="hasSectors">
 														true

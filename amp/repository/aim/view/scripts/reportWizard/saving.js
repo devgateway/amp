@@ -28,7 +28,7 @@ function getReportTitle() {
 }
 
 function getReportDescription() {
-	return aimReportWizardForm.reportDescription.value;
+	return escape(aimReportWizardForm.reportDescriptionClone.value);
 }
 
 function getHideActivities() {

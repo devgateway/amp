@@ -157,6 +157,7 @@
 			YAHOO.amp.reportwizard.tabView.addListener("contentReady", continueInitialization);
 		}
 		function continueInitialization(){
+			aimReportWizardForm.reportDescriptionClone.value	= unescape(aimReportWizardForm.reportDescription.value);
 			treeObj = new DHTMLSuite.JSDragDropTree();
 			treeObj.setTreeId('dhtmlgoodies_tree');
 			treeObj.init();
@@ -376,7 +377,10 @@
 									${descriptionName}
 								</span>
 								<br/>
-								<html:textarea property="reportDescription" styleClass="inp-text" style="border: 1px solid gray;width: 100%; height: 250px;" />
+								<html:hidden property="reportDescription" />
+								<textarea name="reportDescriptionClone" class="inp-text" style="border: 1px solid gray;width: 100%; height: 250px;">
+									&nbsp;
+								</textarea>
 							</td>
 						</tr>
 					</table>

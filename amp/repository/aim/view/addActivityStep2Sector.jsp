@@ -92,23 +92,26 @@
                                     <c:forEach var="config" items="${aimEditActivityForm.sectors.classificationConfigs}" varStatus="ind">
                                     <bean:define id="generalSector" value="false"/>
 									<c:if test="${config.name== 'Primary' }">
-										<bean:define id="auxSectorType" value="Primary Sector"></bean:define>
+										<bean:define id="auxSectorType" value="Primary Sector" />
 										<logic:equal name="aimEditActivityForm" property="sectors.primarySectorVisible" value="true">
 											<bean:define id="generalSector" value="true"/>
 										</logic:equal>
 									</c:if>
 									<c:if test="${config.name== 'Secondary' }">
-										<bean:define id="auxSectorType" value="Secondary Sector"></bean:define>
+										<bean:define id="auxSectorType" value="Secondary Sector" />
 										<logic:equal name="aimEditActivityForm" property="sectors.secondarySectorVisible" value="true">
 											<bean:define id="generalSector" value="true"/>
 										</logic:equal>
 									</c:if>
 									<bean:define id="contentDisabled">false</bean:define>
+									<bean:write name="contentDisabled"/>
 									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
 									</c:set>
+									<bean:write name="contentDisabled"/>
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
+									<bean:write name="contentDisabled"/>
 									<logic:equal name="generalSector" value="true">
                                          <c:set var="sectorAdded">
                                               false

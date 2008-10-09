@@ -114,6 +114,10 @@ public class AddAmpActivity extends Action {
 
     // Get the current member who has logged in from the session
     teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    String action = request.getParameter("action");
+    if (action != null && action.trim().length() != 0)
+      if ("create".equals(action)) 
+    	  PermissionUtil.resetScope(session);
     PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
     //PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 
@@ -123,7 +127,7 @@ public class AddAmpActivity extends Action {
 
     //return mapping.findForward("publicPreview");
 
-    EditActivityForm eaForm = (EditActivityForm) form; 
+    EditActivityForm eaForm = (EditActivityForm) form;
     session.setAttribute("selectedSectorsForActivity", eaForm.getSectors().getActivitySectors());  
       
     //START-patch for error redirecting
@@ -290,7 +294,7 @@ public class AddAmpActivity extends Action {
       // added by Akash
       // desc: clearing comment properties
       // start
-      String action = request.getParameter("action");
+      action = request.getParameter("action");
       if (action != null && action.trim().length() != 0) {
         if ("create".equals(action)) {
           eaForm.getCommentsCol().clear();

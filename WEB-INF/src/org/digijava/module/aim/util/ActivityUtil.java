@@ -1173,7 +1173,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     try {
       Session session = PersistenceManager.getRequestDBSession();
 
-      String oql = "select act from " + AmpActivityProgram.class.getName() + " prog ";
+      String oql = "select distinct act from " + AmpActivityProgram.class.getName() + " prog ";
       oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
       oql += " order by act.name";
 
@@ -1219,7 +1219,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 	    Integer result = null;
 	    try {
 	      Session session = PersistenceManager.getRequestDBSession();
-	      String oql = "select count(act) from " + AmpActivityProgram.class.getName() + " prog ";
+	      String oql = "select count(distinct act) from " + AmpActivityProgram.class.getName() + " prog ";
 	      oql += getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
 	      oql += " order by act.name";
 

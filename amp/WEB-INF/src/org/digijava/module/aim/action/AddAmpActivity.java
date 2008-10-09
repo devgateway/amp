@@ -659,19 +659,20 @@ private ActionForward addSector(ActionMapping mapping, HttpSession session,
 	                if (prevSelSectors != null) {
 	                    Iterator iter = prevSelSectors.iterator();
 	                    boolean firstSecForConfig = true;
-	                    while (iter.hasNext()) {
-	                        ActivitySector actSect = (ActivitySector) iter
-	                            .next();
-	                        if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
-	                        	if(selectedSector.getSectorPercentage()==100f){
-	                        		selectedSector.setSectorPercentage(0f);
-	                        	}	
-	                            firstSecForConfig = false;
-	                            break;
-	                        }
+                        while (iter.hasNext()) {
+                            ActivitySector actSect = (ActivitySector) iter
+                                .next();
+                            if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+                            	if(actSect.getSectorPercentage() != null && actSect.getSectorPercentage()==100f){
+                            		actSect.setSectorPercentage(0f);
+                            	}	
+                            		
+                                firstSecForConfig = false;
+                                break;
+                            }
 
-	                    }
-	                    if (firstSecForConfig) {
+                        }
+                        if (firstSecForConfig) {
 	                        selectedSector.setSectorPercentage(100f);
 	                    }
 	                    prevSelSectors.add(selectedSector);

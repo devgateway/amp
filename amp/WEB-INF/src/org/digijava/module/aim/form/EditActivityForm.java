@@ -4780,7 +4780,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public OrgProjectId getSelectedOrganizations(int index) {
 		return identification.selectedOrganizations[index];
 	}
-	
+
+	public ActivitySector getActivitySectors(int index) {
+		return (ActivitySector)(sectors.activitySectors.toArray()[index]);
+	}
+
 	public FundingDetail getFundingDetail(int index) {
 		int currentSize = funding.fundingDetails.size();
 		if (index >= currentSize) {

@@ -269,11 +269,11 @@ public class ViewChannelOverview extends TilesAction {
                 		formBean=setSectorsToForm(formBean, activity);
                 		formBean=setTypesOfAssistanceToForm(formBean, activity);
                 		formBean=setUniqueModalitiesToForm(formBean, activity);
-
-						formBean.setImpLocation(CategoryManagerUtil
-									.getAmpCategoryValueFromListByKey(
-											CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
-											activity.getCategories()).getId());
+                                AmpCategoryValue impLocation=CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY,activity.getCategories());
+                                if(impLocation!=null){
+                                    formBean.setImpLocation(impLocation.getId());
+                                }
+						
 
 						formBean.setProjectCategory(
 						    CategoryManagerUtil.getStringValueOfAmpCategoryValue(

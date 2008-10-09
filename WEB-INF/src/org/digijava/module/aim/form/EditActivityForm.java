@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpComponentType;
@@ -4783,6 +4784,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public ActivitySector getActivitySectors(int index) {
 		return (ActivitySector)(sectors.activitySectors.toArray()[index]);
+	}
+
+	public AmpActivityProgram getNationalPlanObjectivePrograms(int index) {
+		return (AmpActivityProgram)(programs.nationalPlanObjectivePrograms.toArray()[index]);
+	}
+	public AmpActivityProgram getPrimaryPrograms(int index) {
+		return (AmpActivityProgram)(programs.primaryPrograms.toArray()[index]);
+	}
+	public AmpActivityProgram getSecondaryPrograms(int index) {
+		return (AmpActivityProgram)(programs.secondaryPrograms.toArray()[index]);
 	}
 
 	public FundingDetail getFundingDetail(int index) {

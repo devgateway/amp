@@ -1204,9 +1204,7 @@ function commentWin(val) {
 													</field:display>
 													
 													<field:display name="Project Category" feature="Identification">
-                                                    <c:set var="projectCategory">
-														<category:getoptionvalue categoryValueId="${aimChannelOverviewForm.projectCategory}" categoryKey="<%=CategoryConstants.PROJECT_CATEGORY_NAME %>"  />
-                                                    </c:set>
+                                          
 													<c:if test="${!empty aimChannelOverviewForm.projectCategory}">
 														<TR>
 															<TD>
@@ -1221,7 +1219,7 @@ function commentWin(val) {
 																</TR>
 																<TR>
 																	<TD bgcolor="#ffffff">
-																	${projectCategory}</TD>
+																	${aimChannelOverviewForm.projectCategory}</TD>
 																</TR>
 															</TABLE>
 															</TD>

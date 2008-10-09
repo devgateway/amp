@@ -15,6 +15,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -982,7 +983,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<tr>
 																	<td>
 																		<field:display name="Add Donor Organization" feature="Funding Information">
-																			<aim:addOrganizationButton delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																			<aim:addOrganizationButton delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													
 																		</field:display>
 																	</td>

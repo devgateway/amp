@@ -142,16 +142,16 @@
 				 	         <input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
 	    </td>
     </tr>
-	 <tr id="img_1" onclick="expandHelp(1);"  src="/ampTemplate/images/tree_plus.gif"/>
+	 <tr id="img_-1" onclick="expandHelp(-1);"  src="/ampTemplate/images/tree_plus.gif"/>
 		<td colspan="2" bgcolor="silver">
 			AMP Help
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
-			<table id="imgh_1"  width="772"  style="display: none;" border="0">
+			<table id="imgh_-1"  width="772"  style="display: none;" border="0">
 				<tr>
-					<td colspan="2" bgcolor="silver" onclick="collapseHelp(1)">
+					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-1)">
 							AMP Help
 					</td>
 				</tr>
@@ -164,16 +164,16 @@
 			</table>
 		</td>
 	</tr>
-	<tr id="img_2" onclick="expandHelp(2);"  src="/ampTemplate/images/tree_plus.gif"/>
+	<tr id="img_-2" onclick="expandHelp(-2);"  src="/ampTemplate/images/tree_plus.gif"/>
 		<td colspan="2" bgcolor="silver">
 			AMP Admin Help
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
-			<table id="imgh_2"  width="772"  style="display: none;" border="0">
+			<table id="imgh_-2"  width="772"  style="display: none;" border="0">
 				<tr>
-					<td colspan="2" bgcolor="silver" onclick="collapseHelp(2)">
+					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-2)">
 							AMP Admin Help
 					</td>
 				</tr>

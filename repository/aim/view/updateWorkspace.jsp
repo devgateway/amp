@@ -615,7 +615,7 @@ function cancel()
 															<table>
 																<tr>
 																	<td>
-																		<html:checkbox property="computation"  value="true" onchange="computationChange()">Computation</html:checkbox>
+																		<html:checkbox property="computation"  value="true" onchange="computationChange()"><digi:trn key="chk:computation">Computation</digi:trn></html:checkbox>
 																	</td>
 																</tr>
 															</table>
@@ -629,7 +629,7 @@ function cancel()
 																<table>
 																	<tr>
 																		<td>
-																			<html:checkbox property="addActivity" value="true">Add Activity</html:checkbox>
+																			<html:checkbox property="addActivity" value="true"><digi:trn key="chk:addActivity">Add Activity</digi:trn></html:checkbox>
 																		</td>
 																	</tr>
 																	

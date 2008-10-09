@@ -8,6 +8,94 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+input.file {
+	width: 300px;
+	margin: 0;
+}
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
+</script>
+
 <digi:instance property="helpForm" />
 <script language="JavaScript">
   	function exp() {
@@ -125,9 +213,11 @@
                 </span>
 			</td>
 		</tr>
+		<tr><td>&nbsp;</td></tr>&nbsp;
 	<tr>
-		<td align="right"  colspan="2" >
-				<input type="button" onclick="exp()" value="Export"/>
+		<td align="left"  colspan="2" >
+				<input type="button" onclick="exp()" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'/>
+				<hr>
 		</td>
 	</tr>
 	<tr>
@@ -137,14 +227,23 @@
                 </c:forEach>
               </c:if>
        </td>
-  		<td align="right">
-  						 <input type="button" onclick="imp()" value="import"/>
-				 	         <input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
-	    </td>
     </tr>
+	<tr align="left"><td>
+		<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+				<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+					<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>
+				</div>
+			</a>
+	</td></tr>
+	<tr>
+		<td align="left">
+  			<input type="button" onclick="imp()" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'/>
+<!--		<input id="fileUploaded" name="fileUploaded" type="file" class="file"/>-->
+	    </td>
+	</tr>
 	 <tr id="img_-1" onclick="expandHelp(-1);"  src="/ampTemplate/images/tree_plus.gif"/>
 		<td colspan="2" bgcolor="silver">
-			AMP Help
+			<digi:trn key="aim:amphelp">AMP Help</digi:trn>
 		</td>
 	</tr>
 	<tr>
@@ -152,7 +251,7 @@
 			<table id="imgh_-1"  width="772"  style="display: none;" border="0">
 				<tr>
 					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-1)">
-							AMP Help
+							<digi:trn key="aim:amphelp">AMP Help</digi:trn>
 					</td>
 				</tr>
 				<tr>
@@ -166,7 +265,7 @@
 	</tr>
 	<tr id="img_-2" onclick="expandHelp(-2);"  src="/ampTemplate/images/tree_plus.gif"/>
 		<td colspan="2" bgcolor="silver">
-			AMP Admin Help
+			<digi:trn key="aim:ampadminhelp">AMP Admin Help</digi:trn>
 		</td>
 	</tr>
 	<tr>
@@ -174,7 +273,7 @@
 			<table id="imgh_-2"  width="772"  style="display: none;" border="0">
 				<tr>
 					<td colspan="2" bgcolor="silver" onclick="collapseHelp(-2)">
-							AMP Admin Help
+							<digi:trn key="aim:ampadminhelp">AMP Admin Help</digi:trn>
 					</td>
 				</tr>
 				<tr>
@@ -189,3 +288,11 @@
 	
 </table>
  </digi:form>
+ 
+ <script type="text/javascript">
+	initFileUploads();
+	if ( document.crDocumentManagerForm.pageCloseFlag.value == "true" ) {
+			window.opener.location.replace(window.opener.location.href); 
+			window.close();
+		}
+</script>

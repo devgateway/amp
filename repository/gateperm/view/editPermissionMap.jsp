@@ -47,9 +47,9 @@ function submitForm(mode) {
 			
 			<digi:context name="exportperm" property="context/module/moduleinstance/exchangePermission.do?export" />
 			<digi:context name="importperm" property="context/module/moduleinstance/exchangePermission.do?import" />
-			<input type="button" name="export" value="EXPORT"
+			<input type="button" name="export" value='<digi:trn key="aim:translationmanagerexportbutton">Export</digi:trn>'
 			onclick="javascript:window.location.href='<%=exportperm%>'" /> <input
-			type="button" name="import" value="IMPORT"
+			type="button" name="import" value='<digi:trn key="aim:translationmanagerimportbutton">Import</digi:trn>'
 			onclick="javascript:window.location.href='<%=importperm%>'" />
 		
 			<p/>
@@ -57,12 +57,12 @@ function submitForm(mode) {
 			<h3><digi:trn key="aim:changeexistingperms">Change Existing Permissions</digi:trn></h3>
 			<table>
 				<tr>
-					<td align="right">Permissible Category</td>
+					<td align="right"><digi:trn key="aim:permisiblecategory">Permissible Category</digi:trn></td>
 					<td><html:select property="permissibleCategory"
 						onchange="submitForm('permissibleCategoryPicked')">
-						<html:option value="select">--Select--</html:option>
-						<html:optionsCollection property="_availablePermissibleCategories"
-							value="simpleName" label="simpleName" />
+						<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
+						<digi:trn key="aim:comboOptionsPermissions"><html:optionsCollection property="_availablePermissibleCategories"
+							value="simpleName" label="simpleName" /></digi:trn>
 					</html:select></td>
 				</tr>
 				<logic:notEmpty name="permissionMapForm"
@@ -84,8 +84,7 @@ function submitForm(mode) {
 				<tr>
 						<td align="right">&nbsp;</td>
 				<tr>
-					<td valign="top" align="right"><b>Assign a specific
-					permission for each object of this class:</b></td>
+					<td valign="top" align="right"><b><digi:trn key="aim:assignspecificpermission">Assign a specific permission for each object of this class:</digi:trn></b></td>
 					<td><logic:notEmpty name="permissionMapForm"
 						property="permissionMaps">
 						<html:button property="saveDetailed"

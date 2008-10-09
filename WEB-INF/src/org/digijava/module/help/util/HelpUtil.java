@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -586,7 +587,7 @@ public class HelpUtil {
 		return vector;
 	}
 		
-	 public static void updateNewEditHelpData(HelpType help){
+	 public static void updateNewEditHelpData(HelpType help,HashMap<Long,HelpTopic> storeMap){
 		Session session = null;
 		Query query;
 		String qryStr;
@@ -608,9 +609,6 @@ public class HelpUtil {
 			    	 helptopic.setTopicKey(help.getTopicKey());
 			    	 helptopic.setSiteId("amp");
 			    	 helptopic.setTitleTrnKey(help.getTitleTrnKey());
-	    	    	 if(help.getParentId() != 0){
-	    	    		 helptopic.getParent().setHelpTopicId(help.getParentId());
-	    	    	 }
 	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
 	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
 	    	    	 helptopic.setHelpTopicId(help.getTopicId());
@@ -625,14 +623,29 @@ public class HelpUtil {
 				   helptopic.setTopicKey(help.getTopicKey());
 				   helptopic.setSiteId("amp");
 				   helptopic.setTitleTrnKey(help.getTitleTrnKey());
-	    	    	 if(help.getParentId()!= 0){
-	    	    		 helptopic.getParent().setHelpTopicId(help.getParentId());
-	    	    	 }
 	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
 	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
-	    	    	 helptopic.setHelpTopicId(help.getTopicId());
 	    	    	 helptopic.setKeywordsTrnKey(help.getKeywordsTrnKey());
+	    	    	 HelpTopic top = storeMap.get(help.getParentId());
+	    	    	 if(top != null){
+	    	    		 
+	    	    		 helptopic.setParent(top);
+	    	    	 }
 	    	    	 insertHelp(helptopic);
+	    	    	 HelpTopic parent = new HelpTopic();
+	    	    	 parent.setBodyEditKey(helptopic.getBodyEditKey());
+	    	    	 parent.setHelpTopicId(helptopic.getHelpTopicId());
+	    	    	 parent.setKeywordsTrnKey(helptopic.getKeywordsTrnKey());
+	    	    	 parent.setModuleInstance(helptopic.getModuleInstance());
+	    	    	 parent.setSiteId(helptopic.getSiteId());
+	    	    	 parent.setParent(helptopic.getParent());
+	    	    	 parent.setTitleTrnKey(helptopic.getTitleTrnKey());
+	    	    	 parent.setTopicKey(helptopic.getTopicKey());
+	    	    	
+	    	    	 helptopic.getClass();
+	    	    	 Long oldid = help.getTopicId();
+	    	    	 storeMap.put(oldid, parent);
+	    	    	 
 			   }
 			
 		} catch (Exception e) {

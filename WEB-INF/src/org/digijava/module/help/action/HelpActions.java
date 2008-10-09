@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -273,7 +274,7 @@ public class HelpActions extends DispatchAction {
 			if(helpForm.getAdminTopicTree()!=null){
 			helpForm.getAdminTopicTree().clear();
 			}
-			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId, "admin"));
 			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, "default"));
 			return mapping.findForward("admin");
 		}
@@ -579,6 +580,7 @@ public class HelpActions extends DispatchAction {
 	public ActionForward importing(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		    HashMap<Long,HelpTopic> storeMap=new HashMap<Long, HelpTopic>();
 			HelpForm helpForm = (HelpForm) form;
 			String siteId=RequestUtils.getSite(request).getSiteId();
 			String moduleInstance=RequestUtils.getRealModuleInstance(request).getInstanceName();
@@ -599,11 +601,12 @@ public class HelpActions extends DispatchAction {
 				while(it.hasNext())
 				{
 					HelpType element  = (HelpType) it.next();
-					HelpUtil.updateNewEditHelpData(element);
+					HelpUtil.updateNewEditHelpData(element,storeMap);
 				}
 			}
 			helpForm.getTopicTree().clear();
 			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, moduleInstance));
+			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId,"admin"));
 			return mapping.findForward("admin");
 	}
 	

@@ -1266,6 +1266,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       if (statusCode!=null && !"".equals(statusCode.trim())){
     	  oql+=" join  act.categories as categories ";
       }
+      if(teamMember!=null&&teamMember.getComputation()){
+          oql+=" inner join act.orgrole role ";
+      }
       oql+=" where 1=1 ";
       if (ampThemeId != null) {
           oql += " and ( theme.ampThemeId = :ampThemeId) ";
@@ -1289,7 +1292,25 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oql += " and act.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
       }
       if (teamMember != null) {
-        oql += " and ( act.team.ampTeamId =:teamId) "; //oql += " and " +getTeamMemberWhereClause(teamMember);
+          //oql += " and " +getTeamMemberWhereClause(teamMember);
+          if (teamMember.getComputation()) {
+              AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
+              Set<AmpOrganisation> orgs = team.getOrganizations();
+              Iterator<AmpOrganisation> iter = orgs.iterator();
+              String ids = "";
+              while (iter.hasNext()) {
+                  AmpOrganisation org = iter.next();
+                  ids += org.getAmpOrgId() + ",";
+              }
+              if(ids.length()>1){
+              ids = ids.substring(0, ids.length() - 1);
+              oql += "  and ( act.team.ampTeamId =:teamId or  role.organisation.ampOrgId in(" + ids+"))";
+              }
+          }
+          else{
+               oql += " and ( act.team.ampTeamId =:teamId ) ";
+          }
+
       }
 	  return oql;
   }

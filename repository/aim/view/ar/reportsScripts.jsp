@@ -587,6 +587,8 @@ function validateFormat(){
 	}
 	
 	var enableLink=function(){
+	if (document.getElementById("frezzlink")){
+	
 		if (scrolling){
 			document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 			document.getElementById("frezzlink").setAttribute("class","settingsLink");
@@ -597,10 +599,10 @@ function validateFormat(){
 			document.getElementById("frezzlink").setAttribute("class","settingsLink");
 			document.getElementById("frezzlink").innerHTML=msg1;
 		}
+		
 	}
-	
-	addOnloadEvent(enableLink);
-	
+	}
+		addOnloadEvent(enableLink);
 	
 		
 	//-----------------------
@@ -640,13 +642,6 @@ function validateFormat(){
 		}
 
 </script>
-
-
-
-
-
-
-
 <style type="text/css">
 .mask {
   -moz-opacity: 0.8;

@@ -3168,7 +3168,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long projectCategory = new Long(0);
 		private String govAgreementNumber;
 		private Long acChapter = new Long(0);
-		private Boolean budget = true;
 		private String budgetCheckbox;
 		private Boolean governmentApprovalProcedures;
 		private Boolean jointCriteria;
@@ -3180,14 +3179,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setSelectedOrganizations(int index, OrgProjectId orgProjectId) {
 			selectedOrganizations[index] = orgProjectId;
-		}
-
-		public Boolean getBudget() {
-			return budget;
-		}
-
-		public void setBudget(Boolean budget) {
-			this.budget = budget;
 		}
 
 		public String getBudgetCheckbox() {

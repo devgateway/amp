@@ -13,10 +13,10 @@
 <script language="JavaScript">
 	function budgetCheckboxClick()
 	{
-	 if (document.aimEditActivityForm.budget != null) {
+		if (document.aimEditActivityForm.budget != null) {
 		 if((document.aimEditActivityForm.budget.checked==false))
 		 {
-		 	document.aimEditActivityForm.budgetCheckbox.value="unchecked";
+		 	document.getElementById("hbudget").value="false";
 		 	document.getElementById("FY").style.display='none';
 		 	document.getElementById("Vote").style.display='none';
 		 	document.getElementById("Sub-Vote").style.display='none';
@@ -28,7 +28,7 @@
 		 	}
 		 else if(document.aimEditActivityForm.budget.checked==true)
 			{
-			 	document.aimEditActivityForm.budgetCheckbox.value="checked";
+			 	document.getElementById("hbudget").value="true";
 			 	document.getElementById("FY").style.display='';
 			 	document.getElementById("Vote").style.display='';
 			 	document.getElementById("Sub-Vote").style.display='';
@@ -38,6 +38,15 @@
 			 }
 		}
 	}
+
+function InitBud(){
+	if(document.getElementById("hbudget").value=="false")
+		document.aimEditActivityForm.budget.checked=false;
+	else{
+		document.aimEditActivityForm.budget.checked=true;
+		document.getElementById("FY").style.display='';
+	}
+}
 
 function disableSelection(element) {
 
@@ -398,10 +407,10 @@ target.style.cursor = "default"
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
 														<br/>
 													</a>
-													<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
+													<html:checkbox styleId="budget" property="budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
-													<input type="hidden" name="budgetCheckbox">
+													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
 												</td>
 											<td>
 											<table>
@@ -555,5 +564,5 @@ target.style.cursor = "default"
 
 								</table>
 									<script>
-										budgetCheckboxClick();
+										InitBud();
 									</script>

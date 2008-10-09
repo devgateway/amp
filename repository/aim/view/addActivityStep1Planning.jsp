@@ -377,7 +377,8 @@
 											
 											<field:display name="Status" feature="Planning"></field:display>
 											<bean:define id="contentDisabled">false</bean:define>
-											<c:set var="contentDisabled"><field:display name="Status" feature="Planning">false</field:display>
+											<c:set var="contentDisabled">
+											<field:display name="Status" feature="Planning">false</field:display>
 											</c:set>
 											<c:if test="${contentDisabled==''}">
 												<c:set var="contentDisabled">true</c:set>
@@ -394,10 +395,10 @@
 														<digi:trn key="aim:addActivityStatusFirstLine">Please select a status from below</digi:trn>
 													</c:set>
 													<c:if test="${contentDisabled=='true'}">
-	                                                	<category:showoptions   firstLine="${translation}" name="planning" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
+	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" outerdisabled="disabled" />
 	                                                </c:if>
 	                                                <c:if test="${contentDisabled=='false'}">
-	                                                	<category:showoptions   firstLine="${translation}" name="planning" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
+	                                                	<category:showoptions   firstLine="${translation}" name="aimEditActivityForm" property="planning.statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
 	                                                </c:if>
                                                     <br/><br/>
 													<digi:trn key="aim:reasonsToChangeStatus">If there have been some changes in the status, explain below the reasons</digi:trn> :

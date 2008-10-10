@@ -93,7 +93,7 @@ function validation(){
   </tr>
   <tr bgcolor="#003366" class="textalb">
     <td align="center" valign="middle" width="75">
-      <b><font color="white"><digi:trn key="aim:addeditdata:actualbasetarget">Actual/Base/<br>Target</digi:trn>=</font></b>
+      <b><font color="white"><digi:trn key="aim:addeditdata:actualbasetarget">Actual/Base/<br>Target</digi:trn></font></b>
     </td>
     <td align="center" valign="middle" width="120">
       <b><font color="white"><digi:trn key="aim:addeditdata:value">Value</digi:trn></font></b>

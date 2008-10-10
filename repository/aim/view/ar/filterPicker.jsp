@@ -194,14 +194,14 @@
 			
 			
 				<tr bgcolor="#EEEEEE">
-					<td colspan="5" styleClass="inp-text">
+					<td colspan="5" class="inp-text">
 						&nbsp;
 						<br/>
 						<br/>
 					</td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
-					<td colspan="5" styleClass="inp-text" align="center">
+					<td colspan="5" class="inp-text" align="center">
 						<html:checkbox property="justSearch" value="true" />&nbsp;
 						<digi:trn key="rep:filer:advancedSearch2">Use filter selections as an advanced search</digi:trn>
 					</td>
@@ -597,7 +597,7 @@
 							</td>
 						</tr>
 					   </feature:display>
-					   <tr><td colspan="5">&nbsp; </td></tr
+					   <tr><td colspan="5">&nbsp; </td></tr>
 				</table>
           </td></tr>
           </table>
@@ -667,7 +667,7 @@
 					<field:display name="Ministry of Planning Rank" feature="Planning">
 					<tr>
 						<td>
-							<digi:trn key="rep:filer:PlanningMinRank">Planning Ministry Rank</digi:trn></b>
+							<digi:trn key="rep:filer:PlanningMinRank">Planning Ministry Rank</digi:trn>
 							<br />
 							<html:select property="planMinRank" style="width: 100px" styleClass="inp-text">
 								<html:option value="-1">

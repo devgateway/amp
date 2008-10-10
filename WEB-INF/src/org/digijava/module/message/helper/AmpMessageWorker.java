@@ -5,9 +5,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
@@ -36,10 +34,10 @@ import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
 import java.util.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.Address;
-import org.apache.bcel.util.Class2HTML;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.module.aim.dbentity.AmpTeam;
 
 public class AmpMessageWorker {
 
@@ -90,7 +88,7 @@ public class AmpMessageWorker {
                  *  activity creator/updater should get an alert regardless of receivers list in template
                  */
                 if(e.getTrigger().equals(ApprovedActivityTrigger.class) || e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
-                    defineReceiversForApprovedAndNotApprovedActivities(e.getTrigger(), newMsg);
+                    defineReceiversForApprovedAndNotApprovedActivities(e.getTrigger(), newMsg,(Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM));
                 }else if(e.getTrigger().equals(CalendarEventTrigger.class)) {
                     defineReceiversForCalendarEvents(e, template, newMsg);
                 }else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
@@ -186,6 +184,7 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(NotApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(NotApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
+        myHashMap.put(MessageConstants.OBJECT_TEAM,  ((Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM)).toString());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(NotApprovedActivityTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -209,6 +208,7 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ApprovedActivityTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_AUTHOR, ( (AmpTeamMember) e.getParameters().get(ApprovedActivityTrigger.PARAM_SAVED_BY)).getUser().getName());
+        myHashMap.put(MessageConstants.OBJECT_TEAM,  ((Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM)).toString());
         //url
         if (partialURL != null) {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(ApprovedActivityTrigger.PARAM_URL) + "\">activity URL</a>");
@@ -426,7 +426,8 @@ public class AmpMessageWorker {
         receivers = tm.getUser().getFirstNames() + " " + tm.getUser().getLastName() + "<" + tm.getUser().getEmail() + ">;" + tm.getAmpTeam().getName() + ";";
         if (needsApproval) {
             //team lead can't be null,because if team has no leader,then no trigger will be invoked
-            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(tm.getAmpTeam().getAmpTeamId());
+            String teamId=myMap.get(MessageConstants.OBJECT_TEAM);
+            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(Long.parseLong(teamId));
             receivers += ", " + teamHead.getUser().getFirstNames() + " " + teamHead.getUser().getLastName() + "<" + teamHead.getUser().getEmail() + ">;" + teamHead.getAmpTeam().getName() + ";";
         }
         newApproval.setReceivers(receivers);
@@ -459,13 +460,12 @@ public class AmpMessageWorker {
     /**
      * this method defines approval receivers and creates corresponding AmpMessageStates.
      */
-    private static void defineReceiversForApprovedAndNotApprovedActivities(Class triggerClass, AmpMessage approval) throws Exception {
+    private static void defineReceiversForApprovedAndNotApprovedActivities(Class triggerClass, AmpMessage approval,Long teamId) throws Exception {
         AmpMessageState state = new AmpMessageState();
         state.setMemberId(approval.getSenderId());
         createMsgState(state, approval);
         if (triggerClass.equals(NotApprovedActivityTrigger.class)) {
-            AmpTeamMember tm = TeamMemberUtil.getAmpTeamMember(approval.getSenderId());
-            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(tm.getAmpTeam().getAmpTeamId());
+            AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(teamId);
             if (teamHead != null) {
                 Long teamHeadId = teamHead.getAmpTeamMemId();
                 state = new AmpMessageState();
@@ -527,7 +527,7 @@ public class AmpMessageWorker {
 
     private static void defineReceievrsByActivityTeam(TemplateAlert template, AmpMessage alert, Long teamId) throws Exception {
         List<AmpMessageState> statesRelatedToTemplate = null;
-        //get the member who created an activity. it's the current member
+        //get the member who created an activity. it's the current member    
 
         statesRelatedToTemplate = AmpMessageUtil.loadMessageStates(template.getId());
         if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
@@ -545,8 +545,8 @@ public class AmpMessageWorker {
                  */
                 if (teamMember.getAmpTeam().getAmpTeamId().equals(teamId)) {
                     createMsgState(state, alert);
-                }
             }
+    }
         }
     }
 

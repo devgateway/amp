@@ -224,7 +224,7 @@ function scrollableTable(tableId,height){
 		 divContent.parentNode.insertBefore(newTable,divContent);
 		 this.table.style.visibility="visible";
 		}catch(e){
-			alert(e);
+			//alert(e);
 		}
 	}
 	

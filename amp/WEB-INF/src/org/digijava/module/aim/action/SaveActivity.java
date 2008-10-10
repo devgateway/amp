@@ -600,10 +600,10 @@ public class SaveActivity extends Action {
 							}
 						}
 						
-						if(primaryPrc!=100 && primaryPrc >0)
+						if(primaryPrc!=100)
 							errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong"));
 						
-						if(secondaryPrc!=100 && secondaryPrc >0)
+						if(secondaryPrc!=100)
 							errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong"));
 						
 						

@@ -1694,10 +1694,10 @@ public class TeamUtil {
 			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
 			while (itr.hasNext()) {
 
-				//Object[] act = (Object[]) itr.next();
+				Object[] act = (Object[]) itr.next();
 				//AmpActivity act = (AmpActivity) itr.next();
-				//AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
-				AmpActivity activity =(AmpActivity) itr.next();
+				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
+				//AmpActivity activity = (AmpActivity)itr.next();
 				AmpActivity tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){
 					holder.put(activity.getAmpActivityId().longValue(), activity);
@@ -1707,15 +1707,15 @@ public class TeamUtil {
 				
 				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
 				donnorList =(donnorList==null)?new ArrayList<String>():donnorList;
-				for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
-					AmpOrgRole aor = (AmpOrgRole) it.next();
-					name=aor.getOrganisation().getName();
-					if(aor.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name))
-						{
-						donnorList.add(name);
+				if(activity.getOrgrole()!=null){
+					for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
+						AmpOrgRole aor = (AmpOrgRole) it.next();
+						name=aor.getOrganisation().getName();
+						if(aor.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name)){
+							donnorList.add(name);
 						}
+					}
 				}
-
 				
 				donnors.put(activity.getAmpActivityId().longValue(), donnorList);
 			}

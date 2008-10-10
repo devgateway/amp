@@ -311,7 +311,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		if (request.getParameter("apply") != null && request.getAttribute("apply") == null || isnewreport) {
 			// this.selectedDonors = null;
-			
+			this.selectedDonnorAgency=null;
 			this.selectedRisks = null;
 			this.selectedSectors = null;
 			this.selectedSecondarySectors = null;

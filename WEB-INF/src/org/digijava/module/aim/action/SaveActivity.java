@@ -2169,6 +2169,17 @@ public class SaveActivity extends Action {
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
+                        
+                        AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+                        if(aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+                            if(!eaForm.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+                                new ApprovedActivityTrigger(aAct);
+                            }
+			}
+                        else{
+				new NotApprovedActivityTrigger(aAct);
+			
+                        }
 			
 			/*actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 					true, eaForm.getCommentsCol(), eaForm
@@ -2242,7 +2253,14 @@ public class SaveActivity extends Action {
 
 			actId = recoverySave(rsp);			
 			activity = rsp.getActivity();
+                        AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+			if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+                                new ApprovedActivityTrigger(aAct);
+			}
+                        else{
+				new NotApprovedActivityTrigger(aAct);
 			
+                        }
 			/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 					field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
 			*/
@@ -2257,67 +2275,13 @@ public class SaveActivity extends Action {
 			ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 		}
 
-		boolean needApproval=false;
-		boolean approved=false;
-		//this field is used to define if "activity approved" approval has to be created
-		boolean needNewAppForApproved=true;
+		
 
-		AmpActivity myActivity=ActivityUtil.loadActivity(actId);
-		editedActivityApprovalStatus=myActivity.getApprovalStatus();
-
-		if(eaForm.isEditAct()){
-			if(tm.getTeamHead()){
-				/**
-				 * we have two cases: team leader approves activity or edits already approved one. if so(second situation), then no messages should be
-				 * created. If activity that team leader edited was not approved,this means that team leader now approved it and we need to send message to
-				 * creator/updater of activity to let him know his activity was approved.
-				 */
-				if(oldActivityApprovalStatus.equals(org.digijava.module.aim.helper.Constants.APPROVED_STATUS)){
-					needNewAppForApproved=false;
-				}
-				needApproval = false;
-				approved=true;
-			}else if("newOnly".equals(tm.getAppSettings().getValidation())){
-				needNewAppForApproved=false;
-				approved=true;
-				needApproval = false;
-			}else{
-				needApproval = true;
-				approved=false;
-			}
-		}else{
-			if(tm.getTeamHead()){
-				needNewAppForApproved=false;
-				needApproval=false;
-				approved=true;
-			}else{
-				approved=false;
-				needApproval=true;
-			}
-		}
-
-		/**
-		 * I am doing this,because activity field holds old value of updatedBy and myActivity field holds new one.
-		 * If team leader approved activity,then myActivity has updatedBy=teamLeader and activity has previous updater if he/she exists.
-		 * So If updater exists message  should be sent to him, not team leader.
-		 * But if someone(not team leader) edited activity, then message should be sent to him.
-		 */
-		if(tm.getTeamHead()){
-			myActivity=activity;
-			myActivity.setUpdatedBy(eaForm.getUpdatedBy());
-		}
-
-		//if workspace has no manager, then there is no need to approve any activity.
-		if(TeamMemberUtil.getTeamHead(tm.getTeamId())!=null){
-			//check whether Activity is approved or needs Approval
-			if(approved && needNewAppForApproved&&!myActivity.getDraft()){
-				new ApprovedActivityTrigger(myActivity);
-			}
-			if(needApproval&&!myActivity.getDraft()){
-				new NotApprovedActivityTrigger(myActivity);
-			}
-		}
-
+		
+	
+	
+		
+		
 		if(DocumentUtil.isDMEnabled()) {
 			Site currentSite = RequestUtils.getSite(request);
 			Node spaceNode = DocumentUtil.getDocumentSpace(currentSite,

@@ -283,8 +283,8 @@
 				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="Cancel" onclick="closeWindow()">
+						<input styleClass="dr-menu" type="button" name="addBtn" value='<digi:trn key="aim:btn:save">Save</digi:trn>' onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="reset" value='<digi:trn key="aim:btn:cancel">Cancel</digi:trn>' onclick="closeWindow()">
 				</td>
 				</tr>	
 		</table>

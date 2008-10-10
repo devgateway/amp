@@ -103,9 +103,9 @@
 					
 					<c:if test="${aimNPDForm.mode != 1}">
 					<td align="left">
-									<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}">Export to Excel &nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
+									<digi:link styleId="export2xsl" href="/exportIndicators2xsl.do~programId=${aimNPDForm.programId}"><digi:trn key="rep:tool:exporttoexcel">Export to Excel</digi:trn>&nbsp;<digi:img src="images/xls_icon.jpg" border="0"/></digi:link>
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<digi:link styleId="printWin" href="#" onclick="window.print(); return false;">Print &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
+									<digi:link styleId="printWin" href="#" onclick="window.print(); return false;"><digi:trn key="aim:print">Print</digi:trn> &nbsp;<digi:img src="images/print_icon.gif" border="0"/></digi:link>
 								</td>
 					</c:if>
 						<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">

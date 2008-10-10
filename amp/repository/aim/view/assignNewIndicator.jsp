@@ -315,7 +315,7 @@ function closeWindow()
                                     <tr>
                                      <td align="center">
                                      <c:if test="${empty aimThemeForm.pagedCol && aimThemeForm.pagedCol != null}">
-									   <digi:trn key="aim:noindicators">No indicators match the search criteria</digi:trn> .
+									   <digi:trn key="aim:noindicators">No indicators match the search criteria</digi:trn>
 									</c:if>	
                                      </td>
                                     </tr>

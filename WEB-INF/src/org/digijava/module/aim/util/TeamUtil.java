@@ -1673,10 +1673,10 @@ public class TeamUtil {
 			String queryString = "";
 			Query qry = null;
 			if (teamId != null) {
-//				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
-//						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
-				queryString = "select act from " + AmpActivity.class.getName()
-				+ " act where (act.team=:teamId) ";
+				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
+						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
+		//		queryString = "select act from " + AmpActivity.class.getName()
+				//		+ " act where (act.team=:teamId) ";
 				qry = session.createQuery(queryString);
 				qry.setParameter("teamId", teamId, Hibernate.LONG);
 			} else {

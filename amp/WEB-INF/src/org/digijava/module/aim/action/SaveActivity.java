@@ -131,7 +131,7 @@ public class SaveActivity extends Action {
 	
 	
 	
-	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, boolean createdAsDraft) throws Exception, AMPError{
+	private void processPreStep(EditActivityForm eaForm, AmpActivity activity, TeamMember tm, Boolean[] createdAsDraft) throws Exception, AMPError{
 		// if the activity is being added from a users workspace,
 		// associate the
 		// activity with the team of the current member.
@@ -149,15 +149,15 @@ public class SaveActivity extends Action {
 
 		if(!eaForm.isEditAct()){
 			activity.setCreatedAsDraft(eaForm.getDraft());
-			createdAsDraft=eaForm.getDraft();
-		}
+			createdAsDraft[0]=eaForm.getDraft();
+	}
 		else{
 			if(eaForm.getWasDraft()&&!eaForm.getDraft()){
 				activity.setCreatedAsDraft(false);
-				createdAsDraft=false;
+				createdAsDraft[0]=false;
 			}
 			else{
-				createdAsDraft=true;
+				createdAsDraft[0]=true;
 			}
 		}
 	}
@@ -1920,7 +1920,7 @@ public class SaveActivity extends Action {
 					//We force this step 
 					try {
 						processActivityMustHaveInfo(rsp.getEaForm(), recoveryActivity);
-						processPreStep(rsp.getEaForm(), recoveryActivity, rsp.getTm(), rsp.isCreatedAsDraft());
+						processPreStep(rsp.getEaForm(), recoveryActivity, rsp.getTm(),new Boolean[]{ rsp.isCreatedAsDraft()});
 
 						//we set the activity as draft
 						//this must be set after the method processPreStep so it overrides the value
@@ -2053,7 +2053,7 @@ public class SaveActivity extends Action {
 		if (session.getAttribute("currentMember") != null)
 			tm = (TeamMember) session.getAttribute("currentMember");
 
-		boolean createdAsDraft=false;
+		Boolean[] createdAsDraft={false};
 		//any processing that needs to be done to the activity before the actual steps
 		
 		processPreStep(eaForm, activity, tm, createdAsDraft);
@@ -2155,7 +2155,7 @@ public class SaveActivity extends Action {
 			rsp.setTm(tm);
 			
 			rsp.setActivity(activity);
-			rsp.setCreatedAsDraft(createdAsDraft);
+			rsp.setCreatedAsDraft(createdAsDraft[0]);
 			rsp.setErrors(errors);
 			rsp.setRequest(request);
 			rsp.setSession(session);
@@ -2229,7 +2229,7 @@ public class SaveActivity extends Action {
 			rsp.setTm(tm);
 			
 			rsp.setActivity(activity);
-			rsp.setCreatedAsDraft(createdAsDraft);
+			rsp.setCreatedAsDraft(createdAsDraft[0]);
 			rsp.setErrors(errors);
 			rsp.setRequest(request);
 			rsp.setSession(session);
@@ -2253,7 +2253,7 @@ public class SaveActivity extends Action {
 		}
 
 		//If we're adding an activity, create system/admin message
-		if(!createdAsDraft) {
+		if(!createdAsDraft[0]) {
 			ActivitySaveTrigger ast=new ActivitySaveTrigger(activity);
 		}
 

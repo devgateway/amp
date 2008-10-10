@@ -40,5 +40,16 @@
 			<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
 			<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
 		</button>
-		
+		<button id="step${stepNum}_add_filters_button2" type="button" class="toolbar" onclick="cancelWizard();">
+			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" style="height: 15px;" /> 
+			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
+		</button>
 	</div>
+	
+<script language="JavaScript">
+	function cancelWizard()
+	{
+		//alert('http://ethiopia.ampdev.net/viewTeamReports.do?tabs=false');
+		window.location = "/viewTeamReports.do?tabs=false";
+	}
+</script>

@@ -1662,8 +1662,7 @@ public class TeamUtil {
     }
 
  
-    
-    public static Collection getAllTeamActivities(Long teamId) {
+    public static Collection getAllUnassignedActivities() {
 		Session session = null;
 		Collection col = new ArrayList();
 
@@ -1672,19 +1671,11 @@ public class TeamUtil {
 
 			String queryString = "";
 			Query qry = null;
-			if (teamId != null) {
-				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
-						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
-		//		queryString = "select act from " + AmpActivity.class.getName()
-				//		+ " act where (act.team=:teamId) ";
-				qry = session.createQuery(queryString);
-				qry.setParameter("teamId", teamId, Hibernate.LONG);
-			} else {
-				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy,role.role.roleCode,role.organisation.name  , act.ampId from " + AmpActivity.class.getName()
-						+ " act left join act.orgrole role join  act.updatedBy   where act.team is null ";
-				qry = session.createQuery(queryString);
 
-			}
+			queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy,role.role.roleCode,role.organisation.name  , act.ampId from " + AmpActivity.class.getName()
+					+ " act left join act.orgrole role join  act.updatedBy   where act.team is null ";
+			qry = session.createQuery(queryString);
+
 			
 			qry.setFetchSize(100);
 			ArrayList al=(ArrayList) qry.list();
@@ -1698,6 +1689,87 @@ public class TeamUtil {
 				//AmpActivity act = (AmpActivity) itr.next();
 				AmpActivity activity = new AmpActivity((Long) act[0], (String) act[1], (Boolean) act[2], (Date) act[3], (AmpTeamMember) act[4],(String) act[7] );
 				//AmpActivity activity = (AmpActivity)itr.next();
+				AmpActivity tmp = holder.get(activity.getAmpActivityId());
+				if (tmp==null){
+					holder.put(activity.getAmpActivityId().longValue(), activity);
+				}
+				String roleCode="";//(String)activity.geto;
+				String name="";//(String) act[6];
+				
+				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
+				donnorList =(donnorList==null)?new ArrayList<String>():donnorList;
+				if(activity.getOrgrole()!=null){
+					for (Iterator it = activity.getOrgrole().iterator(); it.hasNext();) {
+						AmpOrgRole aor = (AmpOrgRole) it.next();
+						name=aor.getOrganisation().getName();
+						if(aor.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY) && !donnorList.contains(name)){
+							donnorList.add(name);
+						}
+					}
+				}
+				
+				donnors.put(activity.getAmpActivityId().longValue(), donnorList);
+			}
+
+			for (AmpActivity activity : holder.values()) {
+
+				String donors = "";
+
+				ArrayList<String> donnorList=donnors.get(activity.getAmpActivityId());
+				
+				for (String string : donnorList) {
+					if (donors.trim().length() > 0) {
+						donors += ", ";
+					}
+					donors += string;
+				}
+				
+				activity.setDonors(donors);
+				col.add(activity);
+
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception from getAllTeamActivities()");
+			logger.debug(e.toString());
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+    
+    
+    public static Collection getAllTeamActivities(Long teamId) {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+
+			String queryString = "";
+			Query qry = null;
+			queryString = "select act from " + AmpActivity.class.getName()
+			+ " act where (act.team=:teamId) ";
+			qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+
+			
+			qry.setFetchSize(100);
+			Iterator itr = qry.list().iterator();
+
+			HashMap<Long, AmpActivity> holder = new HashMap<Long, AmpActivity>();
+			HashMap<Long,ArrayList<String>> donnors=new HashMap<Long, ArrayList<String>>();
+			while (itr.hasNext()) {
+
+				AmpActivity activity = (AmpActivity)itr.next();
 				AmpActivity tmp = holder.get(activity.getAmpActivityId());
 				if (tmp==null){
 					holder.put(activity.getAmpActivityId().longValue(), activity);
@@ -2226,10 +2298,6 @@ public class TeamUtil {
             }
         }
         return ampTeamRep;
-    }
-
-    public static Collection getAllUnassignedActivities() {
-        return getAllTeamActivities(null);
     }
 
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {

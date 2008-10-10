@@ -218,7 +218,9 @@
 																		<bean:write name="activities" property="name"/>
 																	</td>
 																	<td width="100">
+																	<logic:notEmpty name="activities" property="team">
 																		<bean:write name="activities" property="team.name"/>
+																	</logic:notEmpty>
 																	</td>																	
 																	<td width="100">
 																		<bean:write name="activities" property="ampId"/>

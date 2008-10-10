@@ -1266,7 +1266,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       if (statusCode!=null && !"".equals(statusCode.trim())){
     	  oql+=" join  act.categories as categories ";
       }
-      if(teamMember!=null&&teamMember.getComputation()){
+      if(teamMember!=null&&teamMember.getComputation()!=null&&teamMember.getComputation()){
           oql+=" inner join act.orgrole role ";
       }
       oql+=" where 1=1 ";
@@ -1293,7 +1293,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
       }
       if (teamMember != null) {
           //oql += " and " +getTeamMemberWhereClause(teamMember);
-          if (teamMember.getComputation()) {
+          if (teamMember.getComputation()!=null&&teamMember.getComputation()) {
               AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
               Set<AmpOrganisation> orgs = team.getOrganizations();
               Iterator<AmpOrganisation> iter = orgs.iterator();

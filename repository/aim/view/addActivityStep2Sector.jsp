@@ -104,14 +104,12 @@
 										</logic:equal>
 									</c:if>
 									<bean:define id="contentDisabled">false</bean:define>
-									<bean:write name="contentDisabled"/>
 									<c:set var="contentDisabled"><field:display name="${auxSectorType}" feature="Sectors">false</field:display>
 									</c:set>
-									<bean:write name="contentDisabled"/>
+									
 									<c:if test="${contentDisabled==''}">
 										<c:set var="contentDisabled">true</c:set>
 									</c:if>
-									<bean:write name="contentDisabled"/>
 									<logic:equal name="generalSector" value="true">
                                          <c:set var="sectorAdded">
                                               false

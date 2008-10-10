@@ -1310,8 +1310,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           else{
                oql += " and ( act.team.ampTeamId =:teamId ) ";
           }
-
+        
       }
+        oql+=" and act.team is not NULL ";
 	  return oql;
   }
 

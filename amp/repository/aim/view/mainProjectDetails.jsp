@@ -305,7 +305,7 @@ html>body #mainEmpty {
 				<feature:display name="Edit Activity" module="Previews">
 					<field:display feature="Edit Activity" name="Edit Activity Button">  
 						<logic:equal name="aimMainProjectDetailsForm" property="buttonText" value="edit">
-	                		<a href="" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
+	                		<a style="cursor:pointer" target="_blank" onclick="javascript:fnEditProject(document.getElementById('tempActivity').value); return false;" title="<digi:trn key='btn:edit'>Edit</digi:trn>"> 
 								<img src="/repository/aim/images/tangopack_edit.png" border="0"></a>&nbsp;
 						</logic:equal>
 					</field:display>

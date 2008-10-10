@@ -506,7 +506,6 @@
 				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>
 				<page>addSectorToIndicator</page>
-				<page>aim_filterPicker</page>
 				<page>aim_euActivityDetails</page>
 				<page>aim_orgPopupLayout</page>
 				<page>aim_assignFieldPermissions</page>
@@ -620,6 +619,7 @@
 			<module name="aim">
 				<page>aim_saveMessage</page>
 				<page>tabManagerData</page>
+				<page>aim_filterPicker</page>
 			</module>
 		</page-group>
 	</site-layout>

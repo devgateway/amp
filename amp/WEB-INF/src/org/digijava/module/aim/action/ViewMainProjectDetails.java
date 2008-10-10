@@ -105,26 +105,22 @@ public class ViewMainProjectDetails extends TilesAction {
 			Long ampTeamId = teamMember.getTeamId();
 			boolean teamLeadFlag    = teamMember.getTeamHead();
 			boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
-			if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null &&
-		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  ))
-		 	{
-		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()))
-		 			formBean.setButtonText("validate");
-		 		else
-		 			formBean.setButtonText("approvalAwaited");
-		 		//burkina
-		 		// if an user save an activity he could edit it even it is not approved by team leader
-		 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
-		 		if(workingTeamFlag)
-		 			formBean.setButtonText("edit");
-		 		
-		 	}
-		 	else {
-		 		if (workingTeamFlag)
-		 			formBean.setButtonText("edit");	// In case of regular working teams
-		 		else
-		 			formBean.setButtonText("none");	// In case of management-workspace
-		 	}
+			if (workingTeamFlag) {
+				formBean.setButtonText("edit");	// In case of regular working teams
+				if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null && Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())))
+			 	{
+			 		//burkina
+			 		// if an user save an activity he could edit it even it is not approved by team leader
+			 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
+			 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())) {
+			 			formBean.setButtonText("validate");
+			 		}/*else {
+			 			formBean.setButtonText("approvalAwaited");
+			 		}*/		 		
+			 	}
+			} else {
+				formBean.setButtonText("none");	// In case of management-workspace
+			}
 		}
 		} catch (Exception e) {
 			logger.debug("Exception " + e.getMessage());

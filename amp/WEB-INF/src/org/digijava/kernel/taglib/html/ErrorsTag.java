@@ -33,11 +33,15 @@ import org.digijava.kernel.entity.ModuleInstance;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionError;
 import java.util.*;
+
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.*;
+import org.digijava.module.translation.util.DbUtil;
 import org.apache.struts.Globals;
 
 /**
@@ -57,6 +61,8 @@ import org.apache.struts.Globals;
 public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 
     private static Logger logger = Logger.getLogger(ErrorsTag.class);
+    
+    private static ResourceBundle bundleApplication = ResourceBundle.getBundle("java.resources.application");
 
     public ErrorsTag() {
     }
@@ -180,6 +186,22 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 newKey = "@" + currentLocale.getCode() + "." + site.getSiteId() + "." + item.getKey();
                 logger.debug("New key for error is " + newKey);
                 newErrors.add(property, new ActionError(newKey, item.getValues()));
+                
+                //Add the new string id if needed.
+                try {
+	                Message msg = new Message();
+	                msg.setKey(item.getKey().trim());
+	                msg.setMessage(bundleApplication.getString(item.getKey()));
+	                msg.setSiteId(site.getSiteId());
+	                msg.setLocale(currentLocale.getCode().trim());
+	                if (DbUtil.getMessage(msg.getKey(), msg.getLocale(), site.getId()) == null) {
+		                if (item.getKey() != null)  {                   
+	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
+		                }
+	                }
+                }catch(Exception e){
+                	logger.error(e);
+                }
             }
 
             if( !newErrors.isEmpty() )

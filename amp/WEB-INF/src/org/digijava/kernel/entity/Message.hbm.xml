@@ -5,6 +5,8 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
 <hibernate-mapping>
+
+
 	<class name="org.digijava.kernel.entity.Message" table="DG_MESSAGE">
 	  	<!-- <cache usage="read-write"/> -->
 		<composite-id unsaved-value="none">

@@ -379,7 +379,7 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
-                <c:forEach var="i" begin="0" end="${report.visibleRows-2}" step="${recordsPerPage}">
+                <c:forEach var="i" begin="0" end="${report.visibleRows-1}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>
@@ -522,7 +522,7 @@ session.setAttribute("progressValue", counter);
 				<c:set var="lastPage">
                 	0
                 </c:set>
-                <c:forEach var="i" begin="0" end="${report.visibleRows-2}" step="${recordsPerPage}">
+                <c:forEach var="i" begin="0" end="${report.visibleRows-1}" step="${recordsPerPage}">
                     <logic:equal name="viewFormat" value="html">
                         <a style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+(recordsPerPage-1)}"/>';">
                     </logic:equal>

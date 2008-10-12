@@ -41,7 +41,7 @@ function changeState() {
 
 <div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
   <div style="padding:5px;font-size:13px;font-weight:bold;color:White;background-color: #7B9EBD">
-  Event Types
+  <digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
   </div>
   <div style="overflow:auto;width:200px;height:92px;font-size:13px;font-weight:bold;">
     <c:if test="${!empty calendarViewForm.filter.eventTypes}">
@@ -69,7 +69,7 @@ function changeState() {
 </div>
 <div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
   <div style="padding:5px;font-size:13px;font-weight:bold;color:White;background-color: #7B9EBD">
-  Donors
+  <digi:trn key="calendar:bodydonors">Donors</digi:trn>
   </div>
   <div style="overflow:auto;width:200px;height:92px;font-size:13px;font-weight:bold;">
     <c:if test="${!empty calendarViewForm.filter.donors}">
@@ -103,7 +103,7 @@ function changeState() {
   </digi:trn>
 </div>
 <div style="padding:5px;width:190px;height:28px;">
-    <input type="submit" value="Run Filter" style="width:88px;" />
+    <input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
     &nbsp;
-    <input type="reset" value="Reset" style="width:88px;" />
+    <input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
 </div>

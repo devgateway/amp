@@ -7,6 +7,17 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="calendarEventForm"/>
+<script language="javascript">
+
+function deleteEvent(){
+	if(confirm('Are You sure?'))
+	{
+		document.getElementById('hdnMethod').value = "delete";
+		return true;
+	}
+	return false;
+}
+</script>
 
 <digi:form action="/showCalendarEvent.do">
 
@@ -37,7 +48,7 @@
                 <digi:trn key="calendar:Description">Description:</digi:trn>
               </td>
               <td>
-                <textarea rows="4" cols="25"></textarea>
+                <textarea rows="4" cols="25">${ calendarEventForm.description}</textarea>
               </td>
             </tr>
             <tr>
@@ -63,10 +74,8 @@
                 <digi:trn key="calendar:Organisations">Organisations:</digi:trn>
               </td>
               <td>
-                <html:select name="calendarEventForm" property="selectedEventOrganisations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
-                  <c:if test="${!empty calendarEventForm.selectedEventOrganisationsCol}">
-                    <html:optionsCollection name="calendarEventForm" property="selectedEventOrganisationsCol" value="value" label="label" />
-                  </c:if>
+                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
+                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" />
                 </html:select>
               </td>
             </tr>
@@ -108,8 +117,8 @@
               </td>
               <td>
                 <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
-                <c:if test="${calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
-                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:no">No</digi:trn></c:if>
+                <c:if test="${calendarEventForm.privateEvent}"><digi:trn key="calendar:no">No</digi:trn></c:if>
+                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
               </td>
             </tr>
             <tr>
@@ -120,7 +129,7 @@
                 &nbsp;
                 <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
                 &nbsp;
-                <input type="button" value="Delete" style="width: 100px;" />
+                <input type="submit" value="<digi:trn key="calendar:deletebutton">Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
               </td>
             </tr>
           </table>

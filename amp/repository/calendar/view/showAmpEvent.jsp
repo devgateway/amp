@@ -5,10 +5,27 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
 <digi:instance property="calendarEventForm"/>
 <script language="JavaScript" type="text/javascript">
   <jsp:include page="../../aim/view/scripts/calendar.js.jsp" flush="true" />
+
+function removeSelOrgs() {
+	setMethod("removeOrg");
+	selectAtts();
+	document.calendarEventForm.submit();
+}
+function submitForm()
+{
+	setMethod("");
+	selectAtts();
+	document.calendarEventForm.submit();
+}
+
+
+
 </script>
 
 <jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
@@ -20,13 +37,12 @@
 <script language="JavaScript" type="text/javascript">
 function makePublic(){
 
-  var showPrivateEvents = document.getElementById('PrivateEvents');
-
+  var showPrivateEvents = document.getElementsByName('privateEventCheckbox')[0];
   if (showPrivateEvents.checked==true) {
-    document.getElementsByName('privateEvent')[0].value=true;
+    document.getElementsByName('privateEvent')[0].value=false;
   }
   if (showPrivateEvents.checked==false){
-    document.getElementsByName('privateEvent')[0].value=false;
+    document.getElementsByName('privateEvent')[0].value=true;
 
   }
 }
@@ -48,7 +64,6 @@ function addOrganisation(orgId, orgName){
       alert("Please enter event title");
       return false;
     }else{
-      selectAllOrgs();
       return true;
     }
   }
@@ -583,7 +598,12 @@ function addOrganisation(orgId, orgName){
                                         </td>
                                         <td style="font-size: 14px; font-weight: bold;">
                                           <html:hidden name="calendarEventForm" property="privateEvent"/>
-                                          <html:checkbox styleId="PrivateEvents" name="calendarEventForm" property="privateEvent"  onchange="javascript:makePublic();" />
+                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
+                                          <c:if test="${!calendarEventForm.privateEvent }">
+                                          CHECKED
+                                          </c:if>
+                                          
+                                          />
                                           <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
                                         </td>
                                     </tr>
@@ -596,27 +616,48 @@ function addOrganisation(orgId, orgName){
                                             Organisations
                                         </td>
                                         <td>
-                                          <html:select name="calendarEventForm" property="selectedEventOrganisations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 50px;">
-                                            <c:if test="${!empty calendarEventForm.selectedEventOrganisationsCol}">
-                                              <html:optionsCollection name="calendarEventForm" property="selectedEventOrganisationsCol" value="value" label="label" />
-                                            </c:if>
-                                          </html:select>
-                                        </td>
-                                        <td style="vertical-align: top;">
-                                            <div>
-                                                <input style="width: 65px;" type="button" value="Add" onclick="window.open('/selectOrganization.do?orgSelReset=true&edit=true', 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;" />
-                                            </div>
-                                            <div>
-                                                <input style="width: 65px;" type="button" value="Remove" onclick="removeSelectedElements('organizationList');" />
-                                            </div>
-                                        </td>
+
+											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+												<logic:iterate name="calendarEventForm" property="organizations"
+												id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+												<tr><td>
+													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+														<tr>
+															<td width="3">
+																<html:multibox property="selOrganizations">
+																	<bean:write name="organization" property="ampOrgId" />
+																</html:multibox>
+															</td>
+															<td align="left">
+																<bean:write name="organization" property="name" />
+															</td>
+														</tr>
+													</table>
+												</td></tr>
+												</logic:iterate>
+												<tr><td>
+													<table cellSpacing=1 cellPadding=1>
+														<tr>
+															<td>
+															<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
+															</td>
+															<td>
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs()">
+																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
+																</html:button>
+															</td>
+														</tr>
+													</table>
+												</td></tr>
+											</table>
+                                        </td> 
                                     </tr>
                                     <tr>
                                         <td style="vertical-align: top;font-size: 14px; font-weight: bold;">
                                             <digi:trn key="calendar:Description">Description</digi:trn>
                                         </td>
                                         <td>
-                                            <textarea rows="5" cols="27"></textarea>
+ 											<html:textarea name="calendarEventForm" styleId="eventTitle" property="description" style="width: 220px;"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -651,7 +692,7 @@ function addOrganisation(orgId, orgName){
                                         </td>
                                         <td>
                                             <div>
-                                              <input type="button" onclick="MyaddUserOrTeam();" style="width: 65px;" value="<digi:trn key="calendar:btnAddUser">Add</digi:trn>">
+                                              <input type="button" onclick="MyaddUserOrTeam();" style="width: 65px;" value="<digi:trn key="calendar:btnadd">Add</digi:trn>">
                                             </div>
                                             <div>
                                               <input type="button" style="width: 65px;" onclick="MyremoveUserOrTeam()" value="<digi:trn key="calendar:btnRemove">Remove</digi:trn>" >

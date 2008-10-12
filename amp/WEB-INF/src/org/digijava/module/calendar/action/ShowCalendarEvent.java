@@ -55,8 +55,30 @@ public class ShowCalendarEvent extends Action {
         CalendarEventForm ceform = (CalendarEventForm) form;
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);
+            ceform.setOrganizations(null);
+            ceform.setSelOrganizations(null);
         }
-
+        else if(ceform.getMethod().equalsIgnoreCase("removeOrg")) 
+        {
+        	Long[] listSelectedOrganizations = ceform.getSelOrganizations();
+        	Collection<AmpOrganisation> colOrganizations = ceform.getOrganizations();
+        	Collection<AmpOrganisation> newColOrganizations = new ArrayList<AmpOrganisation>();
+        	newColOrganizations.addAll(colOrganizations);
+        	
+        	Iterator<AmpOrganisation> itOrgs = colOrganizations.iterator();
+        	while(itOrgs.hasNext()){
+        		AmpOrganisation currentOrg = itOrgs.next();
+        		for(int index=0; index < listSelectedOrganizations.length ; index++)
+        		{
+              		if(currentOrg.getAmpOrgId().equals(listSelectedOrganizations[index])){
+              			newColOrganizations.remove(currentOrg);
+              			break;
+              		}
+        		}
+        	}
+        	ceform.setOrganizations(newColOrganizations);
+        }
+        	
         // calendar type
         Collection calendarTypesList = DateNavigator.getCalendarTypes();
         Collection defCnISO = FeaturesUtil.getDefaultCountryISO();
@@ -114,18 +136,24 @@ public class ShowCalendarEvent extends Action {
             ceform.setSelectedAttsCol(selectedAttsCol);
         }
 
-        String[] slOrgs = ceform.getSelectedEventOrganisations();
-        if (slOrgs != null) {
-            Collection<LabelValueBean> selectedOrgsCol = new ArrayList<LabelValueBean> ();
-            for (int i = 0; i < slOrgs.length; i++) {
-                AmpOrganisation org = DbUtil.getOrganisation(Long.valueOf(slOrgs[i]));
-                if (org != null) {
-                    selectedOrgsCol.add(new LabelValueBean(org.getName(), slOrgs[i]));
-                }
-            }
-            ceform.setSelectedEventOrganisationsCol(selectedOrgsCol);
-        }
-
+//        String[] slOrgs = ceform.getSelectedEventOrganisations();
+//        
+//        if (slOrgs != null) {
+//            Collection<LabelValueBean> selectedOrgsCol = new ArrayList<LabelValueBean> ();
+//            for (int i = 0; i < slOrgs.length; i++) {
+//                AmpOrganisation org = DbUtil.getOrganisation(Long.valueOf(slOrgs[i]));
+//                if (org != null) {
+//                    selectedOrgsCol.add(new LabelValueBean(org.getName(), slOrgs[i]));
+//                }
+//            }
+//            ceform.setSelectedEventOrganisationsCol(selectedOrgsCol);
+//        }
+        
+        Collection<AmpOrganisation> organizations = ceform.getOrganizations();
+        if(organizations == null)
+        	ceform.setOrganizations(new ArrayList<AmpOrganisation>());
+        
+        
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.setAmpCalendarId(null);
 
@@ -170,15 +198,7 @@ public class ShowCalendarEvent extends Action {
                 ampCalendar.setMember(calMember);
             }
 
-            Set orgs = new HashSet();
-            String[] slOrgs = ceform.getSelectedEventOrganisations();
-            if (slOrgs != null) {
-                for (int i = 0; i < slOrgs.length; i++) {
-                    AmpOrganisation org = DbUtil.getOrganisation(Long.valueOf(slOrgs[i]));
-                    orgs.add(org);
-                }
-            }
-            ampCalendar.setOrganisations(orgs);
+            ampCalendar.setOrganisations( new HashSet<AmpOrganisation>(ceform.getOrganizations()));
 
             Set atts =  new HashSet();
             String[] slAtts = ceform.getSelectedAtts();
@@ -214,6 +234,8 @@ public class ShowCalendarEvent extends Action {
             calendarItem.setTitle(ceform.getEventTitle());
             calendarItem.setCreationIp(RequestUtils.getRemoteAddress(request));
             calendarItem.setCreationDate(new Date());
+            calendarItem.setDescription(ceform.getDescription());
+            
             // fill calendar object
 
             calendarItems.add(calendarItem);
@@ -243,7 +265,8 @@ public class ShowCalendarEvent extends Action {
 
             calPK.setCalendar(calendar);
             ampCalendar.setCalendarPK(calPK);
-
+            //Private Event checkbox label states "Public Event"
+            
             ampCalendar.setPrivateEvent(ceform.isPrivateEvent());
 
             AmpDbUtil.updateAmpCalendar(ampCalendar);
@@ -323,14 +346,14 @@ public class ShowCalendarEvent extends Action {
                 // private event
                 ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
 
-                Collection<LabelValueBean> orgs = new ArrayList<LabelValueBean> ();
+                Collection<AmpOrganisation> orgs = new ArrayList<AmpOrganisation> ();
                 if (ampCalendar.getOrganisations() != null) {
                     Iterator orgItr = ampCalendar.getOrganisations().iterator();
                     while (orgItr.hasNext()) {
                         AmpOrganisation org = (AmpOrganisation) orgItr.next();
-                        orgs.add(new LabelValueBean(org.getName(), org.getAmpOrgId().toString()));
+                        orgs.add(org);
                     }
-                    ceform.setSelectedEventOrganisationsCol(orgs);
+                    ceform.setOrganizations(orgs);
                 }
 
                 // selected start date and selected end date

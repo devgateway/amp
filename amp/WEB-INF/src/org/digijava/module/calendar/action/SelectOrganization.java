@@ -28,7 +28,7 @@ public class SelectOrganization extends Action {
                 }
             }
         }
-        ceform.setOrganisations(orgs);
+//        ceform.setOrganisations(orgs);
         return mapping.findForward("forward");
     }
 }

@@ -66,7 +66,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>
 		</set>
 		
-		<set name="calendar" table="AMP_CALENDAR_DONORS_MAP" lazy="true">
+		<set name="calendar" table="AMP_CALENDAR_EVENT_ORGANISATIONS" lazy="true">
             <key column="AMP_ORG_ID"/>
             <many-to-many class="org.digijava.module.calendar.dbentity.AmpCalendar" column="CALENDAR_ID"/>
         </set>

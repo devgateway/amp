@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.entity.DateBreakDown;
@@ -32,9 +33,9 @@ public class CalendarEventForm
     private Long selectedEventTypeId;
     private String selectedEventTypeName;
 
-    private Collection organisations;
-    private String[] selectedOrganisations;
-    private Collection<LabelValueBean> selectedOrganisationsCol;
+//    private Collection organisations;
+//    private String[] selectedOrganisations;
+//    private Collection selectedOrganisationsCol;
 
     private String selectedStartDate;
     private String selectedStartTime;
@@ -45,14 +46,36 @@ public class CalendarEventForm
     private GregorianCalendar endDate;
     private DateBreakDown endDateBreakDown;
 
-    private Collection eventOrganisations;
-    private String[] selectedEventOrganisations;
-    private Collection<LabelValueBean> selectedEventOrganisationsCol;
+//    private Collection eventOrganisations;
+//    private String[] selectedEventOrganisations;
+//    private Collection selectedEventOrganisationsCol;
 
     private Collection attendees;
     private String[] selectedAtts;
     private Collection<LabelValueBean> selectedAttsCol;
 
+    private Long selOrganizations[];
+	private Collection<AmpOrganisation> organizations;
+	private String description;
+	
+
+	public Long[] getSelOrganizations() {
+		return selOrganizations;
+	}
+
+	public void setSelOrganizations(Long[] selOrganizations) {
+		this.selOrganizations = selOrganizations;
+	}
+
+	public Collection<AmpOrganisation> getOrganizations() {
+		return organizations;
+	}
+
+	public void setOrganizations(Collection<AmpOrganisation> organizations) {
+		this.organizations = organizations;
+	}
+
+	
     private boolean resetForm;
 
     public Collection<Team> getTeamMapValues(){
@@ -83,9 +106,9 @@ public class CalendarEventForm
         return eventTypesList;
     }
 
-    public Collection getOrganisations() {
-        return organisations;
-    }
+//    public Collection getOrganisations() {
+//        return organisations;
+//    }
 
     public boolean isPrivateEvent() {
         return privateEvent;
@@ -119,9 +142,9 @@ public class CalendarEventForm
         return selectedEventTypeName;
     }
 
-    public String[] getSelectedOrganisations() {
-        return selectedOrganisations;
-    }
+//    public String[] getSelectedOrganisations() {
+//        return selectedOrganisations;
+//    }
 
     public String getSelectedStartDate() {
         return selectedStartDate;
@@ -147,9 +170,9 @@ public class CalendarEventForm
         return attendees;
     }
 
-    public String[] getSelectedEventOrganisations() {
-        return selectedEventOrganisations;
-    }
+//    public String[] getSelectedEventOrganisations() {
+//        return selectedEventOrganisations;
+//    }
 
     public String getSearchOrgKey() {
         return searchOrgKey;
@@ -163,17 +186,17 @@ public class CalendarEventForm
         return selectedAttsCol;
     }
 
-    public Collection<LabelValueBean> getSelectedOrganisationsCol() {
-        return selectedOrganisationsCol;
-    }
+//    public Collection getSelectedOrganisationsCol() {
+//        return selectedOrganisationsCol;
+//    }
+//
+//    public Collection getSelectedEventOrganisationsCol() {
+//        return selectedEventOrganisationsCol;
+//    }
 
-    public Collection<LabelValueBean> getSelectedEventOrganisationsCol() {
-        return selectedEventOrganisationsCol;
-    }
-
-    public Collection getEventOrganisations() {
-        return eventOrganisations;
-    }
+//    public Collection getEventOrganisations() {
+//        return eventOrganisations;
+//    }
 
     public boolean isResetForm() {
         return resetForm;
@@ -195,9 +218,9 @@ public class CalendarEventForm
         this.selectedStartDate = selectedStartDate;
     }
 
-    public void setSelectedOrganisations(String[] selectedOrganisations) {
-        this.selectedOrganisations = selectedOrganisations;
-    }
+//    public void setSelectedOrganisations(String[] selectedOrganisations) {
+//        this.selectedOrganisations = selectedOrganisations;
+//    }
 
     public void setSelectedEventTypeName(String selectedEventTypeName) {
         this.selectedEventTypeName = selectedEventTypeName;
@@ -231,9 +254,9 @@ public class CalendarEventForm
         this.privateEvent = privateEvent;
     }
 
-    public void setOrganisations(Collection organisations) {
-        this.organisations = organisations;
-    }
+//    public void setOrganisations(Collection organisations) {
+//        this.organisations = organisations;
+//    }
 
     public void setEventTypesList(Collection eventTypesList) {
         this.eventTypesList = eventTypesList;
@@ -267,9 +290,9 @@ public class CalendarEventForm
         this.attendees = attendees;
     }
 
-    public void setSelectedEventOrganisations(String[] selectedEventOrganisations) {
-        this.selectedEventOrganisations = selectedEventOrganisations;
-    }
+//    public void setSelectedEventOrganisations(String[] selectedEventOrganisations) {
+//        this.selectedEventOrganisations = selectedEventOrganisations;
+//    }
 
     public void setSearchOrgKey(String searchOrgKey) {
         this.searchOrgKey = searchOrgKey;
@@ -283,17 +306,17 @@ public class CalendarEventForm
         this.selectedAttsCol = selectedAttsCol;
     }
 
-    public void setSelectedOrganisationsCol(Collection<LabelValueBean> selectedOrganisationsCol) {
-        this.selectedOrganisationsCol = selectedOrganisationsCol;
-    }
-
-    public void setSelectedEventOrganisationsCol(Collection<LabelValueBean> selectedEventOrganisationsCol) {
-        this.selectedEventOrganisationsCol = selectedEventOrganisationsCol;
-    }
-
-    public void setEventOrganisations(Collection eventOrganisations) {
-        this.eventOrganisations = eventOrganisations;
-    }
+//    public void setSelectedOrganisationsCol(Collection<LabelValueBean> selectedOrganisationsCol) {
+//        this.selectedOrganisationsCol = selectedOrganisationsCol;
+//    }
+//
+//    public void setSelectedEventOrganisationsCol(Collection selectedEventOrganisationsCol) {
+//        this.selectedEventOrganisationsCol = selectedEventOrganisationsCol;
+//    }
+//
+//    public void setEventOrganisations(Collection eventOrganisations) {
+//        this.eventOrganisations = eventOrganisations;
+//    }
 
     public void setResetForm(boolean resetForm) {
         this.resetForm = resetForm;
@@ -314,10 +337,13 @@ public class CalendarEventForm
         eventTypesList=null;
         selectedEventTypeId=null;
         selectedEventTypeName=null;
-
-        organisations=null;
-        selectedOrganisations=null;
-        selectedOrganisationsCol=null;
+        description = null;
+//
+//        organisations=null;
+//        selectedOrganisations=null;
+//        selectedOrganisationsCol=null;
+//        organizations = null;
+//        selOrganizations = null;
         
        String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 	if (dtformat == null){
@@ -336,12 +362,20 @@ public class CalendarEventForm
         endDate=null;
         endDateBreakDown=null;
 
-        eventOrganisations=null;
-        selectedEventOrganisations=null;
-        selectedEventOrganisationsCol=null;
+//        eventOrganisations=null;
+//        selectedEventOrganisations=null;
+//        selectedEventOrganisationsCol=null;
 
         attendees=null;
         selectedAtts=null;
         selectedAttsCol=null;
     }
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
+	}
 }

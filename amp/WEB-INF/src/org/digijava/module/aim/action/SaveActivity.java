@@ -567,18 +567,13 @@ public class SaveActivity extends Action {
 						errors.add("sector", new ActionError("error.aim.addActivity.sectorEmpty"));
 					}
 					else{
-						boolean secPer = false;
-						int percent = 0, primaryPrc=0, secondaryPrc=0;
-						boolean primary=false;
+						int primaryPrc=0, secondaryPrc=0;
 						boolean hasPrimarySectorsAdded=false, hasSecondarySectorsAdded=false;
 						
 						Iterator<ActivitySector> secPerItr = eaForm.getSectors().getActivitySectors().iterator();
 						while (secPerItr.hasNext()) {
 							ActivitySector actSect = (ActivitySector) secPerItr.next();
 							AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(actSect.getConfigId());
-							if(config.isPrimary()){
-								primary=true;
-							}
 							if("Primary".equals(config.getName())) 
 								hasPrimarySectorsAdded=true;
 							if("Secondary".equals(config.getName())) 
@@ -592,7 +587,6 @@ public class SaveActivity extends Action {
 								try {
 									if("Primary".equals(config.getName())) primaryPrc+=actSect.getSectorPercentage().intValue();
 									if("Secondary".equals(config.getName())) secondaryPrc+=actSect.getSectorPercentage().intValue();
-									percent += actSect.getSectorPercentage().intValue();
 								} catch (NumberFormatException nex) {
 									errors.add("sectorPercentageNonNumeric",
 											new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
@@ -600,21 +594,25 @@ public class SaveActivity extends Action {
 							}
 						}
 						
-						if(primaryPrc!=100)
-							errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong"));
+						if (isPrimarySectorEnabled()){
+							if(!hasPrimarySectorsAdded){
+								errors.add("noPrimarySectorsAdded",
+										new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
+							}
+							if(primaryPrc!=100)
+								errors.add("primarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.primarySectorPercentageSumWrong"));							
+						}
+
 						
-						if(secondaryPrc!=100)
-							errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong"));
-						
-						
-						// no primary sectors added
-						if (isPrimarySectorEnabled() && !hasPrimarySectorsAdded)
-							errors.add("noPrimarySectorsAdded",
-									new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
-						
-						if (isSecondarySectorEnabled() && !hasSecondarySectorsAdded)
-							errors.add("noSecondarySectorsAdded",
-									new ActionError("error.aim.addActivity.noSecondarySectorsAdded"));
+						if (isSecondarySectorEnabled()){
+							if(!hasSecondarySectorsAdded){
+								errors.add("noSecondarySectorsAdded",
+										new ActionError("error.aim.addActivity.noSecondarySectorsAdded"));									
+							}
+							if(hasSecondarySectorsAdded && secondaryPrc!=100)
+								errors.add("secondarySectorPercentageSumWrong", new ActionError("error.aim.addActivity.secondarySectorPercentageSumWrong"));							
+						}
+
 					}
 				}
 				

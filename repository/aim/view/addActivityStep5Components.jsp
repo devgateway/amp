@@ -10,7 +10,9 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@page import="org.digijava.module.aim.form.EditActivityForm"%>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
-<digi:instance property="aimEditActivityForm"/>
+
+<%@page import="org.digijava.module.aim.util.DbUtil"%>
+<%@page import="org.digijava.module.aim.form.ActivityForm"%><digi:instance property="aimEditActivityForm"/>
 
 
 								<table width="95%" bgcolor="#f4f4f2">
@@ -77,18 +79,31 @@
 												<tr><td align="center">
 													<table width="98%" cellSpacing=1 cellPadding=4 vAlign="top" align="center" border=0
 													class="box-border-nopadding">
+														<tr>
+															<td>
+																<logic:iterate id="type" name="aimEditActivityForm" property="allCompsType" type="org.digijava.module.aim.dbentity.AmpComponentType">
+																	<b>
+																		<%if (selComponents.getType_Id().longValue()==type.getType_id().longValue()){%>
+																	 		<digi:trn key="aim:type">Type:</digi:trn> <%=type.getName()%>	
+																		<%} %>
+																	</b>
+																</logic:iterate>
+															</td>
+														</tr>
 														<tr bgcolor="#fffffc">
 															<td vAlign="center" align="left" width="95%">
 																<html:multibox property="selComp">
 																	<c:out value="${selComponents.componentId}"/>
 																</html:multibox>
+																
 																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>
 																<digi:trn key="aim:TitleofComponent">Component Title</digi:trn></a> :
 																<b><c:out value="${selComponents.title}"/></b>
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																
+																
 																<field:display name="Edit Components Link" feature="Activity - Component Step">
-																<a href="javascript:editFunding('<bean:write name="selComponents"
-																property="componentId"/>')"><digi:trn key="aim:edit">Edit</digi:trn></a>
+																	<a href="javascript:editFunding('<bean:write name="selComponents" property="componentId"/>')"><digi:trn key="aim:edit">Edit</digi:trn></a>
 																</field:display>
 																<br>
 																<digi:trn key="aim:description">Description</digi:trn>:&nbsp;<c:out value="${selComponents.description}"/>

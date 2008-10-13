@@ -27,7 +27,7 @@
             <c:if test="${not empty helpForm.searched}">
             <td height="12" valign="center"  style="background:#222E5D;"><span style="font-family: serif; color: white" >
               
-              <digi:trn key="help:searchedTpc">Search result</digi:trn>
+              <digi:trn key="help:searchedTpcres">Search results</digi:trn>
             </span> </td>
             </c:if>
   </tr>

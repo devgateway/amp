@@ -190,11 +190,12 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 //Add the new string id if needed.
                 try {
 	                Message msg = new Message();
-	                msg.setKey(item.getKey().trim());
+	                msg.setKey(item.getKey().trim().toLowerCase());
 	                msg.setMessage(bundleApplication.getString(item.getKey()));
-	                msg.setSiteId(site.getSiteId());
+	                msg.setSiteId(site.getId().toString());
 	                msg.setLocale(currentLocale.getCode().trim());
-	                if (DbUtil.getMessage(msg.getKey(), msg.getLocale(), site.getId()) == null) {
+	                //msg.setLocale("en");
+	                if (TranslatorWorker.getInstance(msg.getKey()).get(msg.getKey(), msg.getLocale(), site.getId().toString()) == null) {
 		                if (item.getKey() != null)  {                   
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
 		                }

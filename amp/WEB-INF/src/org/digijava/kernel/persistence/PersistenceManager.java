@@ -48,6 +48,7 @@ import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.Count;
@@ -227,6 +228,7 @@ public class PersistenceManager {
                                          String precacheHql, boolean forcePrecache) throws
         HibernateException, DgException {
     	AbstractCache region = DigiCacheManager.getInstance().getCache(regionName);
+        DigiConfig config = DigiConfigManager.getConfig();
         if (region == null) {
             logger.debug("Unable to create cache region " + regionName +
                          " to precache class: " + className);
@@ -253,11 +255,15 @@ public class PersistenceManager {
                     Object item = rowIter.next();
                     Serializable id = meta.getIdentifier(item);
                     if (id == null) {
-                        logger.error(
-                            "One of the object identities is null for class: " +
-                            className);
-                        throw new DgException(
-                            "One of the object identities is null " + className);
+                    	String errMsg = "One of the object identities is null for class: " +className; 
+                        logger.error(errMsg);
+                        throw new DgException(errMsg);
+                    }
+                    if (Message.class.getName().equals(className) && !config.isCaseSensitiveTranslatioKeys()){
+                    	Message msgId 	= (Message) id;
+                    	Message msg		= (Message) item;
+                    	msgId.setKey(msgId.getKey().toLowerCase());
+                    	msg.setKey(msg.getKey().toLowerCase());
                     }
                     region.put(id, item);
                 }

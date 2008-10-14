@@ -168,7 +168,7 @@ function reviseCloseDate() {
 }
 
 function popupwin() {
-	var statId=document.getElementsByName('statusId')[0].value;
+	var statId=document.getElementsByName('planning.statusId')[0].value;
 	openNewWindow(600, 550);	
 	document.aimEditActivityForm.action = "/getSatusDescription.do?catEditKey="+statId;
 	document.aimEditActivityForm.target = popupPointer.name;

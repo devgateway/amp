@@ -634,19 +634,24 @@ public class SaveActivity extends Action {
 				
 				if (eaForm.getPrograms().getNationalPlanObjectivePrograms() != null
 						&& eaForm.getPrograms().getNationalPlanObjectivePrograms().size() > 0) {
+					boolean failNOP = false;
 					Iterator<AmpActivityProgram> npoIt = eaForm.getPrograms().getNationalPlanObjectivePrograms().iterator();
 					Double totalPercentage = 0d;
 					while (npoIt.hasNext()) {
 						AmpActivityProgram activityProgram = npoIt.next();
 						totalPercentage += activityProgram.getProgramPercentage();
 						if(activityProgram.getProgramPercentage() <= 0){
-							errors.add("nationalPlanProgramsPercentageWrong",
-									new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageWrong"));
+							failNOP = true;
 						}
 					}
-					if (totalPercentage != 100)
+					if (totalPercentage != 100) {
 						errors.add("nationalPlanProgramsPercentageSumWrong",
 								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageSumWrong"));
+					}
+					if(failNOP == true) {
+						errors.add("nationalPlanProgramsPercentageWrong",
+								new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageWrong"));
+					}
 				}
 				
 				if (eaForm.getPrograms().getPrimaryPrograms()!= null

@@ -40,7 +40,6 @@
 
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 
-<module:display name="Reports" parentModule="REPORTING"></module:display>
 
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 

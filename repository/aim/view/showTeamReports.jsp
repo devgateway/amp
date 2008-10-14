@@ -482,7 +482,6 @@ function confirmFunc() {
 	                                </c:set>
 	                                <c:set target="${urlParams}" property="event" value="edit" />
 	                                <logic:equal name="teamLeadFlag" scope="session" value="true"> 
-	                                  <module:display name="New Report Wizard" parentModule="REPORTING">
                                       	<c:set var="translation">
 	                                      	<c:if test="${aimTeamReportsForm.showTabs}">
 		                                        <digi:trn key="aim:ClickEditTab">Click on this icon to edit tab&nbsp;</digi:trn>
@@ -494,7 +493,6 @@ function confirmFunc() {
 	                                    <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
 	                                      <img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
 	                                    </digi:link> 
-	                                  </module:display>
                                       &nbsp;
                                       <c:set var="translation">
                                       	<c:if test="${aimTeamReportsForm.showTabs}">
@@ -512,11 +510,9 @@ function confirmFunc() {
 	                                <logic:equal name="teamLeadFlag" scope="session" value="false">
 	                                  <logic:present name="report" property="ownerId">
 	                                    <logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
-	                                      <module:display name="New Report Wizard" parentModule="REPORTING">
 	                                        | <digi:link href="/reportWizard.do?editReportId=${report.ampReportId}">
 	                                          <digi:trn key="aim:reportEdit">Edit</digi:trn>
 	                                        </digi:link> 
-	                                      </module:display>
 	                                      | <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" >
 	                                        <digi:trn key="aim:reportDelete">Delete</digi:trn>
 	                                      </digi:link> 

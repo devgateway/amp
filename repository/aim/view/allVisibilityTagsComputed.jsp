@@ -27,7 +27,6 @@
 <module:display name="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Reports" parentModule="REPORTING"></module:display>
 <module:display name="Measures" parentModule="REPORTING"></module:display>
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
@@ -52,7 +51,6 @@
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Reports" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 

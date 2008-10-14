@@ -39,7 +39,6 @@
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Reports" parentModule="REPORTING"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display>

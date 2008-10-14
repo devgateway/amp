@@ -650,6 +650,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.setUpdatedBy(activity.getUpdatedBy());
           eaForm.getIdentification().setBudgetCheckbox(activity.getBudget().toString());
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
+          eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
           
 
           /*

@@ -154,7 +154,7 @@
 <feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>
 <feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display>
 <feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display>
-<feature:display name="Filter Button" module="Report Generator"></feature:feature>
+<feature:display name="Filter Button" module="Report Generator"></feature:display>
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 

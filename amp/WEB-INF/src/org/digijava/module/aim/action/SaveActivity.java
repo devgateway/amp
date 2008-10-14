@@ -639,6 +639,10 @@ public class SaveActivity extends Action {
 					while (npoIt.hasNext()) {
 						AmpActivityProgram activityProgram = npoIt.next();
 						totalPercentage += activityProgram.getProgramPercentage();
+						if(activityProgram.getProgramPercentage() <= 0){
+							errors.add("nationalPlanProgramsPercentageWrong",
+									new ActionError("error.aim.addActivity.nationalPlanProgramsPercentageWrong"));
+						}
 					}
 					if (totalPercentage != 100)
 						errors.add("nationalPlanProgramsPercentageSumWrong",

@@ -33,7 +33,7 @@
 </script>
 
 <html:hidden property="issueId"/>
-<html:hidden property="event"/>
+<html:hidden property="funding.event"/>
 <html:hidden property="edit" value="true"/>
 <html:hidden property="editAct"/>
 	<tr>

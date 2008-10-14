@@ -574,7 +574,7 @@ html>body #mainEmpty {
 							</logic:notEqual>
 						</feature:display>						
 						
-						<field:display name="Costing Tab" feature="Costing">
+						<feature:display module="Activity Costing" name="Costing">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
 							   <LI>
                                		<a name="node">
@@ -597,9 +597,9 @@ html>body #mainEmpty {
                                 </span>
 								</LI>
 							</logic:notEqual>
-						</field:display>
+						</feature:display>
 						
-						<field:display name="Contracting Tab" feature="Contracting">
+						<feature:display name="Contracting" module="Contracting">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
 							   <LI>
                                		<a name="node">
@@ -621,7 +621,7 @@ html>body #mainEmpty {
                                 </span>
 								</LI>
 							</logic:notEqual>
-						</field:display>
+						</feature:display>
 					</UL>		
 				</DIV>	
             	</DIV>

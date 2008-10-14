@@ -95,7 +95,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display>
-<feature:display name="Filter Button" module="Report Generator"></feature:feature>
+<feature:display name="Filter Button" module="Report Generator"></feature:display>
 <feature:display module="Report Types" name="Contribution Report"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display>
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>

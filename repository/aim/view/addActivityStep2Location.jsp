@@ -86,7 +86,7 @@
                                               	<c:set var="translation">
 														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="location.implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
 												                                             	
                                               	<script language="Javascript">
 
@@ -120,7 +120,7 @@
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
                                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
-                                                  <logic:empty name="location" property="selectedLocs">
+                                                  <logic:empty name="aimEditActivityForm" property="location.selectedLocs">
                                                   <field:display name="Add Location" feature="Location">
                                                     <tr>
                                                     <td bgcolor="#ffffff"><html:button
@@ -131,11 +131,11 @@
                                                     </tr>
                                                     </field:display>
                                                   </logic:empty>
-                                                  <logic:notEmpty name="location" property="selectedLocs">
+                                                  <logic:notEmpty name="aimEditActivityForm" property="location.selectedLocs">
                                                     <tr>
                                                       <td>
                                                         <table cellSpacing="0" cellPadding="0" border="0"	bgcolor="#ffffff" width="100%">
-                                                        <c:forEach var="selectedLocs" items="${location.selectedLocs}">
+                                                        <c:forEach var="selectedLocs" items="${aimEditActivityForm.location.selectedLocs}">
                                                           <tr>
                                                               <td width="100%">
                                                                 <table width="100%" cellSpacing="1" cellPadding="1"	vAlign="top" align="left">

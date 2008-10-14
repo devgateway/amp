@@ -113,24 +113,24 @@ function commentWin(val) {
 										<feature:display module="Project ID and Planning" name="Identification">
 											<field:display name="Description" feature="Identification">
 											&nbsp;&nbsp;<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>'); return false;" >
+											<a href="#" onclick="javascript:previewOverviewframe('Desc','<c:out value="${activity.description}"/>'); return false;" >
 											<digi:trn key="aim:description">Description</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
 											<field:display name="Objectives" feature="Identification">
 												<field:display name="Objective" feature="Identification">
 												<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
-												<a href="#" onclick="javascript:previewOverviewframe('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>'); return false;" >
+												<a href="#" onclick="javascript:previewOverviewframe('Obj','<c:out value="${activity.objective}"/>'); return false;" >
 												<digi:trn key="aim:objectives">Objectives</digi:trn></a>&nbsp;|</div>&nbsp;
 												</field:display>
 											</field:display>
 											<field:display name="Purpose" feature="Identification">
 											<div id="gen" title='<digi:trn key="aim:clickToViewProjectPurpose">Click here to View Project Purpose</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('Purp','<c:out value="${aimMainProjectDetailsForm.purpose}"/>'); return false;" >
+											<a href="#" onclick="javascript:previewOverviewframe('Purp','<c:out value="${activity.purpose}"/>'); return false;" >
 												<digi:trn key="aim:purpose">Purpose</digi:trn></a>&nbsp;|</div>&nbsp;
 											</field:display>
 											<field:display name="Results" feature="Identification">
 											<div id="gen" title='<digi:trn key="aim:clickToViewProjectResults">Click here to View Project Results</digi:trn>'>
-											<a href="#" onclick="javascript:previewOverviewframe('Res','<c:out value="${aimMainProjectDetailsForm.results}"/>'); return false;" >
+											<a href="#" onclick="javascript:previewOverviewframe('Res','<c:out value="${activity.results}"/>'); return false;" >
 												<digi:trn key="aim:results">Results</digi:trn></a></div>&nbsp;
 											</field:display>
 										</feature:display>

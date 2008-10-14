@@ -50,6 +50,7 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
@@ -104,6 +105,10 @@ public class ReportWizardAction extends MultiAction {
 					return this.modeDynamicSave(mapping, form, request, response);
 				else
 					return this.modeSave(mapping, form, request, response);
+			}
+			catch(DuplicateReportNameException e) {
+				logger.info( e.getMessage() );
+				return mapping.findForward("save");
 			}
 			catch (RuntimeException e) {
 				logger.error( e.getMessage() );
@@ -229,7 +234,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		if ( AdvancedReportUtil.checkDuplicateReportName(myForm.getReportTitle(), teamMember.getMemberId(), myForm.getReportId() ) ) {
 			myForm.setDuplicateName(true);
-			throw new Exception("The name " + myForm.getReportTitle() + " is already used by another report");
+			throw new DuplicateReportNameException("The name " + myForm.getReportTitle() + " is already used by another report");
 		}
 			
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
@@ -329,7 +334,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		if ( AdvancedReportUtil.checkDuplicateReportName(ampReportTitle, teamMember.getMemberId(), reportId ) ) {
 			myForm.setDuplicateName(true);
-			throw new Exception("The name " + ampReportTitle + " is already used by another report");
+			throw new DuplicateReportNameException("The name " + ampReportTitle + " is already used by another report");
 		}
 		
 		ampReport.setName( ampReportTitle );

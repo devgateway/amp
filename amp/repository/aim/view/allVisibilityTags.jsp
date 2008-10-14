@@ -62,13 +62,11 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="PI Reports" parentModule="REPORTING"></module:display>
-<module:display name="New Report Wizard" parentModule="REPORTING"></module:display>
 <module:display name="Messages" parentModule="Messaging System"></module:display>
 <module:display name="ADMIN" parentModule="Messaging System"></module:display>
 
 
 
-<feature:display  name="Report and Tab Options" module="New Report Wizard"></feature:display>
 <field:display name="Contracting Remove Disbursements" feature="Contracting"></field:display>
 <feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
 <feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
@@ -98,6 +96,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display>
+<feature:display name="Filter Button" module="Report Generator"></feature:feature>
 <feature:display module="Report Types" name="Contribution Report"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display>
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
@@ -107,7 +106,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Calendar" module="Calendar"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Component Report" module="Report Types"></feature:display>
-<feature:display name="Save Filters from Desktop" module="Reports"></feature:display>
+<feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display>
+<feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display>
 <feature:display name="Activity - Component Step" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>
@@ -620,7 +620,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 
 <field:display name="Template Manager" feature="Message Manager"></field:display>
 
-<field:display  name="Filter Button" feature="Report and Tab Options"></field:display>
 
 
 

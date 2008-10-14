@@ -41,7 +41,6 @@
 <module:display name="Messaging System"></module:display> 
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display> 
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display> 
-<module:display name="New Report Wizard" parentModule="REPORTING"></module:display> 
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="PARIS INDICATORS"></module:display> 
 <module:display name="PI Reports" parentModule="REPORTING"></module:display> 
@@ -154,7 +153,10 @@
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
-<feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display> 
+<feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>
+<feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display>
+<feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display>
+<feature:display name="Filter Button" module="Report Generator"></feature:feature>
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 

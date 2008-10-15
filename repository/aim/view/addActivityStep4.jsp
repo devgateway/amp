@@ -325,7 +325,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<tr><td><b>
 																		
 																		<font 
-																		<c:if test="${aimEditActivityForm.totalCommitmentsAsDouble < aimEditActivityForm.regionTotalDisb }">
+																		<c:if test="${aimEditActivityForm.funding.totalCommitmentsDouble < aimEditActivityForm.regionTotalDisb }">
 																		 color="RED"
 																		</c:if>
 																		>
@@ -405,7 +405,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																							 - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> =
-																							<c:out value="${aimEditActivityForm.totalDisbursements}"/>
+																							<c:out value="${aimEditActivityForm.funding.totalDisbursements}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</field:display>
 																							</b>
@@ -445,7 +445,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																							 - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> =
-																							<c:out value="${aimEditActivityForm.totalExpenditures}"/>
+																							<c:out value="${aimEditActivityForm.funding.totalExpenditures}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</field:display>
 																							</b>

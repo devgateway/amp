@@ -690,7 +690,12 @@ function collapseAll() {
 										<digi:trn key="aim:actBudgeton">
 												Activity is On Budget										</digi:trn>
 										</logic:equal>
-
+										<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget										</digi:trn>
+										</logic:equal>
+										
+										<%--
 										<logic:equal name="aimEditActivityForm" property="budget" value="false">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget										</digi:trn>
@@ -699,7 +704,8 @@ function collapseAll() {
 										<logic:equal name="aimEditActivityForm" property="budget" value="">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget										</digi:trn>
-										</logic:equal>										
+										</logic:equal>
+										--%>										
 										</field:display>
 										</td>
 									</tr>

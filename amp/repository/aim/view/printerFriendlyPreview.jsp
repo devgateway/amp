@@ -327,12 +327,12 @@
 											</td>
 										  <td bgcolor="#ffffff">
 											<field:display name="On/Off Budget" feature="Budget">
-											<logic:equal name="aimEditActivityForm" property="identification.budget" value="true">
+											<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="true">
 											<digi:trn key="aim:actBudgeton">
-													Activity is On Budget										</digi:trn>
+													Activity is On Budget											</digi:trn>
 											</logic:equal>
 	
-											<logic:equal name="aimEditActivityForm" property="identification.budget" value="false">
+											<logic:equal name="aimEditActivityForm" property="identification.budgetCheckbox" value="false">
 											<digi:trn key="aim:actBudgetoff">
 													Activity is Off Budget										</digi:trn>
 											</logic:equal>

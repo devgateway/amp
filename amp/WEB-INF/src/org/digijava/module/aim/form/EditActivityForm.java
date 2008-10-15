@@ -3518,7 +3518,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.selectedLocs = selectedLocs;
 		}
 	}
-
+	
+	public org.digijava.module.aim.helper.Location getSelectedLocs(int index) {
+		return (org.digijava.module.aim.helper.Location)(this.location.selectedLocs.toArray()[index]);
+	}
+	
 	public class Sector {
 		private List classificationConfigs;
 		private String primarySectorVisible = null;

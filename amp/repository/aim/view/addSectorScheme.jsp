@@ -78,7 +78,7 @@
 												<table width="100%">
 													<tr>
 														<td>
-															Scheme Name :
+															<digi:trn key="aim:SchemeName">Scheme Name</digi:trn>
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="secSchemeName" rows="1" cols= "35"/> 

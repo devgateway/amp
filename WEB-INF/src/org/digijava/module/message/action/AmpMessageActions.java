@@ -999,12 +999,15 @@ public class AmpMessageActions extends DispatchAction {
 			Collection<AmpTeamMember> memberList = new ArrayList<AmpTeamMember>();
 			for (AmpMessageState state : msgStates) {
 				if(state.getMemberId()!=null){
-					AmpTeamMember teamMember=TeamMemberUtil.getAmpTeamMember(state.getMemberId());
-					AmpTeam team = teamMember.getAmpTeam();
-					if(!teamList.contains(team)){
-					   teamList.add(team);
-					}
-					memberList.add(teamMember);
+                                AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
+                                    if (teamMember != null) {
+                                        AmpTeam team = teamMember.getAmpTeam();
+                                        if (!teamList.contains(team)) {
+                                            teamList.add(team);
+                                        }
+                                        memberList.add(teamMember);
+                                    }
+
 				}
 			}
 			for(AmpTeam team : teamList){

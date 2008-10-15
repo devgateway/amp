@@ -27,6 +27,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	//private AmpARFilter defaultFilter;
 
 	private String name;
+	
+	private String nametrimed;
 
 	// private String description;
 	private String reportDescription;
@@ -425,4 +427,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		      	((AmpReports)report).getName().compareToIgnoreCase( ((AmpReports)anotherReport).getName() );
 		    }
 		  };
+
+
+
+	public String getNametrimed() {
+		return this.name.replace("'","\\'");
+	}
+
+	public void setNametrimed(String nametrimed) {
+		this.nametrimed = nametrimed;
+	}
 }

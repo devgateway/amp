@@ -67,7 +67,7 @@
 		</set>
 		
 		<set name="calendar" table="AMP_CALENDAR_EVENT_ORGANISATIONS" lazy="true">
-            <key column="AMP_ORG_ID"/>
+            <key column="amp_org_id"/>
             <many-to-many class="org.digijava.module.calendar.dbentity.AmpCalendar" column="CALENDAR_ID"/>
         </set>
         <set name="documents" cascade="all-delete-orphan" inverse="true" lazy="false">

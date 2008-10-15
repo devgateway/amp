@@ -70,14 +70,7 @@
 
 
 
-		<script language="javascript">
-
-		function quitRnot1(message)
-		{
-
-		}
-
-		</script>
+		
 
 
 

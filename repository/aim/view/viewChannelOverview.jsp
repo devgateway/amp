@@ -1261,28 +1261,48 @@ function commentWin(val) {
 																			<TR>
 																				<TD>
 																				<TABLE cellSpacing="1" cellPadding="2" vAlign="top"
-																					align="left" bgcolor="#dddddd">
+																					align="left" bgcolor="#ffffff">
 																					<TR>
 																						<TD bgcolor="#ffffff" colspan="2"><b><digi:trn
 																							key="aim:fundingCountryAgency">
 																								Funding Country/Agency</digi:trn></b></TD>
 																					</TR>
 																					<TR>
-																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty aimChannelOverviewForm.relOrgs}">
-																							<c:forEach var="relOrg"
-																								items="${aimChannelOverviewForm.relOrgs}">
-																								<c:if test="${relOrg.role == 'DN'}">
-																									<c:set var="currentOrg" value="${relOrg}"
-																										target="request" scope="request" />
-																									<%-- 	<bean:define id="currentOrg" name="relOrg"
-																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />--%>
-																									<jsp:include page="organizationPopup.jsp" />
+																						<!-- Due to changes in the activity form the Funding Organizations are saved in 2 different
+																							collections: relOrgs, used in activities with FOs created BEFORE the new code, and 
+																							selectedOrganizations used in FOs created after the new code. Before this patch when you 
+																							save the activity then the old collection is not longer used and the FOs dissapear. 
+																							The old section can be deleted after testing the new collection has always the FOs.-->
+																						<c:if test="${!empty aimChannelOverviewForm.relOrgs}">
+																							<TD bgcolor="#ffffff">
+																								<c:forEach var="relOrg"
+																									items="${aimChannelOverviewForm.relOrgs}">
+																									<c:if test="${relOrg.role == 'DN'}">
+																										<c:set var="currentOrg" value="${relOrg}"
+																											target="request" scope="request" />
+																										<jsp:include page="organizationPopup.jsp" />
+																									</c:if>
+																								</c:forEach>
+																							</TD>
+																						</c:if>
+																						<!-- If the activity has been saved after the new code changes then use the new collection. -->
+																						<c:if test="${empty currentOrg}">
+																							<TD bgcolor="#FFFFFF">
+																								<c:if test="${!empty aimChannelOverviewForm.selectedOrganizations}">
+																									<c:forEach var="selectedOrganizations" items="${aimChannelOverviewForm.selectedOrganizations}" >
+																										<c:if test="${not empty selectedOrganizations}">
+																											<tr><td bgcolor="#FFFFFF">
+																												<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
+																													<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 
+																														type="org.digijava.module.aim.helper.OrgProjectId" toScope="request" />
+																													<jsp:include page="previewOrganizationPopup.jsp"/>
+																												</c:if>
+																											</td></tr>
+																										</c:if>
+																									</c:forEach>
 																								</c:if>
-																							</c:forEach>
-																						</c:if></TD>
-																						<td bgcolor="#ffffff">&nbsp;</td>
+																							</TD>
+																						</c:if>
 																					</TR>
 																				</TABLE>
 																				</TD>

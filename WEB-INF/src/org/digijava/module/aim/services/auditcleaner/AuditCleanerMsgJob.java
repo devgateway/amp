@@ -6,14 +6,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.mail.Address;
-import javax.mail.internet.InternetAddress;
 
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
@@ -22,7 +18,6 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.um.util.AmpUserUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -66,7 +61,7 @@ public class AuditCleanerMsgJob implements Job {
 						+ FeaturesUtil.getGlobalSettingValue("Automatic Audit Logger Cleanup")
 						+ BODY_2 + FormatHelper.formatDate(AuditCleaner.getInstance().getNextcleanup()));
 				message.setCreationDate(new Date(System.currentTimeMillis()));
-				message.setReceivers(strreceiveirs);
+				//message.setReceivers(strreceiveirs);
 				message.setDraft(false);
 				message.setMessageType(0L);
 				AmpMessageUtil.saveOrUpdateMessage(message);
@@ -75,15 +70,17 @@ public class AuditCleanerMsgJob implements Job {
 				state.setMessage(message);
 				state.setSender("Admin");
 				AmpMessageUtil.saveOrUpdateMessageState(state);
+                             
 
 				List<Long> statesMemberIds = new ArrayList<Long>();
 				for (Iterator iterator = alllead.iterator(); iterator.hasNext();) {
 					AmpTeamMember tm = (AmpTeamMember) iterator.next();
 					if (tm != null && tm.getAmpTeamMemId() != null) {
 						createMessageState(message, tm.getAmpTeamMemId(), tm
-								.getUser().getName());
+								.getUser().getName(),tm.getAmpTeam().getName());
 					}
 				}
+                                AmpMessageUtil.saveOrUpdateMessage(message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,25 +88,40 @@ public class AuditCleanerMsgJob implements Job {
 
 	}
 
-	private void createMessageState(AmpMessage message, Long memberId,
-			String senderName) throws Exception {
-		AmpMessageState newMessageState = new AmpMessageState();
-		newMessageState.setMessage(message);
-		newMessageState.setSender(senderName);
-		newMessageState.setMemberId(memberId);
-		String receivers = message.getReceivers();
-		if (receivers == null) {
-			receivers = "";
-		} else {
-			if (receivers.length() > 0) {
-				receivers += ", ";
-			}
-		}
-		User user = TeamMemberUtil.getAmpTeamMember(memberId).getUser();
-		receivers += user.getFirstNames() + " " + user.getLastName() + "<"
-				+ user.getEmail() + ">";
-		message.setReceivers(receivers);
-		newMessageState.setRead(false);
-		AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
-	}
+    private void createMessageState(AmpMessage message, Long memberId,
+            String senderName, String teamName) throws Exception {
+        AmpMessageState newMessageState = new AmpMessageState();
+        newMessageState.setMessage(message);
+        newMessageState.setSender(senderName);
+        newMessageState.setMemberId(memberId);
+        String receivers = message.getReceivers();
+        if (receivers == null) {
+            receivers = "";
+        } else {
+            if (receivers.length() > 0) {
+                receivers += ", ";
+            }
+        }
+        User user = TeamMemberUtil.getAmpTeamMember(memberId).getUser();
+
+        receivers += user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + teamName + ";";
+        message.setReceivers(receivers);
+        newMessageState.setRead(false);
+        //check if user's inbox is already full
+
+        Class clazz = AmpAlert.class;
+
+        int maxStorage = -1;
+        AmpMessageSettings setting = AmpMessageUtil.getMessageSettings();
+        if (setting != null && setting.getMsgStoragePerMsgType() != null) {
+            maxStorage = setting.getMsgStoragePerMsgType().intValue();
+        }
+        if (AmpMessageUtil.isInboxFull(clazz, memberId) || AmpMessageUtil.getInboxMessagesCount(clazz, memberId, false, false, maxStorage) >= maxStorage) {
+            newMessageState.setMessageHidden(true);
+        } else {
+            newMessageState.setMessageHidden(false);
+        }
+        //saving current state in db
+        AmpMessageUtil.saveOrUpdateMessageState(newMessageState);
+    }
 }

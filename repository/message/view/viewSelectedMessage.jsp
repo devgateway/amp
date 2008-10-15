@@ -100,12 +100,14 @@ background: #FFF;
                                                                                 <tr>
 																					<td align="left"><b><digi:trn key="message:to">to</digi:trn></b></td>
 																					<td align="left" bgcolor="#ffffff">
-																			
-																					<logic:iterate id="nameMail"  name="messageForm" property="receivesrsNameMail" >
-																													
-																								<a title="${nameMail.teamName}" style="color: #05528B; text-decoration:underline;"><c:out value="${nameMail.userNeme}"/></a>
-																										
-																					</logic:iterate>
+                                                                                                                                                                            <c:if test="${!empty messageForm.receivesrsNameMail}">
+                                                                                                                                                                                
+                                                                                                                                                                                  <logic:iterate id="nameMail"  name="messageForm" property="receivesrsNameMail" >
+                                                                                                                                                                                      
+                                                                                                                                                                                    <a title="${nameMail.teamName}" style="color: #05528B; text-decoration:underline;"><c:out value="${nameMail.userNeme}"/></a>
+                                                                                                                                                                                        
+                                                                                                                                                                                </logic:iterate>
+                                                                                                                                                                            </c:if>
 																					</td>
 																					<td colspan="2"></td>
 																				</tr>

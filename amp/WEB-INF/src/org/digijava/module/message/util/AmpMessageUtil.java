@@ -259,7 +259,7 @@ public class AmpMessageUtil {
 		try {
 			session=PersistenceManager.getRequestDBSession();	
 			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=:hidden";
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=:hidden or state.messageHidden is NULL  ";
 		
 			queryString+=" order by msg.creationDate asc";
 			query=session.createQuery(queryString);			 				

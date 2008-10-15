@@ -14,37 +14,71 @@
 	function budgetCheckboxClick()
 	{
 		if (document.aimEditActivityForm.budget != null) {
-		 if((document.aimEditActivityForm.budget.checked==false))
-		 {
-		 	document.getElementById("hbudget").value="false";
+			if((document.aimEditActivityForm.budget.checked==false))
+			{
+				try {
+				 	document.getElementById("hbudget").value="false";
+				 	document.getElementById("FY").style.display='none';
+				 	document.getElementById("Vote").style.display='none';
+				 	document.getElementById("Sub-Vote").style.display='none';
+				 	document.getElementById("Sub-Program").style.display='none';
+				 	document.getElementById("ProjectCode").style.display='none';
+				 	document.getElementById("financial").style.display='none';
+				}
+				catch(e)
+				{
+					//This silent try/catch was added because some of the fields can be deactivated from FM
+				}
+			 }
+			else if(document.aimEditActivityForm.budget.checked==true)
+			{
+				try {
+				 	document.getElementById("hbudget").value="true";
+				 	document.getElementById("FY").style.display='';
+				 	document.getElementById("Vote").style.display='';
+				 	document.getElementById("Sub-Vote").style.display='';
+				 	document.getElementById("Sub-Program").style.display='';
+				 	document.getElementById("ProjectCode").style.display='';
+				 	document.getElementById("financial").style.display='';
+				}
+				catch(e)
+				{
+					//This silent try/catch was added because some of the fields can be deactivated from FM
+				}
+			}
+		}
+	}
+
+function InitBud(){
+	if(document.getElementById("hbudget").value=="true"){
+	 	try {
+			document.aimEditActivityForm.budget.checked=true;
+		 	document.getElementById("FY").style.display='';
+		 	document.getElementById("Vote").style.display='';
+		 	document.getElementById("Sub-Vote").style.display='';
+		 	document.getElementById("Sub-Program").style.display='';
+		 	document.getElementById("ProjectCode").style.display='';
+		 	document.getElementById("financial").style.display='';
+		}
+		catch(e)
+		{
+			//This silent try/catch was added because some of the fields can be deactivated from FM
+		}
+	}
+	else{
+	 	try {
+			document.aimEditActivityForm.budget.checked=false;
 		 	document.getElementById("FY").style.display='none';
 		 	document.getElementById("Vote").style.display='none';
 		 	document.getElementById("Sub-Vote").style.display='none';
 		 	document.getElementById("Sub-Program").style.display='none';
 		 	document.getElementById("ProjectCode").style.display='none';
 		 	document.getElementById("financial").style.display='none';
-	
-	
-		 	}
-		 else if(document.aimEditActivityForm.budget.checked==true)
-			{
-			 	document.getElementById("hbudget").value="true";
-			 	document.getElementById("FY").style.display='';
-			 	document.getElementById("Vote").style.display='';
-			 	document.getElementById("Sub-Vote").style.display='';
-			 	document.getElementById("Sub-Program").style.display='';
-			 	document.getElementById("ProjectCode").style.display='';
-			 	document.getElementById("financial").style.display='';
-			 }
 		}
-	}
-
-function InitBud(){
-	if(document.getElementById("hbudget").value=="false")
-		document.aimEditActivityForm.budget.checked=false;
-	else{
-		document.aimEditActivityForm.budget.checked=true;
-		document.getElementById("FY").style.display='';
+		catch(e)
+		{
+			//This silent try/catch was added because some of the fields can be deactivated from FM
+		}
 	}
 }
 

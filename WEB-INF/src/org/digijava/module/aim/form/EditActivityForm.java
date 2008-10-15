@@ -545,6 +545,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			contracts = null;
 			selContractId = null;
 			steps = null;
+			FY = null;
+			vote = null;
+			subVote = null;
+			subProgram = null;
+			projectCode = null;
+			gbsSbs = null;			
 		}
 
 		if (orgSelReset) {

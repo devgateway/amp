@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.SectorUtil;
@@ -79,9 +80,14 @@ public class FilterUtil {
 			arf.setSecondaryPrograms(null);
 		}
 		
+		String name=null;
+		if (arf.getCurrency()!=null){
+			name = "- " + arf.getCurrency().getCurrencyName();
+		}else{
+			name = "- " + Constants.DEFAULT_CURRENCY; 
+		}
 		
-
-		String name = "- " + arf.getCurrency().getCurrencyName();
+		
 		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 
 		String customDecimalSymbol	= String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator()));

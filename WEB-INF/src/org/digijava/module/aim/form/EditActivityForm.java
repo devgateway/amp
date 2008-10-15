@@ -460,6 +460,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.sectors=null;
 			this.components=null;
 			this.program=null;
+			this.getPrograms().setNationalPlanObjectivePrograms(null);
+			this.getPrograms().setPrimaryPrograms(null);
+			this.getPrograms().setSecondaryPrograms(null);
 			this.crossIssues=null;
 			this.funding=null;
 			this.survey=null;

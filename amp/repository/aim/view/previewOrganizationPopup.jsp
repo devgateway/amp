@@ -38,7 +38,7 @@
 <ul>
 <li>
 
-<div align="left" onMouseOver="stm(['<bean:write name="org" property="organisation.ampOrgId"/>Details',document.getElementById('org-<bean:write name="org" property="organisation.ampOrgId"/>').innerHTML],Style[0])" onMouseOut="htm()">[<u><bean:write name="org" property="organisation.name"/>  <bean:write name="org" property="projectId"/></u>]
+<div align="left" onMouseOver="stm(['<bean:write name="org" property="organisation.orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="organisation.ampOrgId"/>').innerHTML],Style[0])" onMouseOut="htm()">[<u><bean:write name="org" property="organisation.name"/>  <bean:write name="org" property="projectId"/></u>]
 
 </div>
 </li>

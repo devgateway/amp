@@ -362,8 +362,8 @@ function adminHelp(){
                                                         </logic:equal>
                                             		    
                                             		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-                                            		   	   <li class="yuiampmenuitem " style="_width:200px;">
-                                                            	 <a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
+                                            		   	   <li class="yuiampmenuitem" style="width: 100%;">
+                                                            	<a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:notEqual>
                                             		</logic:iterate>

@@ -48,6 +48,14 @@ function setStripsTable(tableId, classOdd, classEven) {
 	}
 	rows = null;
 }
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=3&surveyFlag=true&activityId=" + id;
+}
+
+
 function setHoveredTable(tableId, hasHeaders) {
 
 	var tableElement = document.getElementById(tableId);

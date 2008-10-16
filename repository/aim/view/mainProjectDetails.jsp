@@ -57,10 +57,12 @@ function projectFiche(id)
 
 function fnEditProject(id)
 {
+	
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
 	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
+    
 }
 
 function preview(id)

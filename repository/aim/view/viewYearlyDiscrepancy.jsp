@@ -15,8 +15,16 @@
 	{
 		document.aimYearlyDiscrepancyForm.submit();
 	}		
+	
+	
+	
 
 -->
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=3&surveyFlag=true&activityId=" + id;
+}
 </script>
 
 <digi:errors/>

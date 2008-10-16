@@ -30,7 +30,7 @@ function unload() {
 
 <style type="text/css">
 	.text1 {
-	  font-size:10px;
+	  font-size:9px;
 	  font:Arial;
 	  color:#666666;
 	  text-decoration: none;
@@ -62,21 +62,21 @@ function unload() {
 	}
 </style>
 
-<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top" border=0 >
+<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top" border=0 height="500px">
 	<tr><td vAlign="top">
-		<table bgcolor=#f4f4f2 cellPadding=2 cellSpacing=2 width="100%"  border=0 height="470">
+		<table bgcolor=#f4f4f2 cellPadding=2 cellSpacing=2 width="100%"  border=0 height="500px">
 			<tr>
 				<td align=left vAlign=top>
 					<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top"
 					bgcolor="#aaaaaa">
 						<tr>
 							<td colspan="2"  align="center" class="text1">
-								<b><digi:trn key="aim:userProfile">User Profile </digi:trn></b>
+								<b><digi:trn key="aim:userProfile">User Profile</digi:trn></b>
 							</td>
 						</tr>
 						<tr>
 							<td  bgcolor="#f4f4f2" width="150" class="text1">
-								<digi:trn key="aim:firstName" >First Name </digi:trn>
+								<digi:trn key="aim:firstName" >First Name</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2" class="text1">
 								 <bean:write name="aimUserDetailForm" property="firstNames" />
@@ -84,7 +84,7 @@ function unload() {
 						</tr>
 						<tr>
 							<td bgcolor="#f4f4f2" class="text1">
-								<digi:trn key="aim:lastName" >	Last Name 	</digi:trn>
+								<digi:trn key="aim:lastName" >Last Name</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2" class="text1">
 								<bean:write name="aimUserDetailForm" property="lastName" />
@@ -92,7 +92,7 @@ function unload() {
 						</tr>
 						<tr>
 							<td bgcolor="#f4f4f2" class="text1">
-								<digi:trn key="aim:mailingAddress" >	Mailing Address		</digi:trn>
+								<digi:trn key="aim:mailingAddress" >Mailing Address	</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2" class="text1">
 								<bean:write name="aimUserDetailForm"
@@ -101,7 +101,7 @@ function unload() {
 						</tr>
 						<tr>
 							<td bgcolor="#f4f4f2" class="text1">
-								<digi:trn key="aim:address" >	Address		</digi:trn>
+								<digi:trn key="aim:address" >Address</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2" class="text1">
 								<bean:write name="aimUserDetailForm" property="address" />
@@ -144,9 +144,9 @@ function unload() {
 									<tr>
 										<td bgcolor="#f4f4f2"  width="100" class="text1">
 											<% if ((i%2) == 0) { %>
-												<digi:trn key="aim:teamName" >Team Name		</digi:trn>
+												<digi:trn key="aim:teamName" >Team Name	</digi:trn>
 											<% } else { %>
-												<digi:trn key="aim:role" >	Role		</digi:trn>
+												<digi:trn key="aim:role" >Role</digi:trn>
 											<% }
 											   i++;
 											%>

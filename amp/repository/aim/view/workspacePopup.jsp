@@ -12,7 +12,7 @@
 		
     var myPanelWorkspaceframe = new YAHOOAmp.widget.Panel("newmyPWorkspaceframe", {
 		width:"480px",
-		height:"550px",
+		height:"580px",
 	    fixedcenter: true,
 	    constraintoviewport: true,
 	    underlay:"none",

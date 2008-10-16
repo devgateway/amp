@@ -33,5 +33,5 @@
 
 </ul>
 </div>
-<div align="left" onMouseOver="stm(['<bean:write name="org" property="organisation.ampOrgId"/> Details',document.getElementById('org-<bean:write name="org" property="organisation.ampOrgId"/>').innerHTML],Style[0])" onMouseOut="htm()"><u><bean:write name="org" property="organisation.name"/></u>
+<div align="left" onMouseOver="stm(['<bean:write name="org" property="organisation.orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="organisation.ampOrgId"/>').innerHTML],Style[0])" onMouseOut="htm()"><u><bean:write name="org" property="organisation.name"/></u>
 </div>

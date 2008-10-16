@@ -10,6 +10,7 @@
 <script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<div style='position:relative;display:none;' id='legendPopupTitle'><digi:trn key="aim:Legend">Legend</digi:trn></div>
 <div style='position:relative;display:none;' id='legendPopup'> 
 	<ul>
 		<li>
@@ -30,8 +31,8 @@
 	</ul>
 </div>
 <div align="left" width="2" style="display: inline; cursor: default"
-	onMouseOver="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])" 
-	onMouseOut="htm()" onclick="stm(['Legend',document.getElementById('legendPopup').innerHTML],Style[0])">
+	onMouseOver="stm([document.getElementById('legendPopupTitle').innerHTML,document.getElementById('legendPopup').innerHTML],Style[0])" 
+	onMouseOut="htm()" onclick="stm([document.getElementById('legendPopupTitle').innerHTML,document.getElementById('legendPopup').innerHTML],Style[0])">
 	<c:set var="translation">
 		<digi:trn key="aim:clickToViewLegend">Click here to view Legend</digi:trn>
 	</c:set>

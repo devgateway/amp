@@ -17,8 +17,6 @@
     function checkstatus(){
 
     	var statusDiv = document.getElementById("statusValue");
-    	if (!statusDiv) return;
-    	 
     	var offsetByServerSide = 44;
     	var xmlhttp; 
 

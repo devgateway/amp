@@ -133,7 +133,7 @@
 
 	function addIndicator()
 	{
-		openNewRsWindow(750, 400);
+		openNewRsWindow(800, 400);
 		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 		document.aimEditActivityForm.action = "<%=selCreateInd%>?addIndicatorForStep9=true";
 		document.aimEditActivityForm.target = popupPointer.name;

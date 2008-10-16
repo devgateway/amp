@@ -32,6 +32,25 @@
 <!-- End of Logo -->
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 <tr>
+	<!-- Start Navigation -->
+	<td height=33><span class=crumb>
+		<c:set var="translation">
+			<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+		</c:set>
+		<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
+		<digi:trn key="aim:AmpAdminHome">
+			Admin Home
+		</digi:trn>
+		</digi:link>&nbsp;&gt;&nbsp;
+		<digi:trn key="aim:adminconfigurationsettings">
+			Configuration Settings
+		</digi:trn>
+	</td>
+	<!-- End navigation -->
+</tr>
+
+
+<tr>
 <td height=16 vAlign=center width=571>
 
 <span class=subtitle-blue style="padding-top:0px;padding-bottom:0px">

@@ -187,18 +187,10 @@ function addComponent(){
 							<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
 							<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>
-							<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn
-								key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp; <digi:trn
-								key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							
-							<div id="comm"><c:if
-								test="${aimEditActivityForm.componentId != -1}">
-								<c:forEach var="fundComp"
-									items="${aimEditActivityForm.selectedComponents}">
-									<c:if
-										test="${aimEditActivityForm.componentId == fundComp.componentId}">
+							<div id="comm">
+								<c:if test="${aimEditActivityForm.componentId != -1}">
+								<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
+									<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
 										<c:forEach var="comm" items="${fundComp.commitments}">
 											<%
 												String tNameBase = "comm_" + indexC + "_";
@@ -213,44 +205,60 @@ function addComponent(){
 												String field5 = tNameBase + "5";
 												String field6 = tNameBase + "6";
 											%>
-											<div id="<%=divName%>"><select name="<%=field1%>"
-												class="inp-text">
-												<c:if test="${comm.adjustmentType == 1}">
-													<option value="1" selected="true"><digi:trn
-														key="aim:actual">Actual</digi:trn></option>
-													<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
-												</c:if>
-												<c:if test="${comm.adjustmentType == 0}">
-													<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
-													<option value="0" selected="true"><digi:trn
-														key="aim:planned">Planned</digi:trn></option>
-												</c:if>
-											</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text"
-												name="<%=field2%>"
-												value="<c:out value="${comm.transactionAmount}"/>" size="15"
-												class='amt'>&nbsp; <select name="<%=field3%>"
-												class="inp-text">
-												<c:forEach var="currency"
-													items="${aimEditActivityForm.validcurrencies}">
-													<c:if test="${comm.currencyCode == currency.currencyCode}">
-														<option selected="true"
-															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
-													<c:if test="${comm.currencyCode != currency.currencyCode}">
-														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
-													<c:out value="${currency.currencyName}" />
-													</option>
-												</c:forEach>
-											</select>&nbsp; <input type="text" readonly="true" name="<%=field4%>"
-												id="<%=field4%>"
-												value="<c:out value="${comm.transactionDate}"/>" size="10"
-												class="inp-text">&nbsp; <a id="date1<%=field4%>"
-												href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
-											<img src="../ampTemplate/images/show-calendar.gif"
-												alt="Click to View Calendar" border=0> </a>  <input type="hidden"
-												name="<%=field6%>" value="${comm.ampComponentFundingId}">
-											<input type='button' value='Delete' class='inp-text'
-												onclick="removeCommitment('<%=divName%>')"></div>
-										</c:forEach>
+									<div id="<%=divName%>">
+										<table>
+											<tr>
+												<td><p class="inp-text"><digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<br><digi:trn key="aim:ActualFIE">Actual</digi:trn></p></td>
+												<td class="inp-text" valign='bottom'><digi:trn key="aim:AmountFIE">Amount</digi:trn></td>
+												<td valign='bottom'><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></td>
+												<td valign='bottom'><digi:trn key="aim:DateFIE">Date</digi:trn></td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>
+													<select name="<%=field1%>" class="inp-text">
+														<c:if test="${comm.adjustmentType == 1}">
+															<option value="1" selected="true"><digi:trn
+																key="aim:actual">Actual</digi:trn></option>
+															<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
+														</c:if>
+														<c:if test="${comm.adjustmentType == 0}">
+															<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
+															<option value="0" selected="true"><digi:trn
+																key="aim:planned">Planned</digi:trn></option>
+														</c:if>
+													</select>
+										 		</td>
+												<td>											
+													<input type="text" name="<%=field2%>" value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>
+												</td>
+												<td>
+													<select name="<%=field3%>" class="inp-text">
+														<c:forEach var="currency"
+															items="${aimEditActivityForm.funding.validcurrencies}">
+															<c:if test="${comm.currencyCode == currency.currencyCode}">
+																<option selected="true" value="<c:out value="${currency.currencyCode}"/>">													
+															</c:if>
+															<c:if test="${comm.currencyCode != currency.currencyCode}">
+																<option value="<c:out value="${currency.currencyCode}"/>">													
+															</c:if>
+															<c:out value="${currency.currencyName}" />
+															</option>
+														</c:forEach>
+													</select>
+												</td>
+												<td>
+													<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">&nbsp; <a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
+												</td>
+												<td>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+													</a><input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
+													<input type='button' value='Delete' class='inp-text' onclick="removeCommitment('<%=divName%>')">
+												</td>
+											</tr>
+										</table>
+									</div>
+									</c:forEach>
 									</c:if>
 								</c:forEach>
 							</c:if></div>							
@@ -262,19 +270,10 @@ function addComponent(){
 								key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn>
 							<%=eaForm.getFunding().getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
 								href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a><br>
-							<br>
-							<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn
-								key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp; <digi:trn
-								key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							
-							<div id="disb"><c:if
-								test="${aimEditActivityForm.componentId != -1}">
-								<c:forEach var="fundComp"
-									items="${aimEditActivityForm.selectedComponents}">
-									<c:if
-										test="${aimEditActivityForm.componentId == fundComp.componentId}">
+							<br>							
+							<div id="disb"><c:if test="${aimEditActivityForm.componentId != -1}">
+								<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
+									<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
 										<c:forEach var="comm" items="${fundComp.disbursements}">
 											<%
 												String tNameBase = "disb_" + indexD + "_";
@@ -289,49 +288,67 @@ function addComponent(){
 												String field5 = tNameBase + "5";
 												String field6 = tNameBase + "6";
 											%>
-											<div id="<%=divName%>"><select name="<%=field1%>"
-												class="inp-text">
-												<c:if test="${comm.adjustmentType == 1}">
-													<option value="1" selected="true"><digi:trn
-														key="aim:actual">Actual</digi:trn></option>
-													<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
-												</c:if>
-												<c:if test="${comm.adjustmentType == 0}">
-													<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
-													<option value="0" selected="true"><digi:trn
-														key="aim:planned">Planned</digi:trn></option>
-												</c:if>
-											</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"
-												name="<%=field2%>"
-												value="<c:out value="${comm.transactionAmount}"/>" size="15"
-												class='amt'>&nbsp;<select name="<%=field3%>"
-												class="inp-text">
-												<c:forEach var="currency"
-													items="${aimEditActivityForm.validcurrencies}">
-													<c:if test="${comm.currencyCode == currency.currencyCode}">
-														<option selected="true"
-															value="<c:out value="${currency.currencyCode}"/>">													</c:if>
-													<c:if test="${comm.currencyCode != currency.currencyCode}">
-														<option value="<c:out value="${currency.currencyCode}"/>">													</c:if>
-													<c:out value="${currency.currencyName}" />
-													</option>
-												</c:forEach>
-											</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>"
-												readonly="true"
-												value="<c:out value="${comm.transactionDate}"/>" size="10"
-												class="inp-text">&nbsp; <a id="date2<%=field4%>"
-												href='javascript:pickDateById("date2<%=field4%>","<%=field4%>")'>
-											<img src="../ampTemplate/images/show-calendar.gif"
-												alt="Click to View Calendar" border=0> </a> &nbsp;  <input type="hidden" name="<%=field6%>"
-												value="${comm.ampComponentFundingId}"> <input
-												type='button'
-												value='<digi:trn key="btn:delete">Delete</digi:trn>'
-												class='inp-text'
-												onclick="removeDisbursement('<%=divName%>')"></div>
+											<div id="<%=divName%>">
+												<table>
+												<tr>
+													<td><p class="inp-text"><digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<br><digi:trn key="aim:ActualFIE">Actual</digi:trn></p></td>
+													<td class="inp-text" valign='bottom'><digi:trn key="aim:AmountFIE">Amount</digi:trn></td>
+													<td valign='bottom'><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></td>
+													<td valign='bottom'><digi:trn key="aim:DateFIE">Date</digi:trn></td>
+													<td>&nbsp;</td>
+												</tr>
+												<tr>
+													<td>
+														<select name="<%=field1%>" class="inp-text">
+														<c:if test="${comm.adjustmentType == 1}">
+															<option value="1" selected="true"><digi:trn
+																key="aim:actual">Actual</digi:trn></option>
+															<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
+														</c:if>
+														<c:if test="${comm.adjustmentType == 0}">
+															<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
+															<option value="0" selected="true"><digi:trn
+																key="aim:planned">Planned</digi:trn></option>
+														</c:if>
+														</select>
+													</td>
+													<td>
+														<input type="text" name="<%=field2%>" value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>
+													</td>
+													<td>
+														<select name="<%=field3%>" class="inp-text">
+															<c:forEach var="currency"
+																items="${aimEditActivityForm.funding.validcurrencies}">
+																<c:if test="${comm.currencyCode == currency.currencyCode}">
+																	<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
+																</c:if>
+																<c:if test="${comm.currencyCode != currency.currencyCode}">
+																	<option value="<c:out value="${currency.currencyCode}"/>">
+																</c:if>
+																<c:out value="${currency.currencyName}" />
+																</option>
+															</c:forEach>
+														</select>
+													</td>
+													<td>
+														<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">
+													</td>
+													<td>
+														<a id="date2<%=field4%>" href='javascript:pickDateById("date2<%=field4%>","<%=field4%>")'>
+														<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0></a>
+														<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
+													</td>
+													<td>
+														<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="removeDisbursement('<%=divName%>')">
+													</td>
+												</tr>
+											</table>													
+										</div>
 										</c:forEach>
 									</c:if>
 								</c:forEach>
-							</c:if></div>							</td>
+							</c:if></div>							
+						</td>
 						</tr>
 
 						<!-- beging Expenditure  -->
@@ -346,23 +363,10 @@ function addComponent(){
 										key="btn:add">Add</digi:trn></a>
 								</field:display> &nbsp;&nbsp; <br>
 								<br>
-								<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn
-									key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp; <digi:trn
-									key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<br>
-								<div id="expn"><c:if
-									test="${aimEditActivityForm.componentId != -1}">
-									<c:forEach var="fundComp"
-										items="${aimEditActivityForm.selectedComponents}">
-
-										<c:if
-											test="${aimEditActivityForm.componentId == fundComp.componentId}">
-
+								<div id="expn"><c:if test="${aimEditActivityForm.componentId != -1}">
+									<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
+										<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
 											<c:forEach var="comm" items="${fundComp.expenditures}">
-
-
 												<%
 													String tNameBase = "expn_" + indexE + "_";
 													String divName = "expn_" + indexE;
@@ -376,45 +380,61 @@ function addComponent(){
 													String field5 = tNameBase + "5";
 													String field6 = tNameBase + "6";
 												%>
-												<div id="<%=divName%>"><select name="<%=field1%>"
-													class="inp-text">
-													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn
-															key="aim:actual">Actual</digi:trn></option>
-														<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
-													</c:if>
-													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn
-															key="aim:planned">Planned</digi:trn></option>
-													</c:if>
-												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"
-													name="<%=field2%>"
-													value="<c:out value="${comm.transactionAmount}"/>"
-													size="15" class='amt'>&nbsp;<select
-													name="<%=field3%>" class="inp-text">
-													<c:forEach var="currency"
-														items="${aimEditActivityForm.validcurrencies}">
-														<c:if test="${comm.currencyCode == currency.currencyCode}">
-															<option selected="true"
-																value="<c:out value="${currency.currencyCode}"/>">														</c:if>
-														<c:if test="${comm.currencyCode != currency.currencyCode}">
-															<option value="<c:out value="${currency.currencyCode}"/>">														</c:if>
-														<c:out value="${currency.currencyName}" />
-														</option>
-													</c:forEach>
-												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>"
-													readonly="true"
-													value="<c:out value="${comm.transactionDate}"/>" size="10"
-													class="inp-text">&nbsp; <a id="date3<%=field4%>"
-													href='javascript:pickDateById("date3<%=field4%>","<%=field4%>")'>
-												<img src="../ampTemplate/images/show-calendar.gif"
-													alt="Click to View Calendar" border=0> </a> &nbsp;  <input type="hidden" name="<%=field6%>"
-													value="${comm.ampComponentFundingId}"> <input
-													type='button'
-													value='<digi:trn key="btn:delete">Delete</digi:trn>'
-													class='inp-text'
-													onclick="removeExpenditure('<%=divName%>')"></div>
+												<div id="<%=divName%>">
+													<table>
+													<tr>
+														<td><p class="inp-text"><digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<br><digi:trn key="aim:ActualFIE">Actual</digi:trn></p></td>
+														<td class="inp-text" valign='bottom'><digi:trn key="aim:AmountFIE">Amount</digi:trn></td>
+														<td valign='bottom'><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></td>
+														<td valign='bottom'><digi:trn key="aim:DateFIE">Date</digi:trn></td>
+														<td>&nbsp;</td>
+													</tr>
+													<tr>
+														<td>
+															<select name="<%=field1%>" class="inp-text">
+															<c:if test="${comm.adjustmentType == 1}"> 
+																<option value="1" selected="true"><digi:trn key="aim:actual">Actual</digi:trn></option>
+																<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
+															</c:if>
+															<c:if test="${comm.adjustmentType == 0}">
+																<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
+																<option value="0" selected="true"><digi:trn
+																	key="aim:planned">Planned</digi:trn></option>
+															</c:if>
+															</select>
+														</td>
+														<td>
+															<input type="text" name="<%=field2%>" value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>
+														</td>
+														<td>
+															<select name="<%=field3%>" class="inp-text">
+															<c:forEach var="currency" items="${aimEditActivityForm.funding.validcurrencies}">
+																<c:if test="${comm.currencyCode == currency.currencyCode}">
+																	<option selected="true" value="<c:out value="${currency.currencyCode}"/>">														
+																</c:if>
+																<c:if test="${comm.currencyCode != currency.currencyCode}">
+																	<option value="<c:out value="${currency.currencyCode}"/>">														
+																</c:if>
+																<c:out value="${currency.currencyName}" />
+																</option>
+															</c:forEach>
+															</select>
+														</td>
+														<td>
+															<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" value="<c:out value="${comm.transactionDate}"/>" size="10" class="inp-text">
+														</td>
+														<td>
+															<a id="date3<%=field4%>" href='javascript:pickDateById("date3<%=field4%>","<%=field4%>")'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+															</a>
+														</td>
+														<td>
+															<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
+															<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="removeExpenditure('<%=divName%>')">
+														</td>
+													</tr>
+												</table>
+											</div>
 											</c:forEach>
 										</c:if>
 									</c:forEach>
@@ -460,12 +480,21 @@ function addCommitments()
 	var divname = "comm_" + numComm;
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
-	var s = "<select name='comm_" + numComm + "_1' class='inp-text'>";
+
+	var s = "<table><tr>";
+	s += "<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>";
+	s += "<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>";
+	s += "<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>";
+	s += "<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>";
+	s += "<td>&nbsp;</td>";
+	s += "</tr>";
+	s += "<tr><td>";
+	s += "<select name='comm_" + numComm + "_1' class='inp-text'>";
 	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
 	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
-	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
-	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
+	s += "</select></td>";
+	s += "<td><input type='text' name='comm_" + numComm + "_2' size='15' class='amt'></td>";
+	s += "<td><select name='comm_" + numComm + "_3' class='inp-text'>";
 
 	<% Collection col = eaForm.getFunding().getValidcurrencies();
 		Iterator itr = col.iterator();
@@ -479,13 +508,13 @@ function addCommitments()
 			<% }
 		 }%>
 
-	s += "</select>&nbsp;";
-	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'>&nbsp;";
-	s += "<a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	s += "</select></td>";
+	s += "<td><input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'></td>";
+	s += "<td><a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>";
 	
-	s += "<input type='hidden' name='comm_" + numComm + "_6' value=''>";
+	s += "<td><input type='hidden' name='comm_" + numComm + "_6' value=''></td>";
     <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeCommitment("'+ divname + '")><br>';
+	s += '<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeCommitment("'+ divname + '")></td></tr></table><br>';
 
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -507,12 +536,21 @@ function addDisbursement()
 	var divname = "disb_" + numDisb;
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
-	var s = "<select name='disb_" + numDisb + "_1' class='inp-text'>";
+
+	var s = "<table><tr>";
+	s += "<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>";
+	s += "<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>";
+	s += "<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>";
+	s += "<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>";
+	s += "<td>&nbsp;</td>";
+	s += "</tr>";
+	s += "<tr><td>";
+	s += "<select name='disb_" + numDisb + "_1' class='inp-text'>";
 	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
 	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
-	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	s += "<input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'>&nbsp;";
-	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
+	s += "</select></td>";
+	s += "<td><input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'></td>";
+	s += "<td><select name='disb_" + numDisb + "_3' class='inp-text'>";
 
 	<% col = eaForm.getFunding().getValidcurrencies();
 		itr = col.iterator();
@@ -525,13 +563,12 @@ function addDisbursement()
 			<% }
 		 }%>
 
-	s += "</select>&nbsp;";
-	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'>&nbsp;";
-	s += "<a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
-	
-	s += "<input type='hidden' name='disb_" + numDisb + "_6' value=''>";
+	s += "</select></td>";
+	s += "<td><input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'></td>";
+	s += "<td><a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>";
+	s += "<td><input type='hidden' name='disb_" + numDisb + "_6' value=''></td>";
 	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeDisbursement("'+ divname + '")><br>';
+	s += '<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeDisbursement("'+ divname + '")></td></tr></table><br>';
 
 
 	newdiv.innerHTML = s;
@@ -554,12 +591,20 @@ function addExpenditure()
 	var divname = "expn_" + numExpn;
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
-	var s = "<select name='expn_" + numExpn + "_1' class='inp-text'>";
+	var s = "<table><tr>";
+	s += "<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>";
+	s += "<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>";
+	s += "<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>";
+	s += "<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>";
+	s += "<td>&nbsp;</td>";
+	s += "</tr>";
+	s += "<tr><td>";
+	s += "<select name='expn_" + numExpn + "_1' class='inp-text'>";
 	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
 	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
-	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
-	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
+	s += "</select></td>";
+	s += "<td><input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'></td>";
+	s += "<td><select name='expn_" + numExpn + "_3' class='inp-text'>";
 
 	<% col = eaForm.getFunding().getValidcurrencies();
 		itr = col.iterator();
@@ -572,14 +617,12 @@ function addExpenditure()
 			<% }
 		 }%>
 
-	s += "</select>&nbsp;";
-	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'>&nbsp;";
-	s += "<a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
-	
-	s += "<input type='hidden' name='expn_" + numExpn + "_6' value=''>";
+	s += "</select></td>";
+	s += "<td><input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'></td>";
+	s += "<td><a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>";
+	s += "<td><input type='hidden' name='expn_" + numExpn + "_6' value=''></td>";
 	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeExpenditure("'+ divname + '")><br>';
-
+	s += '<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeExpenditure("'+ divname + '")></td></tr></table><br>';
 
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);

@@ -158,13 +158,11 @@ function onMenuItemClick(p_sType, p_aArgs, p_oValue) {
 		{
 			if(oSubmenu.cfg.getProperty("visible"))
 			{
-				if (oSubmenu)
-					oSubmenu.hide();
+				oSubmenu.hide();
 			}
 			else
 			{
-				if (oSubmenu)
-					oSubmenu.show();
+				oSubmenu.show();
 			}
 				
 		}
@@ -172,7 +170,6 @@ function onMenuItemClick(p_sType, p_aArgs, p_oValue) {
 	}
 	else
 	{
-	if (oSubmenu)
 		oSubmenu.hide();		
 	}
 }

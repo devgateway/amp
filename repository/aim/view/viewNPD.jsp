@@ -1207,7 +1207,7 @@
  	function showPanel(headerText, id, posX, posY) {
  		informationPanel.setHeader(headerText);
 		informationPanel.setBody(themeArray[id]);
-		informationPanel.moveTo(posX+2, posY+2);
+		informationPanel.moveTo(posX+2, posY+10);
 		informationPanel.show();
  	}
  	/* Just makes the panel visible */

@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <link href="css/global.css" rel="stylesheet" type="text/css">
 <link href="/TEMPLATE/ampTemplate/css/styles.css" rel="stylesheet" type="text/css"></link>
@@ -142,11 +143,11 @@ function unload() {
 									<% int i = 0; %>
 									<c:forEach var="info" items="${aimUserDetailForm.info}">
 									<tr>
-										<td bgcolor="#f4f4f2"  width="100" class="text1">
+										<td bgcolor="#f4f4f2"  width="150px" class="text1">
 											<% if ((i%2) == 0) { %>
-												<digi:trn key="aim:teamName" >Team Name	</digi:trn>
+												<digi:trn key="aim:teamName">Team Name</digi:trn>
 											<% } else { %>
-												<digi:trn key="aim:role" >Role</digi:trn>
+												<digi:trn key="aim:role">Role</digi:trn>
 											<% }
 											   i++;
 											%>

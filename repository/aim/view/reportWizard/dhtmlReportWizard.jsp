@@ -36,7 +36,9 @@
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/reportWizard/reportWizard.css'/>">
 	<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/css/filters.css'/>">
-	
+
+	<br>
+	<br>
 	<digi:instance property="aimReportWizardForm" />
 	<bean:define name="aimReportWizardForm" id="myForm" type="org.digijava.module.aim.form.reportwizard.ReportWizardForm" toScope="request"/>
 	

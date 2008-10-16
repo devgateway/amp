@@ -356,7 +356,7 @@ function adminHelp(){
                                                         <logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
                                             		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
                                             		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
-                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="_width:200px;">
+                                            		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="_width:100%;">
                                                             	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
                                                           </li>
                                                         </logic:equal>

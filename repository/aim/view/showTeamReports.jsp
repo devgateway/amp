@@ -97,7 +97,7 @@ return false;
 //-->
 
 function confirmFunc() {
-  return confirm('${translation}');
+  return confirm("${translation}");
 }
 </SCRIPT>
 

@@ -120,18 +120,18 @@ public class YearlyComparisonsWorker	{
 
 		while ( iter.hasNext() )	{
 			YearlyComparison yearlyComparison = (YearlyComparison)iter.next();
-			totalActualCommitment += DecimalToText.getDouble(yearlyComparison.getActualCommitment());
-			totalPlannedDisbursement += DecimalToText.getDouble(yearlyComparison.getPlannedDisbursement());
-			totalActualDisbursement += DecimalToText.getDouble(yearlyComparison.getActualDisbursement());
-			totalActualExpenditure += DecimalToText.getDouble(yearlyComparison.getActualExpenditure());
-                        totalDisbOrder+=DecimalToText.getDouble(yearlyComparison.getDisbOrders());
+			totalActualCommitment += FormatHelper.parseDouble(yearlyComparison.getActualCommitment());
+			totalPlannedDisbursement += FormatHelper.parseDouble(yearlyComparison.getPlannedDisbursement());
+			totalActualDisbursement += FormatHelper.parseDouble(yearlyComparison.getActualDisbursement());
+			totalActualExpenditure +=  FormatHelper.parseDouble(yearlyComparison.getActualExpenditure());
+                        totalDisbOrder+= FormatHelper.parseDouble(yearlyComparison.getDisbOrders());
 
 		}
-		allTotals.setTotalActualCommitment(DecimalToText.getString(totalActualCommitment));
-		allTotals.setTotalPlannedDisbursement(DecimalToText.getString(totalPlannedDisbursement));
-		allTotals.setTotalActualDisbursement(DecimalToText.getString(totalActualDisbursement));
-		allTotals.setTotalActualExpenditure(DecimalToText.getString(totalActualExpenditure));
-                allTotals.setTotalDisbOrder(DecimalToText.getString(totalDisbOrder));
+		allTotals.setTotalActualCommitment(FormatHelper.formatNumber(totalActualCommitment));
+		allTotals.setTotalPlannedDisbursement(FormatHelper.formatNumber(totalPlannedDisbursement));
+		allTotals.setTotalActualDisbursement(FormatHelper.formatNumber(totalActualDisbursement));
+		allTotals.setTotalActualExpenditure(FormatHelper.formatNumber(totalActualExpenditure));
+                allTotals.setTotalDisbOrder(FormatHelper.formatNumber(totalDisbOrder));
 		if ( logger.isDebugEnabled() )
 					logger.debug("GETALLTOTALS()>");
 		return allTotals;

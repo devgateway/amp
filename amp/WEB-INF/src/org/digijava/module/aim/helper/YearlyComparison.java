@@ -3,13 +3,13 @@ package org.digijava.module.aim.helper ;
 public class YearlyComparison
 {
 	private int fiscalYear;
-	private String plannedCommitment ;
-	private String actualCommitment ;
-	private String plannedDisbursement ;
-	private String actualDisbursement ;
-	private String plannedExpenditure ;
-	private String actualExpenditure ;
-        private String disbOrders ;
+	private String plannedCommitment ="";
+	private String actualCommitment ="";
+	private String plannedDisbursement="" ;
+	private String actualDisbursement ="";
+	private String plannedExpenditure ="";
+	private String actualExpenditure ="";
+   private String disbOrders="" ;
 
 	/**
 	 * @return

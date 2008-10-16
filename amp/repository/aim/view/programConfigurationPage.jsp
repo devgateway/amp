@@ -32,7 +32,9 @@
 <!-- End of Logo -->
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 <tr>
-<td height=16 vAlign=center width=571><span class=subtitle-blue>
+<td height=16 vAlign=center width=571>
+
+<span class=subtitle-blue style="padding-top:0px;padding-bottom:0px">
 						<digi:trn key="aim:adminconfigurationsettings">Configuration Settings
 						</digi:trn>
 						</span>

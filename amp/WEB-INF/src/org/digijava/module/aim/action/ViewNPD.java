@@ -1,12 +1,9 @@
 package org.digijava.module.aim.action;
 
-import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +14,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
@@ -30,7 +26,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.helper.LabelValueBeanComparator;
 
 /**
  * NPD main page.
@@ -43,11 +38,6 @@ public class ViewNPD extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		NpdForm npdForm=(NpdForm)form;
-                 String langCode= RequestUtils.getNavigationLanguage(request).getCode();
-                 Locale locale=new Locale(langCode);
-                Collator collator = Collator.getInstance(locale);
-                collator.setStrength(Collator.PRIMARY);
-                collator.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
 		//dimensions should come from NPD settings not from constants
 		TeamMember teamMember = (TeamMember) request.getSession().getAttribute("currentMember");
 		Long teamId=teamMember.getTeamId();
@@ -70,7 +60,7 @@ public class ViewNPD extends Action {
         }
 
 		npdForm.setDummyYear("-1");
-		npdForm.setDonors(getDonorsList(30,collator));
+		npdForm.setDonors(getDonorsList(30));
         npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue("NPD Default Program"));
 		//npdForm.setStatuses(getStatuses());
 
@@ -104,7 +94,7 @@ public class ViewNPD extends Action {
 		return result;
 	}
 
-	private List getDonorsList(int nameLimit,Collator collator) {
+	private List getDonorsList(int nameLimit) {
 		List result = null;
 		Collection dbDonors = DbUtil.getAllDonorOrgs();
 		if (dbDonors != null) {
@@ -120,7 +110,6 @@ public class ViewNPD extends Action {
 				result.add(lvBean);
 			}
 		}
-                Collections.sort(result, new LabelValueBeanComparator(collator));
 		return result;
 	}
 

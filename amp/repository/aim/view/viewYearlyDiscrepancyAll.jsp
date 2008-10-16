@@ -8,6 +8,17 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+<script language="Javascript">
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=3&surveyFlag=true&activityId=" + id;
+}
+</script>
+
+
 <digi:errors/>
 <digi:instance property="aimYearlyDiscrepancyAllForm" />
 <digi:context name="digiContext" property="context"/>

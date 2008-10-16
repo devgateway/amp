@@ -1207,7 +1207,7 @@
  	function showPanel(headerText, id, posX, posY) {
  		informationPanel.setHeader(headerText);
 		informationPanel.setBody(themeArray[id]);
-		informationPanel.moveTo(posX+2, posY+10);
+		informationPanel.moveTo(posX+2, posY+2);
 		informationPanel.show();
  	}
  	/* Just makes the panel visible */
@@ -1389,7 +1389,7 @@
 						<c:set var="translation">
 							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
 						</c:set>
-						<category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  multiselect="true" size="5" ordered="true"/>
+						<category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  multiselect="true" size="5"/>
 
 					</td>
 					<td>

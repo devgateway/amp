@@ -304,7 +304,7 @@ div.fakefile2 input{
 							<c:set var="translation">
 								<digi:trn key="contentrepository:doctype:firstline">Please select a type from below</digi:trn>
 							</c:set>
-							<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+							<category:showoptions  firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
 						</td>
 						</tr>
 						<tr id="tr_path">

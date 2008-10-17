@@ -47,10 +47,11 @@
 	color: #ffffff; text-decoration: underline; font-size: 10px; font-style: normal;
 }
 </style>
+
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/fonts/fonts.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
+
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > .</script>

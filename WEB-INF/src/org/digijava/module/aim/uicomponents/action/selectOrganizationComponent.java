@@ -203,7 +203,13 @@ public class selectOrganizationComponent extends Action {
 			}
 
 		} else {
-			organizationResult = eaForm.getOrganizations();
+			//organizationResult = eaForm.getOrganizations();
+			if(eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
+				organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim());
+			}else{
+				organizationResult = DbUtil.searchForOrganisation(alpha,"");
+			}
+			
 			eaForm.setCurrentAlpha(alpha);
 			if (!alpha.equals("viewAll")) {
 				eaForm.setStartAlphaFlag(false);

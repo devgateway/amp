@@ -2370,6 +2370,32 @@ public class DbUtil {
         }
         return col;
     }
+    
+    /**
+     * This function gets all organizations whose names begin with namesFirstLetter 
+     * and name or acronym contain keyword
+     * @author Dare
+     */
+    public static Collection searchForOrganisation(String namesFirstLetter,String keyword) {
+        Session session = null;
+        Collection col = null;
+        if(keyword.length()!=0){
+        	keyword=keyword.toLowerCase();
+        }
+        namesFirstLetter=namesFirstLetter.toLowerCase();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
+                + "where ((lower(acronym) like '%" + keyword + "%' && lower(name) like '"+namesFirstLetter+"%') || lower(name) like '"+namesFirstLetter+ "%"
+                + keyword + "%')";
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to search " + ex);
+        }
+        return col;
+    }
 
     public static Collection searchForOrganisationByType(Long orgType) {
         Session session = null;

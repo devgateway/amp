@@ -631,6 +631,7 @@ public class HelpUtil {
 	    	    		 
 	    	    		 helptopic.setParent(top);
 	    	    	 }
+	    	    	 udateEditpData(help);
 	    	    	 insertHelp(helptopic);
 	    	    	 HelpTopic parent = new HelpTopic();
 	    	    	 parent.setBodyEditKey(helptopic.getBodyEditKey());
@@ -641,8 +642,7 @@ public class HelpUtil {
 	    	    	 parent.setParent(helptopic.getParent());
 	    	    	 parent.setTitleTrnKey(helptopic.getTitleTrnKey());
 	    	    	 parent.setTopicKey(helptopic.getTopicKey());
-	    	    	
-	    	    	 helptopic.getClass();
+	    	    		 
 	    	    	 Long oldid = help.getTopicId();
 	    	    	 storeMap.put(oldid, parent);
 	    	    	 
@@ -687,6 +687,7 @@ public class HelpUtil {
 			       edit.setLastModDate(help.getLastModDate().getTime());
 			       edit.setSiteId("amp");
 			       edit.setLanguage(help.getLeng());
+			       edit.setEditorKey(help.getEditorKey());
 			       insertEdit(edit);
 	    	   }
 	     	}catch (Exception e) {

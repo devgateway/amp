@@ -485,9 +485,7 @@ function fnSubmit() {
 								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left">
 									<tr>
 										<td>
-
-											Page 1 of 1
-
+											 1 <digi:trn key="aim:of">of</digi:trn> 1
 										</td>
 									</tr>
 								</table>

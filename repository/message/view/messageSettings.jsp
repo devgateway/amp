@@ -74,9 +74,23 @@
 				<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
 						<TR><TD bgColor="#ffffff" class="box-border" align="left">
 							<TABLE border="0" cellPadding="1" cellSpacing="1" width="100%">
+								<tr><%-- Start Navigation --%>
+									<td height=33><span class=crumb>
+										<c:set var="translation">
+											<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+										</c:set>
+										<digi:link href="/admin.do" styleClass="comment" title="${translation}" module="aim">
+											<digi:trn key="aim:AmpAdminHome">
+												Admin Home
+											</digi:trn>
+										</digi:link>&nbsp;&gt;&nbsp;
+										<digi:trn key="aim:messagemanager">Message Manager</digi:trn>
+									</td>
+								</tr><%-- End navigation --%>
 								<TR>
 									<TD>
 										<TABLE border="1" cellPadding="3" cellSpacing="3" width="100%" bordercolor="#ccecff" rules="all">
+											
 											<tr>
 												<td colspan="4" align="center" bgcolor="#ccecff"><digi:trn key="message:msgSettings">Message Settings</digi:trn> </td>
 											</tr>

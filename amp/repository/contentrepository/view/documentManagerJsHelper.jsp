@@ -786,12 +786,15 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 		
 	if (isAUrl) {
 		myForm.webResource[1].checked				= true;
-		myForm.webResource[1].defaultChecked		= true;	
-		
+		myForm.webResource[1].defaultChecked		= true;
+		myForm.webResource[0].checked				= false;
+		myForm.webResource[0].defaultChecked		= false;	
 	}
 	else {
 		myForm.webResource[0].checked				= true;		
-		myForm.webResource[0].defaultChecked		= true;		
+		myForm.webResource[0].defaultChecked		= true;
+		myForm.webResource[1].checked				= false;
+		myForm.webResource[1].defaultChecked		= false;
 	}
 	
 	selectResourceType();
@@ -840,7 +843,7 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 	
 }
 
-function selectResourceType(isAUrl) {
+function selectResourceType() {
 	var myForm		= document.getElementById('typeId').form;
 	var elFile	= document.getElementById('tr_path');
 	var elUrl	= document.getElementById('tr_url');

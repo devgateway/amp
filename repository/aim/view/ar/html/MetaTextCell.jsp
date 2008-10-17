@@ -7,7 +7,8 @@
 	toScope="page" />
 
 <c:set var="starFlag" value="false" target="request" scope="request" />
- <font color="BLUE">
+ 	 <font color="${metaTextCell.colour}">
+
  		<c:if test="${metaTextCell.colour == 'GREEN' && metaTextCell.statusFlag == 'started'}">
  			 <font color="GREEN">
 	 		<c:set var="starFlag" value="true" target="request" scope="request" />
@@ -18,3 +19,4 @@
  		</c:if>
 
 <%@ include file="TextCell.jsp"%>
+</font>

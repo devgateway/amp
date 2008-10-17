@@ -90,7 +90,7 @@
 												                                             	
                                               	<script language="Javascript">
 
-                                              	var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+                                              	var implemLocationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
                                               	implemLocationLevelSelect.onchange = removeAllLocations;
                                               	</script>
 											</td>

@@ -431,8 +431,8 @@
 								</span>
 							</td>
 							<td>&nbsp;</td>
-							<td align="center" style="visibility: hidden;">
-								<span id="columnsLimit" style="visibility: hidden">
+							<td align="center">
+								<span id="columnsLimit" style="visibility: visible">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:limit3columns">
 										You cannot select more than 3 columns in a desktop tab

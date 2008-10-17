@@ -79,6 +79,12 @@ function setHoveredTable(tableId, hasHeaders) {
 
 
 }
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+	  var urlToGo = "<%=addUrl%>~pageId=2~activityId=" + id;
+	    document.location.href = urlToGo;
+}
 </script>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>

@@ -394,7 +394,7 @@ function loadPage()
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span
+					<td height=16 vAlign=center width=700><span
 						class=subtitle-blue> <digi:trn
 						key="aim:organizationManager">Organization Manager
 						</digi:trn> </span> <br>
@@ -456,7 +456,7 @@ function loadPage()
 							<td>
 							<table cellspacing=1 cellSpacing=1>
 								<tr>
-									<td noWrap width=616 vAlign="top">
+									<td noWrap width=690 vAlign="top">
 									<table bgColor=#ffffff cellPadding=0 cellSpacing=0
 										class="box-border-nopadding" width="100%">
 										<tr bgColor=#f4f4f2>
@@ -467,7 +467,7 @@ function loadPage()
 											<table align=center bgColor=#f4f4f2 cellPadding=0
 												cellSpacing=0 border=0>
 												<tr>
-													<td bgColor=#ffffff class=box-border width="560">
+													<td bgColor=#ffffff class=box-border width="680">
 													<table border=0 cellPadding=1 cellSpacing=1
 														class="box-border" width="100%">
 														<tr bgColor=#dddddb>
@@ -490,14 +490,14 @@ function loadPage()
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationName">Organization Name</digi:trn><font
 																		size="2" color="#FF0000">*</font></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		name="aimAddOrgForm" property="name" size="54" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgAcronym">Organization Acronym</digi:trn><font
 																		size="2" color="#FF0000">*</font></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		name="aimAddOrgForm" property="acronym" size="54" /></td>
 																</tr>
 																<tr>
@@ -554,7 +554,7 @@ function loadPage()
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationGroup">Organization Group</digi:trn><font
 																		size="2" color="#FF0000">*</font></td>
-																	<td width="380" height="30" colspan="2"><html:select
+																	<td width="500" height="30" colspan="2"><html:select
 																		property="ampOrgGrpId">
 																		<c:set var="translation">
 																			<digi:trn key="aim:editOrganisationSelectGroup">Select Group</digi:trn>
@@ -570,7 +570,7 @@ function loadPage()
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="2">&nbsp;</td>
-																	<td width="380" height="1" colspan="2"><digi:img
+																	<td width="500" height="1" colspan="2"><digi:img
 																		src="module/aim/images/arrow-014E86.gif" width="15"
 																		height="10" /> <a href="javascript:addGroup()"> <digi:trn
 																		key="aim:addOrganizationGroup">Add a Group</digi:trn>
@@ -579,13 +579,13 @@ function loadPage()
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationDac">DAC Code</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="dacOrgCode" size="15" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationIsoCode">ISO Code</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		name="aimAddOrgForm" property="orgIsoCode" size="15" />
 																	</td>
 																</tr>
@@ -593,7 +593,7 @@ function loadPage()
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationCode">Organization Code</digi:trn><font
 																		size="2" color="#FF0000">*</font></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="orgCode" size="15" /></td>
 																</tr>
 																<%--<logic:notEqual name="aimAddOrgForm" property="actionFlag" value="edit" >
@@ -637,7 +637,7 @@ function loadPage()
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:fiscalCalendar">Fiscal Calendar</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:select
+																	<td width="500" height="30" colspan="2"><html:select
 																		property="fiscalCalId">
 																		<c:set var="translation">
 																			<digi:trn
@@ -657,7 +657,7 @@ function loadPage()
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:sectorScheme">Sector Scheme</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:select
+																	<td width="500" height="30" colspan="2"><html:select
 																		property="ampSecSchemeId" onclick="oldSchemeValue=this.value" onchange="checkScheme()">
 																		<c:set var="translation">
 																			<digi:trn
@@ -676,7 +676,7 @@ function loadPage()
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:sectorPreferences">Sector Preferences</digi:trn>
 																	</td>
-																	<td width="380" height="30" colspan="2">
+																	<td width="500" height="30" colspan="2">
 																	<table cellPadding=5 cellSpacing=1 border=0
 																		width="100%" bgcolor="#d7eafd"
 																		class=box-border-nopadding>
@@ -768,7 +768,7 @@ function loadPage()
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:pledges">Pledges</digi:trn></td>
-																	<td width="380" height="30" colspan="2">&nbsp; <%
+																	<td width="500" height="30" colspan="2">&nbsp; <%
  	String tempIndexStr = "";
  %> <%
 																		int tempIndex = 0;
@@ -866,51 +866,51 @@ function loadPage()
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgContactName">Contact Person Name</digi:trn>
 																	</td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="contactPersonName" size="35" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgContactTitle">Contact Person Title</digi:trn>
 																	</td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="contactPersonTitle" size="20" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgContactPhone">Contact Phone</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="phone" size="35" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgContactFax">Contact Fax</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="fax" size="35" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgContactEmail">Contact Email</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="email" size="35" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationUrl">Organization URL</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:text
+																	<td width="500" height="30" colspan="2"><html:text
 																		property="orgUrl" size="54" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:orgAddress">Address</digi:trn></td>
-																	<td width="380" height="30" colspan="2"><html:textarea
+																	<td width="500" height="30" colspan="2"><html:textarea
 																		property="address" cols="40" rows="3" /></td>
 																</tr>
 																<tr>
 																	<td width="169" align="right" height="30"><digi:trn
 																		key="aim:organizationDescription">Description</digi:trn>
 																	</td>
-																	<td width="380" height="30" colspan="2"><html:textarea
+																	<td width="500" height="30" colspan="2"><html:textarea
 																		property="description" cols="40" rows="3" /></td>
 																</tr>
 																<tr>
@@ -987,10 +987,8 @@ function loadPage()
 											<td bgColor=#f4f4f2>&nbsp;</td>
 										</tr>
 									</table>
-									<td noWrap width=100% vAlign="top"><jsp:include
-										page="orgManagerOtherLinks.jsp" /></td>
 									</td>
-									<td noWrap width=110 vAlign="top"></td>
+									<td noWrap width=10 vAlign="top"></td>
 								</tr>
 							</table>
 							</td>

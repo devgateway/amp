@@ -374,8 +374,8 @@ function sortSubmit(value){
 													&gt;&gt; 
 												</digi:link>
 												&nbsp;&nbsp;
-											</c:if>
-											<c:out value="${aimCurrencyForm.currentPage}"></c:out> of <c:out value="${aimCurrencyForm.pagesSize}"></c:out>
+											</c:if>sadadas
+											<c:out value="${aimCurrencyForm.currentPage}"></c:out> <digi:trn key="aim:of">of</digi:trn> <c:out value="${aimCurrencyForm.pagesSize}"></c:out>
 										</td>
 									</tr>
 									</c:if>

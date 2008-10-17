@@ -45,7 +45,7 @@ public class ProjectIdPostProcessDelegate implements IPostProcessDelegate {
 			if (prevOrgs != null) {
 				for (int j = 0; j < prevOrgs.length; j++) {
 					if (prevOrgs[j] != null) {
-						if (prevOrgs[j].getId().equals(eaForm.getSelOrganisations()[i])) {
+						if (prevOrgs[j].getOrganisation().getAmpOrgId().equals(eaForm.getSelOrganisations()[i])) {
 							flag = true;
 							break;
 						}

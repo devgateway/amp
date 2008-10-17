@@ -134,7 +134,7 @@
 								</script>
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
-								onClick="setType('version'); configPanel(0,tempTitle[${counter}],tempDescription[${counter}], '<%=documentData.getCmDocType() %>' ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
+								onClick="setType('version'); configPanel(0,tempTitle[${counter}],tempDescription[${counter}], <%=documentData.getCmDocTypeId() %> ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
 								title="<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
 								
 								</logic:equal>

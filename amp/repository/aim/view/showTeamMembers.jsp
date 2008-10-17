@@ -17,7 +17,7 @@
 <script language=javascript>
 function showUserProfile(id){
 	<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
-	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
+	openURLinWindow("<%= information %>~edit=true~id="+id,480, 400);
 }
 </script>
 
@@ -141,7 +141,7 @@ function showUserProfile(id){
 						</table>
 					</td>
 					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+						<table align=center cellPadding=0 cellSpacing=0 width="100%" border=0>	
 							<tr>
 								<td>
 									<!-- Other Links -->

@@ -77,7 +77,7 @@ function unload() {
 						</tr>
 						<tr>
 							<td  bgcolor="#f4f4f2" width="150" class="text1">
-								<digi:trn key="aim:firstName" >First Name</digi:trn>
+								<digi:trn key="aim:firstName">First Name</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2" class="text1">
 								 <bean:write name="aimUserDetailForm" property="firstNames" />
@@ -110,7 +110,7 @@ function unload() {
 						</tr>
 						<tr>
 							<td bgcolor="#f4f4f2" class="text1">
-								<digi:trn key="aim:organizationName" >	Organization Name	</digi:trn>
+								<digi:trn key="aim:organizationName">Organization Name</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2" class="text1">
 								<bean:write name="aimUserDetailForm" property="organizationName" />
@@ -143,7 +143,7 @@ function unload() {
 									<% int i = 0; %>
 									<c:forEach var="info" items="${aimUserDetailForm.info}">
 									<tr>
-										<td bgcolor="#f4f4f2"  width="150px" class="text1">
+										<td bgcolor="#f4f4f2"  width="300px" class="text1">
 											<% if ((i%2) == 0) { %>
 												<digi:trn key="aim:teamName">Team Name</digi:trn>
 											<% } else { %>
@@ -152,7 +152,7 @@ function unload() {
 											   i++;
 											%>
 										</td>
-										<td bgcolor="#f4f4f2" class="text1">
+										<td bgcolor="#f4f4f2" class="text1" width="500px">
 											<c:out value="${info}"/>
 										</td>
 									</tr>

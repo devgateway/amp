@@ -769,10 +769,10 @@ function toggleView(elementId, iconId, isMinus) {
 	return isMinus;
 }
 /* Configures the form with id typeId */
-function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
+function configPanel(panelNum, title, description, optionId, uuid, isAUrl) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
-	if (optionText == null)
-		optionText	= '';
+	if (optionId == null)
+		optionId	= 0;
 
 	var myForm		= document.getElementById('typeId').form;
 	myForm.docTitle.value		= title;
@@ -816,7 +816,7 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 		
 		var opts									= myForm.docType.options;
 		for ( j=0; j<opts.length; j++ ) {
-			if ( opts[j].text	== optionText ) {
+			if ( opts[j].value	== optionId ) {
 				opts[j].selected	= true;
 				break;
 			}

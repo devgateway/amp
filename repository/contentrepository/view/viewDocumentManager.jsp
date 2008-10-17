@@ -96,6 +96,7 @@ div.fakefile2 input{
 
 		var button = document.createElement('input');
 		button.type = 'button';
+		button.className='buton';
 
 		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
 		fakeFileUpload2.appendChild(button);
@@ -174,7 +175,7 @@ div.fakefile2 input{
 			        <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
 			        <tr>
 			        <td>
-			        	<button type="button" class="dr-menu" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
+			        	<button type="button" class="dr-menu buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 					  		<digi:trn key="contentrepository:addResource">
 					 	    	       Add Resource ...    				
 					  		</digi:trn>            
@@ -312,7 +313,7 @@ div.fakefile2 input{
 			                             <!-- <html:file property="fileData"></html:file> -->
 			                             <div class="fileinputs"> 
 							
-						<input id="fileData" name="fileData" type="file" class="file">
+						<input id="fileData" name="fileData" type="file" class="file buton">
 			                        </div></td>
 						</tr>
 						<tr style="display: none" id="tr_url">
@@ -321,10 +322,14 @@ div.fakefile2 input{
 						</tr>
 						<tr>
 							<td align="right">
-								<html:submit styleClass="dr-menu" onclick="return validateAddDocumentLocal()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
+								<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" onclick="return validateAddDocumentLocal()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 							</td>
 							<td align="left">
-								&nbsp;<button class="dr-menu buton" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
+								&nbsp;
+								<button class="dr-menu buton" type="button" style="padding-bottom: 1px; padding-top: 1px;"  
+								onClick="hidePanel(0)">
+									<digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn>
+								</button>
 							</td>
 						</tr>
 					</table>

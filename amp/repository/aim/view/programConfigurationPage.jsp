@@ -42,8 +42,8 @@
 			Admin Home
 		</digi:trn>
 		</digi:link>&nbsp;&gt;&nbsp;
-		<digi:trn key="aim:adminconfigurationsettings">
-			Configuration Settings
+		<digi:trn key="aim:multiProgramConf">
+			Multi Program Configuration
 		</digi:trn>
 	</td>
 	<!-- End navigation -->

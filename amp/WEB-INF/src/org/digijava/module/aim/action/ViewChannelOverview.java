@@ -7,8 +7,10 @@ package org.digijava.module.aim.action;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +47,10 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.FilterParams;
+import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
@@ -236,6 +241,33 @@ public class ViewChannelOverview extends TilesAction {
             		}
 				
 			}
+			
+			//New Donors code (begin)
+			Collection ampFundings = DbUtil.getAmpFunding(id);
+		    ApplicationSettings apps = null;
+			apps = teamMember.getAppSettings();
+		    FilterParams fp = (FilterParams) session.getAttribute(Constants.FILTER_PARAMS);
+		    if (fp == null) {
+		    	fp = new FilterParams();
+		    }
+		    if (fp.getCurrencyCode() == null)
+			{
+				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
+				if (curr != null) {
+					fp.setCurrencyCode(curr.getCurrencyCode());
+				}
+			}
+		    if (fp.getFiscalCalId() == null) {
+				fp.setFiscalCalId(apps.getFisCalId());
+			}
+		    if (fp.getFromYear() == 0 || fp.getToYear() == 0) {
+				int year = new GregorianCalendar().get(Calendar.YEAR);
+				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
+				fp.setToYear(year+Constants.TO_YEAR_RANGE);
+			}
+		    Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(id, ampFundings, fp,debug);
+			formBean.setFinancingBreakdown(fb);
+			//New Donors code (end)
 
 			AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
 			if(team.getAccessType().equals("Team"))

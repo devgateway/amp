@@ -1268,41 +1268,16 @@ function commentWin(val) {
 																								Funding Country/Agency</digi:trn></b></TD>
 																					</TR>
 																					<TR>
-																						<!-- Due to changes in the activity form the Funding Organizations are saved in 2 different
-																							collections: relOrgs, used in activities with FOs created BEFORE the new code, and 
-																							selectedOrganizations used in FOs created after the new code. Before this patch when you 
-																							save the activity then the old collection is not longer used and the FOs dissapear. 
-																							The old section can be deleted after testing the new collection has always the FOs.-->
-																						<c:if test="${!empty aimChannelOverviewForm.relOrgs}">
-																							<TD bgcolor="#ffffff">
-																								<c:forEach var="relOrg"
-																									items="${aimChannelOverviewForm.relOrgs}">
-																									<c:if test="${relOrg.role == 'DN'}">
-																										<c:set var="currentOrg" value="${relOrg}"
-																											target="request" scope="request" />
-																										<jsp:include page="organizationPopup.jsp" />
-																									</c:if>
-																								</c:forEach>
-																							</TD>
-																						</c:if>
-																						<!-- If the activity has been saved after the new code changes then use the new collection. -->
-																						<c:if test="${empty currentOrg}">
-																							<TD bgcolor="#FFFFFF">
-																								<c:if test="${!empty aimChannelOverviewForm.selectedOrganizations}">
-																									<c:forEach var="selectedOrganizations" items="${aimChannelOverviewForm.selectedOrganizations}" >
-																										<c:if test="${not empty selectedOrganizations}">
-																											<tr><td bgcolor="#FFFFFF">
-																												<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
-																													<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 
-																														type="org.digijava.module.aim.helper.OrgProjectId" toScope="request" />
-																													<jsp:include page="previewOrganizationPopup.jsp"/>
-																												</c:if>
-																											</td></tr>
-																										</c:if>
-																									</c:forEach>
-																								</c:if>
-																							</TD>
-																						</c:if>
+																						<TD>
+																							<c:if test="${!empty aimChannelOverviewForm.financingBreakdown}">
+																								<logic:iterate name="aimChannelOverviewForm" property="financingBreakdown" id="breakdown"
+					  	                   															type="org.digijava.module.aim.helper.FinancingBreakdown">
+																										<bean:define id="breakdown" name="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown" toScope="request" />
+																										<ul><li><i><jsp:include page="previewFinancingOrganizationPopup.jsp"/></i></li></ul>
+																								</logic:iterate>
+																							</c:if>
+																						</TD>
+																						<td bgcolor="#ffffff">&nbsp;</td>
 																					</TR>
 																				</TABLE>
 																				</TD>

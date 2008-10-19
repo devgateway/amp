@@ -55,8 +55,18 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private List secondaryPrograms;
     private List nationalPlanObjectivePrograms;
 	private Collection<ActivitySector> activitySectors;
+	
+	private Collection financingBreakdown;
         
-    private String debugFM;
+    public Collection getFinancingBreakdown() {
+		return financingBreakdown;
+	}
+
+	public void setFinancingBreakdown(Collection financingBreakdown) {
+		this.financingBreakdown = financingBreakdown;
+	}
+
+	private String debugFM;
    
     private OrgProjectId selectedOrganizations[]; //To Show organitations name in channel overview
 	private    HashMap<String,String> errors = new HashMap<String, String>();

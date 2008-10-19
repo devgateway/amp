@@ -260,7 +260,7 @@
                                                                     </logic:notEmpty>
                                                                     <logic:empty name="aimIndicatorForm" property="searchReturn">
                                                                         <tr>
-                                                                            <td>No Indicators in the List</td>
+                                                                            <td><digi:trn key="aim:noindicatorinlist">No Indicators in the List</digi:trn></td>
                                                                         </tr>
                                                                     </logic:empty>
                                                                 </table>

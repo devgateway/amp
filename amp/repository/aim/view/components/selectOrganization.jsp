@@ -485,7 +485,7 @@
 											<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
 										</c:set> <a style="color: #333333; size: 9px; text-decoration: none;"
 											href="javascript:searchAlphaAll('viewAll')"
-											title="${translation}"> viewAll</a></td>
+											title="${translation}"><digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn></a></td>
 									</tr>
 								</table>
 								</td>

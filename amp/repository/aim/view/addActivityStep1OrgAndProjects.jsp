@@ -11,7 +11,19 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 
-
+<script language="JavaScript">
+	function  submitAfterSelectingOrg()
+	{
+		<digi:context name="nextTarget" property="context/module/moduleinstance/addActivity.do" />
+		
+    	document.aimEditActivityForm.action = "<%= nextTarget %>";
+    	document.aimEditActivityForm.target = "_self";
+    	document.aimEditActivityForm.editKey.value = null;
+  		document.aimEditActivityForm.step.value = "1";
+    	document.aimEditActivityForm.submit();
+    	//return true;
+	}
+</script>
 <digi:instance property="aimEditActivityForm" />
 <bean:define id="identification" name="aimEditActivityForm" property="identification"></bean:define>
 
@@ -31,7 +43,7 @@
 												<td>
 													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
 													
-												<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="false"  callBackFunction="document.aimEditActivityForm.submit();"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+												<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="false"  callBackFunction="submitAfterSelectingOrg();"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														
 													
 													</td>
@@ -62,7 +74,7 @@
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="false" callBackFunction="document.aimEditActivityForm.submit();"> <digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton collection="selectedOrganizations" delegateClass="org.digijava.module.aim.uicomponents.ProjectIdPostProcessDelegate" form="${identification}" refreshParentDocument="false" callBackFunction="submitAfterSelectingOrg();"> <digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</td>
 																<td>
 																	<input type="button" value="<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn>" class="dr-menu"

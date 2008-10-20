@@ -37,6 +37,11 @@
 
 <script type="text/javascript">
 
+function validateEnter(e) {
+	eKey = (document.all) ? e.keyCode : e.which;
+	if (eKey==13) addComponent();
+}
+
 function closeWindow() {
 	window.close();
 }
@@ -149,7 +154,7 @@ function addComponent(){
 								<digi:trn key="aim:title">Title</digi:trn> </ a> 
 							</td>
 							<td>
-								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>" size="40"/> 
+								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 
 								<html:button property="addNewCompoenent" onclick="addComponent()">
 									<digi:trn key="aim:add">Add</digi:trn>
 								</html:button>

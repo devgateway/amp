@@ -239,9 +239,16 @@ public class AmpReportGenerator extends ReportGenerator {
 							.newInstance();
 					column.setDimensionClass(cp.getDimensionClass());
 				}
-
-				rawColumns.addColumn(new Integer(rcol.getOrderId()), column);
-				rawColumnsByName.put(column.getName(), (CellColumn) column);
+				logger.info("Adding column "+column.getName());
+				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
+				if(older!=null) {
+				    for ( Object o : column.getItems() ) 
+					older.addCell(o);
+				    
+				} else {
+				    rawColumns.addColumn(new Integer(rcol.getOrderId()), column);
+				    rawColumnsByName.put(column.getName(), (CellColumn) column);
+				}
 			}
 
 		} catch (Exception e) {

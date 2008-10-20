@@ -697,6 +697,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Activity Imp&Exp" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"></feature:display>
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display>
+<feature:display name="Admin Topics Help" module="ADMINISTRATIVE SECTION"></feature:display>
 <%//MALAWI TEMP TAGS %>
 
 <feature:display name="About AMP" module="HELP"></feature:display>

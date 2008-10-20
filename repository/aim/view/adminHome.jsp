@@ -212,6 +212,7 @@
                                 </digi:link>
                               </td>
                           	</tr>
+                          	<feature:display name="Admin Topics Help" module="ADMINISTRATIVE SECTION">
                           	<tr>
                           		<td class="f-names" nowrap="nowrap">
                                 <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -223,6 +224,7 @@
                                 </digi:link>
                               </td>
                           	</tr>
+                          	</feature:display>
                             <!-- 
                             
                             <tr>
@@ -356,9 +358,9 @@
                               <c:set var="translation">
                                 <digi:trn key="widgets:clickToViewTableWidgetAdmin">Click here to view Table Widgets Manager</digi:trn>
                               </c:set>
-                              <a href="/widget/adminTableWidgets.do" title="${translation}">
-                                <digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
-                              </a>
+                            <digi:link module="widget" href="/adminTableWidgets.do" title="${translation}">
+                                  <digi:trn key="widgets:tableWidgetManager">Table Widget Manager</digi:trn>
+                                </digi:link>
                             </td>
                           </tr>
                           </feature:display>

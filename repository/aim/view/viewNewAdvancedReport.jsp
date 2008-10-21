@@ -195,7 +195,7 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
-                <feature:display name="Save Filters from Desktop" module="Report Generator">
+                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	          	 	|
 	          	 	<a class="settingsLink" onClick="initSaveReportEngine();saveReportEngine.showPanel(); " >
 	                	${saveFilters}
@@ -273,7 +273,7 @@ session.setAttribute("progressValue", counter);
                 <a class="settingsLink" onClick="showFilter(); " >
                 <digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>
                 </a>
-                <feature:display name="Save Filters from Desktop" module="Report Generator">
+                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	                |
 	          	 	<a class="settingsLink" onClick="initSaveReportEngine();saveReportEngine.showPanel(); " >
 	                	${saveFilters}

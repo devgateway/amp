@@ -29,6 +29,7 @@
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display>
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -152,9 +153,9 @@
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
 <feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>
-<feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display>
-<feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display>
-<feature:display name="Filter Button" module="Report Generator"></feature:display>
+<feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display>
+<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display>
+<feature:display name="Filter Button" module="Report and Tab Options"></feature:display>
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 

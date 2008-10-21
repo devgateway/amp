@@ -11,7 +11,7 @@
 <script language="JavaScript">
 
 	function msg() {
-		if (confirm("Are you sure about deleting this calendar ?")) {
+		if (confirm('<digi:trn key="aim:fiscalCalendar:deleteQuestion">Are you sure about deleting this calendar?</digi:trn>')) {
 			document.aimAddFiscalCalForm.action.value = "delete";
 			document.aimAddFiscalCalForm.submit();
 		}

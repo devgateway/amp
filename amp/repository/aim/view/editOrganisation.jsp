@@ -260,7 +260,7 @@ function loadPage()
 	}
 
 	function msg() {
-		if (confirm("Are you sure about deleting this organization ?")) {
+		if (confirm('<digi:trn key="aim:organization:deleteQuestion">Are you sure about deleting this organization?</digi:trn>')) {
 			document.aimAddOrgForm.actionFlag.value = "delete";
 			document.aimAddOrgForm.saveFlag.value = "yes";
 			document.aimAddOrgForm.submit();

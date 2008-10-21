@@ -52,6 +52,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Measures" parentModule="REPORTING"></module:display>
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
@@ -95,7 +96,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display>
-<feature:display name="Filter Button" module="Report Generator"></feature:display>
+<feature:display name="Filter Button" module="Report and Tab Options"></feature:display>
 <feature:display module="Report Types" name="Contribution Report"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display>
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
@@ -105,8 +106,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Calendar" module="Calendar"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display>
 <feature:display name="Component Report" module="Report Types"></feature:display>
-<feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display>
-<feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display>
+<feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display>
+<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display>
 <feature:display name="Activity - Component Step" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>

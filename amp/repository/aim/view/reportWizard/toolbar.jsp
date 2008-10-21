@@ -23,7 +23,7 @@
 			<img height="16" src="/TEMPLATE/ampTemplate/images/next_dis.png" class="toolbar" /> 
 			<digi:trn key="btn:next">Next</digi:trn>
 		</button>
-			<feature:display  name="Filter Button" module="Report Generator">
+			<feature:display  name="Filter Button" module="Report and Tab Options">
 				<button id="step${stepNum}_add_filters_button" type="button" class="toolbar" onclick="repFilters.showFilters()">
 					<img src="/TEMPLATE/ampTemplate/images/add_filters.png" class="toolbar" style="height: 15px;" /> 
 					<digi:trn key="btn:repFilters">Filters</digi:trn>

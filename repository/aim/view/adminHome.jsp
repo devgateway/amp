@@ -39,7 +39,7 @@
             <table bgColor="#ffffff" cellPadding=20 cellSpacing="0" class="box-border-nopadding" width="100%">
               <tr align="center" bgcolor="#E1E1E1" vAlign="top">
                 <td class="f-names" nowrap="nowrap">
-                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="300" >
+                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" >
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class="f-names" nowrap="nowrap">
                       <digi:trn key="aim:administrative">
@@ -47,9 +47,9 @@
                       </digi:trn>
                       </td>
                     </tr>
-                    <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
+                    <tr align="center" bgcolor="#f4f4f2" valign="top">
                       <td class="f-names">
-                        <table cellPadding="0" cellSpacing="0" width="70%">
+                        <table cellPadding="0" cellSpacing="0" width="320px">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -272,7 +272,7 @@
                   </table>
                 </td>
                 <td>
-                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="300">
+                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380">
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class="f-names" nowrap="nowrap">
                       <digi:trn key="aim:dataFields">
@@ -282,7 +282,7 @@
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
                       <td class="f-names">
-                        <table cellPadding="0" cellSpacing="0" width="70%">
+                        <table cellPadding="0" cellSpacing="0" width="320px">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -423,7 +423,7 @@
 
               <tr align="center" bgcolor="#E1E1E1" valign="top">
                 <td>
-                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="300">
+                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380">
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class="f-names" nowrap="nowrap">
                       <digi:trn key="aim:programMonitoring">
@@ -433,7 +433,7 @@
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td class="f-names">
-                        <table cellPadding="0" cellSpacing="0" width="70%">
+                        <table cellPadding="0" cellSpacing="0" width="320px">
 						 <feature:display name="Admin - Component Type" module="Components">
                           <tr>
                             <td class="f-names" nowrap="nowrap"><digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -544,7 +544,7 @@
                   </table>
                 </td>
                 <td>
-                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="300" title="">
+                  <table bgColor="#ffffff" cellPadding="0" cellSpacing="0" class="box-border-nopadding" width="380" title="">
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class="f-names" nowrap="nowrap" align="center">
                       <digi:trn key="aim:projectsActivities"> Projects / Activites</digi:trn>
@@ -552,7 +552,7 @@
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td>
-                        <table cellPadding="0" cellSpacing="0" width="70%">
+                        <table cellPadding="0" cellSpacing="0" width="320">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

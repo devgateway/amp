@@ -49,7 +49,7 @@
 <html:hidden property="issueId" />
 <html:hidden property="measureId" />
 <html:hidden property="actorId" />
-<html:hidden property="event"/>
+<html:hidden property="funding.event"/>
 <input type="hidden" name="edit" value="true">
 <html:hidden property="editAct"/>
 

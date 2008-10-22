@@ -258,7 +258,7 @@ function addComponent(){
 												<td>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 													</a><input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
-													<input type='button' value='Delete' class='inp-text' onclick="removeCommitment('<%=divName%>')">
+													<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="removeCommitment('<%=divName%>')">
 												</td>
 											</tr>
 										</table>
@@ -652,7 +652,7 @@ function addExpenditure()
 {
 	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('expn');
-	var divname = "expn" + numExpn;
+	var divname = "expn_" + numExpn;
 	var newdiv = document.getElementById('expn_gen').cloneNode(true);
 	newdiv.setAttribute("id",divname);
 	while(newdiv.innerHTML.match('@@') != null){

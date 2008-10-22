@@ -250,123 +250,125 @@ public class ShowAddComponent extends Action {
 
 			while (paramNames.hasMoreElements()) {
 				param = (String) paramNames.nextElement();
-				if (param.startsWith("comm_")) {
-					val = request.getParameter(param);
-					StringTokenizer st = new StringTokenizer(param, "_");
-					st.nextToken();
-					int index = Integer.parseInt(st.nextToken());
-					int num = Integer.parseInt(st.nextToken());
-
-					if (comm.containsKey(new Integer(index)) == false) {
-						comm.put(new Integer(index), new FundingDetail());
-					}
-					FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
-
-					if (fd != null) {
-						switch (num) {
-						case 1:
-							fd.setAdjustmentType(Integer.parseInt(val));
-							if (fd.getAdjustmentType() == 1) {
-								fd.setAdjustmentTypeName("Actual");
-							} else if (fd.getAdjustmentType() == 0) {
-								fd.setAdjustmentTypeName("Planned");
-							}
-							break;
-						case 2:
-							fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
-							break;
-						case 3:
-							fd.setCurrencyCode(val);
-							break;
-						case 4:
-							fd.setTransactionDate(val);
-							break;
-						case 6:
-							if (!"".equals(val)) {
-								fd.setAmpComponentFundingId(Long.valueOf(val));
-							}
+				if(param.length()>=7 && !param.substring(5, 7).equals("@@")){
+					if (param.startsWith("comm_")) {					
+						val = request.getParameter(param);
+						StringTokenizer st = new StringTokenizer(param, "_");
+						st.nextToken();
+						int index = Integer.parseInt(st.nextToken());
+						int num = Integer.parseInt(st.nextToken());
+	
+						if (comm.containsKey(new Integer(index)) == false) {
+							comm.put(new Integer(index), new FundingDetail());
 						}
-						comm.put(new Integer(index), fd);
-					}
-				} else if (param.startsWith("disb_")) {
-					val = request.getParameter(param);
-					StringTokenizer st = new StringTokenizer(param, "_");
-					st.nextToken();
-					int index = Integer.parseInt(st.nextToken());
-					int num = Integer.parseInt(st.nextToken());
-
-					if (disb.containsKey(new Integer(index)) == false) {
-						disb.put(new Integer(index), new FundingDetail());
-					}
-
-					FundingDetail fd = (FundingDetail) disb.get(new Integer(index));
-
-					if (fd != null) {
-						switch (num) {
-						case 1:
-							fd.setAdjustmentType(Integer.parseInt(val));
-							logger.debug("Adjustment type = " + fd.getAdjustmentType());
-							if (fd.getAdjustmentType() == 1) {
-								fd.setAdjustmentTypeName("Actual");
-							} else if (fd.getAdjustmentType() == 0) {
-								fd.setAdjustmentTypeName("Planned");
+						FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
+	
+						if (fd != null) {
+							switch (num) {
+							case 1:
+								fd.setAdjustmentType(Integer.parseInt(val));
+								if (fd.getAdjustmentType() == 1) {
+									fd.setAdjustmentTypeName("Actual");
+								} else if (fd.getAdjustmentType() == 0) {
+									fd.setAdjustmentTypeName("Planned");
+								}
+								break;
+							case 2:
+								fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
+								break;
+							case 3:
+								fd.setCurrencyCode(val);
+								break;
+							case 4:
+								fd.setTransactionDate(val);
+								break;
+							case 6:
+								if (!"".equals(val)) {
+									fd.setAmpComponentFundingId(Long.valueOf(val));
+								}
 							}
-							break;
-						case 2:
-							fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
-							break;
-						case 3:
-							fd.setCurrencyCode(val);
-							break;
-						case 4:
-							fd.setTransactionDate(val);
-							break;
-						case 6:
-							if (!"".equals(val)) {
-								fd.setAmpComponentFundingId(Long.valueOf(val));
-							}
+							comm.put(new Integer(index), fd);
 						}
-						disb.put(new Integer(index), fd);
-					}
-				} else if (param.startsWith("expn_")) {
-					val = request.getParameter(param);
-					StringTokenizer st = new StringTokenizer(param, "_");
-					st.nextToken();
-					int index = Integer.parseInt(st.nextToken());
-					int num = Integer.parseInt(st.nextToken());
-
-					if (exp.containsKey(new Integer(index)) == false) {
-						exp.put(new Integer(index), new FundingDetail());
-					}
-
-					FundingDetail fd = (FundingDetail) exp.get(new Integer(index));
-
-					if (fd != null) {
-						switch (num) {
-						case 1:
-							fd.setAdjustmentType(Integer.parseInt(val));
-							logger.debug("Adjustment type = " + fd.getAdjustmentType());
-							if (fd.getAdjustmentType() == 1) {
-								fd.setAdjustmentTypeName("Actual");
-							} else if (fd.getAdjustmentType() == 0) {
-								fd.setAdjustmentTypeName("Planned");
-							}
-							break;
-						case 2:
-							fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
-							break;
-						case 3:
-							fd.setCurrencyCode(val);
-							break;
-						case 4:
-							fd.setTransactionDate(val);
-							break;
-						case 6:
-							if (!"".equals(val)) {
-								fd.setAmpComponentFundingId(Long.valueOf(val));
-							}
+					} else if (param.startsWith("disb_")) {
+						val = request.getParameter(param);
+						StringTokenizer st = new StringTokenizer(param, "_");
+						st.nextToken();
+						int index = Integer.parseInt(st.nextToken());
+						int num = Integer.parseInt(st.nextToken());
+	
+						if (disb.containsKey(new Integer(index)) == false) {
+							disb.put(new Integer(index), new FundingDetail());
 						}
-						exp.put(new Integer(index), fd);
+	
+						FundingDetail fd = (FundingDetail) disb.get(new Integer(index));
+	
+						if (fd != null) {
+							switch (num) {
+							case 1:
+								fd.setAdjustmentType(Integer.parseInt(val));
+								logger.debug("Adjustment type = " + fd.getAdjustmentType());
+								if (fd.getAdjustmentType() == 1) {
+									fd.setAdjustmentTypeName("Actual");
+								} else if (fd.getAdjustmentType() == 0) {
+									fd.setAdjustmentTypeName("Planned");
+								}
+								break;
+							case 2:
+								fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
+								break;
+							case 3:
+								fd.setCurrencyCode(val);
+								break;
+							case 4:
+								fd.setTransactionDate(val);
+								break;
+							case 6:
+								if (!"".equals(val)) {
+									fd.setAmpComponentFundingId(Long.valueOf(val));
+								}
+							}
+							disb.put(new Integer(index), fd);
+						}
+					} else if (param.startsWith("expn_")) {
+						val = request.getParameter(param);
+						StringTokenizer st = new StringTokenizer(param, "_");
+						st.nextToken();
+						int index = Integer.parseInt(st.nextToken());
+						int num = Integer.parseInt(st.nextToken());
+	
+						if (exp.containsKey(new Integer(index)) == false) {
+							exp.put(new Integer(index), new FundingDetail());
+						}
+	
+						FundingDetail fd = (FundingDetail) exp.get(new Integer(index));
+	
+						if (fd != null) {
+							switch (num) {
+							case 1:
+								fd.setAdjustmentType(Integer.parseInt(val));
+								logger.debug("Adjustment type = " + fd.getAdjustmentType());
+								if (fd.getAdjustmentType() == 1) {
+									fd.setAdjustmentTypeName("Actual");
+								} else if (fd.getAdjustmentType() == 0) {
+									fd.setAdjustmentTypeName("Planned");
+								}
+								break;
+							case 2:
+								fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
+								break;
+							case 3:
+								fd.setCurrencyCode(val);
+								break;
+							case 4:
+								fd.setTransactionDate(val);
+								break;
+							case 6:
+								if (!"".equals(val)) {
+									fd.setAmpComponentFundingId(Long.valueOf(val));
+								}
+							}
+							exp.put(new Integer(index), fd);
+						}
 					}
 				}
 			}
@@ -448,7 +450,8 @@ public class ShowAddComponent extends Action {
 			eaForm.setCompTotalDisb(totdisbur);
 
 		} catch (Exception e) {
-			logger.debug(e);
+			logger.error(e);
+			e.printStackTrace();
 		}
 		return mapping.findForward("updated");
 	}

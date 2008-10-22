@@ -464,11 +464,131 @@ function addComponent(){
 						</tr>
 					</table>
 
+<div id="comm_gen" style="visibility:hidden">
+	<table>
+		<tr>
+			<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>
+			<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>
+			<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>
+			<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>
+				<select name='comm_@@_1' class='inp-text'>
+					<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>
+					<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>
+				</select>
+			</td>
+			<td><input type='text' name='comm_@@_2' size='15' class='amt'></td>
+			<td>
+				<select name='comm_@@_3' class='inp-text'>
+				<% Collection col = eaForm.getFunding().getValidcurrencies();
+					Iterator itr = col.iterator();
+					while (itr.hasNext())
+					{
+						AmpCurrency curr = (AmpCurrency) itr.next();
+						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+							<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>
+						<% } else { %>
+							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
+						<% }
+					 }%>		
+				</select>
+			</td>
+			<td><input type='text' name='comm_@@_4' id='comm_@@_4' size='10' class='inp-text'></td>
+			<td><a id='date1comm_@@_4' href="javascript:pickDateById('date1comm_@@_4','comm_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
+			<td><input type='hidden' name='comm_@@_6' value=''></td>
+		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
+			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="removeCommitment('comm_@@')"></td>
+		</tr>
+	</table>
+	<br>
+</div>
 
+<div id="disb_gen" style="visibility:hidden">
+	<table>
+		<tr>
+			<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>
+			<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>
+			<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>
+			<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>
+				<select name='disb_@@_1' class='inp-text'>
+					<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>
+					<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>
+				</select>
+			</td>
+			<td><input type='text' name='disb_@@_2' size='15' class='amt'></td>
+			<td>
+				<select name='disb_@@_3' class='inp-text'>
+				<% col = eaForm.getFunding().getValidcurrencies();
+					itr = col.iterator();
+					while (itr.hasNext()) {
+						AmpCurrency curr = (AmpCurrency) itr.next();
+						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+							<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>
+						<% } else { %>
+							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
+						<% }
+					 }%>		
+				</select>
+			</td>
+			<td><input type='text' name='disb_@@_4' id='disb_@@_4' size='10' class='inp-text'></td>
+			<td><a id='date1disb_@@_4' href="javascript:pickDateById('date1disb_@@_4','disb_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
+			<td><input type='hidden' name='disb_@@_6' value=''></td>
+		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
+			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="removeDisbursement('disb_@@')"></td>
+		</tr>
+	</table>
+	<br>	
+</div>
 
+<div id="expn_gen" style="visibility:hidden">
+	<table>
+		<tr>
+			<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>
+			<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>
+			<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>
+			<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>
+				<select name='expn_@@_1' class='inp-text'>
+					<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>
+					<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>
+				</select>
+			</td>
+			<td><input type='text' name='expn_@@_2' size='15' class='amt'></td>
+			<td>
+				<select name='expn_@@_3' class='inp-text'>
+				<% col = eaForm.getFunding().getValidcurrencies();
+					itr = col.iterator();
+					while (itr.hasNext()) {
+						AmpCurrency curr = (AmpCurrency) itr.next();
+						if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+							<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>
+						<% } else { %>
+							<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>
+						<% }
+					 }%>		
+				</select>
+			</td>
+			<td><input type='text' name='expn_@@_4' id='expn_@@_4' size='10' class='inp-text'></td>
+			<td><a id='date1expn_@@_4' href="javascript:pickDateById('date1expn_@@_4','expn_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
+			<td><input type='hidden' name='expn_@@_6' value=''></td>
+		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
+			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="removeExpenditure('expn_@@')"></td>
+		</tr>
+	</table>
+	<br>	
+</div>
 
-
-				  <script language="JavaScript">
+<script language="JavaScript">
 <!--
 
 var numComm = <%=indexC%>;
@@ -481,47 +601,16 @@ var tempExpn = numExpn;
 
 function addCommitments()
 {
+	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('comm');
 	var divname = "comm_" + numComm;
-	var newdiv = document.createElement('div');
+	var newdiv = document.getElementById('comm_gen').cloneNode(true);
 	newdiv.setAttribute("id",divname);
-
-	var s = "<table><tr>";
-	s += "<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>";
-	s += "<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>";
-	s += "<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>";
-	s += "<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>";
-	s += "<td>&nbsp;</td>";
-	s += "</tr>";
-	s += "<tr><td>";
-	s += "<select name='comm_" + numComm + "_1' class='inp-text'>";
-	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
-	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
-	s += "</select></td>";
-	s += "<td><input type='text' name='comm_" + numComm + "_2' size='15' class='amt'></td>";
-	s += "<td><select name='comm_" + numComm + "_3' class='inp-text'>";
-
-	<% Collection col = eaForm.getFunding().getValidcurrencies();
-		Iterator itr = col.iterator();
-		while (itr.hasNext())
-		{
-			AmpCurrency curr = (AmpCurrency) itr.next();
-			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
-			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";
-			<% }
-		 }%>
-
-	s += "</select></td>";
-	s += "<td><input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'></td>";
-	s += "<td><a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>";
-	
-	s += "<td><input type='hidden' name='comm_" + numComm + "_6' value=''></td>";
-    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-	s += '<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeCommitment("'+ divname + '")></td></tr></table><br>';
-
-	newdiv.innerHTML = s;
+	while(newdiv.innerHTML.match('@@') != null){
+		newdiv.innerHTML = newdiv.innerHTML.replace('@@', numComm);
+	}
+	//alert(newdiv.innerHTML);
+	newdiv.style.visibility = "visible";
 	ni.appendChild(newdiv);
 	numComm++;
 	tempComm++;
@@ -537,46 +626,15 @@ function removeCommitment(divname)
 
 function addDisbursement()
 {
+	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('disb');
 	var divname = "disb_" + numDisb;
-	var newdiv = document.createElement('div');
+	var newdiv = document.getElementById('disb_gen').cloneNode(true);
 	newdiv.setAttribute("id",divname);
-
-	var s = "<table><tr>";
-	s += "<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>";
-	s += "<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>";
-	s += "<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>";
-	s += "<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>";
-	s += "<td>&nbsp;</td>";
-	s += "</tr>";
-	s += "<tr><td>";
-	s += "<select name='disb_" + numDisb + "_1' class='inp-text'>";
-	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
-	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
-	s += "</select></td>";
-	s += "<td><input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'></td>";
-	s += "<td><select name='disb_" + numDisb + "_3' class='inp-text'>";
-
-	<% col = eaForm.getFunding().getValidcurrencies();
-		itr = col.iterator();
-		while (itr.hasNext()) {
-			AmpCurrency curr = (AmpCurrency) itr.next();
-			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
-			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";
-			<% }
-		 }%>
-
-	s += "</select></td>";
-	s += "<td><input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'></td>";
-	s += "<td><a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>";
-	s += "<td><input type='hidden' name='disb_" + numDisb + "_6' value=''></td>";
-	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-	s += '<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeDisbursement("'+ divname + '")></td></tr></table><br>';
-
-
-	newdiv.innerHTML = s;
+	while(newdiv.innerHTML.match('@@') != null){
+		newdiv.innerHTML = newdiv.innerHTML.replace('@@', numDisb);
+	}
+	newdiv.style.visibility = "visible";
 	ni.appendChild(newdiv);
 	numDisb++;
 	tempDisb++;
@@ -592,44 +650,15 @@ function removeDisbursement(divname)
 
 function addExpenditure()
 {
+	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('expn');
-	var divname = "expn_" + numExpn;
-	var newdiv = document.createElement('div');
+	var divname = "expn" + numExpn;
+	var newdiv = document.getElementById('expn_gen').cloneNode(true);
 	newdiv.setAttribute("id",divname);
-	var s = "<table><tr>";
-	s += "<td><p class='inp-text'><digi:trn key='aim:PlannedFIE'>Planned</digi:trn>/<br><digi:trn key='aim:ActualFIE'>Actual</digi:trn></p></td>";
-	s += "<td class='inp-text' valign='bottom'><digi:trn key='aim:AmountFIE'>Amount</digi:trn></td>";
-	s += "<td valign='bottom'><digi:trn key='aim:CurrencyFIE'>Currency</digi:trn></td>";
-	s += "<td valign='bottom'><digi:trn key='aim:DateFIE'>Date</digi:trn></td>";
-	s += "<td>&nbsp;</td>";
-	s += "</tr>";
-	s += "<tr><td>";
-	s += "<select name='expn_" + numExpn + "_1' class='inp-text'>";
-	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
-	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
-	s += "</select></td>";
-	s += "<td><input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'></td>";
-	s += "<td><select name='expn_" + numExpn + "_3' class='inp-text'>";
-
-	<% col = eaForm.getFunding().getValidcurrencies();
-		itr = col.iterator();
-		while (itr.hasNext()) {
-			AmpCurrency curr = (AmpCurrency) itr.next();
-			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
-			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";
-			<% }
-		 }%>
-
-	s += "</select></td>";
-	s += "<td><input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'></td>";
-	s += "<td><a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>";
-	s += "<td><input type='hidden' name='expn_" + numExpn + "_6' value=''></td>";
-	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-	s += '<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeExpenditure("'+ divname + '")></td></tr></table><br>';
-
-	newdiv.innerHTML = s;
+	while(newdiv.innerHTML.match('@@') != null){
+		newdiv.innerHTML = newdiv.innerHTML.replace('@@', numExpn);
+	}
+	newdiv.style.visibility = "visible";
 	ni.appendChild(newdiv);
 	numExpn++;
 	tempExpn++;

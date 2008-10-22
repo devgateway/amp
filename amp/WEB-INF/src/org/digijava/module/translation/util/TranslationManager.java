@@ -184,7 +184,7 @@ public class TranslationManager {
                                    relativeUrl);
                 }
                 else {
-                    ti.setReferUrl(DgUtil.getSiteUrl(defaultDomain, request) +
+                    ti.setReferUrl(
                                    "/translation/switchLanguage.do?code=" +
                                    langCode + "&rfr=" + relativeUrlEncode);
                 }

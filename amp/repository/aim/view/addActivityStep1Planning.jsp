@@ -404,7 +404,7 @@
 													<digi:trn key="aim:reasonsToChangeStatus">If there have been some changes in the status, explain below the reasons</digi:trn> :
 													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
                                                     <br/>
-													<html:textarea property="planning.statusReason" cols="50" rows="3" styleClass="inp-text"   disabled="${contentDisabled}"/>
+													<html:textarea name="aimEditActivityForm" property="planning.statusReason" cols="50" rows="3" styleClass="inp-text"   disabled="${contentDisabled}"/>
 													</a>
 												</td>
 											</tr>

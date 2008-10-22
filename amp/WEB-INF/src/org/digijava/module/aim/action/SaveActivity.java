@@ -298,7 +298,7 @@ public class SaveActivity extends Action {
 		}
 
 		if (eaForm.getPlanning().getStatusReason() == null 
-				|| eaForm.getPlanning().getStatusReason().trim().length() != 0) {
+				|| eaForm.getPlanning().getStatusReason().trim().length() == 0) {
 			activity.setStatusReason(" ");
 		} else {
 			activity.setStatusReason(eaForm.getPlanning().getStatusReason().trim());

@@ -99,6 +99,7 @@ public class selectOrganizationComponentForm extends ActionForm {
 		this.alphaPages =  null;
 		this.keyword="";
 		delegateClass ="";
+		callbackFunction = null;
 	}
 
 	private int selectedOrganisationFromPages;

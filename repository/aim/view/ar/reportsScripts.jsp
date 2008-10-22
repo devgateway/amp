@@ -589,14 +589,17 @@ function validateFormat(){
 	var enableLink=function(){
 	if (document.getElementById("frezzlink")){
 	
+	
 		if (scrolling){
 			document.getElementById("frezzlink").setAttribute("onClick","hiddeScroll()");
 			document.getElementById("frezzlink").setAttribute("class","settingsLink");
+			document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
 			document.getElementById("frezzlink").innerHTML=msg2;
 			showScroll();
 		}else{
 			document.getElementById("frezzlink").setAttribute("onClick","makeScroll()");
 			document.getElementById("frezzlink").setAttribute("class","settingsLink");
+			document.getElementById("frezzlink").setAttribute("style","cursor: hand;");
 			document.getElementById("frezzlink").innerHTML=msg1;
 		}
 		

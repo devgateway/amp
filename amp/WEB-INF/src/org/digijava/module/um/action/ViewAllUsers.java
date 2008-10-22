@@ -1,28 +1,26 @@
-	package org.digijava.module.um.action;
+package org.digijava.module.um.action;
 	
-	import org.apache.struts.action.*;
-	import javax.servlet.http.HttpServletRequest;
-	import javax.servlet.http.HttpServletResponse;
-	import org.digijava.module.um.form.ViewAllUsersForm;
-	import java.util.Collection;
-	import java.util.Collections;
-	import java.util.Iterator;
-	import java.util.List;
-	import java.util.Vector;
-	
-	import org.digijava.kernel.user.User;
-	import java.util.ArrayList;
-	import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.RepairDbUtil;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
-	import java.util.*;
-	import org.digijava.module.aim.util.TeamMemberUtil;
-	import org.digijava.module.um.util.AmpUserUtil;
-	import org.digijava.module.aim.dbentity.AmpOrganisation;
-	import org.digijava.module.aim.dbentity.AmpTeamMember;
-	import org.digijava.module.aim.helper.UserBean;
-	import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.util.TeamUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.helper.UserBean;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.RepairDbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.um.form.ViewAllUsersForm;
+import org.digijava.module.um.util.AmpUserUtil;
 	
 	public class ViewAllUsers
 	    extends Action {
@@ -42,7 +40,7 @@ import org.digijava.module.aim.util.TeamUtil;
 	    		vwForm.setShowBanned(true);
 	    		vwForm.setType(-1);
 	    	}
-	    	if ( request.getParameter("showBanned")!=null && request.getParameter("showBanned").equals("false") ) {
+	    	if (request.getParameter("showBanned")==null ||( request.getParameter("showBanned")!=null && request.getParameter("showBanned").equals("false")) ) {
 	    		vwForm.setShowBanned(false);
 	    	}
 	        

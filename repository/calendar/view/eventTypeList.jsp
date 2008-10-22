@@ -184,7 +184,7 @@ function chooseColor(){
                                 <html:text name="eventType" styleId="eventTypeNameColor${varSt.count}" property="color" indexed="true"/>
                               </td>
                               <td>
-                                <input type="text" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" disabled="disabled" />
+                                <input type="text" style="background: ${eventType.color}" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" disabled="disabled" />
                               </td>
                               <td>
                                 <a href=javascript:showColors("colorViwe${varSt.count}","eventTypeNameColor${varSt.count}"); >

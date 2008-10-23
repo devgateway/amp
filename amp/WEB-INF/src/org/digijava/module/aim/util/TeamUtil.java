@@ -2017,7 +2017,7 @@ public class TeamUtil {
             	   queryString="select distinct r from " + AmpReports.class.getName()+
    				"  r left join r.members m where " + tabFilter + " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
-				" tr inner join  tr.report r2 where tr.team=:teamId))";
+				" tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
             	  qry = session.createQuery(queryString); 
             	  qry.setLong("ampTeamMemId", memberId);
              	  qry.setLong("teamId", teamId);

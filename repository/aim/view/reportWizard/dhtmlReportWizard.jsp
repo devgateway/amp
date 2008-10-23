@@ -422,7 +422,7 @@
 						</tr>
 						<tr>
 							<td align="center">
-								<span id="columnsMust" style="visibility: visible">
+								<span id="columnsMust" style="visibility: hidden">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:mustselectcolumn">
 										Must select at least one column
@@ -432,7 +432,7 @@
 							</td>
 							<td>&nbsp;</td>
 							<td align="center">
-								<span id="columnsLimit" style="visibility: visible">
+								<span id="columnsLimit" style="visibility: hidden">
 								<font color="red">* 
 									<digi:trn key="rep:wizard:hint:limit3columns">
 										You cannot select more than 3 columns in a desktop tab

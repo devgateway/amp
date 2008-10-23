@@ -68,18 +68,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
  	   ServletContext ampContext=pageContext.getServletContext();
  try{
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-	   String cache=(String) ampContext.getAttribute("FMcache");
-//	   if(cache==null || cache=="" || "read".compareTo(cache)==0) {
-//		   if(ampTreeVisibility!=null)
-//		   {
-//			   AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
-//			   if(featureByNameFromRoot==null) return EVAL_BODY_BUFFERED;
-//		   }
-//	   }
-//	   else
-//	   if("readwrite".compareTo(cache)==0)
-//	   {
-		   //logger.info("		Field visibility: cache is in writing mode...");
+
 		   if(ampTreeVisibility!=null)
 			   if(!existFieldinDB(ampTreeVisibility)){
 				   synchronized (this) {
@@ -90,8 +79,13 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		                    if(featureByNameFromRoot!=null)
 		                    {
 		                        id = featureByNameFromRoot.getId();
-			   			        try {
-		                             FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
+			   			        try {//extra verification...
+			   			        	if(FeaturesUtil.getFieldVisibility(this.getName())!=null)
+			   			        	{
+			   			        		FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
+			   			        	}
+			   			        	else FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
+		                             
 		                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 		                             ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
 		                             ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);

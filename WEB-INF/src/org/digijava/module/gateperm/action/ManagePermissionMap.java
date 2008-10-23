@@ -100,6 +100,7 @@ public class ManagePermissionMap extends MultiAction {
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 	Session hs = PersistenceManager.getRequestDBSession();
 	Class permCatClass = pf.get_permissibleCategoriesMap().get(pf.getPermissibleCategory());
+	if(permCatClass==null) 	return mapping.getInputForward(); 
 	Long globalPermissionMapIdForPermissibleClass = PermissionUtil
 		.getGlobalPermissionMapIdForPermissibleClass(permCatClass);
 	PermissionMap globalPermissionMapForPermissibleClass=null;

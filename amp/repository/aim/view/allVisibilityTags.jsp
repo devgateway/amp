@@ -52,6 +52,7 @@
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display> 
+<module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
@@ -119,11 +120,11 @@
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Donor Report" module="Report Types"></feature:display> 
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
-<feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display> 
+<feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Event Tab" module="Messaging System"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
-<feature:display name="Filter Button" module="Report Generator"></feature:display> 
+<feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
 <feature:display name="Funding Information" module="Funding"></feature:display> 
 <feature:display name="Global Permission Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
@@ -175,7 +176,7 @@
 <feature:display name="Related Documents" module="Document"></feature:display> 
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Responsible Organization" module="Organizations"></feature:display> 
-<feature:display name="Save Filters from Desktop" module="Report Generator"></feature:display> 
+<feature:display name="Save Report/Tab with Filters" module="Report and Tab Options"></feature:display> 
 <feature:display name="Sector Group" module="Organizations"></feature:display> 
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display> 

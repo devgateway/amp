@@ -20,6 +20,13 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
+	function  doNothing()
+	{
+		
+	}
+</script>
+
+<script language="JavaScript">
 
 	<!--
 
@@ -526,7 +533,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
-															<aim:addOrganizationButton  aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" > <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
+															<aim:addOrganizationButton callBackFunction="doNothing();" aditionalRequestParameters="id=${fundingOrganization.ampOrgId}"  delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  property="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" > <digi:trn key="btn:changeOrganizations">Change Organization</digi:trn> </aim:addOrganizationButton>
 													        </td>
 
                                                             <field:display name="Active Funding Organization" feature="Funding Information">
@@ -961,7 +968,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																				<td>
 																					<field:display name="Add Donor Organization" feature="Funding Information">
 																				   		
-																					<aim:addOrganizationButton delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																					<aim:addOrganizationButton  callBackFunction="doNothing();" delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													
 																					
 																					</field:display>
@@ -983,7 +990,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<tr>
 																	<td>
 																		<field:display name="Add Donor Organization" feature="Funding Information">
-																			<aim:addOrganizationButton delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																			<aim:addOrganizationButton  callBackFunction="doNothing();" delegateClass="org.digijava.module.aim.uicomponents.ToFundingOrganizationDelegate"  collection="fundingOrganizations" form="${aimEditActivityForm.funding}" refreshParentDocument="true" ><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 													
 																		</field:display>
 																	</td>

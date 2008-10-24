@@ -2176,16 +2176,17 @@ public class SaveActivity extends Action {
 			// update an existing activity
 			actId = recoverySave(rsp);
 			activity = rsp.getActivity();
-                        
-                        AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
-                        if(aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-                            if(!eaForm.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
-                                new ApprovedActivityTrigger(aAct);
+              
+                        AmpActivity aAct = ActivityUtil.getAmpActivity(actId);
+                        if (aAct.getDraft() != null && !aAct.getDraft()) {
+                            if (aAct.getApprovalStatus().equals(Constants.APPROVED_STATUS)) {
+                                if (!eaForm.getApprovalStatus().equals(Constants.APPROVED_STATUS)||(eaForm.getWasDraft()!=null&&eaForm.getWasDraft())) {
+                                    new ApprovedActivityTrigger(aAct);
+                                }
+                            } else {
+                                new NotApprovedActivityTrigger(aAct);
+
                             }
-			}
-                        else{
-				new NotApprovedActivityTrigger(aAct);
-			
                         }
 			
 			/*actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
@@ -2261,12 +2262,14 @@ public class SaveActivity extends Action {
 			actId = recoverySave(rsp);			
 			activity = rsp.getActivity();
                         AmpActivity aAct=ActivityUtil.getAmpActivity(actId);
+                        if(activity.getDraft()!=null&&!activity.getDraft()){
 			if(activity.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
                                 new ApprovedActivityTrigger(aAct);
 			}
                         else{
 				new NotApprovedActivityTrigger(aAct);
 			
+                        }
                         }
 			/*actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 					field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());

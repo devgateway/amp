@@ -140,8 +140,6 @@
 <feature:display name="Message tab" module="Messages"></feature:display> 
 <feature:display name="Message tab" module="Messaging System"></feature:display> 
 <feature:display name="Messages" module="Messaging System"></feature:display> 
-<feature:display name="My Messages" module="Desktop Sections"></feature:display> 
-<feature:display name="My Tasks" module="Desktop Sections"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 

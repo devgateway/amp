@@ -19,6 +19,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
@@ -46,7 +47,15 @@ public class VisibilityManager extends MultiAction {
 	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//generateAllFieldsInFile();
-
+		HttpSession session 		= request.getSession();
+		if (session.getAttribute("ampAdmin") == null) {
+			return mapping.findForward("index");
+		} else {
+			String str = (String)session.getAttribute("ampAdmin");
+			if (str.equals("no")) {
+					return mapping.findForward("index");
+				}
+			}
 		return  modeSelect(mapping, form, request, response);
 	}
 
@@ -368,6 +377,7 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
 		if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(new Long(Long.parseLong(request.getParameter("featureId"))),hbsession);//delete feature
 		if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(new Long(Long.parseLong(request.getParameter("moduleId"))),hbsession);//delete module
+		this.updateAmpContext(new AmpTreeVisibility(), hbsession);
 		return modeViewFields(mapping, form, request, response);
 	}
 
@@ -551,6 +561,16 @@ public class VisibilityManager extends MultiAction {
 					}
 				}catch(Exception e){ e.printStackTrace(); }
 				return 1;
+	}
+	
+	private void updateAmpContext(AmpTreeVisibility ampTreeVisibility, Session hbsession) throws HibernateException{
+		
+		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
+		ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+
+		ampContext=this.getServlet().getServletContext();
+		ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+		
 	}
 
 	private void generateAllFieldsInFile(){

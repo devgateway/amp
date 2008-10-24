@@ -86,7 +86,7 @@ public class ChangeTeamReportStatus extends Action {
 		String returnPage = null;
 		if("teamReportList".equals(request.getParameter("returnPage"))){
 			returnPage = "/aim/teamReportList.do";
-		}else if("teamDesktopTabList".equals(request.getParameter("returnPage"))){
+		}else{ //if("teamDesktopTabList".equals(request.getParameter("returnPage"))){
 			returnPage = "/aim/teamDesktopTabList.do";
 		}
 		

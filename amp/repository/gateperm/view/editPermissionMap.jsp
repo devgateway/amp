@@ -4,10 +4,6 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<script type="text/javascript">
-showHideUnDedicated(checkBox,id) {
-	if(checkBox.checked==true) document.getElementById(id)
-}
 
 </script>
 <digi:form action="/managePermMap.do">
@@ -61,8 +57,8 @@ function submitForm(mode) {
 					<td><html:select property="permissibleCategory"
 						onchange="submitForm('permissibleCategoryPicked')">
 						<html:option value="select"><digi:trn key="aim:comboSelect">--Select--</digi:trn></html:option>
-						<digi:trn key="aim:comboOptionsPermissions"><html:optionsCollection property="_availablePermissibleCategories"
-							value="simpleName" label="simpleName" /></digi:trn>
+						<html:optionsCollection property="_availablePermissibleCategories"
+							value="simpleName" label="simpleName" />
 					</html:select></td>
 				</tr>
 				<logic:notEmpty name="permissionMapForm"
@@ -83,49 +79,6 @@ function submitForm(mode) {
 				</logic:notEmpty>
 				<tr>
 						<td align="right">&nbsp;</td>
-				<tr>
-					<td valign="top" align="right"><b><digi:trn key="aim:assignspecificpermission">Assign a specific permission for each object of this class:</digi:trn></b></td>
-					<td><logic:notEmpty name="permissionMapForm"
-						property="permissionMaps">
-						<html:button property="saveDetailed"
-							onclick="submitForm('saveDetailed')">Assign Specified</html:button>
-						<table>
-							<thead>
-								<tr>
-									<th>Object Label</th>
-									<th>Assigned Permission</th>
-								</tr>
-							</thead>
-							<tbody>
-								<logic:iterate id="permissionMap" name="permissionMapForm"
-									property="permissionMaps">
-									<tr>
-										<td><bean:write name="permissionMap"
-											property="objectLabel" /></td>
-										<td><logic:equal name="permissionMap"
-											property="dedicated" value="true">
-											<b>dedicated</b>
-											<input type="checkbox"
-												onchange="javascript:showHideUnDedicated(this,'obj-<bean:write name="permissionMap" property="objectIdentifier"/>')" />
-											<div id="obj-<bean:write name="permissionMap" property="objectIdentifier"/>" style='position: relative; display: none;'>
-										</logic:equal> <html:select name="permissionMap" property="permissionId"
-											indexed="true">
-											<html:option value="0">--Global--</html:option>
-											<html:optionsCollection property="_availablePermissions"
-												value="id" label="name" />
-										</html:select> <logic:equal name="permissionMap" property="dedicated"
-											value="true">
-											</div>
-										</logic:equal></td>
-									</tr>
-								</logic:iterate>
-							</tbody>
-						</table>
-						<html:submit property="saveDetailed">Assign All</html:submit>
-					</logic:notEmpty></td>
-				</tr>
-			</table>
-			</td>
-		</tr>
+						
 	</table>
 </digi:form>

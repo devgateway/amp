@@ -1,8 +1,0 @@
-﻿[ ] // Testplan Calendar
-[-] Test 1
-	[-] Create New Event
-		[ ] script: calendar.t
-		[ ] testcase: Test1
-	[-] Delete Event
-		[ ] script: calendar.t
-		[ ] testcase: Test4

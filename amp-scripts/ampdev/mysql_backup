@@ -1,9 +1,0 @@
-#!/bin/sh
-
-cdate=`date +%d%b%Y-%H%M`
-for database in $(mysql -u amp -e  "show databases" | grep "^\|" | grep -v Database); \
-do 
-mkdir /home/backups/mysql/$database
-mysqldump --add-drop-database --hex-blob --add-drop-table --default-character-set=utf8 -R --single-transaction -u amp -e $database | bzip2 > /home/backups/mysql/$database/$database-$cdate.sql.bz2;\
-ln -fs /home/backups/mysql/$database/$database-$cdate.sql.bz2 /usr/local/www/DevSite/dmdocuments/$database.sql.bz2
-done

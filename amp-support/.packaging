@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<configurations>
-<archive destination="" exploded="false" name="amp-support.war" used="true">
-<folder excludes="*.war" includes="" location="WebRoot" name="WebRoot" prefix="" project="" projectLocation="WebRoot" used="true"/>
-</archive>
-</configurations>

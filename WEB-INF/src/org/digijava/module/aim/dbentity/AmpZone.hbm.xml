@@ -17,11 +17,12 @@
 		<property name="zoneCode" column="zone_code" type="java.lang.String"/>
 		<many-to-one name="country" column="country_id" class="org.digijava.kernel.dbentity.Country" cascade="none"/>
 		<many-to-one name="region" column="region_id" class="org.digijava.module.aim.dbentity.AmpRegion" cascade="none"/>
-        <set name="woredas" inverse="true">
+        
+        <set name="woredas" cascade="all-delete-orphan">
 			<key column="zone_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpWoreda"/>
  		</set>
-        <set name="locations"  inverse="true" >
+        <set name="locations">
 			<key column="zone_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocation"/>
         </set>

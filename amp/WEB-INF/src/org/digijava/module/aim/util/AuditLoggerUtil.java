@@ -319,6 +319,9 @@ public class AuditLoggerUtil {
 					&& !oldActivity.getName().equals(activity.getName())) {
 				auditTrail.add("Name changed");
 			}
+			if(auditTrail.isEmpty()){
+				auditTrail.add("Updated");
+			}
 		} catch (HibernateException e) {
 			logger.error("HibernateException", e);
 		} catch (SQLException e) {

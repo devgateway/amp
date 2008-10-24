@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
@@ -322,6 +323,9 @@ public class AddLocation extends Action {
    			AmpZone obj = null;
    			if (addForm.getZoneId() != null) {
    				obj = LocationUtil.getAmpZone(addForm.getZoneId());
+   				if (LocationUtil.getAmpRegion(obj.getRegion().getAmpRegionId()).getZones()!=null){
+   				LocationUtil.getAmpRegion(obj.getRegion().getAmpRegionId()).getZones().remove(obj);
+   				}
    				DbUtil.delete(obj);
    			}
    		}
@@ -329,6 +333,14 @@ public class AddLocation extends Action {
    			AmpWoreda obj = null;
    			if (addForm.getWoredaId() != null) {
    				obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
+   				if (LocationUtil.getAmpZone(obj.getZone().getAmpZoneId()).getWoredas()!=null){
+   					LocationUtil.getAmpZone(obj.getZone().getAmpZoneId()).getWoredas().remove(obj);
+   				}
+   				
+   				AmpLocation loc = LocationUtil.getAmpLocation(obj.getZone().getCountry().getCountryId().toString(),obj.getZone().getRegion().getAmpRegionId(), obj.getZone().getAmpZoneId(), obj.getAmpWoredaId()); 
+   				if (loc!=null){
+   					DbUtil.delete(loc);
+   				}
    				DbUtil.delete(obj);
    			}
    		}

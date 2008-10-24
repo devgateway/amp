@@ -348,9 +348,18 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</td>
 																		<c:set target="${urlParams}" property="status" value="member" />
 																		<td width="24%" align="center">
+
 																			<c:set var="translation">
-																				
+																				<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
 																			</c:set>
+
+																			<c:if test="${aimTeamReportsForm.showReportList == true}">
+																				<c:set target="${urlParams}" property="returnPage">teamReportList</c:set>
+																			</c:if>	
+																			<c:if test="${aimTeamReportsForm.showReportList == false}">
+																				<c:set target="${urlParams}" property="returnPage">teamDesktopTabList</c:set>
+																			</c:if>	
+
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
 																				<img hspace="2" title="<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>" src= "/repository/contentrepository/view/images/make_public.gif" border=0>
 																			</digi:link>

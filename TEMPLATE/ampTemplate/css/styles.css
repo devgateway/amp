@@ -634,6 +634,22 @@ A.sub-nav2:hover
 	BORDER-BOTTOM: 1px; 
 	LETTER-SPACING: 1px
 }
+
+.subtitle-blue-3
+{
+	BORDER-RIGHT: 1px; 
+	BORDER-TOP: 1px; 
+	FONT-SIZE: 18pt; 
+	PADDING-BOTTOM: 10px; 
+	BORDER-LEFT: 1px; 
+	PADDING-TOP: 16px; 
+	BORDER-BOTTOM: 1px; 
+	LETTER-SPACING: 1px;
+	font-family: Verdana;
+	font-size: 18px;
+	color: #0066FF;
+}
+
 .dr-menu 
 {
 	TEXT-DECORATION: none;

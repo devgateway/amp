@@ -523,6 +523,7 @@
 				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>
 				<page>addSectorToIndicator</page>
+				<page>PI_Filter</page>
 				<page>aim_euActivityDetails</page>
 				<page>aim_orgPopupLayout</page>
 				<page>aim_assignFieldPermissions</page>

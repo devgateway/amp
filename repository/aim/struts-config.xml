@@ -591,6 +591,12 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
     </action>
+    
+    <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorPopupAction" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPopupAction" validate="false">
+<!--		<forward name="forward" path="/showLayout.do?layout=PI_Filter" />-->
+		<forward name="forward" path="/repository/aim/view/viewParisIndicatorPopupFilter.jsp" />
+    </action>
+    
     <action name="aimCurrencyForm" path="/aim/changeCurrencyStatus" scope="session" type="org.digijava.module.aim.action.ChangeCurrencyStatus" validate="false">
       <forward name="forward" path="/currencyManager.do" redirect="true" />
     </action>

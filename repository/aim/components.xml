@@ -347,6 +347,9 @@
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
 
 	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
+	
+	<page page="viewParisIndicatorPopupFilter" name="PI_Filter" title="AMP - PI Reports Filter" />
+	
 	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlReportWizard" title=" - Report Wizard" />
 	<page page="reportWizard/dhtmlReportWizard" name="aim_dhtmlTabWizard" title=" - Tab Wizard" />
 	<page page="reportWizard/saveMessage" name="aim_saveMessage" />

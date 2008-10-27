@@ -5808,7 +5808,7 @@ public class DbUtil {
                                     if (indcFlag != 6) {
                                         if ("4".equalsIgnoreCase(indcCode)) {
                                             percent = new Double(sum * ansToQues4);
-                                            sum = Double.parseDouble(formatter.format(percent));
+                                            sum = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                         }
                                         answersRow[j + 1] += sum;
                                     }
@@ -5830,7 +5830,11 @@ public class DbUtil {
                             else {
                                 sum /= 3;
                                 percent = new Double( (sum * 100) / answersRow[NUM_ANSWER_COLUMNS - 3]);
-                                answersRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent));
+                                try{
+                                	answersRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
+                                }catch(Exception e){
+                                	e.printStackTrace();
+                                }
                             }
                         }
                         // calculating final percentage here
@@ -5849,7 +5853,7 @@ public class DbUtil {
                                     percent = new Double( (100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
                                     percent = new Double( (100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
-                                answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+                                answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                 //logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage is NaN");
@@ -5890,7 +5894,7 @@ public class DbUtil {
                             else {
                                 sum /= 3;
                                 percent = new Double( (sum * 100) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
-                                allDnRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent));
+                                allDnRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                             }
                         }
                         // calculating final percentage here
@@ -5909,7 +5913,7 @@ public class DbUtil {
                                     percent = new Double( (100 * sum) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
                                 } else
                                     percent = new Double( (100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
-                                allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+                                allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent).replaceFirst(",", "."));
                                 //logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
                             } catch (NumberFormatException nex) {
                                 logger.debug("percentage[all-donors row] is NaN");

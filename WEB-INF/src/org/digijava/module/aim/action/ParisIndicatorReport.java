@@ -58,7 +58,7 @@ public class ParisIndicatorReport extends Action {
 
         if (null == svForm.getIndicatorsColl() || svForm.getIndicatorsColl().size() < 1) {
             svForm.setIndicatorsColl(DbUtil.getAllAhSurveyIndicators());
-            return mapping.findForward("menu");
+            //return mapping.findForward("menu");
         }
 
         if (svForm.getReset().booleanValue()) {
@@ -82,8 +82,12 @@ public class ParisIndicatorReport extends Action {
                     svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
                 }
             }
-
-            AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
+            AmpAhsurveyIndicator indc = null;
+            if(indcId != null){
+            	indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
+        	} else {
+        		indc = DbUtil.getIndicatorById(Long.valueOf(svForm.getIndicatorId()));
+        	}
             AmpAhsurveyIndicatorCalcFormula fl = getFormula(indc.getCalcFormulas());
 
             if (svForm.getStartYear() == null || svForm.getCloseYear() == null) {

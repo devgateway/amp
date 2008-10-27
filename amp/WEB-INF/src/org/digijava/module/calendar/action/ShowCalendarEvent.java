@@ -41,6 +41,7 @@ import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.calendar.dbentity.CalendarItem;
+import org.digijava.module.calendar.dbentity.RecurrCalEvent;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
@@ -244,6 +245,18 @@ public class ShowCalendarEvent extends Action {
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
+            if(ceform.getSelectedStartMonth() != null){
+	            Set recEvent =new HashSet();
+	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
+	            recurrEvent.setCalendar(calendar);
+	            recurrEvent.setRecurrPeriod(ceform.getRecurrPeriod());
+	            recurrEvent.setSelectedStartMonth(ceform.getSelectedStartMonth());
+	            recurrEvent.setTypeofOccurrence(ceform.getTypeofOccurrence());
+	            
+	            recEvent.add(recurrEvent);
+	            calendar.setRecurrCalEvent(recEvent);
+            }
+            
             //status
             calendar.setStatus(new ItemStatus(ItemStatus.PUBLISHED));
 

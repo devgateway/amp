@@ -39,12 +39,17 @@ public class CalendarEventForm
 
     private String selectedStartDate;
     private String selectedStartTime;
+    private String selectedStartMonth;
+    private Long recurrPeriod;
+    private String typeofOccurrence;
+    private String[] occurrWeekDays;
     private GregorianCalendar startDate;
     private DateBreakDown startDateBreakDown;
     private String selectedEndDate;
     private String selectedEndTime;
     private GregorianCalendar endDate;
     private DateBreakDown endDateBreakDown;
+    private Collection months;
 
 //    private Collection eventOrganisations;
 //    private String[] selectedEventOrganisations;
@@ -377,5 +382,45 @@ public class CalendarEventForm
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getSelectedStartMonth() {
+		return selectedStartMonth;
+	}
+
+	public void setSelectedStartMonth(String selectedStartMonth) {
+		this.selectedStartMonth = selectedStartMonth;
+	}
+
+	public Long getRecurrPeriod() {
+		return recurrPeriod;
+	}
+
+	public void setRecurrPeriod(Long recurrPeriod) {
+		this.recurrPeriod = recurrPeriod;
+	}
+
+	public String getTypeofOccurrence() {
+		return typeofOccurrence;
+	}
+
+	public void setTypeofOccurrence(String typeofOccurrence) {
+		this.typeofOccurrence = typeofOccurrence;
+	}
+
+	public String[] getOccurrWeekDays() {
+		return occurrWeekDays;
+	}
+
+	public void setOccurrWeekDays(String[] occurrWeekDays) {
+		this.occurrWeekDays = occurrWeekDays;
+	}
+
+	public Collection getMonths() {
+		return months;
+	}
+
+	public void setMonths(Collection months) {
+		this.months = months;
 	}
 }

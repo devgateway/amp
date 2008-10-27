@@ -136,6 +136,8 @@ public class Calendar {
      * Set of event items from current event
      */
     private Set calendarItem;
+    
+    private Set recurrCalEvent;
 
     public Calendar() {
     }
@@ -290,5 +292,13 @@ public class Calendar {
     public void setStatus(ItemStatus status) {
 	this.status = status;
     }
+
+	public Set getRecurrCalEvent() {
+		return recurrCalEvent;
+	}
+
+	public void setRecurrCalEvent(Set recurrCalEvent) {
+		this.recurrCalEvent = recurrCalEvent;
+	}
 
 }

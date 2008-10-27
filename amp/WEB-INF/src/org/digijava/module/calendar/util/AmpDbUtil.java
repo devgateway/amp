@@ -1,32 +1,29 @@
-
-
-
 package org.digijava.module.calendar.util;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.calendar.exception.CalendarException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import java.util.Collection;
-import java.util.*;
-import java.text.SimpleDateFormat;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.calendar.dbentity.CalendarItem;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.calendar.exception.CalendarException;
 
 public class AmpDbUtil {
   private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -399,7 +396,7 @@ public class AmpDbUtil {
                                           String instanceId, String siteId) throws
       CalendarException {
       try{
-          AmpTeam curMemTeam=curMember.getAmpTeam();
+         // AmpTeam curMemTeam=curMember.getAmpTeam();
 
           Hashtable<Long, AmpCalendar> retEvents=new Hashtable<Long,AmpCalendar>();
 
@@ -408,28 +405,50 @@ public class AmpDbUtil {
               for (Iterator eventItr = events.iterator(); eventItr.hasNext(); ) {
                   AmpCalendar ampCal = (AmpCalendar) eventItr.next();
                   if (ampCal.getMember() != null) {
-
-                      AmpTeam calTeam = ampCal.getMember().getAmpTeam();
-
-                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMemTeam.getAmpTeamId())) {
-                          retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                          continue;
-                      }
-                      if (ampCal.getAttendees() != null) {
-                          for (Iterator attItr = ampCal.getAttendees().iterator(); attItr.hasNext(); ) {
-                              AmpCalendarAttendee att = (AmpCalendarAttendee) attItr.next();
-                              AmpTeamMember member = null;
-                              if (att.getMember() != null) {
-                                  member = att.getMember();
-                              }
-                              if (member != null &&
-                                  member.getAmpTeamMemId().equals(curMember.getAmpTeamMemId()) &&
-                                  !retEvents.containsKey(ampCal.getCalendarPK().getCalendar().getId())) {
-                                  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                                  break;
-                              }
-                          }
-                      }
+                	  //AmpTeam calTeam = ampCal.getMember().getAmpTeam();
+                	  
+                	  //creator of the event should see this event
+                	  if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+                    		retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                	  }                	  
+                     
+                      
+                	  if(showPublicEvents){
+                		//everyone in amp should see public events (AMP-3775)
+                		retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                		continue;
+                	  }else{
+                		//If the event is not public
+                		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+                        	for (Object attendee : ampCal.getAttendees()) {
+                          		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+                          		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+                          			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                          			continue;
+                          		}
+                          	}
+                		}
+                	  }
+                     
+//                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMemTeam.getAmpTeamId())) {
+//                          retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+//                          continue;
+//                      }
+//                      if (ampCal.getAttendees() != null) {
+//                          for (Iterator attItr = ampCal.getAttendees().iterator(); attItr.hasNext(); ) {
+//                              AmpCalendarAttendee att = (AmpCalendarAttendee) attItr.next();
+//                              AmpTeamMember member = null;
+//                              if (att.getMember() != null) {
+//                                  member = att.getMember();
+//                              }
+//                              if (member != null &&
+//                                  member.getAmpTeamMemId().equals(curMember.getAmpTeamMemId()) &&
+//                                  !retEvents.containsKey(ampCal.getCalendarPK().getCalendar().getId())) {
+//                                  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+//                                  break;
+//                              }
+//                          }
+//                      }
                   }
               }
           }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,14 +23,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -45,8 +47,7 @@ import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
-import java.util.*;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 
 public class ShowCalendarEvent extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -124,7 +125,8 @@ public class ShowCalendarEvent extends Action {
                     if (team != null) {
                         selectedAttsCol.add(new LabelValueBean("---"+team.getName()+"---", slAtts[i]));
                     }
-                } else if (slAtts[i].startsWith("m:")) {
+                } else
+                	if (slAtts[i].startsWith("m:")) {
                     AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
                     if (member != null) {
                         selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), slAtts[i]));
@@ -180,9 +182,8 @@ public class ShowCalendarEvent extends Action {
 
     private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) {
         try {
-
-
-            if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
+        	
+        	if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
                 AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
             }
 
@@ -199,23 +200,25 @@ public class ShowCalendarEvent extends Action {
             }
 
             ampCalendar.setOrganisations( new HashSet<AmpOrganisation>(ceform.getOrganizations()));
-
-            Set atts =  new HashSet();
+            
+            Collection<InternetAddress> addressCol=new ArrayList<InternetAddress>(); //this will be needed to send e-mails
+            Set<AmpCalendarAttendee> atts =  new HashSet<AmpCalendarAttendee>();
             String[] slAtts = ceform.getSelectedAtts();
             if (slAtts != null) {
                 for (int i = 0; i < slAtts.length; i++) {
                     AmpCalendarAttendee att = new AmpCalendarAttendee();
-                    att.setAmpCalendar(ampCalendar);
-                    if (slAtts[i].startsWith("t:")) {
-                        AmpTeam team = TeamUtil.getAmpTeam(Long.valueOf(slAtts[i].substring(2)));
-                        att.setTeam(team);
-                    } else if (slAtts[i].startsWith("m:")) {
+                    att.setAmpCalendar(ampCalendar); 
+                    	if (slAtts[i].startsWith("m:")) {
                         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
                         att.setMember(member);
+                        atts.add(att);
                     } else if (slAtts[i].startsWith("g:")) {
                         att.setGuest(slAtts[i]);
-                    }
-                    atts.add(att);
+                        atts.add(att);
+                        //collecting guests e-mails to send them mails
+                        String guestEmail=slAtts[i].substring(2);
+                        addressCol.add(new InternetAddress(guestEmail));
+                    }                    
                 }
             }
             ampCalendar.setAttendees(atts);
@@ -270,6 +273,23 @@ public class ShowCalendarEvent extends Action {
             ampCalendar.setPrivateEvent(ceform.isPrivateEvent());
 
             AmpDbUtil.updateAmpCalendar(ampCalendar);
+            //Create new calendar event message only if event is private
+            if(ceform.isPrivateEvent()){
+            	 CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
+            }           
+            
+            //get current member
+            HttpSession session = request.getSession();
+        	TeamMember teamMember = new TeamMember();
+        	 // Get the current member who has logged in from the session
+        	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        	
+            //guests(in Attendee-s list) should get an email    
+        	if(addressCol!=null && addressCol.size()>0){
+        		InternetAddress[] addresses=(InternetAddress[])addressCol.toArray(new InternetAddress[addressCol.size()]);
+                DgEmailManager.sendMail(addresses, teamMember.getEmail(), calendarItem.getTitle(), calendarItem.getDescription());
+        	}
+            
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -291,11 +311,11 @@ public class ShowCalendarEvent extends Action {
                 Collection<LabelValueBean> selectedAttsCol = new ArrayList<LabelValueBean> ();
 
                 Collection<String> selAtts = new ArrayList<String> ();
-                Collection<AmpTeam> teams = new ArrayList<AmpTeam> ();
+                Set<AmpTeam> teams = new HashSet<AmpTeam> ();
                 Collection<AmpTeamMember> members = new ArrayList<AmpTeamMember> ();
                 Collection<String> guests = new ArrayList<String> ();
                 if (ampCalendar.getAttendees() != null) {
-                    LabelValueBean lvb = null;
+                    //LabelValueBean lvb = null;
                     //List<AmpCalendarAttendee> atts=AmpDbUtil.getAmpCalendarAttendees(ampCalendar)
                     Iterator attItr = ampCalendar.getAttendees().iterator();
                     while (attItr.hasNext()) {
@@ -306,27 +326,41 @@ public class ShowCalendarEvent extends Action {
                         String guest = attendee.getGuest();
 
                         if (member != null) {
-                        	members.add(member);
-                        } else if (team != null) {
-                        	teams.add(team);
-                        } else {
+                        	if(!members.contains(member)){
+                        		members.add(member);
+                        	}
+                        	if(!teams.contains(member.getAmpTeam())){
+                        		teams.add(member.getAmpTeam());
+                        	}
+                        	
+                        } else if(guest!=null){
                         	guests.add(guest);
                         }
-                    }
-                    for(AmpTeam team : teams){
-                    	selectedAttsCol.add(new LabelValueBean("---"+team.getName()+"---", "t:" + team.getAmpTeamId().toString()));
-                    	selAtts.add("t:" + team.getAmpTeamId().toString());
-                    	for(AmpTeamMember member: members){
-                    		if(member.getAmpTeam().getAmpTeamId()==team.getAmpTeamId()){
-                    			selectedAttsCol.add(new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(), "m:" + member.getAmpTeamMemId().toString()));
-                    			selAtts.add("m:" + member.getAmpTeamMemId().toString());
-                    		}
-                    	}
-                    }
-                    for(String guest: guests){
-                    	selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));
-                    	selAtts.add("g:" + guest);
-                    }
+                        //else if (team != null) {
+                        //	teams.add(team);                        	
+                        //} else {
+                        //	guests.add(guest);
+                        //}
+                    }                   
+                    
+                }
+                
+                for(AmpTeam team : teams){
+    				LabelValueBean teamLabel=new LabelValueBean("---"+team.getName()+"---","t:"+team.getAmpTeamId().toString());
+    				selectedAttsCol.add(teamLabel);
+    				selAtts.add("t:" + team.getAmpTeamId().toString());
+    				for(AmpTeamMember member : members){
+    					if(team.getAmpTeamId().longValue()==member.getAmpTeam().getAmpTeamId().longValue()){
+    						LabelValueBean tm=new LabelValueBean(member.getUser().getFirstNames() + " " + member.getUser().getLastName(),"m:" + member.getAmpTeamMemId().toString());
+    						selectedAttsCol.add(tm);
+    						selAtts.add("m:" + member.getAmpTeamMemId().toString());
+    					}
+    				}
+    			}
+                
+                for(String guest: guests){
+                	selectedAttsCol.add(new LabelValueBean(guest, "g:" + guest));
+                	selAtts.add("g:" + guest);
                 }
 
                 ceform.setSelectedAttsCol(selectedAttsCol);
@@ -340,11 +374,20 @@ public class ShowCalendarEvent extends Action {
                 // title
                 ceform.setEventTitle(calendar.getFirstCalendarItem().getTitle());
 
+                //description
+                ceform.setDescription(calendar.getFirstCalendarItem().getDescription());
+                
                 // selected event type
                 ceform.setSelectedEventTypeId(ampCalendar.getEventType().getId());
 
                 // private event
-                ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
+                ceform.setPrivateEvent(ampCalendar.isPrivateEvent());                
+                
+                //event type
+                if(ampCalendar.getEventType()!=null){
+                	ceform.setEventTitle(ampCalendar.getEventType().getName());
+                }
+                
 
                 Collection<AmpOrganisation> orgs = new ArrayList<AmpOrganisation> ();
                 if (ampCalendar.getOrganisations() != null) {

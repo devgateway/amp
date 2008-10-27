@@ -2,6 +2,7 @@ package org.digijava.module.message.helper;
 
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
+import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.triggers.ApprovedActivityTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
@@ -29,7 +30,8 @@ public class MessageConstants {
                                                                 UserRegistrationTrigger.class,
                                                                 ApprovedActivityTrigger.class,
                                                                 NotApprovedActivityTrigger.class,
-                                                                CalendarEventTrigger.class,
+                                                                CalendarEventTrigger.class, 
+                                                                CalendarEventSaveTrigger.class,
                                                                 ActivityActualStartDateTrigger.class,
                                                                 ActivityCurrentCompletionDateTrigger.class,
                                                                 ActivityFinalDateForContractingTrigger.class,
@@ -43,7 +45,8 @@ public class MessageConstants {
                                                             "New User Registration",
                                                             "Activity Approved",
                                                             "Activity Not Approved",
-                                                            "Calendar Event",
+                                                            "Calendar Event", 
+                                                            "Save Calendar Event",
                                                             "Activity Actual Start Date",
                                                             "Activity Current Completion Date",
                                                             "Activity Final Date For Contracting",

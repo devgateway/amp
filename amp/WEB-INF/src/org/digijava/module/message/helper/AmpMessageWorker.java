@@ -1,8 +1,21 @@
 package org.digijava.module.message.helper;
 
 
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
+
+import org.digijava.kernel.config.DigiConfig;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.TeamMember;
@@ -16,28 +29,21 @@ import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.Approval;
 import org.digijava.module.message.dbentity.CalendarEvent;
 import org.digijava.module.message.dbentity.TemplateAlert;
-import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.message.triggers.ActivitySaveTrigger;
-import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
-import org.digijava.module.message.triggers.UserRegistrationTrigger;
-import org.digijava.module.message.triggers.ApprovedActivityTrigger;
-import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
-import org.digijava.module.message.triggers.CalendarEventTrigger;
-
 import org.digijava.module.message.triggers.ActivityActualStartDateTrigger;
 import org.digijava.module.message.triggers.ActivityCurrentCompletionDateTrigger;
+import org.digijava.module.message.triggers.ActivityDisbursementDateTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForContractingTrigger;
 import org.digijava.module.message.triggers.ActivityFinalDateForDisbursementsTrigger;
 import org.digijava.module.message.triggers.ActivityProposedApprovalDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedCompletionDateTrigger;
 import org.digijava.module.message.triggers.ActivityProposedStartDateTrigger;
-import java.util.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.Address;
-import org.digijava.kernel.config.DigiConfig;
-import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.kernel.util.DigiConfigManager;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.message.triggers.ActivitySaveTrigger;
+import org.digijava.module.message.triggers.ApprovedActivityTrigger;
+import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
+import org.digijava.module.message.util.AmpMessageUtil;
 
 public class AmpMessageWorker {
 
@@ -60,8 +66,10 @@ public class AmpMessageWorker {
                 } else if (e.getTrigger().equals(ActivityDisbursementDateTrigger.class)) {
                     newMsg = processActivityDisbursementDateComingEvent(e, newAlert, template);
                 } else if (e.getTrigger().equals(CalendarEventTrigger.class)) {
-                    newMsg = proccessCalendarEvent(e, newEvent, template);
-                } else if (e.getTrigger().equals(ApprovedActivityTrigger.class)) {
+                    newMsg = proccessCalendarEvent(e, newEvent, template,false);
+                }else if(e.getTrigger().equals(CalendarEventSaveTrigger.class)){
+                	 newMsg = proccessCalendarEvent(e, newEvent, template,true);
+                }else if (e.getTrigger().equals(ApprovedActivityTrigger.class)) {
                     newMsg = processApprovedActivityEvent(e, newApproval, template);
                 } else if (e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
                     newMsg = processNotApprovedActivityEvent(e, newApproval, template);
@@ -90,8 +98,11 @@ public class AmpMessageWorker {
                 if(e.getTrigger().equals(ApprovedActivityTrigger.class) || e.getTrigger().equals(NotApprovedActivityTrigger.class)) {
                     defineReceiversForApprovedAndNotApprovedActivities(e.getTrigger(), newMsg,(Long)e.getParameters().get(NotApprovedActivityTrigger.PARAM_ACTIVIY_CREATOR_TEAM));
                 }else if(e.getTrigger().equals(CalendarEventTrigger.class)) {
-                    defineReceiversForCalendarEvents(e, template, newMsg);
-                }else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
+                    defineReceiversForCalendarEvents(e, template, newMsg,false);
+                }else if(e.getTrigger().equals(CalendarEventSaveTrigger.class)){
+                	defineReceiversForCalendarEvents(e, template, newMsg,true);
+                }
+                else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
                     defineActivityCreationReceievrs(template, newMsg);
                 }else if(e.getTrigger().equals(ActivityActualStartDateTrigger.class)) {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityActualStartDateTrigger.PARAM_TEAM_ID).toString()));
@@ -128,12 +139,9 @@ public class AmpMessageWorker {
     /**
      *	Calendar Event processing
      */
-    private static CalendarEvent proccessCalendarEvent(Event e, CalendarEvent event, TemplateAlert template) {
+    private static CalendarEvent proccessCalendarEvent(Event e, CalendarEvent event, TemplateAlert template,boolean saveActionWasCalled) {
         DigiConfig config = DigiConfigManager.getConfig();
-        String partialURL = config.getSiteDomain().getContent() ;
-        /*if (FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) != null) {
-            partialURL = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SITE_DOMAIN) + "/";
-        }*/
+        String partialURL = config.getSiteDomain().getContent() ;        
 
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
@@ -141,7 +149,15 @@ public class AmpMessageWorker {
             myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL) + "\">View Event</a>");
             event.setObjectURL(partialURL + e.getParameters().get(CalendarEventTrigger.PARAM_URL));
         }
-        event.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
+        if(saveActionWasCalled){
+        	event.setSenderType(MessageConstants.SENDER_TYPE_USER);
+        	AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(CalendarEventSaveTrigger.SENDER);
+        	event.setSenderId(tm.getAmpTeamMemId());
+        	event.setSenderName(tm.getUser().getFirstNames()+" "+tm.getUser().getLastName()+"<"+tm.getUser().getEmail()+">;"+tm.getAmpTeam().getName());
+        }else{
+        	event.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
+        }
+        
         CalendarEvent newEvent = createEventFromTemplate(template, myHashMap, event);
 
         String receivers = new String();
@@ -162,10 +178,19 @@ public class AmpMessageWorker {
                         emailes.put(user.getEmail(), ampCal.getCalendarPK().getCalendar().getFirstCalendarItem().getTitle());
                     }
                 }
-
-            }
+                if(ampAtt.getGuest()!=null){ //guests e-mails should also be included in receivers list
+                	receivers+=", <"+ampAtt.getGuest().substring(2)+">;";
+                }
+            }            
         }
-
+        //In case this event is created when new calendar event was added, message should go to it's creator too
+        //so in the receivers list we should also add it's creator (AMP-3775)
+        if(saveActionWasCalled){
+        	AmpTeamMember member = ampCal.getMember();
+            User user = member.getUser();
+            receivers += ", " + user.getFirstNames() + " " + user.getLastName() + "<" + user.getEmail() + ">;" + member.getAmpTeam().getName() + ";";
+        }        
+        
         newEvent.setReceivers(receivers.substring(", ".length()));
 
         return newEvent;
@@ -478,7 +503,7 @@ public class AmpMessageWorker {
     /**
      * this method defines calendar event receivers and creates corresponding AmpMessageStates.
      */
-    private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent) throws Exception {
+    private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent,boolean  saveActionWasCalled) throws Exception {
         HashMap<Long, AmpMessageState> temMsgStateMap = new HashMap<Long, AmpMessageState> ();
 
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
@@ -510,12 +535,24 @@ public class AmpMessageWorker {
         }
 
         HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState> ();
+        
+        //calendar event creator should also get a message (AMP-3775)
+        if(saveActionWasCalled){
+        	AmpTeamMember calEventcreator=ampCal.getMember();
+            AmpMessageState msgState = new AmpMessageState();
+            msgState.setMemberId(calEventcreator.getAmpTeamMemId());
+            msgState.setSenderId(calEvent.getSenderId());
+            msgStateMap.put(msgState.getMemberId(), msgState);
+        }
+        
+        
         for (AmpMessageState state : temMsgStateMap.values()) {
             if (eventMsgStateMap.containsKey(state.getMemberId())) {
                 msgStateMap.put(state.getMemberId(), state);
             }
         }
-
+       
+        
         for (AmpMessageState state : msgStateMap.values()) {
             createMsgState(state, calEvent);
         }

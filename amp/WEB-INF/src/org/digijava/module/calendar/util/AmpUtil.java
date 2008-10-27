@@ -9,10 +9,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.collections.CollectionSynchronizer;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.AmpEventType;
@@ -24,10 +27,6 @@ import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.DateNavigatorItem;
 import org.digijava.module.calendar.exception.CalendarException;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new

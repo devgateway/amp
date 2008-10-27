@@ -7,15 +7,14 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.AmpDateUtils;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.util.AmpDbUtil;
+import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
+import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
-import org.digijava.module.calendar.dbentity.Calendar;
-import org.digijava.module.message.dbentity.AmpMessageSettings;
-import org.digijava.module.message.util.AmpMessageUtil;
-import org.digijava.module.calendar.dbentity.AmpCalendar;
 
 public class CalendarEventJob implements StatefulJob{
     private static Logger logger = Logger.getLogger(CalendarEventJob.class);

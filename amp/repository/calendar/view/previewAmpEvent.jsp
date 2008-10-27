@@ -25,17 +25,45 @@ function deleteEvent(){
   <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table>
+  	<tr>
+		<td height=33>
+			<span class=crumb>
+				<c:set var="translation">
+					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+				</c:set>
+				<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
+					<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+				</digi:link>&nbsp;&gt;&nbsp;
+				<digi:link href="/../calendar/showCalendarView.do" styleClass="comment" title="${translation}">
+					<digi:trn key="aim:Calendar">Calendar</digi:trn>
+				</digi:link>&nbsp;&gt;&nbsp;
+				<digi:trn key="calendar:previewEvent">Preview Event</digi:trn>
+			</span>
+		</td>
+	</tr>	
+	<tr>
+		<td height=16 vAlign=center width=571>
+			<span class=subtitle-blue>	<digi:trn key="calendar:previewEvent">Preview  Event</digi:trn> </span>
+		</td>
+	</tr>
+	<tr>				
+        <td align="center" style="padding: 0px 3px 0px 3px;">
+       		<table width="100%">
+              	<tr>
+                   	<td  style="height: 5px;"/>
+                 </tr>
+                 <tr>
+               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
+                 </tr>
+            </table>
+       </td>
+    </tr>
     <tr>
-      <td style="font-family: Tahoma; font-size: 12px;">
-        <div style="padding: 10px;">
-          <div style="padding: 7px; text-align: center; background-color: #CCECFF; font-size: 18px; font-weight: bold;">
-            <digi:trn key="calendar:PreviewEvent">Preview Event</digi:trn>
-          </div>
-        </div>
+      <td style="font-family: Tahoma; font-size: 12px;">        
         <div style="padding: 20px; background-color: #F5F5F5;">
           <table>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td >
                 <digi:trn key="calendar:eventTitle">Event Title:</digi:trn>
               </td>
               <td>
@@ -44,15 +72,15 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td >
                 <digi:trn key="calendar:Description">Description:</digi:trn>
               </td>
               <td>
-                <textarea rows="4" cols="25">${ calendarEventForm.description}</textarea>
+              	<html:textarea name="calendarEventForm" property="description" style="width: 320px;"/>                
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td >
                 <digi:trn key="calendar:CalendarType">Calendar type:</digi:trn>
               </td>
               <td>
@@ -61,7 +89,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td>
                 <digi:trn key="calendar:EventType">Event type:</digi:trn>
               </td>
               <td>
@@ -70,7 +98,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td>
                 <digi:trn key="calendar:Organisations">Organisations:</digi:trn>
               </td>
               <td>
@@ -80,7 +108,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td>
                 <digi:trn key="calendar:StartDate">Start date:</digi:trn>
               </td>
               <td>
@@ -90,7 +118,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td>
                 <digi:trn key="calendar:EndDate">End date:</digi:trn>
               </td>
               <td>
@@ -100,7 +128,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td >
                 <digi:trn key="calendar:Attendees">Attendees:</digi:trn>
               </td>
               <td>
@@ -112,7 +140,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">
+              <td>
                 <digi:trn key="calendar:PublicEvent">Public Event:</digi:trn>
               </td>
               <td>
@@ -122,7 +150,7 @@ function deleteEvent(){
               </td>
             </tr>
             <tr>
-              <td style="font-size: 14px; font-weight: bold; padding: 10px;">
+              <td>
               </td>
               <td>
                 <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:savebutton">Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">

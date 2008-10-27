@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -15,7 +17,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
@@ -24,13 +31,6 @@ import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.form.CalendarViewForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.calendar.util.AmpUtil;
-import javax.servlet.http.HttpSession;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import java.util.*;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class ShowCalendarView extends Action {
 

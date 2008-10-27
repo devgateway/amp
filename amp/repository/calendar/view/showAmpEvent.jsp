@@ -8,9 +8,13 @@
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+
 <digi:instance property="calendarEventForm"/>
 <script language="JavaScript" type="text/javascript">
   <jsp:include page="../../aim/view/scripts/calendar.js.jsp" flush="true" />
+  
 
 function removeSelOrgs() {
 	setMethod("removeOrg");
@@ -183,8 +187,7 @@ function addOrganisation(orgId, orgName){
 
     var flag=false;
     for(var i=0; i<list.length;i++){
-      if(list.options[i].value=='g:'+guest.value &&
-      list.options[i].text==guest.value){
+      if(list.options[i].value=='g:'+guest.value &&list.options[i].text==guest.value){
         flag=true;
         break;
       }
@@ -193,13 +196,29 @@ function addOrganisation(orgId, orgName){
       return false;
     }
 
-    var option = document.createElement("OPTION");
-    option.value = 'g:'+guest.value;
-    option.text = guest.value;
-    list.options.add(option);
+	var guestVal=guest.value;
+	while(guestVal.indexOf(";")!=-1){		
+		var optionValue=guestVal.substring(0,guestVal.indexOf(";"));		
+		addOption(list,optionValue,'g:'+optionValue);				
+	    guestVal=guestVal.substring(guestVal.indexOf(";")+1);		
+	}
+	if(guestVal.length>0){
+		addOption(list,guestVal,'g:'+guestVal);
+	}	
+
     guest.value = "";
   }
 
+    function isGuestAllreadyAdded(guest){
+	  var selreceivers=document.getElementById('selreceivers');
+	  for(var j=0; j<selreceivers.length;j++){
+	    if(selreceivers.options[j].value==guest){
+	      return true;
+	    }
+	  }
+	  return false
+	}
+  
   function removeAtt() {
     var list = document.getElementById('selreceivers');
     if (list == null) {
@@ -288,6 +307,25 @@ function addOrganisation(orgId, orgName){
     return false;
   }
 
+  function reccuringEvent(){
+	  alert('gasaketebelia');
+  }
+
+  function sendEvent(){
+	var list = document.getElementById('selreceivers');  
+  	if(list!=null){
+  		for(var i = 0; i < list.length; i++) {
+      		list.options[i].selected = true;
+  		}
+  	}
+	  
+	  document.getElementById('hdnMethod').value = 'save';
+	  <digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
+	  document.calendarEventForm.action = "<%=sendEvent %>";
+	  document.calendarEventForm.target = "_self";
+	  document.calendarEventForm.submit();  
+  }	  
+	
   function setMethod(mth){
     var h=document.getElementById("hdnMethod");
     if(h!=null){
@@ -301,13 +339,41 @@ function addOrganisation(orgId, orgName){
 <digi:form action="/showCalendarEvent.do">
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
     <table>
+    	<tr>
+			<td height=33>
+				<span class=crumb>
+					<c:set var="translation">
+						<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+					</c:set>
+					<digi:link href="/../aim/showDesktop.do" styleClass="comment" title="${translation}" >
+						<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+					</digi:link>&nbsp;&gt;&nbsp;
+					<digi:link href="/../calendar/showCalendarView.do" styleClass="comment" title="${translation}">
+						<digi:trn key="aim:Calendar">Calendar</digi:trn>
+					</digi:link>&nbsp;&gt;&nbsp;
+					<digi:trn key="aim:createNewEvent">Create New Event</digi:trn>
+				</span>
+			</td>
+		</tr>	
+		<tr>
+			<td height=16 vAlign=center width=571>
+				<span class=subtitle-blue>	<digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn> </span>
+			</td>
+		</tr>
+		<tr>				
+           <td align="center" style="padding: 0px 3px 0px 3px;">
+           		<table width="100%">
+                	<tr>
+                    	<td  style="height: 5px;"/>
+                    </tr>
+                    <tr>
+                   	 	<td style="background-color: #CCDBFF;height: 18px;"/>
+                    </tr>
+                </table>
+           </td>
+        </tr>	
         <tr>
-            <td style="font-family: Tahoma;">
-                <div style="padding: 10px;">
-                    <div style="padding:7px;text-align:center;background-color: #CCECFF; font-size: 18px; font-weight: bold;">
-                        <digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn>
-                    </div>
-                </div>
+            <td style="font-family: Tahoma;">                
                 <div style="padding: 20px; background-color: #F5F5F5;font-size: 16px; font-weight: bold;">
                   <digi:errors/>
                   <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
@@ -317,15 +383,15 @@ function addOrganisation(orgId, orgName){
                             <td style="vertical-align: top; padding: 10px;">
                                 <table>
                                     <tr>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td>
                                             <digi:trn key="calendar:EventTitle">Event title:</digi:trn>
                                         </td>
                                         <td>
-                                            <html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px;"/>
+                                            <html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px;" styleClass="inp-text"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td>
                                             <digi:trn key="calendar:cmbCalendarType">Calendar type:</digi:trn>
                                         </td>
                                         <td>
@@ -339,7 +405,7 @@ function addOrganisation(orgId, orgName){
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td >
                                             <digi:trn key="calendar:EventType">Event type:</digi:trn>
                                         </td>
                                         <td>
@@ -353,7 +419,7 @@ function addOrganisation(orgId, orgName){
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td>
                                             <digi:trn key="calendar:StartDate">Start date:</digi:trn>
                                         </td>
                                         <td>
@@ -471,7 +537,7 @@ function addOrganisation(orgId, orgName){
                                        </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td >
                                             <digi:trn key="calendar:EndDate">End Date</digi:trn>
                                         </td>
                                         <td>
@@ -596,13 +662,12 @@ function addOrganisation(orgId, orgName){
                                     <tr>
                                         <td>
                                         </td>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td>
                                           <html:hidden name="calendarEventForm" property="privateEvent"/>
                                           <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
-                                          <c:if test="${!calendarEventForm.privateEvent }">
-                                          CHECKED
-                                          </c:if>
-                                          
+	                                          <c:if test="${!calendarEventForm.privateEvent }">
+	                                          	CHECKED
+	                                          </c:if>                                          
                                           />
                                           <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
                                         </td>
@@ -612,52 +677,63 @@ function addOrganisation(orgId, orgName){
                             <td style="padding: 10px; vertical-align: top;font-size: 14px; font-weight: bold;">
                                 <table>
                                     <tr>
-                                        <td style="vertical-align: top;font-size: 14px; font-weight: bold;">
+                                        <td>
                                             Organisations
                                         </td>
-                                        <td>
-
+                                        <td valign="top">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="calendarEventForm" property="organizations"
-												id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
-														<tr>
-															<td width="3">
-																<html:multibox property="selOrganizations">
-																	<bean:write name="organization" property="ampOrgId" />
-																</html:multibox>
-															</td>
-															<td align="left">
-																<bean:write name="organization" property="name" />
-															</td>
-														</tr>
-													</table>
-												</td></tr>
-												</logic:iterate>
-												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
-														<tr>
-															<td>
-															<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>			
-															</td>
-															<td>
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs()">
-																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
-																</html:button>
-															</td>
-														</tr>
-													</table>
-												</td></tr>
+												<logic:notEmpty name="calendarEventForm" property="organizations">
+													<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														<tr><td>
+															<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+																<tr>
+																	<td width="3">
+																		<html:multibox property="selOrganizations">
+																			<bean:write name="organization" property="ampOrgId" />
+																		</html:multibox>
+																	</td>
+																	<td align="left">
+																		<bean:write name="organization" property="name" />
+																	</td>
+																</tr>
+															</table>
+														</td></tr>
+													</logic:iterate>	
+												</logic:notEmpty>
+												<logic:empty name="calendarEventForm" property="organizations">
+													<tr>
+														<td>
+															<digi:trn key="calendar:noOrgs">No Organisations</digi:trn>
+														</td>
+													</tr>
+												</logic:empty>											
 											</table>
                                         </td> 
+                                        <td>                                        	
+											<table cellSpacing=1 cellPadding=1>
+												<tr>
+													<td>
+														<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" >
+															<digi:trn key="btn:addNew">Add New</digi:trn>
+														</aim:addOrganizationButton>			
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs()" style="width:65px;">
+															<digi:trn key="btn:remove">Remove</digi:trn>
+														</html:button>
+													</td>
+												</tr>
+											</table>											
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td style="vertical-align: top;font-size: 14px; font-weight: bold;">
+                                        <td >
                                             <digi:trn key="calendar:Description">Description</digi:trn>
                                         </td>
                                         <td>
- 											<html:textarea name="calendarEventForm" styleId="eventTitle" property="description" style="width: 220px;"/>
+ 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 320px;"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -667,7 +743,7 @@ function addOrganisation(orgId, orgName){
                             <td colspan="20" style="text-align:center;">
                                 <table align="center">
                                     <tr>
-                                        <td style="font-size: 14px; font-weight: bold;">
+                                        <td >
                                             <digi:trn key="calendar:Attendee">Attendee</digi:trn>
                                         </td>
                                     </tr>
@@ -692,16 +768,17 @@ function addOrganisation(orgId, orgName){
                                         </td>
                                         <td>
                                             <div>
-                                              <input type="button" onclick="MyaddUserOrTeam();" style="width: 65px;" value="<digi:trn key="calendar:btnadd">Add</digi:trn>">
-                                            </div>
+                                              <input type="button" onclick="MyaddUserOrTeam();" style="width: 80px;" value="<digi:trn key="calendar:btnaddUser">Add User</digi:trn>">
+                                            </div>                                            
                                             <div>
-                                              <input type="button" style="width: 65px;" onclick="MyremoveUserOrTeam()" value="<digi:trn key="calendar:btnRemove">Remove</digi:trn>" >
+                                              <input type="button" style="width: 80px;" onclick="MyremoveUserOrTeam()" value="<digi:trn key="calendar:btnRemoveUser">Remove User</digi:trn>" >
                                             </div>
                                         </td>
                                         <td>
                                             <div>
                                                 <input id="guest" type="text" style="width:150px;">
                                                 <input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
+                                                <digi:trn key="calendar:separateEmails">Please separate email addresses by semicolons</digi:trn>
                                             </div>
                                             <div>
                                               <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 120px;">
@@ -716,10 +793,12 @@ function addOrganisation(orgId, orgName){
                             </td>
                         </tr>
                         <tr>
-                          <td colspan="10" style="text-align:center;">
-                            <input type="submit" onclick="return deleteEvent();" value="<digi:trn key="calendar:deleteBtn">Delete</digi:trn>">
-                            &nbsp;
+                          <td colspan="10" style="text-align:center;">                            
                             <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
+                            &nbsp;
+                            <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+                            &nbsp;
+                            <input type="submit" onclick="return reccuringEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
                           </td>
                         </tr>
                     </table>
@@ -728,4 +807,12 @@ function addOrganisation(orgId, orgName){
         </tr>
     </table>
 </digi:form>
-
+<script type="text/javascript">
+	//attach character counters
+	$("#eventTitle").charCounter(50,{
+									format: " (%1"+ " <digi:trn key="calendar:charactersRemaining">characters remaining</digi:trn>)",
+									pulse: false});
+	$("#descMax").charCounter(300,{
+									format: " (%1"+ " <digi:trn key="calendar:charactersRemaining">characters remaining</digi:trn>)",
+									pulse: false});
+</script>

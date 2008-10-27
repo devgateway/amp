@@ -185,7 +185,7 @@ public class DateBreakDown {
     private static String getDayOfWeekName(int index, int type) {
         String dayName[][] = {
             {
-            "S", "M", "T", "W", "T", "F", "S"}, {
+            "Sun", "M", "T", "W", "T", "F", "S"}, {
             "E", "S", "M", "R", "H", "A", "K"}
         };
         int calendarType = type == CalendarOptions.CALENDAR_TYPE_GREGORIAN ?

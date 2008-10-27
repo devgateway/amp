@@ -29,6 +29,8 @@ public class IndicatorSectorRegionForm extends ActionForm {
     private String regionName;
     private int selectedPage;
     private long pages;
+    //used for search
+    private String keyWord;
 
     public long getPages() {
         return pages;
@@ -141,4 +143,13 @@ public class IndicatorSectorRegionForm extends ActionForm {
     public void setIndSectList(List<IndicatorSector> indSectList) {
         this.indSectList = indSectList;
     }
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
+	}
+    
 }

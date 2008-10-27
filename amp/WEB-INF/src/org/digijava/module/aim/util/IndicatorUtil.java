@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 		
+import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -26,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -843,7 +846,7 @@ public class IndicatorUtil {
 	public static class IndicatorNameComparator implements Comparator<AmpIndicator> {
 
 		public int compare(AmpIndicator indic0, AmpIndicator indic1) {
-			return indic0.getName().compareTo(indic1.getName());
+			return indic0.getName().toLowerCase().compareTo(indic1.getName().toLowerCase());
 		}
 		
 	}
@@ -1752,5 +1755,29 @@ public class IndicatorUtil {
 			return risk;
 		}
 	 
-	  
+	 /**
+	     * This class is used for sorting IndicatorSector onjects by name
+	     * @author Dare Roinishvili
+	     *
+	     */
+	    public static class HelperIndicatorSectorNameComparator implements Comparator<IndicatorSector> {
+	        Locale locale;
+	        Collator collator;
+
+	        public HelperIndicatorSectorNameComparator(){
+	            this.locale=new Locale("en", "EN");
+	        }
+
+	        public HelperIndicatorSectorNameComparator(String iso) {
+	            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+	        }
+
+	        public int compare(IndicatorSector o1, IndicatorSector o2) {
+	            collator = Collator.getInstance(locale);
+	            collator.setStrength(Collator.TERTIARY);
+
+	            int result = collator.compare(o1.getIndicator().getName().toLowerCase(),o2.getIndicator().getName().toLowerCase());
+	            return result;
+	        }
+	    } 
 }

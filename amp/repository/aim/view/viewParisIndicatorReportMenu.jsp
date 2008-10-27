@@ -21,6 +21,157 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<style type="text/css">
+
+
+#tabs {
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 8pt;
+	clear: both;
+	text-align: center;
+}
+
+#tabs ul {
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#tabs li { 
+	 float: left;
+}
+
+
+
+#tabs a, #tabs span { 
+	font-size: 8pt;
+}
+
+#tabs ul li a { 
+	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	float:left;
+	margin:0pt 0px 0pt 0pt;
+	position:relative;
+	text-decoration:none;
+	top:0pt;
+
+}
+
+#tabs ul li a div { 
+	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
+	padding: 4px 10px 4px 10px;
+}
+
+#tabs ul li span a { 
+	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
+	color:#FFFFFF;
+	float:left;
+	margin:0pt 0px 0pt 0pt;
+	position:relative;
+	text-decoration:none;
+	top:0pt;
+
+}
+
+#tabs ul li span a div { 
+	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
+	padding: 4px 10px 4px 10px;
+}
+
+#tabs a:hover {
+    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
+}
+
+#tabs a:hover span {
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+}
+#tabs a:hover div {
+    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+}
+
+#tabs a.active {
+	position: relative;
+	top: 0;
+	margin: 0 2px 0 0;
+	float: left;
+	background: #FFF3B3;
+	padding: 4px 10px 4px 10px;
+	text-decoration: none;
+	color: #333;
+}
+
+#tabs a.active:hover {
+	position: relative;
+	top: 0;
+	margin: 0 2px 0 0;
+	float: left;
+	background: #FFF3B3;
+	padding: 6px 10px 6px 10px;
+	text-decoration: none;
+	color: #333;
+}
+
+
+#subtabs ul {
+	display: inline;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#subtabs li {
+	float: left;
+	padding: 0px 4px 0px 4px;
+}
+
+#subtabs a, #subtabs span { 
+	font-size: 8pt; 
+}
+
+#subtabs a {
+}
+
+#subtabs ul li span {
+	text-decoration: none;
+}
+
+#subtabs ul li div span {
+	text-decoration: none;
+}
+
+#subtabs {
+	text-align: center;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size: 8pt;
+	padding: 2px 4px 2px 4px;
+	background-color:#CCDBFF;
+}
+
+#main {
+	clear:both;
+	text-align: left;
+	border-top: 2px solid #222E5D;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	padding: 2px 4px 2px 4px;
+}
+html>body #main {
+	width:742px;
+}
+
+#mainEmpty {
+	border-top: 2px solid #222E5D;
+	width: 750px;
+	clear:both;
+}
+html>body #mainEmpty {
+	clear:both;
+	width:752px;
+}
+
+</style>
 
 <digi:instance property="aimParisIndicatorReportForm" />
 
@@ -117,6 +268,36 @@
 														</td>
 
 													</tr>
+										
+										<logic:notEmpty name="aimParisIndicatorReportForm"  property="indicatorsColl">
+											<div style="padding-left:5px;width:900px;">
+											<DIV id="tabs">
+											<UL>
+											<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator">
+												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+												<c:if test="${report.indicatorCode != '10b'}">
+                                                    <feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
+														<c:set target="${urlParams}" property="indcId" value="${report.ampIndicatorId}" />
+														<c:set target="${urlParams}" property="reset" value="true" />
+														<LI>
+						                               		<a name="node"><div>
+																<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>
+						                                    </div></a>
+														</LI>
+														<LI><span>
+															<digi:link href="/parisIndicatorReport.do" name="urlParams" styleClass="h-box" title="${translation}" target="_self">
+															<div>
+																<digi:trn key="aim:parisIndicator:${report.indicatorCode}"><c:out value="Paris Indicator ${report.indicatorCode}"/></digi:trn>
+							                                </div>
+															</digi:link>
+							                            </span></LI>
+                                                    </feature:display>
+												</c:if>
+											</logic:iterate>
+											</UL>
+											</DIV>
+											</div>
+										</logic:notEmpty>
 
 										<logic:empty name="aimParisIndicatorReportForm"  property="indicatorsColl">
 
@@ -132,47 +313,7 @@
 
 										</logic:empty>
 
-										<logic:notEmpty name="aimParisIndicatorReportForm"  property="indicatorsColl">
-
-											<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl"
-
-													   type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator">
-
-											<c:if test="${report.indicatorCode != '10b'}">
-
-												<TR><TD>
-                                                    <feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
-
-													<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
-
-													<strong>[${report.indicatorCode}]</strong>
-
-													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-
-													<c:set target="${urlParams}" property="indcId" value="${report.ampIndicatorId}" />
-
-													<c:set target="${urlParams}" property="reset" value="true" />
-
-													<c:set var="translation">
-
-														<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
-
-													</c:set>
-
-													<digi:link href="/parisIndicatorReport.do" name="urlParams" styleClass="h-box" title="${translation}" >
-														<digi:trn key="aim:${report.nameTrn}">
-														<c:out value="${report.name}"/>
-														</digi:trn>
-
-													</digi:link>
-                                                    </feature:display>
-												</TD></TR>
-
-											</c:if>
-
-										</logic:iterate>
-
-										</logic:notEmpty>
+										
 
 												</table>
 

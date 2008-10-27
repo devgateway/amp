@@ -38,6 +38,21 @@ public class AmpFundingDetail implements Serializable
         private String disbOrderId;
         private IPAContract contract;
         private Double transactionAmountInUSD;
+        
+        public AmpFundingDetail(){}
+        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent){
+            this.transactionType=transactionType;
+            this.adjustmentType=adjustmentType;
+            this.transactionDate=transactionDate;
+            this.ampCurrencyId=ampCurrencyId;
+            if(percent==null||percent==0){
+            this.transactionAmount=transactionAmount;
+            }
+            else{
+                this.transactionAmount=transactionAmount*percent/100;
+            }
+        }
+        
 
         public Double getTransactionAmountInUSD() {
             return transactionAmountInUSD;

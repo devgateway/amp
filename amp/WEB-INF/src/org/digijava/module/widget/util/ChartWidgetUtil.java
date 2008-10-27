@@ -3,11 +3,13 @@ package org.digijava.module.widget.util;
 import java.awt.Color;
 import java.awt.Font;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,16 +24,21 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
-import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
@@ -45,16 +52,29 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardXYItemLabelGenerator;
 import org.jfree.chart.labels.XYItemLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.Range;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.ui.RectangleInsets;
+import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.util.DecimalWraper;
+import org.jfree.chart.labels.StandardCategoryToolTipGenerator;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StackedAreaRenderer;
+
 
 
 /**
@@ -65,6 +85,7 @@ import org.jfree.ui.RectangleInsets;
 public class ChartWidgetUtil {
 
     private static Logger logger = Logger.getLogger(ChartWidgetUtil.class);
+    public final static int MILLION=100000;
 
     /**
      * Generates chart object from specified indicator and options.
@@ -123,6 +144,168 @@ public class ChartWidgetUtil {
 
 		return chart;
 	}
+    
+      /**
+     * Generates chart object from specified indicator and options.
+     * This chart then can be rendered as image or pdf or file.
+     * @param indicatorCon
+     * @param opt
+     * @return
+     * @throws DgException
+     */
+    public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException{
+		JFreeChart chart = null;
+		Font font8 = new Font(null,0,12);
+		CategoryDataset dataset=getTypeOfAidDataset(filter);
+		chart=ChartFactory.createStackedBarChart("Type of Aid","","Amount in millions",dataset,PlotOrientation.VERTICAL, true, true,false);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+		
+		
+		return chart;
+	}
+    
+    
+      /**
+     * Generates chart object from specified indicator and options.
+     * This chart then can be rendered as image or pdf or file.
+     * @param indicatorCon
+     * @param opt
+     * @return
+     * @throws DgException
+     */
+    public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException{
+		JFreeChart chart = null;
+		Font font8 = new Font(null,0,12);
+		CategoryDataset dataset=getPledgesCommDisbDataset(filter);
+		chart=ChartFactory.createBarChart("Pledges/Comm/Disb","","Amount in millions",dataset,PlotOrientation.VERTICAL, true, true,false);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+                  // get a reference to the plot for further customisation...
+              CategoryPlot plot = chart.getCategoryPlot();
+              BarRenderer renderer = (BarRenderer) plot.getRenderer();
+              renderer.setDrawBarOutline(false);
+              renderer.setItemMargin(0);
+           
+	      return chart;
+	}
+    
+      /**
+     * Generates chart object from specified indicator and options.
+     * This chart then can be rendered as image or pdf or file.
+     * @param indicatorCon
+     * @param opt
+     * @return
+     * @throws DgException
+     */
+    public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException{
+		JFreeChart chart = null;
+		Font font8 = new Font(null,0,12);
+		CategoryDataset dataset=getODAProfileDataset(filter);
+		chart=ChartFactory.createStackedAreaChart("ODA Profile","","Amount in millions",dataset,PlotOrientation.VERTICAL, true, true,false);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+	
+		
+		return chart;
+	}
+    
+    
+    private static CategoryDataset getTypeOfAidDataset(FilterHelper filter) throws DgException {
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        if (filter.getOrgId() != null) {
+            for (long i = year - 4; i <= year; i++) {
+                Collection<AmpCategoryValue> typeOfAids = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+                for (AmpCategoryValue aid : typeOfAids) {
+                    DecimalWraper funding = getFunding(filter.getOrgId(), i, aid.getId(), currCode,filter.getTransactionType());
+                    result.addValue(funding.doubleValue()/MILLION, aid.getValue(), new Long(i));
+                }
+
+            }
+
+        }
+        
+        return result;
+    }
+    
+     private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
+        DefaultCategoryDataset result = new DefaultCategoryDataset();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        if (filter.getOrgId() != null) {
+            for (long i = year - 4; i <= year; i++) {
+                Collection<AmpCategoryValue> financingInstruments = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+                for (AmpCategoryValue financingInstrument : financingInstruments) {
+                    DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), i, financingInstrument.getId(), currCode,filter.getTransactionType());
+                    result.addValue(funding.doubleValue()/MILLION, financingInstrument.getValue(), new Long(i));
+                }
+
+            }
+
+        }
+        
+        return result;
+    }
+    
+    
+    private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter) throws DgException {
+       DefaultCategoryDataset result = new DefaultCategoryDataset();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        if (filter.getOrgId() != null) {
+            for (long i = year - 2; i <= year; i++) {
+              Double fundingPledge = getPledgesFunding(filter.getOrgId(), i, currCode);
+              result.addValue(fundingPledge .doubleValue()/MILLION, "Pledges", new Long(i));
+              DecimalWraper funding = getFunding(filter.getOrgId(), i, currCode,true);  
+              result.addValue(funding.doubleValue()/MILLION, "Actual commitments", new Long(i));   
+              funding = getFunding(filter.getOrgId(), i, currCode,false);
+              result.addValue(funding.doubleValue()/MILLION, "Actual disbursements", new Long(i)); 
+
+            }
+
+        }
+        
+        return result;
+    }
+    
     
     /**
      * Generates chart dataset from AMP data.
@@ -334,6 +517,45 @@ public class ChartWidgetUtil {
 		plot.setIgnoreZeroValues(true);
 		return result;
 	}
+        
+        
+    public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
+        JFreeChart chart = null;
+        Font font8 = new Font(null, 0, 12);
+        DefaultPieDataset dataset = getDonorSectorDataSet(filter);
+        chart = ChartFactory.createPieChart("Sector Breakdown", dataset, true, true, false);
+        chart.getTitle().setFont(font8);
+        if (opt.isShowLegend()) {
+            chart.getLegend().setItemFont(font8);
+        }
+        PiePlot plot = (PiePlot) chart.getPlot();
+        String pattern = "{0} = {1} ({2})";
+        if (opt.getLabelPattern() != null) {
+            pattern = opt.getLabelPattern();
+        }
+        DecimalFormat format = FormatHelper.getDecimalFormat();
+        format.setMaximumFractionDigits(0);
+        PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator(pattern, format, new DecimalFormat("0.0%"));
+        plot.setLabelGenerator(gen);
+
+
+
+        return chart;
+    }
+       
+       public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
+     	JFreeChart chart = null;
+		Font font8 = new Font(null,0,12);
+		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
+		chart=ChartFactory.createPieChart("Regional Breakdown",dataset, true, true,false);
+		chart.getTitle().setFont(font8);
+		if (opt.isShowLegend()){
+			chart.getLegend().setItemFont(font8);		
+		}
+		
+		
+		return chart;
+    }
 
 	/**
 	 * Generates dataset for sector-donor pie chart.
@@ -369,7 +591,7 @@ public class ChartWidgetUtil {
 		}
 		return ds;
 	}
-	
+        
 	public static Date getStartOfYear(int year){
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.set(year, 0, 1, 0, 0, 0);
@@ -462,6 +684,338 @@ public class ChartWidgetUtil {
 		}
 		return fundings;
 	}
+        
+       
+	public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
+            Long year = filter.getYear();
+            if (year == null || year == -1) {
+                year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+            }
+            year-=1; // previous fiscal year
+            Long currId = filter.getCurrId();
+            String currCode;
+            if (currId == null) {
+                currCode = "USD";
+            } else {
+                currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+            }
+            Long orgID=filter.getOrgId();
+            int transactionType=filter.getTransactionType();
+            DefaultPieDataset ds = new DefaultPieDataset();
+        String oql = "select distinct reg  from ";
+        oql += AmpFundingDetail.class.getName() +
+                " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+        oql += " inner join act.locations loc inner join loc.location.ampRegion reg where " +
+                " reg is not null and f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1";
+        oql += " and year(fd.transactionDate)=:year   and act.team is not null ";
+        Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
+        List<AmpRegion> regions = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            query.setLong("transactionType", transactionType);
+            regions = query.list();
+            Iterator<AmpRegion> regionIter = regions.iterator();
+            while (regionIter.hasNext()) {
+                AmpRegion region = regionIter.next();
+                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,loc.locationPercentage) ";
+                oql += " from ";
+                oql += AmpFundingDetail.class.getName() +
+                        " as fd inner join fd.ampFundingId f ";
+                oql += "   inner join f.ampActivityId act inner join act.locations loc inner join " +
+                        " loc.location.ampRegion reg ";
+
+
+                oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
+
+                oql += " and year(fd.transactionDate)=:year and reg is not null and reg.ampRegionId=  " + region.getAmpRegionId();
+                query = session.createQuery(oql);
+                query.setLong("year", year);
+                query.setLong("orgID", orgID);
+                query.setLong("transactionType", transactionType);
+                List<AmpFundingDetail> fundingDets = query.list();
+                System.out.println(query.list().size());
+                FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                cal.doCalculations(fundingDets, currCode);
+                DecimalWraper total =null;
+                if(transactionType==0){
+                    total=cal.getTotActualComm();
+                }
+                else{
+                    total=cal.getTotActualDisb();
+                }
+                ds.setValue(region.getName(), total.doubleValue()/MILLION);
+                
+            }
+
+
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+        return ds;
+
+    }
+     
+	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+        year -= 1; // previous fiscal year
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        Long orgID = filter.getOrgId();
+        int transactionType=filter.getTransactionType();
+        DefaultPieDataset ds = new DefaultPieDataset();
+        String oql = "select distinct sec  from ";
+        oql += AmpFundingDetail.class.getName() +
+                " as fd inner join fd.ampFundingId f ";
+
+        oql += "   inner join f.ampActivityId act " +
+                " inner join act.sectors actSec " +
+                " inner join actSec.sectorId sec " +
+                " inner join actSec.activityId act " +
+                " inner join actSec.classificationConfig config ";
+
+        oql += "  where  " +
+                "  f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType  and  fd.adjustmentType = 1 ";
+        oql += " and year(fd.transactionDate)=:year   and act.team is not null and config.name='Primary' ";
+        Session session = PersistenceManager.getRequestDBSession();
+        @SuppressWarnings("unchecked")
+        List<AmpSector> sectors = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            query.setLong("transactionType", transactionType);
+            sectors = query.list();
+            Iterator<AmpSector> sectorIter = sectors.iterator();
+            while (sectorIter.hasNext()) {
+                AmpSector sector = sectorIter.next();
+                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage) ";
+                oql += " from ";
+                oql += AmpFundingDetail.class.getName() +
+                        " as fd inner join fd.ampFundingId f ";
+                oql += "   inner join f.ampActivityId act " +
+                        " inner join act.sectors actSec " +
+                        " inner join actSec.sectorId sec " +
+                        " inner join actSec.activityId act " +
+                        " inner join actSec.classificationConfig config ";
+
+                oql += "  where  " +
+                        "   f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
+                oql += " and year(fd.transactionDate)=:year   and act.team is not null and config.name='Primary'  ";
+                oql += " and  sec.ampSectorId=  " + sector.getAmpSectorId();
+                query = session.createQuery(oql);
+                query.setLong("year", year);
+                query.setLong("orgID", orgID);
+                query.setLong("transactionType", transactionType);
+                List<AmpFundingDetail> fundingDets = query.list();
+                System.out.println(query.list().size());
+                FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                cal.doCalculations(fundingDets, currCode);
+                DecimalWraper total =null;
+                if(transactionType==0){
+                    total=cal.getTotActualComm();
+                }
+                else{
+                    total=cal.getTotActualDisb();
+                }
+                ds.setValue(sector.getName(), total.doubleValue()/MILLION);
+                
+            }
+
+
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+        return ds;
+
+    }
+        
+        
+      
+	public static DecimalWraper getFundingByFinancingInstrument(Long orgID, Long year, Long financingInstrumentId, String currCode, int transactionType) throws DgException {
+        DecimalWraper total =null;
+        String oql = "select fd ";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName() +
+                " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+
+
+        oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
+       
+        oql += " and year(fd.transactionDate)=:year ";
+  
+        oql += "  and act.team is not null and f.financingInstrument=:financingInstrumentId ";
+
+
+        Session session = PersistenceManager.getRequestDBSession();       
+        @SuppressWarnings("unchecked")
+        List<AmpFundingDetail> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            query.setLong("transactionType", transactionType);
+            query.setLong("financingInstrumentId", financingInstrumentId);
+            fundingDets = query.list();
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            cal.doCalculations(fundingDets, currCode);
+            
+            if (transactionType == 0) {
+                total = cal.getTotActualComm();
+            } else {
+                total = cal.getTotActualDisb();
+            }
+           
+
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+
+
+        return total;
+    }
+        
+        
+       
+	public static DecimalWraper getFunding(Long orgID, Long year, Long assistanceTypeId, String currCode,int transactionType) throws DgException {
+        DecimalWraper total = null;
+        String oql = "select fd ";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName() +
+                " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+
+
+        oql += " where  fd.transactionType =:transactionType and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";;
+       
+        oql += " and year(fd.transactionDate)=:year ";
+  
+        oql += "  and act.team is not null and f.typeOfAssistance=:assistanceTypeId ";
+
+
+        Session session = PersistenceManager.getRequestDBSession();       
+        @SuppressWarnings("unchecked")
+        List<AmpFundingDetail> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            query.setLong("assistanceTypeId", assistanceTypeId);
+            query.setLong("transactionType", transactionType);
+            fundingDets = query.list();
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            cal.doCalculations(fundingDets, currCode);
+            if (transactionType == 0) {
+                total = cal.getTotActualComm();
+            } else {
+                total = cal.getTotActualDisb();
+            }
+
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+
+
+        return total;
+    }
+        
+        
+       
+    public static double getPledgesFunding(Long orgID, Long year, String currCode) throws DgException {
+       double totalPlannedPldges = 0;
+        String oql = "select fd ";
+        oql += " from ";
+        oql += AmpOrganisation.class.getName() +
+                " org inner join org.fundingDetails fd ";
+    
+        oql += " where    fd.adjustmentType = 0 and org.ampOrgId=:orgID ";
+       
+        oql += " and year(fd.date)=:year ";
+  
+        Session session = PersistenceManager.getRequestDBSession();       
+        @SuppressWarnings("unchecked")
+        List<AmpPledge> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            fundingDets = query.list();
+           Iterator<AmpPledge> fundDetIter=fundingDets.iterator();
+           while(fundDetIter.hasNext()){
+               AmpPledge pledge=fundDetIter.next();
+               java.sql.Date dt = new java.sql.Date(pledge.getDate().getTime());
+               double frmExRt = Util.getExchange(pledge.getCurrency().getCurrencyCode(), dt);
+               double toExRt = Util.getExchange(currCode, dt);
+               DecimalWraper amt = CurrencyWorker.convertWrapper(pledge.getAmount(), frmExRt, toExRt, dt);
+               totalPlannedPldges+=amt.doubleValue();
+           }
+          
+           
+
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+
+
+        return totalPlannedPldges;
+    }
+        
+          
+       
+    public static DecimalWraper getFunding(Long orgID, Long year, String currCode, boolean isComm) throws DgException {
+        String oql = "select fd ";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName() +
+                " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act ";
+
+
+        oql += " where  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
+       
+        oql += " and year(fd.transactionDate)=:year ";
+  
+        oql += "  and act.team is not null";
+
+
+        Session session = PersistenceManager.getRequestDBSession();       
+        @SuppressWarnings("unchecked")
+        List<AmpFundingDetail> fundingDets = null;
+        try {
+            Query query = session.createQuery(oql);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            fundingDets = query.list();
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            cal.doCalculations(fundingDets, currCode);
+            if(isComm){
+            return  cal.getTotActualComm();
+            }
+            else{
+                return cal.getTotActualDisb();
+            }
+
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+    }
     
     public static Double convert(Double amount,AmpCurrency originalCurrency){
     	try {

@@ -19,7 +19,27 @@ public class ShowWidgetChartForm extends ActionForm {
 	private String selectedYear;
 	private Boolean showLegend;
 	private Boolean showLabels;
-	
+        private Long chartType;
+        private Long timestamp;
+
+    
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+
+        public Long getChartType() {
+            return chartType;
+        }
+
+        public void setChartType(Long chartType) {
+            this.chartType = chartType;
+        }
+
 	public String getSelectedYear() {
 		return selectedYear;
 	}

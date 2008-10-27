@@ -13,6 +13,7 @@ import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
+import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.WidgetTeaserForm;
 import org.digijava.module.widget.util.WidgetUtil;
 /**
@@ -58,6 +59,15 @@ public class WidgetTeaser extends TilesAction {
 			AmpWidgetIndicatorChart cWidget = (AmpWidgetIndicatorChart) widget;
 			wform.setRendertype(WidgetUtil.CHART_INDICATOR);
 			wform.setId(cWidget.getId());
+			return null;
+		}
+                // if widget is Org profile widget
+		if((widget instanceof AmpWidgetOrgProfile)){
+			logger.debug("Rendering indicator chart widget for "+wform.getPlaceName());
+			AmpWidgetOrgProfile orgWidget = (AmpWidgetOrgProfile) widget;
+			wform.setRendertype(WidgetUtil.ORG_PROFILE);
+			wform.setId(orgWidget.getId());
+                        wform.setType(orgWidget.getType());
 			return null;
 		}
 		//if widget is table widget

@@ -13,6 +13,14 @@
                 document.gisIndicatorSectorRegionForm.submit();
             
     }
+
+    function viewall(){
+	    <digi:context name="viewIndicators" property="context/module/moduleinstance/indSectRegManager.do?actType=viewAll&view=all" />
+	    document.gisIndicatorSectorRegionForm.action = "<%= viewIndicators %>";
+	    document.gisIndicatorSectorRegionForm.submit();
+	  
+	}
+	
 </script>
 <digi:instance property="gisIndicatorSectorRegionForm" />
 <digi:form action="/indSectRegManager.do~actType=viewAll">
@@ -29,7 +37,7 @@
               <html:link  href="/aim/admin.do" styleClass="comment" title="${translation}" >
                 <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
               </html:link>&nbsp;&gt;&nbsp;
-                <digi:trn key="admin:Navigation:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
+                <digi:trn key="admin:Navigation:ResultsDashboardDataManager">Results Dashboard Data Manager</digi:trn>
 			</span>
 		</td>
                 <tr>
@@ -40,7 +48,7 @@
 	</tr>
 	<tr>
 		<td>
-			<span class="subtitle-blue"><digi:trn key="gis:indicatorSectorRegionManager:pageHeader">Indicator Sector Region Manager</digi:trn></span>
+			<span class="subtitle-blue"><digi:trn key="gis:ResultsDashboardDataManager:pageHeader">Results Dashboard Data Manager</digi:trn></span>
 		</td>
 	</tr>
 	<tr>
@@ -48,6 +56,34 @@
 			<a href="/widget/indSectRegManager.do~actType=create"><digi:trn key="gis:indicatorSectorRegionManager:createNew">Create new Indicator</digi:trn></a>
 		</td>
 	</tr>
+	
+	<tr>
+		<td width="100%">
+			<table>
+				<tr>
+					<td nowrap="nowrap">
+			           <b><digi:trn key="aim:indsearchkey">Keyword</digi:trn>:</b>
+			        </td>
+			        <td>
+			           <html:text property="keyWord" style="width:120px;font-family:verdana;font-size:11px;" />&nbsp;
+			        </td>
+			        <td>
+				         <c:set var="trngo">
+				         	<digi:trn key="aim:searchindbykey">Go</digi:trn>
+				         </c:set>
+				         <input type="submit" value="${trngo}" class="dr-menu"/>
+			        </td>
+			        <td>
+			        	<c:set var="trnviewall">
+			            	<digi:trn key="aim:viewallind">View All</digi:trn>
+			            </c:set>
+			            <input type="submit" value="${trnviewall}" onclick="viewall();" class="dr-menu" />
+			         </td>
+				</tr>
+			</table>
+		</td>		
+    </tr>	
+	
 	<tr>
 		<td>
 			

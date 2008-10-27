@@ -1,6 +1,7 @@
 package org.digijava.module.widget.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.form.IndicatorSectorRegionForm;
@@ -73,7 +75,20 @@ public class IndicatorSectorManager extends DispatchAction {
            to the previous page if all records were deleted on current page
          */
         Integer[] selectedPage={indSecForm.getSelectedPage()};
-        indSecForm.setIndSectList(DbUtil.getIndicatorSectorsForCurrentPage(selectedPage,RECORDS_PER_PAGE));
+        List<IndicatorSector> indSectorList=null;
+        
+        //filter indicator Sectors
+        String view=request.getParameter("view");
+        if(view!=null && view.equalsIgnoreCase("all")){
+        	indSecForm.setKeyWord(null);
+        	indSectorList=DbUtil.getIndicatorSectorsForCurrentPage(selectedPage,RECORDS_PER_PAGE,null);
+        }else{
+        	indSectorList=DbUtil.getIndicatorSectorsForCurrentPage(selectedPage,RECORDS_PER_PAGE,indSecForm.getKeyWord());
+        }
+        
+        
+        Collections.sort(indSectorList, new IndicatorUtil.HelperIndicatorSectorNameComparator());
+        indSecForm.setIndSectList(indSectorList);
         indSecForm.setSelectedPage( selectedPage[0]);
         indSecForm.setPages(pages);
         return mapping.findForward("forward");
@@ -237,7 +252,12 @@ public class IndicatorSectorManager extends DispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         IndicatorSectorRegionForm indSecForm = (IndicatorSectorRegionForm) form;
-        indSecForm.setIndicators(IndicatorUtil.getAllIndicators());
+        //sort indicators by Name
+        List<AmpIndicator> allIndicators=IndicatorUtil.getAllIndicators();
+        if(allIndicators!=null && allIndicators.size()>0){
+        	Collections.sort(allIndicators, new IndicatorUtil.IndicatorNameComparator());
+        }
+        indSecForm.setIndicators(allIndicators);
         indSecForm.setRegions(new ArrayList(LocationUtil.getAllRegionsUnderCountry(FeaturesUtil.getDefaultCountryIso())));
         indSecForm.setSelIndicator(-1l);
         indSecForm.setSelRegionId(-1l);
@@ -416,6 +436,7 @@ public class IndicatorSectorManager extends DispatchAction {
         indSecForm.setIndicatorName(null);
         indSecForm.setIndSectId(null);
         indSecForm.setSelectedPage(0);
+        indSecForm.setKeyWord(null);
         return viewAll(mapping, form, request, response);
 
     }

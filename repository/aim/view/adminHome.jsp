@@ -377,15 +377,15 @@
                             </td>
                           </tr>
                           </feature:display>
-                            <feature:display  name="Indicator Sector Region" module="WIDGETS">
+                            <feature:display  name="Results Dashboard Data" module="WIDGETS">
                           <tr>
                             <td class="f-names" nowrap="nowrap">
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="widget:clickToViewIndicatorSectorRegion">Click here to view Indicator Sector Region Manager</digi:trn>
+                                <digi:trn key="widget:clickToViewResultsDashboardDataManager">Click here to view Results Dashboard Data Manager</digi:trn>
                               </c:set>
                               <a href="/widget/indSectRegManager.do" title="${translation}">
-                                <digi:trn key="widget:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
+                                <digi:trn key="widget:ResultsDashboardDataManager">Results Dashboard Data Manager</digi:trn>
                               </a>
                             </td>
                           </tr>

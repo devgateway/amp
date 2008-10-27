@@ -79,7 +79,7 @@
                         <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                     </html:link>&nbsp;&gt;&nbsp;
                      <html:link  href="/widget/indSectRegManager.do~actType=viewAll" styleClass="comment">
-                    <digi:trn key="gis:Navigation:indicatorSectorRegionManager">Indicator Sector Region Manager</digi:trn>
+                    <digi:trn key="gis:Navigation:ResultsDashboardDataManager">Results Dashboard Data Manager</digi:trn>
                      </html:link>
                     &nbsp;&gt;&nbsp;
                     <digi:trn key="admin:Navigation:addEditValue">Add/Edit Data</digi:trn>

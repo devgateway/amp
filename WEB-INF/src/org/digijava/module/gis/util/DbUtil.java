@@ -304,14 +304,15 @@ public class DbUtil {
         return retVal;
     }
 
-    public static List getIndicatorSectorsForCurrentPage(Integer[] page,int numberPerPage) {
+    public static List getIndicatorSectorsForCurrentPage(Integer[] page,int numberPerPage,String keyWord) {
        List retVal = null;
        Session session = null;
        try {
            session = PersistenceManager.getRequestDBSession();
-           String query=" from " +
-                                         IndicatorSector.class.getName() +
-                                         " indsec ";
+           String query=" from " + IndicatorSector.class.getName() + " indsec ";
+           if(keyWord!=null){
+        	   query+=" where indsec.indicator.name like '%" +keyWord+ "%'";
+           }
            Query q = session.createQuery(query);
            int selectedIndex=(page[0]-1)*numberPerPage;
            q.setFirstResult(selectedIndex);
@@ -320,7 +321,7 @@ public class DbUtil {
            if(retVal!=null&&retVal.size()==0&page[0]!=1){
                page[0]=page[0]-numberPerPage;
                // If all records were deleted we need to navigate to the previous page
-               retVal=getIndicatorSectorsForCurrentPage(page,numberPerPage);
+               retVal=getIndicatorSectorsForCurrentPage(page,numberPerPage,keyWord);
            }
 
 

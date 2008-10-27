@@ -308,7 +308,8 @@ function addOrganisation(orgId, orgName){
   }
 
   function reccuringEvent(){
-	  alert('gasaketebelia');
+	   	<digi:context name="rev" property="context/module/moduleinstance/recurringEvent.do" />
+		openURLinWindow("<%=rev%>",832,624);
   }
 
   function sendEvent(){
@@ -333,6 +334,11 @@ function addOrganisation(orgId, orgName){
     }
   }
 
+function recurEvent(){
+ 	<digi:context name="rev" property="context/module/moduleinstance/recurringEvent.do" />
+	openURLinWindow("<%=rev%>",832,624);
+
+}
   </script>
 
 
@@ -797,6 +803,8 @@ function addOrganisation(orgId, orgName){
                             <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                             &nbsp;
                             <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+                            &nbsp;
+                            <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                             &nbsp;
                             <input type="submit" onclick="return reccuringEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
                           </td>

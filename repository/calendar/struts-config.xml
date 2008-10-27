@@ -25,6 +25,9 @@
       <forward name="forwardMonth" path="/calendar/viewMonthEvents.do" redirect="true" />
       <forward name="forwardYear" path="/calendar/viewYearEvents.do" redirect="true" />
     </action>
+    <action name="calendarEventForm"  path="/calendar/recurringEvent" scope="session" type="org.digijava.module.calendar.action.RecurringEvent" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=recurringEventPopupLayout" />
+    </action>
     <action name="calendarItemForm" path="/calendar/viewListEvents" scope="session" type="org.digijava.module.calendar.action.ViewListEvents" validate="false">
       <forward name="forward" path="/showLayout.do?layout=allEvents_ListView" />
     </action>
@@ -68,7 +71,7 @@
       <forward name="preview" path="/showLayout.do?layout=previewAmpEvent" />
       <forward name="forward" path="/calendar/showCalendarView.do" />
     </action>
-
+	
     <action input="/calendar/showCalendarEvent.do" name="calendarEventForm" path="/calendar/previewCalendarEvent" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarEvent" validate="true">
       <forward name="success" path="/showLayout.do?layout=previewAmpEvent" />
       <forward name="failure" path="/calendar/showCalendarEvent.do" />

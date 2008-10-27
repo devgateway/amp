@@ -43,6 +43,7 @@
 		<hibernate-class>org.digijava.module.calendar.dbentity.AmpEventType</hibernate-class>
         <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendar</hibernate-class>
         <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendarAttendee</hibernate-class>
+		<hibernate-class>org.digijava.module.calendar.dbentity.RecurrCalEvent</hibernate-class>
 	</hibernate-classes>
 	<!-- calendar classes End -->
 

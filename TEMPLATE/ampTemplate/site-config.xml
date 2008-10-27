@@ -509,6 +509,7 @@
 		<page-group masterLayout="popup" tile="body">
 			<module name="calendar">
 				<page>calendarOrgPopupLayout</page>
+				<page>recurringEventPopupLayout</page>
             </module>
             <module name="message">
             	<page>viewSelectedMessage</page>

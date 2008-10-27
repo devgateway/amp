@@ -96,9 +96,12 @@ SaveReportEngine.prototype.success		= function (o) {
 			getReportTitleEl().value	= "";
 		}
 	}
-	else
-		window.location.replace("/aim/showDesktop.do");
-		
+	else{
+		if ( getDesktopTab()=="true" )
+			window.location.replace("/aim/viewTeamReports.do?tabs=true");
+		else
+			window.location.replace("/aim/viewTeamReports.do?tabs=false");
+	}	
 }
 SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;

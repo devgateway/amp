@@ -631,8 +631,14 @@ function toggleSettings(){
 										  		</logic:empty>
 										  		<logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl">
 											  		<c:set var="index1" value="${numCols - 1}" />
+													<%int indexRow2 = 0;%>
 											  		<nested:iterate name="aimParisIndicatorReportForm" property="donorsColl">
+														<% indexRow2++; %>
+											    		<%if(indexRow2 % 2 == 0){%>
 														<tr>
+														<%}else{%>
+														<tr bgcolor="#EBEBEB">
+														<%}%>
 															<td width="15%" align="center" height="65">
 																<div align="center">
 																	<strong><nested:write property="donor" /></strong>

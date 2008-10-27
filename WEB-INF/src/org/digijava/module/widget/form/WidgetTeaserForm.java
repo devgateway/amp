@@ -33,6 +33,17 @@ public class WidgetTeaserForm extends ActionForm {
 	 */
 	private Long id;
 	private boolean showPlaceInfo;
+        
+        // used for Org Profile to determine which chart/text render
+        private Long type;
+
+        public Long getType() {
+            return type;
+        }
+
+        public void setType(Long type) {
+            this.type = type;
+        }
 	
 	public boolean isShowPlaceInfo() {
 		return showPlaceInfo;

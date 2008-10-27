@@ -243,6 +243,14 @@ public class ChartUtil {
 	public static class GraphMapRecord{
 		public Long timestamp;
 		public String map;
+
+        public String getMap() {
+            return map;
+        }
+
+        public void setMap(String map) {
+            this.map = map;
+        }
 	}
 
 	/**

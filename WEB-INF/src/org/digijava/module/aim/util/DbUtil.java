@@ -110,6 +110,11 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.common.util.DateTimeUtil;
 
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.orgProfile.helper.FilterHelper;
+import org.digijava.module.orgProfile.helper.Project;
+
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
         
@@ -2408,13 +2413,11 @@ public class DbUtil {
         return col;
     }
 
-    public static ArrayList<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
+    public static List<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
         Session session = null;
         Query q = null;
-        AmpOrganisation ampOrganisation = null;
-        ArrayList organisation = new ArrayList();
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
         String queryString = null;
-        Iterator iter = null;
 
         try {
             session = PersistenceManager.getRequestDBSession();
@@ -2424,25 +2427,82 @@ public class DbUtil {
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
-            iter = q.list().iterator();
+            organizations = q.list();
 
-            while (iter.hasNext()) {
-                ampOrganisation = (AmpOrganisation) iter.next();
-                organisation.add(ampOrganisation);
-            }
+           
 
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database "
                          + ex.getMessage());
         }
-        return organisation;
+        return organizations;
+    }
+    
+    public static List<Project> getOrganisationLargestProjects(FilterHelper filter) throws DgException {
+        Session session = null;
+        String queryString = null;
+        List<Project> projects = new ArrayList<Project>();
+        Long year = filter.getYear();
+        if (year == null || year == -1) {
+            year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+        year -= 1; // previous fiscal year
+        Long currId = filter.getCurrId();
+        String currCode;
+        if (currId == null) {
+            currCode = "USD";
+        } else {
+            currCode = CurrencyUtil.getCurrency(currId).getCurrencyCode();
+        }
+        Long orgID = filter.getOrgId();
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = " select act from " + AmpActivity.class.getName() + " act  ";
+
+            queryString += " inner join act.funding f " +
+                    " inner join f.fundingDetails fd ";
+            queryString += "  where f.ampDonorOrgId=:orgID and " +
+                    " fd.transactionType = 0 and  fd.adjustmentType = 1";
+            queryString += " and year(fd.transactionDate)=:year   and act.team is not null group by act order by sum(fd.transactionAmountInUSD) limit 5";
+
+            List result = null;
+            Query query = session.createQuery(queryString);
+            query.setLong("year", year);
+            query.setLong("orgID", orgID);
+            result = query.list();
+            Iterator<AmpActivity> activityIter = result.iterator();
+            while (activityIter.hasNext()) {
+                AmpActivity activity = activityIter.next();
+                queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";
+                queryString += "   inner join f.ampActivityId act  where   fd.transactionType = 0 and  fd.adjustmentType = 1 and f.ampDonorOrgId=:orgID ";
+                queryString += " and year(fd.transactionDate)=:year  and act.team is not null and act=" + activity.getAmpActivityId();
+                query = session.createQuery(queryString);
+                query.setLong("year", year);
+                query.setLong("orgID", orgID);
+                List<AmpFundingDetail> details = query.list();
+                Project project = new Project();
+                project.setSectors(activity.getSectors());
+                FundingCalculationsHelper cal = new FundingCalculationsHelper();
+                cal.doCalculations(details, currCode);
+                project.setAmount(cal.getTotActualComm().doubleValue());
+                project.setTitle(activity.getName());
+                project.setActivityId(activity.getAmpActivityId());
+                projects.add(project);
+
+            }
+        } catch (Exception e) {
+            throw new DgException(
+                    "Cannot load sector fundings by donors from db", e);
+        }
+
+
+        return projects;
     }
 
-    public static ArrayList getBilMulOrganisations() {
+    public static List<AmpOrganisation> getBilMulOrganisations() {
         Session session = null;
         Query q = null;
-        AmpOrganisation ampOrganisation = null;
-        ArrayList organisation = new ArrayList();
+        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
         String queryString = null;
         Iterator iter = null;
 
@@ -2454,19 +2514,16 @@ public class DbUtil {
             queryString = " select org from " + AmpOrganisation.class.getName()
                 + " org where org.orgTypeId='" + tBil.getAmpOrgTypeId() + "' or org.orgTypeId='" + tMul.getAmpOrgTypeId() + "' order by org.name";
             q = session.createQuery(queryString);
-            iter = q.list().iterator();
+            organizations = q.list();
 
-            while (iter.hasNext()) {
-                ampOrganisation = (AmpOrganisation) iter.next();
-                organisation.add(ampOrganisation);
-            }
+           
 
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database "
                          + ex.getMessage());
             ex.printStackTrace();
         }
-        return organisation;
+        return organizations;
     }
     /*
      * gets all organisation groups  excluding goverment groups

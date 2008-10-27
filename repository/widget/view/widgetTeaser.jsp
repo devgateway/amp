@@ -7,8 +7,51 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <digi:instance property="gisWidgetTeaserForm" />
+<script language="javascript" type="text/javascript">
+ 
+   
+    function getGraphMap(type){
+        var url="/widget/getWidgetMap.do?type="+type;
+        var async=new Asynchronous();
+        async.complete=mapCallBack;
+        async.call(url);
+    }
+    
+    function mapCallBack(status, statusText, responseText, responseXML){
+        var map=responseXML.getElementsByTagName('map')[0];
+	var id=map.getAttribute('id');
+        var mapSpan= document.getElementById(id);
+        mapSpan.innerHTML=responseText;  
+    }
+
+
+</script>
+
+<c:if test="${gisWidgetTeaserForm.rendertype==5}">
+    <c:choose>
+        <c:when test="${gisWidgetTeaserForm.type==1}">
+            <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
+            <jsp:include page="orgSummary.jsp" flush="true"/>
+        </c:when>
+         <c:when test="${gisWidgetTeaserForm.type==6}">
+            <jsp:include page="/orgProfile/showLargestProjects.do" flush="true"/>
+        </c:when>
+        <c:otherwise>
+            <img  alt="chart" src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}~chartType=${gisWidgetTeaserForm.type}~imageHeight=300~imageWidth=400" usemap="#chartMap${gisWidgetTeaserForm.type}" border="0" onload="getGraphMap(${gisWidgetTeaserForm.type})"/>
+            <span id="chartMap${gisWidgetTeaserForm.type}">
+              
+            </span>
+            
+           
+        </c:otherwise>
+    </c:choose>
+   
+       
+			
+</c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==4}">
 	<img src="/widget/widgetchart.do~widgetId=${gisWidgetTeaserForm.id}">		
@@ -21,7 +64,7 @@
 	<div id="tableWidgetContainer_${gisWidgetTeaserForm.id}">
 		
 	</div>
-
+         
 
 	<script language="JavaScript">
 	

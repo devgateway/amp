@@ -377,8 +377,8 @@
                                     	<tr>
                                     	<td>
 		                                    <html:checkbox property="allowEmptyFundingColumns"/>
-		                                    <digi:trn key="rep:wizard:allowEmptyFundCols">
-		                                        Allow empty funding columns
+		                                    <digi:trn key="rep:wizard:allowEmptyFundingCols">
+		                                        Allow empty funding columns for year, quarter and month 
 		                                    </digi:trn>
                                     	</td>
                                     	</tr>

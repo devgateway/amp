@@ -556,6 +556,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (!arf.isWidget()) {
 			categorizeData();
 		}
+		if ( reportMetadata.getAllowEmptyFundingColumns()==null || !reportMetadata.getAllowEmptyFundingColumns())
+				rawColumns.removeEmptyChildren(true);
 
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);

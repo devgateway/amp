@@ -48,6 +48,16 @@ public class ComparableMonth implements Comparable<ComparableMonth> {
 			ComparableMonth m = (ComparableMonth) obj;
 			return m.monthStr.equalsIgnoreCase(this.monthStr) && m.monthId==this.monthId;
 	}
+
+	public int getMonthId() {
+		return monthId;
+	}
+
+	public void setMonthId(int monthId) {
+		this.monthId = monthId;
+	}
+	
+	
 	
 	
 }

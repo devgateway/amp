@@ -18,6 +18,7 @@
 		<property name="hideActivities" column="hide_activities" type="java.lang.Boolean"/>
 		<property name="drilldownTab" column="drilldown_tab" type="java.lang.Boolean"/>
 		<property name="publicReport" column="publicReport" type="java.lang.Boolean"/>
+		<property name="allowEmptyFundingColumns" column="allow_empty_fund_cols" type="java.lang.Boolean" />
 		
 		<many-to-one name="ownerId" column="ownerId" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 		<many-to-one name="activityLevel" column="cv_activity_level" class="org.digijava.module.aim.dbentity.AmpCategoryValue" />

@@ -56,6 +56,7 @@
 		<input type="text" id="saveReportName" onkeyup="saveReportEngine.checkTyping(event)" onkeypress="saveReportEngine.checkEnter(event)"  
 			class="inp-text" style="border: 1px solid gray; width: 100%; font-size: 8pt; font-weight: bolder;" value="${reportObject.name}" />
 		<input type="hidden" id="saveReportId" value="${reportObject.ampReportId}" />
+		<input type="hidden" id="saveOriginalReportName" value="${reportObject.name}" />
 		<br /> <br />
 		<div align="right">
 			<button id="dynamic_save_button" type="button" class="buton" 

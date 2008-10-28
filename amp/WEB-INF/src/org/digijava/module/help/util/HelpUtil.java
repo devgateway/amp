@@ -611,8 +611,7 @@ public class HelpUtil {
 			    	 helptopic.setTitleTrnKey(help.getTitleTrnKey());
 	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
 	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
-	    	    	 helptopic.setHelpTopicId(help.getTopicId());
-	    	
+	    	    		    	
 	    	    	 udateEditpData(help);
 			       
 			       session.saveOrUpdate(helptopic);
@@ -662,11 +661,12 @@ public class HelpUtil {
 	    	try {
 	    	session = PersistenceManager.getRequestDBSession();
 	    	Transaction tx=session.beginTransaction();
-			String queryString = "select topic from "+ Editor.class.getName() + " topic where (topic.editorKey=:key) and  (topic.language=:lang)";
+			String queryString = "select editTopic from "+ Editor.class.getName() + " editTopic where (editTopic.editorKey=:key) and  (editTopic.language=:lang)";
    	        query = session.createQuery(queryString);
 		    query.setParameter("lang", help.getLeng());
 		    query.setParameter("key", help.getEditorKey());
 	    
+		    
 	    	     
 	    	    if(query.list().iterator().hasNext()){
 	    	     Iterator itr = query.list().iterator();

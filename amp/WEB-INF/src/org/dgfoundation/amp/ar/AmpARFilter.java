@@ -372,8 +372,12 @@ public class AmpARFilter extends PropertyListable {
 		if (widget != null)
 			this.setWidget(new Boolean(widget).booleanValue());
 
-
-		this.setAmpReportId(new Long(ampReportId));
+		try {
+			this.setAmpReportId(new Long(ampReportId));
+		}
+		catch (NumberFormatException e) {
+			logger.info("NumberFormatException:" + e.getMessage());
+		}
 
 	}
 

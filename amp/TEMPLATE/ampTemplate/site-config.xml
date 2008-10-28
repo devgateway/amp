@@ -636,6 +636,7 @@
 			</module>
 			<module name="aim">
 				<page>aim_saveMessage</page>
+				<page>aim_showSelectedFilters</page>
 				<page>tabManagerData</page>
 				<page>aim_filterPicker</page>
 			</module>

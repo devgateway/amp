@@ -181,6 +181,7 @@
 				repManager.addStyleToButton("step"+ i +"_prev_button");
 				repManager.addStyleToButton("step"+ i +"_next_button");
 				repManager.addStyleToButton("step"+ i +"_add_filters_button");
+				repManager.addStyleToButton("step"+ i +"_cancel");
 			}
 			
 			columnsDragAndDropObject	= new ColumnsDragAndDropObject('source_col_div');

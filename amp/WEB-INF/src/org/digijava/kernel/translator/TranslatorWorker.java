@@ -318,11 +318,7 @@ public class TranslatorWorker {
         try {
 
             Message mesageKey = new Message();
-            if (!isCaseSensitiveKeys()){
-                mesageKey.setKey(key.toLowerCase());
-            }else{
-                mesageKey.setKey(key);
-            }
+            mesageKey.setKey(processKeyCase(key));
             mesageKey.setLocale(locale);
             mesageKey.setSiteId(siteId);
 
@@ -435,7 +431,7 @@ public class TranslatorWorker {
                 "select  message from org.digijava.kernel.entity.Message message where message.siteId='"
                 + siteId
                 + "' and message.key like '"
-                + ((caseSensitiveKeys)?prefix:prefix.toLowerCase())
+                + processKeyCase(prefix)
                 + "%'"
                 + " and message.locale='"
                 + lang
@@ -537,7 +533,7 @@ public class TranslatorWorker {
                 + "' or message.siteId='"
                 + rootSiteId
                 + "' ) and message.key like '"
-                + ((isCaseSensitiveKeys())?prefix:prefix.toLowerCase())
+                + processKeyCase(prefix)
                 + "%'"
                 + addClause(isExpired)
                 + " order by message.key";
@@ -766,7 +762,7 @@ public class TranslatorWorker {
                 + "' or message.siteId='"
                 + rootSiteId
                 + "' ) and message.key like '"
-                + ((isCaseSensitiveKeys())?prefix.trim():prefix.trim().toLowerCase())
+                + processKeyCase(prefix.trim())
                 + "%' and lower(message.key) like '%"
                 + keyPattern
                 + "%'"
@@ -887,7 +883,7 @@ public class TranslatorWorker {
                 + "' or message.siteId='"
                 + rootSiteId
                 + "' ) and message.key like '"
-                + ((isCaseSensitiveKeys())?prefix:prefix.toLowerCase())
+                + processKeyCase(prefix)
                 + "%' and lower(message.message) like'%"
                 + messagePattern
                 + "%' and message.locale='"
@@ -964,6 +960,38 @@ public class TranslatorWorker {
         fireRefreshAlert(message);
     }
 
+    /**
+     * Changes message key if necessary.
+     * If DiGi is configured for case insensitive keys then key will be changed to lower case. 
+     * @param message
+     */
+    protected void processKeyCase(Message message) {
+        if (!isCaseSensitiveKeys()){
+        	message.setKey(processKeyCase(message.getKey()));
+        }
+    }
+    
+    protected String processKeyCase(String key) {
+        if (!isCaseSensitiveKeys()){
+        	return key.toLowerCase();
+        }
+        return key;
+    }
+    
+    /**
+     * Removes new line chars from message body.
+     * Fore more details see AMP-4611
+     * @param message
+     */
+    protected void processBodyChars(Message message){
+    	message.setMessage(processBodyChars(message.getMessage()));
+    }
+    
+    protected String processBodyChars(String messageBody){
+    	if (messageBody == null) return null;
+    	return messageBody.replace("\r", "").replace("\n", "");
+    }
+    
     protected void saveDb(Message message) throws WorkerException {
         logger.debug("Saving translation. siteId="
                      + message.getSiteId() + ", key = " + message.getKey() +
@@ -975,9 +1003,8 @@ public class TranslatorWorker {
         	message.setKey(message.getKey().trim());
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
-            if (!isCaseSensitiveKeys()){
-            	message.setKey(message.getKey().toLowerCase());
-            }
+            processKeyCase(message);
+            processBodyChars(message);
             
             if (!isKeyExpired(message.getKey())) {
                 message.setCreated(new java.sql.Timestamp(System.currentTimeMillis()));
@@ -1059,7 +1086,8 @@ public class TranslatorWorker {
         Transaction tx = null;
 
         try {
-        	if (!isCaseSensitiveKeys()) message.setKey(message.getKey().toLowerCase());//DGP-318
+        	processKeyCase(message);//DGP-318
+        	processBodyChars(message);
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
             if (!isKeyExpired(message.getKey())) {
@@ -1125,7 +1153,7 @@ public class TranslatorWorker {
         Session ses = null;
         Transaction tx = null;
         try {
-        	if (!isCaseSensitiveKeys()) message.setKey(message.getKey().toLowerCase());//DGP-318
+        	processKeyCase(message);//DGP-318
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
             ses.delete(message);
@@ -1210,11 +1238,7 @@ public class TranslatorWorker {
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
             Query q = ses.createQuery(queryString);
-            if (isCaseSensitiveKeys()){
-                q.setString("msgKey", key.trim());
-            }else{
-                q.setString("msgKey", key.trim().toLowerCase());
-            }
+            q.setString("msgKey", processKeyCase(key.trim()));
 
             messages = q.list();
             Iterator it = messages.iterator();
@@ -1282,7 +1306,7 @@ public class TranslatorWorker {
             if (isCaseSensitiveKeys()) {
                 q.setString("msgKey", key.trim());
             }else{
-                q.setString("msgKey", key.trim().toLowerCase());
+                q.setString("msgKey", processKeyCase(key.trim()));
             }
             q.setTimestamp("stamp", expTimestamp);
 

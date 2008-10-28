@@ -128,6 +128,7 @@ public class SecureTag
             		Group siteGroup = (Group) siteGroupIter.next();
             		if (siteGroup.getName().equals(this.getGroup())){
             			User user = RequestUtils.getUser(request);
+            			if (user == null) return SKIP_BODY;
             			Iterator userGroupIter = user.getGroups().iterator();
             			while(userGroupIter.hasNext()){
             				Group userGroup = (Group)userGroupIter.next();

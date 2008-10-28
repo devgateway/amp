@@ -8,7 +8,7 @@
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
-	width: 		750px;
+	width: 		800px;
 	background-color: #f4f4f2;
 }
 </style>
@@ -31,6 +31,10 @@
 }
 
 </style>
+
+<DIV id="TipLayer"
+  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
 <script language="javascript">
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
@@ -205,11 +209,11 @@ function setHoveredTable(tableId, hasHeaders) {
 													<tr>
 														<td align="left" width="100%" valign="center">
 															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
-															bgcolor="#ffffff">
-																<tr><td width=3 bgcolor="#999999">
+															bgcolor="#ffffff" border="0">
+																<tr><td width="5%" bgcolor="#999999">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td valign="center" align="center" bgcolor="#999999" style="color:black">
+																<td align="left" bgcolor="#999999" style="color:black" width="40%">
 																	<b>
 																		<c:if test="${aimTeamReportsForm.showReportList == true}">
 																			<digi:trn key="aim:reportListUnassignedReports">
@@ -223,6 +227,24 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</c:if>
 																	</b>
 																</td>
+																<td  align="left" bgcolor="#999999" style="color:black" width="20%">
+																	<b>
+										                              <digi:trn key="aim:reportType">
+										                                Type 
+										                              </digi:trn>
+																	</b>
+																</td>
+									                            <td align="left" bgcolor="#999999" style="color:black" width="15%">
+									                              <b>
+										                              <digi:trn key="aim:hierarchies">
+										                              	Hierarchies
+										                              </digi:trn>
+									                              </b>
+									                            </td>
+																<td bgcolor="#999999" style="color:black" width="20%">
+																	&nbsp;
+																</td>
+
 															</table>
 														</td>
 													</tr>
@@ -252,20 +274,120 @@ function setHoveredTable(tableId, hasHeaders) {
 													<tr>
 														<td>
 															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
-															bgcolor="#dddddd" id="dataTable">
+															bgcolor="#dddddd" id="dataTable" border="0">
 
 															<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" 
 															type="org.digijava.module.aim.dbentity.AmpReports">
 															<tr>
-																<td width="3%">
+																<td width="5%">
 																	<html:multibox property="selReports" >
 																		<bean:write name="reports" property="ampReportId" />
 																	</html:multibox>
 																</td>
-																<td width="73%">
+																<td width="40%">
 																	<bean:write name="reports" property="name" />
-																</td>
-															</tr>
+																</td>															
+
+																	<td width="20%">
+										                                <p style="white-space: nowrap">
+										                                  <li>
+										                                      <%
+										                                        if (reports.getType()!=null && reports.getType().equals(new Long(1))) {
+										                                      %>
+										                                          <digi:trn key="aim:donorType">donor</digi:trn>
+											                                  <%
+										                                        }
+										                                        else if (reports.getType()!=null && reports.getType().equals(new Long (3))){
+											                                  %>
+										                                          <digi:trn key="aim:regionalType">regional</digi:trn>
+											                                  <%
+										                                        }
+										                                        else if (reports.getType()!=null && reports.getType().equals(new Long(2))){
+											                                  %>
+										                                          <digi:trn key="aim:componentType">component</digi:trn>
+											                                  <%
+										                                        }
+										                                        else if (reports.getType()!=null && reports.getType().equals(new Long(4))){
+											                                  %>
+										                                          <digi:trn key="aim:contributionType">contribution</digi:trn>
+											                                  <%}%>
+											                              </li>
+										                                  <logic:equal name="reports" property="drilldownTab" value="true">
+										                                    <li>
+										                                      <digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="reports" property="publicReport" value="true">
+										                                    <li>
+										                                      <digi:trn key="aim:typePublicReport">Public Report</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="reports" property="hideActivities" value="true">
+										                                    <li>
+										                                      <digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
+										                                    </li>
+										                                  </logic:equal>                                  
+										                                  <logic:equal name="reports" property="options" value="A">
+										                                    <li>
+										                                    	<digi:trn key="aim:annualreport">Annual</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="reports" property="options" value="Q">
+										                                    <li>
+										                                    	<digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="reports" property="options" value="M">
+										                                    <li>
+										                                    	<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
+										                                    </li>
+										                                  </logic:equal>
+										                                </p>
+																	</td>
+										                            <td width="15%">
+																		&nbsp;
+										                                <logic:iterate name="reports" property="hierarchies" id="hierarchy" >
+										                                  <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
+										                                  <li>
+										                                  	${hierarchy.column.columnName}
+										                                  </li>
+										                                </logic:iterate>
+										                            </td>
+																	<td width="20%">
+										                                <div style='position:relative;display:none;' id='report-<bean:write name="reports" property="ampReportId"/>'> 
+										                                  <logic:iterate name="reports" property="columns" id="column" indexId="index"  >
+										                                    <%if (index.intValue()%2==0){ %>
+										                                      <li>                                      
+										                                      	<digi:trn key="aim:report:${column.column.columnName}">
+										                                        	<bean:write name="column" property="column.columnName" />
+										                                      	</digi:trn>
+										                                    <% } else {%>
+										                                      ,
+										                                      	<digi:trn key="aim:report:${column.column.columnName}">
+										                                        	<bean:write name="column" property="column.columnName" />
+										                                      	</digi:trn>
+										                                      </li>
+										                                    <%} %>
+										                                  </logic:iterate>
+										                                </div>
+										                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="reports" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
+										                                </span>
+
+										                                <div style='position:relative;display:none;' id='measure-<bean:write name="reports" property="measures"/>'> 
+										                                  <logic:iterate name="reports" property="measures" id="measure" indexId="index"  >
+										                                    <li>
+										                                    	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">                                      
+										                                      		${measure.measure.aliasName}
+										                                      	</digi:trn>
+										                                    </li>
+										                                  </logic:iterate>
+										                                </div>										                                
+										                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="reports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
+										                                </span>
+																	</td>
+
+																</tr>
+
 															</logic:iterate>
 															</table>
 														</td>
@@ -320,12 +442,15 @@ function setHoveredTable(tableId, hasHeaders) {
 </digi:form>
 
 
-
-
-
-
 <script language="javascript">
 setStripsTable("dataTable", "tableEven", "tableOdd");
 setHoveredTable("dataTable", false);
 </script>
 
+<style>
+
+html>body #main {
+	width:792px;
+}
+
+</style>

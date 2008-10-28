@@ -8,7 +8,7 @@
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
-	width: 		900px;
+	width: 		970px;
 	background-color: #f4f4f2;
 }
 </style>
@@ -269,11 +269,11 @@ function setHoveredTable(tableId, hasHeaders) {
 													<tr>
 														<td align="left" width="100%" valign="center">
 															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
-															bgcolor="#ffffff">
+															bgcolor="#ffffff" border="0">
 																<tr><td bgcolor="#999999" width="5%">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td align="center" bgcolor="#999999" style="color:black" width="30%">
+																<td align="left" bgcolor="#999999" style="color:black" width="25%">
 																	<b>
 																		<c:if test="${aimTeamReportsForm.showReportList == true}">
 																			<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
@@ -283,24 +283,31 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</c:if>
 																	</b>
 																</td>
-																<td  align="center" bgcolor="#999999" style="color:black" width="15%">
+																<td  align="left" bgcolor="#999999" style="color:black" width="15%">
+																	<b>
+										                              <digi:trn key="aim:reportOwnerName">
+										                                Owner
+										                              </digi:trn>
+																	</b>
+																</td>
+																<td  align="left" bgcolor="#999999" style="color:black" width="15%">
 																	<b>
 										                              <digi:trn key="aim:reportType">
 										                                Type 
 										                              </digi:trn>
 																	</b>
 																</td>
-									                            <td align="center" bgcolor="#999999" style="color:black" width="17%">
+									                            <td align="left" bgcolor="#999999" style="color:black" width="15%">
 									                              <b>
 										                              <digi:trn key="aim:hierarchies">
 										                              	Hierarchies
 										                              </digi:trn>
 									                              </b>
 									                            </td>
-																<td align="center" bgcolor="#999999" style="color:black" width="23%">
+																<td align="left" bgcolor="#999999" style="color:black" width="18%">
 																	&nbsp;
 																</td>
-																<td align="center" bgcolor="#999999" style="color:black" width="10%">
+																<td align="center" bgcolor="#999999" style="color:black" width="7%">
 																	<b><digi:trn key="aim:visibility">Visibility</digi:trn></b>
 																</td>
 															</table>
@@ -335,8 +342,15 @@ function setHoveredTable(tableId, hasHeaders) {
 																		<bean:write name="ampReports" property="ampReportId" />
 																		</html:multibox>
 																	</td>
-																	<td width="30%">
+																	<td width="25%">
 																		<digi:trn key="aim:reportMemberSpecificName:${ampReports.name}"><bean:write name="ampReports" property="name" /></digi:trn>
+																	</td>
+																	<td width="15%">
+										                                <p style="white-space: nowrap">
+										                                <logic:present name="ampReports" property="ownerId">
+										                                   <i><bean:write name="ampReports" property="ownerId.user.name" /></i>
+										                                </logic:present>
+										                                </p>
 																	</td>
 																	<td width="15%">
 										                                <p style="white-space: nowrap">
@@ -394,7 +408,7 @@ function setHoveredTable(tableId, hasHeaders) {
 										                                  </logic:equal>
 										                                </p>
 																	</td>
-										                            <td width="17%">
+										                            <td width="15%">
 																		&nbsp;
 										                                <logic:iterate name="ampReports" property="hierarchies" id="hierarchy" >
 										                                  <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
@@ -403,7 +417,7 @@ function setHoveredTable(tableId, hasHeaders) {
 										                                  </li>
 										                                </logic:iterate>
 										                            </td>
-																	<td width="23%">
+																	<td width="18%">
 										                                <div style='position:relative;display:none;' id='report-<bean:write name="ampReports" property="ampReportId"/>'> 
 										                                  <logic:iterate name="ampReports" property="columns" id="column" indexId="index"  >
 										                                    <%if (index.intValue()%2==0){ %>
@@ -442,7 +456,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																	</c:set>
 																	<logic:equal name="reports" property="teamView" value="false">
 																		<c:set target="${urlParams}" property="status" value="team" />
-																		<td width="10%" align="center">
+																		<td width="7%" align="center">
 																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPublic">Click here to make this public</digi:trn>
 																			</c:set>
@@ -461,7 +475,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																	</logic:equal>
 																	<logic:equal name="reports" property="teamView" value="true">
 																		<c:set target="${urlParams}" property="status" value="member" />
-																		<td width="10%" align="center">
+																		<td width="7%" align="center">
 																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
 																			</c:set>
@@ -564,7 +578,7 @@ setHoveredTable("dataTable", false);
 <style>
 
 html>body #main {
-	width:892px;
+	width:962px;
 }
 
 </style>

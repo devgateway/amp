@@ -21,6 +21,8 @@ function Filters (filterPanelName, connectionFailureMessage, filterProblemsMessa
 	this.filterPanel.setBody("");
 	this.filterPanel.render(document.body);
 	
+	this.listFiltersDiv				= document.getElementById("listFiltersDiv");
+	
 }
 
 Filters.prototype.success	= function (o) {
@@ -64,9 +66,11 @@ SaveFilters.prototype.saveFilters	= function (e, obj) {
 }
 
 SaveFilters.prototype.success	= function (o) {
-	//alert ("saveFilters" + o.responseText.length);
-	if ( o.responseText.length == 0 ) {
+	//alert ("saveFilters: " + o.responseText);
+	if ( o.responseText.length > 0 ) {
 		this.filterObj.filterPanel.hide();
+		this.filterObj.listFiltersDiv.innerHTML	= o.responseText;
+		repManager.showUseFilters(true);
 	}
 	else
 		this.filterObj.filterPanel.setBody (this.filterObj.cannotSaveFiltersMessage);

@@ -1,7 +1,15 @@
-function SaveReportEngine () {
+/* Check also reportsScripts.jsp for some initialization of this class. 
+   The translated messages and the saveReprotEngine variables are declared there.
+*/
+function SaveReportEngine (isTab) {
 	this.saveButton				= new ExtendedButton("dynamic_save_button");
+	this.overwritingReport		= false;
+	this.isTab					= isTab;
 }
 
+SaveReportEngine.prototype.getOriginalReportName	= function () {
+	return document.getElementById("saveOriginalReportName").value;
+}
 SaveReportEngine.prototype.getReportName	= function () {
 	return document.getElementById("saveReportName").value;
 }
@@ -60,15 +68,38 @@ SaveReportEngine.prototype.success		= function (o) {
 	if ( o.responseText.length > 2 ) {
 		this.panel.setBody( o.responseText );
 	}
-	else
-		window.location.replace(window.location);
+	else {
+		if ( this.overwritingReport )
+			window.location.replace(window.location);
+		else {
+			var message		= null;
+			if ( this.isTab )
+				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkTabsMessage;
+			else {
+				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkReportsMessage;
+				if ( window.opener.location.href != null && 
+						window.opener.location.href.indexOf("viewTeamReports.do") > 0 )
+						window.opener.location.replace(window.opener.location.href)
+			}
+				
+			this.panel.setBody( message );
+			this.doneCopyMessage	
+		}
+	}
 }
 
 SaveReportEngine.prototype.failure		= function (o) {
 	this.panel.setFooter("");
-	this.setBody(SaveReportEngine.connectionErrorMessage);
+	this.panel.setBody(SaveReportEngine.connectionErrorMessage);
 }
 SaveReportEngine.prototype.saveReport		= function () {
+	if ( this.getReportName() == this.getOriginalReportName() ) {
+		this.overwritingReport	= true;
+	}
+	else { 
+		this.overwritingReport	= false;
+	}
+
 	this.saveButton.disable();
 	this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
 	var postString		= "dynamicSaveReport=true" +
@@ -111,7 +142,7 @@ ExtendedButton.prototype.disable			= function () {
 }
 
 
-function initSaveReportEngine() {
+function initSaveReportEngine( isTab) {
 	if (saveReportEngine == null)
-		saveReportEngine	= new SaveReportEngine();
+		saveReportEngine	= new SaveReportEngine( isTab );
 }

@@ -242,7 +242,7 @@ public class EthiopianCalendar
 			return 11;
 	}
 	
-	String ethMonths(int y)
+	public String ethMonths(int y)
 	{
 		if(y==1)
 			return "Meskerem";

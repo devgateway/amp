@@ -307,5 +307,14 @@ public class CellColumn extends Column {
 	public void setItemsMap(HashMap itemsMap) {
 		this.itemsMap = itemsMap;
 	}
+	
+	@Override
+	public boolean removeEmptyChildren(boolean checkFunding) {
+		if ( this.getOwnerIds().size() > 0 ) {
+			return false;
+		}
+		else
+			return true;
+	}
 
 }

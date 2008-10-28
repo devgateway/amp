@@ -6,8 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@page import="org.dgfoundation.amp.ar.ArConstants"%>
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
+
+<c:set var="categoryYear"><%=ArConstants.YEAR%></c:set>
+<c:set var="categoryQuarter"><%=ArConstants.QUARTER%></c:set>
 
 <%int rowIdx = 2;%>
 
@@ -62,7 +66,8 @@
           </logic:equal>
           
         <logic:notEqual name="column" property="columnDepth" value="1">
-        	<logic:notEqual name="subColumn" property="width" value="1">
+        	<c:choose>
+        		<c:when test="${subColumn.width!=1 || subColumn.contentCategory==categoryYear}">
         		<%
         			if(subColumn.getName().length()<5){%>
         				<td style="background-color:#EAEAEA; margin-left: 2px; margin-right: 2px;" class="clsTableTitleColHtml" height="20px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
@@ -71,8 +76,8 @@
 						<td class="clsTableTitleColHtml" style="background-color:#EAEAEA;text-decoration: none;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 							<digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>	
           		<%}%>
-          		</logic:notEqual>
-       			<logic:equal name="subColumn" property="width" value="1"> 
+          		</c:when>
+          		<c:otherwise>
 	      			<td style="background-color:#EAEAEA;border-right: #FFFFFF 1px solid;border-bottom: #FFFFFF 1px solid; font:9px Arial;" valign="bottom" height="15px" nowrap="nowrap" align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	      				<html:link style="font-family: Arial;font-size: 11px;text-decoration: none;color: black ;cursor:pointer;" page="/viewNewAdvancedReport.do" paramName="subColumn" paramProperty="name" paramId="sortBy">
 	        				<digi:trn key="aim:reportBuilder:${reportHeading}">
@@ -89,7 +94,8 @@
 	                		<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	            		</logic:equal>
 	       			</c:if>
-	     		</logic:equal>
+	     		</c:otherwise>
+	     		</c:choose>
 	     	</td>	            
         	</logic:notEqual>
     	

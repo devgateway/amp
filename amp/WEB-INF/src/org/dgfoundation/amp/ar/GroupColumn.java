@@ -41,7 +41,7 @@ public class GroupColumn extends Column {
 	    }
  	    return ret+1; //one is for the title
 	}
-    
+    	
 	public int getWidth() {
 		int ret=0;
 		Iterator i=items.iterator();
@@ -126,7 +126,11 @@ public class GroupColumn extends Column {
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator i = src.iterator();
        
-        
+       if ( (reportMetadata.getAllowEmptyFundingColumns()!=null && reportMetadata.getAllowEmptyFundingColumns()) && 
+    		  ( category.equals(ArConstants.YEAR) || category.equals(ArConstants.QUARTER) 
+    		   	|| category.equals(ArConstants.MONTH) ) ) {
+    	   ARUtil.insertEmptyColumns(category, src, metaSet);
+       } 
         
         
         while (i.hasNext()) {
@@ -143,13 +147,13 @@ public class GroupColumn extends Column {
         
         //TODO: ugly stuff... i have no choice
         //manually add all quarters
-       if(category.equals(ArConstants.QUARTER)) {
-        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q1"));
-        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q2"));
-        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q3"));
-        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q4"));
-        }
-   
+//       if(category.equals(ArConstants.QUARTER)) {
+//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q1"));
+//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q2"));
+//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q3"));
+//        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q4"));
+//        }
+// this has been moved to ARUtil.insertEmptyColumns   
       
     	   //manually add at least one term :(
     	if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
@@ -521,4 +525,22 @@ public class GroupColumn extends Column {
 		return false;
 	}
 	
+	@Override
+	public boolean removeEmptyChildren(boolean checkFunding) {
+		List<Column> myItems	= getItems();
+		Iterator<Column> iter	= myItems.iterator();
+		boolean allEmpty		= true;
+		while ( iter.hasNext() ) {
+			Column col			= iter.next();
+			if ( checkFunding && !ArConstants.COLUMN_FUNDING.equals(col.name))
+				continue;
+			if ( col.removeEmptyChildren(false) ) {
+				if (col instanceof GroupColumn)
+					iter.remove();
+			}
+			else
+				allEmpty		= false;
+		}
+		return allEmpty;
+	}
 }

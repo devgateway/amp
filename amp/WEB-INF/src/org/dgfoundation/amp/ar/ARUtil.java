@@ -7,11 +7,13 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -37,8 +40,13 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.fiscalcalendar.ComparableMonth;
+import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 /**
  * 
@@ -263,5 +271,123 @@ public final class ARUtil {
 			}
 		}
 		return orderedColumns;
+	}
+	
+	public static void insertEmptyColumns (String type, CellColumn src, Set<MetaInfo> destMetaSet) {
+		Iterator iter									= src.iterator();
+		TreeSet<Comparable<? extends Object>>	periods	= new TreeSet<Comparable<? extends Object>>();
+		ARUtil.initializePeriodValues(type, periods);
+		
+		while ( iter.hasNext() ) {
+			Categorizable elem	= (Categorizable)iter.next();
+			MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
+			periods.add( minfo.getValue() );
+		}
+	
+		try{
+			Object prevPeriod					= null;
+			Iterator periodIter					= periods.iterator();
+			while ( periodIter.hasNext() ) {
+				Object period			= periodIter.next();
+				int difference			= 0;
+				if ( prevPeriod != null && 
+						(difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
+					for (int i=1; i< difference; i++) {
+						destMetaSet.add( new MetaInfo(type, ARUtil.getFuturePeriod(type, prevPeriod, i)) );
+					}
+					
+				}
+				prevPeriod		= period;
+			}
+		}
+		catch (Exception e) {
+			logger.error( e.getMessage() );
+			e.printStackTrace();
+		}
+		
+	}
+	private static Comparable getFuturePeriod(String type, Object period, int step) throws Exception{
+		if ( ArConstants.YEAR.equals( type ) ) {
+			return ((Integer)period) + step;
+		}
+		
+		if ( ArConstants.QUARTER.equals( type ) ) {
+			String quarter			= ((String)period ).substring(1);
+			Integer quarterId		= ( Integer.parseInt(quarter) );
+			if ( quarterId >= 4 )
+				throw new Exception( "There is no quarter greater than: " + quarterId );
+			if ( quarterId + step > 4 )
+				throw new Exception( "Max quarter is 4. Trying to generate quarter: " + (quarterId + step) );
+			return "Q" + (quarterId + step); 
+		}
+		
+		if ( ArConstants.MONTH.equals( type ) ) {
+			ComparableMonth month 					= ((ComparableMonth) period);
+			
+			String gsCal 							= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			AmpFiscalCalendar ampFiscalCalendar 	= FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(gsCal));
+			if ( ampFiscalCalendar == null )
+				throw new Exception("Cannot obtain default AmpFiscalCalendar");
+			
+			if ( "GREG-CAL".equalsIgnoreCase( ampFiscalCalendar.getBaseCal() ) ) {
+				if ( month.getMonthId() >= 11 )
+					throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
+							". There is no month greater than: " + month.getMonthId());
+				Integer newMonthId			= month.getMonthId() + step;
+				if ( newMonthId > 11 )
+					throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
+							". Max month is 11. Trying to generate month: " + newMonthId);
+				DateFormatSymbols dfs		= new DateFormatSymbols();
+				return new ComparableMonth(newMonthId, dfs.getMonths()[newMonthId]);
+			}
+			if ( "ETH-CAL".equalsIgnoreCase( ampFiscalCalendar.getBaseCal() ) ) {
+				if ( month.getMonthId() >= 13 )
+					throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
+							". There is no month greater than: " + month.getMonthId());
+				Integer newMonthId			= month.getMonthId() + step;
+				if ( newMonthId > 13 )
+					throw new Exception("Calendar type is "+ ampFiscalCalendar.getBaseCal() +
+							". Max month is 13. Trying to generate month: " + newMonthId);
+				return new ComparableMonth( newMonthId, new EthiopianCalendar().ethMonths(newMonthId) );
+			}
+			throw new Exception("Unknown calendar type: " + ampFiscalCalendar.getBaseCal() );
+		}
+		
+		throw new Exception("The specified type is neither YEAR, QUARTER nor MONTH: " + type);
+	}
+	private static int periodDifference(String type, Object period1, Object period2) throws Exception{
+		if ( ArConstants.YEAR.equals( type ) ) {
+			return ((Integer)period2) - ((Integer)period1);
+		}
+		
+		if ( ArConstants.QUARTER.equals( type ) ) {
+			String quarter1			= ((String)period1 ).substring(1);
+			Integer quarterId1		= ( Integer.parseInt(quarter1) );
+			
+			String quarter2			= ((String)period2 ).substring(1);
+			Integer quarterId2		= ( Integer.parseInt(quarter2) );
+			
+			return quarterId2 - quarterId1;
+		}
+		
+		if ( ArConstants.MONTH.equals( type ) ) {
+			ComparableMonth month1 		= ((ComparableMonth) period1);
+			ComparableMonth month2 		= ((ComparableMonth) period2);
+			
+			return month2.getMonthId() - month1.getMonthId();
+			
+		}
+		
+		throw new Exception("The specified type is neither YEAR, QUARTER nor MONTH: " + type);
+	}
+	private static void initializePeriodValues(String type, Collection<Comparable<? extends Object>> periods) {
+		if ( ArConstants.QUARTER.equals(type) ) {
+			periods.add("Q0");
+			periods.add("Q5");
+		}
+		if ( ArConstants.MONTH.equals(type) ) {
+			periods.add( new ComparableMonth(-1, "") );
+			periods.add( new ComparableMonth(12, "") );
+		}
 	}
 }

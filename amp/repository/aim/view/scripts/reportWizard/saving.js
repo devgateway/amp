@@ -48,6 +48,18 @@ function getReportPeriod() {
 	}
 }
 
+function getUseFilters() {
+	if ( aimReportWizardForm.useFilters.checked!=null && aimReportWizardForm.useFilters.checked )
+		return true;
+	return false;
+}
+
+function getAllowEmptyFundingColumns() {
+	if ( aimReportWizardForm.allowEmptyFundingColumns.checked!=null && aimReportWizardForm.allowEmptyFundingColumns.checked )
+		return true;
+	return false;
+}
+
 function getDesktopTab() {
 	return aimReportWizardForm.desktopTab.value;
 }
@@ -96,12 +108,12 @@ SaveReportEngine.prototype.success		= function (o) {
 			getReportTitleEl().value	= "";
 		}
 	}
-	else{
+	else
 		if ( getDesktopTab()=="true" )
 			window.location.replace("/aim/viewTeamReports.do?tabs=true");
 		else
 			window.location.replace("/aim/viewTeamReports.do?tabs=false");
-	}	
+		
 }
 SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
@@ -145,8 +157,11 @@ SaveReportEngine.prototype.saveReport	= function () {
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&hideActivities="+getHideActivities() +
+						"&useFilters="+getUseFilters()+
+						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 	
+	//alert(postString);
 	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
 	
 }

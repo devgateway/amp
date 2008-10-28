@@ -30,10 +30,6 @@
 	background-color:#a5bcf2;
 }
 
-html>body #main {
-	width:892px;
-}
-
 </style>
 
 <DIV id="TipLayer"
@@ -565,3 +561,10 @@ setStripsTable("dataTable", "tableEven", "tableOdd");
 setHoveredTable("dataTable", false);
 </script>
 
+<style>
+
+html>body #main {
+	width:892px;
+}
+
+</style>

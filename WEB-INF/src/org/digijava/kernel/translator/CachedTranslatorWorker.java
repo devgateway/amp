@@ -67,18 +67,14 @@ public class CachedTranslatorWorker
         try {
 
             Message mesageKey = new Message();
-            if (isCaseSensitiveKeys()){
-            	mesageKey.setKey(key);
-            }else{
-            	mesageKey.setKey(key.toLowerCase());
-            }
-            mesageKey.setKey(key);
+            mesageKey.setKey(processKeyCase(key));
             mesageKey.setLocale(locale);
             mesageKey.setSiteId(siteId);
 
             session = PersistenceManager.getSession();
             Message message = (Message) session.load(Message.class, mesageKey);
-
+            processBodyChars(message);//if we run script on db which will do same action, do we need this here?
+            
             messageCache.put(message, message);
             logger.debug("Refreshed translation for siteId="
                          + siteId + ", key = " + key + ",locale=" + locale);
@@ -108,11 +104,7 @@ public class CachedTranslatorWorker
 
         Message message = new Message();
 
-        if (isCaseSensitiveKeys()){
-            message.setKey(key);
-        }else{
-            message.setKey(key.toLowerCase());
-        }
+        message.setKey(processKeyCase(key));
         message.setLocale(locale);
         message.setSiteId(siteId);
 
@@ -128,7 +120,7 @@ public class CachedTranslatorWorker
     }
 
     public void save(Message message) throws WorkerException {
-        saveDb(message); 
+        saveDb(message); //message will be processed there 
         
         messageCache.put(message, message);
         fireRefreshAlert(message);
@@ -141,7 +133,7 @@ public class CachedTranslatorWorker
      * @throws WorkerException
      */
     public void update(Message message) throws WorkerException {
-        updateDb(message);//this will lower key if needed
+        updateDb(message);//message will be processed there
 
         messageCache.put(message, message);
         fireRefreshAlert(message);
@@ -153,7 +145,7 @@ public class CachedTranslatorWorker
      * @throws WorkerException
      */
     public void delete(Message message) throws WorkerException {
-        deleteDb(message);//this will lower key if needed
+        deleteDb(message);//message will be processed there
         messageCache.evict(message);
         fireRefreshAlert(message);
     }
@@ -174,12 +166,8 @@ public class CachedTranslatorWorker
             ses = PersistenceManager.getSession();
             tx = ses.beginTransaction();
             Query q = ses.createQuery(queryString);
-            if (isCaseSensitiveKeys()){
-                q.setString("msgKey", key.trim());
-            }else{
-                q.setString("msgKey", key.trim().toLowerCase());
-            }
-
+            q.setString("msgKey", processKeyCase(key.trim()));
+            
             messages = q.list();
             Iterator it = messages.iterator();
 

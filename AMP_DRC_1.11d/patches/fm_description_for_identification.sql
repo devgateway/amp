@@ -1,0 +1,1 @@
+INSERT INTO `amp_fields_visibility`(name, parent) values ('Description',(SELECT id FROM `amp_features_visibility` WHERE name = 'Identification'));

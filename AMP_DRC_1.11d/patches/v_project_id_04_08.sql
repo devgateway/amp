@@ -1,0 +1,1 @@
+CREATE or replace VIEW `v_project_id` AS select `i`.`amp_activity_id` AS `amp_activity_id`,concat(`i`.`internal_id`,_latin1' (',`o`.`name`,_latin1')') AS `concat(i.internal_id,' (',o.name,')')` from (`amp_organisation` `o` join `amp_activity_internal_id` `i`) where (`o`.`amp_org_id` = `i`.`amp_org_id`)

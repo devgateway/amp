@@ -1,0 +1,54 @@
+td.treeNodeDefault {
+	color:black;
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	border: 1px solid white;
+	cursor : default;
+}
+
+td.treeNodeMouseOver {
+	color:black;
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	border: 1px solid Silver;
+	cursor : default;
+	background-color : #E6E6E6;
+}
+
+td.treeNodeSelected {
+	color:white;
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	border: 1px solid black;
+	cursor : default;
+	background-color : #130082;
+}
+
+td.treeNodeSelectedMouseOver {
+	color:white;
+	font : 14px "MS Sans Serif", Geneva, sans-serif;
+	border: 1px solid black;
+	cursor : default;
+	background-color : #1D00C1;
+}
+
+font.extraVal{
+	font : italic 12px "Courier New", Courier, monospace;
+}
+
+td.treeNodeComment {
+	color: #079B00;
+	font : italic 12px "Courier New", Courier, monospace;
+	border: 1px solid White;
+	cursor : default;
+	background-color : White;
+}
+
+div.container{
+	overflow: auto;
+	background-color : White;
+	border: 1px solid #D4D4D4;
+	scrollbar-base-color : #F1CE61;
+	scrollbar-3dlight-color : Black;
+	scrollbar-face-color : #F1CE61;
+	scrollbar-highlight-color : #F1CE61;
+	scrollbar-shadow-color : #F1CE61;
+	scrollbar-track-color : #E0E0E0;
+}

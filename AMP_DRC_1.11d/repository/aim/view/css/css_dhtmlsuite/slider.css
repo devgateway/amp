@@ -1,0 +1,55 @@
+/************************************************************************************************************
+*	DHTML slider	(CSS)
+*
+*	Created:					August, 25th, 2006
+*	@class Purpose of class:	Display a slider on a web page.
+*			
+* 	Update log:
+*
+************************************************************************************************************/
+
+.DHTMLSuite_slider_horizontal{
+	border-top:1px solid #9d9c99;
+	border-left:1px solid #9d9c99;
+	border-bottom:1px solid #eee;
+	border-right:1px solid #eee;
+	background-color:#f0ede0;
+	height:3px;
+	position:absolute;
+	bottom:0px;
+	width:200px;
+	cursor:default;
+}
+
+.DHTMLSuite_slider_vertical{
+	border-left:1px solid #9d9c99;
+	border-bottom:1px solid #9d9c99;
+	border-right:1px solid #eee;
+	border-top:1px solid #eee;
+	background-color:#f0ede0;
+	width:3px;
+	position:absolute;
+	bottom:0px;
+	height:200px;
+	margin-left:1px;
+	cursor:default;
+}
+/* Small lines indicating steps on the slider */
+.DHTMLSuite_smallLines_vertical{	/* Vertical lines */
+	border-top:1px solid #9d9c99;
+	border-left:1px solid #9d9c99;
+	border-bottom:1px solid #eee;
+	border-right:1px solid #eee;
+	width:0px;
+	height:5px;
+	cursor:default;
+}
+.DHTMLSuite_smallLines_horizontal{	/* Horizontal lines */
+	border-top:1px solid #9d9c99;
+	border-left:1px solid #9d9c99;
+	border-bottom:1px solid #eee;
+	border-right:1px solid #eee;
+	width:5px;
+	height:1px;
+	cursor:default;
+}

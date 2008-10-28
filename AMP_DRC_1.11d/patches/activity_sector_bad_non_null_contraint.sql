@@ -1,0 +1,1 @@
+ALTER TABLE `amp_activity_sector` MODIFY COLUMN `amp_activity_id` BIGINT(20);

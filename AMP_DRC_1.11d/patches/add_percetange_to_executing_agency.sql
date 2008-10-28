@@ -1,0 +1,1 @@
+alter table amp_org_role modify column percentage float default NULL;

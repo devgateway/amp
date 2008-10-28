@@ -1,0 +1,1 @@
+update perm_permission set dedicated=false where dedicated is null;

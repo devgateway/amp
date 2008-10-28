@@ -18,20 +18,27 @@
     var wmRole = aimTeamMemberForm.workspaceManId.value;
     var idWMMmemeber = aimTeamMemberForm.headId.value;
     var idCurrentMember = aimTeamMemberForm.teamMemberId.value;
-  	if(selectedRole== wmRole && idWMMmemeber!="" && idWMMmemeber!=idCurrentMember ){
-  		<c:set var="translation">
-  		<digi:trn key="aim:OneManagerPerWorkspace">Only one Manager is allowed per workspace. Please choose another role or keep the existing one.</digi:trn>
-		</c:set>   			 
-		alert("${translation}");
-  		return false;
-  	}else{
-  	    var indice = aimTeamMemberForm.role.selectedIndex;
-  	    var valor = aimTeamMemberForm.role.options[indice].text
-  		<c:set var="translation">
-  		<digi:trn key="aim:AreYouSureToChangerole">Are you sure you want to change this role to</digi:trn>
-		</c:set>				 
-		return confirm("${translation} \""+valor+"\"?");
-  	}
+    var idUpdaterMember = aimTeamMemberForm.memberId.value;
+    if(idWMMmemeber!= idUpdaterMember){
+        <c:set var="translation">
+        <digi:trn key="aim:WSMemberCannotChangeRoles">The Workspace Member does not have rights to change the role.</digi:trn>
+        </c:set>   			 
+        alert("${translation}");
+        return false;
+    } else if(selectedRole== wmRole && idWMMmemeber!="" && idWMMmemeber!=idCurrentMember ){
+        <c:set var="translation">
+        <digi:trn key="aim:OneManagerPerWorkspace">Only one Manager is allowed per workspace. Please choose another role or keep the existing one.</digi:trn>
+       </c:set>   			 
+        alert("${translation}");
+        return false;
+    } else {
+        var indice = aimTeamMemberForm.role.selectedIndex;
+        var valor = aimTeamMemberForm.role.options[indice].text
+        <c:set var="translation">
+        <digi:trn key="aim:AreYouSureToChangerole">Are you sure you want to change this role to</digi:trn>
+        </c:set>				 
+        return confirm("${translation} \""+valor+"\"?");
+    }
   }
 </script>
 
@@ -51,6 +58,9 @@
 <html:hidden property="name" />
 <html:hidden property="headId"/>
 <html:hidden property="workspaceManId"/>
+<html:hidden name="currentMember" property="memberId"/>
+
+
 
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">

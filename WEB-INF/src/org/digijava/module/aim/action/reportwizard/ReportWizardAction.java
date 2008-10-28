@@ -143,9 +143,11 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setDesktopTab( false );
 		myForm.setDuplicateName(false);
 		myForm.setPublicReport(false);
+		myForm.setAllowEmptyFundingColumns(false);
+		myForm.setUseFilters(false);
 		
-		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
+		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
 
 	}
 	
@@ -169,6 +171,8 @@ public class ReportWizardAction extends MultiAction {
 	public ActionForward modeEdit(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		
+		modeReset(mapping, form, request, response);
+		
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		Session session				= PersistenceManager.getRequestDBSession();
 		
@@ -185,6 +189,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setOriginalTitle( ampReport.getName() );
 		myForm.setPublicReport( ampReport.getPublicReport() );
 		myForm.setHideActivities( ampReport.getHideActivities() );
+		myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
 		
 		if ( new Long(ArConstants.DONOR_TYPE).equals(ampReport.getType()) )
 			myForm.setReportType("donor");
@@ -218,6 +223,7 @@ public class ReportWizardAction extends MultiAction {
 			FilterUtil.populateFilter(ampReport, filter);
 			FilterUtil.prepare(request, filter);
 			request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER , filter);
+			myForm.setUseFilters(true);
 		}
 				
 		
@@ -257,6 +263,7 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setName( myForm.getReportTitle().trim() );
 		ampReport.setDrilldownTab( myForm.getDesktopTab() );
 		ampReport.setPublicReport(myForm.getPublicReport());
+		ampReport.setAllowEmptyFundingColumns( myForm.getAllowEmptyFundingColumns() );
 		
 		if ( myForm.getReportId() != null ) {
 				if ( myForm.getOriginalTitle()!=null && myForm.getOriginalTitle().equals(myForm.getReportTitle()) )
@@ -281,7 +288,7 @@ public class ReportWizardAction extends MultiAction {
 		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
 		
 		Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
-		if ( filter != null ) {
+		if ( filter != null && myForm.getUseFilters()) {
 			Set<AmpFilterData> fdSet	= AmpFilterData.createFilterDataSet(ampReport, filter);
 			if ( ampReport.getFilterDataSet() == null )
 				ampReport.setFilterDataSet(fdSet);
@@ -294,6 +301,9 @@ public class ReportWizardAction extends MultiAction {
 				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
 				
 		}
+		else
+			if ( ampReport.getAmpReportId()!=null )
+				AmpFilterData.deleteOldFilterData( ampReport.getAmpReportId() );
 			
 		AdvancedReportUtil.saveReport(ampReport, teamMember.getTeamId(), teamMember.getMemberId(), teamMember.getTeamHead() );
 		

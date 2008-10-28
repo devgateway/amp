@@ -191,7 +191,26 @@ NormalReportManager.prototype.addStyleToButton	= function ( id ) {
 	YAHOO.util.Event.addListener(id, "mouseover", addClass) ;
 	YAHOO.util.Event.addListener(id, "mouseout", removeClass) ;
 }
-
+NormalReportManager.prototype.showUseFilters	= function ( check ) {
+	document.getElementById("useFiltersCheckbox").checked	= check;
+	
+	var spanElem				= document.getElementById("spanUseFilters");
+	spanElem.style.visibility	= "visible";
+}
+NormalReportManager.prototype.hideUseFilters	= function ( check ) {
+	document.getElementById("useFiltersCheckbox").checked	= check;
+	var spanElem				= document.getElementById("spanUseFilters");
+	spanElem.style.visibility	= "hidden";
+}
+NormalReportManager.prototype.decideStrikeFilters	= function () {
+	var checkboxElem						= document.getElementById("useFiltersCheckbox");
+	var filtersDivElem						= document.getElementById( "listFiltersDiv" ) ;
+	if ( checkboxElem.checked ) {
+		filtersDivElem.style.textDecoration		= "";
+	}
+	else
+		filtersDivElem.style.textDecoration		= "line-through";
+}
 
 TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;

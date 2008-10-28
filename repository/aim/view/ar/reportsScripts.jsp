@@ -157,9 +157,15 @@ background-color: yellow;
 
 <script type="text/javascript">
 SaveReportEngine.connectionErrorMessage = 
-	'<digi:trn key="aim:reportwizard:connectionProblems">Apparently there are some connection problems. Please try again in a few moments.</digi:trn>';
+	"<digi:trn key='aim:reportwizard:connectionProblems'>Apparently there are some connection problems. Please try again in a few moments.</digi:trn>";
 SaveReportEngine.savingMessage =
-	'<digi:trn key="aim:reportwizard:savingData">Saving data. Please wait.</digi:trn>';
+	"<digi:trn key='aim:reportwizard:savingData'>Saving data. Please wait.</digi:trn>";
+SaveReportEngine.doneCopyMessage =
+	"<digi:trn key='aim:reports:doneCopy'>A copy was saved containing the currently selected filters. </digi:trn>";
+SaveReportEngine.checkReportsMessage =
+	"<digi:trn key='aim:reports:checkReports'>Check Reports in the main menu. </digi:trn>";
+SaveReportEngine.checkTabsMessage =
+	"<digi:trn key='aim:reports:checkTabs'>Check the Tab Manager in the main menu. </digi:trn>";
 saveReportEngine	= null;	
 </script>
 

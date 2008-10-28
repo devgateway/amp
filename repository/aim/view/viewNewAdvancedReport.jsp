@@ -197,7 +197,7 @@ session.setAttribute("progressValue", counter);
                 </a>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	          	 	|
-	          	 	<a class="settingsLink" onClick="initSaveReportEngine();saveReportEngine.showPanel(); " >
+	          	 	<a class="settingsLink" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " >
 	                	${saveFilters}
 	                </a>
                 </feature:display>
@@ -275,7 +275,7 @@ session.setAttribute("progressValue", counter);
                 </a>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	                |
-	          	 	<a class="settingsLink" onClick="initSaveReportEngine();saveReportEngine.showPanel(); " >
+	          	 	<a class="settingsLink" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " >
 	                	${saveFilters}
 	                </a>
            		</feature:display>

@@ -37,6 +37,9 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean duplicateName		= false;
 	
 	private Boolean publicReport 		= false;
+	private Boolean useFilters			= false;
+	
+	private Boolean allowEmptyFundingColumns	= false;
 		
 	public Long getReportId() {
 		return reportId;
@@ -166,6 +169,22 @@ public class ReportWizardForm extends ActionForm {
 
 	public Boolean getPublicReport() {
 		return publicReport;
+	}
+
+	public Boolean getUseFilters() {
+		return useFilters;
+	}
+
+	public void setUseFilters(Boolean useFilters) {
+		this.useFilters = useFilters;
+	}
+
+	public Boolean getAllowEmptyFundingColumns() {
+		return allowEmptyFundingColumns;
+	}
+
+	public void setAllowEmptyFundingColumns(Boolean allowEmptyFundingColumns) {
+		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
 	}
 	
 }

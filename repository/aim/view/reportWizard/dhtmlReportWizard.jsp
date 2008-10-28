@@ -365,11 +365,24 @@
 									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>
 								</span>
 								<div align="center" id="optionsDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
-									<br />
-                                    <html:checkbox property="publicReport"/>
-                                    <digi:trn key="aim:makePublic">
-                                        Make public
-                                    </digi:trn>
+									<table>
+										<tr>
+										<td>
+		                                    <html:checkbox property="publicReport"/>
+		                                    <digi:trn key="aim:makePublic">
+		                                        Make public
+		                                    </digi:trn>
+                                    	</td>
+                                    	</tr>
+                                    	<tr>
+                                    	<td>
+		                                    <html:checkbox property="allowEmptyFundingColumns"/>
+		                                    <digi:trn key="rep:wizard:allowEmptyFundCols">
+		                                        Allow empty funding columns
+		                                    </digi:trn>
+                                    	</td>
+                                    	</tr>
+                                    </table>
                                 </div>
 
 								</c:if>
@@ -381,9 +394,30 @@
 								</span>
 								<br/>
 								<html:hidden property="reportDescription" />
-								<textarea name="reportDescriptionClone" class="inp-text" style="border: 1px solid gray;width: 100%; height: 250px;">
+								<textarea name="reportDescriptionClone" class="inp-text" style="border: 1px solid gray;width: 100%; height: 120px;">
 									&nbsp;
 								</textarea>
+								<br />
+								<br />
+								<span class="list_header">
+									<digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn>
+								</span>
+								<br />
+								<div id="listFiltersDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; height: 120px;">
+									<c:choose>
+										<c:when test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
+											<jsp:include page="showSelectedFilters.jsp" />
+											<c:set var="spanUseFiltersVisibility">visibility: visible</c:set>					
+										</c:when>
+										<c:otherwise>
+											<c:set var="spanUseFiltersVisibility">visibility: hidden</c:set>
+										</c:otherwise>
+									</c:choose>
+								</div>
+								<span style="${spanUseFiltersVisibility}" id="spanUseFilters">
+									<html:checkbox property="useFilters" styleId="useFiltersCheckbox" onclick="repManager.decideStrikeFilters()" /> 
+									<digi:trn key="rep:wizard:useAboveFilters">Use above filters</digi:trn>
+								</span>
 							</td>
 						</tr>
 					</table>

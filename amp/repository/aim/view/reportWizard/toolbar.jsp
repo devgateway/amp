@@ -46,6 +46,6 @@
 
 <script language="JavaScript">
 	function cancelWizard() {
-		window.location = "/viewTeamReports.do?tabs=false";
+		window.location = "/viewTeamReports.do?tabs=true";
  	}
 </script>

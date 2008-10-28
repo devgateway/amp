@@ -1,0 +1,21 @@
+[PropertyInfo]
+approveMessage,String,false,false, , ,false,<default>
+archiveMessage,String,false,false, , ,false,<default>
+defaultView,String,false,false, , ,false,<default>
+id,Long,false,false, , ,false,<default>
+instanceId,String,false,false, , ,false,<default>
+language,String,false,false, , ,false,<default>
+moderated,boolean,false,false, , ,false,<default>
+privateItem,boolean,false,false, , ,false,<default>
+rejectMessage,String,false,false, , ,false,<default>
+revokeMessage,String,false,false, , ,false,<default>
+sendApproveMessage,boolean,false,false, , ,false,<default>
+sendArchiveMessage,boolean,false,false, , ,false,<default>
+sendRejectMessage,boolean,false,false, , ,false,<default>
+sendRevokeMessage,boolean,false,false, , ,false,<default>
+siteId,String,false,false, , ,false,<default>
+[IconNames]
+
+
+
+

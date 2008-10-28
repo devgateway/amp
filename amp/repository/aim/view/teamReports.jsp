@@ -8,7 +8,7 @@
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
-	width: 		750px;
+	width: 		900px;
 	background-color: #f4f4f2;
 }
 </style>
@@ -30,7 +30,15 @@
 	background-color:#a5bcf2;
 }
 
+html>body #main {
+	width:892px;
+}
+
 </style>
+
+<DIV id="TipLayer"
+  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
 <script language="javascript">
 function setStripsTable(tableId, classOdd, classEven) {
 	var tableElement = document.getElementById(tableId);
@@ -266,10 +274,10 @@ function setHoveredTable(tableId, hasHeaders) {
 														<td align="left" width="100%" valign="center">
 															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#ffffff">
-																<tr><td width=3 bgcolor="#999999" width="5%">
+																<tr><td bgcolor="#999999" width="5%">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td valign="center" align="center" bgcolor="#999999" style="color:black" width="75%">
+																<td align="center" bgcolor="#999999" style="color:black" width="30%">
 																	<b>
 																		<c:if test="${aimTeamReportsForm.showReportList == true}">
 																			<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
@@ -279,7 +287,24 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</c:if>
 																	</b>
 																</td>
-																<td valign="center" align="center" bgcolor="#999999" style="color:black" width="20%">
+																<td  align="center" bgcolor="#999999" style="color:black" width="15%">
+																	<b>
+										                              <digi:trn key="aim:reportType">
+										                                Type 
+										                              </digi:trn>
+																	</b>
+																</td>
+									                            <td align="center" bgcolor="#999999" style="color:black" width="17%">
+									                              <b>
+										                              <digi:trn key="aim:hierarchies">
+										                              	Hierarchies
+										                              </digi:trn>
+									                              </b>
+									                            </td>
+																<td align="center" bgcolor="#999999" style="color:black" width="23%">
+																	&nbsp;
+																</td>
+																<td align="center" bgcolor="#999999" style="color:black" width="10%">
 																	<b><digi:trn key="aim:visibility">Visibility</digi:trn></b>
 																</td>
 															</table>
@@ -302,20 +327,117 @@ function setHoveredTable(tableId, hasHeaders) {
 													<tr>
 														<td>
 															<table width="100%" cellSpacing=0 cellPadding=2 vAlign="top" align="left"
-															bgcolor="#dddddd" id="dataTable">
+															bgcolor="#dddddd" id="dataTable" border=0>
 
 															<logic:iterate name="aimTeamReportsForm" property="reports" id="reports"
 															type="org.digijava.module.aim.helper.ReportsCollection">
 																<bean:define id="ampReports" name="reports" property="report"
 																type="org.digijava.module.aim.dbentity.AmpReports" />
 																<tr bgColor=#f4f4f2>
-																	<td width="3%">
+																	<td width="5%">
 																		<html:multibox property="selReports" >
 																		<bean:write name="ampReports" property="ampReportId" />
 																		</html:multibox>
 																	</td>
-																	<td width="73%">
+																	<td width="30%">
 																		<digi:trn key="aim:reportMemberSpecificName:${ampReports.name}"><bean:write name="ampReports" property="name" /></digi:trn>
+																	</td>
+																	<td width="15%">
+										                                <p style="white-space: nowrap">
+										                                  <li>
+										                                      <%
+										                                        if (ampReports.getType()!=null && ampReports.getType().equals(new Long(1))) {
+										                                      %>
+										                                          <digi:trn key="aim:donorType">donor</digi:trn>
+											                                  <%
+										                                        }
+										                                        else if (ampReports.getType()!=null && ampReports.getType().equals(new Long (3))){
+											                                  %>
+										                                          <digi:trn key="aim:regionalType">regional</digi:trn>
+											                                  <%
+										                                        }
+										                                        else if (ampReports.getType()!=null && ampReports.getType().equals(new Long(2))){
+											                                  %>
+										                                          <digi:trn key="aim:componentType">component</digi:trn>
+											                                  <%
+										                                        }
+										                                        else if (ampReports.getType()!=null && ampReports.getType().equals(new Long(4))){
+											                                  %>
+										                                          <digi:trn key="aim:contributionType">contribution</digi:trn>
+											                                  <%}%>
+											                              </li>
+										                                  <logic:equal name="ampReports" property="drilldownTab" value="true">
+										                                    <li>
+										                                      <digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="ampReports" property="publicReport" value="true">
+										                                    <li>
+										                                      <digi:trn key="aim:typePublicReport">Public Report</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="ampReports" property="hideActivities" value="true">
+										                                    <li>
+										                                      <digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
+										                                    </li>
+										                                  </logic:equal>                                  
+										                                  <logic:equal name="ampReports" property="options" value="A">
+										                                    <li>
+										                                    	<digi:trn key="aim:annualreport">Annual</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="ampReports" property="options" value="Q">
+										                                    <li>
+										                                    	<digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>
+										                                    </li>
+										                                  </logic:equal>
+										                                  <logic:equal name="ampReports" property="options" value="M">
+										                                    <li>
+										                                    	<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
+										                                    </li>
+										                                  </logic:equal>
+										                                </p>
+																	</td>
+										                            <td width="17%">
+																		&nbsp;
+										                                <logic:iterate name="ampReports" property="hierarchies" id="hierarchy" >
+										                                  <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
+										                                  <li>
+										                                  	${hierarchy.column.columnName}
+										                                  </li>
+										                                </logic:iterate>
+										                            </td>
+																	<td width="23%">
+										                                <div style='position:relative;display:none;' id='report-<bean:write name="ampReports" property="ampReportId"/>'> 
+										                                  <logic:iterate name="ampReports" property="columns" id="column" indexId="index"  >
+										                                    <%if (index.intValue()%2==0){ %>
+										                                      <li>                                      
+										                                      	<digi:trn key="aim:report:${column.column.columnName}">
+										                                        	<bean:write name="column" property="column.columnName" />
+										                                      	</digi:trn>
+										                                    <% } else {%>
+										                                      ,
+										                                      	<digi:trn key="aim:report:${column.column.columnName}">
+										                                        	<bean:write name="column" property="column.columnName" />
+										                                      	</digi:trn>
+										                                      </li>
+										                                    <%} %>
+										                                  </logic:iterate>
+										                                </div>
+										                                <span align="center" style="text-transform: capitalize;" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="ampReports" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u style="text-transform:capitalize;" ><digi:trn key="aim:teamreports:columns">Columns</digi:trn></u> ]&nbsp;
+										                                </span>
+
+										                                <div style='position:relative;display:none;' id='measure-<bean:write name="ampReports" property="measures"/>'> 
+										                                  <logic:iterate name="ampReports" property="measures" id="measure" indexId="index"  >
+										                                    <li>
+										                                    	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">                                      
+										                                      		${measure.measure.aliasName}
+										                                      	</digi:trn>
+										                                    </li>
+										                                  </logic:iterate>
+										                                </div>										                                
+										                                <span align="center" style="text-transform: capitalize;white-space: no-wrap;"  onMouseOver="stm(['<digi:trn key="aim:teamreports:measures">measures</digi:trn>',document.getElementById('measure-<bean:write name="ampReports" property="measures"/>').innerHTML],Style[1])" onMouseOut="htm()">[ <u><digi:trn key="aim:teamreports:measures">Measures</digi:trn></u> ]<br />
+										                                </span>
 																	</td>
 																	<jsp:useBean id="urlParams" type="java.util.Map"
 																	class="java.util.HashMap"/>
@@ -323,10 +445,8 @@ function setHoveredTable(tableId, hasHeaders) {
 																		<bean:write name="ampReports" property="ampReportId" />
 																	</c:set>
 																	<logic:equal name="reports" property="teamView" value="false">
-																		<td width="3%">
-																		</td>
 																		<c:set target="${urlParams}" property="status" value="team" />
-																		<td width="24%" align="center">
+																		<td width="10%" align="center">
 																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPublic">Click here to make this public</digi:trn>
 																			</c:set>
@@ -344,11 +464,8 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</td>
 																	</logic:equal>
 																	<logic:equal name="reports" property="teamView" value="true">
-																		<td width="3%">
-																		</td>
 																		<c:set target="${urlParams}" property="status" value="member" />
-																		<td width="24%" align="center">
-
+																		<td width="10%" align="center">
 																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
 																			</c:set>

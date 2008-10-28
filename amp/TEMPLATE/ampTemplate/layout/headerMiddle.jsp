@@ -184,7 +184,7 @@ function adminHelp(){
                               <div id="tools" class="yuiampmenu" style="opacity:0.9;">
                                   <div class="bd">                    
                                       <ul>
-                                        <li style="_width:200px">
+                                        <li style="_width:240px">
                                         <a class="yuiampmenuitemlabel" href="#">
                                         <digi:trn key="aim:deflanguage">Language</digi:trn>
                                         </a>

@@ -84,7 +84,7 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
               <span title="${translation}"'>
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
 				<!--<a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">-->
-                	<strong style="color:#FFFFFF"><digi:trn key="aim:pageshead:title:${teamMember.teamName}">${teamMember.teamName}</digi:trn></strong>
+                	<strong style="color:#FFFFFF">${teamMember.teamName}</strong>
 				<!--</a>-->
               </span>
               <c:set var="translation">
@@ -92,7 +92,7 @@ a.header_title,a.header_title:link,a.header_title:hover,A.header_title:active, A
               </c:set>
               <span title="${translation}"'>
                 <a href="javascript:showUserProfile(${teamMember.memberId})"class="header_text">
-                	<digi:trn key="aim:pagesheadtitle:${teamMember.memberName}">${teamMember.memberName}</digi:trn>
+                	${teamMember.memberName}
                 </a>
               </span>
           </logic:present>        

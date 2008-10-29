@@ -359,13 +359,14 @@
 								
 								<bean:define id="member" name="currentMember" scope="session" />
                   				
-                  				<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
+                  				
 
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>
 								</span>
 								<div align="center" id="optionsDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; width: 100%">
 									<table>
+										<c:if test="${member.teamHead == true && member.teamAccessType == 'Management'}">
 										<tr>
 										<td>
 		                                    <html:checkbox property="publicReport"/>
@@ -374,6 +375,8 @@
 		                                    </digi:trn>
                                     	</td>
                                     	</tr>
+                                    	</c:if>
+                                    	
                                     	<tr>
                                     	<td>
 		                                    <html:checkbox property="allowEmptyFundingColumns"/>
@@ -384,9 +387,6 @@
                                     	</tr>
                                     </table>
                                 </div>
-
-								</c:if>
-
 							</td>
 							<td width="47%">
 								<span class="list_header">

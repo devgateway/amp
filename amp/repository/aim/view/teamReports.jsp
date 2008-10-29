@@ -273,7 +273,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																<tr><td bgcolor="#999999" width="5%">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td align="left" bgcolor="#999999" style="color:black" width="25%">
+																<td align="center" bgcolor="#999999" style="color:black" width="25%">
 																	<b>
 																		<c:if test="${aimTeamReportsForm.showReportList == true}">
 																			<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
@@ -283,28 +283,28 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</c:if>
 																	</b>
 																</td>
-																<td  align="left" bgcolor="#999999" style="color:black" width="15%">
+																<td  align="center" bgcolor="#999999" style="color:black" width="15%">
 																	<b>
 										                              <digi:trn key="aim:reportOwnerName">
 										                                Owner
 										                              </digi:trn>
 																	</b>
 																</td>
-																<td  align="left" bgcolor="#999999" style="color:black" width="15%">
+																<td  align="center" bgcolor="#999999" style="color:black" width="15%">
 																	<b>
 										                              <digi:trn key="aim:reportType">
 										                                Type 
 										                              </digi:trn>
 																	</b>
 																</td>
-									                            <td align="left" bgcolor="#999999" style="color:black" width="15%">
+									                            <td align="center" bgcolor="#999999" style="color:black" width="15%">
 									                              <b>
 										                              <digi:trn key="aim:hierarchies">
 										                              	Hierarchies
 										                              </digi:trn>
 									                              </b>
 									                            </td>
-																<td align="left" bgcolor="#999999" style="color:black" width="18%">
+																<td align="center" bgcolor="#999999" style="color:black" width="18%">
 																	&nbsp;
 																</td>
 																<td align="center" bgcolor="#999999" style="color:black" width="7%">

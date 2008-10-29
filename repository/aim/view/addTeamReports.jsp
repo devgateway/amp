@@ -8,7 +8,7 @@
 <style>
 .contentbox_border{
 	border: 	1px solid #666666;
-	width: 		800px;
+	width: 		950px;
 	background-color: #f4f4f2;
 }
 </style>
@@ -213,7 +213,7 @@ function setHoveredTable(tableId, hasHeaders) {
 																<tr><td width="5%" bgcolor="#999999">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
-																<td align="left" bgcolor="#999999" style="color:black" width="40%">
+																<td align="center" bgcolor="#999999" style="color:black" width="25%">
 																	<b>
 																		<c:if test="${aimTeamReportsForm.showReportList == true}">
 																			<digi:trn key="aim:reportListUnassignedReports">
@@ -227,14 +227,21 @@ function setHoveredTable(tableId, hasHeaders) {
 																		</c:if>
 																	</b>
 																</td>
-																<td  align="left" bgcolor="#999999" style="color:black" width="20%">
+																<td  align="center" bgcolor="#999999" style="color:black" width="15%">
+																	<b>
+										                              <digi:trn key="aim:reportOwnerName">
+										                                Owner
+										                              </digi:trn>
+																	</b>
+																</td>
+																<td  align="center" bgcolor="#999999" style="color:black" width="15%">
 																	<b>
 										                              <digi:trn key="aim:reportType">
 										                                Type 
 										                              </digi:trn>
 																	</b>
 																</td>
-									                            <td align="left" bgcolor="#999999" style="color:black" width="15%">
+									                            <td align="center" bgcolor="#999999" style="color:black" width="20%">
 									                              <b>
 										                              <digi:trn key="aim:hierarchies">
 										                              	Hierarchies
@@ -284,11 +291,17 @@ function setHoveredTable(tableId, hasHeaders) {
 																		<bean:write name="reports" property="ampReportId" />
 																	</html:multibox>
 																</td>
-																<td width="40%">
+																<td width="25%">
 																	<bean:write name="reports" property="name" />
 																</td>															
-
-																	<td width="20%">
+																<td width="15%">
+									                                <p>
+									                                <logic:present name="reports" property="ownerId">
+									                                   <i><bean:write name="reports" property="ownerId.user.name" /></i>
+									                                </logic:present>
+									                                </p>
+																</td>
+																	<td width="15%">
 										                                <p style="white-space: nowrap">
 										                                  <li>
 										                                      <%
@@ -344,7 +357,7 @@ function setHoveredTable(tableId, hasHeaders) {
 										                                  </logic:equal>
 										                                </p>
 																	</td>
-										                            <td width="15%">
+										                            <td width="20%">
 																		&nbsp;
 										                                <logic:iterate name="reports" property="hierarchies" id="hierarchy" >
 										                                  <%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
@@ -450,7 +463,7 @@ setHoveredTable("dataTable", false);
 <style>
 
 html>body #main {
-	width:792px;
+	width:942px;
 }
 
 </style>

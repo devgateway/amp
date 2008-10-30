@@ -26,6 +26,7 @@ public class RecoverySaveParameters {
 	private int noOfSteps;
 	private String stepText[];
 	private Boolean stepFailure[];
+	private String stepFailureText[];
 	private EditActivityForm eaForm;
 	private TeamMember tm;
 	private AmpActivity activity;
@@ -142,6 +143,12 @@ public class RecoverySaveParameters {
 	}
 	public void setAlwaysRollback(boolean alwaysRollback) {
 		this.alwaysRollback = alwaysRollback;
+	}
+	public String[] getStepFailureText() {
+		return stepFailureText;
+	}
+	public void setStepFailureText(String[] stepFailureText) {
+		this.stepFailureText = stepFailureText;
 	}
 }
 

@@ -5,6 +5,9 @@
 
 package org.digijava.module.aim.util;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Savepoint;
 import java.text.DecimalFormat;
 import java.sql.Connection;
@@ -1010,6 +1013,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 			session.connection().setAutoCommit(true);
 			try {
 				session.close();
+				logger.error("Session closed!");
 				PersistenceManager.releaseSession(session);
 			}
 			catch (Exception e) {
@@ -1988,7 +1992,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     finally {
       if (session != null) {
         try {
-          PersistenceManager.releaseSession(session);
+        	session.close();
+			PersistenceManager.releaseSession(session);
         }
         catch (Exception ex) {
           logger.debug("Exception while releasing session " + ex.getMessage());
@@ -3568,6 +3573,24 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
     			ex.printStackTrace(); 
     		} 
     		return null;
+        }
+        
+        public static String stackTraceToString(Throwable e) {
+        	String retValue = null;
+        	StringWriter sw = null;
+        	PrintWriter pw = null;
+        	try {
+        		sw = new StringWriter();
+        		pw = new PrintWriter(sw);
+        		e.printStackTrace(pw);
+        		retValue = sw.toString();
+        	} finally {
+        		try {
+        			if(pw != null)  pw.close();
+        			if(sw != null)  sw.close();
+        		} catch (IOException ignore) {}
+        	}
+        	return retValue;
         }
        
 	

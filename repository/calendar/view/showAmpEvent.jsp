@@ -719,9 +719,7 @@ function recurEvent(){
 											<table cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 												<tr>
 													<td width="65px">
-														<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" >
-															<digi:trn key="btn:addNew">Add New</digi:trn>
-														</aim:addOrganizationButton>			
+														<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
 													</td>
 												</tr>
 												<tr>

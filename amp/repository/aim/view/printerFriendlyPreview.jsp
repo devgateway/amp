@@ -317,7 +317,7 @@
 									
 
 		</feature:display>
-                                     <module:display name="Project Id And Planning">
+                                     <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
                                      <feature:display name="Budget" module="Project Id And Planning">
 										<tr>
 											<td width="27%" align="right" valign="top" nowrap="nowrap">

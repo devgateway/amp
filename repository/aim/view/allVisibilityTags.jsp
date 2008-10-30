@@ -35,7 +35,8 @@
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
-<module:display name="Messages" parentModule="Messaging System"></module:display> 
+<module:display name="Messages" parentModule="Messaging System"></module:display>
+ 
 <module:display name="Messaging System"></module:display> 
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display> 
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display> 
@@ -141,8 +142,9 @@
 <feature:display name="Location" module="Project ID and Planning"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
-<feature:display name="Message tab" module="Messaging System"></feature:display> 
-<feature:display name="Messages" module="Messaging System"></feature:display> 
+
+<feature:display name="Message tab" module="Messages"></feature:display>
+<feature:display name="Messages" module="Messages"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 

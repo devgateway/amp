@@ -1752,8 +1752,6 @@ public class SaveActivity extends Action {
 			break;
 		case 1:
 			stepText[stepNumber] = "1_5";
-			if (!check)
-				symErr();
 			processStep1_5(check, eaForm, activity, errors, request);
 			break;
 		case 2:
@@ -1774,8 +1772,6 @@ public class SaveActivity extends Action {
 			break;
 		case 6:
 			stepText[stepNumber] = "6";
-			if (!check)
-				symErr();
 			processStep6(check, eaForm, activity, errors, request, relatedLinks);
 			break;
 		case 7:
@@ -1907,7 +1903,6 @@ public class SaveActivity extends Action {
 		boolean recoveryMode = false;
 		logger.debug("Attempting normal save!");
 		try {
-			symErr();
 			rsp.setAlwaysRollback(false);
 			actId = switchSave(rsp);
 			logger.debug("Succeeded!");

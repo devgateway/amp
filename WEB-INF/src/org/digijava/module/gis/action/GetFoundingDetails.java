@@ -67,8 +67,13 @@ public class GetFoundingDetails extends Action {
             String mapCode = request.getParameter("mapCode");
             GisMap map = null;
 
+            String mapLevel = request.getParameter("mapLevel");
+            if (mapLevel == null) {
+                mapLevel = "2";
+            }
+
             if (mapCode != null && mapCode.trim().length() > 0) {
-                map = GisUtil.getMap(mapCode);
+                map = GisUtil.getMap(mapCode, Integer.parseInt(mapLevel));
             }
 
             int canvasWidth = 700;

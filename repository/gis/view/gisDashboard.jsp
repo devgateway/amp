@@ -43,7 +43,7 @@
 
 
 <div id="ctrlContainer" style="display:none">
-	<div style="width:300px; height:300px; position: absolute; left: 15px; top: 35px; border: 1px solid black"><img width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapCode=TZA"></div>
+	<div style="width:300px; height:300px; position: absolute; left: 15px; top: 35px; border: 1px solid black"><img id="navCursorMap" width="300" height="300" border="0" src="/gis/getFoundingDetails.do?action=paintMap&noCapt=true&width=300&height=300&mapLevel=2&mapCode=TZA"></div>
 	<div id="navCursor" style="width:1px; height:1px; position: absolute; left: 23px; top: 43px; border: 1px solid white; cursor:pointer;">
 		<div style="width:100%; height:100%; background:white; filter:alpha(opacity=30); -moz-opacity:0.3;"></div>
 	</div>
@@ -65,7 +65,7 @@
 	<tr>
 		<td colspan="2">
 			<!-- onscroll="mapScroll(this)"-->
-			<div id="mapCanvasContainer" style="border:1px solid black; width:700px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues();" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&width=700&height=700"></div>
+			<div id="mapCanvasContainer" style="border:1px solid black; width:700px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues();" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&width=700&height=700"></div>
 		</td>
 	</tr>
 	<tr>
@@ -124,6 +124,20 @@
 			<img style="visibility:hidden" id="busyIndicator" src="/TEMPLATE/ampTemplate/images/amploading.gif">
 		</td>
 	</tr>
+	
+	<tr>
+            <td width="15%" nowrap>
+                <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
+            </td>
+		<td>
+		<select id="mapLevelCombo" onchange="mapLevelChanged(this.value)">
+			<option value="2">Region view</option>
+			<option value="3">District view</option>
+		</select>
+		<div id="imageMapContainer" style="visibility:hidden;"></div>
+		</td>
+	</tr>
+	
 	<tr>
             <td width="15%" nowrap>
                 <digi:trn key="gis:selectSector">Select Sector</digi:trn>:
@@ -270,23 +284,26 @@
 	function sectorSelected(sec) {
 		selSector = sec.value;
 		setBusy(true);
+		var mapLevel = document.getElementById("mapLevelCombo").value;
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getDataForSector(sec);
 	}
 	
 	function indicatorSelected(ind) {
 		setBusy(true);
+		var mapLevel = document.getElementById("mapLevelCombo").value;
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getIndValuesAction = true;
 	}
 
 	
 	function getImageMap() {
 		if (!imageMapLoaded) {
+			var mapLevel = document.getElementById("mapLevelCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 			xmlhttp.onreadystatechange = addImageMap;
 			xmlhttp.send(null);
 		} else {
@@ -307,8 +324,9 @@
 	
 	function getDataForSector(sec) {
 			selSector = sec.value;
+			var mapLevel = document.getElementById("mapLevelCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
 			xmlhttp.onreadystatechange = dataForSectorReady;
 			xmlhttp.send(null);
 	}
@@ -340,8 +358,9 @@
 	}
 
 	function getSectorIndicators(sec) {
+			var mapLevel = document.getElementById("mapLevelCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
 			xmlhttp.onreadystatechange = SectorIndicatorsReady;
 			xmlhttp.send(null);
 	}
@@ -376,8 +395,9 @@
 	}
 	
 	function getIndicatorsValues() {
+			var mapLevel = document.getElementById("mapLevelCombo").value;
 			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&uniqueStr=" + uniqueStr, true);
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&uniqueStr=" + uniqueStr, true);
 			xmlhttp.onreadystatechange = indicatorsValuesReady;
 			xmlhttp.send(null);
 	}
@@ -504,6 +524,41 @@
 		}
 		return retVal;
 	}
+	
+	
+		
+	//Map level functions
+	
+	function mapLevelChanged(newVal){
+		
+		var mapObj = document.getElementById("testMap");
+		var mapSrc = mapObj.src;
+		var newUrl = modifyMapLevelURL (mapSrc, newVal);
+		
+		setBusy(true);
+		mapObj.src = newUrl;
+		
+		
+		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal)
+		
+	}
+	
+	function modifyMapLevelURL (url, newLevel) {
+		var retVal = null;
+		
+		var levelStartPos = url.indexOf ("mapLevel");
+		var levelEndtPos = url.indexOf ("&", levelStartPos);
+		if (levelEndtPos == -1) {
+			levelEndtPos = url.length;
+		}
+			retVal = url.substring(0, levelStartPos) +
+			"mapLevel=" + newLevel + url.substring(levelEndtPos, url.length);
+		
+		return retVal;
+	}
+	//end of Map level functions
+	
+	
 	
 	function zoomMap (pressedObj, zoomRation) {
 		if (pressedObj != currentZoomObj) {

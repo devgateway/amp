@@ -38,18 +38,24 @@ public class GisUtil {
         loadedMaps = new HashMap();
     }
 
-
     public static GisMap getMap(String mapCode) {
+        return getMap(mapCode, 2);
+    }
+
+    public static GisMap getMap(String mapCode, int level) {
         GisMap retVal = null;
-        if (loadedMaps.containsKey(mapCode)) {
-            retVal = (GisMap) loadedMaps.get(mapCode);
+
+        MapCodeLevelPair codeLevel = new MapCodeLevelPair(mapCode,level);
+
+        if (loadedMaps.containsKey(codeLevel)) {
+            retVal = (GisMap) loadedMaps.get(codeLevel);
         } else {
-            GisMap dbMap = DbUtil.getMapByCode(mapCode);
+            GisMap dbMap = DbUtil.getMapByCode(mapCode, level);
             generateCenterPoints(dbMap);
 
             if (dbMap != null) {
                 retVal = dbMap;
-                loadedMaps.put(mapCode, dbMap);
+                loadedMaps.put(codeLevel, dbMap);
             }
         }
         return retVal;
@@ -283,7 +289,7 @@ public class GisUtil {
                         //TODO: Improve this it's a last minute solution
                         if (shape.getSegment().getSegmentName().indexOf("Lake")>=0){
                         	g2d.setColor( new Color(51,153,255));
-            	          
+
             			}else{
             				g2d.setColor(gg);
             			}

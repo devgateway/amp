@@ -89,15 +89,16 @@ public class DbUtil {
         return gisMap;
     }
 
-    public static GisMap getMapByCode(String code) {
+    public static GisMap getMapByCode(String code, int level) {
         Session session = null;
         GisMap map = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             Query q = session.createQuery("from " +
                                           GisMap.class.getName() +
-                                          " rs where (rs.mapCode=:mapCode)");
+                                          " rs where (rs.mapCode=:mapCode) and rs.mapLevel=:mapLevel");
             q.setParameter("mapCode", code, Hibernate.STRING);
+            q.setParameter("mapLevel", level, Hibernate.INTEGER);
             Iterator it = q.iterate();
             if (it.hasNext()) {
                 map = (GisMap) it.next();

@@ -7,9 +7,23 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
-
+<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
+<!-- Dependencies --> 
+        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
+        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+        
+        <!-- Source File -->
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+        <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+
 
 <digi:instance property="calendarEventForm"/>
 <style  type="text/css">
@@ -815,7 +829,7 @@ function recurEvent(){
                             &nbsp;
                             <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
                             &nbsp;                            
-                            <input type="submit" onclick="return reccuringEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+                            <input type="button" onclick="showFilter();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
                           </td>
                         </tr>
                     </table>
@@ -828,7 +842,11 @@ function recurEvent(){
         </tr>	
         
     </table>
+<div id="myFilter" style="display:none;" >
+		<jsp:include page="/calendar/recurringEvent.do" />
+	</div>
 </digi:form>
+
 <script type="text/javascript">
 	//attach character counters
 	$("#eventTitle").charCounter(50,{

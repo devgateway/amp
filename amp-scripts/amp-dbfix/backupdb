@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Version 0.1
+# Copyright (c) 2008 Development Gateway Foundation
+# Author Mihai Postelnicu - mpostelnicu@dginternational.org
+
+cdate=`date +%d%b%Y-%H%M`
+extra=""                                                                                                                     
+while [ "$#" -gt "1" ]                                                                                                       
+do                                                                                                                           
+  extra+=$1" "                                                                                                               
+  shift                                                                                                                      
+done                                                                                                                         
+                                                                                                                             
+database=$1 
+
+#sed="'s/`$database`.//g'"
+if [ -n "$1" ]; then 
+mysqldump --hex-blob -v --add-drop-database --add-drop-table --default-character-set=utf8 -R --single-transaction -c -e $extra $database  |  bzip2 > $1-$cdate.sql.bz2
+else
+echo "backupdb - creates a bz2 compressed SQL file with the dump of a MySQL database. Includes blobs, stored procs/views."
+echo "Usage: $0 [connect params] database"
+fi

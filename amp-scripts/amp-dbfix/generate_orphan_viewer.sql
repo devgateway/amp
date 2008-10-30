@@ -1,0 +1,1 @@
+SELECT COALESCE(CONCAT('SELECT \'',kcu.table_name,'\',',kcu.column_name,' FROM ',kcu.table_name,'  WHERE ',kcu.column_name,' IS NOT NULL AND ',kcu.column_name,' NOT IN (SELECT ref.',kcu.referenced_column_name,' FROM ',kcu.referenced_table_name,' ref);'),'') AS '' FROM information_schema.key_column_usage kcu WHERE kcu.table_schema=DATABASE() and kcu.constraint_name != 'PRIMARY';

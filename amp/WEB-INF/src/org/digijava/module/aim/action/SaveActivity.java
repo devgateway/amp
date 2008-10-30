@@ -3,6 +3,9 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -1749,6 +1752,8 @@ public class SaveActivity extends Action {
 			break;
 		case 1:
 			stepText[stepNumber] = "1_5";
+			if (!check)
+				symErr();
 			processStep1_5(check, eaForm, activity, errors, request);
 			break;
 		case 2:
@@ -1769,6 +1774,8 @@ public class SaveActivity extends Action {
 			break;
 		case 6:
 			stepText[stepNumber] = "6";
+			if (!check)
+				symErr();
 			processStep6(check, eaForm, activity, errors, request, relatedLinks);
 			break;
 		case 7:
@@ -1900,6 +1907,7 @@ public class SaveActivity extends Action {
 		boolean recoveryMode = false;
 		logger.debug("Attempting normal save!");
 		try {
+			symErr();
 			rsp.setAlwaysRollback(false);
 			actId = switchSave(rsp);
 			logger.debug("Succeeded!");
@@ -1981,6 +1989,8 @@ public class SaveActivity extends Action {
 						rsp.getStepFailure()[currentStep] = true;
 						//no need to try saving ... because we didn't improve anything
 						currentStep++;
+						
+						rsp.getStepFailureText()[currentStep] = new String(ActivityUtil.stackTraceToString(e));
 						break thisStep;
 					}
 					
@@ -2092,13 +2102,15 @@ public class SaveActivity extends Action {
 		final int noOfSteps = 11;
 		String stepText[] = new String[noOfSteps];
 		Boolean stepFailure[] = new Boolean[noOfSteps];
+		String stepFailureText[] = new String[noOfSteps];
 		for (int i = 0; i < noOfSteps; i++){
 			stepFailure[i] = false;
 			stepText[i] = new String();
+			stepFailureText[i] = new String();
 		}
 		eaForm.setStepText(stepText);
 		eaForm.setStepFailure(stepFailure);
-
+		eaForm.setStepFailureText(stepFailureText);
 		
 		logger.debug("No of steps:" + String.valueOf(eaForm.getSteps().size()));
 		
@@ -2158,6 +2170,7 @@ public class SaveActivity extends Action {
 			rsp.setNoOfSteps(noOfSteps);
 			rsp.setStepText(stepText);
 			rsp.setStepFailure(stepFailure);
+			rsp.setStepFailureText(stepFailureText);
 			rsp.setEaForm(eaForm);
 			rsp.setTm(tm);
 			
@@ -2244,6 +2257,7 @@ public class SaveActivity extends Action {
 			rsp.setNoOfSteps(noOfSteps);
 			rsp.setStepText(stepText);
 			rsp.setStepFailure(stepFailure);
+			rsp.setStepFailureText(stepFailureText);
 			rsp.setEaForm(eaForm);
 			rsp.setTm(tm);
 			

@@ -15,13 +15,18 @@ import java.util.List;
  * @version 1.0
  */
 public class GisMap {
+    public static int MAP_LEVEL_WORLD=0;
+    public static int MAP_LEVEL_COUNTRY=1;
+    public static int MAP_LEVEL_REGION=2;
+    public static int MAP_LEVEL_DISTRICT=3;
+
 
     private long id;
     private String mapCode;
     private String mapName;
     private String parentMapCode;
     private List <GisMapSegment> segments;
-
+    private int mapLevel;
 
     public GisMap() {
     }
@@ -46,6 +51,10 @@ public class GisMap {
         return parentMapCode;
     }
 
+    public int getMapLevel() {
+        return mapLevel;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -64,6 +73,10 @@ public class GisMap {
 
     public void setParentMapCode(String parentMapCode) {
         this.parentMapCode = parentMapCode;
+    }
+
+    public void setMapLevel(int mapLevel) {
+        this.mapLevel = mapLevel;
     }
 
 

@@ -39,7 +39,7 @@ function changeState() {
 <html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
-<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
+<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
   <div style="padding:5px;font-size:13px;font-weight:bold;color:White;background-color: #7B9EBD">
   <digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
   </div>

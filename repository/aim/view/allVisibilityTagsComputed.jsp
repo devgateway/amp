@@ -96,10 +96,10 @@
 <feature:display name="Admin Topics Help" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
-<feature:display name="Alert tab" module="Messaging System"></feature:display> 
+<feature:display name="Alert tab" module="Messages"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
-<feature:display name="Approval Tab" module="Messaging System"></feature:display> 
+<feature:display name="Approval Tab" module="Messages"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
 <feature:display name="Budget" module="Project Id And Planning"></feature:display> 
@@ -120,7 +120,7 @@
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report Generator"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
-<feature:display name="Event Tab" module="Messaging System"></feature:display> 
+<feature:display name="Event Tab" module="Messages"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report Generator"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 

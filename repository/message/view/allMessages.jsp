@@ -1046,7 +1046,7 @@ $(document).ready(function(){
                                                     </LI>
 											</c:if>							
                                 		</feature:display>                  
-                                        <feature:display name="Alert tab" module="Messaging System">           
+                                        <feature:display name="Alert tab" module="Messages">           
                                         	<c:if test="${messageForm.tabIndex==2}">
                                             	<LI>
                                                  	<a name="node">
@@ -1068,7 +1068,7 @@ $(document).ready(function(){
                                             </LI>
 										</c:if>
                                         </feature:display>
-                                        <feature:display name="Approval Tab" module="Messaging System">          
+                                        <feature:display name="Approval Tab" module="Messages">          
                                         	<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 												<c:if test="${messageForm.tabIndex==3}">
                                                     <LI>
@@ -1092,7 +1092,7 @@ $(document).ready(function(){
 												</c:if>
                                             </c:if>
                                         </feature:display>          
-                                        <feature:display name="Event Tab" module="Messaging System">     
+                                        <feature:display name="Event Tab" module="Messages">     
                                 			<c:if test="${messageForm.tabIndex==4}">
                                             	<LI>
                                                 	<a name="node">
@@ -1184,7 +1184,7 @@ $(document).ready(function(){
 								</field:display>
 								</c:if>
 								</feature:display>
-								<feature:display name="Alert tab" module="Messaging System">
+								<feature:display name="Alert tab" module="Messages">
 	                        	<c:if test="${messageForm.tabIndex==2}">    
 	                        	<field:display name="Inbox Alert" feature="Alert tab">                                                                
 									<c:if test="${messageForm.childTab=='inbox'}">

@@ -1024,7 +1024,7 @@ $(document).ready(function(){
 	        					<TD STYLE="width:750">
                                 	<DIV id="tabs">
                                      	<UL>
-                                     	<feature:display name="Message tab" module="Messaging System">
+                                     	<feature:display name="Message tab" module="Messages">
                                 			<c:if test="${messageForm.tabIndex==1}">
                                          		<LI>
                                             		<a name="node">
@@ -1120,7 +1120,7 @@ $(document).ready(function(){
 						<DIV id="subtabs">
 	                        <div style="pa">
 	                        	<UL>
-	                        	<feature:display name="Message tab" module="Messaging System">
+	                        	<feature:display name="Message tab" module="Messages">
 	                        	<c:if test="${messageForm.tabIndex==1}">    
 	                        	<field:display name="Inbox Message" feature="Message tab">                                                                
 									<c:if test="${messageForm.childTab=='inbox'}">

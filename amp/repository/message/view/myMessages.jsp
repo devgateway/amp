@@ -151,7 +151,7 @@
       td1.title=clickToViewMsg;
       td1.innerHTML='<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10> &nbsp'+
       '<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox">'+msgsAmount+''+newmessages+'</a>';
-      <feature:display name="Message tab" module="Messaging System">
+      <feature:display name="Message tab" module="Messages">
       	tr1.appendChild(td1);
       	body.appendChild(tr1);
       </feature:display>

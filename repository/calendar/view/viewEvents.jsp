@@ -44,7 +44,7 @@
                     <td valign="top" style="padding:10px;height: 100%"><jsp:include page="viewEventsButtons.jsp" flush="true"/></td>
                 </tr>
                 <tr>
-                    <td valign="top" style="padding:10px;height: 100%"><jsp:include page="viewEventsBody.jsp" flush="true"/></td>
+                    <td valign="top" style="padding:10px;height: 100%;border: 1px solid #7B9EBD;"><jsp:include page="viewEventsBody.jsp" flush="true"/></td>
                 </tr>
             </table>
         </td>

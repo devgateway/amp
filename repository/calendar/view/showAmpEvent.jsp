@@ -716,16 +716,16 @@ function recurEvent(){
 											</table>
                                         </td> 
                                         <td>                                        	
-											<table cellSpacing=1 cellPadding=1>
+											<table cellSpacing="1" cellPadding="1" class="box-border-nopadding">
 												<tr>
-													<td>
+													<td width="65px">
 														<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" >
 															<digi:trn key="btn:addNew">Add New</digi:trn>
 														</aim:addOrganizationButton>			
 													</td>
 												</tr>
 												<tr>
-													<td>
+													<td width="65px">
 														<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs()" style="width:65px;">
 															<digi:trn key="btn:remove">Remove</digi:trn>
 														</html:button>
@@ -803,9 +803,7 @@ function recurEvent(){
                             <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                             &nbsp;
                             <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
-                            &nbsp;
-                            <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
-                            &nbsp;
+                            &nbsp;                            
                             <input type="submit" onclick="return reccuringEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
                           </td>
                         </tr>

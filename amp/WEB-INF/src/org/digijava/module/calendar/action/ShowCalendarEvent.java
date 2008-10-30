@@ -265,11 +265,13 @@ public class ShowCalendarEvent extends Action {
             calendar.setSiteId(moduleInstance.getSite().getSiteId());
 
             // selected start date and selected end date
-            String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-            if (dtformat == null) {
-                dtformat = "dd/mm/yyyy";
-            }
-
+//            String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
+//            if (dtformat == null) {
+//                dtformat = "dd/mm/yyyy";
+//            }
+            
+            //date from calendar comes in this format
+            String dtformat = "MM/dd/yyyy hh:mm";
 
             SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
 
@@ -281,8 +283,7 @@ public class ShowCalendarEvent extends Action {
 
             calPK.setCalendar(calendar);
             ampCalendar.setCalendarPK(calPK);
-            //Private Event checkbox label states "Public Event"
-            
+            //Private Event checkbox label states "Public Event"            
             ampCalendar.setPrivateEvent(ceform.isPrivateEvent());
 
             AmpDbUtil.updateAmpCalendar(ampCalendar);
@@ -378,27 +379,21 @@ public class ShowCalendarEvent extends Action {
 
                 ceform.setSelectedAttsCol(selectedAttsCol);
 
-                ceform.setSelectedAtts( (String[]) selAtts.toArray(new String[selAtts.size()]));
-
-                ceform.setSelectedEventTypeName(ampCalendar.getEventType().getName());
+                ceform.setSelectedAtts( (String[]) selAtts.toArray(new String[selAtts.size()]));               
 
                 Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
-
                 // title
                 ceform.setEventTitle(calendar.getFirstCalendarItem().getTitle());
-
                 //description
                 ceform.setDescription(calendar.getFirstCalendarItem().getDescription());
-                
-                // selected event type
-                ceform.setSelectedEventTypeId(ampCalendar.getEventType().getId());
-
                 // private event
-                ceform.setPrivateEvent(ampCalendar.isPrivateEvent());                
+                ceform.setPrivateEvent(ampCalendar.isPrivateEvent());
                 
-                //event type
                 if(ampCalendar.getEventType()!=null){
-                	ceform.setEventTitle(ampCalendar.getEventType().getName());
+                	//event type
+                	ceform.setSelectedEventTypeName(ampCalendar.getEventType().getName());
+                	// selected event type
+                    ceform.setSelectedEventTypeId(ampCalendar.getEventType().getId());
                 }
                 
 

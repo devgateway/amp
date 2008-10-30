@@ -13,7 +13,7 @@
 
 <digi:instance property="calendarViewForm"/>
 
-<table id="tbl"width="100%" cellpadding="0" cellspacing="0">
+<table id="tbl"width="100%" cellpadding="0" cellspacing="0" height="100%">
     <tr height="100%">
     	<td>
     		<DIV id="tabs">

@@ -56,7 +56,7 @@ function eventType(){
 		var rec = document.getElementById("recurrWeekly").value;
 		document.getElementById("hidden").value = rec;
 	}
-	submitFilters();
+	submit();
 }
 
 </script>

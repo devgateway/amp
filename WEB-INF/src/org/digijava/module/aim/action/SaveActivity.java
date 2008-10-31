@@ -2023,7 +2023,7 @@ public class SaveActivity extends Action {
 			return actId;
 		} catch (Exception e) {
 			logger.debug("FAILED!!!!!!!!!!!!");
-			err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false);
+			err = new AMPActivityError(Constants.AMP_ERROR_LEVEL_ERROR, false, e);
 			throw err;
 		}
 	}

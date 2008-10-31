@@ -16,7 +16,13 @@ public abstract class AMPError extends Exception{
 		this.level = level;
 		this.continuable = continuable;
 	}
-	
+
+	public AMPError(int level, boolean continuable, Throwable cause) {
+		super(cause);
+		this.level = level;
+		this.continuable = continuable;
+	}
+
 	public int getLevel() {
 		return level;
 	}

@@ -15,6 +15,12 @@ public class AMPActivityError extends AMPError {
 		super(level, continuable);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public AMPActivityError(int level, boolean continuable, Throwable cause) {
+		super(level, continuable, cause);
+		// TODO Auto-generated constructor stub
+	}
+	
 
 	
 	

@@ -1982,10 +1982,10 @@ public class SaveActivity extends Action {
 						logger.debug("    FAILED!");
 						//mark the step as failed 
 						rsp.getStepFailure()[currentStep] = true;
+						rsp.getStepFailureText()[currentStep] = new String(ActivityUtil.stackTraceToString(e));
 						//no need to try saving ... because we didn't improve anything
 						currentStep++;
 						
-						rsp.getStepFailureText()[currentStep] = new String(ActivityUtil.stackTraceToString(e));
 						break thisStep;
 					}
 					
@@ -2001,6 +2001,7 @@ public class SaveActivity extends Action {
 					} catch (Exception e) {
 						logger.debug("     FAILED!");
 						rsp.getStepFailure()[currentStep] = true;
+						rsp.getStepFailureText()[currentStep] = new String(ActivityUtil.stackTraceToString(e));
 					}
 					if (currentStep == rsp.getNoOfSteps() - 1) //if the last added Step has failed then rebuild the activity
 						rebuild = true;

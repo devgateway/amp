@@ -160,12 +160,12 @@
 							<b><font size="2px">
 							Step <c:out value="${aimEditActivityForm.stepText[idx]}" />
 							</font></b>
-							<div id="errMsg<c:out value="${idx+1}"/>" style="display: none;" >
-								<c:out value="${aimEditActivityForm.stepFailureText[idx+1]}" />
+							<div id="errMsg<c:out value="${idx}"/>" style="display: none;" >
+								<c:out value="${aimEditActivityForm.stepFailureText[idx]}" />
 							</div>
 						</td>
 						<td valign="top">
-							<a onclick="javascript:toggleLayer('errMsg<c:out value="${idx+1}" />');">
+							<a onclick="javascript:toggleLayer('errMsg<c:out value="${idx}" />');">
 								<img align="top" width="24px" height="24px" src="/repository/aim/view/scripts/ajaxtabs/failed.gif" />
 							</a>
 						</td>

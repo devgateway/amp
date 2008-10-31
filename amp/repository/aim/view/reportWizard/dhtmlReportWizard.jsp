@@ -376,7 +376,7 @@
                                     	</td>
                                     	</tr>
                                     	</c:if>
-                                    	
+                                    	<c:if test="${!myForm.desktopTab}">
                                     	<tr>
                                     	<td>
 		                                    <html:checkbox property="allowEmptyFundingColumns"/>
@@ -385,6 +385,7 @@
 		                                    </digi:trn>
                                     	</td>
                                     	</tr>
+                                    	</c:if>
                                     </table>
                                 </div>
                                </c:if>

@@ -36,7 +36,7 @@
 								<c:set var="tooltip_translation">
 										<digi:trn key="rep:filter:timePeriod">Specify the time period to limit your search within.</digi:trn>
 								</c:set>
-								<table align="center" cellpadding="2" cellspacing="2" onmouseover="Tip('${tooltip_translation}');">
+								<table align="center" cellpadding="2" cellspacing="2" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 									<tr bgcolor="#EEEEEE">
 										<td colspan="5">
 											<b><digi:trn key="rep:filter:CalendarTitle">Calendar</digi:trn></b>

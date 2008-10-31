@@ -43,7 +43,7 @@
 						key="rep:filter:SpecifyprojectsKeywords.">Specify keywords to look for in the project data.</digi:trn>
 			</c:set>
 			<table align="center" cellpadding="2" cellspacing="2">
-				<tr bgcolor="#EEEEEE" onmouseover="Tip('${tooltip_translation}')">
+				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')">
 					<td colspan="5"><b><digi:trn
 						key="rep:filter:KeywordsTitle">Keyword Search</digi:trn></b><br/>
 					</td>
@@ -53,7 +53,7 @@
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">&nbsp;</td>
 				</tr>
-				<tr bgcolor="#EEEEEE" onmouseover="Tip('${tooltip_translation}')">
+				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')">
 					<td colspan="5"><digi:trn key="rep:filter:Keywords">`s</digi:trn> <br />
 					<html:text property="indexString" style="width: 250px"	styleClass="inp-text" /></td>
 				</tr>
@@ -106,7 +106,7 @@
 					<digi:trn
 						key="rep:filter:timePeriod">Specify the time period to limit your search within.</digi:trn>
 			</c:set>
-			<table align="center" cellpadding="2" cellspacing="2" onmouseover="Tip('${tooltip_translation}');">
+			<table align="center" cellpadding="2" cellspacing="2" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 				
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">
@@ -218,7 +218,7 @@
 				<digi:trn
 						key="rep:filter:financingDetails">Specify the financing details.</digi:trn>
 			</c:set>
-			<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}')">
+			<table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}')">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 					<b><digi:trn key="rep:filter:FinancingTitle">Financing</digi:trn></b>
@@ -289,16 +289,16 @@
 				</c:set>
 				<table align="center" cellpadding="1" cellspacing="1">
 						<tr bgcolor="#EEEEEE">
-					<td colspan="5" onmouseover="Tip('${tooltip_translation}');">
+					<td colspan="5" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 					<b><digi:trn key="rep:filter:RegionTitle">Region </digi:trn></b>
 					<br>
 					</td>
 				</tr>
 				
-				<tr bgcolor="#EEEEEE" onmouseover="Tip('${tooltip_translation}');">
+				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><digi:trn key="rep:filter:Location">Region</digi:trn></td>
 				</tr>
-				<tr bgcolor="#EEEEEE" onmouseover="Tip('${tooltip_translation}');">
+				<tr bgcolor="#EEEEEE" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 					<td colspan="5"><html:select property="regionSelected"
 						style="width: 300px" styleClass="inp-text">
 						<html:option value="-1">
@@ -343,7 +343,7 @@
 				<c:set var="tooltip_translation">
 					<digi:trn key="rep:filter:sectorOfInterest">Specify the   sectors   of interest.</digi:trn>
 				</c:set>
-				<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+				<table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 						<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 					<b><digi:trn key="rep:filter:Sectors"> Sectors</digi:trn></b>
@@ -388,7 +388,7 @@
                             <c:set var="tooltip_translation">
 					<digi:trn key="rep:filter:programOfInterest">Specify the   programs   of interest.</digi:trn>
 			</c:set>
-                            <table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+                            <table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 			<tr bgcolor="#EEEEEE">
 					<td colspan="5">
 					<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b>
@@ -458,7 +458,7 @@
 						<digi:trn
 							key="rep:filter:DonorInformation">Specify Donor Information.</digi:trn>
 				</c:set>
-					<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+					<table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 						<tr bgcolor="#EEEEEE">
 							<td colspan="5">
 							<b><digi:trn key="rep:filter:DonorsTitle">Donors</digi:trn></b>
@@ -520,7 +520,7 @@
 							<digi:trn
 							key="rep:filter:CooperatingAgencies">Specify Cooperating Agencies.</digi:trn>
 						</c:set>	
-						<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+						<table align="center" cellpadding="1" cellspacing="1" onmouseout="UnTip()" onmouseover="Tip('${tooltip_translation}');">
 						<tr bgcolor="#EEEEEE">
 							<td>
 									<b><digi:trn key="rep:filer:AgenciesTitle">Agencies</digi:trn></b>

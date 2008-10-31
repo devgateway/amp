@@ -47,7 +47,8 @@
 										<c:set var="translation">
 											<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to</digi:trn>
 										</c:set>
-										<a onmouseover="Tip('${translation} ${documentData.webLink}')" onclick="window.open('${documentData.webLink}')" 
+										<a onmouseover="Tip('${translation} ${documentData.webLink}')" 
+										 onmouseout="UnTip()" onclick="window.open('${documentData.webLink}')" 
 											style="cursor:pointer;  color: blue; font-size: 11px"> 
 											<bean:write name="documentData" property="name" />
 										</a>
@@ -84,7 +85,7 @@
 											<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn>
 										</c:set> 
 										<a style="cursor:pointer; text-decoration:underline; color: blue"
-										onclick="window.open('${documentData.webLink}')"
+										onclick="window.open('${documentData.webLink}')" onmouseout="UnTip()"
 										onmouseover="Tip('${translation} ${documentData.webLink}')"><img src= "/repository/contentrepository/view/images/link_go.gif" border=0></a>
 									</c:otherwise>
 								</c:choose>

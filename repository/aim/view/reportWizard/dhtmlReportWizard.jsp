@@ -403,7 +403,7 @@
 									<digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn>
 								</span>
 								<br />
-								<div id="listFiltersDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; height: 120px;">
+								<div id="listFiltersDiv" style="border: 1px solid gray; background-color: white; vertical-align: bottom; height: 120px; overflow: auto">
 									<c:choose>
 										<c:when test="${aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters}">
 											<jsp:include page="showSelectedFilters.jsp" />

@@ -152,7 +152,7 @@
 <digi:ref href="css/tabview.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript"
-	src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>"></script>
+	src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src='module/aim/scripts/filters/filters.js'/>"></script>
 <script language="JavaScript" type="text/javascript"

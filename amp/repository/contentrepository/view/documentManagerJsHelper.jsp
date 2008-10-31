@@ -52,7 +52,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > .</script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/tooltip/wz_tooltip.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>" > .</script>
 
 
 <%@page import="java.net.URLDecoder"%>

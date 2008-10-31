@@ -1,5 +1,5 @@
 /*
-tip_centerwindow.js  v. 1.2
+tip_centerwindow.js  v. 1.21
 
 The latest version is available at
 http://www.walterzorn.com
@@ -7,12 +7,16 @@ or http://www.devira.com
 or http://www.walterzorn.de
 
 Initial author: Walter Zorn
-Last modified: 23.6.2007
+Last modified: 3.6.2008
 
 Extension for the tooltip library wz_tooltip.js.
 Centers a sticky tooltip in the window's visible clientarea,
 optionally even if the window is being scrolled or resized.
 */
+
+// Make sure that the core file wz_tooltip.js is included first
+if(typeof config == "undefined")
+	alert("Error:\nThe core tooltip script file 'wz_tooltip.js' must be included first, before the plugin files!");
 
 // Here we define new global configuration variable(s) (as members of the
 // predefined "config." class).
@@ -23,7 +27,7 @@ optionally even if the window is being scrolled or resized.
 // e.g. from config. CenterWindow a command CENTERWINDOW will automatically be
 // created.
 
-//===================  GLOBAL TOOPTIP CONFIGURATION  =========================//
+//===================  GLOBAL TOOLTIP CONFIGURATION  =========================//
 config. CenterWindow = false	// true or false - set to true if you want this to be the default behaviour
 config. CenterAlways = false	// true or false - recenter if window is resized or scrolled
 //=======  END OF TOOLTIP CONFIG, DO NOT CHANGE ANYTHING BELOW  ==============//

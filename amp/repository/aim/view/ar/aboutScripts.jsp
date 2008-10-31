@@ -47,7 +47,7 @@
 </script>
 
 <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='script/tooltip/wz_tooltip.js'/>"></script>
 
 <script type="text/javascript">
 	YAHOOAmp.namespace("YAHOOAmp.amptab");

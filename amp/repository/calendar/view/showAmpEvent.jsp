@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
-<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+<jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
 <!-- Dependencies --> 
@@ -829,20 +829,19 @@ function recurEvent(){
                             &nbsp;
                             <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
                             &nbsp;                            
-                            <input type="button" onclick="showFilter();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+                            <input type="button" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
                           </td>
                         </tr>
                     </table>
                 </div>
             </td>
         </tr>       
-                    
-                </table>
-            </td>
+              </table>
+          </td>
         </tr>	
-        
     </table>
-<div id="myFilter" style="display:none;" >
+
+<div id="myEvent" style="display:none;" >
 		<jsp:include page="/calendar/recurringEvent.do" />
 	</div>
 </digi:form>

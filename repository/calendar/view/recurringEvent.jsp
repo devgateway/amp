@@ -56,23 +56,8 @@ function eventType(){
 		var rec = document.getElementById("recurrWeekly").value;
 		document.getElementById("hidden").value = rec;
 	}
-	window.close();
-		return true;
+	submitFilters();
 }
-
-function expandProgram(progId){
- 	var imgId='#img_'+progId;
- 	var Id='img_'+progId;
-	var display  = document.getElementById(Id).style.display;
-
-		if(display == "none"){
-				$(imgId).show();
-			}else{
-				$(imgId).hide();
-			}
-		
-}       
-
 
 </script>
 <digi:form action="/showCalendarEvent.do">
@@ -318,7 +303,7 @@ function expandProgram(progId){
 	</tr>
 	<tr>
 		<td align="center">
-			<html:submit  property="button" value="Save An CLose" onclick="return eventType();"/>
+			<input type="button" onclick="eventType();" value="Save An CLose"/>
 		</td>
 	</tr>
 </table>

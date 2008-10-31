@@ -49,13 +49,13 @@ function getReportPeriod() {
 }
 
 function getUseFilters() {
-	if ( aimReportWizardForm.useFilters.checked!=null && aimReportWizardForm.useFilters.checked )
+	if ( aimReportWizardForm.useFilters!=null && aimReportWizardForm.useFilters.checked )
 		return true;
 	return false;
 }
 
 function getAllowEmptyFundingColumns() {
-	if ( aimReportWizardForm.allowEmptyFundingColumns.checked!=null && aimReportWizardForm.allowEmptyFundingColumns.checked )
+	if ( aimReportWizardForm.allowEmptyFundingColumns!=null && aimReportWizardForm.allowEmptyFundingColumns.checked )
 		return true;
 	return false;
 }

@@ -245,7 +245,7 @@
 	</tr>
 	<tr>
 		<td align="left" vAlign="top">
-		<digi:form action="/reportWizard.do" method="post" >
+		<digi:form action="/reportWizard.do" method="post">
 		<span id="formChild" style="display:none;">&nbsp;</span>
 		<script type="text/javascript">
 			<c:forEach items="${aimReportWizardForm.selectedColumns}" var="dbId">
@@ -285,9 +285,9 @@
 								<span class="list_header">
 									<digi:trn key="rep:wizard:fundingGrouping"> Funding Grouping </digi:trn>
 								</span>
-								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; 
-											vertical-align: bottom; padding-top: 5%; padding-left: 2%; padding-bottom: 5%; padding-right: 2%;">
-								<table>
+								<div align="center" id="reportGroupDiv" style="border: 1px solid gray; background-color: white; height: 140px;
+											position: relative;">
+								<table style="top: 17%; left: 22%; position: absolute;">
 								<feature:display name="Donor Report" module="Report Types">
                                              <tr>
                                                <td>
@@ -360,7 +360,7 @@
 								<bean:define id="member" name="currentMember" scope="session" />
                   				
                   				
-
+							<c:if test="${ (!myForm.desktopTab) || (member.teamHead==true && member.teamAccessType=='Management')}">
 								<span class="list_header">
 									<digi:trn key="aim:reportBuilder:Options">Options</digi:trn>
 								</span>
@@ -387,6 +387,7 @@
                                     	</tr>
                                     </table>
                                 </div>
+                               </c:if>
 							</td>
 							<td width="47%">
 								<span class="list_header">
@@ -394,11 +395,9 @@
 								</span>
 								<br/>
 								<html:hidden property="reportDescription" />
-								<textarea name="reportDescriptionClone" class="inp-text" style="border: 1px solid gray;width: 100%; height: 120px;">
+								<textarea name="reportDescriptionClone" class="inp-text" style="border: 1px solid gray;width: 100%; height: 140px;">
 									&nbsp;
 								</textarea>
-								<br />
-								<br />
 								<span class="list_header">
 									<digi:trn key="rep:wizard:subtitle:selectedFilters">Selected Filters</digi:trn>
 								</span>

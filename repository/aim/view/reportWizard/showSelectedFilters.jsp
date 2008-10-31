@@ -21,6 +21,7 @@
 	
 	<logic:present name="listable" scope="request">
 		<bean:define id="listableStyle" value="settingsList" toScope="request"/>
+		<bean:define id="persistenceProperties" value="true" toScope="request"/>
 	 			<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
 				<jsp:include page="${listable.jspFile}" flush="true"/>
 	</logic:present>

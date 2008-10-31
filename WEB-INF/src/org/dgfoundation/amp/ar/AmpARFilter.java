@@ -35,6 +35,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -1167,6 +1168,7 @@ public class AmpARFilter extends PropertyListable {
 		this.approved = approved;
 	}
 
+	@IgnorePersistence
 	public boolean isDraft() {
 		return draft;
 	}
@@ -1312,7 +1314,8 @@ public class AmpARFilter extends PropertyListable {
 	public void setDonnorgAgency(Set<AmpOrganisation> donnorgAgency) {
 		this.donnorgAgency = donnorgAgency;
 	}
-		public String getAccessType() {
+	@IgnorePersistence
+	public String getAccessType() {
 		return accessType;
 	}
 
@@ -1320,6 +1323,7 @@ public class AmpARFilter extends PropertyListable {
 		this.accessType = accessType;
 	}
 
+	@IgnorePersistence
 	public Long getActivitiesRejectedByFilter() {
 		return activitiesRejectedByFilter;
 	}

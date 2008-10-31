@@ -16,6 +16,13 @@
 <bean:define id="prefix" name="listableTrnPrefix"
 	type="java.lang.String" scope="request" toScope="page" />
 
+<logic:present name="persistenceProperties" scope="request" >
+	<bean:define id="pMap" name="bean" property="persistencePropertiesMap" toScope="page"/>
+</logic:present>
+<logic:notPresent name="persistenceProperties" scope="request" >
+	<bean:define id="pMap" name="bean" property="propertiesMap" toScope="page"/>
+</logic:notPresent>
+
 
 <!-- Display the bean in a table style -->
 <logic:equal name="style" value="table">
@@ -24,7 +31,7 @@
 			<TD colspan="2" align="center"><I>
               ${listable.beanName}</I></TD>
 		</TR>
-		<logic:iterate id="prop" name="bean" property="propertiesMap">
+		<logic:iterate id="prop" name="pMap">
 			<TR>
 				<TD align="right"><B><digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>
 				:</B></TD>
@@ -61,7 +68,7 @@
 
 <logic:equal name="style" value="settingsList">
 	<I>${listable.beanName}</I>
-	<logic:iterate id="prop" name="bean" property="propertiesMap">
+	<logic:iterate id="prop" name="pMap">
     	<c:if test="${prop.key != 'renderEndYear' && prop.key != 'renderStartYear' }">
             <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>:
             <c:if test="${prop.key == 'teamAssignedOrgs'}">

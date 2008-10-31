@@ -24,6 +24,7 @@ import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.action.ReportsFilterPicker;
+import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.Identifiable;
 
@@ -148,7 +149,8 @@ public class AmpFilterData implements Serializable {
 				 * We check herer if this field's getter is annottated with PropertyListableIgnore. On true -> skip
 				 */
 				Method readMethod	= pd.getReadMethod();
-				if ( readMethod.getAnnotation(PropertyListableIgnore.class) != null) 
+				if ( readMethod.getAnnotation(PropertyListableIgnore.class) != null || 
+						readMethod.getAnnotation(IgnorePersistence.class) != null ) 
 					continue;
 				/** 
 				 * We check here if the field is actually a collection of objects, like sectors for example

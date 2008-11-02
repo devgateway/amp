@@ -3,10 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 
 
-<jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_ethiopia" catalogUri="/WEB-INF/queries/AMP.xml"
+<jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_generic" catalogUri="/WEB-INF/queries/AMP.xml"
    jdbcUser="root" jdbcPassword="" connectionPooling="true">
-SELECT NON EMPTY {[Measures].[Actual Commitments], [Measures].[Actual Disbursements],[Measures].[Planned Commitments], [Measures].[Planned Disbursements]} ON COLUMNS,
-NON EMPTY Filter(CROSSJOIN({[Time].[Year].Members},{[Donor]}),([Measures].[Actual Commitments] > 0) ) ON ROWS 
+SELECT NON EMPTY CROSSJOIN({[Time]},{[Measures].[Actual Commitments], [Measures].[Activity Count]}) ON COLUMNS,
+NON EMPTY CROSSJOIN({[Financing Instrument]},CROSSJOIN({[Terms of Assistance]},CROSSJOIN ({[Donor]},CROSSJOIN({[Primary Sector]},{[Activity]})))) ON ROWS 
 FROM [Donor Funding] 
 </jp:mondrianQuery>
 

@@ -1,0 +1,75 @@
+<center>
+	<% odatab_for :country_strategy, :html => { :class => "admin" } do |r| %>
+		<%= r.title_row ll(:country_strategy, :details) %>
+		
+		<% r.labeled_row :donor, :glossary => true do %>
+			<%= @country_strategy.donor.name %>
+		<% end %>
+		
+		<%= r.text_field :strategy_number, :glossary => true %>
+		
+		<% r.labeled_row :description, :glossary => true do %>
+			<%= expander_tag(@country_strategy.description) %>
+		<% end %>
+		
+		<% r.labeled_row :comments, :glossary => true do %>
+			<%= expander_tag(null_to_na(@country_strategy.comment)) %>
+		<% end %>
+		
+		<%= r.text_field :start, :glossary => true %>
+		
+		<%= r.text_field :end, :glossary => true %>
+		
+		<%= r.text_field :total_amount_foreseen, :glossary => true %>
+		
+		<% r.labeled_row :paper, :glossary => true do %>
+			<%= @country_strategy.strategy_paper ? ll(:yes) : ll(:no) %>
+		<% end %>
+		
+		<% r.labeled_row :internet_link, :glossary => true do %>
+			<%= @country_strategy.website.to_link %>
+		<% end %>
+		
+		<%= r.title_row ll(:country_strategy, :general) %>
+		
+		<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year-1) do |year| %>
+			<% r.labeled_row :total_oda_commitments, :label => [l(:country_strategy, :total_oda_commitments), year].join(" "), :glossary => true do %>
+				<%= null_to_na(@country_strategy.total_odas.find_or_initialize_by_year(year).commitments) %>
+			<% end %>
+			
+			<% r.labeled_row :total_oda_disbursements, :label => [l(:country_strategy, :total_oda_disbursements), year].join(" "), :glossary => true do %>
+				<%= null_to_na(@country_strategy.total_odas.find_or_initialize_by_year(year).disbursements) %>
+			<% end %>
+		<% end %>
+					
+		<%= r.option_field :programming_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, :glossary => true %>
+
+		<%= r.option_field :project_appraisal_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, :glossary => true %>
+              
+		<%= r.option_field :tenders_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, :glossary => true %>
+              
+		<%= r.option_field :commitments_and_payments_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, :glossary => true %>
+              
+		<%= r.option_field :monitoring_and_evaluation_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS, :glossary => true %>
+	
+		<% r.labeled_row :budget_support, :glossary => true do %>
+			<%= @country_strategy.fmt_commitment_to_budget_support %>
+		<% end %>
+		
+		<% r.labeled_row :sector_wide, :glossary => true do %>
+			<%= @country_strategy.fmt_commitment_to_sectorwide_approaches_and_common_funds %>
+		<% end %>
+		
+		<% r.labeled_row :projects, :glossary => true do %>
+			<%= @country_strategy.fmt_commitment_to_projects %>
+		<% end %>
+		
+		<% r.labeled_row :sectors_and_regions, :glossary => true do %>
+			<%= render :partial => "focal_sectors" %>
+		<% end %>	
+	<% end %>
+	<% if session[:user_id] %>
+		<p><b><%= link_to 'Edit', :action => 'edit', :id => @country_strategy %> | <%= link_to 'List', :action => 'list' %> | <%= link_to 'Printable Version', { :action => 'show_print', :id => @country_strategy }, :popup => ['new_window', 'height=500,width=800,scrollbars=yes'] %></b></p>
+	<% end %>
+</center>
+

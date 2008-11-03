@@ -1,0 +1,18 @@
+login: &login
+  adapter: postgresql
+  host: localhost
+  username: odadata
+  password: ggjtea6d
+  encoding: utf8
+
+development:
+  database: odanic_development
+  <<: *login
+
+test:
+  database: odanic_test
+  <<: *login
+
+production:
+  database: odanic_production
+  <<: *login

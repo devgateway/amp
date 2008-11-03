@@ -1,0 +1,7 @@
+<div class="cofunding">
+	<%= f.collection_select :donor_id, Donor.ordered, :id, :name, {:prompt => true} %>
+	<%= f.text_field :amount, :size => 20, :value => f.object.amount.to_s(false) %>
+	<%= f.select :currency, ExchangeRate.available_currencies_for_select %>
+	
+	<%= f.remove_link "remove" %>
+</div>

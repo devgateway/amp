@@ -1,0 +1,16 @@
+<center>
+	<% odaform_for @implementing_agency do |f| %>
+		<table width="740" class="list">
+			<tr>
+				<td class="title" colspan=2><%= lc(:title) %></td>
+			</tr>
+
+			<%= render :partial => 'form', :locals => {:f => f} %>
+			<tr>
+				<td><%= f.submit %></td>
+			</tr>
+
+		</table>
+	<% end %>
+	<p><b><%= link_to ll(:actions, :back), implementing_agencies_path %></b>&nbsp;</p>
+</center>

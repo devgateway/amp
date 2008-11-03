@@ -1,0 +1,7 @@
+<%= render :partial => "#{@project.aasm_current_state}_form" %>
+	
+<center>
+	<b><%= link_to ll(:actions, :show), project_path(@project), 
+			:popup => ['new_window', 'height=500,width=800,scrollbars=yes'] %> |
+	<%= link_to ll(:actions, :back), projects_path(:status => @project.data_status) %></b>
+</center>

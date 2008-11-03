@@ -1,0 +1,16 @@
+<% odaform_for @project do |f| %>
+	<table width="740" class="admin">
+		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
+		
+		<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
+			<tr>
+				<td class="title" colspan="2"><%= ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></td>
+			</tr>
+			<% mdg.targets.ordered.each do |t| %>
+				<%= f.habtm_check_box :target_ids, { :label => t.name }, t.id %>
+			<% end %>
+		<% end %>
+		
+		<%= render :partial => "control_buttons" %>
+	</table>
+<% end %>

@@ -1,0 +1,5 @@
+<% if I18n.locale.to_s == 'en-US' %>
+	<%= link_to 'Espa&ntilde;ol', params.merge(:locale => 'es-NI') %>
+<% else %>
+	<%= link_to 'English', params.merge(:locale => 'en-US') %>
+<% end %>

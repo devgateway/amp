@@ -1,0 +1,122 @@
+<% js_behavior 'checkboxes' %>
+
+<% form_tag({:action => 'custom'}, 
+	:id => 'custom_report_conditions', 
+	:target => "Results", 
+	:onsubmit => "window.open('',this.target,'resizable=1,scrollbars=1,height=600,width=800');return true;") do 
+%>
+	
+	<div id="output_options" class="container">
+		<h2><%= lc(:output) %></h2>
+		
+		<ul class="checkbox_container">
+			<h3><%= lc(:output_format) %></h3>
+			<li><%= radio_button "output", "format", "web", :checked => true %><%= lc(:web) %></li>
+			<li><%= radio_button "output", "format", "excel" %><%= lc(:excel) %></li>
+			<li><%= check_box "output", "map", :disabled => true %><%= lc(:map) %></li>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:terms, :currency) %></h3>
+			<% ExchangeRate.available_currencies.each do |c| %>
+				<li>
+					<input type="radio" value="<%= c %>" name="currency" <%= 'checked="checked"' if c == Prefs.default_currency %>/>
+					<%= lc(:output_in) %> <%= c %>
+				</li>
+			<% end %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= lc(:fields) %></h3>
+			<input type="hidden" value="1" name="query_options[factsheet_link]" />
+			<%= render :partial => "reports/query_options/query_option", :collection => Report.query_options %>
+		</ul>
+	</div>
+	
+	<div id="filter_criteria" class="container">
+		<h2><%= lc(:main_filter) %></h2>
+		
+		<div id="donor_province" class="container">
+			<ul class="checkbox_container">
+				<h3><%= ll(:terms, :donor) %></h3>
+				<li class="all"><%= check_box "donors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+			  <%= render :partial => "reports/query_options/donor", :collection => Donor.main.ordered.all %>
+			</ul>
+			
+			<ul class="checkbox_container">
+				<h3><%= ll(:terms, :region) %></h3>
+				<li class="all"><%= check_box "provinces", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+			  <%= render :partial => "reports/query_options/province", :collection => Province.ordered.all %>
+			</ul>		
+			
+			<ul class="checkbox_container">
+				<h3><%= ll(:terms, :markers) %></h3>
+				<li class="all"><%= check_box "markers", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+				<%= render :partial => "reports/query_options/marker", :collection => translate_options(Project::AVAILABLE_MARKERS) %>
+				<li class="annotation"><%= lc(:markers_annotation) %></li>
+			</ul>	
+		</div>
+	
+		<div id="mdg_sector" class="container">
+			<ul class="checkbox_container">
+				<h3><%= ll(:terms, :mdg) %></h3>
+				<li class="all"><%= check_box "targets", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+			  <%= render :partial => "reports/query_options/mdg", :collection => Mdg.ordered.all %>
+			</ul>
+			
+			<ul class="checkbox_container">
+				<h3><%= ll(:terms, :dac_sector) %></h3>
+				<li class="all"><%= check_box "crs_sectors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 27 } %>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="other_criteria" class="container">
+		<h2><%= lc(:other) %></h2>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:reports, :grant_loan) %></h3>
+			<li class="all"><%= check_box "grant_loan", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
+			<%= render :partial => "reports/query_options/grant_loan", :collection => translate_options(Project::GRANT_LOAN_OPTIONS) %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:reports, :of_budget) %></h3>
+			<li class="all"><%= check_box "on_off_budget", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
+			<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:reports, :of_treasury) %></h3>
+			<li class="all"><%= check_box "on_off_budget", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
+			<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:reports, :toa) %></h3>
+			<li class="all"><%= check_box "type_of_aid", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+      		<%= render :partial => "reports/query_options/type_of_aid", :collection => translate_options(Project::TYPE_OF_AID_OPTIONS) %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:reports, :cod) %></h3>
+			<li class="all"><%= check_box "type_of_implementation", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
+			<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
+		</ul>
+		
+		<ul class="checkbox_container">
+			<h3><%= ll(:reports, :status) %></h3>
+			<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
+		</ul>
+		
+		<h2 style="margin-top: 20px; margin-bottom: 10px"><%= lc(:action) %></h2>
+		<ul class="checkbox_container">
+			<span id="project_count"></span>
+			<div style="text-align: center">
+				<INPUT id="submit_button" type="submit" name="query_button" value="<%= lc(:query_database) %>" class="bt" style="margin: 5px auto 5px auto; width: 100px">
+				<INPUT type="submit" name="totals_button" value="<%= lc(:totals) %>" class="bt" style="margin: 0 auto 5px auto; width: 100px">
+			</div>
+		</ul>
+	</div>	
+<% end %>

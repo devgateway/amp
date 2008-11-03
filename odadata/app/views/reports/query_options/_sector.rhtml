@@ -1,0 +1,3 @@
+<li class="tooltip" title="<%= sector.name %>">
+	<%= check_box "sectors", sector.id %><%= sector.name_with_code(defined?(shorten_to) ? shorten_to : nil) -%>
+</li>

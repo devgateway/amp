@@ -1,0 +1,142 @@
+<%= currency_selector %>
+
+<% cache (:currency => params[:currency], :lang => I18n.locale) do %>
+<center>
+	<% odatab_for @project, :html => { :class => "admin" } do |r| %>
+		<%= r.title_row ll(:reports, :project_details) %>
+
+		<% r.labeled_row :donor, :glossary => true do %>
+			<%= @project.donor.name %>
+		<% end %>
+
+		<% r.labeled_row :donor_agency, :glossary => true do %>
+			<%= @project.donor_agency.name %>
+		<% end %>
+
+		<%= r.text_field :donor_project_number %>
+		
+		<%= r.text_field :oecd_number %>
+		
+		<%= r.text_field :recipient_country_budget_nr %>
+		
+		<%= r.text_field :title %>
+
+		<%= r.text_field :description %>
+
+		<% r.labeled_row :country_strategy, :glossary => true do %>
+			<% if @project.country_strategy.blank? %> 
+				Not linked to any country strategy
+			<% else %>       
+				<%= link_to(@project.country_strategy.strategy_number, {:controller => "country_strategy", :action => "show", :id => @project.country_strategy.id}) %>
+			<% end %>
+		<% end %>
+		
+		<%= r.option_field :prj_status, Project::STATUS_OPTIONS %>
+		
+		<% r.labeled_row :start do %>
+			<%= @project.start.strftime("%d-%b-%Y") %>
+		<% end %>
+
+		<% r.labeled_row :end do %>
+			<%= @project.end.strftime("%d-%b-%Y") %>
+		<% end %>		
+
+		<%= r.text_field :recipient_code %>
+
+		<%= r.text_field :region_code %>
+
+		<%= r.text_field :income_code %>
+
+		<%= r.option_field :nation_regional, Project::NATIONAL_REGIONAL_OPTIONS %>
+
+		<%= r.option_field :type_of_implementation, Project::IMPLEMENTATION_TYPES %>
+
+		<% r.labeled_row :dac_sector do %>
+			<%= @project.dac_sector.name_with_code rescue "n/a" %>
+		<% end %>
+		
+		<% r.labeled_row :dac_crs_sector do %>
+			<%= @project.crs_sector.name_with_code rescue "n/a" %>
+		<% end %>
+		
+		<%= r.option_field :type_of_aid, Project::TYPE_OF_AID_OPTIONS %>
+
+		<%= r.option_field :grant_loan, Project::GRANT_LOAN_OPTIONS %>
+
+		<% r.labeled_row :financial_information do %>
+			<%= render :partial => 'financial_information' %>
+		<% end %>
+
+		<% if @project.has_cofundings %>
+			<% r.labeled_row :cofunding do %>
+				<%= format_as_html_table(@project.cofundings.map {|m| [m.donor.name, m.amount]}, :per_row => 4, :lower_class => "currency right") %>
+			<% end %>
+		<% end %>
+		
+		<% r.labeled_row :government_counterpart, :glossary => true do %>
+			<% if @project.government_counterpart.blank? %>
+				&nbsp;
+			<% else %>
+				<%= @project.government_counterpart.name %>
+			<% end %>
+		<% end %>
+
+		<% r.labeled_row :implementing_agency, :label => :impl_agencies, :glossary => true do %>
+			<% @implementing_agencies.each do |s| %>
+				<%= s.name %><br>
+			<% end %>
+		<% end %>
+		
+		<% r.labeled_row :contracted_agency, :label => :contr_agencies, :glossary => true do %>
+			<% @project.contracted_agencies.each do |s| %>
+				<%= s.name %><br>
+			<% end %>
+		<% end %>
+		
+		<% r.labeled_row :markers, :glossary => true do %>
+			<%= render :partial => 'marker_information' %>
+		<% end %>
+
+		<% r.labeled_row :mdg, :label => :mdg_goals, :glossary => true do %>
+			<%= format_as_html_table(@project.mdgs.map {|m| [m.name, m.description]}, :per_row => 3) %>
+		<% end %>
+		
+		<tr>
+			<td class="sub_title">
+				<%= glossary_icon_for(:focal_region, "Focal Regions") %>
+				<%= ll(:reports, :focal_regions) %>
+				<% unless @project.geo_level2s.empty? %>
+					<a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/project/show_map/<%= @project.id %>" style="display: block; color: #fff; text-align: center">&gt; Show Map &lt;</a>
+				<% end %>
+			</td>
+			<td>
+				<%= render :partial => "focal_regions" %>
+			</td>
+		</tr>
+		
+		<% r.labeled_row :officer_responsible, :glossary => true do %>
+			<%= @project.officer_responsible.formatted_address %>
+		<% end %>
+		
+		<% r.labeled_row :internet_link, :glossary => true do %>
+			<%= @project.website.to_link(:target => "_blank") %>
+		<% end %>
+		
+		<%= r.text_field :comments, :glossary => "comment" %>
+
+		<% r.labeled_row :last_updated, :label => :last_update, :glossary => true do %>
+			<%= @project.updated_at.strftime("%d-%b-%Y") %>
+		<% end %>
+	<% end %>
+	
+<% end #caching %>
+	
+	<% if user_is_logged_in? && !params[:report] %>
+		<p><b><%= link_to 'Edit', :action => 'edit', :id => params[:id] %></b>
+		<b> | <%= link_to 'List', :action => "list", :id => params[:id] %></b>
+		<% if @next_draft %>
+		<b> | <%= link_to "Edit next draft (#{@next_draft.donor_project_number})", :action => "edit", :id => @next_draft.id %></b>
+		<% end %>
+		</p>
+	<% end %>
+</center>

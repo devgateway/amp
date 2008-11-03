@@ -1,0 +1,12 @@
+<%= render :partial => "layouts/header" %>
+
+	<body>
+		<div id="content" class="fluid">
+			<center>
+				<%= yield %>
+			</center>
+		</div>
+		<div style="text-align: center; margin-top: 20px;"><a href="#" onclick="window.close();"><%= ll(:actions, :close_window) %></a></div>
+	</body>
+
+</html>

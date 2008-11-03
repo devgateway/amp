@@ -1,0 +1,50 @@
+<table class="admin">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :contents, :eu_cooperation, :by_toa) %> <%= Time.now.year - 1 %>-<%= Time.now.year %></b>
+			<div id="column_graph">
+				<strong>You need to upgrade your Flash Player</strong>
+			</div>
+			<!-- saved from url=(0013)about:internet -->
+			<!-- amcolumn script-->
+		  <script type="text/javascript">
+			// <![CDATA[		
+					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1150", "430", "8", "#DBE2F1");
+					so.addVariable("path", "/");
+					so.addVariable("settings_file", escape("/charts/settings/cooperation_by_type_of_aid.xml"));
+					so.addVariable("data_file", escape("<%= url_for(:action => :eu_cooperation_type_of_aid_data, :format => 'xml') %>"));  
+			    	so.addVariable("preloader_color", "#999999");
+					so.write("column_graph");
+					// ]]>
+				</script>
+			<!-- end of amcolumn script -->
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>
+
+<table class="admin">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :contents, :eu_cooperation, :in_percent_by_toa) %> <%= Time.now.year - 1 %></b>
+			<br><%= ll(:bluebook, :contents, :eu_cooperation, :in_percent_by_toa_subtitle) %> <%= Time.now.year - 1 %>
+			<div id="percentage_graph">
+				<strong>You need to upgrade your Flash Player</strong>
+			</div>
+			<!-- saved from url=(0013)about:internet -->
+			<!-- amcolumn script-->
+		  <script type="text/javascript">
+			// <![CDATA[		
+					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1150", "430", "8", "#DBE2F1");
+					so.addVariable("path", "/");
+					so.addVariable("settings_file", escape("/charts/settings/cooperation_by_toa_percentages.xml"));
+					so.addVariable("data_file", escape("<%= url_for(:action => :eu_cooperation_type_of_aid_percentages_data, :format => 'xml') %>"));  
+			    	so.addVariable("preloader_color", "#999999");
+					so.write("percentage_graph");
+					// ]]>
+				</script>
+			<!-- end of amcolumn script -->
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>

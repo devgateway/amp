@@ -1,0 +1,42 @@
+<center>
+	<table width="740" class="admin">
+			<tr>
+				<td class="title"><%= ll(:links, :title) %></td>
+			</tr>
+			
+			<% Donor.main.all(:order => "name ASC").each do |donor| %>
+				<tr>
+					<td align="left"><a href="<%= donor.field_office.website.to_url %>" target="_blank"><%= donor.name.titleize %></a></td>
+				</tr>
+			<% end %>
+			
+			<tr>
+				<td align="left"><a href="http://ec.europa.eu/budget/inforeuro/index.cfm?fuseaction=home&amp;Language=en" target="_blank">EC Budget Website</a></td>
+			</tr>
+			
+			
+			<tr>
+				<td align="left">
+					<a href="http://www.oecd.org/department/0,3355,en_2649_33721_1_1_1_1_1,00.html" target="_blank">
+						Development Co-operation Directorate OECD/DAC
+					</a>
+				</td>
+			</tr>
+			
+			<tr>
+				<td align="left">
+					<a href="http://www.odamoz.org.mz/" target="_blank">
+						Official Development Assistance to Mozambique Database (ODAmoz)
+					</a>
+				</td>
+			</tr>
+			
+			<tr>
+				<td align="left">
+					<a href="http://development.donoratlas.eu/" target="_blank">
+						The EU Donor Atlas
+					</a>
+				</td>
+			</tr>
+	</table>
+</center>

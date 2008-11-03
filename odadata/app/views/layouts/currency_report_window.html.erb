@@ -1,0 +1,18 @@
+<%= render :partial => "layouts/header" %>
+
+	<body>
+		<div style="position: absolute; left: 30px; top: 13px">
+			<%= render :partial => '/shared/currency_selector' %>
+		</div>
+		
+		<div style="text-align: right; margin-top: 10px; margin-bottom: 5px"><a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a> <a class="prt" href="#" onclick="window.close();"><%= ll(:actions, :close_window) %></a></div>
+		<div id="content" class="fluid">
+			<center>
+				<%= yield %>
+			</center>
+		</div>
+		<%= render :partial => 'shared/footer' %>		
+	</body>
+
+
+</html>

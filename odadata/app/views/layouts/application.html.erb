@@ -1,0 +1,15 @@
+<%= render :partial => "layouts/header" %>
+
+<body id="body">
+	<%= render_user_navigation %>
+	
+	<div id="content">
+		<% if flash[:error] %>
+			<div class="error"><%= flash[:error] %></div>
+		<% end %>
+		<%= yield  %>
+	</div>
+
+	<%= render :partial => 'shared/footer' %>
+</body>
+</html>

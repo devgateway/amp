@@ -1,0 +1,15 @@
+<div class="implementing_agency">
+	<select name="project[implementing_agency_ids][]">
+		<option><%= ll(:options, :prompt) %></option>
+		<%= options_from_collection_for_select(ImplementingAgency.ordered.all, :id, :name, implementing_agency.id) %>
+	</select>
+
+	<%= link_to_function "Delete", <<-END_JS
+		if ($('.implementing_agency').length > 1) {
+			$(this).parents('.implementing_agency').remove();
+		} else {
+			alert("Please select at least one Implementing Agency!");
+		}
+		END_JS
+	%>
+</div>

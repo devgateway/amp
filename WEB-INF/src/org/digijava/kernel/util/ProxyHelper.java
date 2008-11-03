@@ -23,9 +23,9 @@
 package org.digijava.kernel.util;
 
 import org.digijava.kernel.user.User;
-import net.sf.hibernate.HibernateException;
+import org.hibernate.HibernateException;
 import org.apache.log4j.Logger;
-import net.sf.hibernate.Hibernate;
+import org.hibernate.Hibernate;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.entity.Image;
 import java.util.Collection;

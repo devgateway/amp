@@ -35,10 +35,12 @@ import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
 import org.digijava.kernel.util.I18NHelper;
 import org.dom4j.Element;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.cache.TransactionalCache;
-import net.sf.hibernate.cfg.Configuration;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.dialect.function.ClassicAvgFunction;
+import org.hibernate.dialect.function.ClassicCountFunction;
+import org.hibernate.dialect.function.ClassicSumFunction;
 
 /**
  * Hibernate Class loader, see digi.xml file for more details.
@@ -48,182 +50,195 @@ import net.sf.hibernate.cfg.Configuration;
  */
 public class HibernateClassLoader {
 
-    private static Logger logger = I18NHelper.getKernelLogger(
-        HibernateClassLoader.class);
+	private static Logger logger = I18NHelper.getKernelLogger(
+			HibernateClassLoader.class);
 
-    private static SessionFactory sessionFactory;
-    private static Configuration cfg = null;
-    public static String HIBERNATE_CFG_XML = "/hibernate.cfg.xml";
+	private static SessionFactory sessionFactory;
+	private static Configuration cfg = null;
+	public static String HIBERNATE_CFG_XML = "/hibernate.cfg.xml";
 
-    private static TransactionalCache trnCache = new TransactionalCache();
+	/**
+	 * get Hibernate SessionFactory object, you will call openSession();
+	 * to obtain a JDBC connection and instantiate a new Session.
+	 * form example:
+	 * Session session = HibernateClassLoader.getSessionFactory().openSession();
+	 *
+	 * @return hibernate SessionFactory object
+	 * @throws HibernateException
+	 */
+	public static synchronized SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
 
-    /**
-     * get Hibernate SessionFactory object, you will call openSession();
-     * to obtain a JDBC connection and instantiate a new Session.
-     * form example:
-     * Session session = HibernateClassLoader.getSessionFactory().openSession();
-     *
-     * @return hibernate SessionFactory object
-     * @throws HibernateException
-     */
-    public static synchronized SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
+	public static synchronized Configuration getConfiguration() {
+		return cfg;
+	}
 
-    public static synchronized Configuration getConfiguration() {
-        return cfg;
-    }
+	/**
+	 * initialize hibernate classes for kernel
+	 * see module configuration file for more details
+	 *
+	 */
+	public static void initialize(DigiConfig config) {
 
-    /**
-     * initialize hibernate classes for kernel
-     * see module configuration file for more details
-     *
-     */
-    public static void initialize(DigiConfig config) {
+		loadHibernateClasses(config.getHibernateClasses());
+	}
 
-        loadHibernateClasses(config.getHibernateClasses());
-    }
+	/**
+	 * initialize hibernate classes for module
+	 * see module configuration file for more details
+	 *
+	 * @param config
+	 */
+	public static void initialize(HashMap config) {
 
-    /**
-     * initialize hibernate classes for module
-     * see module configuration file for more details
-     *
-     * @param config
-     */
-    public static void initialize(HashMap config) {
+		Iterator iterModules = config.keySet().iterator();
+		while (iterModules.hasNext()) {
+			String moduleName = (String) iterModules.next();
+			ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
 
-        Iterator iterModules = config.keySet().iterator();
-        while (iterModules.hasNext()) {
-            String moduleName = (String) iterModules.next();
-            ModuleConfig moduleConfig = (ModuleConfig) config.get(moduleName);
+			HibernateClasses classes = moduleConfig.getHibernateClasses();
+			if (classes != null) {
+				loadHibernateClasses(classes);
+			}
+			else {
+				logger.warn("No hibernate classes for module " + moduleName);
+			}
+		}
+	}
 
-            HibernateClasses classes = moduleConfig.getHibernateClasses();
-            if (classes != null) {
-                loadHibernateClasses(classes);
-            }
-            else {
-                logger.warn("No hibernate classes for module " + moduleName);
-            }
-        }
-    }
+	/**
+	 *
+	 * @param classes
+	 */
+	public static void loadHibernateClasses(HibernateClasses classes) {
 
-    /**
-     *
-     * @param classes
-     */
-    public static void loadHibernateClasses(HibernateClasses classes) {
+		boolean required = false;
 
-        boolean required = false;
+		if (cfg == null) {
+			cfg = new LocalHibernateConfig();
+			cfg.addSqlFunction( "count", new ClassicCountFunction()); 
+			cfg.addSqlFunction( "avg", new ClassicAvgFunction()); 
+			cfg.addSqlFunction( "sum", new ClassicSumFunction()); 
+		}
 
-        if (cfg == null)
-            cfg = new LocalHibernateConfig();
+		if (classes == null) {
+			throw new IllegalArgumentException(
+					"classes parameter must be not-null");
+		}
 
-        if (classes == null) {
-            throw new IllegalArgumentException(
-                "classes parameter must be not-null");
-        }
+		Iterator iter = classes.iterator();
+		while (iter.hasNext()) {
+			HibernateClass hibernateClass = (HibernateClass) iter.next();
+			try {
 
-        Iterator iter = classes.iterator();
-        while (iter.hasNext()) {
-            HibernateClass hibernateClass = (HibernateClass) iter.next();
-            try {
+				// check if class is critical resource to load
+				// see catch block
+				required = ( ( (classes.getRequired() == null ||
+						classes.getRequired().equalsIgnoreCase(
+								"true")) &&
+								(hibernateClass.getRequired() == null ||
+										!hibernateClass.getRequired().
+										equalsIgnoreCase(
+												"false"))) ||
+												( (classes.getRequired() != null &&
+														classes.getRequired().equalsIgnoreCase(
+																"false")) &&
+																(hibernateClass.getRequired() != null &&
+																		hibernateClass.getRequired().equalsIgnoreCase(
+																				"true")))
+				);
 
-                // check if class is critical resource to load
-                // see catch block
-                required = ( ( (classes.getRequired() == null ||
-                                classes.getRequired().equalsIgnoreCase(
-                                    "true")) &&
-                              (hibernateClass.getRequired() == null ||
-                               !hibernateClass.getRequired().
-                               equalsIgnoreCase(
-                                   "false"))) ||
-                            ( (classes.getRequired() != null &&
-                               classes.getRequired().equalsIgnoreCase(
-                                   "false")) &&
-                             (hibernateClass.getRequired() != null &&
-                              hibernateClass.getRequired().equalsIgnoreCase(
-                                  "true")))
-                    );
+				if (logger.isDebugEnabled()) {
+					Object[] params = {
+							hibernateClass.getContent()};
+					logger.l7dlog(Level.DEBUG,
+							"HibernateClassLoader.loadingHibernateClass",
+							params, null);
+				}
 
-                if (logger.isDebugEnabled()) {
-                    Object[] params = {
-                        hibernateClass.getContent()};
-                    logger.l7dlog(Level.DEBUG,
-                                  "HibernateClassLoader.loadingHibernateClass",
-                                  params, null);
-                }
+				// adding class to load
+				cfg.addClass(Class.forName(hibernateClass.getContent()));
+			}
+			catch (Exception ex) {
+				Object[] params = {
+						hibernateClass.getContent()};
+				if (required) {
+					logger.l7dlog(Level.FATAL,
+							"HibernateClassLoader.loadingHibernateClass.error",
+							params, null);
+					break;
+				}
+				else {
+					logger.l7dlog(Level.ERROR,
+							"HibernateClassLoader.loadingHibernateClass.error",
+							params, null);
+				}
+			}
 
-                // adding class to load
-                cfg.addClass(Class.forName(hibernateClass.getContent()));
-            }
-            catch (Exception ex) {
-                Object[] params = {
-                    hibernateClass.getContent()};
-                if (required) {
-                    logger.l7dlog(Level.FATAL,
-                                  "HibernateClassLoader.loadingHibernateClass.error",
-                                  params, null);
-                    break;
-                }
-                else {
-                    logger.l7dlog(Level.ERROR,
-                                  "HibernateClassLoader.loadingHibernateClass.error",
-                                  params, null);
-                }
-            }
+		}
+	}
 
-        }
-    }
-
-    /**
-     *
-     */
-    public static void buildHibernateSessionFactory() {
-        InputStream inp = HibernateClassLoader.class.getResourceAsStream(
-            HIBERNATE_CFG_XML);
-        try {
-            if (inp == null) {
-                sessionFactory = cfg.buildSessionFactory();
-            }
-            else {
-                Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
-                sessionFactory = newConfig.buildSessionFactory();
-            }
-        }
-        catch (Exception ex1) {
-            logger.fatal("Unable to build hibernate session factory", ex1);
-            throw new RuntimeException(ex1);
-        }
-    }
+	/**
+	 *
+	 */
+	public static void buildHibernateSessionFactory() {
+		InputStream inp = HibernateClassLoader.class.getResourceAsStream(
+				HIBERNATE_CFG_XML);
+		try {
+			if (inp == null) {
+				sessionFactory = cfg.buildSessionFactory();
+			}
+			else {
+				Configuration newConfig = cfg.configure(HIBERNATE_CFG_XML);
+				sessionFactory = newConfig.buildSessionFactory();
+			}
+		}
+		catch (Exception ex1) {
+			logger.fatal("Unable to build hibernate session factory", ex1);
+			throw new RuntimeException(ex1);
+		}
+	}
 }
 
-class LocalHibernateConfig
-    extends Configuration {
-    private static Logger logger = Logger.getLogger(HibernateClassLoader.class);
+class LocalHibernateConfig extends Configuration {
 
-    protected InputStream getConfigurationInputStream(String resource) throws
-        HibernateException {
+	/**
+	 * Default UID
+	 */
+	private static final long serialVersionUID = -6375194723506753313L;
 
-        logger.info("Configuration resource: " + resource);
+	private static Logger logger = Logger.getLogger(HibernateClassLoader.class);
 
-        InputStream stream = HibernateClassLoader.class.getResourceAsStream(
-            resource);
-        if (stream == null) {
-            logger.warn(resource + " not found");
-            throw new HibernateException(resource + " not found");
-        }
-        return stream;
-    }
+	/**
+	 * @see org.hibernate.cfg.Configuration#getConfigurationInputStream(java.lang.String)
+	 */
+	protected InputStream getConfigurationInputStream(String resource) throws
+	HibernateException {
 
-    protected void add(org.dom4j.Document doc) throws Exception {
-        List nodes = doc.selectNodes("//*/cache[@usage='read-write']");
-        if (nodes != null) {
-            Iterator iter = nodes.iterator();
-            while (iter.hasNext()) {
-                Element item = (Element) iter.next();
-                item.attribute("usage").setValue("transactional");
-            }
-        }
-        super.add(doc);
-    }
+		logger.info("Configuration resource: " + resource);
+
+		InputStream stream = HibernateClassLoader.class.getResourceAsStream(
+				resource);
+		if (stream == null) {
+			logger.warn(resource + " not found");
+			throw new HibernateException(resource + " not found");
+		}
+		return stream;
+	}
+
+	/**
+	 * @see org.hibernate.cfg.Configuration#add(org.dom4j.Document)
+	 */
+	protected void add(org.dom4j.Document doc) {
+		List nodes = doc.selectNodes("//*/cache[@usage='read-write']");
+		if (nodes != null) {
+			Iterator iter = nodes.iterator();
+			while (iter.hasNext()) {
+				Element item = (Element) iter.next();
+				item.attribute("usage").setValue("transactional");
+			}
+		}
+		super.add(doc);
+	}
 }

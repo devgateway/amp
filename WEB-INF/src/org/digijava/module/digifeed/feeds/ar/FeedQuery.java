@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.digijava.kernel.persistence.PersistenceManager;

@@ -13,8 +13,8 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;

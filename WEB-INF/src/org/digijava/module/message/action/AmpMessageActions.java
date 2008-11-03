@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -690,7 +689,15 @@ public class AmpMessageActions extends DispatchAction {
        	state.setMessage(message);
        	state.setSender(teamMember.getMemberName()+";"+teamMember.getTeamName());
        	state.setSenderId(teamMember.getMemberId());
-
+       	
+       	// check if user's inbox is already full
+		Class clazz=null;
+		if(message.getClassName().equalsIgnoreCase("u")){
+			clazz=UserMessage.class;
+		}else if(message.getClassName().equalsIgnoreCase("a")){
+			clazz=AmpAlert.class;
+		}
+		
     	if(AmpMessageUtil.isSentOrDraftFull(clazz,teamMember.getMemberId(),message.getDraft())){
     		state.setMessageHidden(true);
 		}else{

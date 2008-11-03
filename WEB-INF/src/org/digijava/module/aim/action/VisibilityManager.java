@@ -19,9 +19,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -38,6 +35,8 @@ import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.VisibilityManagerExportHelper;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class VisibilityManager extends MultiAction {
 

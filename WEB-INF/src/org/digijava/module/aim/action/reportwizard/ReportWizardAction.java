@@ -21,7 +21,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;

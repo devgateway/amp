@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpActor" table="AMP_ACTOR">
 		<cache usage="read-write" />
@@ -8,9 +8,9 @@
 				<param name="sequence">AMP_ACTOR_seq</param>
 			</generator>
 		</id>
-		<property column="name" name="name" type="org.digijava.kernel.db.SafeClobType"/>
-		<many-to-one name="measure" column="amp_measure_id" 
-		class="org.digijava.module.aim.dbentity.AmpMeasure" cascade="none"/>
+		<property column="name" name="name" type="text" />
+		<many-to-one name="measure" column="amp_measure_id"
+			class="org.digijava.module.aim.dbentity.AmpMeasure" cascade="none" />
 
 	</class>
 </hibernate-mapping>

@@ -2,10 +2,10 @@ package org.digijava.module.message.util;
 
 import java.util.Collection;
 import org.digijava.module.message.dbentity.AmpQuartzJobClass;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Query;
 import org.digijava.kernel.persistence.PersistenceManager;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Transaction;
 
 public class QuartzJobClassUtils {
     public static Collection<AmpQuartzJobClass> getAllJobClasses() {

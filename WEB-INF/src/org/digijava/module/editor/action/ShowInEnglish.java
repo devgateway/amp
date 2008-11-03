@@ -34,7 +34,7 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.form.EditorForm;
 import org.digijava.module.editor.util.DbUtil;
-import net.sf.hibernate.Hibernate;
+import org.hibernate.Hibernate;
 
 /**
  * <p>Title: DiGiJava</p>

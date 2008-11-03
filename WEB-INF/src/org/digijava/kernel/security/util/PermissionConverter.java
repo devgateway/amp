@@ -22,13 +22,10 @@
 
 package org.digijava.kernel.security.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.security.Permission;
 import java.util.Iterator;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -51,7 +48,7 @@ public class PermissionConverter {
         DigiPolicy digiPolicy = new DigiPolicy();
         try {
             Session session = PersistenceManager.getSession();
-            Iterator iter = session.iterate("from " + GroupPermission.class.getName());
+            Iterator iter = session.createQuery("from " + GroupPermission.class.getName()).iterate();
             while (iter.hasNext()) {
                 GroupPermission item = (GroupPermission)iter.next();
                 Permission permission = createPermission(session, item);

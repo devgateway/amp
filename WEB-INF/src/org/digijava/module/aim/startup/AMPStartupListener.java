@@ -11,8 +11,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpServlet;
 
-import net.sf.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -24,6 +22,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.Session;
 
 
 
@@ -73,10 +72,10 @@ public class AMPStartupListener extends HttpServlet
         	AmpTemplatesVisibility currentTemplate=null;
         	try {
 				currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
+				ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         	} finally {
         		PersistenceManager.releaseSession(session);
         	}
-        	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
         	ampContext.setAttribute("FMcache", "read");
         	

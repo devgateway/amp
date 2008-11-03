@@ -1,6 +1,6 @@
 package org.digijava.module.widget.table;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;

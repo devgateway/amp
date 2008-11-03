@@ -38,8 +38,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -94,9 +94,7 @@ public class DBPolicy
         HashMap newPrincipalPermissionsMap = new HashMap();
         try {
             session = PersistenceManager.getSession();
-            Iterator iter = session.iterate("from " +
-                                            GroupPermission.class.getName() +
-                                            " as g");
+            Iterator iter = session.createQuery("from " + GroupPermission.class.getName()).iterate();
             while (iter.hasNext()) {
                 GroupPermission groupPermission = (GroupPermission) iter.
                     next();

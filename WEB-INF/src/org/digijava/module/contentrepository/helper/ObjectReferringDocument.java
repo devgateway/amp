@@ -3,8 +3,8 @@
  */
 package org.digijava.module.contentrepository.helper;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  * @author Alex Gartner

@@ -22,18 +22,16 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.Type;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
@@ -64,72 +62,20 @@ import org.digijava.module.um.exception.UMException;
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
 
-    public static boolean isResetPermitted(String email, String code,
-                                           String resetPassword) throws
-        UMException {
-        boolean permitted = false;
-        Session sess = null;
-        Transaction tx = null;
-
-        try {
-            sess = PersistenceManager.getSession();
-
-            Iterator iter = sess.iterate(
-                "select ur from ResetPassword rs,User ur where ur.email='" +
-                email + "' and ur.id=rs.userId and rs.code='" + code + "'");
-
-            //////////
-            User iterUser = null;
-            if(iter.hasNext()) {
-                permitted = true;
-                iterUser = (User) iter.next();
-                tx = sess.beginTransaction();
-                iterUser.setPassword(resetPassword);
-                sess.save(iterUser);
-                tx.commit();
-
-            }
-
-        } catch(Exception ex) {
-
-            logger.debug("Unable to update user information into database", ex);
-
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
-            throw new UMException(
-                "Unable to update user information into database", ex);
-
-        } finally {
-            if(sess != null) {
-                try {
-                    PersistenceManager.releaseSession(sess);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
-
-        }
-
-        return permitted;
-    }
 
     public static long getuserId(String email) throws UMException {
         long userId = 0;
         Session sess = null;
-        boolean iscorrect = false;
         try {
             sess = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
 
-            Iterator iter = sess.iterate("from " +
-                                         User.class.getName() +
-                                         " rs where rs.email =? ", email,
-                                         Hibernate.STRING);
+            String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
+            Query query = sess.createQuery(queryString);
+            query.setString("email", email);
+            
+            Iterator iter = query.iterate();
+            
             while(iter.hasNext()) {
                 User iterUser = (User) iter.next();
                 userId = iterUser.getId().longValue();
@@ -170,10 +116,11 @@ public class DbUtil {
             sess = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
 
-            Iterator iter = sess.iterate("from " +
-                                         User.class.getName() +
-                                         " rs where rs.email =? ", user,
-                                         Hibernate.STRING);
+            String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
+            Query query = sess.createQuery(queryString);
+            query.setString("email", user);
+            
+            Iterator iter = query.iterate();
 //////////////////////
             while(iter.hasNext()) {
                 User iterUser = (User) iter.next();
@@ -236,61 +183,6 @@ public class DbUtil {
         return iscorrect;
     }
 
-    /**
-     * Reset Password in Database
-     * @param email
-     * @param newPassword
-     * @param confirmPassword
-     * @throws ServletException
-     * @deprecated Please, do not use this silly method
-     */
-    public static void ResetPassword(String email, String newPassword) throws
-        UMException {
-        User userobj = new User();
-
-        Transaction tx = null;
-        Session session = null;
-        try {
-            session = org.digijava.kernel.persistence.PersistenceManager.
-                getSession();
-            Iterator iter = session.iterate("from " +
-                                            User.class.getName() +
-                                            " rs where rs.email =? ", email,
-                                            Hibernate.STRING);
-            User iterUser = null;
-            while(iter.hasNext()) {
-                iterUser = (User) iter.next();
-
-            }
-            tx = session.beginTransaction();
-            iterUser.setPassword(ShaCrypt.crypt(newPassword.trim()).trim());
-            iterUser.setSalt(new Long(newPassword.trim().hashCode()).toString());
-            session.save(iterUser);
-            tx.commit();
-
-        } catch(Exception ex) {
-            logger.debug("Unable to update user information into database", ex);
-
-            if(tx != null) {
-                try {
-                    tx.rollback();
-                } catch(HibernateException ex1) {
-                    logger.warn("rollback() failed ", ex1);
-                }
-            }
-            throw new UMException(
-                "Unable to update user information into database", ex);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-        }
-
-    }
 
     /**
      * Reset Password in Database
@@ -301,18 +193,18 @@ public class DbUtil {
      */
     public static boolean ResetPassword(String email, String code, String newPassword) throws
         UMException {
-        User userobj = new User();
-
+    	
         Transaction tx = null;
         Session session = null;
         try {
             session = org.digijava.kernel.persistence.PersistenceManager.
                 getSession();
             tx = session.beginTransaction();
-            Iterator iter = session.iterate("from " +
-                                            User.class.getName() +
-                                            " rs where rs.email =? ", email,
-                                            Hibernate.STRING);
+            String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
+            Query query = session.createQuery(queryString);
+            query.setString("email", email);
+            
+            Iterator iter = query.iterate();
             User iterUser = null;
             while(iter.hasNext()) {
                 iterUser = (User) iter.next();
@@ -378,17 +270,16 @@ public class DbUtil {
                                       String newPassword) throws
         UMException {
 
-        User userobj = new User();
-
         Transaction tx = null;
         Session session = null;
         try {
-            session = org.digijava.kernel.persistence.PersistenceManager.
-                getSession();
-            Iterator iter = session.iterate("from " +
-                                            User.class.getName() +
-                                            " rs where rs.email =? ", user,
-                                            Hibernate.STRING);
+            session = org.digijava.kernel.persistence.PersistenceManager.getSession();
+            
+            String queryString = "from " + User.class.getName() + " rs where rs.email = :email";
+            Query query = session.createQuery(queryString);
+            query.setString("email", user);
+            
+            Iterator iter = query.iterate();
             User iterUser = null;
             while(iter.hasNext()) {
                 iterUser = (User) iter.next();
@@ -706,10 +597,11 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getSession();
 
-            Iterator usIter = sess.iterate("from " +
-                    User.class.getName() +
-                    " rs where sha(concat(rs.email,rs.id))=? and rs.emailVerified=false", id,
-                    Hibernate.STRING);
+            String queryString = "from " + User.class.getName() + " rs where sha(concat(rs.email,rs.id))=:hash and rs.emailVerified=false";
+            Query query = sess.createQuery(queryString);
+            query.setString("hash", id);
+            
+            Iterator usIter = query.iterate();
             if (usIter.hasNext()) {
                 User user = (User) usIter.next();
                 user.setActive(true);
@@ -720,11 +612,7 @@ public class DbUtil {
                 tx.commit();
                 verified =true;
                 
-            }
-
-            
-
-          
+            } 
         } catch (Exception ex0) {
             logger.debug("isRegisteredEmail() failed", ex0);
             throw new UMException(ex0.getMessage(), ex0);
@@ -749,10 +637,11 @@ public class DbUtil {
         try {
             sess = PersistenceManager.getSession();
 
-            Iterator iter = sess.iterate("from " +
-                                         User.class.getName() +
-                                         " rs where lower(rs.email)=? ", email,
-                                         Hibernate.STRING);
+            String queryString = "from " + User.class.getName() + " rs where trim(lower(rs.email)) = :email";
+            Query query = sess.createQuery(queryString);
+            query.setString("email", email.toLowerCase().trim());
+            
+            Iterator iter = query.list().iterator();
             if(iter.hasNext()) {
                 iscorrect = true;
             }
@@ -822,52 +711,6 @@ public class DbUtil {
 
         }
 
-    }
-
-    /**
-     * Get user preference object by given user and site
-     *
-     * @param user
-     * @param site
-     * @return
-     * @throws UMException
-     */
-    public static UserPreferences getUserPreferences(User user, Site site) throws
-        UMException {
-        Session session = null;
-        UserPreferences userPreferences = null;
-        try {
-            session = org.digijava.kernel.persistence.PersistenceManager.
-                getSession();
-
-            Object[] params = {
-                user.getId(), site.getId()};
-            Type[] paramTypes = {
-                Hibernate.LONG, Hibernate.LONG};
-            Iterator iter = session.iterate("from " +
-                                            UserPreferences.class.getName() +
-                                            " p where p.user.id =? and p.site.id=?", params,
-                                            paramTypes);
-            while(iter.hasNext()) {
-                userPreferences = (UserPreferences) iter.next();
-                break;
-            }
-
-        } catch(Exception ex0) {
-            logger.debug("Can not load user preferences", ex0);
-            throw new UMException("Can not load user preferences", ex0);
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception ex1) {
-                    logger.warn("releaseSession() failed ", ex1);
-                }
-            }
-
-        }
-
-        return userPreferences;
     }
 
     /**
@@ -968,7 +811,8 @@ public class DbUtil {
                 find = new String("from " + className);
             }
 
-            list = session.find(find);
+            Query query = session.createQuery(find);
+            list = query.list();
         } catch(Exception ex) {
             logger.debug("Unable to get data from " + className, ex);
             throw new UMException("Unable to get data from " + className, ex);
@@ -1030,48 +874,7 @@ public class DbUtil {
         List userList;
 
         try {
-
-            session = PersistenceManager.
-                getSession();
-
-            String userLow = criteria.trim().toLowerCase();
-            String userLowConcat;
-
-            StringTokenizer st = new StringTokenizer(userLow);
-            userLowConcat = "";
-            while(st.hasMoreTokens()) {
-                userLowConcat += st.nextToken();
-            }
-            userLow = "%" + userLow + "%";
-            userLowConcat = "%" + userLowConcat + "%";
-
-            /*            if (st.hasMoreTokens()) {
-                            userLowConcat = st.nextToken();
-                            while (st.hasMoreTokens()) {
-                                userLowConcat = userLowConcat + st.nextToken();
-                            }
-                        }
-                        else {
-                            userLowConcat = userLow;
-                        }
-             */
-
-            userList = session.find("from " + User.class.getName() +
-                                    " rs where rs.email like ? or lower(rs.firstNames) like ? or lower(rs.lastName) like ? or lower(rs.firstNames || rs.lastName) like ?",
-                                    new Object[] {
-                userLow, userLow, userLow, userLowConcat
-
-            }
-
-            , new Type[] {
-                Hibernate.STRING, Hibernate.STRING, Hibernate.STRING,
-                Hibernate.STRING});
-            Iterator userIter = userList.iterator();
-            while(userIter.hasNext()) {
-                User user = (User) userIter.next();
-                ProxyHelper.initializeObject(user);
-            }
-
+        	userList = UserUtils.searchUsers(criteria, new String[] {"firstNames", "lastName", "email"});
         } catch(Exception ex) {
             logger.debug("Unable to get username list from database ", ex);
             throw new UMException(
@@ -1173,12 +976,13 @@ public class DbUtil {
         List groups = null;
         Session session = null;
         try {
-            session = PersistenceManager.getSession();
-            groups = session.find(" from " + Group.class.getName() +
-                                  " s where s.site.id = ?", new Object[] {
-                siteId
-            }, new Type[] {
-                Hibernate.LONG});
+
+            String queryString = "from " + Group.class.getName() +
+            					 " g where g.site.id = :siteId";
+            Query query = session.createQuery(queryString);
+            query.setLong("siteId", siteId);
+            
+            groups = query.list();
         } catch(Exception ex) {
             logger.debug("Unable to get Group list from database ", ex);
             throw new UMException("Unable to get Group list from database ", ex);

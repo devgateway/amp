@@ -9,9 +9,9 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -468,54 +468,72 @@ public class AmpDbUtil {
       CalendarException {
       try {
           Session session = PersistenceManager.getRequestDBSession();
-          String queryString = "select ac from "+AmpCalendar.class.getName()+" ac left join ac.organisations org, "+Calendar.class.getName()+" c ";
+          
+          StringBuffer queryString = new StringBuffer();
+          queryString.append("select ac from ").append(AmpCalendar.class.getName());
+          queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
 
-          queryString += "where c.id=ac.calendarPK.calendar.id and " +
-                         "((:startDate <= c.startDate and c.startDate <= :endDate) or " +
-                         "(:startDate <= c.endDate and c.endDate <= :endDate) or " +
-                         "(c.startDate <= :startDate and :endDate <= c.endDate))";
+          queryString.append("where c.id=ac.calendarPK.calendar.id and ").
+          				append ("((:startDate <= c.startDate and c.startDate <= :endDate) or ").
+          				append("(:startDate <= c.endDate and c.endDate <= :endDate) or ").
+          				append("(c.startDate <= :startDate and :endDate <= c.endDate))");
 
           if(showPublicEvents){
-              queryString += " and ac.privateEvent=false";
+        	  queryString.append(" and ac.privateEvent=false");
           }else{
-              queryString += " and ac.privateEvent=true";
+        	  queryString.append(" and ac.privateEvent=true");
           }
 
-          if(selectedEventTypeIds != null){
-              queryString += " and ac.eventType.id in (:selectedEventTypes)";
+          if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
+        	  queryString.append(" and ac.eventType.id in (:selectedEventTypes)");
           }else{
-              queryString += " and 0 = 1";
+        	  queryString.append(" and 0 = 1");
           }
 
-          if(selectedDonorIds != null && selectedDonorIds.length != 0){
-              queryString += " and (org.id in (:selectedDonorIds)";
-
+          List <Long> selectedDonors = new ArrayList<Long>();
+          if(selectedDonorIds != null && selectedDonorIds.length != 0) {
+        	  boolean includeNullOrganizations = false;
               // FFerreyra: Add clause to where for "None" donor selected. See AMP-2691
-
               for(int index = 0; index < selectedDonorIds.length; index++){
                   if(selectedDonorIds[index].equals("None")){
-                      queryString += " or org is null";
-                      break;
+                	  includeNullOrganizations = true;
+                  } else {
+                	  selectedDonors.add(Long.parseLong(selectedDonorIds[index]));
                   }
               }
-              queryString += ")";
+              
+              queryString.append(" and (");
+              if (selectedDonors.size() > 0) {
+            	  queryString.append("org.id in (:selectedDonorIds)");
+              }
+              if (includeNullOrganizations) {
+            	  if (selectedDonors.size() > 0) {
+            		  queryString.append(" or ");
+            	  }
+            	  queryString.append("org is null");
+              }
+              queryString.append(")");
           }
 
           if (instanceId != null) {
-              queryString += " and c.instanceId = :instanceId";
+        	  queryString.append(" and c.instanceId = :instanceId");
           }
           if (siteId != null) {
-              queryString += " and c.siteId = :siteId";
+        	  queryString.append(" and c.siteId = :siteId");
           }
           //queryString += " group by c.id";
-          Query query = session.createQuery(queryString);
+          Query query = session.createQuery(queryString.toString());
           query.setCalendar("startDate", startDate);
           query.setCalendar("endDate", endDate);
-          if (selectedEventTypeIds != null) {
-              query.setParameterList("selectedEventTypes", selectedEventTypeIds);
+          if ( (selectedEventTypeIds != null) && (selectedEventTypeIds.length > 0) ) {
+        	  List <Long> selectedEventType = new ArrayList<Long>();
+        	  for(int index = 0; index < selectedEventTypeIds.length; index++) {
+        		  selectedEventType.add(Long.parseLong(selectedEventTypeIds[index]));
+        	  }
+              query.setParameterList("selectedEventTypes", selectedEventType);
           }
           if (selectedDonorIds != null && selectedDonorIds.length != 0) {
-              query.setParameterList("selectedDonorIds", selectedDonorIds);
+              query.setParameterList("selectedDonorIds", selectedDonors);
           }
 
           if (instanceId != null) {
@@ -524,8 +542,6 @@ public class AmpDbUtil {
           if (siteId != null) {
               query.setString("siteId", siteId);
           }
-
-          //System.out.println("\n\n\n\n\n\n" + query.getQueryString());
 
           return query.list();
       } catch (Exception ex) {

@@ -60,9 +60,9 @@ import org.digijava.module.translation.form.TranslationPermissionsForm;
 import org.digijava.module.translation.security.TranslateObject;
 import org.digijava.module.translation.security.TranslatePermission;
 import org.digijava.module.translation.security.TranslateSecurityManager;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import java.util.Comparator;
 import java.util.TreeSet;
 

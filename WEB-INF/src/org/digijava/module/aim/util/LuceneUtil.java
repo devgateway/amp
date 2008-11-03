@@ -12,13 +12,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
-
-import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -37,8 +33,11 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
-import org.apache.lucene.search.WildcardQuery;
-import org.apache.lucene.search.highlight.*;
+import org.apache.lucene.search.highlight.Fragmenter;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.Util;
@@ -49,15 +48,12 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
-
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
-import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
+import org.hibernate.Session;
 
 /**
  * @author Alexandru Artimon
@@ -78,74 +74,6 @@ public class LuceneUtil {
          * name of index directory
          */
         public final static String indexDirectory = "lucene-index";
-//	/**
-//	 * Opens the writer so information can be added to the index
-//	 * @param create set it to true to create the index filestructure
-//	 */
-//	public void openWriter(boolean create){
-//		if (indexWriter == null){
-//			try {
-//				indexWriter = new IndexWriter(appPath + indexName, analyzer, create);
-//			} catch (CorruptIndexException e) {
-//				e.printStackTrace();
-//			} catch (LockObtainFailedException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Opens the searcher
-//	 */
-//
-//	public void openSearcher(){
-//		if (indexSearcher == null){
-//			try {
-//				indexSearcher = new IndexSearcher(appPath + indexName);
-//			} catch (CorruptIndexException e) {
-//				e.printStackTrace();
-//			} catch (LockObtainFailedException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Closes the writer and insures that all data has been written to the index
-//	 */
-//	public void closeWriter(){
-//		if (indexWriter != null){
-//			try {
-//				indexWriter.close();
-//				indexWriter = null;
-//			} catch (CorruptIndexException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//
-//	/**
-//	 * Closes the searcher
-//	 */
-//	public void closeSearcher(){
-//		if (indexSearcher != null){
-//			try {
-//				indexSearcher.close();
-//				indexSearcher = null;
-//			} catch (CorruptIndexException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-	
 	
         public static Directory createIndex(){
 		RAMDirectory index = new RAMDirectory();

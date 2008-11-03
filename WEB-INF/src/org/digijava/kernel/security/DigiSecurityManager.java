@@ -41,7 +41,7 @@ import java.util.TreeSet;
 
 import javax.security.auth.Subject;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
@@ -344,10 +344,10 @@ public class DigiSecurityManager {
                 session = PersistenceManager.getSession();
 
                 if (userQuery != null) {
-                    result.addAll(session.find(userQuery));
+                    result.addAll(session.createQuery(userQuery).list());
                 }
                 if (groupQuery != null) {
-                    List list = session.find(groupQuery);
+                    List list = session.createQuery(groupQuery).list();
                     iter = list.iterator();
                     while (iter.hasNext()) {
                         Group group = (Group) iter.next();

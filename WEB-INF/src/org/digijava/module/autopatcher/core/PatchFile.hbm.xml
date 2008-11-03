@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.autopatcher.core.PatchFile"
-		table="PATCH_FILE">
+	<class name="org.digijava.module.autopatcher.core.PatchFile" table="PATCH_FILE">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
@@ -11,7 +10,6 @@
 		</id>
 
 		<property name="absolutePatchName" column="absolute_patch_name" type="java.lang.String" />
-		<property name="invoked" column="invoked"
-			type="java.sql.Timestamp" />
+		<property name="invoked" column="invoked" type="java.sql.Timestamp" />
 	</class>
 </hibernate-mapping>

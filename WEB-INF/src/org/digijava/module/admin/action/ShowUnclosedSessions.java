@@ -35,7 +35,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.form.UnclosedSessionsForm;
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 public class ShowUnclosedSessions
       extends Action {

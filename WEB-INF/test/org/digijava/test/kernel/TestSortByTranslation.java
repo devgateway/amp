@@ -16,8 +16,8 @@ import org.digijava.kernel.translator.util.TranslationCallback;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.test.util.DigiTestBase;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class TestSortByTranslation
     extends DigiTestBase {

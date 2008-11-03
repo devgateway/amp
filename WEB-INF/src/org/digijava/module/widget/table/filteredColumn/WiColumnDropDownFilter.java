@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;

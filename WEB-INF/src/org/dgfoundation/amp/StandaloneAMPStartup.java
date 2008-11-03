@@ -5,8 +5,8 @@ package org.dgfoundation.amp;
 
 import java.sql.SQLException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 import org.dgfoundation.amp.importers.ImporterWorker;
 import org.digijava.kernel.exception.DgException;

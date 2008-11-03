@@ -13,10 +13,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;

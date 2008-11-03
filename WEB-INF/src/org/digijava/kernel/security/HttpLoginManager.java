@@ -40,10 +40,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
 import org.acegisecurity.Authentication;
 import org.acegisecurity.AuthenticationException;
 import org.acegisecurity.context.SecurityContext;
@@ -76,6 +72,9 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public final class HttpLoginManager {
 
@@ -1231,13 +1230,13 @@ public final class HttpLoginManager {
               " site#" + site.getId());
 
      UserPreferences result = null;
-     net.sf.hibernate.Session session = null;
+     org.hibernate.Session session = null;
 
      UserPreferencesPK key = new UserPreferencesPK(user, site);
 
      try {
          session = PersistenceManager.getRequestDBSession();
-         result = (UserPreferences) session.load(UserPreferences.class, key);
+         result = (UserPreferences) session.get(UserPreferences.class, key);
 
      }
      catch (ObjectNotFoundException ex) {

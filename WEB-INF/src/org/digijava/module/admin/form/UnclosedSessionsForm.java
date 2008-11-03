@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 public class UnclosedSessionsForm
       extends ActionForm {

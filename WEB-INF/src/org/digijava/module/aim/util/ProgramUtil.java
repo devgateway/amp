@@ -17,13 +17,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.Message;
@@ -59,6 +52,12 @@ import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.translation.util.DbUtil;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 public class ProgramUtil {
@@ -924,21 +923,18 @@ public class ProgramUtil {
 		 * @param parentThemeId
 		 * @return
 		 */
-		public static Collection<AmpTheme> getSubThemes(Long parentThemeId) throws DgException
-		{
+		public static Collection<AmpTheme> getSubThemes(Long parentThemeId) throws DgException {
+			
 			Session session = session = PersistenceManager.getRequestDBSession();
 			Query qry = null;
 			Collection<AmpTheme> subThemes = null;
-			try
-			{
+			try {
 			    String queryString = "from " + AmpTheme.class.getName() +
-			        " subT where subT.parentThemeId=:parentThemeId";
+			        " subT where subT.parentThemeId.ampThemeId=:parentThemeId";
 			    qry = session.createQuery(queryString);
 			    qry.setParameter("parentThemeId",parentThemeId);
 			    subThemes = qry.list();
-			}
-			catch(Exception e1)
-			{
+			} catch(Exception e1) {
 				throw new DgException("Cannot seacr sub themes for theme with id="+parentThemeId,e1);
 			}
 			return subThemes;

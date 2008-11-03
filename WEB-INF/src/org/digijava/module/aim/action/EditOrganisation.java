@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.DateFormatter;
 
-import net.sf.hibernate.JDBCException;
+import org.hibernate.JDBCException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;

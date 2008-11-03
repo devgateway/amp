@@ -32,7 +32,7 @@ import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.entity.Locale;
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.exception.DgException;
 import javax.security.auth.Subject;

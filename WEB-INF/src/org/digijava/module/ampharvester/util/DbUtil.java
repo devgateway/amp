@@ -26,10 +26,10 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 //import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.editor.dbentity.Editor;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
 public class DbUtil {

@@ -8,21 +8,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
-
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -32,7 +29,6 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -49,9 +45,11 @@ import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
-import net.sf.hibernate.ObjectNotFoundException;
-import java.util.Comparator;
-import java.util.List;
+import org.hibernate.Hibernate;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -222,7 +220,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             String query = "select team from " + AmpTeam.class.getName()
-                + " team where (team.parentTeamId=:pid)";
+                + " team where (team.parentTeamId.ampTeamId=:pid)";
             Query qry = session.createQuery(query);
             qry.setParameter("pid", id);
             col = qry.list();
@@ -488,7 +486,7 @@ public class TeamUtil {
                     workspace.setHasActivities(true);
                 }
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
-                    + "where (t.parentTeamId=:teamId)";
+                    + "where (t.parentTeamId.ampTeamId=:teamId)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("teamId", team.getAmpTeamId(), Hibernate.LONG);
                 itr1 = qry.list().iterator();
@@ -572,7 +570,7 @@ public class TeamUtil {
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
-                    + "where (t.parentTeamId=:parId)";
+                    + "where (t.parentTeamId.ampTeamId=:parId)";
                 qry = session.createQuery(qryStr);
                 qry.setParameter("parId", updTeam.getAmpTeamId(),
                                  Hibernate.LONG);
@@ -765,7 +763,7 @@ public class TeamUtil {
             }
             // Remove reference from AmpTeam
             qryStr = "select t from " + AmpTeam.class.getName() + " t"
-                + " where (t.parentTeamId=:teamId)";
+                + " where (t.parentTeamId.ampTeamId=:teamId)";
             qry = session.createQuery(qryStr);
             qry.setLong("teamId", teamId);
             itr = qry.list().iterator();
@@ -1468,7 +1466,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             String qry = "select tm from " + AmpTeam.class.getName()
-                + " tm where tm.parentTeamId=:ampTeamId";
+                + " tm where tm.parentTeamId.ampTeamId=:ampTeamId";
             q = session.createQuery(qry);
             q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
             if(q != null && q.list().size() > 0)
@@ -1933,8 +1931,7 @@ public class TeamUtil {
                 Collections.sort((ArrayList) col);
             }
         } catch(Exception e) {
-            logger.debug("Exception from getAllTeamReports()");
-            logger.error(e.toString());
+            logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);
         } finally {
             try {
@@ -1982,12 +1979,12 @@ public class TeamUtil {
                if(team.getAccessType().equalsIgnoreCase(
                    Constants.ACCESS_TYPE_MNGMT)) {
                    queryString = "select DISTINCT r from " + AmpReports.class.getName()
-                       + " r " + " where " + tabFilter + " (r.ownerId=:p.memberid or r.ampReportId IN (select r2.report from " 
+                       + " r where " + tabFilter + " (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from " 
                        + AmpTeamReports.class.getName() 
-                       + " r2 " + " where r2.team=:p.teamid and r2.teamView = true)) order by r.name";
+                       + " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
                    qry = session.createQuery(queryString);
-                   qry.setParameter("p.memberid", ampteammember.getAmpTeamMemId());
-                   qry.setParameter("p.teamid", teamId);
+                   qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
+                   qry.setParameter("teamid", teamId);
                    if ( getTabs!=null )
                 	   qry.setBoolean("getTabs", getTabs);
                    if (currentPage !=null){
@@ -2034,8 +2031,7 @@ public class TeamUtil {
                }
                
            } catch(Exception e) {
-               logger.debug("Exception from getAllTeamReports()");
-               logger.error(e.toString());
+               logger.error("Exception from getAllTeamReports()", e);
                throw new RuntimeException(e);
            }
            return col;	
@@ -2055,7 +2051,7 @@ public class TeamUtil {
             String queryString = null;
             Query qry = null;
          	queryString="select distinct r from " + AmpReports.class.getName()+
-			"  r inner join r.logs m where "+tabFilter+" (m.member is not null and m.member=:ampTeamMemId) order by m.lastView desc";
+			"  r inner join r.logs m where "+tabFilter+" (m.member is not null and m.member.ampTeamMemId=:ampTeamMemId) order by m.lastView desc";
          	qry = session.createQuery(queryString); 
          	qry.setLong("ampTeamMemId", memberId);
        	    if ( getTabs!=null )
@@ -2069,8 +2065,7 @@ public class TeamUtil {
              	col = qry.list();
             }
         } catch(Exception e) {
-            logger.debug("Exception from getAllTeamReports()");
-            logger.error(e.toString());
+            logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);
         }
         return col;	
@@ -2135,8 +2130,7 @@ public class TeamUtil {
            	  count=qry.list().size();
             }
         } catch(Exception e) {
-            logger.debug("Exception from getAllTeamReports()");
-            logger.error(e.toString());
+            logger.error("Exception from getAllTeamReports()", e);
             throw new RuntimeException(e);
         }
         return count;
@@ -2185,8 +2179,7 @@ public class TeamUtil {
                col = qry.list();
            }
        } catch(Exception e) {
-           logger.debug("Exception from getAllTeamReports()");
-           logger.error(e.toString());
+           logger.error("Exception from getAllTeamReports()", e);
            throw new RuntimeException(e);
        }
        return col;

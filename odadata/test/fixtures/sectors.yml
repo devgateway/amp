@@ -1,0 +1,5 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+sample_sector:
+  id: 1
+  sector_code: 202
+  name: LandOfMilkAndHoney

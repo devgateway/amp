@@ -53,8 +53,8 @@ import org.digijava.module.ampharvester.jaxb10.impl.ProjectIdTypeImpl;
 import org.digijava.module.ampharvester.util.DbUtil;
 import org.digijava.module.ampharvester.util.XmlHelper;
 import org.digijava.module.editor.dbentity.Editor;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.digijava.module.aim.helper.Constants;
 
 public class ExportManager {

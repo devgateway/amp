@@ -3,8 +3,8 @@
  */
 package org.digijava.module.aim.util;
 
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;

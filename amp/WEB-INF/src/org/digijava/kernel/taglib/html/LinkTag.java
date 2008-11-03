@@ -22,22 +22,21 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.ResponseUtils;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.DgUrlProcessor;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteConfigUtils;
-import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.util.SiteUtils;
 
 public class LinkTag
@@ -115,7 +114,7 @@ public class LinkTag
             String requestUrl = null;
             if (!SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite())) {
 
-                Site site = PersistenceManager.getSite(getSite());
+            	Site site = SiteCache.getInstance().getSite(getSite());
                 SiteDomain domain = SiteUtils.getDefaultSiteDomain(site);
 
                 siteURL = SiteUtils.getSiteURL(domain, request.getScheme(),

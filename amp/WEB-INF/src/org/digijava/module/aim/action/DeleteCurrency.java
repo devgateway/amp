@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.JDBCException;
+import org.hibernate.JDBCException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;

@@ -25,13 +25,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.JDBCException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
@@ -39,6 +32,7 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.FilterParam;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -106,14 +100,18 @@ import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.common.util.DateTimeUtil;
-
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.orgProfile.helper.Project;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.JDBCException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -1613,9 +1611,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select a from "
-                + AmpApplicationSettings.class.getName()
-                + " a where (a.team=:teamId) and a.member is null";
+            String queryString = "from " + AmpApplicationSettings.class.getName() + " a where (a.team.ampTeamId=:teamId) and a.member is null";
             qry = session.createQuery(queryString);
             qry.setParameter("teamId", teamId, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -1624,9 +1620,7 @@ public class DbUtil {
             }
             
         } catch (Exception e) {
-        	e.printStackTrace();
-            logger.error("Unable to get TeamAppSettings");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get TeamAppSettings", e);
         }
         return ampAppSettings;
     }
@@ -1650,9 +1644,7 @@ public class DbUtil {
             }
             
         } catch (Exception e) {
-        	e.printStackTrace();
-            logger.error("Unable to get TeamAppSettings");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get TeamAppSettings", e);
         }
         return ampAppSettings;
     }
@@ -1685,7 +1677,7 @@ public class DbUtil {
             } while (itr.hasNext()) {
                 Group grp = (Group) itr.next();
                 logger.debug("Group key is " + grp.getKey());
-                if (grp.getKey().trim().equals("TRN")) {
+                if ( (grp.getKey() != null) && "TRN".equals(grp.getKey().trim()) ) {
                     logger.debug("setting flag as true");
                     flag = true;
                     break;
@@ -1694,7 +1686,7 @@ public class DbUtil {
                 }
             }
         } catch (Exception ex) {
-            logger.error("Unable to get team member " + ex);
+            logger.error("Unable to get team member ", ex);
         }
         return flag;
     }
@@ -1706,9 +1698,8 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select a from "
-                + AmpApplicationSettings.class.getName()
-                + " a where (a.member=:memberId)";
+            String queryString = "from " + AmpApplicationSettings.class.getName() + " a where (a.member.ampTeamMemId = :memberId)";
+            //String queryString = "from " + AmpApplicationSettings.class.getName();
             qry = session.createQuery(queryString);
             qry.setParameter("memberId", memberId, Hibernate.LONG);
             Iterator itr = qry.list().iterator();
@@ -1716,8 +1707,7 @@ public class DbUtil {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
         } catch (Exception e) {
-            logger.error("Unable to get MemberAppSettings");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get MemberAppSettings", e);
         }
         return ampAppSettings;
     }
@@ -1747,8 +1737,7 @@ public class DbUtil {
             qry = session.createQuery(queryString);
             reports = qry.list();
         } catch (Exception e) {
-            logger.error("Unable to get all reports");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get all reports", e);
         }
         return reports;
     }
@@ -1784,7 +1773,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select r from " + AmpReportLog.class.getName()
-                + " r " + "where (r.report=:id and r.member=:member)";
+                + " r " + "where (r.report=:id and r.member.ampTeamMemId=:member)";
             Query qry = session.createQuery(queryString);
             qry.setParameter("id", report_id, Hibernate.LONG);
             qry.setParameter("member", member_id, Hibernate.LONG);
@@ -1825,8 +1814,7 @@ public class DbUtil {
                 col.add(itr.next());
             }
         } catch (Exception e) {
-            logger.debug("Exception from getMembersUsingReport()");
-            logger.debug(e.toString());
+            logger.error("Exception from getMembersUsingReport()", e);
         }
         return col;
     }
@@ -1904,8 +1892,7 @@ public class DbUtil {
                 col.add(itr.next());
             }
         } catch (Exception e) {
-            logger.debug("Exception from getAllPageFilters()");
-            logger.debug(e.toString());
+            logger.error("Exception from getAllPageFilters()", e);
         }
         return col;
     }
@@ -1935,8 +1922,7 @@ public class DbUtil {
                 page = (AmpPages) itr.next();
             }
         } catch (Exception e) {
-            logger.error("Unable to get AmpPage");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get AmpPage", e);
         }
         return page;
     }
@@ -1961,8 +1947,7 @@ public class DbUtil {
             }
             // end
         } catch (Exception e) {
-            logger.error("Unable to get AmpFilter");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get AmpFilter", e);
         }
         return filter;
     }
@@ -1985,8 +1970,7 @@ public class DbUtil {
                 col.add( (Long) itr.next());
             }
         } catch (Exception e) {
-            logger.debug("Exception from getTeamPageFilters()");
-            logger.debug(e.toString());
+            logger.error("Exception from getTeamPageFilters()", e);
         }
         return col;
     }
@@ -2011,30 +1995,11 @@ public class DbUtil {
                 col.add(filter);
             }
         } catch (Exception e) {
-            logger.debug("Exception from getFilters()");
-            logger.debug(e.toString());
+            logger.error("Exception from getFilters()", e);
         }
         return col;
     }
 
-    /**
-     * Replaced by getAllAssistanceTypesFromCM() which uses the category manager
-     * public static Collection getAllAssistanceTypes() {
-        Session session = null;
-        Collection col = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select ta from "
-                + AmpTermsAssist.class.getName() + " ta ";
-            Query qry = session.createQuery(queryString);
-            col = qry.list();
-        } catch (Exception e) {
-            logger.debug("Exception from getAllAssistanceType()");
-            logger.debug(e.toString());
-        }
-        return col;
-    }*/
     /**
      * Replaces DbUtil.getAllAssistanceTypes()
      */
@@ -2053,8 +2018,7 @@ public class DbUtil {
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception e) {
-            logger.debug("Exception from getAll()");
-            e.printStackTrace();
+            logger.error("Exception from getAll()", e);
         }
         return col;
     }
@@ -2071,8 +2035,7 @@ public class DbUtil {
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception e) {
-            logger.debug("Exception from getAllCountries()");
-            logger.debug(e.toString());
+            logger.error("Exception from getAllCountries()", e);
         }
         return col;
     }
@@ -2093,8 +2056,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getDgCountry()");
-            logger.debug(e.toString());
+            logger.error("Exception from getDgCountry()", e);
         }
         return country;
     }
@@ -2115,8 +2077,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getDgCountry()");
-            logger.debug(e.toString());
+            logger.error("Exception from getDgCountry()", e);
         }
         return country;
     }
@@ -2137,8 +2098,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getDgCountry()");
-            logger.debug(e.toString());
+            logger.error("Exception from getDgCountry()", e);
         }
         return country;
     }
@@ -2273,8 +2233,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getFiscalCalOrgs()");
-            logger.debug(e.toString());
+            logger.error("Exception from getFiscalCalOrgs()", e);
         }
         return col;
 
@@ -2300,8 +2259,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getFiscalCalSettings()");
-            logger.debug(e.toString());
+            logger.error("Exception from getFiscalCalSettings()", e);
         }
         return col;
 
@@ -2324,8 +2282,7 @@ public class DbUtil {
                 ampFisCal = (AmpFiscalCalendar) itr.next();
             }
         } catch (Exception e) {
-            logger.error("Unable to get fiscal Calendar");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get fiscal Calendar", e);
         }
         return ampFisCal;
     }
@@ -2339,13 +2296,13 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                + "where (lower(acronym) like '%" + keyword + "%' || lower(name) like '%"
+                + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
                 + keyword + "%') and org.orgTypeId=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
         } catch (Exception ex) {
-            logger.debug("Unable to search " + ex);
+            logger.error("Unable to search ", ex);
         }
         return col;
     }
@@ -2359,12 +2316,12 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                + "where (lower(acronym) like '%" + keyword + "%' || lower(name) like '%"
+                + "where (lower(acronym) like '%" + keyword + "%' or lower(name) like '%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception ex) {
-            logger.debug("Unable to search " + ex);
+            logger.error("Unable to search ", ex);
         }
         return col;
     }
@@ -2385,7 +2342,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from " + AmpOrganisation.class.getName() + " org "
-                + "where ((lower(acronym) like '%" + keyword + "%' && lower(name) like '"+namesFirstLetter+"%') || lower(name) like '"+namesFirstLetter+ "%"
+                + "where ((lower(acronym) like '%" + keyword + "%' and lower(name) like '"+namesFirstLetter+"%') or lower(name) like '"+namesFirstLetter+ "%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);
             col = qry.list();
@@ -2394,6 +2351,7 @@ public class DbUtil {
         }
         return col;
     }
+    
 
     public static Collection searchForOrganisationByType(Long orgType) {
         Session session = null;
@@ -2408,7 +2366,7 @@ public class DbUtil {
             qry.setParameter("orgType", orgType, Hibernate.LONG);
             col = qry.list();
         } catch (Exception ex) {
-            logger.debug("Unable to search " + ex);
+            logger.error("Unable to search ", ex);
         }
         return col;
     }
@@ -2542,8 +2500,7 @@ public class DbUtil {
             qry = session.createQuery(queryString);
             groups = qry.list();
         } catch (Exception e) {
-            logger.error("Unable to get all organisation groups");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get all organisation groups", e);
         }
         return groups;
     }
@@ -2566,8 +2523,7 @@ public class DbUtil {
 
             update(oldInd);
         } catch (Exception ex) {
-            logger.debug("Unable to get survey indicator : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.error("Unable to get survey indicator : ", ex);
         }
     }
 
@@ -2587,8 +2543,7 @@ public class DbUtil {
                 ampOrgType = (AmpOrgType) itr.next();
             }
         } catch (Exception e) {
-            logger.error("Unable to get Org Type");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get Org Type", e);
         }
         return ampOrgType;
     }
@@ -2613,8 +2568,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getFundingDetWithCurrId()");
-            logger.debug(e.toString());
+            logger.error("Exception from getFundingDetWithCurrId()", e);
         }
         return col;
     }
@@ -2637,8 +2591,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getActivityTheme()");
-            logger.debug(e.toString());
+            logger.error("Exception from getActivityTheme()", e);
         }
         return col;
     }
@@ -2665,8 +2618,7 @@ public class DbUtil {
             }
 
         } catch (Exception e) {
-            logger.debug("Exception from getActivityTheme()");
-            logger.debug(e.toString());
+            logger.error("Exception from getActivityTheme()", e);
         }
         return col;
     }
@@ -2688,8 +2640,7 @@ public class DbUtil {
                 try {
                     tx.rollback();
                 } catch (HibernateException ex) {
-                    logger.debug("rollback() failed");
-                    logger.debug(ex.toString());
+                    logger.error("rollback() failed", ex);
                 }
             }
         }
@@ -2705,14 +2656,12 @@ public class DbUtil {
             sess.update(object);
             tx.commit();
         } catch (Exception e) {
-            logger.error("Unable to update");
-            logger.debug(e.toString());
+            logger.error("Unable to update", e);
             if (tx != null) {
                 try {
                     tx.rollback();
                 } catch (HibernateException ex) {
-                    logger.debug("rollback() failed");
-                    logger.debug(ex.toString());
+                    logger.error("rollback() failed", e);
                 }
             }
         }
@@ -2738,14 +2687,12 @@ public class DbUtil {
             sess.update(org);
             tx.commit();
         } catch (Exception e) {
-            logger.error("Unable to update");
-            logger.debug(e.toString());
+            logger.error("Unable to update", e);
             if (tx != null) {
                 try {
                     tx.rollback();
                 } catch (HibernateException ex) {
-                    logger.debug("rollback() failed");
-                    logger.debug(ex.toString());
+                    logger.error("rollback() failed", ex);
                 }
             }
         }
@@ -2800,14 +2747,12 @@ public class DbUtil {
             } else
                 logger.debug("DbUtil session is null");
         } catch (Exception ex) {
-            logger.error("Unable to Delete Amp status record");
-            logger.debug(ex.toString());
-
+            logger.error("Unable to Delete Amp status record", ex);
             if (tx != null) {
                 try {
                     tx.rollback();
                 } catch (HibernateException ex1) {
-                    logger.debug("rollback() failed ");
+                    logger.error("rollback() failed ", ex1);
                 }
             }
         }
@@ -2900,11 +2845,8 @@ public class DbUtil {
             c = q.list();
 
         } catch (Exception ex) {
-            logger.debug("Unable to get  Max fiscal years from database"
-                         + ex.getMessage());
+            logger.error("Unable to get  Max fiscal years from database", ex);
         }
-        //logger.debug("getFiscalYears() collection size returned : " + ( c !=
-        // null ? c.size() : 0 ) ) ;
         return c;
     }
 
@@ -2937,8 +2879,6 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get  Max fiscal years from database", ex);
         }
-        //logger.debug("getFiscalYears() collection size returned : " + ( c !=
-        // null ? c.size() : 0 ) ) ;
         return c;
     }
 
@@ -3082,7 +3022,6 @@ public class DbUtil {
             queryString = "select f from "
                 + AmpFunding.class.getName() + " f";
             q = session.createQuery(queryString);
-            //logger.debug("No of Donors : " + q.list().size());
             Iterator it = q.list().iterator();
             while (it.hasNext()) {
                 AmpFunding el = (AmpFunding) it.next();
@@ -3093,7 +3032,7 @@ public class DbUtil {
                 }
             }
         } catch (Exception ex) {
-            logger.debug("Unable to get Donors from database", ex);
+            logger.error("Unable to get Donors from database", ex);
         }
         return donors;
     }
@@ -3133,7 +3072,6 @@ public class DbUtil {
             while (iterActivity.hasNext()) {
                 AmpActivity ampActivity = (AmpActivity) iterActivity.next();
 
-//				logger.debug("Org Role List: " + ampActivity.getOrgrole().size());
                 iter = ampActivity.getOrgrole().iterator();
                 while (iter.hasNext()) {
                     AmpOrgRole ampOrgRole = (AmpOrgRole) iter.next();
@@ -3161,7 +3099,7 @@ public class DbUtil {
             }
 
         } catch (Exception ex) {
-            logger.debug("Unable to get Donor " + ex.getMessage());
+            logger.error("Unable to get Donor ", ex);
         }
         return donor;
     }
@@ -3193,23 +3131,8 @@ public class DbUtil {
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
             ampFundings = q.list();
             logger.debug("size of result " + ampFundings.size());
-            /*
-             * iter = list.iterator() ; while ( iter.hasNext() ) {
-             * AmpFundingDetail fundDetails = new AmpFundingDetail();
-             * fundDetails = (AmpFundingDetail)iter.next();
-             * if(fundDetails.getAmpCurrencyId().getCurrencyCode().equals("USD")) {
-             * //logger.debug("equals USD"); total = total +
-             * fundDetails.getTransactionAmount().doubleValue() ; } else {
-             * //logger.debug(" not equal to USD ") ; total = total +
-             * CurrencyWorker.convert(fundDetails.getTransactionAmount().doubleValue(),"USD") ;
-             * //logger.debug("AFTER conversion total is " + total); }
-             *
-             *  }
-             */
-            //logger.debug("Final Total is " + total);
         } catch (Exception ex) {
-            logger.debug("Unable to get sum of funds from database"
-                         + ex.getMessage());
+            logger.error("Unable to get sum of funds from database", ex);
         }
         return ampFundings;
     }
@@ -3255,7 +3178,7 @@ public class DbUtil {
                 + AmpFundingDetail.class.getName()
                 + " fd where (fd.transactionType=:transactionType) "
                 + " and (fd.adjustmentType=:adjustmentType) "
-                + " and (fd.ampFundingId in(" + inClause + "))";
+                + " and (fd.ampFundingId.ampFundingId in(" + inClause + "))";
             logger.debug("queryString :" + queryString);
             q = session.createQuery(queryString);
             q.setParameter("transactionType", transactionType,
@@ -3745,7 +3668,7 @@ public class DbUtil {
             }
 
         } catch (Exception ex) {
-            logger.debug("Unable to get sum of funds from database", ex);
+            logger.error("Unable to get sum of funds from database", ex);
         }
         return total;
     }
@@ -3763,7 +3686,7 @@ public class DbUtil {
             logger.debug("No of Donors : " + q.list().size());
             donors = q.list();
         } catch (Exception ex) {
-            logger.debug("Unable to get Donors from database", ex);
+            logger.error("Unable to get Donors from database", ex);
         }
         return donors;
     }
@@ -3778,11 +3701,9 @@ public class DbUtil {
             queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org  join  org.calendar  cal";
             q = session.createQuery(queryString);
-            //logger.debug("No of Donors : " + q.list().size());
             donors = q.list();
         } catch (Exception ex) {
-            logger.debug("Unable to get Donors from database", ex);
-            ex.printStackTrace();
+            logger.error("Unable to get Donors from database", ex);
         }
         return donors;
 
@@ -3800,11 +3721,9 @@ public class DbUtil {
                 + " f where (f.ampDonorOrgId=:ampDonorOrgId)";
             q = session.createQuery(queryString);
             q.setParameter("ampDonorOrgId", ampDonorOrgId, Hibernate.LONG);
-            //logger.debug("No of funding Id for each donor : " +
-            // q.list().size());
             fundingIds = q.list();
         } catch (Exception ex) {
-            logger.debug("Unable to get Donors from database", ex);
+            logger.error("Unable to get Donors from database", ex);
         }
         logger.debug("Returning fundingIDs : "
                      + (fundingIds != null ? fundingIds.size() : 0));
@@ -3825,11 +3744,9 @@ public class DbUtil {
                 + " activity where activity.modality.ampModalityId = :ampModalityId";
             q = session.createQuery(queryString);
             q.setParameter("ampModalityId", ampModalityId, Hibernate.LONG);
-            //				logger.debug("No of projects for each Modality : " +
-            // q.list().size());
             projects = q.list();
         } catch (Exception ex) {
-            logger.debug("Unable to get Donors from database", ex);
+            logger.error("Unable to get Donors from database", ex);
         }
         logger.debug("Returning Projects : "
                      + (projects != null ? projects.size() : 0));
@@ -5259,7 +5176,6 @@ public class DbUtil {
             String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
                 + " indc order by indicator_number asc";
             Collection indicatorColl = session.createQuery(qry).list();
-            //logger.debug("indicatorColl.size() : " + indicatorColl.size());
 
             AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             //response = svy.getResponses();
@@ -5268,7 +5184,6 @@ public class DbUtil {
             Query query = session.createQuery(qry);
             query.setParameter("surveyId", surveyId, Hibernate.LONG);
             response = ( (AmpAhsurvey) query.list().get(0)).getResponses();
-            //logger.debug("response.size() : " + response.size());
 
             qry = "select fund from " + AmpFunding.class.getName()
                 + " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
@@ -5276,7 +5191,6 @@ public class DbUtil {
             query.setParameter("donorId", svy.getAmpDonorOrgId().getAmpOrgId(), Hibernate.LONG);
             query.setParameter("activityId", svy.getAmpActivityId().getAmpActivityId(), Hibernate.LONG);
             fundingSet = query.list();
-            //logger.debug("fundingSet.size() : " + fundingSet.size());
 
             if (response.size() < 1) // new survey
                 flag = false;
@@ -5333,13 +5247,12 @@ public class DbUtil {
                                                     }
                                                 }
                                             }
-                                            //logger.debug("actual = " + actual + "  planned = " + planned);
+
                                             if (planned == 0.0)
                                                 res.setResponse("nil");
                                             else {
                                                 NumberFormat formatter = new DecimalFormat("#.##");
                                                 Double percent = new Double( (actual * 100) / planned);
-                                                //logger.debug("percent = " + percent + " format(percent) : " + formatter.format(percent));
                                                 res.setResponse(formatter.format(percent));
                                             }
                                         } else
@@ -5359,8 +5272,7 @@ public class DbUtil {
                 responses.add(ind);
             }
         } catch (Exception ex) {
-            logger.debug("Unable to get survey responses : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.error("Unable to get survey responses : ", ex);
         }
         logger.debug("responses.size() : " + responses.size());
         return responses;
@@ -5378,8 +5290,7 @@ public class DbUtil {
             q.setParameter("surveyId", surveyId, Hibernate.LONG);
             survey = (AmpAhsurvey) q.list().get(0);
         } catch (Exception ex) {
-            logger.debug("Unable to get survey : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.debug("Unable to get survey : ", ex);
         }
         return survey;
     }
@@ -5411,11 +5322,10 @@ public class DbUtil {
                 try {
                     tx.rollback();
                 } catch (HibernateException e) {
-                    logger.debug("rollback() failed : " + e.getMessage());
+                    logger.debug("rollback() failed : ", e);
                 }
             }
-            logger.debug("Unable to save survey response : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.error("Unable to save survey response : ", ex);
         }
     }
 
@@ -5468,11 +5378,10 @@ public class DbUtil {
                 try {
                     tx.rollback();
                 } catch (HibernateException e) {
-                    logger.debug("rollback() failed : " + e.getMessage());
+                    logger.error("rollback() failed : ", e);
                 }
             }
-            logger.debug("Unable to save survey response : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.error("Unable to save survey response : ", ex);
         }
     }
 
@@ -5487,8 +5396,7 @@ public class DbUtil {
             responses = session.createQuery(qry).list();
 
         } catch (Exception ex) {
-            logger.debug("Unable to get survey indicators : " + ex.getMessage());
-            ex.printStackTrace(System.out);
+            logger.error("Unable to get survey indicators : ", ex);
         }
         return responses;
     }

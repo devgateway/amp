@@ -3,7 +3,7 @@ package org.digijava.module.widget.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 /**
  * Table widget column entity class.

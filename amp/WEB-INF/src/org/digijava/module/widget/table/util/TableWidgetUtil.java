@@ -9,9 +9,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.entity.Locale;

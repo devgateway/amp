@@ -14,8 +14,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;

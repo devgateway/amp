@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -33,7 +31,6 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportLog;
@@ -44,6 +41,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.hibernate.Session;
 
 /**
  * 
@@ -112,7 +110,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 		GroupReportData rd=(GroupReportData) httpSession.getAttribute("report");
 		AmpReports ar=(AmpReports) httpSession.getAttribute("reportMeta");
-		Session session = PersistenceManager.getSession();
+		Session session = PersistenceManager.getRequestDBSession();
 		String sortBy=request.getParameter("sortBy");
 		String applySorter = request.getParameter("applySorter");
 		if(ampReportId==null) 
@@ -128,7 +126,7 @@ public class ViewNewAdvancedReport extends Action {
 		boolean cached=false;
 		if(cachedStr!=null) cached=Boolean.parseBoolean(cachedStr);
 		
-		AmpARFilter filter 			= (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
 			if(filter != null && filter.isPublicView())
 			{
@@ -244,8 +242,6 @@ public class ViewNewAdvancedReport extends Action {
 		rd.setCurrentView(viewFormat);
 		httpSession.setAttribute("report",rd);
 		httpSession.setAttribute("reportMeta",ar);
-		
-		PersistenceManager.releaseSession(session);
 
 		progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
 		httpSession.setAttribute("progressValue", progressValue);

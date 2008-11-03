@@ -17,11 +17,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -36,6 +31,10 @@ import org.dgfoundation.amp.te.ampte.Trn;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.form.TranslatorManagerForm;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class TranslatorManager extends Action {
 	private static Logger logger = Logger.getLogger(TranslatorManager.class);
@@ -429,9 +428,9 @@ public class TranslatorManager extends Action {
 		try{
 				session				= PersistenceManager.getSession();
 				Transaction tx=session.beginTransaction();
-				int i=session.delete("from "
-						+ Message.class.getName() + " m where m.locale = ?",lang,Hibernate.STRING);
-
+				Query query = session.createQuery("delete from " + Message.class.getName() + " m where m.locale = :locale");
+				query.setString("locale", lang);
+				query.executeUpdate();
 				tx.commit();
 				
 		}

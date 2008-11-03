@@ -11,13 +11,6 @@ import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -39,6 +32,12 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.Logic;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class FeaturesUtil {
 
@@ -1689,7 +1688,7 @@ public class FeaturesUtil {
 			ft = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
+			logger.error("Exception : ", ex);
 		}
 		finally {
 			if (session != null) {
@@ -1697,7 +1696,7 @@ public class FeaturesUtil {
 					PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
+					logger.error("Release session failed :", rsf);
 				}
 			}
 		}
@@ -1715,7 +1714,7 @@ public class FeaturesUtil {
 			ft = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
 		}
 		catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
+			logger.error("Exception : ", ex);
 		}
 		finally {
 			if (session != null) {
@@ -1723,7 +1722,7 @@ public class FeaturesUtil {
 					PersistenceManager.releaseSession(session);
 				}
 				catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
+					logger.error("Release session failed :", rsf);
 				}
 			}
 		}
@@ -2729,35 +2728,19 @@ public class FeaturesUtil {
 			String queryString = "select fv from " +AmpModulesVisibility.class.getName() +
 			" mv inner join mv.items fv "+
 			" inner join fv.templates tmpl" +
-			" where (cast(mv.name as Binary)=:moduleName) and (cast(fv.name as Binary)=:featureName)" +
+			" where (mv.name=:moduleName) and (fv.name=:featureName)" +
 			" and (tmpl.id=:defTemplId)";
 			Query qry = session.createQuery(queryString);
 			qry.setString("featureName", featureName);
 			qry.setString("moduleName", moduleName);
 			qry.setLong("defTemplId", defTemplId);
-			if(qry.list()!=null&&qry.list().size()>0){
+			if (qry.list() != null && qry.list().size() > 0) {
 				feature = (AmpFeaturesVisibility) qry.uniqueResult();
-				/* AmpObjectVisibility parent=feature.getParent() ;
-                           if (parent != null) {
-                               AmpObjectVisibility grandPar=parent.getParent();
-                               String grandParName=null;
-                               if(grandPar!=null){
-                                   grandParName=grandPar.getName();
-                                   AmpModulesVisibility module = getModuleByName(parent.getName(), grandParName, defTemplId);
-                                   if (module == null) {
-                                       feature = null;
-                                   }
-                               }
-
-                           }
-				 * */
-
 			}
 
 
 		} catch (Exception e) {
-
-			logger.error(e.getMessage());
+			logger.error(e);
 		}
 
 		return feature;
@@ -2784,10 +2767,10 @@ public class FeaturesUtil {
 				queryString += " inner join mv.parent parent ";
 			}
 			queryString += " inner join mv.templates tmpl " +
-			" where (cast(mv.name as Binary)=:moduleName) " +
+			" where (mv.name=:moduleName) " +
 			" and (tmpl.id=:defTemplId)";
 			if (parentModuleName != null) {
-				queryString += " and (cast(parent.name as Binary)=:parentModuleName) ";
+				queryString += " and (parent.name=:parentModuleName) ";
 			}
 			Query qry = session.createQuery(queryString);
 			qry.setString("moduleName", moduleName);
@@ -2797,25 +2780,9 @@ public class FeaturesUtil {
 			qry.setLong("defTemplId", defTemplId);
 			if (qry.list() != null && qry.list().size() > 0) {
 				module = (AmpModulesVisibility) qry.uniqueResult();
-				/*AmpObjectVisibility parent = module.getParent();
-                        if (parent != null) {
-                            AmpObjectVisibility grandPar = parent.getParent();
-                            String grandParName = null;
-                            if (grandPar != null) {
-                                grandParName = grandPar.getName();
-                            }
-                            AmpModulesVisibility parentModule = getModuleByName(parent.getName(), grandParName, defTemplId);
-                            if (parentModule == null) {
-                                module = null;
-                            }
-                        }
-				 */
 			}
-
-
 		} catch (Exception e) {
-
-			logger.error(e.getMessage());
+			logger.error(e);
 		}
 
 		return module;

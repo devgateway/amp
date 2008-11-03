@@ -37,11 +37,11 @@ import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -383,11 +383,14 @@ public class DgLoginModule
         Session session = null;
 
         try {
-            session = PersistenceManager.getSession();
-            list = session.find("select u.id, u.password, u.salt from " +
-                                User.class.getName() +
-                                " u where lower(u.email) =? ", email.toLowerCase(),
-                                Hibernate.STRING);
+        	session = PersistenceManager.getSession();
+            String queryString = "select u.id, u.password, u.salt from " + User.class.getName() +
+            					 " u where lower(u.email) = :email";
+            
+            Query query = session.createQuery(queryString);
+            query.setString("email", email.toLowerCase());
+            
+            list = query.list();
 
         }
         finally {

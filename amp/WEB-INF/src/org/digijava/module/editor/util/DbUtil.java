@@ -29,12 +29,12 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.ModuleInstance;

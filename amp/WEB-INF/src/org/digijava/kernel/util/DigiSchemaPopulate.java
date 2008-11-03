@@ -34,9 +34,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.LogonSite;

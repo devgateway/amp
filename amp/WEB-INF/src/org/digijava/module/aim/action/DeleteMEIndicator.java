@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.lang.Long;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;

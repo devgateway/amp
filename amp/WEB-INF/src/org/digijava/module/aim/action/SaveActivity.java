@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.Session;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -73,7 +71,6 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
-import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;

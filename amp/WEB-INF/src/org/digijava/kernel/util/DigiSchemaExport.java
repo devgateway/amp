@@ -31,10 +31,10 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.cfg.Configuration;
-import net.sf.hibernate.mapping.PersistentClass;
-import net.sf.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.hibernate.HibernateException;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.mapping.PersistentClass;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
 public class DigiSchemaExport {
     private static Logger logger = Logger.getLogger(DigiSchemaExport.class);

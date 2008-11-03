@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpApplicationSettings" table="AMP_APPLICATION_SETTINGS">
+	<class name="org.digijava.module.aim.dbentity.AmpApplicationSettings"
+		table="AMP_APPLICATION_SETTINGS">
 		<cache usage="read-write" />
 		<id name="ampAppSettingsId" column="amp_app_settings_id" type="java.lang.Long">
 			<generator class="native">
@@ -15,10 +16,15 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="validation" column="validation" type="java.lang.String" />
 		<property name="useDefault" column="use_default" type="java.lang.Boolean" />
-		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id" class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
-		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
-		<many-to-one name="currency" column="currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
-		<many-to-one name="fiscalCalendar" column="fis_cal_id" class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
-		<many-to-one name="member" column="member" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
+		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id"
+			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
+		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam"
+			cascade="none" />
+		<many-to-one name="currency" column="currency_id"
+			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
+		<many-to-one name="fiscalCalendar" column="fis_cal_id"
+			class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
+		<many-to-one name="member" column="member"
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 	</class>
 </hibernate-mapping>

@@ -30,16 +30,15 @@ import java.util.List;
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.MailSpool;
 import org.digijava.kernel.mail.exception.MailSpoolException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class DbUtil {
   private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -210,14 +209,16 @@ public class DbUtil {
         GregorianCalendar date = new GregorianCalendar();
         try {
 
-            querryString = "from " +
+            querryString = "delete from " +
             MailSpool.class.getName() +
             " rs where rs.dateSend <= :dateSend";
 
             session = PersistenceManager.getSession();
             tx = session.beginTransaction();
             date.add(Calendar.DATE,(days.intValue()* -1));
-            session.delete(querryString,date, Hibernate.CALENDAR);
+            Query query = session.createQuery(querryString);
+            query.setCalendar("dateSend", date);
+            query.executeUpdate();
             tx.commit();
 
         }

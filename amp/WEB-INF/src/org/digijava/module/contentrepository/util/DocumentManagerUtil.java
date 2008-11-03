@@ -29,7 +29,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.Query;
+import org.hibernate.Query;
 
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
@@ -434,7 +434,7 @@ public class DocumentManagerUtil {
 	 * @return number of objects deleted
 	 */
 	public static int deleteObjectsReferringDocument(String uuid, String className) {
-		net.sf.hibernate.Session session = null;
+		org.hibernate.Session session = null;
 		int number	= 0;
 		try{
 				session				= PersistenceManager.getSession();

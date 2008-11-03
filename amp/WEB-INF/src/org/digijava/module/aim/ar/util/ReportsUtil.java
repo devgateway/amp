@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;

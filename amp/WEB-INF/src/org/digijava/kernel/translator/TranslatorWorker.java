@@ -35,12 +35,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
@@ -53,6 +47,11 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.SiteCache;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author Shamanth Murthy
@@ -371,7 +370,6 @@ public class TranslatorWorker {
     protected List getKeysForSite(String siteId, String rootSiteId) throws
         WorkerException {
 
-        List messages = null;
         String query =
             "select distinct message.key from org.digijava.kernel.entity.Message message where message.siteId='"
             + siteId.trim()
@@ -383,10 +381,8 @@ public class TranslatorWorker {
         try {
 
             session = PersistenceManager.getSession();
-            messages = session.find(query);
-
-            return messages;
-
+            Query q = session.createQuery(query);
+			return q.list();
         }
         catch (HibernateException he) {
             String errKey = "TranslatorWorker.HibExLoadingMessage.err";

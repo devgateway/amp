@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.aim.dbentity.AmpCurrencyRate" table="AMP_CURRENCY_RATE">
 		<cache usage="read-write" />
@@ -9,13 +9,13 @@
 			</generator>
 		</id>
 
-		<property column="from_currency_code" name="fromCurrencyCode" type="java.lang.String"/>
-		<property column="to_currency_code" name="toCurrencyCode" type="java.lang.String"/>
+		<property column="from_currency_code" name="fromCurrencyCode" type="java.lang.String" />
+		<property column="to_currency_code" name="toCurrencyCode" type="java.lang.String" />
 
-		<property name="exchangeRate" column="exchange_rate" type="java.lang.Double"/>
-		<property name="exchangeRateDate" column="exchange_rate_date" type="java.util.Date"/>
-		<property name="dataSource" column="data_source" type="java.lang.Integer"/>
-		
-		
+		<property name="exchangeRate" column="exchange_rate" type="java.lang.Double" />
+		<property name="exchangeRateDate" column="exchange_rate_date" type="java.util.Date" />
+		<property name="dataSource" column="data_source" type="java.lang.Integer" />
+
+
 	</class>
 </hibernate-mapping>

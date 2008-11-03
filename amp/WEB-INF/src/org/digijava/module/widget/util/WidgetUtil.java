@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;

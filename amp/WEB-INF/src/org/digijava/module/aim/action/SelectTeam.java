@@ -30,7 +30,7 @@ import org.digijava.kernel.request.Site;
 
 public class SelectTeam extends Action {
 
-    private static Logger logger = Logger.getLogger(Login.class);
+    private static Logger logger = Logger.getLogger(SelectTeam.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response)

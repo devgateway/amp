@@ -10,8 +10,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;

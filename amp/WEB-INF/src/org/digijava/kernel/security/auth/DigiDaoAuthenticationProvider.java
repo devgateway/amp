@@ -43,8 +43,8 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.dao.DataRetrievalFailureException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class DigiDaoAuthenticationProvider
     extends DaoAuthenticationProvider implements InitializingBean, SaltSource {

@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import net.sf.hibernate.Session;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
@@ -46,6 +44,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.hibernate.Session;
 
 public class SiteCache implements Runnable {
 
@@ -203,13 +202,18 @@ public class SiteCache implements Runnable {
         try {
             session = PersistenceManager.getSession();
 
-            newSharedInstances = new ArrayList(session.find("from " +
-                ModuleInstance.class.getName() +
-                " mi where mi.site is null "));
+            String queryString = " from " + ModuleInstance.class.getName() +
+            					 " mi where mi.site is null";
+            
+            newSharedInstances = new ArrayList(session.createQuery(queryString).list());
 
             Collections.sort(newSharedInstances, moduleInstanceComparator);
 
-            Iterator iter = session.iterate(" from " + SiteDomain.class.getName() + " sd");
+            queryString = "from " + SiteDomain.class.getName() + " sd left join fetch sd.site site " +
+            			  " left join fetch site.translationLanguages left join fetch site.userLanguages " +
+            			  " left join fetch site.countries";
+            
+            Iterator iter = session.createQuery(queryString).list().iterator();
             while (iter.hasNext()) {
                 SiteDomain siteDomain = (SiteDomain) iter.next();
 
@@ -239,7 +243,7 @@ public class SiteCache implements Runnable {
             }
         }
         catch (Exception ex) {
-            logger.debug("load() failed ",ex);
+            logger.error("load() failed ",ex);
             throw new DgException("load() failed ",ex);
         }
         finally {

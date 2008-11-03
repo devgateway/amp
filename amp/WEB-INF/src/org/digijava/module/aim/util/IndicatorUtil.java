@@ -12,11 +12,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;

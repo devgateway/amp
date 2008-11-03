@@ -5,10 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -19,6 +15,9 @@ import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.TemplateAlert;
 import org.digijava.module.message.helper.MessageConstants;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AmpMessageUtil {
 	private static Logger logger = Logger.getLogger(AmpMessageUtil.class);
@@ -220,7 +219,7 @@ public class AmpMessageUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=:hidden";
 			if(onlyUnread){
 				queryString+=" and state.read=false";
@@ -258,8 +257,8 @@ public class AmpMessageUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and (state.messageHidden=:hidden or state.messageHidden is NULL)  ";
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and (state.messageHidden=:hidden or state.messageHidden is null)";
 		
 			queryString+=" order by msg.creationDate asc";
 			query=session.createQuery(queryString);			 				
@@ -306,7 +305,7 @@ public class AmpMessageUtil {
 		Query query=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select count(*) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=:hidden order by msg.creationDate desc";
 			query=session.createQuery(queryString);			 				
 			query.setParameter("tmId", tmId);
@@ -328,7 +327,7 @@ public class AmpMessageUtil {
 		try {
 			messagesAmount=getInboxMessagesCount(clazz,teamMemberId,false,false,msgStoragePerMsgType);
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=false";	
 			query=session.createQuery(queryString);
 			
@@ -378,7 +377,7 @@ public class AmpMessageUtil {
 		try {
 			messagesAmount=getSentOrDraftMessagesCount(clazz,teamMemberId,draft,false);
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where "+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where "+
 			"msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden="+false;
 			query=session.createQuery(queryString);
 			int fromIndex=messagesAmount-page[0]*MessageConstants.MESSAGES_PER_PAGE;			
@@ -473,7 +472,7 @@ public class AmpMessageUtil {
 		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=true";	
 			query=session.createQuery(queryString);			
 			query.setParameter("tmId", tmId);			
@@ -498,10 +497,10 @@ public class AmpMessageUtil {
 		Query query=null;			
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
-			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=true";	
+			queryString="select count(state.id) from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.senderId = :tmId and msg.draft="+draft+" and state.messageHidden=true";	
 			query=session.createQuery(queryString);			
-			query.setParameter("tmId", tmId);	
+			query.setLong("tmId", tmId);	
 			if(query.list().size()>0){
 				hiddenMsgs=((Integer)query.uniqueResult()).intValue();
 				if(hiddenMsgs>0){
@@ -529,7 +528,7 @@ public class AmpMessageUtil {
 		List<Long> memIds=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();			
-			queryString= "select s.memberId from " + AmpMessageState.class.getName()+ " s, msg from "+clazz.getName()+
+			queryString= "select s.memberId from " + AmpMessageState.class.getName()+ " s, "+clazz.getName()+
 			" msg  where msg.id=s.message.id and s.memberId is not null group by s.memberId having count(s.id)>"+limit;
 			query=session.createQuery(queryString);
 			memIds=query.list();
@@ -550,7 +549,7 @@ public class AmpMessageUtil {
 		List<Long> senderIds=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();			
-			queryString= "select s.senderId from " + AmpMessageState.class.getName()+ " s, msg from "+clazz.getName()+
+			queryString= "select s.senderId from " + AmpMessageState.class.getName()+ " s, "+clazz.getName()+
 			" msg  where msg.id=s.message.id and s.senderId is not null and msg.draft="+draft+" group by s.senderId having count(s.id)>"+limit;
 			query=session.createQuery(queryString);
 			senderIds=query.list();
@@ -570,7 +569,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false;	
 			query=session.createQuery(queryString);
 			query.setFirstResult(limit);			
@@ -594,7 +593,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft;	
 			query=session.createQuery(queryString);
 			query.setFirstResult(limit);			
@@ -618,7 +617,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false";	
 			query=session.createQuery(queryString);
 			query.setMaxResults(limit);			
@@ -642,7 +641,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft;	
 			query=session.createQuery(queryString);
 			query.setMaxResults(limit);			
@@ -666,7 +665,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.memberId=:tmId and msg.draft=false and state.messageHidden=true order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			query.setMaxResults(1);			
@@ -690,7 +689,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" and state.messageHidden=true order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			query.setMaxResults(1);			
@@ -718,7 +717,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId is null and state.messageHidden=true order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			states=query.list();			
@@ -737,7 +736,7 @@ public class AmpMessageUtil {
 		Query query=null;		
 		try {			
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			queryString="select state from "+AmpMessageState.class.getName()+" state, "+clazz.getName()+" msg where"+
 			" msg.id=state.message.id and state.senderId is not null and msg.draft="+draft+" and state.messageHidden=true order by msg.creationDate";	
 			query=session.createQuery(queryString);
 			states=query.list();			

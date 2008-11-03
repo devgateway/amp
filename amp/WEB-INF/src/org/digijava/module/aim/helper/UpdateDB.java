@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.DbUtil;

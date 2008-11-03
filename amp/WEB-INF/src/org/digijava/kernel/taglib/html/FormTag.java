@@ -22,7 +22,6 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
@@ -30,13 +29,13 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.ResponseUtils;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteConfigUtils;
-import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.util.SiteUtils;
 
 /**
@@ -181,7 +180,7 @@ public class FormTag
 
             if( !SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite()) ) {
 
-                Site site = PersistenceManager.getSite(getSite());
+            	Site site = SiteCache.getInstance().getSite(getSite());
                 siteURL = SiteUtils.getSiteURL(SiteUtils.getDefaultSiteDomain(site), request.getScheme(), request.getServerPort(), request.getContextPath());
             } else {
                 StringBuffer tmpSiteURL =  new StringBuffer( HttpLoginManager.getLoginSiteURL(request) );

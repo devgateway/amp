@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-import net.sf.hibernate.Session;
+import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;

@@ -1,95 +1,118 @@
-
 package org.digijava.module.common.dbentity;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.type.NullableType;
+import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Properties;
 
+import org.hibernate.HibernateException;
+import org.hibernate.usertype.ParameterizedType;
+import org.hibernate.usertype.UserType;
 
 /**
- * Provides a base class for persistable, type-safe, comparable,
- * and serializable enums persisted as integers.
- *
- * <p>Create a subclass of this class implementing the enumeration:
- * <pre>package com.foo;
- *
- * public final class Gender extends PersistentCharacterEnum {
- *  public static final Gender MALE = new Gender("male", 0);
- *  public static final Gender FEMALE = new Gender("female", 1);
- *  public static final Gender UNDETERMINED = new Gender("undetermined", 2);
- *
- *  public Gender() {}
- *
- *  private Gender(String name, int persistentValue) {
- *   super(name, persistentValue);
- *  }
- * }
- * </pre>
- * Note that a no-op default constructor must be provided.</p>
- *
- * <p>Use this enumeration in your mapping file as:
- * <pre>&lt;property name="gender" type="com.foo.Gender"&gt;</pre></p>
- *
- * <p><code>
- * $Id$
- * </pre></p>
- *
- * @version $Revision$
- * @author &Oslash;rjan Nygaard Austvold
+ * The class persists enumerations as integer values.
+ * 
+ * @author Catalin Andrei
+ * @since Oct 1, 2008
  */
-public abstract class IntegerPersistentEnum extends PersistentEnum {
-    /**
-     * Default constructor.  Hibernate need the default constructor
-     * to retrieve an instance of the enum from a JDBC resultset.
-     * The instance will be converted to the correct enum instance
-     * in {@link #nullSafeGet(java.sql.ResultSet, java.lang.String[], java.lang.Object)}.
-     */
-    protected IntegerPersistentEnum() {
-        // no-op -- instance will be tossed away once the equivalent enum is found.
-    }
+public class IntegerPersistentEnum implements UserType, ParameterizedType{
 
-    /**
-     * Constructs an enum with given persistent integer value, name of this persistent
-     * class is the string value of persistentInteger
-     * @param persistentInteger
-     */
+	private static final int[] SQL_TYPES = new int[]{Types.INTEGER};
+	private Class targetClass;
 
-    protected IntegerPersistentEnum(int persistentInteger) {
-    	this(String.valueOf(persistentInteger), persistentInteger);
-    }
+	/**
+	 * @see org.hibernate.usertype.ParameterizedType#setParameterValues(java.util.Properties)
+	 */
+	public void setParameterValues(Properties parameters) {
+		String targetClassName = parameters.getProperty("targetClass");
+		try {
+			targetClass = Class.forName(targetClassName);
+		} catch (ClassNotFoundException e) {
+			throw new HibernateException("Class " + targetClassName + " not found ", e);
+		}
+	}
 
-    /**
-     * Constructs an enum with the given name and persistent representation.
-     *
-     * @param name name of enum.
-     * @param persistentInteger persistent representation of the enum.
-     */
-    protected IntegerPersistentEnum(String name, int persistentInteger) {
-        super(name, new Integer(persistentInteger));
-    }
+	/**
+	 * @see org.hibernate.usertype.UserType#sqlTypes()
+	 */
+	public int[] sqlTypes() {
+		return SQL_TYPES;
+	}
 
+	/**
+	 * @see org.hibernate.usertype.UserType#returnedClass()
+	 */
+	public Class returnedClass() {
+		return targetClass;
+	}
 
-    /**
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    public int compareTo(Object other) {
-        if(other == this) {
-            return 0;
-        }
-        if(other instanceof IntegerPersistentEnum) {
-            Integer thisCode = (Integer) getEnumCode();
-            Integer anotherCode = (Integer) ((PersistentEnum) other).
-                getEnumCode();
-            return thisCode.compareTo(anotherCode);
-        } else {
-            return this.getClass().getName().compareTo(other.getClass().getName());
-        }
-    }
+	/**
+	 * @see org.hibernate.usertype.UserType#equals(java.lang.Object, java.lang.Object)
+	 */
+	public boolean equals(Object x, Object y) throws HibernateException {
+		return (x == y);
+	}
 
+	/**
+	 * @see org.hibernate.usertype.UserType#hashCode(java.lang.Object)
+	 */
+	public int hashCode(Object x) throws HibernateException {
+		return x.hashCode();
+	}
 
-    /**
-     * @see PersistentEnum#getNullableType()
-     */
-    protected NullableType getNullableType() {
-        return Hibernate.INTEGER;
-    }
+	/**
+	 * @see org.hibernate.usertype.UserType#nullSafeGet(java.sql.ResultSet, java.lang.String[], java.lang.Object)
+	 */
+	public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
+		int value = rs.getInt(names[0]);
+		return rs.wasNull() ? null : Enum.get(value);
+	}
+
+	/**
+	 * @see org.hibernate.usertype.UserType#nullSafeSet(java.sql.PreparedStatement, java.lang.Object, int)
+	 */
+	public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
+		if (value == null) {
+			st.setNull(index, Types.INTEGER);
+		} else {
+			st.setInt(index, ((Enum)value).getValue());
+		}
+	}
+
+	/**
+	 * @see org.hibernate.usertype.UserType#deepCopy(java.lang.Object)
+	 */
+	public Object deepCopy(Object value) throws HibernateException {
+		return value;
+	}
+
+	/**
+	 * @see org.hibernate.usertype.UserType#isMutable()
+	 */
+	public boolean isMutable() {
+		return false;
+	}
+
+	/**
+	 * @see org.hibernate.usertype.UserType#disassemble(java.lang.Object)
+	 */
+	public Serializable disassemble(Object value) throws HibernateException {
+		return (Serializable) value;
+	}
+
+	/**
+	 * @see org.hibernate.usertype.UserType#assemble(java.io.Serializable, java.lang.Object)
+	 */
+	public Object assemble(Serializable cached, Object owner) throws HibernateException {
+		return cached;
+	}
+
+	/**
+	 * @see org.hibernate.usertype.UserType#replace(java.lang.Object, java.lang.Object, java.lang.Object)
+	 */
+	public Object replace(Object original, Object target, Object owner) throws HibernateException {
+		return original;
+	}
 }

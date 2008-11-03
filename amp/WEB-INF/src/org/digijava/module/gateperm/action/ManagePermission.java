@@ -12,8 +12,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;

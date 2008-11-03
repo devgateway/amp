@@ -3,10 +3,10 @@ package org.digijava.module.um.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.sf.hibernate.ObjectNotFoundException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;

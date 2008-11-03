@@ -247,7 +247,8 @@ public class PersistenceManager {
 							className);
 					return;
 				}
-				Iterator rowIter = session.createQuery(precacheHql).iterate();
+				List<Message> messages = session.createQuery(precacheHql).list();
+				Iterator rowIter = messages.iterator();
 				while (rowIter.hasNext()) {
 					Object item = rowIter.next();
 					Serializable id = meta.getIdentifier(item, EntityMode.POJO);

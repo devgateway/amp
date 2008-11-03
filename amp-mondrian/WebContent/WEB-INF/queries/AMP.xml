@@ -11,6 +11,9 @@
 				<Level name="Activity Title" column="name"
 					table="amp_activity" uniqueMembers="true"
 				/>
+				<Level name="AMP ID" column="amp_id"
+					table="amp_activity" uniqueMembers="true"
+				/>
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Donor">
@@ -26,8 +29,18 @@
 				allLevelName="All Financing Instruments"
 			>
 				<!-- No table element here. Fact table is assumed. -->
-				<Level name="Financing Instrument Name"
+				<Level name="Financing Instrument"
 					column="financing_instrument_name"
+				/>
+			</Hierarchy>
+		</Dimension>
+		<Dimension name="AMP ID">
+			<Hierarchy hasAll="true"
+				allLevelName="All AMP IDs"
+			>
+				<!-- No table element here. Fact table is assumed. -->
+				<Level name="AMP ID"
+					column="amp_id"
 				/>
 			</Hierarchy>
 		</Dimension>
@@ -36,7 +49,7 @@
 				allLevelName="All Terms of Assistance"
 			>
 				<!-- No table element here. Fact table is assumed. -->
-				<Level name="Terms of Assistance Name"
+				<Level name="Terms of Assistance"
 					column="terms_assist_name"
 				/>
 			</Hierarchy>

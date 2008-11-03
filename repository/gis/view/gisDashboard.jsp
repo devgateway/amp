@@ -539,7 +539,7 @@
 		mapObj.src = newUrl;
 		
 		
-		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal)
+		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
 		
 	}
 	

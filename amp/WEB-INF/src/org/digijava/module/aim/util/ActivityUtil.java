@@ -853,7 +853,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }
       }
-        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;
+        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity.ampActivityId=" + activityId;
         String ids = "";
         if (contracts != null) {
 

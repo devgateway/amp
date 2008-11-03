@@ -34,16 +34,6 @@
 				/>
 			</Hierarchy>
 		</Dimension>
-		<Dimension name="AMP ID">
-			<Hierarchy hasAll="true"
-				allLevelName="All AMP IDs"
-			>
-				<!-- No table element here. Fact table is assumed. -->
-				<Level name="AMP ID"
-					column="amp_id"
-				/>
-			</Hierarchy>
-		</Dimension>
 		<Dimension name="Terms of Assistance">
 			<Hierarchy hasAll="true"
 				allLevelName="All Terms of Assistance"

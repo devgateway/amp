@@ -4,7 +4,7 @@
 
 
 <jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_generic" catalogUri="/WEB-INF/queries/AMP.xml"
-   jdbcUser="root" jdbcPassword="" connectionPooling="true">
+   jdbcUser="amp" jdbcPassword="" connectionPooling="true">
 SELECT NON EMPTY CROSSJOIN({[Time]},{[Measures].[Actual Commitments], [Measures].[Activity Count]}) ON COLUMNS,
 NON EMPTY CROSSJOIN({[Financing Instrument]},CROSSJOIN({[Terms of Assistance]},CROSSJOIN ({[Donor]},CROSSJOIN({[Primary Sector]},{[Activity]})))) ON ROWS 
 FROM [Donor Funding] 

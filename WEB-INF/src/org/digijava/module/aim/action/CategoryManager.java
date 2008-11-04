@@ -331,7 +331,7 @@ public class CategoryManager extends Action {
 			int k	= 0; //Index for going through the exisiting values in the database of the AmpCategoryClass
 			for (int index=0;index<possibleVals.size(); index++  ) {
 				if ( k < dbCategory.getPossibleValues().size() && !addToPossibleValues ) {
-					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get(index);
+					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get(k);
                                         PossibleValue value=possibleVals.get(index);
 					
 					if (value.isDisable()||value.getValue().equals("")) {// In this block we are surely editing an existing category (not creating a new one)
@@ -354,7 +354,7 @@ public class CategoryManager extends Action {
 				}
 				else{
 					addToPossibleValues	= true;
-					if (!possibleVals.get(index).getValue().equals("")) {
+					if ( !possibleVals.get(index).isDisable() && !possibleVals.get(index).getValue().equals("") ) {
 						AmpCategoryValue dbValue	= new AmpCategoryValue();
 						dbValue.setValue( possibleVals.get(index).getValue() );
 						dbValue.setIndex( dbCategory.getPossibleValues().size() );
@@ -386,6 +386,7 @@ public class CategoryManager extends Action {
 			
 		} catch (Exception ex) {
 			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
+			ex.printStackTrace();
 			ActionError error1	= new ActionError("error.aim.categoryManager.cannotSaveOrUpdate");
 			errors.add("title",error1);
 			if (tx != null)

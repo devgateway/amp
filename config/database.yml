@@ -2,7 +2,7 @@ login: &login
   adapter: postgresql
   host: localhost
   username: odadata
-  password: ggjtea6d
+  password: 123456
   encoding: utf8
 
 development:

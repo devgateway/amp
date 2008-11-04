@@ -23,7 +23,7 @@ namespace :db do
   task :seed => :environment do
     require 'active_record/fixtures'
     Dir.glob(RAILS_ROOT + "/db/fixtures/#{ENV['SOURCE']}/*.yml").each do |file|
-      Fixtures.create_fixtures('db/fixtures', File.basename(file, '.*'))
+      Fixtures.create_fixtures("db/fixtures/#{ENV['SOURCE']}", File.basename(file, '.*'))
     end
   end
   

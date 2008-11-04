@@ -80,55 +80,7 @@ div.fakefile2 input{
 }
 -->
 </style>
-<style>
-.tableEven {
-	background-color:#dbe5f1;
-	font-size:8pt;
-	padding:2px;
-}
 
-.tableOdd {
-	background-color:#FFFFFF;
-	font-size:8pt;!important;
-	padding:2px;
-}
- 
-.Hovered {
-	background-color:#a5bcf2;
-}
-</style>
-<script language="javascript">
-function setStripsTable(tableId, classOdd, classEven) {
-	var tableElement = document.getElementById(tableId);
-	rows = tableElement.getElementsByTagName('tr');
-	for(var i = 0, n = rows.length; i < n; ++i) {
-		if(i%2 == 0)
-			rows[i].className = classEven;
-		else
-			rows[i].className = classOdd;
-	}
-	rows = null;
-}
-function setHoveredTable(tableId, hasHeaders) {
-
-	var tableElement = document.getElementById(tableId);
-	if(tableElement){
-    var className = 'Hovered',
-        pattern   = new RegExp('(^|\\s+)' + className + '(\\s+|$)'),
-        rows      = tableElement.getElementsByTagName('tr');
-
-		for(var i = 0, n = rows.length; i < n; ++i) {			
-			rows[i].onmouseover = function() {
-				this.className += ' ' + className;
-			};			
-			rows[i].onmouseout = function() {
-				this.className = this.className.replace(pattern, ' ');
-			};
-		}
-		rows = null;
-	}
-}
-</script>
 <script type="text/javascript">
 	var W3CDOM = (document.createElement && document.getElementsByTagName);
 
@@ -181,9 +133,10 @@ function setHoveredTable(tableId, hasHeaders) {
 
 </script>
 
-<table border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="85%"
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="75%"
 	class="box-border-nopadding">
 	<tr>
+		<td width=14>&nbsp;</td>
 		<td valign="bottom" class="crumb" >
 			&nbsp;&nbsp;&nbsp;
 			<c:set var="translation">
@@ -193,9 +146,11 @@ function setHoveredTable(tableId, hasHeaders) {
                	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
                </digi:link> &gt; <digi:trn key="contentrepository:contentRepository">Content Repository</digi:trn>
 			<br />
-		</td>
+			<br />		</td>
 	</tr>
 	<tr>
+		<td width=14>&nbsp;</td>
+
 		<td align=left vAlign=top>
 				
 			<span class="subtitle-blue"> &nbsp;&nbsp; 
@@ -205,7 +160,7 @@ function setHoveredTable(tableId, hasHeaders) {
 			</span> 
 			<br />
 			<table border="0" cellPadding=5 cellSpacing=0 width="95%"
-			style="position: relative; left: 10px">
+			style="position: relative; left: 20px">
 			<tr><td>
 			<div id="demo" class="yui-navset">
 			    <ul class="yui-nav">
@@ -229,13 +184,14 @@ function setHoveredTable(tableId, hasHeaders) {
 				    <td>	
 				    </table>				    	
 			        </div>
+			        <jsp:include page="iconReferences.jsp"/>
 						  <table border="0" cellPadding=1 cellSpacing=0 width="95%"
 							style="position: relative; left: 20px">
 							<tr style="display: table-row" id="myDocumentstr">
 								<td colspan="3">
 									<logic:notEmpty name="crDocumentManagerForm" property="myPersonalDocuments">
 									<br />
-									<div id="my_markup" align="left" class="all_markup">
+									<div id="my_markup" align="center" class="all_markup">
 									<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
 									<jsp:include page="documentTable.jsp" flush="true" />
 									</div>
@@ -261,7 +217,8 @@ function setHoveredTable(tableId, hasHeaders) {
 						</td>
 						</tr>
 					</table>	
-			        </div>	        
+			        </div>
+			        <jsp:include page="iconReferences.jsp"/>		        
 					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 						style="position: relative; left: 20px" >
 						<tr style="display: table-row" id="teamDocumentstr">
@@ -278,7 +235,9 @@ function setHoveredTable(tableId, hasHeaders) {
 						</tr>
 					</table>
 			        </div>
-			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">				        	       
+			        <div id="public_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
+				        <div>&nbsp;</div>
+				        <jsp:include page="iconReferences.jsp"/>		        
 						<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 							style="position: relative; left: 20px" >
 							<tr>
@@ -294,7 +253,9 @@ function setHoveredTable(tableId, hasHeaders) {
 			        </div>
 			        
 			        <div id="team_mem_res" style="border-color: #27415f;border-left: thin solid #27415f; border-right: thin solid #27415f; border-bottom: thin solid #27415f;">
-			        <table border="0" cellPadding=1 cellSpacing=0 width="100%"
+			        <div>&nbsp;</div>
+			        <jsp:include page="iconReferences.jsp"/>		        
+					<table border="0" cellPadding=1 cellSpacing=0 width="100%"
 						style="position: relative; left: 20px" >
 						<tr>
 							<td>
@@ -409,14 +370,4 @@ YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 		windowController.populateWithPublicDocs();
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
-</script>
-<script language="javascript">
-setStripsTable("team_markup", "tableEven", "tableOdd");
-setHoveredTable("team_markup", false);
-setStripsTable("my_markup", "tableEven", "tableOdd");
-setHoveredTable("my_markup", false);
-setStripsTable("publicDocumentsDiv", "tableEven", "tableOdd");
-setHoveredTable("publicDocumentsDiv", false);
-setStripsTable("otherDocumentsDiv", "tableEven", "tableOdd");
-setHoveredTable("otherDocumentsDiv", false);
-</script>
+</script>	

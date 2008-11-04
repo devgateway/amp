@@ -57,6 +57,9 @@ public class GetFoundingDetails extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         ServletOutputStream sos = null;
+
+        List ggg = DbUtil.getAvailIndicatorYears();
+
         try {
 
             GisUtil gisUtil = new GisUtil();
@@ -71,6 +74,17 @@ public class GetFoundingDetails extends Action {
             if (mapLevel == null) {
                 mapLevel = "2";
             }
+
+
+            String indYear = request.getParameter("indYear");
+            Integer indicatorYear = null;
+            if (indYear == null) {
+                indicatorYear = new Integer(-1);
+            } else {
+                indicatorYear = new Integer(indYear);
+            }
+
+
 
             if (mapCode != null && mapCode.trim().length() > 0) {
                 map = GisUtil.getMap(mapCode, Integer.parseInt(mapLevel));
@@ -287,7 +301,7 @@ public class GetFoundingDetails extends Action {
                 List hilightDashData = prepareDashSegments(segmentDataDasheList,
                         new ColorRGB(0, 0, 0), map);
 
-                List inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId);
+                List inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId, indicatorYear);
 
                 List segmentDataList = new ArrayList();
                 Iterator indsIt = inds.iterator();

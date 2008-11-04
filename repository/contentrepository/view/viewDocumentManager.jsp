@@ -208,7 +208,7 @@ div.fakefile2 input{
 			        	<tr>
 			        	<td>
 						<c:if test="${isTeamLeader}">
-							<button class="dr-menu" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
+							<button class="dr-menu buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
                             	<digi:trn key="contentrepository:addResource">
 		 	    	       				Add Resource ...    							
 	 	    	       			</digi:trn>            

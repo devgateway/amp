@@ -21,6 +21,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.dbentity.GisMap;
+import org.digijava.module.aim.action.IndicatorValues;
 
 /**
  * <p>Title: </p>
@@ -193,27 +194,45 @@ public class DbUtil {
    }
 
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
-           Long indicatorId) {
-       List retVal = null;
-       Session session = null;
-       try {
-           session = PersistenceManager.getRequestDBSession();
-//
+              Long indicatorId, Integer year) {
+          List retVal = null;
+          Session session = null;
+          try {
+              session = PersistenceManager.getRequestDBSession();
 
-           Query q = session.createQuery("select indVal.value, indConn.location.region from " +
-                                         AmpIndicatorValue.class.getName() +
-                                         " indVal, " +
-                                         IndicatorSector.class.getName() +
-                                         " indConn where indConn.sector.ampSectorId=:sectorId" +
-                                         " and indConn.indicator.indicatorId=:indicatorId " +
-                                         " and indConn.id=indVal.indicatorConnection.id");
-           q.setParameter("sectorId", sectorId, Hibernate.LONG);
-           q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
-           retVal = q.list();
-       } catch (Exception ex) {
-           logger.debug("Unable to get indicators from DB", ex);
-       }
-       return retVal;
+              StringBuffer queryString = new StringBuffer("select indVal.value, indConn.location.region from ");
+              queryString.append(AmpIndicatorValue.class.getName());
+              queryString.append(" indVal, ");
+              queryString.append(IndicatorSector.class.getName());
+              queryString.append(" indConn where indConn.sector.ampSectorId=:sectorId");
+              queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
+              queryString.append(" and indConn.id=indVal.indicatorConnection.id");
+
+              if (year.intValue() > 0) {
+                  queryString.append(" and year(indVal.valueDate)=:indValDate");
+              }
+
+              Query q = session.createQuery(queryString.toString());
+
+              q.setParameter("sectorId", sectorId, Hibernate.LONG);
+              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+
+              if (year.intValue() > 0) {
+                  q.setParameter("indValDate", year, Hibernate.INTEGER);
+              }
+
+
+              retVal = q.list();
+          } catch (Exception ex) {
+              logger.debug("Unable to get indicators from DB", ex);
+          }
+          return retVal;
+   }
+
+   public static List getIndicatorValuesForSectorIndicator(Long sectorId,
+           Long indicatorId) {
+
+       return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1));
    }
 
 
@@ -332,6 +351,23 @@ public class DbUtil {
        return retVal;
    }
 
+   public static List getAvailIndicatorYears() {
+       List retVal = null;
+       Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String query = "select distinct year(indval.valueDate) from " +
+                    AmpIndicatorValue.class.getName() +
+                    " indval where year(indval.valueDate) is not null order by indval.valueDate desc";
+            Query q = session.createQuery(query);
+             retVal = q.list();
+
+        } catch (Exception ex) {
+            logger.debug("Unable to get indicators from DB", ex);
+        }
+
+       return retVal;
+   }
 
 
 }

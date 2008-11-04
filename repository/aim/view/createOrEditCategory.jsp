@@ -39,8 +39,8 @@
       
         function addNewValue() {
           
- 	document.forms[0].action="/categoryManager.do?addValue";
- 	document.forms[0].submit();
+ 	document.forms[1].action="/categoryManager.do?addValue";
+ 	document.forms[1].submit();
 		
 		
 	}

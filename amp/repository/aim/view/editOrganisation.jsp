@@ -25,7 +25,7 @@
 		if(oldSchemeValue != -1 && document.aimAddOrgForm.ampSecSchemeId.value != oldSchemeValue)
 		{
 			//If the selected scheme is different, the sectors selected should be reset
-			if(confirm('<digi:trn key="aim:editOrganisation:sectorReset">If you change Sector Scheme, the sectors selected will be deleted. Are you sure?</digi:trn>')){
+			if(confirm("<digi:trn key="aim:editOrganisation:sectorReset">If you change Sector Scheme, the sectors selected will be deleted. Are you sure?</digi:trn>")){
 				resetSelectedSectors();
 			}
 			else

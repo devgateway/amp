@@ -24,6 +24,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpEventType;
+import org.digijava.module.calendar.entity.AmpCalendarGraph;
 import org.digijava.module.calendar.entity.CalendarOptions;
 import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
@@ -201,9 +202,24 @@ public class ShowCalendarView extends Action {
         Collection ampCalendarEvents = AmpDbUtil.getAmpCalendarEventsByMember(startDate,
             endDate, filter.getSelectedEventTypes(), filter.getSelectedDonors(),
             member, filter.isShowPublicEvents(), null, null);
-        Collection ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,
+        Collection<AmpCalendarGraph> ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,
             navigator, view);
-        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
+        calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);      
+        
+        
+        if(calendarViewForm.getView().equals("yearly")){        	
+        	Integer [] eventsAmountByMonth=new Integer[] {0,0,0,0,0,0,0,0,0,0,0,0,0};
+        	String[] monthsArray=new String[]{"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
+        	for (int i=0;i<monthsArray.length;i++) {
+				for(AmpCalendarGraph acg:ampCalendarGraphs){
+					if(acg.getAmpCalendar().getCalendarPK().getStartMonth()==i){
+						eventsAmountByMonth[i]++;
+					}
+				}
+			}
+        	calendarViewForm.setEventsAmountByMonth(eventsAmountByMonth);
+        }
+
 
         return mapping.findForward("success");
     }

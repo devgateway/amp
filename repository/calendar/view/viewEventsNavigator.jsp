@@ -159,14 +159,14 @@ function selectCalendarType(view, type) {
     </table>
 </c:if>
 <c:if test="${calendarViewForm.view != 'custom'}">
-    <table border="0" width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:5px;background-color:#7B9EBD;color:White;">
+    <table border="0" width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:5px;background-color:#3754A1;color:White;">
         <tr>
             <td style="text-align:right;">
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
                   <img alt="" src="../ampTemplate/images/yearLeft.jpg" border="0"/>
                 </a>
             </td>
-            <td align="center" style="font-size:14px;font-weight:bold;">
+            <td align="center" style="font-size:12px;font-family: Tahoma;">
                 <c:if test="${calendarViewForm.view == 'yearly'}">
                   <%-- ${calendarViewForm.baseDateBreakDown.year - 1}--%>
                   &nbsp;
@@ -174,25 +174,18 @@ function selectCalendarType(view, type) {
                   &nbsp;
                   <%-- ${calendarViewForm.baseDateBreakDown.year + 1}--%>
                 </c:if>
-                <c:if test="${calendarViewForm.view == 'monthly'}">
-                    <b>
-
-						<digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
-                        ${calendarViewForm.baseDateBreakDown.year}
-                    </b>
+                <c:if test="${calendarViewForm.view == 'monthly'}">	
+                	<digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
+                        ${calendarViewForm.baseDateBreakDown.year}                
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'weekly'}">
-                    <b>
                     <digi:trn key="aim:calendar:weeklyMonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                         ${calendarViewForm.baseDateBreakDown.year}
-                    </b>
                 </c:if>
-                <c:if test="${calendarViewForm.view == 'daily'}">
-                    <b>
+                <c:if test="${calendarViewForm.view == 'daily'}">                   
                       <digi:trn key="aim:calendar:dayMonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                         ${calendarViewForm.baseDateBreakDown.dayOfMonth},&nbsp;
-                        ${calendarViewForm.baseDateBreakDown.year}
-                    </b>
+                        ${calendarViewForm.baseDateBreakDown.year}                   
                 </c:if>
             </td>
             <td>
@@ -206,9 +199,9 @@ function selectCalendarType(view, type) {
         <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
             <tr>
                 <c:forEach var="item" items="${row}">
-                  <td align="center" style='font-size:14px;font-weight:bold;padding:4px;<c:if test="${item.nolink}">color:Black;</c:if><c:if test="${item.selected}">color:Red;</c:if>'>
+                  <td align="center" style='font-size:12px;padding:4px;font-family: Tahoma;<c:if test="${item.nolink}">color:Black;</c:if><c:if test="${item.selected}">color:Red;</c:if>'>
                     <c:if test="${!item.nolink}">
-                      <a href="#" style="text-decoration:none;color:black;font-size:13px;font-weight:bold;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}'); return(false);">
+                      <a href="#" style="text-decoration:none;color:black;font-size:12px;font-family: Tahoma;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}'); return(false);">
                     </c:if>
                     <c:if test="${!item.enabled}">
                       <span style="color:LightGrey;">

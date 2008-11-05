@@ -2371,10 +2371,10 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
+    public static ArrayList<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
        Session session = null;
         Query q = null;
-        Collection<AmpOrganisation> organizations = null;
+        ArrayList<AmpOrganisation> organizations =new ArrayList<AmpOrganisation>();
         String queryString = null;
 
         try {
@@ -2385,9 +2385,11 @@ public class DbUtil {
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
-                organizations=q.list();
+            if(q.list()!=null &&q.list().size()>0){
+                organizations.addAll(q.list());
+            }
+                
             
-
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database "
                          + ex.getMessage());
@@ -6803,4 +6805,252 @@ public class DbUtil {
 		}
 		return item;
 	}
+          /**
+     * 
+     * @param questionNumber 
+     * @param indId
+     * @param adjustmentType
+     * @param currCode
+     * @param orgId
+     * @param year
+     * @return
+     */
+    public static Double getValue(int questionNumber[], Long indId, int adjustmentType, String currCode, Long orgId, Long year, boolean isInd4) {
+        DecimalWraper total = null;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String queryString = "select  new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId";
+            if (isInd4) {
+                queryString += ", ah.ampAHSurveyId";
+            }
+
+            queryString += ") from " + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " + " inner join q.ampIndicatorId ind  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   " + " where act.team is not null " + " and fd.transactionType =1 and  fd.adjustmentType =:adjustmentType" +
+                    " and year(fd.transactionDate)=:year " + " and ind.ampIndicatorId=:indId";
+            if (questionNumber[0] != 0) {
+                queryString += " and res.response='Yes' ";
+                for (int i = 0; i < questionNumber.length; i++) {
+                    queryString += " and   q.questionNumber=" + questionNumber[0];
+                    
+                }
+                
+                
+            } else {
+                if (!isInd4) {
+                    queryString += " and (res.response='Yes' or res.response='No') and   q.questionNumber=1";
+                }
+            }
+
+            if (orgId != null) {
+                queryString += " and ah.ampDonorOrgId=:orgId ";
+                queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
+            }
+
+            Query qry = session.createQuery(queryString);
+            qry.setLong("indId", indId);
+            qry.setLong("year", year);
+
+
+            qry.setInteger("adjustmentType", adjustmentType);
+            if (orgId != null) {
+                qry.setLong("orgId", orgId);
+            }
+            List<AmpFundingDetail> fundingDets = qry.list();
+            FundingCalculationsHelper cal = new FundingCalculationsHelper();
+            cal.doCalculations(fundingDets, currCode);
+
+            if (adjustmentType == 1) {
+                total = cal.getTotActualDisb();
+            } else {
+                total = cal.getTotPlanDisb();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return total.doubleValue();
+    }
+
+    /**
+     * 
+     * @param questionNumber 
+     * @param indId
+     * @param adjustmentType
+     * @param currCode
+     * @param orgId
+     * @param year
+     * @return
+     */
+    public static int getDonorsCount(int questionNumber[], Long indId, Long orgId, Long year) {
+        int size = 0;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String queryString = "select  distinct f.ampDonorOrgId "
+             + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " + " inner join q.ampIndicatorId ind  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   " + " where act.team is not null " + " and fd.transactionType =1 and  fd.adjustmentType =1" +
+                    " and year(fd.transactionDate)=:year " + " and ind.ampIndicatorId=:indId";
+                queryString += " and res.response='Yes' ";
+                for (int i = 0; i < questionNumber.length; i++) {
+                    queryString += " and   q.questionNumber="+ questionNumber[0];
+                    
+                }
+                
+                
+ 
+            if (orgId != null) {
+                queryString += " and ah.ampDonorOrgId=:orgId ";
+                queryString += " and ah.ampDonorOrgId=f.ampDonorOrgId ";
+            }
+
+            Query qry = session.createQuery(queryString);
+            qry.setLong("indId", indId);
+            qry.setLong("year", year);
+            if (orgId != null) {
+                qry.setLong("orgId", orgId);
+            }
+           size=qry.list().size();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return size;
+    }
+     
+        /**
+     * 
+     * @param questionNumber 
+     * @param indId
+     * @param adjustmentType
+     * @param currCode
+     * @param orgId
+     * @param year
+     * @return
+     */
+     public static long getPIUValue(Long indId,  Long orgId, Long year) {
+       long  size=0;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String queryString = "select  distinct act ";
+           
+                  queryString +=" from " + AmpAhsurvey.class.getName() 
+                    + " ah inner join ah.responses res  " 
+                    + " inner join res.ampQuestionId  q  " 
+                    + " inner join q.ampIndicatorId ind  "
+                    + " inner join ah.ampActivityId act   " 
+                    + " inner join act.funding f   " 
+                    + " inner join  f.fundingDetails fd   " 
+                    + " where act.team is not null "
+                    + " and fd.transactionType =1 and  fd.adjustmentType =1" +
+                    " and year(fd.transactionDate)=:year "
+                     + " and ind.ampIndicatorId=:indId";
+              
+                      queryString+= " and res.response='Yes' and q.questionNumber=9" ;
+               
+                   
+            if(orgId!=null){
+                queryString +=" and ah.ampDonorOrgId=:orgId ";
+                 queryString+=" and ah.ampDonorOrgId=f.ampDonorOrgId ";
+            }
+           
+            Query qry = session.createQuery(queryString);
+            qry.setLong("indId", indId);
+            qry.setLong("year", year);
+            
+
+     
+             if(orgId!=null){
+                qry.setLong("orgId",orgId);
+            }
+            size =qry.list().size();
+           
+
+           
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return size;
+    }
+   
+     
+       /**
+     * 
+     * @param questionNumber 
+     * @param indId
+     * @param adjustmentType
+     * @param currCode
+     * @param orgId
+     * @param year
+     * @return
+     */
+     public static Double getQ4Value(Long ampAhsurveyId) {
+        Double value = null;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String queryString = "select  res.response"
+                   +" from " + AmpAhsurveyResponse.class.getName() 
+                   
+                    + " res inner join res.ampQuestionId  q  " ;
+                  
+                
+                      queryString+= " where q.questionNumber=4 and res.ampAHSurveyId=:ampAHSurveyId" ;
+                    
+            Query qry = session.createQuery(queryString);
+            qry.setLong("ampAHSurveyId", ampAhsurveyId);
+            String val=(String)qry.uniqueResult();
+            if(val!=null&&!val.equals("")){
+            value=Double.parseDouble(val);
+            }
+            else{
+                value=new Double(0);
+            }
+           
+                
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return value;
+    }
+     
+     
+      /**
+     * 
+     * @param questionNumber 
+     * @param indId
+     * @param adjustmentType
+     * @param currCode
+     * @param orgId
+     * @param year
+     * @return
+     */
+     public static Double getIndicator10aValue(Long year, Long orgId) {
+        Double value = null;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String queryString = "select  count(distinct cal)  from "
+                    + AmpCalendar.class.getName() 
+                    + " cal inner join cal.eventType  type "
+                    +" inner join cal.organisations orgs  where year(cal.calendarPK.calendar.startDate)=:year or year(cal.calendarPK.calendar.endDate)=:year" 
+                    +" group by orgs having count(elements(orgs))>1";
+                
+                      
+                    
+            Query qry = session.createQuery(queryString);
+            qry.setLong("year", year);
+            List val=qry.list();
+           
+           
+                
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+
+        return value;
+    }
+
 }

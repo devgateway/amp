@@ -2371,10 +2371,10 @@ public class DbUtil {
         return col;
     }
 
-    public static List<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
+    public static ArrayList<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
        Session session = null;
         Query q = null;
-        List<AmpOrganisation> organizations =new ArrayList<AmpOrganisation>();
+        ArrayList<AmpOrganisation> organizations =new ArrayList<AmpOrganisation>();
         String queryString = null;
 
         try {

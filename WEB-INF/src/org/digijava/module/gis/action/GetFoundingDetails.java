@@ -58,8 +58,6 @@ public class GetFoundingDetails extends Action {
                                  HttpServletResponse response) throws Exception {
         ServletOutputStream sos = null;
 
-        List ggg = DbUtil.getAvailIndicatorYears();
-
         try {
 
             GisUtil gisUtil = new GisUtil();
@@ -278,8 +276,10 @@ public class GetFoundingDetails extends Action {
                 String indIdStr = request.getParameter("indicatorId");
                 Long indId = new Long(indIdStr);
 
-                AmpIndicator selIndicator = IndicatorUtil.getIndicator(indId);
-
+                AmpIndicator selIndicator = null;
+                if (indId.intValue()>0) {
+                    selIndicator = IndicatorUtil.getIndicator(indId);
+                }
                 //Get segments with funding for dashed paint map
                 List secFundings = DbUtil.getSectorFoundings(secId);
                 Iterator it = secFundings.iterator();
@@ -301,8 +301,13 @@ public class GetFoundingDetails extends Action {
                 List hilightDashData = prepareDashSegments(segmentDataDasheList,
                         new ColorRGB(0, 0, 0), map);
 
-                List inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId, indicatorYear);
-
+                List inds = null;
+                if (indicatorYear.intValue()>0) {
+                    inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId,
+                            indicatorYear);
+                } else {
+                    inds = new ArrayList();
+                }
                 List segmentDataList = new ArrayList();
                 Iterator indsIt = inds.iterator();
                 Double min = null;
@@ -427,6 +432,33 @@ public class GetFoundingDetails extends Action {
                 }
 
                 sos.print(segmendDataInfo.toString());
+            } else if (action.equalsIgnoreCase("getAvailIndicatorYears")) {
+                response.setContentType("text/xml");
+
+                String secIdStr = request.getParameter("sectorId");
+                Long secId = new Long(secIdStr);
+
+                String indIdStr = request.getParameter("indicatorId");
+                Long indId = new Long(indIdStr);
+
+                List availYears = DbUtil.getAvailYearsForSectorIndicator(secId, indId);
+
+
+                XMLDocument availYearsXmlDoc = new XMLDocument();
+                XML root = new XML("availYears");
+
+                availYearsXmlDoc.addElement(root);
+
+                Iterator yearIt = availYears.iterator();
+
+                while (yearIt.hasNext()) {
+                    Integer year = (Integer) yearIt.next();
+                    XML yearNode = new XML("year");
+                    yearNode.addAttribute("value",year);
+                    root.addElement(yearNode);
+                }
+
+                sos.print(availYearsXmlDoc.toString());
             } else if (action.equalsIgnoreCase("getIndicatorNamesXML")) {
 
                 response.setContentType("text/xml");

@@ -19,6 +19,16 @@ public class AmpLocation implements Serializable
 	private String zone;
 	private String woreda;
 	private Set aidlocation;
+	
+	private Set activities;
+
+	public Set getActivities() {
+		return activities;
+	}
+
+	public void setActivities(Set activities) {
+		this.activities = activities;
+	}
 
 	private Country dgCountry; 
 	private AmpRegion ampRegion;

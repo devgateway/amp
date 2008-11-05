@@ -169,9 +169,6 @@
 		<td>
 		<select id="indicatorYearCombo" onChange="yearSelected(this)">
 			<option value="-1">None</option>
-			<logic:iterate name="gisDashboardForm" property="availYears" id="indYares">
-				<option value="<bean:write name="indYares"/>"><bean:write name="indYares"/></option>
-			</logic:iterate>
 		</select>
 		<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>

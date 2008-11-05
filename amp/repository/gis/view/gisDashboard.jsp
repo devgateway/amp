@@ -319,7 +319,7 @@
 			
 			
 			setBusy(true);
-			getIndValuesAction = true;
+			//getIndValuesAction = true;
 	
 		/*
 		setBusy(true);
@@ -600,6 +600,7 @@
 		var mapObj = document.getElementById("testMap");
 		var mapSrc = mapObj.src;
 		var newUrl = modifyMapLevelURL (mapSrc, newVal);
+		newUrl = modifyUniqueStringURL (newUrl);
 		setBusy(true);
 		
 		imageMapLoaded = false;
@@ -609,28 +610,32 @@
 	
 	function modifyMapLevelURL (url, newLevel) {
 		var retVal = null;
-		var retVal1 = null;
 		
 		var levelStartPos = url.indexOf ("mapLevel");
 		var levelEndtPos = url.indexOf ("&", levelStartPos);
 		if (levelEndtPos == -1) {
 			levelEndtPos = url.length;
 		}
-			retVal1 = url.substring(0, levelStartPos) +
+			retVal = url.substring(0, levelStartPos) +
 			"mapLevel=" + newLevel + url.substring(levelEndtPos, url.length);
-		
-		var uniqueStartPos = retVal1.indexOf ("uniqueStr");
-		var uniqueEndtPos = retVal1.indexOf ("&", uniqueStartPos);
+		return retVal;
+	}
+	
+	function modifyUniqueStringURL (url) {
+		var uniqueStartPos = url.indexOf ("uniqueStr");
+		var uniqueEndtPos = url.indexOf ("&", uniqueStartPos);
 		if (uniqueEndtPos == -1) {
-			uniqueEndtPos = retVal1.length;
+			uniqueEndtPos = url.length;
 		}
-			retVal = retVal1.substring(0, uniqueStartPos) +
-			"uniqueStr=" + (new Date()).getTime() + retVal1.substring(uniqueEndtPos, retVal1.length);
+			retVal = url.substring(0, uniqueStartPos) +
+			"uniqueStr=" + (new Date()).getTime() + url.substring(uniqueEndtPos, url.length);
 		
 		
 		
 		return retVal;
 	}
+	
+	
 	//end of Map level functions
 	
 	//Year functions

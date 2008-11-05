@@ -2371,10 +2371,10 @@ public class DbUtil {
         return col;
     }
 
-    public static List<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
+    public static Collection<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
        Session session = null;
         Query q = null;
-        List<AmpOrganisation> organizations = null;
+        Collection<AmpOrganisation> organizations = null;
         String queryString = null;
 
         try {
@@ -2385,7 +2385,7 @@ public class DbUtil {
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
-            organizations=q.list();
+                organizations=q.list();
             
 
         } catch (Exception ex) {

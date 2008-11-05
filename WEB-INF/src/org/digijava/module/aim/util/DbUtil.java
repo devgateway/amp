@@ -2385,7 +2385,9 @@ public class DbUtil {
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
-            organizations = q.list();
+            if(q.list()!=null&&q.list().size()>0){
+                organizations.addAll(q.list());
+            }
 
            
 
@@ -5438,7 +5440,7 @@ public class DbUtil {
         }
         return responses;
     }
-
+  
     public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup,
         AmpCategoryValue statusCM, int startYear, int closeYear, String currency, String termAssist, AmpCategoryValue financingInstr,
         String sector, String calendar) {

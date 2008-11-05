@@ -65,7 +65,7 @@
 	<tr>
 		<td colspan="2">
 			<!-- onscroll="mapScroll(this)"-->
-			<div id="mapCanvasContainer" style="border:1px solid black; width:700px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues();" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&year=-1&width=700&height=700"></div>
+			<div id="mapCanvasContainer" style="border:1px solid black; width:700px; height:450px; overflow:hidden;"><img onLoad="ajaxInit(); initMouseOverEvt(); getImageMap(); checkIndicatorValues(); setBusy(false);" useMap="#areaMap" id="testMap" border="0" src="/gis/getFoundingDetails.do?action=paintMap&mapCode=TZA&mapLevel=2&uniqueStr=0&year=-1&width=700&height=700"></div>
 		</td>
 	</tr>
 	<tr>
@@ -319,7 +319,7 @@
 			
 			
 			setBusy(true);
-	
+			getIndValuesAction = true;
 	
 		/*
 		setBusy(true);
@@ -597,29 +597,37 @@
 	//Map level functions
 	
 	function mapLevelChanged(newVal){
-		
 		var mapObj = document.getElementById("testMap");
 		var mapSrc = mapObj.src;
 		var newUrl = modifyMapLevelURL (mapSrc, newVal);
-		
 		setBusy(true);
+		
+		imageMapLoaded = false;
 		mapObj.src = newUrl;
-		
-		
 		document.getElementById("navCursorMap").src = modifyMapLevelURL (document.getElementById("navCursorMap").src, newVal);
-		
 	}
 	
 	function modifyMapLevelURL (url, newLevel) {
 		var retVal = null;
+		var retVal1 = null;
 		
 		var levelStartPos = url.indexOf ("mapLevel");
 		var levelEndtPos = url.indexOf ("&", levelStartPos);
 		if (levelEndtPos == -1) {
 			levelEndtPos = url.length;
 		}
-			retVal = url.substring(0, levelStartPos) +
+			retVal1 = url.substring(0, levelStartPos) +
 			"mapLevel=" + newLevel + url.substring(levelEndtPos, url.length);
+		
+		var uniqueStartPos = retVal1.indexOf ("uniqueStr");
+		var uniqueEndtPos = retVal1.indexOf ("&", uniqueStartPos);
+		if (uniqueEndtPos == -1) {
+			uniqueEndtPos = retVal1.length;
+		}
+			retVal = retVal1.substring(0, uniqueStartPos) +
+			"uniqueStr=" + (new Date()).getTime() + retVal1.substring(uniqueEndtPos, retVal1.length);
+		
+		
 		
 		return retVal;
 	}

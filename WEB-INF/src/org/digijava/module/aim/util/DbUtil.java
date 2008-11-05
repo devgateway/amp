@@ -2374,7 +2374,7 @@ public class DbUtil {
     public static List<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
        Session session = null;
         Query q = null;
-        List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
+        List<AmpOrganisation> organizations = null;
         String queryString = null;
 
         try {
@@ -2385,11 +2385,8 @@ public class DbUtil {
             }     
             queryString +=  "  order by org.name";
             q = session.createQuery(queryString);
-            if(q.list()!=null&&q.list().size()>0){
-                organizations.addAll(q.list());
-            }
-
-           
+            organizations=q.list();
+            
 
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database "

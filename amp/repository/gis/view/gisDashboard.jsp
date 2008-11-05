@@ -152,23 +152,6 @@
 		<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>
 	</tr>
-	
-	<tr>
-            <td width="15%" nowrap>
-                <digi:trn key="gis:selectIndicatorYear">Select year for indicator data</digi:trn>:
-            </td>
-		<td>
-		<select id="indicatorYearCombo" onChange="yearSelected(this)">
-			<option value="-1">All</option>
-			<logic:iterate name="gisDashboardForm" property="availYears" id="indYares">
-				<option value="<bean:write name="indYares"/>"><bean:write name="indYares"/></option>
-			</logic:iterate>
-		</select>
-		<div id="imageMapContainer" style="visibility:hidden;"></div>
-		</td>
-	</tr>
-	
-	
 	<tr>
             <td width="15%" nowrap>
                 <digi:trn key="gis:selectIndicator">Select Indicator</digi:trn>:
@@ -179,6 +162,22 @@
 		</select>
 		</td>
 	</tr>
+	<tr>
+        <td width="15%" nowrap>
+            <digi:trn key="gis:selectIndicatorYear">Select year for indicator data</digi:trn>:
+        </td>
+		<td>
+		<select id="indicatorYearCombo" onChange="yearSelected(this)">
+			<option value="-1">None</option>
+			<logic:iterate name="gisDashboardForm" property="availYears" id="indYares">
+				<option value="<bean:write name="indYares"/>"><bean:write name="indYares"/></option>
+			</logic:iterate>
+		</select>
+		<div id="imageMapContainer" style="visibility:hidden;"></div>
+		</td>
+	</tr>	
+	
+	
 </table>
     </div>
   </div>
@@ -299,6 +298,7 @@
 	var getIndValuesAction = false;
 	
 	function sectorSelected(sec) {
+
 		var selSector = sec.value;
 		setBusy(true);
 		var mapLevel = document.getElementById("mapLevelCombo").value;
@@ -309,12 +309,59 @@
 	}
 	
 	function indicatorSelected(ind) {
+			selIndicator = ind.value;
+			var mapLevel = document.getElementById("mapLevelCombo").value;
+			var sec = document.getElementById("sectorsMapCombo").value;
+			var uniqueStr = (new Date()).getTime();
+			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorYears&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+			xmlhttp.onreadystatechange = availYearsReady;
+			xmlhttp.send(null);
+			
+			
+			document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+			
+			
+			setBusy(true);
+	
+	
+		/*
 		setBusy(true);
 		var mapLevel = document.getElementById("mapLevelCombo").value;
 		var indYear = document.getElementById("indicatorYearCombo").value;
 		var uniqueStr = (new Date()).getTime();
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getIndValuesAction = true;
+		*/
+	}
+	
+	function availYearsReady () {
+		if (xmlhttp.readyState == 4) {
+			var availYearList = xmlhttp.responseXML.getElementsByTagName('year');
+			var yearIndex = 0;
+			
+			var selectCmb = document.getElementById("indicatorYearCombo");
+			selectCmb.innerHTML = null;
+			var noneOpt = document.createElement("OPTION");
+			noneOpt.value="-1";
+			noneOpt.text="none";
+			selectCmb.options.add(noneOpt);			
+			
+			
+			for (yearIndex = 0; yearIndex < availYearList.length; yearIndex ++) {
+				var yearData = availYearList[yearIndex];
+				var opt = document.createElement("OPTION");
+				opt.value=yearData.attributes.getNamedItem("value").value;
+				opt.text=yearData.attributes.getNamedItem("value").value;
+				selectCmb.options.add(opt);				
+			}
+
+			/*
+			initIndicatorValues();
+			window.setTimeout(getSectorIndicators, 100);
+			*/
+			setBusy(false);
+		}
+		
 	}
 
 	
@@ -583,11 +630,22 @@
 	
 	//Year functions
 	function yearSelected(year) {
+		setBusy(true);
+		var mapLevel = document.getElementById("mapLevelCombo").value;
+		var ind = document.getElementById("indicatorsCombo").value;
+		var uniqueStr = (new Date()).getTime();
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + year.value + "&sectorId=" + selSector + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		getIndValuesAction = true;
+
+	
+	
+		/*
 		var mapObj = document.getElementById("testMap");
 		var mapSrc = mapObj.src;
 		var newUrl = modifyYearURL (mapSrc, year.value);
 		setBusy(true);
 		mapObj.src = newUrl;
+		*/
 	}
 	
 	function modifyYearURL (url, newYear) {

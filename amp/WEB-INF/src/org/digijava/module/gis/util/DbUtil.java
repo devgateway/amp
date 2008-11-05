@@ -369,5 +369,34 @@ public class DbUtil {
        return retVal;
    }
 
+   public static List getAvailYearsForSectorIndicator(Long sectorId,
+              Long indicatorId) {
+          List retVal = null;
+          Session session = null;
+          try {
+              session = PersistenceManager.getRequestDBSession();
+
+              StringBuffer queryString = new StringBuffer("select distinct year(indVal.valueDate) from ");
+              queryString.append(AmpIndicatorValue.class.getName());
+              queryString.append(" indVal, ");
+              queryString.append(IndicatorSector.class.getName());
+              queryString.append(" indConn where indConn.sector.ampSectorId=:sectorId");
+              queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
+              queryString.append(" and indConn.id=indVal.indicatorConnection.id order by year(indVal.valueDate) desc");
+
+
+              Query q = session.createQuery(queryString.toString());
+
+              q.setParameter("sectorId", sectorId, Hibernate.LONG);
+              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+
+              retVal = q.list();
+          } catch (Exception ex) {
+              logger.debug("Unable to get indicator years from DB", ex);
+          }
+          return retVal;
+   }
+
+
 
 }

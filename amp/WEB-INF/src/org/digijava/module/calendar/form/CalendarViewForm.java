@@ -1,11 +1,17 @@
 package org.digijava.module.calendar.form;
 
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.List;
 
-import org.apache.struts.action.*;
-import org.digijava.kernel.user.*;
-import org.digijava.module.calendar.entity.*;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.user.User;
+import org.digijava.module.calendar.entity.DateBreakDown;
+import org.digijava.module.calendar.entity.DateNavigator;
+import org.digijava.module.calendar.entity.EventsFilter;
 
 public class CalendarViewForm
     extends ActionForm {
@@ -30,7 +36,9 @@ public class CalendarViewForm
     private EventsFilter filter;
     private boolean filterInUse;
     private Collection ampCalendarGraphs;
-  private Boolean resetFilter;
+    private Boolean resetFilter;
+    private Integer [] eventsAmountByMonth;
+    private Integer eventsAmountIndexed;
 
   public GregorianCalendar getCurrentDate() {
         return currentDate;
@@ -217,6 +225,22 @@ public class CalendarViewForm
      }
     */
   }
+
+public Integer[] getEventsAmountByMonth() {
+	return eventsAmountByMonth;
+}
+
+public void setEventsAmountByMonth(Integer[] eventsAmountByMonth) {
+	this.eventsAmountByMonth = eventsAmountByMonth;
+}
+
+public Integer getEventsAmountIndexed(int index) {
+	return eventsAmountByMonth[index];
+}
+
+public void setEventsAmountIndexed(int index,Integer value) {
+	eventsAmountByMonth[index]=value;
+}
 
 
 }

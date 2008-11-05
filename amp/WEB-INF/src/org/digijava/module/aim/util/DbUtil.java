@@ -2372,8 +2372,7 @@ public class DbUtil {
     }
 
     public static List<AmpOrganisation> getAmpOrganisations(boolean includeWeirdOrgs) {
-         List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-        /*Session session = null;
+        Session session = null;
         Query q = null;
         List<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
         String queryString = null;
@@ -2395,7 +2394,7 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database "
                          + ex.getMessage());
-        }*/
+        }
         return organizations;
     }
     

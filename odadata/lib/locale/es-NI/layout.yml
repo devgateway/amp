@@ -1,10 +1,10 @@
 es-NI:
   navigation:
-    logout: Log out
+    logout: Salir del Sistema
     
     default:
       home: Inicio
-      bluebook: Blue Book EU
+      bluebook: Blue Book UE
       search_by: Buscar Proyectos
       links: Enlaces
       downloads: Descargas
@@ -17,41 +17,41 @@ es-NI:
       contact: Contacto
       
     focal_point:
-      donor_info: Donor Info
-      donor_details: Donor Details
-      accounts: Login Accounts
+      donor_info: Información del Donante
+      donor_details: Detalles del Donante
+      accounts: Cuentas de Ingreso
       projects: Projects
-      new_project: Add New
-      draft_projects: Draft
-      published_projects: Published
-      deleted_projects: Recycle Bin
-      bluebook: EU Blue Book
-      design_own: Design own report
-      strategy: Country Strategy
-      financial_consistency: Financial Consistency
-      exchange_rates: Used Exchange Rates
-      manuals: Manuals
-      data_input_manual: Data Input Manual
-      data_input_glossary: Data Input Glossary
+      new_project: Añadir Nuevo
+      draft_projects: Borrador
+      published_projects: Púublicado
+      deleted_projects: Papelera de Reciclaje
+      bluebook: UE Blue Book
+      design_own: 'Diseña tu Reporte'
+      strategy: Estrategia del País
+      financial_consistency: Regularidad de Financiamiento
+      exchange_rates: Tasas de cambio ya usadas
+      manuals: Manuales
+      data_input_manual: Manual de Ingreso de Datos
+      data_input_glossary: Glosario de Ingreso de Datos
       dac_crs_manual: DAC-CRS Manual
       country_manual: ODAnic Manual
-      contact: Contact
+      contact: Contacto
       
     admin:
-      gen_conf: General Configuration
-      op_cl_data_input: Op./Cl. Data Input
-      glossary: Glossary
-      donor_admin: Donor Administration
-      exchange_rates: Exchange Rates
-      agencies: Agencies / Counterparts
-      impl_agencies: Implementing Agencies
-      contr_agencies: Contracted Agencies
-      gov_counterpart: Government Counterpart
+      gen_conf: Configuración General
+      op_cl_data_input: Op./Cl. Ingreso de Datos
+      glossary: Glosario
+      donor_admin: Administración de Donantes
+      exchange_rates: Tasas de cambio
+      agencies: Agencias / Contrapartes
+      impl_agencies: Agencias Imeplementadoras
+      contr_agencies: Agencias Contratadas
+      gov_counterpart: Homólogo Gubermental
       
   actions:
       print: Imprimir
       close_window: Cerrar ventana
       back: Regresar
-      edit: Edit
-      delete: Delete
-      show: Show
+      edit: Editar
+      delete: Borrar
+      show: Mostrar

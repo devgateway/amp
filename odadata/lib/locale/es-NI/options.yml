@@ -1,7 +1,7 @@
 es-NI:
   options:
     all: todos
-    prompt: TODO
+    prompt: Por favor seleccione
       
     # Grant / Loan
     grant: Donación
@@ -68,4 +68,4 @@ es-NI:
     head_quarters_field_office: Sedes/Oficina de Campo
     
     # Country Strategy
-    country_strategy_unavailable: TODO
+    country_strategy_unavailable: No vinculado a una estrategia

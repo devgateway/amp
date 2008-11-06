@@ -235,6 +235,9 @@ public class getNPDgraph extends Action {
                             Double targetValue = null;
                             Double baseValue = null;
                             Double actualValue = null;
+                            Integer targetYear=null;
+                            Integer baseYear=null;
+                            
                             for (Integer year : years) {
                                 if (Integer.parseInt(selectedYear) <= year) {
                                     ArrayList<AmpIndicatorValue> targValues = targetVals.get(year);
@@ -243,10 +246,12 @@ public class getNPDgraph extends Action {
                                             if (actValue == null) {
                                                 targValue = value;
                                                 actualValue = new Double(0);
+                                                targetYear=year;
                                             } else {
                                                 if (value.getValueDate().after(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
                                                     targValue = value;
                                                     actualValue = actValue.getValue();
+                                                    targetYear=year;
                                                 }
                                             }
                                         }
@@ -271,9 +276,11 @@ public class getNPDgraph extends Action {
                                             if (basValue == null || basValue.getValueDate().before(value.getValueDate())) {
                                                 if (actValue == null) {
                                                     basValue = value;
+                                                    baseYear=year;
                                                 } else {
                                                     if (value.getValueDate().before(actValue.getValueDate()) || value.getValueDate().equals(actValue.getValueDate())) {
                                                         basValue = value;
+                                                        baseYear=year;
                                                     }
                                                 }
                                             }
@@ -299,7 +306,7 @@ public class getNPDgraph extends Action {
                                 targetValue=targValue.getValue();
                             }
                          // create dataset for graph
-                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(actualValue), formatValue(actualValue), formatValue(targetValue)});
+                            dataset.addCustomTooltipValue(new String[]{formatValue(baseValue,baseYear, selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(actualValue,Integer.parseInt(selectedYear), selectedYear), formatValue(targetValue,targetYear, selectedYear)});
                              Double realActual = computePercent(indicator, targetValue, actualValue, baseValue);
                              dataset.addValue(realActual.doubleValue(), selectedYear, displayLabel);
 
@@ -317,11 +324,21 @@ public class getNPDgraph extends Action {
     }
 
 
-    public String formatValue(Double val) {
+    public String formatValue(Double val,Integer year,String selctedYear) {
+        String retVal="0";
         if (val != null) {
-            return val.toString();
+            retVal=val.toString();
+            if(year!=null){
+                retVal+=" ("+year.toString()+") ";
+            }
+            else{
+                retVal+=" ("+selctedYear+") ";
+            }
         }
-        return "0";
+        else{
+            retVal+=" ("+selctedYear+") ";
+        }
+        return retVal;
     }
 
     public String formatActualDate(AmpIndicatorValue val) {

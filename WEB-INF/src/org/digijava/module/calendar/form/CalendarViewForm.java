@@ -13,9 +13,14 @@ import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.EventsFilter;
 
-public class CalendarViewForm
-    extends ActionForm {
-    private String siteId;
+public class CalendarViewForm  extends ActionForm {
+	
+    /**
+	 * default serial version id
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String siteId;
     private String instanceId;
     private User user;
     private GregorianCalendar currentDate;

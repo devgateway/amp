@@ -25,9 +25,13 @@ function deleteEvent(){
   <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
   <table>
-  	<tr>
+  	 <tr>
+		<td width=14>&nbsp;</td>
+		<td align=left vAlign=top width=750>
+			<table cellPadding=5 cellSpacing=0 width="100%">
+				<tr>
 		<td height=33>
-			<span class=crumb>
+			<span class=crumb>&nbsp;
 				<c:set var="translation">
 					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 				</c:set>
@@ -35,7 +39,7 @@ function deleteEvent(){
 					<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 				</digi:link>&nbsp;&gt;&nbsp;
 				<digi:link href="/../calendar/showCalendarView.do" styleClass="comment" title="${translation}">
-					<digi:trn key="aim:Calendar">Calendar</digi:trn>
+					<digi:trn key="calendar:Calendar">Calendar</digi:trn>
 				</digi:link>&nbsp;&gt;&nbsp;
 				<digi:trn key="calendar:previewEvent">Preview Event</digi:trn>
 			</span>
@@ -164,6 +168,10 @@ function deleteEvent(){
         </div>
       </td>
     </tr>
+			</table>
+		</td>
+	</tr>
+  	
   </table>
 </digi:form>
 

@@ -370,9 +370,13 @@ function recurEvent(){
 <digi:form action="/showCalendarEvent.do">
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
     <table>
-    	<tr>
+    	 <tr>
+			<td width=14>&nbsp;</td>
+			<td align=left vAlign=top width=750>
+				<table cellPadding=5 cellSpacing=0 width="100%">
+					<tr>
 			<td height=33>
-				<span class=crumb>
+				<span class=crumb> &nbsp;
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 					</c:set>
@@ -380,7 +384,7 @@ function recurEvent(){
 						<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 					</digi:link>&nbsp;&gt;&nbsp;
 					<digi:link href="/../calendar/showCalendarView.do" styleClass="comment" title="${translation}">
-						<digi:trn key="aim:Calendar">Calendar</digi:trn>
+						<digi:trn key="calendar:Calendar">Calendar</digi:trn>
 					</digi:link>&nbsp;&gt;&nbsp;
 					<digi:trn key="aim:createNewEvent">Create New Event</digi:trn>
 				</span>
@@ -388,11 +392,11 @@ function recurEvent(){
 		</tr>	
 		<tr>
 			<td height=16 vAlign=center width=571>
-				<span class=subtitle-blue>	<digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn> </span>
+				<span class=subtitle-blue>&nbsp;<digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn> </span>
 			</td>
 		</tr>
-		<tr>
-			<td noWrap vAlign="top">
+		<tr>			
+			<td noWrap vAlign="top"> 
             	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
                 	<tr>	
                 		<td align="center" style="padding: 0px 3px 0px 3px;">
@@ -422,8 +426,8 @@ function recurEvent(){
                                         <td nowrap="nowrap" style="text-align: right">
                                             <digi:trn key="calendar:EventTitle">Event title:</digi:trn>
                                         </td>
-                                        <td>
-                                            <html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px;" styleClass="inp-text"/>
+                                        <td width="220px">
+                                        		<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 100%" styleClass="inp-text"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -766,8 +770,8 @@ function recurEvent(){
                                         <td nowrap="nowrap" align="right">
                                             <digi:trn key="calendar:Description">Description</digi:trn>
                                         </td>
-                                        <td align="left">
- 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 320px;" rows="5"/>
+                                        <td align="left" width="220px">
+ 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -836,6 +840,9 @@ function recurEvent(){
                 </div>
             </td>
         </tr>       
+				</table>
+			</td>
+    	
               </table>
           </td>
         </tr>	

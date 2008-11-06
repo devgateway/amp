@@ -20,7 +20,7 @@
 <style>
 <!--
 .headersColor { 
-	background:#3754A1 ;
+	background:#376091 ;
 	color:#FFFFFF;	
 	text-decoration:none;
 	height: 100%;
@@ -95,27 +95,27 @@
 	  		<table width="100%">
 	  			<tr>
 				    <td align="center" vAlign="middle">
-				    	<table width="100%" cellpadding="1" cellspacing="1" align="center">
+				    	<table cellpadding="1" cellspacing="1" align="center" <c:if test="${calendarViewForm.view != 'yearly'}">style="width:100%"</c:if>>
 				        	<c:if test="${calendarViewForm.view != 'custom'}">
 				        		<!-- Monthly view start -->
 				            	<c:if test="${calendarViewForm.view == 'monthly'}">
 				            		<tr align="center" vAlign="middle">
-				                		<td>
+				                		<td width="100%">
 				                  			<table width="99%" border="0" align="center" >
 							                    <tr>
-							                    	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:mon">Mon</digi:trn></td>
+							                    	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:mon">Mon</digi:trn></td>
 							                    	<td width="1px" bgcolor="#7B9EBD"/>
-							                      	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:tue">Tue</digi:trn></td>
+							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:tue">Tue</digi:trn></td>
 							                      	<td width="1px" bgcolor="#7B9EBD"/>
-							                      	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:wed">Wed</digi:trn></td>
+							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:wed">Wed</digi:trn></td>
 							                      	<td width="1px" bgcolor="#7B9EBD"/>
-							                      	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:thu">Thu</digi:trn></td>
+							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:thu">Thu</digi:trn></td>
 							                      	<td width="1px" bgcolor="#7B9EBD"/>
-							                      	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:fr">Fri</digi:trn></td>
+							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:fr">Fri</digi:trn></td>
 							                      	<td width="1px" bgcolor="#7B9EBD"/>
-							                      	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:sat">Sat</digi:trn></td>
+							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:sat">Sat</digi:trn></td>
 							                      	<td width="1px" bgcolor="#7B9EBD"/>
-							                      	<td align="left" valign="top" bgcolor="#3754A1" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:sun">Sun</digi:trn></td>
+							                      	<td align="left" valign="top" bgcolor="#376091" style="font-size:12px;color:White;font-family:Tahoma;"><digi:trn key="aim:sun">Sun</digi:trn></td>
 							                      	<td width="1px" bgcolor="#7B9EBD"/>
 							                    </tr>
 							                    <tr height="4px" bgcolor="#e8eef7">
@@ -290,7 +290,7 @@
 				                                        	<table width="100%">
 				                                            	<c:forEach var="hour" begin="0" end="24">
 				                                              		<tr style="height:40px;">
-				                                                		<td align="left" style="border-top:2px solid #e8eef7;color:White;background-color:#3754A1;vertical-align:top;width:70px;padding:6px;font-size:12px;font-family: Tahome">
+				                                                		<td align="left" style="border-top:2px solid #e8eef7;color:White;background-color:#376091;vertical-align:top;width:70px;padding:6px;font-size:12px;font-family: Tahome">
 				                                                  			<c:if test="${hour < 12}">
 				                                                    			<c:if test="${hour < 10}">
 				                                                      				<c:set var="hoursToDisplay" value="0${hour}:00"/>
@@ -350,9 +350,9 @@
 								<!-- Daily View End -->
 								
 								<!-- yearly view Start -->
-								<c:if test="${calendarViewForm.view == 'yearly'}">
+								<c:if test="${calendarViewForm.view == 'yearly'}">									
 									<tr valign="top" bgcolor="#ffffff">
-				                    	<td style="text-align:center;" valign="top">
+				                    	<td style="text-align:center;width: 100%" valign="top" >
 				                        	<div style="vertical-align: top;width: 100%;height: 100%">				                              					                                        	
 				                                	<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}"  varStatus="stat">
 				  										<c:forEach var="item" items="${row}">
@@ -370,25 +370,26 @@
 																<c:if test="${item.month=='Nov'}">11</c:if>
 																<c:if test="${item.month=='Dec'}">12</c:if>
 															</c:set> 
-															<table width="100%" style="border:solid 2px #e8eef7">
+															<table style="border:solid 2px #e8eef7;width: 850px">
 					  											<tr>
-					  												<td align="left" width="70" class="headersColor" >											        						
+					  												<td align="left" style="width: 70px;background-color: #376091;" >											        						
 																    	<a href="#" style="text-decoration:none;color:White;font-size:12px;font-family:Tahoma;text-align: center;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">
 																        	<digi:trn key="aim:calendar${item.month}">${item.month}</digi:trn>
 																        </a>
-																	</td> 
-																	<td width="770px">  
-																		<c:if test="${fn:length(calendarViewForm.ampCalendarGraphs)!=0}">
-																			<c:if test="${calendarViewForm.view == 'yearly'}">																			
-																				<c:set var="eventsAmountForThisMonth"> <bean:write name="calendarViewForm" property="eventsAmountIndexed[${monthIndex-1}]"/></c:set>					
-																				<div <c:if test="${eventsAmountForThisMonth>5}"> style="overflow:scroll;width: 790px;"</c:if>>
-																					<table style="padding:6px;width: 100%;">
-																		       			<tr height="25px">
+																	</td>
+																	<td >
+																	<div style="width:780px;height:40px;font-family:Tahoma;vertical-align: top;">
+																	    <c:if test="${fn:length(calendarViewForm.ampCalendarGraphs)!=0}">
+																			<c:if test="${calendarViewForm.view == 'yearly'}">
+																				<c:set var="eventsAmountForThisMonth"> <bean:write name="calendarViewForm" property="eventsAmountIndexed[${monthIndex-1}]"/></c:set>				
+																				<div <c:if test="${eventsAmountForThisMonth>5}"> style="overflow:auto;width: 780px;height:45px"</c:if>>
+																					<table style="width: 100%;">
+																						<tr height="25px">
 																		       				<c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
 																			           			<c:set var="startMonth">${ampCalendarGraph.ampCalendar.calendarPK.startMonth+1}</c:set>																					           																					           								              			
 																				           			<c:if test="${monthIndex== startMonth}">																				           				
-																				           				<td align="left" width="155px"> 
-																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%">
+																				           				<td align="left" width="155px">
+																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
 																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																					                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
 																					                       				${ampCalendarEventItem.title}
@@ -402,8 +403,10 @@
 																		           		</table>
 																		          	</div>
 																				</c:if>
-																			</c:if>
-																		</td> 
+																			</c:if>																	  
+																	</div>
+																	</td>
+																	
 					  												</tr>
 					  												<tr height="1px" bgcolor="#ffffff"></tr>
 					  											</table>
@@ -418,7 +421,7 @@
 								<!-- Weekly view Start -->
 								<c:if test="${calendarViewForm.view == 'weekly'}">
 									<tr>
-				                    	<td style="padding:30px;text-align:center;">
+				                    	<td style="padding:20px;text-align:center">
 				                        	<table align="center" style="min-width:700px;" width="100%">
 				                            	<tr>
 				                                	<td width="100%">
@@ -428,7 +431,7 @@
 					  													<c:forEach var="item" items="${row}">
 					  														<c:if test="${calendarViewForm.view == 'weekly' && item.selected}">				  																															 		
 																				<tr style="width: 100%">
-																					<td align="left" vAlign="top" width="30px" style="font-size:12px;color:White;background-color: #3754A1;font-family:Tahoma;border-bottom:1px solid #ffffff;">
+																					<td align="left" vAlign="top" width="30px" style="font-size:12px;color:White;background-color: #376091;font-family:Tahoma;border-bottom:1px solid #ffffff;">
 																					   	<span id="calenderSubFont" style="width:25px">
 																					       	<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>
 																					   	</span>
@@ -454,7 +457,7 @@
 														                              				<c:if test="${endMonth==currentMonth}">
 															                                			<c:if test="${item.dayOfMonth >=startDay && item.dayOfMonth<=endDay && item.selected}">
 															                                				<tr>
-																                                				<td align="center" style="padding:6px;border-bottom:solid 1px #CCECFF;width: 70px;" width="80">																	                                			
+																                                				<td align="center" style="padding:6px;border-bottom:solid 1px #CCECFF;">																	                                			
 																			                                		<div style="font-weight:Bold;text-align:center;color:Black;background-color:${ampCalendarGraph.ampCalendar.eventType.color};">
 																			                                			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																												          	<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">

@@ -37,7 +37,7 @@ function changeState() {
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
 <div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
-  <div style="padding:5px;font-size:12px;color:White;background-color: #3754A1;font-family:Tahoma;">
+  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family:Tahoma;">
   <digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
   </div>
   <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-family:Tahoma;">
@@ -65,7 +65,7 @@ function changeState() {
 &nbsp;
 </div>
 <div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
-  <div style="padding:5px;font-size:12px;color:White;background-color: #3754A1;font-family: Tahoma;">
+  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
   <digi:trn key="calendar:bodydonors">Donors</digi:trn>
   </div>
   <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-weight:bold;font-family:Tahoma;">
@@ -99,7 +99,7 @@ function changeState() {
   &nbsp;Public events
   </digi:trn>
 </div>
-<div style="padding:5px;width:190px;height:28px;">
+<div style="padding:5px;width:200px;height:28px;">
     <input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
     &nbsp;
     <input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />

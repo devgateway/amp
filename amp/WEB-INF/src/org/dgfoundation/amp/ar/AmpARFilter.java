@@ -1250,6 +1250,7 @@ public class AmpARFilter extends PropertyListable {
 		this.typeOfAssistance = typeOfAssistance;
 	}
 
+	@IgnorePersistence
 	public Set getTeamAssignedOrgs() {
 		return teamAssignedOrgs;
 	}

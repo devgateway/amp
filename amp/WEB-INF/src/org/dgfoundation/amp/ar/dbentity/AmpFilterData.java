@@ -160,8 +160,13 @@ public class AmpFilterData implements Serializable {
 					while (iter.hasNext()) {
 						Object element	= iter.next();
 						if (element != null) {
+							String elClassName	= element.getClass().getName();
+							int indexOfDollar	= elClassName.indexOf("$$");
+							if ( indexOfDollar >= 0 )
+								elClassName		= elClassName.substring(0, indexOfDollar); 
+									
 							AmpFilterData fd	= new AmpFilterData( report, fields[i].getName(), 
-									fieldObj.getClass().getName(), element.getClass().getName(), 
+									fieldObj.getClass().getName(), elClassName, 
 									objectValue(element) );
 							fdSet.add( fd );
 						}

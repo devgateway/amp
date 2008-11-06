@@ -67,7 +67,7 @@
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
 	  	document.aimEditActivityForm.submit();
-	  	validateFormatUsingSymbos();
+	  	//validateFormatUsingSymbos();
 	  	
 		return true;
 	}

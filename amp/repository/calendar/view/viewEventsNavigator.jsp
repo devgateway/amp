@@ -159,11 +159,11 @@ function selectCalendarType(view, type) {
     </table>
 </c:if>
 <c:if test="${calendarViewForm.view != 'custom'}">
-    <table border="0" width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:5px;background-color:#3754A1;color:White;">
+    <table border="0" width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:5px;background-color:#376091;color:White;">
         <tr>
             <td style="text-align:right;">
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
-                  <img alt="" src="../ampTemplate/images/yearLeft.jpg" border="0"/>
+                  <digi:img src="module/aim/images/images_dhtmlsuite/calendar/calender-previous-year.gif" border="0" alt=""/>
                 </a>
             </td>
             <td align="center" style="font-size:12px;font-family: Tahoma;">
@@ -190,7 +190,7 @@ function selectCalendarType(view, type) {
             </td>
             <td>
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);">
-                  <img alt="" src="../ampTemplate/images/yearRight.jpg" border="0"/>
+                  <digi:img src="module/aim/images/images_dhtmlsuite/calendar/calender-next-year.gif" border="0" alt=""/>                 
                 </a>
             </td>
         </tr>

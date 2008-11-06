@@ -141,7 +141,6 @@
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 
 <feature:display name="Message tab" module="Messages"></feature:display>
-<feature:display name="Messages" module="Messages"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
@@ -699,7 +698,6 @@
 <field:display name="Web Resources Url" feature="Web Resources"></field:display> 
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
-<field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
 
 

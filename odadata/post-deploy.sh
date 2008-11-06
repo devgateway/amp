@@ -1,3 +1,3 @@
 #!/usr/local/bin/bash
 rake db:migrate
-touch tmp/restart.txt
+mkdir -p tmp && touch tmp/restart.txt

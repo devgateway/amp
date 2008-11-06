@@ -7,7 +7,14 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@page import="org.digijava.module.help.util.HelpUtil"%>
 
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxtree.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/help/script/dhtmlxcommon.js"/>"></script>
+<!-- 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="script/dhtmlxcommon_debug.js"/>"></script>
+-->
+
 <script language="javascript" type="text/javascript">
 	function toggleDiv(id,state){
 		if (state==true){
@@ -39,8 +46,9 @@
 		$(imgId).show();
 		$(divId).hide('fast');
 	}
-
+			
 </script>
+
 <digi:instance property="helpForm" />
 <digi:context name="url" property="context/module/moduleinstance/helpActions.do?actionType=viewSelectedHelpTopic" />
 <div id="content"  class="yui-skin-sam" style="width:100%;"> 
@@ -54,9 +62,99 @@
                           </a>
                           </li>
                         </ul>
+             		 <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
+                      <!--  
                         <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-                        <%= HelpUtil.renderTopicsTree(topic,request) %>
+                        	<%= HelpUtil.renderTopicsTree(topic,request) %>
              		</div>
+             		-->
+  <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
+  <div id="log"></div>
+
+<script type="text/javascript">	
 
 
+	function tonclick(id){
+			if(id != null){
+					var key = tree.getItemText(id);
+					show(key);
+			 	}
+			}
+
+	 		var id = document.getElementById("treeboxbox_tree");
+	 		tree = new dhtmlXTreeObject(id,"100%","100%",0);
+	 		tree.setImagePath("../../repository/help/view/images/csh_vista/");
+			tree.enableDragAndDrop(true);
+		    tree.setOnClickHandler(tonclick);
+		    var xml = '<?xml version="1.0" encoding="iso-8859-1"?>';
+			    xml+='<tree id="0" radio="1">';
+			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
+			    xml+='</tree>';
+		    tree.loadXMLString(xml);
+
+
+	function show(str){
+	
+	  if (str.length==0){ 
+			 	document.getElementById("bodyhelp").innerHTML="";
+			 	
+			 	document.getElementById("bodyhelp").style.border="1px";
+		 	return
+		 }
+		 
+	 xmlHttp=GetXmlHttpObject();
+		if (xmlHttp==null){
+	 			alert ("Browser does not support HTTP Request")
+	 		return
+	 	} 
+	 	$("#bodyhelp").show();
+	 	
+	 	var urlact="/help/helpActions.do?actionType=getbody"
+		urlact=urlact+"&body="+str
+		xmlHttp.open("GET",urlact,true)
+		xmlHttp.onreadystatechange=stateChange 
+		xmlHttp.send(null)
+}
+
+function stateChange(){
+	 if (xmlHttp.readyState==4)
+  { 
+	 document.getElementById("bodyhelp").innerHTML=xmlHttp.responseText;
+	 document.getElementById("bodyhelp").style.border="1px solid #A5ACB2";
+	 
+   } 
+   
+   $("#title").hide();
+   $("#searchedTitle").hide();
+   $("#searchedBody").hide();
+  
+   
+}
+
+
+function GetXmlHttpObject()	{
+	 var xmlHttp=null;
+	 try
+ 	{
+ 		// Firefox, Opera 8.0+, Safari
+ 	xmlHttp=new XMLHttpRequest();
+ 	}catch (e)
+ 		
+ 		{
+ 		
+ 		// Internet Explorer
+ 	 try	{
+  		xmlHttp=new ActiveXObject("Msxml2.XMLHTTP");
+  	}
+ 		catch (e)
+  		{
+  			xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+  		}
+ 	}
+	return xmlHttp;
+}
+</script>
+ 		
+ 		
+             		

@@ -99,6 +99,32 @@ public class HelpActions extends DispatchAction {
 		return result;
 	}
 
+public ActionForward getbody(ActionMapping mapping,
+		ActionForm form, HttpServletRequest request,
+		HttpServletResponse response)throws Exception{
+	HelpForm helpForm = (HelpForm) form;
+	OutputStreamWriter os = null;	
+    PrintWriter out = null;
+    String loadStatus = request.getParameter("body");
+	
+	try {
+		if(loadStatus != null){
+			os = new OutputStreamWriter(response.getOutputStream());
+			out = new PrintWriter(os, true);
+			String key = loadStatus.toLowerCase();
+			String body = HelpUtil.body(key);
+			out.println(body);
+		}
+		out.flush();
+		out.close();
+		
+	} catch (Exception e) {
+		 e.printStackTrace();
+   }
+	return null;
+}
+	
+	
 	public ActionForward vewSearchKey(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

@@ -32,6 +32,7 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
@@ -324,6 +325,25 @@ public class HelpUtil {
 	return helpTopics;
 }
 
+
+	
+	public static String body(String key) {
+		Session session = null;
+		String queryString = null;
+		Query q = null;
+		String helpTopics = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select e.body from e in class " + Editor.class.getName() +" where e.editorKey like '%"+key+"'";
+			q = session.createQuery(queryString);
+			helpTopics = q.list().get(0).toString();
+		}catch (Exception ex) {
+			logger.error("Unable to get currency name", ex);
+		} 
+		
+		return helpTopics;
+	}	
 	
     public static Collection getAllHelpData() throws 
     EditorException {
@@ -392,6 +412,7 @@ public class HelpUtil {
     
     	return result;
     }
+
     
     public static List<Editor> getEditor(String bodyKey,String lang){
     	List<Editor> result = null;
@@ -457,6 +478,32 @@ public class HelpUtil {
 		}
 		return retVal;
 	}
+	 
+	 public static String renderTopicTree(Collection topics,HttpServletRequest request,boolean child){
+		 String xml="";
+		 Iterator iter = topics.iterator();
+		 String instanceName=RequestUtils.getModuleInstance(request).getInstanceName();
+		 while (iter.hasNext()) {
+			 HelpTopicsTreeItem item = (HelpTopicsTreeItem) iter.next();
+			 HelpTopic topic = (HelpTopic) item.getMember();
+		
+			 if(topic.getTopicKey().length() != 0 ){
+				
+				if(item.getChildren().isEmpty()){	
+					xml+= "<item text=\""+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"\" id=\"" + topic.getHelpTopicId()+"\"/>";
+				}else{
+					xml+= "<item text=\""+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"\" id=\"" + topic.getHelpTopicId()+"\">";
+					 if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
+						 xml += renderTopicTree(item.getChildren(),request,true);
+					 }
+					xml+= "</item>";
+				} 
+			 }
+	}
+		 return xml;
+	 }
+	 
+	 
 	 public static String renderSelectTopicTree(Collection topics,String helpType,HttpServletRequest request) {
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 			String retVal = "";

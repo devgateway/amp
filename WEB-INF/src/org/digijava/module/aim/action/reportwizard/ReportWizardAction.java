@@ -289,6 +289,8 @@ public class ReportWizardAction extends MultiAction {
 		this.addFields(myForm.getSelectedMeasures(), availableMeas, ampReport.getMeasures(), AmpReportMeasures.class, level1);
 		
 		Object filter	= request.getSession().getAttribute( ReportWizardAction.SESSION_FILTER );
+		if ( filter == null )
+			filter		= request.getSession().getAttribute( ReportWizardAction.EXISTING_SESSION_FILTER );
 		if ( filter != null && myForm.getUseFilters()) {
 			Set<AmpFilterData> fdSet	= AmpFilterData.createFilterDataSet(ampReport, filter);
 			if ( ampReport.getFilterDataSet() == null )

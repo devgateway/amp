@@ -38,14 +38,8 @@
 			<img src="/TEMPLATE/ampTemplate/images/save_as_dis.png" class="toolbar"/>
 			<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
 		</button>
-		<button id="step${stepNum}_cancel" type="button" class="toolbar" onclick="cancelWizard();" >
+		<button id="step${stepNum}_cancel" type="button" class="toolbar" onclick="repManager.cancelWizard();" >
 			<img src="/TEMPLATE/ampTemplate/images/cancel.png" class="toolbar" />
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>
  	 </div>
-
-<script language="JavaScript">
-	function cancelWizard() {
-		window.location = "/viewTeamReports.do?tabs=true";
- 	}
-</script>

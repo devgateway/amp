@@ -211,6 +211,9 @@ NormalReportManager.prototype.decideStrikeFilters	= function () {
 	else
 		filtersDivElem.style.textDecoration		= "line-through";
 }
+NormalReportManager.prototype.cancelWizard	= function () {
+	window.location = "/viewTeamReports.do?tabs=false";
+}
 
 TabReportManager.prototype					= new NormalReportManager();
 TabReportManager.prototype.constructor		= TabReportManager;
@@ -268,5 +271,8 @@ TabReportManager.prototype.checkMeasures	= function () {
 		this.disableSave();
 		return false;
 	}
+}
+TabReportManager.prototype.cancelWizard	= function () {
+	window.location = "/viewTeamReports.do?tabs=true";
 }
 

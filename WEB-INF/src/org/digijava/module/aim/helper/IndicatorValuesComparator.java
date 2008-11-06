@@ -2,7 +2,6 @@
 
 package org.digijava.module.aim.helper;
 
-import java.util.Calendar;
 import java.util.Comparator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 
@@ -13,37 +12,27 @@ import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 public class IndicatorValuesComparator implements Comparator<AmpIndicatorValue> {
 
     public int compare(AmpIndicatorValue o1, AmpIndicatorValue o2) {
-        int compare;
-        Calendar date = Calendar.getInstance();
-        /*if(o1.getValueDate()==null||o2.getValueDate()==null){
-            if(o1.getValueType() == o2.getValueType()){
-               compare=0;
-            }
-            else{
-                if(o1.getValueType() > o2.getValueType()){
-                    compare=1;
+        int compare = 0;
+        if (o1.getValueDate() != null && o2.getValueDate() != null) {
+            compare = o1.getValueDate().compareTo(o2.getValueDate());
+            if (compare == 0) {
+                /* If dates are equal we must compare types, 
+                 * order should be following:
+                 * Base value (2)
+                 * Actual value (1)
+                 * Target value (0)
+                 */
+                if (o1.getValueType() > o2.getValueType()) {
+                    compare = -1;
+                } else {
+                    if (o1.getValueType() < o2.getValueType()) {
+                        compare = 1;
+                    }
                 }
-                else{
-                    compare=-1;
-                }
             }
-           return compare;
-            
-        }*/
-        date.setTime(o1.getValueDate());
-        int o1year = date.get(Calendar.YEAR);
-        date.setTime(o2.getValueDate());
-        int o2year = date.get(Calendar.YEAR);
-        if (o1year == o2year && o1.getValueType() == o2.getValueType()) {
-            compare = 0;
-        } else {
-            if (o1year > o2year || (o1year == o2year && o1.getValueType() > o2.getValueType())) {
-                compare = 1;
-            } else {
-                compare = -1;
-            }
-
         }
+
+
         return compare;
     }
 

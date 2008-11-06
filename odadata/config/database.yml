@@ -1,4 +1,4 @@
-login: &login
+global: &global
   adapter: postgresql
   host: localhost
   username: odadata
@@ -7,12 +7,16 @@ login: &login
 
 development:
   database: odanic_development
-  <<: *login
+  <<: *global
 
 test:
   database: odanic_test
-  <<: *login
+  <<: *global
 
 production:
   database: odanic_production
-  <<: *login
+  <<: *global
+
+ampdev_development:
+  database: odadata_nicaragua
+  <<: *global

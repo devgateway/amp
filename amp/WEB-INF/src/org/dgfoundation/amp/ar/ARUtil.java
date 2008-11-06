@@ -273,27 +273,31 @@ public final class ARUtil {
 		return orderedColumns;
 	}
 	
-	public static void insertEmptyColumns (String type, CellColumn src, Set<MetaInfo> destMetaSet) {
+	public static void insertEmptyColumns (String type, CellColumn src, Set<MetaInfo> destMetaSet, AmpARFilter filter) {
 		Iterator iter									= src.iterator();
 		TreeSet<Comparable<? extends Object>>	periods	= new TreeSet<Comparable<? extends Object>>();
-		ARUtil.initializePeriodValues(type, periods);
-		
-		while ( iter.hasNext() ) {
-			Categorizable elem	= (Categorizable)iter.next();
-			MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
-			periods.add( minfo.getValue() );
-		}
-	
 		try{
+			ARUtil.initializePeriodValues(type, periods, filter);
+		
+			while ( iter.hasNext() ) {
+				Categorizable elem	= (Categorizable)iter.next();
+				MetaInfo minfo		= MetaInfo.getMetaInfo(elem.getMetaData(),type );
+				periods.add( minfo.getValue() );
+			}
+	
+		
 			Object prevPeriod					= null;
 			Iterator periodIter					= periods.iterator();
 			while ( periodIter.hasNext() ) {
 				Object period			= periodIter.next();
+				System.out.println("Year found:" + period );
 				int difference			= 0;
 				if ( prevPeriod != null && 
 						(difference=ARUtil.periodDifference(type, prevPeriod, period)) > 1 ) {
 					for (int i=1; i< difference; i++) {
-						destMetaSet.add( new MetaInfo(type, ARUtil.getFuturePeriod(type, prevPeriod, i)) );
+						Comparable comparable	= ARUtil.getFuturePeriod(type, prevPeriod, i, filter);
+						if (comparable != null)
+							destMetaSet.add( new MetaInfo(type, comparable) );
 					}
 					
 				}
@@ -306,8 +310,16 @@ public final class ARUtil {
 		}
 		
 	}
-	private static Comparable getFuturePeriod(String type, Object period, int step) throws Exception{
+	private static Comparable getFuturePeriod(String type, Object period, int step, AmpARFilter filter) throws Exception{
 		if ( ArConstants.YEAR.equals( type ) ) {
+			System.out.println("Adding year:" + (((Integer)period) + step) );
+			if ( filter.getRenderStartYear() != null && 
+					(((Integer)period) + step) < filter.getRenderStartYear())
+				return null;
+			if ( filter.getRenderEndYear() != null && 
+					(((Integer)period) + step) > filter.getRenderEndYear())
+				return null;
+			
 			return ((Integer)period) + step;
 		}
 		
@@ -380,7 +392,15 @@ public final class ARUtil {
 		
 		throw new Exception("The specified type is neither YEAR, QUARTER nor MONTH: " + type);
 	}
-	private static void initializePeriodValues(String type, Collection<Comparable<? extends Object>> periods) {
+	private static void initializePeriodValues(String type, Collection<Comparable<? extends Object>> periods, AmpARFilter filter) throws Exception {
+		if ( ArConstants.YEAR.equals(type) ) {
+			if ( filter == null  )
+				throw new Exception("Filter is null when adding empty years to report");
+			if ( filter.getRenderStartYear() != null )
+				periods.add(  filter.getRenderStartYear() -1 );
+			if ( filter.getRenderEndYear() != null )
+				periods.add( filter.getRenderEndYear() + 1 );
+		}
 		if ( ArConstants.QUARTER.equals(type) ) {
 			periods.add("Q0");
 			periods.add("Q5");

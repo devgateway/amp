@@ -126,10 +126,17 @@ public class GroupColumn extends Column {
         Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator i = src.iterator();
        
+        AmpARFilter myFilters	= null;
+        try{
+        	myFilters	= src.getWorker().getGenerator().getFilter();
+        }
+        catch (NullPointerException e) {
+			logger.warn("Could not get filter object when type is: " + category);
+		}
        if ( (reportMetadata.getAllowEmptyFundingColumns()!=null && reportMetadata.getAllowEmptyFundingColumns()) && 
     		  ( category.equals(ArConstants.YEAR) || category.equals(ArConstants.QUARTER) 
     		   	|| category.equals(ArConstants.MONTH) ) ) {
-    	   ARUtil.insertEmptyColumns(category, src, metaSet);
+    	  ARUtil.insertEmptyColumns(category, src, metaSet, myFilters);
        } 
         
         

@@ -91,6 +91,7 @@
 			    xml+='<tree id="0" radio="1">';
 			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
+			    alert(xml);
 		    tree.loadXMLString(xml);
 
 

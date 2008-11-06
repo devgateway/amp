@@ -49,5 +49,5 @@ es-NI:
       
   sessions:
     new:
-      title: Please log in!
-      submit: Login
+      title: "¡Por favor ingrese al sistema!"
+      submit: Ingresar

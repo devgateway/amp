@@ -6,11 +6,9 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +30,6 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.aim.helper.IndicatorValuesComparator;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -201,7 +198,6 @@ public class AddThemeIndicator extends Action {
 			IndicatorThemeBean indThemeBean=new IndicatorThemeBean();
 			indThemeBean.setIndicatorThemeId(indTheme.getId());
 			indThemeBean.setIndicator(indTheme.getIndicator());
-			//Collections.sort(indValuesList, new DbUtil.IndicatorValuesComparatorByTypeAndYear());
 			indThemeBean.setProgramIndicatorValues(indValuesList);
 			
 			indList.add(indThemeBean);

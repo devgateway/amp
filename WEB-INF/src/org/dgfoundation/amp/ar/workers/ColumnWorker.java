@@ -361,6 +361,10 @@ public abstract class ColumnWorker {
 		this.internalCondition = internalCondition;
 	}
 
+	public ReportGenerator getGenerator() {
+		return generator;
+	}
+	
 
 
 }

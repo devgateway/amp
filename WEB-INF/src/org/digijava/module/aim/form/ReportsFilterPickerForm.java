@@ -309,6 +309,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		/**
+		 * Do not reset the filter when changing the range
+		 */
+		if ( request.getParameter("renderStartYear") != null )  
+			return;
+		
 		if (request.getParameter("apply") != null && request.getAttribute("apply") == null || isnewreport) {
 			// this.selectedDonors = null;
 			this.selectedDonnorAgency=null;

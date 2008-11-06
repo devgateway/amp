@@ -58,7 +58,7 @@ public class AddEditData
 					bean.setLocation(value.getLocation());
 					indValuesList.add(bean);
 				}
-            	Collections.sort((List<AmpPrgIndicatorValue>)indValuesList, new DbUtil.IndicatorValuesComparatorByTypeAndYear());
+            	
                 themeForm.setPrgIndValues(indValuesList);
             }else{
                 themeForm.setPrgIndValues(null);

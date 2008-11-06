@@ -488,11 +488,15 @@ public class HelpUtil {
 			 HelpTopic topic = (HelpTopic) item.getMember();
 		
 			 if(topic.getTopicKey().length() != 0 ){
-				
-				if(item.getChildren().isEmpty()){	
-					xml+= "<item text=\""+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"\" id=\"" + topic.getHelpTopicId()+"\"/>";
+				   
+				    String article = getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request);
+					String newCode = article.replaceAll("&","&amp;");
+		
+					if(item.getChildren().isEmpty()){	
+					
+					xml+= "<item text=\""+newCode+"\" id=\"" + topic.getHelpTopicId()+"\"/>";
 				}else{
-					xml+= "<item text=\""+getTrn(topic.getTitleTrnKey(),topic.getTopicKey(), request)+"\" id=\"" + topic.getHelpTopicId()+"\">";
+					xml+= "<item text=\""+newCode+"\" id=\"" + topic.getHelpTopicId()+"\">";
 					 if (!item.getChildren().isEmpty() || item.getChildren().size() > 0) {
 						 xml += renderTopicTree(item.getChildren(),request,true);
 					 }

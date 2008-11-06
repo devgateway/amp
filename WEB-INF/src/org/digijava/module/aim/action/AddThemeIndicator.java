@@ -201,7 +201,7 @@ public class AddThemeIndicator extends Action {
 			IndicatorThemeBean indThemeBean=new IndicatorThemeBean();
 			indThemeBean.setIndicatorThemeId(indTheme.getId());
 			indThemeBean.setIndicator(indTheme.getIndicator());
-			Collections.sort(indValuesList, new DbUtil.IndicatorValuesComparatorByTypeAndYear());
+			//Collections.sort(indValuesList, new DbUtil.IndicatorValuesComparatorByTypeAndYear());
 			indThemeBean.setProgramIndicatorValues(indValuesList);
 			
 			indList.add(indThemeBean);

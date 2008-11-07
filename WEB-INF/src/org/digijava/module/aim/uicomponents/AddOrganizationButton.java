@@ -41,7 +41,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
-			html.append("<input type=\"button\" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			html.append("<input class=\"dr-menu\" type=\"button\" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
 
 			html.append(PARAM_RESET_FORM);
 			html.append("=true~");

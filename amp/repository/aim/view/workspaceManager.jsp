@@ -87,6 +87,55 @@
 											</digi:trn>
 											<!-- end table title -->
 										</td></tr>
+										<digi:form action="/workspaceManager.do" method="post">
+										<tr><td class="box-title" height="20" align="center">
+											<!-- Table title -->
+											<table width="100%" >
+												<tr>
+													<td>
+													<digi:trn key="aim:keyword">
+										              keyword
+										             </digi:trn>:
+										              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
+													</td>
+													
+													<td>
+														<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>&nbsp;
+														<html:select property="workspaceType" styleClass="inp-text">
+															<html:option value="all"><digi:trn key="aim:all">All</digi:trn></html:option>
+															<html:option value="team"><digi:trn key="aim:team">Team</digi:trn></html:option>
+															<html:option value="management"><digi:trn key="aim:management">Management</digi:trn></html:option>
+															<html:option value="computed"><digi:trn key="aim:computed">Computed</digi:trn></html:option>
+														</html:select>
+													</td>
+													
+													<td>
+														<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+														<html:select property="numPerPage" styleClass="inp-text">
+															<html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
+															<html:option value="5">5</html:option>
+															<html:option value="10">10</html:option>
+															<html:option value="20">20</html:option>
+															<html:option value="50">50</html:option>
+														</html:select>
+													</td>
+													
+													<td>
+													<c:set var="translation">
+										                <digi:trn key="aim:showButton">
+										                Show
+										                </digi:trn>
+										            </c:set>
+										            <input type="submit" value="${translation}"  class="dr-menu" style="font-family:verdana;font-size:11px;" />
+													</td>
+													
+													
+												</tr>
+											</table>
+											<!-- end table title -->
+										</td></tr>
+										</digi:form>
+										
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
 													<logic:empty name="aimWorkspaceForm" property="workspaces">

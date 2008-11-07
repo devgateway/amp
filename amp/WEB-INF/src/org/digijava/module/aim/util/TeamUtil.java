@@ -220,7 +220,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             String query = "select team from " + AmpTeam.class.getName()
-                + " team where (team.parentTeamId.ampTeamId=:pid)";
+                + " team where (team.parentTeamId.ampTeamId=:pid) order by name";
             Query qry = session.createQuery(query);
             qry.setParameter("pid", id);
             col = qry.list();
@@ -2300,7 +2300,7 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getSession();
             String queryString = "select t from " + AmpTeam.class.getName()
-                + " t";
+                + " t order by name";
             qry = session.createQuery(queryString);
             teams = qry.list();
         } catch(Exception e) {

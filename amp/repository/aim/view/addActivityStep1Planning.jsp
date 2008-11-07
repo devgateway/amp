@@ -34,9 +34,9 @@
 																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
 																	<html:select name="aimEditActivityForm" property="planning.lineMinRank" styleClass="inp-text">
 																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
-																		<c:forEach var="lmr" items="${planning.actRankCollection}" >
+																		<c:forEach var="lmr" items="${aimEditActivityForm.planning.actRankCollection}" >
 																			<c:choose>
-																				<c:when test="${lmr == planning.lineMinRank}">
+																				<c:when test="${lmr == aimEditActivityForm.planning.lineMinRank}">
 																					<option value='<c:out value="${lmr}" />' selected><c:out value="${lmr}"/></option>
 																				</c:when>
 																				<c:otherwise>
@@ -66,17 +66,21 @@
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
 																	<html:select property="planning.planMinRank" styleClass="inp-text">
 																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
-																		<c:forEach var="mpr" items="${aimEditActivityForm.planning.actRankCollection}" >
-																			<c:choose>
-																				<c:when test="${mpr == aimEditActivityForm.planning.planMinRank}">
-																					<option value='<c:out value="${mpr}" />' selected><c:out value="${mpr}"/></option>
-																				</c:when>
-																				<c:otherwise>
-																					<option value='<c:out value="${mpr}" />'><c:out value="${mpr}"/></option>
-																				</c:otherwise>
-																			</c:choose>
-																		</c:forEach>
-																	</html:select>
+							<c:forEach var="mpr"
+								items="${aimEditActivityForm.planning.actRankCollection}">
+								<c:choose>
+									<c:when
+										test="${mpr == aimEditActivityForm.planning.planMinRank}">
+										<option value='<c:out value="${mpr}" />' selected><c:out
+											value="${mpr}" /></option>
+									</c:when>
+									<c:otherwise>
+										<option value='<c:out value="${mpr}" />'><c:out
+											value="${mpr}" /></option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</html:select>
 																</a>
 															</td>
 														</tr>

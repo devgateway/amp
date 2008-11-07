@@ -769,10 +769,11 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                   toString());
           else
             eaForm.getPlanning().setPlanMinRank("-1");
-          //eaForm.setActRankCollection(new ArrayList());
-          //for(int i = 1; i < 6; i++) {
-          //  eaForm.getActRankCollection().add(new Integer(i));
-          //}
+          
+          eaForm.getPlanning().setActRankCollection(new ArrayList());
+          for(int i = 1; i < 6; i++) {
+            eaForm.getPlanning().getActRankCollection().add(new Integer(i));
+          }
 
           eaForm.setCreatedDate(DateConversion
                                 .ConvertDateToString(activity.

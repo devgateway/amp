@@ -238,12 +238,20 @@
         <delete file="${src}/quartz.properties"/>
 		<delete file="${repository}/digi.xml"/>
 		<delete file="${webinf}/jboss-web.xml"/>
+		<delete file="${webinf}/web.xml"/>
+		<delete file="${webinf}/queries/cj.jsp"/>
+		<delete file="${webinf}/queries/by_time.jsp"/>
+		<delete file="${webinf}/queries/by_donors.jsp"/>
 		<delete dir="${jackrabbit}"/>
 		<copy file="${deployConfigs}/${serverName}/hibernate.properties" todir="${src}"/>
         <copy file="${deployConfigs}/${serverName}/quartz.properties" todir="${src}"/>
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
 		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>
+		<copy file="${deployConfigs}/${serverName}/web.xml" todir="${webinf}"/>
 		<copy file="${deployConfigs}/${serverName}/repository.xml" todir="${jackrabbit}"/>
+		<copy file="${deployConfigs}/${serverName}/cj.jsp" todir="${webinf}/queries/"/>
+		<copy file="${deployConfigs}/${serverName}/by_time.jsp" todir="${webinf}/queries/"/>
+	    <copy file="${deployConfigs}/${serverName}/by_donors.jsp" todir="${webinf}/queries/"/>
 
 	</target>
 

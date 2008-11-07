@@ -392,8 +392,14 @@ function adminHelp(){
 	                                                <b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 	                                            </a>
 	                                        </li>
+	                                    </module:display>
+										<module:display name="Off Line Reports" parentModule="REPORTING">
+                                        <li class="yuiampmenuitem">
+                                            <a class="yuiampmenuitemlabel" href="/mondrian/mainreport.do">
+                                            	<digi:trn key="aim:offlinereports">Off Line Reports</digi:trn>
+                                            </a>
+                                        </li>
                                         </module:display>
-										
                                         <feature:display name="Paris Indicators Reports" module="Portfolio">
                                                 <li class="yuiampmenuitem" title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
                                                     <a class="yuiampmenuitemlabel" href="/aim/parisIndicatorReport.do~indcId=1~reset=true">

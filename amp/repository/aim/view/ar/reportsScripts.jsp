@@ -166,6 +166,10 @@ SaveReportEngine.checkReportsMessage =
 	"<digi:trn key='aim:reports:checkReports'>Check Reports in the main menu. </digi:trn>";
 SaveReportEngine.checkTabsMessage =
 	"<digi:trn key='aim:reports:checkTabs'>Check the Tab Manager in the main menu. </digi:trn>";
+SaveReportEngine.tabSavedMessage =
+	"<digi:trn key='aim:reports:tabSaved'>Tab and filters have been saved. </digi:trn>";
+SaveReportEngine.reportSavedMessage =
+	"<digi:trn key='aim:reports:reportSaved'>Report and filters have been saved.</digi:trn>";
 saveReportEngine	= null;	
 </script>
 

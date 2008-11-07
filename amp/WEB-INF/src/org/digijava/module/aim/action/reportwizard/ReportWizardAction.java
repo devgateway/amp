@@ -148,7 +148,7 @@ public class ReportWizardAction extends MultiAction {
 		
 		request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
 		request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
-		request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
+		//request.getSession().setAttribute( ArConstants.REPORTS_FILTER, null );
 
 	}
 	

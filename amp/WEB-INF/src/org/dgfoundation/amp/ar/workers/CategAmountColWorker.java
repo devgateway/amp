@@ -131,7 +131,6 @@ public class CategAmountColWorker extends ColumnWorker {
 			if(filter.getRenderEndYear()!=null &&  filter.getRenderEndYear()>0 &&
 				itemYear.intValue() > filter.getRenderEndYear().intValue()) renderizable=false;
 		}
-		System.out.println( "Rend= "+renderizable );
 		return renderizable;
 	}
 	

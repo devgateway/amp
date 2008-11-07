@@ -82,7 +82,7 @@ function deleteEvent(){
 			        <div style="padding: 20px; background-color: #F5F5F5;">
 			          <table>
 			            <tr>
-			              <td >
+			              <td style="text-align: right" nowrap="nowrap">
 			                <digi:trn key="calendar:eventTitle">Event Title:</digi:trn>
 			              </td>
 			              <td>
@@ -91,15 +91,15 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td >
+			              <td style="text-align: right" nowrap="nowrap">
 			                <digi:trn key="calendar:Description">Description:</digi:trn>
 			              </td>
 			              <td>
-			              	<html:textarea name="calendarEventForm" property="description" style="width: 320px;"/>                
+			              	<html:textarea name="calendarEventForm" property="description" style="width: 220px;" readonly="true"/>                
 			              </td>
 			            </tr>
 			            <tr>
-			              <td >
+			              <td style="text-align: right"nowrap="nowrap">
 			                <digi:trn key="calendar:CalendarType">Calendar type:</digi:trn>
 			              </td>
 			              <td>
@@ -108,7 +108,7 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td>
+			              <td style="text-align: right"nowrap="nowrap">
 			                <digi:trn key="calendar:EventType">Event type:</digi:trn>
 			              </td>
 			              <td>
@@ -117,7 +117,7 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td>
+			              <td style="text-align: right"nowrap="nowrap">
 			                <digi:trn key="calendar:Organisations">Organisations:</digi:trn>
 			              </td>
 			              <td>
@@ -127,7 +127,7 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td>
+			              <td style="text-align: right"nowrap="nowrap">
 			                <digi:trn key="calendar:StartDate">Start date:</digi:trn>
 			              </td>
 			              <td>
@@ -137,7 +137,7 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td>
+			              <td style="text-align: right"nowrap="nowrap">
 			                <digi:trn key="calendar:EndDate">End date:</digi:trn>
 			              </td>
 			              <td>
@@ -147,7 +147,7 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td >
+			              <td style="text-align: right" nowrap="nowrap">
 			                <digi:trn key="calendar:Attendees">Attendees:</digi:trn>
 			              </td>
 			              <td>
@@ -159,7 +159,7 @@ function deleteEvent(){
 			              </td>
 			            </tr>
 			            <tr>
-			              <td>
+			              <td style="text-align: right" nowrap="nowrap">
 			                <digi:trn key="calendar:PublicEvent">Public Event:</digi:trn>
 			              </td>
 			              <td>

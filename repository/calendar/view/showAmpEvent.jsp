@@ -411,7 +411,7 @@ function recurEvent(){
 			           </td>	
                     </tr>
              		<tr>
-			            <td style="font-family: Tahoma;">                
+			            <td style="font-family: Tahoma;font-size: 12px;">                
 			                <div style="background-color: #F5F5F5; padding: 20px">
 			                  <digi:errors/>
 			                  <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
@@ -434,7 +434,7 @@ function recurEvent(){
 			                                        </td>
 			                                        <td align="left">
 			                                          <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-			                                          <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()">
+			                                          <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()" styleClass="inp-text">
 			                                            <c:if test="${!empty calendarEventForm.calendarTypes}">
 			                                              <c:set var="types" value="${calendarEventForm.calendarTypes}"/>
 			                                              <html:options collection="types" property="value" labelProperty="label"/>
@@ -447,7 +447,7 @@ function recurEvent(){
 			                                            <digi:trn key="calendar:EventType">Event type:</digi:trn>
 			                                        </td>
 			                                        <td align="left">
-			                                          <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId">
+			                                          <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
 			                                            <c:if test="${!empty calendarEventForm.eventTypesList}">
 			                                              <c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
 			                                                <html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
@@ -467,7 +467,7 @@ function recurEvent(){
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
-			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
+			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>
 			                                                </td>
 			                                                <td>&nbsp;</td>
 			                                                <td>
@@ -483,7 +483,7 @@ function recurEvent(){
 			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
-			                                                      <option value="${hour}">${hour}</option>
+			                                                      <option value="${hour}" class="inp-text">${hour}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -495,7 +495,7 @@ function recurEvent(){
 			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-			                                                      <option value="${minute}">${minute}</option>
+			                                                      <option value="${minute}" class="inp-text">${minute}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -523,7 +523,7 @@ function recurEvent(){
 			                                                      <c:if test="${i < 10}">
 			                                                        <c:set var="i" value="0${i}"/>
 			                                                      </c:if>
-			                                                      <option value="${i}"/>
+			                                                      <option class="inp-text" value="${i}"/>
 			                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
 			                                                      </option>
 			                                                    </c:forEach>
@@ -538,7 +538,7 @@ function recurEvent(){
 			                                                      <c:if test="${i < 10}">
 			                                                        <c:set var="i" value="0${i}"/>
 			                                                      </c:if>
-			                                                      <option value="${i}"/>${i}</option>
+			                                                      <option class="inp-text" value="${i}"/>${i}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -550,7 +550,7 @@ function recurEvent(){
 			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
-			                                                      <option value="${hour}">${hour}</option>
+			                                                      <option class="inp-text" value="${hour}">${hour}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -562,7 +562,7 @@ function recurEvent(){
 			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-			                                                      <option value="${minute}">${minute}</option>
+			                                                      <option class="inp-text" value="${minute}">${minute}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -583,7 +583,7 @@ function recurEvent(){
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
-			                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
+			                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px" styleClass="inp-text"/>
 			                                                </td>
 			                                                <td>
 			                                                &nbsp;
@@ -610,7 +610,7 @@ function recurEvent(){
 			                                                      <c:if test="${hour < 10}">
 			                                                        <c:set var="hour" value="0${hour}"/>
 			                                                      </c:if>
-			                                                      <option value="${hour}">${hour}</option>
+			                                                      <option class="inp-text" value="${hour}">${hour}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -622,7 +622,7 @@ function recurEvent(){
 			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-			                                                      <option value="${minute}">${minute}</option>
+			                                                      <option class="inp-text" value="${minute}">${minute}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -648,7 +648,7 @@ function recurEvent(){
 			                                                      <bean:define id="index" value="${i - 1}"/>
 			                                                      <bean:define id="type" value="${calendarEventForm.selectedCalendarTypeId}"/>
 			                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
-			                                                      <option value="${i}"/>
+			                                                      <option class="inp-text" value="${i}"/>
 			                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
 			                                                      </option>
 			                                                    </c:forEach>
@@ -661,7 +661,7 @@ function recurEvent(){
 			                                                  <select id="selectedEndDay" onchange="updateDate(document.getElementById('selectedEndDate'), 'day', this.value)">
 			                                                    <c:forEach var="i" begin="1" end="30">
 			                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
-			                                                      <option value="${i}"/>${i}</option>
+			                                                      <option class="inp-text" value="${i}"/>${i}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -673,7 +673,7 @@ function recurEvent(){
 			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
-			                                                      <option value="${hour}">${hour}</option>
+			                                                      <option class="inp-text" value="${hour}">${hour}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -685,7 +685,7 @@ function recurEvent(){
 			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-			                                                      <option value="${minute}">${minute}</option>
+			                                                      <option class="inp-text" value="${minute}">${minute}</option>
 			                                                    </c:forEach>
 			                                                  </select>
 			                                                  <script type="text/javascript">
@@ -726,11 +726,11 @@ function recurEvent(){
 																		<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 																			<tr>
 																				<td width="3">
-																					<html:multibox property="selOrganizations">
+																					<html:multibox property="selOrganizations" >
 																						<bean:write name="organization" property="ampOrgId" />
 																					</html:multibox>
 																				</td>
-																				<td align="left">
+																				<td align="left" class="inp-text">
 																					<bean:write name="organization" property="name" />
 																				</td>
 																			</tr>
@@ -769,7 +769,7 @@ function recurEvent(){
 			                                            <digi:trn key="calendar:Description">Description</digi:trn>
 			                                        </td>
 			                                        <td align="left" width="220px">
-			 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
+			 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="5"/>
 			                                        </td>
 			                                    </tr>
 			                                </table>

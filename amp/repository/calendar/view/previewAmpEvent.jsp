@@ -7,6 +7,18 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="calendarEventForm"/>
+
+<style  type="text/css">
+<!--
+
+.contentbox_border {
+    border: 1px solid black;
+	border-width: 1px 1px 1px 1px; 
+	background-color: #ffffff;
+}
+-->
+</style>
+
 <script language="javascript">
 
 function deleteEvent(){
@@ -51,127 +63,132 @@ function deleteEvent(){
 		</td>
 	</tr>
 	<tr>				
-        <td align="center" style="padding: 0px 3px 0px 3px;">
-       		<table width="100%">
-              	<tr>
-                   	<td  style="height: 5px;"/>
-                 </tr>
-                 <tr>
-               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
-                 </tr>
-            </table>
-       </td>
-    </tr>
-    <tr>
-      <td style="font-family: Tahoma; font-size: 12px;">        
-        <div style="padding: 20px; background-color: #F5F5F5;">
-          <table>
-            <tr>
-              <td >
-                <digi:trn key="calendar:eventTitle">Event Title:</digi:trn>
-              </td>
-              <td>
-                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
-                ${calendarEventForm.eventTitle}
-              </td>
-            </tr>
-            <tr>
-              <td >
-                <digi:trn key="calendar:Description">Description:</digi:trn>
-              </td>
-              <td>
-              	<html:textarea name="calendarEventForm" property="description" style="width: 320px;"/>                
-              </td>
-            </tr>
-            <tr>
-              <td >
-                <digi:trn key="calendar:CalendarType">Calendar type:</digi:trn>
-              </td>
-              <td>
-                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
-                ${calendarEventForm.selectedCalendarTypeName}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <digi:trn key="calendar:EventType">Event type:</digi:trn>
-              </td>
-              <td>
-                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
-                ${calendarEventForm.selectedEventTypeName}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <digi:trn key="calendar:Organisations">Organisations:</digi:trn>
-              </td>
-              <td>
-                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
-                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" />
-                </html:select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <digi:trn key="calendar:StartDate">Start date:</digi:trn>
-              </td>
-              <td>
-                <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
-                <html:hidden name="calendarEventForm" property="selectedStartTime" value="${calendarEventForm.selectedStartTime}"/>
-                ${calendarEventForm.selectedStartDate}&nbsp;${calendarEventForm.selectedStartTime}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <digi:trn key="calendar:EndDate">End date:</digi:trn>
-              </td>
-              <td>
-                <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
-                <html:hidden name="calendarEventForm" property="selectedEndTime" value="${calendarEventForm.selectedEndTime}"/>
-                ${calendarEventForm.selectedEndDate}&nbsp;${calendarEventForm.selectedEndTime}
-              </td>
-            </tr>
-            <tr>
-              <td >
-                <digi:trn key="calendar:Attendees">Attendees:</digi:trn>
-              </td>
-              <td>
-                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
-                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
-                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
-                  </c:if>
-                </html:select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <digi:trn key="calendar:PublicEvent">Public Event:</digi:trn>
-              </td>
-              <td>
-                <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
-                <c:if test="${calendarEventForm.privateEvent}"><digi:trn key="calendar:no">No</digi:trn></c:if>
-                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
-              </td>
-            </tr>
-            <tr>
-              <td>
-              </td>
-              <td>
-                <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:savebutton">Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
-                &nbsp;
-                <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
-                &nbsp;
-                <input type="submit" value="<digi:trn key="calendar:deletebutton">Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
-              </td>
-            </tr>
-          </table>
-        </div>
-      </td>
-    </tr>
-			</table>
-		</td>
-	</tr>
-  	
-  </table>
+        <td align="center" nowrap="nowrap" valign="top">
+        	<table class="contentbox_border" width="100%" cellpadding="0" cellspacing="0">
+                <tr>	
+                	<td align="center" style="padding: 0px 3px 0px 3px;">
+                		<table width="100%">
+			              	<tr>
+			                   	<td  style="height: 5px;"/>
+			                 </tr>
+			                 <tr>
+			               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
+			                 </tr>
+			            </table>
+                	</td>
+                </tr>
+                <tr>
+			      <td style="font-family: Tahoma; font-size: 12px;">        
+			        <div style="padding: 20px; background-color: #F5F5F5;">
+			          <table>
+			            <tr>
+			              <td >
+			                <digi:trn key="calendar:eventTitle">Event Title:</digi:trn>
+			              </td>
+			              <td>
+			                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
+			                ${calendarEventForm.eventTitle}
+			              </td>
+			            </tr>
+			            <tr>
+			              <td >
+			                <digi:trn key="calendar:Description">Description:</digi:trn>
+			              </td>
+			              <td>
+			              	<html:textarea name="calendarEventForm" property="description" style="width: 320px;"/>                
+			              </td>
+			            </tr>
+			            <tr>
+			              <td >
+			                <digi:trn key="calendar:CalendarType">Calendar type:</digi:trn>
+			              </td>
+			              <td>
+			                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
+			                ${calendarEventForm.selectedCalendarTypeName}
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			                <digi:trn key="calendar:EventType">Event type:</digi:trn>
+			              </td>
+			              <td>
+			                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
+			                ${calendarEventForm.selectedEventTypeName}
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			                <digi:trn key="calendar:Organisations">Organisations:</digi:trn>
+			              </td>
+			              <td>
+			                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
+			                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" />
+			                </html:select>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			                <digi:trn key="calendar:StartDate">Start date:</digi:trn>
+			              </td>
+			              <td>
+			                <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
+			                <html:hidden name="calendarEventForm" property="selectedStartTime" value="${calendarEventForm.selectedStartTime}"/>
+			                ${calendarEventForm.selectedStartDate}&nbsp;${calendarEventForm.selectedStartTime}
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			                <digi:trn key="calendar:EndDate">End date:</digi:trn>
+			              </td>
+			              <td>
+			                <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
+			                <html:hidden name="calendarEventForm" property="selectedEndTime" value="${calendarEventForm.selectedEndTime}"/>
+			                ${calendarEventForm.selectedEndDate}&nbsp;${calendarEventForm.selectedEndTime}
+			              </td>
+			            </tr>
+			            <tr>
+			              <td >
+			                <digi:trn key="calendar:Attendees">Attendees:</digi:trn>
+			              </td>
+			              <td>
+			                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
+			                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
+			                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
+			                  </c:if>
+			                </html:select>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			                <digi:trn key="calendar:PublicEvent">Public Event:</digi:trn>
+			              </td>
+			              <td>
+			                <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
+			                <c:if test="${calendarEventForm.privateEvent}"><digi:trn key="calendar:no">No</digi:trn></c:if>
+			                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
+			              </td>
+			            </tr>
+			            <tr>
+			              <td>
+			              </td>
+			              <td>
+			                <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:savebutton">Save</digi:trn>" onclick="document.getElementById('hdnMethod').value = 'save'">
+			                &nbsp;
+			                <input type="submit" style="width: 100px;" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('hdnMethod').value = ''">
+			                &nbsp;
+			                <input type="submit" value="<digi:trn key="calendar:deletebutton">Delete</digi:trn>" style="width: 100px;" onclick="deleteEvent();" />
+			              </td>
+			            </tr>
+			          </table>
+			        </div>
+			      </td>
+			    </tr>
+             </table>
+       		</td>
+    	</tr>
+    </table>
+	</td>
+</tr>
+</table>
 </digi:form>
 

@@ -391,7 +391,7 @@ function recurEvent(){
 			</td>
 		</tr>	
 		<tr>
-			<td height=16 vAlign=center width=571>
+			<td height="16" vAlign="middle" width="571">
 				<span class=subtitle-blue>&nbsp;<digi:trn key="calendar:CreateAnEvent">Create An Event</digi:trn> </span>
 			</td>
 		</tr>
@@ -410,435 +410,433 @@ function recurEvent(){
 			                </table>
 			           </td>	
                     </tr>
-             		
-             		
              		<tr>
-            <td style="font-family: Tahoma;">                
-                <div style="background-color: #F5F5F5; padding: 20px">
-                  <digi:errors/>
-                  <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
-                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-                    <table>
-                        <tr>
-                            <td valign="top" style="padding: 10px">
-                                <table>
-                                    <tr>
-                                        <td nowrap="nowrap" style="text-align: right">
-                                            <digi:trn key="calendar:EventTitle">Event title:</digi:trn>
-                                        </td>
-                                        <td width="220px">
-                                        		<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 100%" styleClass="inp-text"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td nowrap="nowrap" align="right">
-                                            <digi:trn key="calendar:cmbCalendarType">Calendar type:</digi:trn>
-                                        </td>
-                                        <td align="left">
-                                          <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-                                          <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()">
-                                            <c:if test="${!empty calendarEventForm.calendarTypes}">
-                                              <c:set var="types" value="${calendarEventForm.calendarTypes}"/>
-                                              <html:options collection="types" property="value" labelProperty="label"/>
-                                            </c:if>
-                                          </html:select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td nowrap="nowrap" align="right">
-                                            <digi:trn key="calendar:EventType">Event type:</digi:trn>
-                                        </td>
-                                        <td align="left">
-                                          <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId">
-                                            <c:if test="${!empty calendarEventForm.eventTypesList}">
-                                              <c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
-                                                <html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
-                                              </c:forEach>
-                                            </c:if>
-                                          </html:select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td nowrap="nowrap" align="right">
-                                            <digi:trn key="calendar:StartDate">Start date:</digi:trn>
-                                        </td>
-                                        <td align="left">
-                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-                                            <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
-                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
-                                            <table cellpadding="0" cellspacing="0">
-                                              <tr>
-                                                <td nowrap="nowrap">
-                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
-                                                </td>
-                                                <td>&nbsp;</td>
-                                                <td>
-                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
-                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-                                                  </a>
-                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
-                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-                                                  </a>
-                                                </td>
-                                                <td>&nbsp;&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
-                                                    <c:forEach var="hour" begin="0" end="23">
-                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
-                                                      <option value="${hour}">${hour}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-                                                  </script>
-                                                </td>
-                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
-                                                    <c:forEach var="minute" begin="0" end="59">
-                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-                                                      <option value="${minute}">${minute}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
-                                                  </script>
-                                                </td>
-                                              </tr>
-                                            </table>
-                                          </c:if>
-                                          <c:if test="${calendarEventForm.selectedCalendarTypeId != 0}">
-                                            <html:hidden styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate"/>
-                                            <table cellpadding="0" cellspacing="0">
-                                              <tr>
-                                                <td>
-                                                  <select id="selectedStartYear" onchange="updateDate(document.getElementById('selectedStartDate'), 'year', this.value)"></select>
-                                                  <script type="text/javascript">
-                                                  createYearCombo(document.getElementById('selectedStartYear'), document.getElementById('selectedStartDate').value);
-                                                  </script>
-                                                </td>
-                                                <td>
-                                                  <select id="selectedStartMonth" onchange="updateDate(document.getElementById('selectedStartDate'), 'month', this.value)">
-                                                    <c:forEach var="i" begin="1" end="13">
-                                                      <bean:define id="index" value="${i - 1}"/>
-                                                      <bean:define id="type" value="${calendarEventForm.selectedCalendarTypeId}"/>
-                                                      <c:if test="${i < 10}">
-                                                        <c:set var="i" value="0${i}"/>
-                                                      </c:if>
-                                                      <option value="${i}"/>
-                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
-                                                      </option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedStartMonth'), get('month', document.getElementById('selectedStartDate').value));
-                                                  </script>
-                                                </td>
-                                                <td>
-                                                  <select id="selectedStartDay" onchange="updateDate(document.getElementById('selectedStartDate'), 'day', this.value)">
-                                                    <c:forEach var="i" begin="1" end="30">
-                                                      <c:if test="${i < 10}">
-                                                        <c:set var="i" value="0${i}"/>
-                                                      </c:if>
-                                                      <option value="${i}"/>${i}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedStartDay'), get('day', document.getElementById('selectedStartDate').value));
-                                                  </script>
-                                                </td>
-                                                <td nowrap="nowrap">&nbsp;&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
-                                                    <c:forEach var="hour" begin="0" end="23">
-                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
-                                                      <option value="${hour}">${hour}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-                                                  </script>
-                                                </td>
-                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
-                                                    <c:forEach var="minute" begin="0" end="59">
-                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-                                                      <option value="${minute}">${minute}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
-                                                  </script>
-                                                </td>
-                                              </tr>
-                                            </table>
-                                          </c:if>
-                                       </td>
-                                    </tr>
-                                    <tr>
-                                        <td nowrap="nowrap" align="right">
-                                            <digi:trn key="calendar:EndDate">End Date</digi:trn>
-                                        </td>
-                                        <td align="left">
-                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-                                            <table cellpadding="0" cellspacing="0">
-                                              <tr>
-                                                <td nowrap="nowrap">
-                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
-                                                </td>
-                                                <td>
-                                                &nbsp;
-                                                </td>
-                                                <td>
-                                                  <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
-                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-                                                  </a>
-                                                </td>
-                                                <td>
-                                                &nbsp;
-                                                </td>
-                                                <td>
-                                                  <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
-                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-                                                  </a>
-                                                </td>
-                                                <td>
-                                                &nbsp;&nbsp;
-                                                </td>
-                                                <td>
-                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
-                                                    <c:forEach var="hour" begin="0" end="23">
-                                                      <c:if test="${hour < 10}">
-                                                        <c:set var="hour" value="0${hour}"/>
-                                                      </c:if>
-                                                      <option value="${hour}">${hour}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
-                                                  </script>
-                                                </td>
-                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
-                                                    <c:forEach var="minute" begin="0" end="59">
-                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-                                                      <option value="${minute}">${minute}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
-                                                  </script>
-                                                </td>
-                                              </tr>
-                                            </table>
-                                          </c:if>
-                                          <c:if test="${calendarEventForm.selectedCalendarTypeId != 0}">
-                                            <html:hidden styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate"/>
-                                            <table cellpadding="0" cellspacing="0">
-                                              <tr>
-                                                <td>
-                                                  <select id="selectedEndYear" onchange="updateDate(document.getElementById('selectedEndDate'), 'year', this.value)"></select>
-                                                  <script type="text/javascript">
-                                                  createYearCombo(document.getElementById('selectedEndYear'), document.getElementById('selectedEndDate').value);
-                                                  </script>
-                                                </td>
-                                                <td>
-                                                  <select id="selectedEndMonth" onchange="updateDate(document.getElementById('selectedEndDate'), 'month', this.value)">
-                                                    <c:forEach var="i" begin="1" end="13">
-                                                      <bean:define id="index" value="${i - 1}"/>
-                                                      <bean:define id="type" value="${calendarEventForm.selectedCalendarTypeId}"/>
-                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
-                                                      <option value="${i}"/>
-                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
-                                                      </option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedEndMonth'), get('month', document.getElementById('selectedEndDate').value));
-                                                  </script>
-                                                </td>
-                                                <td>
-                                                  <select id="selectedEndDay" onchange="updateDate(document.getElementById('selectedEndDate'), 'day', this.value)">
-                                                    <c:forEach var="i" begin="1" end="30">
-                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
-                                                      <option value="${i}"/>${i}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedEndDay'), get('day', document.getElementById('selectedEndDate').value));
-                                                  </script>
-                                                </td>
-                                                <td nowrap="nowrap">&nbsp;&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
-                                                    <c:forEach var="hour" begin="0" end="23">
-                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
-                                                      <option value="${hour}">${hour}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
-                                                  </script>
-                                                </td>
-                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-                                                <td>
-                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
-                                                    <c:forEach var="minute" begin="0" end="59">
-                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
-                                                      <option value="${minute}">${minute}</option>
-                                                    </c:forEach>
-                                                  </select>
-                                                  <script type="text/javascript">
-                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
-                                                  </script>
-                                                </td>
-                                              </tr>
-                                            </table>
-                                          </c:if>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                        </td>
-                                        <td>
-                                          <html:hidden name="calendarEventForm" property="privateEvent"/>
-                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
-	                                          <c:if test="${!calendarEventForm.privateEvent }">
-	                                          	CHECKED
-	                                          </c:if>                                          
-                                          />
-                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td style="padding: 10px" valign="top">
-                                <table>
-                                    <tr>
-                                        <td nowrap="nowrap" align="right">
-                                            <digi:trn key="calendar:orgs">Organizations</digi:trn> 
-                                        </td>
-                                        <td valign="top" align="left">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:notEmpty name="calendarEventForm" property="organizations">
-													<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<tr><td>
-															<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+			            <td style="font-family: Tahoma;">                
+			                <div style="background-color: #F5F5F5; padding: 20px">
+			                  <digi:errors/>
+			                  <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
+			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                    <table>
+			                        <tr>
+			                            <td valign="top" style="padding: 10px">
+			                                <table>
+			                                    <tr>
+			                                        <td nowrap="nowrap" style="text-align: right">
+			                                            <digi:trn key="calendar:EventTitle">Event title:</digi:trn>
+			                                        </td>
+			                                        <td width="220px">
+			                                        		<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 100%" styleClass="inp-text"/>
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td nowrap="nowrap" align="right">
+			                                            <digi:trn key="calendar:cmbCalendarType">Calendar type:</digi:trn>
+			                                        </td>
+			                                        <td align="left">
+			                                          <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                                          <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()">
+			                                            <c:if test="${!empty calendarEventForm.calendarTypes}">
+			                                              <c:set var="types" value="${calendarEventForm.calendarTypes}"/>
+			                                              <html:options collection="types" property="value" labelProperty="label"/>
+			                                            </c:if>
+			                                          </html:select>
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td nowrap="nowrap" align="right">
+			                                            <digi:trn key="calendar:EventType">Event type:</digi:trn>
+			                                        </td>
+			                                        <td align="left">
+			                                          <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId">
+			                                            <c:if test="${!empty calendarEventForm.eventTypesList}">
+			                                              <c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
+			                                                <html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
+			                                              </c:forEach>
+			                                            </c:if>
+			                                          </html:select>
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td nowrap="nowrap" align="right">
+			                                            <digi:trn key="calendar:StartDate">Start date:</digi:trn>
+			                                        </td>
+			                                        <td align="left">
+			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                                            <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
+			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
+			                                            <table cellpadding="0" cellspacing="0">
+			                                              <tr>
+			                                                <td nowrap="nowrap">
+			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
+			                                                </td>
+			                                                <td>&nbsp;</td>
+			                                                <td>
+			                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
+			                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+			                                                  </a>
+			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
+			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+			                                                  </a>
+			                                                </td>
+			                                                <td>&nbsp;&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
+			                                                    <c:forEach var="hour" begin="0" end="23">
+			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
+			                                                      <option value="${hour}">${hour}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
+			                                                    <c:forEach var="minute" begin="0" end="59">
+			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
+			                                                      <option value="${minute}">${minute}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
+			                                                  </script>
+			                                                </td>
+			                                              </tr>
+			                                            </table>
+			                                          </c:if>
+			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId != 0}">
+			                                            <html:hidden styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate"/>
+			                                            <table cellpadding="0" cellspacing="0">
+			                                              <tr>
+			                                                <td>
+			                                                  <select id="selectedStartYear" onchange="updateDate(document.getElementById('selectedStartDate'), 'year', this.value)"></select>
+			                                                  <script type="text/javascript">
+			                                                  createYearCombo(document.getElementById('selectedStartYear'), document.getElementById('selectedStartDate').value);
+			                                                  </script>
+			                                                </td>
+			                                                <td>
+			                                                  <select id="selectedStartMonth" onchange="updateDate(document.getElementById('selectedStartDate'), 'month', this.value)">
+			                                                    <c:forEach var="i" begin="1" end="13">
+			                                                      <bean:define id="index" value="${i - 1}"/>
+			                                                      <bean:define id="type" value="${calendarEventForm.selectedCalendarTypeId}"/>
+			                                                      <c:if test="${i < 10}">
+			                                                        <c:set var="i" value="0${i}"/>
+			                                                      </c:if>
+			                                                      <option value="${i}"/>
+			                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
+			                                                      </option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedStartMonth'), get('month', document.getElementById('selectedStartDate').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td>
+			                                                  <select id="selectedStartDay" onchange="updateDate(document.getElementById('selectedStartDate'), 'day', this.value)">
+			                                                    <c:forEach var="i" begin="1" end="30">
+			                                                      <c:if test="${i < 10}">
+			                                                        <c:set var="i" value="0${i}"/>
+			                                                      </c:if>
+			                                                      <option value="${i}"/>${i}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedStartDay'), get('day', document.getElementById('selectedStartDate').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td nowrap="nowrap">&nbsp;&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
+			                                                    <c:forEach var="hour" begin="0" end="23">
+			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
+			                                                      <option value="${hour}">${hour}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
+			                                                    <c:forEach var="minute" begin="0" end="59">
+			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
+			                                                      <option value="${minute}">${minute}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedStartMinute'), get('minute', document.getElementById('selectedStartTime').value));
+			                                                  </script>
+			                                                </td>
+			                                              </tr>
+			                                            </table>
+			                                          </c:if>
+			                                       </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td nowrap="nowrap" align="right">
+			                                            <digi:trn key="calendar:EndDate">End Date</digi:trn>
+			                                        </td>
+			                                        <td align="left">
+			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                                            <table cellpadding="0" cellspacing="0">
+			                                              <tr>
+			                                                <td nowrap="nowrap">
+			                                                  <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
+			                                                </td>
+			                                                <td>
+			                                                &nbsp;
+			                                                </td>
+			                                                <td>
+			                                                  <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
+			                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+			                                                  </a>
+			                                                </td>
+			                                                <td>
+			                                                &nbsp;
+			                                                </td>
+			                                                <td>
+			                                                  <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
+			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+			                                                  </a>
+			                                                </td>
+			                                                <td>
+			                                                &nbsp;&nbsp;
+			                                                </td>
+			                                                <td>
+			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
+			                                                    <c:forEach var="hour" begin="0" end="23">
+			                                                      <c:if test="${hour < 10}">
+			                                                        <c:set var="hour" value="0${hour}"/>
+			                                                      </c:if>
+			                                                      <option value="${hour}">${hour}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
+			                                                    <c:forEach var="minute" begin="0" end="59">
+			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
+			                                                      <option value="${minute}">${minute}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
+			                                                  </script>
+			                                                </td>
+			                                              </tr>
+			                                            </table>
+			                                          </c:if>
+			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId != 0}">
+			                                            <html:hidden styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate"/>
+			                                            <table cellpadding="0" cellspacing="0">
+			                                              <tr>
+			                                                <td>
+			                                                  <select id="selectedEndYear" onchange="updateDate(document.getElementById('selectedEndDate'), 'year', this.value)"></select>
+			                                                  <script type="text/javascript">
+			                                                  createYearCombo(document.getElementById('selectedEndYear'), document.getElementById('selectedEndDate').value);
+			                                                  </script>
+			                                                </td>
+			                                                <td>
+			                                                  <select id="selectedEndMonth" onchange="updateDate(document.getElementById('selectedEndDate'), 'month', this.value)">
+			                                                    <c:forEach var="i" begin="1" end="13">
+			                                                      <bean:define id="index" value="${i - 1}"/>
+			                                                      <bean:define id="type" value="${calendarEventForm.selectedCalendarTypeId}"/>
+			                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
+			                                                      <option value="${i}"/>
+			                                                      <%=org.digijava.module.calendar.entity.DateBreakDown.getMonthName(Integer.parseInt(index), Integer.parseInt(type), false)%>
+			                                                      </option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedEndMonth'), get('month', document.getElementById('selectedEndDate').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td>
+			                                                  <select id="selectedEndDay" onchange="updateDate(document.getElementById('selectedEndDate'), 'day', this.value)">
+			                                                    <c:forEach var="i" begin="1" end="30">
+			                                                      <c:if test="${i < 10}"><c:set var="i" value="0${i}"/></c:if>
+			                                                      <option value="${i}"/>${i}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedEndDay'), get('day', document.getElementById('selectedEndDate').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td nowrap="nowrap">&nbsp;&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
+			                                                    <c:forEach var="hour" begin="0" end="23">
+			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
+			                                                      <option value="${hour}">${hour}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedEndHour'), get('hour', document.getElementById('selectedEndTime').value));
+			                                                  </script>
+			                                                </td>
+			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
+			                                                <td>
+			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
+			                                                    <c:forEach var="minute" begin="0" end="59">
+			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
+			                                                      <option value="${minute}">${minute}</option>
+			                                                    </c:forEach>
+			                                                  </select>
+			                                                  <script type="text/javascript">
+			                                                  selectOptionByValue(document.getElementById('selectedEndMinute'), get('minute', document.getElementById('selectedEndTime').value));
+			                                                  </script>
+			                                                </td>
+			                                              </tr>
+			                                            </table>
+			                                          </c:if>
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td>
+			                                        </td>
+			                                        <td>
+			                                          <html:hidden name="calendarEventForm" property="privateEvent"/>
+			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
+				                                          <c:if test="${!calendarEventForm.privateEvent }">
+				                                          	CHECKED
+				                                          </c:if>                                          
+			                                          />
+			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
+			                                        </td>
+			                                    </tr>
+			                                </table>
+			                            </td>
+			                            <td valign="top">
+			                                <table>
+			                                    <tr>
+			                                        <td nowrap="nowrap" align="right">
+			                                            <digi:trn key="calendar:orgs">Organizations</digi:trn> 
+			                                        </td>
+			                                        <td valign="top" align="left">
+														<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">													
+															<logic:notEmpty name="calendarEventForm" property="organizations">
+																<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																	<tr><td>
+																		<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
+																			<tr>
+																				<td width="3">
+																					<html:multibox property="selOrganizations">
+																						<bean:write name="organization" property="ampOrgId" />
+																					</html:multibox>
+																				</td>
+																				<td align="left">
+																					<bean:write name="organization" property="name" />
+																				</td>
+																			</tr>
+																		</table>
+																	</td></tr>
+																</logic:iterate>	
+															</logic:notEmpty>
+															<logic:empty name="calendarEventForm" property="organizations">
 																<tr>
-																	<td width="3">
-																		<html:multibox property="selOrganizations">
-																			<bean:write name="organization" property="ampOrgId" />
-																		</html:multibox>
-																	</td>
-																	<td align="left">
-																		<bean:write name="organization" property="name" />
+																	<td>																		
+																		<digi:trn key="calendar:noOrgs">No Organisations</digi:trn>																																				
 																	</td>
 																</tr>
-															</table>
-														</td></tr>
-													</logic:iterate>	
-												</logic:notEmpty>
-												<logic:empty name="calendarEventForm" property="organizations">
-													<tr>
-														<td>
-															<digi:trn key="calendar:noOrgs">No Organisations</digi:trn>
-														</td>
-													</tr>
-												</logic:empty>											
-											</table>
-                                        </td> 
-                                        <td>                                        	
-											<table cellSpacing="1" cellPadding="1" class="box-border-nopadding">
-												<tr>
-													<td width="65px">
-														<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
-													</td>
-												</tr>
-												<tr>
-													<td width="65px">
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs()" style="width:65px;">
-															<digi:trn key="btn:remove">Remove</digi:trn>
-														</html:button>
-													</td>
-												</tr>
-											</table>											
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td nowrap="nowrap" align="right">
-                                            <digi:trn key="calendar:Description">Description</digi:trn>
-                                        </td>
-                                        <td align="left" width="220px">
- 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="20" style="text-align:center;">
-                                <table align="center">
-                                    <tr>
-                                        <td >
-                                            <digi:trn key="calendar:Attendee">Attendee</digi:trn>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                          <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width: 220px; height: 150px;">
-                                            <c:if test="${empty calendarEventForm.teamMapValues}">
-                                              <option value="-1">No receivers</option>
-                                            </c:if>
-                                            <c:if test="${!empty calendarEventForm.teamMapValues}">
-                                              <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
-                                              <c:forEach var="team" items="${calendarEventForm.teamMapValues}">
-                                                <c:if test="${!empty team.members}">
-                                                  <option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
-                                                  <c:forEach var="tm" items="${team.members}">
-                                                    <option value="m:${tm.memberId}" id="t:${team.id}" styleId="t:${team.id}" style="font:italic;font-size:11px;">${tm.memberName}</option>
-                                                  </c:forEach>
-                                                </c:if>
-                                              </c:forEach>
-                                            </c:if>
-                                          </select>
-                                        </td>
-                                        <td>
-		                                	<input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
-		                                  	<br><br>
-		                       			  	<input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <input id="guest" type="text" style="width:150px;">
-                                                <input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
-                                                <digi:trn key="calendar:separateEmails">Please separate email addresses by semicolons</digi:trn>
-                                            </div>
-                                            <div>
-                                              <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 120px;">
-                                                <c:if test="${!empty calendarEventForm.selectedAttsCol}">
-                                                  <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
-                                                </c:if>
-                                              </html:select>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                          <td colspan="10" style="text-align:center;">                            
-                            <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
-                            &nbsp;
-                            <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
-                            &nbsp;                            
-                            <input type="button" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
-                          </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
+															</logic:empty>											
+														</table>
+			                                        </td> 
+			                                        <td>                                        	
+														<table cellSpacing="1" cellPadding="1">
+															<tr>
+																<td style="width: 55px">
+																	<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
+																</td>
+															</tr>
+															<tr>
+																<td style="width: 80px">
+																	<html:button  property="submitButton" onclick="return removeSelOrgs()" style="width:100%">
+																		<digi:trn key="btn:remove">Remove</digi:trn>
+																	</html:button>
+																</td>
+															</tr>
+														</table>											
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td nowrap="nowrap" align="right">
+			                                            <digi:trn key="calendar:Description">Description</digi:trn>
+			                                        </td>
+			                                        <td align="left" width="220px">
+			 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
+			                                        </td>
+			                                    </tr>
+			                                </table>
+			                            </td>
+			                        </tr>
+			                        <tr>
+			                            <td colspan="20" style="text-align:center;">
+			                                <table align="center">
+			                                    <tr>
+			                                        <td >
+			                                            <digi:trn key="calendar:Attendee">Attendee</digi:trn>
+			                                        </td>
+			                                    </tr>
+			                                    <tr>
+			                                        <td>
+			                                          <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width: 220px; height: 150px;">
+			                                            <c:if test="${empty calendarEventForm.teamMapValues}">
+			                                              <option value="-1">No receivers</option>
+			                                            </c:if>
+			                                            <c:if test="${!empty calendarEventForm.teamMapValues}">
+			                                              <option value="all" ><digi:trn key="message:AllTeams">All</digi:trn></option>
+			                                              <c:forEach var="team" items="${calendarEventForm.teamMapValues}">
+			                                                <c:if test="${!empty team.members}">
+			                                                  <option value="t:${team.id}" style="font-weight: bold;background:#CCDBFF;font-size:11px;">---${team.name}---</option>
+			                                                  <c:forEach var="tm" items="${team.members}">
+			                                                    <option value="m:${tm.memberId}" id="t:${team.id}" styleId="t:${team.id}" style="font:italic;font-size:11px;">${tm.memberName}</option>
+			                                                  </c:forEach>
+			                                                </c:if>
+			                                              </c:forEach>
+			                                            </c:if>
+			                                          </select>
+			                                        </td>
+			                                        <td>
+					                                	<input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+					                                  	<br><br>
+					                       			  	<input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
+			                                        </td>
+			                                        <td>
+			                                            <div>
+			                                                <input id="guest" type="text" style="width:150px;">
+			                                                <input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
+			                                                <digi:trn key="calendar:separateEmails">Please separate email addresses by semicolons</digi:trn>
+			                                            </div>
+			                                            <div>
+			                                              <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 120px;">
+			                                                <c:if test="${!empty calendarEventForm.selectedAttsCol}">
+			                                                  <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
+			                                                </c:if>
+			                                              </html:select>
+			                                            </div>
+			                                        </td>
+			                                    </tr>
+			                                </table>
+			                            </td>
+			                        </tr>
+			                        <tr>
+			                          <td colspan="10" style="text-align:center;">                            
+			                            <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
+			                            &nbsp;
+			                            <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            &nbsp;                            
+			                            <input type="button" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                          </td>
+			                        </tr>
+			                    </table>
+			                </div>
+			            </td>
         </tr>       
 				</table>
 			</td>

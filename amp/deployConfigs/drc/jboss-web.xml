@@ -1,9 +1,9 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>drc.ampdev.net</virtual-host>
+<virtual-host>localhost</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
- com.example:loader=amp-drc.war
+ com.example:loader=amp.war
  <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
  </loader-repository>
  </class-loading>

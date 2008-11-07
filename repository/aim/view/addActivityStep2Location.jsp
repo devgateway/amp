@@ -86,12 +86,21 @@
                                               	<c:set var="translation">
 														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="location.implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+													
+													
+													<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
+													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+												                                             	
+                                              		<input type="hidden" name="location.implemLocationLevel" value="${location.implemLocationLevel}">
 												                                             	
                                               	<script language="Javascript">
-
-                                              	var implemLocationLevelSelect = document.getElementsByName("location.implemLocationLevel")[0];
-                                              	implemLocationLevelSelect.onchange = removeAllLocations;
+												var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+                                              		implemLocationLevelSelect.onchange=function(){
+                                              			document.getElementsByName("location.implemLocationLevel")[0].value=implemLocationLevelSelect.value;
+                                              			removeAllLocations();
+                                              	}
+                                              	
+                                              	
                                               	</script>
 											</td>
                                             </tr>

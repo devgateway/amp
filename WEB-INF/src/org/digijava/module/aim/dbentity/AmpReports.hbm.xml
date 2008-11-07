@@ -53,7 +53,7 @@
 			</composite-element>
 		</set>
 
-		<set name="hierarchies" table="AMP_REPORT_HIERARCHY" lazy="true">
+		<set name="hierarchies" table="AMP_REPORT_HIERARCHY" lazy="false">
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportHierarchy">
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
@@ -64,7 +64,7 @@
 			</composite-element>
 		</set>
 
-		<set name="measures" table="AMP_REPORT_MEASURES">
+		<set name="measures" table="AMP_REPORT_MEASURES" lazy="false">
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"
@@ -73,7 +73,7 @@
 			</composite-element>
 		</set>
 
-		<set name="reportMeasures" table="AMP_REPORT_XLEVEL_MEASURES">
+		<set name="reportMeasures" table="AMP_REPORT_XLEVEL_MEASURES" lazy="false">
 			<key column="amp_report_id" />
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"

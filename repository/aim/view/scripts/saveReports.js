@@ -69,22 +69,26 @@ SaveReportEngine.prototype.success		= function (o) {
 		this.panel.setBody( o.responseText );
 	}
 	else {
-		if ( this.overwritingReport )
-			window.location.replace(window.location);
-		else {
-			var message		= null;
-			if ( this.isTab )
+		var message		= null;
+		if ( this.isTab )
+			if ( this.overwritingReport )
+				message	= SaveReportEngine.tabSavedMessage;
+			else
 				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkTabsMessage;
+		else {
+			if ( this.overwritingReport )
+				message	= SaveReportEngine.reportSavedMessage;
 			else {
 				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkReportsMessage;
 				if ( window.opener.location.href != null && 
 						window.opener.location.href.indexOf("viewTeamReports.do") > 0 )
 						window.opener.location.replace(window.opener.location.href)
 			}
-				
-			this.panel.setBody( message );
-			this.doneCopyMessage	
 		}
+			
+		this.panel.setBody( message );
+		this.doneCopyMessage	
+	
 	}
 }
 

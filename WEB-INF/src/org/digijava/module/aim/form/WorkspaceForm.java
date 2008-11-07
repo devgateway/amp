@@ -10,6 +10,36 @@ public class WorkspaceForm extends ActionForm {
 	private Collection pages;
 
 	private int page;
+	
+	private String workspaceType="all";
+	
+	private int numPerPage=-1;
+	
+	private String keyword;
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public int getNumPerPage() {
+		return numPerPage;
+	}
+
+	public void setNumPerPage(int numPerPage) {
+		this.numPerPage = numPerPage;
+	}
+
+	public String getWorkspaceType() {
+		return workspaceType;
+	}
+
+	public void setWorkspaceType(String workspaceType) {
+		this.workspaceType = workspaceType;
+	}
 
 	/**
 	 * @return Returns the page.

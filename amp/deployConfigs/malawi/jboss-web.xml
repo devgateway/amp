@@ -11,6 +11,6 @@
  <resource-ref>
  	<res-ref-name>java:malawiDS</res-ref-name>
 	<res-type>javax.sql.DataSource</res-type>
-	<jndi-name>java:localDS</jndi-name>
+	<jndi-name>java:malawiDS</jndi-name>
 </resource-ref>
 </jboss-web>

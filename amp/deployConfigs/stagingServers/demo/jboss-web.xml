@@ -1,14 +1,13 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>localhost</virtual-host>
+<virtual-host>demo.staging.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
- com.example:loader=amp.war
+ com.example:loader=amp-demo-staging.war
  <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
  </loader-repository>
  </class-loading>
-
- <resource-ref>
+  <resource-ref>
  	<res-ref-name>java:demoStagingDS</res-ref-name>
 	<res-type>javax.sql.DataSource</res-type>
 	<jndi-name>java:demoStagingDS</jndi-name>

@@ -324,26 +324,6 @@ public class HelpUtil {
 	}
 	return helpTopics;
 }
-
-
-	
-	public static String body(String key) {
-		Session session = null;
-		String queryString = null;
-		Query q = null;
-		String helpTopics = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			queryString = "select e.body from e in class " + Editor.class.getName() +" where e.editorKey like '%"+key+"'";
-			q = session.createQuery(queryString);
-			helpTopics = q.list().get(0).toString();
-		}catch (Exception ex) {
-			logger.error("Unable to get currency name", ex);
-		} 
-		
-		return helpTopics;
-	}	
 	
     public static Collection getAllHelpData() throws 
     EditorException {

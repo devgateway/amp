@@ -102,6 +102,7 @@ public class HelpActions extends DispatchAction {
 public ActionForward getbody(ActionMapping mapping,
 		ActionForm form, HttpServletRequest request,
 		HttpServletResponse response)throws Exception{
+	String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
 	HelpForm helpForm = (HelpForm) form;
 	OutputStreamWriter os = null;	
     PrintWriter out = null;
@@ -111,9 +112,18 @@ public ActionForward getbody(ActionMapping mapping,
 		if(loadStatus != null){
 			os = new OutputStreamWriter(response.getOutputStream());
 			out = new PrintWriter(os, true);
-			String key = loadStatus.toLowerCase();
-			String body = HelpUtil.body(key);
-			out.println(body);
+			String id = loadStatus.toLowerCase();
+			HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
+			String bodyKey =  key.getBodyEditKey();
+			List editor = HelpUtil.getEditor(bodyKey, lang);
+			
+			if(!editor.isEmpty()){
+				Iterator iter = editor.iterator();
+				while (iter.hasNext()) {
+					Editor help = (Editor) iter.next();
+					out.println(help.getBody());
+				}
+			}
 		}
 		out.flush();
 		out.close();

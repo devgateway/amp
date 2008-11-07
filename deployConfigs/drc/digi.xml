@@ -5,8 +5,8 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 
-    <logon-site id="dglogin" host="amp-login.code.ro">http://drc.ampdev.net/login</logon-site>
-        <site-domain id="dgDomain" host="drc.ampdev.net">http://drc.ampdev.net/</site-domain>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-drc.local:8080/login</logon-site>
+        <site-domain id="dgDomain" host="drc.ampdev.net">http://amp-drc.local:8080/</site-domain>
     
         <server-type caseSensitiveTranslatioKeys="false"/>
     
@@ -36,7 +36,7 @@
     <!-- Enable/disable AccessLogger -->
 	<enable-logging>true</enable-logging>
 	
-	<enable-autologin>true</enable-autologin>
+	<enable-autologin>false</enable-autologin>
 
 	<!-- Hibernate class -->
 	<hibernate-classes required="false">              

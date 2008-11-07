@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config>
+<secondary-pages>
+	<page name="mainreport" title="Mondrian Analisys"/>
+	<page name="testpage" title="Mondrian Analisys"/>
+</secondary-pages>
+</config>

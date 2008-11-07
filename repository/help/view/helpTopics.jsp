@@ -77,8 +77,8 @@
 
 	function tonclick(id){
 			if(id != null){
-					var key = tree.getItemText(id);
-					show(key);
+					var id = tree.getSelectedItemId();
+					show(id);
 			 	}
 			}
 
@@ -92,7 +92,6 @@
 			    xml+= '<%= HelpUtil.renderTopicTree(topic,request,false) %>';
 			    xml+='</tree>';
 		    tree.loadXMLString(xml);
-
 
 	function show(str){
 	

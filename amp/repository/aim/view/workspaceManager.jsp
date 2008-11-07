@@ -74,7 +74,7 @@
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
-					<tr><td noWrap width=600 vAlign="top">
+					<tr><td noWrap width="750" vAlign="top">
 						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
@@ -87,20 +87,22 @@
 											</digi:trn>
 											<!-- end table title -->
 										</td></tr>
+										<tr><td>&nbsp;</td></tr>
+										
 										<digi:form action="/workspaceManager.do" method="post">
-										<tr><td class="box-title" height="20" align="center">
+										<tr><td class="box-title" align="center">
 											<!-- Table title -->
 											<table width="100%" >
 												<tr>
 													<td>
 													<digi:trn key="aim:keyword">
 										              keyword
-										             </digi:trn>:
+										             </digi:trn>:&nbsp;
 										              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
 													</td>
 													
-													<td>
-														<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>&nbsp;
+													<td align="center">
+														<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>:&nbsp;
 														<html:select property="workspaceType" styleClass="inp-text">
 															<html:option value="all"><digi:trn key="aim:all">All</digi:trn></html:option>
 															<html:option value="team"><digi:trn key="aim:team">Team</digi:trn></html:option>
@@ -109,8 +111,8 @@
 														</html:select>
 													</td>
 													
-													<td>
-														<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+													<td align="center">
+														<digi:trn key="aim:results">Results</digi:trn>:&nbsp;
 														<html:select property="numPerPage" styleClass="inp-text">
 															<html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
 															<html:option value="5">5</html:option>
@@ -120,7 +122,7 @@
 														</html:select>
 													</td>
 													
-													<td>
+													<td align="right">
 													<c:set var="translation">
 										                <digi:trn key="aim:showButton">
 										                Show
@@ -135,7 +137,7 @@
 											<!-- end table title -->
 										</td></tr>
 										</digi:form>
-										
+										<tr><td>&nbsp;</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
 													<logic:empty name="aimWorkspaceForm" property="workspaces">

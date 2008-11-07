@@ -10,6 +10,7 @@
 
 <script type="text/javascript">
 function submitFilterForm(view, timestamp) {
+	changeState();	
   var form = document.getElementById('filterForm');
   if (form != null) {
     form.view.value = view;

@@ -556,7 +556,13 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (!arf.isWidget()) {
 			categorizeData();
 		}
-		if ( reportMetadata.getAllowEmptyFundingColumns()==null || !reportMetadata.getAllowEmptyFundingColumns())
+		
+		/**
+		 * If we handle a normal report (not tab) and allowEmptyColumns is not set then we need to remove 
+		 * empty funding columns
+		 */
+		if ( ( reportMetadata.getDrilldownTab()==null || !reportMetadata.getDrilldownTab() ) && 
+				( reportMetadata.getAllowEmptyFundingColumns()==null || !reportMetadata.getAllowEmptyFundingColumns() ) )
 				rawColumns.removeEmptyChildren(true);
 
 		report = new GroupReportData(reportMetadata.getName());

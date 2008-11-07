@@ -539,8 +539,15 @@ public class GroupColumn extends Column {
 		boolean allEmpty		= true;
 		while ( iter.hasNext() ) {
 			Column col			= iter.next();
-			if ( checkFunding && !ArConstants.COLUMN_FUNDING.equals(col.name))
+			if ( checkFunding && !ArConstants.COLUMN_FUNDING.equals(col.name)) {
 				continue;
+			}
+			if ( checkFunding && col.getItems().size() == 1 ) {
+				Column child 	= (Column) col.getItems().get(0);
+				if ( ArConstants.COLUMN_FUNDING.equals(child.name) )
+					iter.remove();
+				continue;
+			}
 			if ( col.removeEmptyChildren(false) ) {
 				if (col instanceof GroupColumn)
 					iter.remove();

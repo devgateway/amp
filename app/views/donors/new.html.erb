@@ -1,14 +1,4 @@
-<center>
-	<% odaform_for @donor do |f| %>
-		<table width="740" class="list">
-			<tr>
-				<td class="title" colspan=2><%= lc(:title) %></td>
-			</tr>
-			<%= render :partial => 'form', :locals => {:f => f} %>
-			<tr>
-				<td><%= f.submit %></td>
-			</tr>
-		</table>
-	<% end %>
-	<p><b><%= link_to ll(:actions, :back), donors_path %></b>&nbsp;</p>
-</center>
+<h2><%= lc(:title) %></h2>
+		
+<%= render :partial => 'form' %>
+<p><b><%= link_to ll(:actions, :back), donors_path %></b>&nbsp;</p>

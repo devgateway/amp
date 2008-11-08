@@ -7,7 +7,7 @@ class Province < ActiveRecord::Base
   
   has_and_belongs_to_many :sector_details
   
-  named_scope :ordered, :order => "id ASC"
+  named_scope :ordered, :order => "name ASC"
     
   def self.list
     ActiveSupport::Deprecation.warn("named_scope :ordered should be used here!")

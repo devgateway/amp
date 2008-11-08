@@ -1,16 +1,4 @@
-<% odaform_for @glossary do |f| %>
-	<center>
-		<table width="740" class="list">
-			<tr>
-				<td class="title" colspan=2><%= lc(:title) %></td>
-			</tr>
+<h2><%= lc(:title) %></h2>
 
-			<%= render :partial => 'form', :locals => {:f => f} %>
-
-			<tr>
-				<td class="sub_button" colspan=2><center><%= f.submit %></center></td>
-			</tr>
-		</table>
-	</center>
-<% end %>
+<%= render :partial => 'form' %>
 <p><b><%= link_to ll(:actions, :back), glossaries_path %></b>&nbsp;</p>

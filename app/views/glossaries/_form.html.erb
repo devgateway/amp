@@ -1,6 +1,10 @@
-<!--[form:glossary]-->
-<%= f.select :model, @models.map { |n| [n, n] } %>
-<%= f.text_field :method %>
-<%= f.text_field :locale %>
-<%= f.text_area :description %>
-<!--[eoform:glossary]-->
+<% odaform_for @glossary do |f| %>
+	<table>
+		<%= f.select :model, @models.map { |n| [n, n] } %>
+		<%= f.text_field :method %>
+		<%= f.text_field :locale %>
+		<%= f.text_area :description %>
+		
+		<%= f.submit %>
+	</table>
+<% end %>

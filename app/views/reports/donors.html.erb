@@ -1,33 +1,30 @@
-<table class="admin">
+<%# TODO: Add total projects number to reports again %>
+<h2><%= lc(:title) %></h2>
+
+<table>	
 	<tr>
-		<td class="title" colspan=4><b><%= lc(:title) %></b></td>
-	</tr>	
-	<tr>
-		<td colspan=4><b><%= Project.published.size %> <%= ll(:reports, :projects_counter) %></b></td>
-	</tr>	
-	<tr>
-		<td class="sub_title"><b><%= ll(:terms, :donor) %></b></td>
-		<td class="sub_title"><b><%= ll(:reports, :no_projects) %></b></td>
-		<td class="sub_title"><b><%= ll(:reports, :list) %></b></td>
-		<td class="sub_title"><b><%= ll(:terms, :map) %></b></td>
-</tr>
-<% @donors.each do |donor| %>
-	<% projects = donor.projects.published %>
-	<tr>
-		<td><%= donor.name %></td>
-		<td><%= projects.size %></td>
-		<td align='center'>
-			<% if projects.many? %>
-				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
-					:controller => "reports", :action => "project_list", :query => "donor", 
-					:value => donor.id) %>
-			<% else %>
-				<%= link_to(image_tag("/images/details.gif", :size => "14x15", :border => 0), 
-					project_path(projects.first, :report => true), 
-					:popup => ['Project Details', 'height=600,width=800']) %>
-			<% end %>
-		</td>
+		<th><%= ll(:terms, :donor) %></th>
+		<th><%= ll(:reports, :no_projects) %></th>
+		<th><%= ll(:reports, :list) %></th>
+		<th><%= ll(:terms, :map) %></th>
 	</tr>
-<% end %>
+	<% @donors.each do |donor| %>
+		<% projects = donor.projects.published %>
+		<tr>
+			<td><%= donor.name %></td>
+			<td><%= projects.size %></td>
+			<td>
+				<% if projects.many? %>
+					<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+						:controller => "reports", :action => "project_list", :query => "donor", 
+						:value => donor.id) %>
+				<% else %>
+					<%= link_to(image_tag("/images/details.gif", :size => "14x15", :border => 0), 
+						project_path(projects.first, :report => true), 
+						:popup => ['Project Details', 'height=600,width=800']) %>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
 
 </table>

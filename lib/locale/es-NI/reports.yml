@@ -57,7 +57,7 @@ es-NI:
           title: Proyectos por Región
           show_municipalities: Mostrar Municipios
       location_detail:
-          title: Proyectos por Municipios
+          title: Proyectos de <i>{{province_name}}</i> por Municipios
       mdgs:
           title: Proyectos por ODM
       custom:

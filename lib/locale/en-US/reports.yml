@@ -57,7 +57,7 @@ en-US:
         title: Projects by Region
         show_municipalities: Show Municipalities
     location_detail:
-        title: Projects by Municipality
+        title: Projects of <i>{{province_name}}</i> by Municipality
     mdgs:
         title: Projects by MDG
     custom:

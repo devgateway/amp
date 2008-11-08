@@ -1,9 +1,6 @@
 <% js_behavior :related_selects %>
-
 <% odaform_for @project do |f| %>
-	<table width="740" class="admin">
-		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
-		
+	<table>
 		<% f.labeled_row :dac_crs_sector do %>
 			<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
 			<%= collection_select(:project, :dac_sector_id, sectors, :id, :name_with_code, 

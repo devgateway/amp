@@ -1,3 +1,4 @@
+<h2><%= lc(:title, :project => @project.donor_project_number) %></h2>
 <%= render :partial => "#{@project.aasm_current_state}_form" %>
 	
 <center>

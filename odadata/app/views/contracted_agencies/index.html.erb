@@ -1,20 +1,17 @@
-<center>
-	<table width="740" class="list">
-		<% if @contracted_agencies.blank? %>
-			<tr>
-				<td class="exist"><%= lc(:empty) %></td>
-			</tr>
-		<% else %>
-			<tr>
-				<td class="title" colspan=2><%= lc(:title) %></td>
-			</tr>
-			<% @contracted_agencies.each do |agency| %> 
-				<tr>
-					<td width=90%><%= agency.name %></td>
-					<td width=10%><%= link_to ll(:actions, :edit), edit_contracted_agency_path(agency) %></td>
-				</tr>
-			<% end %>
-		<% end %>
-	</table>
+<h2><%= lc(:title) %></h2>
+
+<table>
+	<% if @contracted_agencies.blank? %>
+ 		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+ 	<% else %>	
+ 		<% @contracted_agencies.each do |agency| %> 
+ 		<tr>
+ 			<td><%= agency.name %></td>
+ 			<td><%= link_to ll(:actions, :edit), edit_contracted_agency_path(agency) %></td>
+ 		</tr>
+ 		<% end %>
+ 		
+ 	<% end %>
+</table>
+	
 <p><b><%= link_to lc(:new), new_contracted_agency_path %></b></p>
-</center>

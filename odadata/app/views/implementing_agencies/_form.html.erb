@@ -1,1 +1,4 @@
-<%= f.text_field :name %>
+<% odaform_for @implementing_agency do |f| %>
+	<%= f.text_field :name %>
+	<%= f.submit %>
+<% end %>

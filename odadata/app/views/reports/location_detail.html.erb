@@ -1,14 +1,10 @@
-<table class="admin">
+<h2><%= lc(:title, :province_name => @province.name) %></h2>
+
+<table>
 	<tr>
-		<td class="title" colspan=4><b><%= lc(:title) %> (<%= @province.name %>)</b></td>
-	</tr>	
-	<tr>
-		<td colspan=4><b><%= Project.published.size %> <%= ll(:reports, :projects_counter) %></b></td>
-	</tr>	
-	<tr>
-		<td class="sub_title"><b><%= ll(:terms, :municipality) %></b></td>
-		<td class="sub_title"><b><%= ll(:reports, :no_projects) %></b></td>
-		<td class="sub_title"><b><%= ll(:reports, :list) %></b></td>
+		<th><%= ll(:terms, :municipality) %></th>
+		<th><%= ll(:reports, :no_projects) %></th>
+		<th><%= ll(:reports, :list) %></th>
 	</tr>
 	
 	<% @districts.each do |district| %>
@@ -16,7 +12,7 @@
 		<tr>
 			<td><%= district.name %></td>
 			<td><%= projects.size %></td>
-			<td align='center'>
+			<td>
 				<% if projects.many? %>
 					<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
 						{ :controller => "reports", :action => "project_list", :query => "sub_location", :value => district.id }, 

@@ -1,5 +1,10 @@
-<%= f.text_field :name %>
-<%= f.check_box :cofunding_only %>
-<%= f.text_field :code %>
-<%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
-	
+<% odaform_for @donor do |f| %>
+	<table>
+		<%= f.text_field :name %>
+		<%= f.check_box :cofunding_only %>
+		<%= f.text_field :code %>
+		<%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
+		
+		<%= f.submit %>
+	</table>
+<% end %>

@@ -1,33 +1,29 @@
-<center>
-	<table width="740" class="list">
-		<% if @donors.blank? %>
+<h2><%= lc(:title) %></h2>
+
+<table>
+	<% if @donors.blank? %>
+		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+	<% else %>
+		<tr>
+			<th><%= ll(:donor, :name) %></th>
+			<th><%= ll(:donor, :cofunding_only) %></th>
+			<th><%= ll(:donor, :currency) %></th>
+			<th> </th>
+			<th> </th>	
+			<th> </th>		
+		</tr>
+		<% for donor in @donors %> 
 			<tr>
-				<td class="exist"><%= lc(:empty) %></td>
+				<td><%= donor.name %></td>
+				<td><%= donor.cofunding_only ? "yes" : "no" %></td>
+				<td><%= null_to_na(donor.currency) %></td>
+				<td><%= link_to ll(:actions, :edit), edit_donor_path(donor) %></td>
+				<td><%= link_to lc(:agencies, :total => donor.agencies.size), 
+						donor_agencies_path(donor) unless donor.cofunding_only? %></td>
+				<td><%= link_to lc(:logins), donor_users_path(donor) unless donor.cofunding_only? %></td>
 			</tr>
-		<% else %>
-			<tr>
-				<td class="head2" colspan=6><%= lc(:title) %></td>
-			</tr>
-			<tr>
-				<td class="title"><%= ll(:donor, :name) %></td>
-				<td class="title"><%= ll(:donor, :cofunding_only) %></td>
-				<td class="title"><%= ll(:donor, :currency) %></td>
-				<td class="title"> </td>
-				<td class="title"> </td>	
-				<td class="title"> </td>		
-			</tr>
-			<% for donor in @donors %> 
-				<tr>
-					<td><%= donor.name %></td>
-					<td><%= donor.cofunding_only ? "yes" : "no" %></td>
-					<td><%= null_to_na(donor.currency) %></td>
-					<td><%= link_to ll(:actions, :edit), edit_donor_path(donor) %></td>
-					<td><%= link_to lc(:agencies, :total => donor.agencies.size), 
-							donor_agencies_path(donor) unless donor.cofunding_only? %></td>
-					<td><%= link_to lc(:logins), donor_users_path(donor) unless donor.cofunding_only? %></td>
-				</tr>
-			<% end %>
 		<% end %>
-	</table>
-	<p><b><%= link_to lc(:new), new_donor_path %></b></p>
-</center>
+	<% end %>
+</table>
+
+<p><b><%= link_to lc(:new), new_donor_path %></b></p>

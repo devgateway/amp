@@ -1,7 +1,5 @@
 <% odaform_for @project do |f| %>
-	<table width="740" class="admin">
-		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
-		
+	<table>	
 		<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
 			<tr>
 				<td class="title" colspan="2"><%= ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></td>

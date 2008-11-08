@@ -1,7 +1,5 @@
 <% odaform_for @project do |f| %>
-	<table width="740" class="admin">
-		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
-	
+	<table>
 		<% Time.now.year.upto(Time.now.year+Project::FORECAST_RANGE) do |y| %>
 			<%= f.title lc(:forecasts_title, :year => y) %>
 			<% f.fields_for_associated @project.funding_forecasts.find_or_initialize_by_year(y) do |fa| -%>

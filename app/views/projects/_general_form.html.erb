@@ -1,7 +1,5 @@
 <% odaform_for @project do |f| %>
-	<table width="740" class="admin">
-		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
-
+	<table>
 		<%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name", 
 								:required => true, :prompt => I18n.t('options.prompt') %>
 		

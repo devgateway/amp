@@ -1,7 +1,5 @@
 <% odaform_for @project do |f| %>
-	<table width="740" class="admin">
-		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
-		
+	<table>		
 		<%= f.select :biodiversity_marker, Project::MARKER_OPTIONS %>
 		<%= f.select :climate_change_marker, Project::MARKER_OPTIONS %>
 		<%= f.select :desertification_marker, Project::MARKER_OPTIONS %>
@@ -10,6 +8,5 @@
 		<%= f.select :environment_policy_marker, Project::MARKER_OPTIONS %>
     	
 		<%= render :partial => 'control_buttons' %>
-	
 	</table>
 <% end %>

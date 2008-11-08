@@ -1,12 +1,8 @@
-<table class="admin">
-	<tr>
-		<td colspan=8 class="title"><%= lc(:title, :status => option_text_by_id(Project::DATA_STATUS_OPTIONS, @status)) %></td>
-	</tr>
-	
+<h2><%= lc(:title, :status => option_text_by_id(Project::DATA_STATUS_OPTIONS, @status)) %></h2>
+
+<table>
 	<% if @projects.blank? then %>
-		<tr>
-			<td class="title"><center><%= lc(:empty) %></center></td>
-		</tr>
+		<tr><td class="empty"><%= lc(:empty) %></td></tr>
 	<% else %>
 		<tr>
 			<th><%= lc(:factsheet) %></th>

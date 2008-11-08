@@ -1,9 +1,7 @@
 <% js_behavior :related_selects %>
 
 <% odaform_for @project do |f| %>
-	<table width="740" class="admin">
-		<tr><td class="title" colspan=2><%= lc(:title, :project => @project.donor_project_number) %></td></tr>
-		
+	<table>		
 		<tr><td>
 			<div id="geo_information">
 				<%= render :partial => 'relevant_area', :collection => (@project.provinces.blank? ? [Province.new] : @project.provinces) %>

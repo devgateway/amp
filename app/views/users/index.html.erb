@@ -1,22 +1,22 @@
-<center>
-	<table width="740" class="admin">
-		<tr>
-			<td class="title" colspan=4><%= lc(:title) %></td>
-		</tr>
-		<tr>
-			<td class="title"><%= lc(:name) %></td>
-			<td class="title"><%= lc(:role) %></td>
-			<td class="title"> </td>
-			<td class="title"> </td>			
-		</tr>
-			<% @users.each do |user| %>
-				<tr>
-					<td><%= user.name %></td>
-					<td><%= user.role.description %></td>
-					<td><%= link_to lc(:edit), edit_user_path(user) %></td>
-					<td><%= link_to lc(:delete), user_path(user), :method => 'delete' %></td>
-				</tr>
-			<% end %>
-	</table>
-	<p><b><%= link_to lc(:new), @donor.nil? ? new_user_path : new_donor_user_path(@donor) %></b></p>
-</center>
+<h2><%= lc(:title) %></h2>
+
+<table>
+	<tr>
+		<th><%= lc(:name) %></th>
+		<th><%= lc(:role) %></th>
+		<th> </th>
+		<th> </th>			
+	</tr>
+	
+	<% @users.each do |user| %>
+	<tr>
+		<td><%= user.name %></td>
+		<td><%= user.role.description %></td>
+		<td><%= link_to lc(:edit), edit_user_path(user) %></td>
+		<td><%= link_to lc(:delete), user_path(user), :method => 'delete' %></td>
+	</tr>
+	<% end %>
+	
+</table>
+
+<p><b><%= link_to lc(:new), @donor.nil? ? new_user_path : new_donor_user_path(@donor) %></b></p>

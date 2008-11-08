@@ -10,8 +10,9 @@ class Donor < ActiveRecord::Base
   
   has_many :cofundings
   has_many :cofinanced_projects, :through => :cofundings, :source => :project
-  has_many :consistency_finances, :class_name => "ConsistencyFinances"
   
+  has_many :accessible_fundings
+  has_many :accessible_forecasts
   
   ##
   # Validation
@@ -36,6 +37,8 @@ class Donor < ActiveRecord::Base
   # can be accessed as an array (e.g. Donor.annual_commitments[2007])
   # Forecasts are *not* included!
   def annual_commitments
+    # Thanks to new solutions, this can be written as:
+    # accessible_fundings.in_currency("SEK").find(:all, :select => 'SUM(commitments) AS commitments, year', :group => 'year')
     # Use lazy loading to minimize database queries
     @annual_commitments ||= Funding.find(:all, 
       :select=>'SUM(fundings.commitments) AS total_commitments, fundings.year as year',

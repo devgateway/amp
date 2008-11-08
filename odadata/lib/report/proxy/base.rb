@@ -41,21 +41,21 @@ module Report
       end
             
       def total_payments(year = nil)
-        ["#{ll(:reports, :disbursements_td)} #{year}", @target.total_payments(year).andand.in("EUR")]
+        ["#{ll(:reports, :disbursements_td)} #{year}", @target.total_payments(year).andand.in(Prefs.default_currency)]
       end
       
       def total_commitments(year = nil)
-        ["#{ll(:reports, :commitments_td)} #{year}", @target.total_commitments(year).andand.in("EUR")]
+        ["#{ll(:reports, :commitments_td)} #{year}", @target.total_commitments(year).andand.in(Prefs.default_currency)]
       end
       
       def payments_forecast(year)
         ["Payments Forecast #{year}", 
-          (@target.funding_forecasts.find_by_year(year).andand.payments.andand.in("EUR"))]
+          (@target.funding_forecasts.find_by_year(year).andand.payments.andand.in(Prefs.default_currency))]
       end
       
       def commitments_forecast(year)
         ["Commitments Forecast #{year}", 
-          (@target.funding_forecasts.find_by_year(year).andand.commitments.andand.in("EUR"))]
+          (@target.funding_forecasts.find_by_year(year).andand.commitments.andand.in(Prefs.default_currency))]
       end
       
       def dac_sector

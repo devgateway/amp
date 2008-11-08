@@ -108,6 +108,20 @@ module ReportsHelper
     link_to(text, url, :popup => ["_blank", 'height=700,width=800,scrollbars=yes,resizable=yes'])
   end
   
+  # This helper provides a link to either the factsheet of a project if there is only one
+  # or a report of all projects
+  def projects_list_link(parent_class)
+    if parent_class.projects.published.many?
+      reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+  			:controller => "reports", :action => "project_list", :query => parent_class.class.to_s, 
+  			:value => parent_class.id)
+  	else
+  	  link_to(image_tag("/images/details.gif", :size => "14x15", :border => 0), 
+  			project_path(parent_class.projects.published.first, :report => true), 
+  			:popup => ['Project Details', 'height=600,width=800'])
+  	end
+  end
+  	
   # Adds the currency selector dropdown to the page, if we are in report mode
   def currency_selector
     if params[:report]

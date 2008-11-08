@@ -17,15 +17,13 @@ Rails::Initializer.run do |config|
   # Gem Dependencies
   config.gem "rubyist-aasm", :source => 'http://gems.github.com', :lib => "aasm"
   config.gem "andand"
-  
-  ##
-  # Observers
-  #config.active_record.observers = :user_observer
-  
-  
+    
   # Add any subdirectories of app/models to the load path, so that we can use
   # sort of pseudo namespacing.
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]
+  
+  # Add reports directory to the load path
+  config.load_paths << "#{RAILS_ROOT}/app/reports"
 end
 
 # Custom validation error handling

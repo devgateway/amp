@@ -33,8 +33,6 @@ class Project < ActiveRecord::Base
   # Relations
   belongs_to              :donor
   belongs_to              :donor_agency
-  has_many                :cofundings
-  has_many                :cofinancing_donors, :through => :cofundings, :source => :donor
   
   belongs_to              :country_strategy
   
@@ -59,10 +57,14 @@ class Project < ActiveRecord::Base
   
   # Funding Information
   has_many                :cofundings, :dependent => :delete_all, :attributes => true, :discard_if => :blank?
+  has_many                :cofinancing_donors, :through => :cofundings, :source => :donor
+  
   has_many                :fundings, :attributes => true, :extend => AggregatedFundings, :dependent => :delete_all
   has_many                :funding_forecasts, :attributes => true, :dependent => :delete_all
   has_one                 :historic_funding, :dependent => :delete
   
+  has_many                :accessible_fundings
+  has_many                :accessible_forecasts
   
   ##
   # State machine for step by step data input

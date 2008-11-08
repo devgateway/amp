@@ -1,25 +1,25 @@
 class ReportsController < ApplicationController
 
   def donors
-    @donors = Donor.main.ordered.all.select { |d| d.projects.size > 0 }
+    @donors = Donor.main.ordered.all.select { |d| d.projects.published.size > 0 }
   end
   
   def sectors
-    @sectors = DacSector.ordered.all.select { |d| d.projects.size > 0 }
+    @sectors = DacSector.ordered.all.select { |d| d.projects.published.size > 0 }
   end
   
   def mdgs
-    @mdgs = Mdg.ordered.all.select { |d| d.projects.size > 0 }
+    @mdgs = Mdg.ordered.all.select { |d| d.projects.published.size > 0 }
   end
   
   def locations
     if params[:id]
       @province = Province.find(params[:id])
-      @districts = @province.districts.select { |d| d.projects.size > 0 }
+      @districts = @province.districts.select { |d| d.projects.published.size > 0 }
       
       render :action => "location_detail"
     else
-      @provinces = Province.ordered.all.select { |d| d.projects.size > 0 }
+      @provinces = Province.ordered.all.select { |d| d.projects.published.size > 0 }
       @national = Project.published.all
     end
   end

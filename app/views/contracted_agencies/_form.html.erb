@@ -1,1 +1,6 @@
-<%= f.text_field :name %>
+<% odaform_for @contracted_agency do |f| %>
+	<table>
+		<%= f.text_field :name %>
+		<%= f.submit %>
+	</table>
+<% end%>

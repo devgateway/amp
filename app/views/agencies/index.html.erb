@@ -1,32 +1,28 @@
-<center>
-	<table width="740" class="list">
-		<% if @agencies.blank? %>
+<h2><%= lc(:title, :donor => @donor.name) %></h2>
+
+<table>
+	<% if @agencies.blank? %>
+		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+	<% else %>
+		<tr>
+			<th><%= ll(:donor_agency, :code) %></th>
+			<th><%= ll(:donor_agency, :name) %></th>
+			<th><%= ll(:donor_agency, :acronym) %></th>		
+			<th> </th>		
+			<th> </th>		
+		</tr>
+		<% for agency in @agencies %> 
 			<tr>
-				<td class="exist"><%= lc(:empty) %></td>
+				<td><%= agency.code %></td>
+				<td><%= agency.name %></td>
+				<td><%= agency.acronym %></td>
+				<td><%= link_to ll(:actions, :edit), edit_agency_path(agency) %></td>
+				<td><%= link_to ll(:actions, :delete), agency_path(agency), :method => 'delete', 
+						:confirm => lc(:confirm_delete, :agency => agency.name) %>
+				</td>
 			</tr>
-		<% else %>
-			<tr>
-				<td class="head2" colspan=5><%= lc(:title, :donor => @donor.name) %></td>
-			</tr>
-			<tr>
-				<td class="title"><%= ll(:donor_agency, :code) %></td>
-				<td class="title"><%= ll(:donor_agency, :name) %></td>
-				<td class="title"><%= ll(:donor_agency, :acronym) %></td>		
-				<td class="title"> </td>		
-				<td class="title"> </td>		
-			</tr>
-			<% for agency in @agencies %> 
-				<tr>
-					<td><%= agency.code %></td>
-					<td><%= agency.name %></td>
-					<td><%= agency.acronym %></td>
-					<td><%= link_to ll(:actions, :edit), edit_agency_path(agency) %></td>
-					<td><%= link_to ll(:actions, :delete), agency_path(agency), :method => 'delete', 
-							:confirm => lc(:confirm_delete, :agency => agency.name) %>
-					</td>
-				</tr>
-			<% end %>
 		<% end %>
-	</table>
-	<p><b><%= link_to lc(:new), new_donor_agency_path(@donor) %></b></p>
-</center>
+	<% end %>
+</table>
+
+<p><b><%= link_to lc(:new), new_donor_agency_path(@donor) %></b></p>

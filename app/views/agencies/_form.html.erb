@@ -1,3 +1,9 @@
-<%= f.text_field :code %>
-<%= f.text_field :name %>
-<%= f.text_field :acronym %>
+<% odaform_for [@donor, @agency].compact do |f| %>
+	<table>
+		<%= f.text_field :code %>
+		<%= f.text_field :name %>
+		<%= f.text_field :acronym %>
+	
+		<%= f.submit %>
+	</table>
+<% end %>

@@ -1,15 +1,7 @@
 <% @user.password = @user.password_confirmation = nil %>
 <%= error_messages_for :user %>
 
-<center>
-	<% odaform_for (@donor.nil? ? @user : [@donor, @user]) do |f| %>
-		<table width="740" class="list">
-			<%= f.title lc(:title) %>
-			<%= render :partial => 'form', :locals => {:f => f} %>
-			<tr>
-				<td><%= f.submit %></td>
-			</tr>
-		</table>
-	<% end %>
-	<p><b><%= link_to ll(:actions, :back), list_path %></b>&nbsp;</p>
-</center>
+<h2><%= lc(:title) %></h2>
+<%= render :partial => 'form' %>
+
+<p><b><%= link_to ll(:actions, :back), list_path %></b>&nbsp;</p>

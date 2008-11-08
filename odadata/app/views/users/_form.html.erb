@@ -1,9 +1,15 @@
-<%= f.text_field :name %>
-<%= f.text_field :email %>
+<% odaform_for [@donor, @user].compact do |f| %>
+	<table>
+		<%= f.text_field :name %>
+		<%= f.text_field :email %>
 
-<%= f.password_field :password %>
-<%= f.password_field :password_confirmation %>
+		<%= f.password_field :password %>
+		<%= f.password_field :password_confirmation %>
 
-<% if false && @donor.nil? %>
-	<%= f.collection_select :role_id, Role.all, :id, :description %>
+		<% if false && @donor.nil? %>
+			<%= f.collection_select :role_id, Role.all, :id, :description %>
+		<% end %>
+		
+		<%= f.submit %>
+	</table>
 <% end %>

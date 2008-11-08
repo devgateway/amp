@@ -1,17 +1,6 @@
-<% odaform_for @country_strategy do |f| %>
-	<center>
-		<table width="740" class="admin">
-			<tr>
-				<td class="title" colspan=2><%= lc(:title) %></td>
-			</tr>
-			
-			<%= render :partial => 'form', :locals => {:f => f} %>
-			
-			<tr>
-				<td class="sub_button" colspan=2><%= f.submit %></td>
-			</tr>
-		</table>
-	</center>
-<% end %>
+<h2><%= lc(:title) %></h2>
+<%= render :partial => 'form' %>
 
-<%= link_to ll(:actions, :back), country_strategies_path %>
+<p><center>
+	<%= link_to ll(:actions, :back), country_strategies_path %>
+</center></p>

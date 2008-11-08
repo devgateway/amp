@@ -1,36 +1,30 @@
-<center>
-	<table width="740" class="admin">
-		<tr>
-			<td class="title" colspan=2>
-				<%= lc(:title) %>
-			</td>
-		</tr>
-		<tr>
-			<td class="sub_title" width=50%><%= ll(:consistency, :donor) %></td>
-			<td width=50%><%= current_donor.name %></td>
-		</tr>
-		<tr>
-			<td class="sub_title"><%= ll(:consistency, :year) %></td>
-			<td><%= select :consistency, :year, 
-					(Time.now.year-5..Time.now.year).to_a.reverse.collect { |y| [y, y] }, {},
-					:onchange => "window.location = '#{request.path}?year=' + this.value" %>
-			</td>			
-		</tr>
-		<tr>
-			<td class="sub_title"><%= ll(:consistency, :total_commitments) %></td>
-			<td class="field_justify"><%= @consistency.total_commitments %></td>			
-		</tr>
-		<tr>
-			<td class="sub_title"><%= ll(:consistency, :total_payments) %></td>
-			<td class="field_justify"><%= @consistency.total_payments %></td>			
-		</tr>
-		<% translate_options(Project::TYPE_OF_AID_OPTIONS).each do |name, idx| %>
-			<tr>
-				<td class="sub_title"><%= ll(:consistency, :toa_payments, :type => name) -%></td>
-				<td><%= @consistency.payments_by_type_of_aid(idx) %></td>			
-			</tr>
-		<% end %>
+<h2><%= lc(:title) %></h2>
 
-	</table>
-</center>
+<table>
+	<tr>
+		<th><%= ll(:consistency, :donor) %></th>
+		<td width="50%"><%= current_donor.name %></td>
+	</tr>
+	<tr>
+		<th><%= ll(:consistency, :year) %></th>
+		<td><%= select :consistency, :year, 
+				(Time.now.year-5..Time.now.year).to_a.reverse.collect { |y| [y, y] }, {},
+				:onchange => "window.location = '#{request.path}?year=' + this.value" %></td>			
+	</tr>
+	<tr>
+		<th><%= ll(:consistency, :total_commitments) %></th>
+		<td class="field_justify"><%= @consistency.total_commitments %></td>			
+	</tr>
+	<tr>
+		<th><%= ll(:consistency, :total_payments) %></th>
+		<td class="field_justify"><%= @consistency.total_payments %></td>			
+	</tr>
+	
+	<% translate_options(Project::TYPE_OF_AID_OPTIONS).each do |name, idx| %>
+		<tr>
+			<th><%= ll(:consistency, :toa_payments, :type => name) -%></th>
+			<td><%= @consistency.payments_by_type_of_aid(idx) %></td>			
+		</tr>
+	<% end %>
+</table>
 

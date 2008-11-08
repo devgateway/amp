@@ -1,3 +1,9 @@
-<%= f.text_field :currency %>
-<%= f.year_select :year, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year+5 %>
-<%= f.text_field :euro_rate %>
+<% odaform_for @exchange_rate do |f| %>
+	<table>
+		<%= f.text_field :currency %>
+		<%= f.year_select :year, Project::FIRST_YEAR_OF_RELEVANCE, Time.now.year+5 %>
+		<%= f.text_field :euro_rate %>
+		
+		<%= f.submit %>
+	</table>
+<% end %>

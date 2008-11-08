@@ -1,41 +1,34 @@
-<center>
-	<%# TODO: Remove when table styling is decided by global style sheet %>
-	<table width="740" class="<%= has_permission?('admin') ? "list" : "admin" %>">
-		<% if @exchange_rates.blank? %>
+<h2><%= lc(:title) %></h2>
+
+<table>
+	<% if @exchange_rates.blank? %>
+		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+	<% else %>
+		<% @exchange_rates.each do |year, rates| %> 
 			<tr>
-				<td class="exist"><%= lc(:empty) %></td>
-			</tr>
-		<% else %>
-			<tr>
-				<td class="head1" colspan=4><%= lc(:title) %></td>
+				<th colspan="3"><%= year %></td>
 			</tr>
 
-			<% @exchange_rates.each do |year, rates| %> 
-				<tr>
-					<td class="head2" colspan=3><%= year %></td>
-				</tr>
-
-				<tr>
-					<td class="title"><%= ll(:exchange_rate, :currency) %></td>
-					<td class="title"><%= ll(:exchange_rate, :euro_rate) %></td>
+			<tr>
+				<th><%= ll(:exchange_rate, :currency) %></th>
+				<th><%= ll(:exchange_rate, :euro_rate) %></th>
+				<% restrict_to 'admin' do %>
+					<th> </th>
+				<% end %>
+			</tr>
+			<% rates.sort_by(&:currency).each do |rate| %>
+				<tr>			
+					<td><%= rate.currency %></td>
+					<td><%= rate.euro_rate %></td>
 					<% restrict_to 'admin' do %>
-						<td class="title"> </td>
+						<td><%= link_to ll(:actions, :edit), edit_exchange_rate_path(rate) %></td>
 					<% end %>
 				</tr>
-				<% rates.sort_by(&:currency).each do |rate| %>
-					<tr>			
-						<td><%= rate.currency %></td>
-						<td><%= rate.euro_rate %></td>
-						<% restrict_to 'admin' do %>
-							<td><%= link_to ll(:actions, :edit), edit_exchange_rate_path(rate) %></td>
-						<% end %>
-					</tr>
-				<% end %>
 			<% end %>
 		<% end %>
-	</table>
-	
-	<% restrict_to 'admin' do %>
-		<p><b><%= link_to lc(:new), new_exchange_rate_path %></b></p>
 	<% end %>
-</center>
+</table>
+	
+<% restrict_to 'admin' do %>
+	<p><b><%= link_to lc(:new), new_exchange_rate_path %></b></p>
+<% end %>

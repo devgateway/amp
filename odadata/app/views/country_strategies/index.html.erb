@@ -1,37 +1,31 @@
-<center>
-	<table width="740" class="admin">
-		<% if @country_strategies.blank? then %>
-			<tr><td colspan=6 class="title"><%= lc(:empty) %></td></tr>
-		<% else %>		
-			<tr>
-				<td colspan=6 class="title">
-					<%= lc(:title) %>
-				</td>
-			</tr>
-			<tr>
-				<td class="sub_title">Donor</td>
-				<td colspan=5><%= current_donor.name %></td>
-			</tr>
-			<tr>
-				<td class="sub_title">Country Strategy Number/Name</td>
-				<td class="sub_title">Country Strategy Description</td>
-				<td class="sub_title">Start Date</td>
-				<td class="sub_title">End Date</td>
-				<td class="sub_title">Total Amount Foreseen</td>
-				<td class="sub_title">&nbsp;</td>
-			</tr>
+<h2><%= lc(:title) %></h2>
 
-			<% for strategy in @country_strategies %> 
-				<tr>
-					<td valign="top"><%= strategy.strategy_number %></td>
-					<td valign="top" class="field_justify"><%= expander_tag(strategy.description) %></td>
-					<td valign="top"><%= strategy.start %></td>
-					<td valign="top"><%= strategy.end %></td>
-					<td valign="top"><%= null_to_na(strategy.total_amount_foreseen) %></td>
-					<td valign="top"><%= link_to ll(:actions, :edit), edit_country_strategy_path(strategy) %> <%= link_to ll(:actions, :show), country_strategy_path(strategy) %></td>
-				</tr>
-			<% end %>
+<table>
+	<% if @country_strategies.blank? then %>
+		<tr><td class="empty"><%= lc(:empty) %></td></tr>
+	<% else %>		
+		<tr>
+			<th>Country Strategy Number/Name</th>
+			<th>Country Strategy Description</th>
+			<th>Start Date</th>
+			<th>End Date</th>
+			<th>Total Amount Foreseen</th>
+			<th>&nbsp;</th>
+		</tr>
+	
+		<% for strategy in @country_strategies %> 
+			<tr>
+				<td><%= strategy.strategy_number %></td>
+				<td class="field_justify"><%= expander_tag(strategy.description) %></td>
+				<td><%= strategy.start %></td>
+				<td><%= strategy.end %></td>
+				<td><%= null_to_na(strategy.total_amount_foreseen) %></td>
+				<td><%= link_to ll(:actions, :edit), edit_country_strategy_path(strategy) %> <%= link_to ll(:actions, :show), country_strategy_path(strategy) %></td>
+			</tr>
 		<% end %>
-	</table>
-<p><b><%= link_to lc(:new), new_country_strategy_path %></b></p>
+	<% end %>
+</table>
+	
+<center>
+	<p><b><%= link_to lc(:new), new_country_strategy_path %></b></p>
 </center>

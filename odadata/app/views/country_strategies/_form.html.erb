@@ -1,44 +1,48 @@
-<%= javascript "behavior/related_selects" %>
-<!--[form:project]-->
-<tr>
-	<td class="sub_title" width=50%><%= ll(:country_strategy, :donor) %></td>
-	<td width=50%><%= current_donor.name %></td>
-</tr>
-
-<%= f.text_field :strategy_number %>
-<%= f.text_field :strategy_number_es %>
-<%= f.text_area :description, :rows => 3 %>
-<%= f.text_area :description_es, :rows => 3 %>
-<%= f.date_select :start, :start_year=>1995, :end_year=>Time.now.year+15, :default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
-<%= f.date_select :end,  :start_year=>1995, :end_year=>Time.now.year+15, :default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
-<%= f.text_field :total_amount_foreseen, :value => f.object.total_amount_foreseen %>
-<%= f.check_box :strategy_paper %>
-<%= f.text_field :website %>
-<%= f.select :programming_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
-<%= f.select :project_appraisal_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
-<%= f.select :tenders_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
-<%= f.select :commitments_and_payments_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
-<%= f.select :monitoring_and_evaluation_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
-
-<%= f.text_field :commitment_to_budget_support, :size => 4 %>
-<%= f.text_field :commitment_to_sectorwide_approaches_and_common_funds, :size => 4 %>
-<%= f.text_field :commitment_to_projects, :size => 4 %>
-
-<%= f.title ll(:country_strategy, :current_total_oda, :year => Time.now.year-1) %>
-<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-1) do |o| %>
-	<%= o.hidden_field :year, Time.now.year-1 %>
-	<%= o.text_field :commitments %>
-	<%= o.text_field :disbursements %>
+<%= js_behavior :related_selects %>
+<% odaform_for @country_strategy do |f| %>
+	<table>
+		<tr>
+			<td class="sub_title" width=50%><%= ll(:country_strategy, :donor) %></td>
+			<td width=50%><%= current_donor.name %></td>
+		</tr>
+		
+		<%= f.text_field :strategy_number %>
+		<%= f.text_field :strategy_number_es %>
+		<%= f.text_area :description, :rows => 3 %>
+		<%= f.text_area :description_es, :rows => 3 %>
+		<%= f.date_select :start, :start_year=>1995, :end_year=>Time.now.year+15, :default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
+		<%= f.date_select :end,  :start_year=>1995, :end_year=>Time.now.year+15, :default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
+		<%= f.text_field :total_amount_foreseen, :value => f.object.total_amount_foreseen %>
+		<%= f.check_box :strategy_paper %>
+		<%= f.text_field :website %>
+		<%= f.select :programming_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
+		<%= f.select :project_appraisal_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
+		<%= f.select :tenders_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
+		<%= f.select :commitments_and_payments_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
+		<%= f.select :monitoring_and_evaluation_responsibility, CountryStrategy::RESPONSIBILITY_OPTIONS %>
+		
+		<%= f.text_field :commitment_to_budget_support, :size => 4 %>
+		<%= f.text_field :commitment_to_sectorwide_approaches_and_common_funds, :size => 4 %>
+		<%= f.text_field :commitment_to_projects, :size => 4 %>
+		
+		<%= f.title ll(:country_strategy, :current_total_oda, :year => Time.now.year-1) %>
+		<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-1) do |o| %>
+			<%= o.hidden_field :year, Time.now.year-1 %>
+			<%= o.text_field :commitments %>
+			<%= o.text_field :disbursements %>
+		<% end %>
+		
+		<%= f.title ll(:country_strategy, :last_total_oda, :year => Time.now.year-2) %>
+		<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-2) do |o| %>
+			<%= o.hidden_field :year, Time.now.year-2 %>
+			<%= o.text_field :commitments %>
+			<%= o.text_field :disbursements %>
+		<% end %>
+		
+		<%= render :partial => 'sectors_selection' %>
+		
+		<%= f.text_area :comment, :rows => 5 %>
+		
+		<%= f.submit %>
+	</table>
 <% end %>
-
-<%= f.title ll(:country_strategy, :last_total_oda, :year => Time.now.year-2) %>
-<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-2) do |o| %>
-	<%= o.hidden_field :year, Time.now.year-2 %>
-	<%= o.text_field :commitments %>
-	<%= o.text_field :disbursements %>
-<% end %>
-
-<%= render :partial => 'sectors_selection' %>
-
-<%= f.text_area :comment, :rows => 5 %>
-<!--[eoform:project]-->

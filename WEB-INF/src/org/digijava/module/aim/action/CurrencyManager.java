@@ -52,20 +52,20 @@ public class CurrencyManager extends Action {
 				crForm.setCantDelete(true);
 			}
 
-			String sortingValue = request.getParameter("sortingValue");
-			if (sortingValue == null) {
+			int sortingValue = crForm.getOrder();
+			if (sortingValue == 0) {
 				if ((crForm.getAllCurrencies() == null)	|| ((reload != null) && (reload.compareTo("true") == 0))) {
 					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
 				}else{
                     crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
                 }
-			} else if (sortingValue.equalsIgnoreCase("-1")) {
+			} else if (sortingValue == -1) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
-			} else if (sortingValue.equalsIgnoreCase("1")) {
+			} else if (sortingValue == 1) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE));
-			} else if (sortingValue.equalsIgnoreCase("2")) {
+			} else if (sortingValue == 2) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_NAME));
-			} else if (sortingValue.equalsIgnoreCase("3")) {
+			} else if (sortingValue == 3) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME));
 			}
 

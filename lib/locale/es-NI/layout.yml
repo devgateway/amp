@@ -1,4 +1,7 @@
 es-NI:
+  layout:
+    title: ODAnic {{page_title}}
+    
   navigation:
     logout: Salir del Sistema
     

@@ -1,5 +1,15 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  # Helper to display flash messages in views.
+  # If +keys+ parameter has been given, only specific messages will be rendered
+  # in the given order
+  def flash_messages(keys = nil)
+    keys ||= [:error, :warning, :notice, :message]
+    
+    relevant_keys = keys.select { |k| flash[k] }
+    relevant_keys.inject("") { |e, k| e += content_tag(:div, flash[k], :class => "flash #{k}") }
+  end
+  
   # Renders a specific menu partial depending on the user's role
   # and associated layout attribute
   def render_user_navigation
@@ -7,18 +17,15 @@ module ApplicationHelper
     render :partial => "layouts/navigation/#{nav_tmpl}"
   end
   
-  def option_text_by_id(options_array, id)
-    translate_options(options_array).rassoc(id).first rescue "n/a"
+  ##
+  # Header Generation
+  def header(title)
+    content_for(:header) { content_tag(:h2, title) }    
+    @_page_title = title
   end
   
-  # Use to savely get a value from a model.
-  # If anything should go wrong it returns "n/a"
-  def safe_access(record, method, rescue_val = nil)
-      record.send(method) rescue rescue_val
-  end
-  
-  def null_to_na(value)
-    (value.blank? || value == 0 || value == "0") ? "n/a" : value
+  def render_page_title
+    ll(:layout, :title, :page_title => (@_page_title ? "- #{strip_html_tags(@_page_title)}" : nil))
   end
   
   # =====================================================================
@@ -57,5 +64,10 @@ module ApplicationHelper
   
   def short_expander_tag(content)
     content_tag(:div, content, :class => "short_expander")
+  end
+  
+private
+  def strip_html_tags(string)
+    string.gsub(/\<\/?.*?\>/, '')
   end
 end

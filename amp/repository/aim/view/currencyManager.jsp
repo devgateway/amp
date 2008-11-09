@@ -67,7 +67,7 @@ function submit() {
 
 function sortSubmit(value){
 	<digi:context name="sorting" property="context/module/moduleinstance/currencyManager.do" />
-	document.aimCurrencyForm.action = "<%= sorting %>~sortingValue="+value;
+	document.aimCurrencyForm.action = "<%= sorting %>~order="+value;
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();
 }
@@ -83,6 +83,7 @@ function sortSubmit(value){
 <html:hidden property="currencyCode"/>
 <html:hidden property="currencyName"/>
 <html:hidden property="countryId"/>
+<html:hidden property="order"/>
 
 
 
@@ -314,6 +315,7 @@ function sortSubmit(value){
 											<c:if test="${aimCurrencyForm.currentPage > 1}">
 												<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParamsFirst}" property="page" value="1"/>
+												<c:set target="${urlParamsFirst}" property="order" value="${aimCurrencyForm.order}"/>
 												<c:set var="translation">
 													<digi:trn key="aim:firstpage">First Page</digi:trn>
 												</c:set>
@@ -322,6 +324,7 @@ function sortSubmit(value){
 												</digi:link>
 												<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParamsPrevious}" property="page" value="${aimCurrencyForm.currentPage -1}"/>
+												<c:set target="${urlParamsPrevious}" property="order" value="${aimCurrencyForm.order}"/>
 												<c:set var="translation">
 													<digi:trn key="aim:previouspage">Previous Page</digi:trn>
 												</c:set>
@@ -336,6 +339,7 @@ function sortSubmit(value){
 												<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
 												<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+												<c:set target="${urlParams1}" property="order" value="${aimCurrencyForm.order}"/>
 												<c:if test="${aimCurrencyForm.currentPage == pages}">
 													<font color="#FF0000"><%=pages%></font>
 												</c:if>
@@ -353,6 +357,7 @@ function sortSubmit(value){
 												<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParamsNext}" property="page" value="${aimCurrencyForm.currentPage+1}"/>
 												<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
+												<c:set target="${urlParamsNext}" property="order" value="${aimCurrencyForm.order}"/>
 												<c:set var="translation">
 													<digi:trn key="aim:nextpage">Next Page</digi:trn>
 												</c:set>
@@ -367,6 +372,7 @@ function sortSubmit(value){
 													<c:set target="${urlParamsLast}" property="page" value="${aimCurrencyForm.pagesSize}"/>
 												</c:if>
 												<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+												<c:set target="${urlParamsLast}" property="order" value="${aimCurrencyForm.order}"/>
 												<c:set var="translation">
 													<digi:trn key="aim:lastpage">Last Page</digi:trn>
 												</c:set>

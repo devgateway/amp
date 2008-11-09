@@ -25,7 +25,7 @@
 
 	<body>
 		<div style="position: absolute; left: 30px; top: 13px">
-			<%= render :partial => '/shared/currency_selector' %>
+			<%= render :partial => '/layouts/currency_selector' %>
 		</div>
 		
 		<div style="text-align: right; margin-top: 10px; margin-bottom: 5px"><a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a> <a class="prt" href="#" onclick="window.close();"><%= ll(:actions, :close_window) %></a></div>
@@ -34,7 +34,7 @@
 				<%= yield %>
 			</center>
 		</div>
-		<%= render :partial => 'shared/footer' %>		
+		<%= render :partial => 'layouts/footer' %>		
 	</body>
 
 

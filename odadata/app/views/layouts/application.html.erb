@@ -1,7 +1,8 @@
+<?xml version="1.0" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 	  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	  <title><%= render_page_title %></title>
@@ -15,14 +16,42 @@
 	</head>
 	
 	<body id="body" class="<%= current_user.andand.layout || 'public' %>">
-		<%= render_user_navigation %>
-		
 		<div id="content">
+			<table id="header">
+				<tr> 
+					<td>
+						<%= flashobject_tag "/images/ODAnicFlashLogo.swf", :size => "80x80" %>
+					</td>
+					<td>
+						<img src="/images/ODAnicLogo.jpg" alt="ODAnic" width="489" height="128" border="0" />
+					</td>
+					<td>
+						<%= flashobject_tag "/images/ODAnicFlags.swf", :size => "80x54" %>
+					</td>
+				</tr>
+				<tr class="menuline"><td colspan="4" height="2"><hr /></td></tr>
+				<tr>
+					<td colspan="4" width="100%">
+						<%= render_user_navigation %>
+						<hr />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="5">
+						<span class="small">
+							<marquee DIRECTION="LEFT" BEHAVIOR="SCROLL" SCROLLAMOUNT="7" SCROLLDELAY="200" TRUESPEED height="20" width="700">
+								<%= Prefs.scroll_bar_mfp %>
+							</marquee>
+						</span>
+					</td>
+				</tr>
+			</table>
+			
 			<%= flash_messages %>
 			<%= yield :header %>
 			<%= yield  %>
 		</div>
 	
-		<%= render :partial => 'shared/footer' %>
+		<%= render :partial => 'layouts/footer' %>
 	</body>
 </html>

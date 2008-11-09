@@ -1,4 +1,7 @@
 en-US:
+  layout:
+    title: ODAnic {{page_title}}
+    
   navigation:
     logout: Log out
     

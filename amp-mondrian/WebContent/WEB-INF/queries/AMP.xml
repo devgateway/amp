@@ -68,7 +68,7 @@
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberName="All Primary Sectors">
 				<Table name="v_sectors"/>
-				<Level name="Primary Sector" column="sectorname">
+				<Level name="Sector Name" column="sectorname" uniqueMembers="true">
 					<Property name="percentage" column="sector_percentage" type="Numeric"/>
 				</Level>
 			</Hierarchy>
@@ -148,8 +148,8 @@
 			</MeasureExpression>
 		</Measure>
 		
-		<CalculatedMember name="Sector Percentage" dimension="Measures">
-  			<Formula>[Primary Sector].CurrentMember.Properties("percentage")</Formula>
+		<CalculatedMember name="Actual Commitments Sector Percentage" dimension="Measures">
+  			<Formula>IIf( [Primary Sector].Level.Name = "Sector Name" AND  [Primary Sector].CurrentMember.Properties("percentage") >0 , [Primary Sector].CurrentMember.Properties("percentage") * [Measures].[Actual Commitments] / 100.0, [Measures].[Actual Commitments])</Formula>
 		</CalculatedMember>
 		
 		

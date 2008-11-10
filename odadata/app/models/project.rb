@@ -112,6 +112,8 @@ class Project < ActiveRecord::Base
   
   ##
   # Custom finders
+  named_scope :ordered, :order => "donor_id ASC, donor_project_number ASC"
+  
   named_scope :draft, :conditions => ['data_status = ?', DRAFT], :order => "donor_project_number"
   named_scope :published, :conditions => ['data_status = ?', PUBLISHED], :order => "donor_project_number"
   named_scope :deleted, :conditions => ['data_status = ?', DELETED], :order => "donor_project_number"

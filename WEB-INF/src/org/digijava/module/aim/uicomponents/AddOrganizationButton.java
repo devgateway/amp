@@ -19,6 +19,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	private String delegateClass = "";
 	private String refreshParentDocument = "";
 	private String aditionalRequestParameters = "";
+	private String styleClass=""; //class name
 
 	public static final String PARAM_PARAM_FORM_NAME = "PARAM_PARAM_FORM_NAME";
 	public static final String PARAM_COLLECTION_NAME = "PARAM_COLLECTION_NAME";
@@ -31,6 +32,7 @@ public class AddOrganizationButton extends BodyTagSupport {
 	public static final String PARAM_NAME_HOLDER = "PARAM_NAME_HOLDER";
 	public static final String PARAM_NAME_DELEGATE_CLASS = "PARAM_NAME_DELEGATE_CLASS";
 	public static final String ADITIONAL_REQUEST_PARAMS = "ADITIONAL_REQUEST_PARAMS";
+	public static final String STYLE_CLASS_NAME = "class"; //buttons standard class property
 
 	public int doStartTag() throws JspException {
 		try {
@@ -41,7 +43,13 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 			JspWriter out = pageContext.getOut();
 			StringBuffer html = new StringBuffer();
-			html.append("<input class=\"dr-menu\" type=\"button\" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
+			html.append("<input type=\"button\" ");
+			if(!"".equalsIgnoreCase(styleClass)){
+				html.append(STYLE_CLASS_NAME);
+				html.append("=");
+				html.append("\""+styleClass+"\"");				
+			}
+			html.append(" onclick=\"window.open('/aim/selectOrganizationComponent.do~edit=true~reset=true~");
 
 			html.append(PARAM_RESET_FORM);
 			html.append("=true~");
@@ -220,6 +228,14 @@ public class AddOrganizationButton extends BodyTagSupport {
 
 	public void setAditionalRequestParameters(String aditionalRequestParameters) {
 		this.aditionalRequestParameters = aditionalRequestParameters;
+	}
+
+	public String getStyleClass() {
+		return styleClass;
+	}
+
+	public void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
 	}
 
 	

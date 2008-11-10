@@ -42,6 +42,8 @@ public class selectOrganizationComponentForm extends ActionForm {
 	private String delegateClass;
 	private HashMap<String, String> aditionalParameters=new HashMap<String, String>();
 	
+	String styleClass="";
+	
 	public HashMap<String, String> getAditionalParameters() {
 		return aditionalParameters;
 	}
@@ -328,5 +330,13 @@ public class selectOrganizationComponentForm extends ActionForm {
 
 	public void setDelegateClass(String delegateClass) {
 		this.delegateClass = delegateClass;
+	}
+
+	public String getStyleClass() {
+		return styleClass;
+	}
+
+	public void setStyleClass(String styleClass) {
+		this.styleClass = styleClass;
 	}
 }

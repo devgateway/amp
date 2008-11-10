@@ -370,7 +370,7 @@ public class getNPDgraph extends Action {
                 base -= target;
                 actual -= target;
                 target = 0;
-                if (base != 0 && actual != 0) {
+                if (base != 0) {
                     result = actual / (base / 100);
                     result = 1 - result / 100;
 

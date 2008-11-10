@@ -27,25 +27,22 @@ class ReportsController < ApplicationController
   def project_list
     projects = case params[:query]
     when "donor"
-      Project.published.find_all_by_donor_id(params[:value], :order => "donor_id ASC, donor_project_number ASC", :include => [:donor, :finances])
+      Donor.find(params[:value]).projects.published.ordered
     when "draft"
-      Project.draft.find_all_by_donor_id(params[:value], :order => "donor_id ASC, donor_project_number ASC", :include => [:donor, :finances])
+      Donor.find(params[:value]).projects.draft.ordered
     when "mdg"
-      Mdg.find(params[:value]).projects.published
+      Mdg.find(params[:value]).projects.published.ordered
     when "sector"
-      DacSector.find(params[:value]).projects.published.all(
-        :order => "donor_id ASC, donor_project_number ASC", :include => [:donor, :finances])
+      DacSector.find(params[:value]).projects.published.ordered
     when "location"
       if params[:value].to_i == 0
         # FIXME: Figure out a better way to select national projects..
         #Project.published.all(:include => [:geo_level2s, :donor, :finances], :conditions => "geo_level2_id IS NULL", :order => "donor_id ASC, donor_project_number ASC")
       else
-        Province.find(params[:value]).projects.published.all(
-          :order => "donor_id ASC, donor_project_number ASC", :include => [:donor, :finances])
+        Province.find(params[:value]).projects.published.ordered
       end
     when "sub_location"
-      District.find(params[:value]).projects.published.all(
-        :order => "donor_id ASC, donor_project_number ASC", :include => [:donor, :finances])
+      District.find(params[:value]).projects.published.ordered
     end
     
     fields = [:factsheet_link, :donor, :donor_project_number, :title, :total_commitments, :total_payments, "total_commitments_#{Time.now.year-1}", "total_payments_#{Time.now.year-1}", "commitments_forecast_#{Time.now.year}", "payments_forecast_#{Time.now.year}", :start, :end]

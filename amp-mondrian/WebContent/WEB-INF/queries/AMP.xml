@@ -68,7 +68,7 @@
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberName="All Primary Sectors">
 				<Table name="v_sectors"/>
-				<Level name="Sector Name" column="sectorname" uniqueMembers="true">
+				<Level name="Sector Name" column="sectorname">
 					<Property name="percentage" column="sector_percentage" type="Numeric"/>
 				</Level>
 			</Hierarchy>

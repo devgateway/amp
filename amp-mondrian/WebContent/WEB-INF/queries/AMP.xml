@@ -68,7 +68,9 @@
 		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
 			<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberName="All Primary Sectors">
 				<Table name="v_sectors"/>
-				<Level name="Primary Sector" column="sectorname"/>
+				<Level name="Primary Sector" column="sectorname">
+					<Property name="percentage" column="sector_percentage" type="Numeric"/>
+				</Level>
 			</Hierarchy>
 		</Dimension>	
 			
@@ -146,6 +148,9 @@
 			</MeasureExpression>
 		</Measure>
 		
+		<CalculatedMember name="Sector Percentage" dimension="Measures">
+  			<Formula>[Primary Sector].CurrentMember.Properties("percentage")</Formula>
+		</CalculatedMember>
 		
 		
 	</Cube>

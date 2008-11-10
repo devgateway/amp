@@ -1,0 +1,56 @@
+/*
+// $Id: IsNullFunDef.java,v 1.1 2008-11-10 10:05:21 mpostelnicu Exp $
+// This software is subject to the terms of the Common Public License
+// Agreement, available at the following URL:
+// http://www.opensource.org/licenses/cpl.html.
+// Copyright (C) 2006-2006 Julian Hyde
+// All Rights Reserved.
+// You must accept the terms of that agreement to use this software.
+*/
+package mondrian.olap.fun;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.impl.AbstractBooleanCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
+import mondrian.olap.Member;
+import mondrian.olap.Literal;
+
+/**
+ * Definition of the <code>IS NULL</code> MDX function.
+ *
+ * @author medstat
+ * @version $Id: IsNullFunDef.java,v 1.1 2008-11-10 10:05:21 mpostelnicu Exp $
+ * @since Aug 21, 2006
+ */
+class IsNullFunDef extends FunDefBase {
+    /**
+     * Resolves calls to the <code>IS NULL</code> postfix operator.
+     */
+    static final ReflectiveMultiResolver Resolver = new ReflectiveMultiResolver(
+            "IS NULL",
+            "<Expression> IS NULL",
+            "Returns whether an object is null",
+            new String[]{"Qbm", "Qbl", "Qbh", "Qbd"},
+            IsNullFunDef.class);
+
+    public IsNullFunDef(FunDef dummyFunDef) {
+        super(dummyFunDef);
+    }
+
+    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+        assert call.getArgCount() == 1;
+        final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
+        return new AbstractBooleanCalc(call, new Calc[]{memberCalc}) {
+            public boolean evaluateBoolean(Evaluator evaluator) {
+                Member member = memberCalc.evaluateMember(evaluator);
+                return member.isNull();
+            }
+        };
+    }
+}
+
+// End IsNullFunDef.java

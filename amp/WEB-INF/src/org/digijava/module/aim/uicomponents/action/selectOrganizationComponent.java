@@ -80,7 +80,13 @@ public class selectOrganizationComponent extends Action {
 		} else {
 			oForm.setRefreshParent(false);
 		}
-
+		
+		//styleClass
+		String styleClassName=request.getParameter(AddOrganizationButton.STYLE_CLASS_NAME);
+		if(styleClassName!=null && !"null".equalsIgnoreCase(styleClassName)){
+			oForm.setStyleClass(styleClassName);
+		}
+		
 		if ("true".equalsIgnoreCase(request.getParameter(AddOrganizationButton.PARAM_USE_CLIENT))) {
 			oForm.setUseClient(true);
 			oForm.setValueHoder(request.getParameter(AddOrganizationButton.PARAM_VALUE_HOLDER));

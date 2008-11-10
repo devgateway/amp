@@ -163,6 +163,14 @@
 		<description>Class in charge to process the post, the class have to implement the IPostProcessDelegate interface</description>
 		</attribute>
 		
+		<attribute>
+			<name>styleClass</name>
+			<required>false</required>
+			<description>
+				styleClass
+			</description>
+		</attribute>
+		
 		<bodycontent>JSP</bodycontent>
 	</tag>
 

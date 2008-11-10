@@ -150,8 +150,6 @@
 	<!-- new organization Component -->
 	<form-bean name="aimSelectOrganizationForm" type="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm"/>
 	<!-- End new organization Component -->
-	
-	<form-bean name="expresionbuilderForm" type="org.digijava.module.aim.form.ExpresionBuilderForm" />
 </form-beans>
 
   <global-forwards>
@@ -1685,12 +1683,6 @@
 		<forward name="forward" path="/showLayout.do?layout=aim_showDocumentsInPopup" />
 	</action>
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
-    
-    <action name="expresionbuilderForm" path="/aim/expresionBuilderMaganer" type="org.digijava.module.aim.action.ExpresionBuilderMaganer" validate="false" parameter="method">	
-      <forward name="listExpresions" path="/showLayout.do?layout=expresionsList" />
-      <forward name="expresionForm" path="/showLayout.do?layout=expresionForm" />
-    </action>
-        
   </action-mappings>
 </struts-config>
 

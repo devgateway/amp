@@ -408,9 +408,7 @@
     <page page="manageClassificationsConfig" name="manageClassificationsConfig" title="Manage Classifications Configuration" />
     <page page="editSectorClassConfig" name="editSectorClassConfig" title="Add/Edit Classifications Configuration" />
 
-	<page page="expresionsList" name="expresionsList" title="Expresions List" />
-	<page page="expresionForm" name="expresionForm" title="Expresion Page" />
-	
+
 </secondary-pages>
 <module>
 

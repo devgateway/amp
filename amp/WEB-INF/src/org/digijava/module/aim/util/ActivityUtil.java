@@ -2946,10 +2946,10 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         deletedRows = stmt.executeUpdate(deletePhysicalPerformance);
         
         //Delete the connection with Indicator Project.
-        String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
-        con = session.connection();
-        stmt = con.createStatement();
-        deletedRows = stmt.executeUpdate(deleteIndicatorProject);
+        //String deleteIndicatorProject = "DELETE FROM amp_indicator_project WHERE amp_activity_id = " + ampAct.getAmpActivityId();
+        //con = session.connection();
+        //stmt = con.createStatement();
+        //deletedRows = stmt.executeUpdate(deleteIndicatorProject);
         
 //        ArrayList ipacontracts = org.digijava.module.aim.util.DbUtil.getAllIPAContractsByActivityId(ampAct.getAmpActivityId());
 //	    logger.debug("contracts number [Inside deleting]: " + ipacontracts.size());

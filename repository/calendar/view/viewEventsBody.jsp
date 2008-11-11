@@ -47,7 +47,7 @@
 	            </td>
 	          </c:if>
 	          <td align="center" >
-	            <span id="calendarFont" style="font-size:14px;font-weight:bold;">
+	            <span id="calendarFont" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
 	              <c:if test="${calendarViewForm.view == 'yearly'}">
 	              ${calendarViewForm.baseDateBreakDown.year}
 	              </c:if>
@@ -227,7 +227,7 @@
 				                              						
 				                              						<c:if test="${startMonth!=currentMonth && endMonth!=currentMonth}">
 				                                						<div style="margin:0px;padding:0px;font-weight:Bold;text-align:center;color:Black;border:1px solid ${ampCalendarGraph.ampCalendar.eventType.color};background-color:${ampCalendarGraph.ampCalendar.eventType.color};">				                                                     			                                                        				
-					                                                    &NBSP;
+					                                                    &nbsp;
 					                                                    </div>	
 				                              						</c:if>		                              						
 				                              						
@@ -315,7 +315,7 @@
 				                                                    			</c:if>
 				                                                  			</c:if>
 				                                                		</td>
-				                                                		<td style="border-top:2px solid #e8eef7;">
+				                                                		<td style="border-top:2px solid #e8eef7;background-color: #ffffff">
 				                                                  			<c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
 				                                                    			<c:set var="startHours">${ampCalendarGraph.ampCalendar.calendarPK.startHour}</c:set>
 				                                                    			<c:set var="endHours">${ampCalendarGraph.ampCalendar.calendarPK.endHour}</c:set>
@@ -371,18 +371,18 @@
 																<c:if test="${item.month=='Dec'}">12</c:if>
 															</c:set> 
 															<table style="border:solid 2px #e8eef7;width: 850px">
-					  											<tr>
-					  												<td align="left" style="width: 70px;background-color: #376091;" >											        						
-																    	<a href="#" style="text-decoration:none;color:White;font-size:12px;font-family:Tahoma;text-align: center;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">
-																        	<digi:trn key="aim:calendar${item.month}">${item.month}</digi:trn>
+					  											<tr style="height: 25px;">
+					  												<td style="width: 80px;background-color: #376091;text-align: center" >											        						
+																    	<a href="#" style="text-decoration:none;color:White;font-size:12px;font-family:Tahoma;text-align: center" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">
+																        	<digi:trn key="aim:calendar${item.month}">${item.month}</digi:trn> 
 																        </a>
 																	</td>
 																	<td >
-																	<div style="width:780px;height:40px;font-family:Tahoma;vertical-align: top;">
+																	<div style="width:780px;height:25px;font-family:Tahoma;vertical-align: top;">
 																	    <c:if test="${fn:length(calendarViewForm.ampCalendarGraphs)!=0}">
 																			<c:if test="${calendarViewForm.view == 'yearly'}">
 																				<c:set var="eventsAmountForThisMonth"> <bean:write name="calendarViewForm" property="eventsAmountIndexed[${monthIndex-1}]"/></c:set>				
-																				<div <c:if test="${eventsAmountForThisMonth>5}"> style="overflow:auto;width: 780px;height:45px"</c:if>>
+																				<div <c:if test="${eventsAmountForThisMonth>5}"> style="overflow:auto;width: 780px;height:35px"</c:if>>
 																					<table style="width: 100%;">
 																						<tr height="25px">
 																		       				<c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
@@ -430,18 +430,16 @@
 					                                        		<c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
 					  													<c:forEach var="item" items="${row}">
 					  														<c:if test="${calendarViewForm.view == 'weekly' && item.selected}">				  																															 		
-																				<tr style="width: 100%">
-																					<td align="left" vAlign="top" width="30px" style="font-size:12px;color:White;background-color: #376091;font-family:Tahoma;border-bottom:1px solid #ffffff;">
+																				<tr style="width: 100%;height: 25px">
+																					<td align="left" vAlign="top" style="font-size:12px;color:White;background-color: #376091;font-family:Tahoma;border-bottom:1px solid #ffffff;width: 80px;height: 25px">
 																					   	<span id="calenderSubFont" style="width:25px">
-																					       	<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>
+																					       	<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>, &nbsp;
 																					   	</span>
-																					   	<br>
 																					   	<a href="#" style="font-size:10px;color:White;font-family:Tahoma;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">
-																					  		${item.dayOfMonth}<c:if test="${item.dayOfMonth>3}"><digi:trn key="calendar:dayPrefix">th</digi:trn></c:if>
-																					   		<digi:trn key="calendar:${item.month}">${item.month}</digi:trn>
+																					  		${item.dayOfMonth}<c:if test="${item.dayOfMonth>3}"><digi:trn key="calendar:dayPrefix">th</digi:trn></c:if>																					   		
 																					   	</a>
 																					</td>
-																					<td style="border-top:2px solid #e8eef7;">																																												
+																					<td style="border-top:2px solid #e8eef7;background-color: #ffffff">																																												
 																							<c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">																																										
 																								<c:set var="startDay">${ampCalendarGraph.ampCalendar.calendarPK.startDay}</c:set>
 																						        <c:set var="endDay">${ampCalendarGraph.ampCalendar.calendarPK.endDay}</c:set>
@@ -460,7 +458,8 @@
 																												<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
 																													${ampCalendarEventItem.title}
 																												</c:forEach>
-																											</digi:link>																			                                
+																											</digi:link>
+																											</div>																			                                
 															                                			</c:if>
 															                              			</c:if>
 														                              							
@@ -503,7 +502,7 @@
 																																										
 																					</td>
 																				</tr>
-																				<tr height="3px" bgcolor="#e8eef7">
+																				<tr height="2px" bgcolor="#e8eef7">
 					  																<td bgcolor="#e8eef7" colspan="2"/>
 					  															</tr>
 																			</c:if>																		

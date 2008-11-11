@@ -34,6 +34,9 @@
 	border-width: 1px 1px 1px 1px; 
 	background-color: #ffffff;
 }
+.myStyleClass{	
+	width: 80px;
+}
 -->
 </style>
 
@@ -421,15 +424,15 @@ function recurEvent(){
 			                            <td valign="top" style="padding: 10px">
 			                                <table>
 			                                    <tr>
-			                                        <td nowrap="nowrap" style="text-align: right">
-			                                            <digi:trn key="calendar:EventTitle">Event title:</digi:trn>
+			                                        <td nowrap="nowrap" style="text-align: right" align="right">
+			                                            <digi:trn key="calendar:title">Event title:</digi:trn>
 			                                        </td>
 			                                        <td width="220px">
 			                                        		<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 100%" styleClass="inp-text"/>
 			                                        </td>
 			                                    </tr>
 			                                    <tr>
-			                                        <td nowrap="nowrap" align="right">
+			                                        <td nowrap="nowrap" align="right" style="text-align: right">
 			                                            <digi:trn key="calendar:cmbCalendarType">Calendar type:</digi:trn>
 			                                        </td>
 			                                        <td align="left">
@@ -443,8 +446,8 @@ function recurEvent(){
 			                                        </td>
 			                                    </tr>
 			                                    <tr>
-			                                        <td nowrap="nowrap" align="right">
-			                                            <digi:trn key="calendar:EventType">Event type:</digi:trn>
+			                                        <td nowrap="nowrap" align="right" style="text-align: right">
+			                                            <digi:trn key="calendar:type">Event type:</digi:trn>
 			                                        </td>
 			                                        <td align="left">
 			                                          <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
@@ -457,23 +460,30 @@ function recurEvent(){
 			                                        </td>
 			                                    </tr>
 			                                    <tr>
-			                                        <td nowrap="nowrap" align="right">
+			                                        <td nowrap="nowrap" align="right" style="text-align: right">
 			                                            <digi:trn key="calendar:StartDate">Start date:</digi:trn>
 			                                        </td>
-			                                        <td align="left">
+			                                        <td align="left" style="width: 220px">
 			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-			                                            <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
+			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
 			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
 			                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px" styleClass="inp-text"/>
 			                                                </td>
-			                                                <td>&nbsp;</td>
+			                                                <td>
+			                                                &nbsp;
+			                                                </td>
 			                                                <td>
 			                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
 			                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 			                                                  </a>
+			                                                </td>
+			                                                <td>
+			                                                &nbsp;
+			                                                </td>
+			                                                <td>
 			                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
 			                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 			                                                  </a>
@@ -510,7 +520,7 @@ function recurEvent(){
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td>
-			                                                  <select id="selectedStartYear" onchange="updateDate(document.getElementById('selectedStartDate'), 'year', this.value)"></select>
+			                                                 <select id="selectedStartYear" onchange="updateDate(document.getElementById('selectedStartDate'), 'year', this.value)"></select>
 			                                                  <script type="text/javascript">
 			                                                  createYearCombo(document.getElementById('selectedStartYear'), document.getElementById('selectedStartDate').value);
 			                                                  </script>
@@ -533,7 +543,7 @@ function recurEvent(){
 			                                                  </script>
 			                                                </td>
 			                                                <td>
-			                                                  <select id="selectedStartDay" onchange="updateDate(document.getElementById('selectedStartDate'), 'day', this.value)">
+			                                                   <select id="selectedStartDay" onchange="updateDate(document.getElementById('selectedStartDate'), 'day', this.value)">
 			                                                    <c:forEach var="i" begin="1" end="30">
 			                                                      <c:if test="${i < 10}">
 			                                                        <c:set var="i" value="0${i}"/>
@@ -572,10 +582,10 @@ function recurEvent(){
 			                                              </tr>
 			                                            </table>
 			                                          </c:if>
-			                                       </td>
-			                                    </tr>
+			                                        </td>
+			                                      			                                    
 			                                    <tr>
-			                                        <td nowrap="nowrap" align="right">
+			                                        <td nowrap="nowrap" align="right" style="text-align: right">
 			                                            <digi:trn key="calendar:EndDate">End Date</digi:trn>
 			                                        </td>
 			                                        <td align="left">
@@ -718,7 +728,7 @@ function recurEvent(){
 			                                        <td nowrap="nowrap" align="right">
 			                                            <digi:trn key="calendar:orgs">Organizations</digi:trn> 
 			                                        </td>
-			                                        <td valign="top" align="left">
+			                                        <td align="left">
 														<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">													
 															<logic:notEmpty name="calendarEventForm" property="organizations">
 																<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -750,16 +760,16 @@ function recurEvent(){
 			                                        <td>                                        	
 														<table cellSpacing="1" cellPadding="1">
 															<tr>
-																<td style="width: 55px">
-																	<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
+																<td>
+																	<aim:addOrganizationButton refreshParentDocument="false" styleClass="myStyleClass" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
 																</td>
 															</tr>
 															<tr>
-																<td style="width: 80px">
-																	<html:button  property="submitButton" onclick="return removeSelOrgs()" style="width:100%">
+																<td>
+																	<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">
 																		<digi:trn key="btn:remove">Remove</digi:trn>
 																	</html:button>
-																</td>
+																</td> 
 															</tr>
 														</table>											
 			                                        </td>
@@ -809,8 +819,11 @@ function recurEvent(){
 			                                        </td>
 			                                        <td>
 			                                            <div>
-			                                                <input id="guest" type="text" style="width:150px;">
+			                                                <input id="guest" type="text" style="width:220px;">
 			                                                <input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
+			                                                <a href="#">
+															<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height="10" border="0"></a>
+			                                                
 			                                                <digi:trn key="calendar:separateEmails">Please separate email addresses by semicolons</digi:trn>
 			                                            </div>
 			                                            <div>

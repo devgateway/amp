@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  	<title>ODAnic - Official Development Assistance to Nicaragua Database</title>
+  	<%= stylesheet_link_tag 'scaffold', 'odadata', 'odadata_eubluebook', :cache => false %>
+  	<%= javascript_include_tag(:defaults, 'swfobject', 'jtip', 'jquery_expander', 'behavior/menu', :cache => true) %>
+</head>
+
+<body>
+	<%= render :partial => '/layouts/navigation/bluebook' %>
+
+<div id="content">
+	<%= yield  %>		
+</div>
+
+<%= render :partial => '/layouts/footer' %>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<div align="center">
+<table border="0" width="740">
+	<tr> 
+		<td>
+			<%= flashobject_tag "/images/ODAnicFlashLogo.swf", :size => "80x80" %>
+		</td>
+		<td align="center">
+			<img src="/images/ODAnicLogo.jpg" alt="ODAnic" width="489" height="128" border="0" />
+		<td/>
+		<td>
+			<%= flashobject_tag "/images/ODAnicFlags.swf", :size => "80x54" %>
+		</td>
+	</tr>
+	<tr class="menuline"><td colspan="4" height="2"><hr></td></tr>
+	<tr>
+		<td colspan="4" width="100%">
+			<ul id="nav">
+				<% l_scope(:bluebook) do %>
+					<li id="bigger">
+						<div><a href="/bluebook/contents"><%= ll(:contents, :toc) %></a></div>
+					</li>
+					
+					<li id="bigger">
+						<div><a href="/bluebook/foreword"><%= ll(:contents, :foreword) %></a></div>
+					</li>
+                	
+					<li id="bigger">
+						<div><a href="#"><%= ll(:contents, :eu_at_a_glance, :short) %></a></div>
+						<ul>
+							<li><a href="/bluebook/eu_at_a_glance_50_years"><%= ll(:contents, :eu_at_a_glance, :building_europe) %></a></li>
+							<li><a href="/bluebook/eu_at_a_glance_member_states"><%= ll(:contents, :eu_at_a_glance, :member_states_short) %></a></li>
+							<li><a href="/bluebook/eu_at_a_glance_institutions"><%= ll(:contents, :eu_at_a_glance, :institutions_short) %></a></li>
+							<li><a href="/bluebook/eu_at_a_glance_consensus_on_development"><%= ll(:contents, :eu_at_a_glance, :consensus_short) %></a></li>
+							<li><a href="/bluebook/eu_at_a_glance_code_of_conduct"><%= ll(:contents, :eu_at_a_glance, :code_of_conduct_short) %></a></li>
+							<li><a href="/bluebook/eu_at_a_glance_aid"><%= ll(:contents, :eu_at_a_glance, :eu_aid_short) %></a></li>									
+						</ul>
+					</li>
+                	
+					<li id="bigger">
+						<div><a href="#"><%= ll(:contents, :eu_cooperation, :title) %></a></div>
+						<ul>
+							<li><a href="/bluebook/eu_at_a_glance_h_and_a_process"><%= ll(:contents, :eu_cooperation, :process_short) %></a></li>
+							<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_achievements"><%= ll(:contents, :eu_cooperation, :achievements) %> 2007</a></li>
+							<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_forecasts"><%= ll(:contents, :eu_cooperation, :forecasts) %> 2008</a></li>
+							<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_trend"><%= ll(:contents, :eu_cooperation, :trend) %> 2007-2008</a></li>
+							<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_dac_sector_column_chart"><%= ll(:contents, :eu_cooperation, :by_sector) %> 2007</a></li>
+							<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_region_column_chart"><%= ll(:contents, :eu_cooperation, :by_region) %> 2007</a></li>
+							<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_type_of_aid"><%= ll(:contents, :eu_cooperation, :by_toa) %> 2007-2008</a></li>
+						</ul>
+					</li>
+				<% end %>
+				
+				<li id="bigger">
+					<div><a href="#"><%= ll(:bluebook, :contents, :profiles, :title) %></a></div>
+					<ul>
+						<% Donor.main.all(:order => "name ASC").each do |d| %>
+							<li><a href="/bluebook/donor_profiles/<%= d.id %>"><%= d.name.titleize %></a></li>
+						<% end %>
+					</ul>
+				</li>
+				<li id="bigger">
+					<div><a href="#"><%= ll(:bluebook, :contents, :note, :title) %></a></div>
+					<ul>
+						<li><a href="/bluebook/explanatory_note"><%= ll(:bluebook, :contents, :note, :explanatory_note) %></a></li>
+					</ul>					
+				</li>
+				
+				<li id="smaller">
+					<%= render :partial => "layouts/navigation/language_select" %>
+				</li>
+				
+			</ul>
+			<hr />
+		</td>
+	</tr>
+	<tr>
+		<td colspan=5>
+			<span class="small">
+				<marquee DIRECTION="LEFT" BEHAVIOR="SCROLL" SCROLLAMOUNT="7" SCROLLDELAY="200" TRUESPEED height="20" width="700">
+					<%= Prefs.scroll_bar_bluebook %>
+				</marquee>
+			</span>
+		</td>
+	</tr>
+</table>
+
+</div>

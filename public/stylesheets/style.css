@@ -1,0 +1,607 @@
+/*
+Blue scale
+
+Header: 
+ Background: #4f81bd
+ Color: #fff
+Row: 
+ Background: #b8cce4
+ Color: #000
+Lighter row: 
+ Background: #dbe5f1
+ Color: #000
+
+Grayscale:
+Header: 
+ Background: #000000
+ Color: #fff
+Row: 
+ Background: #a5a5a5
+ Color: #000
+Lighter row: 
+ Background: #d8d8d8
+ Color: #000
+
+Greenscale
+Header: 
+ Background: #9bbb59
+ Color: #fff
+Row: 
+ Background: #d7e4bc
+ Color: #000
+Lighter row: 
+ Background: #eaf1dd
+ Color: #000
+
+*/
+
+
+
+
+/* Start PUBLIC style */
+/* For PUBLIC using bluescale */
+
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+.public #content H2+TABLE {
+	text-align: center;
+	width: 740px;
+	background-color: #dbe5f1;
+	border: 0px;
+	border-spacing: 0px;
+} 
+
+/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
+.public #content H2+TABLE TH {
+	color: #fff;
+  background-color:#4f81bd;
+} 
+
+/* For the data cells of the table */
+.public #content H2+TABLE TD {
+  background-color:#dbe5f1;
+} 
+
+/* Data Table title, preceding the <TABLE> tag */
+.public #content H2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: bold;
+	color: #003366;
+} 
+
+/* End PUBLIC style */
+
+/* Start FOCAL_POINT style */
+/* For FOCAL_POINT using grayscale */
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+.focal_point #content H2+TABLE {
+	text-align: center;
+	width: 740px;
+	background-color: #dbe5f1;
+	border: 0px;
+	border-spacing: 0px;
+} 
+
+/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
+.focal_point #content H2+TABLE TH {
+	color: #fff;
+  background-color:#000000;
+} 
+
+/* For the data cells of the table */
+.focal_point #content H2+TABLE TD {
+  background-color:#d8d8d8;
+} 
+
+/* Data Table title, preceding the <TABLE> tag */
+.focal_point #content H2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: bold;
+	color: #003366;
+} 
+
+/* End FOCAL_POINT style */
+
+/* Start ADMIN style */
+/* For ADMIN using greenscale */
+/* Data Tables (usually lists), always preceded by the title as a <H2> tag */
+.admin #content H2+TABLE {
+	text-align: center;
+	width: 740px;
+	background-color: #eaf1dd;
+	border: 0px;
+	border-spacing: 0px;
+} 
+
+/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
+.admin #content H2+TABLE TH {
+	color: #fff;
+  background-color:#9bbb59;
+} 
+
+/* For the data cells of the table */
+.admin #content H2+TABLE TD {
+  background-color:#eaf1dd;
+} 
+
+/* Data Table title, preceding the <TABLE> tag */
+.admin #content H2 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: bold;
+	color: #003366;
+} 
+
+
+/* End ADMIN style */
+
+/* Start Design Own Report */
+.container {
+	float: left;
+}
+div#output_options {
+	width: 142px;
+	margin-right: 10px;
+}
+div#filter_criteria {
+	width: 426px;
+	margin-right: 10px;
+}
+div#other_criteria {
+	width: 142px;
+}
+div#donor_province {
+	width: 170px;
+	margin-right: 10px;
+}
+div#mdg_sector {
+	width: 246px;
+}
+
+.container h2 {
+	margin: 0;
+	font-size: 1.3em;
+	font-weight: bold;
+	text-decoration: underline;
+	text-align: center;
+}
+
+.checkbox_container h3 {
+	margin: 0;
+	padding: 2px;
+	font-size: 1.15em;
+	display: block;
+	border-bottom: 1px solid #777;
+	background-color: #687EAB;
+	color: #000;
+}
+
+ul.checkbox_container {
+	margin-top: 10px;
+	border: 1px solid #777;
+	background-color: #DBE2F1;
+}
+
+ul.checkbox_container li {
+	display: block;
+	clear: both;
+	vertical-align: baseline;
+	margin-top: 2px;
+	margin-bottom: 4px;
+}
+
+ul.checkbox_container li.all {
+	font-weight: bold;
+}
+
+ul.checkbox_container li div {
+	display: inline;
+	margin-left: 25px;
+	padding-top: 3px;
+}
+
+ul.checkbox_container li input {
+	float: left;
+	margin-right: 5px;
+}
+/* End Design Own Report */
+
+/* Start GENERAL STYLES */
+
+HTML {
+	margin: 0;
+	padding: 0;
+}
+
+BODY { 
+  background-color: #fff; 
+  color: #333; 
+	scrollbar-face-color:#FFFFFF;
+	scrollbar-highlight-color:#FFFFFF;
+	scrollbar-3dlight-color:#006699;
+	scrollbar-darkshadow-color:#006699;
+	scrollbar-shadow-color:#FFFFFF;
+	scrollbar-arrow-color:#006699;
+	scrollbar-track-color:#E2E7EB;
+}
+
+BODY, P, OL, UL, TD {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+}
+
+HR {
+	display: none;
+}
+
+P {
+	padding: 1em 1em 0 1em;
+	margin: 0;
+}
+
+PRE {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+A { color: #000; }
+A:visited { color: #666; }
+A:hover { color: #fff; background-color:#000; }
+A IMG { border: 0; }
+
+
+/* Start GENERAL CLASSES */
+
+
+#content {
+	width: 740px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#content.fluid {
+	width: auto;
+}
+
+#footer {
+	clear: left;
+	width: 740px;
+	margin: 0px auto 5px auto;
+	padding-top: 30px;
+}
+
+#footer hr {
+	display: block;
+	border: 1px solid #003F7D;
+	height: 3px;
+	background-color: #003F7D;
+	color: #003F7D;
+}
+
+
+/*
+	background-color: #FFAA33;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FF6600;
+	padding: 2px;
+	text-align: center;
+}*/
+
+/* Used in MDGS */
+ul.fatlist li {
+	display: block;
+	padding: 1px;
+	border: 1px solid #fff;
+	white-space: nowrap;
+	margin-bottom: 2px;
+}
+ul.fatlist.flexible li {
+	padding: 2px;
+	margin-left: 2px;
+	float: left;
+}
+
+/* Used in layouts for currency_report, graph windows and report window */
+.prt {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	color: #003366;
+	text-decoration: none;
+	background-color: #FFAA33;
+	border-top: 1px solid #FF6600;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FF6600;
+	padding: 1px;
+	width: 80px;
+	text-align: center;
+}
+
+/* Top Menu Orange line */
+.menuline {
+	background-color: #FFAD33;
+}
+
+/* Class Style for errors defined in ActionPack */
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+/* Id Style for Explanation of errors defined in ActionPack */
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation H2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation P {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation UL LI {
+  font-size: 12px;
+  list-style: square;
+}
+/* End GENERAL CLASSES */
+
+/* End GENERAL STYLES */
+
+/* START TOP MENU STYLES */
+/* This CSS is used for the Menu (the left frame and the top frame) */
+/* This has to be changed and cleaned up */
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	font-size: 8pt;
+}
+
+#nav a {
+	font-weight: normal;
+	color: #FFAD33;
+	text-decoration: none;
+}
+
+#nav * {
+	z-index: 20;
+	cursor: pointer;
+}
+
+/*
+Sub menu settings
+*/
+#nav ul li a {
+	display: block;
+	font-weight: normal;
+	color: #003F7D;
+	width: 12em;
+	background-color: #FFAD33;
+	border: 1px solid brown;
+}
+
+#nav ul li a:hover {
+	font-weight: normal;
+	color: #FFAD33;
+	border: 1px solid brown;
+	width: 12em;
+	background-color: #003F7D;
+}
+
+li#smaller {
+	float: left;
+	position: relative;
+	width: 6.1em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+
+li#smaller a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 6.1em;
+}
+
+li#smallera {
+	float: left;
+	position: relative;
+	width: 5.9em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+
+li#smallera a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 5.9em;
+}
+
+li#bigger {
+	float: left;
+	position: relative;
+	width: 11.6em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+li#bigger a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 11.6em;
+}
+
+li#biggera {
+	float: left;
+	position: relative;
+	width: 11.2em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+li#biggera a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 11.2em;
+}
+
+li#smallmfp {
+	float: left;
+	position: relative;
+	width: 6.1em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+
+li#smallmfp a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 6.1em;
+}
+
+li#biggermfp {
+	float: left;
+	position: relative;
+	width: 13em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+li#biggermfp a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 13em;
+}
+
+li#biggestmfp {
+	float: left;
+	position: relative;
+	width: 14.9em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+li#biggestmfp a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 14.9em;
+}
+
+li#eubb {
+	float: left;
+	position: relative;
+	width: 7.2em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+
+li#eubb a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 7.2em;
+}
+
+li#donoradmin {
+	float: left;
+	position: relative;
+	width: 8em;
+	text-align: center;
+	cursor: default;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+
+li#donoradmin a:hover {
+	color: #003F7D;
+	display: block;
+	background-color: #FFAD33;
+	width: 8em;
+}
+
+li ul {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	font-size: 8pt;
+	font-weight: normal;
+	background: bottom left no-repeat;
+	padding: 0.2em 0 0.2em 0;
+}
+
+
+
+li li {
+	display: block;
+	float: none;
+	border: 0;
+}
+
+li:hover ul, li.over ul {
+	display: block;
+	border: 1px solid brown;
+	background-color: #003F7D;
+}
+
+li#biggestmfp ul a {
+	display: block;
+	font-weight: normal;
+	color: #FFAD33;
+	width: 14.2em;
+	background-color: #003F7D;
+	border: 1px solid brown;
+}
+
+li#biggestmfp ul a:hover {
+	font-weight: normal;
+	color: #003F7D;
+	border: 1px solid brown;
+	width: 14.2em;
+	background-color: #FFAD33;
+}
+/* End TOP MENU STYLES */
+

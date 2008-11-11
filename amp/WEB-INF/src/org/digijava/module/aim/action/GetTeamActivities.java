@@ -108,7 +108,8 @@ public class GetTeamActivities
                             col = TeamUtil.getAllTeamActivities(id);
                             taForm.setDonorFlag(true);
                         } else {
-                            col = TeamUtil.getAllTeamActivities(id);
+                            //col = TeamUtil.getAllTeamActivities(id);
+                        	col = TeamUtil.getAllTeamAmpActivities(id);
                             taForm.setDonorFlag(false);
                         }
                     }else {

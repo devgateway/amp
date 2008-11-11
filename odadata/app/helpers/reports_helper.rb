@@ -126,7 +126,7 @@ module ReportsHelper
   def currency_selector
     if params[:report]
       %{<div style="position: absolute; left: 30px; top: 13px">
-        #{render :partial => '/shared/currency_selector'}
+        #{render :partial => '/layouts/currency_selector'}
       </div>}
     end
   end

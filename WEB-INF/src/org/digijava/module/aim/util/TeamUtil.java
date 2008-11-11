@@ -1526,11 +1526,23 @@ public class TeamUtil {
 
         try {
             session = PersistenceManager.getSession();
-            String queryString = "select act from "
+            String queryString = "";
+            Query qry = null;
+            if(teamId == null) {
+            	queryString = "select act from "
+            
+                + AmpActivity.class.getName()
+                + " act where act.team is null";
+            	qry=session.createQuery(queryString);
+            }
+            else{
+            	queryString = "select act from "
+            
                 + AmpActivity.class.getName()
                 + " act where (act.team=:teamId)";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("teamId", teamId, Hibernate.LONG);
+            	qry=session.createQuery(queryString);
+            	qry.setParameter("teamId", teamId, Hibernate.LONG);
+            }
             col = qry.list();
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamAmpActivities()");
@@ -1643,7 +1655,7 @@ public class TeamUtil {
 
             }
         } catch(Exception e) {
-            logger.debug("Exception from getAllTeamActivities()");
+            logger.debug("Exception from getAllManagementTeamActivities()");
             logger.debug(e.toString());
             throw new RuntimeException(e);
         } finally {
@@ -1671,8 +1683,10 @@ public class TeamUtil {
 			String queryString = "";
 			Query qry = null;
 			if (teamId != null) {
-				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ,role.role.roleCode,role.organisation.name , act.ampId from " + AmpActivity.class.getName()
-						+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
+				queryString = "select act.ampActivityId, act.name, act.budget, act.updatedDate,act.updatedBy ," +
+						"role.role.roleCode,role.organisation.name , act.ampId from " 
+					+ AmpActivity.class.getName()
+					+ " act left join act.orgrole role  left join  act.updatedBy  where (act.team=:teamId) ";
 		//		queryString = "select act from " + AmpActivity.class.getName()
 				//		+ " act where (act.team=:teamId) ";
 				qry = session.createQuery(queryString);
@@ -2222,7 +2236,8 @@ public class TeamUtil {
     }
 
     public static Collection getAllUnassignedActivities() {
-        return getAllTeamActivities(null);
+        //return getAllTeamActivities(null);
+    	return getAllTeamAmpActivities(null);
     }
 
     public static Collection getAllUnassignedTeamReports(Long id, Boolean tabs) {

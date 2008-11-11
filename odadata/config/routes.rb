@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.routes_from_plugin(:bluebook)
+  map.routes_from_plugin :analytics
 
   # Static
   map.with_options :controller => "static" do |static|

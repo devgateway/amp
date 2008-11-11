@@ -1,0 +1,27 @@
+<table class="admin">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :contents, :eu_cooperation, :by_sector_in) %> <%= Time.now.year - 1 %></b>
+			<br>
+			<br>
+			<%= ll(:bluebook, :chart_subtitles, :by_sector_in) %> <%= Time.now.year - 1 %>
+			<div id="multicolumn_graph">
+				<strong>You need to upgrade your Flash Player</strong>
+			</div>
+			<!-- saved from url=(0013)about:internet -->
+			<!-- amcolumn script-->
+		  <script type="text/javascript">
+			// <![CDATA[		
+					var so = new SWFObject("/amcolumn.swf", "amcolumn", "1000", "1200", "8", "#DBE2F1");
+					so.addVariable("path", "/");
+					so.addVariable("settings_file", escape("/chart_settings/dac_sector_column_data_settings.xml"));
+					so.addVariable("data_file", escape("<%= url_for(:action => :dac_sectors_column_data, :format => 'xml') %>"));  
+			    	so.addVariable("preloader_color", "#999999");
+					so.write("multicolumn_graph");
+					// ]]>
+				</script>
+			<!-- end of amcolumn script -->
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>

@@ -198,8 +198,10 @@ function toggleSettings(){
                                  		<input  class="dr-menu" type="button" onclick="submitClean()" value="OK">
                                  		&nbsp;
 									</td>
+									
 									<td align="left">
-										<input class="dr-menu" type="button" value="Cancel">
+									
+																			<input class="dr-menu" type="button" value="Cancel" onclick="document.aimAuditLoggerManagerForm.reset();toggleSettings()">
 									</td>
                                  </tr>
                                  </table>

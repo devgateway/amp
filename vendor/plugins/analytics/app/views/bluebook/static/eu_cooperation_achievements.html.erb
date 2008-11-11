@@ -1,0 +1,26 @@
+<table class="admin">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :contents, :eu_cooperation, :achievement_in) %> 2007</b>
+			<br>
+			<%= ll(:bluebook, :chart_subtitles, :achievements) %>
+			<div id="column_graph">
+				<strong>You need to upgrade your Flash Player</strong>
+			</div>
+			<!-- saved from url=(0013)about:internet -->
+			<!-- amcolumn script-->
+		  <script type="text/javascript">
+			// <![CDATA[		
+					var so = new SWFObject("/amcolumn.swf", "amcolumn", "940", "430", "8", "#DBE2F1");
+					so.addVariable("path", "/");
+					so.addVariable("settings_file", escape("/bluebook/charts/settings/cooperation_achievements.xml"));
+					so.addVariable("data_file", escape("/bluebook/charts/sectors_column_data.xml"));  
+			    	so.addVariable("preloader_color", "#999999");
+					so.write("column_graph");
+					// ]]>
+				</script>
+			<!-- end of amcolumn script -->
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>

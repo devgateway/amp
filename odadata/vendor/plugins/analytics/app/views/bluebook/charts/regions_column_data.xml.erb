@@ -1,0 +1,17 @@
+<chart>
+<series>
+	<% @totals.each do |region, amount| %>
+		<value xid="<%= region %>"><%= region %></value>
+	<% end%>
+</series>
+
+<graphs>
+<% @region_payments.each_with_index do |(donor, regions), idx| %>
+	<graph gid="<%= donor %>" title="<%= donor %>" color="<%= Settings::COLOR_SCHEME[idx] %>">
+		<% regions.each do |region, amount| %>
+			<value xid="<%= region %>"><%= amount.in(Prefs.default_currency).in_millions(2).to_s %></value>
+		<% end %>
+	</graph>
+<% end %>
+</graphs>
+</chart>

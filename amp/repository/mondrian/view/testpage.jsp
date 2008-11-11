@@ -26,17 +26,15 @@
   how to use the WCF tags (like tree, form, table etc).
 
 --%>
-
+  <link rel="stylesheet" type="text/css" href="../../../jpivot/table/mdxtable.css">
+  <link rel="stylesheet" type="text/css" href="../../../navi/mdxnavi.css">
+  <link rel="stylesheet" type="text/css" href="../../../wcf/form/xform.css">
+  <link rel="stylesheet" type="text/css" href="../../../wcf/table/xtable.css">
+  <link rel="stylesheet" type="text/css" href="../../../wcf/tree/xtree.css">
 <html>
 <head>
   <title>Mondrian/JPivot Test Page</title>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-  <link rel="stylesheet" type="text/css" href="jpivot/table/mdxtable.css">
-  <link rel="stylesheet" type="text/css" href="jpivot/navi/mdxnavi.css">
-  <link rel="stylesheet" type="text/css" href="wcf/form/xform.css">
-  <link rel="stylesheet" type="text/css" href="wcf/table/xtable.css">
-  <link rel="stylesheet" type="text/css" href="wcf/tree/xtree.css">
-
 </head>
 <body bgcolor=white>
 
@@ -67,7 +65,7 @@
 
 <%-- define a toolbar --%>
 <wcf:toolbar  id="toolbar01" bundle="com.tonbeller.jpivot.toolbar.resources">
-  <wcf:scriptbutton   id="cubeNaviButton" tooltip="toolb.cube" img="cube"  model="#{navi01.visible}"/>
+  <wcf:scriptbutton id="cubeNaviButton" tooltip="toolb.cube" img="cube"  model="#{navi01.visible}"/>
   <wcf:scriptbutton id="mdxEditButton" tooltip="toolb.mdx.edit" img="mdx-edit" model="#{mdxedit01.visible}"/>
   <wcf:scriptbutton id="sortConfigButton" tooltip="toolb.table.config" img="sort-asc" model="#{sortform01.visible}"/>
   <wcf:separator/>
@@ -86,8 +84,8 @@
   <wcf:scriptbutton id="chartPropertiesButton01" tooltip="toolb.chart.config" img="chart-config" model="#{chartform01.visible}"/>
   <wcf:separator/>
   <wcf:scriptbutton  id="printPropertiesButton01" tooltip="toolb.print.config" img="print-config" model="#{printform01.visible}"/>
-  <wcf:imgbutton id="printpdf" tooltip="toolb.print" img="print" href="./Print?cube=01&type=1"/>
-  <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="./Print?cube=01&type=0"/>
+  <wcf:imgbutton id="printpdf" tooltip="toolb.print" img="print" href="../../../Print.out?cube=01&type=1"/>
+  <wcf:imgbutton id="printxls" tooltip="toolb.excel" img="excel" href="../../../Print.out?cube=01&type=0"/>
 </wcf:toolbar>
 
 <%-- render toolbar --%>
@@ -123,21 +121,14 @@
 <p>
 <wcf:render ref="table01" xslUri="/WEB-INF/jpivot/table/mdxtable.xsl" xslCache="true"/>
 <p>
-Slicer:
-
-<wcf:render ref="table01" xslUri="/WEB-INF/jpivot/table/mdxslicer.xsl" xslCache="true"/>
+	<wcf:render ref="table01" xslUri="/WEB-INF/jpivot/table/mdxslicer.xsl" xslCache="true"/>
 <p>
 <!-- drill through table -->
 <wcf:render ref="query01.drillthroughtable" xslUri="/WEB-INF/wcf/wcf.xsl" xslCache="true"/>
 
 <p>
-render chart 
-<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"  xslCache="true"/>
-
+	<wcf:render  ref="chart01" xslUri="/WEB-INF/jpivot/chart/chart.xsl"  xslCache="true"/>
 <p>
-
 </digi:form>
-
-
 </body>
 </html>

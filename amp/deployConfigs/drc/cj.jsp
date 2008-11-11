@@ -13,7 +13,3 @@ NON EMPTY CROSSJOIN({[Financing Instrument]},CROSSJOIN({[Terms of Assistance]},C
 FROM [Donor Funding] 
 </jp:mondrianQuery>
 
-
-
-
-<c:set var="title01" scope="session">Test Query uses Mondrian OLAP</c:set>

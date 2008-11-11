@@ -2,12 +2,12 @@
 	<div style="margin-bottom: 10px; margin-top: 10px; border: 1px solid #999">
 		<%= details.focal_sector.name_with_code %><br />
 		&nbsp;&nbsp;<%= ll(:terms, :amount) %>: <%= null_to_na(details.amount) %>
-		<% if details.geo_level1s.empty? %>	
+		<% if details.provinces.empty? %>	
 		<br />&nbsp;&nbsp;<%= ll(:terms, :national_sector) %>.<br />
 		<% else %>
 			<div>
 			&nbsp;&nbsp;<%= ll(:reports, :focal_regions) %>:<br />
-			<% details.geo_level1s.each do |province| %>
+			<% details.provinces.each do |province| %>
 				&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;<%= province.name %><br />
 			<% end %>
 			</div>

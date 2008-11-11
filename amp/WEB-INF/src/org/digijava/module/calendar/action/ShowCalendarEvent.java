@@ -29,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Team;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -264,13 +265,13 @@ public class ShowCalendarEvent extends Action {
             calendar.setSiteId(moduleInstance.getSite().getSiteId());
 
             // selected start date and selected end date
-//            String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
-//            if (dtformat == null) {
-//                dtformat = "dd/mm/yyyy";
-//            }
+            String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
+            if (dtformat == null) {
+                dtformat = "dd/MM/yyyy";
+            }
             
             //date from calendar comes in this format
-            String dtformat = "MM/dd/yyyy hh:mm";
+            dtformat+=" hh:mm";
 
             SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
 

@@ -49,10 +49,7 @@
 				                <tr>
 				            </table>          	          
 			          	<td>
-			        </tr>
-	                <tr>
-	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsCreateNewEvent.jsp" flush="true"/></td>
-	                </tr>               
+			        </tr>	                             
 	                <tr valign="top">
 	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
 	                </tr>	               		                

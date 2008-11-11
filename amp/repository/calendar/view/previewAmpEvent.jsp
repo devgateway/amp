@@ -75,8 +75,8 @@ function deleteEvent(){
 			               	 	<td style="background-color: #CCDBFF;height: 18px;"/>
 			                 </tr>
 			            </table>
-                	</td>
-                </tr>
+                	</td>                	
+                </tr> 
                 <tr>
 			      <td style="font-family: Tahoma; font-size: 12px;">        
 			        <div style="padding: 20px; background-color: #F5F5F5;">

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<pie>
-	<% @sectors.each_with_index do |sector_data, idx| %>
-		<slice title="<%= sector_data[0].name_with_code %>" color="<%= Settings::COLOR_SCHEME[idx] %>"><%= sector_data[1].to_i %></slice>
-	<% end %>
-</pie>

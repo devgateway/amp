@@ -5,4 +5,3 @@ delete from amp_features_visibility  where name = 'Messages';
 delete from amp_modules_templates where module in (select id from amp_modules_visibility where name = 'My Messages');
 delete from amp_features_visibility where parent in ( select id from amp_modules_visibility where name = 'My Messages');
 delete from amp_modules_visibility where name = 'My Messages';
-insert into amp_features_visibility (name, parent, hasLevel) VALUES ('My Messages', (select id from amp_modules_visibility where name = 'Messages'), true);

@@ -12,7 +12,6 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
-<module:display name="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="TREND ANALYSIS"></module:display>
 <module:display name="MONITORING AND EVALUATING"></module:display>
 <module:display name="REPORTING"></module:display>
@@ -26,7 +25,6 @@
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>

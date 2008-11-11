@@ -24,8 +24,6 @@
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="DOCUMENTS MANAGEMENT"></module:display> 
-<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="GIS DASHBOARD"></module:display> 
@@ -108,7 +106,6 @@
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
-<feature:display name="Content Repository" module="Document Management"></feature:display> 
 <feature:display name="Contracting Agency" module="Organizations"></feature:display> 
 <feature:display name="Contracting" module="Contracting"></feature:display> 
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
@@ -141,6 +138,7 @@
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display> 
+<feature:display name="My Messages" module="Messages"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
@@ -185,7 +183,6 @@
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
-<feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display> 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 
@@ -699,3 +696,8 @@
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
+<module:display name="Resources"></module:display>
+<feature:display name="My Resources" module="Resources"></feature:display> 
+<feature:display name="Team Resources" module="Resources"></feature:display>
+<feature:display name="Public Resources" module="Resources"></feature:display>
+<feature:display name="Other Resources" module="Resources"></feature:display>

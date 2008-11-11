@@ -80,9 +80,8 @@ SaveReportEngine.prototype.success		= function (o) {
 				message	= SaveReportEngine.reportSavedMessage;
 			else {
 				message	= SaveReportEngine.doneCopyMessage + SaveReportEngine.checkReportsMessage;
-				if ( window.opener.location.href != null && 
-						window.opener.location.href.indexOf("viewTeamReports.do") > 0 )
-						window.opener.location.replace(window.opener.location.href)
+				if ( window.opener.location.href != null )
+						window.opener.location.replace("/viewTeamReports.do?tabs=false");
 			}
 		}
 			

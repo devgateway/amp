@@ -12,7 +12,8 @@ module I18nHelper
   end
   
   def lc(*args)
-    ll(params[:controller], params[:action], *args)
+    scope = params[:controller].split('/') << params[:action]
+    ll(*(scope + args))
   end
   
   def ll(*args)

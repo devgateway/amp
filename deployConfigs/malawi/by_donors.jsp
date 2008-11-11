@@ -14,8 +14,3 @@ SELECT {[Measures].[Actual Commitments], [Measures].[Actual Disbursements],[Meas
 {[Donor]} ON ROWS 
 FROM [Donor Funding] 
 </jp:mondrianQuery>
-
-
-
-
-<c:set var="title01" scope="session">Test Query uses Mondrian OLAP</c:set>

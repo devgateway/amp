@@ -341,11 +341,12 @@
 	<res-type>javax.sql.DataSource</res-type>
 	<res-auth>Container</res-auth>
   </resource-ref>
-	
-  <servlet-mapping>
+   
+   <servlet-mapping>
     <servlet-name>Print</servlet-name>
-    <url-pattern>/Print</url-pattern>
+    <url-pattern>/Print.out</url-pattern>
   </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>GetChart</servlet-name>
     <url-pattern>/GetChart</url-pattern>

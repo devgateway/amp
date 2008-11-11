@@ -344,7 +344,7 @@
 	
   <servlet-mapping>
     <servlet-name>Print</servlet-name>
-    <url-pattern>/Print</url-pattern>
+    <url-pattern>/Print.out</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>GetChart</servlet-name>

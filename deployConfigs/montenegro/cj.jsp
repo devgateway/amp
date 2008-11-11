@@ -16,4 +16,4 @@ FROM [Donor Funding]
 
 
 
-<c:set var="title01" scope="session">Test Query uses Mondrian OLAP</c:set>
+

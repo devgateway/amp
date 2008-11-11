@@ -1,22 +1,6 @@
 <?xml version="1.0"?>
 <site-config>
 	<site-layout>
-            <layout name="orgProfileLayout" extends="default" file="orgProfileLayout.jsp">
-			<put name="title">Organization Profile View</put>
-                        <put-item name="headerTop" file="headerTop.jsp"/>
-			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="footer" layout="footerLayout"/>
-                        <put-item name="filters" module="orgProfile"  page="filter"/>
-                        <put-item name="chart1" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart2" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart3" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart4" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart5" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart6" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart7" module="widget" instance="default" teaser="teaserOfWidget"/>
-			<put-item name="chart8" module="widget" instance="default" teaser="teaserOfWidget"/>
-		</layout>
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
 			<put name="title">Results Matrix</put>
 <!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->
@@ -109,9 +93,7 @@
 		</layout>
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
-	    	<put name="version">1.12i</put>
-			<put name="build_version">build 24.Oct.2008</put>
-	    	<put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
+	    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
@@ -119,15 +101,12 @@
 		</layout>
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put name="version">1.12i</put>
-			<put name="build_version">build 24.Oct.2008</put>
+			<put name="version">1.12j build 11.Nov.2008</put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
-		
-		
 		<layout name="default">
 			<put name="title">AMP Default Template</put>
 			<put-item name="headerTop" file="headerTop.jsp"/>
@@ -514,7 +493,6 @@
 		<page-group masterLayout="popup" tile="body">
 			<module name="calendar">
 				<page>calendarOrgPopupLayout</page>
-				<page>recurringEventPopupLayout</page>
             </module>
             <module name="message">
             	<page>viewSelectedMessage</page>
@@ -528,7 +506,6 @@
 				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>
 				<page>addSectorToIndicator</page>
-				<page>PI_Filter</page>
 				<page>aim_euActivityDetails</page>
 				<page>aim_orgPopupLayout</page>
 				<page>aim_assignFieldPermissions</page>
@@ -641,12 +618,8 @@
 			</module>
 			<module name="aim">
 				<page>aim_saveMessage</page>
-				<page>aim_showSelectedFilters</page>
 				<page>tabManagerData</page>
 				<page>aim_filterPicker</page>
-			</module>
-                        <module name="orgProfile">
-				<page>largestProjects</page>
 			</module>
 		</page-group>
 	</site-layout>

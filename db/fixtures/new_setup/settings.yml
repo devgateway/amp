@@ -10,10 +10,6 @@ scroll_bar_mfp:
   key: scroll_bar_mfp
   value: Have a cool day!
   
-scroll_bar_bluebook:
-  key: scroll_bar_bluebook
-  value: Enjoy the Blue Book!
-  
 data_input_open:
   key: data_input_open
   value: true

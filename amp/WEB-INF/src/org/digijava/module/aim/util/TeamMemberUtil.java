@@ -16,13 +16,6 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.FlushMode;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.Group;
@@ -42,6 +35,12 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
+import org.hibernate.FlushMode;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class TeamMemberUtil {
 
@@ -125,8 +124,7 @@ public class TeamMemberUtil {
 						members.add(tm);
 				}
 			} catch (Exception e) {
-				logger.error("Unable to get all team members [getAllTMExceptTL()]");
-				logger.debug("Exceptiion " + e);
+				logger.error("Unable to get all team members [getAllTMExceptTL()]", e);
 			} finally {
 				try {
 					if (session != null) {
@@ -160,12 +158,12 @@ public class TeamMemberUtil {
 			}
 			// end
 		} catch (Exception ex) {
-			logger.error("Unable to get team member " + ex);
+			logger.error("Unable to get team member ", ex);
 		} finally {
 			try {
 				PersistenceManager.releaseSession(session);
 			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
+				logger.error("releaseSession() failed", ex2);
 			}
 		}
 		return ampMember;
@@ -193,8 +191,7 @@ public class TeamMemberUtil {
 				member = (AmpTeamMember) itr.next();
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get team member");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get team member", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -218,8 +215,7 @@ public class TeamMemberUtil {
             qry = session.createQuery(queryString);
             return qry.list();
         } catch (Exception e) {
-            logger.error("Unable to get team members");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get team members", e);
         }
         return null;
 	}
@@ -271,8 +267,7 @@ public class TeamMemberUtil {
 				member = (AmpTeamMember) itr.next();
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get team member");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get team member", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -300,8 +295,7 @@ public class TeamMemberUtil {
 			qry.setParameter("roleId", roleId, Hibernate.LONG);
 			members = qry.list();
 		} catch (Exception e) {
-			logger.error("Unable to get all team members");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get all team members", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -360,8 +354,7 @@ public class TeamMemberUtil {
 				members.add(tm);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get all team members");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get all team members", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -399,8 +392,7 @@ public class TeamMemberUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error("Unable to get all team members");
-            logger.debug("Exceptiion " + e);
+            logger.error("Unable to get all team members", e);
         }
         logger.debug("returning members");
         return users;
@@ -434,16 +426,14 @@ public class TeamMemberUtil {
 				col.add(itr.next());
 			}
 		} catch (Exception e) {
-			logger.debug("Exception from getAllMembersUsingActivity()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllMembersUsingActivity()", e);
 		} finally {
 			try {
 				if (session != null) {
 					PersistenceManager.releaseSession(session);
 				}
 			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
+				logger.error("releaseSession() failed", ex);
 			}
 		}
 		return col;
@@ -508,16 +498,14 @@ public class TeamMemberUtil {
 			}
 
 		} catch (Exception e) {
-			logger.debug("Exception from getAllMemberActivities()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllMemberActivities()", e);
 		} finally {
 			try {
 				if (session != null) {
 					PersistenceManager.releaseSession(session);
 				}
 			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
+				logger.error("releaseSession() failed", ex);
 			}
 		}
 		return col;
@@ -566,8 +554,7 @@ public class TeamMemberUtil {
 					PersistenceManager.releaseSession(session);
 				}
 			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
+				logger.error("releaseSession() failed", ex);
 			}
 		}
 		return col;
@@ -668,8 +655,7 @@ public class TeamMemberUtil {
 				member = (AmpTeamMember) itr.next();
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get team Member");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get team Member", e);
 		}
 		return member;
 	}
@@ -705,16 +691,14 @@ public class TeamMemberUtil {
 				col.add(tm);
 			}
 		} catch (Exception e) {
-			logger.debug("Exception from getTeamMembers()");
-			logger.debug(e.toString());
+			logger.error("Exception from getTeamMembers()", e);
 		} finally {
 			try {
 				if (session != null) {
 					PersistenceManager.releaseSession(session);
 				}
 			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
+				logger.error("releaseSession() failed", ex);
 			}
 		}
 		return col;
@@ -748,14 +732,13 @@ public class TeamMemberUtil {
 			info = new String[vect.size()];
 			vect.toArray(info);
 		} catch (Exception e) {
-			logger.debug("Exception in getTeamMemberInformation() : " + e);
+			logger.error("Exception in getTeamMemberInformation() : ", e);
 			e.printStackTrace(System.out);
 		} finally {
 			try {
 				PersistenceManager.releaseSession(session);
 			} catch (Exception ex2) {
-				logger
-						.info("releaseSession() failed for getMemberInformation()");
+				logger.error("releaseSession() failed for getMemberInformation()");
 			}
 		}
 
@@ -778,8 +761,7 @@ public class TeamMemberUtil {
 				ampRole = (AmpTeamMemberRoles) itr.next();
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get role");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get role", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -804,8 +786,7 @@ public class TeamMemberUtil {
 			qry = session.createQuery(queryString);
 			roles = qry.list();
 		} catch (Exception e) {
-			logger.error("Unable to get all roles");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get all roles", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -835,8 +816,7 @@ public class TeamMemberUtil {
 				role = (AmpTeamMemberRoles) itr.next();
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get role");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get role", e);
 		}
 		finally {
 			try {
@@ -867,8 +847,7 @@ public class TeamMemberUtil {
 				role = (AmpTeamMemberRoles) itr.next();
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get role");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get role", e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1436,8 +1415,7 @@ public class TeamMemberUtil {
 				members.add(tm);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get all team members");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get all team members", e);
 			e.printStackTrace(System.out);
 		} finally {
 			try {
@@ -1463,7 +1441,7 @@ public class TeamMemberUtil {
 
 				String queryString = "select app from "
 					+ AmpApplicationSettings.class.getName()
-					+ " app where (app.member=:memId)";
+					+ " app where (app.member.ampTeamMemId=:memId)";
 
 				Query qry = session.createQuery(queryString);
 				qry.setParameter("memId", memId, Hibernate.LONG);
@@ -1503,7 +1481,7 @@ public class TeamMemberUtil {
                     Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
                     removeLinksFromATMToActivity(relatedActivities, ampMember);
                    
-                    String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member=:Id ";
+                    String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member.ampTeamMemId=:Id ";
                     qry = session.createQuery(queryString);
                     qry.setParameter("Id", ampMember.getAmpTeamMemId(), Hibernate.LONG);
                     Collection memevents=qry.list();
@@ -1516,13 +1494,7 @@ public class TeamMemberUtil {
 						}
                     }
                     
-                    User user = (User) session.load(User.class, ampMember.getUser().getId());
-                  /*
-                   !This part doesn't make sense 
-                    Group group = (Group) session.load(Group.class, groupId);
-                    user.getGroups().remove(group);
-                    session.update(user);
-                   */
+                   
                     // Verify for reports that are owned by this user and delete them
                     //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
                     queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
@@ -1565,7 +1537,7 @@ public class TeamMemberUtil {
                         }
                     }
                     qryStr = "select a from " + AmpApplicationSettings.class.getName() +
-                        " a where (a.member=:memberId)";
+                        " a where (a.member.ampTeamMemId=:memberId)";
                     qry = session.createQuery(qryStr);
                     qry.setParameter("memberId", id[i], Hibernate.LONG);
 
@@ -1653,8 +1625,7 @@ public class TeamMemberUtil {
                     teamMembers= qry.list();
             }
             catch (HibernateException ex) {
-                    logger.error("Unable to get team member");
-                    logger.debug("Exceptiion " + ex);
+                    logger.error("Unable to get team member", ex);
                     throw ex;
             }
 
@@ -1679,8 +1650,7 @@ public class TeamMemberUtil {
                     teamMembers= qry.list();
             }
             catch (HibernateException ex) {
-                    logger.error("Unable to get team member");
-                    logger.debug("Exceptiion " + ex);
+                    logger.error("Unable to get team member", ex);
                     throw ex;
             }
 

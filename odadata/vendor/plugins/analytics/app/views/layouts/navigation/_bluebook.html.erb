@@ -54,7 +54,7 @@
 					<div><a href="#"><%= ll(:bluebook, :contents, :profiles, :title) %></a></div>
 					<ul>
 						<% Donor.main.all(:order => "name ASC").each do |d| %>
-							<li><a href="/bluebook/donor_profiles/<%= d.id %>"><%= d.name.titleize %></a></li>
+							<li><%= link_to(d.name.titleize, bluebook_donor_profile_path(d.id)) %></li>
 						<% end %>
 					</ul>
 				</li>

@@ -88,7 +88,7 @@
 	
 	<% Donor.main.all(:order => "name ASC").each do |d| %>
 		<tr>
-			<td><a href="/bluebook/donor_profile/<%= d.id %>"><%= d.name.titleize %></a></td>
+			<td><%= link_to(d.name.titleize, bluebook_donor_profile_path(d.id)) %></a></td>
 		</tr>
 	<% end %>
 	<tr>

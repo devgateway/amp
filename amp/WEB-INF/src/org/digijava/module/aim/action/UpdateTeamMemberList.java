@@ -40,7 +40,7 @@ public class UpdateTeamMemberList extends Action {
 				logger.debug("in remove members");
 				Long selMembers[] = tmForm.getSelMembers();
 				Site site = RequestUtils.getSite(request);
-				TeamMemberUtil.removeTeamMembers(selMembers,site.getId());
+				TeamMemberUtil.removeTeamMembers(selMembers);
 				return mapping.findForward("forward");
 			} else {
 				return mapping.findForward(null);

@@ -12,19 +12,13 @@ en-US:
                 building_europe: 50 Years Building Europe
                 member_states: Member States of the European Union
                 institutions: Institutions of the European Union
-                member_states_short: Member States of the EU
-                institutions_short: Institutions of the EU
                 consensus: The European Consensus on Development / Development Policy
-                consensus_short: The European Consensus on Development
                 eu_aid: European Union Aid to Developing Countries
-                eu_aid_short: EU Aid to Developing Countries
                 code_of_conduct: The EU Code of Conduct on Complementarity and Division of Labour in Development Policy
-                code_of_conduct_short: EU Code of Conduct
             eu_cooperation:
                 title: EU Cooperation
                 policy: EU Cooperation in Nicaragua - Policy Orientations   
                 process: The EU Coordination, Harmonisation and Alignment Process in Nicaragua 
-                process_short: EU Coordination and Harmonisation Process    
                 facts: EU Cooperation in Nicaragua - Facts and Figures
                 achievement_in: EU Cooperation Achievements in {{year}}
                 forecasts_for: EU Cooperation Forecasts for {{year}}
@@ -39,7 +33,6 @@ en-US:
                 by_region: EU Cooperation by Region
                 by_toa: EU Cooperation by Type of Aid
                 in_percent_by_toa: EU Cooperation in % by Type of Aid in {{year}}
-                # CHANGED!
                 in_percent_by_toa_subtitle: EU ODA disbursements in % by type of aid per EU Member State in {{year}}
             profiles:
                 title: EU Donor Profiles

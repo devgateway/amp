@@ -163,7 +163,7 @@ function selectCalendarType(view, type) {
         <tr>
             <td style="text-align:right;">
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
-                  <digi:img src="module/aim/images/images_dhtmlsuite/calendar/calender-previous-year.gif" border="0" alt=""/>
+                  <digi:img src="module/calendar/images/Previous.png" border="0" alt=""/>
                 </a>
             </td>
             <td align="center" style="font-size:12px;font-family: Tahoma;">
@@ -190,7 +190,7 @@ function selectCalendarType(view, type) {
             </td>
             <td>
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);">
-                  <digi:img src="module/aim/images/images_dhtmlsuite/calendar/calender-next-year.gif" border="0" alt=""/>                 
+                  <digi:img src="module/calendar/images/Next.png" border="0" alt=""/>                 
                 </a>
             </td>
         </tr>

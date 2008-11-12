@@ -10,19 +10,22 @@
 <jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.charcounter.js"/>"></script>
-<!-- Dependencies --> 
-        <script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script>
-        <script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
+<!-- Dependencies -->        
+<script type="text/javascript" src="<digi:file src="script/yui/container_core-min.js"/>"></script>        
+<script type="text/javascript" src="<digi:file src="script/yui/connection-min.js"/>"></script>
         
-        <!-- Source File -->
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
-		<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
-        <script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script> 
+<!-- Source File -->
+<script type="text/javascript" src="<digi:file src="script/yui/menu-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="script/yui/yahoo-dom-event.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/container-min.js"/>"></script>       
+<script type="text/javascript" src="<digi:file src="script/yui/element-beta-min.js"/>"></script> 
+<script type="text/javascript" src="<digi:file src="script/yui/tabview-min.js"/>"></script>        
+        
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
 
 <digi:instance property="calendarEventForm"/>
@@ -67,6 +70,10 @@ function submitForm()
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
+
+	var calendarHelp="<digi:trn key='calendar:calendarHelp'>Calendar</digi:trn>"
+	var separateEmails="<digi:trn key='calendar:separateEmails'>Please separate email addresses by semicolons</digi:trn>"
+		
 function makePublic(){
 
   var showPrivateEvents = document.getElementsByName('privateEventCheckbox')[0];
@@ -821,10 +828,7 @@ function recurEvent(){
 			                                            <div>
 			                                                <input id="guest" type="text" style="width:220px;">
 			                                                <input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
-			                                                <a href="#">
-															<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width="10" height="10" border="0"></a>
-			                                                
-			                                                <digi:trn key="calendar:separateEmails">Please separate email addresses by semicolons</digi:trn>
+			                                                <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>			                                               
 			                                            </div>
 			                                            <div>
 			                                              <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 120px;">

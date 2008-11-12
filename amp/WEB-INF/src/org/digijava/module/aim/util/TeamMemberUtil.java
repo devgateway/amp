@@ -1480,7 +1480,7 @@ public class TeamMemberUtil {
 		}
 	}
 
-    public static void removeTeamMembers(Long id[], Long groupId) {
+    public static void removeTeamMembers(Long id[]) {
         Session session = null;
         Transaction tx = null;
         String qryStr = null;
@@ -1517,9 +1517,12 @@ public class TeamMemberUtil {
                     }
                     
                     User user = (User) session.load(User.class, ampMember.getUser().getId());
+                  /*
+                   !This part doesn't make sense 
                     Group group = (Group) session.load(Group.class, groupId);
                     user.getGroups().remove(group);
                     session.update(user);
+                   */
                     // Verify for reports that are owned by this user and delete them
                     //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
                     queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";

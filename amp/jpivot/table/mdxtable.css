@@ -1,13 +1,13 @@
 /* slicer */
 .slicer-normal {
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size: 0.9em;;
+  font-size: 0.7em;;
 }
 
 .slicer-selected {
   background-color : #ABE5B5;
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size: 0.8em;;
+  font-size: 0.7em;;
   color : Black;
 }
 
@@ -49,7 +49,7 @@ th.column-heading-span-right,
 th.property-heading,
 td.property-name {
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size: 0.8em;;
+  font-size: 0.7em;;
   color : Black;
   text-align: left;
   vertical-align: top;
@@ -133,7 +133,7 @@ td.cell-gruen,
 td.property-value,
 td.property-span {
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size: 0.8em;;
+  font-size: 0.6em;;
   color : Black;
   text-align: right;
 }

@@ -639,7 +639,7 @@ function addOrganisation(orgId, orgName){
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-															<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="dr-menu"><digi:trn key="btn:addOrganizations" styleClass="dr-menu">Add Organizations</digi:trn></aim:addOrganizationButton>			
+															<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="dr-menu"><digi:trn key="btn:addOrganizations" >Add Organizations</digi:trn></aim:addOrganizationButton>			
 															</td>
 															<td>
 																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs()">

@@ -497,9 +497,11 @@ function confirmFunc() {
                                       <c:set var="translation">
                                       	<c:if test="${aimTeamReportsForm.showTabs}">
 	                                        <digi:trn key="aim:ClickDeleteTab">Click on this icon to delete tab&nbsp;</digi:trn>
+											<c:set target="${urlParams}" property="isTab" value="1" />
                                       	</c:if>
                                       	<c:if test="${!aimTeamReportsForm.showTabs}">
 	                                        <digi:trn key="aim:ClickDeleteReport">Click on this icon to delete report&nbsp;</digi:trn>
+											<c:set target="${urlParams}" property="isTab" value="0" />
                                       	</c:if>
                                        </c:set>
                                       <digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">

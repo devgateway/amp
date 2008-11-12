@@ -111,13 +111,13 @@ public class ActivityUtil {
 
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
 
-  /**
-   * Persists an AmpActivity object to the database
-   * This function is used to create a new activity
-   * @param activity The activity to be persisted
-   */
+   ///**
+   //* Persists an AmpActivity object to the database
+   //* This function is used to create a new activity
+   //* @param activity The activity to be persisted
+   //*/
   //I've seen no references so I marked it deprecated
-  @Deprecated
+  //@Deprecated
 //  public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
 //                                  boolean serializeFlag, Long field,
 //                                  Collection relatedLinks, Long memberId,
@@ -850,7 +850,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           }
         }
       }
-        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;
+        //String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;
+        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity.ampActivityId=" + activityId;
+      	IPAContract ipaAux = (IPAContract) session.get(IPAContract.class, activityId);
         String ids = "";
         if (contracts != null) {
 
@@ -967,7 +969,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         if (ids.length() != 0) {
             queryString += " and con.id not in (" + ids + ")";
         }
-       session.delete(queryString);
+        if(ipaAux != null){//if no row is returned there is an Hibernate exception.
+     	   session.delete(queryString);
+        }
        //session.flush();
        
        if (alwaysRollback)

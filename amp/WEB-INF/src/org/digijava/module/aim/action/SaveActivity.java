@@ -1905,12 +1905,13 @@ public class SaveActivity extends Action {
 			logger.debug("Succeeded!");
 			return actId;
 		} catch (Exception e) {
+			logger.error(e);
 			//TODO: Record error that initially caused save problems
 			recoveryMode = true;
 		}
 		
 		if (recoveryMode){
-			logger.debug("<<<<RECOVERY MODE>>>>");
+			logger.warn("<<<<RECOVERY MODE>>>>");
 			rsp.setDidRecover(true);
 			int currentStep = 0;
 			int badSteps = 0;

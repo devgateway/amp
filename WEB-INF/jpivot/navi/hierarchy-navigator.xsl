@@ -50,7 +50,7 @@
 </xsl:template>
 
 <xsl:template match="cat-item">
-  <tr>
+ <tr>
     <td class="navi-hier">
       <div style="margin-left: 1em">
         <xsl:apply-templates select="cat-button"/>
@@ -58,7 +58,7 @@
         <xsl:text> </xsl:text>
         <xsl:choose>
           <xsl:when test="@id">
-            <a href="?{$token}&amp;{@id}=x">
+            <a href="../../../mondrian/testpage.do?{$token}&amp;{@id}=x">
               <xsl:value-of select="@name"/>
             </a>
           </xsl:when>
@@ -72,7 +72,7 @@
         <xsl:apply-templates select="slicer-value"/>
       </div>
     </td>
-  </tr>
+ </tr>
 </xsl:template>
 
 <xsl:template match="slicer-value">

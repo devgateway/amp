@@ -514,7 +514,7 @@ window.onload=autosum;
 	<tr>
 		<td colspan="6" align="left">
 			<field:display name="Contract Organization" feature="Contracting">
-				<aim:addOrganizationButton form="${aimIPAContractForm}" collection="organisations" refreshParentDocument="false" callBackFunction="orgsAdded()" useClient="false"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+				<aim:addOrganizationButton form="${aimIPAContractForm}" collection="organisations" refreshParentDocument="false" callBackFunction="orgsAdded()" useClient="false" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 				&nbsp;
 				<html:button styleClass="dr-menu" property="deleteOrgs" onclick="delOrgs();">
 					<digi:trn key="aim:IPA:newPopup:removeOrganizations">Remove Organizations</digi:trn>

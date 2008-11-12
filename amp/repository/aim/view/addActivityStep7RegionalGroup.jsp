@@ -46,7 +46,7 @@
 														<tr>
 															<td>
 																<field:display name="Regional Group Add Button" feature="Regional Group">
-																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+																	<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 																</field:display>
 															</td>
 															<td>
@@ -67,7 +67,7 @@
 												<tr>
 													<td bgcolor="#ffffff">
 													<field:display name="Regional Group Add Button" feature="Regional Group">
-														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
+														<aim:addOrganizationButton form="${aimEditActivityForm.agencies}" collection="regGroups" refreshParentDocument="true" styleClass="dr-menu"><digi:trn key="btn:addOrganizations">Add Organizations</digi:trn></aim:addOrganizationButton>
 														<%
 															selectOrganizationComponentForm compForm1 = (selectOrganizationComponentForm) session.getAttribute("aimSelectOrganizationForm");
 															selectOrganizationComponentForm compForm2 = (selectOrganizationComponentForm) session.getAttribute("siteampdefaultaimSelectOrganizationForm");

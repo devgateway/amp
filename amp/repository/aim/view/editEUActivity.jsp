@@ -186,7 +186,7 @@ function selectOrganisation1() {
                               <c:set var="nameId"> nameContrDonorId${idx} </c:set>
                               <input   name='contrDonorId' type="hidden" id="${valueId}" style="text-align:right" value='${aimEUActivityForm.contrDonorId[idx]}' size="4"/>
                               <input name="contrDonorName" type='text' id="${nameId}" style="text-align:right" value='${aimEUActivityForm.contrDonorName[idx]}' size="10" style="background-color:#CCCCCC" onKeyDown="return false"/>
-                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}"><digi:trn key="aim:addEditActivitySelectDonorDots">....</digi:trn></aim:addOrganizationButton>
+                              <aim:addOrganizationButton useClient="true" htmlvalueHolder="${valueId}" htmlNameHolder="${nameId}" styleClass="dr-menu"><digi:trn key="aim:addEditActivitySelectDonorDots">....</digi:trn></aim:addOrganizationButton>
                             </field:display></td>
 							<td align="right" valign="top" nowrap><field:display name="Contribution Financing Type" feature="Costing">
                               <logic:present name="aimEUActivityForm" property="finTypes">

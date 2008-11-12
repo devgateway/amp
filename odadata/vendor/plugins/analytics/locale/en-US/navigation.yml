@@ -15,7 +15,7 @@ en-US:
       eu_cooperation:
         title: EU Cooperation
         process: EU Coordination and Harmonisation Process    
-        achievement_in: EU Cooperation Achievements in {{year}}
+        achievements: EU Cooperation Achievements in {{year}}
         forecasts_for: EU Cooperation Forecasts for {{year}}
         trend: EU Cooperation Trend from {{from}} to {{to}}
         by_sector_in: EU Cooperation by DAC Sector in {{year}}

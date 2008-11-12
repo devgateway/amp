@@ -15,7 +15,7 @@ es-NI:
       eu_cooperation:
         title: Cooperación UE
         process: Proceso de Coordinación y Armonicazión de la UE
-        achievement_in: Logros de la Cooperacion UE en {{year}}
+        achievements: Logros de la Cooperacion UE en {{year}}
         forecasts_for: Proyecciones de la Cooperación UE para {{year}}
         trend: Tendencia de la Cooperación UE de {{from}} para {{to}}
         by_sector_in: Cooperación de UE por Sector CAD en {{year}}

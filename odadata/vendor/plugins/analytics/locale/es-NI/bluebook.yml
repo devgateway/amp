@@ -2,7 +2,7 @@ es-NI:
   bluebook:
       title: EU Blue Book
       
-      static:
+      pages:
         contents: # Tabla de Contenidos
             toc: Contenidos
             foreword: Prefacio

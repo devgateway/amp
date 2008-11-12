@@ -7,8 +7,8 @@
 // <![CDATA[  
 	var so = new SWFObject("/ampie.swf", "sectors_graph", "700", "630", "8", "#FFFFFF");
 	so.addVariable("path", "/");
-	so.addVariable("settings_file", escape("/charts/settings/sectors_large.xml"));       
-	so.addVariable("data_file", escape("<%= url_for(:action => :sectors_chart_data, :format => 'xml', :dname => @donor.non_localized_name) %>"));  
+	so.addVariable("settings_file", escape("/bluebook/charts/settings/sectors_large.xml"));       
+	so.addVariable("data_file", escape("<%= url_for(:action => :sectors_chart_data, :format => 'xml', :id => @donor) %>"));  
 	so.addVariable("preloader_color", "#999999");
 	so.write("sectors_graph");
 // ]]>

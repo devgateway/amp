@@ -2,7 +2,7 @@ en-US:
   bluebook:
       title: EU Blue Book
       
-      static:
+      pages:
         contents: # Table of Contents
             toc: Table of Contents
             foreword: Foreword

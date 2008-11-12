@@ -1,6 +1,6 @@
 class Donor < ActiveRecord::Base
   has_many :province_payments
-  
+  has_many :sector_payments
   
   # Total commitments of donor
   def total_commitments
@@ -113,38 +113,6 @@ class Donor < ActiveRecord::Base
     query_projects.inject(0.to_currency(currency)) { |sum, p| sum + p.funding_forecasts.find_by_year(year).andand.payments }
   end
     
-  # List of total payments per sector
-  def total_payments_in_sectors(year = nil)
-    conditions = if year
-      ["fundings.year = ? AND projects.data_status = ? AND projects.donor_id = ? AND dac_sectors.name IS NOT NULL", year, Project::PUBLISHED, self.id]
-    else
-      ["projects.data_status = ? AND projects.donor_id = ? AND dac_sectors.name IS NOT NULL", Project::PUBLISHED, self.id]
-    end
-  
-    res = Funding.find(:all, 
-      :select => "SUM(payments_q1 + payments_q2 + payments_q3 + payments_q4) AS payments, year, dac_sectors.code AS sector_code, dac_sectors.name as sector_name",
-      :joins => "LEFT OUTER JOIN projects ON fundings.project_id = projects.id LEFT OUTER JOIN crs_sectors ON projects.crs_sector_id = crs_sectors.id LEFT OUTER JOIN dac_sectors ON crs_sectors.dac_sector_id = dac_sectors.id",
-      :conditions => conditions,
-      :group => "crs_sectors.dac_sector_id, dac_sectors.code, dac_sectors.name, fundings.year",
-      :order => "sector_name ASC")
-  
-    res.inject(OrderedHash.new) do |sector_amounts, r|
-      # Merge
-      # if [111, 112, 113, 114].include?(r.sector_code.to_i)
-      #         sector = DacSector.new(:code => 110, :name => "EDUCATION", :name_es => "EDUCACION") # 11000 EDUCATION
-      #       elsif [121, 122].include?(r.sector_code.to_i)
-      #         sector = DacSector.new(:code => 120, :name => "HEALTH", :name_es => "SALUD") # 12000 HEALTH
-      #       else
-        sector = DacSector.find_by_code(r.sector_code)
-      # end
-  
-      sector_amounts[sector] ||= 0.to_currency(self.currency) 
-      sector_amounts[sector] += r.payments.to_currency(self.currency, r.year)
-  
-      sector_amounts
-    end
-  end
-  
   # Returns total payments to national projects (no provinces/regions chosen)
   def payments_to_national_projects(year = nil)
     conditions = if year

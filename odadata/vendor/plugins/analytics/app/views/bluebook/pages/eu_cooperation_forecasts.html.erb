@@ -1,0 +1,26 @@
+<table class="admin">
+	<tr>
+		<td>
+			<b><%= ll(:bluebook, :contents, :eu_cooperation, :forecasts_for) %> 2008</b>
+			<br>
+			<%= ll(:bluebook, :chart_subtitles, :forecasts) %>
+			<div id="column_graph">
+				<strong>You need to upgrade your Flash Player</strong>
+			</div>
+			<!-- saved from url=(0013)about:internet -->
+			<!-- amcolumn script-->
+		  <script type="text/javascript">
+			// <![CDATA[		
+					var so = new SWFObject("/amcolumn.swf", "amcolumn", "960", "430", "8", "#DBE2F1");
+					so.addVariable("path", "/");
+					so.addVariable("settings_file", escape("/bluebook/charts/settings/cooperation_forecasts.xml"));
+					so.addVariable("data_file", escape("/bluebook/charts/forecasts_column_data/show.xml"));  
+			    	so.addVariable("preloader_color", "#999999");
+					so.write("column_graph");
+					// ]]>
+				</script>
+			<!-- end of amcolumn script -->
+			<br><br><font size=1><%= ll(:terms, :source) %>: 2008 ODAnic - www.odadata.eu/odanic</font>
+		</td>
+	</tr>
+</table>

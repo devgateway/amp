@@ -4,11 +4,6 @@
 # resources :bluebooks
 
 namespace :bluebook do |bb|
+  bb.root :controller => 'pages', :action => 'contents'
   bb.resources :donor_profiles
-    
-  # Static routes
-  bb.with_options :controller => 'static' do |static|
-    static.connect ':action'
-    static.connect ':action.:format'
-  end
 end

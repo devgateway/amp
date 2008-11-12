@@ -179,15 +179,15 @@
 						<div id="sectors_graph">
 							<strong>You need to upgrade your Flash Player</strong>
 						</div>
-						<br><%= reports_link_to lc(:enlarged_chart), :action => "sectors_chart", :id => @donor.non_localized_name %>
+						<br><%= reports_link_to lc(:enlarged_chart), :controller => 'charts', :action => 'sectors_chart', :id => @donor %>
 						
 						<!-- Sectors Pie script-->
 					 	<script type="text/javascript">
 						// <![CDATA[  
 							var so = new SWFObject("/ampie.swf", "sectors_graph", "280", "250", "8", "#DBE2F1");
 							so.addVariable("path", "/");
-							so.addVariable("settings_file", escape("/charts/settings/sectors_graph.xml"));       
-							so.addVariable("data_file", escape("<%= url_for(:action => :sectors_chart_data, :format => 'xml', :dname => @donor.non_localized_name) %>"));  
+							so.addVariable("settings_file", escape("/bluebook/charts/settings/sectors_graph.xml"));       
+							so.addVariable("data_file", escape("<%= url_for(:controller => 'charts', :action => 'sectors_chart_data', :id => @donor, :format => 'xml') %>"));  
 							so.addVariable("preloader_color", "#999999");
 							so.write("sectors_graph");
 						// ]]>

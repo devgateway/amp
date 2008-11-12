@@ -12,6 +12,7 @@ import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.dbentity.Approval;
 import org.digijava.module.message.dbentity.CalendarEvent;
@@ -610,25 +611,34 @@ public class AmpMessageWorker {
         return receivers;
     }
 
-    private static void sendMailes(Collection<AmpMessageState> statesRelatedToTemplate){
+    private static void sendMailes(Collection<AmpMessageState> statesRelatedToTemplate) throws Exception {
         for(AmpMessageState state:statesRelatedToTemplate){
             sendMail(state);
         }
     }
 
-    private static void sendMailes(HashMap<String, String> emails){
+    private static void sendMailes(HashMap<String, String> emails) throws Exception {
         if(emails!=null){
             for (String email : emails.keySet()) {
-                sendMail("system@digijava.org",email,"New alert","UTF8",emails.get(email));
+            	AmpMessageSettings messageSettings;
+				messageSettings = AmpMessageUtil.getMessageSettings();
+				Long sendMail = messageSettings.getEmailMsgs();
+                if(sendMail.equals(1)){
+                	sendMail("system@digijava.org",email,"New alert","UTF8",emails.get(email));
+                }
             }
         }
     }
 
-    private static void sendMail(AmpMessageState state) {
+    private static void sendMail(AmpMessageState state) throws Exception {
         AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
         if (teamMember != null) {
-            User user = teamMember.getUser();
-            sendMail("system@digijava.org",user.getEmail(),"New alert","UTF8",state.getMessage().getDescription());
+        	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
+            Long sendMail = messageSettings.getEmailMsgs();
+            if(sendMail.equals(1)){
+            	User user = teamMember.getUser();
+                sendMail("system@digijava.org",user.getEmail(),"New alert","UTF8",state.getMessage().getDescription());
+            }
         }
     }
 

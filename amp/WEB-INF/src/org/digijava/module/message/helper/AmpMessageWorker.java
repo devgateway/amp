@@ -623,7 +623,7 @@ public class AmpMessageWorker {
             	AmpMessageSettings messageSettings;
 				messageSettings = AmpMessageUtil.getMessageSettings();
 				Long sendMail = messageSettings.getEmailMsgs();
-                if(sendMail.equals(1)){
+                if(sendMail.intValue() == 1){
                 	sendMail("system@digijava.org",email,"New alert","UTF8",emails.get(email));
                 }
             }
@@ -635,7 +635,7 @@ public class AmpMessageWorker {
         if (teamMember != null) {
         	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
             Long sendMail = messageSettings.getEmailMsgs();
-            if(sendMail.equals(1)){
+            if(sendMail.intValue() == 1){
             	User user = teamMember.getUser();
                 sendMail("system@digijava.org",user.getEmail(),"New alert","UTF8",state.getMessage().getDescription());
             }

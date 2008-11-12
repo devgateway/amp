@@ -10,13 +10,13 @@
 	<graphs>	
 		<graph gid="1" title="<%= ll(:terms, :disbursements) %> <%= Time.now.year - 1 %>" color="#0000FF">
 			<% translate_options(Project::TYPE_OF_AID_OPTIONS).each do |name, id| %>
-				<value xid="<%= id %>"><%= @aid_payments[id].in_millions(2) rescue 0 %></value>
+				<value xid="<%= id %>"><%= @aid_payments[id].andand.to_i %></value>
 			<% end %>
 		</graph>
 		
 		<graph gid="2" title="<%= ll(:charts, :legends, :disbursements_forecast) %> <%= Time.now.year %>" color="#00FFFF">
 			<% translate_options(Project::TYPE_OF_AID_OPTIONS).each do |name, id| %>
-				<value xid="<%= id %>"><%= @aid_forecasts[id].in_millions(2) rescue 0 %></value>
+				<value xid="<%= id %>"><%= @aid_forecasts[id].andand.to_i %></value>
 			<% end %>
 		</graph>
 	</graphs>

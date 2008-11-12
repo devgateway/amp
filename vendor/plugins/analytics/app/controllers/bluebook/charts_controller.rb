@@ -8,7 +8,7 @@ class Bluebook::ChartsController < BluebookController
   # Charts
   def sectors_chart
     # Show large version of sectors chart
-    @donor = Donor.find_by_name(params[:id])
+    @donor = Donor.find(params[:id])
    
     render :layout => "report_window"
   end
@@ -17,9 +17,9 @@ class Bluebook::ChartsController < BluebookController
   # Chart data
     
   def sectors_chart_data
-    @donor = Donor.find_by_name(params[:dname])
-    @sectors = @donor.total_payments_in_sectors(Time.now.year-1).sort { |e, f| f[1] <=> e[1] }
-       
+    @donor = Donor.find(params[:id])
+    @sector_payments = @donor.sector_payments.all.published.find_all_by_year(Time.now.year-1)
+    
     render :layout => false
   end
   
@@ -29,7 +29,7 @@ class Bluebook::ChartsController < BluebookController
     @donors.each { |d| @donor_payments[d.name] = d.annual_payments[Time.now.year-1].in("EUR") }
     @donor_commitments = OrderedHash.new
     @donors.each { |d| @donor_commitments[d.name] = d.annual_commitments[Time.now.year-1].in("EUR") }
-   
+
     render :layout => false
   end
  
@@ -53,27 +53,31 @@ class Bluebook::ChartsController < BluebookController
     render :layout => false
   end
  
+ 
+  # TODO: Whoaaa, this definitely needs refactoring.
+  # Best way would probably be to create another table for the type of aid options and handle it like
+  # the sectors. Using a view for aggregates.
   def eu_cooperation_type_of_aid_data
     @aid_payments, @aid_forecasts = [], []
     
     Donor.main.each do |d|
-      res = Finances.find(:all, 
-        :select => "SUM((payments_q1 + payments_q2 + payments_q3 + payments_q4)) AS payments, year, projects.type_of_aid AS type_of_aid",
-        :joins => "LEFT OUTER JOIN projects ON finances.project_id = projects.id",
-        :conditions => ["finances.year = ? AND projects.data_status = ? AND projects.donor_id = ?", Time.now.year-1, Project::PUBLISHED, d.id],
+      res = Funding.find(:all, 
+        :select => "SUM((payments_q1 + payments_q2 + payments_q3 + payments_q4)) AS total_payments, year, projects.type_of_aid AS type_of_aid",
+        :joins => "LEFT OUTER JOIN projects ON fundings.project_id = projects.id",
+        :conditions => ["fundings.year = ? AND projects.data_status = ? AND projects.donor_id = ?", Time.now.year-1, Project::PUBLISHED, d.id],
         :group => "projects.type_of_aid, year")
       
       res.each do |r|
         @aid_payments[r.type_of_aid.to_i] ||= 0.to_currency(Prefs.default_currency)
-        @aid_payments[r.type_of_aid.to_i] += r.payments.to_currency(d.currency, r.year)
+        @aid_payments[r.type_of_aid.to_i] += r.total_payments.to_currency(d.currency, r.year)
       end
     end
     
     Donor.main.each do |d|
-      res = Finances.find(:all, 
-        :select => "SUM(payments_forecast) AS forecasts, year, projects.type_of_aid AS type_of_aid",
-        :joins => "LEFT OUTER JOIN projects ON finances.project_id = projects.id",
-        :conditions => ["finances.year = ? AND projects.data_status = ? AND projects.donor_id = ?", Time.now.year, Project::PUBLISHED, d.id],
+      res = FundingForecast.find(:all, 
+        :select => "SUM(payments) AS forecasts, year, projects.type_of_aid AS type_of_aid",
+        :joins => "LEFT OUTER JOIN projects ON funding_forecasts.project_id = projects.id",
+        :conditions => ["funding_forecasts.year = ? AND projects.data_status = ? AND projects.donor_id = ?", Time.now.year, Project::PUBLISHED, d.id],
         :group => "projects.type_of_aid, year")
       
       res.each do |r|
@@ -108,42 +112,16 @@ class Bluebook::ChartsController < BluebookController
   end
   
   def dac_sectors_column_data
-    @donors = Donor.main.all(:order => "name ASC")
-    @sector_payments = OrderedHash.new
-
-    @donors.each do |d|
-      @sector_payments[d.name] = d.total_payments_in_sectors(Time.now.year-1) 
-    end
+    @sector_payments = SectorPayment.published.all.find_all_by_year(Time.now.year-1)
+    @sector_totals = SectorPayment.published.totals.all.find_all_by_year(Time.now.year-1)
     
-    @totals = @sector_payments.inject(OrderedHash.new) do |totals, d|
-      d[1].each do |sector, amount|
-        totals[sector] ||= 0.to_currency(Prefs.default_currency)
-        totals[sector] += amount
-      end
-      
-      totals
-    end
-    
-    @totals = @totals.sort_by { |k, v| v }
+    render :layout => false
   end
   
   def regions_column_data
-    @donors = Donor.main.all(:order => "name ASC")
-    @region_payments = OrderedHash.new
-    @donors.each do |d|
-      @region_payments[d.name] = d.provinces_by_amount(Time.now.year-1) 
-      #@region_payments[d.name]["National"] = d.payments_to_national_projects(Time.now.year-1)
-    end
+    @province_payments = ProvincePayment.published.all.find_all_by_year(Time.now.year-1)
+    @province_totals = ProvincePayment.published.totals.all.find_all_by_year(Time.now.year-1)
     
-    @totals = @region_payments.inject(OrderedHash.new) do |totals, d|
-      d[1].each do |region, amount|
-        totals[region] ||= 0.to_currency(Prefs.default_currency)
-        totals[region] += amount
-      end
-      
-      totals
-    end
-    
-    @totals = @totals.sort_by { |k, v| v }    
+    render :layout => false
   end
 end

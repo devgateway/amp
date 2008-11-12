@@ -1,35 +1,49 @@
 <ul id="nav">
 	<% l_scope(:navigation, :bluebook) do %>
 		<li id="bigger">
-			<div><a href="/bluebook/contents"><%= ll(:toc) %></a></div>
+			<div><%= link_to ll(:toc), :action => 'contents' %></a></div>
 		</li>
 		
 		<li id="smaller">
-			<div><a href="/bluebook/foreword"><%= ll(:foreword) %></a></div>
+			<div><%= link_to ll(:foreword), :action => 'foreword' %></a></div>
 		</li>
     	
 		<li id="smaller">
 			<div><a href="#"><%= ll(:eu_at_a_glance, :title) %></a></div>
 			<ul>
-				<li><a href="/bluebook/eu_at_a_glance_50_years"><%= ll(:eu_at_a_glance, :building_europe) %></a></li>
-				<li><a href="/bluebook/eu_at_a_glance_member_states"><%= ll(:eu_at_a_glance, :member_states) %></a></li>
-				<li><a href="/bluebook/eu_at_a_glance_institutions"><%= ll(:eu_at_a_glance, :institutions) %></a></li>
-				<li><a href="/bluebook/eu_at_a_glance_consensus_on_development"><%= ll(:eu_at_a_glance, :consensus) %></a></li>
-				<li><a href="/bluebook/eu_at_a_glance_code_of_conduct"><%= ll(:eu_at_a_glance, :code_of_conduct) %></a></li>
-				<li><a href="/bluebook/eu_at_a_glance_aid"><%= ll(:eu_at_a_glance, :eu_aid) %></a></li>									
+				<li><%= link_to ll(:eu_at_a_glance, :building_europe), :action => 'eu_at_a_glance_50_years' %></a></li>
+				<li><%= link_to ll(:eu_at_a_glance, :member_states), :action => 'eu_at_a_glance_member_states' %></a></li>
+				<li><%= link_to ll(:eu_at_a_glance, :institutions), :action => 'eu_at_a_glance_institutions' %></a></li>
+				<li><%= link_to ll(:eu_at_a_glance, :consensus), :action => 'eu_at_a_glance_consensus_on_development' %></a></li>
+				<li><%= link_to ll(:eu_at_a_glance, :code_of_conduct), :action => 'eu_at_a_glance_code_of_conduct' %></a></li>
+				<li><%= link_to ll(:eu_at_a_glance, :eu_aid), :action => 'eu_at_a_glance_aid' %></a></li>									
 			</ul>
 		</li>
     	
 		<li id="bigger">
 			<div><a href="#"><%= ll(:eu_cooperation, :title) %></a></div>
 			<ul>
-				<li><a href="/bluebook/eu_at_a_glance_h_and_a_process"><%= ll(:eu_cooperation, :process) %></a></li>
-				<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_achievements"><%= ll(:eu_cooperation, :achievements, :year => 2007) %></a></li>
-				<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_forecasts"><%= ll(:eu_cooperation, :forecasts_for, :year => 2008) %></a></li>
-				<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_trend"><%= ll(:eu_cooperation, :trend, :from => 2007, :to => 2008) %></a></li>
-				<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_dac_sector_column_chart"><%= ll(:eu_cooperation, :by_sector_in, :year => 2007) %></a></li>
-				<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_region_column_chart"><%= ll(:eu_cooperation, :by_region_in, :year => 2007) %></a></li>
-				<li><a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/bluebook/eu_cooperation_type_of_aid"><%= ll(:eu_cooperation, :by_toa_in, :year => 2007, :forecasts => 2008) %></a></li>
+				<li><%= link_to ll(:eu_cooperation, :process), 
+							{ :controller => 'pages', :action => 'eu_at_a_glance_h_and_a_process' }, 
+							:popup => ['ODAnic', 'height=700,width=800'] %></li>
+				<li><%= link_to ll(:eu_cooperation, :achievements), 
+							{ :controller => 'pages', :action => 'eu_cooperation_achievements' }, 
+							:popup => ['ODAnic', 'height=700,width=800'] %></li>						
+				<li><%= link_to ll(:eu_cooperation, :forecasts_for, :year => 2008), 
+							{ :controller => 'pages', :action => 'eu_cooperation_forecasts' }, 
+							:popup => ['ODAnic', 'height=700,width=800'] %></li>
+				<li><%= link_to ll(:eu_cooperation, :trend, :from => 2007, :to => 2008), 
+							{ :controller => 'pages', :action => 'eu_cooperation_trend' }, 
+							:popup => ['ODAnic', 'height=700,width=800'] %></li>
+				<li><%= link_to ll(:eu_cooperation, :by_sector_in, :year => 2007), 
+							{ :controller => 'pages', :action => 'eu_cooperation_dac_sector_column_chart' }, 
+							:popup => ['ODAnic', 'height=700,width=800'] %></li>
+				<li><%= link_to ll(:eu_cooperation, :by_region_in, :year => 2007), 
+							{ :controller => 'pages', :action => 'eu_cooperation_region_column_chart' },
+				 			:popup => ['ODAnic', 'height=700,width=800'] %></li>
+				<li><%= link_to ll(:eu_cooperation, :by_toa_in, :year => 2007, :forecasts => 2008), 
+							{ :controller => 'pages', :action => 'eu_cooperation_type_of_aid' }, 
+							:popup => ['ODAnic', 'height=700,width=800'] %></li>
 			</ul>
 		</li>
 	
@@ -38,14 +52,14 @@
 			<div><a href="#"><%= ll(:donor_profiles) %></a></div>
 			<ul>
 				<% Donor.main.all(:order => "name ASC").each do |d| %>
-					<li><%= link_to(d.name.titleize, bluebook_donor_profile_path(d.id)) %></li>
+					<li><%= link_to d.name.titleize, bluebook_donor_profile_path(d.id) %></li>
 				<% end %>
 			</ul>
 		</li>
 		<li id="bigger">
 			<div><a href="#"><%= ll(:note, :title) %></a></div>
 			<ul>
-				<li><a href="/bluebook/explanatory_note"><%= ll(:note, :explanatory_note) %></a></li>
+				<li><%= link_to ll(:note, :explanatory_note), :action => 'explanatory_note' %></a></li>
 			</ul>					
 		</li>
 	<% end %>

@@ -34,6 +34,14 @@ public class CurrencyForm extends ActionForm {
     private int pagesSize;
     private int offset;
     
+    private int order;
+    
+	public int getOrder() {
+		return order;
+	}
+	public void setOrder(int order) {
+		this.order = order;
+	}
 	/**
 	 * @return Returns the allCurrencies.
 	 */

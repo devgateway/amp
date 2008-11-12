@@ -2,37 +2,30 @@
 
 .yui-tt{ background: LightYellow; border-color: black }
 
-.all_markup
-{margin:1em} 
-.all_markup table
-{border-collapse:collapse;border: 1px solid #d7eafd;  width: 90%} 
-.all_markup th
-{padding:.25em;background-color:#d7eafd; font-size:12px; color: #666666; text-align: left;}
-.all_markup th a, .all_markup th a:hover
-{font-size:13px; text-decoration: none;}
-.all_markup td
-{padding:.25em;font-size:11px}
-.all_markup .yui-dt-even {background-color:white;} 
-.all_markup .yui-dt-odd {background-color:#eeeeee} /* a light grey color */ 
-.all_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
-.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color:#dddddb;}
-
-.all_markup .yui-dt-headtext {margin-right:5px;padding-right:15px;}
-.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
-.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
+.all_markup {margin:1em} 
+.all_markup table {border-collapse:collapse;border: 1px solid #d7eafd;  width: 90%} 
+.all_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: #ffcccc 1px solid;border-bottom: #cccccc 1px solid;}
+.all_markup th a, .all_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
+.all_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
+.all_markup .yui-dt-even {background-color:#FFFFFF;} 
+.all_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
+.all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
+.all_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
+.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
+.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
+.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}
 
 .versions_markup {margin:1em; overflow: auto; } 
 .versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
-.versions_markup th {padding:.25em;background-color:#d7eafd;color:#666666; font-size:11px}
-.versions_markup th a, .versions_markup th a:hover {font-size:11px; text-decoration: none;}
-.versions_markup td {padding:.25em;} 
-.versions_markup .yui-dt-odd {background-color:#eeeeee} /* a light grey color */ 
-.versions_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
-.versions_markup .yui-dt-headtext {margin-right:5px; padding-right:15px;}
-.versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
-.versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
-.versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color:#dddddb;}
-.versions_markup .yui-dt-pagelinks {font-size: 10px;}
+.versions_markup th {padding:.25em;background-color:rgb(153, 153, 153); font-size:12px; color: black; text-align: center;border-right: #ffcccc 1px solid;border-bottom: #cccccc 1px solid;}
+.versions_markup th a, .versions_markup th a:hover {font-size: 10px;font: bold 7.5pt "Verdana"; color:black; text-decoration: none;}
+.versions_markup td {padding:.25em;font-size:11px;color:#0E69B3;font-family:	Arial,Helvetica,sans-serif;font-size:10px;letter-space:2px;}
+.versions_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
+.versions_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
+.versions_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
+.versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
+.versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
+.versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}
 
 #otherDocumentsDiv .yuimenu {z-index: 101;}
 #otherDocumentsDiv ul.first-of-type { background: transparent; z-index: 300000;} 
@@ -60,6 +53,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/tooltip/wz_tooltip.js'/>" > .</script>
+
 
 <%@page import="java.net.URLDecoder"%>
 
@@ -253,14 +247,14 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     this.columnHeaders = [
-        {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true},
+        {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true,width:150},
 	    {key:"type",text:"${trans_headerType}",sortable:true},
-        {key:"file_name",text:"${trans_headerFileName}",sortable:true},
+        {key:"file_name",text:"${trans_headerFileName}",sortable:true,width:150},
         {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
         {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
         {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
-        {key:"description",text:"${trans_headerDescription}",sortable:false},
-        {key:"actions",text:"${trans_headerActions}",sortable:false}
+        {key:"description",text:"${trans_headerDescription}",sortable:false,width:100},
+        {key:"actions",text:"${trans_headerActions}",sortable:false,width:150}
     ];
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 
@@ -276,7 +270,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	                			};
     
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
-    
+	
     return dataTable;
 };
 
@@ -652,7 +646,8 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 					containerElement.innerHTML	= "<div class='all_markup' align='center' id='"+divId+"'>" + o.responseText + "</div>";
 					var datatable				= YAHOO.amp.table.enhanceMarkup(divId);
 					datatable.subscribe("cellClickEvent",datatable.onEventSelectRow);
-					
+					//
+	
 					YAHOO.amp.datatables[YAHOO.amp.num_of_tables-1] = datatable;
 					windowController.datatable	= datatable;
 				
@@ -941,3 +936,4 @@ YAHOO.amp.panelCounter	= 3;
 
 YAHOO.util.Event.addListener(window, "load", initPanel) ;
 </script>
+

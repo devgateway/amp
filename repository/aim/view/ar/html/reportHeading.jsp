@@ -22,7 +22,7 @@
   	columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
   %>
   <%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
-  <tr title="Report Headings">
+  <tr title='<digi:trn key="reports.ReportHeadings">Report Headings</digi:trn>'>
     <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
       <%
       	column.setCurrentDepth(curDepth);

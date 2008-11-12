@@ -30,7 +30,7 @@
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id" />
 		<Measure name="Raw Sector Percentage" aggregator="sum" column="sector_percentage" visible="false" />
 		<CalculatedMember name="Sector Percentage" dimension="Measures">
-			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],100)</Formula>
+			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],null)</Formula>
 		</CalculatedMember>
 	</Cube>
 	<Cube name="Donor Funding">

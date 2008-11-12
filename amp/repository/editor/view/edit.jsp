@@ -40,10 +40,29 @@
   _editor_url = "<%=_editor_url%>";
 
 </script>
+<script language="javascript">
+
+
+function validate(){
+	var size=<%=(request.getParameter("size")!=null)?request.getParameter("size"):-1%>;
+	if (size==-1){
+		size=10000;
+	}
+	
+	if (content.FCKeditorAPI.GetInstance('content').GetData().length > size){
+		var msg='<digi:trn key="editor:longtextError">The text is too long.</digi:trn>'
+		alert(msg);
+		return false;
+	}
+	return true;
+}
 
 
 
-	<digi:form action="/saveText.do" method="post">
+</script>
+	
+
+	<digi:form  onsubmit="return validate()" action="/saveText.do" method="post">
 
 	<html:hidden name="editorForm" property="key"/>
 

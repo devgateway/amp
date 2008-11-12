@@ -3517,7 +3517,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
                     } else {
                         // none computed workspace
                         queryString = "select a.name, a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
-                        if (teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
                         }
                         queryString += " order by a.name ";

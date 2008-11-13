@@ -2,7 +2,7 @@ td.tree-node-even,
 td.tree-node-odd,
 td.tree-node-selected {
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-  font-size: 0.8em;
+  font-size: 0.6em;
   color : Black;
   text-align: left;
 }

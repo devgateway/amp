@@ -28,19 +28,20 @@
 						</thead>
 						<logic:iterate name="documentDataCollection" id="documentData"
 							type="org.digijava.module.contentrepository.helper.DocumentData" indexId="counter">
-							<%
+							<%--
 					int index2;
 					String documentName = documentData.getName();
 					String iconPath = "";
 					index2 = ((String) documentName).lastIndexOf(".");
 					if (index2 >= 0) {
-						iconPath = "/TEMPLATE/ampTemplate/images/icons/"
+						iconPath = "module/cms/images/extensions/"
 								+ ((String) documentName).substring(index2 + 1,
 										((String) documentName).length())
 								+ ".gif";
 					}
 
-					%>							<logic:equal name="documentData" property="isPublic" value="true">
+					--%>
+							<logic:equal name="documentData" property="isPublic" value="true">
 								<c:set var="makePublicCommand">
 									<digi:trn key="contentrepository:republish">Rep</digi:trn>
 								</c:set>
@@ -58,8 +59,8 @@
 									</script> --%>
 								</td>
 								<td>
-                                <img src="<%=iconPath%>" />
-									&nbsp;
+									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
+									&nbsp; 
 								</td>
 								<td>
 									<c:set var="isUrl" scope="page" value="false" />

@@ -203,6 +203,12 @@ public class NodeWrapper {
 	
 	private void populateNode(Node newNode, String doTitle, String docDescr, String docNotes, String contentType, Long cmDocType, String user) {
 		try{
+			
+			if ( docDescr == null )
+				docDescr = "";
+			if ( docNotes == null )
+				docNotes = "";
+			
 			String encTitle		= URLEncoder.encode(doTitle, "UTF-8");
 			String encDescr		= URLEncoder.encode(docDescr, "UTF-8");
 			String encNotes		= URLEncoder.encode(docNotes, "UTF-8");

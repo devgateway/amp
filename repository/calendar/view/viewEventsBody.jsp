@@ -415,25 +415,143 @@ color:Black;
 																	    <c:if test="${fn:length(calendarViewForm.ampCalendarGraphs)!=0}">
 																			<c:if test="${calendarViewForm.view == 'yearly'}">
 																				<c:set var="eventsAmountForThisMonth"> <bean:write name="calendarViewForm" property="eventsAmountIndexed[${monthIndex-1}]"/></c:set>				
-																				<div <c:if test="${eventsAmountForThisMonth>5}"> style="overflow:auto;width: 780px;height:35px"</c:if>>
+																				<div <c:if test="${eventsAmountForThisMonth>5}"> style="overflow:auto;width: 780px;height:35px"</c:if> style="overflow:auto;width: 780px;height:35px">
 																					<table style="width: 100%;">
 																						<tr height="30px">
 																		       				<c:forEach var="ampCalendarGraph" items="${calendarViewForm.ampCalendarGraphs}">
-																			           			<c:set var="startMonth">${ampCalendarGraph.ampCalendar.calendarPK.startMonth+1}</c:set>																					           																					           								              			
-																				           			<c:if test="${monthIndex== startMonth}">																				           				
-																				           				<td align="left" width="155px" style="text-align: center;vertical-align: middle">
-																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center">																					                   			
-																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">								                                                        	
-											                                                        				<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
-														                                                        </digi:link>
-														                                                        <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">					                                                        					
-											                                                        				${ampCalendarEventItem.title}
-											                                                        			</c:forEach>
+																			           			<c:set var="startMonth">${ampCalendarGraph.ampCalendar.calendarPK.startMonth+1}</c:set>
+																			           			<c:set var="endMonth">${ampCalendarGraph.ampCalendar.calendarPK.endMonth+1}</c:set>
+																			           			<c:set var="reccperiod">${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}</c:set>	
+																			           			<c:set var="currentMonth">${calendarViewForm.baseDateBreakDown.month}</c:set>
+																			           			<c:set var="startDay">${ampCalendarGraph.ampCalendar.calendarPK.startDay}</c:set>
+																			           			<c:set var="startYear">${ampCalendarGraph.ampCalendar.calendarPK.startYear}</c:set>
+																			           			<c:set var="endYear">${ampCalendarGraph.ampCalendar.calendarPK.endYear}</c:set>
+																			           	   			
+																			           	   		
+																			           	   		<c:if test="${startYear < endYear}">
+																			           	   		<c:if test="${startMonth-1 < endMonth+1 &&  startMonth-1 < monthIndex && monthIndex < endMonth+1 && calendarViewForm.endDateBreakDown.year == endYear}">
+																			          				
+																			          						<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																					                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																					                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																					                       				${ampCalendarEventItem.title}
+																					                       			</c:forEach>
+																					                   			</digi:link>
 																					                   		</div>
-																					               		</td>
-																				           			</c:if>																			           		
-																								</c:forEach>
-																		           			</tr>
+																					                   </td>
+																					                   <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+																					                   	<c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
+																					                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
+																					        	           <c:forEach begin="1" end="${30/Month-1}">
+																												<td align="left" width="155px">
+																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																							                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																							                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																							                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																							                       				${ampCalendarEventItem.title}
+																							                       			</c:forEach>
+																							                   			</digi:link>
+																							                   		</div>
+																							                   </td>
+																											</c:forEach>
+																						              	</c:if>			
+																					                 </c:forEach>
+																			          				
+																			           	   		</c:if>
+																			           	   		<c:if test="${monthIndex >= endMonth+1 && calendarViewForm.endDateBreakDown.year == startYear}">
+																			           	   		<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																					                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																					                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																					                       				${ampCalendarEventItem.title}
+																					                       			</c:forEach>
+																					                   			</digi:link>
+																					                   		</div>
+																					                   </td>
+																					                   <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+																					                   	<c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
+																					                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
+																					        	           <c:forEach begin="1" end="${30/Month-1}">
+																												<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																							                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																							                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																							                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																							                       				${ampCalendarEventItem.title}
+																							                       			</c:forEach>
+																							                   			</digi:link>
+																							                   		</div>
+																							                   </td>
+																											</c:forEach>
+																						              	</c:if>			
+																					                 </c:forEach>
+																			           	   		</c:if>
+																			           	   		<c:if test="${monthIndex <= startMonth-1 && calendarViewForm.endDateBreakDown.year == endYear}">
+																			           	   		<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																					                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																					                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																					                       				${ampCalendarEventItem.title}
+																					                       			</c:forEach>
+																					                   			</digi:link>
+																					                   		</div>
+																					                   </td>
+																					                   <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+																					                   	<c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
+																					                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
+																					        	           <c:forEach begin="1" end="${30/Month-1}">
+																												<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																							                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																							                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																							                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																							                       				${ampCalendarEventItem.title}
+																							                       			</c:forEach>
+																							                   			</digi:link>
+																							                   		</div>
+																							                   </td>
+																											</c:forEach>
+																						              	</c:if>			
+																					                 </c:forEach>
+																			           	   		</c:if>
+																			           	   		</c:if>
+																			           	   		<c:if test="${startMonth-1 < endMonth+1 &&  startMonth-1 < monthIndex && monthIndex < endMonth+1 &&  calendarViewForm.endDateBreakDown.year == startYear}">
+																			          				
+																			          						<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																					                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																					                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																					                       				${ampCalendarEventItem.title}
+																					                       			</c:forEach>
+																					                   			</digi:link>
+																					                   		</div>
+																					                   </td>
+																					                   <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+																					                   	<c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
+																					                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
+																					        	           <c:forEach begin="1" end="${30/Month-1}">
+																												<td align="left" width="155px" style="text-align: center;vertical-align: middle">
+																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;">
+																							                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
+																							                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
+																							                       			<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+																							                       				${ampCalendarEventItem.title}
+																							                       			</c:forEach>
+																							                   			</digi:link>
+																							                   		</div>
+																							                   </td>
+																											</c:forEach>
+																						              	</c:if>			
+																					                 </c:forEach>
+																			          				
+																			           	   		</c:if>
+																			           			</c:forEach>
+																			       			</tr>
 																		           		</table>
 																		          	</div>
 																				</c:if>

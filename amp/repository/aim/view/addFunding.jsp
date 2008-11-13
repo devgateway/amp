@@ -44,31 +44,39 @@
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
   }
 
-	function addFunding() {
-		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
-		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
-		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
-        var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
-		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
-		var msgConfirmFunding="<digi:trn key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
-</gs:test>
-<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
-		var msgConfirmFunding="";
-</gs:test>
-		//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-		//var msgEnterDate="qsfgqsg";
 
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
-		
-		if (flag == false) return false;
-		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
-		document.aimEditActivityForm.action = "<%= fundAdded %>";
-		document.aimEditActivityForm.target = "_self";
-	  	document.aimEditActivityForm.submit();
-	  	//validateFormatUsingSymbos();
-	  	
+var isAlreadySubmitted = false;
+
+	function addFunding() {
+		if(!isAlreadySubmitted)
+		{
+			var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
+			var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
+			var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
+			var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
+			var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="true" onTrueEvalBody="true">
+			var msgConfirmFunding="<digi:trn key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
+	</gs:test>
+	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS %>" compareWith="false" onTrueEvalBody="true">
+			var msgConfirmFunding="";
+	</gs:test>
+			//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
+			var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
+			//var msgEnterDate="qsfgqsg";
+	
+			var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
+			
+			if (flag == false) return false;
+			<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
+			document.aimEditActivityForm.action = "<%= fundAdded %>";
+			document.aimEditActivityForm.target = "_self";
+	
+			isAlreadySubmitted = true;
+			document.aimEditActivityForm.submit();
+			//validateFormatUsingSymbos();
+		}
+			
 		return true;
 	}
 

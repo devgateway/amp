@@ -48,7 +48,6 @@
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Project Id And Planning"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display> 

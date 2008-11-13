@@ -92,7 +92,7 @@
 						<html:option value="2" style="color:green">
 							*&nbsp;<digi:trn key="rep:filter:NewUnvalidated" >New Un-validated</digi:trn>
 						</html:option>
-						<html:option value="4" style="color:black">
+						<html:option value="4" style="color:blue">
 							&nbsp;<digi:trn key="rep:filter:ValidatedActivities" >Validated Activities</digi:trn>
 						</html:option>
 						</logic:notEqual>

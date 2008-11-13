@@ -309,7 +309,7 @@
 					</logic:notEmpty>
 					<logic:empty name="aimSelectSectorForm" property="searchedSectors">
 					<tr><td><br><br>&nbsp;&nbsp;&nbsp;
-					No records found, matching to your query......
+					<digi:trn key="aim:noRecordsFoundMatching">No records found, matching to your query......</digi:trn>
 					<br><br>
 					</td></tr>
 					</logic:empty>

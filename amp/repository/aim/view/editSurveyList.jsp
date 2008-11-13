@@ -342,7 +342,8 @@
 
 			                    		<TR valign="top">
 
-											<TD align="center" colspan="7" width="742"><span class="note"> No records found </span></TD>
+											<TD align="center" colspan="7" width="742"><span class="note"> 
+												<digi:trn key="aim:noRecordsFound">No records found</digi:trn> </span></TD>
 
 			                     		</TR>
 

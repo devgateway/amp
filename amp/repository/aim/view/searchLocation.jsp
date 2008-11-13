@@ -285,7 +285,7 @@ function checkNumeric(objName,comma,period,hyphen)
 					</logic:notEmpty>
 					<logic:empty name="aimEditActivityForm" property="searchLocs">
 					<tr><td><br><br>&nbsp;&nbsp;&nbsp;
-					No records found, matching to your query......
+					<digi:trn key="aim:noRecordsFoundMatching">No records found, matching to your query......</digi:trn>
 					<br><br>
 					</td></tr>
 					</logic:empty>

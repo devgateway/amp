@@ -430,13 +430,14 @@
 													<td align="left">
 														${aimEditActivityForm.planning.revisedAppDate}													</td>
 												</tr>
+												
 												</field:display>
 												<field:display name="Proposed Start Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityFormplanning.planning.originalStartDate}													</td>
+														${aimEditActivityForm.planning.originalStartDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Final Date for Contracting" feature="Planning">

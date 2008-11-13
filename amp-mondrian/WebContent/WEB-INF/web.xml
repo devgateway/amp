@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-$Id: web.xml,v 1.1 2008-11-02 15:26:16 mpostelnicu Exp $
+$Id: web.xml,v 1.2 2008-11-13 17:34:06 mpostelnicu Exp $
 
 This software is subject to the terms of the Common Public License
 Agreement, available at the following URL:
@@ -31,7 +31,7 @@ database which is exploded in the class path of the WAR.
 
   <context-param>
     <param-name>connectString</param-name>
-    <param-value>Provider=mondrian;jdbc:mysql://localhost/amp_ethiopia?autoReconnect=true;JdbcUser=root;JdbcPassword=;JdbcDrivers=com.mysql.jdbc.Driver;Catalog=/WEB-INF/queries/AMP.xml</param-value>
+    <param-value>Provider=mondrian;jdbc:mysql://localhost/amp_malawi_staging?autoReconnect=true;JdbcUser=root;JdbcPassword=;JdbcDrivers=com.mysql.jdbc.Driver;Catalog=/WEB-INF/queries/AMP.xml</param-value>
   </context-param>
 
   <filter>

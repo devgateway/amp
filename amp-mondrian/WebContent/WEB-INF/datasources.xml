@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  == $Id: datasources.xml,v 1.1 2008-11-02 15:26:16 mpostelnicu Exp $
+  == $Id: datasources.xml,v 1.2 2008-11-13 17:34:07 mpostelnicu Exp $
   == This software is subject to the terms of the Common Public License
   == Agreement, available at the following URL:
   == http://www.opensource.org/licenses/cpl.html.
@@ -45,7 +45,7 @@
              Catalogs can override the connect string with their own
              <DataSourceInfo> element.
           -->
-        <DataSourceInfo>Provider=mondrian;jdbc:mysql://localhost/amp_ethiopia?;JdbcUser=root;JdbcPassword=;JdbcDrivers=com.mysql.jdbc.Driver;Catalog=/WEB-INF/queries/AMP.xml</DataSourceInfo>
+        <DataSourceInfo>Provider=mondrian;jdbc:mysql://localhost/amp_malawi_staging?;JdbcUser=root;JdbcPassword=;JdbcDrivers=com.mysql.jdbc.Driver;Catalog=/WEB-INF/queries/AMP.xml</DataSourceInfo>
 
         <!-- 
              Provider name must be 'Mondrian'.

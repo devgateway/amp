@@ -7,5 +7,5 @@ namespace :bluebook do |bb|
   bb.root :controller => 'pages', :action => 'contents'
   bb.pages '/pages/:action', :controller => 'pages'
   
-  bb.resources :donor_profiles
+  bb.resources :donor_profiles, :only => [:show], :formatted => :none
 end

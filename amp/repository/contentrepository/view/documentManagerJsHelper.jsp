@@ -11,6 +11,7 @@
 .all_markup .yui-dt-odd {background-color:#CCDBFF;} /* a light blue color */ 
 .all_markup .yui-dt-headtext {background-color: rgb(153, 153, 153); color: black;margin-right:5px;padding-right:15px;font-size: 10px;font: bold 7.5pt "Verdana"; color:black;}
 .all_markup .yui-dt-headcontainer {background-color: rgb(153, 153, 153); color: black;}
+.all_markup .yui-dt-selected {background-color:rgb(165,188,242);}
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/up.gif') no-repeat right;}/*arrow up*/
 .all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {color: black;background: url('/repository/contentrepository/view/images/down.gif') no-repeat right;}/*arrow down*/
 .all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color: rgb(153, 153, 153); color: black;}

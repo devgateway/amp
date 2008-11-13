@@ -605,3 +605,124 @@ li#biggestmfp ul a:hover {
 }
 /* End TOP MENU STYLES */
 
+
+/* DATA INPUT FORM STYLES */
+
+/* Clearfix */
+ol { overflow: hidden; }
+
+form fieldset {
+    border: 1px solid #ccc;
+    padding: 1em;
+    margin: 1em 0;
+}
+
+form fieldset legend {
+    font-size: 1.5em;
+    padding: 0 .2em;
+    color: #999;
+}
+
+form fieldset ol {
+    list-style: none;
+}
+
+form fieldset ol li {
+    border-bottom: 1px dashed #ccc;
+    padding: .5em 0;
+}
+
+form fieldset label {
+    display: block;
+}
+
+form fieldset label.fluid {
+    display: inline;
+    padding: 0 !important;
+}
+
+form fieldset ol li.fifty {
+    float: left;
+    width: 49.9%;
+}
+
+form fieldset ol li.twenty {
+    float: left;
+    width: 20%;
+}
+
+form fieldset input,
+form fieldset textarea,
+form fieldset select {
+    padding: 2px;
+    font: 13px "Trebuchet MS", sans-serif;
+    border: 1px solid #aaa;
+    color: #777;
+    margin-top: .2em;
+    margin-left: 1em;
+}
+
+form fieldset input:focus,
+form fieldset textarea:focus {
+    border: 1px solid #555 !important;
+    color: #555;
+}
+
+form textarea {
+    width: 75%;
+    overflow: auto;
+}
+
+form fieldset input.plain {
+    border: 0 !important;
+    padding: 0 !important;
+}
+
+form label em {
+    color: #999;
+    font-size: .9em;
+}
+
+form abbr {
+    cursor: help
+}
+
+form fieldset p {
+    padding: 1em;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    margin: 0 0 1em 0;
+    color: #777;
+}
+
+form button {
+    padding: .5em 2em;
+    font: 1.2em "Trebuchet MS", Sans-Serif;
+    cursor: pointer;
+}    
+
+.buttonHolder {
+    background: #eee;
+    padding: .5em;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+    
+
+/* hidden sections */
+.holder {
+    display: none;
+    margin-left: 2em;
+    border-left: 1px dashed #ccc;
+}
+    
+.holder label {
+    padding-left: 1em;
+}
+    
+#hldr_fileTypes {
+    padding-top: .5em;
+}
+        
+/* End DATA INPUT FORM STYLES */

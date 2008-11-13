@@ -1,40 +1,38 @@
-<% odaform_for @project do |f| %>
-	<table>
-		<%= f.title lc(:cofunding_title) %>
-		<tr>
-			<td colspan="2">
-				<div id="cofundings">
-				<%= f.render_associated_form(@project.cofundings, :new => 1, 
-						:fields_for => { :builder => ActionView::Base.default_form_builder }) %>
-				</div>
-				<%= f.add_associated_link(lc(:add_cofunding_donor), @project.cofundings.build, 
-						:fields_for => { :builder => ActionView::Base.default_form_builder }) %>
-			</td>
-		</tr>
+<% labeled_form_for @project do |f| %>
+	<% f.field_set lc(:cofunding_title) do %>
+		<div id="cofundings">
+		<%= f.render_associated_form(@project.cofundings, :new => 1, 
+			:fields_for => { :builder => ActionView::Base.default_form_builder }) %>
+		</div>
 		
-		<%= f.title lc(:historic_funding, :year => Project::FIRST_YEAR_OF_RELEVANCE-1) %>
+		<%= f.add_associated_link(lc(:add_cofunding_donor), @project.cofundings.build, 
+			:fields_for => { :builder => ActionView::Base.default_form_builder }) %>
+	<% end %>
+		
+	<% f.field_set lc(:historic_funding, :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
 		<% funding = HistoricFunding.find_or_initialize_by_project_id(@project.id) %>
 		<% f.fields_for "project[historic_funding_attributes]", funding do |fh| %>
 			<%= fh.text_field :commitments, :value => fh.object.commitments %>
 			<%= fh.text_field :payments, :value => fh.object.payments %>
 		<% end %>
-		
-		<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year) do |y| %>
-			<%= f.title lc(:funding_title, :year => y) %>
-			<% f.fields_for_associated @project.fundings.find_or_initialize_by_year(y) do |fa| -%>
-				<%= fa.hidden_field :year, y %>
-				<%= fa.text_field :commitments, :value => fa.object.commitments %>
-    	    	
-				<%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %>
-				<%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %>
-				<%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %>
-				<%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %>
-    	    	
-				<%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS %>
-				<%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS %>
+	<% end %>
+	
+	<% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year) do |y| %>
+ 		<% f.field_set lc(:funding_title, :year => y) do %>
+   			<% f.fields_for_associated @project.fundings.find_or_initialize_by_year(y) do |fa| -%>
+   				<%= fa.hidden_field :year, y %>
+   				<%= fa.text_field :commitments, :value => fa.object.commitments %>
+   				
+   				<%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %>
+   				<%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %>
+   				<%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %>
+   				<%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %>
+   				
+   				<%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS %>
+   				<%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS %>
 			<% end %>
 		<% end %>
-		
-		<%= render :partial => "control_buttons" %>
-	</table>
+	<% end %>
+	
+	<%= render :partial => "control_buttons" %>
 <% end %>

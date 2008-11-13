@@ -1,20 +1,18 @@
 <% js_behavior :related_selects %>
 
-<% odaform_for @project do |f| %>
-	<table>		
-		<tr><td>
-			<div id="geo_information">
-				<%= render :partial => 'relevant_area', :collection => (@project.provinces.blank? ? [Province.new] : @project.provinces) %>
-			</div>
+<% labeled_form_for @project do |f| %>
+	<% f.field_set do %>
+		<div id="geo_information">
+			<%= render :partial => 'relevant_area', :collection => (@project.provinces.blank? ? [Province.new] : @project.provinces) %>
+		</div>
 		
-			<p class="add_another">
-				<%= button_to_function lc(:add_province) do |page| 
-					page.insert_html :bottom, :geo_information, :partial => 'relevant_area'
-					page << "initDynamicSelects();"
-				end %>
-			</p>
-		</td></tr>
-		
-		<%= render :partial => "control_buttons" %>
-	</table>
+		<p class="add_another">
+			<%= button_to_function lc(:add_province) do |page| 
+				page.insert_html :bottom, :geo_information, :partial => 'relevant_area'
+				page << "initDynamicSelects();"
+			end %>
+		</p>
+	<% end %>
+	
+	<%= render :partial => 'control_buttons' %>
 <% end %>

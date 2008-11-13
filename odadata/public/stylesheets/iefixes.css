@@ -6,3 +6,6 @@ div#donor_province {
 .checkbox_container h3 {
 	width: 100%;
 }
+
+/* IE Clearfix for forms */
+ol { display: inline-block; }

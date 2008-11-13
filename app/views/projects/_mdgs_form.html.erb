@@ -1,14 +1,11 @@
-<% odaform_for @project do |f| %>
-	<table>	
-		<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
-			<tr>
-				<td class="title" colspan="2"><%= ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></td>
-			</tr>
+<% labeled_form_for @project do |f| %>
+	<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
+		<% f.field_set ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) do %>
 			<% mdg.targets.ordered.each do |t| %>
 				<%= f.habtm_check_box :target_ids, { :label => t.name }, t.id %>
 			<% end %>
 		<% end %>
-		
-		<%= render :partial => "control_buttons" %>
-	</table>
+	<% end %>
+	
+	<%= render :partial => "control_buttons" %>
 <% end %>

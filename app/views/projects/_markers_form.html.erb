@@ -1,12 +1,12 @@
-<% odaform_for @project do |f| %>
-	<table>		
+<% labeled_form_for @project do |f| %>
+	<% f.field_set do %>	
 		<%= f.select :biodiversity_marker, Project::MARKER_OPTIONS %>
 		<%= f.select :climate_change_marker, Project::MARKER_OPTIONS %>
 		<%= f.select :desertification_marker, Project::MARKER_OPTIONS %>
 		
 		<%= f.select :gender_policy_marker, Project::MARKER_OPTIONS %>
 		<%= f.select :environment_policy_marker, Project::MARKER_OPTIONS %>
-    	
-		<%= render :partial => 'control_buttons' %>
-	</table>
+	<% end %>
+	
+	<%= render :partial => 'control_buttons' %>
 <% end %>

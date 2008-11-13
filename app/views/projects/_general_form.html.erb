@@ -1,5 +1,5 @@
-<% odaform_for @project do |f| %>
-	<table>
+<% labeled_form_for @project do |f| %>
+	<% f.field_set do %>
 		<%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name", 
 								:required => true, :prompt => I18n.t('options.prompt') %>
 		
@@ -18,7 +18,7 @@
 						  :default => { :day => 1, :month => 1, :year => 1995 }, :required => true %>
 		<%= f.date_select :end, :start_year=>1995, :end_year=>Time.now.year+15, 
 						  :default => { :day => 1, :month => 1, :year => 1995 }, :required => true %>
-		
-		<%= render :partial => 'control_buttons' %>
-	</table>
+	<% end %>
+	
+	<%= render :partial => 'control_buttons' %>
 <% end %>

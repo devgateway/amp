@@ -1,6 +1,6 @@
 <% js_behavior :related_selects %>
-<% odaform_for @project do |f| %>
-	<table>
+<% labeled_form_for @project do |f| %>
+	<% f.field_set do %>
 		<% f.labeled_row :dac_crs_sector do %>
 			<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
 			<%= collection_select(:project, :dac_sector_id, sectors, :id, :name_with_code, 
@@ -62,7 +62,7 @@
 		<%= f.text_field :officer_responsible_name, :required => true %>
 		<%= f.text_field :officer_responsible_phone %>
 		<%= f.text_field :officer_responsible_email %>
-		
-		<%= render :partial => 'control_buttons' %>
-	</table>
+	<% end %>
+	
+	<%= render :partial => 'control_buttons' %>
 <% end %>

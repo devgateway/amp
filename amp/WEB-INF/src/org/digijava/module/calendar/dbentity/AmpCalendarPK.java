@@ -65,6 +65,15 @@ public class AmpCalendarPK
     java.util.Calendar cal = getCalendar(getCalendar().getStartDate());
     return cal.get(java.util.Calendar.DATE);
   }
+  public int getStartYear() {
+	    java.util.Calendar cal = getCalendar(getCalendar().getStartDate());
+	    return cal.get(java.util.Calendar.YEAR);
+	  }
+  
+  public int getEndYear() {
+	    java.util.Calendar cal = getCalendar(getCalendar().getEndDate());
+	    return cal.get(java.util.Calendar.YEAR);
+	  }
 
   public int getEndDay() {
     java.util.Calendar cal = getCalendar(getCalendar().getEndDate());

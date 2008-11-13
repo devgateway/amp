@@ -493,7 +493,7 @@ public class LocationUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select reg  from " +AmpRegion.class.getName()
-                                +" reg  inner join reg.country country where country.iso=:iso order by reg.ampRegionId";
+                                +" reg  inner join reg.country country where country.iso=:iso order by reg.name";
                        
 			q=session.createQuery(queryString);
                         q.setString("iso",  FeaturesUtil.getDefaultCountryIso());

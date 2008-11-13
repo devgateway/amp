@@ -41,7 +41,7 @@ public class RemoveIndicatorEditSectors extends Action {
 					
 					
 					//SectorUtil.deleteIndSector(sectorid,indid);
-					IndicatorUtil.deleteIndsector(sectorid,indid);
+					//IndicatorUtil.deleteIndsector(sectorid,indid);
 					
 					flag=true;
                     break;

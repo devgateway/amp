@@ -60,7 +60,7 @@
 	}
 
 	function removeFundingDetail(index) {
-		var flag = confirm("Are you sure you want to remove the selected transaction ?");
+		var flag = confirm('<digi:trn key="aim:areYouSureRemoveTransaction">Are you sure you want to remove the selected transaction ?</digi:trn>');
 		if(flag != false) {
 			<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
 			document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~delPledge=true";
@@ -80,7 +80,7 @@
 	function addSectors() {
 		var schemeId = document.aimAddOrgForm.ampSecSchemeId.value;
 		if(schemeId == -1){
-			alert("<digi:trn key="aim:editOrganisation:selectScheme">Please select a sector scheme before adding sectors.</digi:trn>");
+			alert('<digi:trn key="aim:editOrganisation:selectScheme">Please select a sector scheme before adding sectors.</digi:trn>');
 			return false;
 		}
 		openNewWindow(600, 450);

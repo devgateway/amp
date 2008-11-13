@@ -72,7 +72,7 @@ div.fakefile2 input{
 
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this workspace?");
+		var flag = confirm('<digi:trn key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
 		return flag;
 	}
 	

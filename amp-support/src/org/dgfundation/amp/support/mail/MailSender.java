@@ -20,7 +20,7 @@ public class MailSender {
 	 */
 	
 	public static boolean sendSupportMail(RequestSupport srequest) {
-		String to = "amp@code.ro";
+		String to = "amp@ampdev.net";
 		String from = "ampsupport@amp.org";
 		String host = "localhost";
 		Properties props = new Properties();

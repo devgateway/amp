@@ -5,9 +5,9 @@
 
 <jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_generic" catalogUri="/WEB-INF/queries/AMP.xml"
    jdbcUser="amp" jdbcPassword="" connectionPooling="true">
-SELECT NON EMPTY CROSSJOIN({[Time]},{[Measures].[Actual Commitments], [Measures].[Actual Commitments Sector Percentage]}) ON COLUMNS,
-NON EMPTY CROSSJOIN({[Financing Instrument]},CROSSJOIN({[Terms of Assistance]},CROSSJOIN ({[Donor]},CROSSJOIN({[Primary Sector]},{[Activity]})))) ON ROWS 
-FROM [Donor Funding] 
+select NON EMPTY Crossjoin({[Donor Dates].[All Periods]}, {[Measures].[Actual Commitments], [Measures].[Sector Percentage], [Measures].[Actual Disbursements], [Measures].[Actual Expenditures], [Measures].[Planned Commitments], [Measures].[Planned Disbursements], [Measures].[Planned Expenditures]}) ON COLUMNS,
+  NON EMPTY Crossjoin(Hierarchize({([Financing Instrument].[All Financing Instruments], [Terms of Assistance].[All Terms of Assistances], [Donor].[All Donors], [Primary Sector].[All Primary Sectors])}), {[Activity].[All Activities]}) ON ROWS
+from [Donor Funding Weighted]
 </jp:mondrianQuery>
 
 

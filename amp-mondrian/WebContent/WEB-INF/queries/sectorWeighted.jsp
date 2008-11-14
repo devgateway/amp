@@ -5,7 +5,7 @@
 
 <jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_burundi" catalogUri="/WEB-INF/queries/AMP.xml"
    jdbcUser="amp" jdbcPassword="" connectionPooling="true">
-select NON EMPTY {[Measures].[Actual Commitments], [Measures].[Weighted Actual Commitments], [Measures].[Sector Percentage]} ON COLUMNS,
+select NON EMPTY {[Measures].[Actual Commitments], [Measures].[Actual Disbursements], [Measures].[Actual Expenditures], [Measures].[Sector Percentage]} ON COLUMNS,
   NON EMPTY {([Primary Sector].[All Primary Sectors], [Activity].[All Activities])} ON ROWS
 from [Donor Funding Weighted]
 </jp:mondrianQuery>

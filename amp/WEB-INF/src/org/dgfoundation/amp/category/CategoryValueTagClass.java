@@ -9,7 +9,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class CategoryValueTagClass extends TagSupport {
 	private static Logger logger	= Logger.getLogger( CategoryValueTagClass.class );

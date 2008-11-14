@@ -1,12 +1,14 @@
-package org.digijava.module.aim.form;
+package org.digijava.module.categorymanager.form;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import java.util.List;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletRequest;
-import org.digijava.module.aim.helper.PossibleValue;
+
+import org.digijava.module.categorymanager.util.PossibleValue;
 
 /**
  * 
@@ -27,7 +29,9 @@ public class CategoryManagerForm extends ActionForm {
 	private Integer numOfPossibleValues	= null;
 	private boolean isMultiselect	= false;
 	private boolean isOrdered		= false;
-        private List<PossibleValue> possibleVals;
+    private List<PossibleValue> possibleVals	= new ArrayList<PossibleValue>();
+    
+    private int numOfAdditionalFields	= 0;
 	/**
 	 * End - The properties below are used for adding a new category
 	 */
@@ -120,4 +124,13 @@ public class CategoryManagerForm extends ActionForm {
 	public void setKeyName(String key) {
 		this.keyName = key;
 	}
+
+	public int getNumOfAdditionalFields() {
+		return numOfAdditionalFields;
+	}
+
+	public void setNumOfAdditionalFields(int numOfAdditionalFields) {
+		this.numOfAdditionalFields = numOfAdditionalFields;
+	}
+	
 }

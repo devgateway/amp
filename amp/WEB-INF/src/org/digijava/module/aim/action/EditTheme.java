@@ -15,9 +15,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 
 public class EditTheme extends Action {

@@ -5,11 +5,8 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,20 +25,12 @@ import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.form.ReferenceForm;
-import org.digijava.module.aim.helper.ApplicationSettings;
-import org.digijava.module.aim.helper.CategoryConstants;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewReferences extends TilesAction {

@@ -5,13 +5,16 @@
  */
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import org.apache.struts.validator.ValidatorForm;
-
 import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
-import org.digijava.module.aim.helper.CategoryConstants;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.validator.ValidatorForm;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class AddLocationForm extends ValidatorForm {
 

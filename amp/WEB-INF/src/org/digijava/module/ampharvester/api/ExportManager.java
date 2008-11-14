@@ -26,7 +26,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.ampharvester.jaxb10.ActivityType;
 import org.digijava.module.ampharvester.jaxb10.CodeValueType;
@@ -52,10 +52,10 @@ import org.digijava.module.ampharvester.jaxb10.impl.OrganizationTypeImpl;
 import org.digijava.module.ampharvester.jaxb10.impl.ProjectIdTypeImpl;
 import org.digijava.module.ampharvester.util.DbUtil;
 import org.digijava.module.ampharvester.util.XmlHelper;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.editor.dbentity.Editor;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.digijava.module.aim.helper.Constants;
 
 public class ExportManager {
 

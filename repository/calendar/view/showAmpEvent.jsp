@@ -99,13 +99,18 @@ function addOrganisation(orgId, orgName){
 
   function check(){
     var et=document.getElementById("eventTitle");
+    var list=document.getElementById("selreceivers"); 
     if(et.value==''){
       alert("Please enter event title");
       return false;
+    }if(list==null || list.length==0){
+    	alert("Please enter Attendees");
+        return false;
     }else{
       return true;
     }
   }
+
   function MyremoveUserOrTeam(){
   	var MyGuests=new Array();
   	var orphands=new Array();
@@ -348,18 +353,22 @@ function addOrganisation(orgId, orgName){
   }
 
   function sendEvent(){
-	var list = document.getElementById('selreceivers');  
-  	if(list!=null){
-  		for(var i = 0; i < list.length; i++) {
-      		list.options[i].selected = true;
-  		}
-  	}
-	  
-	  document.getElementById('hdnMethod').value = 'save';
-	  <digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
-	  document.calendarEventForm.action = "<%=sendEvent %>";
-	  document.calendarEventForm.target = "_self";
-	  document.calendarEventForm.submit();  
+	  if(check()){
+		 var list = document.getElementById('selreceivers');  
+		 if(list!=null){
+		  	for(var i = 0; i < list.length; i++) {
+		  		list.options[i].selected = true;
+		  	}
+		}
+			  
+		document.getElementById('hdnMethod').value = 'save';
+		<digi:context name="sendEvent" property="context/module/moduleinstance/showCalendarEvent.do?method=save"/>
+		document.calendarEventForm.action = "<%=sendEvent %>";
+		document.calendarEventForm.target = "_self";
+		document.calendarEventForm.submit();
+	  }	else{
+		  return false;
+	  }  
   }	  
 	
   function setMethod(mth){
@@ -378,7 +387,7 @@ function recurEvent(){
 
 
 <digi:form action="/showCalendarEvent.do">
-  <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
+  <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>  
   <html:hidden name="calendarEventForm" property="selectedStartMonth" styleId="hiddenMonth"/>
 	<html:hidden name="calendarEventForm" property="recurrPeriod" styleId="hidden"/>
 	<html:hidden name="calendarEventForm" property="typeofOccurrence" styleId="type"/>
@@ -437,6 +446,7 @@ function recurEvent(){
 			                                    <tr>
 			                                        <td nowrap="nowrap" style="text-align: right" align="right">
 			                                            <digi:trn key="calendar:title">Event title:</digi:trn>
+			                                            <font color="red" size="3px">*</font>
 			                                        </td>
 			                                        <td width="220px">
 			                                        		<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 100%" styleClass="inp-text"/>
@@ -474,7 +484,7 @@ function recurEvent(){
 			                                        <td nowrap="nowrap" align="right" style="text-align: right">
 			                                            <digi:trn key="calendar:StartDate">Start date:</digi:trn>
 			                                        </td>
-			                                        <td align="left" style="width: 220px">
+			                                        <td align="left" style="width: 220px">			                                        	
 			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
 			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
@@ -736,6 +746,7 @@ function recurEvent(){
 			                            <td valign="top">
 			                                <table>
 			                                    <tr>
+			                                    	<td style="width: 12px">&nbsp;</td>
 			                                        <td nowrap="nowrap" align="right">
 			                                            <digi:trn key="calendar:orgs">Organizations</digi:trn> 
 			                                        </td>
@@ -786,6 +797,7 @@ function recurEvent(){
 			                                        </td>
 			                                    </tr>
 			                                    <tr>
+			                                    	<td style="width: 12px">&nbsp;</td>
 			                                        <td nowrap="nowrap" align="right">
 			                                            <digi:trn key="calendar:Description">Description</digi:trn>
 			                                        </td>
@@ -797,15 +809,18 @@ function recurEvent(){
 			                            </td>
 			                        </tr>
 			                        <tr>
-			                            <td colspan="20" style="text-align:center;">
+			                            <td colspan="20" style="text-align:center;font-size: 12px">
 			                                <table align="center">
 			                                    <tr>
-			                                        <td >
+			                                    	<td style="width:72px" >&nbsp;</td>
+			                                        <td nowrap="nowrap">
 			                                            <digi:trn key="calendar:Attendee">Attendee</digi:trn>
+			                                            <font color="red" size="3px">*</font>
 			                                        </td>
 			                                    </tr>
 			                                    <tr>
-			                                        <td>
+			                                    	<td style="width: 72px">&nbsp;</td>
+			                                        <td style="width: 220px">
 			                                          <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width: 220px; height: 150px;">
 			                                            <c:if test="${empty calendarEventForm.teamMapValues}">
 			                                              <option value="-1">No receivers</option>

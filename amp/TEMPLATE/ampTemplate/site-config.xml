@@ -119,8 +119,8 @@
 		</layout>
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put name="version">1.12i</put>
-			<put name="build_version">build 24.Oct.2008</put>
+			<put name="version">1.13 ALPHA</put>
+			<put name="build_version"></put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>

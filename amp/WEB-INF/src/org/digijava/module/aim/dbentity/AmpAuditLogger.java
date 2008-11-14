@@ -11,8 +11,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettings;
-import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpAuditLogger implements Comparable, Serializable {

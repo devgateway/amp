@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.helper;
 
-import java.text.DecimalFormat;
 
 public class CurrencyRates {
 	private Long id;

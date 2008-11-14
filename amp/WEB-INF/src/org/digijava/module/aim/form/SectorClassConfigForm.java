@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 
 public class SectorClassConfigForm extends ActionForm {
 

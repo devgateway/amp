@@ -8,7 +8,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.ParisIndicatorReportForm;
 
 public class ParisIndicatorPopupAction extends Action {
 

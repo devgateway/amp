@@ -1,21 +1,18 @@
 package org.digijava.module.aim.action;
 
-import org.digijava.module.aim.form.FlagUploaderForm;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.upload.FormFile;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.Action;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
+
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import java.util.Collection;
-import java.util.Iterator;
-import org.digijava.module.aim.helper.Flag;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpSiteFlag;
+import org.digijava.module.aim.form.FlagUploaderForm;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class DeleteFlag extends Action {
 

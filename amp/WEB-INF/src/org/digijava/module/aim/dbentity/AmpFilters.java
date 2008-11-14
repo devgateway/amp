@@ -6,8 +6,8 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.util.Set;
 import java.io.Serializable;
+import java.util.Set;
 
 public class AmpFilters implements Comparable, Serializable {
 

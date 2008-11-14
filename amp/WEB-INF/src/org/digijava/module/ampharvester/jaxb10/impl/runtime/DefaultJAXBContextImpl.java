@@ -15,15 +15,15 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.Validator;
 
-import com.sun.xml.bind.Messages;
 import com.sun.xml.bind.DatatypeConverterImpl;
+import com.sun.xml.bind.Messages;
 
 /**
  * This class provides the default implementation of JAXBContext.  It
  * also creates the GrammarInfoFacade that unifies all of the grammar
  * info from packages on the contextPath.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class DefaultJAXBContextImpl extends JAXBContext {
     

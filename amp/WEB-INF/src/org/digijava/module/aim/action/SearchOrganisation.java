@@ -1,21 +1,20 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Vector;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.OrgProjectId;
-import java.util.HashSet;
-import java.util.Arrays;
+import org.digijava.module.aim.util.DbUtil;
 @Deprecated
 public class SearchOrganisation extends Action {
 

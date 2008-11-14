@@ -6,8 +6,8 @@
 package org.digijava.module.aim.form;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;

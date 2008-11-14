@@ -1,6 +1,5 @@
 package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
-import org.digijava.module.aim.dbentity.AmpTeam;
 
 /**
  * NPD settings for each team.

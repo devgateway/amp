@@ -161,7 +161,7 @@ function delet1(val1, val2) {
 														<tr>
 															<td width="193" align="right" valign="top" height="19">
 																<c:set var="countryNormal">
-																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 																</c:set>
 																${countryNormal}
 															</td>
@@ -182,7 +182,7 @@ function delet1(val1, val2) {
 																<br>
                                                                                                     
 																<c:set var="country">
-																	<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+																	<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 																</c:set>
 																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
 																	<a href="javascript:newWin(0,'create')">
@@ -213,7 +213,7 @@ function delet1(val1, val2) {
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
 																<c:set var="regionNormal">
-																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 																</c:set>
 																${regionNormal}
 															</td>
@@ -235,7 +235,7 @@ function delet1(val1, val2) {
 																<br>
 																<logic:notEqual name="aimAddLocationForm" property ="countryId" value ="">
 																	<c:set var="region">
-																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
+																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 																	</c:set>
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin(1,'create')">
@@ -267,7 +267,7 @@ function delet1(val1, val2) {
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
 																<c:set var="zoneNormal">
-																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 																</c:set>
 																${zoneNormal}
 															</td>
@@ -290,7 +290,7 @@ function delet1(val1, val2) {
 																<!--here -->
 															<logic:notEqual name="aimAddLocationForm" property="regionId"  value="-1">
 																	<c:set var="zone">
-																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 																	</c:set>
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin(2,'create')">
@@ -322,7 +322,7 @@ function delet1(val1, val2) {
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
 																<c:set var="districtNormal">
-																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 																</c:set>
 																${districtNormal}
 															</td>
@@ -345,7 +345,7 @@ function delet1(val1, val2) {
 																<logic:notEqual name ="aimAddLocationForm"
 																property="zoneId" value="-1">
 																	<c:set var="district">
-																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 																	</c:set>
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin(3,'create')">

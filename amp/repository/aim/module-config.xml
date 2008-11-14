@@ -122,8 +122,6 @@
 
 		<hibernate-class>org.digijava.module.aim.dbentity.FeatureTemplates</hibernate-class>
 
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryClass</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpCategoryValue</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.NpdSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityReferenceDoc</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityDocument</hibernate-class>

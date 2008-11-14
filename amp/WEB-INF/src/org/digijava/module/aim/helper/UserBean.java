@@ -1,8 +1,9 @@
 package org.digijava.module.aim.helper;
 
-import java.util.*;
+import java.util.Collection;
 
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 public class UserBean {
   private Long id;

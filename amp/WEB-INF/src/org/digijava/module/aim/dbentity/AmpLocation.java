@@ -1,7 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.util.Set ; 
+import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
 

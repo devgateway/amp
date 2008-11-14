@@ -5,15 +5,13 @@
 
 package org.digijava.module.aim.helper;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 
 import org.dgfoundation.amp.Util;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
 
 public class FundingValidator {
 	

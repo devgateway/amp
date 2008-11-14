@@ -21,7 +21,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.aim.helper.ApplicationSettings;
 
 
 public class ViewKnowledge extends TilesAction {

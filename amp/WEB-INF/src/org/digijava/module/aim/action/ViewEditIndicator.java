@@ -1,40 +1,31 @@
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.*;
-import org.digijava.module.aim.form.NewIndicatorForm;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.helper.AllActivities;
-import org.digijava.module.aim.helper.AmpIndSectors;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.IndicatorsBean;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Collection;
-import java.util.ArrayList;
-
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.form.NewIndicatorForm;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
-import java.util.*;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewEditIndicator
     extends Action {

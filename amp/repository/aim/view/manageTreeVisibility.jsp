@@ -93,7 +93,7 @@ function openFieldPermissionsPopup(fieldId) {
 		<bean:write name="template" property="root.id"/>
 	</c:set>
 	 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
-		<category:showoptions name="aimVisibilityManagerForm" firstLine="${translation}" outeronchange="javascript:changeLevel('${templateId}')" property="levelCategory"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text" />
+		<category:showoptions name="aimVisibilityManagerForm" firstLine="${translation}" outeronchange="javascript:changeLevel('${templateId}')" property="levelCategory"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text" />
 	</gs:test>
 
 <script language="javascript">

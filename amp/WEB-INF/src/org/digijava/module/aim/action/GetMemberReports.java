@@ -16,7 +16,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class GetMemberReports extends Action {

@@ -14,11 +14,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 /**
  * Helper class for RegionalFundings manipulation

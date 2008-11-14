@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
-<%@ page import="org.digijava.module.aim.helper.CategoryConstants" %>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>

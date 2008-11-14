@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public  class CommonWorker	{
 	

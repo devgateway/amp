@@ -16,7 +16,6 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.MainProjectDetailsForm;
-import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.COverSubString;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;

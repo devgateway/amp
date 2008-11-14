@@ -1,14 +1,15 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.validator.Field;
 import org.apache.commons.validator.ValidatorAction;
 import org.apache.commons.validator.ValidatorUtil;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
-import org.apache.log4j.Logger;
 
 
 public class YearRangeValidator

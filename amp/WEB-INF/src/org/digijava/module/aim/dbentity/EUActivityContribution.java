@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * @author mihai

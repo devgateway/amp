@@ -3,14 +3,10 @@ package org.digijava.module.aim.helper;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.NumberFormat;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-
-import org.apache.taglibs.standard.resources.Resources;
 
 public class FormatDateHelperTag extends BodyTagSupport {
 

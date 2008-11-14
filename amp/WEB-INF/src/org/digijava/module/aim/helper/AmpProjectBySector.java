@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper ;
-import org.digijava.module.aim.dbentity.AmpReportSector;
 import java.util.Collection;
+
+import org.digijava.module.aim.dbentity.AmpReportSector;
 
 public class AmpProjectBySector
 {

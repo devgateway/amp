@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
 
 /**
  * 

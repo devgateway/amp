@@ -14,8 +14,8 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DesktopUtil;
 
 public class GetDesktopTasks extends TilesAction {
 

@@ -1,15 +1,19 @@
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.*;
-import org.apache.struts.tiles.ComponentContext;
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.digijava.module.aim.form.ViewQuickLinksForm;
-import java.util.Collection;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.form.ViewQuickLinksForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class ViewQuickLinks
     extends Action {

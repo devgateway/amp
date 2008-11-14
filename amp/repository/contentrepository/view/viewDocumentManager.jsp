@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
-<%@ page import="org.digijava.module.aim.helper.CategoryConstants"%>
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants"%>
 
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 

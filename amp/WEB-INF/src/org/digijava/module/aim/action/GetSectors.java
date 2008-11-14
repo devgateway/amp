@@ -14,7 +14,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.SectorsForm;
 import org.digijava.module.aim.helper.Sector;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class GetSectors extends Action {

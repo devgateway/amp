@@ -2,8 +2,6 @@ package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 

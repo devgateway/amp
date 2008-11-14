@@ -9,8 +9,6 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.digijava.module.aim.util.FeaturesUtil;
-
 public class FeatureTemplates implements Serializable {
 	/**
 	 * 

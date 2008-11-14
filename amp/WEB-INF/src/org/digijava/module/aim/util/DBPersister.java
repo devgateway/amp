@@ -3,11 +3,10 @@
  */
 package org.digijava.module.aim.util;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author mihai

@@ -1,18 +1,16 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.form.DesktopForm;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.ArrayList;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.helper.AmpSectors;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
+import org.digijava.module.aim.form.DesktopForm;
 
 /**
  * <p>Title: </p>

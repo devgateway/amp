@@ -9,10 +9,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
@@ -46,6 +42,9 @@ import org.digijava.module.widget.table.filteredColumn.WiCellFiltered;
 import org.digijava.module.widget.table.filteredColumn.WiCellHeaderFiltered;
 import org.digijava.module.widget.table.filteredColumn.WiColumnDropDownFilter;
 import org.digijava.module.widget.table.filteredColumn.WiColumnFilterSubColumn;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * Utility methods for table widgets and its children.

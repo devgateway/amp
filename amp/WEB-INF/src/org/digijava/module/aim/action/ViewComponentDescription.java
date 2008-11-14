@@ -6,22 +6,20 @@
 package org.digijava.module.aim.action ;
 
 import java.text.DecimalFormat;
-import java.util.Iterator;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.form.PhysicalProgressForm ;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.form.PhysicalProgressForm;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.TeamMember ;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpSession ;
-import javax.servlet.http.HttpServletResponse ;
 
 public class ViewComponentDescription extends Action
 {

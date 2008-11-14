@@ -1,7 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
 
 public class AmpSectorIndicator implements Serializable
 {

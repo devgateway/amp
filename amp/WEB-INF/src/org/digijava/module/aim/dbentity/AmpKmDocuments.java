@@ -1,7 +1,9 @@
 package org.digijava.module.aim.dbentity ;
 
-import org.apache.log4j.Logger ;
-import java.util.*; 
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpKmDocuments
 {

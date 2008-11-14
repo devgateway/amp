@@ -5,13 +5,18 @@
  */
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ViewOrgForm;
 import org.digijava.module.aim.util.DbUtil;
-import javax.servlet.http.*;
-import java.util.Collection;
 
 public class ViewOrganisation extends Action {
 

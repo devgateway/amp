@@ -1,18 +1,15 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.SectorUtil;
-
-import java.util.Iterator;
-import java.util.Collection;
-import java.util.ArrayList;
 
 public class RemoveIndicatorEditSectors extends Action {
 

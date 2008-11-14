@@ -3,20 +3,16 @@ package org.digijava.module.aim.helper;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.hibernate.Session;
-
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.dbentity.AmpSector;
-
 import org.apache.log4j.Logger;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.util.SectorUtil;
+import org.hibernate.Session;
 
 
 public class UpdateDB {

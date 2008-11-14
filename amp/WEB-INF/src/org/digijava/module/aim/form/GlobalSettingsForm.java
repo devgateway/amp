@@ -1,7 +1,10 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.struts.action.ActionForm;
 public class GlobalSettingsForm extends ActionForm {
 	Collection gsfCol = null;
 	Collection countryNameCol = null;

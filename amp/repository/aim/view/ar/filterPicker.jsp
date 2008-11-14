@@ -245,7 +245,7 @@
 						outerstyle="width: 300px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						property="selectedFinancingInstruments" multiselect="true"
-						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 					</td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
@@ -257,7 +257,7 @@
 						outerstyle="width: 300px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						property="selectedTypeOfAssistance" multiselect="true"
-						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
 					</td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
@@ -322,7 +322,7 @@
 						name="aimReportsFilterPickerForm"
 						multiselect="true"
 						property="selectedProjectCategory"
-						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_KEY %>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.PROJECT_CATEGORY_KEY %>" />
 					</td>
 				</tr>
 				</field:display>
@@ -624,7 +624,7 @@
 						outerstyle="width: 300px" styleClass="inp-text"
 						property="selectedStatuses" size="3"
 						name="aimReportsFilterPickerForm" multiselect="true"
-						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
+						keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
 					</td>
 				</tr>
 				<tr><td>&nbsp;</td></tr>

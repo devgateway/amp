@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.UnmarshallerHandler;
+import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.helpers.AbstractUnmarshallerImpl;
 
 import org.w3c.dom.Document;

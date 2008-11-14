@@ -1,8 +1,6 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;

@@ -17,7 +17,7 @@
 			class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none" not-null="true" />
 
 		<many-to-one name="categoryValue" column="categoryValueId"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" />
 
 	</class>
 </hibernate-mapping>

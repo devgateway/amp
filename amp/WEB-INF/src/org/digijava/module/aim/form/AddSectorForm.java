@@ -1,8 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
 
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
 /*
  *@ Author Govind G Dalwani
  */

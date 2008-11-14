@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class ChannelOverviewForm extends MainProjectDetailsForm
 {

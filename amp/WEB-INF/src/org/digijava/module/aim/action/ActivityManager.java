@@ -19,7 +19,6 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
-import org.digijava.module.aim.util.DbUtil;
 
 public class ActivityManager extends Action {
 	private static Logger logger = Logger.getLogger(ActivityManager.class);

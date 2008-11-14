@@ -6,48 +6,27 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
-import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.ListAppliedPatchesForm;
-import org.digijava.module.aim.form.GlobalSettingsForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.KeyValue;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.autopatcher.core.PatchFile;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class ListAppliedPatches extends Action {
 	private static Logger logger 				= Logger.getLogger(ListAppliedPatches.class);

@@ -1,8 +1,9 @@
 package org.digijava.module.aim.form;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
 
 public class UpdateAppSettingsForm extends ActionForm {
 

@@ -6,7 +6,7 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.*;
+import java.io.Serializable;
 
 public class AmpApplicationSettings implements Serializable {
 

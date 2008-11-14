@@ -3,8 +3,6 @@ package org.digijava.module.aim.helper.fiscalcalendar;
 import java.util.Collection;
 import java.util.Vector;
 
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-
 public class BaseCalendar {
 	private String name;
 	private String value;

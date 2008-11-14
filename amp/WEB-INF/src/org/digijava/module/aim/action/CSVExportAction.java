@@ -6,6 +6,8 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +36,6 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.FeaturesUtil;
-
-import java.io.PrintWriter;
-import java.io.OutputStreamWriter;
-import javax.servlet.*;
 
 /**
  * CSV Export is actually using the XLS export API. The difference is only at

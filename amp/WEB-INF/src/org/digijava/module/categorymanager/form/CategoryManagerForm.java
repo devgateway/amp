@@ -2,12 +2,12 @@ package org.digijava.module.categorymanager.form;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import java.util.List;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.categorymanager.util.PossibleValue;
 
 /**

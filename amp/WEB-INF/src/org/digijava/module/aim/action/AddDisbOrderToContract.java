@@ -4,16 +4,18 @@
  */
 
 package org.digijava.module.aim.action;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForward;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.struts.action.ActionMapping;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.apache.log4j.Logger;
-import org.digijava.module.aim.form.EditActivityForm;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingDetail;
 
 /**

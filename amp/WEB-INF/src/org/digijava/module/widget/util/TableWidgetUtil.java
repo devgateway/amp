@@ -11,11 +11,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
@@ -33,6 +28,10 @@ import org.digijava.module.widget.oldTable.DaTable;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.WiRow;
 import org.digijava.module.widget.table.WiTable;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * Utilities for table widgets,

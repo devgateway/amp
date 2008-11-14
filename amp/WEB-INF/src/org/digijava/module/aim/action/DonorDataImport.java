@@ -1,19 +1,14 @@
 package org.digijava.module.aim.action ;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.form.DonorDataImportForm ;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.helper.COverSubString ;
-import org.digijava.module.aim.helper.AmpProject ;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpServletResponse ;
-import java.util.Collection ;
-import java.util.Iterator ;
-import java.util.ArrayList ;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.form.DonorDataImportForm;
 
 public class DonorDataImport extends Action
 {

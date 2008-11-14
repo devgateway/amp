@@ -1,10 +1,10 @@
 package org.digijava.module.aim.helper;
 
-import java.io.IOException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Collection;
-import java.util.*;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ParisIndicator5aSubJrxml extends ParisIndicatorJrxml {
     public synchronized void createSubJrxml(String filePath, String reportName, List data) throws IOException {

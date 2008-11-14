@@ -2,15 +2,14 @@ package org.digijava.module.widget.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.IndicatorSector;
-import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.orgProfile.helper.FilterHelper;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;

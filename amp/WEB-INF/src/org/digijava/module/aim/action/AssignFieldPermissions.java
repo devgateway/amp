@@ -4,7 +4,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,9 +11,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -31,6 +27,8 @@ import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.gates.OrgRoleGate;
 import org.digijava.module.gateperm.gates.UserLevelGate;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  * AssignFieldPermissions.java

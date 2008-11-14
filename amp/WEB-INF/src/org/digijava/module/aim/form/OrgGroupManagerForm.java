@@ -1,11 +1,12 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 
 public class OrgGroupManagerForm extends ActionForm {
    

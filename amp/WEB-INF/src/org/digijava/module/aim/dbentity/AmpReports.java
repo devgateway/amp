@@ -16,6 +16,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.common.util.DateTimeUtil;
 
 public class AmpReports implements Comparable, LoggerIdentifiable {

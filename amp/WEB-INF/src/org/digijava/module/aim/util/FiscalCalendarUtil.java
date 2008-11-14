@@ -4,13 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
+import org.hibernate.Session;
 
 public class FiscalCalendarUtil {
 	

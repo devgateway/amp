@@ -1,18 +1,16 @@
 package org.digijava.module.aim.ar.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class ReportsUtil {
 	private static Logger logger	= Logger.getLogger(ReportsUtil.class);

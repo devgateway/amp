@@ -173,7 +173,7 @@ function selectOrganisation1() {
                               <option value="-1">
                                 <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
                               </option>
-                              <logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue"> <option value='<bean:write name="modality" property="id"/>'
+                              <logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"> <option value='<bean:write name="modality" property="id"/>'
 								
                                   <c:if test="${ aimEUActivityForm.contrFinInstrId[idx] == modality.id }">selected</c:if>
                                 >
@@ -194,7 +194,7 @@ function selectOrganisation1() {
                                   <option value="-1">
                                     <digi:trn key="aim:addEditActivitySelect">Select</digi:trn>
                                   </option>
-                                  <logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue"> <option value='<bean:write name="finType" property="id"/>'
+                                  <logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"> <option value='<bean:write name="finType" property="id"/>'
 								
                                       <c:if test="${ aimEUActivityForm.contrFinTypeId[idx] == finType.id }">selected</c:if>
                                     >

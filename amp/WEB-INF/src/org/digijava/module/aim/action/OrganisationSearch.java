@@ -1,17 +1,17 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.OrgManagerForm;
-import org.digijava.module.aim.util.DbUtil;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import javax.servlet.http.HttpSession;
 
 public class OrganisationSearch extends Action {
 	

@@ -3,18 +3,19 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.helper.ActivitySector;
-import javax.servlet.http.HttpSession;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class AddSelectedSectors

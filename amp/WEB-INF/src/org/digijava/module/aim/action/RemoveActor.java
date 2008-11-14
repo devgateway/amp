@@ -13,7 +13,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Issues;

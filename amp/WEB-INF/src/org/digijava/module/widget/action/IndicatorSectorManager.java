@@ -24,7 +24,6 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.gis.util.DbUtil;
 import org.digijava.module.widget.form.IndicatorSectorRegionForm;

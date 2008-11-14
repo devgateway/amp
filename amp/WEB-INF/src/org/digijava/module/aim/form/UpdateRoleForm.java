@@ -1,7 +1,9 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
 public class UpdateRoleForm extends ValidatorForm {

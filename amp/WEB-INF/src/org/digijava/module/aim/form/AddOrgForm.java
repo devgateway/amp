@@ -1,16 +1,13 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.Pledge;
-import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AddOrgForm extends ActionForm {
 

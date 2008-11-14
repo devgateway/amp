@@ -12,7 +12,7 @@
 
 		<property name="name" column="location_name" type="java.lang.String" />
 		<many-to-one name="parentCategoryValue" column="parent_category_value"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="parentLocation" column="parent_location"
 			class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" />
 		<property name="description" column="description" type="text" />

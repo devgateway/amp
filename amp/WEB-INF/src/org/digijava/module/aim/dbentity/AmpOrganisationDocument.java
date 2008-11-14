@@ -1,14 +1,11 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class AmpOrganisationDocument extends ObjectReferringDocument {
 	public static final String SESSION_NAME	= "ORGANISATION_DOCUMENTS";

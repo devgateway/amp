@@ -383,33 +383,35 @@ function toggleSettings(){
 																<strong><digi:trn key="rep:pop:Donors">Donors:</digi:trn></strong>&nbsp;<%=donorAux%>&nbsp;|			
 																<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 																	<%
-																	String statusName = "All";
-																	Collection ampCategoryValues = CategoryManagerUtil.getAmpCategoryByKey(org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY, null);
-																	if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
-																		Iterator iterator = ampCategoryValues.iterator();
-																		while (iterator.hasNext()) {
-																			AmpCategoryValue ampCategoryValue = (AmpCategoryValue)iterator.next();
-																			if (ampCategoryValue!=null){
-																				String outputValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
-																				if ( formPI.getStatus() != null && formPI.getStatus() == ampCategoryValue.getId().longValue() /*|| 
-																						( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) */) {
-																					statusName = outputValue;
-																				}
-																			}
-																		}
-																	}
+																		String statusName = "All";
+																																Collection ampCategoryValues = CategoryManagerUtil.getAmpCategoryByKey(org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY, null);
+																																if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
+																																	Iterator iterator = ampCategoryValues.iterator();
+																																	while (iterator.hasNext()) {
+																																		AmpCategoryValue ampCategoryValue = (AmpCategoryValue)iterator.next();
+																																		if (ampCategoryValue!=null){
+																																			String outputValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
+																																			if ( formPI.getStatus() != null && formPI.getStatus() == ampCategoryValue.getId().longValue() /*|| 
+																																					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) */) {
+																																				statusName = outputValue;
+																																			}
+																																		}
+																																	}
+																																}
 																	%>
 																	<strong><digi:trn key="rep:pop:StatusType">Status Type:</digi:trn></strong>&nbsp;<%=statusName%>&nbsp;|
 																</c:if>
 																<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '10a'}">
-																	<%String groupsAux = "All";
-																	Iterator iterGroups = formPI.getOrgGroupColl().iterator();
-																	while(iterGroups.hasNext()){
-																		AmpOrgGroup auxAmpOrg = (AmpOrgGroup) iterGroups.next();
-																		if(auxAmpOrg.getOrgGrpCode().equals(formPI.getOrgGroup())){
-																			groupsAux = auxAmpOrg.getOrgGrpName();
-																		}
-																	}%>
+																	<%
+																		String groupsAux = "All";
+																																Iterator iterGroups = formPI.getOrgGroupColl().iterator();
+																																while(iterGroups.hasNext()){
+																																	AmpOrgGroup auxAmpOrg = (AmpOrgGroup) iterGroups.next();
+																																	if(auxAmpOrg.getOrgGrpCode().equals(formPI.getOrgGroup())){
+																																		groupsAux = auxAmpOrg.getOrgGrpName();
+																																	}
+																																}
+																	%>
 																	<strong><digi:trn key="rep:pop:Groups">Groups:</digi:trn></strong>&nbsp;<%=groupsAux%>&nbsp;|
 																</c:if>
 															</tr>
@@ -419,31 +421,33 @@ function toggleSettings(){
 												<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 													<tr height=20>
 														<td>
-															<%String groupsAux = "All";
-															Iterator iterGroups = formPI.getOrgGroupColl().iterator();
-															while(iterGroups.hasNext()){
-																AmpOrgGroup auxAmpOrg = (AmpOrgGroup) iterGroups.next();
-																if(auxAmpOrg.getOrgGrpCode().equals(formPI.getOrgGroup())){
-																	groupsAux = auxAmpOrg.getOrgGrpName();
-																}
-															}%>
+															<%
+																String groupsAux = "All";
+																												Iterator iterGroups = formPI.getOrgGroupColl().iterator();
+																												while(iterGroups.hasNext()){
+																													AmpOrgGroup auxAmpOrg = (AmpOrgGroup) iterGroups.next();
+																													if(auxAmpOrg.getOrgGrpCode().equals(formPI.getOrgGroup())){
+																														groupsAux = auxAmpOrg.getOrgGrpName();
+																													}
+																												}
+															%>
 															<strong><digi:trn key="rep:pop:Groups">Groups:</digi:trn></strong>&nbsp;<%=groupsAux%>&nbsp;|
 															<%
-															String indName = "All";
-															Collection ampCategoryValues = CategoryManagerUtil.getAmpCategoryByKey(org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
-															if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
-																Iterator iteratorInd = ampCategoryValues.iterator();
-																while (iteratorInd.hasNext()) {
-																	AmpCategoryValue ampCategoryValue = (AmpCategoryValue)iteratorInd.next();
-																	if (ampCategoryValue!=null){
-																		String outputValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
-																		if ( formPI.getFinancingInstrument() != null && formPI.getFinancingInstrument().equals(ampCategoryValue.getId()) /*|| 
-																				( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) */) {
-																			indName = outputValue;
-																		}
-																	}
-																}
-															}
+																String indName = "All";
+																												Collection ampCategoryValues = CategoryManagerUtil.getAmpCategoryByKey(org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
+																												if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
+																													Iterator iteratorInd = ampCategoryValues.iterator();
+																													while (iteratorInd.hasNext()) {
+																														AmpCategoryValue ampCategoryValue = (AmpCategoryValue)iteratorInd.next();
+																														if (ampCategoryValue!=null){
+																															String outputValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
+																															if ( formPI.getFinancingInstrument() != null && formPI.getFinancingInstrument().equals(ampCategoryValue.getId()) /*|| 
+																																	( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) */) {
+																																indName = outputValue;
+																															}
+																														}
+																													}
+																												}
 															%>
 															<strong><digi:trn key="rep:filer:financingInstrument">Financing Instrument</digi:trn>:</strong>&nbsp;<%=indName%>&nbsp;|
 															<%String sectorAux = "All";

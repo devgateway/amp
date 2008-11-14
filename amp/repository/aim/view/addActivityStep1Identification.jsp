@@ -380,7 +380,7 @@ target.style.cursor = "default"
 														<digi:trn key="aim:addActivityAccInstrFirstLine">Please select from below</digi:trn>
 													</c:set>
 													
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.accessionInstrument" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											</td></tr>	
 											</field:display>
 
@@ -397,7 +397,7 @@ target.style.cursor = "default"
 													<c:set var="translation">
 														<digi:trn key="aim:addActivityAccInstrFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.projectCategory" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.PROJECT_CATEGORY_NAME %>" styleClass="inp-text" />													
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="identification.projectCategory" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PROJECT_CATEGORY_NAME %>" styleClass="inp-text" />													
 											</td></tr>	
 											</field:display>
 
@@ -427,7 +427,7 @@ target.style.cursor = "default"
 													<c:set var="translation">
 														<digi:trn key="aim:addActivityAcChapterFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="acChapter" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="acChapter" categoryName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
 											</td></tr>											
 											</field:display>
 											
@@ -530,7 +530,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left" >
-											<category:showoptions listView="false" name="aimEditActivityForm" property="gbsSbs" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
+											<category:showoptions listView="false" name="aimEditActivityForm" property="gbsSbs" categoryName="<%=org.digijava.module.categorymanager.util.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											<!-- 	<html:radio property="gbsSbs" value="1"/>GBS<br/>
 												<html:radio property="gbsSbs" value="2"/>SBS<br/>								
 												<html:radio property="gbsSbs" value="3"/>Basket<br/>

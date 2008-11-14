@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.dbentity.AmpTermsAssist;
-import org.digijava.module.contentrepository.action.DocumentManager;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * @author jose

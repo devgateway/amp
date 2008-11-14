@@ -6,6 +6,7 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+
 import org.apache.struts.action.ActionForm;
 
 public class SurveyForm extends ActionForm {

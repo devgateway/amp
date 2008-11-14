@@ -1,14 +1,19 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.util.SectorUtil;
-import javax.servlet.http.*;
-import java.util.*;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.SectorClassConfigForm;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class ManageClassificationConfig extends Action {
 

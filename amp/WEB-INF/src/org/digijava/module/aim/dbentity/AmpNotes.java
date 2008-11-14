@@ -1,6 +1,5 @@
 package org.digijava.module.aim.dbentity ;
 
-import org.digijava.module.aim.dbentity.AmpActivity ;
 
 public class AmpNotes
 {

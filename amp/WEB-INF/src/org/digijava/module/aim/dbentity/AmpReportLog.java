@@ -2,9 +2,6 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
 
-import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-
 public class AmpReportLog {
 
 	private Long ampReportMemberLogId;

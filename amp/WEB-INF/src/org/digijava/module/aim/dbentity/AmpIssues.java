@@ -3,7 +3,6 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-//import java.io.Serializable;
 
 public class AmpIssues  implements Serializable
 {

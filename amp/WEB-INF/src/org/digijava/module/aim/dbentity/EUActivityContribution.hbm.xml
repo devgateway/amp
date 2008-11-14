@@ -19,10 +19,10 @@
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" />
 		<!-- <many-to-one name="financingType" column="financing_type_id" class="org.digijava.module.aim.dbentity.AmpTermsAssist"/>	 -->
 		<many-to-one name="financingTypeCategVal" column="financing_type_categ_val_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		<!-- <many-to-one name="financingInstrument" column="financing_instrument_id" class="org.digijava.module.aim.dbentity.AmpModality"/> -->
 		<many-to-one name="financingInstr" column="financing_instr_category_value_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 
 	</class>
 </hibernate-mapping>

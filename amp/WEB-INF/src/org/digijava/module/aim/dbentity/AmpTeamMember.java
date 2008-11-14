@@ -6,9 +6,10 @@
 
 package org.digijava.module.aim.dbentity;
 
-import org.digijava.kernel.user.User;
-import java.util.*;
 import java.io.Serializable;
+import java.util.Set;
+
+import org.digijava.kernel.user.User;
 
 public class AmpTeamMember implements Serializable {
 

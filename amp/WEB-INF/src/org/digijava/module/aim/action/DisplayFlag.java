@@ -1,7 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;

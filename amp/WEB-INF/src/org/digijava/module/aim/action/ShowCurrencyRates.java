@@ -4,9 +4,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -31,7 +28,6 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
-import org.digijava.module.currencyrates.DailyCurrencyRateSingleton;
 
 public class ShowCurrencyRates extends Action {
 	

@@ -1,9 +1,6 @@
 package org.digijava.module.aim.helper ;
 
-import org.digijava.module.aim.helper.QuarterlyInfo ;
-import org.digijava.module.aim.helper.QuarterlyComparison;
-import org.apache.log4j.Logger ;
-import org.digijava.module.aim.helper.QuarterlyInfoComparator;
+import org.apache.log4j.Logger;
 
 public class QuarterlyInfoComparator implements java.util.Comparator
 {

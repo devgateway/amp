@@ -1,26 +1,24 @@
 	package org.digijava.module.aim.action;
 	
-	import org.apache.struts.action.*;
-	import javax.servlet.http.HttpServletRequest;
-	import javax.servlet.http.HttpServletResponse;
-	
-	import org.digijava.kernel.dbentity.Country;
-	import org.digijava.module.aim.form.ThemeForm;
-	import org.digijava.module.aim.util.FeaturesUtil;
-	import org.digijava.module.aim.util.ProgramUtil;
-	import org.digijava.module.aim.util.LocationUtil;
-	import java.util.ArrayList;
-	
-	import org.digijava.module.aim.dbentity.AmpLocation;
-	import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpWoreda;
-	import org.digijava.module.aim.dbentity.AmpZone;
-	import org.apache.struts.util.LabelValueBean;
 	import java.util.Collection;
-	import java.util.List;
-	import java.util.Iterator;
-	import java.util.Collections;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpWoreda;
+import org.digijava.module.aim.dbentity.AmpZone;
+import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 	
 	public class SelectLocationForIndicatorValue   extends Action {
 		

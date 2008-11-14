@@ -2,6 +2,7 @@ package org.digijava.module.aim.form;
 
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;

@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.category;
+package org.digijava.module.categorymanager.tags;
 
 
 
@@ -8,7 +8,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class CategoryValueTagClass extends TagSupport {

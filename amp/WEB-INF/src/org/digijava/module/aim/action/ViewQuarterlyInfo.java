@@ -23,7 +23,6 @@ import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.PresentationUtil;
-import org.digijava.module.aim.helper.QuarterlyDiscrepancyWorker;
 import org.digijava.module.aim.helper.QuarterlyInfoWorker;
 import org.digijava.module.aim.helper.TabColors;
 import org.digijava.module.aim.helper.TeamMember;

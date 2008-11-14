@@ -7,10 +7,6 @@ package org.digijava.module.widget.action;
 
 import java.util.Collection;
 import java.util.List;
-import org.digijava.module.widget.form.OrgProfileWidgetForm;
-
-
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +18,7 @@ import org.apache.struts.actions.DispatchAction;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
+import org.digijava.module.widget.form.OrgProfileWidgetForm;
 import org.digijava.module.widget.util.OrgProfileWidgetUtil;
 import org.digijava.module.widget.util.WidgetUtil;
 

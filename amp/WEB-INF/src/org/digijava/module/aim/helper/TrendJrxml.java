@@ -962,7 +962,10 @@ p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='
 */
 
 package org.digijava.module.aim.helper;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 

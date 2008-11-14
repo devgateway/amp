@@ -1,7 +1,8 @@
 package org.digijava.module.aim.form ;
 
-import org.apache.struts.action.ActionForm ;
 import java.util.Collection;
+
+import org.apache.struts.action.ActionForm;
 public class CommitmentbyDonorForm extends ActionForm
 {
 	private String donor ;

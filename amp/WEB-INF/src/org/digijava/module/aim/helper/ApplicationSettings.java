@@ -1,7 +1,7 @@
 
 package org.digijava.module.aim.helper;
 
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 public class ApplicationSettings {
 

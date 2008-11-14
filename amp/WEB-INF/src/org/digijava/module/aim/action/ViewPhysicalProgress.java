@@ -14,10 +14,10 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.form.PhysicalProgressForm;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewPhysicalProgress extends TilesAction {

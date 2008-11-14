@@ -104,10 +104,10 @@ function saveIndicator(){
   //window.close();
   //window.opener.document.forms[0].submit();
   
-  aimNewIndicatorForm.action = "<%=addInd%>";
-  aimNewIndicatorForm.target=window.opener.name;
-  aimNewIndicatorForm.submit(); 
-  window.close();
+  document.aimNewIndicatorForm.action = "<%=addInd%>";
+  document.aimNewIndicatorForm.target="_self";
+  document.aimNewIndicatorForm.submit(); 
+ 
 }
 
 function selectProgram(){
@@ -196,7 +196,15 @@ function closeWindow() {
 	}
 
 </script>
-<digi:form action="/viewEditIndicator.do" method="post">  
+<digi:form action="/viewEditIndicator.do" method="post"> 
+<script language="javascript">
+<c:if test="${aimNewIndicatorForm.action=='added'}">
+    window.opener.location.reload(true);
+    window.opener.focus();
+    window.close();
+</c:if>
+  
+</script>
   <html:hidden property="prjStatus" styleId="projectStatus" />
   <html:hidden property="prgStatus" styleId="programStatus" /> 
   <html:hidden name="aimNewIndicatorForm" property="themeId" styleId="hdnThemeId" />
@@ -207,6 +215,11 @@ function closeWindow() {
       <td colspan="1" align="center" class="textalb">
       <b><digi:trn key="aim:vieweditindicator">View/Edit Indicator</digi:trn></b>
       </td>
+    </tr>
+    <tr>
+          <td>
+            <digi:errors/>
+        </td>
     </tr>
     <tr align="center" bgcolor="#ECF3FD">
       <td>

@@ -104,6 +104,42 @@ public class IndicatorUtil {
 			}
 		}
 	}
+        
+     /**
+     * Searches database for {@link AmpIndicator} with given name.
+     * Returns true if such indicator exists otherwise returns false
+     * @param indicator object.
+     * @throws DgException if anything goes wrong rollback is attempted.
+     * @return true or false
+     */
+    public static boolean validateIndicatorName(AmpIndicator indicator) throws DgException {
+
+        boolean exists = true;
+
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            String qrString = "Select ind  from " + AmpIndicator.class.getName() + " ind where ind.name=:name ";
+            Long indicatorId = indicator.getIndicatorId();
+            if (indicatorId != null && indicatorId != 0) {
+                qrString += "and ind.indicatorId !=:id ";
+            }
+            Query q=session.createQuery(qrString);
+            q.setString("name", indicator.getName());
+             if (indicatorId != null && indicatorId != 0) {
+               q.setLong("id",indicatorId);
+            }
+            List result=q.list();
+            if(result.size()==0){
+                exists=false;
+            }
+            
+
+        } catch (HibernateException e) {
+            logger.error("Error saving indicator", e);
+
+        }
+        return exists;
+    }
 	
 	/**
 	 * Removes {@link AmpIndicator} from db.

@@ -18,7 +18,11 @@
 		<digi:context name="selSector" property="context/module/moduleinstance/sectorActions.do?actionType=addsectorToindicator"/>
 	    document.aimIndicatorForm.action = "<%= selSector %>";
 		 document.aimIndicatorForm.target = window.opener.name;
+              
 	    document.aimIndicatorForm.submit();
+            window.opener.location.reload(true);
+            window.opener.focus();
+
 		window.close();
 		
 	}	

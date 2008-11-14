@@ -38,7 +38,14 @@ public class AddNewIndicatorTL extends Action {
         indicator.setCreationDate(new Date());
         indicator.setCode(indForm.getIndicatorCode());
         indicator.setType((indForm.getAscendingInd()+"").trim());  
-        indicator.setSectors((Set)indForm.getSelectedSectorsForInd());
+         if (indForm.getSelectedSectorsForInd() != null && indForm.getSelectedSectorsForInd().size() > 0) {
+                indicator.setSectors(new HashSet<AmpSector>());
+                for (Iterator sectorIt = indForm.getSelectedSectorsForInd().iterator(); sectorIt.hasNext();) {
+                    ActivitySector actSector = (ActivitySector) sectorIt.next();
+                    AmpSector sector = SectorUtil.getAmpSector(actSector.getSectorId());
+                    indicator.getSectors().add(sector);
+                }
+            }
         
         IndicatorUtil.saveIndicator(indicator);		
 		

@@ -330,7 +330,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedPrimaryPrograms = null;
 			this.selectedSecondaryPrograms = null;
 			this.selectedresponsibleorg=null;
-			this.approvalStatusSelected	= null;
+
 			if (request.getParameter("applyFormat")!=null)
 				this.customUseGrouping=false;
 		}

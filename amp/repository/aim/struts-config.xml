@@ -820,11 +820,11 @@
       <forward name="forward" path="/showLayout.do?layout=selectCreateIndicators" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimIndicatorForm" path="/aim/addIndicatorsTL" scope="request" type="org.digijava.module.aim.action.AddIndicatorsTL" validate="false">
+    <action name="aimIndicatorForm" path="/aim/addIndicatorsTL" scope="session" type="org.digijava.module.aim.action.AddIndicatorsTL" validate="false">
       <forward name="forward" path="/aim/getActivityIndicators.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimIndicatorForm" path="/aim/addNewIndicatorTL" scope="request" type="org.digijava.module.aim.action.AddNewIndicatorTL" validate="false">
+    <action name="aimIndicatorForm" path="/aim/addNewIndicatorTL" scope="session" type="org.digijava.module.aim.action.AddNewIndicatorTL" validate="false">
       <forward name="forward" path="/aim/getActivityIndicators.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="toAdditionOfIndiForStep9" path="/showLayout.do?layout=aim_selectCreateIndicatorForStep9" />

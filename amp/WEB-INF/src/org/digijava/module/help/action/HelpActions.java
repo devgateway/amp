@@ -304,15 +304,20 @@ public ActionForward getbody(ActionMapping mapping,
 			}
 		  }
 		}
-		if(!page.equals("admin")){
+		if(page != null){
+			if(!page.equals("admin")){
+				return mapping.findForward("helpHome");
+				}else{
+					if(helpForm.getAdminTopicTree()!=null){
+					helpForm.getAdminTopicTree().clear();
+					}
+					helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId, "admin"));
+					helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, "default"));
+					return mapping.findForward("admin");
+				}
+			}else{
+				
 			return mapping.findForward("helpHome");
-		}else{
-			if(helpForm.getAdminTopicTree()!=null){
-			helpForm.getAdminTopicTree().clear();
-			}
-			helpForm.setAdminTopicTree(HelpUtil.getHelpTopicsTree(siteId, "admin"));
-			helpForm.setTopicTree(HelpUtil.getHelpTopicsTree(siteId, "default"));
-			return mapping.findForward("admin");
 		}
 	}
 	

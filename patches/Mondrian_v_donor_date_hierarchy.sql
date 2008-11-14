@@ -1,6 +1,6 @@
-CREATE OR REPLACE VIEW `v_donor_date_hierarchy` AS (select `fd`.`amp_fund_detail_id` AS `amp_fund_detail_id`,`fd`.`transaction_date` 
-AS `full_date`,year(`fd`.`transaction_date`) AS `year`,month(`fd`.`transaction_date`) AS `month`,
-cast(monthname(`fd`.`transaction_date`) as char charset latin1) AS `month_name`,quarter(`fd`.`transaction_date`) 
-AS `quarter`,concat(_latin1'Q',cast(quarter(`fd`.`transaction_date`) as char charset latin1)) AS `quarter_name` 
-from ((`amp_activity` `a` join `amp_funding` `f`) join `amp_funding_detail` `fd`) where ((`a`.`amp_activity_id` = `f`.`amp_activity_id`) 
-and (`f`.`amp_funding_id` = `fd`.`AMP_FUNDING_ID`)));
+CREATE OR REPLACE VIEW v_donor_date_hierarchy AS 
+(SELECT a.amp_activity_id,fd.amp_fund_detail_id as amp_fund_detail_id, fd.transaction_date as full_date, 
+year(fd.transaction_date) as year,month(fd.transaction_date) as month,
+CAST(monthname(fd.transaction_date) AS CHAR) as month_name, quarter(fd.transaction_date)  as quarter,
+concat('Q',CAST(quarter(fd.transaction_date) AS CHAR)) as quarter_name FROM amp_activity a, amp_funding f, amp_funding_detail fd
+WHERE a.amp_activity_id=f.amp_activity_id AND f.amp_funding_id=fd.amp_funding_id);

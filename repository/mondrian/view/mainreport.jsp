@@ -1,7 +1,7 @@
 <%@page contentType="text/html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%--
-// $Id: mainreport.jsp,v 1.1 2008-11-07 17:21:58 ddimunzio Exp $
+// $Id: mainreport.jsp,v 1.2 2008-11-14 18:14:35 ddimunzio Exp $
 // This software is subject to the terms of the Common Public License
 // Agreement, available at the following URL:
 // http://www.opensource.org/licenses/cpl.html.
@@ -33,9 +33,10 @@ document.testpageform.submit();
 <digi:form  action="/testpage.do" method="post">
 
 <input type="hidden" name="query">
-<p>Mondrian examples:</p>
+<p>Mondrian AMP Examples:</p>
 <ul>
-<li><a href="javascript:sendForm('cj')">Complex 5 level cross-join of dimensions - hierarchy with years+measures as columns, activity count. All amounts are converted to USD</a></li>
+<li><a href="javascript:sendForm('sectorWeighted')">Donor Funding Amounts Weighted to Sector Percentages (filtered by 3 activities)</a></li>
+<li><a href="javascript:sendForm('cj')">Complex Demo Example</a></li>
 <li><a href="javascript:sendForm('by_donors')">By Donor dimension - 3 level horizontal hierarchy. Includes Donor Type/Donor Group/Donor Name</a></li>
 <li><a href="javascript:sendForm('by_time')">By Time dimension - 3 level vertical hierarchy. Includes years, quarters, months </a></li></li>
 </ul>

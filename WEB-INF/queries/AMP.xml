@@ -1,21 +1,40 @@
 <?xml version="1.0"?>
 <!DOCTYPE Schema PUBLIC "//UNKNOWN/" "mondrian.dtd">
 <Schema name="AMP">
+	<Dimension name="Primary Sector">
+		<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberName="All Primary Sectors">		
+			<Table name="v_sectors" />
+			<Level name="Primary Sector Scheme" column="sec_scheme_name"/>
+			<Level name="Primary Sector Name" column="sectorname" />
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Activity">
+		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="amp_activity" allMemberName="All Activities">
+			<Table name="amp_activity" />
+			<Level name="Activity Title" column="name" table="amp_activity" uniqueMembers="true" />
+			<Level name="AMP ID" column="amp_id" table="amp_activity" uniqueMembers="true" />
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Donor Dates" type="TimeDimension">
+		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="amp_fund_detail_id">
+			<Table name="v_donor_date_hierarchy" />
+			<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
+			<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
+			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric" />
+		</Hierarchy>
+	</Dimension>
+	<Cube name="Sectors">
+		<Table name="v_sectors" />
+		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id" />
+		<Measure name="Raw Sector Percentage" aggregator="sum" column="sector_percentage" visible="false" />
+		<CalculatedMember name="Sector Percentage" dimension="Measures">
+			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],null)</Formula>
+		</CalculatedMember>
+	</Cube>
 	<Cube name="Donor Funding">
 		<Table name="v_donor_funding" />
-		<Dimension name="Activity" foreignKey="amp_activity_id">
-			<Hierarchy hasAll="true" primaryKey="amp_activity_id"
-				primaryKeyTable="amp_activity" allMemberName="All Activities"
-			>
-				<Table name="amp_activity" />
-				<Level name="Activity Title" column="name"
-					table="amp_activity" uniqueMembers="true"
-				/>
-				<Level name="AMP ID" column="amp_id"
-					table="amp_activity" uniqueMembers="true"
-				/>
-			</Hierarchy>
-		</Dimension>
 		<Dimension name="Donor">
 			<Hierarchy hasAll="true" allLevelName="All Donors">
 				<!-- No table element here. Fact table is assumed. -->
@@ -25,157 +44,119 @@
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Financing Instrument">
-			<Hierarchy hasAll="true"
-				allLevelName="All Financing Instruments"
-			>
+			<Hierarchy hasAll="true" allLevelName="All Financing Instruments">
 				<!-- No table element here. Fact table is assumed. -->
-				<Level name="Financing Instrument"
-					column="financing_instrument_name"
-				/>
+				<Level name="Financing Instrument" column="financing_instrument_name" />
 			</Hierarchy>
 		</Dimension>
 		<Dimension name="Terms of Assistance">
-			<Hierarchy hasAll="true"
-				allLevelName="All Terms of Assistance"
-			>
+			<Hierarchy hasAll="true" allLevelName="All Terms of Assistance">
 				<!-- No table element here. Fact table is assumed. -->
-				<Level name="Terms of Assistance"
-					column="terms_assist_name"
-				/>
+				<Level name="Terms of Assistance" column="terms_assist_name" />
 			</Hierarchy>
 		</Dimension>
-		<Dimension name="Time" type="TimeDimension"
-			foreignKey="amp_fund_detail_id"
-		>
-			<Hierarchy hasAll="true" allMemberName="All Periods"
-				primaryKey="amp_fund_detail_id"
-			>
-				<Table name="v_donor_date_hierarchy" />
-				<Level name="Year" column="year" levelType="TimeYears"
-					type="Numeric"
-				/>
-				<Level name="Quarter" column="quarter"
-					ordinalColumn="quarter" nameColumn="quarter_name"
-					levelType="TimeQuarters" type="Numeric"
-				/>
-				<Level name="Month" column="month" uniqueMembers="false"
-					ordinalColumn="month" nameColumn="month_name"
-					levelType="TimeMonths" type="Numeric"
-				/>
-			</Hierarchy>
-		</Dimension>
-		
-		<Dimension name="Primary Sector" foreignKey="amp_activity_id">
-			<Hierarchy hasAll="true" primaryKey="amp_activity_id" allMemberName="All Primary Sectors">
-				<Table name="v_sectors"/>
-				<Level name="Primary Sector" column="sectorname"/>
-			</Hierarchy>
-		</Dimension>	
-			
-	
+		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
 		<Dimension name="SectorAll" foreignKey="amp_activity_id">
-			<Hierarchy hasAll="true" primaryKey="amp_activity_id"
-				primaryKeyTable="amp_activity_sector" allMemberName="All Sectors"
-			>
-				<Join rightKey="amp_sector_id"
-					leftKey="amp_sector_id"
-				>
+			<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="amp_activity_sector" allMemberName="All Sectors">
+				<Join rightKey="amp_sector_id" leftKey="amp_sector_id">
 					<Table name="amp_activity_sector" />
 					<Table name="amp_sector" />
 				</Join>
-				<Level name="Sector Name" table="amp_sector"
-					column="name"
-				/>
+				<Level name="Sector Name" table="amp_sector" column="name" />
 			</Hierarchy>
 		</Dimension>
-		<Measure name="Actual Commitments"
-			aggregator="sum">
+		<Measure name="Raw Actual Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when v_donor_funding.transaction_type=1 and v_donor_funding.adjustment_type=1 then v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end 
+					case when v_donor_funding.transaction_type=0 and v_donor_funding.adjustment_type=1 then
+					v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		<Measure name="Actual Disbursements"
-			aggregator="sum">
+		<Measure name="Raw Actual Disbursements" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when v_donor_funding.transaction_type=2 and v_donor_funding.adjustment_type=1 then v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end 
+					case when v_donor_funding.transaction_type=1 and v_donor_funding.adjustment_type=1 then
+					v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id"/>
-	
-		
-		<Measure name="Actual Expenditures"
-			aggregator="sum">
+		<Measure name="Activity Count" aggregator="distinct-count" column="amp_activity_id" />
+		<Measure name="Raw Actual Expenditures" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when v_donor_funding.transaction_type=3 and v_donor_funding.adjustment_type=1 then v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end 
+					case when v_donor_funding.transaction_type=2 and v_donor_funding.adjustment_type=1 then
+					v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		
-		<Measure name="Planned Commitments"
-			aggregator="sum">
+		<Measure name="Raw Planned Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when v_donor_funding.transaction_type=1 and v_donor_funding.adjustment_type=0 then v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end 
+					case when v_donor_funding.transaction_type=0 and v_donor_funding.adjustment_type=0 then
+					v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		<Measure name="Planned Disbursements"
-			aggregator="sum">
+		<Measure name="Raw Planned Disbursements" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when v_donor_funding.transaction_type=2 and v_donor_funding.adjustment_type=0 then v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end 
+					case when v_donor_funding.transaction_type=1 and v_donor_funding.adjustment_type=0 then
+					v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		<Measure name="Planned Expenditures"
-			aggregator="sum">
+		<Measure name="Raw Planned Expenditures" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
-					case when v_donor_funding.transaction_type=3 and v_donor_funding.adjustment_type=0 then v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end 
+					case when v_donor_funding.transaction_type=2 and v_donor_funding.adjustment_type=0 then
+					v_donor_funding.transaction_amount/getExchangeWithFixed(v_donor_funding.currency_code,v_donor_funding.transaction_date,v_donor_funding.fixed_exchange_rate) else 0 end
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
-		
-		
 	</Cube>
-	<!-- 
-		<Cube name="Activities">
-		<Table name="amp_activity" />
-		<Dimension name="Activity">
-		<Hierarchy hasAll="true" allMemberName="All Activities">
-		<Level name="Title" column="name" uniqueMembers="true" />
-		<Level name="ampId" column="amp_id"
-		uniqueMembers="true"
-		/>
-		</Hierarchy>
-		</Dimension>
-		<Dimension name="Sector" foreignKey="amp_activity_id">
-		<Hierarchy hasAll="true" primaryKey="amp_activity_id"
-		primaryKeyTable="amp_activity_sector" allMemberName="All Sectors"
-		>
-		<Join rightKey="amp_sector_id"
-		leftKey="amp_sector_id"
-		>
-		<Table name="amp_activity_sector" />
-		<Table name="amp_sector" />
-		</Join>
-		<Level name="Sector Name" table="amp_sector"
-		column="name"
-		/>
-		</Hierarchy>
-		</Dimension>
-		<Measure name="Draft" column="draft" aggregator="sum" />
-		</Cube>
-	-->
+	<VirtualCube name="Donor Funding Weighted">
+		<CubeUsages>
+			<CubeUsage cubeName="Sectors" />
+			<CubeUsage cubeName="Donor Funding" />
+		</CubeUsages>
+		<VirtualCubeDimension name="Primary Sector" foreignKey="amp_activity_id" />
+		<VirtualCubeDimension name="Activity" foreignKey="amp_activity_id" />
+		<VirtualCubeDimension name="Donor Dates" foreignKey="amp_fund_detail_id" />
+		<VirtualCubeDimension name="Financing Instrument" cubeName="Donor Funding" />
+		<VirtualCubeDimension name="Terms of Assistance" cubeName="Donor Funding" />
+		<VirtualCubeDimension name="Donor" cubeName="Donor Funding" />
+		<VirtualCubeMeasure cubeName="Sectors" name="[Measures].[Sector Percentage]" />
+		
+		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Commitments]" visible="false" />
+		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Disbursements]" visible="false" />
+		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Actual Expenditures]" visible="false"/>
+		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Planned Commitments]" visible="false"/>
+		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Planned Disbursements]" visible="false"/>
+		<VirtualCubeMeasure cubeName="Donor Funding" name="[Measures].[Raw Planned Expenditures]" visible="false"/>
+		
+		<CalculatedMember name="Actual Commitments" dimension="Measures">
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Actual Commitments] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Actual Commitments])</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="Actual Disbursements" dimension="Measures">
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Actual Disbursements] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Actual Disbursements])</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="Actual Expenditures" dimension="Measures">
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Actual Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Actual Expenditures])</Formula>
+		</CalculatedMember>
+
+		<CalculatedMember name="Planned Commitments" dimension="Measures">
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Commitments] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Commitments])</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="Planned Disbursements" dimension="Measures">
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Disbursements] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Disbursements])</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="Planned Expenditures" dimension="Measures">
+			<Formula>IIf([Measures].[Sector Percentage] &gt; 0 AND [Measures].[Sector Percentage] &lt; 100,[Measures].[Raw Planned Expenditures] * [Measures].[Sector Percentage] / 100,[Measures].[Raw Planned Expenditures])</Formula>
+		</CalculatedMember>
+
+
+	</VirtualCube>
 </Schema>

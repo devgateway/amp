@@ -5,7 +5,7 @@
 
 <jp:mondrianQuery 
 	id="query01" 
-	dataSource="czechDS"  
+	dataSource="demoDS"  
 	catalogUri="/WEB-INF/queries/AMP.xml"
 >
 

@@ -7,11 +7,11 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Set;
 
-import org.digijava.kernel.dbentity.*;
-import org.digijava.module.aim.util.*;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.Identifiable;
 
 public class AmpRegion implements Serializable, Comparable, Identifiable{
 	private Long ampRegionId;

@@ -1,6 +1,8 @@
 package org.digijava.module.aim.helper;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 
 public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
     public synchronized void createJrxml(String filePath, String reportName,String selCurr, int cols, int rows, String type) throws IOException {

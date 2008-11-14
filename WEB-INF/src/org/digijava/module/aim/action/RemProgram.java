@@ -1,21 +1,22 @@
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpServletRequest;
-import org.apache.struts.action.ActionForward;
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.Action;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
-import org.digijava.module.aim.form.EditActivityForm;
-import java.util.List;
-import java.util.Iterator;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.util.ProgramUtil;
 import java.util.ArrayList;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.util.ProgramUtil;
 
 public class RemProgram extends Action
 {

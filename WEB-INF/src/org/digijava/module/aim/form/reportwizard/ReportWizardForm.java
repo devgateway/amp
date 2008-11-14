@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.apache.struts.action.ActionForm;
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 /**

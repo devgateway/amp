@@ -15,16 +15,16 @@
 			type="java.lang.String" />
 
 		<many-to-one name="activityCategory" column="activity_category_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="status" column="status"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="type" column="type"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="contractType" column="contractType"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="organization" column="contracting_org"
 			class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none" />

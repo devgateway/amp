@@ -14,8 +14,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.Constants;

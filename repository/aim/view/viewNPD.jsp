@@ -1389,7 +1389,7 @@
 						<c:set var="translation">
 							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
 						</c:set>
-						<category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  multiselect="true" size="5"/>
+						<category:showoptions  firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY %>"  multiselect="true" size="5"/>
 
 					</td>
 					<td>

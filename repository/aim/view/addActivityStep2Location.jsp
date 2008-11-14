@@ -63,7 +63,7 @@
 													<c:set var="translation">
 														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
 													</c:set>
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="location.levelId" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="location.levelId" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
 												</td>
                                             </tr>
                                             </field:display>
@@ -89,7 +89,7 @@
 													
 													
 													<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
-													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
 												                                             	
                                               		<input type="hidden" name="location.implemLocationLevel" value="${location.implemLocationLevel}">
 												                                             	

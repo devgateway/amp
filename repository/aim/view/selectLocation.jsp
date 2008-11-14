@@ -218,7 +218,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="1">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 											</td>
 											<td><b>
 												<c:out value="${aimEditActivityForm.country}"/></b>
@@ -234,7 +234,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="2">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 											</td>
 											<td>
 												<c:if test="${aimEditActivityForm.impLevelValue != 2}">
@@ -261,7 +261,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="3">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 											</td>
 											<td>
 												<c:if test="${aimEditActivityForm.impLevelValue != 3}">
@@ -288,7 +288,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="4">
 										<tr>
 											<td>
-												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 											</td>
 											<td>
 												<html:select property="impMultiWoreda"  styleClass="inp-text" size="5" multiple="true">

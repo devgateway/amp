@@ -26,7 +26,6 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpComponent;

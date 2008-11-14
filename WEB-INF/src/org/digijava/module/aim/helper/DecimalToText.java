@@ -1,9 +1,9 @@
 package org.digijava.module.aim.helper ;
 
-import org.apache.commons.beanutils.converters.DoubleConverter;
-import org.apache.log4j.Logger ;
-import java.text.DecimalFormat ;
+import java.text.DecimalFormat;
 import java.util.StringTokenizer;
+
+import org.apache.log4j.Logger;
 
 public class DecimalToText
 {

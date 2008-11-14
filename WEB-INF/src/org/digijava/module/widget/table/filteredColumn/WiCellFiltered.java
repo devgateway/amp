@@ -1,14 +1,13 @@
 package org.digijava.module.widget.table.filteredColumn;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiCellStandard;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class WiCellFiltered extends WiCellStandard {
 

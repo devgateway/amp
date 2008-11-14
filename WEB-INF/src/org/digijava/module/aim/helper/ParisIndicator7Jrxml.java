@@ -1,7 +1,8 @@
 package org.digijava.module.aim.helper;
 
-import java.io.*;
-import java.lang.Math;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 

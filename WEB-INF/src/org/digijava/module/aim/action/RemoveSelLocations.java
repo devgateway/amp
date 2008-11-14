@@ -3,7 +3,6 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.TreeSet;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;

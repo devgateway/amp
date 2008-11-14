@@ -1,24 +1,22 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-
-import com.sun.org.apache.xml.internal.security.utils.HelperNodeList;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Vector;
-
-import javax.servlet.http.HttpSession;
 
 public class OrganisationManager
     extends Action {

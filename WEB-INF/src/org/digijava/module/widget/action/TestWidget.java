@@ -12,9 +12,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -31,6 +28,8 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.widget.form.TableWidgetTeaserForm;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * This action is just for testing purposes.

@@ -1,7 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;

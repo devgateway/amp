@@ -1,9 +1,11 @@
 package org.digijava.module.aim.form;
 
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.Collection;
 
-import org.apache.struts.action.*;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 public class OrgManagerForm
     extends ActionForm {

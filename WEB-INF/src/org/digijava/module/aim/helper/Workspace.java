@@ -6,8 +6,7 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class Workspace {
 	private String id;

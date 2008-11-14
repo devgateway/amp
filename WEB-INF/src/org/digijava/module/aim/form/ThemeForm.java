@@ -1,6 +1,9 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
@@ -9,11 +12,6 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.aim.helper.IndicatorsBean;
-
-
-import java.util.Collection;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 
 
 public class ThemeForm extends ActionForm {

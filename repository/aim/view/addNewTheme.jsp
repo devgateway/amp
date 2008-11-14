@@ -170,7 +170,7 @@
 						<digi:trn key="aim:program:programTypeFirstLine">Please select from below</digi:trn>
 					</c:set>
 					<category:showoptions firstLine="${translation}" name="aimThemeForm" property="programTypeCategValId" 
-						keyName="<%= org.digijava.module.aim.helper.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />	
+						keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />	
 					<%--<html:select property="programType" styleClass="inp-text">
 						<html:option value="-1">Select Progarm Type</html:option>
 							<html:optionsCollection name="aimThemeForm" property="programTypeNames"

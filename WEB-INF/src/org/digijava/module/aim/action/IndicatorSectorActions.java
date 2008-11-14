@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,7 +14,6 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.IndicatorForm;
-import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.SectorUtil;
 

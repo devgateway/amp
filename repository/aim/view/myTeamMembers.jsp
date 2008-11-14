@@ -86,7 +86,7 @@
 
 							<logic:present name="activity_level" scope="request">
 							<category:showoptions firstLine="${translation}" name="xx" outerId="activityLevel"
-							property="activityLevel"  styleClass="inp-text" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY%>"/>
+							property="activityLevel"  styleClass="inp-text" keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_LEVEL_KEY%>"/>
 							</logic:present>
 							
 							</div>

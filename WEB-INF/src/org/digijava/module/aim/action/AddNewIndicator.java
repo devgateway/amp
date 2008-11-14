@@ -1,37 +1,27 @@
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.digijava.module.aim.form.NewIndicatorForm;
-import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
-import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.AllPrgIndicators;
-import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import java.util.Collection;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.apache.struts.util.LabelValueBean;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.form.NewIndicatorForm;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.AmpPrgIndicator;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class AddNewIndicator
     extends Action {

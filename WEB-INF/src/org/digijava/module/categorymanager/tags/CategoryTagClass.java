@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.category;
+package org.digijava.module.categorymanager.tags;
 
 import java.beans.PropertyDescriptor;
 import java.util.Collection;
@@ -19,8 +19,8 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpCategoryClass;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.springframework.beans.BeanWrapperImpl;
 

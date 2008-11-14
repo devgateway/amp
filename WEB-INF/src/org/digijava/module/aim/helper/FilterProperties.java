@@ -1,7 +1,6 @@
 
 package org.digijava.module.aim.helper;
 
-import java.util.Date;
 
 
 public class FilterProperties

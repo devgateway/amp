@@ -5,7 +5,6 @@
   
 package org.digijava.module.aim.action;
 
-import javax.jcr.Node;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,11 +14,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 
 /***

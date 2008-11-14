@@ -7,8 +7,6 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
-import org.digijava.module.aim.dbentity.AmpCurrency;
-
 public class SelectComponent {
 
 		private String title;

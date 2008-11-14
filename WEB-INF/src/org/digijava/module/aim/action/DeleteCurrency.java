@@ -1,23 +1,17 @@
 package org.digijava.module.aim.action ;
 
-import java.sql.BatchUpdateException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.hibernate.JDBCException;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
-import org.digijava.module.aim.form.AddCurrencyForm;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.hibernate.JDBCException;
 
 
 public class DeleteCurrency extends Action {

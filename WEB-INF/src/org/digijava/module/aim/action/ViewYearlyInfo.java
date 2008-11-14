@@ -30,12 +30,9 @@ import org.digijava.module.aim.helper.TabColors;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.TotalsQuarterly;
 import org.digijava.module.aim.helper.YearUtil;
-import org.digijava.module.aim.helper.YearlyDiscrepancyWorker;
 import org.digijava.module.aim.helper.YearlyInfoWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-
-import com.corda.taglib.Debug;
 
 public class ViewYearlyInfo extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewYearlyInfo.class);

@@ -20,6 +20,6 @@
 		<many-to-one name="ampFunding" column="amp_funding_id"
 			class="org.digijava.module.aim.dbentity.AmpFunding" />
 		<many-to-one name="projected" column="amp_projected_categoryvalue_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 	</class>
 </hibernate-mapping>

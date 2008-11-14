@@ -257,7 +257,7 @@
 										<digi:trn key="aim:addActivityTypeOfAssistenceFirstLine">Please select from below</digi:trn>
 									</c:set>
 
-										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm"   property="funding.assistanceType"  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 
 								</td>
 							</tr>
@@ -287,7 +287,7 @@
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
 										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="funding.modality"
-										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
+										keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 
 								</td>
 							</tr>
@@ -362,9 +362,9 @@
 
 
 						<html:select indexed="true" name="mtefProjection" property="projected">
-							<logic:iterate name="aimEditActivityForm" property="funding.projections" id="projection" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+							<logic:iterate name="aimEditActivityForm" property="funding.projections" id="projection" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 							<html:option value="${projection.id}" >
-								<digi:trn key="<%= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
+								<digi:trn key="<%= org.digijava.module.categorymanager.util.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
 									<bean:write name="projection" property="value"/>
 								</digi:trn>
 							</html:option>

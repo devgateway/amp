@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.dbentity.AmpDaValue;
@@ -15,6 +13,7 @@ import org.digijava.module.widget.dbentity.AmpDaValueFiltered;
 import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiColumn;
 import org.digijava.module.widget.table.util.TableWidgetUtil;
+import org.hibernate.Session;
 
 /**
  * Drop down filter column.

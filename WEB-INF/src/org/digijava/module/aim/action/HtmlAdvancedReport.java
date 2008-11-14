@@ -8,7 +8,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.AdvancedReportForm ;
+import org.digijava.module.aim.form.AdvancedReportForm;
 
 public class HtmlAdvancedReport extends Action 
 {

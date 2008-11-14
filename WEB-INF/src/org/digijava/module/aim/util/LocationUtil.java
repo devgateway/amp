@@ -11,12 +11,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARVRegions;
 import org.digijava.kernel.dbentity.Country;
@@ -35,6 +29,11 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.helper.AmpLocations;
 import org.digijava.module.aim.helper.Location;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class LocationUtil {
 

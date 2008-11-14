@@ -1,7 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
-import java.util.Set;
+
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @Deprecated
 public class AmpMEIndicatorValue {

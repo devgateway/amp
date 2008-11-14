@@ -15,10 +15,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.form.TeamPagesForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ShowConfigureTeam extends Action {
 

@@ -1,7 +1,5 @@
 package org.digijava.module.aim.form ;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 

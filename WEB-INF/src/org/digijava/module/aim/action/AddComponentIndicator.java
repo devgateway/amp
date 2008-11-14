@@ -1,7 +1,7 @@
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
 import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,10 +13,9 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.ComponentsForm;
 import org.digijava.module.aim.dbentity.AmpComponentsIndicators;
+import org.digijava.module.aim.form.ComponentsForm;
 import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class AddComponentIndicator extends Action 
 {

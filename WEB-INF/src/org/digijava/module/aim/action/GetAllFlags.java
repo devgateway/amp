@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,10 +11,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.FlagUploaderForm;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.kernel.translator.util.TrnCountry;
-import java.util.Collection;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class GetAllFlags extends Action {
 

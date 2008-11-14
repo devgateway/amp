@@ -3,16 +3,11 @@
  */
 
 package org.digijava.module.aim.helper;
-import java.util.List;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
+import org.hibernate.Session;
 
 public class RelOrganization {
 	private String orgName;

@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.table.WiTable.TableProxy;
 import org.digijava.module.widget.table.util.TableWidgetUtil;
+import org.hibernate.Session;
 
 public abstract class WiColumn {
 	

@@ -1,12 +1,11 @@
 package org.digijava.module.aim.form;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
-
-import java.io.Serializable;
 
 public class ActivityForm extends ActionForm implements Serializable {
 

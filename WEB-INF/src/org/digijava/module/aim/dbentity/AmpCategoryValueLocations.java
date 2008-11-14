@@ -1,5 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 /**
  *
  * @author medea

@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper ;
 
-import java.util.Collection;
 
 public class AmpLocations
 {

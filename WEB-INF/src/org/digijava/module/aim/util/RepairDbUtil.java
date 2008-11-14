@@ -2,15 +2,11 @@ package org.digijava.module.aim.util;
 
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.Collection;
-import java.util.Iterator;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.hibernate.Session;
 
 public class RepairDbUtil {
 	private static Logger logger = Logger.getLogger(RepairDbUtil.class);

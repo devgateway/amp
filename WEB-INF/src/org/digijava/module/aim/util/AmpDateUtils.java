@@ -3,8 +3,8 @@ package org.digijava.module.aim.util;
 /*
  Author: Vazha Ezugbaia
  */
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AmpDateUtils {
 

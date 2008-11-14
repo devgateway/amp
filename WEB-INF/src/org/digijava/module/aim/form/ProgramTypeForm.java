@@ -1,11 +1,9 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
 import java.io.Serializable;
 import java.util.Collection;
-/*
- *@author Govind G Dalwani 
- */
+
+import org.apache.struts.action.ActionForm;
 
 public class ProgramTypeForm extends ActionForm implements Serializable{
 

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpTheme implements Serializable, Identifiable
 {

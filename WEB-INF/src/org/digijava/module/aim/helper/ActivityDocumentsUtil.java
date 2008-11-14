@@ -10,17 +10,13 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.exception.NoDocumentTypeException;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 /**
  * @author Alex Gartner

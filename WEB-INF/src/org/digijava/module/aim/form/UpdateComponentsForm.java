@@ -1,11 +1,10 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 
 public class UpdateComponentsForm extends ActionForm implements Serializable {
 

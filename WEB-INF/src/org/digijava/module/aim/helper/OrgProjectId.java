@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class OrgProjectId implements Serializable, Comparable

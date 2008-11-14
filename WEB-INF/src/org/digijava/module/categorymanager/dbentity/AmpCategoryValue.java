@@ -1,4 +1,4 @@
-package org.digijava.module.aim.dbentity;
+package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
 import java.util.Set;

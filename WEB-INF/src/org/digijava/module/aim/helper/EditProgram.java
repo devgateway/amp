@@ -3,8 +3,8 @@ package org.digijava.module.aim.helper ;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class EditProgram
 {

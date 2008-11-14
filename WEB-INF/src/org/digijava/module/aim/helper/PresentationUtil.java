@@ -1,7 +1,5 @@
 package org.digijava.module.aim.helper;
 
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TabColors;
 
 public class PresentationUtil {
 	

@@ -1,11 +1,10 @@
 package org.digijava.module.aim.action;
 
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.user.User;
 import org.digijava.module.um.util.DbUtil;
-import org.apache.struts.action.Action;
 
 
 /**

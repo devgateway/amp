@@ -1,10 +1,8 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.Date;
 
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 
 public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{

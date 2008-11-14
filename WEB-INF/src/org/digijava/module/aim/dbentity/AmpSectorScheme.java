@@ -1,8 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.SectorUtil;
 

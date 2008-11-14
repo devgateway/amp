@@ -244,7 +244,7 @@ function unload() {
   <html:hidden property="start" value="false" />
 
   <c:set var="location">
-    <category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>"
+    <category:getoptionvalue categoryKey="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>"
     categoryIndex="${aimAddLocationForm.categoryLevel}"/>
   </c:set>
 

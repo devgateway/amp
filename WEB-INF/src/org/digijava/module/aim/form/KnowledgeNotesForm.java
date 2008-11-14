@@ -1,7 +1,5 @@
 package org.digijava.module.aim.form ;
 
-import java.util.Collection ;
-import org.digijava.module.aim.dbentity.AmpSector ;
 
 public class KnowledgeNotesForm extends MainProjectDetailsForm
 {

@@ -84,7 +84,7 @@
 																		</digi:trn> :</b>&nbsp;
 																		<c:if test="${!empty aimChannelOverviewForm.modal}">
 																			<logic:iterate name="aimChannelOverviewForm" id="modal" property="modal"
-																				type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+																				type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 																				<bean:write name="modal" property="value" />&nbsp;
 																			</logic:iterate>
 																		</c:if>

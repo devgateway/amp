@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.FeaturesUtil;

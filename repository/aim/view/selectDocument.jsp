@@ -373,7 +373,7 @@ div.fakefile2 input {
 													<digi:trn key="aim:addActivityDocTypeFirstLine">Please select from below</digi:trn>
 												</c:set>
 												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
-													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docType" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docType" categoryName="<%=org.digijava.module.categorymanager.util.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
 												</a>
 											</td>
 										</tr>
@@ -392,7 +392,7 @@ div.fakefile2 input {
 													<digi:trn key="aim:addActivityDocLanguageFirstLine">Please select from below</digi:trn>
 											</c:set>
 											<a title="<digi:trn key="aim:languageOfTheDocumentDescription">Select document language</digi:trn>">
-											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docLang" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_LANGUAGE_KEY %>" styleClass="inp-text"/>
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docLang" keyName="<%=org.digijava.module.categorymanager.util.CategoryConstants.DOCUMENT_LANGUAGE_KEY %>" styleClass="inp-text"/>
 											</a>
 										</td>
 									</tr>

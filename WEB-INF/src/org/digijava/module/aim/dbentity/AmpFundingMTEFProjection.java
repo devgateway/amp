@@ -1,9 +1,9 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.Date ; 
-import org.digijava.module.aim.dbentity.AmpCurrency ;
-import org.digijava.module.aim.dbentity.AmpFunding ;
+import java.util.Date;
+
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpFundingMTEFProjection {
 

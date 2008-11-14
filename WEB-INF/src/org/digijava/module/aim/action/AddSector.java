@@ -1,7 +1,8 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,12 +13,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;

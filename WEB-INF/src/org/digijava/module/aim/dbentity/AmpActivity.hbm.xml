@@ -145,7 +145,7 @@
 			class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none" />
 		<!-- <many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>  -->
 		<many-to-one name="modality" column="amp_categ_val_modality_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="team" column="amp_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
 		<many-to-one name="country" column="country_iso"
@@ -166,7 +166,7 @@
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValue"
+			<many-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
 				column="amp_categoryvalue_id" />
 		</set>
 

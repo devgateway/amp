@@ -1,14 +1,15 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.util.DbUtil;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Vector;
 @Deprecated
 public class SelectOrganization extends Action {
 

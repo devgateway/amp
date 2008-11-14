@@ -13,14 +13,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
-import java.util.*;
-import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.helper.CountryBean;
 
 public class CurrencyManager extends Action {
 

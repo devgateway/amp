@@ -1,9 +1,8 @@
 package org.digijava.module.widget.table.calculated;
 
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.table.WiColumn;
+import org.hibernate.Session;
 
 public class WiColumnCalculated extends WiColumn{
 

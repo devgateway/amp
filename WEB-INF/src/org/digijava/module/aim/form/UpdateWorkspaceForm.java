@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 //public class UpdateWorkspaceForm extends ValidatorForm {

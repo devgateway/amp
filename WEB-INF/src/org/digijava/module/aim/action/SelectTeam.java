@@ -1,15 +1,21 @@
 package org.digijava.module.aim.action;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.security.auth.Subject;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.security.DgSecurityManager;
+import org.digijava.kernel.security.ResourcePermission;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -21,12 +27,6 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.security.ResourcePermission;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.UserUtils;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.request.Site;
 
 public class SelectTeam extends Action {
 

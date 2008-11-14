@@ -15,17 +15,16 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.FinancialOverviewForm;
-import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 public class ViewFinancialOverview extends TilesAction {

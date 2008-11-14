@@ -8,13 +8,12 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.Widget;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.table.util.TableWidgetUtil;
+import org.hibernate.Session;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 

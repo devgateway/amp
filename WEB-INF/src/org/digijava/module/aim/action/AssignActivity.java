@@ -15,7 +15,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AssignActivityForm;
-import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;

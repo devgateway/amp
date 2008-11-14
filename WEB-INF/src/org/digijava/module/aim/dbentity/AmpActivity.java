@@ -9,6 +9,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 

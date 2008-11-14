@@ -6,6 +6,7 @@
 package org.digijava.module.widget.form;
 
 import java.util.List;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;

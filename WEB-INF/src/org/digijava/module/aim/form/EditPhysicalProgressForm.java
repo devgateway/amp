@@ -1,9 +1,6 @@
 package org.digijava.module.aim.form ;
 
-import org.apache.struts.action.ActionForm ;
-import org.digijava.module.aim.dbentity.AmpActivity;
-
-import java.util.*;
+import org.apache.struts.action.ActionForm;
 
 public class EditPhysicalProgressForm extends ActionForm
 {

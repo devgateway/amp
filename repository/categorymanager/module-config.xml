@@ -5,6 +5,8 @@
 	<hibernate-classes required="true">
 		<hibernate-class>
 			org.digijava.module.categorymanager.dbentity.AmpCategoryClass
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.categorymanager.dbentity.AmpCategoryValue
 		</hibernate-class>
 	</hibernate-classes>

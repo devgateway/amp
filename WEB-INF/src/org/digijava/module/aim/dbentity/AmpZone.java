@@ -7,10 +7,10 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Set;
 
-import org.digijava.kernel.dbentity.*;
+import org.digijava.kernel.dbentity.Country;
 
 public class AmpZone implements Serializable{
 	private Long ampZoneId;

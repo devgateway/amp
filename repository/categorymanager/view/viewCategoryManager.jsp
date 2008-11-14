@@ -94,7 +94,7 @@ function confirmDelete() {
 								</digi:trn>
 							</td>
 						</tr>
-						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.aim.dbentity.AmpCategoryClass">
+						<logic:iterate name="myForm" property="categories" id="category" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass">
 						<% String key	= "aim:category" + category.getId() + "_" + category.getName() + "_"; %>
 						<tr align="center">
 							<td>
@@ -117,7 +117,7 @@ function confirmDelete() {
 							</td>
 							<td align="left">
 								<ul>
-								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 								<logic:notEmpty name="categoryValue">
 								<% String keyForValue	= CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue); %>
 									<li>

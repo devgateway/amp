@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.aim.dbentity.AmpCategoryValue" table="AMP_CATEGORY_VALUE" lazy="false">
+	<class name="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" table="AMP_CATEGORY_VALUE" lazy="false">
 		<cache usage="read-write" />
 		<id name="id" column="id" type="java.lang.Long">
 			<generator class="native">
@@ -12,7 +12,7 @@
 		<property name="value" column="category_value" type="java.lang.String" index="value" />
 
 		<many-to-one name="ampCategoryClass" column="amp_category_class_id"
-			class="org.digijava.module.aim.dbentity.AmpCategoryClass" cascade="none" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
 		<property name="index" column="index_column" type="int" update="true" insert="true" />
 		<property name="fieldType" column="field_type" type="long" />
 

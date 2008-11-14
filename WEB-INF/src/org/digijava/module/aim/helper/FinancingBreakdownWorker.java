@@ -12,8 +12,6 @@ import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 
-import com.corda.taglib.Debug;
-
 public class FinancingBreakdownWorker
 {
 	private static Logger logger = Logger.getLogger(FinancingBreakdownWorker.class) ;

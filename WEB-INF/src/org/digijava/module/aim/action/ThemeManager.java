@@ -25,7 +25,6 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
 import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
 

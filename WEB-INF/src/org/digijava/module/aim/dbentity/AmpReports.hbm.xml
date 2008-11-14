@@ -24,7 +24,7 @@
 		<many-to-one name="ownerId" column="ownerId"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 		<many-to-one name="activityLevel" column="cv_activity_level"
-			class="org.digijava.module.aim.dbentity.AmpCategoryValue" />
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		<property name="updatedDate" column="updated_date" type="java.util.Date" />
 
 		<many-to-one name="ampPage" column="ampPageId"
@@ -47,7 +47,7 @@
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportColumn">
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
 					column="columnId" />
-				<many-to-one name="level" class="org.digijava.module.aim.dbentity.AmpCategoryValue"
+				<many-to-one name="level" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
 					column="cv_level_id" />
 				<property name="orderId" column="order_id" type="java.lang.String" />
 			</composite-element>
@@ -58,7 +58,7 @@
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportHierarchy">
 				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns"
 					column="columnId" />
-				<many-to-one name="level" class="org.digijava.module.aim.dbentity.AmpCategoryValue"
+				<many-to-one name="level" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
 					column="cv_level_id" />
 				<property name="levelId" column="levelId" type="java.lang.String" />
 			</composite-element>
@@ -78,7 +78,7 @@
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
 				<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures"
 					column="measureId" />
-				<many-to-one name="level" class="org.digijava.module.aim.dbentity.AmpCategoryValue"
+				<many-to-one name="level" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue"
 					column="cv_level_id" />
 				<property name="orderId" column="order_id" type="java.lang.String" />
 			</composite-element>

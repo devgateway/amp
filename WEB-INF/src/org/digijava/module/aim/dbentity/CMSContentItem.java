@@ -23,6 +23,7 @@ import java.util.Date;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.user.User;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class CMSContentItem implements Serializable 
 {

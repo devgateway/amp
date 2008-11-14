@@ -1,6 +1,6 @@
 package org.digijava.module.aim.helper ;
 
-import java.io.*;
+import java.io.Serializable;
 
 public class PhysicalProgress implements Comparable, Serializable
 {

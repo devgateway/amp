@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+
 public class AmpIndicator implements Serializable
 {
 	private static final long serialVersionUID = 1L;

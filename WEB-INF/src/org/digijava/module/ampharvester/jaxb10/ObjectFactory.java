@@ -8,6 +8,9 @@
 
 package org.digijava.module.ampharvester.jaxb10;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.PropertyException;
+
 
 /**
  * This object contains factory methods for each 

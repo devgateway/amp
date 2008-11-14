@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
@@ -34,6 +33,7 @@ import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class ParisIndicatorReport extends Action {

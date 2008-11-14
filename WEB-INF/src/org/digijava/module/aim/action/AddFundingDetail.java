@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
-import java.util.Iterator;
 
 /**
  * @author jose

@@ -1,6 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,13 +11,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.form.ViewIndicatorsForm;
-import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.helper.AmpSectors;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 

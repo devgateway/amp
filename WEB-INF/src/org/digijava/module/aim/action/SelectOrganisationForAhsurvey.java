@@ -1,20 +1,25 @@
 
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.util.DbUtil;
-import java.util.Collection;
-import java.util.*;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 @Deprecated
 public class SelectOrganisationForAhsurvey extends Action {
 

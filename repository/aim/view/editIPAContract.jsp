@@ -394,7 +394,7 @@ window.onload=autosum;
 			<field:display name="Contracting IPA Activity Category" feature="Contracting">
 				<digi:trn key="aim:IPA:newPopup:actCat">Activity Category</digi:trn>&nbsp;&nbsp;
 				<category:showoptions name="aimIPAContractForm" property="activityCategoryId"  
-									  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY %>" 
+									  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY %>" 
 									  styleClass="inp-text" />
 				
 				&nbsp;&nbsp;&nbsp;
@@ -404,7 +404,7 @@ window.onload=autosum;
 				&nbsp;&nbsp;
 	
 				<category:showoptions name="aimIPAContractForm" property="contractTypeId"  
-									  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_TYPE_KEY %>" 
+									  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IPA_TYPE_KEY %>" 
 									  styleClass="inp-text" />
 	
 				&nbsp;&nbsp;&nbsp;
@@ -414,7 +414,7 @@ window.onload=autosum;
 				&nbsp;&nbsp;
 				
 				<category:showoptions name="aimIPAContractForm" property="typeId"  
-									  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_ACTIVITY_TYPE_KEY %>" 
+									  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IPA_ACTIVITY_TYPE_KEY %>" 
 									  styleClass="inp-text" />
 			</field:display>
 			
@@ -461,7 +461,7 @@ window.onload=autosum;
 			</td>
 			<td align="left">
 				<category:showoptions name="aimIPAContractForm" property="statusId"  
-					  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IPA_STATUS_KEY %>" 
+					  keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IPA_STATUS_KEY %>" 
 					  styleClass="inp-text" />
 			</td>
 		</field:display>

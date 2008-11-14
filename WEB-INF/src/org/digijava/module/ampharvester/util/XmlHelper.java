@@ -3,9 +3,6 @@ package org.digijava.module.ampharvester.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -18,6 +15,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.ampharvester.jaxb10.FundingDetailType;
 import org.digijava.module.ampharvester.jaxb10.LocationType;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class XmlHelper {
   public static final String siteId = "amp";

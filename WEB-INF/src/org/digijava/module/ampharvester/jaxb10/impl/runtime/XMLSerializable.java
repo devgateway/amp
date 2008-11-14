@@ -8,6 +8,7 @@
 package org.digijava.module.ampharvester.jaxb10.impl.runtime;
 
 import org.xml.sax.SAXException;
+
 import com.sun.xml.bind.JAXBObject;
 
 /**

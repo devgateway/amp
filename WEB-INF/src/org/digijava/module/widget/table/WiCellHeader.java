@@ -1,9 +1,8 @@
 package org.digijava.module.widget.table;
 
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumn;
+import org.hibernate.Session;
 
 /**
  * Represents table header row cell.

@@ -1,6 +1,9 @@
 
 package org.digijava.module.aim.action ;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,11 +13,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import java.util.*;
-
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddSectorForm;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewSectorDetails extends Action {

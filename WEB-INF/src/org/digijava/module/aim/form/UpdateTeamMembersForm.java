@@ -1,8 +1,7 @@
 
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import java.util.*;
+import java.util.Collection;
 
 public class UpdateTeamMembersForm extends TeamMemberForm {
 

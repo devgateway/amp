@@ -2,13 +2,12 @@ package org.digijava.module.widget.table.filteredColumn;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.widget.dbentity.AmpDaColumnFilter;
 import org.digijava.module.widget.table.WiCell;
 import org.digijava.module.widget.table.WiColumnStandard;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 public class WiColumnFilterSubColumn extends WiColumnStandard {
 

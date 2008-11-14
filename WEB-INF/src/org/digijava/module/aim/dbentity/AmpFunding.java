@@ -2,11 +2,10 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date ; 
-import java.util.Set ; 
-import org.digijava.module.aim.dbentity.AmpOrganisation ;
-import org.digijava.module.aim.dbentity.AmpActivity ;
-import org.digijava.module.aim.dbentity.AmpTermsAssist ;
+import java.util.Date;
+import java.util.Set;
+
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 public class AmpFunding implements Serializable
 {

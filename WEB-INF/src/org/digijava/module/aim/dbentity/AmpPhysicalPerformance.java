@@ -2,8 +2,6 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpActivity ;
 
 public class AmpPhysicalPerformance implements Serializable
 {

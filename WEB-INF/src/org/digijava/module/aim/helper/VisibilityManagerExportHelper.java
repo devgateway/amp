@@ -1,37 +1,29 @@
 package org.digijava.module.aim.helper;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.xml.bind.JAXBException;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.dgfoundation.amp.visibility.feed.fm.schema.FeatureType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.FieldType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.ModuleType;
+import org.dgfoundation.amp.visibility.feed.fm.schema.ObjectFactory;
 import org.dgfoundation.amp.visibility.feed.fm.schema.TemplateType;
 import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.dgfoundation.amp.visibility.feed.fm.schema.ObjectFactory;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 /**
  * @author Diego Dimunzio
  * 

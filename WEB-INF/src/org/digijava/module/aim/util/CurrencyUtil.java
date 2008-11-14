@@ -13,14 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.Hibernate;
-import org.hibernate.JDBCException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
-import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -31,6 +24,11 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
+import org.hibernate.Hibernate;
+import org.hibernate.JDBCException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class CurrencyUtil {
 

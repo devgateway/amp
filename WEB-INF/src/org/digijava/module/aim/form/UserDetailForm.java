@@ -1,7 +1,8 @@
 package org.digijava.module.aim.form;
 
-import org.digijava.module.um.form.UserProfileForm;
 import java.util.Collection;
+
+import org.digijava.module.um.form.UserProfileForm;
 
 public class UserDetailForm extends UserProfileForm
 {

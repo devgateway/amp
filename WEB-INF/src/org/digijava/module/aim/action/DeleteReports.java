@@ -1,11 +1,17 @@
 package org.digijava.module.aim.action ;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
-import javax.servlet.http.*;
+import org.digijava.module.aim.util.DbUtil;
 
 public class DeleteReports extends Action {
 

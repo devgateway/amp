@@ -4,11 +4,14 @@
  */
 package org.digijava.module.aim.form;
 
-import java.util.*;
-import javax.servlet.http.*;
+import java.util.Collection;
+import java.util.List;
 
-import org.apache.struts.action.*;
-import org.apache.struts.upload.*;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 
 public class CurrencyRateForm

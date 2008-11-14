@@ -2,9 +2,6 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-
 
 public class AmpOrgRole implements Serializable
 {

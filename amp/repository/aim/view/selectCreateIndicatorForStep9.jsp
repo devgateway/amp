@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<digi:instance property="aimIndicatorForm" />
 <script language="JavaScript">
     <!--
     function searchIndicators()
@@ -114,10 +114,10 @@
 </script>
 
 <digi:form action="/selectCreateIndicators.do">
-    
+    <digi:errors/>
     <html:hidden property="activityId" />
     <html:hidden property="addswitch" />
-    
+   
     <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
     <c:set target="${bcparams}" property="tId" value="-1"/>
     <c:set target="${bcparams}" property="dest" value="teamLead"/>

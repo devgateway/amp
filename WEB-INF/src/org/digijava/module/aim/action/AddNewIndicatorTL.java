@@ -8,21 +8,20 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import org.digijava.module.aim.form.IndicatorForm;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class AddNewIndicatorTL extends Action {
@@ -38,9 +37,25 @@ public class AddNewIndicatorTL extends Action {
         indicator.setCreationDate(new Date());
         indicator.setCode(indForm.getIndicatorCode());
         indicator.setType((indForm.getAscendingInd()+"").trim());  
-        indicator.setSectors((Set)indForm.getSelectedSectorsForInd());
-        
-        IndicatorUtil.saveIndicator(indicator);		
+            if (indForm.getSelectedSectorsForInd() != null && indForm.getSelectedSectorsForInd().size() > 0) {
+                indicator.setSectors(new HashSet<AmpSector>());
+                for (Iterator sectorIt = indForm.getSelectedSectorsForInd().iterator(); sectorIt.hasNext();) {
+                    ActivitySector actSector = (ActivitySector) sectorIt.next();
+                    AmpSector sector = SectorUtil.getAmpSector(actSector.getSectorId());
+                    indicator.getSectors().add(sector);
+                }
+            }
+      
+            if (!IndicatorUtil.validateIndicatorName(indicator)) {
+                IndicatorUtil.saveIndicator(indicator);
+
+            } else {
+                ActionErrors errors = new ActionErrors();
+                errors.add("title", new ActionError("error.aim.addIndicator.duplicateName"));
+                saveErrors(request, errors);
+            }
+
+     	
 		
 //		AmpMEIndicators ampMEIndnew = null;
 //		if (indForm.getIndicatorName().trim() != null

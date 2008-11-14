@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -163,9 +165,17 @@ public class ShowCalendarEvent extends Action {
         } else if (ceform.getMethod().equalsIgnoreCase("edit")) {
             loadAmpCalendar(ceform, request);
         } else if (ceform.getMethod().equalsIgnoreCase("save")) {
-            saveAmpCalendar(ceform, request);
-            ceform.setMethod("");
-            return mapping.findForward("forward");
+        	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
+        	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
+        	ActionErrors errors=validateDate(stDate,endDate);
+        	if(!errors.isEmpty()){
+        		saveErrors(request, errors);
+        		return mapping.findForward("success");        		
+        	}else{
+        		saveAmpCalendar(ceform, request);
+                ceform.setMethod("");
+                return mapping.findForward("forward");
+        	}            
 
         } else if (ceform.getMethod().equalsIgnoreCase("delete")) {
             AmpDbUtil.deleteAmpCalendar(ceform.getAmpCalendarId());
@@ -173,9 +183,20 @@ public class ShowCalendarEvent extends Action {
             return mapping.findForward("forward");
 
         } else if (ceform.getMethod().equalsIgnoreCase("preview")) {
-            loadAmpCalendar(ceform, request);
-            ceform.setMethod("");
-            return mapping.findForward("preview");
+        	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
+        	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
+        	ActionErrors errors=new ActionErrors();
+        	if(ceform.getAmpCalendarId()==null || !ceform.isResetForm()){
+        		errors=validateDate(stDate,endDate);
+        	}        	
+        	if(!errors.isEmpty()){
+        		saveErrors(request, errors);
+        		return mapping.findForward("success");        		
+        	}else{
+        		loadAmpCalendar(ceform, request);
+                ceform.setMethod("");
+                return mapping.findForward("preview");
+        	}
         }
 
         return mapping.findForward("success");
@@ -451,6 +472,23 @@ public class ShowCalendarEvent extends Action {
             }
         }
         return teamMap;
+    }
+    
+    private ActionErrors validateDate(String eventStartDate,String eventEndDate) throws Exception{   
+    	ActionErrors errors=new ActionErrors();
+        String dtformat = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
+        if (dtformat == null) {
+            dtformat = "dd/MM/yyyy";
+        }
+        dtformat+=" hh:mm";
+
+        SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
+        Date stDate=sdf.parse(eventStartDate);
+        Date endDate=sdf.parse(eventEndDate);
+        if(stDate!=endDate && !stDate.before(endDate)){
+        	errors.add("incorrectDate", new ActionError("error.calendar.endDateLessThanStartDate"));
+        }
+    	return errors;
     }
 
 }

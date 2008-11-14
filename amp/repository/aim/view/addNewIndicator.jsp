@@ -105,8 +105,10 @@ function addNewIndicator(){
 		} 
 		
 	<digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />	
-	window.opener.location.href="<%=addInd%>";
-	window.close();	
+	document.aimNewIndicatorForm.action = "<%= addInd %>";
+	document.aimNewIndicatorForm.target = "_self";
+	document.aimNewIndicatorForm.submit();
+	
 
   
   //document.forms[0].action="<%=addInd%>";
@@ -175,6 +177,15 @@ function closeWindow() {
 </script>
 <digi:instance property="aimNewIndicatorForm" />
 <digi:form action="/addNewIndicator.do" method="post">
+    
+<script language="javascript">
+<c:if test="${aimNewIndicatorForm.action=='added'}">
+    window.opener.location.reload(true);
+    window.opener.focus();
+    window.close();
+</c:if>
+  
+</script>
  <!-- <html:hidden property="type" value="3"/> --> 
   <html:hidden property="trType" value="3"/>
   <html:hidden property="category" value="-1"/> 
@@ -186,7 +197,13 @@ function closeWindow() {
       <b><digi:trn key="aim:addnewindicator">Add New Indicator</digi:trn></b>
       </td>
     </tr>
+    <tr>
+         <td>
+            <digi:errors/>
+        </td>
+    </tr>
     <tr align="center" bgcolor="#ECF3FD">
+       
       <td>
         <table border="0">
         <field:display name="Indicator name" feature="Admin">

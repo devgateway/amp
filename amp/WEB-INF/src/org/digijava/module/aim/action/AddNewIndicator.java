@@ -146,9 +146,17 @@ public class AddNewIndicator
 					}
                  }
                  
-                 IndicatorUtil.saveIndicator(indicator);
-                 return mapping.findForward("added");
-        		
+                   if(!IndicatorUtil.validateIndicatorName(indicator)){
+                        IndicatorUtil.saveIndicator(indicator);
+                        newIndForm.setAction("added");
+                    }
+                    else{
+                        ActionErrors errors=new ActionErrors();
+                        errors.add("title", new ActionError("error.aim.addIndicator.duplicateName"));
+                        saveErrors(request, errors);
+                        return mapping.findForward("forward");
+                    }                
+                 
         	}
         	
 /*

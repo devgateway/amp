@@ -98,11 +98,23 @@ public class ViewEditIndicator
 							indicator.getSectors().add(sector);
 						}
                     }
-                    IndicatorUtil.saveIndicator(indicator);
+                    if(!IndicatorUtil.validateIndicatorName(indicator)){
+                        IndicatorUtil.saveIndicator(indicator);
+                        indForm.reset();
+                        indForm.setAction("added");
+                        return mapping.findForward("forward");
+                    }
+                    else{
+                        ActionErrors errors=new ActionErrors();
+                        errors.add("title", new ActionError("error.aim.addIndicator.duplicateName"));
+                        saveErrors(request, errors);
+                        return mapping.findForward("forward");
+                    }
+                    
                     //TODO INDIC line below commented by me.
 //                    IndicatorUtil.saveIndicators(newInd);
 //                    ProgramUtil.saveThemeIndicators(newInd, existIndForm.getSelectedProgramId());
-                    indForm.reset();
+                    
 //                    break;
        //	}
 //                }

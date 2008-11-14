@@ -9,8 +9,8 @@
 	catalogUri="/WEB-INF/queries/AMP.xml"
 >
 
-SELECT {[Measures].[Actual Commitments], [Measures].[Actual Disbursements],[Measures].[Planned Commitments], [Measures].[Planned Disbursements]} ON COLUMNS,
-{[Time].[All Periods]} ON ROWS 
+SELECT {[Measures].[Raw Actual Commitments], [Measures].[Raw Actual Disbursements],[Measures].[Raw Planned Commitments], [Measures].[Raw Planned Disbursements]} ON COLUMNS,
+{[Donor Dates].[All Periods]} ON ROWS 
 FROM [Donor Funding] 
 </jp:mondrianQuery>
 

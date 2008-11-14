@@ -25,6 +25,8 @@
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="DOCUMENTS MANAGEMENT"></module:display> 
+<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="GIS DASHBOARD"></module:display> 
@@ -33,8 +35,7 @@
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
-<module:display name="Messages" parentModule="Messaging System"></module:display>
- 
+<module:display name="Messages" parentModule="Messaging System"></module:display> 
 <module:display name="Messaging System"></module:display> 
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display> 
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display> 
@@ -47,11 +48,9 @@
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display> 
-<module:display name="Off Line Reports" parentModule="REPORTING"></module:display>
 <module:display name="Report and Tab Options" parentModule="REPORTING"></module:display>
 <module:display name="Report Types" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -59,7 +58,6 @@
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
 <module:display name="WIDGETS"></module:display> 
-<module:display name="Org Profile"></module:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
@@ -99,8 +97,10 @@
 <feature:display name="Admin Topics Help" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Admin" module="M & E"></feature:display> 
 <feature:display name="Alert tab" module="Messages"></feature:display> 
+<feature:display name="Alert tab" module="Messaging System"></feature:display> 
 <feature:display name="Applied Patches" module="ADMINISTRATIVE SECTION"></feature:display> 
 <feature:display name="Approval Tab" module="Messages"></feature:display> 
+<feature:display name="Approval Tab" module="Messaging System"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
 <feature:display name="Budget" module="Project Id And Planning"></feature:display> 
@@ -108,6 +108,7 @@
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
+<feature:display name="Content Repository" module="Document Management"></feature:display> 
 <feature:display name="Contracting Agency" module="Organizations"></feature:display> 
 <feature:display name="Contracting" module="Contracting"></feature:display> 
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
@@ -120,6 +121,7 @@
 <feature:display name="Edit Activity" module="Previews"></feature:display> 
 <feature:display name="Enable Scrolling Reports" module="Report and Tab Options"></feature:display> 
 <feature:display name="Event Tab" module="Messages"></feature:display> 
+<feature:display name="Event Tab" module="Messaging System"></feature:display> 
 <feature:display name="Executing Agency" module="Organizations"></feature:display> 
 <feature:display name="Filter Button" module="Report and Tab Options"></feature:display> 
 <feature:display name="Financial Progress Tab" module="Funding"></feature:display> 
@@ -128,8 +130,7 @@
 <feature:display name="Government Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Identification" module="Project ID and Planning"></feature:display> 
 <feature:display name="Implementing Agency" module="Organizations"></feature:display> 
-<%--<feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> --%>
-<feature:display name="Results Dashboard Data" module="WIDGETS"></feature:display> 
+<feature:display name="Indicator Sector Region" module="WIDGETS"></feature:display> 
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Issues" module="Issues"></feature:display> 
 <feature:display name="Job Manager" module="ADMIN"></feature:display> 
@@ -137,9 +138,9 @@
 <feature:display name="Location" module="Project ID and Planning"></feature:display> 
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
-
-<feature:display name="Message tab" module="Messages"></feature:display>
-<feature:display name="My Messages" module="Messages"></feature:display>
+<feature:display name="Message tab" module="Messaging System"></feature:display>
+<feature:display name="My Messages" module="Messages"></feature:display> 
+<feature:display name="Messages" module="Messaging System"></feature:display> 
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display> 
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display> 
 <feature:display name="New Region Manager" module="ADMINISTRATIVE SECTION"></feature:display> 
@@ -184,6 +185,16 @@
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
+<feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>
+
+<%
+pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
+pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.getAllClassificationConfigs());
+%>
+<logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
+	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
+</logic:iterate>
+ 
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display> 
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display> 
@@ -696,19 +707,7 @@
 <field:display name="Web Resources Url" feature="Web Resources"></field:display> 
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
+<field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
-<module:display name="Resources"></module:display>
-<feature:display name="My Resources" module="Resources"></feature:display> 
-<feature:display name="Team Resources" module="Resources"></feature:display>
-<feature:display name="Public Resources" module="Resources"></feature:display>
-<feature:display name="Other Resources" module="Resources"></feature:display>
 
-
-<%
-pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
-pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.getAllClassificationConfigs());
-%>
-<logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
-	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
-</logic:iterate>
 		

@@ -3,11 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 
 
-<jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_generic" catalogUri="/WEB-INF/queries/AMP.xml"
+<jp:mondrianQuery id="query01" jdbcDriver="com.mysql.jdbc.Driver" jdbcUrl="jdbc:mysql://localhost/amp_burundi" catalogUri="/WEB-INF/queries/AMP.xml"
    jdbcUser="amp" jdbcPassword="" connectionPooling="true">
-select NON EMPTY Crossjoin({[Donor Dates].[All Periods]}, {[Measures].[Actual Commitments], [Measures].[Sector Percentage], [Measures].[Actual Disbursements], [Measures].[Actual Expenditures], [Measures].[Planned Commitments], [Measures].[Planned Disbursements], [Measures].[Planned Expenditures]}) ON COLUMNS,
-  NON EMPTY Crossjoin(Hierarchize({([Financing Instrument].[All Financing Instruments], [Terms of Assistance].[All Terms of Assistances], [Donor].[All Donors], [Primary Sector].[All Primary Sectors])}), {[Activity].[All Activities]}) ON ROWS
-from [Donor Funding Weighted]
+SELECT NON EMPTY CROSSJOIN({[Donor Dates]},{[Measures].[Actual Commitments]}) ON COLUMNS,
+NON EMPTY CROSSJOIN({[Financing Instrument]},CROSSJOIN({[Terms of Assistance]},CROSSJOIN ({[Donor]},CROSSJOIN({[Primary Sector]},{[Activity]})))) ON ROWS 
+FROM [Donor Funding Weighted] 
 </jp:mondrianQuery>
 
 

@@ -6,12 +6,13 @@
 <jp:mondrianQuery 
 	id="query01" 
 	dataSource="genericDS"  
-	catalogUri="/WEB-INF/queries/AMP.xml"
->
-
-    
-SELECT {[Measures].[Actual Commitments], [Measures].[Actual Disbursements],[Measures].[Planned Commitments], [Measures].[Planned Disbursements]} ON COLUMNS,
+	catalogUri="/WEB-INF/queries/AMP.xml">
+SELECT {[Measures].[Actual Commitments]} ON COLUMNS,
 {[Donor]} ON ROWS 
 FROM [Donor Funding] 
 </jp:mondrianQuery>
 
+
+
+
+<c:set var="title01" scope="session">Test Query uses Mondrian OLAP</c:set>

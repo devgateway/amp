@@ -22,6 +22,7 @@
     <property name="deployConfigs" location="deployConfigs"/>
 	<property name="repository" location="./repository"/>
 	<property name="jackrabbit" location="./jackrabbit"/>
+    <property name="ampTest" location="./WEB-INF/amp-test" />
 
     <!-- Path settings -->
     <property name="doc.path" value="./doc/api"/>
@@ -93,6 +94,18 @@
 	            </patternset>
             </fileset>
         </copy>
+    	<copy todir="${classes}" includeemptydirs="no">
+    		<fileset dir="${ampTest}">
+    			   <patternset>
+    				 <include name="**/*.conf"/>
+    			     <include name="**/*.properties"/>
+    			     <include name="**/*.xml"/>
+    			     <include name="**/*.ccf"/>
+    			     <include name="**/*.xsl"/>
+    			     <include name="**/*.xsd"/>
+    				</patternset>
+    	 	</fileset>
+    	</copy>
     </target>
 
     <!-- Create DB data-model in a fresh schema -->
@@ -156,10 +169,18 @@
         </javac>
     </target>
 
-    <target name="testCompile" depends="compile, testResources">
-        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}">
+    <target name="compileTest" depends="deployForServer,compile,testResources">
+        <javac  srcdir="${ampTest}" destdir="${classes}" deprecation="off" debug="${debug}">
             <classpath refid="compile.classpath"/>
         </javac>
+    </target>
+	
+    <target name="runTest" depends="compileTest">
+    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
+    	  <classpath refid="run.classpath"/>
+    	 	<formatter type="xml"/>
+    		 <test   name="org.dgfoundation.amp.test.AllTest" haltonfailure="no" outfile="test_result"/>
+    	</junit>
     </target>
 
 
@@ -258,7 +279,7 @@
 
 	</target>
 
-    <target name="junit" depends="testCompile">
+    <target name="junit" depends="compileTest">
         <junit printsummary="yes" haltonfailure="yes" showoutput="yes">
     	    <classpath refid="run.classpath"/>
   		<formatter type="xml"/>

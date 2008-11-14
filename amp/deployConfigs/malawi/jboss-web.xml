@@ -1,6 +1,6 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>localhost</virtual-host>
+<virtual-host>malawi.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
  com.example:loader=amp-malawi.war

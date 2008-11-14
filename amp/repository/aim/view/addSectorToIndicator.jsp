@@ -19,6 +19,8 @@
 	    document.aimIndicatorForm.action = "<%= selSector %>";
 		 document.aimIndicatorForm.target = window.opener.name;
 	    document.aimIndicatorForm.submit();
+            window.opener.location.reload(true);
+            window.opener.focus();
 		window.close();
 		
 	}	

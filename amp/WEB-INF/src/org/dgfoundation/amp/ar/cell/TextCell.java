@@ -71,7 +71,10 @@ public class TextCell extends Cell {
 	public String getShortTextVersion() {
 		if (!getHasLongVersion())
 			return value;
-		return value.replaceAll("\\<.*?>","").substring(0, shortLength - 1);
+		String alteredValue =  value.replaceAll("\\<.*?>","");
+		if(alteredValue.length()<shortLength)
+			return alteredValue;
+		return alteredValue.substring(0, shortLength-1);
 		
 	}
 	

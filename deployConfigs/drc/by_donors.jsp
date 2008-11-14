@@ -7,12 +7,7 @@
 	id="query01" 
 	dataSource="drcDS"  
 	catalogUri="/WEB-INF/queries/AMP.xml">
-SELECT {[Measures].[Actual Commitments]} ON COLUMNS,
+SELECT {[Measures].[Raw Actual Commitments]} ON COLUMNS,
 {[Donor]} ON ROWS 
 FROM [Donor Funding] 
 </jp:mondrianQuery>
-
-
-
-
-<c:set var="title01" scope="session">Test Query uses Mondrian OLAP</c:set>

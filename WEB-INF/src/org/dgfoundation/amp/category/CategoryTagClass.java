@@ -7,7 +7,6 @@ import java.beans.PropertyDescriptor;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
@@ -22,7 +21,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**

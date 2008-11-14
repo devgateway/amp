@@ -5,7 +5,7 @@ import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class DocumentData implements Comparable<DocumentData>{
 	String name				= null;

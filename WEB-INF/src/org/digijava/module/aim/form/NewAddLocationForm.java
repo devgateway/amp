@@ -5,9 +5,10 @@
 package org.digijava.module.aim.form;
 
 import java.util.List;
+
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  *

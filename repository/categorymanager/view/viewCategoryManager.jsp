@@ -7,11 +7,12 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.List"%>
  
-<digi:instance property="aimCategoryManagerForm" />
-<bean:define id="myForm" name="aimCategoryManagerForm" toScope="page" type="org.digijava.module.aim.form.CategoryManagerForm" />
+<%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+<digi:instance property="cmCategoryManagerForm" />
+<bean:define id="myForm" name="cmCategoryManagerForm" toScope="page" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
 
 <!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<%-- <jsp:include page="teamPagesHeader.jsp" flush="true" /> --%>
 <c:set var="translation">
 				<digi:trn key="aim:categoryDeleteConfirm">Are you sure you want to delete the category?</digi:trn>
 </c:set>
@@ -33,7 +34,7 @@ function confirmDelete() {
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" contextPath="/aim">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -118,7 +119,7 @@ function confirmDelete() {
 								<ul>
 								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
 								<logic:notEmpty name="categoryValue">
-								<% String keyForValue	= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue); %>
+								<% String keyForValue	= CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue); %>
 									<li>
 										<digi:trn key='<%=keyForValue%>'>
 											<bean:write name="categoryValue" property="value" />

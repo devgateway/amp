@@ -2,16 +2,15 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
-import org.digijava.module.aim.helper.CategoryConstants;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Session;
 
 
 public class AmpReportColumn  implements Serializable, Comparable

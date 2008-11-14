@@ -4,10 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -29,7 +25,6 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.ampharvester.jaxb10.Activities;
@@ -47,7 +42,11 @@ import org.digijava.module.ampharvester.jaxb10.ProjectIdType;
 import org.digijava.module.ampharvester.util.DbUtil;
 import org.digijava.module.ampharvester.util.XmlHelper;
 import org.digijava.module.ampharvester.util.XmlTransformerHelper;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.editor.dbentity.Editor;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class ImportManager {
 

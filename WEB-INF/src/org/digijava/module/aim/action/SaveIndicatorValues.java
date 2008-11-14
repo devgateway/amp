@@ -13,7 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class SaveIndicatorValues extends Action
 {

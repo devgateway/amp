@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.digijava.module.aim.action;
+package org.digijava.module.categorymanager.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,12 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -30,10 +24,14 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.form.CategoryManagerForm;
-import org.digijava.module.aim.helper.CategoryConstants;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
-import org.digijava.module.aim.helper.PossibleValue;
+import org.digijava.module.categorymanager.form.CategoryManagerForm;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.PossibleValue;
+import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * @author Alex Gartner
@@ -65,30 +63,31 @@ public class CategoryManager extends Action {
 		/**
 		 * If the user wants to create a new category
 		 */
-		          if (request.getParameter("new") != null) {
-                                myForm.setNumOfPossibleValues(new Integer(0));
-                                myForm.setCategoryName(null);
-                                myForm.setDescription(null);
-                                myForm.setKeyName(null);
-                                myForm.setIsMultiselect(false);
-                                myForm.setIsOrdered(false);
-                                List<PossibleValue> possibleVals = new ArrayList();
-                                for (int i = 0; i < 3; i++) {
-                                    possibleVals.add(new PossibleValue());
-                                }
-                                myForm.setEditedCategoryId(null);
-                                myForm.setPossibleVals(possibleVals);
-                                return mapping.findForward("createOrEditCategory");
-            }
-                if (request.getParameter("addValue") != null) {
-			PossibleValue value=new PossibleValue();
-                        value.setValue("");
-                        value.setFieldType(CategoryConstants.NONE_TYPE);
-                        if(myForm.getPossibleVals()==null){
-                            myForm.setPossibleVals(new ArrayList<PossibleValue>());
-                        }
-                        myForm.getPossibleVals().add(value);
-                        return mapping.findForward("createOrEditCategory");
+		if (request.getParameter("new") != null) {
+			myForm.setNumOfPossibleValues(new Integer(0));
+			myForm.setCategoryName(null);
+			myForm.setDescription(null);
+			myForm.setKeyName(null);
+			myForm.setIsMultiselect(false);
+			myForm.setIsOrdered(false);
+			List<PossibleValue> possibleVals = new ArrayList();
+			for (int i = 0; i < 3; i++) {
+				possibleVals.add(new PossibleValue());
+			}
+			myForm.setEditedCategoryId(null);
+			myForm.setPossibleVals(possibleVals);
+			return mapping.findForward("createOrEditCategory");
+		}
+		if (request.getParameter("addValue") != null) {
+			if(myForm.getPossibleVals()==null){
+				myForm.setPossibleVals(new ArrayList<PossibleValue>());
+			}
+			for (int i=0; i<myForm.getNumOfAdditionalFields(); i++) {
+				PossibleValue value=new PossibleValue();
+				value.setValue("");
+				myForm.getPossibleVals().add(value);
+			}
+			return mapping.findForward("createOrEditCategory");
 		}
 		/**
 		 * If the user wants to edit an existing category
@@ -167,10 +166,10 @@ public class CategoryManager extends Action {
 			while (iterator.hasNext()) {
 				AmpCategoryValue ampCategoryValue	= (AmpCategoryValue) iterator.next();
 				possibleValues[k++]					= ampCategoryValue.getValue();
-                                PossibleValue value=new PossibleValue();
-                                value.setValue(ampCategoryValue.getValue());
-                                value.setFieldType(ampCategoryValue.getFieldType());
-                                possibleVals.add(value);
+				PossibleValue value					= new PossibleValue();
+				
+				value.setValue(ampCategoryValue.getValue());
+				possibleVals.add(value);
 			}
 			
 			myForm.setPossibleValues( possibleValues );
@@ -331,7 +330,7 @@ public class CategoryManager extends Action {
 			int k	= 0; //Index for going through the exisiting values in the database of the AmpCategoryClass
 			for (int index=0;index<possibleVals.size(); index++  ) {
 				if ( k < dbCategory.getPossibleValues().size() && !addToPossibleValues ) {
-					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get(k);
+					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get( k );
                                         PossibleValue value=possibleVals.get(index);
 					
 					if (value.isDisable()||value.getValue().equals("")) {// In this block we are surely editing an existing category (not creating a new one)
@@ -348,7 +347,6 @@ public class CategoryManager extends Action {
 					}
 					else {
 						ampCategoryValue.setValue( possibleVals.get(index).getValue() );
-                                                ampCategoryValue.setFieldType( possibleVals.get(index).getFieldType() );
 						ampCategoryValue.setIndex( k++ );
 					}
 				}
@@ -358,7 +356,6 @@ public class CategoryManager extends Action {
 						AmpCategoryValue dbValue	= new AmpCategoryValue();
 						dbValue.setValue( possibleVals.get(index).getValue() );
 						dbValue.setIndex( dbCategory.getPossibleValues().size() );
-                                                dbValue.setFieldType( possibleVals.get(index).getFieldType() );
 						dbValue.setAmpCategoryClass( dbCategory );
 						dbCategory.getPossibleValues().add(dbValue);
 					}
@@ -386,7 +383,6 @@ public class CategoryManager extends Action {
 			
 		} catch (Exception ex) {
 			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
-			ex.printStackTrace();
 			ActionError error1	= new ActionError("error.aim.categoryManager.cannotSaveOrUpdate");
 			errors.add("title",error1);
 			if (tx != null)

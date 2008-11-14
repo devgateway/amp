@@ -156,7 +156,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:clickToViewCategoryManager">Click here to view Category Manager</digi:trn>
                               </c:set>
-                              <digi:link href="/categoryManager.do" title="${translation}" >
+                              <digi:link href="/categoryManager.do" title="${translation}" contextPath="/categorymanager" >
                                 <digi:trn key="aim:categoryManager">Category Manager</digi:trn>
                               </digi:link>
                             </td>

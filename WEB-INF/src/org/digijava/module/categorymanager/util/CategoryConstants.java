@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper;
+package org.digijava.module.categorymanager.util;
 
 public class CategoryConstants {
 	public static final String ACCHAPTER_NAME	= "A.C. Chapter";

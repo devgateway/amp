@@ -10,13 +10,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 public class SelectLocation extends Action {
 

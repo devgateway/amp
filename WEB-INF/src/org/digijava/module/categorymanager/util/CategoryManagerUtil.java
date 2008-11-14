@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper;
+package org.digijava.module.categorymanager.util;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -16,10 +16,6 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Hibernate;
-import org.hibernate.Query;
-import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -27,6 +23,9 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.exception.NoCategoryClassException;
+import org.hibernate.Hibernate;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 public class CategoryManagerUtil {
 	private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);
@@ -486,12 +485,21 @@ public class CategoryManagerUtil {
 	 * @return the translation key for the ampCategoryValue
 	 */
 	public static String getTranslationKeyForCategoryValue(AmpCategoryValue ampCategoryValue) {
-		String filteredValue			= asciiStringFilter( ampCategoryValue.getValue() );
-		String translationKey			= "aim:category" + ampCategoryValue.getAmpCategoryClass().getId() +
-										"_" + ampCategoryValue.getAmpCategoryClass().getName() + "_" +
-										filteredValue;
+		return getTranslationKeyForCategoryValue(ampCategoryValue.getValue(), ampCategoryValue.getAmpCategoryClass().getKeyName() );
+	}
+	
+	/**
+	 *
+	 * @param ampCategoryValue
+	 * @return the translation key for the ampCategoryValue
+	 */
+	public static String getTranslationKeyForCategoryValue(String value, String classKeyName) {
+		String filteredValue			= asciiStringFilter( value );
+		String translationKey			= "cm:category_" + classKeyName +
+										"_" + filteredValue;
 		return translationKey.toLowerCase();
 	}
+	
 	/**
 	 *
 	 * @param key The key of the AmpCategoryClass object. (A key can be attributed when creating a new category)

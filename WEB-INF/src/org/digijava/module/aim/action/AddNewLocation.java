@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -9,8 +10,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.form.NewAddLocationForm;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  *

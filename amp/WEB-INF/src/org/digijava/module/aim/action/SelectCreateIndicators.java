@@ -43,9 +43,11 @@ public class SelectCreateIndicators extends Action {
 		IndicatorForm indForm = (IndicatorForm) form;
 
 		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
-		AmpActivity activity=ActivityUtil.loadActivity(indForm.getActivityId());		
+		AmpActivity activity=null;
+              
 //		activityInd = IndicatorUtil.getActivityIndicatorsList(indForm.getActivityId());
-		if(activity!=null){
+		if(indForm.getActivityId() != null && indForm.getActivityId() != 0){
+                    activity = ActivityUtil.loadActivity(indForm.getActivityId());
 			activityInd = activity.getIndicators();
 
 			Iterator nonDefaultItr = nonDefaultInd.iterator();

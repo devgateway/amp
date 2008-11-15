@@ -76,6 +76,7 @@ module LabeledFormHelper
     end
     
     def submit(value = nil, options = {})
+      value ||= @template.lc(:submit)
       super(value, options)
     end
     
@@ -88,7 +89,8 @@ module LabeledFormHelper
     def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
       label_opts = extract_label_options!(options)
       wrap_in_label_row(method, 
-        @template.check_box(@object_name, method, options, checked_value, unchecked_value), label_opts)
+        @template.check_box(@object_name, method, options, checked_value, unchecked_value), 
+        label_opts.merge(:class => 'fluid', :reverse => true))
     end
     
     def habtm_check_box(method, options = {}, value = nil)
@@ -104,6 +106,11 @@ module LabeledFormHelper
   
     def labeled_row(method, options = {}, &block)
       @template.concat(wrap_in_label_row(method, @template.capture(&block), options), block.binding)
+    end
+    
+    def label(method, caption = nil, options = {})
+      caption ||= localized_caption(method)
+      @template.label(@object_name, method, caption, options)
     end
       
     # This overrides methods from the AttributeFu plugin so that they make use of
@@ -137,28 +144,28 @@ protected
     ll(underscore_class_name, method_or_relation_name)
   end
 
-  def build_label(method, options)
-    options = extract_label_options!(options)
-    caption = options[:label] || localized_caption(method)
-    #glossary = build_glossary(method, caption, options)
-    
-    @template.label(@object_name, method, caption)
-  end
-
   def wrap_in_label_row(method, content, options)
-    label = build_label(method, options)
-    inner_html = [label, content]
-    inner_html.reverse! if options.delete(:reverse)
+    caption, reverse = options.delete(:label), options.delete(:reverse)
+    return content if caption == false
     
-    @template.content_tag("li", inner_html.join)
+    label = label(method, caption, options) 
+    inner_html = [label, content]
+    inner_html.reverse! if reverse
+    
+    inner_html.join
   end
   
   def extract_label_options!(options)
-    options.extract!(
+    opts = options.extract!(
       :label => nil,
-      :label_class => "sub_title",
+      :label_class => nil,
       :glossary => false,
       :required => false)
+    
+    # Renaming  
+    opts[:class] = opts.delete(:label_class)
+    
+    opts
   end
     
   def strip_options_for_select!(options)

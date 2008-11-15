@@ -2,16 +2,16 @@
 
 <% labeled_form_for @project do |f| %>
 	<% f.field_set do %>
-		<div id="geo_information">
-			<%= render :partial => 'relevant_area', :collection => (@project.provinces.blank? ? [Province.new] : @project.provinces) %>
-		</div>
+		<p>TODO: Instructions on how to use this</p>
 		
-		<p class="add_another">
-			<%= button_to_function lc(:add_province) do |page| 
+		<%= button_to_function lc(:add_province) do |page| 
 				page.insert_html :bottom, :geo_information, :partial => 'relevant_area'
 				page << "initDynamicSelects();"
-			end %>
-		</p>
+		end %>
+		
+		<div id="geo_information">
+			<%= render :partial => 'relevant_area', :collection => (@project.provinces.blank? ? [Province.new] : @project.provinces) %>
+		</div>	
 	<% end %>
 	
 	<%= render :partial => 'control_buttons' %>

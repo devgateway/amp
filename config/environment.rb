@@ -28,16 +28,12 @@ Rails::Initializer.run do |config|
 end
 
 # Custom validation error handling
-ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-  error_style = "border: 2px solid #c00"
-  
-  if html_tag =~ /<(input|textarea|select)[^>]+style=/
-    style_attribute = html_tag =~ /style=['"]/
-    html_tag.insert(style_attribute + 7, "#{error_style}; ")
-  elsif html_tag =~ /<(input|textarea|select)/
-    first_whitespace = html_tag =~ /\s/
-    html_tag[first_whitespace] = " style='#{error_style}' "
+ActionView::Base.field_error_proc = lambda do |html_tag, instance|
+  if html_tag =~ /<(label)/
+    error_tag = %{(<span class="error">#{[instance.error_message].flatten.first}</span>)}
+    # Prepend closing tag with error messages
+    html_tag.gsub('</label>', " #{error_tag}</label>")
+  else
+    html_tag
   end
-  
-  %{#{html_tag}<span class="error">#{[instance.error_message].flatten.first}</span>}
 end

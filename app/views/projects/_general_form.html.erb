@@ -1,23 +1,26 @@
+<%= error_messages_for :project %>
+
 <% labeled_form_for @project do |f| %>
 	<% f.field_set do %>
-		<%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name", 
-								:required => true, :prompt => I18n.t('options.prompt') %>
+		<li><%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name", 
+					:required => true, :prompt => I18n.t('options.prompt') %></li>
 		
-		<%= f.text_field :donor_project_number, :required => true %>
-		<%= f.text_field :oecd_number %>
-		<%= f.text_field :recipient_country_budget_nr %>
-		<%= f.text_field :title, :required => true %>
-		<%= f.text_area  :description, :required => true %>
+		<li class="fifty"><%= f.text_field :donor_project_number, :required => true %></li>
+		<li class="fifty"><%= f.text_field :oecd_number %></li>
 		
-		<%= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",
-		 						:prompt => I18n.t('options.country_strategy_unavailable') %>
-		<%= f.select 			:prj_status, Project::STATUS_OPTIONS, 
-					 			:include_blank => I18n.t('options.prompt'), :required => true %>
+		<li><%= f.text_field :recipient_country_budget_nr %></li>
+		<li><%= f.text_field :title, :size => 80, :required => true %></li>
+		<li><%= f.text_area  :description, :rows => 10, :required => true %></li>
+		
+		<li><%= f.collection_select :country_strategy_id, @project.donor.country_strategies, "id", "strategy_number",
+		 		:prompt => I18n.t('options.country_strategy_unavailable') %></li>
+		<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
+				:include_blank => I18n.t('options.prompt'), :required => true %></li>
     	
-		<%= f.date_select :start, :start_year=>1995, :end_year=>Time.now.year+15, 
-						  :default => { :day => 1, :month => 1, :year => 1995 }, :required => true %>
-		<%= f.date_select :end, :start_year=>1995, :end_year=>Time.now.year+15, 
-						  :default => { :day => 1, :month => 1, :year => 1995 }, :required => true %>
+		<li class="fifty"><%= f.date_select :start, :start_year=>1995, :end_year=>Time.now.year+15, 
+						  		:default => { :day => 1, :month => 1, :year => 1995 }, :required => true %></li>
+		<li class="fifty"><%= f.date_select :end, :start_year=>1995, :end_year=>Time.now.year+15, 
+						  		:default => { :day => 1, :month => 1, :year => 1995 }, :required => true %></li>
 	<% end %>
 	
 	<%= render :partial => 'control_buttons' %>

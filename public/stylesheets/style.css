@@ -609,7 +609,7 @@ li#biggestmfp ul a:hover {
 /* DATA INPUT FORM STYLES */
 
 /* Clearfix */
-ol { overflow: hidden; }
+ol { overflow: hidden; margin: 0; padding: 0; }
 
 form fieldset {
     border: 1px solid #ccc;
@@ -649,6 +649,11 @@ form fieldset ol li.fifty {
 form fieldset ol li.twenty {
     float: left;
     width: 20%;
+}
+
+form fieldset ol li.thirty {
+    float: left;
+    width: 33.2%;
 }
 
 form fieldset input,
@@ -709,20 +714,17 @@ form button {
     text-align: center;
 }
     
+/* Validation errors */
+form fieldset .error {
+  color: #c00;
+}
 
-/* hidden sections */
-.holder {
-    display: none;
-    margin-left: 2em;
-    border-left: 1px dashed #ccc;
-}
-    
-.holder label {
-    padding-left: 1em;
-}
-    
-#hldr_fileTypes {
-    padding-top: .5em;
+/* Field sizes */
+form fieldset .large { width: 80%; }
+form fieldset .full  { width: 95%; }
+
+form fieldset ol li.noborder {
+  border: 0;
 }
         
 /* End DATA INPUT FORM STYLES */

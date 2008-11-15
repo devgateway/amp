@@ -1,8 +1,8 @@
-<div id="sector_detail_<%= index %>" class="sector_detail">
+<li id="sector_detail_<%= index %>" class="sector_detail">
 	<% fields_for "country_strategy[sector_detail_attributes][#{index}]", sector_detail do |sector_form| %>
-		<%= sector_form.collection_select(:dac_sector_id, DacSector.ordered, :id, :name_with_code, {:prompt => true}, {:class => "dynamic_select parent"}) %>
+		<%= sector_form.collection_select(:dac_sector_id, DacSector.ordered, :id, :name_with_code, {:prompt => true}, {:class => "dynamic_select parent large"}) %>
 		
-		<select name="country_strategy[sector_detail_attributes][<%= index %>][crs_sector_id]" class="dynamic_select child">
+		<select name="country_strategy[sector_detail_attributes][<%= index %>][crs_sector_id]" class="dynamic_select child large">
 			<option value="">Select CRS Sector if given</option>
 			<%= option_groups_from_collection_for_select(DacSector.ordered, :crs_sectors, :name_with_code, :id, :name_with_code, sector_detail.crs_sector_id) %>
 		</select>
@@ -21,7 +21,7 @@
 		end %>
 		
 	<% end %>
-	<%# TODO: Style a bit nicer ;-) %>
+
 	<%= link_to_function "Delete Sector", <<-END_JS
 			if ($('.sector_detail').length > 1) {
 				$(this).parents('.sector_detail').remove();
@@ -30,4 +30,4 @@
 			}
 		END_JS
 	%>
-</div>
+</li>

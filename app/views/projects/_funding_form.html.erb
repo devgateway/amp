@@ -1,19 +1,17 @@
 <% labeled_form_for @project do |f| %>
 	<% f.field_set lc(:cofunding_title) do %>
 		<div id="cofundings">
-		<%= f.render_associated_form(@project.cofundings, :new => 1, 
-			:fields_for => { :builder => ActionView::Base.default_form_builder }) %>
+			<%= f.render_associated_form(@project.cofundings, :new => 1) %>
 		</div>
 		
-		<%= f.add_associated_link(lc(:add_cofunding_donor), @project.cofundings.build, 
-			:fields_for => { :builder => ActionView::Base.default_form_builder }) %>
+		<%= f.add_associated_link(lc(:add_cofunding_donor), @project.cofundings.build) %>
 	<% end %>
 		
 	<% f.field_set lc(:historic_funding, :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
 		<% funding = HistoricFunding.find_or_initialize_by_project_id(@project.id) %>
 		<% f.fields_for "project[historic_funding_attributes]", funding do |fh| %>
-			<%= fh.text_field :commitments, :value => fh.object.commitments %>
-			<%= fh.text_field :payments, :value => fh.object.payments %>
+			<li class="fifty"><%= fh.text_field :commitments, :value => fh.object.commitments %></li>
+			<li class="fifty"><%= fh.text_field :payments, :value => fh.object.payments %></li>
 		<% end %>
 	<% end %>
 	
@@ -21,15 +19,15 @@
  		<% f.field_set lc(:funding_title, :year => y) do %>
    			<% f.fields_for_associated @project.fundings.find_or_initialize_by_year(y) do |fa| -%>
    				<%= fa.hidden_field :year, y %>
-   				<%= fa.text_field :commitments, :value => fa.object.commitments %>
+   				<li><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
    				
-   				<%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %>
-   				<%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %>
-   				<%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %>
-   				<%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %>
+   				<li class="fifty"><%= fa.text_field :payments_q1, :value => fa.object.payments_q1 %></li>
+   				<li class="fifty"><%= fa.text_field :payments_q2, :value => fa.object.payments_q2 %></li>
+   				<li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %></li>
+   				<li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %></li>
    				
-   				<%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS %>
-   				<%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS %>
+   				<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS %></li>
+   				<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS %></li>
 			<% end %>
 		<% end %>
 	<% end %>

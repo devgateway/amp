@@ -1,10 +1,10 @@
-<% odaform_for @donor do |f| %>
-	<table>
-		<%= f.text_field :name %>
-		<%= f.check_box :cofunding_only %>
-		<%= f.text_field :code %>
-		<%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %>
-		
-		<%= f.submit %>
-	</table>
+<% labeled_form_for @donor do |f| %>
+	<% f.field_set do %>
+		<li class="fifty"><%= f.text_field :name %></li>
+		<li class="fifty"><%= f.text_field :code %></li>
+		<li><%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %></li>
+		<li><%= f.check_box :cofunding_only %></li>
+	<% end %>
+	
+	<div class="buttonHolder"><%= f.submit %></div>
 <% end %>

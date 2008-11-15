@@ -10,7 +10,7 @@ en-US:
     prj_status: Project Status
     start: Start date
     end: End date
-    dac_crs_sector: DAC / CRS Sector
+    dac_sector: DAC / CRS Sector
     implementing_agencies: Implementing Agencies
     contracted_agencies: Contracted Agencies
     national_regional: National / Regional
@@ -19,6 +19,7 @@ en-US:
     grant_loan: Type of Funding
     website: Website
     comments: Comments
+    officer_responsible: Officer Responsible
     officer_responsible_name: Officer Responsible - Name
     officer_responsible_phone: Officer Responsible - Phone
     officer_responsible_email: Officer Responsible - E-Mail
@@ -66,6 +67,7 @@ en-US:
     donor: Co-Funding Donor
     amount: Amount of Funding
     currency: Currency
+    in: in
     
   historic_funding:
     commitments: Commitments

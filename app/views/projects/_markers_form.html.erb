@@ -1,11 +1,12 @@
 <% labeled_form_for @project do |f| %>
 	<% f.field_set do %>	
-		<%= f.select :biodiversity_marker, Project::MARKER_OPTIONS %>
-		<%= f.select :climate_change_marker, Project::MARKER_OPTIONS %>
-		<%= f.select :desertification_marker, Project::MARKER_OPTIONS %>
+		<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS %></li>
+		<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS %></li>
+		<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS %></li>
 		
-		<%= f.select :gender_policy_marker, Project::MARKER_OPTIONS %>
-		<%= f.select :environment_policy_marker, Project::MARKER_OPTIONS %>
+		<li class="thirty"><%= f.select :gender_policy_marker, Project::MARKER_OPTIONS %></li>
+		<li class="thirty"><%= f.select :environment_policy_marker, Project::MARKER_OPTIONS %></li>
+		<li class="thirty" style="height: 45px"></li>
 	<% end %>
 	
 	<%= render :partial => 'control_buttons' %>

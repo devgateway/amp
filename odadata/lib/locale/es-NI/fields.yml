@@ -10,7 +10,7 @@ es-NI:
     prj_status: Estado del Proyecto
     start: Fecha de inicio
     end: Fecha de finalización
-    dac_crs_sector: Sector CAD/CRS
+    dac_sector: Sector CAD/CRS
     implementing_agencies: Agencias Implementadoras
     contracted_agencies: Agencias Contratadas
     national_regional: Nacional / Regional
@@ -19,9 +19,10 @@ es-NI:
     grant_loan: Tipo de financiamiento
     website: Sitio web
     comments: Comentarios
+    officer_responsible: Oficial Responsable
     officer_responsible_name: Oficial Responsable - Nombre
     officer_responsible_phone: Oficial Responsable - Teléfono
-    officer_responsible_email: Oficial Responsable  Correo Electrónico
+    officer_responsible_email: Oficial Responsable - Correo Electrónico
     biodiversity_marker: Biodiversidad
     climate_change_marker: Cambio Climático
     desertification_marker: Desertificación
@@ -66,6 +67,8 @@ es-NI:
     donor: Donante de co-financiamiento
     amount: Cantidad de financiamiento
     currency: Moneda
+    # TODO: This was just a guess ;-)
+    in: en 
     
   historic_funding:
     commitments: Compromisos

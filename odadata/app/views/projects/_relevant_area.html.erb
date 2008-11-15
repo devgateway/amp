@@ -1,12 +1,12 @@
-<div class="geo_information">
+<li class="geo_information fifty">
 	<%= select_tag "project[province_ids][]", '<option value="">National</option>' +
 		options_from_collection_for_select(Province.ordered, :id, :name, (relevant_area.id rescue nil)), 
-		:class => "dynamic_select parent"
+		:class => "dynamic_select parent large"
 	 %><br />
 	
 	<%= select_tag "project[district_ids][]", 
 		option_groups_from_collection_for_select(Province.ordered, :districts, :name, :id, :name, (@project.district_ids rescue nil)), 
-		:multiple => true, :class => "dynamic_select child" 
+		:multiple => true, :class => "dynamic_select child large", :style => "height: 200px"
 	%>
 	
 	<%= link_to_function ll(:actions, :delete), <<-END_JS
@@ -17,4 +17,4 @@
 		}
 		END_JS
 	%>
-</div>
+</li>

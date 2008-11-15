@@ -1,15 +1,16 @@
-<% odaform_for [@donor, @user].compact do |f| %>
-	<table>
-		<%= f.text_field :name %>
-		<%= f.text_field :email %>
-
-		<%= f.password_field :password %>
-		<%= f.password_field :password_confirmation %>
+<% labeled_form_for [@donor, @user].compact do |f| %>
+	<% f.field_set do %>
+		<p>TODO: Here you can add and edit users...</p>
+		<li><%= f.text_field :name %></li>
+		<li><%= f.text_field :email %></li>
+        
+		<li class="fifty"><%= f.password_field :password %></li>
+		<li class="fifty"><%= f.password_field :password_confirmation %></li>
 
 		<% if false && @donor.nil? %>
 			<%= f.collection_select :role_id, Role.all, :id, :description %>
 		<% end %>
-		
-		<%= f.submit %>
-	</table>
+	<% end %>
+	
+	<div class="buttonHolder"><%= f.submit %></div>
 <% end %>

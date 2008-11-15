@@ -1,67 +1,65 @@
 <% js_behavior :related_selects %>
+
+<%= error_messages_for :project %>
 <% labeled_form_for @project do |f| %>
 	<% f.field_set do %>
-		<% f.labeled_row :dac_crs_sector do %>
+		<li>
 			<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
-			<%= collection_select(:project, :dac_sector_id, sectors, :id, :name_with_code, 
-				{:prompt => true}, {:class => "dynamic_select parent"}) %>
-			<select name="project[crs_sector_id]" class="dynamic_select child">
+			<%= f.collection_select(:dac_sector_id, sectors, :id, :name_with_code, 
+					{:prompt => true}, {:class => "dynamic_select parent large"}) %>
+			
+			<select name="project[crs_sector_id]" class="dynamic_select child large">
 				<%= option_groups_from_collection_for_select(sectors, :crs_sectors, :name_with_code, 
-					:id, :name_with_code, @project.crs_sector_id) %>
+						:id, :name_with_code, @project.crs_sector_id) %>
 			</select>
-		<% end %>
+		</li>
 		
-		<%# FIXME: Add helper for these rows! Cell where dropdowns are supposed to go needs id 'implementing_agencies'! %>
-		<% f.labeled_row :implementing_agencies do %>
+		<li>
+			<%= f.label :implementing_agencies %>
 			<div id="implementing_agencies">
 				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
 			</div>
-		<% end %>
-		<tr>
-			<td colspan="2">
-				<%= button_to_function lc(:add_implementing_agency) do |page|  
+			
+			<%= button_to_function lc(:add_implementing_agency) do |page|  
 					page.insert_html :bottom, :implementing_agencies, 
 						:partial => 'implementing_agency', :object => ImplementingAgency.new
 				end %>
-			</td>
-		</tr>
+		</li>
 		
-		<% f.labeled_row :contracted_agencies do %>
+		<li>
+			<%= f.label :contracted_agencies %>
 			<div id="contracted_agencies">
 				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
 			</div>
-		<% end %>
-		<tr>
-			<td colspan="2">
-				<%= button_to_function lc(:add_contracted_agency) do |page| 
-					page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
-				end %>
-			</td>
-		</tr>
+			
+			<%= button_to_function lc(:add_contracted_agency) do |page| 
+				page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
+			end %>
+		</li>
 		
-		<%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS, 
-					 :include_blank => ll(:options, :prompt), :required => true %>
-		             
-		<%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES, 
-					 :include_blank => ll(:options, :prompt), :required => true %>
-		             
-		<%= f.select :type_of_aid, Project::TYPE_OF_AID_OPTIONS, 
-					 :include_blank => ll(:options, :prompt), :required => true %>
+		<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
+					:include_blank => ll(:options, :prompt), :required => true %></li>
+					
+		<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
+					:include_blank => ll(:options, :prompt), :required => true %></li>
 		
-		<%# TODO: Should better be with the funding forms %>             
-		<%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS, 
-					 :include_blank => ll(:options, :prompt), :required => true %>
+		<li class="fifty"><%= f.select :type_of_aid, Project::TYPE_OF_AID_OPTIONS,
+					 :include_blank => ll(:options, :prompt), :required => true %></li>
+
+		<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
+					 :include_blank => ll(:options, :prompt), :required => true %></li>
+			
+			
+		<li><%= f.text_field :website %></li>
+		<li><%= f.text_area :comments, :rows => 10 %></li>
+
 		
-		<%# f.collection_select :government_counterpart_id, GovernmentCounterpart.all, :id, :name,
-		 						:prompt => "Not available" %>
-		
-		<%= f.text_field :website %>
-		
-		<%= f.text_area :comments %>
-		
-		<%= f.text_field :officer_responsible_name, :required => true %>
-		<%= f.text_field :officer_responsible_phone %>
-		<%= f.text_field :officer_responsible_email %>
+	<% end %>
+	
+	<% f.field_set ll(:project, :officer_responsible) do %>
+		<li><%= f.text_field :officer_responsible_name, :required => true %></li>
+		<li><%= f.text_field :officer_responsible_phone %></li>
+		<li><%= f.text_field :officer_responsible_email %></li>
 	<% end %>
 	
 	<%= render :partial => 'control_buttons' %>

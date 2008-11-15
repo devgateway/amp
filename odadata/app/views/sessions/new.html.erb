@@ -1,26 +1,11 @@
-<% form_tag session_path do -%>
-	<table class="admin" align="center">
-		<tbody>
-			<tr>
-				<td class="title" colspan=2><%= lc(:title) %></td>
-			</tr>
-			<tr>
-				<td class="sub_title"><%= ll(:session, :email) %>:</td>
-				<td>
-					<%= text_field_tag 'email', @email %>
-				</td>
-			</tr>
-			<tr>
-				<td class="sub_title"><%= ll(:session, :password) %>:</td>
-				<td><%= password_field_tag 'password', nil %></td>
-			</tr>
-			<tr>
-				<td class="sub_title"><%= ll(:session, :remember_me) %></td>
-				<td><%= check_box_tag 'remember_me', '1', @remember_me %></td>
-			</tr>
-			<tr>
-				<td colspan="2"><%= submit_tag lc(:submit) %></td>
-			</tr>
-		</tbody>
-	</table>
+<% header lc(:title) %>
+
+<% labeled_form_for :session, :url => session_path do |f| -%>
+	<% f.field_set do %>
+		<li><%= f.text_field :email %></li>
+		<li><%= f.password_field :password, :value => nil %></li>
+		<li><%= f.check_box :remember_me, :value => true %></li>
+	<% end %>
+	
+	<%= submit_tag lc(:submit) %>
 <% end %>

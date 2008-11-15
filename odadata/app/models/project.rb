@@ -100,15 +100,7 @@ class Project < ActiveRecord::Base
     transitions :to => :funding,          :from => :forecasts
     transitions :to => :forecasts,        :from => :completed
   end
-  
-  
-  ##
-  # Validation
-  # FIXME: Disabled until we can display proper error messages again!
-  
-  #validates_presence_of :title, :description, :donor_project_number, :nation_regional, :type_of_implementation, :type_of_aid, :grant_loan, :prj_status, :dac_sector_id
-  #validates_uniqueness_of :donor_project_number, :scope => :donor_id
-  #validates_associated :finances
+
   
   ##
   # Custom finders
@@ -125,7 +117,29 @@ class Project < ActiveRecord::Base
   # Callbacks
   before_save :update_dac_sector_id_for_crs_sector
   
-
+  
+  ##
+  # Validation
+    
+  validates_inclusion_of    :data_status, :in => [Project::DRAFT, Project::PUBLISHED, Project::DELETED], 
+                            :message => "has invalid code: {{value}}"
+  
+  # STATE: general
+  validates_presence_of     :donor_project_number, :title, :description, :prj_status, 
+                            :if => :general?
+  validates_uniqueness_of   :donor_project_number, :scope => :donor_id, 
+                            :if => :general?
+  
+  # STATE: categorization
+  validates_presence_of     :national_regional, :type_of_implementation, :type_of_aid, :grant_loan, 
+                            :officer_responsible_name, :dac_sector_id, :crs_sector_id,
+                            :if => :categorization?
+  
+  #:nation_regional, :type_of_implementation, :type_of_aid, :grant_loan, :prj_status, :dac_sector_id
+  #validates_multiparameter_assignments :message => " is not entered correctly."
+  #validates_associated :finances
+  
+  
   ##
   # Accessors    
   def historic_funding_attributes=(attribs)

@@ -95,7 +95,8 @@ public class ShowAddComponent extends Action {
 				AmpComponent helperComponent = new AmpComponent();
 				helperComponent.setAmpComponentId(comp.getAmpComponentId());
 				helperComponent.setName(comp.getTitle());
-				helperComponent.setShortName(comp.getTitle().length() > 60 ? comp.getTitle().substring(0, 60) : comp.getTitle());
+				if(comp.getTitle() != null)
+					helperComponent.setShortName(comp.getTitle().length() > 60 ? comp.getTitle().substring(0, 60) : comp.getTitle());
 				componentsList.add(helperComponent);
 			}
 		}
@@ -177,7 +178,8 @@ public class ShowAddComponent extends Action {
 				AmpComponent helperComponent = new AmpComponent();
 				helperComponent.setAmpComponentId(comp.getAmpComponentId());
 				helperComponent.setName(comp.getTitle());
-				helperComponent.setShortName(comp.getTitle().length() > 60 ? comp.getTitle().substring(0, 60) : comp.getTitle());
+				if(comp.getTitle() != null)
+					helperComponent.setShortName(comp.getTitle().length() > 60 ? comp.getTitle().substring(0, 60) : comp.getTitle());
 				componentsList.add(helperComponent);
 			}
 		}

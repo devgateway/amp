@@ -69,6 +69,8 @@ function checkallIssues() {
 		    draggable:true} 
 		    );
 	
+	
+
 		//POPIN RENDER FUNCTION
 		function showPOPIN(){
 			var element = document.getElementById("divContent");
@@ -76,18 +78,19 @@ function checkallIssues() {
 			myPanel1.render(document.body);
 			myPanel1.show();
 		}
-		
+
 		
 	//LOAD THE POPUP
-	var div=null; 
+		var div=null; 
 		var callback = { 
      	   		success: function(o) {
      	   				if (div!=null){
-     	   					document.removeChild(div);
-     	   				}
-     	   					div=document.createElement('div');
-     	   					div.setAttribute("style","display:inline");
-     	   					div.setAttribute("id","divContent");
+							if(div.parentNode)
+								div.parentNode.removeChild(div)
+	 	   				}
+						div=document.createElement('div');
+						div.setAttribute("style","display:inline");
+						div.setAttribute("id","divContent");
      	   					
      	   				
      	   				/* 
@@ -291,27 +294,22 @@ function validateComponents() {
 
 
 function addPhyProgess(id,comp) {
-
-		openNewWindow(610, 255);
-
 		<digi:context name="addPhyProg" property="context/module/moduleinstance/showAddPhyProg.do~edit=true" />
-
+		var url = "";
 		if (id == -1) {
-			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp;
+			url = "<%= addPhyProg %>~comp=" + comp;
 
 		} else {
 
-			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp + "~id=" + id;
+			url = "<%= addPhyProg %>~comp=" + comp + "~id=" + id;
 
 		}
-		document.aimEditActivityForm.target = popupPointer.name;
-	//	document.aimEditActivityForm.prevId.value = id;
-		document.aimEditActivityForm.submit();
-
+		reusableDialog.setHeader("<digi:trn key="aim:physicalprogress">Physical Progress</digi:trn>");
+		var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', url,callbackDialog);
 }
 
-
-
+       
+       
 function removeSelPhyProgress() {
 
 	var flag = validatePhyProg();
@@ -331,72 +329,6 @@ function removeSelPhyProgress() {
 }
 
 
-
-
-
-/*
-
-function addComponents(id) {
-
-
-
-		<digi:context name="addComponents" property="context/module/moduleinstance/showAddComponent.do~edit=true" />
-
-		if (id == -1) {
-
-			document.aimEditActivityForm.action = "<%= addComponents %>";
-
-		} else {
-
-			document.aimEditActivityForm.action = "<%= addComponents %>~id=" + id;
-
-		}
-
-		openNewWindow(610, 280);
-
-		document.aimEditActivityForm.target = popupPointer.name;
-
-		document.aimEditActivityForm.submit();
-
-}
-
-*/
-
-
-
-function addComponents()
-
-{
-
-	openNewWindow(650,500 );
-
-	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
-
-	document.aimEditActivityForm.action = "<%= addComp %>";
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
-
-
-
-function editFunding(id)
-
-{
-
-	openNewWindow(650,500 );
-
-	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
-
-	document.aimEditActivityForm.action = "<%= addComp %>&fundId="+id;
-
-	document.aimEditActivityForm.target = popupPointer.name;
-
-	document.aimEditActivityForm.submit();
-
-}
 
 
 
@@ -528,8 +460,8 @@ function removeSelComponents() {
       <td width="100%" vAlign="top" align="left" class=r-dotted-lg>
         <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
           <tr>
-            <td class=r-dotted-lg width="10">
-            &nbsp;
+            <td class=r-dotted-lg width="10">&nbsp;
+            
             </td>
             <td align=left vAlign=top>
               <table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
@@ -747,9 +679,9 @@ function removeSelComponents() {
 									</feature:display>
 								</td></tr>
 									
-									<tr><td>
+									<tr><td>&nbsp;
 
-										&nbsp;
+										
 
 									</td></tr>
 <!--
@@ -829,9 +761,9 @@ function removeSelComponents() {
 
 				</td></tr>
 
-				<tr><td>
+				<tr><td>&nbsp;
 
-					&nbsp;
+					
 
 				</td></tr>
 
@@ -846,3 +778,172 @@ function removeSelComponents() {
 </table>
 
 </digi:form>
+
+<script language="javascript">
+function editFunding(id)
+
+{
+
+	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
+
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%= addComp %>&fundId="+id,callbackDialog);
+
+}
+
+
+function addComponents()
+
+{
+	reusableDialog.setHeader("<digi:trn key="aim:components">Components</digi:trn>");
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
+	var connectionObject =YAHOOAmp.util.Connect.asyncRequest('GET', "<%=addComp%>",callbackDialog);
+
+}
+
+function postComponentForm(action){
+	var formObject = document.aimAddComponentForm;
+	YAHOOAmp.util.Connect.setForm(formObject);
+	var cObj = YAHOOAmp.util.Connect.asyncRequest('POST', action, callbackPost);
+}
+
+function addComponent(){
+	<digi:context name="addNewComponent" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=addNewComponent" />
+
+	if (document.aimAddComponentForm.newCompoenentName.value==""){
+		var msg="<digi:trn key="aim:msgErrorNoName">You have to enter the component name</digi:trn>"
+		alert(msg);
+		return false;
+	}
+	
+	<feature:display name="Admin - Component Type" module="Components">
+	if (document.aimAddComponentForm.selectedType.value=="-1"){
+		var msg="<digi:trn key="aim:msgErrorSelctType">You have to select the component type</digi:trn>"
+		alert(msg);
+		return false;
+	}
+	</feature:display>
+	postComponentForm("<%= addNewComponent%>");
+}
+
+function validateEnter(e) {
+	eKey = (document.all) ? e.keyCode : e.which;
+	if (eKey==13) addComponent();
+}
+
+
+YAHOOAmp.namespace("YAHOOAmp.amptab");
+	var reusableDialog = new YAHOOAmp.widget.Dialog("new", {
+	width:"700px",
+	fixedcenter: false,
+	constraintoviewport: true,
+	underlay:"none",
+	close:true,
+	visible:false,
+	modal:true,
+	draggable:true,
+	hideaftersubmit:false}
+	 
+	);
+
+ 	reusableDialog.beforeHideEvent.subscribe(function() {
+		if (div!=null){
+			div.parentNode.removeChild(div)
+		}
+    }); 
+   
+	var divDialog=null;
+		var callbackPost = { 
+     	   		success: function(o) {
+     	   				if (div==null){
+     	   					div=document.createElement('div');
+     	   					div.setAttribute("style","display:inline");
+     	   					div.setAttribute("id","divContent");
+     	   				}
+						else
+						{
+							div.innerHTML = "";
+						}
+     	   					
+     	   				
+     	   				/* 
+     	   				 just load the form part  of the popup page (we can improve it using DOM) 
+     	   			  	 be sure all needed (script etc) is located into the FORM on the popup page
+     	   				*/ 
+     	   				div.innerHTML= o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
+
+						//Extract javascript and execute it
+						eval(o.responseText.substr(o.responseText.indexOf('<script language=\"JavaScript\"')+30,o.responseText.indexOf("</script")-30-o.responseText.indexOf('<script language=\"JavaScript\"')));
+	        	} 
+        }
+		
+		var callbackDialog = { 
+     	   		success: function(o) {
+     	   				if (div!=null){
+							if(div.parentNode)
+								div.parentNode.removeChild(div)
+	 	   				}
+
+						div=document.createElement('div');
+						div.setAttribute("style","display:inline");
+						div.setAttribute("id","divContent");
+     	   					
+     	   				
+     	   				/* 
+     	   				 just load the form part  of the popup page (we can improve it using DOM) 
+     	   			  	 be sure all needed (script etc) is located into the FORM on the popup page
+     	   				*/ 
+     	   				div.innerHTML=o.responseText.substr(o.responseText.indexOf("<form"),o.responseText.indexOf("</form>")-o.responseText.indexOf("<form")+8);
+     	   				//APPEND THE POPUP FORM TO THE POPIN DIV 
+     	   				document.body.appendChild(div);
+     	   				//call this to render the popin
+     	   				showPOPINDialog();
+     	   				
+	        	} 
+        }
+		
+		function showPOPINDialog(){
+			var element = document.getElementById("divContent");
+			reusableDialog.setBody(element);
+			reusableDialog.render(document.body);
+			reusableDialog.show();
+		}
+
+function closePopup() {
+		div.innerHTML = "";
+	reusableDialog.hide();
+}
+
+	function addPhysicalProgress()
+	{
+		var titleFlag = isEmpty(document.addPhysicalProgressForm.phyProgTitle.value);
+		var dateFlag = isEmpty(document.addPhysicalProgressForm.phyProgRepDate.value);
+		if(titleFlag == true & dateFlag == true)
+		{
+			alert("Please enter Title and Reporting Date");
+			document.addPhysicalProgressForm.phyProgTitle.focus();
+		}
+		else
+		{
+			if(titleFlag == true)
+			{
+				alert(" Please enter title");
+				document.addPhysicalProgressForm.phyProgTitle.focus();
+			}
+			if(dateFlag == true)
+			{
+				alert(" Please enter Reporting Date");
+				document.addPhysicalProgressForm.phyProgRepDate.focus();
+			}
+		}
+		if(titleFlag == false && dateFlag == false)
+		{
+			<digi:context name="addPhyProg" property="context/module/moduleinstance/phyProgSelected.do?edit=true"/>
+		   document.addPhysicalProgressForm.action = "<%= addPhyProg %>";
+		   document.addPhysicalProgressForm.submit();
+			window.close();
+		}
+	}
+		
+</script>
+

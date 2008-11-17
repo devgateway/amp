@@ -103,6 +103,10 @@ A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginW
 	#demo .yui-nav li a:hover {
 	    background: #455786 url(tableftcornerhover.gif) left top no-repeat;  
 	}
+       
+        #demo li.selected .nohover a:hover {background:#222E5D url(tableftcorner.gif)  no-repeat scroll left top;}
+        
+        #demo li.selected .nohover a:hover div {background: url(tabrightcorner.gif) right top no-repeat;}
 	
 	#demo .yui-nav li a:hover div {
 	    background: url(tabrightcornerhover.gif) right top no-repeat;  

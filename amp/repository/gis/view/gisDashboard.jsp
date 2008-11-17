@@ -31,13 +31,15 @@
 <div id="content" class="yui-skin-sam" style="width:100%;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
     <ul class="yui-nav">
-      <li class="selected">
-        <a href="#">
-        <div>
-          <digi:trn key="gis:regionalview">Regional View</digi:trn>
-        </div>
-        </a>
-      </li>
+        <li class="selected">
+            <div class="nohover">
+                <a style="cursor:default">
+                    <div>
+                        <digi:trn key="gis:regionalview">Regional View</digi:trn>
+                    </div>
+                </a>
+            </div>
+        </li>
     </ul>
     <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 

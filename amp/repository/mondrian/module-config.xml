@@ -4,5 +4,6 @@
 	<security login-required="true" default="READ">
 	<action login-required="true" pattern="/mainreport"/>
 	<action login-required="true" pattern="/testpage"/>
+	<action login-required="true" pattern="/querypage"/>
 	</security>
 </module-config>

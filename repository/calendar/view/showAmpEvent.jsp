@@ -751,33 +751,14 @@ function recurEvent(){
 			                                            <digi:trn key="calendar:orgs">Organizations</digi:trn> 
 			                                        </td>
 			                                        <td align="left">
-														<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">													
-															<logic:notEmpty name="calendarEventForm" property="organizations">
-																<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-																	<tr><td>
-																		<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
-																			<tr>
-																				<td width="3">
-																					<html:multibox property="selOrganizations" >
-																						<bean:write name="organization" property="ampOrgId" />
-																					</html:multibox>
-																				</td>
-																				<td align="left" class="inp-text">
-																					<bean:write name="organization" property="name" />
-																				</td>
-																			</tr>
-																		</table>
-																	</td></tr>
-																</logic:iterate>	
-															</logic:notEmpty>
-															<logic:empty name="calendarEventForm" property="organizations">
-																<tr>
-																	<td>																		
-																		<digi:trn key="calendar:noOrgs">No Organisations</digi:trn>																																				
-																	</td>
-																</tr>
-															</logic:empty>											
-														</table>
+			                                        
+			                                        <html:select multiple="multiple" property="selOrganizations" size="3" style="width: 220px; height:50px;">
+			                                        	<logic:notEmpty name="calendarEventForm" property="organizations">
+															<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<html:option value="${organization.ampOrgId}">${organization.name}</html:option>
+															</logic:iterate>
+														</logic:notEmpty>
+			                                          </html:select>			                                        
 			                                        </td> 
 			                                        <td>                                        	
 														<table cellSpacing="1" cellPadding="1">
@@ -812,14 +793,14 @@ function recurEvent(){
 			                            <td colspan="20" style="text-align:center;font-size: 12px">
 			                                <table align="center">
 			                                    <tr>
-			                                    	<td style="width:72px" >&nbsp;</td>
+			                                    	<td style="width:75px" >&nbsp;&nbsp;</td>
 			                                        <td nowrap="nowrap">
 			                                            <digi:trn key="calendar:Attendee">Attendee</digi:trn>
 			                                            <font color="red" size="3px">*</font>
 			                                        </td>
 			                                    </tr>
 			                                    <tr>
-			                                    	<td style="width: 72px">&nbsp;</td>
+			                                    	<td style="width: 75px">&nbsp;</td>
 			                                        <td style="width: 220px">
 			                                          <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width: 220px; height: 150px;">
 			                                            <c:if test="${empty calendarEventForm.teamMapValues}">

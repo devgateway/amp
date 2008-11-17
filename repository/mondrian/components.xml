@@ -3,5 +3,6 @@
 <secondary-pages>
 	<page name="mainreport" title="Mondrian Analisys"/>
 	<page name="testpage" title="Mondrian Analisys"/>
+	<page name="querypage"/>
 </secondary-pages>
 </config>

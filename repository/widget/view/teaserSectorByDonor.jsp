@@ -60,15 +60,18 @@
 //-->
 </script>
 
+
 <div id="content" class="yui-skin-sam" style="width:100%;z-index: 1;">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
     <ul class="yui-nav">
       <li class="selected">
-        <a href="#">
+        <div class="nohover">
+        <a style="cursor:default">
         <div>
           <digi:trn key="gis:breakdownbysector">Breakdown by sector</digi:trn>
         </div>
         </a>
+        </div>
       </li>
     </ul>
     <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">

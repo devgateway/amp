@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%>
+<%@ page language="java" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
@@ -17,8 +17,7 @@
 		<td width="257">
 		<p align="center" style="font-family: Arial, Helvetica, sans-serif; font-size: 16px;"><strong><digi:trn
 			key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn></strong></p>
-		<p align="center"><digi:trn
-			key="aim:aidmanagementplatformversionshort">Version 1.11c</digi:trn></p>
+		<p align="center"><tiles:getAsString name="version"/></p>
 		</td>
 		<td width="220"><img width="220" height="149"
 			src="/TEMPLATE/ampTemplate/images/dgf_logo.jpg"></td>
@@ -26,7 +25,7 @@
 	<tr>
 		<td colspan="2">
 		<p style="font-family: Arial, Helvetica, sans-serif; font-size: 10px;"><digi:trn key="aim:aidmanagementplatform">Aid Management Platform (AMP)</digi:trn>
-		<digi:trn key="aim:aidmanagementplatformversion">Version 1.11c Build 9. August 2008.</digi:trn>
+		 - <tiles:getAsString name="version"/> - 
 		<digi:trn key="aim:ampdevelopmentcredits">Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and Development Gateway Foundation.</digi:trn>
 		</p>
 		</td>

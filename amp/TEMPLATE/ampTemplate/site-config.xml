@@ -94,6 +94,7 @@
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
 	    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitchMenu"/>
+	    	<put name="version">1.12k build 13.Nov.2008</put>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>

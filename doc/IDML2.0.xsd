@@ -45,13 +45,13 @@
 			<xs:element name="proposedApprovalDate" type="dateType" minOccurs="0"/>
 			<xs:element name="actualApprovalDate" type="dateType" minOccurs="0"/>
 			<xs:element name="proposedStartDate" type="dateType" minOccurs="0"/>
-			<xs:element name="actualStartDate" type="dateType" minOccurs="0"/>
+			<xs:element name="actualStartDate" type="dateType"/>
 			<xs:element name="modifiedClosingDate" type="dateType" minOccurs="0"/>
-			<xs:element name="closingDate" type="dateType" minOccurs="0"/>
+			<xs:element name="closingDate" type="dateType"/>
 			<xs:element name="status" type="codeValueType"/>
 			<xs:element name="statusReason" type="freeTextType" minOccurs="0"/>
 			<xs:element name="sectors" type="codeValueType" maxOccurs="unbounded"/>
-			<xs:element name="programs" type="codeValueType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="programs" type="codeValueType" maxOccurs="unbounded"/>
 			<xs:element name="notes" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="keywords" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
@@ -61,7 +61,7 @@
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="componentTitle" type="freeTextType"/>
-						<xs:element name="componentDescription" type="freeTextType"/>
+						<xs:element name="componentDescription" type="freeTextType" minOccurs="0"/>
 						<xs:element name="funding" type="fundingType" maxOccurs="unbounded"/>
 						<xs:element name="physicalProgress" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
@@ -79,18 +79,29 @@
 			<xs:element name="issues" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="title" type="freeTextType"/>
-						<xs:element name="measure" type="codeValueType" minOccurs="0"/>
-						<xs:element name="actor" minOccurs="0">
+						<xs:element name="title" type="xs:string" minOccurs="0"/>
+						<xs:element name="measure" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="title" type="xs:string" minOccurs="0"/>
+									<xs:element name="actor" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:string">
+													<xs:attribute name="code" type="xs:int" use="optional"/>
+													<xs:attribute name="language" type="xs:string" use="optional"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
 								</xs:sequence>
-								<xs:attribute name="code" type="xs:string" use="required"/>
+								<xs:attribute name="code" type="xs:int" use="optional"/>
+								<xs:attribute name="language" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
 					<xs:attribute name="code" type="xs:string" use="required"/>
+					<xs:attribute name="language" type="xs:string" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="documents" minOccurs="0" maxOccurs="unbounded">
@@ -114,14 +125,27 @@
 			</xs:element>
 			<xs:element name="relatedOrgs" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="executingOrg" type="codeValueType"/>
-						<xs:element name="implementingOrgs" type="codeValueType" minOccurs="0" maxOccurs="unbounded"/>
-					</xs:sequence>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="code" type="xs:string" use="required"/>
+							<xs:attribute name="language" type="xs:string" use="optional"/>
+							<xs:attribute name="type" use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="Responsible"/>
+										<xs:enumeration value="Executing"/>
+										<xs:enumeration value="Implementing"/>
+										<xs:enumeration value="Beneficiary"/>
+										<xs:enumeration value="Contracting"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="donorContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="mofedContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="govContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="dbKey" type="xs:string" use="required"/>
 		<xs:attribute name="rights" type="xs:int" use="optional"/>
@@ -160,16 +184,33 @@
 	</xs:complexType>
 	<xs:complexType name="fundingType">
 		<xs:sequence>
-			<xs:element name="fundingOrg" type="codeValueType" minOccurs="0"/>
+			<xs:element name="fundingOrg" type="codeValueType"/>
 			<xs:element name="assistanceType" type="codeValueType"/>
 			<xs:element name="financingInstrument" type="codeValueType"/>
 			<xs:element name="conditions" type="freeTextType"/>
 			<xs:element name="signatureDate" type="dateType"/>
+			<xs:element name="projections" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:attribute name="type" type="xs:string" use="required"/>
+					<xs:attribute name="amount" type="xs:long" use="required"/>
+					<xs:attribute name="currency" type="xs:string" use="required"/>
+					<xs:attribute name="startYear" type="xs:int" use="required"/>
+					<xs:attribute name="endYear" type="xs:int" use="optional"/>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="commitments" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="disbursements" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="expenditures" type="fundingDetailType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="code" type="xs:string" use="required"/>
+		<xs:attribute name="type" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Actual"/>
+					<xs:enumeration value="Plan"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="contactType">
 		<xs:sequence>

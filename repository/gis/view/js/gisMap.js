@@ -299,7 +299,7 @@
 				}
 				retVal += "\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
-				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "')\">";
+				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("name").value + "')\">";
 			}
 		}
 		retVal += "</map>";

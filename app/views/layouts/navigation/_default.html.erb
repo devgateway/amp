@@ -1,14 +1,11 @@
-<ul id="nav">
-
-	<li id="smaller">
+<ul id="mainMenu">
+	<li>
 		<div><a href="/"><%= ll(:navigation, :default, :home) %></a></div>
 	</li>
-	
-	<li id="eubb">
+	<li>
 		<div><%= link_to ll(:navigation, :default, :bluebook), { :controller => "bluebook", :action => "contents" }, :popup => ['Contents', 'height=600,width=800,scrollbars=yes' ] %></div>
 	</li>
-
-	<li id="bigger">
+	<li>
 		<div><a href=""><%= ll(:navigation, :default, :search_by) %>:</a></div>
 		<ul>
 			<li><a href="/reports/donors"><%= ll(:terms, :donor) %></a></li>
@@ -18,20 +15,20 @@
 		</ul>
 	</li>
 
-	<li id="bigger">
+	<li>
 		<div><%= link_to ll(:navigation, :default, :design_own), :controller => "reports", :action => "custom" %></div>
 	</li>
 
-	<li id="smaller">
+	<li>
 		<div><a href="/links"><%= ll(:navigation, :default, :links) %></a></div>
 	</li>
 
-	<li id="smaller">
+	<li>
 		<div><a href="/downloads"><%= ll(:navigation, :default, :downloads) %></a></div>
 	</li>
 
-	<li id="smaller">
-		<div><a href=""><%= ll(:navigation, :default, :resources) %>:</a></div>
+	<li>
+		<div><a href="#"><%= ll(:navigation, :default, :resources) %>:</a></div>
 		<ul>
 			<li><a href="/manuals/odanic_manual_10_<%= I18n.locale %>.pdf" onclick="window.open(this.href,'_blank','height=500,width=800,scrollbars=yes,resizable=yes');return false;"><%= ll(:navigation, :default, :odadata_manual) %></a></li>
 			<li><a href="/manuals/odanic_glossary_10_<%= I18n.locale %>.pdf" onclick="window.open(this.href,'_blank','height=500,width=800,scrollbars=yes,resizable=yes');return false;"><%= ll(:navigation, :default, :glossary) %></a></li>
@@ -40,11 +37,11 @@
 		</ul>
 	</li>
 
-	<li id="smaller">
+	<li>
 		<div><a href="mailto:alexander.bohr@odadata.eu"><%= ll(:navigation, :default, :contact) %></a></div>
 	</li>
 
-	<li id="smallera">
+	<li>
 		<div>
 			<%= render :partial => "layouts/navigation/language_select" %>
 		</div>

@@ -1,5 +1,5 @@
-<ul id="nav">
-	<li id="biggermfp">
+<ul id="mainMenu">
+	<li>
 		<div><a href="#"><%= ll(:navigation, :admin, :gen_conf) %></a></div>
 		<ul>
 			<li><a href="<%= data_input_status_settings_path %>"><%= ll(:navigation, :admin, :op_cl_data_input) %></a></li>
@@ -7,15 +7,15 @@
 		</ul>
 	</li>
 	
-	<li id="biggermfp">
+	<li>
 		<div><a href="<%= donors_path %>"><%= ll(:navigation, :admin, :donor_admin) %></a></div>
 	</li>
 
-	<li id="biggermfp">
+	<li>
 		<div><a href="<%= exchange_rates_path %>"><%= ll(:navigation, :admin, :exchange_rates) %></a></div>
 	</li>
 
-	<li id="biggestmfp">
+	<li>
 		<div><a href="#"><%= ll(:navigation, :admin, :agencies) %></a></div>
 		<ul>
 			<li><a href="<%= implementing_agencies_path %>"><%= ll(:navigation, :admin, :impl_agencies) %></a></li>
@@ -24,13 +24,13 @@
 		</ul>
 	</li>
 
-	<li id="smallera">
+	<li>
 		<div>
 			<%= render :partial => "layouts/navigation/language_select" %>
 		</div>
 	</li>
 	
-	<li id="smallmfp">
+	<li>
 		<div><a href="<%= logout_path %>"><%= ll(:navigation, :logout) %></a></div>
 	</li>
 </ul>

@@ -99,7 +99,7 @@ div.fakefile2 input{
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
+                                                <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:AmpAdminHome">
 								Admin Home
 							</digi:trn>

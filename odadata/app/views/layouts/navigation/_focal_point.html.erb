@@ -1,9 +1,9 @@
-<ul id="nav">
-	<li id="eubb">
+<ul id="mainMenu">
+	<li>
 		<div><%= link_to ll(:navigation, :focal_point, :bluebook), { :controller => "bluebook", :action => "contents" }, :popup => ['Contents', 'height=600,width=800,scrollbars=yes' ] %></div>
 	</li>
 	
-	<li id="smallera">
+	<li>
 		<div><a href="<%= projects_path %>"><%= ll(:navigation, :focal_point, :projects) %>:</a></div>
 		<ul>
 			<li><%= link_to ll(:navigation, :focal_point, :new_project), 
@@ -17,12 +17,12 @@
 		</ul>
 	</li>
 
-	<li id="biggera">
+	<li>
 		<div><%= link_to ll(:navigation, :focal_point, :design_own), 
 					:controller => "reports", :action => "custom" %></div>
 	</li>
 
-	<li id="biggera">
+	<li>
 		<div><a href="#">Reports on:</a></div>
 		<ul>
 			<li><%= link_to 'Drafts', { :controller => "reports", :action => "project_list", :query => "draft", :value => current_donor.id }, :popup => ['_blank', 'scrollbars=yes' ] %></li>
@@ -30,7 +30,7 @@
 		</ul>
 	</li>
 
-	<li id="donoradmin">
+	<li>
 		<div><a href="#"><%= ll(:navigation, :focal_point, :donor_info) %></a></div>
 		<ul>
 			<li><a href="/contact/show"><%= ll(:navigation, :focal_point, :donor_details) %></a></li>
@@ -41,7 +41,7 @@
 		</ul>
 	</li>
 
-	<li id="smallera">
+	<li>
 		<div><a href="#"><%= ll(:navigation, :focal_point, :manuals) %>:</a></div>
 		<ul>
 			<li><a href="/manuals/odanic_data_entry.pdf"><%= ll(:navigation, :focal_point, :data_input_manual) %></a></li>
@@ -51,17 +51,17 @@
 		</ul>
 	</li>
 
-	<li id="smallera">
+	<li>
 		<div><a href="http://odadata.updatelog.com" target="_blank"><%= ll(:navigation, :focal_point, :contact) %></a></div>
 	</li>
 
-	<li id="smallera">
+	<li>
 		<div>
 			<%= render :partial => "layouts/navigation/language_select" %>
 		</div>
 	</li>
 
-	<li id="smallera">
+	<li>
 		<div><a href="/logout"><%= ll(:navigation, :logout) %></a></div>
 	</li>
 </ul>

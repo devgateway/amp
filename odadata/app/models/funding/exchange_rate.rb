@@ -1,8 +1,4 @@
 class ExchangeRate < ActiveRecord::Base
-  # List of possible currencies
-  CURRENCIES = ['EUR', 1], ['US DOLLAR', 2]
-  Prefs.default_currency = "EUR"
-  
   # Validation
   validates_presence_of :currency, :euro_rate
   validates_numericality_of :euro_rate

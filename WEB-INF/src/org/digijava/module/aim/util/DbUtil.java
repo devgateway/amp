@@ -6667,9 +6667,9 @@ public class DbUtil {
     			AmpOrgGroup orggrp1=o1.getOrgGrpId();
     			AmpOrgGroup orggrp2=o2.getOrgGrpId();
     			result=new HelperAmpOrgGroupNameComparator().compare(orggrp1, orggrp2);
-    		} else if (o2.getOrgGrpId()==null){
+    		} else if (o2.getOrgGrpId()==null&&o1.getOrgGrpId()!=null){
     			result=collator.compare(o1.getOrgGrpId().getOrgGrpName(), "");
-    		}else if (o1.getOrgGrpId()==null){
+    		}else if (o1.getOrgGrpId()==null&&o2.getOrgGrpId()!=null){
     			result= collator.compare("", o2.getOrgGrpId().getOrgGrpName());
     		}
     		return result;
@@ -6703,9 +6703,9 @@ public class DbUtil {
     			AmpOrgType orgType1=o1.getOrgTypeId();
     			AmpOrgType orgType2=o2.getOrgTypeId();
     			result=new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
-    		} else if (o2.getOrgTypeId()==null){
+    		} else if (o2.getOrgTypeId()==null&&o1.getOrgTypeId()!=null){
     			result=collator.compare(o1.getOrgTypeId().getOrgType(), "");
-    		}else if (o1.getOrgTypeId()==null){
+    		}else if (o1.getOrgTypeId()==null&&o2.getOrgTypeId()!=null){
     			result=collator.compare("", o2.getOrgTypeId().getOrgType());
     		}
     		return result;
@@ -6819,7 +6819,7 @@ public class DbUtil {
         DecimalWraper total = null;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "select  new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId";
+            String queryString = "select  new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,fd.fixedExchangeRate";
             if (isInd4) {
                 queryString += ", ah.ampAHSurveyId";
             }

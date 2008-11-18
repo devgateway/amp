@@ -611,7 +611,7 @@ public class HelpUtil {
 			    	 helptopic.setTitleTrnKey(help.getTitleTrnKey());
 	    	    	 helptopic.setModuleInstance(help.getModuleInstance());
 	    	    	 helptopic.setBodyEditKey(help.getEditorKey());
-	    	    	 helptopic.setHelpTopicId(help.getTopicId());
+	    	    	 //helptopic.setHelpTopicId(help.getTopicId());
 	    	
 	    	    	 udateEditpData(help);
 			       

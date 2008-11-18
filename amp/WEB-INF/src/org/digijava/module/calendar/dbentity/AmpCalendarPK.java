@@ -89,5 +89,14 @@ public class AmpCalendarPK
 	    java.util.Calendar cal = getCalendar(getCalendar().getEndDate());
 	    return cal.get(java.util.Calendar.HOUR_OF_DAY);
 	  }
-
+  
+  public int getStartMinute(){
+	  java.util.Calendar cal= getCalendar(getCalendar().getStartDate());
+	  return cal.get(java.util.Calendar.MINUTE);
+  }
+  
+  public int getEndMinute(){
+	  java.util.Calendar cal= getCalendar(getCalendar().getEndDate());
+	  return cal.get(java.util.Calendar.MINUTE);
+  }
 }

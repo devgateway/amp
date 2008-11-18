@@ -2,9 +2,13 @@
 	<li>
 		<div><a href="/"><%= ll(:navigation, :default, :home) %></a></div>
 	</li>
+	
 	<li>
-		<div><%= link_to ll(:navigation, :default, :bluebook), { :controller => "bluebook", :action => "contents" }, :popup => ['Contents', 'height=600,width=800,scrollbars=yes' ] %></div>
+		<div><%= link_to ll(:navigation, :default, :bluebook), bluebook_root_path, 
+					:popup => ['Contents', 'height=600,width=800,scrollbars=yes' %>
+		</div>
 	</li>
+	
 	<li>
 		<div><a href=""><%= ll(:navigation, :default, :search_by) %>:</a></div>
 		<ul>

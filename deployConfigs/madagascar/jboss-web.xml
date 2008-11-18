@@ -9,8 +9,8 @@
  </class-loading>
  
  <resource-ref>
- 	<res-ref-name>java:malawiDS</res-ref-name>
+ 	<res-ref-name>java:madagascarDS</res-ref-name>
 	<res-type>javax.sql.DataSource</res-type>
-	<jndi-name>java:malawiDS</jndi-name>
+	<jndi-name>java:madagascarDS</jndi-name>
 </resource-ref>
 </jboss-web>

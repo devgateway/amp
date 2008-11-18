@@ -10,22 +10,21 @@
 <!--
 div.fileinputs {
 	position: relative;
-	height: 10px;
+	height: 30px;
 	width: 300px;
 }
-
 input.file {
 	width: 300px;
 	margin: 0;
 }
-
 input.file.hidden {
 	position: relative;
 	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
 	width: 300px;
 	opacity: 0;
 	z-index: 2;
-	height:10px;
 }
 
 div.fakefile {
@@ -38,12 +37,10 @@ div.fakefile {
 	z-index: 1;
 	line-height: 90%;
 }
-
 div.fakefile input {
-	margin-bottom: 2px;
+	margin-bottom: 5px;
 	margin-left: 0;
 	width: 217px;
-	height:20px;
 }
 div.fakefile2 {
 	position: absolute;

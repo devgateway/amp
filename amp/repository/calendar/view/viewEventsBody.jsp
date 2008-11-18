@@ -364,7 +364,7 @@ color:Black;
 				                                                         									<c:when test="${startHours!=endHours}">
 																												<c:choose>
 																													<c:when test="${hour!=endHours && startMinute<=min}">1</c:when>
-																													<c:when test="${hour==endHours && startMinute<=min && min<=endMinute}">1</c:when>
+																													<c:when test="${hour==endHours && min<=endMinute}">1</c:when>
 																													<c:otherwise>0</c:otherwise>
 																												</c:choose>
 																											</c:when>
@@ -373,7 +373,7 @@ color:Black;
 				                                                    								</c:set>
 				                                                         							<td style="padding:0px; <c:if test="${takeEventsColor==1}">background-color:${ampCalendarGraph.ampCalendar.eventType.color};border-color:${ampCalendarGraph.ampCalendar.eventType.color}</c:if>" >
 				                                                         								<c:choose>
-				                                                         									<c:when test="${startMinute==min}">
+				                                                         									<c:when test="${(startHours==hour && startMinute==min) || (startHours!=hour && min==1)}">
 				                                                         										<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">								                                                        	
 								                                                        							<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
 											                                            						</digi:link>

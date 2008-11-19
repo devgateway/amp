@@ -65,8 +65,7 @@ function deleteEvent(){
                   </c:if>
                   <c:if test="${calendarEventForm.selectedCalendarTypeId == 2}">
                         Ethiopian_FY                     
-                  </c:if>
-                ${calendarEventForm.selectedCalendarTypeName}
+                  </c:if>     
               </td>
             <tr>
               <td style="font-size: 14px; font-weight: bold; padding: 10px;vertical-align:top;">

@@ -47,6 +47,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Cell;
@@ -569,11 +570,11 @@ public class ProjectFicheExport extends Action {
 
 		
 		//fische objectives:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getObjective(),navigationLanguage),"Objective",indicatorsMe);
+		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getObjective(),navigationLanguage), CategoryConstants.LOGFRAME_OBJECTIVE ,indicatorsMe);
 		//fische purpose:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getPurpose(),navigationLanguage),"Purpose",indicatorsMe);	
+		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getPurpose(),navigationLanguage), CategoryConstants.LOGFRAME_PURPOSE,indicatorsMe);	
 		//fische results:
-		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getResults(),navigationLanguage),"Results",indicatorsMe);
+		addIndicatorsLine(allComments,tbl,Util.getEditorBody(site,act.getResults(),navigationLanguage),CategoryConstants.LOGFRAME_RESULTS,indicatorsMe);
 		
 		tbl.addCell(getLogframeHeadingCell("Activities"));
 		tbl.addCell(getLogframeHeadingCell("Contributions"));
@@ -842,16 +843,16 @@ public class ProjectFicheExport extends Action {
 	}
 	
 
-	public void addIndicatorsLine(Map allComments,Table tbl,String text, String category, Collection indicatorsMe) throws BadElementException {
+	public void addIndicatorsLine(Map allComments,Table tbl,String text, HardCodedCategoryValue hcValue, Collection indicatorsMe) throws BadElementException {
 		Cell c=null;
 
-		c=getLogframeHeadingCell(category);
+		c=getLogframeHeadingCell( hcValue.getValueKey() );
 		tbl.addCell(c);
 		c=getLogframeHeadingCell("Indicators");
 		tbl.addCell(c);
 		c=getLogframeHeadingCell("Verification");
 		tbl.addCell(c);
-		c=category.equals("Objective")?new Cell(""):getLogframeHeadingCell("Assumptions");
+		c=hcValue.equals(CategoryConstants.LOGFRAME_OBJECTIVE)?new Cell(""):getLogframeHeadingCell("Assumptions");
 		tbl.addCell(c);
 
 		//fische objectives:
@@ -862,7 +863,9 @@ public class ProjectFicheExport extends Action {
 		Iterator i=indicatorsMe.iterator();
 		while (i.hasNext()) {
 			ActivityIndicator element = (ActivityIndicator) i.next();
-			if(element.getIndicatorsCategory()==null || element.getIndicatorsCategory().getValue()==null || element.getIndicatorsCategory().getValue().equals(category)) continue;
+			if(element.getIndicatorsCategory()==null || element.getIndicatorsCategory().getValue()==null ||
+					CategoryManagerUtil.equalsCategoryValue(element.getIndicatorsCategory(), hcValue) )
+						continue;
 			c.addElement(new Paragraph(element.getIndicatorName()));
 		}
 		tbl.addCell(c);
@@ -870,7 +873,7 @@ public class ProjectFicheExport extends Action {
 	
 		//verifcation space
 		c=new Cell("");
-		Collection verifications=(Collection) allComments.get(category+" Verification");
+		Collection verifications=(Collection) allComments.get(hcValue.getValueKey()+" Verification");
 		i=verifications.iterator();
 		while (i.hasNext()) {
 			AmpComments element = (AmpComments) i.next();
@@ -880,8 +883,8 @@ public class ProjectFicheExport extends Action {
 		
 		//assumptions space
 		c=new Cell("");
-		if(!category.equals("Objective")) {
-			Collection assumptions=(Collection) allComments.get(category+" Assumption");
+		if(!hcValue.equals(CategoryConstants.LOGFRAME_OBJECTIVE)) {
+			Collection assumptions=(Collection) allComments.get(hcValue.getValueKey()+" Assumption");
 			i=assumptions.iterator();
 			while (i.hasNext()) {
 				AmpComments element = (AmpComments) i.next();

@@ -3167,7 +3167,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,act.getCategories());
 
     if (act != null && statusValue != null) {
-      if (statusValue.getValue().equals(Constants.ACTIVITY_STATUS_PROPOSED) &&
+      if ( CategoryManagerUtil.equalsCategoryValue(statusValue, CategoryConstants.ACTIVITY_STATUS_PROPOSED) &&
           act.getFunAmount() != null) {
         String currencyCode = act.getCurrencyCode();
         //AMP-1403 assume USD if no code is specified

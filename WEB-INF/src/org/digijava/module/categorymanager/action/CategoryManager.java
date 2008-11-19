@@ -331,12 +331,14 @@ public class CategoryManager extends Action {
 			for (int index=0;index<possibleVals.size(); index++  ) {
 				if ( k < dbCategory.getPossibleValues().size() && !addToPossibleValues ) {
 					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get( k );
-                                        PossibleValue value=possibleVals.get(index);
+					PossibleValue value					= possibleVals.get(index);
 					
-					if (value.isDisable()||value.getValue().equals("")) {// In this block we are surely editing an existing category (not creating a new one)
+					if (value.isDisable()) {// In this block we are surely editing an existing category value (not creating a new one)
 						AmpCategoryValue removedValue			= (AmpCategoryValue)dbCategory.getPossibleValues().remove( k );
 						try{
 							dbSession.flush();
+							if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), removedValue.getValue()) )
+									throw new Exception("This value is in CategoryConstants.java and used by the system");
 						}
 						catch(Exception E) {
 							if (undeletableCategoryValues ==  null) 

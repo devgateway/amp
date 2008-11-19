@@ -37,7 +37,7 @@
 	<digi:trn key="cm:correctNumberOfFields">Please specify a number of fields to add that is above zero and below 30</digi:trn>
 </c:set>
 <c:set var="translation7">
-	<digi:trn key="cm:warningModifyCategoryValue">Modifying the key of a category value can have disastrous effects on the system ! Only proceed at your own risk ! Are you sure you want to proceed ?</digi:trn>
+	<digi:trn key="cm:warningDeleteCategoryValue">Please proceed only if you are sure that the value you are trying to delete is not used by the system anymore.  Are you sure you want to delete it ?</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -96,18 +96,20 @@
         document.cmCategoryManagerForm.submit();
     }
 	function deleteField(id, deleteId, undoId,disabeledId) {
-		field						= document.getElementById(id) ;
-		disabled					= document.getElementById(disabeledId) ;
-		disabled.value				= true;
-		field.style.textDecoration	= "line-through";
-		field.style.color			= "darkgray";
-		field.disabled				= true;
-		
-		del							= document.getElementById(deleteId) ;
-		del.style.display			= "none";
-		
-		undo						= document.getElementById(undoId) ;
-		undo.style.display			= "inline";
+		if ( confirm("${translation7}") ) {
+			field						= document.getElementById(id) ;
+			disabled					= document.getElementById(disabeledId) ;
+			disabled.value				= true;
+			field.style.textDecoration	= "line-through";
+			field.style.color			= "darkgray";
+			field.disabled				= true;
+			
+			del							= document.getElementById(deleteId) ;
+			del.style.display			= "none";
+			
+			undo						= document.getElementById(undoId) ;
+			undo.style.display			= "inline";
+		}
 	}
 	function undeleteField(id, deleteId, undoId,disabeledId) {
 		field						= document.getElementById(id) ;
@@ -195,11 +197,11 @@
 					<html:textarea property="description" cols="20" rows="4" />
 				</td>
 				<td valign="middle">
-					<html:checkbox property="isMultiselect" />
+					<%-- <html:checkbox property="isMultiselect" />
 					<digi:trn key="aim:categoryManagerAllowMultiselect">
 						Should <strong>multiselect</strong> be allowed for this category
 					</digi:trn> 
-					<br />
+					<br /> --%>
 					<html:checkbox property="isOrdered" />
 					<digi:trn key="aim:categoryManagerIsOrdered">
 						Should the values be presented in <strong>alphabetical order</strong> 
@@ -213,6 +215,11 @@
 					</td>
 					<td>
 						<html:text property="keyName"/>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><strong><digi:trn key="cm:categoryManagerImportantNote">IMPORTANT NOTE</digi:trn></strong>: 
+						<digi:trn key="cm:categoryManagerPlsUseTranslations">If you need to change the translation for a category value please use Translator View</digi:trn> !
 					</td>
 				</tr>
 				<tr>

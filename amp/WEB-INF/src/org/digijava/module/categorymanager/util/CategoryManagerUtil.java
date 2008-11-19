@@ -1,5 +1,6 @@
 package org.digijava.module.categorymanager.util;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -23,6 +24,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -264,6 +266,23 @@ public class CategoryManagerUtil {
 			logger.debug("[getAmpCategoryValueFromDb] valueId is null");
 		return null;
 	}
+	
+	public static AmpCategoryValue getAmpCategoryValueFromDB(HardCodedCategoryValue hcValue) throws Exception {
+		Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+				hcValue.getCategoryKey(), null);
+		if (c != null) {
+			Iterator<AmpCategoryValue> tempItr = c.iterator();
+			while (tempItr.hasNext()) {
+				AmpCategoryValue categoryValue = (AmpCategoryValue) tempItr.next();
+				if (categoryValue.getValue().equalsIgnoreCase( hcValue.getValueKey() )) {
+					return categoryValue;
+				}
+			}
+		}
+		
+		throw new Exception ("HardCodedCategoryValue not found in the database");
+	}
+	
 	/**
 	 *
 	 * @param categoryId
@@ -589,6 +608,37 @@ public class CategoryManagerUtil {
 			ret.add(elem.getValue());
 		}
 		return ret;
+	}
+	/**
+	 * Verify that a category value has been inserted in CategoryConstants as a HardCodedcategoryValue
+	 * @return true if the category value key has been inserted in the CategoryConstants class.
+	 */
+	public static boolean verifyDeletionProtectionForCategoryValue (String categoryKey, String valueKey ) {
+		Field[] fields	= CategoryConstants.class.getDeclaredFields();
+		for (int i=0; i< fields.length; i++  ) {
+			Class fieldClass	= fields[i].getType();
+			if ( fieldClass.equals( HardCodedCategoryValue.class ) ) {
+				HardCodedCategoryValue proprietyValue;
+				try {
+					proprietyValue = (HardCodedCategoryValue)fields[i].get(null);
+				} catch (Exception e) {
+					e.printStackTrace();
+					continue;
+				}
+				if ( proprietyValue.getCategoryKey().equals(categoryKey) 
+						&& proprietyValue.getValueKey().equals(valueKey) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean equalsCategoryValue(AmpCategoryValue value, HardCodedCategoryValue hcValue){
+			if ( value != null && value.getValue().equals( hcValue.getValueKey() ) )
+				return true;
+			else 
+				return false;
 	}
 	
 	

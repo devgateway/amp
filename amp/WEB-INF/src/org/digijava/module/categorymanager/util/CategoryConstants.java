@@ -1,5 +1,6 @@
 package org.digijava.module.categorymanager.util;
 
+
 public class CategoryConstants {
 	public static final String ACCHAPTER_NAME	= "A.C. Chapter";
 	public static final String ACCHAPTER_KEY	= "acchapter";
@@ -68,5 +69,52 @@ public class CategoryConstants {
 	public static final long NONE_TYPE=0;
 	public static final long COUNTRY_TYPE=1;
 	public static final long REGION_TYPE=2;
+	
+	public static final HardCodedCategoryValue TYPE_OF_ASSITANCE_GRANT	= 
+			new CategoryConstants().new HardCodedCategoryValue("type_of_assistence","Grant", true);
+	
+	public static final HardCodedCategoryValue LOGFRAME_OBJECTIVE	= 
+		new CategoryConstants().new HardCodedCategoryValue("logframe","Objective", true);
+	public static final HardCodedCategoryValue LOGFRAME_PURPOSE	= 
+		new CategoryConstants().new HardCodedCategoryValue("logframe","Purpose", true);
+	public static final HardCodedCategoryValue LOGFRAME_RESULTS	= 
+		new CategoryConstants().new HardCodedCategoryValue("logframe","Results", true);
+	
+	public static final HardCodedCategoryValue TEAM_TYPE_MULTILATERAL	= 
+		new CategoryConstants().new HardCodedCategoryValue("team_type","Multilateral", false);
+	public static final HardCodedCategoryValue TEAM_TYPE_BILATERAL	= 
+		new CategoryConstants().new HardCodedCategoryValue("team_type","Bilateral", false);
+	
+	public static final HardCodedCategoryValue MTEF_PROJECTION_PROJECTION	= 
+		new CategoryConstants().new HardCodedCategoryValue("mtef_projection","projection", false);
+	public static final HardCodedCategoryValue MTEF_PROJECTION_PIPELINE	= 
+		new CategoryConstants().new HardCodedCategoryValue("mtef_projection","pipeline", false);
+	
+	public static final HardCodedCategoryValue ACTIVITY_STATUS_PROPOSED	= 
+		new CategoryConstants().new HardCodedCategoryValue("activity_status","proposed", false);
+	
+	public static final HardCodedCategoryValue FIN_INSTR_DIRECT_BUDGET_SUPPORT	= 
+		new CategoryConstants().new HardCodedCategoryValue("financing_instrument","Direct Budget Support", false);
+	
+	public class HardCodedCategoryValue {
+		private String valueKey;
+		private String categoryKey;
+		private boolean protectOnDelete;
+		public String getValueKey() {
+			return valueKey;
+		}
+		public String getCategoryKey() {
+			return categoryKey;
+		}
+				
+		public boolean isProtectOnDelete() {
+			return protectOnDelete;
+		}
+		private HardCodedCategoryValue(String categoryKey, String valueKey, boolean protectOnDelete) {
+			this.categoryKey		= categoryKey;
+			this.valueKey			= valueKey;
+			this.protectOnDelete	= protectOnDelete;
+		}
+	}
 }
 

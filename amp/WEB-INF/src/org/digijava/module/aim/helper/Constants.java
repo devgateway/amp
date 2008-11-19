@@ -159,13 +159,16 @@ public class Constants
 	public static final String ACTIVITY_STATUS_ONGOING			= "Ongoing";
 	public static final String ACTIVITY_STATUS_COMPLETED		= "Completed";
 	public static final String ACTIVITY_STATUS_CANCELLED		= "Cancelled / Suspended";
+	@Deprecated
 	public static final String ACTIVITY_STATUS_PROPOSED			= "Proposed";
 	public static final String ACTIVITY_STATUS_CONSIDERED		= "Considered";
 	
 	public static final String ACTIVITY_NEEDS_APPROVAL_STATUS	= "'created', 'started', 'edited'";
 
 	/* Team types */
+	@Deprecated
 	public static final String TEAM_TYPE_MULTILATERAL			= "Multilateral";
+	@Deprecated
 	public static final String TEAM_TYPE_BILATERAL				= "Bilateral";
 	/* END - Team types */
 

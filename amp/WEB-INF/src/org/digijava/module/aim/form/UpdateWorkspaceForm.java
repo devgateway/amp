@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
 import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 //public class UpdateWorkspaceForm extends ValidatorForm {
@@ -457,7 +458,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			
 			if ("DONOR".equalsIgnoreCase(category) && "Donor".equalsIgnoreCase(workspaceType)) {
 				if ("edit".equalsIgnoreCase(actionEvent)) {
-					if (typeCategoryValue!=null && Constants.TEAM_TYPE_BILATERAL.equals( typeCategoryValue.getValue() )) {
+					if (typeCategoryValue!=null && CategoryManagerUtil.equalsCategoryValue(typeCategoryValue, CategoryConstants.TEAM_TYPE_BILATERAL) ) {
 						if (relatedTeamBilatColl.size() > 0 )
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
 								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
@@ -465,7 +466,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 								relatedTeamFlag = "set";
 							}
 					}
-					if ( typeCategoryValue!=null && Constants.TEAM_TYPE_MULTILATERAL.equals(typeCategoryValue.getValue()) ) {
+					if ( typeCategoryValue!=null && CategoryManagerUtil.equalsCategoryValue(typeCategoryValue, CategoryConstants.TEAM_TYPE_MULTILATERAL) ) {
 						if (relatedTeamMutilatColl.size() > 0)
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
 								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");

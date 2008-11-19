@@ -78,7 +78,7 @@ public class AddFunding extends Action {
 				break;
 			}
 		}
-		Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+		/*Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
 								CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
 		if (c != null) {
 			Iterator<AmpCategoryValue> tempItr = c.iterator();
@@ -89,6 +89,13 @@ public class AddFunding extends Action {
 					break;
 				}
 			}
+		}*/
+		try {
+			AmpCategoryValue grantCV	= CategoryManagerUtil.getAmpCategoryValueFromDB( CategoryConstants.TYPE_OF_ASSITANCE_GRANT );
+			formBean.getFunding().setAssistanceType( grantCV.getId() );
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		formBean.getFunding().setOrganizations(DbUtil.getAllOrganisation());
 		formBean.getFunding().setEvent(null);

@@ -74,7 +74,10 @@ UPDATE dg_message SET message_utf8='Funds commited by a donor-agency'
 WHERE message_key='fm:tooltip:commitments' AND lang_iso='en';
 
 UPDATE dg_message SET message_utf8='Funds disbursed/sent by a donor-agency'
-WHERE message_key='fm:tooltip:disbursements' AND lang_iso='en';
+WHERE message_key='fm:tooltip:disbursement' AND lang_iso='en';
+
+UPDATE dg_message SET message_utf8='Disbursements arranged for receipts'
+WHERE message_key='fm:tooltip:disbursementorders' AND lang_iso='en';
 
 UPDATE dg_message SET message_utf8='Expenditures for a given project'
 WHERE message_key='fm:tooltip:expenditures' AND lang_iso='en';
@@ -133,6 +136,9 @@ WHERE message_key='fm:tooltip:previews' AND lang_iso='en';
 UPDATE dg_message SET message_utf8='Controls the ability to add/edit activities'
 WHERE message_key='fm:tooltip:editactivity' AND lang_iso='en';
 
+UPDATE dg_message SET message_utf8='Controls Logical Framework view in the overview of an activity'
+WHERE message_key='fm:tooltip:logframe' AND lang_iso='en';
+
 UPDATE dg_message SET message_utf8='Controls the ability to preview all activity information on one page'
 WHERE message_key='fm:tooltip:previewactivity' AND lang_iso='en';
 
@@ -158,7 +164,7 @@ UPDATE dg_message SET message_utf8='Project Planning Information (Dates, Funding
 WHERE message_key='fm:tooltip:planning' AND lang_iso='en';
 
 UPDATE dg_message SET message_utf8='Activity sectors and schemes'
-WHERE message_key='fm:tooltip:sector' AND lang_iso='en';
+WHERE message_key='fm:tooltip:sectors' AND lang_iso='en';
 
 UPDATE dg_message SET message_utf8='Information added as a reference source for activities'
 WHERE message_key='fm:tooltip:references' AND lang_iso='en';

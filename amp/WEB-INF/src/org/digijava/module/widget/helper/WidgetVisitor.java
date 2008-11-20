@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.digijava.module.widget.helper;
 
@@ -17,5 +13,5 @@ public interface WidgetVisitor {
     public void visit(AmpWidgetIndicatorChart chart);
     public void visit(AmpDaTable table);
     public void visit(AmpWidgetOrgProfile org);
-
+ 
 }

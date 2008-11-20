@@ -11,4 +11,4 @@ public class AmpDaValueFiltered extends AmpDaValue{
 	public Long getFilterItemId() {
 		return filterItemId;
 	}
-}
+        }

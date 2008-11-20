@@ -1,6 +1,7 @@
 package org.digijava.module.widget.dbentity;
 
 import java.io.Serializable;
+import org.digijava.module.widget.helper.WidgetVisitor;
 
 /**
  * Abstract widget.
@@ -40,5 +41,6 @@ public class AmpWidget implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
+         public void accept(WidgetVisitor visitor){}
 
 }

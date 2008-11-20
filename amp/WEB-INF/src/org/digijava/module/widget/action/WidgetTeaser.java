@@ -1,5 +1,6 @@
 package org.digijava.module.widget.action;
 
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,8 @@ import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
 import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.form.WidgetTeaserForm;
+import org.digijava.module.widget.helper.WidgetVisitor;
+import org.digijava.module.widget.helper.WidgetVisitorAdapter;
 import org.digijava.module.widget.util.WidgetUtil;
 /**
  * Generic widget teaser.
@@ -53,34 +56,33 @@ public class WidgetTeaser extends TilesAction {
 		}
 		//we have widget assigned to teaser place.
 		AmpWidget widget = place.getAssignedWidget();
-		// if widget is chart widget
-		if((widget instanceof AmpWidgetIndicatorChart)){
-			logger.debug("Rendering indicator chart widget for "+wform.getPlaceName());
-			AmpWidgetIndicatorChart cWidget = (AmpWidgetIndicatorChart) widget;
-			wform.setRendertype(WidgetUtil.CHART_INDICATOR);
-			wform.setId(cWidget.getId());
-			return null;
-		}
-                // if widget is Org profile widget
-		if((widget instanceof AmpWidgetOrgProfile)){
-			logger.debug("Rendering indicator chart widget for "+wform.getPlaceName());
-			AmpWidgetOrgProfile orgWidget = (AmpWidgetOrgProfile) widget;
-			wform.setRendertype(WidgetUtil.ORG_PROFILE);
-			wform.setId(orgWidget.getId());
-                        wform.setType(orgWidget.getType());
-			return null;
-		}
-		//if widget is table widget
-		if (widget instanceof AmpDaTable){
-			logger.debug("Rendering table widget for "+wform.getPlaceName());
-//			AmpDaTable dbTable = (AmpDaTable)widget;
-			wform.setRendertype(WidgetUtil.TABLE);
-			wform.setId(widget.getId());
-//			DaTable tableHelper = TableWidgetUtil.widgetToHelper(dbTable);
-//			wform.setTable(tableHelper);
-			return null;
-		}
-		logger.debug("Widget teaser: we should not get here!");
+                wform.setId(widget.getId());
+                final ArrayList rendertype=new ArrayList();
+                WidgetVisitor adapter=new WidgetVisitorAdapter(){
+                    @Override
+                    public void visit(AmpWidgetIndicatorChart chart){
+			rendertype.add(WidgetUtil.CHART_INDICATOR);
+                    }
+                     @Override
+                    public void visit(AmpWidgetOrgProfile orgProfile){
+                        rendertype.add(WidgetUtil.ORG_PROFILE);
+                        rendertype.add(orgProfile.getType());
+                        
+                    }
+                    @Override
+                    public void visit(AmpDaTable table){
+                         rendertype.add(WidgetUtil.TABLE);
+                    }
+                };
+                widget.accept(adapter);
+                int rType=(Integer)rendertype.get(0);
+                wform.setRendertype(rType);
+                // if size>1 then we are working with AmpWidgetOrgProfile and so we need to know type...
+                if(rendertype.size()>1){
+                    Long type=(Long)rendertype.get(1);
+                    wform.setType(type);
+                }
+		
 		return null;
 	}
 

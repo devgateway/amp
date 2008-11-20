@@ -34,12 +34,9 @@
        	<tr>
 	        <td valign="top" width="230" > 
 	          <digi:form action="/showCalendarView.do" styleId="filterForm">   
-	            <table border="0" width="100%">	            	
-	            	<tr>
-	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsNavigator.jsp" flush="true"/><td>
-	                </tr>
+	            <table border="0" width="100%">
 	                <tr style="width: 100%">
-			          	<td valign="top" style="padding:5px;">          	
+			          	<td valign="top" style="padding:5px;" align="left">          	
 			          		<table>
 				                <tr>
 				                  <td style="font-weight:Bold;font-family:Tahoma;padding:6px;font-size: 12px">
@@ -49,7 +46,10 @@
 				                <tr>
 				            </table>          	          
 			          	<td>
-			        </tr>	                             
+			        </tr>
+			        <tr>
+	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsNavigator.jsp" flush="true"/><td>
+	                </tr>
 	                <tr valign="top">
 	                    <td valign="top" style="padding:10px;"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
 	                </tr>	               		                

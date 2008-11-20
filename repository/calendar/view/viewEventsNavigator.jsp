@@ -23,7 +23,7 @@ function selectCalendarType(view, type) {
 }
 </script>
 
-<table border="0" width="100%" style="border:1px solid; border-color: #CCECFF;">
+<table width="100%" style="border:1px solid; border-color: #CCECFF;width: 200px">
     <tr>
         <td nowrap="nowrap">
             <table border="0" cellpadding="0" cellspacing="0">
@@ -41,7 +41,7 @@ function selectCalendarType(view, type) {
     </tr>
 </table>
 <c:if test="${calendarViewForm.view == 'custom'}">
-    <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
+    <table width="100%" style="border:1px solid; border-color: #484846;width: 200px">
         <tr>
             <td nowrap="nowrap">
                 <table border="0" cellpadding="0" cellspacing="0">
@@ -159,7 +159,7 @@ function selectCalendarType(view, type) {
     </table>
 </c:if>
 <c:if test="${calendarViewForm.view != 'custom'}">
-    <table border="0" width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:5px;background-color:#376091;color:White;">
+    <table width="100%" style="border-left: solid 1px #CCECFF;border-right: solid 1px #CCECFF;padding:2px;background-color:#376091;color:White;width: 200px">
         <tr>
             <td style="text-align:right;">
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">
@@ -195,11 +195,11 @@ function selectCalendarType(view, type) {
             </td>
         </tr>
     </table>
-    <table border="0" width="100%" style="border: solid 1px #CCECFF;">
+    <table width="100%" style="border: solid 1px #CCECFF;width: 200px">
         <c:forEach var="row" items="${calendarViewForm.dateNavigator.items}">
             <tr>
                 <c:forEach var="item" items="${row}">
-                  <td align="center" style='font-size:12px;padding:4px;font-family: Tahoma;<c:if test="${item.nolink}">color:Black;</c:if><c:if test="${item.selected}">color:Red;</c:if>'>
+                  <td align="center" style='font-size:12px;padding:2px;font-family: Tahoma;<c:if test="${item.nolink}">color:Black;</c:if><c:if test="${item.selected}">color:Red;</c:if>'>
                     <c:if test="${!item.nolink}">
                       <a href="#" style="text-decoration:none;color:black;font-size:12px;font-family: Tahoma;" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}'); return(false);">
                     </c:if>

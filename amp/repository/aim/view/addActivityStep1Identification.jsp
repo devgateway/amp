@@ -441,13 +441,16 @@ target.style.cursor = "default"
 														<digi:trn key="aim:actBudget">Activity Budget</digi:trn>
 														<br/>
 													</a>
-													<html:checkbox styleId="budget" property="budget"  onclick="budgetCheckboxClick();">
-													<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
+													<html:checkbox style="vertical-align: middle" styleId="budget" property="budget"  onclick="budgetCheckboxClick();">
+														<digi:trn key="aim:actBudgeton">Activity is On Budget</digi:trn>
 													</html:checkbox>
+													
 													<html:hidden property="identification.budgetCheckbox" styleId="hbudget"/>
 												</td>
 											<td>
-											<table>
+											
+											
+											<table cellpadding="3" cellspacing="3">
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
@@ -457,9 +460,10 @@ target.style.cursor = "default"
 												FY
 												</digi:trn>
 												</a>
-														<br/>
-														<html:text property="FY" size="12"/>
+												<br/>
+												<html:text style="width:100%"  property="FY" size="12"/>
 											</td>
+										<td></td>	
 										</field:display>
 											
 										<field:display name="Vote" feature="Budget">
@@ -470,8 +474,9 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 											<br/>
-													<html:text property="vote" size="12"/>
+													<html:text style="width:100%" property="vote" size="12"/>
 										</td>	
+										<td></td>
 											</field:display>
 											
 											<field:display name="Sub-Vote" feature="Budget">
@@ -482,8 +487,9 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 											<br/>
-										<html:text property="subVote" size="12"/>
+										<html:text  style="width:100%" property="subVote" size="12"/>
 										</td>
+										<td></td>
 											</field:display>
 											
 	
@@ -496,7 +502,7 @@ target.style.cursor = "default"
 												</digi:trn>
 												</a>
 											<br/>
-											<html:text property="subProgram" size="12"/>
+											<html:text style="width:100%" property="subProgram" size="12"/>
 								
 									</td>
 								</field:display>

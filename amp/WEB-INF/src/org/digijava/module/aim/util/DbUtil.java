@@ -2422,13 +2422,19 @@ public class DbUtil {
                     " inner join f.fundingDetails fd ";
             queryString += "  where f.ampDonorOrgId=:orgID and " +
                     " fd.transactionType = 0 and  fd.adjustmentType = 1";
-            queryString += " and year(fd.transactionDate)=:year   and act.team is not null group by act order by sum(fd.transactionAmountInUSD) limit 5";
+            queryString += " and year(fd.transactionDate)=:year   and act.team is not null group by act order by sum(fd.transactionAmountInUSD) ";
 
-            List result = null;
             Query query = session.createQuery(queryString);
             query.setLong("year", year);
             query.setLong("orgID", orgID);
-            result = query.list();
+            List result;
+            if(query.list().size()>5){
+                result=query.list().subList(0, 4);//pick 5 largest projects
+            }
+            else{
+               result = query.list();
+            }
+            
             Iterator<AmpActivity> activityIter = result.iterator();
             while (activityIter.hasNext()) {
                 AmpActivity activity = activityIter.next();
@@ -2484,7 +2490,7 @@ public class DbUtil {
         }
         return organizations;
     }
-    /*
+   /*
      * gets all organisation groups  excluding goverment groups
      */ 
    public static Collection<AmpOrgGroup> getAllNonGovOrgGroups() {
@@ -2494,10 +2500,9 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select distinct gr from " + AmpFunding.class.getName()
-                    +" f inner join f.ampDonorOrgId  org "
-                    +" inner join org.orgGrpId gr "
-                + " inner join gr.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by org_grp_name asc";
+            String queryString = "select distinct gr from " + AmpOrgGroup.class.getName()
+                    +" gr "
+                + " inner join gr.orgType t where t.orgTypeIsGovernmental is NULL or t.orgTypeIsGovernmental=false order by gr.orgGrpName asc";
             qry = session.createQuery(queryString);
             groups = qry.list();
         } catch (Exception e) {
@@ -6886,12 +6891,19 @@ public class DbUtil {
         int size = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "select  distinct f.ampDonorOrgId "
-             + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " + " inner join res.ampQuestionId  q  " + " inner join q.ampIndicatorId ind  " + " inner join ah.ampActivityId act   " + " inner join act.funding f   " + " inner join  f.fundingDetails fd   " + " where act.team is not null " + " and fd.transactionType =1 and  fd.adjustmentType =1" +
+            String queryString = "select  distinct f.ampDonorOrgId from "
+             + AmpAhsurvey.class.getName() + " ah inner join ah.responses res  " 
+             + " inner join res.ampQuestionId  q  " 
+             + " inner join q.ampIndicatorId ind  " +
+             " inner join ah.ampActivityId act   " 
+             + " inner join act.funding f   " 
+             + " inner join  f.fundingDetails fd   " 
+             + " where act.team is not null " 
+             + " and fd.transactionType =1 and  fd.adjustmentType =1" +
                     " and year(fd.transactionDate)=:year " + " and ind.ampIndicatorId=:indId";
                 queryString += " and res.response='Yes' ";
                 for (int i = 0; i < questionNumber.length; i++) {
-                    queryString += " and   q.questionNumber="+ questionNumber[0];
+                    queryString += " and   q.questionNumber="+ questionNumber[i];
                     
                 }
                 
@@ -7028,15 +7040,15 @@ public class DbUtil {
      * @param year
      * @return
      */
-     public static Double getIndicator10aValue(Long year, Long orgId) {
-        Double value = null;
+     public static long getIndicator10aValue(Long year, Long orgId) {
+        long value = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
             String queryString = "select  count(distinct cal)  from "
                     + AmpCalendar.class.getName() 
                     + " cal inner join cal.eventType  type "
-                    +" inner join cal.organisations orgs  where year(cal.calendarPK.calendar.startDate)=:year or year(cal.calendarPK.calendar.endDate)=:year" 
-                    +" group by orgs having count(elements(orgs))>1";
+                    +" inner join cal.organisations orgs  where (year(cal.calendarPK.calendar.startDate)=:year or year(cal.calendarPK.calendar.endDate)=:year)" 
+                    +" and size(cal.organisations)>1 and type.name='Mission'";
                 
                       
                     

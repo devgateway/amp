@@ -50,7 +50,7 @@ function changeState() {
               <div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
               </div>
             </td>
-            <td style="padding:5px;width:115px;text-align:center;font-weight:bold;">
+            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;">
             ${eventType.name}
             </td>
             <td>
@@ -76,7 +76,7 @@ function changeState() {
           <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
             <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" />
           </td>
-          <td style="padding:5px;width:115px;text-align:center;font-weight:bold;">
+          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;">
             <digi:trn key="calendar:donorsNone">None</digi:trn>
           </td>
         </tr>
@@ -85,7 +85,7 @@ function changeState() {
             <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;font-weight:bold;">
               <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
             </td>
-            <td style="padding:5px;width:115px;text-align:center;font-weight:bold;">
+            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;">
               ${donor.label}
             </td>
           </tr>

@@ -440,52 +440,85 @@ function recurEvent(){
 			                  <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
 			                  <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                    <table>
-			                        <tr>
-			                            <td valign="top" style="padding: 10px">
-			                                <table>
-			                                    <tr>
-			                                        <td nowrap="nowrap" style="text-align: right" align="right">
-			                                            <digi:trn key="calendar:title">Event title:</digi:trn>
-			                                            <font color="red" size="3px">*</font>
-			                                        </td>
-			                                        <td width="220px">
-			                                        		<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 100%" styleClass="inp-text"/>
-			                                        </td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td nowrap="nowrap" align="right" style="text-align: right">
-			                                            <digi:trn key="calendar:cmbCalendarType">Calendar type:</digi:trn>
-			                                        </td>
-			                                        <td align="left">
-			                                          <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
+			                    	<tr>
+			                    		<td nowrap="nowrap" align="right" style="vertical-align: text-top">
+			                    			<font color="red" size="3px">*</font>
+			                    			<digi:trn key="calendar:evntTitle">Event title</digi:trn>			                                
+			                    		</td>
+			                    		<td align="left" style="width: 220px;vertical-align: top;">
+			                    			<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
+			                    		</td>
+			                    		<td rowspan="2" style="text-align: center;">
+			                    			<digi:trn key="calendar:orgs">Organizations</digi:trn>
+			                    		</td>
+			                    		<td rowspan="2" align="left" valign="top">
+			                    			 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
+			                                        	<logic:notEmpty name="calendarEventForm" property="organizations">
+															<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<html:option value="${organization.ampOrgId}">${organization.name}</html:option>
+															</logic:iterate>
+														</logic:notEmpty>
+			                                          </html:select>
+			                    		</td>
+			                    		<td rowspan="2" valign="top">
+			                    			<table cellSpacing="1" cellPadding="1">
+												<tr>
+													<td>
+														<aim:addOrganizationButton refreshParentDocument="false" styleClass="myStyleClass" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">
+															<digi:trn key="btn:remove">Remove</digi:trn>
+														</html:button>
+													</td> 
+												</tr>
+											</table>	
+			                    		</td>
+			                    	</tr>
+			                    	
+			                    	<tr>
+			                    		<td align="right" nowrap="nowrap" style="text-align: right;">
+			                    			<digi:trn key="calendar:cType">Calendar type</digi:trn>
+			                    		</td>
+			                    		<td align="left">
+			                    			 <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                                          <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()" styleClass="inp-text">
 			                                            <c:if test="${!empty calendarEventForm.calendarTypes}">
 			                                              <c:set var="types" value="${calendarEventForm.calendarTypes}"/>
 			                                              <html:options collection="types" property="value" labelProperty="label"/>
 			                                            </c:if>
 			                                          </html:select>
-			                                        </td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td nowrap="nowrap" align="right" style="text-align: right">
-			                                            <digi:trn key="calendar:type">Event type:</digi:trn>
-			                                        </td>
-			                                        <td align="left">
-			                                          <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
+			                    		</td>			                    		
+			                    	</tr>
+			                    	<tr style="height:25px">
+			                    		<td valign="top" align="right" nowrap="nowrap" rowspan="1">
+			                    			<digi:trn key="calendar:eventsType">Event type</digi:trn>
+			                    		</td>
+			                    		<td align="left" valign="top" rowspan="1">
+			                    			 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
 			                                            <c:if test="${!empty calendarEventForm.eventTypesList}">
 			                                              <c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
 			                                                <html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
 			                                              </c:forEach>
 			                                            </c:if>
 			                                          </html:select>
-			                                        </td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td nowrap="nowrap" align="right" style="text-align: right">
-			                                            <digi:trn key="calendar:StartDate">Start date:</digi:trn>
-			                                        </td>
-			                                        <td align="left" style="width: 220px">			                                        	
-			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                    		</td>
+			                    		<td rowspan="4" style="text-align: center" align="right" nowrap="nowrap">
+			                    			<digi:trn key="calendar:Description">Description</digi:trn>
+			                    		</td>
+			                    		<td style="width: 220px" align="left" rowspan="4">
+			                    			<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
+			                    		</td>
+			                    		<td>&nbsp;</td>			                    		
+			                    	</tr>
+			                    	<tr style="height: 25px;">
+			                    		<td nowrap="nowrap" align="right" style="text-align: right;vertical-align: top;" >
+			                    			<digi:trn key="calendar:StDate">Start date</digi:trn>
+			                    		</td>
+			                    		<td align="left" style="width: 220px;vertical-align: top;">
+			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
 			                                            <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
 			                                            <table cellpadding="0" cellspacing="0">
@@ -510,19 +543,19 @@ function recurEvent(){
 			                                                  </a>
 			                                                </td>
 			                                                <td>&nbsp;&nbsp;</td>
-			                                                <td>
+			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}"><c:set var="hour" value="0${hour}"/></c:if>
 			                                                      <option value="${hour}" class="inp-text">${hour}</option>
 			                                                    </c:forEach>
-			                                                  </select>
-			                                                  <script type="text/javascript">
-			                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
-			                                                  </script>
+			                                                  </select>			                                                 
+			                                                  	<script type="text/javascript">
+				                                                  selectOptionByValue(document.getElementById('selectedStartHour'), get('hour', document.getElementById('selectedStartTime').value));
+				                                                </script>	                                                  
 			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-			                                                <td>
+			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedStartMinute" onchange="updateTime(document.getElementById('selectedStartTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
@@ -603,14 +636,15 @@ function recurEvent(){
 			                                              </tr>
 			                                            </table>
 			                                          </c:if>
-			                                        </td>
-			                                      			                                    
-			                                    <tr>
-			                                        <td nowrap="nowrap" align="right" style="text-align: right">
-			                                            <digi:trn key="calendar:EndDate">End Date</digi:trn>
-			                                        </td>
-			                                        <td align="left">
-			                                          <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                    		</td>			                    		
+			                    		<td>&nbsp;</td>
+			                    	</tr>
+			                    	<tr height="25px;">
+			                    		<td  nowrap="nowrap" align="right" style="text-align: right">
+			                    			<digi:trn key="calendar:EndDate">End Date</digi:trn>
+			                    		</td>
+			                    		<td>
+			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                            <table cellpadding="0" cellspacing="0">
 			                                              <tr>
 			                                                <td nowrap="nowrap">
@@ -635,7 +669,7 @@ function recurEvent(){
 			                                                <td>
 			                                                &nbsp;&nbsp;
 			                                                </td>
-			                                                <td>
+			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
 			                                                    <c:forEach var="hour" begin="0" end="23">
 			                                                      <c:if test="${hour < 10}">
@@ -649,7 +683,7 @@ function recurEvent(){
 			                                                  </script>
 			                                                </td>
 			                                                <td nowrap="nowrap">&nbsp;<b>:</b>&nbsp;</td>
-			                                                <td>
+			                                                <td  style="font-family: Tahoma;font-size: 11px">
 			                                                  <select id="selectedEndMinute" onchange="updateTime(document.getElementById('selectedEndTime'), 'minute', this.value)">
 			                                                    <c:forEach var="minute" begin="0" end="59">
 			                                                      <c:if test="${minute < 10}"><c:set var="minute" value="0${minute}"/></c:if>
@@ -726,82 +760,38 @@ function recurEvent(){
 			                                              </tr>
 			                                            </table>
 			                                          </c:if>
-			                                        </td>
-			                                    </tr>
-			                                    <tr>
-			                                        <td>
-			                                        </td>
-			                                        <td>
-			                                          <html:hidden name="calendarEventForm" property="privateEvent"/>
+			                    		</td>			                    		
+			                    		<td>&nbsp;</td>
+			                    	</tr>
+			                    	<tr height="25px;">
+			                    		<td>&nbsp;</td>
+			                    		<td style="vertical-align: top">
+			                    			<html:hidden name="calendarEventForm" property="privateEvent"/>
 			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
 				                                          <c:if test="${!calendarEventForm.privateEvent }">
 				                                          	CHECKED
 				                                          </c:if>                                          
 			                                          />
 			                                          <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
-			                                        </td>
-			                                    </tr>
-			                                </table>
-			                            </td>
-			                            <td valign="top">
-			                                <table>
-			                                    <tr>
-			                                    	<td style="width: 12px">&nbsp;</td>
-			                                        <td nowrap="nowrap" align="right">
-			                                            <digi:trn key="calendar:orgs">Organizations</digi:trn> 
-			                                        </td>
-			                                        <td align="left">
-			                                        
-			                                        <html:select multiple="multiple" property="selOrganizations" size="3" style="width: 220px; height:50px;">
-			                                        	<logic:notEmpty name="calendarEventForm" property="organizations">
-															<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-																<html:option value="${organization.ampOrgId}">${organization.name}</html:option>
-															</logic:iterate>
-														</logic:notEmpty>
-			                                          </html:select>			                                        
-			                                        </td> 
-			                                        <td>                                        	
-														<table cellSpacing="1" cellPadding="1">
-															<tr>
-																<td>
-																	<aim:addOrganizationButton refreshParentDocument="false" styleClass="myStyleClass" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
-																</td>
-															</tr>
-															<tr>
-																<td>
-																	<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">
-																		<digi:trn key="btn:remove">Remove</digi:trn>
-																	</html:button>
-																</td> 
-															</tr>
-														</table>											
-			                                        </td>
-			                                    </tr>
-			                                    <tr>
-			                                    	<td style="width: 12px">&nbsp;</td>
-			                                        <td nowrap="nowrap" align="right">
-			                                            <digi:trn key="calendar:Description">Description</digi:trn>
-			                                        </td>
-			                                        <td align="left" width="220px">
-			 											<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="5"/>
-			                                        </td>
-			                                    </tr>
-			                                </table>
-			                            </td>
-			                        </tr>
-			                        <tr>
-			                            <td colspan="20" style="text-align:center;font-size: 12px">
-			                                <table align="center">
-			                                    <tr>
-			                                    	<td style="width:75px" >&nbsp;&nbsp;</td>
-			                                        <td nowrap="nowrap">
-			                                            <digi:trn key="calendar:Attendee">Attendee</digi:trn>
-			                                            <font color="red" size="3px">*</font>
-			                                        </td>
-			                                    </tr>
-			                                    <tr>
-			                                    	<td style="width: 75px">&nbsp;</td>
-			                                        <td style="width: 220px">
+			                    		</td>			                    		
+			                    		<td>&nbsp;</td>			                    		
+			                    	</tr>
+			                    	<tr height="25px;">
+			                    		<td colspan="5"> &nbsp;</td>
+			                    	</tr>
+			                    	<tr>
+			                    		<td>&nbsp;</td>
+			                    		<td>
+			                    			<font color="red" size="3px">*</font>
+			                    			<digi:trn key="calendar:Attendee">Attendee</digi:trn>			                                            
+			                    		</td>
+			                    		<td> &nbsp;</td>
+			                    		<td>&nbsp;</td>
+			                    		<td>&nbsp;</td>
+			                    	</tr>
+			                    	<tr>
+			                    		<td>&nbsp;</td>
+			                    		 <td style="width: 220px">
 			                                          <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width: 220px; height: 150px;">
 			                                            <c:if test="${empty calendarEventForm.teamMapValues}">
 			                                              <option value="-1">No receivers</option>
@@ -825,43 +815,47 @@ function recurEvent(){
 					                       			  	<input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
 			                                        </td>
 			                                        <td>
-			                                            <div>
-			                                                <input id="guest" type="text" style="width:220px;">
-			                                                <input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
-			                                                <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>			                                               
-			                                            </div>
-			                                            <div>
-			                                              <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 120px;">
-			                                                <c:if test="${!empty calendarEventForm.selectedAttsCol}">
-			                                                  <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
-			                                                </c:if>
-			                                              </html:select>
-			                                            </div>
+			                                        	<table width="100%" height="100%">
+			                                        		<tr height="25px">
+			                                        			<td style="width: 100%;height: 100%">
+			                                        				<input id="guest" type="text" style="width:220px;height: 25px">
+			                                        			</td>
+			                                        		</tr>
+			                                        		<tr height="125px">
+			                                        			<td style="width: 100%;height: 100%">
+			                                        				<html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 125px;">
+						                                                <c:if test="${!empty calendarEventForm.selectedAttsCol}">
+						                                                  <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
+						                                                </c:if>
+						                                              </html:select>
+			                                        			</td>
+			                                        		</tr>
+			                                        	</table>
 			                                        </td>
-			                                    </tr>
-			                                </table>
-			                            </td>
-			                        </tr>
-			                        <tr>
-			                          <td colspan="10" style="text-align:center;">                            
-			                            <input type="submit" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
+			                                        <td style="vertical-align: top;">
+			                                        	<input type="button" style="width:65px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
+			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
+			                                        </td>
+			                    	</tr>
+			                    	<tr>
+			                          <td colspan="5" style="text-align:center;">                            
+			                            <input type="submit" style="width: 105px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 			                            &nbsp;
-			                            <input type="submit" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            <input type="submit" style="width: 105px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            &nbsp;                            
-			                            <input type="button" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                            <input type="button" style="width: 105px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
 			                          </td>
 			                        </tr>
 			                    </table>
 			                </div>
 			            </td>
-        </tr>       
+        			</tr>       
 				</table>
-			</td>
-    	
-              </table>
-          </td>
-        </tr>	
-    </table>
+			</td>    	
+        	</table>
+    	</td>
+	</tr>	
+</table>
 
 <div id="myEvent" style="display:none;" >
 		<jsp:include page="/calendar/recurringEvent.do" />

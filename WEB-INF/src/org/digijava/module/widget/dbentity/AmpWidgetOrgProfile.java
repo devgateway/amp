@@ -5,6 +5,8 @@
 
 package org.digijava.module.widget.dbentity;
 
+import org.digijava.module.widget.helper.WidgetVisitor;
+
 /**
  *
  * @author medea
@@ -20,6 +22,10 @@ public class AmpWidgetOrgProfile extends AmpWidget {
 
     public void setType(Long type) {
         this.type = type;
+    }
+    @Override
+    public void accept(WidgetVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

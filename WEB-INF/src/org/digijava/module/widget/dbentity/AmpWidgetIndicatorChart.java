@@ -1,6 +1,7 @@
 package org.digijava.module.widget.dbentity;
 
 import org.digijava.module.aim.dbentity.IndicatorSector;
+import org.digijava.module.widget.helper.WidgetVisitor;
 
 /**
  * Chart widget for indicators.
@@ -20,5 +21,8 @@ public class AmpWidgetIndicatorChart extends AmpWidget {
 	public void setIndicator(IndicatorSector indicator) {
 		this.indicator = indicator;
 	}
-
+        @Override
+        public void accept(WidgetVisitor visitor) {
+            visitor.visit(this);
+        }
 }

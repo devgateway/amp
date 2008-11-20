@@ -1,6 +1,7 @@
 package org.digijava.module.widget.dbentity;
 
 import java.util.Set;
+import org.digijava.module.widget.helper.WidgetVisitor;
 
 /**
  * Table widget entity.
@@ -40,5 +41,9 @@ public class AmpDaTable extends AmpWidget{
 	public void setColumns(Set<AmpDaColumn> columns) {
 		this.columns = columns;
 	}
-	
+      @Override
+        public void accept(WidgetVisitor visitor) {
+            visitor.visit(this);
+        }
+
 }

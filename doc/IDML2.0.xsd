@@ -27,6 +27,8 @@
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="title" type="freeTextType" maxOccurs="unbounded"/>
+			<xs:element name="objective" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="description" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="implementationLevels" type="codeValueType"/>
 			<xs:element name="locations" maxOccurs="unbounded">
 				<xs:complexType>
@@ -55,8 +57,6 @@
 			<xs:element name="notes" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="keywords" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="descriptions" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="objectives" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="components" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
@@ -146,6 +146,7 @@
 			</xs:element>
 			<xs:element name="donorContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="govContacts" type="contactType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="additional" type="additionalFieldType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="dbKey" type="xs:string" use="required"/>
 		<xs:attribute name="rights" type="xs:int" use="optional"/>
@@ -218,5 +219,23 @@
 			<xs:element name="lastName" type="xs:string"/>
 			<xs:element name="email" type="xs:string"/>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="additionalFieldType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="language" type="xs:string" use="optional"/>
+				<xs:attribute name="field" type="xs:string" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="String"/>
+							<xs:enumeration value="Number"/>
+							<xs:enumeration value="Date"/>
+							<xs:enumeration value="Boolean"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 </xs:schema>

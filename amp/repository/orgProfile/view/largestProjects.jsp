@@ -8,14 +8,14 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <digi:instance property="orgProfLargestProjectsForm"/>
-    <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
-<table border="1">
-    <th colspan="3">5 Largest projects</th>
-    <tr>
-        <td>Project title</td>
-        <td>Commitment (USD million)</td>
-        <td>Sector</td>
+
+<table border="1" id="lgProjects" bgcolor="#dddddd">
+    <th colspan="3" bgcolor="#999999" style="color:black">5 Largest projects</th>
+    <tr colspan="3">
+        <td bgcolor="#999999" style="color:black">Project title</td>
+        <td bgcolor="#999999" style="color:black">Commitment (USD million)</td>
+        <td bgcolor="#999999" style="color:black">Sector</td>
     </tr>
      
           <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  >
@@ -34,6 +34,8 @@
     
 	
 </table>
-    </div>
- 
+<script language="javascript">
+setStripsTable("lgProjects", "tableEven", "tableOdd");
+setHoveredTable("lgProjects");
+</script>
 

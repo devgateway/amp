@@ -4,6 +4,8 @@
 		<page page="filter" name="filter" title="Filter"/>
 
 		<page page="largestProjects" name="largestProjects" title="5 Largest Projects"/>
+                <page page="parisIndicators" name="parisIndicators" title="Paris Indicators"/>
+                
 	</secondary-pages>
 	<module>
              	

@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpFundingDetail implements Serializable
@@ -40,17 +41,38 @@ public class AmpFundingDetail implements Serializable
         private Double transactionAmountInUSD;
         
         public AmpFundingDetail(){}
-        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent){
-            this.transactionType=transactionType;
-            this.adjustmentType=adjustmentType;
-            this.transactionDate=transactionDate;
-            this.ampCurrencyId=ampCurrencyId;
+        
+        
+        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId, Float percent,Double fixedExchangeRate){
+            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
             if(percent==null||percent==0){
             this.transactionAmount=transactionAmount;
             }
             else{
                 this.transactionAmount=transactionAmount*percent/100;
             }
+        }
+        
+        // used in org profile for indicator 4
+         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate, Long ahsureyId){
+            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+            this.transactionAmount=transactionAmount*DbUtil.getQ4Value(ahsureyId);
+     
+        }
+          // used in org profile 
+         public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Double transactionAmount,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+            this(transactionType,adjustmentType,transactionDate,ampCurrencyId,fixedExchangeRate); 
+            this.transactionAmount=transactionAmount;
+            
+        }
+         
+        public AmpFundingDetail(Integer transactionType,Integer adjustmentType,Date transactionDate,AmpCurrency ampCurrencyId,Double fixedExchangeRate){
+            this.transactionType=transactionType;
+            this.adjustmentType=adjustmentType;
+            this.transactionDate=transactionDate;
+            this.ampCurrencyId=ampCurrencyId;
+            this.fixedExchangeRate=fixedExchangeRate;
+            
         }
         
 

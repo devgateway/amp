@@ -104,8 +104,8 @@ public final class TableWidgetUtil {
 			cell = new WiCellFiltered();
 			((WiCellFiltered)cell).setFilterItemId(((AmpDaValueFiltered)value).getFilterItemId());
 		}else{
-			cell = new WiCellStandard(value);
-		}
+                    cell = new WiCellStandard(value);
+                }
 		cell.setId(value.getId());
 		cell.setPk(value.getPk());
 		cell.setValue(value.getValue());

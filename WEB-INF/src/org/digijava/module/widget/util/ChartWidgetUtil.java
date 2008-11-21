@@ -207,8 +207,8 @@ public class ChartWidgetUtil {
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		
 		}
-	
-		
+
+         
 		return chart;
 	}
     
@@ -262,7 +262,7 @@ public class ChartWidgetUtil {
                 for (AmpCategoryValue financingInstrument : financingInstruments) {
                     DecimalWraper funding = getFundingByFinancingInstrument(filter.getOrgId(), i, financingInstrument.getId(), currCode,filter.getTransactionType());
                     result.addValue(funding.doubleValue()/MILLION, financingInstrument.getValue(), new Long(i));
-                }
+                    }
 
             }
 
@@ -717,7 +717,7 @@ public class ChartWidgetUtil {
             Iterator<AmpRegion> regionIter = regions.iterator();
             while (regionIter.hasNext()) {
                 AmpRegion region = regionIter.next();
-                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,loc.locationPercentage) ";
+                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,loc.locationPercentage,fd.fixedExchangeRate) ";
                 oql += " from ";
                 oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -733,7 +733,6 @@ public class ChartWidgetUtil {
                 query.setLong("orgID", orgID);
                 query.setLong("transactionType", transactionType);
                 List<AmpFundingDetail> fundingDets = query.list();
-                System.out.println(query.list().size());
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(fundingDets, currCode);
                 DecimalWraper total =null;
@@ -749,6 +748,7 @@ public class ChartWidgetUtil {
 
 
         } catch (Exception e) {
+            logger.error(e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }
@@ -797,7 +797,7 @@ public class ChartWidgetUtil {
             Iterator<AmpSector> sectorIter = sectors.iterator();
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
-                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage) ";
+                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
                 oql += " from ";
                 oql += AmpFundingDetail.class.getName() +
                         " as fd inner join fd.ampFundingId f ";
@@ -816,7 +816,6 @@ public class ChartWidgetUtil {
                 query.setLong("orgID", orgID);
                 query.setLong("transactionType", transactionType);
                 List<AmpFundingDetail> fundingDets = query.list();
-                System.out.println(query.list().size());
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(fundingDets, currCode);
                 DecimalWraper total =null;
@@ -832,6 +831,7 @@ public class ChartWidgetUtil {
 
 
         } catch (Exception e) {
+            logger.error(e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }
@@ -878,6 +878,7 @@ public class ChartWidgetUtil {
            
 
         } catch (Exception e) {
+            logger.error(e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }
@@ -923,6 +924,7 @@ public class ChartWidgetUtil {
             }
 
         } catch (Exception e) {
+            logger.error(e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }
@@ -965,6 +967,7 @@ public class ChartWidgetUtil {
            
 
         } catch (Exception e) {
+            logger.error(e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }
@@ -1008,6 +1011,7 @@ public class ChartWidgetUtil {
             }
 
         } catch (Exception e) {
+            logger.error(e);
             throw new DgException(
                     "Cannot load sector fundings by donors from db", e);
         }

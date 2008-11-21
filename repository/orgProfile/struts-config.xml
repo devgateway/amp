@@ -7,6 +7,7 @@
                 <form-bean name="orgProfOrgProfileFilterForm" type="org.digijava.module.orgProfile.form.OrgProfileFilterForm" />
                 <form-bean name="orgProfLargestProjectsForm" type="org.digijava.module.orgProfile.form.LargestProjectsForm" />
                 <form-bean name="gisWidgetTeaserForm" type="org.digijava.module.widget.form.WidgetTeaserForm"/>
+                <form-bean name="orgProfilePIForm" type="org.digijava.module.orgProfile.form.OrgProfilePIForm"/>
 	</form-beans>
 	
 	<action-mappings>
@@ -16,6 +17,10 @@
           <action name="orgProfLargestProjectsForm" path="/orgProfile/showLargestProjects" type="org.digijava.module.orgProfile.action.ShowLargestProjects" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=largestProjects"/>
 	</action>
+        <action name="orgProfilePIForm" path="/orgProfile/showParisIndicator" type="org.digijava.module.orgProfile.action.OrgProfileParisIndicatorAction" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=parisIndicators"/>
+	</action>
+       
 		
 		<!-- Teasers below this -->
           <action name="orgProfSummaryTeaserForm" path="/orgProfile/orgSummary" type="org.digijava.module.orgProfile.action.OrgSummary"/>

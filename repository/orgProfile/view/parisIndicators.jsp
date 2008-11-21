@@ -23,11 +23,11 @@
        </td>
     </tr>
     <tr>
-        <td>2005 Baseline</td>
-        <td>${orgProfilePIForm.fiscalYear-1} Value</td>
-        <td>2010 Target</td>
-        <td>2005 Baseline</td>
-        <td>${orgProfilePIForm.fiscalYear-1} Value</td>
+        <td bgcolor="#999999" style="color:black">2005 Baseline</td>
+        <td bgcolor="#999999" style="color:black">${orgProfilePIForm.fiscalYear-1} Value</td>
+        <td bgcolor="#999999" style="color:black">2010 Target</td>
+        <td bgcolor="#999999" style="color:black">2005 Baseline</td>
+        <td bgcolor="#999999" style="color:black">${orgProfilePIForm.fiscalYear-1} Value</td>
         
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">

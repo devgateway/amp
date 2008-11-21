@@ -6870,7 +6870,7 @@ public class DbUtil {
                 total = cal.getTotPlanDisb();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unable get value ", e);
 
         }
 
@@ -6922,7 +6922,7 @@ public class DbUtil {
             }
            size=qry.list().size();
         } catch (Exception e) {
-            e.printStackTrace();
+             logger.error("Unable get value ", e);
 
         }
 
@@ -6980,7 +6980,7 @@ public class DbUtil {
            
             
         } catch (Exception e) {
-            e.printStackTrace();
+              logger.error("Unable get value ", e);
 
         }
 
@@ -7022,7 +7022,7 @@ public class DbUtil {
            
                 
         } catch (Exception e) {
-            e.printStackTrace();
+              logger.error("Unable get value ", e);
 
         }
 
@@ -7044,23 +7044,36 @@ public class DbUtil {
         long value = 0;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            String queryString = "select  count(distinct cal)  from "
+            String queryString = "select  distinct cal  from "
                     + AmpCalendar.class.getName() 
                     + " cal inner join cal.eventType  type "
-                    +" inner join cal.organisations orgs  where (year(cal.calendarPK.calendar.startDate)=:year or year(cal.calendarPK.calendar.endDate)=:year)" 
-                    +" and size(cal.organisations)>1 and type.name='Mission'";
+                    +" inner join cal.organisations   where (year(cal.calendarPK.calendar.startDate)=:year or year(cal.calendarPK.calendar.endDate)=:year)" 
+                    +" and type.name='Mission' " ; //I think we need made changes in db structure
                 
                       
-                    
-            Query qry = session.createQuery(queryString);
+            if(orgId!=null){
+                 queryString+=" and :orgId in elements(cal.organisations)";
+            }  
+            Query qry = session.createQuery(queryString+" and size(cal.organisations)>1 "); //joint
             qry.setLong("year", year);
-            List val=qry.list();
+            if(orgId!=null){
+                qry.setLong("orgId", orgId); 
+            }  
+            long jointMisssion=qry.list().size();
+            qry = session.createQuery(queryString); // all missions
+            qry.setLong("year", year);
+            if(orgId!=null){
+                qry.setLong("orgId", orgId); 
+            }  
+            long allMisssion=qry.list().size();
+            if(allMisssion>0){
+                value=jointMisssion/allMisssion;
+            }
            
            
-                
         } catch (Exception e) {
-            e.printStackTrace();
-
+             logger.error("Unable get value ", e);
+             e.printStackTrace();
         }
 
         return value;

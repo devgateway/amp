@@ -5,8 +5,8 @@
 package org.digijava.module.orgProfile.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
-import java.util.Currency;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -65,7 +65,13 @@ public class OrgProfileFilterAction extends Action {
         for (long i = yearFrom; i <= (yearFrom + countYear); i++) {
 			orgForm.getYears().add(new BeanWrapperImpl(new Long(i)));
         }
-        Long year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        Long year =null;
+        try{
+                year=Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
+        }
+        catch(NumberFormatException ex){
+           year=new Long(Calendar.getInstance().get(Calendar.YEAR));
+        }
         
         if(orgForm.getYear()==null){
             orgForm.setYear(year);

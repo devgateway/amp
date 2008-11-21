@@ -647,6 +647,7 @@
 			</module>
                         <module name="orgProfile">
 				<page>largestProjects</page>
+                                <page>parisIndicators</page>
 			</module>
 		</page-group>
 	</site-layout>

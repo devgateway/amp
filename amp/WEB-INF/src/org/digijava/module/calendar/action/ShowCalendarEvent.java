@@ -50,7 +50,9 @@ import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.form.CalendarEventForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.dbentity.ItemStatus;
+import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
+import org.digijava.module.message.util.AmpMessageUtil;
 
 public class ShowCalendarEvent extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -227,6 +229,8 @@ public class ShowCalendarEvent extends Action {
             Set<AmpCalendarAttendee> atts =  new HashSet<AmpCalendarAttendee>();
             String[] slAtts = ceform.getSelectedAtts();
             if (slAtts != null) {
+            	 //getting settings for message
+            	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
                 for (int i = 0; i < slAtts.length; i++) {
                     AmpCalendarAttendee att = new AmpCalendarAttendee();
                     att.setAmpCalendar(ampCalendar); 
@@ -234,6 +238,11 @@ public class ShowCalendarEvent extends Action {
                         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
                         att.setMember(member);
                         atts.add(att);
+                    	//If emailable=true in Message Manager,then e-mails should be sent to attendees too
+                        if(settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))){
+                        	//creating internet address where the mail will be sent
+                        	addressCol.add(new InternetAddress(member.getUser().getEmail()));
+                        }
                     } else if (slAtts[i].startsWith("g:")) {
                         att.setGuest(slAtts[i]);
                         atts.add(att);

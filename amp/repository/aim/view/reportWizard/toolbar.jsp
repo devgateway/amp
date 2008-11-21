@@ -2,7 +2,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-	
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+
 	<c:set var="className" value="toolbar"/>
 	<c:set var="imgName" value="prev.png"/>
 	<c:set var="disabledString" value=" "/>

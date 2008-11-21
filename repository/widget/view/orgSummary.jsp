@@ -7,33 +7,35 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-    <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+   
 
-<table>
-    <th colspan="2">Summary</th>
+<table id="orgTable" border="1">
+    <th colspan="2" bgcolor="#999999" style="color:black">Summary</th>
     <tr>
-        <td>Organization Name:</td><td>${organization.name}</td>
+        <td>Organization Name:</td><td>${organization.name}&nbsp;</td>
     </tr>
       <tr>
-        <td>Organization Acronym:</td><td>${organization.acronym}</td>
+        <td>Organization Acronym:</td><td>${organization.acronym}&nbsp;</td>
     </tr>
       <tr>
-        <td>Donor Group:</td><td>${organization.orgGrpId.orgGrpName}</td>
+        <td>Donor Group:</td><td>${organization.orgGrpId.orgGrpName}&nbsp;</td>
     </tr>
       <tr>
-        <td>Web Link:</td><td>${organization.orgUrl}</td>
+        <td>Web Link:</td><td>${organization.orgUrl}&nbsp;</td>
     </tr>
      <tr>
-        <td>Contact Name:</td><td>${organization.contactPersonName}</td>
+        <td>Contact Name:</td><td>${organization.contactPersonName}&nbsp;</td>
     </tr>
      <tr>
-        <td>Contact Phone:</td><td>${organization.phone}</td>
+        <td>Contact Phone:</td><td>${organization.phone}&nbsp;</td>
     </tr>
      <tr>
-        <td>Contact Email:</td><td>${organization.email}</td>
+        <td>Contact Email:</td><td>${organization.email}&nbsp;</td>
     </tr>
 	
 </table>
-    </div>
  
-
+<script language="javascript">
+setStripsTable("orgTable", "tableEven", "tableOdd");
+setHoveredTable("orgTable");
+</script>

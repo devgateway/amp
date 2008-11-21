@@ -10,15 +10,15 @@
 <digi:instance property="orgProfilePIForm"/>
 <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
-<table border="1">
+<table border="1" id="pIndicator">
   
     <tr>
-        <td colspan="2" rowspan="2">
+        <td colspan="2" rowspan="2" bgcolor="#999999" style="color:black">
             PARIS DECLARATION INDICATORS - DONORS</td>
-        <td colspan="3" align="center">
+        <td colspan="3" align="center" bgcolor="#999999" style="color:black">
             All donors
        </td>
-       <td colspan="2" align="center">
+       <td colspan="2" align="center" bgcolor="#999999" style="color:black">
            ${orgProfilePIForm.organization.name}
        </td>
     </tr>
@@ -51,5 +51,10 @@
     
 </table>
 </div>
+<script language="javascript">
+setStripsTable("pIndicator", "tableEven", "tableOdd");
+setHoveredTable("pIndicator");
+</script>
+
  
 

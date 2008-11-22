@@ -8,6 +8,7 @@
 <%@ page import="java.util.List"%>
 
 <%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
+
 <digi:instance property="cmCategoryManagerForm" />
 <bean:define id="myForm" name="cmCategoryManagerForm" toScope="session" type="org.digijava.module.categorymanager.form.CategoryManagerForm" />
 
@@ -43,8 +44,8 @@
 <script type="text/javascript">
 	
       
-    function addNewValue() {
-    	var subForm				= document.forms[1];
+    function addNewValue(position) {
+    	var subForm				= document.forms["cmCategoryManagerForm"];
     	var fieldNumStr			= subForm.numOfAdditionalFields.value;
     	var fieldNum			= parseInt(fieldNumStr);
     	if ( isNaN(fieldNumStr) || fieldNum < 1 || fieldNum > 30 ) {
@@ -52,6 +53,8 @@
     		return false;
     	}
  		subForm.action			= "/categorymanager/categoryManager.do?addValue=true";
+ 		if ( position > 0 )
+ 			subForm.action		= "/categorymanager/categoryManager.do?addValue=true&position="+position;
  		subForm.submit();
 	}
 	
@@ -64,35 +67,7 @@
             alert ("${translation2}");
             return false;
         } 
-       var fieldTypes=document.cmCategoryManagerForm.getElementsByTagName("select");
-        var countryNum=0;
-        var regionNum=0;
-	if(fieldTypes!=null&&fieldTypes.length>0){
-		for (var i=0;i<fieldTypes.length;i++){
-			
-			if (fieldTypes[i].selectedIndex==1){
-				countryNum++;
-                                if(countryNum>1){
-                                    alert("${translation4}");
-                                    return false;
-                                }
-			}
-                        if (fieldTypes[i].selectedIndex==2){
-				regionNum++;
-                                if(regionNum>1){
-                                    alert("${translation5}");
-                                    return false;
-                                }
-			}
-		}
-                if(countryNum==0){
-                    alert("${translation4}");
-                    return false;
-                }
-	}
-	
-	
-        
+        document.forms["cmCategoryManagerForm"].submitPressed.value	= "true";
         document.cmCategoryManagerForm.submit();
     }
 	function deleteField(id, deleteId, undoId,disabeledId) {
@@ -176,8 +151,8 @@
 				<tr>
 				<td>
 	<digi:form action="/categoryManager.do" method="post">
-		<html:hidden property="addNewCategory" value="yes" /> 
-		<table cellpadding="5px" cellspacing="5px" valign="top">
+		<html:hidden property="submitPressed" value="false" /> 
+		<table cellpadding="5px" cellspacing="5px" valign="top" width="80%">
 			<tr>
 				<td colspan="2">
 					<digi:trn key="aim:categoryManagerAddNameText">
@@ -225,10 +200,15 @@
 				<tr>
 				<td id="possibleValuesTd" colspan="2">
 					<div id="possibleValuesDiv">
-					<digi:trn key="aim:categoryManagerAddPossibleValueKeysText">
+					<%--<digi:trn key="aim:categoryManagerAddPossibleValueKeysText">
 							Please enter possible <strong>value keys</strong> :
 					</digi:trn>
-					<br /> <br />
+					<br /> <br /> --%>
+			<digi:trn key="aim:categoryManagerAddMoreFields">
+				Add More Fields
+			</digi:trn>:
+		
+			<html:text property="numOfAdditionalFields" size="4" value="1"/>
 			<table cellpadding="5px" cellspacing="5px">
 				<tr>
 					<td width="35%"><strong>Category Value Key</strong></td>
@@ -237,7 +217,7 @@
 				</tr>
 			<c:forEach var="possibleVals" items="${myForm.possibleVals}" varStatus="index">
 				<bean:define id="pVal" toScope="page" name="possibleVals" type="org.digijava.module.categorymanager.util.PossibleValue" />
-               <c:choose>
+               <%-- <c:choose>
                	<c:when test="${possibleVals.disable}">
                		<c:set var="textDecorationStyle" scope="page">text-decoration:line-through;</c:set>
                		<c:set var="textDisabled" scope="page" value="true" />
@@ -251,27 +231,34 @@
                		<c:set var="undeleteField" scope="page">display: none</c:set>
                	</c:otherwise>
                	
-               </c:choose>
+               </c:choose> --%>
                
-               <c:choose>
-					<c:when test="${pVal.value != '' && !possibleVals.disable}">
-						<c:set var="textReadonly" value="true" />
-						<c:set var="textColorStyle" value="color: black; background-color:white; border-style: none; " />
-					</c:when>
-					<c:otherwise>
-						<c:set var="textReadonly" value="false" />
-						<c:set var="textColorStyle"> </c:set>
-					</c:otherwise>
-				</c:choose>
+				<c:if test="${pVal.id != null && pVal.id != 0 && !pVal.disable}">
+					<c:set var="textReadonly" value="true" />
+					<c:set var="textColorStyle" value="color: black; background-color:white; border-style: none; text-decoration: none;" />
+					<c:set var="deleteField" scope="page">display: inline</c:set>
+               		<c:set var="undeleteField" scope="page">display: none</c:set>
+				</c:if>
+				<c:if test="${pVal.id == null || pVal.id == 0}">
+					<c:set var="textReadonly" value="false" />
+					<c:set var="textColorStyle" value="color: black; background-color:white; text-decoration: none;" />
+				</c:if>
+				<c:if test="${pVal.disable}">
+					<c:set var="textReadonly" value="true" />
+					<c:set var="textColorStyle" value="color:darkgray; background-color:white; border-style: none; text-decoration: line-through;" />
+					<c:set var="deleteField" scope="page">display: none</c:set>
+               		<c:set var="undeleteField" scope="page">display: inline</c:set>
+				</c:if>
                
 				<tr>
 				<td>
-                  <html:text name="possibleVals" property="value" readonly="${textReadonly}" disabled="${textDisabled}" style="text-decoration:none; ${textColorStyle} ${textDecorationStyle}" indexed="true" styleId="field${index.count}"/>
+                  <html:text name="possibleVals" property="value" readonly="${textReadonly}" style="${textColorStyle}" indexed="true" styleId="field${index.count}"/>
                   <html:hidden name="possibleVals" property="disable"  indexed="true" styleId="disabled${index.count}"/>
+                  <html:hidden name="possibleVals" property="id" indexed="true" />
 				</td>
 				<td>
 					<c:choose>
-						<c:when test="${pVal.value != ''}">
+						<c:when test="${pVal.id!=null && pVal.id!=0}">
 							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryValue(pVal.getValue(), myForm.getKeyName() ) %>">
 								${pVal.value}
 							</digi:trn>
@@ -280,7 +267,7 @@
 					</c:choose>
 				</td>
 				<td>  
-					<c:if test="${pVal.value!=''}">                        
+					<c:if test="${pVal.id!=null && pVal.id!=0}">                        
 						<span id="delete${index.count}" style="${deleteField}">
 							[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')">
 								<digi:trn key="aim:categoryManagerValueDelete">
@@ -295,6 +282,11 @@
 								</digi:trn>
 							</a>]
 						</span>
+						<span>
+							[<a style="cursor:pointer; text-decoration:underline; color: blue" onclick="addNewValue(${index.count})">
+				  				Add value(s) above
+				  			</a>]
+						</span>
 					</c:if>
 				</td>
 				</tr>				
@@ -304,15 +296,11 @@
  
 					</div>
 					
-					<digi:trn key="aim:categoryManagerAddMoreFields">
-						Add More Fields
-					</digi:trn>:
-				
-					<html:text property="numOfAdditionalFields" size="4" value="1"/>
-					<button class="buton" type="button" onclick="return addNewValue()">Go</button>
+					[ <a style="cursor:pointer; text-decoration:underline; color: blue" onclick="addNewValue(-1)">Add value(s)</a> ]
 				</td>
 			</tr>
 		</table>
+		<br />
 		<html:button property="xx" onclick="return doSubmit()">
 			<digi:trn key="aim:categoryManagerSubmit">
 					Submit

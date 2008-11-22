@@ -21,14 +21,14 @@ public class CategoryManagerForm extends ActionForm {
 	/**
 	 * Begin - The properties below are used for adding a new category
 	 */
-	private Boolean addNewCategory	= null;
-	private String categoryName		= null;
-	private String keyName		= null;
-	private String description		= null;
+	private Boolean submitPressed		= null;
+	private String categoryName			= null;
+	private String keyName				= null;
+	private String description			= null;
 	private String [] possibleValues	= null;
 	private Integer numOfPossibleValues	= null;
-	private boolean isMultiselect	= false;
-	private boolean isOrdered		= false;
+	private boolean isMultiselect		= false;
+	private boolean isOrdered			= false;
     private List<PossibleValue> possibleVals	= new ArrayList<PossibleValue>();
     
     private int numOfAdditionalFields	= 0;
@@ -51,12 +51,17 @@ public class CategoryManagerForm extends ActionForm {
 	public void setNumOfPossibleValues(Integer numOfPossibleValues) {
 		this.numOfPossibleValues = numOfPossibleValues;
 	}
-	public Boolean getAddNewCategory() {
-		return addNewCategory;
+	
+	
+
+	public Boolean getSubmitPressed() {
+		return submitPressed;
 	}
-	public void setAddNewCategory(Boolean addNewCategory) {
-		this.addNewCategory = addNewCategory;
+
+	public void setSubmitPressed(Boolean submitPressed) {
+		this.submitPressed = submitPressed;
 	}
+
 	public String getCategoryName() {
 		return categoryName;
 	}

@@ -18,7 +18,7 @@ public class AmpCategoryClass implements Serializable {
 	private String keyName;
 	private boolean isMultiselect	= false;
 	private boolean isOrdered		= false;
-	private List possibleValues;
+	private List<AmpCategoryValue> possibleValues;
 	
 	public String getDescription() {
 		return description;
@@ -56,10 +56,11 @@ public class AmpCategoryClass implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List getPossibleValues() {
+	
+	public List<AmpCategoryValue> getPossibleValues() {
 		return possibleValues;
 	}
-	public void setPossibleValues(List possibleValues) {
+	public void setPossibleValues(List<AmpCategoryValue> possibleValues) {
 		this.possibleValues = possibleValues;
 	}
 	public String getKeyName() {

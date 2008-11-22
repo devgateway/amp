@@ -5,6 +5,7 @@ package org.digijava.module.categorymanager.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -79,13 +80,18 @@ public class CategoryManager extends Action {
 			return mapping.findForward("createOrEditCategory");
 		}
 		if (request.getParameter("addValue") != null) {
+			int position 	= myForm.getPossibleVals().size();
+			if ( request.getParameter("position") != null )
+				position	= Integer.parseInt(request.getParameter("position"))-1;
 			if(myForm.getPossibleVals()==null){
 				myForm.setPossibleVals(new ArrayList<PossibleValue>());
 			}
 			for (int i=0; i<myForm.getNumOfAdditionalFields(); i++) {
 				PossibleValue value=new PossibleValue();
 				value.setValue("");
-				myForm.getPossibleVals().add(value);
+				value.setId(null);
+				value.setDisable(false);
+				myForm.getPossibleVals().add(position, value);
 			}
 			return mapping.findForward("createOrEditCategory");
 		}
@@ -105,10 +111,11 @@ public class CategoryManager extends Action {
 		/**
 		 * Adding a new category to the database
 		 */
-		if (myForm.getAddNewCategory() != null && myForm.getAddNewCategory().booleanValue()) {
+		if (myForm.getSubmitPressed() != null && myForm.getSubmitPressed().booleanValue()) {
+			myForm.setSubmitPressed(false);
 			boolean saved	= this.saveCategoryToDatabase(myForm, errors);
 			if (!saved) {
-				try{
+				/*try{
 					AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass( myForm.getEditedCategoryId() );
 					this.populateForm(ampCategoryClass, myForm);
 				}
@@ -116,7 +123,7 @@ public class CategoryManager extends Action {
 					// TODO: handle exception
 					logger.info(e.getMessage());
 					e.printStackTrace();
-				}
+				}*/
 				this.saveErrors(request, errors);
 				return mapping.findForward("createOrEditCategory");
 			}
@@ -159,21 +166,24 @@ public class CategoryManager extends Action {
 			myForm.setKeyName( ampCategoryClass.getKeyName() );
 			
 			
-			Iterator iterator			= ampCategoryClass.getPossibleValues().iterator();
-			String[] possibleValues		= new String [ampCategoryClass.getPossibleValues().size()];
-                        List<PossibleValue> possibleVals=new ArrayList();
-			int k 						= 0;
+			Iterator iterator					= ampCategoryClass.getPossibleValues().iterator();
+			//String[] possibleValues				= new String [ampCategoryClass.getPossibleValues().size()];
+			List<PossibleValue> possibleVals	= new ArrayList<PossibleValue>();
+			
 			while (iterator.hasNext()) {
 				AmpCategoryValue ampCategoryValue	= (AmpCategoryValue) iterator.next();
-				possibleValues[k++]					= ampCategoryValue.getValue();
+				//possibleValues[k++]					= ampCategoryValue.getValue();
 				PossibleValue value					= new PossibleValue();
 				
 				value.setValue(ampCategoryValue.getValue());
+				value.setId(ampCategoryValue.getId());
+				value.setDisable(false);
+				
 				possibleVals.add(value);
 			}
 			
-			myForm.setPossibleValues( possibleValues );
-                        myForm.setPossibleVals(possibleVals);
+			//myForm.setPossibleValues( possibleValues );
+			myForm.setPossibleVals(possibleVals);
 		}
 		else{
 			if ( myForm.getPossibleValues() != null && myForm.getPossibleValues().length > 0 ) {
@@ -323,66 +333,94 @@ public class CategoryManager extends Action {
 			//dbCategory.getPossibleValues().clear();
 			
 			//String[] possibleValues		= myForm.getPossibleValues();
-                        List <PossibleValue> possibleVals=myForm.getPossibleVals();
+			List <PossibleValue> possibleVals=myForm.getPossibleVals();
 			
 			boolean addToPossibleValues	= false;
-                       
-			int k	= 0; //Index for going through the exisiting values in the database of the AmpCategoryClass
-			for (int index=0;index<possibleVals.size(); index++  ) {
-				if ( k < dbCategory.getPossibleValues().size() && !addToPossibleValues ) {
-					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get( k );
-					PossibleValue value					= possibleVals.get(index);
-					
-					if (value.isDisable()) {// In this block we are surely editing an existing category value (not creating a new one)
-						AmpCategoryValue removedValue			= (AmpCategoryValue)dbCategory.getPossibleValues().remove( k );
-						try{
-							dbSession.flush();
-							if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), removedValue.getValue()) )
-									throw new Exception("This value is in CategoryConstants.java and used by the system");
-						}
-						catch(Exception E) {
-							if (undeletableCategoryValues ==  null) 
-								undeletableCategoryValues = new String() + removedValue;
-							else
-								undeletableCategoryValues += ", " + removedValue; 
-						}
+            
+			/**
+			 * Eliminate empty values from the new values
+			 */
+			Iterator<PossibleValue> iter			= possibleVals.iterator();
+			while ( iter.hasNext() ) {
+				if ( iter.next().getValue().equals("") )
+					iter.remove();
+			}
+			/**
+			 * Add new values
+			 */
+			for ( int i=0; i<possibleVals.size(); i++ ) {
+				PossibleValue pVal		= possibleVals.get(i);
+				if ( pVal.getId() == null || pVal.getId() == 0L ) {
+					AmpCategoryValue newVal			= new AmpCategoryValue();
+					newVal.setValue( pVal.getValue() );
+					newVal.setAmpCategoryClass( dbCategory );
+					dbCategory.getPossibleValues().add(i, newVal);
+				}
+			}
+			/**
+			 * Remove deleted values from database
+			 */
+			iter						= possibleVals.iterator();
+			while ( iter.hasNext() ) {
+				PossibleValue pVal		= iter.next();
+				if ( pVal.isDisable() ) {
+					if ( pVal.getId() == null ) {
+						throw new Exception ("Received id paramter is null");
 					}
-					else {
-						ampCategoryValue.setValue( possibleVals.get(index).getValue() );
-						ampCategoryValue.setIndex( k++ );
+					Iterator<AmpCategoryValue> iterCV	= dbCategory.getPossibleValues().iterator();
+					while ( iterCV.hasNext() ) {
+						AmpCategoryValue ampCategoryValue	= iterCV.next();
+						if ( pVal.getId().equals(ampCategoryValue.getId()) ) {
+							iterCV.remove();
+							try{
+								dbSession.flush();
+								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
+																		ampCategoryValue.getValue()) )
+										throw new Exception("This value is in CategoryConstants.java and used by the system");
+							}
+							catch (Exception e) {
+								if (undeletableCategoryValues ==  null) 
+									undeletableCategoryValues = new String() + ampCategoryValue.getValue();
+								else
+									undeletableCategoryValues += ", " + ampCategoryValue.getValue(); 
+							}
+						}
 					}
 				}
-				else{
-					addToPossibleValues	= true;
-					if ( !possibleVals.get(index).isDisable() && !possibleVals.get(index).getValue().equals("") ) {
-						AmpCategoryValue dbValue	= new AmpCategoryValue();
-						dbValue.setValue( possibleVals.get(index).getValue() );
-						dbValue.setIndex( dbCategory.getPossibleValues().size() );
-						dbValue.setAmpCategoryClass( dbCategory );
-						dbCategory.getPossibleValues().add(dbValue);
-					}
-				}			
-			} 
+			}
 			
-			if (undeletableCategoryValues != null) {
+			this.reindexAmpCategoryValueList( dbCategory.getPossibleValues() );
+			
+			String dupValue		= this.checkDuplicateValues(dbCategory.getPossibleValues()); 
+			
+			if ( dupValue != null ) {
 				if (tx != null)
 					tx.rollback();
-				ActionError error2	= new ActionError("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
-				errors.add("title",error2);
+				ActionError error	= new ActionError("error.aim.categoryManager.duplicateValue", dupValue);
+				errors.add("title",error);
 				retValue			= false;
 			}
-			
 			else {
-				if (myForm.getEditedCategoryId() == null) {
-					dbSession.saveOrUpdate( dbCategory );
-				}
-				else{
-					dbSession.flush();
+			
+				if (undeletableCategoryValues != null) {
+					if (tx != null)
+						tx.rollback();
+					ActionError error2	= new ActionError("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
+					errors.add("title",error2);
+					retValue			= false;
 				}
 				
-				tx.commit();
+				else {
+					if (myForm.getEditedCategoryId() == null) {
+						dbSession.saveOrUpdate( dbCategory );
+					}
+					else{
+						dbSession.flush();
+					}
+					
+					tx.commit();
+				}
 			}
-			
 		} catch (Exception ex) {
 			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
 			ActionError error1	= new ActionError("error.aim.categoryManager.cannotSaveOrUpdate");
@@ -399,6 +437,23 @@ public class CategoryManager extends Action {
 			}
 		}
 		return retValue;
+	}
+	
+	private void reindexAmpCategoryValueList( List<AmpCategoryValue> values ) {
+		for (int i=0; i<values.size(); i++) 
+			values.get(i).setIndex(i);
+	}
+	
+	private String checkDuplicateValues( List<AmpCategoryValue>  values) {
+		HashSet<String> set					= new HashSet<String>( values.size() );
+		Iterator<AmpCategoryValue> iter		= values.iterator();
+		
+		while ( iter.hasNext() ) {
+			String value					= iter.next().getValue(); 
+			if ( !set.add( value ) )
+				return value;
+		}
+		return null;
 	}
 	
 }

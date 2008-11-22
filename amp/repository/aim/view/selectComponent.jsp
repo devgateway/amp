@@ -61,7 +61,7 @@
 									              Component Type
 									              </digi:trn></td>
 								<td><html:select property="selectedType"
-									styleClass="inp-text" onchange="switchType()">
+									styleClass="inp-text">
 									<html:option value="-1">
 										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
 									</html:option>
@@ -511,8 +511,6 @@
 </div>
 
 <script language="JavaScript">
-<!--
-
 var numComm = <%=indexC%>;
 var numExpn = <%=indexE%>;
 var numDisb = <%=indexD%>;

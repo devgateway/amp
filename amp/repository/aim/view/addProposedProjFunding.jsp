@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
@@ -128,10 +129,11 @@
                           <html:text property="funding.proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
-							<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,80)'>
+            				<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,30)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
                         </td>
+            
                       </tr>
                     </table>
                   </td>

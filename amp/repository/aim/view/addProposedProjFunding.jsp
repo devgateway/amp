@@ -110,7 +110,7 @@
                           <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
                         </td>
                         <td align="center" valign="middle" width="120" colspan="2">
-                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn><br><digi:trn key="aim:commitments">Commitment</digi:trn> <digi:trn key="aim:DateFIE">Date</digi:trn></font></b>
+                          <b><font color="white"><digi:trn key="aim:PlannedCommitmentDate">Planned Commitment Date</digi:trn></font></b>
                         </td>
                       </tr>
                       <tr>

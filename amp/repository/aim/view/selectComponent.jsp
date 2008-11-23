@@ -40,8 +40,7 @@
 		class=box-border-nopadding>
 		<tr>
 			<td align=left vAlign=top>
-			<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"
-				class=box-border-nopadding>
+			<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
 				<tr bgcolor="#006699">
 					<td vAlign="center" width="100%" align="center" class="textalb"
 						height="20"><a
@@ -71,9 +70,8 @@
 							</tr>
 						</feature:display>						
 						<tr>
-							<td align="right"><a
-								title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
-								<digi:trn key="aim:title">Title</digi:trn> </ a> 
+							<td align="right" title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
+								<digi:trn key="aim:title">Title</digi:trn>
 							</td>
 							<td>
 								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 

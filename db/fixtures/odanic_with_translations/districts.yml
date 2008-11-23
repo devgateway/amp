@@ -1,0 +1,856 @@
+--- 
+districts_001: 
+  code: "1101"
+  id: "775935630"
+  name: Catarina
+  province_id: "995689234"
+districts_002: 
+  code: "1410"
+  id: "784117058"
+  name: Tola
+  province_id: "995689231"
+districts_003: 
+  code: "1406"
+  id: "784049416"
+  name: Potosí
+  province_id: "995689231"
+districts_004: 
+  code: "1702"
+  id: "784252355"
+  name: "Bocana de Paiwas"
+  province_id: "995689228"
+districts_005: 
+  code: "1607"
+  id: "784184713"
+  name: Waspam
+  province_id: "995689229"
+districts_006: 
+  code: "803"
+  id: "775732685"
+  name: "La Paz Centro"
+  province_id: "995756876"
+districts_007: 
+  code: "906"
+  id: "775867976"
+  name: Somoto
+  province_id: "995756875"
+districts_008: 
+  code: "506"
+  id: "775597389"
+  name: "San Nicolás"
+  province_id: "995756879"
+districts_009: 
+  code: "1310"
+  id: "783981768"
+  name: "San Fernando"
+  province_id: "995689232"
+districts_010: 
+  code: "702"
+  id: "775665037"
+  name: Jinotega
+  province_id: "995756877"
+districts_011: 
+  code: "603"
+  id: "775665031"
+  name: Granada
+  province_id: "995756878"
+districts_012: 
+  code: "1109"
+  id: "783846465"
+  name: Tisma
+  province_id: "995689234"
+districts_013: 
+  code: "207"
+  id: "775394438"
+  name: "San Marcos"
+  province_id: "995756882"
+districts_014: 
+  code: "1208"
+  id: "783914113"
+  name: "San Dionisio"
+  province_id: "995689233"
+districts_015: 
+  code: "104"
+  id: "775326789"
+  name: "San Lorenzo"
+  province_id: "995756883"
+districts_016: 
+  code: "307"
+  id: "775462086"
+  name: Posoltega
+  province_id: "995756881"
+districts_017: 
+  code: "1703"
+  id: "784252356"
+  name: "Corn Island"
+  province_id: "995689228"
+districts_018: 
+  code: "808"
+  id: "775800328"
+  name: "San José de Achuapa"
+  province_id: "995756876"
+districts_019: 
+  code: "1002"
+  id: "775867982"
+  name: "El Crucero"
+  province_id: "995689235"
+districts_020: 
+  code: "1005"
+  id: "775935624"
+  name: "San Francisco Libre"
+  province_id: "995689235"
+districts_021: 
+  code: "1708"
+  id: "784252362"
+  name: "Kukra Hill"
+  province_id: "995689228"
+districts_022: 
+  code: "1401"
+  id: "784049411"
+  name: Altagracia
+  province_id: "995689231"
+districts_023: 
+  code: "1712"
+  id: "784320004"
+  name: "Nueva Guinea"
+  province_id: "995689228"
+districts_024: 
+  code: "1602"
+  id: "784184707"
+  name: Prinzapolka
+  province_id: "995689229"
+districts_025: 
+  code: "1505"
+  id: "784117065"
+  name: "San Juan del Norte"
+  province_id: "995689230"
+districts_026: 
+  code: "1407"
+  id: "784049417"
+  name: Rivas
+  province_id: "995689231"
+districts_027: 
+  code: "303"
+  id: "775462081"
+  name: "Cinco Pinos"
+  province_id: "995756881"
+districts_028: 
+  code: "1500"
+  id: "784117059"
+  name: "All Municipalities"
+  province_id: "995689230"
+districts_029: 
+  code: "1304"
+  id: "783981762"
+  name: Jalapa
+  province_id: "995689232"
+districts_030: 
+  code: "708"
+  id: "775732680"
+  name: Wiwilí
+  province_id: "995756877"
+districts_031: 
+  code: "907"
+  id: "775867977"
+  name: Telpaneca
+  province_id: "995756875"
+districts_032: 
+  code: "703"
+  id: "775665038"
+  name: "La Concordia"
+  province_id: "995756877"
+districts_033: 
+  code: "1102"
+  id: "775935631"
+  name: "La Concepción"
+  province_id: "995689234"
+districts_034: 
+  code: "403"
+  id: "775529735"
+  name: "El Coral"
+  province_id: "995756880"
+districts_035: 
+  code: "1209"
+  id: "783914114"
+  name: "San Isidro"
+  province_id: "995689233"
+districts_036: 
+  code: "501"
+  id: "775597383"
+  name: Condega
+  province_id: "995756879"
+districts_037: 
+  code: "604"
+  id: "775665032"
+  name: Nandaime
+  province_id: "995756878"
+districts_038: 
+  code: "202"
+  id: "775394432"
+  name: Dolores
+  province_id: "995756882"
+districts_039: 
+  code: "105"
+  id: "775326790"
+  name: "Santa Lucía"
+  province_id: "995756883"
+districts_040: 
+  code: "1003"
+  id: "775867983"
+  name: Managua
+  province_id: "995689235"
+districts_041: 
+  code: "1608"
+  id: "784184714"
+  name: Mulukuku
+  province_id: "995689229"
+districts_042: 
+  code: "804"
+  id: "775732686"
+  name: Larreynaga
+  province_id: "995756876"
+districts_043: 
+  code: "1006"
+  id: "775935625"
+  name: "San Rafael del Sur"
+  province_id: "995689235"
+districts_044: 
+  code: "903"
+  id: "775800335"
+  name: "San José de Cusmapa"
+  province_id: "995756875"
+districts_045: 
+  code: "1210"
+  id: "783914115"
+  name: "San Ramón"
+  province_id: "995689233"
+districts_046: 
+  code: "208"
+  id: "775394439"
+  name: "Santa Teresa"
+  province_id: "995756882"
+districts_047: 
+  code: "1603"
+  id: "784184708"
+  name: "Puerto Cabezas"
+  province_id: "995689229"
+districts_048: 
+  code: "1506"
+  id: "784117066"
+  name: "San Miguelito"
+  province_id: "995689230"
+districts_049: 
+  code: "1200"
+  id: "783846466"
+  name: "All Municipalities"
+  province_id: "995689233"
+districts_050: 
+  code: "809"
+  id: "775800329"
+  name: "Santa Rosa del Peñón"
+  province_id: "995756876"
+districts_051: 
+  code: "1305"
+  id: "783981763"
+  name: Macuelizo
+  province_id: "995689232"
+districts_052: 
+  code: "404"
+  id: "775529736"
+  name: Juigalpa
+  province_id: "995756880"
+districts_053: 
+  code: "1704"
+  id: "784252357"
+  name: "Desembocadura de la Cruz de Río Grande"
+  province_id: "995689228"
+districts_054: 
+  code: "1700"
+  id: "784184715"
+  name: "All Municipalities"
+  province_id: "995689228"
+districts_055: 
+  code: "308"
+  id: "775462087"
+  name: "Puerto Morazán"
+  province_id: "995756881"
+districts_056: 
+  code: "1103"
+  id: "775935632"
+  name: Masatepe
+  province_id: "995689234"
+districts_057: 
+  code: "106"
+  id: "775326791"
+  name: Teustepe
+  province_id: "995756883"
+districts_058: 
+  code: "1402"
+  id: "784049412"
+  name: Belén
+  province_id: "995689231"
+districts_059: 
+  code: "300"
+  id: "775394440"
+  name: "All Municipalities"
+  province_id: "995756881"
+districts_060: 
+  code: "1709"
+  id: "784252363"
+  name: "La Cruz de Río Grande"
+  province_id: "995689228"
+districts_061: 
+  code: "203"
+  id: "775394433"
+  name: "El Rosario"
+  province_id: "995756882"
+districts_062: 
+  code: "304"
+  id: "775462082"
+  name: Corinto
+  province_id: "995756881"
+districts_063: 
+  code: "810"
+  id: "775800330"
+  name: Telica
+  province_id: "995756876"
+districts_064: 
+  code: "908"
+  id: "775867978"
+  name: Totogalpa
+  province_id: "995756875"
+districts_065: 
+  code: "805"
+  id: "775732687"
+  name: León
+  province_id: "995756876"
+districts_066: 
+  code: "904"
+  id: "775800336"
+  name: "San Juan del Río Coco"
+  province_id: "995756875"
+districts_067: 
+  code: "313"
+  id: "775529730"
+  name: "Villa Nueva"
+  province_id: "995756881"
+districts_068: 
+  code: "502"
+  id: "775597385"
+  name: Estelí
+  province_id: "995756879"
+districts_069: 
+  code: "605"
+  id: "775665033"
+  name: "Zapatera Island"
+  province_id: "995756878"
+districts_070: 
+  code: "1201"
+  id: "783846467"
+  name: "Ciudad Darío"
+  province_id: "995689233"
+districts_071: 
+  code: "100"
+  id: "775326785"
+  name: "All Municipalities"
+  province_id: "995756883"
+districts_072: 
+  code: "1105"
+  id: "783846461"
+  name: Nandasmo
+  province_id: "995689234"
+districts_073: 
+  code: "1205"
+  id: "783914109"
+  name: "Muy Muy"
+  province_id: "995689233"
+districts_074: 
+  code: "1007"
+  id: "775935626"
+  name: Ticuantepe
+  province_id: "995689235"
+districts_075: 
+  code: "1705"
+  id: "784252358"
+  name: "El Ayote"
+  province_id: "995689228"
+districts_076: 
+  code: "1501"
+  id: "784117061"
+  name: "El Almendro"
+  province_id: "995689230"
+districts_077: 
+  code: "1311"
+  id: "784049407"
+  name: "Santa María"
+  province_id: "995689232"
+districts_078: 
+  code: "309"
+  id: "775462088"
+  name: "San Francisco del Norte"
+  province_id: "995756881"
+districts_079: 
+  code: "800"
+  id: "775732681"
+  name: "All Municipalities"
+  province_id: "995756876"
+districts_080: 
+  code: "1211"
+  id: "783914116"
+  name: Sébaco
+  province_id: "995689233"
+districts_081: 
+  code: "1710"
+  id: "784252364"
+  name: "Laguna de Perlas"
+  province_id: "995689228"
+districts_082: 
+  code: "1403"
+  id: "784049413"
+  name: "Buenos Aires"
+  province_id: "995689231"
+districts_083: 
+  code: "1604"
+  id: "784184709"
+  name: Rosita
+  province_id: "995689229"
+districts_084: 
+  code: "1301"
+  id: "783981758"
+  name: "Ciudad Antigua"
+  province_id: "995689232"
+districts_085: 
+  code: "400"
+  id: "775529731"
+  name: "All Municipalities"
+  province_id: "995756880"
+districts_086: 
+  code: "909"
+  id: "775867979"
+  name: Yalagüina
+  province_id: "995756875"
+districts_087: 
+  code: "1202"
+  id: "783846468"
+  name: Esquipulas
+  province_id: "995689233"
+districts_088: 
+  code: "1306"
+  id: "783981764"
+  name: Mozonte
+  province_id: "995689232"
+districts_089: 
+  code: "405"
+  id: "775529737"
+  name: "La Libertad"
+  province_id: "995756880"
+districts_090: 
+  code: "310"
+  id: "775462089"
+  name: "San Pedro del Norte"
+  province_id: "995756881"
+districts_091: 
+  code: "1004"
+  id: "775867985"
+  name: Mateare
+  province_id: "995689235"
+districts_092: 
+  code: "409"
+  id: "775597379"
+  name: "Santo Tomás"
+  province_id: "995756880"
+districts_093: 
+  code: "200"
+  id: "775326792"
+  name: "All Municipalities"
+  province_id: "995756882"
+districts_094: 
+  code: "301"
+  id: "775394441"
+  name: Chichigalpa
+  province_id: "995756881"
+districts_095: 
+  code: "1408"
+  id: "784117056"
+  name: "San Jorge"
+  province_id: "995689231"
+districts_096: 
+  code: "101"
+  id: "775326786"
+  name: Boaco
+  province_id: "995756883"
+districts_097: 
+  code: "1104"
+  id: "775935633"
+  name: Masaya
+  province_id: "995689234"
+districts_098: 
+  code: "1008"
+  id: "775935627"
+  name: Tipitapa
+  province_id: "995689235"
+districts_099: 
+  code: "900"
+  id: "775800331"
+  name: "All Municipalities"
+  province_id: "995756875"
+districts_100: 
+  code: "1502"
+  id: "784117062"
+  name: "El Castillo"
+  province_id: "995689230"
+districts_101: 
+  code: "1307"
+  id: "783981765"
+  name: Murra
+  province_id: "995689232"
+districts_102: 
+  code: "801"
+  id: "775732682"
+  name: "El Jicaral"
+  province_id: "995756876"
+districts_103: 
+  code: "503"
+  id: "775597386"
+  name: "La Trinidad"
+  province_id: "995756879"
+districts_104: 
+  code: "1212"
+  id: "783914117"
+  name: Terrabona
+  province_id: "995689233"
+districts_105: 
+  code: "600"
+  id: "775665028"
+  name: "All Municipalities"
+  province_id: "995756878"
+districts_106: 
+  code: "410"
+  id: "775597380"
+  name: "Villa Sandino"
+  province_id: "995756880"
+districts_107: 
+  code: "1302"
+  id: "783981759"
+  name: Dipilto
+  province_id: "995689232"
+districts_108: 
+  code: "1106"
+  id: "783846462"
+  name: Nindirí
+  province_id: "995689234"
+districts_109: 
+  code: "305"
+  id: "775462083"
+  name: "El Realejo"
+  province_id: "995756881"
+districts_110: 
+  code: "204"
+  id: "775394435"
+  name: Jinotepe
+  province_id: "995756882"
+districts_111: 
+  code: "406"
+  id: "775529738"
+  name: "San Francisco de Cuapa"
+  province_id: "995756880"
+districts_112: 
+  code: "1312"
+  id: "784049408"
+  name: "Wiwilí de Nueva Segovia"
+  province_id: "995689232"
+districts_113: 
+  code: "700"
+  id: "775665035"
+  name: "All Municipalities"
+  province_id: "995756877"
+districts_114: 
+  code: "704"
+  id: "775732677"
+  name: "San José de Bocay"
+  province_id: "995756877"
+districts_115: 
+  code: "1706"
+  id: "784252359"
+  name: "El Rama"
+  province_id: "995689228"
+districts_116: 
+  code: "1605"
+  id: "784184711"
+  name: Siuna
+  province_id: "995689229"
+districts_117: 
+  code: "201"
+  id: "775326793"
+  name: Diriamba
+  province_id: "995756882"
+districts_118: 
+  code: "302"
+  id: "775394442"
+  name: Chinandega
+  province_id: "995756881"
+districts_119: 
+  code: "1206"
+  id: "783914111"
+  name: "Rancho Grande"
+  province_id: "995689233"
+districts_120: 
+  code: "1404"
+  id: "784049414"
+  name: Cárdenas
+  province_id: "995689231"
+districts_121: 
+  code: "1308"
+  id: "783981766"
+  name: Ocotal
+  province_id: "995689232"
+districts_122: 
+  code: "901"
+  id: "775800332"
+  name: "Las Sabanas"
+  province_id: "995756875"
+districts_123: 
+  code: "311"
+  id: "775462090"
+  name: "Santo Tomás del Norte"
+  province_id: "995756881"
+districts_124: 
+  code: "1203"
+  id: "783846469"
+  name: Matagalpa
+  province_id: "995689233"
+districts_125: 
+  code: "707"
+  id: "775597381"
+  name: "Santa María de Pantasma"
+  province_id: "995756877"
+districts_126: 
+  code: "1000"
+  id: "775867980"
+  name: "All Municipalities"
+  province_id: "995689235"
+districts_127: 
+  code: "601"
+  id: "775665029"
+  name: Diria
+  province_id: "995756878"
+districts_128: 
+  code: "401"
+  id: "775529732"
+  name: Acoyapa
+  province_id: "995756880"
+districts_129: 
+  code: "504"
+  id: "775597387"
+  name: "Pueblo Nuevo"
+  province_id: "995756879"
+districts_130: 
+  code: "1409"
+  id: "784117057"
+  name: "San Juan del Sur"
+  province_id: "995689231"
+districts_131: 
+  code: "1405"
+  id: "784049415"
+  name: Moyogalpa
+  province_id: "995689231"
+districts_132: 
+  code: "102"
+  id: "775326787"
+  name: Camoapa
+  province_id: "995756883"
+districts_133: 
+  code: "1107"
+  id: "783846463"
+  name: Niquinomo
+  province_id: "995689234"
+districts_134: 
+  code: "1009"
+  id: "775935628"
+  name: "Villa Carlos Fonseca"
+  province_id: "995689235"
+districts_135: 
+  code: "701"
+  id: "775665036"
+  name: "El Cuá"
+  province_id: "995756877"
+districts_136: 
+  code: "905"
+  id: "775867975"
+  name: "San Lucas"
+  province_id: "995756875"
+districts_137: 
+  code: "1503"
+  id: "784117063"
+  name: Morrito
+  province_id: "995689230"
+districts_138: 
+  code: "1701"
+  id: "784252354"
+  name: Bluefields
+  province_id: "995689228"
+districts_139: 
+  code: "802"
+  id: "775732683"
+  name: "El Sauce"
+  province_id: "995756876"
+districts_140: 
+  code: "1207"
+  id: "783914112"
+  name: "Río Blanco"
+  province_id: "995689233"
+districts_141: 
+  code: "1204"
+  id: "783846470"
+  name: Matiguas
+  province_id: "995689233"
+districts_142: 
+  code: "1213"
+  id: "783914118"
+  name: "Tuma-La Dalia"
+  province_id: "995689233"
+districts_143: 
+  code: "205"
+  id: "775394436"
+  name: "La Conquista"
+  province_id: "995756882"
+districts_144: 
+  code: "1600"
+  id: "784184705"
+  name: "All Municipalities"
+  province_id: "995689229"
+districts_145: 
+  code: "312"
+  id: "775462091"
+  name: Somotillo
+  province_id: "995756881"
+districts_146: 
+  code: "602"
+  id: "775665030"
+  name: Diriomo
+  province_id: "995756878"
+districts_147: 
+  code: "705"
+  id: "775732678"
+  name: "San Rafael del Norte"
+  province_id: "995756877"
+districts_148: 
+  code: "806"
+  id: "775800326"
+  name: Nagarote
+  province_id: "995756876"
+districts_149: 
+  code: "407"
+  id: "775529739"
+  name: "San Pedro de Lóvago"
+  province_id: "995756880"
+districts_150: 
+  code: "402"
+  id: "775529733"
+  name: Comalapa
+  province_id: "995756880"
+districts_151: 
+  code: "1001"
+  id: "775867981"
+  name: "Ciudad Sandino"
+  province_id: "995689235"
+districts_152: 
+  code: "1606"
+  id: "784184712"
+  name: Waslala
+  province_id: "995689229"
+districts_153: 
+  code: "1100"
+  id: "775935629"
+  name: "All Municipalities"
+  province_id: "995689234"
+districts_154: 
+  code: "103"
+  id: "775326788"
+  name: "San José de los Remates"
+  province_id: "995756883"
+districts_155: 
+  code: "1711"
+  id: "784320003"
+  name: "Muelle de los Bueyes"
+  province_id: "995689228"
+districts_156: 
+  code: "1309"
+  id: "783981767"
+  name: Quilalí
+  province_id: "995689232"
+districts_157: 
+  code: "1400"
+  id: "784049409"
+  name: "All Municipalities"
+  province_id: "995689231"
+districts_158: 
+  code: "1601"
+  id: "784184706"
+  name: Bonanza
+  province_id: "995689229"
+districts_159: 
+  code: "1504"
+  id: "784117064"
+  name: "San Carlos"
+  province_id: "995689230"
+districts_160: 
+  code: "206"
+  id: "775394437"
+  name: "La Paz de Carazo"
+  province_id: "995756882"
+districts_161: 
+  code: "902"
+  id: "775800333"
+  name: Palacagüina
+  province_id: "995756875"
+districts_162: 
+  code: "1303"
+  id: "783981761"
+  name: "El Jícaro"
+  province_id: "995689232"
+districts_163: 
+  code: "1300"
+  id: "783914119"
+  name: "All Municipalities"
+  province_id: "995689232"
+districts_164: 
+  code: "807"
+  id: "775800327"
+  name: Quezalguaque
+  province_id: "995756876"
+districts_165: 
+  code: "306"
+  id: "775462085"
+  name: "El Viejo"
+  province_id: "995756881"
+districts_166: 
+  code: "505"
+  id: "775597388"
+  name: "San Juan de Limay"
+  province_id: "995756879"
+districts_167: 
+  code: "408"
+  id: "775529740"
+  name: "Santo Domingo"
+  province_id: "995756880"
+districts_168: 
+  code: "706"
+  id: "775732679"
+  name: "San Sebastián de Yalí"
+  province_id: "995756877"
+districts_169: 
+  code: "500"
+  id: "775597382"
+  name: "All Municipalities"
+  province_id: "995756879"
+districts_170: 
+  code: "1707"
+  id: "784252361"
+  name: "El Tortugero"
+  province_id: "995689228"
+districts_171: 
+  code: "1108"
+  id: "783846464"
+  name: "San Juan de Oriente"
+  province_id: "995689234"

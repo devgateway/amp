@@ -1,8 +1,6 @@
 class CreateDonors < ActiveRecord::Migration
   def self.up
     create_table :donors do |t|
-      t.string  :name
-      t.string  :name_es
       t.string  :code
       
       t.string  :currency
@@ -37,6 +35,13 @@ class CreateDonors < ActiveRecord::Migration
       t.string  :second_focal_point_email
     end
     
+    create_table :donor_translations do |t|
+      t.string     :locale
+      t.string     :name
+      
+      t.references :donor
+    end
+    
     create_table :donor_agencies do |t|
       t.string  :name
       t.string  :code
@@ -48,6 +53,7 @@ class CreateDonors < ActiveRecord::Migration
 
   def self.down
     drop_table :donors
+    drop_table :donor_translations
     drop_table :donor_agencies
   end
 end

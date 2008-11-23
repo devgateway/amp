@@ -1,0 +1,25 @@
+--- 
+users_001: 
+  created_at: "2008-11-01 16:32:53"
+  crypted_password: 9d11d10a5c21538415acd3413ec490fa05b5b644
+  donor_id: ~
+  email: odamfp@dgfoundation.org
+  id: "541702176"
+  name: "ODAdata Master Focal Point"
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "935545106"
+  salt: e7519b5f47d770af28a81567fcd0fd88c10a86c5
+  updated_at: "2008-11-01 16:32:53"
+users_002: 
+  created_at: "2008-11-01 16:32:53"
+  crypted_password: bbce0e59ad79e4108e415f4142f514ce7e9fdc14
+  donor_id: "18151548"
+  email: sample@europa.eu
+  id: "20191269"
+  name: "Sample Focal Point"
+  remember_token: ~
+  remember_token_expires_at: ~
+  role_id: "575398043"
+  salt: 5bac2dbd40d4be9a3599ecf315575784a84b42a0
+  updated_at: "2008-11-01 16:32:53"

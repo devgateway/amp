@@ -230,7 +230,7 @@ BODY {
 }
 
 BODY, P, OL, UL, TD {
-  font-family: verdana, arial, helvetica, sans-serif;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size:   13px;
   line-height: 18px;
 }
@@ -437,12 +437,13 @@ form fieldset {
     border: 1px solid #ccc;
     padding: 1em;
     margin: 1em 0;
+    background-color: #F8F8F8;
 }
 
 form fieldset legend {
     font-size: 1.5em;
     padding: 0 .2em;
-    color: #999;
+    color: #003366;
 }
 
 form fieldset ol {
@@ -456,26 +457,14 @@ form fieldset ol li {
 
 form fieldset label {
     display: block;
+    font-weight: bold;
+    font-size: 0.9em;
 }
 
 form fieldset label.fluid {
     display: inline;
     padding: 0 !important;
-}
-
-form fieldset ol li.fifty {
-    float: left;
-    width: 49.9%;
-}
-
-form fieldset ol li.twenty {
-    float: left;
-    width: 20%;
-}
-
-form fieldset ol li.thirty {
-    float: left;
-    width: 33.2%;
+    font-weight: normal;
 }
 
 form fieldset input,
@@ -495,23 +484,9 @@ form fieldset textarea:focus {
     color: #555;
 }
 
-form textarea {
-    width: 75%;
-    overflow: auto;
-}
-
-form fieldset input.plain {
-    border: 0 !important;
-    padding: 0 !important;
-}
-
 form label em {
     color: #999;
     font-size: .9em;
-}
-
-form abbr {
-    cursor: help
 }
 
 form fieldset p {
@@ -541,12 +516,32 @@ form fieldset .error {
   color: #c00;
 }
 
-/* Field sizes */
+/* Field styles */
+form textarea { width: 75%; overflow: auto; }
 form fieldset .large { width: 80%; }
 form fieldset .full  { width: 95%; }
 
-form fieldset ol li.noborder {
-  border: 0;
+form fieldset li.fifty { float: left; width: 49.9%; }
+form fieldset li.twenty { float: left; width: 20%; }
+form fieldset li.thirty { float: left; width: 33.2%; }
+
+form fieldset ol li.noborder { border: 0 !important; }
+
+/* Align checkboxes properly */
+form fieldset ol li.checkbox { 
+  padding-left: 40px !important; 
+  text-indent: -37px; 
 }
-        
+
+form fieldset ol li.checkbox input { 
+  margin-right: 10px;
+  vertical-align: middle;
+}
+ 
+/* Subheadings */
+form fieldset h3 { 
+  font-size: 1.3em;
+  font-weight: bold; 
+}       
+
 /* End DATA INPUT FORM STYLES */

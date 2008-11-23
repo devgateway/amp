@@ -15,6 +15,7 @@ Rails::Initializer.run do |config|
   
   ##
   # Gem Dependencies
+  #config.gem "pg"
   config.gem "rubyist-aasm", :source => 'http://gems.github.com', :lib => "aasm"
   config.gem "andand"
   config.gem "RedCloth"

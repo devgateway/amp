@@ -1,0 +1,119 @@
+toat1:
+  type_of_aid_id: 1
+  name: "Project/Program"
+  locale: en
+  
+toat2:
+  type_of_aid_id: 2
+  name: "Techn. Assistance"
+  locale: en
+  
+toat3:
+  type_of_aid_id: 3
+  name: "General Budget Support"
+  locale: en
+  
+toat4:
+  type_of_aid_id: 4
+  name: "FC Prorural"
+  locale: en
+  
+toat5:
+  type_of_aid_id: 5
+  name: "FC FONSALUD"
+  locale: en
+  
+toat6:
+  type_of_aid_id: 6
+  name: "FC Fondo Fed"
+  locale: en
+  
+toat7:
+  type_of_aid_id: 7
+  name: "FC Promipyme"
+  locale: en
+  
+toat8:
+  type_of_aid_id: 8
+  name: "FC Fonim"
+  locale: en
+  
+toat9:
+  type_of_aid_id: 9
+  name: "FC Civil Society"
+  locale: en
+  
+toat10:
+  type_of_aid_id: 10
+  name: "FC Anti Corruption"
+  locale: en
+  
+toat11:
+  type_of_aid_id: 11
+  name: "FC FISE"
+  locale: en
+  
+toat12:
+  type_of_aid_id: 12
+  name: "FC PROASE"
+  locale: en
+  
+toates1:
+  type_of_aid_id: 1
+  name: "Proyecto/Programa"
+  locale: es
+
+toates2:
+  type_of_aid_id: 2
+  name: "Techn. Asistencia"
+  locale: es
+
+toates3:
+  type_of_aid_id: 3
+  name: "Apoyo General del Presupuesto"
+  locale: es
+
+toates4:
+  type_of_aid_id: 4
+  name: "FC Prorural"
+  locale: es
+
+toates5:
+  type_of_aid_id: 5
+  name: "FC FONSALUD"
+  locale: es
+
+toates6:
+  type_of_aid_id: 6
+  name: "FC Fondo Fed"
+  locale: es
+
+toates7:
+  type_of_aid_id: 7
+  name: "FC Promipyme"
+  locale: es
+
+toates8:
+  type_of_aid_id: 8
+  name: "FC Fonim"
+  locale: es
+
+toates9:
+  type_of_aid_id: 9
+  name: "FC Sociedad Civil"
+  locale: es
+
+toates10:
+  type_of_aid_id: 10
+  name: "FC Anticorrupción"
+  locale: es
+
+toates11:
+  type_of_aid_id: 11
+  name: "FC FISE"
+  locale: es
+
+toates12:
+  type_of_aid_id: 12
+  name: "FC PROASE"
+  locale: es

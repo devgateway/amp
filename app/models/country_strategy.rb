@@ -1,5 +1,4 @@
 class CountryStrategy < ActiveRecord::Base
-  extend Translator
   translates :description, :strategy_number
   
   belongs_to  :donor

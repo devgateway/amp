@@ -1,5 +1,4 @@
 class Mdg < ActiveRecord::Base
-  extend Translator
   translates :name, :description
   
   

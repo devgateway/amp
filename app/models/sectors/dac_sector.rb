@@ -1,5 +1,4 @@
 class DacSector < ActiveRecord::Base
-  extend Translator
   translates :name, :description
   
   

@@ -5,10 +5,8 @@ namespace :db do
   task :flush => :environment do
     print "Are you sure you want to flush your entire database? [y/N] "
     exit unless STDIN.gets.strip.upcase == "Y"
-    
-    tables = ActiveRecord::Base.connection.execute("SELECT tablename FROM pg_tables WHERE schemaname='public'")
-    
-    tables.each do |t|
+        
+    ActiveRecord::Base.connection.tables.each do |t|
       ActiveRecord::Base.connection.execute("DROP TABLE #{t} CASCADE")
       puts "Removed table \"#{t}\""
     end
@@ -16,7 +14,7 @@ namespace :db do
   
   desc "Shows all tables existing in current database"
   task :show_tables => :environment do
-    ActiveRecord::Base.connection.execute("SELECT tablename FROM pg_tables WHERE schemaname='public'").each { |p| puts p }
+    ActiveRecord::Base.connection.tables.each { |p| puts p }
   end
   
   desc "Load seed fixtures (from db/fixtures) into the current environment's database." 

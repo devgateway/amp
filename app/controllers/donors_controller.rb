@@ -2,7 +2,7 @@ class DonorsController < ApplicationController
   access_rule 'admin', :only => [:index, :new, :create]
   
   def index
-    @donors = Donor.find_without_localization(:all, :order => "name ASC")
+    @donors = Donor.find(:all, :order => "name ASC")
   end
   
   def new
@@ -21,11 +21,11 @@ class DonorsController < ApplicationController
   end
 
   def edit
-    @donor = Donor.find_without_localization(params[:id])
+    @donor = Donor.find(params[:id])
   end
 
   def update
-    @donor = Donor.find_without_localization(params[:id])
+    @donor = Donor.find(params[:id])
     
     # Manually set attributes because mass-assignment has been disabled for security reasons
     @donor.name            = params[:donor][:name]

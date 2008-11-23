@@ -3,7 +3,9 @@ ActionController::Routing::Routes.draw do |map|
 
   # Static
   map.with_options :controller => "static" do |static|
-    static.root :action => "home"
+    static.root                           :action => "home"
+    static.links      "/links",           :action => "links"
+    static.downloads  "/downloads",       :action => "downloads"
   end
   
   map.resources :implementing_agencies,   :formatted => :none

@@ -1,12 +1,10 @@
+<% header ll(:links, :title) %>
 <center>
 	<table width="740" class="admin">
-			<tr>
-				<td class="title"><%= ll(:links, :title) %></td>
-			</tr>
 			
-			<% Donor.main.all(:order => "name ASC").each do |donor| %>
+			<% @donors_with_websites.each do |donor| %>
 				<tr>
-					<td align="left"><a href="<%= donor.field_office.website.to_url %>" target="_blank"><%= donor.name.titleize %></a></td>
+					<td align="left"><%= link_to donor.name.titleize, donor.field_office_website.to_url, :target => "_blank" %></td>
 				</tr>
 			<% end %>
 			

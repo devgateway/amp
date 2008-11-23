@@ -1,0 +1,265 @@
+--- 
+sector_details_001: 
+  amount: "0"
+  country_strategy_id: "698218864"
+  focal_sector_id: "218"
+  focal_sector_type: DacSector
+  id: "391"
+sector_details_002: 
+  amount: "535000000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "1034"
+  focal_sector_type: CrsSector
+  id: "411"
+sector_details_003: 
+  amount: "0"
+  country_strategy_id: "698218865"
+  focal_sector_id: "1143"
+  focal_sector_type: CrsSector
+  id: "369"
+sector_details_004: 
+  amount: "0"
+  country_strategy_id: "698286511"
+  focal_sector_id: "1066"
+  focal_sector_type: CrsSector
+  id: "480"
+sector_details_005: 
+  amount: "501000000"
+  country_strategy_id: "698286513"
+  focal_sector_id: "1015"
+  focal_sector_type: CrsSector
+  id: "489"
+sector_details_006: 
+  amount: "0"
+  country_strategy_id: "698218866"
+  focal_sector_id: "1009"
+  focal_sector_type: CrsSector
+  id: "486"
+sector_details_007: 
+  amount: "27000000"
+  country_strategy_id: "698218871"
+  focal_sector_id: "1009"
+  focal_sector_type: CrsSector
+  id: "472"
+sector_details_008: 
+  amount: "8000000"
+  country_strategy_id: "698286512"
+  focal_sector_id: "982"
+  focal_sector_type: CrsSector
+  id: "483"
+sector_details_009: 
+  amount: "3300000"
+  country_strategy_id: "698218868"
+  focal_sector_id: "1012"
+  focal_sector_type: CrsSector
+  id: "448"
+sector_details_010: 
+  amount: "0"
+  country_strategy_id: "698286511"
+  focal_sector_id: "1013"
+  focal_sector_type: CrsSector
+  id: "478"
+sector_details_011: 
+  amount: "0"
+  country_strategy_id: "698218869"
+  focal_sector_id: "1142"
+  focal_sector_type: CrsSector
+  id: "475"
+sector_details_012: 
+  amount: "72000000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "1015"
+  focal_sector_type: CrsSector
+  id: "409"
+sector_details_013: 
+  amount: "37600000"
+  country_strategy_id: "698218863"
+  focal_sector_id: "225"
+  focal_sector_type: DacSector
+  id: "402"
+sector_details_014: 
+  amount: "78900000"
+  country_strategy_id: "698218863"
+  focal_sector_id: "217"
+  focal_sector_type: DacSector
+  id: "403"
+sector_details_015: 
+  amount: "0"
+  country_strategy_id: "698218869"
+  focal_sector_id: "1161"
+  focal_sector_type: CrsSector
+  id: "477"
+sector_details_016: 
+  amount: "144000000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "232"
+  focal_sector_type: DacSector
+  id: "412"
+sector_details_017: 
+  amount: "0"
+  country_strategy_id: "698218865"
+  focal_sector_id: "1100"
+  focal_sector_type: CrsSector
+  id: "370"
+sector_details_018: 
+  amount: "346000000"
+  country_strategy_id: "698286513"
+  focal_sector_id: "985"
+  focal_sector_type: CrsSector
+  id: "492"
+sector_details_019: 
+  amount: "0"
+  country_strategy_id: "698218864"
+  focal_sector_id: "230"
+  focal_sector_type: DacSector
+  id: "394"
+sector_details_020: 
+  amount: "185000000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "217"
+  focal_sector_type: DacSector
+  id: "414"
+sector_details_021: 
+  amount: "0"
+  country_strategy_id: "698218864"
+  focal_sector_id: "221"
+  focal_sector_type: DacSector
+  id: "392"
+sector_details_022: 
+  amount: "8000000"
+  country_strategy_id: "698286512"
+  focal_sector_id: "1004"
+  focal_sector_type: CrsSector
+  id: "484"
+sector_details_023: 
+  amount: "0"
+  country_strategy_id: "698286511"
+  focal_sector_id: "985"
+  focal_sector_type: CrsSector
+  id: "481"
+sector_details_024: 
+  amount: "415000000"
+  country_strategy_id: "698286513"
+  focal_sector_id: "1143"
+  focal_sector_type: CrsSector
+  id: "490"
+sector_details_025: 
+  amount: "38500000"
+  country_strategy_id: "698218871"
+  focal_sector_id: "1002"
+  focal_sector_type: CrsSector
+  id: "473"
+sector_details_026: 
+  amount: "2000000"
+  country_strategy_id: "698218868"
+  focal_sector_id: "1147"
+  focal_sector_type: CrsSector
+  id: "449"
+sector_details_027: 
+  amount: "0"
+  country_strategy_id: "698286511"
+  focal_sector_id: "1133"
+  focal_sector_type: CrsSector
+  id: "479"
+sector_details_028: 
+  amount: "0"
+  country_strategy_id: "698218866"
+  focal_sector_id: "1141"
+  focal_sector_type: CrsSector
+  id: "488"
+sector_details_029: 
+  amount: "53300000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "1022"
+  focal_sector_type: CrsSector
+  id: "410"
+sector_details_030: 
+  amount: "97500000"
+  country_strategy_id: "698218863"
+  focal_sector_id: "238"
+  focal_sector_type: DacSector
+  id: "404"
+sector_details_031: 
+  amount: "4050000"
+  country_strategy_id: "698218868"
+  focal_sector_id: "985"
+  focal_sector_type: CrsSector
+  id: "447"
+sector_details_032: 
+  amount: "0"
+  country_strategy_id: "698218866"
+  focal_sector_id: "997"
+  focal_sector_type: CrsSector
+  id: "487"
+sector_details_033: 
+  amount: "0"
+  country_strategy_id: "698218865"
+  focal_sector_id: "986"
+  focal_sector_type: CrsSector
+  id: "371"
+sector_details_034: 
+  amount: "12000000"
+  country_strategy_id: "698286512"
+  focal_sector_id: "985"
+  focal_sector_type: CrsSector
+  id: "482"
+sector_details_035: 
+  amount: "4530000"
+  country_strategy_id: "698218868"
+  focal_sector_id: "1143"
+  focal_sector_type: CrsSector
+  id: "446"
+sector_details_036: 
+  amount: "0"
+  country_strategy_id: "698218869"
+  focal_sector_id: "1143"
+  focal_sector_type: CrsSector
+  id: "476"
+sector_details_037: 
+  amount: "4350000"
+  country_strategy_id: "698286512"
+  focal_sector_id: "1132"
+  focal_sector_type: CrsSector
+  id: "485"
+sector_details_038: 
+  amount: "11900000"
+  country_strategy_id: "698218871"
+  focal_sector_id: "1133"
+  focal_sector_type: CrsSector
+  id: "471"
+sector_details_039: 
+  amount: "0"
+  country_strategy_id: "698218864"
+  focal_sector_id: "231"
+  focal_sector_type: DacSector
+  id: "395"
+sector_details_040: 
+  amount: "200000000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "240"
+  focal_sector_type: DacSector
+  id: "413"
+sector_details_041: 
+  amount: "0"
+  country_strategy_id: "698218869"
+  focal_sector_id: "1024"
+  focal_sector_type: CrsSector
+  id: "474"
+sector_details_042: 
+  amount: "22200000"
+  country_strategy_id: "698218867"
+  focal_sector_id: "225"
+  focal_sector_type: DacSector
+  id: "408"
+sector_details_043: 
+  amount: "345000000"
+  country_strategy_id: "698286513"
+  focal_sector_id: "1147"
+  focal_sector_type: CrsSector
+  id: "491"
+sector_details_044: 
+  amount: "0"
+  country_strategy_id: "698218864"
+  focal_sector_id: "225"
+  focal_sector_type: DacSector
+  id: "393"

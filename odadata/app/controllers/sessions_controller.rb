@@ -12,6 +12,9 @@ class SessionsController < ApplicationController
       # Protects against session fixation attacks, causes request forgery
       # protection if user resubmits an earlier form using back
       # button. Uncomment if you understand the tradeoffs.
+      # TODO: It would certainly be good to use this but it would also reset the 
+      # output locale. It might make sense to store the locale in a separate cookie
+      # for that purpose.
       # reset_session
       self.current_user = user
       new_cookie_flag = (session[:remember_me] == "1")

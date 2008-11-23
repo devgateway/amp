@@ -1,5 +1,5 @@
 class DonorsController < ApplicationController
-  access_rule 'admin'
+  access_rule 'admin', :only => [:index, :new, :create]
   
   def index
     @donors = Donor.find_without_localization(:all, :order => "name ASC")
@@ -26,7 +26,14 @@ class DonorsController < ApplicationController
 
   def update
     @donor = Donor.find_without_localization(params[:id])
-    if @donor.update_attributes(params[:donor])
+    
+    # Manually set attributes because mass-assignment has been disabled for security reasons
+    @donor.name            = params[:donor][:name]
+    @donor.code            = params[:donor][:code]
+    @donor.currency        = params[:donor][:currency]
+    @donor.cofunding_only  = params[:donor][:cofunding_only]
+      
+    if @donor.save
       flash[:notice] = 'Donor was successfully updated.'
       redirect_to donors_path
     else

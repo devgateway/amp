@@ -1,4 +1,4 @@
-es-NI:
+es:
   project:
     donor_agency: Agencia Donante
     donor_project_number: Número Donante de Proyecto
@@ -40,6 +40,23 @@ es-NI:
     cofunding_only: Sólo donante de co-financiamiento
     code: Código donante
     currency: Moneda
+    # TODO: All missing
+    field_office_address: Field Office Address
+    field_office_email: Field Office Email
+    field_office_phone: Field Office Phone
+    field_office_website: Field Office Website
+    head_of_mission_name: Head of Mission Name
+    head_of_mission_email: Head of Mission Email
+    head_of_cooperation_name: Head of Cooperation Name
+    head_of_cooperation_email: Head of Cooperation Email
+    first_focal_point_name: First Focal Point Name
+    first_focal_point_email: First Focal Point Email
+    second_focal_point_name: Second Focal Point Name
+    second_focal_point_email: Second Focal Point Email
+    institutions_responsible_for_oda: Institution Responsible for ODA
+    total_staff_in_country: Total Staff in Country
+    total_expatriate_staff: Total Expatriate Staff
+    total_local_staff: Total Local Staff
     
   exchange_rate:
     currency: Moneda

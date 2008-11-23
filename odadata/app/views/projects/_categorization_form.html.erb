@@ -5,8 +5,8 @@
 	<% f.field_set do %>
 		<li>
 			<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
-			<%= f.collection_select(:dac_sector_id, sectors, :id, :name_with_code, 
-					{:prompt => true}, {:class => "dynamic_select parent large"}) %>
+			<%= f.collection_select :dac_sector_id, sectors, :id, :name_with_code, 
+					{ :prompt => ll(:options, :prompt) }, { :class => "dynamic_select parent large" } %>
 			
 			<select name="project[crs_sector_id]" class="dynamic_select child large">
 				<%= option_groups_from_collection_for_select(sectors, :crs_sectors, :name_with_code, 
@@ -43,8 +43,8 @@
 		<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
 					:include_blank => ll(:options, :prompt), :required => true %></li>
 		
-		<li class="fifty"><%= f.select :type_of_aid, Project::TYPE_OF_AID_OPTIONS,
-					 :include_blank => ll(:options, :prompt), :required => true %></li>
+		<li class="fifty"><%= f.collection_select :type_of_aid_id, TypeOfAid.all, :id, :name, 
+					:prompt => ll(:options, :prompt), :required => true %></li>
 
 		<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
 					 :include_blank => ll(:options, :prompt), :required => true %></li>

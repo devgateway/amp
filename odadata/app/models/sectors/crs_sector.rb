@@ -1,5 +1,4 @@
 class CrsSector < ActiveRecord::Base
-  extend Translator
   translates :name, :description
   
   belongs_to :dac_sector, :dependent => :destroy

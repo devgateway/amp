@@ -16,7 +16,6 @@ class CreateProjects < ActiveRecord::Migration
                 
       t.text    :comments
       t.string  :website
-      t.integer :type_of_aid
       t.integer :grant_loan
       t.integer :national_regional
       t.integer :type_of_implementation
@@ -28,10 +27,9 @@ class CreateProjects < ActiveRecord::Migration
       
       # Relations
       t.references :donor, :donor_agency
-      t.references :dac_sector, :crs_sector
+      t.references :dac_sector, :crs_sector, :type_of_aid
       t.references :country_strategy
       t.references :government_counterpart
-      
       
       # Markers
       t.integer :gender_policy_marker

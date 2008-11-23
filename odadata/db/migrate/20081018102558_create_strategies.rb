@@ -1,12 +1,6 @@
 class CreateStrategies < ActiveRecord::Migration
   def self.up
-    create_table :country_strategies do |t|
-      t.string  :strategy_number
-      t.string  :strategy_number_es
-      
-      t.text    :description
-      t.text    :description_es
-      
+    create_table :country_strategies do |t|    
       t.string  :website
       t.text    :comment
       t.boolean :strategy_paper
@@ -27,6 +21,14 @@ class CreateStrategies < ActiveRecord::Migration
       t.integer :commitment_to_projects
       
       t.integer :donor_id
+    end
+    
+    create_table :country_strategy_translations do |t|
+      t.string    :locale
+      t.string    :strategy_number
+      t.text      :description    
+      
+      t.references :country_strategy
     end
     
     create_table :total_odas do |t|
@@ -53,6 +55,7 @@ class CreateStrategies < ActiveRecord::Migration
 
   def self.down
     drop_table :country_strategies
+    drop_table :country_strategy_translations
     drop_table :total_odas
     drop_table :sector_amounts
     drop_table :sector_details

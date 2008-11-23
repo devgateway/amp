@@ -3,6 +3,9 @@
 <%= error_messages_for :country_strategy %>
 <% labeled_form_for @country_strategy do |f| %>
 	<% f.field_set do %>
+		<li class="fifty"><%= f.text_field :strategy_number, :class => "large" %></li>
+		<li class="fifty"><%= f.text_field :strategy_number_es, :class => "large" %></li>
+		
 		<li class="fifty">
 			<%= f.date_select :start, :start_year=> 1995, :end_year=> Time.now.year+15, 
 					:default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
@@ -12,8 +15,6 @@
 					:default => { :day => 1, :month => 1, :year => 1995 }, :order => [:day, :month, :year] %>
 		</li>
 		
-		<li class="fifty"><%= f.text_field :strategy_number, :class => "large" %></li>
-		<li class="fifty"><%= f.text_field :strategy_number_es, :class => "large" %></li>
 		<li><%= f.text_area :description, :rows => 5, :class => "full" %></li>
 		<li><%= f.text_area :description_es, :rows => 5, :class => "full" %></li>
 			
@@ -35,16 +36,16 @@
 	<% f.field_set ll(:country_strategy, :current_total_oda, :year => Time.now.year-1) do %>
 		<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-1) do |o| %>
 			<%= o.hidden_field :year, Time.now.year-1 %>
-			<li class="fifty"><%= o.text_field :commitments %></li>
-			<li class="fifty"><%= o.text_field :disbursements %></li>
+			<li class="fifty noborder"><%= o.text_field :commitments %></li>
+			<li class="fifty noborder"><%= o.text_field :disbursements %></li>
 		<% end %>
 	<% end %>
 		
 	<% f.field_set ll(:country_strategy, :last_total_oda, :year => Time.now.year-2) do %>
 		<% f.fields_for_associated @country_strategy.total_odas.find_or_initialize_by_year(Time.now.year-2) do |o| %>
 			<%= o.hidden_field :year, Time.now.year-2 %>
-			<li class="fifty"><%= o.text_field :commitments %></li>
-			<li class="fifty"><%= o.text_field :disbursements %></li>
+			<li class="fifty noborder"><%= o.text_field :commitments %></li>
+			<li class="fifty noborder"><%= o.text_field :disbursements %></li>
 		<% end %>
 	<% end %>
 	

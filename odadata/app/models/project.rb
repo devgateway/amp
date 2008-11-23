@@ -18,9 +18,7 @@ class Project < ActiveRecord::Base
   DATA_STATUS_OPTIONS       = [['draft', DRAFT], ['published', PUBLISHED], ['deleted', DELETED]]
   
   IMPLEMENTATION_TYPES      = [['bilateral', 1], ['multilateral', 2], ['ngo_implementation', 3]]
-  TYPE_OF_AID_OPTIONS       = [['project_program', 1], ['techn_assistance', 2], ['general_budget_support', 3], ['fc_prorural', 4], 
-                              ['fc_fonsalud', 5], ['fc_fondo_fed', 6], ['fc_promipyme', 7], ['fc_fonim', 8], ['fc_civil_society', 9],
-                              ['fc_anti_corruption', 10], ['fc_fise', 11], ['fc_proase', 12]]
+
   GRANT_LOAN_OPTIONS        = [['grant', 1], ['loan', 2]]
   ON_OFF_BUDGET_OPTIONS     = [['on_budget', true], ['off_budget', false]]
   ON_OFF_TREASURY_OPTIONS   = [['on_treasury', true], ['off_treasury', false]]
@@ -38,6 +36,7 @@ class Project < ActiveRecord::Base
   
   belongs_to              :dac_sector
   belongs_to              :crs_sector
+  belongs_to              :type_of_aid
   
   belongs_to              :government_counterpart, :class_name => "GovernmentCounterpartNames", :foreign_key => "government_counterpart_id"
   
@@ -104,7 +103,12 @@ class Project < ActiveRecord::Base
   
   ##
   # Custom finders
-  named_scope :ordered, :joins => [:donor], :order => "donors.name ASC, donor_project_number ASC"
+  # TODO: This is a hack to order by the translated donor name
+  # This should better be done in the globalization plugin directly but joining in the translation
+  named_scope :ordered, lambda { {
+    :joins => "LEFT OUTER JOIN donor_translations ON (donor_translations.donor_id = projects.donor_id AND donor_translations.locale = '#{I18n.locale.to_s.split('-').first}')", 
+    :order => "donor_translations.name ASC, donor_project_number ASC"
+  } }
   
   named_scope :draft, :conditions => ['data_status = ?', DRAFT]
   named_scope :published, :conditions => ['data_status = ?', PUBLISHED]

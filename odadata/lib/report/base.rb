@@ -29,10 +29,10 @@ module Report
       
     def projects
       @projects ||= 
-        Project.published.all(
+        Project.published.ordered.all(
           :include => [:donor, :mdg_relevances, :geo_relevances], 
-          :conditions => build_sql_conditions,
-          :order => "donors.name ASC, donor_project_number ASC").map { |p| @proxy.new(p) }
+          :conditions => build_sql_conditions
+        ).map { |p| @proxy.new(p) }
     end
     
     # Builds the report table as an Report::Data::Table object

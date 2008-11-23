@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081025061719) do
+ActiveRecord::Schema.define(:version => 20081123111827) do
 
   create_table "agencies", :force => true do |t|
     t.string "name"
@@ -28,24 +28,12 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
 
   add_index "cofundings", ["donor_id", "project_id"], :name => "index_cofundings_on_project_id_and_donor_id"
 
-  create_table "contacts", :force => true do |t|
-    t.string "name"
-    t.string "address"
-    t.string "phone"
-    t.string "email"
-    t.string "website"
-  end
-
   create_table "contracted_agencies_projects", :id => false, :force => true do |t|
     t.integer "project_id"
     t.integer "contracted_agency_id"
   end
 
   create_table "country_strategies", :force => true do |t|
-    t.string  "strategy_number"
-    t.string  "strategy_number_es"
-    t.text    "description"
-    t.text    "description_es"
     t.string  "website"
     t.text    "comment"
     t.boolean "strategy_paper"
@@ -63,23 +51,36 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
     t.integer "donor_id"
   end
 
+  create_table "country_strategy_translations", :force => true do |t|
+    t.string  "locale"
+    t.string  "strategy_number"
+    t.text    "description"
+    t.integer "country_strategy_id"
+  end
+
+  create_table "crs_sector_translations", :force => true do |t|
+    t.string  "locale"
+    t.string  "name"
+    t.text    "description"
+    t.integer "crs_sector_id"
+  end
+
   create_table "crs_sectors", :force => true do |t|
     t.integer "code"
-    t.string  "name"
-    t.string  "name_es"
-    t.text    "description"
-    t.text    "description_es"
     t.integer "dac_sector_id"
   end
 
   add_index "crs_sectors", ["dac_sector_id"], :name => "index_crs_sectors_on_dac_sector_id"
 
+  create_table "dac_sector_translations", :force => true do |t|
+    t.string  "locale"
+    t.string  "name"
+    t.text    "description"
+    t.integer "dac_sector_id"
+  end
+
   create_table "dac_sectors", :force => true do |t|
     t.integer "code"
-    t.string  "name"
-    t.string  "name_es"
-    t.text    "description"
-    t.text    "description_es"
   end
 
   create_table "districts", :force => true do |t|
@@ -95,9 +96,13 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
     t.integer "donor_id"
   end
 
-  create_table "donors", :force => true do |t|
+  create_table "donor_translations", :force => true do |t|
+    t.string  "locale"
     t.string  "name"
-    t.string  "name_es"
+    t.integer "donor_id"
+  end
+
+  create_table "donors", :force => true do |t|
     t.string  "code"
     t.string  "currency"
     t.boolean "cofunding_only"
@@ -166,10 +171,6 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
 
   add_index "glossaries", ["locale", "method", "model"], :name => "index_glossaries_on_model_and_method_and_locale"
 
-  create_table "government_counterpart_names", :force => true do |t|
-    t.string "name"
-  end
-
   create_table "historic_fundings", :force => true do |t|
     t.integer "project_id"
     t.integer "payments"
@@ -189,11 +190,19 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
     t.integer "target_id"
   end
 
+  create_table "mdg_translations", :force => true do |t|
+    t.string  "locale"
+    t.string  "name"
+    t.text    "description"
+    t.integer "mdg_id"
+  end
+
   create_table "mdgs", :force => true do |t|
-    t.string "name"
-    t.string "name_es"
-    t.text   "description"
-    t.string "description_es"
+  end
+
+  create_table "plugin_schema_info", :id => false, :force => true do |t|
+    t.string  "plugin_name"
+    t.integer "version"
   end
 
   create_table "projects", :force => true do |t|
@@ -264,14 +273,18 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
     t.string  "focal_sector_type"
   end
 
-  create_table "settings", :force => true do |t|
+  create_table "settings", :id => false, :force => true do |t|
     t.string "key"
     t.text   "value"
   end
 
-  create_table "targets", :force => true do |t|
+  create_table "target_translations", :force => true do |t|
+    t.string  "locale"
     t.text    "name"
-    t.text    "name_es"
+    t.integer "target_id"
+  end
+
+  create_table "targets", :force => true do |t|
     t.integer "mdg_id"
   end
 
@@ -280,6 +293,15 @@ ActiveRecord::Schema.define(:version => 20081025061719) do
     t.integer "year"
     t.integer "disbursements"
     t.integer "country_strategy_id"
+  end
+
+  create_table "type_of_aid_translations", :force => true do |t|
+    t.string  "locale"
+    t.string  "name"
+    t.integer "type_of_aid_id"
+  end
+
+  create_table "types_of_aid", :force => true do |t|
   end
 
   create_table "users", :force => true do |t|

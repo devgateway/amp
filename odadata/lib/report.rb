@@ -19,7 +19,7 @@ module Report
     :markers => lambda { |m, v| 
       v.map { |name| "projects.#{name}_marker >= 1"}.join(" OR ") 
     },
-    [:prj_status, :grant_loan, :type_of_aid, :type_of_implementation] => 
+    [:prj_status, :grant_loan, :type_of_aid_id, :type_of_implementation] => 
       lambda { |m, v| ["#{m} IN (?)", v] }
   }
   

@@ -4,11 +4,11 @@ class CountryStrategiesController < ApplicationController
   before_filter :fetch_donor
   
   def index
-    @country_strategies = current_donor.country_strategies.find_without_localization(:all)
+    @country_strategies = current_donor.country_strategies.find(:all)
   end
   
   def show
-    @country_strategy = CountryStrategy.find_without_localization(params[:id])
+    @country_strategy = CountryStrategy.find(params[:id])
   end
   
   def new
@@ -28,11 +28,11 @@ class CountryStrategiesController < ApplicationController
   end
   
   def edit
-    @country_strategy = @donor.country_strategies.find_without_localization(params[:id])
+    @country_strategy = @donor.country_strategies.find(params[:id])
   end
   
   def update
-    @country_strategy = @donor.country_strategies.find_without_localization(params[:id])
+    @country_strategy = @donor.country_strategies.find(params[:id])
     
     if @country_strategy.update_attributes(params[:country_strategy])
         flash[:notice] = 'Country Strategy was successfully updated.'

@@ -17,11 +17,13 @@
 						:controller => "reports", :action => "project_list", :query => "location", :value => 0) %>
 			</td>
 		<% end %>
-		<% if @national.length == 1 %>
-			<td><%= link_to(image_tag("/images/details.gif", :size => "14x15"), 
+		<td>
+   		<% if @national.length == 1 %>
+			<%= link_to(image_tag("/images/details.gif", :size => "14x15"), 
 						project_path(projects.first, :report => "with_currency_selector"), 
-						:popup => ['_blank', 'height=600,width=800']) %></td>
+						:popup => ['_blank', 'height=600,width=800']) %>
 		<% end %>
+        </td>
 	</tr>
 		
 	<% @provinces.each do |province| %>

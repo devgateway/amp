@@ -3,7 +3,10 @@ es:
     title: ODAnic {{page_title}}
     
   navigation:
-    logout: Salir del Sistema
+    logout: Salir
+    language: Lenguaje
+    language_SP: Espa&ntilde;ol
+    language_EN: Ingl&eacute;s
     
     default:
       home: Inicio

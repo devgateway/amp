@@ -4,6 +4,9 @@ en:
     
   navigation:
     logout: Log out
+    language: Language
+    language_SP: Spanish
+    language_EN: English
     
     default:
       home: Home

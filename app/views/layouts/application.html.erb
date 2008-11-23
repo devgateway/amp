@@ -13,30 +13,28 @@
 	</head>
 	
 	<body id="body" class="<%= current_user.andand.layout || 'public' %>">
+	<div id="generalContainer" style="border-left:1px solid #CECECE;border-right:1px solid #CECECE;">
 		<div id="header" style="width:900px;">
 			<!-- START Flash Objects -->
-			<div style="display:block;clear:both;height:90px;vertical-align:bottom;">
-				<div style="float:left;height:inherit;width:15%;">
-					<%= flashobject_tag "/images/ODAnicFlashLogo.swf", :size => "80x80" %>
-				</div>
-				<div style="float:left;height:inherit;width:70%;text-align:center;">
+			<div style="height:80px;">
+				<div style="float:left;height:inherit;width:70%;text-align:left;padding:6px 6px 6px 6px;">
 					<img src="/images/ODAnicLogo.gif" alt="ODAnic" width="236" height="80" border="0" style="float:left" />
-                    <p>Official Development Assistance <br/> to Nicaragua Database</p>
-				</div>
-				<div style="float:right;padding-top:15px;width:15%;">
-					<%= flashobject_tag "/images/ODAnicFlags.swf", :size => "80x54" %>
+                    <p style="color:#1c4683;font-weight:bold;">Official Development Assistance <br/> to Nicaragua Database</p>
 				</div>
 			</div>
 			<!-- END Flash Objects -->
-
+			<div style="float:left;width:900px;">
 			<!-- START Render User Navigation AKA Menu-->
 			<%= render_user_navigation %>
 			<!-- END Render User Navigation -->
+            </div>
 
 			<!-- START News section -->
+            <div style="text-align:center;padding:2px;">
 			<marquee DIRECTION="LEFT" BEHAVIOR="SCROLL" SCROLLAMOUNT="7" SCROLLDELAY="200" TRUESPEED height="20" width="700">
 				<%= Prefs.scroll_bar_mfp %>
 			</marquee>
+            </div>
 			<!-- END News section -->
 
 			<!-- START Flash Messages section -->
@@ -57,5 +55,6 @@
 		<!-- START footer section -->
 		<%= render :partial => 'layouts/footer' %>
 		<!-- END footer section -->
+	</div>
 	</body>
 </html>

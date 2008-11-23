@@ -1,5 +1,21 @@
+
+<li>
+<%= link_to ll(:navigation, :language_SP), params.merge(:locale => 'es-NI'), :id => "language_SP" %>
+</li>
+<li>
+<%= link_to ll(:navigation, :language_EN), params.merge(:locale => 'en-US'), :id => "language_EN" %>
+</li>
+
+<!-- Mark selected langauge-->
+<script language="javascript">
+    $(document).ready(
+        function()
+        {
 <% if I18n.locale.to_s == 'en-US' %>
-	<%= link_to 'Espa&ntilde;ol', params.merge(:locale => 'es-NI') %>
+            $('#language_EN').prepend('<img src="/images/checked.gif" height="7" width="7" border="0" align="absmiddle" style="float:left;border:0;padding:3px;"/>');
+
 <% else %>
-	<%= link_to 'English', params.merge(:locale => 'en-US') %>
+			$('#language_SP').prepend('<img src="/images/checked.gif" height="7" width="7" border="0" align="absmiddle" style="float:left;border:0;padding:3px;"/>');
 <% end %>
+        });
+</script>

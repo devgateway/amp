@@ -1702,10 +1702,11 @@ public class DbUtil {
             //String queryString = "from " + AmpApplicationSettings.class.getName();
             qry = session.createQuery(queryString);
             qry.setParameter("memberId", memberId, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
+            /*Iterator itr = qry.list().iterator();
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
-            }
+            }*/
+            ampAppSettings = (AmpApplicationSettings) qry.uniqueResult();
         } catch (Exception e) {
             logger.error("Unable to get MemberAppSettings", e);
         }

@@ -1,6 +1,7 @@
 <ul id="mainMenu">
 	<li>
-		<div><a href="#"><%= ll(:navigation, :admin, :gen_conf) %></a></div>
+		<span><%= ll(:navigation, :admin, :gen_conf) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
 			<li><a href="<%= data_input_status_settings_path %>"><%= ll(:navigation, :admin, :op_cl_data_input) %></a></li>
 			<li><a href="<%= glossaries_path %>"><%= ll(:navigation, :admin, :glossary) %></a></li>
@@ -16,7 +17,8 @@
 	</li>
 
 	<li>
-		<div><a href="#"><%= ll(:navigation, :admin, :agencies) %></a></div>
+		<span><%= ll(:navigation, :admin, :agencies) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
 			<li><a href="<%= implementing_agencies_path %>"><%= ll(:navigation, :admin, :impl_agencies) %></a></li>
 			<li><a href="<%= contracted_agencies_path %>"><%= ll(:navigation, :admin, :contr_agencies) %></a></li>
@@ -25,9 +27,11 @@
 	</li>
 
 	<li>
-		<div>
+		<span><%= ll(:navigation, :language) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+        <ul>
 			<%= render :partial => "layouts/navigation/language_select" %>
-		</div>
+        </ul>
 	</li>
 	
 	<li>

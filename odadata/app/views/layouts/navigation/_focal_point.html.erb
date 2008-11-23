@@ -5,7 +5,8 @@
 	</li>
 	
 	<li>
-		<div><a href="<%= projects_path %>"><%= ll(:navigation, :focal_point, :projects) %>:</a></div>
+		<span><%= ll(:navigation, :focal_point, :projects) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
 			<li><%= link_to ll(:navigation, :focal_point, :new_project), 
 						new_project_path %></li>
@@ -24,7 +25,8 @@
 	</li>
 
 	<li>
-		<div><a href="#">Reports on:</a></div>
+		<span>Reports on</span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
 			<li><%= link_to 'Drafts', { :controller => "reports", :action => "project_list", :query => "draft", :value => current_donor.id }, :popup => ['_blank', 'scrollbars=yes' ] %></li>
 			<li><%= link_to 'Published', { :controller => "reports", :action => "project_list", :query => "donor", :value => current_donor.id }, :popup => ['_blank', 'scrollbars=yes' ] %></li>
@@ -32,7 +34,8 @@
 	</li>
 
 	<li>
-		<div><a href="#"><%= ll(:navigation, :focal_point, :donor_info) %></a></div>
+		<span><%= ll(:navigation, :focal_point, :donor_info) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
 			<li><%= link_to ll(:navigation, :focal_point, :donor_details), edit_donor_details_path %></a></li>
 			<li><a href="<%= country_strategies_path %>"><%= ll(:navigation, :focal_point, :strategy) %></a></li>
@@ -43,7 +46,8 @@
 	</li>
 
 	<li>
-		<div><a href="#"><%= ll(:navigation, :focal_point, :manuals) %>:</a></div>
+		<span><%= ll(:navigation, :focal_point, :manuals) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
 			<li><a href="/manuals/odanic_data_entry.pdf"><%= ll(:navigation, :focal_point, :data_input_manual) %></a></li>
 			<li><a href="/manuals/odanic_data_entry_glossary.pdf" onclick="window.open(this.href,'ODAnic Glossary','height=500,width=800,scrollbars=yes,resizable=yes');return false;"><%= ll(:navigation, :focal_point, :data_input_glossary) %></a></li>
@@ -57,9 +61,11 @@
 	</li>
 
 	<li>
-		<div>
+		<span><%= ll(:navigation, :language) %></span>
+        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+        <ul>
 			<%= render :partial => "layouts/navigation/language_select" %>
-		</div>
+        </ul>
 	</li>
 
 	<li>

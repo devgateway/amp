@@ -1,27 +1,17 @@
-<table width="740" class="admin">
-	<tr>
-		<td width=20% valign="top">
-			<center>
-			<br>
-			<a href="/odamap" target="_blank"><IMG SRC="/images/Nicaragua.jpg" width="150" height="100" border="1" alt="ODAmap"></a>
+			<div id="leftColumn" style="text-align:center">
+			<a href="/odamap" target="_blank"><IMG SRC="/images/Nicaragua.jpg" width="150" height="100" border="1" alt="ODAmap" /></a>
 			<%= lc(:map_image_link) %> 
-			</center>
-		</td>
-		<td width=60% class="field_justify">
+            </div>
+			<div id="rightColumn" style="text-align:center">
+			<a href="/resources/nicaragua_bluebook_2007_<%= I18n.locale %>.pdf"><IMG SRC="/images/EUBluebookCoverNicaragua.jpg" width="150" height="100" border="1" alt="EU BlueBook Cover"></a>
+			<%= lc(:bluebook_image_link) %>
+            </div>
+			<div id="centerColumn">
 			<% if params[:id] == "all" %>
 				<%= lc(:introduction_long) %>
 				<p align="right"><%= link_to "#{ll(:actions, :back)}...", root_path %></p>
 			<% else %>
 				<%= lc(:introduction_short) %>
-				<p align="right"><%= link_to "#{lc(:read_more)}...", root_path(:id => "all") %></p>
+				<p align="right" style="display:block;"><%= link_to "#{lc(:read_more)}...", root_path(:id => "all") %></p>
 			<% end %>
-		</td>
-		<td width=20% valign="top">
-			<center>
-			<br>
-			<a href="/resources/nicaragua_bluebook_2007_<%= I18n.locale %>.pdf"><IMG SRC="/images/EUBluebookCoverNicaragua.jpg" width="150" height="100" border="1" alt="EU BlueBook Cover"></a>
-			<%= lc(:bluebook_image_link) %>
-			</center>
-		</td>	
-	</tr>		
-</table>
+            </div>

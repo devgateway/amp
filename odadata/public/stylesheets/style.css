@@ -44,21 +44,27 @@ Lighter row:
 /* Data Tables (usually lists), always preceded by the title as a <H2> tag */
 .public #content H2+TABLE {
 	text-align: center;
-	width: 740px;
-	background-color: #dbe5f1;
+	width: 100%;
 	border: 0px;
-	border-spacing: 0px;
+	border-spacing: 1px;
 } 
 
 /* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
 .public #content H2+TABLE TH {
 	color: #fff;
-  background-color:#4f81bd;
+	background-color:#687eab;
+	text-align:left;
+	padding:2px 2px 2px 2px;
+	border-bottom:2px solid white;
 } 
 
 /* For the data cells of the table */
 .public #content H2+TABLE TD {
-  background-color:#dbe5f1;
+	font-size:11px;
+  	background-color:#dbe2f1;
+	border-spacing: 1px;
+	text-align:left;
+	padding:2px 2px 2px 2px;
 } 
 
 /* Data Table title, preceding the <TABLE> tag */
@@ -76,22 +82,28 @@ Lighter row:
 /* For FOCAL_POINT using grayscale */
 /* Data Tables (usually lists), always preceded by the title as a <H2> tag */
 .focal_point #content H2+TABLE {
+	font-size:11px;
 	text-align: center;
-	width: 740px;
-	background-color: #dbe5f1;
+	width: 100%;
 	border: 0px;
-	border-spacing: 0px;
+	border-spacing: 1px;
 } 
 
-/* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
 .focal_point #content H2+TABLE TH {
 	color: #fff;
-  background-color:#000000;
+	background-color:#687eab;
+	text-align:left;
+	padding:2px 2px 2px 2px;
+	border-bottom:2px solid white;
 } 
 
 /* For the data cells of the table */
 .focal_point #content H2+TABLE TD {
-  background-color:#d8d8d8;
+	font-size:11px;
+  	background-color:#dbe2f1;
+	border-spacing: 1px;
+	text-align:left;
+	padding:2px 2px 2px 2px;
 } 
 
 /* Data Table title, preceding the <TABLE> tag */
@@ -102,29 +114,32 @@ Lighter row:
 	font-weight: bold;
 	color: #003366;
 } 
-
 /* End FOCAL_POINT style */
 
 /* Start ADMIN style */
 /* For ADMIN using greenscale */
 /* Data Tables (usually lists), always preceded by the title as a <H2> tag */
 .admin #content H2+TABLE {
-	text-align: center;
-	width: 740px;
-	background-color: #eaf1dd;
+	font-size:11px;
+	width: 100%;
 	border: 0px;
-	border-spacing: 0px;
+	border-spacing: 1px;
 } 
 
 /* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
 .admin #content H2+TABLE TH {
+	text-align:left;
+	padding:2px 2px 2px 2px;
 	color: #fff;
-  background-color:#9bbb59;
+  background-color:#666666;
 } 
 
 /* For the data cells of the table */
 .admin #content H2+TABLE TD {
-  background-color:#eaf1dd;
+	background-color:#cccccc;
+	border-spacing: 1px;
+	text-align:left;
+	padding:2px 2px 2px 2px;
 } 
 
 /* Data Table title, preceding the <TABLE> tag */
@@ -136,7 +151,6 @@ Lighter row:
 	color: #003366;
 } 
 
-
 /* End ADMIN style */
 
 /* Start Design Own Report */
@@ -144,22 +158,22 @@ Lighter row:
 	float: left;
 }
 div#output_options {
-	width: 142px;
-	margin-right: 10px;
-}
-div#filter_criteria {
-	width: 426px;
-	margin-right: 10px;
-}
-div#other_criteria {
-	width: 142px;
-}
-div#donor_province {
 	width: 170px;
 	margin-right: 10px;
 }
+div#filter_criteria {
+	width: 522px;
+	margin-right: 10px;
+}
+div#other_criteria {
+	width: 170px;
+}
+div#donor_province {
+	width: 200px;
+	margin-right: 10px;
+}
 div#mdg_sector {
-	width: 246px;
+	width: 312px;
 }
 
 .container h2 {
@@ -182,6 +196,12 @@ div#mdg_sector {
 
 ul.checkbox_container {
 	margin-top: 10px;
+	font-size:8pt;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
 	border: 1px solid #777;
 	background-color: #DBE2F1;
 }
@@ -218,8 +238,8 @@ HTML {
 }
 
 BODY { 
-  background-color: #fff; 
-  color: #333; 
+	background-color: #eee; 
+	color: #333; 
 	scrollbar-face-color:#FFFFFF;
 	scrollbar-highlight-color:#FFFFFF;
 	scrollbar-3dlight-color:#006699;
@@ -227,6 +247,7 @@ BODY {
 	scrollbar-shadow-color:#FFFFFF;
 	scrollbar-arrow-color:#006699;
 	scrollbar-track-color:#E2E7EB;
+	margin:0 0;
 }
 
 BODY, P, OL, UL, TD {
@@ -257,12 +278,45 @@ A IMG { border: 0; }
 
 
 /* Start GENERAL CLASSES */
+.bt {
+	background-color:#FFAA33;
+	border:1px solid #FF6600; 
+	color:#003366;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	padding:2px;
+	text-align:center;
+	text-decoration:none;
+}
 
+#leftColumn {
+	width:160px;
+	float:left;
+}
+
+#centerColumn {
+	width:580px;	
+	margin: 0 160px;
+}
+
+#rightColumn {
+	width:160px;	
+	float:right;
+}
+
+
+#generalContainer {
+	width:900px;
+	margin:0 auto;
+	background-color:#fff;
+}
 
 #content {
-	width: 780px;
-	margin-left: 0;
-	margin-right: 0;
+	text-align:left;
+	width: 892px;
+	padding-left: 4px;
+	padding-right: 4px;
 }
 
 #content.fluid {
@@ -270,9 +324,12 @@ A IMG { border: 0; }
 }
 
 #footer {
-	width: 780px;
+	width: 900px;
 	margin-left: 0;
 	margin-right: 0;
+	text-align:center;
+	vertical-align:middle;
+	height:35px;
 }
 
 #footer hr {
@@ -375,12 +432,16 @@ ul.fatlist.flexible li {
 /* This CSS is used for the Menu (the left frame and the top frame) */
 /* This has to be changed and cleaned up */
 #mainMenu
-{	margin: 0;
-	padding: 0
+{
+ 	height:23px;
+ 	background-color:#376091;
+	margin:0;
+	padding:0;
 }
-	
+
 #mainMenu li
-{	float: left;
+{
+	float: left;
     list-style: none;
     font: 12px Tahoma, Arial
 }
@@ -388,7 +449,7 @@ ul.fatlist.flexible li {
 #mainMenu li a
 {
 	display: block;
-    background: #20548E;
+    background: #376091;
     padding: 5px 12px;
     text-decoration: none;
     border-right: 1px solid white;
@@ -399,31 +460,80 @@ ul.fatlist.flexible li {
     font-size:10px;
 }
 
+#mainMenu li img
+{
+    background: #376091;
+    text-decoration: none;
+    color: #EAFFED;
+    border-right: 1px solid white;
+	cursor:pointer;
+    padding: 10px 5px 9px 5px;
+}
+/*    padding: 10px 5px 9px 5px;
+    padding: 5px 2px 5px 12px;
+*/
+#mainMenu li span
+{
+    background: #376091;
+    text-decoration: none;
+    padding: 5px 2px 5px 12px;
+    color: #EAFFED;
+    white-space: nowrap;
+    text-transform:uppercase;
+    font-family:Arial,sans-serif;
+    font-size:10px;
+	cursor:default;
+}
+
+#mainMenu li img:hover
+{
+	background: #222e5d
+}
+
+#mainMenu li ul li a img 
+{
+	background:none;
+}
+
+#mainMenu li ul li a img:hover
+{
+	background:none;
+}
+
+#mainMenu li span:hover
+{
+	background: #222e5d
+}
+
 #mainMenu li a:hover
 {
-	background: #1A4473
+	background: #222e5d
 }
     
 #mainMenu li ul
-{	margin: 0;
+{
+	margin: 0;
     padding: 0;
     position: absolute;
     visibility: hidden;
     border-top: 1px solid white}
 
 #mainMenu li ul li
-{	float: none;
-    display: inline}
+{	
+	text-align:left;	
+	float: none;
+    display: inline
+}
 
 #mainMenu li ul li a
 {
-	width: 120px;
-    background: #20548E;
+    background: #376091;
+	min-width:180px;
 }
 
 #mainMenu li ul li a:hover
 {
-	background: #1A4473
+	background: #222e5d
 }
 /* End TOP MENU STYLES */
 

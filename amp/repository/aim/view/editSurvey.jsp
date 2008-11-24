@@ -336,7 +336,7 @@
 															</td>
 
 														</tr>
-
+														<nested:define id="indicatorCodeAux" property="indicatorCode" />
 													<nested:iterate property="question">
 
 														<TR bgcolor="#f4f4f2">
@@ -349,7 +349,7 @@
 
 																	<c:choose>
 
-																		<c:when test="${indicators.indicatorCode == '7' }">
+																		<c:when test="${indicatorCodeAux == '7' }">
 
 																			<TD width="100%">
 
@@ -363,7 +363,7 @@
 
 																		</c:when>
 
-																		<c:when test="${indicators.indicatorCode == '10a' }">
+																		<c:when test="${indicatorCodeAux == '10a' }">
 
 																			<TD width="100%">
 
@@ -375,7 +375,7 @@
 
 																		</c:when>
 
-																		<c:when test="${indicators.indicatorCode == '10b' }">
+																		<c:when test="${indicatorCodeAux == '10b' }">
 
 																			<TD width="100%">
 
@@ -413,7 +413,7 @@
 
 																<nested:equal property="questionType" value="yes-no">
 
-																	<c:if test="${indicators.indicatorCode != '10a' && indicators.indicatorCode != '10b' }">
+																	<c:if test="${indicatorCodeAux != '10a' && indicatorCodeAux != '10b' }">
 
 																		<TD width="3%">
 
@@ -447,7 +447,7 @@
 
 																<nested:equal property="questionType" value="calculated">
 
-																	<c:if test="${indicators.indicatorCode != '7' }">
+																	<c:if test="${indicatorCodeAux != '7' }">
 
 																		<TD width="20%">
 

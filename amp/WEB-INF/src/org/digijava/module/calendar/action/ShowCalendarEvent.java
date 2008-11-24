@@ -317,10 +317,9 @@ public class ShowCalendarEvent extends Action {
             ampCalendar.setPrivateEvent(ceform.isPrivateEvent());
 
             AmpDbUtil.updateAmpCalendar(ampCalendar);
-            //Create new calendar event message only if event is private
-            if(ceform.isPrivateEvent()){
-            	 CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
-            }           
+            //Create new calendar event alert           
+            CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
+                      
             
             //get current member
             HttpSession session = request.getSession();
@@ -328,7 +327,7 @@ public class ShowCalendarEvent extends Action {
         	 // Get the current member who has logged in from the session
         	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
         	
-            //guests(in Attendee-s list) should get an email    
+            //guests(in Attendee-s list) should get an email and also attendees(if emailable setting is set to true)   
         	if(addressCol!=null && addressCol.size()>0){
         		InternetAddress[] addresses=(InternetAddress[])addressCol.toArray(new InternetAddress[addressCol.size()]);
                 DgEmailManager.sendMail(addresses, teamMember.getEmail(), calendarItem.getTitle(), calendarItem.getDescription());

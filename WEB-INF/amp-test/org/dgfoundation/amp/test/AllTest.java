@@ -14,7 +14,7 @@ public class AllTest {
 		TestSuite suite = new TestSuite();
 		//suite.addTestSuite(MockTagLibTest.class);
 		//suite.addTestSuite(MockStrutTest.class);
-		//suite.addTestSuite(SimpleUnitTest.class);
+		suite.addTestSuite(SimpleUnitTest.class);
 		//suite.addTestSuite(UserRegistrationTest.class);
 		suite.addTestSuite(TestTest.class);
 		return suite;

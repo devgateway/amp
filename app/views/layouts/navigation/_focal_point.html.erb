@@ -8,14 +8,10 @@
 		<span><%= ll(:navigation, :focal_point, :projects) %></span>
         <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
-			<li><%= link_to ll(:navigation, :focal_point, :new_project), 
-						new_project_path %></li>
-			<li><%= link_to ll(:navigation, :focal_point, :draft_projects), 
-						projects_path(:status => Project::DRAFT) %></li>
-			<li><%= link_to ll(:navigation, :focal_point, :published_projects), 
-						projects_path(:status => Project::PUBLISHED) %></li>
-			<li><%= link_to ll(:navigation, :focal_point, :deleted_projects), 
-						projects_path(:status => Project::DELETED) %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :new_project), new_project_path %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :draft_projects), projects_path(:status => Project::DRAFT) %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :published_projects), projects_path(:status => Project::PUBLISHED) %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :deleted_projects), projects_path(:status => Project::DELETED) %></li>
 		</ul>
 	</li>
 
@@ -37,11 +33,11 @@
 		<span><%= ll(:navigation, :focal_point, :donor_info) %></span>
         <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
 		<ul>
-			<li><%= link_to ll(:navigation, :focal_point, :donor_details), edit_donor_details_path(current_donor) %></a></li>
-			<li><a href="<%= country_strategies_path %>"><%= ll(:navigation, :focal_point, :strategy) %></a></li>
-			<li><a href="<%= consistency_path %>"><%= ll(:navigation, :focal_point, :financial_consistency) %></a></li>
-			<li><a href="<%= exchange_rates_path %>"><%= ll(:navigation, :focal_point, :exchange_rates) %></a></li>
-			<li><a href="<%= users_path %>"><%= ll(:navigation, :focal_point, :accounts) %></a></li>
+			<li><%= link_to ll(:navigation, :focal_point, :donor_details), edit_donor_details_path(current_donor) %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :strategy), country_strategies_path %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :financial_consistency), consistency_path %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :exchange_rates), exchange_rates_path %></li>
+			<li><%= link_to ll(:navigation, :focal_point, :accounts), users_path %></li>
 		</ul>
 	</li>
 

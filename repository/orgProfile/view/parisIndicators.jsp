@@ -13,21 +13,21 @@
 <table border="1" id="pIndicator">
   
     <tr>
-        <td colspan="2" rowspan="2" bgcolor="#999999" style="color:black">
+        <td colspan="2" rowspan="2" class="tableHeaderCls">
             PARIS DECLARATION INDICATORS - DONORS</td>
-        <td colspan="3" align="center" bgcolor="#999999" style="color:black">
+        <td colspan="3" align="center" class="tableHeaderCls">
             All donors
        </td>
-       <td colspan="2" align="center" bgcolor="#999999" style="color:black">
+       <td colspan="2" align="center" class="tableHeaderCls">
            ${orgProfilePIForm.organization.name}
        </td>
     </tr>
     <tr>
-        <td bgcolor="#999999" style="color:black">2005 Baseline</td>
-        <td bgcolor="#999999" style="color:black">${orgProfilePIForm.fiscalYear-1} Value</td>
-        <td bgcolor="#999999" style="color:black">2010 Target</td>
-        <td bgcolor="#999999" style="color:black">2005 Baseline</td>
-        <td bgcolor="#999999" style="color:black">${orgProfilePIForm.fiscalYear-1} Value</td>
+        <td class="tableHeaderCls">2005 Baseline</td>
+        <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} Value</td>
+        <td class="tableHeaderCls">2010 Target</td>
+        <td class="tableHeaderCls">2005 Baseline</td>
+        <td class="tableHeaderCls">${orgProfilePIForm.fiscalYear-1} Value</td>
         
     </tr>
     <c:forEach var="indicator" items="${orgProfilePIForm.indicators}">

@@ -27,6 +27,11 @@
 	background-color:#a5bcf2;
 }
 
+.tableHeaderCls {
+      color: #FFFFFF;
+      background-color:#222E5D;
+
+}
 </style>
 
 <script language="javascript">

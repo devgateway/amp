@@ -10,7 +10,7 @@
    
 
 <table id="orgTable" border="1">
-    <th colspan="2" bgcolor="#999999" style="color:black">Summary</th>
+    <th colspan="2" class="tableHeaderCls">Summary</th>
     <tr>
         <td>Organization Name:</td><td>${organization.name}&nbsp;</td>
     </tr>

@@ -26,7 +26,6 @@ ActionController::Routing::Routes.draw do |map|
     d.resources :country_strategies,      :formatted => :none
     d.resource  :details,                 :formatted => :none, :controller => 'donor_details'
   end
-  map.resource  :donor_details
   
   map.resources :settings, :collection => {
     :data_input_status => :get,

@@ -56,6 +56,8 @@ class Funding < ActiveRecord::Base
   end
    
   # Formatted output for all currency fields
+  # TODO: This turned out to be unnecessary and should be replaced by the existing composed_of
+  # along the next data model refactoring. http://opensoul.org/2006/11/16/making-code-composed_of-code-more-useful
   currency_columns :payments_q1, :payments_q2, :payments_q3, :payments_q4, :commitments,
     :currency => lambda { |f| f.project.donor.currency }, 
     :year => lambda { |f| f.year }, :validations => false

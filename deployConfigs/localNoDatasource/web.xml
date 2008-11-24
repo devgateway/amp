@@ -350,7 +350,7 @@
   
   <servlet-mapping>
     <servlet-name>GetChart</servlet-name>
-    <url-pattern>/GetChart</url-pattern>
+    <url-pattern>/GetChart.out</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

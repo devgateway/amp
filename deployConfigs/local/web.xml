@@ -295,7 +295,7 @@
 
   <filter-mapping>
     <filter-name>JPivotController</filter-name>
-    <url-pattern>/mondrian/testpage.do</url-pattern>
+    <url-pattern>/mondrian/*</url-pattern>
   </filter-mapping>
 
   <listener>
@@ -349,7 +349,7 @@
   
   <servlet-mapping>
     <servlet-name>GetChart</servlet-name>
-    <url-pattern>/GetChart</url-pattern>
+    <url-pattern>/GetChart.out</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

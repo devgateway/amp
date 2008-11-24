@@ -9,13 +9,12 @@
 
 <digi:instance property="orgProfLargestProjectsForm"/>
 
-
 <table border="1" id="lgProjects" bgcolor="#dddddd">
-    <th colspan="3" bgcolor="#999999" style="color:black">5 Largest projects</th>
+    <th colspan="3" class="tableHeaderCls">5 Largest projects</th>
     <tr colspan="3">
-        <td bgcolor="#999999" style="color:black">Project title</td>
-        <td bgcolor="#999999" style="color:black">Commitment (USD million)</td>
-        <td bgcolor="#999999" style="color:black">Sector</td>
+        <td class="tableHeaderCls">Project title</td>
+        <td class="tableHeaderCls">Commitment (USD million)</td>
+        <td class="tableHeaderCls">Sector</td>
     </tr>
      
           <c:forEach items="${orgProfLargestProjectsForm.projects}" var="project"  >

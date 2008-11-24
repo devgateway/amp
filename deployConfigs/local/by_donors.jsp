@@ -7,7 +7,7 @@
 	id="query01" 
 	dataSource="localDS"  
 	catalogUri="/WEB-INF/queries/AMP.xml">
-SELECT {[Measures].[Actual Commitments]} ON COLUMNS,
+SELECT {[Measures].[Raw Actual Commitments]} ON COLUMNS,
 {[Donor]} ON ROWS 
 FROM [Donor Funding] 
 </jp:mondrianQuery>

@@ -7,7 +7,7 @@
 	dataSource="localDS"  
 	catalogUri="/WEB-INF/queries/AMP.xml"
 >
-select NON EMPTY {[Measures].[Actual Commitments], [Measures].[Actual Disbursements], [Measures].[Actual Expenditures], [Measures].[Sector Percentage]} ON COLUMNS,
+select NON EMPTY {[Measures].[raw Actual Commitments], [Measures].[raw Actual Disbursements], [Measures].[raw Actual Expenditures], [Measures].[Sector Percentage]} ON COLUMNS,
   NON EMPTY {([Primary Sector].[All Primary Sectors], [Activity].[All Activities])} ON ROWS
 from [Donor Funding Weighted]
 </jp:mondrianQuery>

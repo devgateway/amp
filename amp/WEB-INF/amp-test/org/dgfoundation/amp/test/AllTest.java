@@ -11,10 +11,10 @@ public class AllTest {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		suite.addTestSuite(MockTagLibTest.class);
-		suite.addTestSuite(MockStrutTest.class);
-		suite.addTestSuite(SimpleUnitTest.class);
-		suite.addTestSuite(UserRegistrationTest.class);
+		//suite.addTestSuite(MockTagLibTest.class);
+		//suite.addTestSuite(MockStrutTest.class);
+		//suite.addTestSuite(SimpleUnitTest.class);
+		//suite.addTestSuite(UserRegistrationTest.class);
 		return suite;
 	}
 

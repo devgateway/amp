@@ -2,7 +2,7 @@ class DonorsController < ApplicationController
   access_rule 'admin', :only => [:index, :new, :create]
   
   def index
-    @donors = Donor.find(:all, :order => "name ASC")
+    @donors = Donor.ordered
   end
   
   def new

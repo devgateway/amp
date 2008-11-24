@@ -1,6 +1,7 @@
-<% odaform_for @contracted_agency do |f| %>
-	<table>
-		<%= f.text_field :name %>
-		<%= f.submit %>
-	</table>
+<% labeled_form_for @contracted_agency do |f| %>
+	<% f.field_set do %>
+		<li><%= f.text_field :name, :class => 'large' %></li>
+	<% end %>
+	
+	<div class="buttonHolder"><%= f.submit %></div>
 <% end%>

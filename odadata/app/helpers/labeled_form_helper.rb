@@ -138,10 +138,9 @@ module LabeledFormHelper
   
 protected
   def localized_caption(method)
-    underscore_class_name = @object.class.to_s.underscore
-    method_or_relation_name = method.to_s.sub(/_id$/, '')
-  
-    ll(underscore_class_name, method_or_relation_name)
+    method_or_association_name = method.to_s.sub(/_id$/, '')
+    
+    ll(@object_name, method_or_association_name)
   end
 
   def wrap_in_label_row(method, content, options)

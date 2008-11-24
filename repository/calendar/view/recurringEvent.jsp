@@ -25,44 +25,53 @@ function eventType(){
 		var Weekly = document.getElementById("Weekly").checked;
 		var Monthly = document.getElementById("Monthly").checked;
 		var Yearly = document.getElementById("Yearly").checked;
-	
-	if(!Dailly && !Weekly && !Monthly && !Yearly){
+        var startDate = document.getElementById("selectedStartDate").value;
+        var endDate = document.getElementById("selectedEndDate").value;
+
+    if(!Dailly && !Weekly && !Monthly && !Yearly){
 		alert("please choose");
 		return false;
 	}
-	
-	if(Yearly == true){
-		var month = document.getElementById("selectedStartYearlyMonth").value;
+
+    
+
+    if(Yearly){
+        var month = document.getElementById("selectedStartYearlyMonth").value;
 		var rec = document.getElementById("recurrYearly").value;
 		
-		document.getElementById("hiddenMonth").value = month;
+		document.getElementById("type").value = 'Yearly';
+        document.getElementById("hiddenMonth").value = month;
 		document.getElementById("hidden").value = rec;
 	}
 	
-	if(Monthly == true){
-		var month = document.getElementById("selectedStartMonth").value;
+	if(Monthly){
+        var month = document.getElementById("selectedStartMonth").value;
 		var rec = document.getElementById("recurrMonthly").value;
 		
-		document.getElementById("hiddenMonth").value = month;
+		document.getElementById("type").value = 'Monthly';
+        document.getElementById("hiddenMonth").value = month;
 		document.getElementById("hidden").value = rec;
 	}
 
-	if(Dailly == true){
-	  	var rec = document.getElementById("recurrDailly").value;
-	 	document.getElementById("hidden").value = rec;
-	}
+	if(Dailly){
+        var rec = document.getElementById("recurrDailly").value;
+        document.getElementById("startDate").value = startDate;
 
-	if(Weekly == true){
-		var rec = document.getElementById("recurrWeekly").value;
-		document.getElementById("hidden").value = rec;
+        document.getElementById("hidden").value = rec;
+        document.getElementById("type").value = 'Dailly';
+    }
+
+	if(Weekly){
+        var rec = document.getElementById("recurrWeekly").value;
+
+        document.getElementById("type").value = 'Weekly';
+        document.getElementById("hidden").value = rec;
 	}
-	submit();
+	    submit();
 }
 
 </script>
 <digi:form action="/showCalendarEvent.do">
-<input type="hidden" name="selectedStartMonth" id="hiddenMonth"/>
-<input type="hidden" name="recurrPeriod" id="hidden"/>
 <table border="0" cellPadding=2 cellSpacing=0 width="100%" >
 
 <tr>
@@ -201,11 +210,13 @@ function eventType(){
 				 		  </tr>
 			 		</table>
 			 	</td>
-		 	</tr>
+		 
 		 </table>
 		</td>
 	</tr>
-	<tr>
+
+<!--
+<tr>
 		<td>
 			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="340px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
 				 		<tr><td>Time</td></tr>
@@ -265,9 +276,7 @@ function eventType(){
 		                        	</c:if>
 		 	                 	</td>
 						 	 </tr>
-				 	 	<tr>
-				 	 		<td><input type="checkbox"/> No End Date</td>
-				 	 	</tr>
+				 	 	
 				 	 	<tr>
 				 	 		<td><digi:trn key="calendar:EndDate">End Date</digi:trn></td>
 				 	 		<td>
@@ -300,7 +309,7 @@ function eventType(){
 				 	 	</tr>
 			 	</table>
 		</td>	
-	</tr>
+	</tr>  -->
 	<tr>
 		<td align="center">
 			<input type="button" onclick="eventType();" value="Save An CLose"/>

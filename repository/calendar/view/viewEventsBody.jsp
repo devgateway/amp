@@ -314,8 +314,9 @@ color:Black;
 				                                                    			<c:set var="startHours">${ampCalendarGraph.ampCalendar.calendarPK.startHour}</c:set>
 				                                                    			<c:set var="endHours">${ampCalendarGraph.ampCalendar.calendarPK.endHour}</c:set>
 				                                                    			<c:set var="startMinute">${ampCalendarGraph.ampCalendar.calendarPK.startMinute}</c:set>
-				                                                    			<c:set var="endMinute">${ampCalendarGraph.ampCalendar.calendarPK.endMinute}</c:set>	
-				                                                    			 <!-- These fields are used in mouse Over function -->				                                                    			
+				                                                    			<c:set var="endMinute">${ampCalendarGraph.ampCalendar.calendarPK.endMinute}</c:set>
+                                                                                <c:set var="reccperiod">${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}</c:set>
+                                                                                 <!-- These fields are used in mouse Over function -->
 				                                                    			<c:set var="startDay">${ampCalendarGraph.ampCalendar.calendarPK.startDay}</c:set>
 				                        										<c:set var="endDay">${ampCalendarGraph.ampCalendar.calendarPK.endDay}</c:set>
 				                        										<c:set var="endMonth">${ampCalendarGraph.ampCalendar.calendarPK.endMonth+1}</c:set>
@@ -334,46 +335,107 @@ color:Black;
 										                        					${endDay}/${endMonth}/${endYear} ${endHours}:${endMinute}
 										                        				</c:set>				                                                    			
 				                                                    						                                                    			
-				                                                    			<c:if test="${hour>=startHours && hour<=endHours}">				                                                    				
-				                                                      				<div style="font-weight:Bold;text-align:center;border:0px;">
-				                                                         				<table style="width: 100%;padding-bottom: 2px;padding-top: 2px;" cellspacing="0">
-				                                                         					<tr style="width: 100%">
-				                                                         						<c:forEach var="min" begin="0" end="59">
-				                                                         							<c:set var="takeEventsColor">
-				                                                         								<c:choose>
-				                                                         									<c:when test="${startHours==endHours && (startMinute<=min && min<=endMinute)}">1</c:when>
-				                                                         									<c:when test="${startHours!=endHours}">
-																												<c:choose>
-																													<c:when test="${hour!=endHours && startMinute<=min}">1</c:when>
-																													<c:when test="${hour==endHours && min<=endMinute}">1</c:when>
-																													<c:otherwise>0</c:otherwise>
-																												</c:choose>
-																											</c:when>
-				                                                         									<c:otherwise>0</c:otherwise>
-				                                                         								</c:choose>
-				                                                    								</c:set>
-				                                                         							<td style="padding:0px; <c:if test="${takeEventsColor==1}">background-color:${ampCalendarGraph.ampCalendar.eventType.color};border-color:${ampCalendarGraph.ampCalendar.eventType.color}</c:if>"  <c:if test="${takeEventsColor==1}"> onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()"</c:if>>
-				                                                         								<c:choose>
-				                                                         									<c:when test="${(startHours==hour && startMinute==min) || (startHours!=hour && min==1)}">
-				                                                         										<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">								                                                        	
-								                                                        							<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
-											                                            						</digi:link>
-											                                            						<c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">					                                                        					
-								                                                        							<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
-								                                                        						</c:forEach>		                                                         										
-				                                                         									</c:when>
-				                                                         									<c:otherwise>&nbsp;</c:otherwise>
-				                                                         								</c:choose>
-				                                                         							</td>
-				                                                         						</c:forEach>
-				                                                         					</tr>
-				                                                         					<tr height="2px">
-				                                                         						<td colspan="60"/>
-				                                                         					</tr>
-				                                                         				</table>				                                                         												                                                        
-				                                                      				</div>
-				                                                    			</c:if>
-				                                                  			</c:forEach>
+				                                                    			<c:if test="${hour>=startHours && hour<=endHours}">
+                                                                                    <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+																					 <c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
+
+                                                                                         <c:if test="${calendarViewForm.baseDateBreakDown.dayOfMonth%ampCalendarEventItem.recurrPeriod == 0}">
+
+
+                                                                                                      <div style="font-weight:Bold;text-align:center;border:0px;">
+                                                                                                        <table style="width: 100%;padding-bottom: 2px;padding-top: 2px;" cellspacing="0">
+                                                                                                            <tr style="width: 100%">
+                                                                                                                <c:forEach var="min" begin="0" end="59">
+                                                                                                                    <c:set var="takeEventsColor">
+                                                                                                                        <c:choose>
+                                                                                                                            <c:when test="${startHours==endHours && (startMinute<=min && min<=endMinute)}">1</c:when>
+                                                                                                                            <c:when test="${startHours!=endHours}">
+                                                                                                                                <c:choose>
+                                                                                                                                    <c:when test="${hour!=endHours && startMinute<=min}">1</c:when>
+                                                                                                                                    <c:when test="${hour==endHours && min<=endMinute}">1</c:when>
+                                                                                                                                    <c:otherwise>0</c:otherwise>
+                                                                                                                                </c:choose>
+                                                                                                                            </c:when>
+                                                                                                                            <c:otherwise>0</c:otherwise>
+                                                                                                                        </c:choose>
+                                                                                                                    </c:set>
+                                                                                                                    <td style="padding:0px; <c:if test="${takeEventsColor==1}">background-color:${ampCalendarGraph.ampCalendar.eventType.color};border-color:${ampCalendarGraph.ampCalendar.eventType.color}</c:if>"  <c:if test="${takeEventsColor==1}"> onmouseover="stm([evnt,'recurr:every ${ampCalendarEventItem.recurrPeriod} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()"</c:if>>
+                                                                                                                        <c:choose>
+                                                                                                                            <c:when test="${(startHours==hour && startMinute==min) || (startHours!=hour && min==1)}">
+                                                                                                                                <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
+                                                                                                                                    <digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
+                                                                                                                                </digi:link>
+                                                                                                                                <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+                                                                                                                                    <span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+                                                                                                                                </c:forEach>
+                                                                                                                            </c:when>
+                                                                                                                            <c:otherwise>&nbsp;</c:otherwise>
+                                                                                                                        </c:choose>
+                                                                                                                    </td>
+                                                                                                                </c:forEach>
+                                                                                                            </tr>
+                                                                                                            <tr height="2px">
+                                                                                                                <td colspan="60"/>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                    </div>
+
+                                                                                            </c:if>
+                                                                                        </c:if>
+                                                                                    </c:forEach>
+                                                                                </c:if>
+
+
+                                                                                  	<c:if test="${hour>=startHours && hour<=endHours}">
+                                                                                    <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+																					 <c:if test='${ampCalendarEventItem.typeofOccurrence != "Dailly"}'>
+
+
+
+                                                                                                      <div style="font-weight:Bold;text-align:center;border:0px;">
+                                                                                                        <table style="width: 100%;padding-bottom: 2px;padding-top: 2px;" cellspacing="0">
+                                                                                                            <tr style="width: 100%">
+                                                                                                                <c:forEach var="min" begin="0" end="59">
+                                                                                                                    <c:set var="takeEventsColor">
+                                                                                                                        <c:choose>
+                                                                                                                            <c:when test="${startHours==endHours && (startMinute<=min && min<=endMinute)}">1</c:when>
+                                                                                                                            <c:when test="${startHours!=endHours}">
+                                                                                                                                <c:choose>
+                                                                                                                                    <c:when test="${hour!=endHours && startMinute<=min}">1</c:when>
+                                                                                                                                    <c:when test="${hour==endHours && min<=endMinute}">1</c:when>
+                                                                                                                                    <c:otherwise>0</c:otherwise>
+                                                                                                                                </c:choose>
+                                                                                                                            </c:when>
+                                                                                                                            <c:otherwise>0</c:otherwise>
+                                                                                                                        </c:choose>
+                                                                                                                    </c:set>
+                                                                                                                    <td style="padding:0px; <c:if test="${takeEventsColor==1}">background-color:${ampCalendarGraph.ampCalendar.eventType.color};border-color:${ampCalendarGraph.ampCalendar.eventType.color}</c:if>"  <c:if test="${takeEventsColor==1}"> onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()"</c:if>>
+                                                                                                                        <c:choose>
+                                                                                                                            <c:when test="${(startHours==hour && startMinute==min) || (startHours!=hour && min==1)}">
+                                                                                                                                <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
+                                                                                                                                    <digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
+                                                                                                                                </digi:link>
+                                                                                                                                <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+                                                                                                                                    <span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+                                                                                                                                </c:forEach>
+                                                                                                                            </c:when>
+                                                                                                                            <c:otherwise>&nbsp;</c:otherwise>
+                                                                                                                        </c:choose>
+                                                                                                                    </td>
+                                                                                                                </c:forEach>
+                                                                                                            </tr>
+                                                                                                            <tr height="2px">
+                                                                                                                <td colspan="60"/>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                    </div>
+
+                                                                                        </c:if>
+                                                                                    </c:forEach>
+                                                                                </c:if>
+
+
+                                                                              </c:forEach>
 						                                           			&nbsp;
 				                                                		</td>
 				                                              		</tr>
@@ -464,7 +526,7 @@ color:Black;
 																				           	   		</c:set>	
 																			           	   			<c:if test="${drawTD==1}">
 																			          						<td align="left" width="155px" style="text-align: center;vertical-align: middle">
-																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;"  onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
+																					                   		<div style="width:155;overflow:hidden;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;"  onmouseover="stm([evnt,'recurr:every ${ampCalendarEventItem.recurrPeriod} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
 																					                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																					                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>																					                       			
 																					                   			</digi:link>
@@ -478,7 +540,7 @@ color:Black;
 																					                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
 																					        	           <c:forEach begin="1" end="${30/Month-1}">
 																												<td align="left" width="155px">
-																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;"  onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
+																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;"  onmouseover="stm([evnt,'recurr:every ${ampCalendarEventItem.recurrPeriod} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
 																							                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																							                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
 																							                   			</digi:link>
@@ -508,7 +570,7 @@ color:Black;
 																					                   	 <c:set var="Month">${ampCalendarEventItem.recurrPeriod}</c:set>
 																					        	           <c:forEach begin="1" end="${30/Month-1}">
 																												<td align="left" width="155px" style="text-align: center;vertical-align: middle">
-																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;"  onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
+																							                   		<div style="width:155;background-color:${ampCalendarGraph.ampCalendar.eventType.color};height:100%;text-align:center;"  onmouseover="stm([evnt,'recurr:every ${Month} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
 																							                   			<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~method=preview~resetForm=true">
 																							                       			<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left" style="vertical-align:middle"/>
 																							                   			</digi:link>
@@ -603,19 +665,40 @@ color:Black;
 														                        						<c:when test="${startMonth!=currentMonth && endMonth!=currentMonth}">1</c:when>
 														                        						<c:otherwise>0</c:otherwise>
 														                        					</c:choose>
-														                        				</c:set>														                        				
-														                              						
-														                              			<c:if test="${drawTD==1}">	                                			
-																			                        <div style="margin:2px;padding:2px;font-weight:Bold;text-align:center;color:Black;background-color:${ampCalendarGraph.ampCalendar.eventType.color};"onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
-																			                        	<digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">								                                                        	
-									                                                        				<digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
-												                                                        </digi:link>
-												                                                        <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">					                                                        					
-									                                                        				<span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
-									                                                        			</c:forEach>
-																			                        </div>				                              					                                						
-														                              			</c:if>											                              																																								
-																							</c:forEach>
+														                        				</c:set>
+                                                                                                  <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.recurrCalEvent}">
+                                                                                                   <c:if test='${ampCalendarEventItem.typeofOccurrence != "Dailly"}'>
+                                                                                                    <c:if test="${drawTD==1}">
+                                                                                                        <div style="margin:2px;padding:2px;font-weight:Bold;text-align:center;color:Black;background-color:${ampCalendarGraph.ampCalendar.eventType.color};"onmouseover="stm([evnt,'name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
+                                                                                                            <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
+                                                                                                                <digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
+                                                                                                            </digi:link>
+                                                                                                            <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+                                                                                                                <span style="color: #ffffff"> ${ampCalendarEventItem.title}</span>
+                                                                                                            </c:forEach>
+                                                                                                        </div>
+                                                                                                    </c:if>
+                                                                                                </c:if>
+
+
+                                                                                                    <c:if test='${ampCalendarEventItem.typeofOccurrence == "Dailly"}'>
+                                                                                                         <c:if test="${item.dayOfMonth%ampCalendarEventItem.recurrPeriod == 0}">
+                                                                                                             <c:if test="${drawTD==1}">
+                                                                                                                        <div style="margin:2px;padding:2px;font-weight:Bold;text-align:center;color:Black;background-color:${ampCalendarGraph.ampCalendar.eventType.color};"onmouseover="stm([evnt,'recurr:every ${ampCalendarEventItem.recurrPeriod} day <br>name:${eventName}<br>stDate:${eventStartDate}<br>endDate:${eventEndDate}'],Style[14])" onmouseout="htm()">
+                                                                                                                            <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}~~method=preview~resetForm=true">
+                                                                                                                                <digi:img src="module/calendar/images/eventIcon.bmp" border="0" alt="" align="left"/>
+                                                                                                                            </digi:link>
+                                                                                                                            <c:forEach var="ampCalendarEventItem" items="${ampCalendarGraph.ampCalendar.calendarPK.calendar.calendarItem}">
+                                                                                                                                <span style="color: white;"> ${ampCalendarEventItem.title}</span>
+                                                                                                                            </c:forEach>
+                                                                                                                        </div>
+														                              			            </c:if>
+                                                                                                       </c:if>
+                                                                                                    </c:if>
+                                                                                                </c:forEach>
+
+
+                                                                                            </c:forEach>
 																					</td>
 																				</tr>
 																				<tr height="2px" bgcolor="#e8eef7">

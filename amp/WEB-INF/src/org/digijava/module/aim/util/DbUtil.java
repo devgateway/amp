@@ -2970,10 +2970,8 @@ public class DbUtil {
             String queryString = new String();
             queryString = "select a.internalId from "
                 + AmpActivityInternalId.class.getName()
-                + " a where (a.id=:ampActivityId) "
-                + " and (a.organisation=:ampDonorOrgId)"
-                + " a inner join a.ampActivityId ampAct"  
-                + " inner join a.ampOrgId ampOrg "  
+                + " a inner join a.ampActivity ampAct"  
+                + " inner join a.organisation ampOrg "  
                 + " where (ampAct.ampActivityId=:ampActivityId) "
                 + " and (ampOrg.ampOrgId=:ampDonorOrgId)";
     

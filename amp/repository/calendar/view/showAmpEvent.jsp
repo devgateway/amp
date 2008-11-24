@@ -387,11 +387,20 @@ function recurEvent(){
 
 
 <digi:form action="/showCalendarEvent.do">
-  <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>  
-  <html:hidden name="calendarEventForm" property="selectedStartMonth" styleId="hiddenMonth"/>
-	<html:hidden name="calendarEventForm" property="recurrPeriod" styleId="hidden"/>
+    <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
+    <html:hidden name="calendarEventForm" property="selectedStartMonth" styleId="hiddenMonth"/>
+    <html:hidden name="calendarEventForm" property="recurrPeriod" styleId="hidden"/>
 	<html:hidden name="calendarEventForm" property="typeofOccurrence" styleId="type"/>
-	
+    <html:hidden name="calendarEventForm" property="selectedStartDate" styleId="startDate"/>
+
+
+
+   <script type="text/javascript">
+
+       alert(document.getElementById("startDate").value);
+
+   </script>
+           pr:  ${calendarEventForm.recurrPeriod}
     <table>
     	 <tr>
 			<td width=14>&nbsp;</td>

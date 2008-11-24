@@ -70,12 +70,13 @@ class Donor < ActiveRecord::Base
   end
   
   def payments_by_type_of_aid(year = Time.now.year)
+    # FIXME: This is a very ugly solution to the problem and should be replaced asap.
     # Use lazy loading to minimize database queries
     @annual_payments_by_toa ||= Funding.find(:all, 
-      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year, projects.type_of_aid AS type_of_aid',
+      :select=>'SUM(fundings.payments_q1 + fundings.payments_q2 + fundings.payments_q3 + fundings.payments_q4) AS pay, fundings.year as year, projects.type_of_aid_id AS type_of_aid',
       :joins => 'JOIN projects ON fundings.project_id = projects.id',
       :conditions => ['projects.donor_id = ? AND projects.data_status = ? AND fundings.year = ?', self.id, Project::PUBLISHED, year],
-      :group => 'projects.type_of_aid, fundings.year'
+      :group => 'type_of_aid, year'
     ).inject([]) {|totals, rec| totals[rec.type_of_aid.to_i] = rec.pay.to_currency(currency, rec.year); totals} 
   end
   

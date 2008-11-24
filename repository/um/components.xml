@@ -27,6 +27,9 @@
 
     <page page="viewEditUser" name="umViewEditUser" title=" - View/Edit User" />
     <page page="viewAllUsers" name="umViewAllUsers" title=" - All Users" />
+    <page page="addUser" name="umAddUser" title=" - Register User" />
+    <page name="waitingUserConfirmation" title=" - Successfully registered user" />
+    <page name="addWorkSpaceUser" title=" - Add user to workspace" />
 </secondary-pages>
 
 <module>

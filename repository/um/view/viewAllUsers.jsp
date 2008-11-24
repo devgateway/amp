@@ -427,7 +427,18 @@ function banUser(txt) {
 											</tr>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
-													<table cellPadding=5 cellSpacing=1 width="100%">											
+													<table cellPadding=5 cellSpacing=1 width="100%">
+														<tr>
+															<td>
+																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+															</td>
+															<td>
+																<digi:link module="aim"  href="/../um/addUser.do">
+											 					<digi:trn key="aim:addNewUser">
+																Add new user																</digi:trn>
+																</digi:link>
+															</td>
+														</tr>																								
 														<tr>
 															<td>
 																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>

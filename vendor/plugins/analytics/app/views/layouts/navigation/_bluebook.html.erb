@@ -57,7 +57,7 @@
 		<li id="bigger">
 			<div><a href="#"><%= ll(:donor_profiles) %></a></div>
 			<ul>
-				<% Donor.main.all(:order => "name ASC").each do |d| %>
+				<% Donor.main.ordered.each do |d| %>
 					<li><%= link_to d.name.titleize, bluebook_donor_profile_path(d.id) %></li>
 				<% end %>
 			</ul>

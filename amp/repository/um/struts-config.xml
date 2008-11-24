@@ -16,6 +16,7 @@
     <form-bean name="userUnSubscribeForm" type="org.digijava.module.um.form.UserUnSubscribeForm" />
     <form-bean name="umViewAllUsersForm" type="org.digijava.module.um.form.ViewAllUsersForm" />
     <form-bean name="umViewEditUserForm" type="org.digijava.module.um.form.ViewEditUserForm" />
+    <form-bean name="umAddUserForm" type="org.digijava.module.um.form.AddUserForm" />    
   </form-beans>
   <action-mappings>
     <!--- UM (USER MANAGMENT) -->
@@ -140,6 +141,21 @@
       <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
       <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
     </action>
+    <action input="/um/registerUser.do" name="umAddUserForm" path="/um/addWorkSpaceUser" scope="session" type="org.digijava.module.um.action.addWorkSpaceUser" validate="true">
+      <forward name="forward" path="/showLayout.do?layout=addWorkSpaceUser" />
+      <forward name="index" path="/um/addUser.do" redirect="true" />
+    </action>
+
+    <action input="/um/addUser.do" name="umAddUserForm" path="/um/registerUser" scope="session" type="org.digijava.module.um.action.RegisterUser" validate="true">
+      <forward name="forward" path="/showLayout.do?layout=addWorkSpaceUser" />
+      <forward name="index" path="/showLayout.do?layout=umAddUser" />
+    </action>
+
+    <action name="umAddUserForm" path="/um/addUser" scope="session" type="org.digijava.module.um.action.AddUser" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=umAddUser"/>
+      <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
+    </action>
+ 
     <action name="umViewAllUsersForm" path="/um/userSearch" scope="session" type="org.digijava.module.um.action.UserSearch">
    		<forward name="index" path="/aim/index.do" redirect="true" />
    		<forward name="forward" path="/showLayout.do?layout=umViewAllUsers" /> 

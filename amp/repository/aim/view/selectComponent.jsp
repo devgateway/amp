@@ -14,15 +14,6 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
-<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
-</script>
 
 <%
 	EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm");
@@ -34,79 +25,10 @@
 %>
 
 
-
-<script type="text/javascript">
-
-function validateEnter(e) {
-	eKey = (document.all) ? e.keyCode : e.which;
-	if (eKey==13) addComponent();
-}
-
-function closeWindow() {
-	window.close();
-}
-
-function switchType(){
-
-  <digi:context name="switchType" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=switchType" />
-  document.aimEditActivityForm.action = "<%= switchType%>";
-  document.aimEditActivityForm.submit();
-}
-
-function switchComponent(){
-if (document.aimEditActivityForm.newCompoenentName.value!=''){
-  	 document.getElementById('tblId').style.visibility="visible";                         		
-     document.getElementById('tblId').style.position="relative";  
-     //document.aimEditActivityForm.newCompoenentName.value="";
-	document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.aimEditActivityForm.newCompoenentName.value;
-  
-  }else{
-  	 document.getElementById('tblId').style.visibility="hidden";                         		
-     document.getElementById('tblId').style.position="absolute";  
-  
-  }
-  
-<feature:display name="Admin - Component Type" module="Components">
-  if (document.aimEditActivityForm.selectedType.value==-1){
-   document.aimEditActivityForm.newCompoenentName.disabled=true;
-    document.aimEditActivityForm.newCompoenentName.style.bgColor="#EEEEEE";
-  }else{
-</feature:display>
-   document.aimEditActivityForm.newCompoenentName.disabled=false;
-   document.aimEditActivityForm.newCompoenentName.style.bgColor="#EEEEEE";
-   <feature:display name="Admin - Component Type" module="Components">
-  }
-</feature:display>
-}
-
-
-function addComponent(){
-	<digi:context name="addNewComponent" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=addNewComponent" />
-
-	if (document.aimEditActivityForm.newCompoenentName.value==""){
-		var msg="<digi:trn key="aim:msgErrorNoName">You have to enter the component name</digi:trn>"
-		alert(msg);
-		return false;
-	}
-	
-	<feature:display name="Admin - Component Type" module="Components">
-	if (document.aimEditActivityForm.selectedType.value=="-1"){
-		var msg="<digi:trn key="aim:msgErrorSelctType">You have to select the component type</digi:trn>"
-		alert(msg);
-		return false;
-	}
-	</feature:display>
-  	document.aimEditActivityForm.action = "<%= addNewComponent%>";
-  	document.aimEditActivityForm.submit();
-}
-</script>
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
-
 <digi:instance property="aimEditActivityForm" />
 
 
-<digi:form action="/showAddComponent.do" method="post">
+<digi:form action="/showAddComponent.do" method="post" name="aimAddComponentForm" type="EditActivityForm">
 	<html:hidden property="componentReset" value="false" />
 	<html:hidden property="componentId" />
 
@@ -190,7 +112,7 @@ function addComponent(){
 								key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn>
 							<%=eaForm.getFunding().getTotalCommitments()%> <%=eaForm.getCurrCode()%> ) </span> <!-- Commented added by mouhamad for burkina AMP-2709 -->
 							<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
-							<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br>
+							<a href="javascript:addCommitments()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>
 							<div id="comm">
 								<c:if test="${aimEditActivityForm.componentId != -1}">
@@ -274,7 +196,7 @@ function addComponent(){
 							<td colspan="2" class="box-border"><span class="f-names"><digi:trn
 								key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn>
 							<%=eaForm.getFunding().getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
-								href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a><br>
+								href="javascript:addDisbursement()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>							
 							<div id="disb"><c:if test="${aimEditActivityForm.componentId != -1}">
 								<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
@@ -364,7 +286,7 @@ function addComponent(){
 									key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn>
 								<%=eaForm.getFunding().getTotalExpenditures()%> <%=eaForm.getCurrCode()%>)</span> <field:display
 									name="Add Expenditure Button" feature="Expenditures">
-									<a href="javascript:addExpenditure()"> <digi:trn
+									<a href="javascript:addExpenditure()" style="color:blue"> <digi:trn
 										key="btn:add">Add</digi:trn></a>
 								</field:display> &nbsp;&nbsp; <br>
 								<br>
@@ -452,13 +374,13 @@ function addComponent(){
 								<tr>
 									<td><input type="button"
 										value="<digi:trn key='btn:save'>Save</digi:trn>"
-										class="inp-text" onclick="return addComponents()"></td>
+										class="inp-text" onclick="return addComponentsPopup()"></td>
 									<td><input type="reset"
 										value="<digi:trn key='btn:reset'>Reset</digi:trn>"
 										class="inp-text"></td>
 									<td><input type="button"
 										value="<digi:trn key='btn:close'>Close</digi:trn>"
-										class="inp-text" onclick="closeWindow()"></td>
+										class="inp-text" onclick="closePopup()"></td>
 								</tr>
 							</table>							</td>
 						</tr>
@@ -674,15 +596,14 @@ function removeExpenditure(divname)
 
 
 
-function addComponents()
+function addComponentsPopup()
 {
 	var flag = validate();
 	if (flag == true){
 		<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=save"/>
-		document.aimEditActivityForm.action = "<%= addComp %>";
-		document.aimEditActivityForm.target = window.opener.name;
-		document.aimEditActivityForm.submit();
-		window.close();
+		document.aimAddComponentForm.action = "<%= addComp %>";
+		document.aimAddComponentForm.submit();
+		closePopup();
 	}
 	return flag;
 }
@@ -697,14 +618,14 @@ function validate()
   var msgEnterCommitment="<digi:trn key="aim:selectComponent:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
   var msgEnterExpenditure="<digi:trn key="aim:selectComponent:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
 
-	var titleFlag = isEmpty(document.aimEditActivityForm.newCompoenentName.value);
+	var titleFlag = isEmpty(document.aimAddComponentForm.newCompoenentName.value);
 	if(titleFlag == true) {
 		alert(msgEnterTitle);
 		return false;
 	}
 
-	var x = document.aimEditActivityForm;
-	if(document.aimEditActivityForm.newCompoenentName.value == '')
+	var x = document.aimAddComponentForm;
+	if(document.aimAddComponentForm.newCompoenentName.value == '')
 	{
 		alert(msgSelectComponent);
 			return false;
@@ -790,30 +711,49 @@ function checkAmount(val){
   }
   return true;
 }
+function validateEnter(e) {
+	eKey = (document.all) ? e.keyCode : e.which;
+	if (eKey==13) addComponent();
+}
 
 
+function switchType(){
+/* 
+  <digi:context name="switchType" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=switchType" />
+  document.aimAddComponentForm.action = "<%= switchType%>";
+  document.aimAddComponentForm.submit();*/
+}
 
-	function load() {
-		if (document.aimEditActivityForm.newCompoenentName.value!=''){;
-			switchComponent();
-		}
-	}
+function switchComponent(){
+if (document.aimAddComponentForm.newCompoenentName.value!=''){
+  	 document.getElementById('tblId').style.visibility="visible";                         		
+     document.getElementById('tblId').style.position="relative";  
+     //document.aimEditActivityForm.newCompoenentName.value="";
+	document.getElementById("txtTitle").innerHTML="<digi:trn key="aim:msgAddfunding">Add funding information for </digi:trn> " + document.aimAddComponentForm.newCompoenentName.value;
+  
+  }else{
+  	 document.getElementById('tblId').style.visibility="hidden";                         		
+     document.getElementById('tblId').style.position="absolute";  
+  
+  }
+  
+<feature:display name="Admin - Component Type" module="Components">
+  if (document.aimAddComponentForm.selectedType.value==-1){
+   document.aimAddComponentForm.newCompoenentName.disabled=true;
+    document.aimAddComponentForm.newCompoenentName.style.bgColor="#EEEEEE";
+  }else{
+</feature:display>
+   document.aimAddComponentForm.newCompoenentName.disabled=false;
+   document.aimAddComponentForm.newCompoenentName.style.bgColor="#EEEEEE";
+   <feature:display name="Admin - Component Type" module="Components">
+  }
+</feature:display>
+}
 
-	
-	function addLoadEvent(func) {
-  		var oldonload = window.onload;
- 		 if (typeof window.onload != 'function') {
-    			window.onload = func;
-  		} else {
-    			window.onload = function() {
-    		 	 if (oldonload) {
-     			   oldonload();
-     			 }
-     	 		func();
-   			 }
- 		 }
-	}
-	addLoadEvent(load)
+
+if (document.aimAddComponentForm.newCompoenentName.value!=''){;
+	switchComponent();
+}
 	
 </script>
 

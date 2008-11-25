@@ -465,7 +465,7 @@ function recurEvent(){
 			                    			<table cellSpacing="1" cellPadding="1">
 												<tr>
 													<td>
-														<aim:addOrganizationButton refreshParentDocument="false" styleClass="myStyleClass" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" ><digi:trn key="btn:addNew">Add New</digi:trn></aim:addOrganizationButton>			
+													<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="dr-menu"><digi:trn key="btn:addOrganizations" >Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
 													</td>
 												</tr>
 												<tr>

@@ -7,50 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
-</script>
-
 <script language="JavaScript">
 <!--
 
-	function addPhysicalProgress()
-	{
-		var titleFlag = isEmpty(document.aimEditActivityForm.phyProgTitle.value);
-		var dateFlag = isEmpty(document.aimEditActivityForm.phyProgRepDate.value);
-		if(titleFlag == true & dateFlag == true)
-		{
-			alert("Please enter Title and Reporting Date");
-			document.aimEditActivityForm.phyProgTitle.focus();
-		}
-		else
-		{
-			if(titleFlag == true)
-			{
-				alert(" Please enter title");
-				document.aimEditActivityForm.phyProgTitle.focus();
-			}
-			if(dateFlag == true)
-			{
-				alert(" Please enter Reporting Date");
-				document.aimEditActivityForm.phyProgRepDate.focus();
-			}
-		}
-		if(titleFlag == false && dateFlag == false)
-		{
-			<digi:context name="addPhyProg" property="context/module/moduleinstance/phyProgSelected.do?edit=true"/>
-		   document.aimEditActivityForm.action = "<%= addPhyProg %>";
-			document.aimEditActivityForm.target = window.opener.name;
-		   document.aimEditActivityForm.submit();
-			window.close();
-		}
-	}
-
 	function load() {
-		document.aimEditActivityForm.phyProgTitle.focus();
+		document.addPhysicalProgressForm.phyProgTitle.focus();
 	}
 
 	function unload() {
@@ -62,13 +23,11 @@
 -->
 </script>
 
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
 <digi:instance property="aimEditActivityForm" />
 <%--
 <digi:form action="/phyProgSelected.do" method="post"> --%>
 
-<form name="aimEditActivityForm" action="/phyProgSelected.do" method="post">
+<form name="addPhysicalProgressForm" action="/phyProgSelected.do" method="post">
 
 <html:hidden property="phyProgReset" value="false"/>
 
@@ -84,7 +43,7 @@
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-								<digi:trn key="aim:add</a>PhysicalProgress">
+								<digi:trn key="aim:addPhysicalProgress">
 								Add Physical Progress</digi:trn>
 							</td></tr>
 						<tr>
@@ -92,34 +51,34 @@
 								<table cellSpacing=2 cellPadding=2>
 									<tr>
 										<td>
+											<div title="<digi:trn key="aim:TitleForPhysicalActivity">Title of the physical activity</digi:trn>">
 											<FONT color=red>*</FONT>
-											<a title="<digi:trn key="aim:TitleForPhysicalActivity">Title of the physical activity</digi:trn>">
 											<digi:trn key="aim:title">Title</digi:trn>
-											</a>
+											</div>
 										</td>
 										<td>
-											<a title="<digi:trn key="aim:TitleForPhysicalActivity">Title of the physical activity</digi:trn>">
+											<div title="<digi:trn key="aim:TitleForPhysicalActivity">Title of the physical activity</digi:trn>">
 											<html:textarea property="phyProgTitle" cols="50" rows="1" styleClass="inp-text" tabindex="1"/>
-											</a>
+											</div>
 										</td>
 									</tr>
 									<tr>
 										<td>
-										<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
+										<div title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
 										<digi:trn key="aim:description">Description</digi:trn>
-										</a>
+										</div>
 										</td>
 										<td>
-											<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
+											<div title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
 											<html:textarea property="phyProgDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
-											</a>
+											</div>
 										</td>
 									</tr>
 									<tr>
 										<td>
+											<div title="<digi:trn key="aim:DateofReporting">Date the activity was initiated</digi:trn>">
 											<FONT color=red>*</FONT>
-											<a title="<digi:trn key="aim:DateofReporting">Date the activity was initiated</digi:trn>">
-											<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></a>
+											<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></div>
 										</td>
 										<td>
 											<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
@@ -130,7 +89,7 @@
 													</td>
 													<td>
 														&nbsp;
-														<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.phyProgRepDate)'>
+														<a id="date1" href='javascript:pickDate("date1",document.addPhysicalProgressForm.phyProgRepDate)'>
 															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 														</a>
 													</td>
@@ -150,7 +109,7 @@
 														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" tabindex="5">
 													</td>
 													<td>
-														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"
+														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closePopup()"
 														tabindex="6">
 													</td>
 												</tr>

@@ -44,7 +44,12 @@
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
   }
 
+
+var isAlreadySubmitted = false;
+
 	function addFunding() {
+		if(!isAlreadySubmitted)
+		{
 		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
 		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
 		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
@@ -66,8 +71,11 @@
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
+	
+			isAlreadySubmitted = true;
 	  	document.aimEditActivityForm.submit();
-	  	//validateFormatUsingSymbos();
+			//validateFormatUsingSymbos();
+		}
 	  	
 		return true;
 	}

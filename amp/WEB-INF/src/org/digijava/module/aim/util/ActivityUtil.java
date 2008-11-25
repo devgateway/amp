@@ -341,7 +341,6 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setContFirstName(activity.getContFirstName());
         oldActivity.setContLastName(activity.getContLastName());
         oldActivity.setContractors(activity.getContractors());
-        oldActivity.setCountry(activity.getCountry());
         oldActivity.setDescription(activity.getDescription());
         oldActivity.setDocumentSpace(activity.getDocumentSpace());
         oldActivity.setEmail(activity.getEmail());

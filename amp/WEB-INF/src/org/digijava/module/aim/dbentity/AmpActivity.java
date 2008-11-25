@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
-import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LoggerIdentifiable;
@@ -83,7 +82,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String programDescription;
 	private AmpTeam team;
 	private Set member;
-	private Country country;
+	
 	private String contactName;
 	private AmpTeamMember updatedBy;
 
@@ -620,19 +619,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		calType = string;
 	}
 
-	/**
-	 * @return
-	 */
-	public Country getCountry() {
-		return country;
-	}
-
-	/**
-	 * @param country
-	 */
-	public void setCountry(Country country) {
-		this.country = country;
-	}
+	
 
 	public int compareTo(AmpActivity act) {
 		// if (!(o instanceof AmpActivity)) throw new ClassCastException();

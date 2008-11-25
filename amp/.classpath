@@ -53,10 +53,10 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.8.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.8.jar"/>
-	<classpathentry kind="var" path="JBOSS_LIB/jsp-api.jar"/>
-	<classpathentry kind="var" path="JBOSS_LIB/log4j.jar"/>
-	<classpathentry kind="var" path="JBOSS_LIB/servlet-api.jar"/>
-	<classpathentry kind="var" path="JBOSS_LIB/commons-collections.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/jsp-api.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/log4j.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/servlet-api.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/commons-collections.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/c3p0-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-bean-collections.jar"/>

@@ -1,21 +1,14 @@
-
 <li>
-<%= link_to ll(:navigation, :language_SP), params.merge(:locale => 'es-NI'), :id => "language_SP" %>
+	<%= link_to ll(:navigation, :language_es), params.merge(:locale => 'es'), :id => "language_es" %>
 </li>
 <li>
-<%= link_to ll(:navigation, :language_EN), params.merge(:locale => 'en-US'), :id => "language_EN" %>
+	<%= link_to ll(:navigation, :language_en), params.merge(:locale => 'en'), :id => "language_en" %>
 </li>
 
 <!-- Mark selected langauge-->
 <script language="javascript">
     $(document).ready(
-        function()
-        {
-<% if I18n.locale.to_s == 'en-US' %>
-            $('#language_EN').prepend('<img src="/images/checked.gif" height="7" width="7" border="0" align="absmiddle" style="float:left;border:0;padding:3px;"/>');
-
-<% else %>
-			$('#language_SP').prepend('<img src="/images/checked.gif" height="7" width="7" border="0" align="absmiddle" style="float:left;border:0;padding:3px;"/>');
-<% end %>
+        function() {
+            $('#language_<%= I18n.locale %>').prepend('<img src="/images/checked.gif" height="7" width="7" border="0" align="absmiddle" style="float:left;border:0;padding:3px;"/>');
         });
 </script>

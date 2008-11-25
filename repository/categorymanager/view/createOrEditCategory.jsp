@@ -189,7 +189,14 @@
 						<font color="#FF0000">*</font>
 					</td>
 					<td>
-						<html:text property="keyName"/>
+						<c:set var="keyTextReadonly" value="false" />
+						<c:set var="keyTextColorStyle" value="color: black; background-color:white; border-style: none; text-decoration: none;" />
+						
+						<c:if test="${myForm.advancedMode}">
+							<c:set var="keyTextReadonly" value="false" />
+							<c:set var="keyTextColorStyle" value="color: black; background-color:white; " />
+						</c:if>
+						<html:text property="keyName" readonly="${keyTextReadonly}" style="${keyTextColorStyle}" />
 					</td>
 				</tr>
 				<tr>
@@ -235,24 +242,32 @@
                
 				<c:if test="${pVal.id != null && pVal.id != 0 && !pVal.disable}">
 					<c:set var="textReadonly" value="true" />
-					<c:set var="textColorStyle" value="color: black; background-color:white; border-style: none; text-decoration: none;" />
+					<c:set var="borderStyle" value="border-style: none;" />
+					<c:set var="textColorStyle" value="color: black; background-color:white; text-decoration: none;" />
 					<c:set var="deleteField" scope="page">display: inline</c:set>
                		<c:set var="undeleteField" scope="page">display: none</c:set>
 				</c:if>
 				<c:if test="${pVal.id == null || pVal.id == 0}">
 					<c:set var="textReadonly" value="false" />
+					<c:set var="borderStyle" value=" " />
 					<c:set var="textColorStyle" value="color: black; background-color:white; text-decoration: none;" />
 				</c:if>
 				<c:if test="${pVal.disable}">
 					<c:set var="textReadonly" value="true" />
-					<c:set var="textColorStyle" value="color:darkgray; background-color:white; border-style: none; text-decoration: line-through;" />
+					<c:set var="borderStyle" value="border-style: none;" />
+					<c:set var="textColorStyle" value="color:darkgray; background-color:white; text-decoration: line-through;" />
 					<c:set var="deleteField" scope="page">display: none</c:set>
                		<c:set var="undeleteField" scope="page">display: inline</c:set>
+				</c:if>
+				
+				<c:if test="${myForm.advancedMode}">
+					<c:set var="textReadonly" value="false" />
+					<c:set var="borderStyle" value=" " />
 				</c:if>
                
 				<tr>
 				<td>
-                  <html:text name="possibleVals" property="value" readonly="${textReadonly}" style="${textColorStyle}" indexed="true" styleId="field${index.count}"/>
+                  <html:text name="possibleVals" property="value" readonly="${textReadonly}" style="${textColorStyle} ${borderStyle}" indexed="true" styleId="field${index.count}"/>
                   <html:hidden name="possibleVals" property="disable"  indexed="true" styleId="disabled${index.count}"/>
                   <html:hidden name="possibleVals" property="id" indexed="true" />
 				</td>

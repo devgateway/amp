@@ -596,6 +596,15 @@ function loadPage()
 																	<td width="500" height="30" colspan="2"><html:text
 																		property="orgCode" size="15" /></td>
 																</tr>
+																
+																<tr>
+																	<td width="169" align="right" height="30"><digi:trn
+																		key="aim:budgetOrganizationCode">Budget Organization Code</digi:trn><font
+																		size="2" color="#FF0000">*</font></td>
+																	<td width="500" height="30" colspan="2"><html:text
+																		property="budgetOrgCode" size="15" /></td>
+																</tr>
+																
 																<%--<logic:notEqual name="aimAddOrgForm" property="actionFlag" value="edit" >
                                                           			<tr>
 																		<td width="169" align="right" height="30">

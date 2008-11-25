@@ -318,11 +318,19 @@ public class EditOrganisation
         }
         else
           editForm.setDacOrgCode("");
+        
         if (ampOrg.getOrgCode() != null) {
           editForm.setOrgCode(ampOrg.getOrgCode());
         }
         else
           editForm.setOrgCode("");
+        
+        if (ampOrg.getBudgetOrgCode() != null) {
+            editForm.setBudgetOrgCode(ampOrg.getBudgetOrgCode());
+          }
+          else
+            editForm.setBudgetOrgCode("");
+        
         if (ampOrg.getOrgIsoCode() != null) {
           editForm.setOrgIsoCode(ampOrg.getOrgIsoCode());
         }
@@ -544,6 +552,14 @@ public class EditOrganisation
         }
         else
           ampOrg.setOrgCode(null);
+        
+        //budget organization code
+        if (editForm.getBudgetOrgCode() != null ||
+                !editForm.getBudgetOrgCode().trim().equals(""))
+              ampOrg.setBudgetOrgCode(editForm.getBudgetOrgCode());
+            else
+              ampOrg.setBudgetOrgCode(null);
+        
         if (editForm.getOrgIsoCode() != null ||
             !editForm.getOrgIsoCode().trim().equals(""))
           ampOrg.setOrgIsoCode(editForm.getOrgIsoCode());

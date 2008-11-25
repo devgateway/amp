@@ -50,6 +50,7 @@ public class EditTheme extends Action {
 				themeForm.setThemeId(id);
 				themeForm.setProgramName(ampTheme.getName());
 				themeForm.setProgramCode(ampTheme.getThemeCode());
+				themeForm.setBudgetProgramCode(ampTheme.getBudgetProgramCode());
 				themeForm.setProgramDescription(ampTheme.getDescription());
 				if (ampTheme.getTypeCategoryValue() != null)
 					themeForm.setProgramTypeCategValId(ampTheme.getTypeCategoryValue().getId());
@@ -92,6 +93,7 @@ public class EditTheme extends Action {
 				themeForm.setThemeId(id);
 				themeForm.setProgramName(ampTheme.getName());
 				themeForm.setProgramCode(ampTheme.getThemeCode());
+				themeForm.setBudgetProgramCode(ampTheme.getBudgetProgramCode());
 				themeForm.setProgramDescription(ampTheme.getDescription());
 				if (ampTheme.getTypeCategoryValue() != null)
 					themeForm.setProgramTypeCategValId(ampTheme.getTypeCategoryValue().getId());
@@ -138,6 +140,7 @@ public class EditTheme extends Action {
 					editPrg.setAmpThemeId(id);
 					editPrg.setName(themeForm.getProgramName());
 					editPrg.setThemeCode(themeForm.getProgramCode());
+					editPrg.setBudgetProgramCode(themeForm.getBudgetProgramCode());
 					editPrg.setDescription(themeForm.getProgramDescription());
 					
 					editPrg.setTypeCategVal( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
@@ -164,6 +167,7 @@ public class EditTheme extends Action {
 					editPrg.setAmpThemeId(id);
 					editPrg.setName(themeForm.getProgramName());
 					editPrg.setThemeCode(themeForm.getProgramCode());
+					editPrg.setBudgetProgramCode(themeForm.getBudgetProgramCode());
 					editPrg.setDescription(themeForm.getProgramDescription());
 					editPrg.setTypeCategVal( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );					
 					editPrg.setLeadAgency( themeForm.getProgramLeadAgency() );

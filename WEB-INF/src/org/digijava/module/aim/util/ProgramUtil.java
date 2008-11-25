@@ -1559,6 +1559,7 @@ public class ProgramUtil {
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,editPrg.getAmpThemeId());
 				tempAmpTheme.setName(editPrg.getName());
 				tempAmpTheme.setThemeCode(editPrg.getThemeCode());
+				tempAmpTheme.setBudgetProgramCode(editPrg.getBudgetProgramCode());
 				tempAmpTheme.setDescription(editPrg.getDescription());
 				tempAmpTheme.setTypeCategoryValue( editPrg.getTypeCategVal() );
 

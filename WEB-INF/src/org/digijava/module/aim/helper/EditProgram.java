@@ -12,6 +12,7 @@ public class EditProgram
     private Long ampThemeId ;
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
+	private String budgetProgramCode;
 	private String name ;
 	//private String type ;
 	private AmpCategoryValue typeCategVal;
@@ -248,6 +249,12 @@ public class EditProgram
 	 */
 	public void setTotalFinancing(Double totalFinancing) {
 		this.totalFinancing = totalFinancing;
+	}
+	public String getBudgetProgramCode() {
+		return budgetProgramCode;
+	}
+	public void setBudgetProgramCode(String budgetProgramCode) {
+		this.budgetProgramCode = budgetProgramCode;
 	}
 	
 }

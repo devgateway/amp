@@ -65,6 +65,7 @@ public class AddTheme extends Action
 		{
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
+			themeForm.setBudgetProgramCode(null);
 			themeForm.setProgramDescription(null);
 			themeForm.setProgramTypeCategValId(new Long(0));
 			themeForm.setPrgLanguage(null);
@@ -76,6 +77,7 @@ public class AddTheme extends Action
 			AmpTheme ampTheme = new AmpTheme();
 			ampTheme.setName(themeForm.getProgramName());
 			ampTheme.setThemeCode(themeForm.getProgramCode());
+			ampTheme.setBudgetProgramCode(themeForm.getBudgetProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
 			ampTheme.setIndlevel(new Integer(0));			
@@ -91,6 +93,7 @@ public class AddTheme extends Action
 			ampTheme.setVersion(null);				
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
+			themeForm.setBudgetProgramCode(null);
 			themeForm.setProgramDescription(null);
 			themeForm.setProgramTypeCategValId( new Long(0));
 			DbUtil.add(ampTheme);

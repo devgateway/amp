@@ -25,6 +25,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private AmpFiscalCalendar ampFiscalCalId;
 	private AmpSectorScheme ampSecSchemeId;
 	
+	private String budgetOrgCode;
+	
 	private String acronymAndName;
 	/**
 	 * @deprecated
@@ -486,6 +488,14 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
     public void setAcronymAndName(String acronymAndName) {
 	this.acronymAndName = acronymAndName;
     }
+
+	public String getBudgetOrgCode() {
+		return budgetOrgCode;
+	}
+
+	public void setBudgetOrgCode(String budgetOrgCode) {
+		this.budgetOrgCode = budgetOrgCode;
+	}
 
 	
 	

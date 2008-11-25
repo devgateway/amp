@@ -16,6 +16,7 @@ public class RelOrganization {
 	private AmpOrgGroup orgGrpId;
 	private String acronym;
 	private String orgCode;
+	private String budgetOrgCode;
 	private Long orgId;
 
 	
@@ -117,5 +118,13 @@ public class RelOrganization {
 			ex.printStackTrace(System.out);
 		}
 		return null;
+	}
+
+	public String getBudgetOrgCode() {
+		return budgetOrgCode;
+	}
+
+	public void setBudgetOrgCode(String budgetOrgCode) {
+		this.budgetOrgCode = budgetOrgCode;
 	}
 }

@@ -15,6 +15,7 @@ public class AmpTheme implements Serializable, Identifiable
     private Long ampThemeId ;
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
+	private String budgetProgramCode ;
 	private String name ;
 	private String encodeName;
 	//private String type ;
@@ -339,6 +340,14 @@ public class AmpTheme implements Serializable, Identifiable
 		 */
 		public void setInternalFinancing(Double internalFinancing) {
 			this.internalFinancing = FeaturesUtil.applyThousandsForEntry(internalFinancing);
+		}
+
+		public String getBudgetProgramCode() {
+			return budgetProgramCode;
+		}
+
+		public void setBudgetProgramCode(String budgetProgramCode) {
+			this.budgetProgramCode = budgetProgramCode;
 		}
 
 }

@@ -75,6 +75,7 @@ public class AddSubPrgIndicator extends Action
 		{
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
+			themeForm.setBudgetProgramCode(null);
 			themeForm.setProgramDescription(null);
 			themeForm.setProgramTypeCategValId(new Long(0));
 			themeForm.setPrgParentThemeId(new Long(Long.parseLong(request.getParameter("themeId"))));
@@ -91,6 +92,7 @@ public class AddSubPrgIndicator extends Action
 			AmpTheme ampTheme = new AmpTheme();
 			ampTheme.setName(themeForm.getProgramName());
 			ampTheme.setThemeCode(themeForm.getProgramCode());
+			ampTheme.setBudgetProgramCode(themeForm.getBudgetProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()));
 			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(id));

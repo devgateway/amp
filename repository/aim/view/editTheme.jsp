@@ -196,6 +196,21 @@
 					
 				</td>
 				</tr>
+				
+				<field:display name="Budget Program Code" feature="Admin NPD">
+				<tr bgColor=#ffffff>
+				<td height="20" align="center">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:budgetProgramCode">
+						Budget Program Code</digi:trn>
+						<font color="red">*</font>
+				</td>
+				<td align="left">
+						<html:text property="budgetProgramCode" size="20" styleClass="inp-text"/>
+					
+				</td>
+				</tr>
+				</field:display>
 				<field:display name="Program Type" feature="Admin NPD"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="center">

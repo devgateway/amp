@@ -24,6 +24,7 @@ public class ThemeForm extends ActionForm {
 		  private String programName;
 		  private String sectorName;
 		  private String programCode;
+		  private String budgetProgramCode;
 		  private String programDescription;
 		  //private String programType; replaced by programTypeCategValId which uses Category Manager
 		  private Long programTypeCategValId;
@@ -949,6 +950,14 @@ public class ThemeForm extends ActionForm {
 
 	public void setSettingsUsedByTheme(String settingsUsedByTheme) {
 		this.settingsUsedByTheme = settingsUsedByTheme;
+	}
+
+	public String getBudgetProgramCode() {
+		return budgetProgramCode;
+	}
+
+	public void setBudgetProgramCode(String budgetProgramCode) {
+		this.budgetProgramCode = budgetProgramCode;
 	}
       
 	

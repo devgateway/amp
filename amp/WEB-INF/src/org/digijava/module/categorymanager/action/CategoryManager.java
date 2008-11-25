@@ -101,7 +101,10 @@ public class CategoryManager extends Action {
 		if (request.getParameter("edit") != null) {
 			Collection categoryCollection		= this.loadCategories(new Long(request.getParameter("edit")) );
 			AmpCategoryClass ampCategoryClass	= (AmpCategoryClass)(categoryCollection.toArray())[0];
-			this.populateForm(ampCategoryClass, myForm);
+			boolean advancedMode				= false;
+			if ( request.getParameter("advancedMode") != null)
+				advancedMode					= true;
+			this.populateForm(ampCategoryClass, myForm, advancedMode);
 			return mapping.findForward("createOrEditCategory");
 		}
 		if (request.getParameter("delete") != null ) {
@@ -155,15 +158,17 @@ public class CategoryManager extends Action {
 	 * @param ampCategoryClass
 	 * @param myForm
 	 */
-	private void populateForm(AmpCategoryClass ampCategoryClass, CategoryManagerForm myForm) {
+	private void populateForm(AmpCategoryClass ampCategoryClass, CategoryManagerForm myForm, boolean advancedMode) {
 		if (ampCategoryClass != null) {
 			myForm.setCategoryName( ampCategoryClass.getName() );
 			myForm.setDescription( ampCategoryClass.getDescription() );
 			myForm.setNumOfPossibleValues( new Integer(ampCategoryClass.getPossibleValues().size()) );
-			myForm.setEditedCategoryId( ampCategoryClass.getId() );
+			myForm.setEditedCategoryId( ampCategoryClass.getId() );	
 			myForm.setIsMultiselect( ampCategoryClass.isMultiselect() );
 			myForm.setIsOrdered( ampCategoryClass.isOrdered() );
 			myForm.setKeyName( ampCategoryClass.getKeyName() );
+			
+			myForm.setAdvancedMode(advancedMode);
 			
 			
 			Iterator iterator					= ampCategoryClass.getPossibleValues().iterator();
@@ -357,6 +362,13 @@ public class CategoryManager extends Action {
 					dbCategory.getPossibleValues().add(i, newVal);
 				}
 			}
+			/**
+			 * Save modifications to existing values only if we are in advvanced mode
+			 */
+			if ( myForm.isAdvancedMode() )
+				for ( int i=0; i<possibleVals.size(); i++ ) {
+					dbCategory.getPossibleValues().get(i).setValue( possibleVals.get(i).getValue() );
+				}
 			/**
 			 * Remove deleted values from database
 			 */

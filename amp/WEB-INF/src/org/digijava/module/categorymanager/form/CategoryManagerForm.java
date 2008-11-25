@@ -29,6 +29,7 @@ public class CategoryManagerForm extends ActionForm {
 	private Integer numOfPossibleValues	= null;
 	private boolean isMultiselect		= false;
 	private boolean isOrdered			= false;
+	private boolean advancedMode		= false;
     private List<PossibleValue> possibleVals	= new ArrayList<PossibleValue>();
     
     private int numOfAdditionalFields	= 0;
@@ -136,6 +137,14 @@ public class CategoryManagerForm extends ActionForm {
 
 	public void setNumOfAdditionalFields(int numOfAdditionalFields) {
 		this.numOfAdditionalFields = numOfAdditionalFields;
+	}
+
+	public boolean isAdvancedMode() {
+		return advancedMode;
+	}
+
+	public void setAdvancedMode(boolean advancedMode) {
+		this.advancedMode = advancedMode;
 	}
 	
 }

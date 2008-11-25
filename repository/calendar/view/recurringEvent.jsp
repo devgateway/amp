@@ -21,23 +21,20 @@
 
 
 function eventType(){
-		var Dailly = document.getElementById("Dailly").checked;
+    
+        var Dailly = document.getElementById("Dailly").checked;
 		var Weekly = document.getElementById("Weekly").checked;
 		var Monthly = document.getElementById("Monthly").checked;
 		var Yearly = document.getElementById("Yearly").checked;
-        var startDate = document.getElementById("selectedStartDate").value;
-        var endDate = document.getElementById("selectedEndDate").value;
+        
 
     if(!Dailly && !Weekly && !Monthly && !Yearly){
 		alert("please choose");
 		return false;
 	}
 
-    
-
     if(Yearly){
-        var month = document.getElementById("selectedStartYearlyMonth").value;
-		var rec = document.getElementById("recurrYearly").value;
+    	var rec = document.getElementById("recurrYearly").value;
 		
 		document.getElementById("type").value = 'Yearly';
         document.getElementById("hiddenMonth").value = month;
@@ -45,8 +42,7 @@ function eventType(){
 	}
 	
 	if(Monthly){
-        var month = document.getElementById("selectedStartMonth").value;
-		var rec = document.getElementById("recurrMonthly").value;
+   		var rec = document.getElementById("recurrMonthly").value;
 		
 		document.getElementById("type").value = 'Monthly';
         document.getElementById("hiddenMonth").value = month;
@@ -55,7 +51,7 @@ function eventType(){
 
 	if(Dailly){
         var rec = document.getElementById("recurrDailly").value;
-        document.getElementById("startDate").value = startDate;
+        
 
         document.getElementById("hidden").value = rec;
         document.getElementById("type").value = 'Dailly';
@@ -67,7 +63,7 @@ function eventType(){
         document.getElementById("type").value = 'Weekly';
         document.getElementById("hidden").value = rec;
 	}
-	    submit();
+   submit();
 }
 
 </script>

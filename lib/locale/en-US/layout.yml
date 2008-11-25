@@ -5,8 +5,8 @@ en:
   navigation:
     logout: Log out
     language: Language
-    language_SP: Spanish
-    language_EN: English
+    language_es: Spanish
+    language_en: English
     
     default:
       home: Home

@@ -5,8 +5,8 @@ es:
   navigation:
     logout: Salir
     language: Lenguaje
-    language_SP: Espa&ntilde;ol
-    language_EN: Ingl&eacute;s
+    language_es: Español
+    language_en: Inglés
     
     default:
       home: Inicio

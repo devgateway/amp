@@ -526,6 +526,8 @@
 <field:display name="National Plan Objective" feature="NPD Programs"></field:display> 
 <field:display name="National Plan Objective" feature="Program"></field:display> 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
+
+<field:display name="Parent National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 
 <field:display name="Objective" feature="Identification"></field:display> 
 <field:display name="Objectively Verifiable Indicators" feature="Identification"></field:display> 

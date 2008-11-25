@@ -18,6 +18,8 @@ public class AddOrgForm extends ActionForm {
 	private String orgCode = null;
 	private String orgIsoCode = null;
 		
+	private String budgetOrgCode = null;
+	
 	private String contactPersonName = null;
 	private String contactPersonTitle = null;
 	private String address = null;
@@ -104,6 +106,8 @@ public class AddOrgForm extends ActionForm {
 		  description = null;
 		  orgCode = null;
 		  orgIsoCode = null;
+		  
+		  budgetOrgCode=null;
 			
 		  contactPersonName = null;
 		  contactPersonTitle = null;
@@ -474,5 +478,11 @@ public class AddOrgForm extends ActionForm {
 
 	public void setTransIndexId(long transIndexId) {
 		this.transIndexId = transIndexId;
+	}
+	public String getBudgetOrgCode() {
+		return budgetOrgCode;
+	}
+	public void setBudgetOrgCode(String budgetOrgCode) {
+		this.budgetOrgCode = budgetOrgCode;
 	}
 }

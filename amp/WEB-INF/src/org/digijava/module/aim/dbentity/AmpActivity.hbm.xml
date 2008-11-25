@@ -148,8 +148,6 @@
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 		<many-to-one name="team" column="amp_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
-		<many-to-one name="country" column="country_iso"
-			class="org.digijava.kernel.dbentity.Country" cascade="none" />
 
 		<many-to-one name="author" column="author" class="org.digijava.kernel.user.User"
 			cascade="none" /><!-- defunct -->

@@ -294,6 +294,9 @@
 		<copy file="${deployConfigs}/${serverName}/cj.jsp" todir="${webinf}/queries/"/>
 		<copy file="${deployConfigs}/${serverName}/by_time.jsp" todir="${webinf}/queries/"/>
 	    <copy file="${deployConfigs}/${serverName}/by_donors.jsp" todir="${webinf}/queries/"/>
+		<copy file="${deployConfigs}/${serverName}/sectorWeighted.jsp" todir="${webinf}/queries/"/>
+		
+
 	</target>
 
     <target name="junit" depends="compileTest">

@@ -1,12 +1,14 @@
 package org.digijava.module.widget.helper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.digijava.module.widget.dbentity.AmpDaTable;
 import org.digijava.module.widget.dbentity.AmpDaWidgetPlace;
 import org.digijava.module.widget.dbentity.AmpWidget;
 import org.digijava.module.widget.dbentity.AmpWidgetIndicatorChart;
+import org.digijava.module.widget.dbentity.AmpWidgetOrgProfile;
 import org.digijava.module.widget.util.WidgetUtil;
 
 /**
@@ -60,23 +62,44 @@ public class WidgetPlaceHelper implements Serializable{
 		fromWidget(widget);
 	}
 	
-	private void fromWidget(AmpWidget widget){
-		this.widgetClassName = widget.getClass().getName();
-		this.widgetId = widget.getId();
-		this.widgetName = widget.getName();
-		this.widgetCode = widget.getCode();
-		if (widget instanceof AmpDaTable){
-			this.widgetTypeName = "Table";
-			this.widgetTypeCode = new Integer(WidgetUtil.TABLE);
-		}else if (widget instanceof AmpWidgetIndicatorChart){
-			this.widgetTypeName = "Indicator Chart";
-			this.widgetTypeCode = new Integer(WidgetUtil.CHART_INDICATOR);
-		}else {
-			this.widgetTypeName = "Unknown";
-			this.widgetTypeCode = new Integer(0);
-		}
-		this.widgetCombinedName = this.widgetName + "  ("+this.widgetTypeName+")";
-	}
+	   private void fromWidget(AmpWidget widget) {
+        this.widgetClassName = widget.getClass().getName();
+        this.widgetId = widget.getId();
+        this.widgetName = widget.getName();
+        this.widgetCode = widget.getCode();
+        final ArrayList<Integer> rendertype = new ArrayList<Integer>();
+        final ArrayList<String> rendertypeName = new ArrayList<String>();
+        WidgetVisitor adapter = new WidgetVisitorAdapter() {
+
+            @Override
+            public void visit(AmpWidgetIndicatorChart chart) {
+                rendertype.add(WidgetUtil.CHART_INDICATOR);
+                rendertypeName.add("Indicator Chart");
+            }
+
+            @Override
+            public void visit(AmpWidgetOrgProfile orgProfile) {
+                rendertype.add(WidgetUtil.ORG_PROFILE);
+                rendertypeName.add("Organization Profile");
+
+            }
+
+            @Override
+            public void visit(AmpDaTable table) {
+                rendertype.add(WidgetUtil.TABLE);
+                rendertypeName.add("Table");
+            }
+        };
+        widget.accept(adapter);
+        if (rendertype.size() > 0) {
+            this.widgetTypeCode = rendertype.get(0);
+            this.widgetTypeName = rendertypeName.get(0);
+        } else {
+            this.widgetTypeName = "Unknown";
+            this.widgetTypeCode = new Integer(0);
+        }
+        this.widgetCombinedName = this.widgetName + "  (" + this.widgetTypeName + ")";
+    }
 	
 	public Long getPlaceId() {
 		return placeId;

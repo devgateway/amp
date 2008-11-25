@@ -19,6 +19,4 @@ production:
 
 ampdev_development:
   <<: *global
-  # TODO: Replace by new pg gem and postgresql adapter
-  adapter: postgres
   database: odadata_nicaragua

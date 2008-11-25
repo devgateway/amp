@@ -17,6 +17,8 @@
 <%@ page import="java.util.*" %>
 <%@ page import="org.digijava.module.aim.dbentity.*" %>
 <%@ page import="org.digijava.module.aim.helper.*" %>
+<%@ page import="org.digijava.module.categorymanager.util.*" %>
+<%@ page import="org.digijava.module.categorymanager.dbentity.*" %>
 
 <style>
 <!--

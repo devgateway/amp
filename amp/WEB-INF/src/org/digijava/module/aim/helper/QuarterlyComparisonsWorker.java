@@ -66,8 +66,8 @@ public class QuarterlyComparisonsWorker	{
 						double am = qi.getActualAmount();
 
                         if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
-                                if ( qc.getActualDisbOrder() == null ) {
-                                        qc.setActualDisbOrder(Double.toString(am));
+                                if ( qc.getActualDisbOrder() == 0.0) {
+                                        qc.setActualDisbOrder(am);
                                         b = true;
                                 }
                         }
@@ -75,19 +75,19 @@ public class QuarterlyComparisonsWorker	{
 
 
 						if ( transactionType == Constants.DISBURSEMENT)	{
-							if ( qc.getPlannedDisbursement() == null
-								&& qc.getActualDisbursement()== null) {
-								qc.setPlannedDisbursement(Double.toString(pm));
-								qc.setActualDisbursement(Double.toString(am));
+							if ( qc.getPlannedDisbursement() == 0.0
+								&& qc.getActualDisbursement()== 0.0) {
+								qc.setPlannedDisbursement(pm);
+								qc.setActualDisbursement(am);
 								b = true;
 							}
 						}
 
 						if ( transactionType == Constants.EXPENDITURE)	{
-							if ( qc.getPlannedExpenditure() == null
-								&& qc.getActualExpenditure() == null ) {
-								qc.setPlannedExpenditure(Double.toString(pm));
-								qc.setActualExpenditure(Double.toString(am));
+							if ( qc.getPlannedExpenditure() == 0.0
+								&& qc.getActualExpenditure() == 0.0) {
+								qc.setPlannedExpenditure(pm);
+								qc.setActualExpenditure(am);
 								b = true;
 							}
 
@@ -114,19 +114,19 @@ public class QuarterlyComparisonsWorker	{
 			qc.setFiscalYear(qi.getFiscalYear());
 			qc.setFiscalQuarter(qi.getFiscalQuarter());
 			if ( transactionType == Constants.COMMITMENT ) {
-				qc.setPlannedCommitment(Double.toString(qi.getPlannedAmount()));
-				qc.setActualCommitment(Double.toString(qi.getActualAmount()));
+				qc.setPlannedCommitment(qi.getPlannedAmount());
+				qc.setActualCommitment(qi.getActualAmount());
 			}
 			if ( transactionType == Constants.DISBURSEMENT)	{
-				qc.setPlannedDisbursement(Double.toString(qi.getPlannedAmount()));
-				qc.setActualDisbursement(Double.toString(qi.getActualAmount()));
+				qc.setPlannedDisbursement(qi.getPlannedAmount());
+				qc.setActualDisbursement(qi.getActualAmount());
 			}
                         if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
-				qc.setActualDisbOrder(Double.toString(qi.getActualAmount()));
+				qc.setActualDisbOrder(qi.getActualAmount());
 			}
 			if ( transactionType == Constants.EXPENDITURE)	{
-				qc.setPlannedExpenditure(Double.toString(qi.getPlannedAmount()));
-				qc.setActualExpenditure(Double.toString(qi.getActualAmount()));
+				qc.setPlannedExpenditure(qi.getPlannedAmount());
+				qc.setActualExpenditure(qi.getActualAmount());
 			}
 			arrList.add(qc);
 		}

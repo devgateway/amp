@@ -22,6 +22,8 @@
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
+
 <style>
 
 .tableEven {
@@ -187,7 +189,6 @@ function setHoveredTable(tableId, hasHeaders) {
 </c:set>
 
 
-
 <digi:form action="/viewMonthlyInfo.do" name="aimMonthlyInfoForm" type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
     
     
@@ -218,9 +219,9 @@ function setHoveredTable(tableId, hasHeaders) {
                             
                             
                             
-                            <TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
+                            <TABLE width="100%" border=0 align="center" cellPadding=3 cellSpacing=3 bgcolor="#f4f4f4" vAlign="top">
                                 
-                                <TR height="20"><TD height="20">
+                              <TR height="20"><TD height="20">
 				<div id="subtabsFinancial">
                                         
                                         <c:set var="translation">
@@ -365,7 +366,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                             <digi:trn key="aim:all">ALL</digi:trn>
                                             
                                         </digi:link>
-                                        </div>
+                                </div>
                                 </TD></TR>
                                 
                                 <TR bgColor=#f4f4f2>
@@ -456,19 +457,19 @@ function setHoveredTable(tableId, hasHeaders) {
                                 
                                 <TR bgColor=#f4f4f2>
                                     
-                                    <TD vAlign="top" align="center" width="100%" bgColor="#f4f4f2">
+                                  <TD vAlign="top" align="center" bgColor="#f4f4f2">
                                         
-                                        <TABLE cellSpacing=0 cellPadding=0 width="100%" align=center bgColor="#f4f4f2" border=0>
+                              <TABLE width="100%" border=0 align=center cellPadding=0 cellSpacing=0 bgColor="#f4f4f2">
                                             
-                                            <TR bgcolor="#ffffff">
+                  <TR bgcolor="#ffffff">
                                                 
                                                 <TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
                                                     
                                                     <TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left"
                                                            
-                                                           bgColor="#ffffff">
+                                                         >
                                                         
-                                                        <TR><TD bgColor="#ffffff">
+                                              <TR><TD bgColor="#ffffff">
                                                                 
                                                                 <logic:equal name="aimMonthlyInfoForm" property="goButtonPresent" value="true">
                                                                 
@@ -569,76 +570,63 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                 
                                                         </TD></TR>
                                                         
-                                                        <TR><TD>
+                                                        <TR>
+<TD>
                                                                 
-                                                                <TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
+                                                                <TABLE width="100%" border=0 align="left" cellPadding=0 cellSpacing=0 bgColor=#ffffff vAlign="top">
                                                                     
-                                                                    <TR><TD>
+                                                                  <TR>
+                                                                    <TD>
                                                                         
                                                                         
                                                                         
                                                                      
                                                                         
-                                                                            <TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" id="dataTable" class="box-border-nopadding">
+                                                          <TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding" id="dataTable">
                                                                             
-                                                                            <tr bgcolor="#999999" >
+      <tr bgcolor="#999999" >
                                                                                 
-                                                                                <td bgcolor="#999999"  >
+                                                                                <td width="21%" bgcolor="#999999"  >
                                                                                     
                                                                                     <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <digi:trn key="aim:year">Year</digi:trn>
-                                                                                        
-                                                                                    </div>
-                                                                                    
-                                                                                </td>
+                                                                                    </div>                                                                              </td>
                                                                                 
-                                                                                <td bgcolor="#999999">
+                                                                                <td width="25%" bgcolor="#999999">
                                                                                     
                                                                                     <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <digi:trn key="aim:dateDisbursed">Date Disbursed</digi:trn>
-                                                                                        
-                                                                                    </div>
-                                                                                    
-                                                                                </td>
+                                                                                    </div>                                                                              </td>
                                                                                 <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
                                                                                 
-                                                                                <td bgcolor="#999999">
+                                                                                <td width="24%" bgcolor="#999999">
                                                                                     
                                                                                     <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <FONT color="blue">*</FONT>
                                                                                         
                                                                                         <digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
-                                                                                        
-                                                                                    </div>
-                                                                                    
-                                                                                </td>
+                                                                                    </div>                                                                                </td>
                                                                             </c:if>
                                                                                 
-                                                                                <td bgcolor="#999999">
+                                                                                <td width="30%" bgcolor="#999999">
                                                                                     
                                                                                     <div align="center" style="font-weight:bold;color:black;">
                                                                                         
                                                                                         <FONT color="blue">*</FONT>
                                                                                         
                                                                                         <digi:trn key="aim:actualAmount">Actual Amount</digi:trn>
-                                                                                        
-                                                                                    </div>
-                                                                                    
-                                                                                </td>
-                                                                                
-                                                                            </tr>
+                                                                                    </div>                                                                              </td>
+                                                            </tr>
                                                                             
                                                                             <logic:empty name="aimMonthlyInfoForm" property="monthlyInfoList">
                                                                             
                                                                                 <tr valign="top">
                                                                                     
                                                                                     <td colspan="5" align="center"><span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!</td>
-                                                                                    
                                                                                 </tr>
-                                                                                
                                                                             </logic:empty>
                                                                             
                                                                             <logic:notEmpty name="aimMonthlyInfoForm" property="monthlyInfoList">
@@ -646,64 +634,39 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                                 <logic:iterate name="aimMonthlyInfoForm" property="monthlyInfoList"
                          
                          id="month" type="org.digijava.module.aim.helper.MonthlyInfo">
-                                                                                    <td valign="baseline">
+                                                                                    <td align="left" valign="baseline">
                                                                                         
-                                                                                        ${month.year}
-
-                                                                                    </td>
+                                                                                        ${month.year}                                                                                    </td>
                                                                                     
                                                                                     
                                                                                     
-                                                                                    <td valign="baseline">
-                                                                                        
-                                                                                        <div align="right"><digi:trn key='aim:monthly:${month.month}'>${month.month}</digi:trn> </div>
-                                                                                        
-                                                                                    </td>
+                                                                                    <td valign="baseline"  align="right">
+                                                                                      <digi:trn key='aim:monthly:${month.month}'>${month.month}</digi:trn>                                                                                     </td>
                                                                                     
                                                                                      <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
-                                                                                    <td valign="baseline">
-                                                                                        
-                                                                                        <div align="right"><bean:write name="month" property="plannedAmount" format="#.##"/></div>
-                                                                                        
+                                                                                    <td align="center" valign="baseline">
+                                                                                       <aim:formatNumber  value="${month.plannedAmount}"/>
                                                                                     </td>
                                                                                     </c:if>
                                                                                     
-                                                                                    <td valign="baseline">
+                                                                                    <td valign="baseline" align="right" style="padding-right:5px">
                                                                                         
-                                                                                        <div align="right"><bean:write name="month" property="actualAmount" format="#.##"/></div>
-                                                                                        
-                                                                                    </td>
+                                                                                      <aim:formatNumber  value="${month.actualAmount}"/>                                                                                    </td>
                                                                                     
-                                                                                </tr>
-                                                                                
-                                                                                
-                                                                                
+                                                                                    
+                                                                                </tr>    <tr>
+                                                                                      <td align="left" valign="baseline"><span class="note"> <font color="blue">*</font>
+                              <digi:trn key="aim:total">Total</digi:trn>
+                  </span></td>
+                                                                                      <td valign="baseline">&nbsp;</td>
+                                                                                        <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
+                                                                                      <td align="center" class="note" valign="baseline"><aim:formatNumber  value="${aimMonthlyInfoForm.totalPlanned}"/></td></c:if>
+                                                                                      <td valign="baseline" class="note" align="right" style="padding-right:5px">
+                                                                                      
+                                                                                       <aim:formatNumber  value="${aimMonthlyInfoForm.totalActual}"/>
+                                                                                      </td></tr>
                                                                             </logic:iterate>
-                                                                            <tr valign="top">
-                                                                                <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
-                                                                                    <td colspan="2">
-                                                                                </c:if>
-                                                                                 <c:if test="${aimMonthlyInfoForm.transactionType==4}">
-                                                                                    <td>
-                                                                                </c:if>
-														 <span class="note">
-															<digi:trn key="aim:total">Total</digi:trn>
-                                                            </span>
-														</td>
-														<td>
-															<div align="right" class="note">
-																<bean:write name="aimMonthlyInfoForm" property="totalPlanned" format="#.##"/>
-															</div>
-														</td>
-														<td>
-															<div align="right" class="note">
-																<bean:write name="aimMonthlyInfoForm" property="totalActual" format="#.##"/>
-															</div>
-														</td>
-									</tr>
-                                                                            
-                                                                        </logic:notEmpty>
-                                                                        
+                                                                       </logic:notEmpty>
                                                                     </TABLE>
                                                                     
                                                                
@@ -712,14 +675,14 @@ function setHoveredTable(tableId, hasHeaders) {
                                                         
                                                         
                                                         
-                                                        <TR><TD align="right">
-                                                                
-                                                                <TABLE cellspacing="0" cellpadding="0" vAlign="top">
+                                                        <TR>
+                                                          <TD align="right">                                                            <br />
+                                                     <TABLE cellspacing="0" cellpadding="0" vAlign="top">
                                                                      <c:set target="${urlSubTabs}" property="transactionType">
                                                                                 
                                                                                 <bean:write name='aimMonthlyInfoForm' property='transactionType'/>
                                                                                 
-                                                                            </c:set>
+                                                                  </c:set>
                                                                     
                                                                     <TR>
                                                                         
@@ -804,7 +767,7 @@ function setHoveredTable(tableId, hasHeaders) {
                                                                     <digi:trn key="aim:allTheAmountsInThousands">
                                                                     
                                                                         All the amounts are in thousands (000)</digi:trn>
-                                                                    </FONT>
+                                      </FONT>
 </gs:test>
                                                                     
                                                             </TD></TR>
@@ -813,13 +776,13 @@ function setHoveredTable(tableId, hasHeaders) {
                                                         
                                                 </TD></TR>
                                                 
-                                            </TABLE>
+                                    </TABLE>
                                             
-                                        </TD>
+                                  </TD>
                                         
-                                    </TR>
+                              </TR>
                                     
-                                </TABLE>
+                      </TABLE>
                                 
                             </TD>
                             

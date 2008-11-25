@@ -16,7 +16,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
-
+<%@ taglib uri="/taglib/aim" prefix="aim" %>
 
 <style>
 
@@ -592,10 +592,10 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
          			                   			<tr valign="top">
 
-			         			                   	<td align="center">
+			         			                   	<td align="center" colspan="6">
 
-			                  						  		<span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!!</span>						                            	</td>
-         			                   			</tr>
+			                  						  		<span class="note">
+                  						  		  <digi:trn key="aim:noRecords">No records</digi:trn>!!</span>						                            	</td></tr>
 
 			                            			</logic:empty>
 
@@ -674,8 +674,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 																	<div align="right">
 
 																		<bean:write name="yearlyComparisons" property="actualExpenditure" />
-
-																	</div>
+													</div>
 
 											  </td>
 
@@ -704,7 +703,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimYearlyComparisonsForm" property="totalActualCommitment" />
+																		<aim:formatNumber  value="${aimYearlyComparisonsForm.totalActualCommitment}" />
 
 																		</span>
 
@@ -719,7 +718,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimYearlyComparisonsForm" property="totalDisbOrder" />
+																			<aim:formatNumber  value="${aimYearlyComparisonsForm.totalDisbOrder}" />
 
 																		</span>
 
@@ -737,7 +736,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimYearlyComparisonsForm" property="totalPlannedDisbursement" />
+																			<aim:formatNumber  value="${aimYearlyComparisonsForm.totalPlannedDisbursement}" />
 
 																		</span>
 
@@ -750,8 +749,9 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 																	<div align="right">
 
 																		<span class="note">
+																		
 
-																			<bean:write name="aimYearlyComparisonsForm" property="totalActualDisbursement" />
+																		<aim:formatNumber  value="${aimYearlyComparisonsForm.totalActualDisbursement}" />
 
 																		</span>
 
@@ -767,7 +767,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																		<span class="note">
 
-																			<bean:write name="aimYearlyComparisonsForm" property="totalActualExpenditure" />
+																			<aim:formatNumber  value="${aimYearlyComparisonsForm.totalActualExpenditure}" />
 
 																		</span>
 

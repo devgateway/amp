@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.digijava.module.widget.action;
 
 import java.util.Collection;
@@ -108,6 +103,24 @@ public class OrgProfileManager  extends DispatchAction {
             oldPlaces = WidgetUtil.getWidgetPlaces(orgProfWidget.getId());
         }
         orgProfWidget.setType(orgForm.getType());
+        /*
+         * Name is used in  the Widget Place Manager,
+         * We could force the user to enter it manually,
+         * but it will be hard  to explain them why we need specify name twice 
+         * cause from user perspective name and type are the same...
+        */
+        String name="";
+        switch(orgForm.getType().intValue()){
+            case WidgetUtil.ORG_PROFILE_SUMMARY: name="Summary"; break;
+             case WidgetUtil.ORG_PROFILE_TYPE_OF_AID: name="Type of Aid"; break;
+              case WidgetUtil.ORG_PROFILE_PLEDGES_COMM_DISB: name="Pledges/Comm/Disb"; break;
+               case WidgetUtil.ORG_PROFILE_ODA_PROFILE: name="ODA Profile"; break;
+                case WidgetUtil.ORG_PROFILE_SECTOR_BREAKDOWN: name="Sector Breakdown"; break;
+                 case WidgetUtil.ORG_PROFILE_SECTOR_LARGETST_PROJECTS: name="5 Largest Projects"; break;
+                  case WidgetUtil.ORG_PROFILE_REGIONAL_BREAKDOWN: name="Regional Breakdown"; break;
+                   case WidgetUtil.ORG_PROFILE_PARIS_DECLARATION: name="Paris Declaration"; break;
+        }
+        orgProfWidget.setName(name);
         OrgProfileWidgetUtil.saveWidget(orgProfWidget);
         if (orgForm.getSelPlaces() != null && orgForm.getSelPlaces().length > 0) {
             newPlaces = WidgetUtil.getPlacesWithIDs(orgForm.getSelPlaces());

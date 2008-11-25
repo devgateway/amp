@@ -87,20 +87,19 @@
 														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
 													</c:set>
 													
-													
+																							
 													<bean:define id="location" name="aimEditActivityForm" property="location"></bean:define>
-													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+													<category:showoptions firstLine="${translation}" name="location" property="implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
 												                                             	
                                               		<input type="hidden" name="location.implemLocationLevel" value="${location.implemLocationLevel}">
-												                                             	
-                                              	<script language="Javascript">
+
+                                              	<script language="Javascript">                                             	
 												var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
                                               		implemLocationLevelSelect.onchange=function(){
                                               			document.getElementsByName("location.implemLocationLevel")[0].value=implemLocationLevelSelect.value;
                                               			removeAllLocations();
                                               	}
-                                              	
-                                              	
+     	
                                               	</script>
 											</td>
                                             </tr>

@@ -69,8 +69,13 @@ public class TextCell extends Cell {
 	}
 	
 	public String getShortTextVersion() {
-		 if(!getHasLongVersion()) return value;
-		return value.substring(0,shortLength-1);
+		if (!getHasLongVersion())
+			return value;
+		String alteredValue =  value.replaceAll("\\<.*?>","");
+		if(alteredValue.length()<shortLength)
+			return alteredValue;
+		return alteredValue.substring(0, shortLength-1);
+		
 	}
 	
 	public boolean getHasLongVersion() {
@@ -86,6 +91,9 @@ public class TextCell extends Cell {
 	public void merge(Cell c1, Cell c2) {
 		this.setValue((this.equals(c1)?"":c1.getValue()+(String)(this.equals(c2)?"":c2.getValue())));
 	}
-	
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getValue()!=null?getValue().toString().replaceAll("\\<.*?>",""):"";
+	}
 	
 }

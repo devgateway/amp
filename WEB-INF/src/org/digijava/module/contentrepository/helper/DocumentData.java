@@ -214,12 +214,12 @@ public class DocumentData implements Comparable<DocumentData>{
 			extension		 	= "link";
 		if ( extension != null) {
 			if (forDigiImgTag) {
-				iconPath = "module/cms/images/extensions/"
+				iconPath = "images/icons/"
 						+ extension
 						+ ".gif";
 			}
 			else
-				iconPath = "/repository/cms/view/images/extensions/"
+				iconPath = "/TEMPLATE/ampTemplate/images/icons/"
 					+ extension
 					+ ".gif";
 		}

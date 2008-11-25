@@ -440,6 +440,16 @@ function adminHelp(){
                               </div>                    
                           </li>
                           </feature:display>
+						<%	
+							boolean showDashboard = false;
+						  	if(FeaturesUtil.isVisibleFeature("NPD Dashboard", request.getSession().getServletContext())) {
+						  		showDashboard = true;
+						  	}
+						  	if(FeaturesUtil.isVisibleModule("GIS DASHBOARD", request.getSession().getServletContext())) {
+						  		showDashboard = true;
+						  	}
+						%>
+						<%if (showDashboard) {%>
                           <li class="yuiampmenuitem" style="float:left;">
                               <span class="yuiampmenuitemlabel" href="#"  style="float:left;position:relative;top:0px;_top:1px">
                                   <digi:trn key="aim:medashboard">DASHBOARDS</digi:trn>
@@ -476,9 +486,7 @@ function adminHelp(){
                                   </div>
                               </div>                    
                           </li>
-                         
-                          
-                          
+						<%}%>
 						  <module:display name="Messages" parentModule="Messaging System">
                           <li class="yuiampmenuitem" style="float:left;">
                               <a class="yuiampmenuitemlabel" href="${pageContext.request.contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1&childTab=inbox"  style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">

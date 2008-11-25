@@ -285,6 +285,7 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 		vForm.setTemplates(templates);
+		vForm.setMode("manageTemplates");
 		return mapping.findForward("forward");
 	}
 

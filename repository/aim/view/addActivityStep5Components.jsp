@@ -21,8 +21,8 @@
 										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
 										<b><digi:trn key="aim:components">Components</digi:trn></b></a>
 									</td></tr>
-									<tr><td>
-										&nbsp;
+									<tr><td>&nbsp;
+										
 									</td></tr>
 
 									<tr><td align="left">
@@ -358,4 +358,5 @@
 										</table>
 									</field:display>
 									</logic:empty>
-								
+									</td></tr>
+</table>								

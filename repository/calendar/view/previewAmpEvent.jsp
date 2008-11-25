@@ -104,9 +104,16 @@ function deleteEvent(){
 			              </td>
 			              <td>
 			                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
-			                ${calendarEventForm.selectedCalendarTypeName}
+                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+                        Gregorian                     
+                  </c:if>
+                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 1}">
+                        Ethiopian                     
+                  </c:if>
+                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 2}">
+                        Ethiopian_FY                     
+                  </c:if>     
 			              </td>
-			            </tr>
 			            <tr>
 			              <td style="text-align: right"nowrap="nowrap">
 			                <digi:trn key="calendar:EventType">Event type:</digi:trn>

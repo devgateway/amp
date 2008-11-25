@@ -270,7 +270,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
 	                			};
     
 	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
-	
+	YAHOO.widget.DataTable.MSG_EMPTY = "<digi:trn key="aim:noRecordsFound">No records found</digi:trn>";
     return dataTable;
 };
 

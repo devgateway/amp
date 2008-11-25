@@ -57,7 +57,7 @@ public class GetVersionsForDocumentManager extends Action {
 				while (nIter.hasNext()) {
 					DocumentData docData	= new DocumentData();
 					Node n					= nIter.nextNode();
-					String testUUID			= n.getUUID();
+					//String testUUID			= n.getUUID();
 					//System.out.println(testUUID);
 					
 					if ( this.generateDocumentData(n, counter+1, docData) ) {
@@ -91,6 +91,7 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setCalendar		( nodeWrapper.getDate() );
 		docData.setFileSize		( nodeWrapper.getFileSizeInMegabytes() );
 		docData.setVersionNumber( nodeWrapper.getVersionNumber() );
+		docData.setUuid			( nodeWrapper.getUuid() );
 		if ( docData.getVersionNumber() == 0 )
 			docData.setVersionNumber(verNum);
 		

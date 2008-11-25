@@ -2809,4 +2809,20 @@ public class FeaturesUtil {
 			return fieldToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
+	
+	public static boolean isVisibleFeature(String featureName, ServletContext ampContext){
+		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		AmpFeaturesVisibility featureToTest=ampTreeVisibility.getFeatureByNameFromRoot(featureName);
+		if(featureToTest!=null)
+			return featureToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+		return false;
+	}
+
+	public static boolean isVisibleModule(String moduleName, ServletContext ampContext){
+		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
+		if(moduleToTest!=null)
+			return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
+		return false;
+	}
 }

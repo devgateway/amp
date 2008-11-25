@@ -35,16 +35,18 @@ function eventType(){
 
     if(Yearly){
     	var rec = document.getElementById("recurrYearly").value;
-		
-		document.getElementById("type").value = 'Yearly';
+        var month = document.getElementById("selectedStartYearlyMonth").value;
+
+        document.getElementById("type").value = 'Yearly';
         document.getElementById("hiddenMonth").value = month;
 		document.getElementById("hidden").value = rec;
 	}
 	
 	if(Monthly){
    		var rec = document.getElementById("recurrMonthly").value;
-		
-		document.getElementById("type").value = 'Monthly';
+        var month = document.getElementById("selectedStartMonth").value;
+
+        document.getElementById("type").value = 'Monthly';
         document.getElementById("hiddenMonth").value = month;
 		document.getElementById("hidden").value = rec;
 	}

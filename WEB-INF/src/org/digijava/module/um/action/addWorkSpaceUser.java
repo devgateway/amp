@@ -146,5 +146,7 @@ public class addWorkSpaceUser extends Action{
 			upMemForm.setAssignedWorskpaces(assWS);
 		}
 		upMemForm.getAssignedWorkspaces().add(newMember);
+		upMemForm.setTeamId(-1L);
+		upMemForm.setRole(-1L);
 	}	
 }

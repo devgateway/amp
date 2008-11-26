@@ -4,7 +4,7 @@ package org.digijava.module.um.form;
  *   UserRegisterForm.java
  *   @Author Lasha Dolidze lasha@digijava.org
  *   Created:
- *   CVS-ID: $Id: AddUserForm.java,v 1.1 2008-11-24 10:58:52 msotero Exp $
+ *   CVS-ID: $Id: AddUserForm.java,v 1.2 2008-11-26 01:25:52 msotero Exp $
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -19,6 +19,7 @@ package org.digijava.module.um.form;
  *************************************************************************/
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -41,9 +42,11 @@ import org.apache.struts.validator.ValidatorForm;
 
 public class AddUserForm
     extends ValidatorForm {
+	private Collection assignedWorkspaces;
 	private boolean addWorkspace;
 	private Long teamId;
 	private Long role;
+	private Long teamMemberId;
 	private Collection workspaces;
 	private Collection ampRoles;
 	private boolean sendEmail;	
@@ -416,7 +419,7 @@ public class AddUserForm
 
         siteId = null;
         addWorkspace=false;
-        
+       
     }
 
     /**
@@ -560,6 +563,19 @@ public class AddUserForm
 	public void setAddWorkspace(boolean addWorkspace) {
 		this.addWorkspace = addWorkspace;
 	}
+	public Collection getAssignedWorkspaces() {
+		return assignedWorkspaces;
+	}
 
+	public void setAssignedWorskpaces(Collection assignedWorkspaces) {
+		this.assignedWorkspaces = assignedWorkspaces;
+	}
+	public Long getTeamMemberId() {
+		return teamMemberId;
+	}
+
+	public void setTeamMemberId(Long teamMemberId) {
+		this.teamMemberId = teamMemberId;
+	}
 
 }

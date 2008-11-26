@@ -12,8 +12,17 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
+<script language="JavaScript">
+	function deleteWS(id){
+		document.umAddUserForm.teamMemberId.value=id;
+		document.umAddUserForm.actionFlag.value = "deleteWS";
+		<digi:context name="selectType" property="context/module/moduleinstance/addWorkSpaceUser.do" />
+		document.umAddUserForm.action = "<%= selectType %>";
+		document.umAddUserForm.target = "_self";
+		document.umAddUserForm.submit();
+	}
 	function cancel()
 	{
 		document.umAddUserForm.action = "/um/addUser.do";
@@ -74,6 +83,7 @@
 <html:hidden property="orgGrp" />
 
 <input type="hidden" name="actionFlag" value="">
+<input type="hidden" name="teamMemberId" />
   <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=705>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -255,10 +265,42 @@
 									</tr>
 								</table>
 							</td>
-							<td vAlign=top>
+						</tr>
+						<tr>
+							<td width=14>&nbsp;
+							</td>
+							<td align=center vAlign=top width=520><br>
+             					<table border=0 cellPadding=5 cellSpacing=0 width="80%">
+								<c:if test="${!empty umAddUserForm.assignedWorkspaces && umAddUserForm.assignedWorkspaces != null}">
+								<tr bgColor=#999999>
+								<td bgColor=#999999 align="center" height="20">
+								<b><digi:trn key="um:addWorkspaces:wsname">Workspace</digi:trn></b>
+								</td>
+								<td bgColor=#999999 align="center" height="20">
+								<b><digi:trn key="um:addWorkspaces:wsrole">Role</digi:trn></b>
+								</td>
+								<td bgColor=#999999 align="center" height="20">
+								<b><digi:trn key="um:addWorkspaces:wsaction">Action</digi:trn></b>
+								</td>
+								</tr>
+    							<logic:iterate name="umAddUserForm"  property="assignedWorkspaces" id="assignedWS" indexId="idx">
+                              	<tr bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" onmouseout="setPointer(this, <%=idx.intValue()%>, 'out', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" 
+                              	onmouseover="setPointer(this, <%=idx.intValue()%>, 'over', <%=(idx.intValue()%2==1?"\'#dbe5f1\'":"\'#ffffff\'")%>, '#a5bcf2', '#FFFF00');" style="" >                           
+                              	<td bgcolor="<%=(idx.intValue()%2==1?"#dbe5f1":"#ffffff")%>" class="reportsBorderTD">
+								<c:out value="${assignedWS.ampTeam.name}"/>
+								</td>
+								<td>
+								<c:out value="${assignedWS.ampMemberRole.description}"/>
+								</td>
+								<td align="center">
+								<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteWS">Click on this icon to delete workspace</digi:trn>"><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>
+								</td>
+								</tr>
+								</logic:iterate>
+								</c:if>
+								</table>
 							</td>
 						</tr>
-
 					</table>
 					<br /><br />
 					</td>

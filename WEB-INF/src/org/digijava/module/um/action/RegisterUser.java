@@ -161,6 +161,7 @@ public class RegisterUser extends Action {
 			logger.error("Exception from RegisterUser :" + e);
 		}
 		if(userRegisterForm.isAddWorkspace()){
+			userRegisterForm.setAssignedWorskpaces(null);
 			return mapping.findForward("forward");
 		}
 		else{

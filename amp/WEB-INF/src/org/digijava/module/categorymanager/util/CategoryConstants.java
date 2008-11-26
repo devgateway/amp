@@ -71,30 +71,30 @@ public class CategoryConstants {
 	public static final long REGION_TYPE	= 2;
 	
 	public static final HardCodedCategoryValue TYPE_OF_ASSITANCE_GRANT	= 
-		new HardCodedCategoryValue("type_of_assistence","Grant", true);
+		new CategoryConstants.HardCodedCategoryValue("type_of_assistence","Grant", true);
 	
 	public static final HardCodedCategoryValue LOGFRAME_OBJECTIVE	= 
-		new HardCodedCategoryValue("logframe","Objective", true);
+		new CategoryConstants.HardCodedCategoryValue("logframe","Objective", true);
 	public static final HardCodedCategoryValue LOGFRAME_PURPOSE	= 
-		new HardCodedCategoryValue("logframe","Purpose", true);
+		new CategoryConstants.HardCodedCategoryValue("logframe","Purpose", true);
 	public static final HardCodedCategoryValue LOGFRAME_RESULTS	= 
-		new HardCodedCategoryValue("logframe","Results", true);
+		new CategoryConstants.HardCodedCategoryValue("logframe","Results", true);
 	
 	public static final HardCodedCategoryValue TEAM_TYPE_MULTILATERAL	= 
-		new HardCodedCategoryValue("team_type","Multilateral", false);
+		new CategoryConstants.HardCodedCategoryValue("team_type","Multilateral", false);
 	public static final HardCodedCategoryValue TEAM_TYPE_BILATERAL	= 
-		new HardCodedCategoryValue("team_type","Bilateral", false);
+		new CategoryConstants.HardCodedCategoryValue("team_type","Bilateral", false);
 	
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PROJECTION	= 
-		new HardCodedCategoryValue("mtef_projection","projection", false);
+		new CategoryConstants.HardCodedCategoryValue("mtef_projection","projection", false);
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PIPELINE	= 
-		new HardCodedCategoryValue("mtef_projection","pipeline", false);
+		new CategoryConstants.HardCodedCategoryValue("mtef_projection","pipeline", false);
 	
 	public static final HardCodedCategoryValue ACTIVITY_STATUS_PROPOSED	= 
-		new HardCodedCategoryValue("activity_status","proposed", false);
+		new CategoryConstants.HardCodedCategoryValue("activity_status","proposed", false);
 	
 	public static final HardCodedCategoryValue FIN_INSTR_DIRECT_BUDGET_SUPPORT	= 
-		new HardCodedCategoryValue("financing_instrument","Direct Budget Support", false);
+		new CategoryConstants.HardCodedCategoryValue("financing_instrument","Direct Budget Support", false);
 	
 	public static class HardCodedCategoryValue {
 		private String valueKey;

@@ -470,16 +470,13 @@
 											</tr>
 										</table>
 										</td>
-										<td vAlign=top>
-									<TR>
-										</td>
 									</tr>
 								  </table>
 						          <br />
 						          <br />
 						      </td>
 					        </tr>
-						</table>
+						</table>						
 					</td>
 				</tr>
 			</table>

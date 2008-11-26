@@ -3,6 +3,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -2141,9 +2143,16 @@ public class SaveActivity extends Action {
 			Iterator<CustomField> cfi = customFields.iterator();
 			while(cfi.hasNext()){
 				CustomField customField = cfi.next();
-				String propertyName =  customField.getDb_field_name();
-				// INTROSPECTION NEEDED
-				activity.setCustomField1(customField.getValue());
+				String propertyName = customField.getAmpActivityPropertyName();
+				if(propertyName == null){
+					logger.warn("Please set AmpActivityPropertyName for all custom fields.");
+					continue;
+				}
+				try{
+					BeanUtils.setProperty(activity, customField.getAmpActivityPropertyName(), customField.getValue());
+				}catch(Exception e){
+					logger.error("Custom Field [" + customField.getAmpActivityPropertyName() + "] exception", e);
+				}
 			}
 		}
 				

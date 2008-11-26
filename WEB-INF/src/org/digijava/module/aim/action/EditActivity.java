@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -71,6 +72,7 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FilterParams;
@@ -1472,6 +1474,18 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             }
           }
         }
+        
+        Iterator<CustomField> itcf = eaForm.getCustomFields().iterator();
+        while(itcf.hasNext()){
+        	CustomField cf = itcf.next();
+        	try{
+        		String value = BeanUtils.getProperty(activity, cf.getAmpActivityPropertyName());
+        		cf.setValue(value);
+        	}catch(Exception e){
+        		logger.error("Error getting property [" + cf.getAmpActivityPropertyName() + "] from bean ", e);
+        	}
+        }
+        
       }
       //Collection statusCol = null;
       // load the status from the database

@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
@@ -452,6 +453,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		editKey = "";
 		fundingRegionId = new Long(-1);
 		keyword = null;
+		
+    	List<CustomField> customFields = new ArrayList<CustomField>(); 
+    	CustomField cf = new CustomField();
+    	cf.setStep(1);
+    	cf.setName("Field1");
+    	cf.setDescription("Description");
+    	cf.setAmpActivityPropertyName("customField1");
+    	customFields.add(cf);
+    	this.setCustomFields(customFields);	
 	}
 
 
@@ -556,7 +566,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			subVote = null;
 			subProgram = null;
 			projectCode = null;
-			gbsSbs = null;			
+			gbsSbs = null;	
+			
+	        Iterator<CustomField> itcf = this.customFields.iterator();
+	        while(itcf.hasNext()){
+	        	CustomField cf = itcf.next();
+        		cf.setValue(null);
+	        }
+	        
 		}
 
 		if (orgSelReset) {

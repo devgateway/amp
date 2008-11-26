@@ -155,6 +155,9 @@ public class AmpMessageWorker {
         	AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(CalendarEventSaveTrigger.SENDER);
         	event.setSenderId(tm.getAmpTeamMemId());
         	event.setSenderName(tm.getUser().getFirstNames()+" "+tm.getUser().getLastName()+"<"+tm.getUser().getEmail()+">;"+tm.getAmpTeam().getName());
+        	//put event's start/end dates in map.
+        	myHashMap.put(MessageConstants.START_DATE, (String) e.getParameters().get(CalendarEventSaveTrigger.EVENT_START_DATE));
+        	myHashMap.put(MessageConstants.END_DATE, (String) e.getParameters().get(CalendarEventSaveTrigger.EVENT_END_DATE));
         }else{
         	event.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
         }

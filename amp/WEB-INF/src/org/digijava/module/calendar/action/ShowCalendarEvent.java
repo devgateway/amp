@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -27,6 +29,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.action.SaveActivity;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -55,9 +58,10 @@ import org.digijava.module.message.triggers.CalendarEventSaveTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 
 public class ShowCalendarEvent extends Action {
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception {
+	
+	private static Logger logger = Logger.getLogger(ShowCalendarEvent.class);
+	
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request,HttpServletResponse response) throws Exception {
         CalendarEventForm ceform = (CalendarEventForm) form;
         if (ceform.getMethod().equalsIgnoreCase("new")) {
             ceform.reset(mapping, request);
@@ -204,7 +208,7 @@ public class ShowCalendarEvent extends Action {
         return mapping.findForward("success");
     }
 
-    private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) {
+    private void saveAmpCalendar(CalendarEventForm ceform, HttpServletRequest request) throws Exception{
         try {
         	
         	if (ceform.getAmpCalendarId() != null && ceform.getAmpCalendarId() > 0) {
@@ -319,7 +323,6 @@ public class ShowCalendarEvent extends Action {
             AmpDbUtil.updateAmpCalendar(ampCalendar);
             //Create new calendar event alert           
             CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
-                      
             
             //get current member
             HttpSession session = request.getSession();
@@ -328,13 +331,17 @@ public class ShowCalendarEvent extends Action {
         	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
         	
             //guests(in Attendee-s list) should get an email and also attendees(if emailable setting is set to true)   
-        	if(addressCol!=null && addressCol.size()>0){
+        	if(addressCol!=null && addressCol.size()>0){        		
         		InternetAddress[] addresses=(InternetAddress[])addressCol.toArray(new InternetAddress[addressCol.size()]);
-                DgEmailManager.sendMail(addresses, teamMember.getEmail(), calendarItem.getTitle(), calendarItem.getDescription());
+        		try {
+        			DgEmailManager.sendMail(addresses, teamMember.getEmail(), calendarItem.getTitle(), calendarItem.getDescription());
+				} catch (MessagingException e) {
+					logger.debug("couldn't send mail", e);
+				}                
         	}
             
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            ex.printStackTrace();
         }
 
     }
@@ -498,5 +505,6 @@ public class ShowCalendarEvent extends Action {
         }
     	return errors;
     }
-
+    
+    
 }

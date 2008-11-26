@@ -81,7 +81,7 @@
 		document.umAddUserForm.selectedOrgGroup.value="-1";
 		document.umAddUserForm.selectedOrganizationId.value="-1";
 		document.umAddUserForm.sendEmail.value="-1";
-		
+
 		document.umAddUserForm.target = "_self";
 		document.umAddUserForm.submit();
 		return false;
@@ -307,10 +307,10 @@
 													<html:submit value="${btnSubmit}" styleClass="dr-menu" onclick="return validate()" />
 												</td>
 												<td align="left">
-							                        <c:set var="btnCancel">
-							                              <digi:trn key="btn:cancel">Cancel</digi:trn>
+							                        <c:set var="btnDone">
+							                              <digi:trn key="btn:done">Done</digi:trn>
 							                        </c:set>
-													<html:submit value="${btnCancel}" styleClass="dr-menu" onclick="return cancel()"/>
+													<html:submit value="${btnDone}" styleClass="dr-menu" onclick="return cancel()"/>
 												</td>
 												
 											</tr>
@@ -347,7 +347,7 @@
 										<c:out value="${assignedWS.ampMemberRole.description}"/>
 										</td>
 										<td align="center">
-										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteWS">Click on this icon to delete workspace</digi:trn>"><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>
+										<a href="javascript:deleteWS(<c:out value="${assignedWS.ampTeamMemId}"/>)" title="<digi:trn key="aim:ClickDeleteUserFromWS">Click on this icon to remove user from the workspace</digi:trn>"><img  src="/repository/message/view/images/trash_12.gif" border=0 hspace="2"/></a>
 										</td>
 										</tr>
 										</logic:iterate>

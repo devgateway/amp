@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <digi:instance property="gisWidgetTeaserForm" />
@@ -31,6 +33,7 @@
 </script>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==5}">
+<feature:display name="orgprof_chart_place${gisWidgetTeaserForm.type}" module="Org Profile">
     <c:choose>
         <c:when test="${gisWidgetTeaserForm.type==1}">
             <c:set var="organization" scope="request" value="${sessionScope.orgProfileFilter.organization}"/>
@@ -51,9 +54,10 @@
            
         </c:otherwise>
     </c:choose>
-   
-       
-			
+   </feature:display>
+     	
+
+
 </c:if>
 
 <c:if test="${gisWidgetTeaserForm.rendertype==4}">

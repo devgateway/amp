@@ -57,7 +57,8 @@
 <module:display name="TREND ANALYSIS"></module:display> 
 <module:display name="Tab Generator" parentModule="REPORTING"></module:display> 
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
-<module:display name="WIDGETS"></module:display> 
+<module:display name="WIDGETS"></module:display>
+<module:display name="Org Profile"></module:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 
 <feature:display module="Contracting" name="Contracting"></feature:display> 
@@ -186,6 +187,14 @@
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
 <feature:display name="yuiampmenuitemlabel" module="Document Management"></feature:display>
+<feature:display name="orgprof_chart_place1" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place2" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place3" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place4" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place5" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place6" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place7" module="Org Profile"></feature:display>
+<feature:display name="orgprof_chart_place8" module="Org Profile"></feature:display>
 
 <%
 pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
@@ -708,6 +717,5 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
-<field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
-
+<field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
 		

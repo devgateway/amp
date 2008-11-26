@@ -373,4 +373,15 @@
     <taglib-uri>http://www.tonbeller.com/jpivot</taglib-uri>
     <taglib-location>/WEB-INF/jpivot/jpivot-tags.tld</taglib-location>
   </taglib>
+  
+    
+    <filter>
+        <filter-name>LogDigger Servlet Filter</filter-name>
+        <filter-class>org.logdigger.servlet.filter.LogDiggerServletFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LogDigger Servlet Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

@@ -262,19 +262,6 @@ public class AddAmpActivity extends Action {
     //===============Componentes END=========================
 
 
-
-
-    if(eaForm.getCustomFields()==null){
-    	List<CustomField> customFields = new ArrayList<CustomField>(); 
-    	CustomField cf = new CustomField();
-    	cf.setStep(1);
-    	cf.setName("Field1");
-    	cf.setDescription("Description");
-    	customFields.add(cf);
-    	eaForm.setCustomFields(customFields);
-    }
-
-
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());
     ProposedProjCost propProjCost = null;
     if (eaForm.getFunding().getProProjCost() != null) {

@@ -279,6 +279,18 @@ div.fakefile2 input{
 						<br />
 						</TD>
 					</TR>
+					<TR>
+						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+							<digi:trn key="message:patternstartDate"> {start date} - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
+						<br />
+						</TD>
+					</TR>
+					<TR>
+						<TD nowrap="nowrap" bgcolor="#E9E9E9">
+							<digi:trn key="message:patternEndDate"> {end date} - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
+						<br />
+						</TD>
+					</TR>
 				</TABLE>
 
 				</td></tr>

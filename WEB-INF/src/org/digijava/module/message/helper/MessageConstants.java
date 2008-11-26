@@ -88,6 +88,8 @@ public class MessageConstants {
 	public static final String OBJECT_NAME="name";
 	public static final String OBJECT_URL="url";
 	public static final String OBJECT_AUTHOR="created by";
-        public static final String OBJECT_TEAM="team";
+    public static final String OBJECT_TEAM="team";
+    public static final String START_DATE="start date";
+    public static final String END_DATE="end date";
 
 }

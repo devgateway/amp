@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.digijava.module.calendar.dbentity.AmpCalendarPK;
 import org.digijava.module.calendar.dbentity.Calendar.TBD;
 import org.digijava.module.calendar.form.CalendarItemForm;
 
@@ -136,5 +137,26 @@ public class CalendarUtil {
 	 */	
 	public static boolean isAllDayEvent(Calendar calendar) {
 		return calendar.get(Calendar.SECOND) == calendar.getActualMinimum(Calendar.SECOND);
+	}
+	
+	public static boolean isCurrentDateBetweenEventsDates(AmpCalendarPK calendarPK,int day,int month,int year,int hour,int minute){    	
+    	java.util.Calendar currentCalDate=java.util.Calendar.getInstance();
+    	//iteration's date(current)
+    	currentCalDate.set(year, month, day, hour, minute);
+    	//CalendarPK's start Date
+    	java.util.Calendar calPKStartDate=java.util.Calendar.getInstance();
+    	calPKStartDate.set(calendarPK.getStartYear(), calendarPK.getStartMonth(), calendarPK.getStartDay(), calendarPK.getStartHour(), calendarPK.getStartMinute());
+    	//CalendarPK's start Date
+    	java.util.Calendar calPKEndDate=java.util.Calendar.getInstance();
+    	calPKStartDate.set(calendarPK.getEndYear(), calendarPK.getEndMonth(), calendarPK.getEndDay(), calendarPK.getEndHour(), calendarPK.getEndMinute());    	
+    	//compare if current date is between calendar event's start/end dates
+    	return calPKStartDate.before(currentCalDate)&& currentCalDate.before(calPKEndDate);
+    }
+	
+	public static Calendar buildCalendar(int day,int month,int year,int hour,int minute){
+		java.util.Calendar CalDate=java.util.Calendar.getInstance();
+    	//iteration's date(current)
+		CalDate.set(year, month, day, hour, minute);		
+		return CalDate;
 	}
 }

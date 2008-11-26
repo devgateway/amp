@@ -35,7 +35,7 @@
 					<xs:sequence>
 						<xs:element name="funding" type="fundingType" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
-					<xs:attribute name="lang" type="xs:string" use="optional"/>
+					<xs:attribute name="lang" type="xs:language" use="optional"/>
 					<xs:attribute name="locationType" type="xs:int" use="required"/>
 					<xs:attribute name="gis" type="xs:string" use="optional"/>
 					<xs:attribute name="iso3" type="xs:string" use="required"/>
@@ -89,28 +89,29 @@
 											<xs:simpleContent>
 												<xs:extension base="xs:string">
 													<xs:attribute name="code" type="xs:int" use="optional"/>
-													<xs:attribute name="language" type="xs:string" use="optional"/>
+													<xs:attribute name="lang" type="xs:language" use="optional"/>
 												</xs:extension>
 											</xs:simpleContent>
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
 								<xs:attribute name="code" type="xs:int" use="optional"/>
-								<xs:attribute name="language" type="xs:string" use="optional"/>
+								<xs:attribute name="lang" type="xs:language" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
 					<xs:attribute name="code" type="xs:string" use="required"/>
-					<xs:attribute name="language" type="xs:string" use="optional"/>
+					<xs:attribute name="lang" type="xs:language" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="documents" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="title" type="freeTextType" maxOccurs="unbounded"/>
-						<xs:element name="description" type="freeTextType" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element name="title" type="xs:string" maxOccurs="unbounded"/>
+						<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="code" type="xs:string" use="required"/>
+					<xs:attribute name="lang" type="xs:language" use="optional"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="relatedLinks" minOccurs="0" maxOccurs="unbounded">
@@ -120,7 +121,7 @@
 						<xs:element name="description" type="xs:string" minOccurs="0"/>
 						<xs:element name="url" type="xs:anyURI"/>
 					</xs:sequence>
-					<xs:attribute name="language" type="xs:string" use="required"/>
+					<xs:attribute name="lang" type="xs:language" use="required"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="relatedOrgs" minOccurs="0" maxOccurs="unbounded">
@@ -128,7 +129,7 @@
 					<xs:simpleContent>
 						<xs:extension base="xs:string">
 							<xs:attribute name="code" type="xs:string" use="required"/>
-							<xs:attribute name="language" type="xs:string" use="optional"/>
+							<xs:attribute name="lang" type="xs:language" use="optional"/>
 							<xs:attribute name="type" use="required">
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
@@ -155,7 +156,7 @@
 	<xs:complexType name="freeTextType">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="language" type="xs:language"/>
+				<xs:attribute name="lang" type="xs:language"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -185,7 +186,7 @@
 	</xs:complexType>
 	<xs:complexType name="fundingType">
 		<xs:sequence>
-			<xs:element name="fundingOrg" type="codeValueType"/>
+			<xs:element name="fundingOrg" type="codeValueType" minOccurs="0"/>
 			<xs:element name="assistanceType" type="codeValueType"/>
 			<xs:element name="financingInstrument" type="codeValueType"/>
 			<xs:element name="conditions" type="freeTextType"/>
@@ -223,7 +224,7 @@
 	<xs:complexType name="additionalFieldType">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="language" type="xs:string" use="optional"/>
+				<xs:attribute name="lang" type="xs:language" use="optional"/>
 				<xs:attribute name="field" type="xs:string" use="required"/>
 				<xs:attribute name="type" use="required">
 					<xs:simpleType>

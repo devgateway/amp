@@ -56,6 +56,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.ReferenceDoc;
@@ -263,7 +264,15 @@ public class AddAmpActivity extends Action {
 
 
 
-
+    if(eaForm.getCustomFields()==null){
+    	List<CustomField> customFields = new ArrayList<CustomField>(); 
+    	CustomField cf = new CustomField();
+    	cf.setStep(1);
+    	cf.setName("Field1");
+    	cf.setDescription("Description");
+    	customFields.add(cf);
+    	eaForm.setCustomFields(customFields);
+    }
 
 
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());

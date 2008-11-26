@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -374,6 +375,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private List steps;
 
 	private Boolean wasDraft;
+	
+	private List<CustomField> customFields;
 
 	public Boolean getWasDraft() {
 		return wasDraft;
@@ -5085,5 +5088,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 	public void setStepFailureText(String[] stepFailureText) {
 		this.stepFailureText = stepFailureText;
+	}
+
+	public void setCustomFields(List<CustomField> customFields) {
+		this.customFields = customFields;
+	}
+
+	public List<CustomField> getCustomFields() {
+		return customFields;
 	}
 }

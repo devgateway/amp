@@ -73,6 +73,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
@@ -2135,6 +2136,16 @@ public class SaveActivity extends Action {
 			stepNumber++;
 		}
 
+		if(eaForm.getCustomFields()!=null){
+			List<CustomField> customFields = eaForm.getCustomFields();
+			Iterator<CustomField> cfi = customFields.iterator();
+			while(cfi.hasNext()){
+				CustomField customField = cfi.next();
+				String propertyName =  customField.getDb_field_name();
+				// INTROSPECTION NEEDED
+				activity.setCustomField1(customField.getValue());
+			}
+		}
 				
 		//TAG HERE YOU SHOULD BE
 

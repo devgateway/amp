@@ -143,7 +143,7 @@ public class RegisterUser extends Action {
                                      '\n'+'\t'+'\t'+"password: " + userRegisterForm.getPassword()+
                                      '\n'+'\n'+"Please change your password when you first login to AMP in order to keep it private.";
                 if(userRegisterForm.isSendEmail()){  
-                    DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+                    DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
                 }	
                   
 				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);

@@ -150,6 +150,8 @@
 	<!-- new organization Component -->
 	<form-bean name="aimSelectOrganizationForm" type="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm"/>
 	<!-- End new organization Component -->
+    <form-bean name="quartzJobManagerForm" type="org.digijava.module.aim.form.QuartzJobManagerForm" />
+    <form-bean name="quartzJobClassManagerForm" type="org.digijava.module.aim.form.QuartzJobClassManagerForm" />
 </form-beans>
 
   <global-forwards>
@@ -1683,6 +1685,16 @@
 		<forward name="forward" path="/showLayout.do?layout=aim_showDocumentsInPopup" />
 	</action>
     <action path="/aim/switchDevelopmentMode" type="org.digijava.module.admin.action.SwitchDevelopmentMode" />
+
+        <action name="quartzJobManagerForm" path="/aim/quartzJobManager" type="org.digijava.module.aim.action.QuartzJobManager" validate="false">
+       <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />
+       <forward name="addJob" path="/showLayout.do?layout=addQuartzJob" />
+     </action>
+     <action name="quartzJobClassManagerForm" path="/aim/quartzJobClassManager" type="org.digijava.module.aim.action.QuartzJobClassManager" validate="false">
+       <forward name="forward" path="/showLayout.do?layout=quartzJobClassManager" />
+       <forward name="addJobClass" path="/showLayout.do?layout=addQuartzJobClass" />
+       <forward name="editJobClass" path="/showLayout.do?layout=editQuartzJobClass" />
+     </action>
   </action-mappings>
 </struts-config>
 

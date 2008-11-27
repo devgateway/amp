@@ -407,6 +407,14 @@
     <page page="addDisbOrderToContract" name="aim_addDisbOrderToContractPopupLayout" title="Disbursement Order Contract For Activity" />
     <page page="manageClassificationsConfig" name="manageClassificationsConfig" title="Manage Classifications Configuration" />
     <page page="editSectorClassConfig" name="editSectorClassConfig" title="Add/Edit Classifications Configuration" />
+    <!-- quartzJobManager settings -->
+    <page name="quartzJobManager" title="Job Manager" />
+    <page name="addQuartzJob" title="Add Job" />
+    <page name="editQuartzJob" title="Edit Job" />
+
+    <page name="addQuartzJobClass" title="Add Job Class" />
+    <page name="editQuartzJobClass" title="Edit Job Class" />
+    <page name="quartzJobClassManager" title="Job Class Manager" />
 
 
 </secondary-pages>

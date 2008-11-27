@@ -4,8 +4,6 @@
 <struts-config>
 <form-beans>
 	<form-bean name="messageForm" type="org.digijava.module.message.form.AmpMessageForm"/>
-	<form-bean name="quartzJobManagerForm" type="org.digijava.module.message.form.QuartzJobManagerForm" />
-    <form-bean name="quartzJobClassManagerForm" type="org.digijava.module.message.form.QuartzJobClassManagerForm" />
 </form-beans>
 <action-mappings>
  	<action path="/message/messageActions" name="messageForm" scope="session" parameter="actionType" type="org.digijava.module.message.action.AmpMessageActions">
@@ -28,15 +26,7 @@
      	<forward name="gotoPage" path="/showLayout.do?layout=exportImportTemplatesPage" />
      	<forward name="viewTemplates" path="/message/templatesManager.do?actionType=viewTemplates" />
      </action>
-     <action name="quartzJobManagerForm" path="/message/quartzJobManager" type="org.digijava.module.message.action.QuartzJobManager" validate="false">
-       <forward name="forward" path="/showLayout.do?layout=quartzJobManager" />
-       <forward name="addJob" path="/showLayout.do?layout=addQuartzJob" />
-     </action>
-     <action name="quartzJobClassManagerForm" path="/message/quartzJobClassManager" type="org.digijava.module.message.action.QuartzJobClassManager" validate="false">
-       <forward name="forward" path="/showLayout.do?layout=quartzJobClassManager" />
-       <forward name="addJobClass" path="/showLayout.do?layout=addQuartzJobClass" />
-       <forward name="editJobClass" path="/showLayout.do?layout=editQuartzJobClass" />
-     </action>
+ 
 </action-mappings>
 
 </struts-config>

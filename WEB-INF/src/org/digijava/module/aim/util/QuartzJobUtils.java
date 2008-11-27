@@ -1,4 +1,4 @@
-package org.digijava.module.message.util;
+package org.digijava.module.aim.util;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.TriggerUtils;
-import org.digijava.module.message.helper.QuartzJobForm;
+import org.digijava.module.aim.helper.QuartzJobForm;
 
 public class QuartzJobUtils {
 

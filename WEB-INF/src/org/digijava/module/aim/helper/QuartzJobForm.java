@@ -1,4 +1,4 @@
-package org.digijava.module.message.helper;
+package org.digijava.module.aim.helper;
 
 public class QuartzJobForm {
     private String name;

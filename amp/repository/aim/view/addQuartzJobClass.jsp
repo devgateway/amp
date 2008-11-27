@@ -63,9 +63,6 @@ function saveJc(){
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
-                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
-                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
-                </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/quartzJobClassManager.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:jc:jobManager">Job Class Manager</digi:trn>
                 </digi:link>

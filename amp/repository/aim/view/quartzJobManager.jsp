@@ -83,7 +83,7 @@ function addActionToURL(actionName){
 }
 
 function getServerTime(){
-  var url=addActionToURL('message/quartzJobManager.do?action=serverTime');
+  var url=addActionToURL('aim/quartzJobManager.do?action=serverTime');
   var async=new Asynchronous();
   async.complete=displayServerTime;
   async.call(url);
@@ -116,9 +116,6 @@ function displayServerTime(status, statusText, responseText, responseXML){
                 </c:set>
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-                </digi:link>&nbsp;&gt;&nbsp;
-                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
-                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
                 <digi:trn key="aim:jobManager">Job Manager</digi:trn>
               </span>

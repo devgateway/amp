@@ -225,6 +225,28 @@
                               </td>
                           	</tr>
                           	</feature:display>
+                            <tr>
+                                <td class="f-names" nowrap="nowrap">
+                                    <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                    <c:set var="trn">
+                                        <digi:trn key="aim:viewSettings">Click here to view Job Manager</digi:trn>
+                                    </c:set>
+                                    <digi:link module="aim" href="/quartzJobManager.do" title="${trn}">
+                                        <digi:trn key="aim:jobManager">Job Manager</digi:trn>
+                                    </digi:link>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="f-names" nowrap="nowrap">
+                                   <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                    <c:set var="trn">
+                                        <digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn>
+                                    </c:set>
+                                    <digi:link module="aim" href="/quartzJobClassManager.do" title="${trn}">
+                                        <digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn>
+                                    </digi:link>
+                                </td>
+                            </tr>
                             <!-- 
                             
                             <tr>

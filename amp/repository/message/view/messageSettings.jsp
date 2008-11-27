@@ -208,28 +208,6 @@
 								                                </digi:link>
 															</td>
 														</tr>
-														<tr>
-															<td>
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-																<c:set var="trn">
-								                                  <digi:trn key="aim:viewSettings">Click here to view Job Manager</digi:trn>
-								                                </c:set>
-								                                <digi:link module="message" href="/quartzJobManager.do" title="${trn}">
-								                                  <digi:trn key="aim:jobManager">Job Manager</digi:trn>
-								                                </digi:link>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-																<c:set var="trn">
-								                                  <digi:trn key="aim:viewSettings">Click here to view Job Class Manager</digi:trn>
-								                                </c:set>
-								                                <digi:link module="message" href="/quartzJobClassManager.do" title="${trn}">
-								                                  <digi:trn key="aim:jobClassManager">Job Class Manager</digi:trn>
-								                                </digi:link>
-															</td>
-														</tr>
 														<!-- end of other links -->
 													</table>
 												</td>

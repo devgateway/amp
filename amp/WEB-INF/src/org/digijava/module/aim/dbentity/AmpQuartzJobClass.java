@@ -1,4 +1,4 @@
-package org.digijava.module.message.dbentity;
+package org.digijava.module.aim.dbentity;
 
 public class AmpQuartzJobClass {
     private Long id;

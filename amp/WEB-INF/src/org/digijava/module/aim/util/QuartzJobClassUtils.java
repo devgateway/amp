@@ -1,7 +1,7 @@
-package org.digijava.module.message.util;
+package org.digijava.module.aim.util;
 
 import java.util.Collection;
-import org.digijava.module.message.dbentity.AmpQuartzJobClass;
+import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.digijava.kernel.persistence.PersistenceManager;

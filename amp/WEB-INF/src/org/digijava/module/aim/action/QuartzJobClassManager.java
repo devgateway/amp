@@ -1,4 +1,4 @@
-package org.digijava.module.message.action;
+package org.digijava.module.aim.action;
 
 import org.apache.struts.action.ActionForward;
 import javax.servlet.http.HttpServletRequest;
@@ -6,9 +6,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.message.form.QuartzJobClassManagerForm;
-import org.digijava.module.message.util.QuartzJobClassUtils;
-import org.digijava.module.message.dbentity.AmpQuartzJobClass;
+import org.digijava.module.aim.form.QuartzJobClassManagerForm;
+import org.digijava.module.aim.util.QuartzJobClassUtils;
+import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 
 public class QuartzJobClassManager extends Action {
 

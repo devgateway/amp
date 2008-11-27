@@ -151,6 +151,7 @@
 		
 		<hibernate-class>org.digijava.module.aim.dbentity.CMSContentItem</hibernate-class>
 		<hibernate-class>org.dgfoundation.amp.ar.dbentity.AmpFilterData</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpQuartzJobClass</hibernate-class>
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

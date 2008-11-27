@@ -1,9 +1,9 @@
-package org.digijava.module.message.form;
+package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
-import org.digijava.module.message.dbentity.AmpQuartzJobClass;
+import org.digijava.module.aim.dbentity.AmpQuartzJobClass;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionMapping;
 

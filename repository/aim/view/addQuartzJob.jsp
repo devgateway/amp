@@ -102,9 +102,6 @@ function typeChanged(value){
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
-                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
-                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
-                </digi:link>&nbsp;&gt;&nbsp;
                 <digi:link href="/quartzJobManager.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                 </digi:link>

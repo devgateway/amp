@@ -70,9 +70,6 @@ function addJc(){
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
-                <digi:link href="/msgSettings.do~actionType=getSettings" styleClass="comment" title="${translation}" >
-                  <digi:trn key="message:messageSettings">Message Settings</digi:trn>
-                </digi:link>&nbsp;&gt;&nbsp;
                 <digi:trn key="aim:jc:jobClassManager">Job Class Manager</digi:trn>
               </span>
             </td>

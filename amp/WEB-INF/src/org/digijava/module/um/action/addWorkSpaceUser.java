@@ -31,8 +31,6 @@ public class addWorkSpaceUser extends Action{
 		ActionErrors errors = new ActionErrors();
 		logger.debug("In add members");
 		
-		AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
-		User user = org.digijava.module.aim.util.DbUtil.getUser(upMemForm.getEmail());
 		String actionFlag = request.getParameter("actionFlag");
 		logger.debug("actionFlag: " + actionFlag);
 
@@ -53,6 +51,9 @@ public class addWorkSpaceUser extends Action{
             }
 		}
 		else{
+			AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
+			User user = org.digijava.module.aim.util.DbUtil.getUser(upMemForm.getEmail());
+
 			/* check if the user have entered an invalid user id */
 			if (user == null) {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());

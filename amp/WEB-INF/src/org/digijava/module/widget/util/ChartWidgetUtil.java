@@ -519,7 +519,7 @@ public class ChartWidgetUtil {
         JFreeChart chart = null;
         Font font8 = new Font(null, 0, 12);
         DefaultPieDataset dataset = getDonorSectorDataSet(filter);
-        chart = ChartFactory.createPieChart("Sector Breakdown", dataset, true, true, false);
+        chart = ChartFactory.createPieChart("Sector Breakdown ("+(filter.getYear()-1)+")", dataset, true, true, false);
         chart.getTitle().setFont(font8);
         if (opt.isShowLegend()) {
             chart.getLegend().setItemFont(font8);
@@ -543,7 +543,7 @@ public class ChartWidgetUtil {
      	JFreeChart chart = null;
 		Font font8 = new Font(null,0,12);
 		DefaultPieDataset dataset=getDonorRegionalDataSet(filter);
-		chart=ChartFactory.createPieChart("Regional Breakdown",dataset, true, true,false);
+		chart=ChartFactory.createPieChart("Regional Breakdown ("+(filter.getYear()-1)+")",dataset, true, true,false);
 		chart.getTitle().setFont(font8);
 		if (opt.isShowLegend()){
 			chart.getLegend().setItemFont(font8);		

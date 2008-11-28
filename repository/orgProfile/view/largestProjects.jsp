@@ -10,7 +10,7 @@
 <digi:instance property="orgProfLargestProjectsForm"/>
 
 <table border="1" id="lgProjects" bgcolor="#dddddd">
-    <th colspan="3" class="tableHeaderCls">5 Largest projects</th>
+    <th colspan="3" class="tableHeaderCls">5 Largest projects (${sessionScope.orgProfileFilter.year-1})</th>
     <tr colspan="3">
         <td class="tableHeaderCls">Project title</td>
         <td class="tableHeaderCls">Commitment (USD million)</td>

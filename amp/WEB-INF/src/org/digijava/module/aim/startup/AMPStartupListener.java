@@ -23,6 +23,7 @@ import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Session;
+import org.quartz.impl.StdSchedulerFactory;
 
 
 
@@ -106,7 +107,8 @@ public class AMPStartupListener extends HttpServlet
         		GatePermConst.availablePermissiblesBySimpleNames.put(GatePermConst.availablePermissibles[i].getSimpleName(),GatePermConst.availablePermissibles[i]);
 			}
 			
-        	
+        	 StdSchedulerFactory factory = (StdSchedulerFactory) ampContext.getAttribute("quartzFactory");
+        	 factory.getScheduler().getContext().put(Constants.AMP_SERVLET_CONTEXT,ampContext);
         	
     	} catch (Exception e) {
     		logger.error("Exception while initialising AMP :" + e.getMessage());

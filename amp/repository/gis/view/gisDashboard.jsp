@@ -151,7 +151,7 @@
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
 			</logic:iterate>
 		</select>
-		<div id="imageMapContainer" style="visibility:hidden;"></div>
+
 		</td>
 	</tr>
 	<tr>
@@ -166,15 +166,25 @@
 	</tr>
 	<tr>
         <td width="15%" nowrap>
+            <digi:trn key="gis:selectIndicatorSubgroups">Select subgroup for indicator data</digi:trn>:
+        </td>
+		<td>
+		<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)">
+			<option value="-1">None</option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+        <td width="15%" nowrap>
             <digi:trn key="gis:selectIndicatorYear">Select year for indicator data</digi:trn>:
         </td>
 		<td>
 		<select id="indicatorYearCombo" onChange="yearSelected(this)">
 			<option value="-1">None</option>
 		</select>
-		<div id="imageMapContainer" style="visibility:hidden;"></div>
+
 		</td>
-	</tr>	
+	</tr>
 	
 	
 </table>

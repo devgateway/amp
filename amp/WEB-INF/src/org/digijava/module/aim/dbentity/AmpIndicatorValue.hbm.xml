@@ -9,6 +9,10 @@
 		</id>
 		<property name="comment" column="comment" type="java.lang.String" />
 		<property name="valueDate" column="value_date" type="java.util.Date" />
+
+                <property name="dataIntervalStart" column="interval_start_date" type="java.util.Date" />
+                <property name="dataIntervalEnd" column="interval_end_date" type="java.util.Date" />
+
 		<property access="field" name="value" column="value" type="java.lang.Double" />
 		<property name="valueType" column="value_type" type="int" />
 		<many-to-one name="logFrame" column="ind_val_category"
@@ -21,5 +25,11 @@
 		<property name="defaultInd" column="default_ind" type="java.lang.Boolean" />
 		<many-to-one name="location" column="location_id"
 			class="org.digijava.module.aim.dbentity.AmpLocation" cascade="none" />
+
+		<many-to-one name="subgroup" column="subgroup"
+			class="org.digijava.module.aim.dbentity.AmpIndicatorSubgroup" cascade="none" />
+
+
+
 	</class>
 </hibernate-mapping>

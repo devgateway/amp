@@ -14,7 +14,7 @@ import org.digijava.module.common.util.DateTimeUtil;
  *
  */
 public class AmpIndicatorValue implements Serializable{
-	
+
 	public static final int TARGET=0;
 	public static final int ACTUAL=1;
 	public static final int BASE=2;
@@ -24,6 +24,10 @@ public class AmpIndicatorValue implements Serializable{
 	private Long indValId;
 	private String comment;
 	private Date valueDate;
+
+        private Date dataIntervalStart;
+        private Date dataIntervalEnd;
+
 	private Double value;
 	private int valueType;
 	private AmpCategoryValue logFrame;
@@ -31,8 +35,11 @@ public class AmpIndicatorValue implements Serializable{
 	private Boolean defaultInd;
 	private IndicatorConnection indicatorConnection;
 	private AmpLocation location;
-        
-        /*these  helper methods are used 
+
+
+        private AmpIndicatorSubgroup subgroup;
+
+        /*these  helper methods are used
          to set and get date object value to(from) the date input field
         see addEditValue.jsp*/
         public String getValueDateString(){
@@ -45,9 +52,9 @@ public class AmpIndicatorValue implements Serializable{
         public void setValueDateString(String valueDateString) throws Exception{
             if(!valueDateString.trim().equals("")){
                valueDate=DateTimeUtil.parseDate(valueDateString);
-            }   
+            }
         }
-	
+
 	public Long getIndValId() {
 		return indValId;
 	}
@@ -105,9 +112,34 @@ public class AmpIndicatorValue implements Serializable{
 	public AmpLocation getLocation() {
 		return location;
 	}
-	public void setLocation(AmpLocation location) {
+
+    public AmpIndicatorSubgroup getSubgroup() {
+        return subgroup;
+    }
+
+    public Date getDataIntervalEnd() {
+        return dataIntervalEnd;
+    }
+
+    public Date getDataIntervalStart() {
+        return dataIntervalStart;
+    }
+
+    public void setLocation(AmpLocation location) {
 		this.location = location;
 	}
-	
-	
+
+    public void setSubgroup(AmpIndicatorSubgroup subgroup) {
+        this.subgroup = subgroup;
+    }
+
+    public void setDataIntervalEnd(Date dataIntervalEnd) {
+        this.dataIntervalEnd = dataIntervalEnd;
+    }
+
+    public void setDataIntervalStart(Date dataIntervalStart) {
+        this.dataIntervalStart = dataIntervalStart;
+    }
+
+
 }

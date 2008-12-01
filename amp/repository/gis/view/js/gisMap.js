@@ -1,3 +1,5 @@
+	
+	
 	var canvasWidth = 700;
 	var canvasHeight = 700;
 	
@@ -75,29 +77,62 @@
 	}
 	
 	function indicatorSelected(ind) {
-			selIndicator = ind.value;
-			var mapLevel = document.getElementById("mapLevelCombo").value;
-			var sec = document.getElementById("sectorsMapCombo").value;
-			var uniqueStr = (new Date()).getTime();
-			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorYears&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
-			xmlhttp.onreadystatechange = availYearsReady;
-			xmlhttp.send(null);
-			
-			
-			document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-			initIndicatorValues();
-			
-			setBusy(true);
-			//getIndValuesAction = true;
-	
-		/*
-		setBusy(true);
+		selIndicator = ind.value;
 		var mapLevel = document.getElementById("mapLevelCombo").value;
-		var indYear = document.getElementById("indicatorYearCombo").value;
+		var sec = document.getElementById("sectorsMapCombo").value;
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&indicatorId=" + ind.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
-		getIndValuesAction = true;
-		*/
+		xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorSubgroups&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+		xmlhttp.onreadystatechange = availSubgroupsReady
+		xmlhttp.send(null);
+		
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		initIndicatorValues();
+		
+		setBusy(true);
+	}
+	
+	function availSubgroupsReady () {
+		if (xmlhttp.readyState == 4) {
+			var availSubgroupList = xmlhttp.responseXML.getElementsByTagName('subgroup');
+			var subgroupIndex = 0;
+			
+			var selectCmb = document.getElementById("indicatorSubgroupCombo");
+			selectCmb.innerHTML = null;
+			var noneOpt = document.createElement("OPTION");
+			noneOpt.value="-1";
+			noneOpt.text="None";
+			selectCmb.options.add(noneOpt);			
+			
+			
+			for (subgroupIndex = 0; subgroupIndex < availSubgroupList.length; subgroupIndex ++) {
+				var subgroupData = availSubgroupList[subgroupIndex];
+				var opt = document.createElement("OPTION");
+				opt.value=subgroupData.attributes.getNamedItem("id").value;
+				opt.text=subgroupData.attributes.getNamedItem("name").value;
+				selectCmb.options.add(opt);				
+			}
+			setBusy(false);
+		}
+		
+	}
+	
+	function subgroupSelected(sbgr) {
+		selSubgroup = sbgr.value;
+
+		var mapLevel = document.getElementById("mapLevelCombo").value;
+		var sec = document.getElementById("sectorsMapCombo").value;
+		var selIndicator = document.getElementById("indicatorsCombo").value;
+		var uniqueStr = (new Date()).getTime();
+
+		xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorYears&mapCode=TZA&mapLevel=" + mapLevel + "&subgroupId=" + selSubgroup + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
+		xmlhttp.onreadystatechange = availYearsReady;
+		xmlhttp.send(null);
+		
+		
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		initIndicatorValues();
+		
+		setBusy(true);
 	}
 	
 	function availYearsReady () {
@@ -109,7 +144,7 @@
 			selectCmb.innerHTML = null;
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="none";
+			noneOpt.text="None";
 			selectCmb.options.add(noneOpt);			
 			
 			
@@ -299,17 +334,17 @@
 				}
 				retVal += "\"";
 				retVal += " onMouseOut=\"hideRegionTooltip()\"";
-				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("name").value + "')\">";
+				retVal += " onMouseOver=\"showRegionTooltip('" + segment.attributes.getNamedItem("code").value + "','" + segment.attributes.getNamedItem("name").value + "')\">";
 			}
 		}
 		retVal += "</map>";
 		return retVal;
 	}
 	
-	function showRegionTooltip(regCode) {
+	function showRegionTooltip(regCode, regName) {
 		if (regCode.indexOf("Lake")<0){
 			var mouseEvent = null;
-			document.getElementById("tooltipRegionContainer").innerHTML = regCode;
+			document.getElementById("tooltipRegionContainer").innerHTML = regName;
 		
 			document.getElementById("tooltipTotalCommitmentContainer").innerHTML = totalCommitmentFund + " k";
 			document.getElementById("tooltipTotalDisbursementContainer").innerHTML = totalDisbursementFund + " k";
@@ -419,8 +454,10 @@
 		setBusy(true);
 		var mapLevel = document.getElementById("mapLevelCombo").value;
 		var ind = document.getElementById("indicatorsCombo").value;
+		var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
+		
 		var uniqueStr = (new Date()).getTime();
-		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + year.value + "&sectorId=" + selSector + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
+		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&subgroupId=" + subgroupId + "&indYear=" + year.value + "&sectorId=" + selSector + "&indicatorId=" + ind + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
 		getIndValuesAction = true;
 
 	

@@ -29,7 +29,6 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.action.SaveActivity;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -174,6 +173,7 @@ public class ShowCalendarEvent extends Action {
         	String stDate=ceform.getSelectedStartDate() + " " + ceform.getSelectedStartTime();
         	String endDate=ceform.getSelectedEndDate()+ " " + ceform.getSelectedEndTime();
         	ActionErrors errors=validateDate(stDate,endDate);
+        	errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
         		return mapping.findForward("success");        		
@@ -194,6 +194,7 @@ public class ShowCalendarEvent extends Action {
         	ActionErrors errors=new ActionErrors();
         	if(ceform.getAmpCalendarId()==null || !ceform.isResetForm()){
         		errors=validateDate(stDate,endDate);
+        		errors.add(validateEventInformation(ceform.getEventTitle(),ceform.getSelectedAtts()));
         	}        	
         	if(!errors.isEmpty()){
         		saveErrors(request, errors);
@@ -288,8 +289,8 @@ public class ShowCalendarEvent extends Action {
 	            recurrEvent.setTypeofOccurrence(ceform.getTypeofOccurrence());
                 recurrEvent.setRecurrStartDate(ceform.getRecurrStartDate());
                 recurrEvent.setRecurrEndDate(ceform.getRecurrEndDate());
-
-                recEvent.add(recurrEvent);
+	            
+	            recEvent.add(recurrEvent);
 	            calendar.setRecurrCalEvent(recEvent);
             }
             
@@ -307,7 +308,7 @@ public class ShowCalendarEvent extends Action {
             }
             
             //date from calendar comes in this format
-            dtformat+=" hh:mm";
+            dtformat+=" HH:mm";
 
             SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
 
@@ -497,16 +498,26 @@ public class ShowCalendarEvent extends Action {
         if (dtformat == null) {
             dtformat = "dd/MM/yyyy";
         }
-        dtformat+=" hh:mm";
+        dtformat+=" HH:mm";
 
         SimpleDateFormat sdf = new SimpleDateFormat(dtformat);
         Date stDate=sdf.parse(eventStartDate);
         Date endDate=sdf.parse(eventEndDate);
-        if(stDate!=endDate && !stDate.before(endDate)){
+        if(!stDate.equals(endDate) && !stDate.before(endDate)){
         	errors.add("incorrectDate", new ActionError("error.calendar.endDateLessThanStartDate"));
         }
     	return errors;
     }
     
+    private ActionErrors validateEventInformation(String title,String[] selectedAttendees){
+    	ActionErrors errors=new ActionErrors();
+    	if(title==null || title.length()==0){
+    		errors.add("emptyTitle",new ActionError("error.calendar.emptyEventTitle"));
+    	}
+    	if(selectedAttendees==null || selectedAttendees.length==0){
+    		errors.add("noAttendees",new ActionError("error.calendar.noAttendees"));
+    	}
+    	return errors;
+    }
     
 }

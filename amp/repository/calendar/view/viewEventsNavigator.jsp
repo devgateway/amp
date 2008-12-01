@@ -26,10 +26,10 @@ function selectCalendarType(view, type) {
 <table width="100%" style="border:1px solid; border-color: #CCECFF;width: 200px">
     <tr>
         <td nowrap="nowrap">
-            <table border="0" cellpadding="0" cellspacing="0">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td nowrap="nowrap"><digi:trn key="calendar:CalendarType">&nbsp;Calendar Type&nbsp;&nbsp;</digi:trn></td>
-                    <td>
+                    <td align="right">
                         <html:select name="calendarViewForm" property="selectedCalendarType" onchange="selectCalendarType('${calendarViewForm.view}', '${calendarViewForm.selectedCalendarType}')">
                             <bean:define id="types" name="calendarViewForm" property="calendarTypes" type="java.util.List"/>
                             <html:options collection="types" property="value" labelProperty="label"/>

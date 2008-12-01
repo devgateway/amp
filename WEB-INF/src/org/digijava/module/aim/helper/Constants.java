@@ -317,6 +317,7 @@ public class Constants
 	public static final String ONLY_PREVIEW="onlyPreview";
 	public static final String MY_REPORTS_PER_PAGE = "myReportsPerPage";
 
+	public static final String AMP_SERVLET_CONTEXT="ampServletContext";
        
     public static final String   FEATURE_MANAGER_VISIBILITY_TREE_UPDATED="Your changes have been saved." ;
     

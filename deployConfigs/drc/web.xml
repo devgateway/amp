@@ -13,6 +13,31 @@
 		<param-value>/WEB-INF/spring/application-context.xml</param-value>
 	</context-param>
 
+<context-param>
+		<param-name>shutdown-on-unload</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>servlet-context-factory-key</param-name>
+		<param-value>quartzFactory</param-value>
+	</context-param>
+	<context-param>
+		<param-name>start-delay-seconds</param-name>
+		<param-value>30</param-value>
+	</context-param>
+	<context-param>
+		<param-name>start-scheduler-on-load</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<!-- START AMP Quartz  -->
+	<listener>
+		<listener-class>
+			org.quartz.ee.servlet.QuartzInitializerListener
+		</listener-class>
+	</listener>
+	<!-- END AMP Quartz  -->
+
 	<filter>
 		<filter-name>Acegi Filter Chain Proxy</filter-name>
 		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
@@ -75,23 +100,7 @@
 	</servlet>
 	<!-- End of servlet used for URL preloading -->
 
-	<!-- Quartz test -->
-	<servlet>
-		<description>Quartz Initializer Servlet</description>
-		<servlet-name>QuartzInitializer</servlet-name>
-		<servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
-		<init-param>
-			<param-name>shutdown-on-unload</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<init-param>
-			<param-name>start-scheduler-on-load</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<!-- Quartz test -->
-
+	
 	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>org.digijava.module.aim.config.AMPActionServlet</servlet-class>

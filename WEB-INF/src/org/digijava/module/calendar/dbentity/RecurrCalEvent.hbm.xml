@@ -13,5 +13,9 @@
 		<property name="selectedStartMonth" column="SELECTED_MONTH" type="java.lang.String" />
 		<property name="occurrWeekDays" column="OCCURR_WEEKDAYS" type="java.lang.String" />
 		<property name="recurrPeriod" column="RECURR_PERIOD" type="java.lang.Long" />
-	</class>
+        <property name="recurrStartDate" column="RECURR_START_DATE" type="java.lang.String" />
+        <property name="recurrEndDate" column="RECURR_END_DATE" type="java.lang.String" />
+
+
+    </class>
 </hibernate-mapping>

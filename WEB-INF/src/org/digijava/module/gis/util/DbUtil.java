@@ -194,13 +194,19 @@ public class DbUtil {
    }
 
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
-              Long indicatorId, Integer year) {
+              Long indicatorId, Integer year, int areaLevel) {
           List retVal = null;
           Session session = null;
           try {
               session = PersistenceManager.getRequestDBSession();
 
-              StringBuffer queryString = new StringBuffer("select indVal.value, indConn.location.region from ");
+              StringBuffer queryString = new StringBuffer();
+
+              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode from ");
+              } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode from ");
+              }
               queryString.append(AmpIndicatorValue.class.getName());
               queryString.append(" indVal, ");
               queryString.append(IndicatorSector.class.getName());
@@ -232,7 +238,7 @@ public class DbUtil {
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
            Long indicatorId) {
 
-       return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1));
+       return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1), GisMap.MAP_LEVEL_REGION);
    }
 
 
@@ -370,7 +376,7 @@ public class DbUtil {
    }
 
    public static List getAvailYearsForSectorIndicator(Long sectorId,
-              Long indicatorId) {
+              Long indicatorId, int mapLevel, Long subgroupId) {
           List retVal = null;
           Session session = null;
           try {
@@ -381,6 +387,50 @@ public class DbUtil {
               queryString.append(" indVal, ");
               queryString.append(IndicatorSector.class.getName());
               queryString.append(" indConn where indConn.sector.ampSectorId=:sectorId");
+
+              if (mapLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append(" and indConn.location.ampRegion is not null and indConn.location.ampZone is null");
+              } else if (mapLevel==GisMap.MAP_LEVEL_DISTRICT) {
+                  queryString.append(" and indConn.location.ampRegion is not null and indConn.location.ampZone is not null");
+              }
+              queryString.append(" and indVal.subgroup.ampIndicatorSubgroupId=:subgroupId ");
+              queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
+              queryString.append(" and indConn.id=indVal.indicatorConnection.id order by year(indVal.valueDate) desc");
+
+
+              Query q = session.createQuery(queryString.toString());
+
+              q.setParameter("sectorId", sectorId, Hibernate.LONG);
+              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+
+              retVal = q.list();
+          } catch (Exception ex) {
+              logger.debug("Unable to get indicator years from DB", ex);
+          }
+          return retVal;
+   }
+
+   public static List getAvailSubgroupsForSectorIndicator(Long sectorId,
+              Long indicatorId, int mapLevel) {
+          List retVal = null;
+          Session session = null;
+          try {
+              session = PersistenceManager.getRequestDBSession();
+
+              StringBuffer queryString = new StringBuffer("select distinct indVal.subgroup.ampIndicatorSubgroupId, ");
+              queryString.append("indVal.subgroup.subgroupName from ");
+              queryString.append(AmpIndicatorValue.class.getName());
+              queryString.append(" indVal, ");
+              queryString.append(IndicatorSector.class.getName());
+              queryString.append(" indConn where indConn.sector.ampSectorId=:sectorId");
+
+              if (mapLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append(" and indConn.location.ampRegion is not null and indConn.location.ampZone is null");
+              } else if (mapLevel==GisMap.MAP_LEVEL_DISTRICT) {
+                  queryString.append(" and indConn.location.ampRegion is not null and indConn.location.ampZone is not null");
+              }
+
               queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
               queryString.append(" and indConn.id=indVal.indicatorConnection.id order by year(indVal.valueDate) desc");
 
@@ -396,6 +446,7 @@ public class DbUtil {
           }
           return retVal;
    }
+
 
 
 

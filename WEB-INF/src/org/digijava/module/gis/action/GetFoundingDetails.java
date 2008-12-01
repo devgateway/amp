@@ -83,6 +83,14 @@ public class GetFoundingDetails extends Action {
             }
 
 
+            String subgroupIdStr = request.getParameter("subgroupId");
+            Long subgroupId = null;
+            if (subgroupIdStr != null) {
+                subgroupId = new Long(subgroupIdStr);
+            } else {
+                subgroupId = Long.valueOf(0l);
+            }
+
 
             if (mapCode != null && mapCode.trim().length() > 0) {
                 map = GisUtil.getMap(mapCode, Integer.parseInt(mapLevel));
@@ -304,7 +312,7 @@ public class GetFoundingDetails extends Action {
                 List inds = null;
                 if (indicatorYear.intValue()>0) {
                     inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId,
-                            indicatorYear);
+                            indicatorYear, Integer.parseInt(mapLevel));
                 } else {
                     inds = new ArrayList();
                 }
@@ -432,6 +440,36 @@ public class GetFoundingDetails extends Action {
                 }
 
                 sos.print(segmendDataInfo.toString());
+            } else if (action.equalsIgnoreCase("getAvailIndicatorSubgroups")) {
+                response.setContentType("text/xml");
+
+                String secIdStr = request.getParameter("sectorId");
+                Long secId = new Long(secIdStr);
+
+                String indIdStr = request.getParameter("indicatorId");
+                Long indId = new Long(indIdStr);
+
+                List availSubgroups = DbUtil.getAvailSubgroupsForSectorIndicator(secId, indId, Integer.parseInt(mapLevel));
+
+                XMLDocument availSubGroupXmlDoc = new XMLDocument();
+                XML root = new XML("availSubgroups");
+
+                availSubGroupXmlDoc.addElement(root);
+
+                Iterator subIt = availSubgroups.iterator();
+
+                while (subIt.hasNext()) {
+                    Object[] subData = (Object[]) subIt.next();
+                    Long subId = (Long) subData[0];
+                    String subName = (String) subData[1];
+
+                    XML subNode = new XML("subgroup");
+                    subNode.addAttribute("id",subId);
+                    subNode.addAttribute("name",subName);
+                    root.addElement(subNode);
+                }
+
+                sos.print(availSubGroupXmlDoc.toString());
             } else if (action.equalsIgnoreCase("getAvailIndicatorYears")) {
                 response.setContentType("text/xml");
 
@@ -441,8 +479,7 @@ public class GetFoundingDetails extends Action {
                 String indIdStr = request.getParameter("indicatorId");
                 Long indId = new Long(indIdStr);
 
-                List availYears = DbUtil.getAvailYearsForSectorIndicator(secId, indId);
-
+                List availYears = DbUtil.getAvailYearsForSectorIndicator(secId, indId, Integer.parseInt(mapLevel), subgroupId);
 
                 XMLDocument availYearsXmlDoc = new XMLDocument();
                 XML root = new XML("availYears");

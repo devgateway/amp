@@ -9,10 +9,10 @@
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Activity">
-		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="amp_activity" allMemberName="All Activities">
+		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberName="All Activities">
 			<Table name="cached_amp_activity" />
-			<Level name="Activity Title" column="name" table="amp_activity" uniqueMembers="true" />
-			<Level name="AMP ID" column="amp_id" table="amp_activity" uniqueMembers="true" />
+			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
+			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true" />
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
@@ -58,6 +58,7 @@
 		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
+	
 		<Measure name="Raw Actual Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">

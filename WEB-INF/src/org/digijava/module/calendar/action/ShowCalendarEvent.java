@@ -286,8 +286,10 @@ public class ShowCalendarEvent extends Action {
 	            recurrEvent.setRecurrPeriod(ceform.getRecurrPeriod());
 	            recurrEvent.setSelectedStartMonth(ceform.getSelectedStartMonth());
 	            recurrEvent.setTypeofOccurrence(ceform.getTypeofOccurrence());
-	            
-	            recEvent.add(recurrEvent);
+                recurrEvent.setRecurrStartDate(ceform.getRecurrStartDate());
+                recurrEvent.setRecurrEndDate(ceform.getRecurrEndDate());
+
+                recEvent.add(recurrEvent);
 	            calendar.setRecurrCalEvent(recEvent);
             }
             

@@ -52,11 +52,11 @@ public class CalendarEventSaveTrigger extends Trigger {
 	}
 	
 	private String buildDateFromEvent(Date date){
-        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);            
+        String pattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
         if (pattern == null) {
             pattern = "dd/MM/yyyy";
         }
-        pattern+=" hh:mm";
+        pattern+=" HH:mm";
         
         SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		String result = formater.format(date);

@@ -82,99 +82,109 @@ function deleteEvent(){
 			        <div style="padding: 20px; background-color: #F5F5F5;">
 			          <table>
 			            <tr>
-			              <td style="text-align: right" nowrap="nowrap">
-			                <digi:trn key="calendar:eventTitle">Event Title:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			                <digi:trn key="calendar:evntTitle">Event title</digi:trn>
 			              </td>
-			              <td>
+			              <td style="font-family: Tahoma;font-size: 12px;">
 			                <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
 			                ${calendarEventForm.eventTitle}
 			              </td>
 			            </tr>
+			           <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right" nowrap="nowrap">
-			                <digi:trn key="calendar:Description">Description:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			                <digi:trn key="calendar:Description">Description</digi:trn>
 			              </td>
 			              <td>
 			              	<html:textarea name="calendarEventForm" property="description" style="width: 220px;" readonly="true"/>                
 			              </td>
 			            </tr>
+			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right"nowrap="nowrap">
-			                <digi:trn key="calendar:CalendarType">Calendar type:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			                <digi:trn key="calendar:cType">Calendar type</digi:trn>
 			              </td>
-			              <td>
+			              <td style="font-family: Tahoma;font-size: 12px;">
 			                <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
-                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
-                        Gregorian                     
-                  </c:if>
-                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 1}">
-                        Ethiopian                     
-                  </c:if>
-                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 2}">
-                        Ethiopian_FY                     
-                  </c:if>     
+			                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
+			                        Gregorian                     
+			                  </c:if>
+			                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 1}">
+			                        Ethiopian                     
+			                  </c:if>
+			                  <c:if test="${calendarEventForm.selectedCalendarTypeId == 2}">
+			                        Ethiopian_FY                     
+			                  </c:if>
 			              </td>
+			             </tr>
+			             <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right"nowrap="nowrap">
-			                <digi:trn key="calendar:EventType">Event type:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			                <digi:trn key="calendar:eventsType">Event type</digi:trn>
 			              </td>
-			              <td>
+			              <td style="font-family: Tahoma;font-size: 12px;">
 			                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
 			                ${calendarEventForm.selectedEventTypeName}
 			              </td>
 			            </tr>
+			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right"nowrap="nowrap">
-			                <digi:trn key="calendar:Organisations">Organisations:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			                <digi:trn key="calendar:orgs">Organizations</digi:trn>
 			              </td>
 			              <td>
 			                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
-			                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" />
+			                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" style="font-family: Tahoma;font-size:11px;"/>
 			                </html:select>
 			              </td>
 			            </tr>
+			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right"nowrap="nowrap">
-			                <digi:trn key="calendar:StartDate">Start date:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			                <digi:trn key="calendar:StDate">Start date</digi:trn>
 			              </td>
-			              <td>
+			              <td style="font-family: Tahoma;font-size: 12px;">
 			                <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
 			                <html:hidden name="calendarEventForm" property="selectedStartTime" value="${calendarEventForm.selectedStartTime}"/>
 			                ${calendarEventForm.selectedStartDate}&nbsp;${calendarEventForm.selectedStartTime}
 			              </td>
 			            </tr>
+			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right"nowrap="nowrap">
-			                <digi:trn key="calendar:EndDate">End date:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			                <digi:trn key="calendar:EndDate">End Date</digi:trn>
 			              </td>
-			              <td>
+			              <td style="font-family: Tahoma;font-size: 12px;">
 			                <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
 			                <html:hidden name="calendarEventForm" property="selectedEndTime" value="${calendarEventForm.selectedEndTime}"/>
 			                ${calendarEventForm.selectedEndDate}&nbsp;${calendarEventForm.selectedEndTime}
 			              </td>
 			            </tr>
+			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right" nowrap="nowrap">
-			                <digi:trn key="calendar:Attendees">Attendees:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			                <digi:trn key="calendar:Attendee">Attendee</digi:trn>
 			              </td>
 			              <td>
 			                <html:select multiple="multiple" styleId="selreceivers" name="calendarEventForm" property="selectedAtts" size="11" styleClass="inp-text" style="width: 220px; height: 70px;">
 			                  <c:if test="${!empty calendarEventForm.selectedAttsCol}">
-			                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" />
+			                    <html:optionsCollection name="calendarEventForm" property="selectedAttsCol" value="value" label="label" style="font-family: Tahoma;font-size:11px;"/>
 			                  </c:if>
 			                </html:select>
 			              </td>
 			            </tr>
+			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right" nowrap="nowrap">
-			                <digi:trn key="calendar:PublicEvent">Public Event:</digi:trn>
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
 			              </td>
-			              <td>
+			              <td style="font-family: Tahoma;font-size: 12px;">
 			                <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
 			                <c:if test="${calendarEventForm.privateEvent}"><digi:trn key="calendar:no">No</digi:trn></c:if>
 			                <c:if test="${!calendarEventForm.privateEvent}"><digi:trn key="calendar:yes">Yes</digi:trn></c:if>
 			              </td>
 			            </tr>
+			            <tr height="5px"><td colspan="2">&nbsp;</td></tr>
 			            <tr>
 			              <td>
 			              </td>

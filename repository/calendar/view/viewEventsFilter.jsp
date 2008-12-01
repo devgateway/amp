@@ -82,10 +82,10 @@ function changeState() {
         </tr>
         <c:forEach var="donor" items="${calendarViewForm.filter.donors}">
           <tr>
-            <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;font-weight:bold;">
+            <td style="background-color: #CCECFF;width:29px;padding:2px;text-align:center;font-weight:bold;">
               <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
             </td>
-            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;">
+            <td style="padding:3px;width:115px;text-align:left;font-weight:bold;" nowrap="nowrap" title="${donor.label}">
               ${donor.label}
             </td>
           </tr>

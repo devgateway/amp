@@ -39,7 +39,7 @@
 			          	<td valign="top" style="padding:5px;" align="left">          	
 			          		<table>
 				                <tr>
-				                  <td style="font-weight:Bold;font-family:Tahoma;padding:6px;font-size: 12px">
+				                  <td style="font-weight:Bold;font-family:Tahoma;padding:6px;font-size: 12px;color: #800000">
 				                   		<digi:trn key="calendar:navToday"> Today&nbsp;is:</digi:trn>
 				       	            	${calendarViewForm.currentDateBreakDown.dayOfMonth}/${calendarViewForm.currentDateBreakDown.month}/${calendarViewForm.currentDateBreakDown.year}
 				                  </td>

@@ -391,6 +391,8 @@ function recurEvent(){
     <html:hidden name="calendarEventForm" property="selectedStartMonth" styleId="hiddenMonth"/>
     <html:hidden name="calendarEventForm" property="recurrPeriod" styleId="hidden"/>
 	<html:hidden name="calendarEventForm" property="typeofOccurrence" styleId="type"/>
+    <html:hidden name="calendarEventForm" property="recurrStartDate" styleId="recurrStrDate"/>
+    <html:hidden name="calendarEventForm" property="recurrEndDate" styleId="recurrEndDate"/>
    
    
     <table>

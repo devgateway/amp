@@ -9,6 +9,15 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"  style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"  src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script langauage="JavaScript">
+	var helpBody="<digi:trn key='orgProfile:helpBpdy'>Sector Breakdown,5 Largest Projects,Regional Breakdown, Paris Declaration are rendering  data of the previous fiscal year</digi:trn>";
+    var helpTitle="<digi:trn key='orgProfile:helpTitle'>Organization Profile Help</digi:trn>";
+</script>
+
 <style>
 
 .tableEven {
@@ -67,7 +76,7 @@ function setHoveredTable(tableId) {
 	}
 	
 
-
+      
 }
 </script>
 <digi:instance property="orgProfOrgProfileFilterForm"/>
@@ -121,7 +130,9 @@ function setHoveredTable(tableId) {
                 
               
             </td>
-            
+                   <td  align="left">
+                       <digi:img  src="module/widget/images/help1.gif" onmouseover="stm([helpTitle,helpBody],Style[13])" onmouseout="htm()"/>
+                   </td>         
         </tr>
     </table>
 </digi:form>

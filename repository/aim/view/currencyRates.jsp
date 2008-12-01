@@ -17,73 +17,51 @@
 <style type="text/css">
 <!--
 div.fileinputs {
-	height:25px;
-	position:relative;
-	width:450px;
+	position: relative;
+	height: 30px;
+	width: 300px;
 }
 input.file {
-	margin:0px;
-	size:10px;
-	width:400px;
+	width: 300px;
+	margin: 0;
 }
 input.file.hidden {
-	opacity:0;
-	position:relative;
-	text-align:right;
-	width:380px;
-	z-index:2;
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
 }
-input.button {
-	background-color:#ECF3FD;
-	border-color:#FFFFFF rgb(0, 51, 153) rgb(0, 51, 153) rgb(255, 255, 255);
-	border-style:solid;
-	border-width:1px;
-	color:#000000;
-	font-family:Verdana,Arial,Helvetica,sans-serif;
-	font-size:11px;
-	font-weight:bold;
-	left:400px;
-	position:absolute;
-	text-decoration:none;
-	top:0px;
-	width:120px;
-}
+
 div.fakefile {
-	left:0px;
-	line-height:90%;
-	margin:0pt;
-	padding:0pt;
-	position:absolute;
-	top:0px;
-	width:300px;
-	z-index:1;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
 }
 div.fakefile input {
-	margin-bottom:0px;
-	margin-left:0px;
-	width:300px;
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
 }
 div.fakefile2 {
-	left:300px;
-	line-height:90%;
-	margin:0pt;
-	padding:0pt;
-	position:absolute;
-	top:0px;
-	width:100px;
-	z-index:1;
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
 }
-div.fakefile2 input {
-	background-color:#ECF3FD;
-	border-color:#FFFFFF rgb(0, 51, 153) rgb(0, 51, 153) rgb(255, 255, 255);
-	border-style:solid;
-	border-width:1px;
-	color:#000000;
-	font-family:Verdana,Arial,Helvetica,sans-serif;
-	font-size:11px;
-	font-weight:bold;
-	text-decoration:none;
-	width:80px;
+div.fakefile2 input{
+	width: 83px;
 }
 -->
 </style>

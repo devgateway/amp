@@ -93,13 +93,28 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 		try {
 			connection.setAutoCommit(true);
 			PersistenceManager.releaseSession(session);
+			
 		} catch (SQLException e) {
 			logger.error(e);
 			e.printStackTrace();
 			return;			
 		}
 	}
+		flushMondrianCache();
 		logger.info("Refresh Mondrian Cache Job Successful!");
+	}
+	private void flushMondrianCache() {
+		java.util.Iterator<mondrian.rolap.RolapSchema> schemaIterator =  mondrian.rolap.RolapSchema.getRolapSchemas();
+		while(schemaIterator.hasNext()){
+		    mondrian.rolap.RolapSchema schema = schemaIterator.next();
+		    mondrian.olap.CacheControl cacheControl = schema.getInternalConnection().getCacheControl(null);
+		    
+		    for (mondrian.olap.Cube cube : schema.getCubes()) {
+		        cacheControl.flush(cacheControl.createMeasuresRegion(cube));
+		    }
+		}
+
+		
 	}
 	
 

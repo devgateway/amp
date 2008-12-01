@@ -5,7 +5,7 @@ module Report
     include I18nHelper
         
     def output_start
-      %{<h3 style="text-align: center">ODAnic #{ll(:reports, :custom, :title)}</h2>
+      %{<h2 style="text-align: center">ODAnic #{ll(:reports, :custom, :title)}</h2>
       <table class="admin" style="border: 1px solid #bbb; margin-top: 10px">}
     end
     

@@ -3,7 +3,7 @@ module Report
     class Html < Proxy::Base      
       def factsheet_link
         [" ", %{<a href="/project/show/#{@target.id}?report=with_currency_selector" onclick="report_window(this.href); return false;">
-          <img width="14" height="15" border="0" src="/images/list.gif?1205443145" alt="List" /></a>}]
+          <img width="14" height="15" border="0" src="/images/list.gif?1205443145" alt="List" class="no_print"/></a>}]
       end
       
       def description

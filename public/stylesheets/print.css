@@ -1,3 +1,23 @@
 #header * {
 	display: none;
 }
+
+#content select {
+	display: none;
+}
+
+.prt {
+	display:none;
+}
+
+.no_print {
+	display:none;
+}
+
+TD {
+	border-bottom:1px solid black;
+}
+
+THEAD TH {
+	border-bottom:2px solid black;!important
+}

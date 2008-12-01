@@ -8,9 +8,11 @@ public class RecurrCalEvent {
     private Long recurrPeriod;
     private String typeofOccurrence;
     private String occurrWeekDays;
+    private String recurrStartDate;
+    private String recurrEndDate;
     
     
-	public String getSelectedStartMonth() {
+    public String getSelectedStartMonth() {
 		return selectedStartMonth;
 	}
 	public void setSelectedStartMonth(String selectedStartMonth) {
@@ -46,5 +48,20 @@ public class RecurrCalEvent {
 	public void setCalendar(Calendar calendar) {
 		this.calendar = calendar;
 	}
-	
+
+    public String getRecurrEndDate() {
+        return recurrEndDate;
+    }
+
+    public void setRecurrEndDate(String recurrEndDate) {
+        this.recurrEndDate = recurrEndDate;
+    }
+
+    public String getRecurrStartDate() {
+        return recurrStartDate;
+    }
+
+    public void setRecurrStartDate(String recurrStartDate) {
+        this.recurrStartDate = recurrStartDate;
+    }
 }

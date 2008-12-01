@@ -42,6 +42,8 @@ public class CalendarEventForm
     private String selectedStartMonth;
     private Long recurrPeriod;
     private String typeofOccurrence;
+    private String recurrStartDate;
+    private String recurrEndDate;
     private String[] occurrWeekDays;
     private GregorianCalendar startDate;
     private DateBreakDown startDateBreakDown;
@@ -423,4 +425,20 @@ public class CalendarEventForm
 	public void setMonths(Collection months) {
 		this.months = months;
 	}
+
+    public String getRecurrStartDate() {
+        return recurrStartDate;
+    }
+
+    public void setRecurrStartDate(String recurrStartDate) {
+        this.recurrStartDate = recurrStartDate;
+    }
+
+    public String getRecurrEndDate() {
+        return recurrEndDate;
+    }
+
+    public void setRecurrEndDate(String recurrEndDate) {
+        this.recurrEndDate = recurrEndDate;
+    }
 }

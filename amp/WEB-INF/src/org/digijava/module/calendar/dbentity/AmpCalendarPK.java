@@ -1,6 +1,11 @@
 package org.digijava.module.calendar.dbentity;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
 
 public class AmpCalendarPK
     implements Serializable {
@@ -99,4 +104,165 @@ public class AmpCalendarPK
 	  java.util.Calendar cal= getCalendar(getCalendar().getEndDate());
 	  return cal.get(java.util.Calendar.MINUTE);
   }
+    
+    public int getRecurrStartMonth() throws ParseException{
+       int result = -1;
+
+           if(!getCalendar().getRecurrCalEvent().isEmpty()){
+             Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+             while (itr.hasNext()) {
+      
+                RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                 if(rec.getRecurrStartDate() != null){
+                    Date month  = stringToDate(rec.getRecurrStartDate());
+                    result = getRecStrDate(month);
+
+
+                }
+              }
+           }
+        
+        return result;
+    }
+
+    public int getRecStrDate(Date data){
+        java.util.Calendar cal = getCalendar(data);
+        return cal.get(java.util.Calendar.MONTH);
+    }
+
+    
+    public int getRecurrEndMonth() throws ParseException{
+           int result = -1;
+
+               if(!getCalendar().getRecurrCalEvent().isEmpty()){
+                 Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+                 while (itr.hasNext()) {
+
+                    RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                     if(rec.getRecurrEndDate() != null){
+                        Date month  = stringToDate(rec.getRecurrEndDate());
+                        result = getRecEndDate(month);
+
+
+                    }
+                  }
+               }
+
+            return result;
+        }
+
+        public int getRecEndDate(Date data){
+            java.util.Calendar cal = getCalendar(data);
+            return cal.get(java.util.Calendar.MONTH);
+        }
+
+    public int getRecurrStartYear() throws ParseException{
+           int result = -1;
+
+               if(!getCalendar().getRecurrCalEvent().isEmpty()){
+                 Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+                 while (itr.hasNext()) {
+
+                    RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                     if(rec.getRecurrStartDate() != null){
+                        Date year  = stringToDate(rec.getRecurrStartDate());
+                        result = getRecStartDate(year);
+
+
+                    }
+                  }
+               }
+
+            return result;
+        }
+
+        public int getRecStartDate(Date data){
+            java.util.Calendar cal = getCalendar(data);
+            return cal.get(java.util.Calendar.YEAR);
+        }
+
+    public int getRecurrEndYear() throws ParseException{
+               int result = -1;
+
+                   if(!getCalendar().getRecurrCalEvent().isEmpty()){
+                     Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+                     while (itr.hasNext()) {
+
+                        RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                         if(rec.getRecurrEndDate() != null){
+                            Date year  = stringToDate(rec.getRecurrEndDate());
+                            result = getReccEndDate(year);
+                         }
+                      }
+                   }
+
+                return result;
+            }
+
+            public int getReccEndDate(Date data){
+                java.util.Calendar cal = getCalendar(data);
+                return cal.get(java.util.Calendar.YEAR);
+            }
+
+
+     public int getRecurrStrDayOfmonth() throws ParseException{
+               int result = -1;
+
+                   if(!getCalendar().getRecurrCalEvent().isEmpty()){
+                     Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+                     while (itr.hasNext()) {
+
+                        RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                         if(rec.getRecurrEndDate() != null){
+                            Date day  = stringToDate(rec.getRecurrStartDate());
+                            result = getReccSTRDayOfMonth(day);
+                         }
+                      }
+                   }
+
+                return result;
+            }
+
+            public int getReccSTRDayOfMonth(Date data){
+                java.util.Calendar cal = getCalendar(data);
+                return cal.get(java.util.Calendar.DAY_OF_MONTH);
+            }
+
+
+
+    public int getRecurrEndDayOfmonth() throws ParseException{
+               int result = -1;
+
+                   if(!getCalendar().getRecurrCalEvent().isEmpty()){
+                     Iterator itr = getCalendar().getRecurrCalEvent().iterator();
+
+                     while (itr.hasNext()) {
+
+                        RecurrCalEvent rec = (RecurrCalEvent) itr.next();
+                         if(rec.getRecurrEndDate() != null){
+                            Date day  = stringToDate(rec.getRecurrEndDate());
+                            result = getReccEndDayOfMonth(day);
+                         }
+                      }
+                   }
+
+                return result;
+            }
+
+            public int getReccEndDayOfMonth(Date data){
+                java.util.Calendar cal = getCalendar(data);
+                return cal.get(java.util.Calendar.DAY_OF_MONTH);
+            }
+
+
+    public Date stringToDate(String data) throws ParseException{
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            Date result = df.parse(data);
+        return result;        
+    }
 }

@@ -14,7 +14,7 @@
 			<%= hidden_field_tag option[0], option[1] %>
 		<% end %>
 	<% end %>
-	<select name="currency" onchange="$(this).parent().submit()">
+	<select name="currency" onchange="$(this).parent().submit()" class="no_print">
 		<option selected="selected"><%= ll(:reports, :currency_selection) %>:</option>
 		<% ExchangeRate.available_currencies.each do |currency| %>
 			<option value="<%= currency -%>"><%= currency -%></option>

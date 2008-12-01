@@ -9,6 +9,8 @@
 	
 	  <%= javascript_include_tag(:defaults, 'swfobject', 'jtip', 'jquery_expander', 'jquery_template', 'behavior/menu', :cache => false) %>
 	  <%= stylesheet_link_tag('style', 'jtip', :media => :all, :cache => false) %>
+	  <%= stylesheet_link_tag('print', :media => :print, :cache => false) %>
+
 	  <%= yield :head %>
 	</head>
 	

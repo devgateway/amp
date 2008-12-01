@@ -50,8 +50,8 @@ function changeState() {
               <div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
               </div>
             </td>
-            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;">
-            ${eventType.name}
+            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;" nowrap="nowrap">
+             <div style="white-space: nowrap;">${eventType.name}</div> 
             </td>
             <td>
               <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/>
@@ -65,18 +65,18 @@ function changeState() {
 <div style="width:200px;height:5px;font-family:Tahoma;">
 &nbsp;
 </div>
-<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;">
+<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
   <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
   <digi:trn key="calendar:bodydonors">Donors</digi:trn>
   </div>
-  <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-weight:bold;font-family:Tahoma;">
+  <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-weight:bold;font-family:Tahoma;white-space: nowrap">
     <c:if test="${!empty calendarViewForm.filter.donors}">
       <table cellpadding="0" cellspacing="0">
         <tr>
           <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
             <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" />
           </td>
-          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;">
+          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;white-space: nowrap;">
             <digi:trn key="calendar:donorsNone">None</digi:trn>
           </td>
         </tr>
@@ -85,8 +85,8 @@ function changeState() {
             <td style="background-color: #CCECFF;width:29px;padding:2px;text-align:center;font-weight:bold;">
               <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
             </td>
-            <td style="padding:3px;width:115px;text-align:left;font-weight:bold;" nowrap="nowrap" title="${donor.label}">
-              ${donor.label}
+            <td style="padding:3px;width:115px;text-align:left;font-weight:bold;white-space: nowrap" title="${donor.label}" nowrap="nowrap">
+              <div style="white-space: nowrap;">${donor.label}</div> 
             </td>
           </tr>
         </c:forEach>

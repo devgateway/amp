@@ -38,7 +38,7 @@
 	background-color: #ffffff;
 }
 .myStyleClass{	
-	width: 105px;
+	width: 110px;
 }
 -->
 </style>
@@ -815,17 +815,17 @@ function recurEvent(){
 			                                        	</table>
 			                                        </td>
 			                                        <td style="vertical-align: top;" nowrap="nowrap">
-			                                        	<input type="button" style="width:105px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
+			                                        	<input type="button" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
 			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
 			                                        </td>
 			                    	</tr>
 			                    	<tr>
 			                          <td colspan="5" style="text-align:center;">                            
-			                            <input type="submit" style="width: 105px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
+			                            <input type="submit" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 			                            &nbsp;
-			                            <input type="submit" style="width: 105px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            <input type="submit" style="width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            &nbsp;                            
-			                            <input type="button" style="width: 105px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                            <input type="button" style="width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
 			                          </td>
 			                        </tr>
 			                    </table>

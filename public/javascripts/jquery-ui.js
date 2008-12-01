@@ -1,110 +1,2423 @@
 /*
- * jQuery UI 1.0 - New Wave User Interface
+ * jQuery UI @VERSION
  *
- * Copyright (c) 2007 John Resig (jquery.com)
+ * Copyright (c) 2008 Paul Bakaus (ui.jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ * http://docs.jquery.com/UI
  */
-(function($){$.ui=$.ui||{};$.extend($.ui,{plugin:{add:function(w,c,o,p){var a=$.ui[w].prototype;if(!a.plugins[c])a.plugins[c]=[];a.plugins[c].push([o,p]);},call:function(instance,name,arguments){var c=instance.plugins[name];if(!c)return;var o=instance.interaction?instance.interaction.options:instance.options;var e=instance.interaction?instance.interaction.element:instance.element;for(var i=0;i<c.length;i++){if(o[c[i][0]])c[i][1].apply(e,arguments);}}}});$.fn.mouseInteractionDestroy=function(){this.each(function(){if($.data(this,"ui-mouse"))$.data(this,"ui-mouse").destroy();});}
-$.ui.mouseInteraction=function(el,o){if(!o)var o={};this.element=el;$.data(this.element,"ui-mouse",this);this.options={};$.extend(this.options,o);$.extend(this.options,{handle:o.handle?($(o.handle,el)[0]?$(o.handle,el):$(el)):$(el),helper:o.helper||'original',preventionDistance:o.preventionDistance||0,dragPrevention:o.dragPrevention?o.dragPrevention.toLowerCase().split(','):['input','textarea','button','select','option'],cursorAt:{top:((o.cursorAt&&o.cursorAt.top)?o.cursorAt.top:0),left:((o.cursorAt&&o.cursorAt.left)?o.cursorAt.left:0),bottom:((o.cursorAt&&o.cursorAt.bottom)?o.cursorAt.bottom:0),right:((o.cursorAt&&o.cursorAt.right)?o.cursorAt.right:0)},cursorAtIgnore:(!o.cursorAt)?true:false,appendTo:o.appendTo||'parent'})
-o=this.options;if(!this.options.nonDestructive&&(o.helper=='clone'||o.helper=='original')){o.margins={top:parseInt($(el).css('marginTop'))||0,left:parseInt($(el).css('marginLeft'))||0,bottom:parseInt($(el).css('marginBottom'))||0,right:parseInt($(el).css('marginRight'))||0};if(o.cursorAt.top!=0)o.cursorAt.top=o.margins.top;if(o.cursorAt.left!=0)o.cursorAt.left+=o.margins.left;if(o.cursorAt.bottom!=0)o.cursorAt.bottom+=o.margins.bottom;if(o.cursorAt.right!=0)o.cursorAt.right+=o.margins.right;if(o.helper=='original')
-o.wasPositioned=$(el).css('position');}else{o.margins={top:0,left:0,right:0,bottom:0};}
-var self=this;this.mousedownfunc=function(e){return self.click.apply(self,[e]);}
-o.handle.bind('mousedown',this.mousedownfunc);if($.browser.msie)$(this.element).attr('unselectable','on');}
-$.extend($.ui.mouseInteraction.prototype,{plugins:{},currentTarget:null,lastTarget:null,timer:null,slowMode:false,init:false,destroy:function(){this.options.handle.unbind('mousedown',this.mousedownfunc);},trigger:function(e){return this.click.apply(this,arguments);},click:function(e){var o=this.options;window.focus();if(e.which!=1)return true;var targetName=(e.target)?e.target.nodeName.toLowerCase():e.srcElement.nodeName.toLowerCase();for(var i=0;i<o.dragPrevention.length;i++){if(targetName==o.dragPrevention[i])return true;}
-if(o.startCondition&&!o.startCondition.apply(this,[e]))return true;var self=this;this.mouseup=function(e){return self.stop.apply(self,[e]);}
-this.mousemove=function(e){return self.drag.apply(self,[e]);}
-var initFunc=function(){$(document).bind('mouseup',self.mouseup);$(document).bind('mousemove',self.mousemove);self.opos=[e.pageX,e.pageY];}
-if(o.preventionTimeout){if(this.timer)clearInterval(this.timer);this.timer=setTimeout(function(){initFunc();},o.preventionTimeout);return false;}
-initFunc();return false;},start:function(e){var o=this.options;var a=this.element;o.co=$(a).offset();this.helper=typeof o.helper=='function'?$(o.helper.apply(a,[e,this]))[0]:(o.helper=='clone'?$(a).clone()[0]:a);if(o.appendTo=='parent'){var cp=a.parentNode;while(cp){if(cp.style&&($(cp).css('position')=='relative'||$(cp).css('position')=='absolute')){o.pp=cp;o.po=$(cp).offset();o.ppOverflow=!!($(o.pp).css('overflow')=='auto'||$(o.pp).css('overflow')=='scroll');break;}
-cp=cp.parentNode?cp.parentNode:null;};if(!o.pp)o.po={top:0,left:0};}
-this.pos=[this.opos[0],this.opos[1]];this.rpos=[this.pos[0],this.pos[1]];if(o.cursorAtIgnore){o.cursorAt.left=this.pos[0]-o.co.left+o.margins.left;o.cursorAt.top=this.pos[1]-o.co.top+o.margins.top;}
-if(o.pp){this.pos[0]-=o.po.left;this.pos[1]-=o.po.top;}
-this.slowMode=(o.cursorAt&&(o.cursorAt.top-o.margins.top>0||o.cursorAt.bottom-o.margins.bottom>0)&&(o.cursorAt.left-o.margins.left>0||o.cursorAt.right-o.margins.right>0))?true:false;if(!o.nonDestructive)$(this.helper).css('position','absolute');if(o.helper!='original')$(this.helper).appendTo((o.appendTo=='parent'?a.parentNode:o.appendTo)).show();if(o.cursorAt.right&&!o.cursorAt.left)o.cursorAt.left=this.helper.offsetWidth+o.margins.right+o.margins.left-o.cursorAt.right;if(o.cursorAt.bottom&&!o.cursorAt.top)o.cursorAt.top=this.helper.offsetHeight+o.margins.top+o.margins.bottom-o.cursorAt.bottom;this.init=true;if(o._start)o._start.apply(a,[this.helper,this.pos,o.cursorAt,this,e]);this.helperSize={width:outerWidth(this.helper),height:outerHeight(this.helper)};return false;},stop:function(e){var o=this.options;var a=this.element;var self=this;$(document).unbind('mouseup',self.mouseup);$(document).unbind('mousemove',self.mousemove);if(this.init==false)return this.opos=this.pos=null;if(o._beforeStop)o._beforeStop.apply(a,[this.helper,this.pos,o.cursorAt,this,e]);if(this.helper!=a&&!o.beQuietAtEnd){$(this.helper).remove();this.helper=null;}
-if(!o.beQuietAtEnd){if(o._stop)o._stop.apply(a,[this.helper,this.pos,o.cursorAt,this,e]);}
-this.init=false;this.opos=this.pos=null;return false;},drag:function(e){if(!this.opos||($.browser.msie&&!e.button))return this.stop.apply(this,[e]);var o=this.options;this.pos=[e.pageX,e.pageY];if(this.rpos&&this.rpos[0]==this.pos[0]&&this.rpos[1]==this.pos[1])return false;this.rpos=[this.pos[0],this.pos[1]];if(o.pp){this.pos[0]-=o.po.left;this.pos[1]-=o.po.top;}
-if((Math.abs(this.rpos[0]-this.opos[0])>o.preventionDistance||Math.abs(this.rpos[1]-this.opos[1])>o.preventionDistance)&&this.init==false)
-this.start.apply(this,[e]);else{if(this.init==false)return false;}
-if(o._drag)o._drag.apply(this.element,[this.helper,this.pos,o.cursorAt,this,e]);return false;}});var num=function(el,prop){return parseInt($.css(el.jquery?el[0]:el,prop))||0;};function outerWidth(el){var $el=$(el),ow=$el.width();for(var i=0,props=['borderLeftWidth','paddingLeft','paddingRight','borderRightWidth'];i<props.length;i++)
-ow+=num($el,props[i]);return ow;}
-function outerHeight(el){var $el=$(el),oh=$el.width();for(var i=0,props=['borderTopWidth','paddingTop','paddingBottom','borderBottomWidth'];i<props.length;i++)
-oh+=num($el,props[i]);return oh;}})(jQuery);
-(function($){$.extend($.expr[':'],{draggable:"(' '+a.className+' ').indexOf(' ui-draggable ')"});var methods="destroy,enable,disable".split(",");for(var i=0;i<methods.length;i++){var cur=methods[i],f;eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-draggable")) jQuery.data(this, "ui-draggable")["'+cur+'"](a); }); }');$.fn["draggable"+cur.substr(0,1).toUpperCase()+cur.substr(1)]=f;};$.fn.draggableInstance=function(){if($(this[0]).is(".ui-draggable"))return $.data(this[0],"ui-draggable");return false;};$.fn.draggable=function(o){return this.each(function(){if(!$(this).is(".ui-draggable"))new $.ui.draggable(this,o);});}
-$.ui.ddmanager={current:null,droppables:[],prepareOffsets:function(t,e){var dropTop=$.ui.ddmanager.dropTop=[];var dropLeft=$.ui.ddmanager.dropLeft;var m=$.ui.ddmanager.droppables;for(var i=0;i<m.length;i++){if(m[i].item.disabled)continue;m[i].offset=$(m[i].item.element).offset();if(t&&m[i].item.options.accept(t.element))
-m[i].item.activate.call(m[i].item,e);}},fire:function(oDrag,e){var oDrops=$.ui.ddmanager.droppables;var oOvers=$.grep(oDrops,function(oDrop){if(!oDrop.item.disabled&&$.ui.intersect(oDrag,oDrop,oDrop.item.options.tolerance))
-oDrop.item.drop.call(oDrop.item,e);});$.each(oDrops,function(i,oDrop){if(!oDrop.item.disabled&&oDrop.item.options.accept(oDrag.element)){oDrop.out=1;oDrop.over=0;oDrop.item.deactivate.call(oDrop.item,e);}});},update:function(oDrag,e){if(oDrag.options.refreshPositions)$.ui.ddmanager.prepareOffsets();var oDrops=$.ui.ddmanager.droppables;var oOvers=$.grep(oDrops,function(oDrop){if(oDrop.item.disabled)return false;var isOver=$.ui.intersect(oDrag,oDrop,oDrop.item.options.tolerance)
-if(!isOver&&oDrop.over==1){oDrop.out=1;oDrop.over=0;oDrop.item.out.call(oDrop.item,e);}
-return isOver;});$.each(oOvers,function(i,oOver){if(oOver.over==0){oOver.out=0;oOver.over=1;oOver.item.over.call(oOver.item,e);}});}};$.ui.draggable=function(el,o){var options={};$.extend(options,o);var self=this;$.extend(options,{_start:function(h,p,c,t,e){self.start.apply(t,[self,e]);},_beforeStop:function(h,p,c,t,e){self.stop.apply(t,[self,e]);},_drag:function(h,p,c,t,e){self.drag.apply(t,[self,e]);},startCondition:function(e){return!(e.target.className.indexOf("ui-resizable-handle")!=-1||self.disabled);}});$.data(el,"ui-draggable",this);if(options.ghosting==true)options.helper='clone';$(el).addClass("ui-draggable");this.interaction=new $.ui.mouseInteraction(el,options);}
-$.extend($.ui.draggable.prototype,{plugins:{},currentTarget:null,lastTarget:null,destroy:function(){$(this.interaction.element).removeClass("ui-draggable").removeClass("ui-draggable-disabled");this.interaction.destroy();},enable:function(){$(this.interaction.element).removeClass("ui-draggable-disabled");this.disabled=false;},disable:function(){$(this.interaction.element).addClass("ui-draggable-disabled");this.disabled=true;},prepareCallbackObj:function(self){return{helper:self.helper,position:{left:self.pos[0],top:self.pos[1]},offset:self.options.cursorAt,draggable:self,options:self.options}},start:function(that,e){var o=this.options;$.ui.ddmanager.current=this;$.ui.plugin.call(that,'start',[e,that.prepareCallbackObj(this)]);$(this.element).triggerHandler("dragstart",[e,that.prepareCallbackObj(this)],o.start);if(this.slowMode&&$.ui.droppable&&!o.dropBehaviour)
-$.ui.ddmanager.prepareOffsets(this,e);return false;},stop:function(that,e){var o=this.options;$.ui.plugin.call(that,'stop',[e,that.prepareCallbackObj(this)]);$(this.element).triggerHandler("dragstop",[e,that.prepareCallbackObj(this)],o.stop);if(this.slowMode&&$.ui.droppable&&!o.dropBehaviour)
-$.ui.ddmanager.fire(this,e);$.ui.ddmanager.current=null;$.ui.ddmanager.last=this;return false;},drag:function(that,e){var o=this.options;$.ui.ddmanager.update(this,e);this.pos=[this.pos[0]-o.cursorAt.left,this.pos[1]-o.cursorAt.top];$.ui.plugin.call(that,'drag',[e,that.prepareCallbackObj(this)]);var nv=$(this.element).triggerHandler("drag",[e,that.prepareCallbackObj(this)],o.drag);var nl=(nv&&nv.left)?nv.left:this.pos[0];var nt=(nv&&nv.top)?nv.top:this.pos[1];$(this.helper).css('left',nl+'px').css('top',nt+'px');return false;}});})(jQuery);
-(function($){$.ui.plugin.add("draggable","stop","effect",function(e,ui){var t=ui.helper;if(ui.options.effect[1]){if(t!=this){ui.options.beQuietAtEnd=true;switch(ui.options.effect[1]){case'fade':$(t).fadeOut(300,function(){$(this).remove();});break;default:$(t).remove();break;}}}});$.ui.plugin.add("draggable","start","effect",function(e,ui){if(ui.options.effect[0]){switch(ui.options.effect[0]){case'fade':$(ui.helper).hide().fadeIn(300);break;}}});$.ui.plugin.add("draggable","start","cursor",function(e,ui){var t=$('body');if(t.css("cursor"))ui.options.ocursor=t.css("cursor");t.css("cursor",ui.options.cursor);});$.ui.plugin.add("draggable","stop","cursor",function(e,ui){if(ui.options.ocursor)$('body').css("cursor",ui.options.ocursor);});$.ui.plugin.add("draggable","start","zIndex",function(e,ui){var t=$(ui.helper);if(t.css("zIndex"))ui.options.ozIndex=t.css("zIndex");t.css('zIndex',ui.options.zIndex);});$.ui.plugin.add("draggable","stop","zIndex",function(e,ui){if(ui.options.ozIndex)$(ui.helper).css('zIndex',ui.options.ozIndex);});$.ui.plugin.add("draggable","start","opacity",function(e,ui){var t=$(ui.helper);if(t.css("opacity"))ui.options.oopacity=t.css("opacity");t.css('opacity',ui.options.opacity);});$.ui.plugin.add("draggable","stop","opacity",function(e,ui){if(ui.options.oopacity)$(ui.helper).css('opacity',ui.options.oopacity);});$.ui.plugin.add("draggable","stop","revert",function(e,ui){var o=ui.options;var rpos={left:0,top:0};o.beQuietAtEnd=true;if(ui.helper!=this){rpos=$(ui.draggable.sorthelper||this).offset({border:false});var nl=rpos.left-o.po.left-o.margins.left;var nt=rpos.top-o.po.top-o.margins.top;}else{var nl=o.co.left-(o.po?o.po.left:0);var nt=o.co.top-(o.po?o.po.top:0);}
-var self=ui.draggable;$(ui.helper).animate({left:nl,top:nt},500,function(){if(o.wasPositioned)$(self.element).css('position',o.wasPositioned);if(o.stop)o.stop.apply(self.element,[self.helper,self.pos,[o.co.left-o.po.left,o.co.top-o.po.top],self]);if(self.helper!=self.element)window.setTimeout(function(){$(self.helper).remove();},0);});});$.ui.plugin.add("draggable","start","iframeFix",function(e,ui){var o=ui.options;if(!ui.draggable.slowMode){if(o.iframeFix.constructor==Array){for(var i=0;i<o.iframeFix.length;i++){var co=$(o.iframeFix[i]).offset({border:false});$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width",$(o.iframeFix[i])[0].offsetWidth+"px").css("height",$(o.iframeFix[i])[0].offsetHeight+"px").css("position","absolute").css("opacity","0.001").css("z-index","1000").css("top",co.top+"px").css("left",co.left+"px").appendTo("body");}}else{$("iframe").each(function(){var co=$(this).offset({border:false});$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width",this.offsetWidth+"px").css("height",this.offsetHeight+"px").css("position","absolute").css("opacity","0.001").css("z-index","1000").css("top",co.top+"px").css("left",co.left+"px").appendTo("body");});}}});$.ui.plugin.add("draggable","stop","iframeFix",function(e,ui){if(ui.options.iframeFix)$("div.DragDropIframeFix").each(function(){this.parentNode.removeChild(this);});});$.ui.plugin.add("draggable","start","containment",function(e,ui){var o=ui.options;if(!o.cursorAtIgnore||o.containment.left!=undefined||o.containment.constructor==Array)return;if(o.containment=='parent')o.containment=this.parentNode;if(o.containment=='document'){o.containment=[0-o.margins.left,0-o.margins.top,$(document).width()-o.margins.right,($(document).height()||document.body.parentNode.scrollHeight)-o.margins.bottom];}else{var ce=$(o.containment)[0];var co=$(o.containment).offset({border:false});o.containment=[co.left-o.margins.left,co.top-o.margins.top,co.left+(ce.offsetWidth||ce.scrollWidth)-o.margins.right,co.top+(ce.offsetHeight||ce.scrollHeight)-o.margins.bottom];}});$.ui.plugin.add("draggable","drag","containment",function(e,ui){var o=ui.options;if(!o.cursorAtIgnore)return;var h=$(ui.helper);var c=o.containment;if(c.constructor==Array){if((ui.draggable.pos[0]<c[0]-o.po.left))ui.draggable.pos[0]=c[0]-o.po.left;if((ui.draggable.pos[1]<c[1]-o.po.top))ui.draggable.pos[1]=c[1]-o.po.top;if(ui.draggable.pos[0]+h[0].offsetWidth>c[2]-o.po.left)ui.draggable.pos[0]=c[2]-o.po.left-h[0].offsetWidth;if(ui.draggable.pos[1]+h[0].offsetHeight>c[3]-o.po.top)ui.draggable.pos[1]=c[3]-o.po.top-h[0].offsetHeight;}else{if(c.left&&(ui.draggable.pos[0]<c.left))ui.draggable.pos[0]=c.left;if(c.top&&(ui.draggable.pos[1]<c.top))ui.draggable.pos[1]=c.top;var p=$(o.pp);if(c.right&&ui.draggable.pos[0]+h[0].offsetWidth>p[0].offsetWidth-c.right)ui.draggable.pos[0]=(p[0].offsetWidth-c.right)-h[0].offsetWidth;if(c.bottom&&ui.draggable.pos[1]+h[0].offsetHeight>p[0].offsetHeight-c.bottom)ui.draggable.pos[1]=(p[0].offsetHeight-c.bottom)-h[0].offsetHeight;}});$.ui.plugin.add("draggable","drag","grid",function(e,ui){var o=ui.options;if(!o.cursorAtIgnore)return;ui.draggable.pos[0]=o.co.left+o.margins.left-o.po.left+Math.round((ui.draggable.pos[0]-o.co.left-o.margins.left+o.po.left)/o.grid[0])*o.grid[0];ui.draggable.pos[1]=o.co.top+o.margins.top-o.po.top+Math.round((ui.draggable.pos[1]-o.co.top-o.margins.top+o.po.top)/o.grid[1])*o.grid[1];});$.ui.plugin.add("draggable","drag","axis",function(e,ui){var o=ui.options;if(!o.cursorAtIgnore)return;if(o.constraint)o.axis=o.constraint;o.axis?(o.axis=='x'?ui.draggable.pos[1]=o.co.top-o.margins.top-o.po.top:ui.draggable.pos[0]=o.co.left-o.margins.left-o.po.left):null;});$.ui.plugin.add("draggable","drag","scroll",function(e,ui){var o=ui.options;o.scrollSensitivity=o.scrollSensitivity||20;o.scrollSpeed=o.scrollSpeed||20;if(o.pp&&o.ppOverflow){}else{if((ui.draggable.rpos[1]-$(window).height())-$(document).scrollTop()>-o.scrollSensitivity)window.scrollBy(0,o.scrollSpeed);if(ui.draggable.rpos[1]-$(document).scrollTop()<o.scrollSensitivity)window.scrollBy(0,-o.scrollSpeed);if((ui.draggable.rpos[0]-$(window).width())-$(document).scrollLeft()>-o.scrollSensitivity)window.scrollBy(o.scrollSpeed,0);if(ui.draggable.rpos[0]-$(document).scrollLeft()<o.scrollSensitivity)window.scrollBy(-o.scrollSpeed,0);}});$.ui.plugin.add("draggable","drag","wrapHelper",function(e,ui){var o=ui.options;if(o.cursorAtIgnore)return;var t=ui.helper;if(!o.pp||!o.ppOverflow){var wx=$(window).width()-($.browser.mozilla?20:0);var sx=$(document).scrollLeft();var wy=$(window).height();var sy=$(document).scrollTop();}else{var wx=o.pp.offsetWidth+o.po.left-20;var sx=o.pp.scrollLeft;var wy=o.pp.offsetHeight+o.po.top-20;var sy=o.pp.scrollTop;}
-ui.draggable.pos[0]-=((ui.draggable.rpos[0]-o.cursorAt.left-wx+t.offsetWidth+o.margins.right)-sx>0||(ui.draggable.rpos[0]-o.cursorAt.left+o.margins.left)-sx<0)?(t.offsetWidth+o.margins.left+o.margins.right-o.cursorAt.left*2):0;ui.draggable.pos[1]-=((ui.draggable.rpos[1]-o.cursorAt.top-wy+t.offsetHeight+o.margins.bottom)-sy>0||(ui.draggable.rpos[1]-o.cursorAt.top+o.margins.top)-sy<0)?(t.offsetHeight+o.margins.top+o.margins.bottom-o.cursorAt.top*2):0;});})(jQuery);
-(function($){$.extend($.expr[':'],{droppable:"(' '+a.className+' ').indexOf(' ui-droppable ')"});var methods="destroy,enable,disable".split(",");for(var i=0;i<methods.length;i++){var cur=methods[i],f;eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-droppable")) jQuery.data(this, "ui-droppable")["'+cur+'"](a); }); }');$.fn["droppable"+cur.substr(0,1).toUpperCase()+cur.substr(1)]=f;};$.fn.droppableInstance=function(){if($(this[0]).is(".ui-droppable"))return $.data(this[0],"ui-droppable");return false;};$.fn.droppable=function(o){return this.each(function(){new $.ui.droppable(this,o);});}
-$.ui.droppable=function(el,o){if(!o)var o={};this.element=el;if($.browser.msie)el.droppable=1;$.data(el,"ui-droppable",this);this.options={};$.extend(this.options,o);var accept=o.accept;$.extend(this.options,{accept:o.accept&&o.accept.constructor==Function?o.accept:function(d){return $(d).is(accept);},tolerance:o.tolerance||'intersect'});o=this.options;var self=this;this.mouseBindings=[function(e){return self.move.apply(self,[e]);},function(e){return self.drop.apply(self,[e]);}];$(this.element).bind("mousemove",this.mouseBindings[0]);$(this.element).bind("mouseup",this.mouseBindings[1]);$.ui.ddmanager.droppables.push({item:this,over:0,out:1});$(this.element).addClass("ui-droppable");};$.extend($.ui.droppable.prototype,{plugins:{},prepareCallbackObj:function(c){return{draggable:c,droppable:this,element:c.element,helper:c.helper,options:this.options}},destroy:function(){$(this.element).removeClass("ui-droppable").removeClass("ui-droppable-disabled");$(this.element).unbind("mousemove",this.mouseBindings[0]);$(this.element).unbind("mouseup",this.mouseBindings[1]);for(var i=0;i<$.ui.ddmanager.droppables.length;i++){if($.ui.ddmanager.droppables[i].item==this)$.ui.ddmanager.droppables.splice(i,1);}},enable:function(){$(this.element).removeClass("ui-droppable-disabled");this.disabled=false;},disable:function(){$(this.element).addClass("ui-droppable-disabled");this.disabled=true;},move:function(e){if(!$.ui.ddmanager.current)return;var o=this.options;var c=$.ui.ddmanager.current;var findCurrentTarget=function(e){if(e.currentTarget)return e.currentTarget;var el=e.srcElement;do{if(el.droppable)return el;el=el.parentNode;}while(el);}
-if(c&&o.accept(c.element))c.currentTarget=findCurrentTarget(e);c.drag.apply(c,[e]);e.stopPropagation?e.stopPropagation():e.cancelBubble=true;},over:function(e){var c=$.ui.ddmanager.current;if(!c||c.element==this.element)return;var o=this.options;if(o.accept(c.element)){$.ui.plugin.call(this,'over',[e,this.prepareCallbackObj(c)]);$(this.element).triggerHandler("dropover",[e,this.prepareCallbackObj(c)],o.over);}},out:function(e){var c=$.ui.ddmanager.current;if(!c||c.element==this.element)return;var o=this.options;if(o.accept(c.element)){$.ui.plugin.call(this,'out',[e,this.prepareCallbackObj(c)]);$(this.element).triggerHandler("dropout",[e,this.prepareCallbackObj(c)],o.out);}},drop:function(e){var c=$.ui.ddmanager.current;if(!c||c.element==this.element)return;var o=this.options;if(o.accept(c.element)){if(o.greedy&&!c.slowMode){if(c.currentTarget==this.element){$.ui.plugin.call(this,'drop',[e,{draggable:c,droppable:this,element:c.element,helper:c.helper}]);$(this.element).triggerHandler("drop",[e,{draggable:c,droppable:this,element:c.element,helper:c.helper}],o.drop);}}else{$.ui.plugin.call(this,'drop',[e,this.prepareCallbackObj(c)]);$(this.element).triggerHandler("drop",[e,this.prepareCallbackObj(c)],o.drop);}}},activate:function(e){var c=$.ui.ddmanager.current;$.ui.plugin.call(this,'activate',[e,this.prepareCallbackObj(c)]);if(c)$(this.element).triggerHandler("dropactivate",[e,this.prepareCallbackObj(c)],this.options.activate);},deactivate:function(e){var c=$.ui.ddmanager.current;$.ui.plugin.call(this,'deactivate',[e,this.prepareCallbackObj(c)]);if(c)$(this.element).triggerHandler("dropdeactivate",[e,this.prepareCallbackObj(c)],this.options.deactivate);}});$.ui.intersect=function(oDrag,oDrop,toleranceMode){if(!oDrop.offset)
-return false;var x1=oDrag.rpos[0]-oDrag.options.cursorAt.left+oDrag.options.margins.left,x2=x1+oDrag.helperSize.width,y1=oDrag.rpos[1]-oDrag.options.cursorAt.top+oDrag.options.margins.top,y2=y1+oDrag.helperSize.height;var l=oDrop.offset.left,r=l+oDrop.item.element.offsetWidth,t=oDrop.offset.top,b=t+oDrop.item.element.offsetHeight;switch(toleranceMode){case'fit':return(l<x1&&x2<r&&t<y1&&y2<b);break;case'intersect':return(l<x1+(oDrag.helperSize.width/2)&&x2-(oDrag.helperSize.width/2)<r&&t<y1+(oDrag.helperSize.height/2)&&y2-(oDrag.helperSize.height/2)<b);break;case'pointer':return(l<oDrag.rpos[0]&&oDrag.rpos[0]<r&&t<oDrag.rpos[1]&&oDrag.rpos[1]<b);break;case'touch':return((l<x1&&x1<r&&t<y1&&y1<b)||(l<x1&&x1<r&&t<y2&&y2<b)||(l<x2&&x2<r&&t<y1&&y1<b)||(l<x2&&x2<r&&t<y2&&y2<b));break;default:return false;break;}}})(jQuery);
-(function($){$.ui.plugin.add("droppable","activate","activeClass",function(e,ui){$(this).addClass(ui.options.activeClass);});$.ui.plugin.add("droppable","deactivate","activeClass",function(e,ui){$(this).removeClass(ui.options.activeClass);});$.ui.plugin.add("droppable","drop","activeClass",function(e,ui){$(this).removeClass(ui.options.activeClass);});$.ui.plugin.add("droppable","over","hoverClass",function(e,ui){$(this).addClass(ui.options.hoverClass);});$.ui.plugin.add("droppable","out","hoverClass",function(e,ui){$(this).removeClass(ui.options.hoverClass);});$.ui.plugin.add("droppable","drop","hoverClass",function(e,ui){$(this).removeClass(ui.options.hoverClass);});})(jQuery);
-if(window.Node&&Node.prototype&&!Node.prototype.contains){Node.prototype.contains=function(arg){return!!(this.compareDocumentPosition(arg)&16)}}
-(function($){$.extend($.expr[':'],{sortable:"(' '+a.className+' ').indexOf(' ui-sortable ')"});$.fn.sortable=function(o){return this.each(function(){new $.ui.sortable(this,o);});}
-var methods="destroy,enable,disable,refresh".split(",");for(var i=0;i<methods.length;i++){var cur=methods[i],f;eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-sortable")) jQuery.data(this, "ui-sortable")["'+cur+'"](a); }); }');$.fn["sortable"+cur.substr(0,1).toUpperCase()+cur.substr(1)]=f;};$.fn.sortableInstance=function(){if($(this[0]).is(".ui-sortable"))return $.data(this[0],"ui-sortable");return false;};$.ui.sortable=function(el,o){this.element=el;this.set=[];var options={};var self=this;$.data(this.element,"ui-sortable",this);$(el).addClass("ui-sortable");$.extend(options,o);$.extend(options,{items:options.items||'> li',smooth:options.smooth!=undefined?options.smooth:true,helper:'clone',containment:options.containment?(options.containment=='sortable'?el:options.containment):null,zIndex:options.zIndex||1000,_start:function(h,p,c,t,e){self.start.apply(t,[self,e]);},_beforeStop:function(h,p,c,t,e){self.stop.apply(t,[self,e]);},_drag:function(h,p,c,t,e){self.drag.apply(t,[self,e]);},startCondition:function(){return!self.disabled;}});var items=$(options.items,el);options.floating=/left|right/.test(items.css('float'));if($(el).css('position')=='static')$(el).css('position','relative');options.offset=$(el).offset({border:false});items.each(function(){new $.ui.mouseInteraction(this,options);});items.each(function(){self.set.push([this,null]);});this.options=options;}
-$.extend($.ui.sortable.prototype,{plugins:{},currentTarget:null,lastTarget:null,prepareCallbackObj:function(self,that){if(!self.pos)self.pos=[0,0];return{helper:self.helper,position:{left:self.pos[0],top:self.pos[1]},offset:self.options.cursorAt,draggable:self,current:that,options:self.options}},refresh:function(){var self=this;var items=$(this.options.items,this.element);var unique=[];items.each(function(){old=false;for(var i=0;i<self.set.length;i++){if(self.set[i][0]==this)old=true;}
-if(!old)unique.push(this);});for(var i=0;i<unique.length;i++){new $.ui.mouseInteraction(unique[i],self.options);}
-this.set=[];items.each(function(){self.set.push([this,null]);});},destroy:function(){$(this.element).removeClass("ui-sortable").removeClass("ui-sortable-disabled");$(this.options.items,this.element).mouseInteractionDestroy();},enable:function(){$(this.element).removeClass("ui-sortable-disabled");this.disabled=false;},disable:function(){$(this.element).addClass("ui-sortable-disabled");this.disabled=true;},start:function(that,e){var o=this.options;if(o.hoverClass){that.helper=$('<div class="'+o.hoverClass+'"></div>').appendTo('body').css({height:this.element.offsetHeight+'px',width:this.element.offsetWidth+'px',position:'absolute'});}
-if(o.zIndex){if($(this.helper).css("zIndex"))o.ozIndex=$(this.helper).css("zIndex");$(this.helper).css('zIndex',o.zIndex);}
-that.firstSibling=$(this.element).prev()[0];$(this.element).triggerHandler("sortstart",[e,that.prepareCallbackObj(this)],o.start);$(this.element).css('visibility','hidden');return false;},stop:function(that,e){var o=this.options;var self=this;o.beQuietAtEnd=true;if(o.smooth){var os=$(this.element).offset();$(this.helper).animate({left:os.left-o.po.left,top:os.top-o.po.top},500,stopIt);}else{stopIt();}
-function stopIt(){$(self.element).css('visibility','visible');if(that.helper)that.helper.remove();if(self.helper!=self.element)$(self.helper).remove();if(o.ozIndex)
-$(self.helper).css('zIndex',o.ozIndex);if($(self.element).prev()[0]!=that.firstSibling){$(self.element).triggerHandler("sortupdate",[e,that.prepareCallbackObj(self,that)],o.update);}
-$(self.element).triggerHandler("sortstop",[e,that.prepareCallbackObj(self,that)],o.stop);}
-return false;},drag:function(that,e){var o=this.options;this.pos=[this.pos[0]-(o.cursorAt.left?o.cursorAt.left:0),this.pos[1]-(o.cursorAt.top?o.cursorAt.top:0)];var nv=$(this.element).triggerHandler("sort",[e,that.prepareCallbackObj(this)],o.sort);var nl=(nv&&nv.left)?nv.left:this.pos[0];var nt=(nv&&nv.top)?nv.top:this.pos[1];var m=that.set;var p=this.pos[1];for(var i=0;i<m.length;i++){var ci=$(m[i][0]);var cio=m[i][0];if(this.element.contains(cio))continue;var cO=ci.offset();cO={top:cO.top,left:cO.left};var mb=function(e){if(true||o.lba!=cio){ci.before(e);o.lba=cio;}}
-var ma=function(e){if(true||o.laa!=cio){ci.after(e);o.laa=cio;}}
-if(o.floating){var overlap=((cO.left-(this.pos[0]+(this.options.po?this.options.po.left:0)))/this.helper.offsetWidth);if(!(cO.top<this.pos[1]+(this.options.po?this.options.po.top:0)+cio.offsetHeight/2&&cO.top+cio.offsetHeight>this.pos[1]+(this.options.po?this.options.po.top:0)+cio.offsetHeight/2))continue;}else{var overlap=((cO.top-(this.pos[1]+(this.options.po?this.options.po.top:0)))/this.helper.offsetHeight);if(!(cO.left<this.pos[0]+(this.options.po?this.options.po.left:0)+cio.offsetWidth/2&&cO.left+cio.offsetWidth>this.pos[0]+(this.options.po?this.options.po.left:0)+cio.offsetWidth/2))continue;}
-if(overlap>=0&&overlap<=0.5){ci.prev().length?ma(this.element):mb(this.element);break;}
-if(overlap<0&&overlap>-0.5){ci.next()[0]==this.element?mb(this.element):ma(this.element);break;}}
-if($(this.element).prev()[0]!=that.lastSibling){$(this.element).triggerHandler("sortchange",[e,that.prepareCallbackObj(this,that)],this.options.change);that.lastSibling=$(this.element).prev()[0];}
-if(that.helper){var to=$(this.element).offset();that.helper.css({top:to.top+'px',left:to.left+'px'});}
-$(this.helper).css('left',nl+'px').css('top',nt+'px');return false;}});})(jQuery);
-(function($){$.extend($.expr[':'],{resizable:"(' '+a.className+' ').indexOf(' ui-resizable ')"});$.fn.resizable=function(o){return this.each(function(){if(!$(this).is(".ui-resizable"))new $.ui.resizable(this,o);});}
-var methods="destroy,enable,disable".split(",");for(var i=0;i<methods.length;i++){var cur=methods[i],f;eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-resizable")) jQuery.data(this, "ui-resizable")["'+cur+'"](a); if(jQuery(this.parentNode).is(".ui-resizable")) jQuery.data(this, "ui-resizable")["'+cur+'"](a); }); }');$.fn["resizable"+cur.substr(0,1).toUpperCase()+cur.substr(1)]=f;};$.fn.resizableInstance=function(){if($(this[0]).is(".ui-resizable")||$(this[0].parentNode).is(".ui-resizable"))return $.data(this[0],"ui-resizable");return false;};$.ui.resizable=function(el,o){var options={};o=o||{};$.extend(options,o);this.element=el;var self=this;$.data(this.element,"ui-resizable",this);if(options.proxy){var helper=function(e,that){var helper=$('<div></div>').css({width:$(this).width(),height:$(this).height(),position:'absolute',left:that.options.co.left,top:that.options.co.top}).addClass(that.options.proxy);return helper;}}else{var helper="original";}
-if(options.containment){if(options.containment.left!=undefined||options.containment.constructor==Array)return;if(options.containment=='parent')options.containment=this.element.parentNode;if(options.containment=='document'){options.containment=[0,0,$(document).width(),($(document).height()||document.body.parentNode.scrollHeight)];}else{var ce=$(options.containment)[0];var co=$(options.containment).offset({border:false});options.containment=[co.left,co.top,co.left+(ce.offsetWidth||ce.scrollWidth),co.top+(ce.offsetHeight||ce.scrollHeight)];}}
-if(el.nodeName.match(/textarea|input|select|button|img/i))options.destructive=true;if(options.destructive){$(el).wrap('<div class="ui-wrapper"  style="position: relative; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');var oel=el;el=el.parentNode;this.element=el;$(el).css({marginLeft:$(oel).css("marginLeft"),marginTop:$(oel).css("marginTop"),marginRight:$(oel).css("marginRight"),marginBottom:$(oel).css("marginBottom")});$(oel).css({marginLeft:0,marginTop:0,marginRight:0,marginBottom:0});o.proportionallyResize=o.proportionallyResize||[];o.proportionallyResize.push(oel);var b=[parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];}else{var b=[0,0,0,0];}
-if(options.destructive||!$(".ui-resizable-handle",el).length){var t=function(a,b){$(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='"+b+"'></div>");};t('e','right: '+b[1]+'px;'+(options.zIndex?'z-index: '+options.zIndex+';':''));t('s','bottom: '+b[1]+'px;'+(options.zIndex?'z-index: '+options.zIndex+';':''));t('se','bottom: '+b[2]+'px; right: '+b[1]+'px;'+(options.zIndex?'z-index: '+options.zIndex+';':''));}
-options.modifyThese=[];if(o.proportionallyResize){options.proportionallyResize=o.proportionallyResize.slice(0);var propRes=options.proportionallyResize;for(var i in propRes){if(propRes[i].constructor==String)
-propRes[i]=$(propRes[i],el);if(!$(propRes[i]).length)continue;var x=$(propRes[i]).width()-$(el).width();var y=$(propRes[i]).height()-$(el).height();options.modifyThese.push([$(propRes[i]),x,y]);}}
-options.handles={};if(!o.handles)o.handles={n:'.ui-resizable-n',e:'.ui-resizable-e',s:'.ui-resizable-s',w:'.ui-resizable-w',se:'.ui-resizable-se',sw:'.ui-resizable-sw',ne:'.ui-resizable-ne',nw:'.ui-resizable-nw'};for(var i in o.handles){options.handles[i]=o.handles[i];}
-for(var i in options.handles){if(options.handles[i].constructor==String)
-options.handles[i]=$(options.handles[i],el);if(!$(options.handles[i]).length)continue;$(options.handles[i]).bind('mousedown',function(e){self.interaction.options.axis=this.resizeAxis;})[0].resizeAxis=i;}
-if(o.autohide)
-$(this.element).addClass("ui-resizable-autohide").hover(function(){$(this).removeClass("ui-resizable-autohide");},function(){if(self.interaction.options.autohide&&!self.interaction.init)$(this).addClass("ui-resizable-autohide");});if(o.aspectRatio&&(o.aspectRatio=='preserve'||o.aspectRatio===true))
-options.aspectRatio=$(this.element).width()/$(this.element).height();$.extend(options,{helper:helper,nonDestructive:true,dragPrevention:'input,button,select',minHeight:options.minHeight||50,minWidth:options.minWidth||100,aspectRatio:options.aspectRatio||false,startCondition:function(e){if(self.disabled)return false;for(var i in options.handles){if($(options.handles[i])[0]==e.target)return true;}
-return false;},_start:function(h,p,c,t,e){self.start.apply(t,[self,e]);},_beforeStop:function(h,p,c,t,e){self.stop.apply(t,[self,e]);},_drag:function(h,p,c,t,e){self.drag.apply(t,[self,e]);}});this.interaction=new $.ui.mouseInteraction(el,options);$(this.element).addClass("ui-resizable");}
-$.extend($.ui.resizable.prototype,{plugins:{},prepareCallbackObj:function(self){return{helper:self.helper,resizable:self,axis:self.options.axis,options:self.options}},destroy:function(){$(this.element).removeClass("ui-resizable").removeClass("ui-resizable-disabled");this.interaction.destroy();},enable:function(){$(this.element).removeClass("ui-resizable-disabled");this.disabled=false;},disable:function(){$(this.element).addClass("ui-resizable-disabled");this.disabled=true;},start:function(that,e){this.options.originalSize=[$(this.element).width(),$(this.element).height()];this.options.originalPosition=$(this.element).css("position");this.options.originalPositionValues=$(this.element).position();if(this.options.modifyThese.length==0||!this.options.modifyThese[this.options.modifyThese.length-1][0].is('.ui-resizable'))
-this.options.modifyThese.push([$(this.helper),0,0]);$(that.element).triggerHandler("resizestart",[e,that.prepareCallbackObj(this)],this.options.start);return false;},stop:function(that,e){var o=this.options;$(that.element).triggerHandler("resizestop",[e,that.prepareCallbackObj(this)],this.options.stop);if(o.proxy){$(this.element).css({width:$(this.helper).width(),height:$(this.helper).height()});if(o.originalPosition=="absolute"||o.originalPosition=="fixed")
-$(this.element).css({top:$(this.helper).css("top"),left:$(this.helper).css("left")});}
-return false;},drag:function(that,e){var o=this.options;var rel=(o.originalPosition!="absolute"&&o.originalPosition!="fixed");var co=rel?o.co:this.options.originalPositionValues;var p=o.originalSize;this.pos=rel?[this.rpos[0]-o.cursorAt.left,this.rpos[1]-o.cursorAt.top]:[this.pos[0]-o.cursorAt.left,this.pos[1]-o.cursorAt.top];var nw=p[0]+(this.pos[0]-co.left);var nh=p[1]+(this.pos[1]-co.top);if(e.shiftKey&&!o.aspectRatio)o.aspectRatio=p[0]/p[1];if(o.axis){switch(o.axis){case'e':nh=p[1];break;case's':nw=p[0];break;case'n':case'ne':if(!o.proxy&&(o.originalPosition!="absolute"&&o.originalPosition!="fixed"))return false;if(o.axis=='n')nw=p[0];var mod=(this.pos[1]-co.top);nh=nh-(mod*2);mod=nh<=o.minHeight?p[1]-o.minHeight:(nh>=o.maxHeight?0-(o.maxHeight-p[1]):mod);if(o.containment&&co.top+mod<o.containment[1]-o.po.top){mod=(o.containment[1]-o.po.top)-co.top;nh=nh+this.pos[1]-(o.containment[1]-o.po.top);}
-$(this.helper).css('top',co.top+mod);break;case'w':case'sw':if(!o.proxy&&(o.originalPosition!="absolute"&&o.originalPosition!="fixed"))return false;if(o.axis=='w')nh=p[1];var mod=(this.pos[0]-co.left);nw=nw-(mod*2);mod=nw<=o.minWidth?p[0]-o.minWidth:(nw>=o.maxWidth?0-(o.maxWidth-p[0]):mod);if(o.containment&&co.left+mod<o.containment[0]-o.po.left){mod=(o.containment[0]-o.po.left)-co.left;nw=nw+this.pos[0]-(o.containment[0]-o.po.left);}
-$(this.helper).css('left',co.left+mod);break;case'nw':if(!o.proxy&&(o.originalPosition!="absolute"&&o.originalPosition!="fixed"))return false;var modx=(this.pos[0]-co.left);nw=nw-(modx*2);modx=nw<=o.minWidth?p[0]-o.minWidth:(nw>=o.maxWidth?0-(o.maxWidth-p[0]):modx);var mody=(this.pos[1]-co.top);nh=nh-(mody*2);mody=nh<=o.minHeight?p[1]-o.minHeight:(nh>=o.maxHeight?0-(o.maxHeight-p[1]):mody);if(o.containment&&co.top+mody<o.containment[1]-o.po.top){mody=(o.containment[1]-o.po.top)-co.top;nh=nh+this.pos[1]-(o.containment[1]-o.po.top);}
-if(o.containment&&co.left+modx<o.containment[0]-o.po.left){modx=(o.containment[0]-o.po.left)-co.left;nw=nw+this.pos[0]-(o.containment[0]-o.po.left);}
-$(this.helper).css({left:co.left+modx,top:co.top+mody});break;}}
-if(e.shiftKey)nh=nw*(1/o.aspectRatio);if(o.minWidth)nw=nw<=o.minWidth?o.minWidth:nw;if(o.minHeight)nh=nh<=o.minHeight?o.minHeight:nh;if(o.maxWidth)nw=nw>=o.maxWidth?o.maxWidth:nw;if(o.maxHeight)nh=nh>=o.maxHeight?o.maxHeight:nh;if(e.shiftKey)nh=nw*(1/o.aspectRatio);var modifier=$(that.element).triggerHandler("resize",[e,that.prepareCallbackObj(this)],o.resize);if(!modifier)modifier={};var left_handle_pos=co.left<this.pos[0]?co.left:this.pos[0];var top_handle_pos=co.top<this.pos[1]?co.top:this.pos[1];if(o.containment&&left_handle_pos+nw>o.containment[2]-o.po.left)
-nw=(o.containment[2]-o.po.left)-left_handle_pos;if(o.containment&&top_handle_pos+nh>o.containment[3]-o.po.top)
-nh=(o.containment[3]-o.po.top)-top_handle_pos;for(var i in this.options.modifyThese){var c=this.options.modifyThese[i];c[0].css({width:modifier.width?modifier.width+c[1]:nw+c[1],height:modifier.height?modifier.height+c[2]:nh+c[2]});}
-return false;}});})(jQuery);
-(function($){if(window['webforms']){$(document).ready(function(){$("input").each(function(){if(this.getAttribute("type")=="range"){var cur=$(this);var slider=$("<div class='ui-slider'></div>").css({width:cur.innerWidth()+"px",height:cur.innerHeight()+"px"}).insertAfter(cur);var handle=$("<div class='ui-slider-handle'></div>").appendTo(slider);slider.css({"position":cur.css("position")=="absolute"?"absolute":"relative","left":cur.css("left"),"right":cur.css("right"),"zIndex":cur.css("zIndex"),"float":cur.css("float"),"clear":cur.css("clear")});cur.css({position:"absolute",opacity:0,top:"-1000px",left:"-1000px"});slider.slider({maxValue:cur.attr("max"),minValue:cur.attr("min"),startValue:this.getAttribute("value"),stepping:cur.attr("step"),change:function(e,ui){cur[0].value=ui.value;cur[0].setAttribute("value",ui.value);}});slider=slider.sliderInstance();cur.bind("keydown",function(e){var o=slider.interaction.options;switch(e.keyCode){case 37:slider.moveTo(slider.interaction.curValue+o.minValue-(o.stepping||1));break;case 39:slider.moveTo(slider.interaction.curValue+o.minValue+(o.stepping||1));break;}
-if(e.keyCode!=9)return false;});};});});}
-$.extend($.expr[':'],{slider:"(' '+a.className+' ').indexOf(' ui-slider ')"});$.fn.slider=function(o){return this.each(function(){new $.ui.slider(this,o);});}
-var methods="destroy,enable,disable,moveTo".split(",");for(var i=0;i<methods.length;i++){var cur=methods[i],f;eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-slider")) jQuery.data(this, "ui-slider")["'+cur+'"](a); }); }');$.fn["slider"+cur.substr(0,1).toUpperCase()+cur.substr(1)]=f;};$.fn.sliderInstance=function(){if($(this[0]).is(".ui-slider"))return $.data(this[0],"ui-slider");return false;};$.ui.slider=function(el,o){var options={};o=o||{};$.extend(options,o);$.extend(options,{axis:o.axis||(el.offsetWidth<el.offsetHeight?'vertical':'horizontal'),maxValue:parseInt(o.maxValue)||100,minValue:parseInt(o.minValue)||0,startValue:parseInt(o.startValue)||0,_start:function(h,p,c,t,e){self.start.apply(t,[self,e]);},_beforeStop:function(h,p,c,t,e){self.stop.apply(t,[self,e]);},_drag:function(h,p,c,t,e){self.drag.apply(t,[self,e]);},startCondition:function(){return!self.disabled;}});var self=this;var o=options;$.data(el,"ui-slider",this);o.stepping=parseInt(o.stepping)||(o.steps?o.maxValue/o.steps:0);o.realValue=(o.maxValue-o.minValue);this.handle=options.handle?$(options.handle,el):$('.ui-slider-handle',el);if(this.handle.length==1){this.interaction=new $.ui.mouseInteraction(this.handle[0],options);this.multipleHandles=false;}else{this.interactions=[];this.handle.each(function(){self.interactions.push(new $.ui.mouseInteraction(this,options));});this.multipleHandles=true;}
-this.element=el;$(this.element).addClass("ui-slider");if(o.axis=='horizontal'){this.parentSize=$(this.element).outerWidth()-this.handle.outerWidth();this.prop='left';}
-if(o.axis=='vertical'){this.parentSize=$(this.element).outerHeight()-this.handle.outerHeight();this.prop='top';}
-if(!this.multipleHandles){$(el).bind('click',function(e){self.click.apply(self,[e]);});if(!isNaN(o.startValue))this.moveTo(o.startValue,options.realValue,null,false);}}
-$.extend($.ui.slider.prototype,{currentTarget:null,lastTarget:null,destroy:function(){$(this.element).removeClass("ui-slider").removeClass("ui-slider-disabled");this.interaction.destroy();},enable:function(){$(this.element).removeClass("ui-slider-disabled");this.disabled=false;},disable:function(){$(this.element).addClass("ui-slider-disabled");this.disabled=true;},nonvalidRange:function(self){for(var i=0;i<this.interactions.length;i++){if(self==this.interactions[i]){if(this.interactions[i-1]){if(this.interactions[i-1].curValue>this.interactions[i].curValue)return this.interactions[i-1].curValue;}
-if(this.interactions[i+1]){if(this.interactions[i+1].curValue<this.interactions[i].curValue)return this.interactions[i+1].curValue;}}}
-return false;},prepareCallbackObj:function(self,m){var cur=this;var func=function(){var retVal=[];for(var i=0;i<cur.interactions.length;i++){retVal.push((cur.interactions[i].curValue||0)+self.options.minValue);}
-return retVal;};return{handle:self.helper,pixel:m,value:self.curValue+self.options.minValue,values:this.multipleHandles?func():self.curValue+self.options.minValue,slider:self}},click:function(e){var o=this.interaction.options;var pointer=[e.pageX,e.pageY];var offset=$(this.interaction.element).offsetParent().offset({border:false});if(this.interaction.element==e.target||this.disabled)return;this.interaction.pickValue=this.interaction.curValue;this.drag.apply(this.interaction,[this,e,[pointer[0]-offset.left-this.handle[0].offsetWidth/2,pointer[1]-offset.top-this.handle[0].offsetHeight/2]]);if(this.interaction.pickValue!=this.interaction.curValue)
-$(this.element).triggerHandler("slidechange",[e,this.prepareCallbackObj(this.interaction)],o.change);},start:function(that,e){var o=this.options;$(that.element).triggerHandler("slidestart",[e,that.prepareCallbackObj(this)],o.start);this.pickValue=this.curValue;return false;},stop:function(that,e){var o=this.options;$(that.element).triggerHandler("slidestop",[e,that.prepareCallbackObj(this)],o.stop);if(this.pickValue!=this.curValue)$(that.element).triggerHandler("slidechange",[e,that.prepareCallbackObj(this)],o.change);return false;},drag:function(that,e,pos){var o=this.options;this.pos=pos||[this.pos[0]-this.element.offsetWidth/2,this.pos[1]-this.element.offsetHeight/2];if(o.axis=='horizontal')var m=this.pos[0];if(o.axis=='vertical')var m=this.pos[1];var p=that.parentSize;var prop=that.prop;if(m<0)m=0;if(m>p)m=p;this.curValue=(Math.round((m/p)*o.realValue));if(o.stepping){this.curValue=Math.round(this.curValue/o.stepping)*o.stepping;m=((this.curValue)/o.realValue)*p;}
-if(that.interactions){nonvalidRange=that.nonvalidRange(this);if(nonvalidRange){this.curValue=nonvalidRange;m=((this.curValue)/o.realValue)*p;}}
-$(this.element).css(prop,m+'px');$(that.element).triggerHandler("slide",[e,that.prepareCallbackObj(this,m)],o.slide);return false;},moveTo:function(value,scale,changeslide,p){if(this.multipleHandles)return false;var o=this.interaction.options;var offset=$(this.interaction.element).offsetParent().offset({border:false});this.interaction.pickValue=this.interaction.curValue;value=value-o.minValue;var modifier=scale||o.realValue;if(!p)var p=this.parentSize;var prop=this.prop;var m=Math.round(((value)/modifier)*p);if(m<0)m=0;if(m>p)m=p;this.interaction.curValue=(Math.round((m/p)*o.realValue));if(o.stepping){this.interaction.curValue=Math.round(this.interaction.curValue/o.stepping)*o.stepping;m=((this.interaction.curValue)/o.realValue)*p;}
-$(this.interaction.element).css(prop,m+'px');if(!changeslide&&this.interaction.pickValue!=this.interaction.curValue&&!p)
-$(this.element).triggerHandler("slidechange",[null,this.prepareCallbackObj(this.interaction)],o.change);if(changeslide)
-$(this.element).triggerHandler("slide",[null,this.prepareCallbackObj(this.interaction)],o.slide);}});})(jQuery);
+;(function($) {
+
+$.ui = {
+	plugin: {
+		add: function(module, option, set) {
+			var proto = $.ui[module].prototype;
+			for(var i in set) {
+				proto.plugins[i] = proto.plugins[i] || [];
+				proto.plugins[i].push([option, set[i]]);
+			}
+		},
+		call: function(instance, name, args) {
+			var set = instance.plugins[name];
+			if(!set) { return; }
+			
+			for (var i = 0; i < set.length; i++) {
+				if (instance.options[set[i][0]]) {
+					set[i][1].apply(instance.element, args);
+				}
+			}
+		}	
+	},
+	cssCache: {},
+	css: function(name) {
+		if ($.ui.cssCache[name]) { return $.ui.cssCache[name]; }
+		var tmp = $('<div class="ui-gen">').addClass(name).css({position:'absolute', top:'-5000px', left:'-5000px', display:'block'}).appendTo('body');
+		
+		//if (!$.browser.safari)
+			//tmp.appendTo('body'); 
+		
+		//Opera and Safari set width and height to 0px instead of auto
+		//Safari returns rgba(0,0,0,0) when bgcolor is not set
+		$.ui.cssCache[name] = !!(
+			(!(/auto|default/).test(tmp.css('cursor')) || (/^[1-9]/).test(tmp.css('height')) || (/^[1-9]/).test(tmp.css('width')) || 
+			!(/none/).test(tmp.css('backgroundImage')) || !(/transparent|rgba\(0, 0, 0, 0\)/).test(tmp.css('backgroundColor')))
+		);
+		try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
+		return $.ui.cssCache[name];
+	},
+	disableSelection: function(el) {
+		$(el).attr('unselectable', 'on').css('MozUserSelect', 'none');
+	},
+	enableSelection: function(el) {
+		$(el).attr('unselectable', 'off').css('MozUserSelect', '');
+	},
+	hasScroll: function(e, a) {
+		var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
+		if (e[scroll] > 0) return true; e[scroll] = 1;
+		has = e[scroll] > 0 ? true : false; e[scroll] = 0;
+		return has;
+	}
+};
+
+
+/** jQuery core modifications and additions **/
+
+var _remove = $.fn.remove;
+$.fn.remove = function() {
+	$("*", this).add(this).triggerHandler("remove");
+	return _remove.apply(this, arguments );
+};
+
+// $.widget is a factory to create jQuery plugins
+// taking some boilerplate code out of the plugin code
+// created by Scott González and Jörn Zaefferer
+function getter(namespace, plugin, method) {
+	var methods = $[namespace][plugin].getter || [];
+	methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
+	return ($.inArray(method, methods) != -1);
+}
+
+$.widget = function(name, prototype) {
+	var namespace = name.split(".")[0];
+	name = name.split(".")[1];
+	
+	// create plugin method
+	$.fn[name] = function(options) {
+		var isMethodCall = (typeof options == 'string'),
+			args = Array.prototype.slice.call(arguments, 1);
+		
+		if (isMethodCall && getter(namespace, name, options)) {
+			var instance = $.data(this[0], name);
+			return (instance ? instance[options].apply(instance, args)
+				: undefined);
+		}
+		
+		return this.each(function() {
+			var instance = $.data(this, name);
+			if (isMethodCall && instance && $.isFunction(instance[options])) {
+				instance[options].apply(instance, args);
+			} else if (!isMethodCall) {
+				$.data(this, name, new $[namespace][name](this, options));
+			}
+		});
+	};
+	
+	// create widget constructor
+	$[namespace][name] = function(element, options) {
+		var self = this;
+		
+		this.widgetName = name;
+		this.widgetBaseClass = namespace + '-' + name;
+		
+		this.options = $.extend({}, $.widget.defaults, $[namespace][name].defaults, options);
+		this.element = $(element)
+			.bind('setData.' + name, function(e, key, value) {
+				return self.setData(key, value);
+			})
+			.bind('getData.' + name, function(e, key) {
+				return self.getData(key);
+			})
+			.bind('remove', function() {
+				return self.destroy();
+			});
+		this.init();
+	};
+	
+	// add widget prototype
+	$[namespace][name].prototype = $.extend({}, $.widget.prototype, prototype);
+};
+
+$.widget.prototype = {
+	init: function() {},
+	destroy: function() {
+		this.element.removeData(this.widgetName);
+	},
+	
+	getData: function(key) {
+		return this.options[key];
+	},
+	setData: function(key, value) {
+		this.options[key] = value;
+		
+		if (key == 'disabled') {
+			this.element[value ? 'addClass' : 'removeClass'](
+				this.widgetBaseClass + '-disabled');
+		}
+	},
+	
+	enable: function() {
+		this.setData('disabled', false);
+	},
+	disable: function() {
+		this.setData('disabled', true);
+	}
+};
+
+$.widget.defaults = {
+	disabled: false
+};
+
+
+/** Mouse Interaction Plugin **/
+
+$.ui.mouse = {
+	mouseInit: function() {
+		var self = this;
+	
+		this.element.bind('mousedown.'+this.widgetName, function(e) {
+			return self.mouseDown(e);
+		});
+		
+		// Prevent text selection in IE
+		if ($.browser.msie) {
+			this._mouseUnselectable = this.element.attr('unselectable');
+			this.element.attr('unselectable', 'on');
+		}
+		
+		this.started = false;
+	},
+	
+	// TODO: make sure destroying one instance of mouse doesn't mess with
+	// other instances of mouse
+	mouseDestroy: function() {
+		this.element.unbind('.'+this.widgetName);
+		
+		// Restore text selection in IE
+		($.browser.msie
+			&& this.element.attr('unselectable', this._mouseUnselectable));
+	},
+	
+	mouseDown: function(e) {
+		// we may have missed mouseup (out of window)
+		(this._mouseStarted && this.mouseUp(e));
+		
+		this._mouseDownEvent = e;
+		
+		var self = this,
+			btnIsLeft = (e.which == 1),
+			elIsCancel = (typeof this.options.cancel == "string" ? $(e.target).parents().add(e.target).filter(this.options.cancel).length : false);
+		if (!btnIsLeft || elIsCancel || !this.mouseCapture(e)) {
+			return true;
+		}
+		
+		this._mouseDelayMet = !this.options.delay;
+		if (!this._mouseDelayMet) {
+			this._mouseDelayTimer = setTimeout(function() {
+				self._mouseDelayMet = true;
+			}, this.options.delay);
+		}
+		
+		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
+			this._mouseStarted = (this.mouseStart(e) !== false);
+			if (!this._mouseStarted) {
+				e.preventDefault();
+				return true;
+			}
+		}
+		
+		// these delegates are required to keep context
+		this._mouseMoveDelegate = function(e) {
+			return self.mouseMove(e);
+		};
+		this._mouseUpDelegate = function(e) {
+			return self.mouseUp(e);
+		};
+		$(document)
+			.bind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
+			.bind('mouseup.'+this.widgetName, this._mouseUpDelegate);
+		
+		return false;
+	},
+	
+	mouseMove: function(e) {
+		// IE mouseup check - mouseup happened when mouse was out of window
+		if ($.browser.msie && !e.button) {
+			return this.mouseUp(e);
+		}
+		
+		if (this._mouseStarted) {
+			this.mouseDrag(e);
+			return false;
+		}
+		
+		if (this.mouseDistanceMet(e) && this.mouseDelayMet(e)) {
+			this._mouseStarted =
+				(this.mouseStart(this._mouseDownEvent, e) !== false);
+			(this._mouseStarted ? this.mouseDrag(e) : this.mouseUp(e));
+		}
+		
+		return !this._mouseStarted;
+	},
+	
+	mouseUp: function(e) {
+		$(document)
+			.unbind('mousemove.'+this.widgetName, this._mouseMoveDelegate)
+			.unbind('mouseup.'+this.widgetName, this._mouseUpDelegate);
+		
+		if (this._mouseStarted) {
+			this._mouseStarted = false;
+			this.mouseStop(e);
+		}
+		
+		return false;
+	},
+	
+	mouseDistanceMet: function(e) {
+		return (Math.max(
+				Math.abs(this._mouseDownEvent.pageX - e.pageX),
+				Math.abs(this._mouseDownEvent.pageY - e.pageY)
+			) >= this.options.distance
+		);
+	},
+	
+	mouseDelayMet: function(e) {
+		return this._mouseDelayMet;
+	},
+	
+	// These are placeholder methods, to be overriden by extending plugin
+	mouseStart: function(e) {},
+	mouseDrag: function(e) {},
+	mouseStop: function(e) {},
+	mouseCapture: function(e) { return true; }
+};
+
+$.ui.mouse.defaults = {
+	cancel: null,
+	distance: 1,
+	delay: 0
+};
+
+})(jQuery);
+/*
+ * jQuery UI Tabs
+ *
+ * Copyright (c) 2007, 2008 Klaus Hartl (stilbuero.de)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ * http://docs.jquery.com/UI/Tabs
+ *
+ * Depends:
+ *	ui.core.js
+ */
+(function($) {
+
+$.widget("ui.tabs", {
+	init: function() {
+		this.options.event += '.tabs'; // namespace event
+		
+		// create tabs
+		this.tabify(true);
+	},
+	setData: function(key, value) {
+		if ((/^selected/).test(key))
+			this.select(value);
+		else {
+			this.options[key] = value;
+			this.tabify();
+		}
+	},
+	length: function() {
+		return this.$tabs.length;
+	},
+	tabId: function(a) {
+		return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '')
+			|| this.options.idPrefix + $.data(a);
+	},
+	ui: function(tab, panel) {
+		return {
+			options: this.options,
+			tab: tab,
+			panel: panel,
+			index: this.$tabs.index(tab)
+		};
+	},
+	tabify: function(init) {
+
+		this.$lis = $('li:has(a[href])', this.element);
+		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
+		this.$panels = $([]);
+
+		var self = this, o = this.options;
+
+		this.$tabs.each(function(i, a) {
+			// inline tab
+			if (a.hash && a.hash.replace('#', '')) // Safari 2 reports '#' for an empty hash
+				self.$panels = self.$panels.add(a.hash);
+			// remote tab
+			else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
+				$.data(a, 'href.tabs', a.href); // required for restore on destroy
+				$.data(a, 'load.tabs', a.href); // mutable
+				var id = self.tabId(a);
+				a.href = '#' + id;
+				var $panel = $('#' + id);
+				if (!$panel.length) {
+					$panel = $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
+						.insertAfter( self.$panels[i - 1] || self.element );
+					$panel.data('destroy.tabs', true);
+				}
+				self.$panels = self.$panels.add( $panel );
+			}
+			// invalid tab href
+			else
+				o.disabled.push(i + 1);
+		});
+
+		if (init) {
+
+			// attach necessary classes for styling if not present
+			this.element.addClass(o.navClass);
+			this.$panels.each(function() {
+				var $this = $(this);
+				$this.addClass(o.panelClass);
+			});
+
+			// Selected tab
+			// use "selected" option or try to retrieve:
+			// 1. from fragment identifier in url
+			// 2. from cookie
+			// 3. from selected class attribute on <li>
+			if (o.selected === undefined) {
+				if (location.hash) {
+					this.$tabs.each(function(i, a) {
+						if (a.hash == location.hash) {
+							o.selected = i;
+							// prevent page scroll to fragment
+							if ($.browser.msie || $.browser.opera) { // && !o.remote
+								var $toShow = $(location.hash), toShowId = $toShow.attr('id');
+								$toShow.attr('id', '');
+								setTimeout(function() {
+									$toShow.attr('id', toShowId); // restore id
+								}, 500);
+							}
+							scrollTo(0, 0);
+							return false; // break
+						}
+					});
+				}
+				else if (o.cookie) {
+					var index = parseInt($.cookie('ui-tabs' + $.data(self.element)),10);
+					if (index && self.$tabs[index])
+						o.selected = index;
+				}
+				else if (self.$lis.filter('.' + o.selectedClass).length)
+					o.selected = self.$lis.index( self.$lis.filter('.' + o.selectedClass)[0] );
+			}
+			o.selected = o.selected === null || o.selected !== undefined ? o.selected : 0; // first tab selected by default
+
+			// Take disabling tabs via class attribute from HTML
+			// into account and update option properly.
+			// A selected tab cannot become disabled.
+			o.disabled = $.unique(o.disabled.concat(
+				$.map(this.$lis.filter('.' + o.disabledClass),
+					function(n, i) { return self.$lis.index(n); } )
+			)).sort();
+			if ($.inArray(o.selected, o.disabled) != -1)
+				o.disabled.splice($.inArray(o.selected, o.disabled), 1);
+			
+			// highlight selected tab
+			this.$panels.addClass(o.hideClass);
+			this.$lis.removeClass(o.selectedClass);
+			if (o.selected !== null) {
+				this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
+				this.$lis.eq(o.selected).addClass(o.selectedClass);
+				
+				// seems to be expected behavior that the show callback is fired
+				var onShow = function() {
+					$(self.element).triggerHandler('tabsshow',
+						[self.fakeEvent('tabsshow'), self.ui(self.$tabs[o.selected], self.$panels[o.selected])], o.show);
+				}; 
+
+				// load if remote tab
+				if ($.data(this.$tabs[o.selected], 'load.tabs'))
+					this.load(o.selected, onShow);
+				// just trigger show event
+				else
+					onShow();
+				
+			}
+			
+			// clean up to avoid memory leaks in certain versions of IE 6
+			$(window).bind('unload', function() {
+				self.$tabs.unbind('.tabs');
+				self.$lis = self.$tabs = self.$panels = null;
+			});
+
+		}
+
+		// disable tabs
+		for (var i = 0, li; li = this.$lis[i]; i++)
+			$(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
+
+		// reset cache if switching from cached to not cached
+		if (o.cache === false)
+			this.$tabs.removeData('cache.tabs');
+		
+		// set up animations
+		var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
+		if (o.fx && o.fx.constructor == Array)
+			hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
+		else
+			hideFx = showFx = o.fx || baseFx;
+
+		// reset some styles to maintain print style sheets etc.
+		var resetCSS = { display: '', overflow: '', height: '' };
+		if (!$.browser.msie) // not in IE to prevent ClearType font issue
+			resetCSS.opacity = '';
+
+		// Hide a tab, animation prevents browser scrolling to fragment,
+		// $show is optional.
+		function hideTab(clicked, $hide, $show) {
+			$hide.animate(hideFx, hideFx.duration || baseDuration, function() { //
+				$hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
+				if ($.browser.msie && hideFx.opacity)
+					$hide[0].style.filter = '';
+				if ($show)
+					showTab(clicked, $show, $hide);
+			});
+		}
+
+		// Show a tab, animation prevents browser scrolling to fragment,
+		// $hide is optional.
+		function showTab(clicked, $show, $hide) {
+			if (showFx === baseFx)
+				$show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab panels
+			$show.animate(showFx, showFx.duration || baseDuration, function() {
+				$show.removeClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
+				if ($.browser.msie && showFx.opacity)
+					$show[0].style.filter = '';
+
+				// callback
+				$(self.element).triggerHandler('tabsshow',
+					[self.fakeEvent('tabsshow'), self.ui(clicked, $show[0])], o.show);
+
+			});
+		}
+
+		// switch a tab
+		function switchTab(clicked, $li, $hide, $show) {
+			/*if (o.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
+				$.ajaxHistory.update(clicked.hash);
+			}*/
+			$li.addClass(o.selectedClass)
+				.siblings().removeClass(o.selectedClass);
+			hideTab(clicked, $hide, $show);
+		}
+
+		// attach tab event handler, unbind to avoid duplicates from former tabifying...
+		this.$tabs.unbind('.tabs').bind(o.event, function() {
+
+			//var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
+			var $li = $(this).parents('li:eq(0)'),
+				$hide = self.$panels.filter(':visible'),
+				$show = $(this.hash);
+
+			// If tab is already selected and not unselectable or tab disabled or 
+			// or is already loading or click callback returns false stop here.
+			// Check if click handler returns false last so that it is not executed
+			// for a disabled or loading tab!
+			if (($li.hasClass(o.selectedClass) && !o.unselect)
+				|| $li.hasClass(o.disabledClass) 
+				|| $(this).hasClass(o.loadingClass)
+				|| $(self.element).triggerHandler('tabsselect', [self.fakeEvent('tabsselect'), self.ui(this, $show[0])], o.select) === false
+				) {
+				this.blur();
+				return false;
+			}
+
+			self.options.selected = self.$tabs.index(this);
+
+			// if tab may be closed
+			if (o.unselect) {
+				if ($li.hasClass(o.selectedClass)) {
+					self.options.selected = null;
+					$li.removeClass(o.selectedClass);
+					self.$panels.stop();
+					hideTab(this, $hide);
+					this.blur();
+					return false;
+				} else if (!$hide.length) {
+					self.$panels.stop();
+					var a = this;
+					self.load(self.$tabs.index(this), function() {
+						$li.addClass(o.selectedClass).addClass(o.unselectClass);
+						showTab(a, $show);
+					});
+					this.blur();
+					return false;
+				}
+			}
+
+			if (o.cookie)
+				$.cookie('ui-tabs' + $.data(self.element), self.options.selected, o.cookie);
+
+			// stop possibly running animations
+			self.$panels.stop();
+
+			// show new tab
+			if ($show.length) {
+
+				// prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
+				/*if ($.browser.msie && o.bookmarkable) {
+					var showId = this.hash.replace('#', '');
+					$show.attr('id', '');
+					setTimeout(function() {
+						$show.attr('id', showId); // restore id
+					}, 0);
+				}*/
+
+				var a = this;
+				self.load(self.$tabs.index(this), $hide.length ? 
+					function() {
+						switchTab(a, $li, $hide, $show);
+					} :
+					function() {
+						$li.addClass(o.selectedClass);
+						showTab(a, $show);
+					}
+				);
+
+				// Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
+				/*var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+				var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
+				setTimeout(function() {
+					scrollTo(scrollX, scrollY);
+				}, 0);*/
+
+			} else
+				throw 'jQuery UI Tabs: Mismatching fragment identifier.';
+
+			// Prevent IE from keeping other link focussed when using the back button
+			// and remove dotted border from clicked link. This is controlled in modern
+			// browsers via CSS, also blur removes focus from address bar in Firefox
+			// which can become a usability and annoying problem with tabsRotate.
+			if ($.browser.msie)
+				this.blur();
+
+			//return o.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
+			return false;
+
+		});
+
+		// disable click if event is configured to something else
+		if (!(/^click/).test(o.event))
+			this.$tabs.bind('click.tabs', function() { return false; });
+
+	},
+	add: function(url, label, index) {
+		if (index == undefined) 
+			index = this.$tabs.length; // append by default
+
+		var o = this.options;
+		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
+		$li.data('destroy.tabs', true);
+
+		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this.tabId( $('a:first-child', $li)[0] );
+
+		// try to find an existing element before creating a new one
+		var $panel = $('#' + id);
+		if (!$panel.length) {
+			$panel = $(o.panelTemplate).attr('id', id)
+				.addClass(o.hideClass)
+				.data('destroy.tabs', true);
+		}
+		$panel.addClass(o.panelClass);
+		if (index >= this.$lis.length) {
+			$li.appendTo(this.element);
+			$panel.appendTo(this.element[0].parentNode);
+		} else {
+			$li.insertBefore(this.$lis[index]);
+			$panel.insertBefore(this.$panels[index]);
+		}
+		
+		o.disabled = $.map(o.disabled,
+			function(n, i) { return n >= index ? ++n : n });
+			
+		this.tabify();
+
+		if (this.$tabs.length == 1) {
+			$li.addClass(o.selectedClass);
+			$panel.removeClass(o.hideClass);
+			var href = $.data(this.$tabs[0], 'load.tabs');
+			if (href)
+				this.load(index, href);
+		}
+
+		// callback
+		this.element.triggerHandler('tabsadd',
+			[this.fakeEvent('tabsadd'), this.ui(this.$tabs[index], this.$panels[index])], o.add
+		);
+	},
+	remove: function(index) {
+		var o = this.options, $li = this.$lis.eq(index).remove(),
+			$panel = this.$panels.eq(index).remove();
+
+		// If selected tab was removed focus tab to the right or
+		// in case the last tab was removed the tab to the left.
+		if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
+			this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
+
+		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
+			function(n, i) { return n >= index ? --n : n });
+
+		this.tabify();
+
+		// callback
+		this.element.triggerHandler('tabsremove',
+			[this.fakeEvent('tabsremove'), this.ui($li.find('a')[0], $panel[0])], o.remove
+		);
+	},
+	enable: function(index) {
+		var o = this.options;
+		if ($.inArray(index, o.disabled) == -1)
+			return;
+			
+		var $li = this.$lis.eq(index).removeClass(o.disabledClass);
+		if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
+			$li.css('display', 'inline-block');
+			setTimeout(function() {
+				$li.css('display', 'block');
+			}, 0);
+		}
+
+		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
+
+		// callback
+		this.element.triggerHandler('tabsenable',
+			[this.fakeEvent('tabsenable'), this.ui(this.$tabs[index], this.$panels[index])], o.enable
+		);
+
+	},
+	disable: function(index) {
+		var self = this, o = this.options;
+		if (index != o.selected) { // cannot disable already selected tab
+			this.$lis.eq(index).addClass(o.disabledClass);
+
+			o.disabled.push(index);
+			o.disabled.sort();
+
+			// callback
+			this.element.triggerHandler('tabsdisable',
+				[this.fakeEvent('tabsdisable'), this.ui(this.$tabs[index], this.$panels[index])], o.disable
+			);
+		}
+	},
+	select: function(index) {
+		if (typeof index == 'string')
+			index = this.$tabs.index( this.$tabs.filter('[href$=' + index + ']')[0] );
+		this.$tabs.eq(index).trigger(this.options.event);
+	},
+	load: function(index, callback) { // callback is for internal usage only
+		
+		var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
+				bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
+
+		callback = callback || function() {};
+		
+		// no remote or from cache - just finish with callback
+		if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
+			callback();
+			return;
+		}
+
+		// load remote from here on
+		
+		var inner = function(parent) {
+			var $parent = $(parent), $inner = $parent.find('*:last');
+			return $inner.length && $inner.is(':not(img)') && $inner || $parent;
+		};
+		var cleanup = function() {
+			self.$tabs.filter('.' + o.loadingClass).removeClass(o.loadingClass)
+						.each(function() {
+							if (o.spinner)
+								inner(this).parent().html(inner(this).data('label.tabs'));
+						});
+			self.xhr = null;
+		};
+		
+		if (o.spinner) {
+			var label = inner(a).html();
+			inner(a).wrapInner('<em></em>')
+				.find('em').data('label.tabs', label).html(o.spinner);
+		}
+
+		var ajaxOptions = $.extend({}, o.ajaxOptions, {
+			url: url,
+			success: function(r, s) {
+				$(a.hash).html(r);
+				cleanup();
+				
+				if (o.cache)
+					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
+
+				// callbacks
+				$(self.element).triggerHandler('tabsload',
+					[self.fakeEvent('tabsload'), self.ui(self.$tabs[index], self.$panels[index])], o.load
+				);
+				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
+				
+				// This callback is required because the switch has to take
+				// place after loading has completed. Call last in order to 
+				// fire load before show callback...
+				callback();
+			}
+		});
+		if (this.xhr) {
+			// terminate pending requests from other tabs and restore tab label
+			this.xhr.abort();
+			cleanup();
+		}
+		$a.addClass(o.loadingClass);
+		setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
+			self.xhr = $.ajax(ajaxOptions);
+		}, 0);
+
+	},
+	url: function(index, url) {
+		this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
+	},
+	destroy: function() {
+		var o = this.options;
+		this.element.unbind('.tabs')
+			.removeClass(o.navClass).removeData('tabs');
+		this.$tabs.each(function() {
+			var href = $.data(this, 'href.tabs');
+			if (href)
+				this.href = href;
+			var $this = $(this).unbind('.tabs');
+			$.each(['href', 'load', 'cache'], function(i, prefix) {
+				$this.removeData(prefix + '.tabs');
+			});
+		});
+		this.$lis.add(this.$panels).each(function() {
+			if ($.data(this, 'destroy.tabs'))
+				$(this).remove();
+			else
+				$(this).removeClass([o.selectedClass, o.unselectClass,
+					o.disabledClass, o.panelClass, o.hideClass].join(' '));
+		});
+	},
+	fakeEvent: function(type) {
+		return $.event.fix({
+			type: type,
+			target: this.element[0]
+		});
+	}
+});
+
+$.ui.tabs.defaults = {
+	// basic setup
+	unselect: false,
+	event: 'click',
+	disabled: [],
+	cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+	// TODO history: false,
+
+	// Ajax
+	spinner: 'Loading&#8230;',
+	cache: false,
+	idPrefix: 'ui-tabs-',
+	ajaxOptions: {},
+
+	// animations
+	fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+
+	// templates
+	tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
+	panelTemplate: '<div></div>',
+
+	// CSS classes
+	navClass: 'ui-tabs-nav',
+	selectedClass: 'ui-tabs-selected',
+	unselectClass: 'ui-tabs-unselect',
+	disabledClass: 'ui-tabs-disabled',
+	panelClass: 'ui-tabs-panel',
+	hideClass: 'ui-tabs-hide',
+	loadingClass: 'ui-tabs-loading'
+};
+
+$.ui.tabs.getter = "length";
+
+/*
+ * Tabs Extensions
+ */
+
+/*
+ * Rotate
+ */
+$.extend($.ui.tabs.prototype, {
+	rotation: null,
+	rotate: function(ms, continuing) {
+		
+		continuing = continuing || false;
+		
+		var self = this, t = this.options.selected;
+		
+		function start() {
+			self.rotation = setInterval(function() {
+				t = ++t < self.$tabs.length ? t : 0;
+				self.select(t);
+			}, ms); 
+		}
+		
+		function stop(e) {
+			if (!e || e.clientX) { // only in case of a true click
+				clearInterval(self.rotation);
+			}
+		}
+		
+		// start interval
+		if (ms) {
+			start();
+			if (!continuing)
+				this.$tabs.bind(this.options.event, stop);
+			else
+				this.$tabs.bind(this.options.event, function() {
+					stop();
+					t = self.options.selected;
+					start();
+				});
+		}
+		// stop interval
+		else {
+			stop();
+			this.$tabs.unbind(this.options.event, stop);
+		}
+	}
+});
+
+})(jQuery);
+/*
+ * jQuery UI Datepicker
+ *
+ * Copyright (c) 2006, 2007, 2008 Marc Grabanski
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Datepicker
+ *
+ * Depends:
+ *	ui.core.js
+ *
+ * Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
+ */
+   
+(function($) { // hide the namespace
+
+var PROP_NAME = 'datepicker';
+
+/* Date picker manager.
+   Use the singleton instance of this class, $.datepicker, to interact with the date picker.
+   Settings for (groups of) date pickers are maintained in an instance object,
+   allowing multiple different settings on the same page. */
+
+function Datepicker() {
+	this.debug = false; // Change this to true to start debugging
+	this._curInst = null; // The current instance in use
+	this._disabledInputs = []; // List of date picker inputs that have been disabled
+	this._datepickerShowing = false; // True if the popup picker is showing , false if not
+	this._inDialog = false; // True if showing within a "dialog", false if not
+	this._mainDivId = 'ui-datepicker-div'; // The ID of the main datepicker division
+	this._appendClass = 'ui-datepicker-append'; // The name of the append marker class
+	this._triggerClass = 'ui-datepicker-trigger'; // The name of the trigger marker class
+	this._dialogClass = 'ui-datepicker-dialog'; // The name of the dialog marker class
+	this._promptClass = 'ui-datepicker-prompt'; // The name of the dialog prompt marker class
+	this._unselectableClass = 'ui-datepicker-unselectable'; // The name of the unselectable cell marker class
+	this._currentClass = 'ui-datepicker-current-day'; // The name of the current day marker class
+	this.regional = []; // Available regional settings, indexed by language code
+	this.regional[''] = { // Default regional settings
+		clearText: 'Clear', // Display text for clear link
+		clearStatus: 'Erase the current date', // Status text for clear link
+		closeText: 'Close', // Display text for close link
+		closeStatus: 'Close without change', // Status text for close link
+		prevText: '&#x3c;Prev', // Display text for previous month link
+		prevStatus: 'Show the previous month', // Status text for previous month link
+		nextText: 'Next&#x3e;', // Display text for next month link
+		nextStatus: 'Show the next month', // Status text for next month link
+		currentText: 'Today', // Display text for current month link
+		currentStatus: 'Show the current month', // Status text for current month link
+		monthNames: ['January','February','March','April','May','June',
+			'July','August','September','October','November','December'], // Names of months for drop-down and formatting
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // For formatting
+		monthStatus: 'Show a different month', // Status text for selecting a month
+		yearStatus: 'Show a different year', // Status text for selecting a year
+		weekHeader: 'Wk', // Header for the week of the year column
+		weekStatus: 'Week of the year', // Status text for the week of the year column
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], // For formatting
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // For formatting
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Column headings for days starting at Sunday
+		dayStatus: 'Set DD as first week day', // Status text for the day of the week selection
+		dateStatus: 'Select DD, M d', // Status text for the date selection
+		dateFormat: 'mm/dd/yy', // See format options on parseDate
+		firstDay: 0, // The first day of the week, Sun = 0, Mon = 1, ...
+		initStatus: 'Select a date', // Initial Status text on opening
+		isRTL: false // True if right-to-left language, false if left-to-right
+	};
+	this._defaults = { // Global defaults for all the date picker instances
+		showOn: 'focus', // 'focus' for popup on focus,
+			// 'button' for trigger button, or 'both' for either
+		showAnim: 'show', // Name of jQuery animation for popup
+		showOptions: {}, // Options for enhanced animations
+		defaultDate: null, // Used when field is blank: actual date,
+			// +/-number for offset from today, null for today
+		appendText: '', // Display text following the input box, e.g. showing the format
+		buttonText: '...', // Text for trigger button
+		buttonImage: '', // URL for trigger button image
+		buttonImageOnly: false, // True if the image appears alone, false if it appears on a button
+		closeAtTop: true, // True to have the clear/close at the top,
+			// false to have them at the bottom
+		mandatory: false, // True to hide the Clear link, false to include it
+		hideIfNoPrevNext: false, // True to hide next/previous month links
+			// if not applicable, false to just disable them
+		navigationAsDateFormat: false, // True if date formatting applied to prev/today/next links
+		gotoCurrent: false, // True if today link goes back to current selection instead
+		changeMonth: true, // True if month can be selected directly, false if only prev/next
+		changeYear: true, // True if year can be selected directly, false if only prev/next
+		yearRange: '-10:+10', // Range of years to display in drop-down,
+			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
+		changeFirstDay: true, // True to click on day name to change, false to remain as set
+		highlightWeek: false, // True to highlight the selected week
+		showOtherMonths: false, // True to show dates in other months, false to leave blank
+		showWeeks: false, // True to show week of the year, false to omit
+		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
+			// takes a Date and returns the number of the week for it
+		shortYearCutoff: '+10', // Short year values < this are in the current century,
+			// > this are in the previous century, 
+			// string value starting with '+' for current year + value
+		showStatus: false, // True to show status bar at bottom, false to not show it
+		statusForDate: this.dateStatus, // Function to provide status text for a date -
+			// takes date and instance as parameters, returns display text
+		minDate: null, // The earliest selectable date, or null for no limit
+		maxDate: null, // The latest selectable date, or null for no limit
+		duration: 'normal', // Duration of display/closure
+		beforeShowDay: null, // Function that takes a date and returns an array with
+			// [0] = true if selectable, false if not, [1] = custom CSS class name(s) or '', 
+			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
+		beforeShow: null, // Function that takes an input field and
+			// returns a set of custom settings for the date picker
+		onSelect: null, // Define a callback function when a date is selected
+		onChangeMonthYear: null, // Define a callback function when the month or year is changed
+		onClose: null, // Define a callback function when the datepicker is closed
+		numberOfMonths: 1, // Number of months to show at a time
+		stepMonths: 1, // Number of months to step back/forward
+		rangeSelect: false, // Allows for selecting a date range on one date picker
+		rangeSeparator: ' - ', // Text between two dates in a range
+		altField: '', // Selector for an alternate field to store selected dates into
+		altFormat: '' // The date format to use for the alternate field
+	};
+	$.extend(this._defaults, this.regional['']);
+	this.dpDiv = $('<div id="' + this._mainDivId + '" style="display: none;"></div>');
+}
+
+$.extend(Datepicker.prototype, {
+	/* Class name added to elements to indicate already configured with a date picker. */
+	markerClassName: 'hasDatepicker',
+
+	/* Debug logging (if enabled). */
+	log: function () {
+		if (this.debug)
+			console.log.apply('', arguments);
+	},
+	
+	/* Override the default settings for all instances of the date picker. 
+	   @param  settings  object - the new settings to use as defaults (anonymous object)
+	   @return the manager object */
+	setDefaults: function(settings) {
+		extendRemove(this._defaults, settings || {});
+		return this;
+	},
+
+	/* Attach the date picker to a jQuery selection.
+	   @param  target    element - the target input field or division or span
+	   @param  settings  object - the new settings to use for this date picker instance (anonymous) */
+	_attachDatepicker: function(target, settings) {
+		// check for settings on the control itself - in namespace 'date:'
+		var inlineSettings = null;
+		for (attrName in this._defaults) {
+			var attrValue = target.getAttribute('date:' + attrName);
+			if (attrValue) {
+				inlineSettings = inlineSettings || {};
+				try {
+					inlineSettings[attrName] = eval(attrValue);
+				} catch (err) {
+					inlineSettings[attrName] = attrValue;
+				}
+			}
+		}
+		var nodeName = target.nodeName.toLowerCase();
+		var inline = (nodeName == 'div' || nodeName == 'span');
+		if (!target.id)
+			target.id = 'dp' + new Date().getTime();
+		var inst = this._newInst($(target), inline);
+		inst.settings = $.extend({}, settings || {}, inlineSettings || {}); 
+		if (nodeName == 'input') {
+			this._connectDatepicker(target, inst);
+		} else if (inline) {
+			this._inlineDatepicker(target, inst);
+		}
+	},
+
+	/* Create a new instance object. */
+	_newInst: function(target, inline) {
+		return {id: target[0].id, input: target, // associated target
+			selectedDay: 0, selectedMonth: 0, selectedYear: 0, // current selection
+			drawMonth: 0, drawYear: 0, // month being drawn
+			inline: inline, // is datepicker inline or not
+			dpDiv: (!inline ? this.dpDiv : // presentation div
+			$('<div class="ui-datepicker-inline"></div>'))};
+	},
+
+	/* Attach the date picker to an input field. */
+	_connectDatepicker: function(target, inst) {
+		var input = $(target);
+		if (input.hasClass(this.markerClassName))
+			return;
+		var appendText = this._get(inst, 'appendText');
+		var isRTL = this._get(inst, 'isRTL');
+		if (appendText)
+			input[isRTL ? 'before' : 'after']('<span class="' + this._appendClass + '">' + appendText + '</span>');
+		var showOn = this._get(inst, 'showOn');
+		if (showOn == 'focus' || showOn == 'both') // pop-up date picker when in the marked field
+			input.focus(this._showDatepicker);
+		if (showOn == 'button' || showOn == 'both') { // pop-up date picker when button clicked
+			var buttonText = this._get(inst, 'buttonText');
+			var buttonImage = this._get(inst, 'buttonImage');
+			var trigger = $(this._get(inst, 'buttonImageOnly') ? 
+				$('<img/>').addClass(this._triggerClass).
+					attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
+				$('<button type="button"></button>').addClass(this._triggerClass).
+					html(buttonImage == '' ? buttonText : $('<img/>').attr(
+					{ src:buttonImage, alt:buttonText, title:buttonText })));
+			input[isRTL ? 'before' : 'after'](trigger);
+			trigger.click(function() {
+				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == target)
+					$.datepicker._hideDatepicker();
+				else
+					$.datepicker._showDatepicker(target);
+				return false;
+			});
+		}
+		input.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress).
+			bind("setData.datepicker", function(event, key, value) {
+				inst.settings[key] = value;
+			}).bind("getData.datepicker", function(event, key) {
+				return this._get(inst, key);
+			});
+		$.data(target, PROP_NAME, inst);
+	},
+
+	/* Attach an inline date picker to a div. */
+	_inlineDatepicker: function(target, inst) {
+		var input = $(target);
+		if (input.hasClass(this.markerClassName))
+			return;
+		input.addClass(this.markerClassName).append(inst.dpDiv).
+			bind("setData.datepicker", function(event, key, value){
+				inst.settings[key] = value;
+			}).bind("getData.datepicker", function(event, key){
+				return this._get(inst, key);
+			});
+		$.data(target, PROP_NAME, inst);
+		this._setDate(inst, this._getDefaultDate(inst));
+		this._updateDatepicker(inst);
+	},
+
+	/* Tidy up after displaying the date picker. */
+	_inlineShow: function(inst) {
+		var numMonths = this._getNumberOfMonths(inst); // fix width for dynamic number of date pickers
+		inst.dpDiv.width(numMonths[1] * $('.ui-datepicker', inst.dpDiv[0]).width());
+	}, 
+
+	/* Pop-up the date picker in a "dialog" box.
+	   @param  input     element - ignored
+	   @param  dateText  string - the initial date to display (in the current format)
+	   @param  onSelect  function - the function(dateText) to call when a date is selected
+	   @param  settings  object - update the dialog date picker instance's settings (anonymous object)
+	   @param  pos       int[2] - coordinates for the dialog's position within the screen or
+	                     event - with x/y coordinates or
+	                     leave empty for default (screen centre)
+	   @return the manager object */
+	_dialogDatepicker: function(input, dateText, onSelect, settings, pos) {
+		var inst = this._dialogInst; // internal instance
+		if (!inst) {
+			var id = 'dp' + new Date().getTime();
+			this._dialogInput = $('<input type="text" id="' + id +
+				'" size="1" style="position: absolute; top: -100px;"/>');
+			this._dialogInput.keydown(this._doKeyDown);
+			$('body').append(this._dialogInput);
+			inst = this._dialogInst = this._newInst(this._dialogInput, false);
+			inst.settings = {};
+			$.data(this._dialogInput[0], PROP_NAME, inst);
+		}
+		extendRemove(inst.settings, settings || {});
+		this._dialogInput.val(dateText);
+
+		this._pos = (pos ? (pos.length ? pos : [pos.pageX, pos.pageY]) : null);
+		if (!this._pos) {
+			var browserWidth = window.innerWidth || document.documentElement.clientWidth ||	document.body.clientWidth;
+			var browserHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+			this._pos = // should use actual width/height below
+				[(browserWidth / 2) - 100 + scrollX, (browserHeight / 2) - 150 + scrollY];
+		}
+
+		// move input on screen for focus, but hidden behind dialog
+		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
+		inst.settings.onSelect = onSelect;
+		this._inDialog = true;
+		this.dpDiv.addClass(this._dialogClass);
+		this._showDatepicker(this._dialogInput[0]);
+		if ($.blockUI)
+			$.blockUI(this.dpDiv);
+		$.data(this._dialogInput[0], PROP_NAME, inst);
+		return this;
+	},
+
+	/* Detach a datepicker from its control.
+	   @param  target    element - the target input field or division or span */
+	_destroyDatepicker: function(target) {
+		var nodeName = target.nodeName.toLowerCase();
+		var $target = $(target);
+		$.removeData(target, PROP_NAME);
+		if (nodeName == 'input') {
+			$target.siblings('.' + this._appendClass).remove().end().
+				siblings('.' + this._triggerClass).remove().end().
+				removeClass(this.markerClassName).
+				unbind('focus', this._showDatepicker).
+				unbind('keydown', this._doKeyDown).
+				unbind('keypress', this._doKeyPress);
+		} else if (nodeName == 'div' || nodeName == 'span')
+			$target.removeClass(this.markerClassName).empty();
+	},
+
+	/* Enable the date picker to a jQuery selection.
+	   @param  target    element - the target input field or division or span */
+	_enableDatepicker: function(target) {
+		target.disabled = false;
+		$(target).siblings('button.' + this._triggerClass).each(function() { this.disabled = false; }).end().
+			siblings('img.' + this._triggerClass).css({opacity: '1.0', cursor: ''});
+		this._disabledInputs = $.map(this._disabledInputs,
+			function(value) { return (value == target ? null : value); }); // delete entry
+	},
+
+	/* Disable the date picker to a jQuery selection.
+	   @param  target    element - the target input field or division or span */
+	_disableDatepicker: function(target) {
+		target.disabled = true;
+		$(target).siblings('button.' + this._triggerClass).each(function() { this.disabled = true; }).end().
+			siblings('img.' + this._triggerClass).css({opacity: '0.5', cursor: 'default'});
+		this._disabledInputs = $.map(this._disabledInputs,
+			function(value) { return (value == target ? null : value); }); // delete entry
+		this._disabledInputs[this._disabledInputs.length] = target;
+	},
+
+	/* Is the first field in a jQuery collection disabled as a datepicker?
+	   @param  target    element - the target input field or division or span
+	   @return boolean - true if disabled, false if enabled */
+	_isDisabledDatepicker: function(target) {
+		if (!target)
+			return false;
+		for (var i = 0; i < this._disabledInputs.length; i++) {
+			if (this._disabledInputs[i] == target)
+				return true;
+		}
+		return false;
+	},
+
+	/* Update the settings for a date picker attached to an input field or division.
+	   @param  target  element - the target input field or division or span
+	   @param  name    object - the new settings to update or
+	                   string - the name of the setting to change or
+	   @param  value   any - the new value for the setting (omit if above is an object) */
+	_changeDatepicker: function(target, name, value) {
+		var settings = name || {};
+		if (typeof name == 'string') {
+			settings = {};
+			settings[name] = value;
+		}
+		if (inst = $.data(target, PROP_NAME)) {
+			extendRemove(inst.settings, settings);
+			this._updateDatepicker(inst);
+		}
+	},
+
+	/* Set the dates for a jQuery selection.
+	   @param  target   element - the target input field or division or span
+	   @param  date     Date - the new date
+	   @param  endDate  Date - the new end date for a range (optional) */
+	_setDateDatepicker: function(target, date, endDate) {
+		var inst = $.data(target, PROP_NAME);
+		if (inst) {
+			this._setDate(inst, date, endDate);
+			this._updateDatepicker(inst);
+		}
+	},
+
+	/* Get the date(s) for the first entry in a jQuery selection.
+	   @param  target  element - the target input field or division or span
+	   @return Date - the current date or
+	           Date[2] - the current dates for a range */
+	_getDateDatepicker: function(target) {
+		var inst = $.data(target, PROP_NAME);
+		if (inst)
+			this._setDateFromField(inst); 
+		return (inst ? this._getDate(inst) : null);
+	},
+
+	/* Handle keystrokes. */
+	_doKeyDown: function(e) {
+		var inst = $.data(e.target, PROP_NAME);
+		var handled = true;
+		if ($.datepicker._datepickerShowing)
+			switch (e.keyCode) {
+				case 9:  $.datepicker._hideDatepicker(null, '');
+						break; // hide on tab out
+				case 13: $.datepicker._selectDay(e.target, inst.selectedMonth, inst.selectedYear,
+							$('td.ui-datepicker-days-cell-over', inst.dpDiv)[0]);
+						return false; // don't submit the form
+						break; // select the value on enter
+				case 27: $.datepicker._hideDatepicker(null, $.datepicker._get(inst, 'duration'));
+						break; // hide on escape
+				case 33: $.datepicker._adjustDate(e.target, (e.ctrlKey ? -1 :
+							-$.datepicker._get(inst, 'stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
+						break; // previous month/year on page up/+ ctrl
+				case 34: $.datepicker._adjustDate(e.target, (e.ctrlKey ? +1 :
+							+$.datepicker._get(inst, 'stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
+						break; // next month/year on page down/+ ctrl
+				case 35: if (e.ctrlKey) $.datepicker._clearDate(e.target);
+						break; // clear on ctrl+end
+				case 36: if (e.ctrlKey) $.datepicker._gotoToday(e.target);
+						break; // current on ctrl+home
+				case 37: if (e.ctrlKey) $.datepicker._adjustDate(e.target, -1, 'D');
+						break; // -1 day on ctrl+left
+				case 38: if (e.ctrlKey) $.datepicker._adjustDate(e.target, -7, 'D');
+						break; // -1 week on ctrl+up
+				case 39: if (e.ctrlKey) $.datepicker._adjustDate(e.target, +1, 'D');
+						break; // +1 day on ctrl+right
+				case 40: if (e.ctrlKey) $.datepicker._adjustDate(e.target, +7, 'D');
+						break; // +1 week on ctrl+down
+				default: handled = false;
+			}
+		else if (e.keyCode == 36 && e.ctrlKey) // display the date picker on ctrl+home
+			$.datepicker._showDatepicker(this);
+		else
+			handled = false;
+		if (handled) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	},
+
+	/* Filter entered characters - based on date format. */
+	_doKeyPress: function(e) {
+		var inst = $.data(e.target, PROP_NAME);
+		var chars = $.datepicker._possibleChars($.datepicker._get(inst, 'dateFormat'));
+		var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
+		return e.ctrlKey || (chr < ' ' || !chars || chars.indexOf(chr) > -1);
+	},
+
+	/* Pop-up the date picker for a given input field.
+	   @param  input  element - the input field attached to the date picker or
+	                  event - if triggered by focus */
+	_showDatepicker: function(input) {
+		input = input.target || input;
+		if (input.nodeName.toLowerCase() != 'input') // find from button/image trigger
+			input = $('input', input.parentNode)[0];
+		if ($.datepicker._isDisabledDatepicker(input) || $.datepicker._lastInput == input) // already here
+			return;
+		var inst = $.data(input, PROP_NAME);
+		var beforeShow = $.datepicker._get(inst, 'beforeShow');
+		extendRemove(inst.settings, (beforeShow ? beforeShow.apply(input, [input, inst]) : {}));
+		$.datepicker._hideDatepicker(null, '');
+		$.datepicker._lastInput = input;
+		$.datepicker._setDateFromField(inst);
+		if ($.datepicker._inDialog) // hide cursor
+			input.value = '';
+		if (!$.datepicker._pos) { // position below input
+			$.datepicker._pos = $.datepicker._findPos(input);
+			$.datepicker._pos[1] += input.offsetHeight; // add the height
+		}
+		var isFixed = false;
+		$(input).parents().each(function() {
+			isFixed |= $(this).css('position') == 'fixed';
+			return !isFixed;
+		});
+		if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
+			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
+			$.datepicker._pos[1] -= document.documentElement.scrollTop;
+		}
+		var offset = {left: $.datepicker._pos[0], top: $.datepicker._pos[1]};
+		$.datepicker._pos = null;
+		inst.rangeStart = null;
+		// determine sizing offscreen
+		inst.dpDiv.css({position: 'absolute', display: 'block', top: '-1000px'});
+		$.datepicker._updateDatepicker(inst);
+		// fix width for dynamic number of date pickers
+		inst.dpDiv.width($.datepicker._getNumberOfMonths(inst)[1] *
+			$('.ui-datepicker', inst.dpDiv[0])[0].offsetWidth);
+		// and adjust position before showing
+		offset = $.datepicker._checkOffset(inst, offset, isFixed);
+		inst.dpDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
+			'static' : (isFixed ? 'fixed' : 'absolute')), display: 'none',
+			left: offset.left + 'px', top: offset.top + 'px'});
+		if (!inst.inline) {
+			var showAnim = $.datepicker._get(inst, 'showAnim') || 'show';
+			var duration = $.datepicker._get(inst, 'duration');
+			var postProcess = function() {
+				$.datepicker._datepickerShowing = true;
+				if ($.browser.msie && parseInt($.browser.version) < 7) // fix IE < 7 select problems
+					$('iframe.ui-datepicker-cover').css({width: inst.dpDiv.width() + 4,
+						height: inst.dpDiv.height() + 4});
+			};
+			if ($.effects && $.effects[showAnim])
+				inst.dpDiv.show(showAnim, $.datepicker._get(inst, 'showOptions'), duration, postProcess);
+			else
+				inst.dpDiv[showAnim](duration, postProcess);
+			if (duration == '')
+				postProcess();
+			if (inst.input[0].type != 'hidden')
+				inst.input[0].focus();
+			$.datepicker._curInst = inst;
+		}
+	},
+
+	/* Generate the date picker content. */
+	_updateDatepicker: function(inst) {
+		var dims = {width: inst.dpDiv.width() + 4,
+			height: inst.dpDiv.height() + 4};
+		inst.dpDiv.empty().append(this._generateDatepicker(inst)).
+			find('iframe.ui-datepicker-cover').
+			css({width: dims.width, height: dims.height});
+		var numMonths = this._getNumberOfMonths(inst);
+		inst.dpDiv[(numMonths[0] != 1 || numMonths[1] != 1 ? 'add' : 'remove') +
+			'Class']('ui-datepicker-multi');
+		inst.dpDiv[(this._get(inst, 'isRTL') ? 'add' : 'remove') +
+			'Class']('ui-datepicker-rtl');
+		if (inst.input && inst.input[0].type != 'hidden')
+			$(inst.input[0]).focus();
+	},
+
+	/* Check positioning to remain on screen. */
+	_checkOffset: function(inst, offset, isFixed) {
+		var pos = inst.input ? this._findPos(inst.input[0]) : null;
+		var browserWidth = window.innerWidth || document.documentElement.clientWidth;
+		var browserHeight = window.innerHeight || document.documentElement.clientHeight;
+		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+		// reposition date picker horizontally if outside the browser window
+		if (this._get(inst, 'isRTL') || (offset.left + inst.dpDiv.width() - scrollX) > browserWidth)
+			offset.left = Math.max((isFixed ? 0 : scrollX),
+				pos[0] + (inst.input ? inst.input.width() : 0) - (isFixed ? scrollX : 0) - inst.dpDiv.width() -
+				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0));
+		else
+			offset.left -= (isFixed ? scrollX : 0);
+		// reposition date picker vertically if outside the browser window
+		if ((offset.top + inst.dpDiv.height() - scrollY) > browserHeight)
+			offset.top = Math.max((isFixed ? 0 : scrollY),
+				pos[1] - (isFixed ? scrollY : 0) - (this._inDialog ? 0 : inst.dpDiv.height()) -
+				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0));
+		else
+			offset.top -= (isFixed ? scrollY : 0);
+		return offset;
+	},
+	
+	/* Find an object's position on the screen. */
+	_findPos: function(obj) {
+        while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
+            obj = obj.nextSibling;
+        }
+        var position = $(obj).offset();
+	    return [position.left, position.top];
+	},
+
+	/* Hide the date picker from view.
+	   @param  input  element - the input field attached to the date picker
+	   @param  duration  string - the duration over which to close the date picker */
+	_hideDatepicker: function(input, duration) {
+		var inst = this._curInst;
+		if (!inst)
+			return;
+		var rangeSelect = this._get(inst, 'rangeSelect');
+		if (rangeSelect && this._stayOpen)
+			this._selectDate('#' + inst.id, this._formatDate(inst,
+				inst.currentDay, inst.currentMonth, inst.currentYear));
+		this._stayOpen = false;
+		if (this._datepickerShowing) {
+			duration = (duration != null ? duration : this._get(inst, 'duration'));
+			var showAnim = this._get(inst, 'showAnim');
+			var postProcess = function() {
+				$.datepicker._tidyDialog(inst);
+			};
+			if (duration != '' && $.effects && $.effects[showAnim])
+				inst.dpDiv.hide(showAnim, $.datepicker._get(inst, 'showOptions'),
+					duration, postProcess);
+			else
+				inst.dpDiv[(duration == '' ? 'hide' : (showAnim == 'slideDown' ? 'slideUp' :
+					(showAnim == 'fadeIn' ? 'fadeOut' : 'hide')))](duration, postProcess);
+			if (duration == '')
+				this._tidyDialog(inst);
+			var onClose = this._get(inst, 'onClose');
+			if (onClose)
+				onClose.apply((inst.input ? inst.input[0] : null),
+					[this._getDate(inst), inst]);  // trigger custom callback
+			this._datepickerShowing = false;
+			this._lastInput = null;
+			inst.settings.prompt = null;
+			if (this._inDialog) {
+				this._dialogInput.css({ position: 'absolute', left: '0', top: '-100px' });
+				if ($.blockUI) {
+					$.unblockUI();
+					$('body').append(this.dpDiv);
+				}
+			}
+			this._inDialog = false;
+		}
+		this._curInst = null;
+	},
+
+	/* Tidy up after a dialog display. */
+	_tidyDialog: function(inst) {
+		inst.dpDiv.removeClass(this._dialogClass).unbind('.ui-datepicker');
+		$('.' + this._promptClass, inst.dpDiv).remove();
+	},
+
+	/* Close date picker if clicked elsewhere. */
+	_checkExternalClick: function(event) {
+		if (!$.datepicker._curInst)
+			return;
+		var $target = $(event.target);
+		if (($target.parents('#' + $.datepicker._mainDivId).length == 0) &&
+				!$target.hasClass($.datepicker.markerClassName) &&
+				!$target.hasClass($.datepicker._triggerClass) &&
+				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI))
+			$.datepicker._hideDatepicker(null, '');
+	},
+
+	/* Adjust one of the date sub-fields. */
+	_adjustDate: function(id, offset, period) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		this._adjustInstDate(inst, offset, period);
+		this._updateDatepicker(inst);
+	},
+
+	/* Action for current link. */
+	_gotoToday: function(id) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		if (this._get(inst, 'gotoCurrent') && inst.currentDay) {
+			inst.selectedDay = inst.currentDay;
+			inst.drawMonth = inst.selectedMonth = inst.currentMonth;
+			inst.drawYear = inst.selectedYear = inst.currentYear;
+		}
+		else {
+		var date = new Date();
+		inst.selectedDay = date.getDate();
+		inst.drawMonth = inst.selectedMonth = date.getMonth();
+		inst.drawYear = inst.selectedYear = date.getFullYear();
+		}
+		this._adjustDate(target);
+		this._notifyChange(inst);
+	},
+
+	/* Action for selecting a new month/year. */
+	_selectMonthYear: function(id, select, period) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		inst._selectingMonthYear = false;
+		inst[period == 'M' ? 'drawMonth' : 'drawYear'] =
+			select.options[select.selectedIndex].value - 0;
+		this._adjustDate(target);
+		this._notifyChange(inst);
+	},
+
+	/* Restore input focus after not changing month/year. */
+	_clickMonthYear: function(id) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		if (inst.input && inst._selectingMonthYear && !$.browser.msie)
+			inst.input[0].focus();
+		inst._selectingMonthYear = !inst._selectingMonthYear;
+	},
+
+	/* Action for changing the first week day. */
+	_changeFirstDay: function(id, day) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		inst.settings.firstDay = day;
+		this._updateDatepicker(inst);
+	},
+
+	/* Action for selecting a day. */
+	_selectDay: function(id, month, year, td) {
+		if ($(td).hasClass(this._unselectableClass))
+			return;
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		var rangeSelect = this._get(inst, 'rangeSelect');
+		if (rangeSelect) {
+			this._stayOpen = !this._stayOpen;
+			if (this._stayOpen) {
+				$('.ui-datepicker td').removeClass(this._currentClass);
+				$(td).addClass(this._currentClass);
+			} 
+		}
+		inst.selectedDay = inst.currentDay = $('a', td).html();
+		inst.selectedMonth = inst.currentMonth = month;
+		inst.selectedYear = inst.currentYear = year;
+		if (this._stayOpen) {
+			inst.endDay = inst.endMonth = inst.endYear = null;
+		}
+		else if (rangeSelect) {
+			inst.endDay = inst.currentDay;
+			inst.endMonth = inst.currentMonth;
+			inst.endYear = inst.currentYear;
+		}
+		this._selectDate(id, this._formatDate(inst,
+			inst.currentDay, inst.currentMonth, inst.currentYear));
+		if (this._stayOpen) {
+			inst.rangeStart = new Date(inst.currentYear, inst.currentMonth, inst.currentDay);
+			this._updateDatepicker(inst);
+		}
+		else if (rangeSelect) {
+			inst.selectedDay = inst.currentDay = inst.rangeStart.getDate();
+			inst.selectedMonth = inst.currentMonth = inst.rangeStart.getMonth();
+			inst.selectedYear = inst.currentYear = inst.rangeStart.getFullYear();
+			inst.rangeStart = null;
+			if (inst.inline)
+				this._updateDatepicker(inst);
+		}
+	},
+
+	/* Erase the input field and hide the date picker. */
+	_clearDate: function(id) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		if (this._get(inst, 'mandatory'))
+			return;
+		this._stayOpen = false;
+		inst.endDay = inst.endMonth = inst.endYear = inst.rangeStart = null;
+		this._selectDate(target, '');
+	},
+
+	/* Update the input field with the selected date. */
+	_selectDate: function(id, dateStr) {
+		var target = $(id);
+		var inst = $.data(target[0], PROP_NAME);
+		dateStr = (dateStr != null ? dateStr : this._formatDate(inst));
+		if (this._get(inst, 'rangeSelect') && dateStr)
+			dateStr = (inst.rangeStart ? this._formatDate(inst, inst.rangeStart) :
+				dateStr) + this._get(inst, 'rangeSeparator') + dateStr;
+		if (inst.input)
+			inst.input.val(dateStr);
+		this._updateAlternate(inst);
+		var onSelect = this._get(inst, 'onSelect');
+		if (onSelect)
+			onSelect.apply((inst.input ? inst.input[0] : null), [dateStr, inst]);  // trigger custom callback
+		else if (inst.input)
+			inst.input.trigger('change'); // fire the change event
+		if (inst.inline)
+			this._updateDatepicker(inst);
+		else if (!this._stayOpen) {
+			this._hideDatepicker(null, this._get(inst, 'duration'));
+			this._lastInput = inst.input[0];
+			if (typeof(inst.input[0]) != 'object')
+				inst.input[0].focus(); // restore focus
+			this._lastInput = null;
+		}
+	},
+	
+	/* Update any alternate field to synchronise with the main field. */
+	_updateAlternate: function(inst) {
+		var altField = this._get(inst, 'altField');
+		if (altField) { // update alternate field too
+			var altFormat = this._get(inst, 'altFormat');
+			var date = this._getDate(inst);
+			dateStr = (isArray(date) ? (!date[0] && !date[1] ? '' :
+				this.formatDate(altFormat, date[0], this._getFormatConfig(inst)) +
+				this._get(inst, 'rangeSeparator') + this.formatDate(
+				altFormat, date[1] || date[0], this._getFormatConfig(inst))) :
+				this.formatDate(altFormat, date, this._getFormatConfig(inst)));
+			$(altField).each(function() { $(this).val(dateStr); });
+		}
+	},
+
+	/* Set as beforeShowDay function to prevent selection of weekends.
+	   @param  date  Date - the date to customise
+	   @return [boolean, string] - is this date selectable?, what is its CSS class? */
+	noWeekends: function(date) {
+		var day = date.getDay();
+		return [(day > 0 && day < 6), ''];
+	},
+	
+	/* Set as calculateWeek to determine the week of the year based on the ISO 8601 definition.
+	   @param  date  Date - the date to get the week for
+	   @return  number - the number of the week within the year that contains this date */
+	iso8601Week: function(date) {
+		var checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), (date.getTimezoneOffset() / -60));
+		var firstMon = new Date(checkDate.getFullYear(), 1 - 1, 4); // First week always contains 4 Jan
+		var firstDay = firstMon.getDay() || 7; // Day of week: Mon = 1, ..., Sun = 7
+		firstMon.setDate(firstMon.getDate() + 1 - firstDay); // Preceding Monday
+		if (firstDay < 4 && checkDate < firstMon) { // Adjust first three days in year if necessary
+			checkDate.setDate(checkDate.getDate() - 3); // Generate for previous year
+			return $.datepicker.iso8601Week(checkDate);
+		} else if (checkDate > new Date(checkDate.getFullYear(), 12 - 1, 28)) { // Check last three days in year
+			firstDay = new Date(checkDate.getFullYear() + 1, 1 - 1, 4).getDay() || 7;
+			if (firstDay > 4 && (checkDate.getDay() || 7) < firstDay - 3) { // Adjust if necessary
+				checkDate.setDate(checkDate.getDate() + 3); // Generate for next year
+				return $.datepicker.iso8601Week(checkDate);
+			}
+		}
+		return Math.floor(((checkDate - firstMon) / 86400000) / 7) + 1; // Weeks to given date
+	},
+	
+	/* Provide status text for a particular date.
+	   @param  date  the date to get the status for
+	   @param  inst  the current datepicker instance
+	   @return  the status display text for this date */
+	dateStatus: function(date, inst) {
+		return $.datepicker.formatDate($.datepicker._get(inst, 'dateStatus'),
+			date, $.datepicker._getFormatConfig(inst));
+	},
+
+	/* Parse a string value into a date object.
+	   See formatDate below for the possible formats.
+
+	   @param  format    string - the expected format of the date
+	   @param  value     string - the date in the above format
+	   @param  settings  Object - attributes include:
+	                     shortYearCutoff  number - the cutoff year for determining the century (optional)
+	                     dayNamesShort    string[7] - abbreviated names of the days from Sunday (optional)
+	                     dayNames         string[7] - names of the days from Sunday (optional)
+	                     monthNamesShort  string[12] - abbreviated names of the months (optional)
+	                     monthNames       string[12] - names of the months (optional)
+	   @return  Date - the extracted date value or null if value is blank */
+	parseDate: function (format, value, settings) {
+		if (format == null || value == null)
+			throw 'Invalid arguments';
+		value = (typeof value == 'object' ? value.toString() : value + '');
+		if (value == '')
+			return null;
+		var shortYearCutoff = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff;
+		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort;
+		var dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames;
+		var monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort;
+		var monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames;
+		var year = -1;
+		var month = -1;
+		var day = -1;
+		var literal = false;
+		// Check whether a format character is doubled
+		var lookAhead = function(match) {
+			var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) == match);
+			if (matches)
+				iFormat++;
+			return matches;	
+		};
+		// Extract a number from the string value
+		var getNumber = function(match) {
+			lookAhead(match);
+			var origSize = (match == '@' ? 14 : (match == 'y' ? 4 : 2));
+			var size = origSize;
+			var num = 0;
+			while (size > 0 && iValue < value.length &&
+					value.charAt(iValue) >= '0' && value.charAt(iValue) <= '9') {
+				num = num * 10 + (value.charAt(iValue++) - 0);
+				size--;
+			}
+			if (size == origSize)
+				throw 'Missing number at position ' + iValue;
+			return num;
+		};
+		// Extract a name from the string value and convert to an index
+		var getName = function(match, shortNames, longNames) {
+			var names = (lookAhead(match) ? longNames : shortNames);
+			var size = 0;
+			for (var j = 0; j < names.length; j++)
+				size = Math.max(size, names[j].length);
+			var name = '';
+			var iInit = iValue;
+			while (size > 0 && iValue < value.length) {
+				name += value.charAt(iValue++);
+				for (var i = 0; i < names.length; i++)
+					if (name == names[i])
+						return i + 1;
+				size--;
+			}
+			throw 'Unknown name at position ' + iInit;
+		};
+		// Confirm that a literal character matches the string value
+		var checkLiteral = function() {
+			if (value.charAt(iValue) != format.charAt(iFormat))
+				throw 'Unexpected literal at position ' + iValue;
+			iValue++;
+		};
+		var iValue = 0;
+		for (var iFormat = 0; iFormat < format.length; iFormat++) {
+			if (literal)
+				if (format.charAt(iFormat) == "'" && !lookAhead("'"))
+					literal = false;
+				else
+					checkLiteral();
+			else
+				switch (format.charAt(iFormat)) {
+					case 'd':
+						day = getNumber('d');
+						break;
+					case 'D': 
+						getName('D', dayNamesShort, dayNames);
+						break;
+					case 'm': 
+						month = getNumber('m');
+						break;
+					case 'M':
+						month = getName('M', monthNamesShort, monthNames); 
+						break;
+					case 'y':
+						year = getNumber('y');
+						break;
+					case '@':
+						var date = new Date(getNumber('@'));
+						year = date.getFullYear();
+						month = date.getMonth() + 1;
+						day = date.getDate();
+						break;
+					case "'":
+						if (lookAhead("'"))
+							checkLiteral();
+						else
+							literal = true;
+						break;
+					default:
+						checkLiteral();
+				}
+		}
+		if (year < 100)
+			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
+				(year <= shortYearCutoff ? 0 : -100);
+		var date = new Date(year, month - 1, day);
+		if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day)
+			throw 'Invalid date'; // E.g. 31/02/*
+		return date;
+	},
+
+	/* Standard date formats. */
+	ATOM: 'yy-mm-dd', // RFC 3339 (ISO 8601)
+	COOKIE: 'D, dd M yy',
+	ISO_8601: 'yy-mm-dd',
+	RFC_822: 'D, d M y',
+	RFC_850: 'DD, dd-M-y',
+	RFC_1036: 'D, d M y',
+	RFC_1123: 'D, d M yy',
+	RFC_2822: 'D, d M yy',
+	RSS: 'D, d M y', // RFC 822
+	TIMESTAMP: '@',
+	W3C: 'yy-mm-dd', // ISO 8601
+
+	/* Format a date object into a string value.
+	   The format can be combinations of the following:
+	   d  - day of month (no leading zero)
+	   dd - day of month (two digit)
+	   D  - day name short
+	   DD - day name long
+	   m  - month of year (no leading zero)
+	   mm - month of year (two digit)
+	   M  - month name short
+	   MM - month name long
+	   y  - year (two digit)
+	   yy - year (four digit)
+	   @ - Unix timestamp (ms since 01/01/1970)
+	   '...' - literal text
+	   '' - single quote
+
+	   @param  format    string - the desired format of the date
+	   @param  date      Date - the date value to format
+	   @param  settings  Object - attributes include:
+	                     dayNamesShort    string[7] - abbreviated names of the days from Sunday (optional)
+	                     dayNames         string[7] - names of the days from Sunday (optional)
+	                     monthNamesShort  string[12] - abbreviated names of the months (optional)
+	                     monthNames       string[12] - names of the months (optional)
+	   @return  string - the date in the above format */
+	formatDate: function (format, date, settings) {
+		if (!date)
+			return '';
+		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort;
+		var dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames;
+		var monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort;
+		var monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames;
+		// Check whether a format character is doubled
+		var lookAhead = function(match) {
+			var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) == match);
+			if (matches)
+				iFormat++;
+			return matches;	
+		};
+		// Format a number, with leading zero if necessary
+		var formatNumber = function(match, value) {
+			return (lookAhead(match) && value < 10 ? '0' : '') + value;
+		};
+		// Format a name, short or long as requested
+		var formatName = function(match, value, shortNames, longNames) {
+			return (lookAhead(match) ? longNames[value] : shortNames[value]);
+		};
+		var output = '';
+		var literal = false;
+		if (date)
+			for (var iFormat = 0; iFormat < format.length; iFormat++) {
+				if (literal)
+					if (format.charAt(iFormat) == "'" && !lookAhead("'"))
+						literal = false;
+					else
+						output += format.charAt(iFormat);
+				else
+					switch (format.charAt(iFormat)) {
+						case 'd':
+							output += formatNumber('d', date.getDate()); 
+							break;
+						case 'D': 
+							output += formatName('D', date.getDay(), dayNamesShort, dayNames);
+							break;
+						case 'm': 
+							output += formatNumber('m', date.getMonth() + 1); 
+							break;
+						case 'M':
+							output += formatName('M', date.getMonth(), monthNamesShort, monthNames); 
+							break;
+						case 'y':
+							output += (lookAhead('y') ? date.getFullYear() : 
+								(date.getYear() % 100 < 10 ? '0' : '') + date.getYear() % 100);
+							break;
+						case '@':
+							output += date.getTime(); 
+							break;
+						case "'":
+							if (lookAhead("'"))
+								output += "'";
+							else
+								literal = true;
+							break;
+						default:
+							output += format.charAt(iFormat);
+					}
+			}
+		return output;
+	},
+
+	/* Extract all possible characters from the date format. */
+	_possibleChars: function (format) {
+		var chars = '';
+		var literal = false;
+		for (var iFormat = 0; iFormat < format.length; iFormat++)
+			if (literal)
+				if (format.charAt(iFormat) == "'" && !lookAhead("'"))
+					literal = false;
+				else
+					chars += format.charAt(iFormat);
+			else
+				switch (format.charAt(iFormat)) {
+					case 'd': case 'm': case 'y': case '@':
+						chars += '0123456789'; 
+						break;
+					case 'D': case 'M':
+						return null; // Accept anything
+					case "'":
+						if (lookAhead("'"))
+							chars += "'";
+						else
+							literal = true;
+						break;
+					default:
+						chars += format.charAt(iFormat);
+				}
+		return chars;
+	},
+
+	/* Get a setting value, defaulting if necessary. */
+	_get: function(inst, name) {
+		return inst.settings[name] !== undefined ?
+			inst.settings[name] : this._defaults[name];
+	},
+
+	/* Parse existing date and initialise date picker. */
+	_setDateFromField: function(inst) {
+		var dateFormat = this._get(inst, 'dateFormat');
+		var dates = inst.input ? inst.input.val().split(this._get(inst, 'rangeSeparator')) : null; 
+		inst.endDay = inst.endMonth = inst.endYear = null;
+		var date = defaultDate = this._getDefaultDate(inst);
+		if (dates.length > 0) {
+			var settings = this._getFormatConfig(inst);
+			if (dates.length > 1) {
+				date = this.parseDate(dateFormat, dates[1], settings) || defaultDate;
+				inst.endDay = date.getDate();
+				inst.endMonth = date.getMonth();
+				inst.endYear = date.getFullYear();
+			}
+			try {
+				date = this.parseDate(dateFormat, dates[0], settings) || defaultDate;
+			} catch (e) {
+				this.log(e);
+				date = defaultDate;
+			}
+		}
+		inst.selectedDay = date.getDate();
+		inst.drawMonth = inst.selectedMonth = date.getMonth();
+		inst.drawYear = inst.selectedYear = date.getFullYear();
+		inst.currentDay = (dates[0] ? date.getDate() : 0);
+		inst.currentMonth = (dates[0] ? date.getMonth() : 0);
+		inst.currentYear = (dates[0] ? date.getFullYear() : 0);
+		this._adjustInstDate(inst);
+	},
+	
+	/* Retrieve the default date shown on opening. */
+	_getDefaultDate: function(inst) {
+		var date = this._determineDate(this._get(inst, 'defaultDate'), new Date());
+		var minDate = this._getMinMaxDate(inst, 'min', true);
+		var maxDate = this._getMinMaxDate(inst, 'max');
+		date = (minDate && date < minDate ? minDate : date);
+		date = (maxDate && date > maxDate ? maxDate : date);
+		return date;
+	},
+
+	/* A date may be specified as an exact value or a relative one. */
+	_determineDate: function(date, defaultDate) {
+		var offsetNumeric = function(offset) {
+			var date = new Date();
+			date.setUTCDate(date.getUTCDate() + offset);
+			return date;
+		};
+		var offsetString = function(offset, getDaysInMonth) {
+			var date = new Date();
+			var year = date.getFullYear();
+			var month = date.getMonth();
+			var day = date.getDate();
+			var pattern = /([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?/g;
+			var matches = pattern.exec(offset);
+			while (matches) {
+				switch (matches[2] || 'd') {
+					case 'd' : case 'D' :
+						day += (matches[1] - 0); break;
+					case 'w' : case 'W' :
+						day += (matches[1] * 7); break;
+					case 'm' : case 'M' :
+						month += (matches[1] - 0); 
+						day = Math.min(day, getDaysInMonth(year, month));
+						break;
+					case 'y': case 'Y' :
+						year += (matches[1] - 0);
+						day = Math.min(day, getDaysInMonth(year, month));
+						break;
+				}
+				matches = pattern.exec(offset);
+			}
+			return new Date(year, month, day);
+		};
+		return (date == null ? defaultDate :
+			(typeof date == 'string' ? offsetString(date, this._getDaysInMonth) :
+			(typeof date == 'number' ? offsetNumeric(date) : date)));
+	},
+
+	/* Set the date(s) directly. */
+	_setDate: function(inst, date, endDate) {
+		var clear = !(date);
+		date = this._determineDate(date, new Date());
+		inst.selectedDay = inst.currentDay = date.getDate();
+		inst.drawMonth = inst.selectedMonth = inst.currentMonth = date.getMonth();
+		inst.drawYear = inst.selectedYear = inst.currentYear = date.getFullYear();
+		if (this._get(inst, 'rangeSelect')) {
+			if (endDate) {
+				endDate = this._determineDate(endDate, null);
+				inst.endDay = endDate.getDate();
+				inst.endMonth = endDate.getMonth();
+				inst.endYear = endDate.getFullYear();
+			} else {
+				inst.endDay = inst.currentDay;
+				inst.endMonth = inst.currentMonth;
+				inst.endYear = inst.currentYear;
+			}
+		}
+		this._adjustInstDate(inst);
+		if (inst.input)
+			inst.input.val(clear ? '' : this._formatDate(inst) +
+				(!this._get(inst, 'rangeSelect') ? '' : this._get(inst, 'rangeSeparator') +
+				this._formatDate(inst, inst.endDay, inst.endMonth, inst.endYear)));
+	},
+
+	/* Retrieve the date(s) directly. */
+	_getDate: function(inst) {
+		var startDate = (!inst.currentYear || (inst.input && inst.input.val() == '') ? null :
+			new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
+		if (this._get(inst, 'rangeSelect')) {
+			return [inst.rangeStart || startDate, (!inst.endYear ? null :
+				new Date(inst.endYear, inst.endMonth, inst.endDay))];
+		} else
+			return startDate;
+	},
+
+	/* Generate the HTML for the current state of the date picker. */
+	_generateDatepicker: function(inst) {
+		var today = new Date();
+		today = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // clear time
+		var showStatus = this._get(inst, 'showStatus');
+		var isRTL = this._get(inst, 'isRTL');
+		// build the date picker HTML
+		var clear = (this._get(inst, 'mandatory') ? '' :
+			'<div class="ui-datepicker-clear"><a onclick="jQuery.datepicker._clearDate(\'#' + inst.id + '\');"' +
+			(showStatus ? this._addStatus(inst, this._get(inst, 'clearStatus') || '&#xa0;') : '') + '>' +
+			this._get(inst, 'clearText') + '</a></div>');
+		var controls = '<div class="ui-datepicker-control">' + (isRTL ? '' : clear) +
+			'<div class="ui-datepicker-close"><a onclick="jQuery.datepicker._hideDatepicker();"' +
+			(showStatus ? this._addStatus(inst, this._get(inst, 'closeStatus') || '&#xa0;') : '') + '>' +
+			this._get(inst, 'closeText') + '</a></div>' + (isRTL ? clear : '')  + '</div>';
+		var prompt = this._get(inst, 'prompt');
+		var closeAtTop = this._get(inst, 'closeAtTop');
+		var hideIfNoPrevNext = this._get(inst, 'hideIfNoPrevNext');
+		var navigationAsDateFormat = this._get(inst, 'navigationAsDateFormat');
+		var numMonths = this._getNumberOfMonths(inst);
+		var stepMonths = this._get(inst, 'stepMonths');
+		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
+		var currentDate = (!inst.currentDay ? new Date(9999, 9, 9) :
+			new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
+		var minDate = this._getMinMaxDate(inst, 'min', true);
+		var maxDate = this._getMinMaxDate(inst, 'max');
+		var drawMonth = inst.drawMonth;
+		var drawYear = inst.drawYear;
+		if (maxDate) {
+			var maxDraw = new Date(maxDate.getFullYear(),
+				maxDate.getMonth() - numMonths[1] + 1, maxDate.getDate());
+			maxDraw = (minDate && maxDraw < minDate ? minDate : maxDraw);
+			while (new Date(drawYear, drawMonth, 1) > maxDraw) {
+				drawMonth--;
+				if (drawMonth < 0) {
+					drawMonth = 11;
+					drawYear--;
+				}
+			}
+		}
+		// controls and links
+		var prevText = this._get(inst, 'prevText');
+		prevText = (!navigationAsDateFormat ? prevText : this.formatDate(
+			prevText, new Date(drawYear, drawMonth - stepMonths, 1), this._getFormatConfig(inst)));
+		var prev = '<div class="ui-datepicker-prev">' + (this._canAdjustMonth(inst, -1, drawYear, drawMonth) ? 
+			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', -' + stepMonths + ', \'M\');"' +
+			(showStatus ? this._addStatus(inst, this._get(inst, 'prevStatus') || '&#xa0;') : '') + '>' + prevText + '</a>' :
+			(hideIfNoPrevNext ? '' : '<label>' + prevText + '</label>')) + '</div>';
+		var nextText = this._get(inst, 'nextText');
+		nextText = (!navigationAsDateFormat ? nextText : this.formatDate(
+			nextText, new Date(drawYear, drawMonth + stepMonths, 1), this._getFormatConfig(inst)));
+		var next = '<div class="ui-datepicker-next">' + (this._canAdjustMonth(inst, +1, drawYear, drawMonth) ?
+			'<a onclick="jQuery.datepicker._adjustDate(\'#' + inst.id + '\', +' + stepMonths + ', \'M\');"' +
+			(showStatus ? this._addStatus(inst, this._get(inst, 'nextStatus') || '&#xa0;') : '') + '>' + nextText + '</a>' :
+			(hideIfNoPrevNext ? '' : '<label>' + nextText + '</label>')) + '</div>';
+		var currentText = this._get(inst, 'currentText');
+		currentText = (!navigationAsDateFormat ? currentText: this.formatDate(
+			currentText, today, this._getFormatConfig(inst)));
+		var html = (prompt ? '<div class="' + this._promptClass + '">' + prompt + '</div>' : '') +
+			(closeAtTop && !inst.inline ? controls : '') +
+			'<div class="ui-datepicker-links">' + (isRTL ? next : prev) +
+			(this._isInRange(inst, (this._get(inst, 'gotoCurrent') && inst.currentDay ?
+			currentDate : today)) ? '<div class="ui-datepicker-current">' +
+			'<a onclick="jQuery.datepicker._gotoToday(\'#' + inst.id + '\');"' +
+			(showStatus ? this._addStatus(inst, this._get(inst, 'currentStatus') || '&#xa0;') : '') + '>' +
+			currentText + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
+		var firstDay = this._get(inst, 'firstDay');
+		var changeFirstDay = this._get(inst, 'changeFirstDay');
+		var dayNames = this._get(inst, 'dayNames');
+		var dayNamesShort = this._get(inst, 'dayNamesShort');
+		var dayNamesMin = this._get(inst, 'dayNamesMin');
+		var monthNames = this._get(inst, 'monthNames');
+		var beforeShowDay = this._get(inst, 'beforeShowDay');
+		var highlightWeek = this._get(inst, 'highlightWeek');
+		var showOtherMonths = this._get(inst, 'showOtherMonths');
+		var showWeeks = this._get(inst, 'showWeeks');
+		var calculateWeek = this._get(inst, 'calculateWeek') || this.iso8601Week;
+		var status = (showStatus ? this._get(inst, 'dayStatus') || '&#xa0;' : '');
+		var dateStatus = this._get(inst, 'statusForDate') || this.dateStatus;
+		var endDate = inst.endDay ? new Date(inst.endYear, inst.endMonth, inst.endDay) : currentDate;
+		for (var row = 0; row < numMonths[0]; row++)
+			for (var col = 0; col < numMonths[1]; col++) {
+				var selectedDate = new Date(drawYear, drawMonth, inst.selectedDay);
+				html += '<div class="ui-datepicker-one-month' + (col == 0 ? ' ui-datepicker-new-row' : '') + '">' +
+					this._generateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
+					selectedDate, row > 0 || col > 0, showStatus, monthNames) + // draw month headers
+					'<table class="ui-datepicker" cellpadding="0" cellspacing="0"><thead>' + 
+					'<tr class="ui-datepicker-title-row">' +
+					(showWeeks ? '<td>' + this._get(inst, 'weekHeader') + '</td>' : '');
+				for (var dow = 0; dow < 7; dow++) { // days of the week
+					var day = (dow + firstDay) % 7;
+					var dayStatus = (status.indexOf('DD') > -1 ? status.replace(/DD/, dayNames[day]) :
+						status.replace(/D/, dayNamesShort[day]));
+					html += '<td' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="ui-datepicker-week-end-cell"' : '') + '>' +
+						(!changeFirstDay ? '<span' :
+						'<a onclick="jQuery.datepicker._changeFirstDay(\'#' + inst.id + '\', ' + day + ');"') + 
+						(showStatus ? this._addStatus(inst, dayStatus) : '') + ' title="' + dayNames[day] + '">' +
+						dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</td>';
+				}
+				html += '</tr></thead><tbody>';
+				var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
+				if (drawYear == inst.selectedYear && drawMonth == inst.selectedMonth)
+					inst.selectedDay = Math.min(inst.selectedDay, daysInMonth);
+				var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
+				var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
+				var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
+				for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
+					html += '<tr class="ui-datepicker-days-row">' +
+						(showWeeks ? '<td class="ui-datepicker-week-col">' + calculateWeek(printDate) + '</td>' : '');
+					for (var dow = 0; dow < 7; dow++) { // create date picker days
+						var daySettings = (beforeShowDay ?
+							beforeShowDay.apply((inst.input ? inst.input[0] : null), [printDate]) : [true, '']);
+						var otherMonth = (printDate.getMonth() != drawMonth);
+						var unselectable = otherMonth || !daySettings[0] ||
+							(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
+						html += '<td class="ui-datepicker-days-cell' +
+							((dow + firstDay + 6) % 7 >= 5 ? ' ui-datepicker-week-end-cell' : '') + // highlight weekends
+							(otherMonth ? ' ui-datepicker-otherMonth' : '') + // highlight days from other months
+							(printDate.getTime() == selectedDate.getTime() && drawMonth == inst.selectedMonth ?
+							' ui-datepicker-days-cell-over' : '') + // highlight selected day
+							(unselectable ? ' ' + this._unselectableClass : '') +  // highlight unselectable days
+							(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
+							(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
+							' ' + this._currentClass : '') + // highlight selected day
+							(printDate.getTime() == today.getTime() ? ' ui-datepicker-today' : '')) + '"' + // highlight today (if different)
+							((!otherMonth || showOtherMonths) && daySettings[2] ? ' title="' + daySettings[2] + '"' : '') + // cell title
+							(unselectable ? (highlightWeek ? ' onmouseover="jQuery(this).parent().addClass(\'ui-datepicker-week-over\');"' + // highlight selection week
+							' onmouseout="jQuery(this).parent().removeClass(\'ui-datepicker-week-over\');"' : '') : // unhighlight selection week
+							' onmouseover="jQuery(this).addClass(\'ui-datepicker-days-cell-over\')' + // highlight selection
+							(highlightWeek ? '.parent().addClass(\'ui-datepicker-week-over\')' : '') + ';' + // highlight selection week
+							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
+							inst.id + '\').html(\'' + (dateStatus.apply((inst.input ? inst.input[0] : null),
+							[printDate, inst]) || '&#xa0;') +'\');') + '"' +
+							' onmouseout="jQuery(this).removeClass(\'ui-datepicker-days-cell-over\')' + // unhighlight selection
+							(highlightWeek ? '.parent().removeClass(\'ui-datepicker-week-over\')' : '') + ';' + // unhighlight selection week
+							(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#ui-datepicker-status-' +
+							inst.id + '\').html(\'&#xa0;\');') + '" onclick="jQuery.datepicker._selectDay(\'#' +
+							inst.id + '\',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
+							(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
+							(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
+						printDate.setUTCDate(printDate.getUTCDate() + 1);
+					}
+					html += '</tr>';
+				}
+				drawMonth++;
+				if (drawMonth > 11) {
+					drawMonth = 0;
+					drawYear++;
+				}
+				html += '</tbody></table></div>';
+			}
+		html += (showStatus ? '<div style="clear: both;"></div><div id="ui-datepicker-status-' + inst.id + 
+			'" class="ui-datepicker-status">' + (this._get(inst, 'initStatus') || '&#xa0;') + '</div>' : '') +
+			(!closeAtTop && !inst.inline ? controls : '') +
+			'<div style="clear: both;"></div>' + 
+			($.browser.msie && parseInt($.browser.version) < 7 && !inst.inline ? 
+			'<iframe src="javascript:false;" class="ui-datepicker-cover"></iframe>' : '');
+		return html;
+	},
+	
+	/* Generate the month and year header. */
+	_generateMonthYearHeader: function(inst, drawMonth, drawYear, minDate, maxDate,
+			selectedDate, secondary, showStatus, monthNames) {
+		minDate = (inst.rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
+		var html = '<div class="ui-datepicker-header">';
+		// month selection
+		if (secondary || !this._get(inst, 'changeMonth'))
+			html += monthNames[drawMonth] + '&#xa0;';
+		else {
+			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
+			var inMaxYear = (maxDate && maxDate.getFullYear() == drawYear);
+			html += '<select class="ui-datepicker-new-month" ' +
+				'onchange="jQuery.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'M\');" ' +
+				'onclick="jQuery.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
+				(showStatus ? this._addStatus(inst, this._get(inst, 'monthStatus') || '&#xa0;') : '') + '>';
+			for (var month = 0; month < 12; month++) {
+				if ((!inMinYear || month >= minDate.getMonth()) &&
+						(!inMaxYear || month <= maxDate.getMonth()))
+					html += '<option value="' + month + '"' +
+						(month == drawMonth ? ' selected="selected"' : '') +
+						'>' + monthNames[month] + '</option>';
+			}
+			html += '</select>';
+		}
+		// year selection
+		if (secondary || !this._get(inst, 'changeYear'))
+			html += drawYear;
+		else {
+			// determine range of years to display
+			var years = this._get(inst, 'yearRange').split(':');
+			var year = 0;
+			var endYear = 0;
+			if (years.length != 2) {
+				year = drawYear - 10;
+				endYear = drawYear + 10;
+			} else if (years[0].charAt(0) == '+' || years[0].charAt(0) == '-') {
+				year = endYear = new Date().getFullYear();
+				year += parseInt(years[0], 10);
+				endYear += parseInt(years[1], 10);
+			} else {
+				year = parseInt(years[0], 10);
+				endYear = parseInt(years[1], 10);
+			}
+			year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
+			endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
+			html += '<select class="ui-datepicker-new-year" ' +
+				'onchange="jQuery.datepicker._selectMonthYear(\'#' + inst.id + '\', this, \'Y\');" ' +
+				'onclick="jQuery.datepicker._clickMonthYear(\'#' + inst.id + '\');"' +
+				(showStatus ? this._addStatus(inst, this._get(inst, 'yearStatus') || '&#xa0;') : '') + '>';
+			for (; year <= endYear; year++) {
+				html += '<option value="' + year + '"' +
+					(year == drawYear ? ' selected="selected"' : '') +
+					'>' + year + '</option>';
+			}
+			html += '</select>';
+		}
+		html += '</div>'; // Close datepicker_header
+		return html;
+	},
+
+	/* Provide code to set and clear the status panel. */
+	_addStatus: function(inst, text) {
+		return ' onmouseover="jQuery(\'#ui-datepicker-status-' + inst.id + '\').html(\'' + text + '\');" ' +
+			'onmouseout="jQuery(\'#ui-datepicker-status-' + inst.id + '\').html(\'&#xa0;\');"';
+	},
+
+	/* Adjust one of the date sub-fields. */
+	_adjustInstDate: function(inst, offset, period) {
+		var year = inst.drawYear + (period == 'Y' ? offset : 0);
+		var month = inst.drawMonth + (period == 'M' ? offset : 0);
+		var day = Math.min(inst.selectedDay, this._getDaysInMonth(year, month)) +
+			(period == 'D' ? offset : 0);
+		var date = new Date(year, month, day);
+		// ensure it is within the bounds set
+		var minDate = this._getMinMaxDate(inst, 'min', true);
+		var maxDate = this._getMinMaxDate(inst, 'max');
+		date = (minDate && date < minDate ? minDate : date);
+		date = (maxDate && date > maxDate ? maxDate : date);
+		inst.selectedDay = date.getDate();
+		inst.drawMonth = inst.selectedMonth = date.getMonth();
+		inst.drawYear = inst.selectedYear = date.getFullYear();
+		if (period == 'M' || period == 'Y')
+			this._notifyChange(inst);
+	},
+
+	/* Notify change of month/year. */
+	_notifyChange: function(inst) {
+		var onChange = this._get(inst, 'onChangeMonthYear');
+		if (onChange)
+			onChange.apply((inst.input ? inst.input[0] : null),
+				[new Date(inst.selectedYear, inst.selectedMonth, 1), inst]);
+	},
+	
+	/* Determine the number of months to show. */
+	_getNumberOfMonths: function(inst) {
+		var numMonths = this._get(inst, 'numberOfMonths');
+		return (numMonths == null ? [1, 1] : (typeof numMonths == 'number' ? [1, numMonths] : numMonths));
+	},
+
+	/* Determine the current maximum date - ensure no time components are set - may be overridden for a range. */
+	_getMinMaxDate: function(inst, minMax, checkRange) {
+		var date = this._determineDate(this._get(inst, minMax + 'Date'), null);
+		if (date) {
+			date.setHours(0);
+			date.setMinutes(0);
+			date.setSeconds(0);
+			date.setMilliseconds(0);
+		}
+		return (!checkRange || !inst.rangeStart ? date :
+			(!date || inst.rangeStart > date ? inst.rangeStart : date));
+	},
+
+	/* Find the number of days in a given month. */
+	_getDaysInMonth: function(year, month) {
+		return 32 - new Date(year, month, 32).getDate();
+	},
+
+	/* Find the day of the week of the first of a month. */
+	_getFirstDayOfMonth: function(year, month) {
+		return new Date(year, month, 1).getDay();
+	},
+
+	/* Determines if we should allow a "next/prev" month display change. */
+	_canAdjustMonth: function(inst, offset, curYear, curMonth) {
+		var numMonths = this._getNumberOfMonths(inst);
+		var date = new Date(curYear, curMonth + (offset < 0 ? offset : numMonths[1]), 1);
+		if (offset < 0)
+			date.setDate(this._getDaysInMonth(date.getFullYear(), date.getMonth()));
+		return this._isInRange(inst, date);
+	},
+
+	/* Is the given date in the accepted range? */
+	_isInRange: function(inst, date) {
+		// during range selection, use minimum of selected date and range start
+		var newMinDate = (!inst.rangeStart ? null :
+			new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+		newMinDate = (newMinDate && inst.rangeStart < newMinDate ? inst.rangeStart : newMinDate);
+		var minDate = newMinDate || this._getMinMaxDate(inst, 'min');
+		var maxDate = this._getMinMaxDate(inst, 'max');
+		return ((!minDate || date >= minDate) && (!maxDate || date <= maxDate));
+	},
+	
+	/* Provide the configuration settings for formatting/parsing. */
+	_getFormatConfig: function(inst) {
+		var shortYearCutoff = this._get(inst, 'shortYearCutoff');
+		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
+			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
+		return {shortYearCutoff: shortYearCutoff,
+			dayNamesShort: this._get(inst, 'dayNamesShort'), dayNames: this._get(inst, 'dayNames'),
+			monthNamesShort: this._get(inst, 'monthNamesShort'), monthNames: this._get(inst, 'monthNames')};
+	},
+
+	/* Format the given date for display. */
+	_formatDate: function(inst, day, month, year) {
+		if (!day) {
+			inst.currentDay = inst.selectedDay;
+			inst.currentMonth = inst.selectedMonth;
+			inst.currentYear = inst.selectedYear;
+		}
+		var date = (day ? (typeof day == 'object' ? day : new Date(year, month, day)) :
+			new Date(inst.currentYear, inst.currentMonth, inst.currentDay));
+		return this.formatDate(this._get(inst, 'dateFormat'), date, this._getFormatConfig(inst));
+	}
+});
+
+/* jQuery extend now ignores nulls! */
+function extendRemove(target, props) {
+	$.extend(target, props);
+	for (var name in props)
+		if (props[name] == null || props[name] == undefined)
+			target[name] = props[name];
+	return target;
+};
+
+/* Determine whether an object is an array. */
+function isArray(a) {
+	return (a && (($.browser.safari && typeof a == 'object' && a.length) ||
+		(a.constructor && a.constructor.toString().match(/\Array\(\)/))));
+};
+
+/* Invoke the datepicker functionality.
+   @param  options  string - a command, optionally followed by additional parameters or
+                    Object - settings for attaching new datepicker functionality
+   @return  jQuery object */
+$.fn.datepicker = function(options){
+	var otherArgs = Array.prototype.slice.call(arguments, 1);
+	if (typeof options == 'string' && (options == 'isDisabled' || options == 'getDate'))
+		return $.datepicker['_' + options + 'Datepicker'].
+			apply($.datepicker, [this[0]].concat(otherArgs));
+	return this.each(function() {
+		typeof options == 'string' ?
+			$.datepicker['_' + options + 'Datepicker'].
+				apply($.datepicker, [this].concat(otherArgs)) :
+			$.datepicker._attachDatepicker(this, options);
+	});
+};
+
+$.datepicker = new Datepicker(); // singleton instance
+	
+/* Initialise the date picker. */
+$(document).ready(function() {
+	$(document.body).append($.datepicker.dpDiv).
+		mousedown($.datepicker._checkExternalClick);
+});
+
+})(jQuery);

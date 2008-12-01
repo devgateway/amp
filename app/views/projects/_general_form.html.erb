@@ -17,10 +17,27 @@
 		<li><%= f.select :prj_status, Project::STATUS_OPTIONS, 
 				:include_blank => I18n.t('options.prompt'), :required => true %></li>
     	
-		<li class="fifty"><%= f.date_select :start, :start_year=>1995, :end_year=>Time.now.year+15, 
-						  		:default => { :day => 1, :month => 1, :year => 1995 }, :required => true %></li>
-		<li class="fifty"><%= f.date_select :end, :start_year=>1995, :end_year=>Time.now.year+15, 
-						  		:default => { :day => 1, :month => 1, :year => 1995 }, :required => true %></li>
+		<li class="fifty"><%= f.text_field :start, :required => true, :readonly =>true %></li>
+		<li class="fifty"><%= f.text_field :end, :required => true, :readonly =>true  %></li>
+
+  <script language="javascript">
+  $(document).ready(
+  	function(){
+
+		$.datepicker.setDefaults({
+            showOn: "button", 
+            buttonImage: "/images/datepicker.png", 
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $('#project_end').datepicker();
+        $('#project_start').datepicker();
+	}
+  );
+  </script>
+
+                                
 	<% end %>
 	
 	<%= render :partial => 'control_buttons' %>

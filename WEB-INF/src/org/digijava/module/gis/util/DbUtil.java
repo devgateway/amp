@@ -194,7 +194,7 @@ public class DbUtil {
    }
 
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
-              Long indicatorId, Integer year, int areaLevel) {
+              Long indicatorId, Integer year, Long subgroupId, int areaLevel) {
           List retVal = null;
           Session session = null;
           try {
@@ -214,6 +214,8 @@ public class DbUtil {
               queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
               queryString.append(" and indConn.id=indVal.indicatorConnection.id");
 
+              queryString.append(" and indVal.subgroup.ampIndicatorSubgroupId=:subgroupId");
+
               if (year.intValue() > 0) {
                   queryString.append(" and year(indVal.valueDate)=:indValDate");
               }
@@ -222,6 +224,7 @@ public class DbUtil {
 
               q.setParameter("sectorId", sectorId, Hibernate.LONG);
               q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
 
               if (year.intValue() > 0) {
                   q.setParameter("indValDate", year, Hibernate.INTEGER);
@@ -236,9 +239,9 @@ public class DbUtil {
    }
 
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
-           Long indicatorId) {
+           Long indicatorId, Long subgroupId) {
 
-       return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1), GisMap.MAP_LEVEL_REGION);
+       return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1), subgroupId, GisMap.MAP_LEVEL_REGION);
    }
 
 

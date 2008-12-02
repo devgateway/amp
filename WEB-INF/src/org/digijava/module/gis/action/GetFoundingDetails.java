@@ -312,7 +312,7 @@ public class GetFoundingDetails extends Action {
                 List inds = null;
                 if (indicatorYear.intValue()>0) {
                     inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId,
-                            indicatorYear, Integer.parseInt(mapLevel));
+                            indicatorYear, subgroupId, Integer.parseInt(mapLevel));
                 } else {
                     inds = new ArrayList();
                 }

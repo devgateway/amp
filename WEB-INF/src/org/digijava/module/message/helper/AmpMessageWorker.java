@@ -125,7 +125,7 @@ public class AmpMessageWorker {
                     HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState> ();
                     if (statesRelatedToTemplate != null && statesRelatedToTemplate.size() > 0) {
                         for (AmpMessageState state : statesRelatedToTemplate) {
-                            createMsgState(state, newMsg);
+                            createMsgState(state, newMsg,false);
                             if (!msgStateMap.containsKey(state.getMemberId())) {
                                 msgStateMap.put(state.getMemberId(), state);
                             }
@@ -155,6 +155,7 @@ public class AmpMessageWorker {
         	AmpTeamMember tm=(AmpTeamMember)e.getParameters().get(CalendarEventSaveTrigger.SENDER);
         	event.setSenderId(tm.getAmpTeamMemId());
         	event.setSenderName(tm.getUser().getFirstNames()+" "+tm.getUser().getLastName()+"<"+tm.getUser().getEmail()+">;"+tm.getAmpTeam().getName());
+        	event.setSenderEmail(tm.getUser().getEmail());
         	//put event's start/end dates in map.
         	myHashMap.put(MessageConstants.START_DATE, (String) e.getParameters().get(CalendarEventSaveTrigger.EVENT_START_DATE));
         	myHashMap.put(MessageConstants.END_DATE, (String) e.getParameters().get(CalendarEventSaveTrigger.EVENT_END_DATE));
@@ -480,7 +481,7 @@ public class AmpMessageWorker {
         newEvent.setName(DgUtil.fillPattern(template.getName(), myMap));
         newEvent.setDescription(DgUtil.fillPattern(template.getDescription(), myMap));
         newEvent.setReceivers(template.getReceivers());
-        newEvent.setDraft(false);
+        newEvent.setDraft(false);        
         Calendar cal = Calendar.getInstance();
         newEvent.setCreationDate(cal.getTime());
         return newEvent;
@@ -492,24 +493,24 @@ public class AmpMessageWorker {
     private static void defineReceiversForApprovedAndNotApprovedActivities(Class triggerClass, AmpMessage approval,Long teamId) throws Exception {
         AmpMessageState state = new AmpMessageState();
         state.setMemberId(approval.getSenderId());
-        createMsgState(state, approval);
+        createMsgState(state, approval,false);
         if (triggerClass.equals(NotApprovedActivityTrigger.class)) {
             AmpTeamMember teamHead=TeamMemberUtil.getTeamHead(teamId);
             if (teamHead != null) {
                 Long teamHeadId = teamHead.getAmpTeamMemId();
                 state = new AmpMessageState();
                 state.setMemberId(teamHeadId);
-                createMsgState(state, approval);
+                createMsgState(state, approval,false);
             }
         }
     }
 
     /**
      * this method defines calendar event receivers and creates corresponding AmpMessageStates.
+     * saveActionWasCalled field is used to define whether user created new calendar event or not
      */
     private static void defineReceiversForCalendarEvents(Event e, TemplateAlert template, AmpMessage calEvent,boolean  saveActionWasCalled) throws Exception {
         HashMap<Long, AmpMessageState> temMsgStateMap = new HashMap<Long, AmpMessageState> ();
-
         List<AmpMessageState> lstMsgStates = AmpMessageUtil.loadMessageStates(template.getId());
         if (lstMsgStates != null) {
             for (AmpMessageState state : lstMsgStates) {
@@ -533,11 +534,12 @@ public class AmpMessageWorker {
                         state.setSenderId(calEvent.getSenderId());
                         eventMsgStateMap.put(state.getMemberId(), state);
                     }
-                }
-
+                }else if(ampAtt.getGuest()!=null){ // <---guests should always get e-mails about event
+                	String email=ampAtt.getGuest().substring(2);
+                	sendMail(((CalendarEvent)calEvent).getSenderEmail(),email, calEvent.getName(), "UTF-8", calEvent.getDescription());
+                }                
             }
         }
-
         HashMap<Long, AmpMessageState> msgStateMap = new HashMap<Long, AmpMessageState> ();
         
         //calendar event creator should also get a message (AMP-3775)
@@ -547,18 +549,16 @@ public class AmpMessageWorker {
             msgState.setMemberId(calEventcreator.getAmpTeamMemId());
             msgState.setSenderId(calEvent.getSenderId());
             msgStateMap.put(msgState.getMemberId(), msgState);
-        }
-        
+        }        
         
         for (AmpMessageState state : temMsgStateMap.values()) {
             if (eventMsgStateMap.containsKey(state.getMemberId())) {
                 msgStateMap.put(state.getMemberId(), state);
             }
-        }
-       
+        }       
         
         for (AmpMessageState state : msgStateMap.values()) {
-            createMsgState(state, calEvent);
+            createMsgState(state, calEvent,saveActionWasCalled);
         }
     }
 
@@ -585,7 +585,7 @@ public class AmpMessageWorker {
                  * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
                  */
                 if (teamMember.getAmpTeam().getAmpTeamId().equals(teamId)) {
-                    createMsgState(state, alert);
+                    createMsgState(state, alert,false);
             }
     }
         }
@@ -611,17 +611,20 @@ public class AmpMessageWorker {
                  * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
                  */
                 if (teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())) {
-                    createMsgState(state, alert);
+                    createMsgState(state, alert,false);
                 }
             }
         }
     }
 
-    private static void createMsgState(AmpMessageState state, AmpMessage newMsg) throws Exception {
+    private static void createMsgState(AmpMessageState state, AmpMessage newMsg,boolean calendarSaveActionWasCalled) throws Exception {
         AmpMessageState newState = new AmpMessageState();
         newState.setMessage(newMsg);
         newState.setMemberId(state.getMemberId());
         newState.setRead(false);
+        if(newMsg.getClassName().equals("c")){
+        	newState.setSender(((CalendarEvent)newMsg).getSenderEmail());
+        }        
         //will this message be visible in user's mailbox
         if (AmpMessageUtil.isInboxFull(newMsg.getClass(), state.getMemberId())) {
             newState.setMessageHidden(true);
@@ -629,8 +632,9 @@ public class AmpMessageWorker {
             newState.setMessageHidden(false);
         }
         try {
-            AmpMessageUtil.saveOrUpdateMessageState(newState);
-            sendMail(newState);
+            AmpMessageUtil.saveOrUpdateMessageState(newState);           
+            sendMail(newState,calendarSaveActionWasCalled);
+           
         } catch (AimException e) {
             e.printStackTrace();
         }
@@ -653,31 +657,22 @@ public class AmpMessageWorker {
 
     private static void sendMailes(Collection<AmpMessageState> statesRelatedToTemplate) throws Exception {
         for(AmpMessageState state:statesRelatedToTemplate){
-            sendMail(state);
+            sendMail(state,false);
         }
     }
 
-    private static void sendMailes(HashMap<String, String> emails) throws Exception {
-        if(emails!=null){
-            for (String email : emails.keySet()) {
-            	AmpMessageSettings messageSettings;
-				messageSettings = AmpMessageUtil.getMessageSettings();
-				Long sendMail = messageSettings.getEmailMsgs();
-                if(sendMail.intValue() == 1){
-                	sendMail("system@digijava.org",email,"New alert","UTF8",emails.get(email));
-                }
-            }
-        }
-    }
-
-    private static void sendMail(AmpMessageState state) throws Exception {
+    private static void sendMail(AmpMessageState state,boolean calendarSaveActionWasCalled) throws Exception {
         AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(state.getMemberId());
         if (teamMember != null) {
         	AmpMessageSettings messageSettings = AmpMessageUtil.getMessageSettings();
             Long sendMail = messageSettings.getEmailMsgs();
             if(sendMail.intValue() == 1){
             	User user = teamMember.getUser();
-                sendMail("system@digijava.org",user.getEmail(),"New alert","UTF8",state.getMessage().getDescription());
+            	if(calendarSaveActionWasCalled){ // <---means that user created new calendar event. if so, a bit different e-mail should be sent
+            		sendMail(state.getSender(),user.getEmail(),state.getMessage().getName(),"UTF8",state.getMessage().getDescription());
+            	}else{
+            		sendMail("system@digijava.org",user.getEmail(),"New alert","UTF8",state.getMessage().getDescription());
+            	}                
             }
         }
     }
@@ -685,7 +680,6 @@ public class AmpMessageWorker {
     private static void sendMail(String from, String to, String subject, String charset, String text) {
         try {
             InternetAddress[] ito = new InternetAddress[] {new InternetAddress(to)};
-
             Address[] cc = null;
             Address[] bcc = null;
             boolean asHtml = true;

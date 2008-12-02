@@ -31,22 +31,26 @@
 	<!--
 	function validate()
 	{
+		var err1="<digi:trn key='admin:enterindicatorname'>Please enter Indicator name</digi:trn>";
+		var err2="<digi:trn key='admin:enterindicatorcode'>Please enter Indicator code</digi:trn>";
+		var err3="<digi:trn key='admin:enterindicatortype'>Please enter Indicator type</digi:trn>";
+		
 		if (trim(document.aimThemeForm.name.value).length == 0)
 		{
-			alert('<digi:trn key="admin:enterindicatorname">Please enter Indicator name</digi:trn>');
+			alert(err1);
 			document.aimThemeForm.name.focus();
 			return false;
 		}
 		if (trim(document.aimThemeForm.code.value).length == 0)
 		{
-			alert('<digi:trn key="admin:enterindicatorcode">Please enter Indicator code</digi:trn>');
+			alert(err2);
 			document.aimThemeForm.code.focus();
 			return false;
 		}
 
 		if (trim(document.aimThemeForm.type.value).length == 0)
 		{
-			alert('<digi:trn key="admin:enterindicatortype">Please enter Indicator type</digi:trn>');
+			alert(err3);
 			document.aimThemeForm.type.focus();
 			return false;
 		}
@@ -99,6 +103,9 @@ function addData(id){
 
 function checkValues(){
   var values=getTypeValues();
+  var err1="<digi:trn key='admin:onlyonetargetvalue'>Please specify only one target value</digi:trn>";
+  var err2="<digi:trn key='admin:datesallindicators'>Please specify dates for all indicators</digi:trn>";
+	
   if (values.length !=null){
     var targets=0;
     for (var i=0; i< values.length; i++){
@@ -107,7 +114,7 @@ function checkValues(){
       }
     }
     if (targets > 1 || targets < 1 ) {
-   	  alert('<digi:trn key="admin:onlyonetargetvalue">Please specify only one target value</digi:trn>');
+   	  alert(err1);
       return false;
     }
   }
@@ -116,7 +123,7 @@ function checkValues(){
   if (dates.length !=null){
     for (var i=0; i< dates.length; i++){
       if (dates[i] == '' || dates[i] ==  null ){
-    	alert('<digi:trn key="admin:datesallindicators">Please specify dates for all indicators</digi:trn>');
+    	alert(err2);
         return false;
       }
     }
@@ -126,6 +133,7 @@ function checkValues(){
 
 function checkBaseValues(){
   var values=getTypeValues();
+  var err1 = "<digi:trn key='admin:onlyonebasevalues'>Please specify only one Base value</digi:trn>";
   if (values.length !=null){
     var targets=0;
     for (var i=0; i< values.length; i++){
@@ -134,7 +142,7 @@ function checkBaseValues(){
       }
     }
     if (targets > 1 || targets < 1 ) {
-      alert('<digi:trn key="admin:onlyonebasevalue">Please specify only one Base value</digi:trn>');
+      alert(err1);
       return false;
     }
   }
@@ -224,12 +232,13 @@ function closeWindow(){
    // validate indicator
    
   function validate(field) {
-	  
+	  var err1 = "<digi:trn key='admin:chooseindicatorremove'>Please choose a indicator to remove</digi:trn>";
+	  var msg = "<digi:trn key='admin:confirmremoveindicator'>Are you sure you want to remove the selected indicator(s)?</digi:trn>";
 	  if (field == 2) {
 	  
 	  	if (document.aimThemeForm.indicatorsId.checked != null) {
 	  		if (document.aimThemeForm.indicatorsId.checked == false) {
-	  			alert('<digi:trn key="admin:chooseindicatorremove">Please choose a indicator to remove</digi:trn>');
+	  			alert(err1);
 	    return false;
 	  	}
 	  	
@@ -244,12 +253,12 @@ function closeWindow(){
 	    }
 	  }
 	  	if (flag == 0) {
-	  		alert('<digi:trn key="admin:chooseindicatorremove">Please choose a indicator to remove</digi:trn>');
+	  		alert(err2);
 		    return false;
 		  }
 		}
 		
-		var validate = window.confirm('<digi:trn key="admin:confirmremoveindicator">Are you sure you want to remove the selected indicator(s)?</digi:trn>'); 
+		var validate = window.confirm(msg); 
 		if(validate){
 			 return true;
 			 }else{

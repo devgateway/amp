@@ -2440,7 +2440,8 @@ function collapseAll() {
 										</td>
 									</tr>
 									</field:display>
-									<tr>
+									<field:display feature="Identification" name="Computation">
+										<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:computation">Computation</digi:trn>
 										</td>
@@ -2453,7 +2454,8 @@ function collapseAll() {
 											</c:if>
 										</td>
 									</tr>
-									<field:display feature="Identification" name="Data Source">
+								</field:display>			
+							<field:display feature="Identification" name="Data Source">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:dataSource">

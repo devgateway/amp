@@ -177,14 +177,13 @@ function load(){}
 
 function unload(){}
 
-function closeWindow() 
-    {
-              <digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
-              document.aimThemeForm.action = "<%=closeInd%>";
-              document.aimThemeForm.submit();
-              window.close();
-              return true;
-      }
+function closeWindow(){
+	<digi:context name="closeInd" property="context/module/moduleinstance/closeThemeIndicator.do"/>
+	document.aimThemeForm.action = "<%=closeInd%>";
+	document.aimThemeForm.submit();
+	window.close();
+	return true;
+}
 
   function closeWindow(indiType)
   {

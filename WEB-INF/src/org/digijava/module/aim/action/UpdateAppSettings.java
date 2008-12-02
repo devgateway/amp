@@ -128,8 +128,10 @@ public class UpdateAppSettings extends Action {
 				uForm.setValidation(ampAppSettings.getValidation());
 				uForm.setCurrencyId(ampAppSettings.getCurrency()
 						.getAmpCurrencyId());
+                if(ampAppSettings.getFiscalCalendar()!=null){
 				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar()
 						.getAmpFiscalCalId());
+                }
 
 				if (ampAppSettings.getDefaultTeamReport() != null)
 					uForm.setDefaultReportForTeamId(ampAppSettings

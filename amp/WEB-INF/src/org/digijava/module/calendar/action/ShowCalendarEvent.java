@@ -228,9 +228,8 @@ public class ShowCalendarEvent extends Action {
                 ampCalendar.setMember(calMember);
             }
 
-            ampCalendar.setOrganisations( new HashSet<AmpOrganisation>(ceform.getOrganizations()));
-            
-            Collection<InternetAddress> addressCol=new ArrayList<InternetAddress>(); //this will be needed to send e-mails
+            ampCalendar.setOrganisations( new HashSet<AmpOrganisation>(ceform.getOrganizations()));            
+           
             Set<AmpCalendarAttendee> atts =  new HashSet<AmpCalendarAttendee>();
             String[] slAtts = ceform.getSelectedAtts();
             if (slAtts != null) {
@@ -243,17 +242,9 @@ public class ShowCalendarEvent extends Action {
                         AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(Long.valueOf(slAtts[i].substring(2)));
                         att.setMember(member);
                         atts.add(att);
-                    	//If emailable=true in Message Manager,then e-mails should be sent to attendees too
-                        if(settings != null && settings.getEmailMsgs() != null && settings.getEmailMsgs().equals(new Long(1))){
-                        	//creating internet address where the mail will be sent
-                        	addressCol.add(new InternetAddress(member.getUser().getEmail()));
-                        }
                     } else if (slAtts[i].startsWith("g:")) {
                         att.setGuest(slAtts[i]);
                         atts.add(att);
-                        //collecting guests e-mails to send them mails
-                        String guestEmail=slAtts[i].substring(2);
-                        addressCol.add(new InternetAddress(guestEmail));
                     }                    
                 }
             }
@@ -326,23 +317,7 @@ public class ShowCalendarEvent extends Action {
             AmpDbUtil.updateAmpCalendar(ampCalendar);
             //Create new calendar event alert           
             CalendarEventSaveTrigger cet=new CalendarEventSaveTrigger(ampCalendar);
-            
-            //get current member
-            HttpSession session = request.getSession();
-        	TeamMember teamMember = new TeamMember();
-        	 // Get the current member who has logged in from the session
-        	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-        	
-            //guests(in Attendee-s list) should get an email and also attendees(if emailable setting is set to true)   
-        	if(addressCol!=null && addressCol.size()>0){        		
-        		InternetAddress[] addresses=(InternetAddress[])addressCol.toArray(new InternetAddress[addressCol.size()]);
-        		try {
-        			DgEmailManager.sendMail(addresses, teamMember.getEmail(), calendarItem.getTitle(), calendarItem.getDescription());
-				} catch (MessagingException e) {
-					logger.debug("couldn't send mail", e);
-				}                
-        	}
-            
+           
         } catch (Exception ex) {
             ex.printStackTrace();
         }

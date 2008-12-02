@@ -756,6 +756,7 @@ public class ChartWidgetUtil {
 
     }
      
+    @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
         Long year = filter.getYear();
         if (year == null || year == -1) {
@@ -794,39 +795,23 @@ public class ChartWidgetUtil {
             query.setLong("orgID", orgID);
             query.setLong("transactionType", transactionType);
             sectors = query.list();
+            DecimalWraper totAllSeqtors= getSectorFunding(year,orgID,transactionType,null,currCode);;
             Iterator<AmpSector> sectorIter = sectors.iterator();
+            double others=0;
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
-                oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
-                oql += " from ";
-                oql += AmpFundingDetail.class.getName() +
-                        " as fd inner join fd.ampFundingId f ";
-                oql += "   inner join f.ampActivityId act " +
-                        " inner join act.sectors actSec " +
-                        " inner join actSec.sectorId sec " +
-                        " inner join actSec.activityId act " +
-                        " inner join actSec.classificationConfig config ";
-
-                oql += "  where  " +
-                        "   f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
-                oql += " and year(fd.transactionDate)=:year   and act.team is not null and config.name='Primary'  ";
-                oql += " and  sec.ampSectorId=  " + sector.getAmpSectorId();
-                query = session.createQuery(oql);
-                query.setLong("year", year);
-                query.setLong("orgID", orgID);
-                query.setLong("transactionType", transactionType);
-                List<AmpFundingDetail> fundingDets = query.list();
-                FundingCalculationsHelper cal = new FundingCalculationsHelper();
-                cal.doCalculations(fundingDets, currCode);
-                DecimalWraper total =null;
-                if(transactionType==0){
-                    total=cal.getTotActualComm();
+                DecimalWraper total=getSectorFunding(year,orgID,transactionType,sector.getAmpSectorId(),currCode);
+                double percent=total.doubleValue()/totAllSeqtors.doubleValue();
+                // the sectors which percent is less then 5% should be group in "Others"
+                if (percent > 0.05) {
+                    ds.setValue(sector.getName(), total.doubleValue() / MILLION);
+                } else {
+                    others+=total.doubleValue();
                 }
-                else{
-                    total=cal.getTotActualDisb();
-                }
-                ds.setValue(sector.getName(), total.doubleValue()/MILLION);
                 
+            }
+            if(others>0){
+                  ds.setValue("Others", others / MILLION);
             }
 
 
@@ -836,6 +821,44 @@ public class ChartWidgetUtil {
                     "Cannot load sector fundings by donors from db", e);
         }
         return ds;
+
+    }
+
+    public static DecimalWraper getSectorFunding(Long year, Long orgId, int transactionType, Long sectorId,String currCode) throws DgException {
+        Session session = PersistenceManager.getRequestDBSession();
+        String oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,actSec.sectorPercentage,fd.fixedExchangeRate) ";
+        oql += " from ";
+        oql += AmpFundingDetail.class.getName() +
+                " as fd inner join fd.ampFundingId f ";
+        oql += "   inner join f.ampActivityId act " +
+                " inner join act.sectors actSec " +
+                " inner join actSec.sectorId sec " +
+                " inner join actSec.activityId act " +
+                " inner join actSec.classificationConfig config ";
+
+        oql += "  where  " +
+                "   f.ampDonorOrgId=:orgID and fd.transactionType =:transactionType and  fd.adjustmentType = 1 ";
+        oql += " and year(fd.transactionDate)=:year   and act.team is not null and config.name='Primary'  ";
+        if( sectorId!=null){
+            oql += " and  sec.ampSectorId=:sectorId  ";
+        }
+        Query query = session.createQuery(oql);
+        query.setLong("year", year);
+        query.setLong("orgID", orgId);
+        query.setLong("transactionType", transactionType);
+        if( sectorId!=null){
+           query.setLong("sectorId", sectorId);
+        }
+        List<AmpFundingDetail> fundingDets = query.list();
+        FundingCalculationsHelper cal = new FundingCalculationsHelper();
+        cal.doCalculations(fundingDets, currCode);
+        DecimalWraper total = null;
+        if (transactionType == 0) {
+            total = cal.getTotActualComm();
+        } else {
+            total = cal.getTotActualDisb();
+        }
+        return total;
 
     }
         

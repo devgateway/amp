@@ -109,11 +109,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 	private HttpSession session = null;
 	private String locale = null;
 	private Site site = null;
-	private Locale navigationLanguage = null; 
+	private Locale navigationLanguage = null;
 
 	private PdfPTable contenTable;
 	private HttpServletResponse response;
-	
+
 	private Long[] tableId = null;
 	private Long[] columnId = null;
 	private Long[] itemId = null;
@@ -138,7 +138,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		// for translation purposes
 		this.site = RequestUtils.getSite(request);
 		this.navigationLanguage = RequestUtils.getNavigationLanguage(request);
-		
+
 		this.siteId = site.getSiteId();
 		this.locale = navigationLanguage.getCode();
 
@@ -229,8 +229,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			{
 				this.columnId[columnIdIndex] = Long.parseLong(str);
 				columnIdIndex++;
-			}			
-			
+			}
+
 		}
 		if (request.getParameter("itemId") != null
 				&& !request.getParameter("itemId").equals("-1")) {
@@ -243,10 +243,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			{
 				this.itemId[itemIdIndex] = Long.parseLong(str);
 				itemIdIndex++;
-			}			
+			}
 		}
-		
-		
+
+
 		//Check for sector and indicator
 		ByteArrayOutputStream outMapByteArray;
 		String indicatorName = "None";
@@ -263,7 +263,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
             } else {
     			outMapByteArray = getMapImageSectorIndicator("TZA", secId, indId);
             }
-			
+
 		}
 		else
 		{
@@ -273,7 +273,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
     			outMapByteArray = getMapImage("TZA");
             }
 		}
-		
+
 		// Get the Map Image
 		// GIS, this
 		// should
@@ -301,10 +301,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable resourcesBox = getResourcesBox();
 		PdfPTable mdgsBox = getMDGSBox();
-		
+
 		layoutTable1.addCell(mdgsBox);
 		layoutTable1.addCell(resourcesBox);
-		
+
 		layoutTable1.addCell(" ");
 		layoutTable1.addCell(" ");
 
@@ -315,7 +315,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutTable1.addCell(" ");
 		layoutTable1.addCell(" ");
-		
+
 		PdfPTable IOBox = getIntermediateOutputBox();
 		tempCell = new PdfPCell(IOBox);
 		tempCell.setColspan(2);
@@ -339,7 +339,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		tempCell.setBorder(Rectangle.NO_BORDER);
 		tempCell.setPaddingBottom(10);
 		layoutTable1.addCell(tempCell);
-		
+
 		document.open();
 		String countryName = "";
         String ISO = null;
@@ -348,7 +348,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
           AmpGlobalSettings ampG = (AmpGlobalSettings) itr1.next();
           ISO = ampG.getGlobalSettingsValue();
         }
-        
+
         if(ISO != null && !ISO.equals("")){
             Country cntry = DbUtil.getDgCountry(ISO);
             countryName = cntry.getCountryName();
@@ -363,7 +363,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         String generatedOnTranslation = TranslatorWorker.translate("gis:generatedon", locale, siteId);
         if(generatedOnTranslation == null || generatedOnTranslation.equals(""))
         	generatedOnTranslation = "Generated on: ";
-        
+
 		Paragraph updateDate = new Paragraph(generatedOnTranslation
 				+ FormatHelper.formatDate(new Date(System.currentTimeMillis()))
 				+ "\n\n", new Font(Font.HELVETICA, 6, Font.BOLDITALIC));
@@ -381,16 +381,16 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		out.flush();
 		return null;
 	}
-	
+
 	private PdfPTable getIntermediateOutputBox() throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {1f,3f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -399,13 +399,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell firstCell = new PdfPCell();
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:outputindicators", locale, siteId)+"\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.setBorder(Rectangle.NO_BORDER);
@@ -444,24 +444,24 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translate("widget:SourceOfficialgovernmentsources", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		layoutExAidResources.addCell(" ");
-			
+
 		layoutCell.addElement(layoutExAidResources);
 		generalBox.addCell(layoutCell);
 
-		
+
 		return generalBox;
 	}
 
-	
+
 	private PdfPTable getTotalResourcesBox() throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {1f,3f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -475,7 +475,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.setBorder(Rectangle.NO_BORDER);
@@ -510,25 +510,25 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutTotalResources.addCell(tableTotalResources1);
 //		PdfPTable tableTotalResources2 = getWidgetTable("table_place6");
 //		layoutTotalResources.addCell(tableTotalResources2);
-		
+
 		layoutTotalResources.addCell(new Paragraph(TranslatorWorker.translate("widget:sourceministryoffinance", locale, siteId), new Font(Font.HELVETICA, 6)));
-		
+
 		layoutCell.addElement(layoutTotalResources);
 		generalBox.addCell(layoutCell);
-		
-		
+
+
 		return generalBox;
 	}
 
 	private PdfPTable getAEPIBox() throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {1f,3f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -537,13 +537,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		PdfPCell firstCell = new PdfPCell();
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:aideffectivenessindicators", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
@@ -579,29 +579,29 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		layoutAEIndicators.addCell(table1AEIndicators);
 		layoutAEIndicators.addCell(table2AEIndicators);
-		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translate("widget:SourceParisDeclaration", locale, siteId) , new Font(Font.HELVETICA, 6))); 
-		layoutAEIndicators.addCell(" "); 
-		
-		
-		
+		layoutAEIndicators.addCell(new Paragraph(TranslatorWorker.translate("widget:SourceParisDeclaration", locale, siteId) , new Font(Font.HELVETICA, 6)));
+		layoutAEIndicators.addCell(" ");
+
+
+
 		layoutCell.addElement(layoutAEIndicators);
 
-		
+
 		generalBox.addCell(layoutCell);
 
-		
+
 		return generalBox;
 	}
 
 	private PdfPTable getEAResourcesBox() throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {1f,3f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -616,7 +616,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.setBorder(Rectangle.NO_BORDER);
@@ -655,23 +655,23 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutExAidResources.addCell(new Paragraph(TranslatorWorker.translate("widget:sourceAMPdatabase", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		layoutExAidResources.addCell(" ");
-			
+
 		layoutCell.addElement(layoutExAidResources);
 		generalBox.addCell(layoutCell);
 
-		
+
 		return generalBox;
 	}
-	
+
 	private PdfPTable getImageChart(Image imgChart, String selectedDonorName, Integer selectedYear) throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {2f,1f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -681,13 +681,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:breakdownbysector
-		
+
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:breakdownbysector", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
@@ -712,7 +712,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutCell.setPadding(2);
 		layoutCell.setBackgroundColor(new Color(206,226,251));
 		layoutCell.addElement(imgChart);
-		
+
 		PdfPCell textCell = new PdfPCell();
 		textCell.setPadding(2);
 		textCell.setBackgroundColor(new Color(206,226,251));
@@ -731,26 +731,26 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		text2Cell.setPadding(2);
 		text2Cell.setBackgroundColor(new Color(206,226,251));
 		//widget:SourceAmpdatabase
-		
+
 
 		text2Cell.addElement(new Paragraph(TranslatorWorker.translate("widget:SourceAmpdatabase", locale, siteId), new Font(Font.HELVETICA, 6)));
-		
+
 		generalBox.addCell(layoutCell);
 		generalBox.addCell(text2Cell);
 
-		
+
 		return generalBox;
 	}
 
 	private PdfPTable getImageMap(Image imgMap, String sectorName, String indicatorName) throws WorkerException {
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {1f,2f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -760,13 +760,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:regionalview
-		
+
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:regionalview", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
@@ -804,10 +804,10 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		String selectedIndicatorTranslation = TranslatorWorker.translate("gis:selectedIndicator", locale, siteId);
 		if(selectedIndicatorTranslation == null || selectedIndicatorTranslation.equals(""))
 			selectedIndicatorTranslation = "Selected Indicator";
-		
-		
+
+
 		textCell.addElement(new Paragraph(TranslatorWorker.translate("gis:minmax:message", locale, siteId) + "\n" + selectedSectorTranslation + ": " + sectorName + "\n" + selectedIndicatorTranslation + ": " + indicatorName + "\n\n"+TranslatorWorker.translate("gis:datasource:message", locale, siteId), new Font(Font.HELVETICA, 6)));
-		PdfPCell legendCell = new PdfPCell();		
+		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
 		try {
@@ -827,12 +827,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			e.printStackTrace();
 		}
 
-		
+
 		generalBox.addCell(legendCell);
 		generalBox.addCell(textCell);
-		
-		
-		
+
+
+
 		return generalBox;
 	}
 
@@ -840,12 +840,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {1f,2f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -855,13 +855,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:millenniumdevelopmentgoals
-		
+
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:millenniumdevelopmentgoals", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
@@ -943,7 +943,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		PdfPCell legendCell = new PdfPCell();		
+		PdfPCell legendCell = new PdfPCell();
 		legendCell.setPadding(0);
 		legendCell.setBorder(Rectangle.NO_BORDER);
 		try {
@@ -962,12 +962,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		
+//
 		PdfPCell legendTextCell = new PdfPCell();
 		legendTextCell.setPadding(0);
 		legendTextCell.setBorder(Rectangle.NO_BORDER);
 		//widget:SourceOfficialgovernmentsources
-		
+
 		legendTextCell.addElement(new Paragraph(TranslatorWorker.translate("widget:SourceOfficialgovernmentsources", locale, siteId), new Font(Font.HELVETICA, 6)));
 
 		PdfPTable legendTable = new PdfPTable(1);
@@ -989,12 +989,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		PdfPTable generalBox = new PdfPTable(1);
 		generalBox.setWidthPercentage(100f);
-		
+
 		//Work the header
 		PdfPCell headerCell = new PdfPCell();
 		headerCell.setPadding(0);
 		headerCell.setBorder(Rectangle.NO_BORDER);
-		
+
 		float[] widths = {2f,1f};
 		PdfPTable headerTable = new PdfPTable(widths);
 		headerTable.setWidthPercentage(100f);
@@ -1004,13 +1004,13 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		firstCell.setPadding(0);
 		firstCell.setBorder(Rectangle.NO_BORDER);
 		//gis:resourcesatglance
-		
+
 		Paragraph paragraph = new Paragraph(TranslatorWorker.translate("gis:resourcesatglance", locale, siteId) + "\n", new Font(
 				Font.HELVETICA, 7, Font.BOLD, new Color(255,255,255)));
 		paragraph.setAlignment(Element.ALIGN_CENTER);
 		firstCell.setCellEvent(border);
 		firstCell.addElement(paragraph);
-		
+
 		PdfPCell secondCell = new PdfPCell();
 		secondCell.setPadding(0);
 		secondCell.addElement(new Phrase(" ", new Font(Font.HELVETICA, 10f)));
@@ -1069,11 +1069,11 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		layoutResourcesAtAGlance.addCell(layoutResourcesAtAGlanceTable3alone);
 		layoutCell.addElement(layoutResourcesAtAGlance);
 		//widget:SourceOECD
-		
+
 		layoutCell.addElement(new Paragraph(TranslatorWorker.translate("widget:SourceOECD", locale, siteId), new Font(Font.HELVETICA, 6)));
-		
+
 		generalBox.addCell(layoutCell);
-		
+
 		//Make the innerLayout
 		return generalBox;
 	}
@@ -1119,12 +1119,12 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 				String columnName = "";
 				if(filter != null && column.getId() == filter.getId())
 					column = filter;
-				
+
 				if (column instanceof WiColumnDropDownFilter && filter != null)
 					columnName = filter.getProvider().getItem(filter.getActiveItemId()).getName();
 				else
 					columnName = column.getName();
-					
+
 				PdfPCell cell = new PdfPCell(new Phrase(columnName,
 						fontHeader));
 				cell.setBackgroundColor(new Color(34, 46, 93));
@@ -1168,7 +1168,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 		}
 		return -1;
 	}
-	
+
 	private ByteArrayOutputStream getMapImageSectorIndicator(String mapCode, Long secId, Long indId) throws Exception {
 		ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();
 
@@ -1180,7 +1180,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
         //Get segments with funding for dashed paint map
         List secFundings = org.digijava.module.gis.util.DbUtil.getSectorFoundings(secId);
-        
+
         Iterator it = secFundings.iterator();
 
         Object [] fundingList = getFundingsByLocations(secFundings);
@@ -1200,7 +1200,8 @@ public class PDFExportAction extends Action implements PdfPageEvent {
         List hilightDashData = prepareDashSegments(segmentDataDasheList,
                 new ColorRGB(0, 0, 0), map);
 
-        List inds = org.digijava.module.gis.util.DbUtil.getIndicatorValuesForSectorIndicator(secId, indId);
+        //Need to pass year and subgroup ID in the future to get correct results.
+        List inds = org.digijava.module.gis.util.DbUtil.getIndicatorValuesForSectorIndicator(secId, indId, new Long(-1));
 
         List segmentDataList = new ArrayList();
         Iterator indsIt = inds.iterator();

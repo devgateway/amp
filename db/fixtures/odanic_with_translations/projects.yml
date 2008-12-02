@@ -23,7 +23,7 @@ projects_001:
   grant_loan: "1"
   id: "359"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -61,7 +61,7 @@ projects_002:
   grant_loan: "1"
   id: "169"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: rene.lauer@mae.etat.lu
@@ -101,7 +101,7 @@ projects_003:
   grant_loan: "1"
   id: "360"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -146,7 +146,7 @@ projects_004:
   grant_loan: "1"
   id: "170"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "14015"
   officer_responsible_email: helge.jahn@kfw.de
@@ -184,7 +184,7 @@ projects_005:
   grant_loan: "1"
   id: "411"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu
@@ -222,7 +222,7 @@ projects_006:
   grant_loan: "1"
   id: "221"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: susana.fernandez-rodriguez@ec.europa.eu
@@ -260,7 +260,7 @@ projects_007:
   grant_loan: "1"
   id: "31"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -298,7 +298,7 @@ projects_008:
   grant_loan: "1"
   id: "412"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -338,7 +338,7 @@ projects_009:
   grant_loan: "1"
   id: "222"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: jaime.martin-granizo@ec.europa.eu
@@ -376,7 +376,7 @@ projects_010:
   grant_loan: "1"
   id: "32"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -414,7 +414,7 @@ projects_011:
   grant_loan: "1"
   id: "413"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -452,7 +452,7 @@ projects_012:
   grant_loan: "1"
   id: "223"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -490,7 +490,7 @@ projects_013:
   grant_loan: "1"
   id: "33"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -528,7 +528,7 @@ projects_014:
   grant_loan: "1"
   id: "461"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-neret@dfid.gov.uk
@@ -568,7 +568,7 @@ projects_015:
   grant_loan: "1"
   id: "414"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -609,7 +609,7 @@ projects_016:
   grant_loan: "1"
   id: "224"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -647,7 +647,7 @@ projects_017:
   grant_loan: "1"
   id: "34"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -685,7 +685,7 @@ projects_018:
   grant_loan: "1"
   id: "271"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: ""
@@ -723,7 +723,7 @@ projects_019:
   grant_loan: "1"
   id: "81"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -765,7 +765,7 @@ projects_020:
   grant_loan: "1"
   id: "462"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: rene.lauer@mae.etat.lu
@@ -803,7 +803,7 @@ projects_021:
   grant_loan: "1"
   id: "415"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -841,7 +841,7 @@ projects_022:
   grant_loan: "1"
   id: "35"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -879,7 +879,7 @@ projects_023:
   grant_loan: "1"
   id: "272"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -935,7 +935,7 @@ projects_024:
   grant_loan: "1"
   id: "82"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -973,7 +973,7 @@ projects_025:
   grant_loan: "1"
   id: "225"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1011,7 +1011,7 @@ projects_026:
   grant_loan: "1"
   id: "463"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1051,7 +1051,7 @@ projects_027:
   grant_loan: "1"
   id: "416"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -1089,7 +1089,7 @@ projects_028:
   grant_loan: "1"
   id: "36"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ibatrina@gencat.net
@@ -1131,7 +1131,7 @@ projects_029:
   grant_loan: "1"
   id: "273"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1169,7 +1169,7 @@ projects_030:
   grant_loan: "1"
   id: "83"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: erika.fricke@ec.europa.eu
@@ -1207,7 +1207,7 @@ projects_031:
   grant_loan: "1"
   id: "226"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: martha.gallardo@ec.europa.eu
@@ -1245,7 +1245,7 @@ projects_032:
   grant_loan: "1"
   id: "464"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -1283,7 +1283,7 @@ projects_033:
   grant_loan: "1"
   id: "417"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1330,7 +1330,7 @@ projects_034:
   grant_loan: "1"
   id: "274"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -1368,7 +1368,7 @@ projects_035:
   grant_loan: "1"
   id: "84"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1408,7 +1408,7 @@ projects_036:
   grant_loan: "1"
   id: "227"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -1446,7 +1446,7 @@ projects_037:
   grant_loan: "1"
   id: "37"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: olga.viluce@ec.europa.eu
@@ -1484,7 +1484,7 @@ projects_038:
   grant_loan: "1"
   id: "465"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -1522,7 +1522,7 @@ projects_039:
   grant_loan: "1"
   id: "418"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu
@@ -1560,7 +1560,7 @@ projects_040:
   grant_loan: "1"
   id: "275"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1598,7 +1598,7 @@ projects_041:
   grant_loan: "1"
   id: "85"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1636,7 +1636,7 @@ projects_042:
   grant_loan: "1"
   id: "228"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1674,7 +1674,7 @@ projects_043:
   grant_loan: "1"
   id: "38"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: "nicaragua@medicosdel mundo.org"
@@ -1712,7 +1712,7 @@ projects_044:
   grant_loan: "1"
   id: "466"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1750,7 +1750,7 @@ projects_045:
   grant_loan: "1"
   id: "419"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1788,7 +1788,7 @@ projects_046:
   grant_loan: "1"
   id: "276"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -1826,7 +1826,7 @@ projects_047:
   grant_loan: "1"
   id: "86"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -1864,7 +1864,7 @@ projects_048:
   grant_loan: "1"
   id: "229"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1902,7 +1902,7 @@ projects_049:
   grant_loan: "1"
   id: "39"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -1942,7 +1942,7 @@ projects_050:
   grant_loan: "1"
   id: "420"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -1991,7 +1991,7 @@ projects_051:
   grant_loan: "1"
   id: "277"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -2029,7 +2029,7 @@ projects_052:
   grant_loan: "1"
   id: "87"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2067,7 +2067,7 @@ projects_053:
   grant_loan: "1"
   id: "230"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2105,7 +2105,7 @@ projects_054:
   grant_loan: "1"
   id: "40"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2143,7 +2143,7 @@ projects_055:
   grant_loan: "1"
   id: "278"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2181,7 +2181,7 @@ projects_056:
   grant_loan: "1"
   id: "88"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2219,7 +2219,7 @@ projects_057:
   grant_loan: "1"
   id: "279"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2259,7 +2259,7 @@ projects_058:
   grant_loan: "1"
   id: "89"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu
@@ -2297,7 +2297,7 @@ projects_059:
   grant_loan: "1"
   id: "280"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2347,7 +2347,7 @@ projects_060:
   grant_loan: "1"
   id: "90"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2385,7 +2385,7 @@ projects_061:
   grant_loan: "1"
   id: "331"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2426,7 +2426,7 @@ projects_062:
   grant_loan: "1"
   id: "141"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -2464,7 +2464,7 @@ projects_063:
   grant_loan: "1"
   id: "142"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: apcnic@intelnett.com
@@ -2502,7 +2502,7 @@ projects_064:
   grant_loan: "1"
   id: "332"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2540,7 +2540,7 @@ projects_065:
   grant_loan: "1"
   id: "143"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2578,7 +2578,7 @@ projects_066:
   grant_loan: "1"
   id: "333"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -2630,7 +2630,7 @@ projects_067:
   grant_loan: "1"
   id: "381"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2668,7 +2668,7 @@ projects_068:
   grant_loan: "1"
   id: "191"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2706,7 +2706,7 @@ projects_069:
   grant_loan: "1"
   id: "334"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2744,7 +2744,7 @@ projects_070:
   grant_loan: "1"
   id: "144"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -2782,7 +2782,7 @@ projects_071:
   grant_loan: "1"
   id: "382"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2833,7 +2833,7 @@ projects_072:
   grant_loan: "1"
   id: "192"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2871,7 +2871,7 @@ projects_073:
   grant_loan: "1"
   id: "335"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2909,7 +2909,7 @@ projects_074:
   grant_loan: "1"
   id: "145"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: farmamundi@cablenet.com.ni
@@ -2947,7 +2947,7 @@ projects_075:
   grant_loan: "1"
   id: "383"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -2985,7 +2985,7 @@ projects_076:
   grant_loan: "1"
   id: "193"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -3023,7 +3023,7 @@ projects_077:
   grant_loan: "1"
   id: "336"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "1"
   officer_responsible_email: ""
@@ -3071,7 +3071,7 @@ projects_078:
   grant_loan: "1"
   id: "146"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3112,7 +3112,7 @@ projects_079:
   grant_loan: "1"
   id: "384"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3150,7 +3150,7 @@ projects_080:
   grant_loan: "1"
   id: "194"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3188,7 +3188,7 @@ projects_081:
   grant_loan: "1"
   id: "337"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3226,7 +3226,7 @@ projects_082:
   grant_loan: "1"
   id: "147"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -3264,7 +3264,7 @@ projects_083:
   grant_loan: "1"
   id: "385"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ghiort@um.dk
@@ -3302,7 +3302,7 @@ projects_084:
   grant_loan: "1"
   id: "195"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3340,7 +3340,7 @@ projects_085:
   grant_loan: "1"
   id: "338"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3378,7 +3378,7 @@ projects_086:
   grant_loan: "1"
   id: "148"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3420,7 +3420,7 @@ projects_087:
   grant_loan: "1"
   id: "386"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -3458,7 +3458,7 @@ projects_088:
   grant_loan: "1"
   id: "196"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -3496,7 +3496,7 @@ projects_089:
   grant_loan: "1"
   id: "339"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3539,7 +3539,7 @@ projects_090:
   grant_loan: "1"
   id: "149"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-ruyter@dfid.gov.uk
@@ -3579,7 +3579,7 @@ projects_091:
   grant_loan: "1"
   id: "387"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "92030"
   officer_responsible_email: maria.berlinger@foreign.ministry.se
@@ -3617,7 +3617,7 @@ projects_092:
   grant_loan: "1"
   id: "197"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3655,7 +3655,7 @@ projects_093:
   grant_loan: "1"
   id: "340"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3693,7 +3693,7 @@ projects_094:
   grant_loan: "1"
   id: "150"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -3733,7 +3733,7 @@ projects_095:
   grant_loan: "1"
   id: "388"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -3771,7 +3771,7 @@ projects_096:
   grant_loan: "1"
   id: "198"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: riitta.tyolajarvi@formin.fi
@@ -3809,7 +3809,7 @@ projects_097:
   grant_loan: "1"
   id: "201"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: susana.fernandez-rodriguez@ec.europa.eu
@@ -3847,7 +3847,7 @@ projects_098:
   grant_loan: "1"
   id: "11"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: amigost@cablenet.com.ni
@@ -3885,7 +3885,7 @@ projects_099:
   grant_loan: "1"
   id: "389"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -3923,7 +3923,7 @@ projects_100:
   grant_loan: "1"
   id: "199"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: monica.peiro-vallejo@ec.europa.eu
@@ -3961,7 +3961,7 @@ projects_101:
   grant_loan: "1"
   id: "202"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -3999,7 +3999,7 @@ projects_102:
   grant_loan: "1"
   id: "12"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4037,7 +4037,7 @@ projects_103:
   grant_loan: "1"
   id: "390"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4079,7 +4079,7 @@ projects_104:
   grant_loan: "1"
   id: "200"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4117,7 +4117,7 @@ projects_105:
   grant_loan: "1"
   id: "203"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4157,7 +4157,7 @@ projects_106:
   grant_loan: "1"
   id: "13"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: martha.gallardo@ec.europa.eu
@@ -4195,7 +4195,7 @@ projects_107:
   grant_loan: "1"
   id: "441"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4233,7 +4233,7 @@ projects_108:
   grant_loan: "1"
   id: "61"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4271,7 +4271,7 @@ projects_109:
   grant_loan: "1"
   id: "204"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4309,7 +4309,7 @@ projects_110:
   grant_loan: "1"
   id: "14"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: solinter@solidaridad.org.ni
@@ -4347,7 +4347,7 @@ projects_111:
   grant_loan: "1"
   id: "251"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -4385,7 +4385,7 @@ projects_112:
   grant_loan: "1"
   id: "442"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -4423,7 +4423,7 @@ projects_113:
   grant_loan: "1"
   id: "62"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4461,7 +4461,7 @@ projects_114:
   grant_loan: "1"
   id: "205"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4499,7 +4499,7 @@ projects_115:
   grant_loan: "1"
   id: "15"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4537,7 +4537,7 @@ projects_116:
   grant_loan: "1"
   id: "252"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4575,7 +4575,7 @@ projects_117:
   grant_loan: "1"
   id: "443"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: susana.lucia.casablanca-mendizabal@ec.europa.eu
@@ -4613,7 +4613,7 @@ projects_118:
   grant_loan: "1"
   id: "206"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4651,7 +4651,7 @@ projects_119:
   grant_loan: "1"
   id: "16"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4689,7 +4689,7 @@ projects_120:
   grant_loan: "1"
   id: "253"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4727,7 +4727,7 @@ projects_121:
   grant_loan: "1"
   id: "63"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -4765,7 +4765,7 @@ projects_122:
   grant_loan: "1"
   id: "444"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -4806,7 +4806,7 @@ projects_123:
   grant_loan: "1"
   id: "207"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -4844,7 +4844,7 @@ projects_124:
   grant_loan: "1"
   id: "17"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -4882,7 +4882,7 @@ projects_125:
   grant_loan: "1"
   id: "254"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -4920,7 +4920,7 @@ projects_126:
   grant_loan: "1"
   id: "64"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -4958,7 +4958,7 @@ projects_127:
   grant_loan: "1"
   id: "445"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -4996,7 +4996,7 @@ projects_128:
   grant_loan: "1"
   id: "208"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5034,7 +5034,7 @@ projects_129:
   grant_loan: "1"
   id: "18"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: farmamundi@cablenet.com.ni
@@ -5072,7 +5072,7 @@ projects_130:
   grant_loan: "2"
   id: "255"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: "123456"
   officer_responsible_email: ""
@@ -5110,7 +5110,7 @@ projects_131:
   grant_loan: "1"
   id: "65"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: elena.getino@ec.europa.eu
@@ -5148,7 +5148,7 @@ projects_132:
   grant_loan: "1"
   id: "446"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -5186,7 +5186,7 @@ projects_133:
   grant_loan: "1"
   id: "209"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5224,7 +5224,7 @@ projects_134:
   grant_loan: "1"
   id: "19"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5262,7 +5262,7 @@ projects_135:
   grant_loan: "1"
   id: "256"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -5300,7 +5300,7 @@ projects_136:
   grant_loan: "1"
   id: "66"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5338,7 +5338,7 @@ projects_137:
   grant_loan: "1"
   id: "447"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5376,7 +5376,7 @@ projects_138:
   grant_loan: "1"
   id: "210"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nicaragua@cooperacio.org
@@ -5414,7 +5414,7 @@ projects_139:
   grant_loan: "1"
   id: "20"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5452,7 +5452,7 @@ projects_140:
   grant_loan: "1"
   id: "257"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5503,7 +5503,7 @@ projects_141:
   grant_loan: "1"
   id: "67"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5541,7 +5541,7 @@ projects_142:
   grant_loan: "1"
   id: "448"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5579,7 +5579,7 @@ projects_143:
   grant_loan: "1"
   id: "258"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -5617,7 +5617,7 @@ projects_144:
   grant_loan: "1"
   id: "68"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5655,7 +5655,7 @@ projects_145:
   grant_loan: "1"
   id: "449"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -5695,7 +5695,7 @@ projects_146:
   grant_loan: "1"
   id: "259"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu
@@ -5733,7 +5733,7 @@ projects_147:
   grant_loan: "1"
   id: "69"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -5771,7 +5771,7 @@ projects_148:
   grant_loan: "1"
   id: "450"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-ruyter@dfid.gov.uk
@@ -5809,7 +5809,7 @@ projects_149:
   grant_loan: "1"
   id: "260"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5858,7 +5858,7 @@ projects_150:
   grant_loan: "1"
   id: "70"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5899,7 +5899,7 @@ projects_151:
   grant_loan: "1"
   id: "311"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -5939,7 +5939,7 @@ projects_152:
   grant_loan: "1"
   id: "121"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -5977,7 +5977,7 @@ projects_153:
   grant_loan: "1"
   id: "312"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6015,7 +6015,7 @@ projects_154:
   grant_loan: "1"
   id: "122"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nicaragua@feyalegria.org
@@ -6053,7 +6053,7 @@ projects_155:
   grant_loan: "1"
   id: "313"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -6091,7 +6091,7 @@ projects_156:
   grant_loan: "1"
   id: "123"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -6129,7 +6129,7 @@ projects_157:
   grant_loan: "1"
   id: "314"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6167,7 +6167,7 @@ projects_158:
   grant_loan: "1"
   id: "124"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -6205,7 +6205,7 @@ projects_159:
   grant_loan: "1"
   id: "361"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -6243,7 +6243,7 @@ projects_160:
   grant_loan: "1"
   id: "171"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -6281,7 +6281,7 @@ projects_161:
   grant_loan: "1"
   id: "315"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6319,7 +6319,7 @@ projects_162:
   grant_loan: "1"
   id: "125"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: amigost@cablenet.com.ni
@@ -6357,7 +6357,7 @@ projects_163:
   grant_loan: "1"
   id: "362"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "15100"
   officer_responsible_email: ricardo.gomez@gtz.de
@@ -6395,7 +6395,7 @@ projects_164:
   grant_loan: "1"
   id: "172"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -6433,7 +6433,7 @@ projects_165:
   grant_loan: "1"
   id: "316"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6471,7 +6471,7 @@ projects_166:
   grant_loan: "1"
   id: "126"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -6512,7 +6512,7 @@ projects_167:
   grant_loan: "1"
   id: "363"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -6550,7 +6550,7 @@ projects_168:
   grant_loan: "1"
   id: "173"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6590,7 +6590,7 @@ projects_169:
   grant_loan: "1"
   id: "317"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -6628,7 +6628,7 @@ projects_170:
   grant_loan: "1"
   id: "127"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: amigost@cablenet.com.ni
@@ -6666,7 +6666,7 @@ projects_171:
   grant_loan: "1"
   id: "364"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -6704,7 +6704,7 @@ projects_172:
   grant_loan: "1"
   id: "174"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6742,7 +6742,7 @@ projects_173:
   grant_loan: "1"
   id: "318"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6787,7 +6787,7 @@ projects_174:
   grant_loan: "1"
   id: "128"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -6825,7 +6825,7 @@ projects_175:
   grant_loan: "1"
   id: "365"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -6866,7 +6866,7 @@ projects_176:
   grant_loan: "1"
   id: "175"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -6904,7 +6904,7 @@ projects_177:
   grant_loan: "1"
   id: "319"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6942,7 +6942,7 @@ projects_178:
   grant_loan: "1"
   id: "129"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -6980,7 +6980,7 @@ projects_179:
   grant_loan: "1"
   id: "366"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: remy.llinares@ec.europa.eu
@@ -7020,7 +7020,7 @@ projects_180:
   grant_loan: "1"
   id: "176"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -7058,7 +7058,7 @@ projects_181:
   grant_loan: "1"
   id: "320"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: "genero@aecinicaragua.org.ni "
@@ -7096,7 +7096,7 @@ projects_182:
   grant_loan: "1"
   id: "130"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: amigost@cablenet.com.ni
@@ -7134,7 +7134,7 @@ projects_183:
   grant_loan: "1"
   id: "367"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: susana.fernandez-rodriguez@ec.europa.eu
@@ -7172,7 +7172,7 @@ projects_184:
   grant_loan: "1"
   id: "177"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7210,7 +7210,7 @@ projects_185:
   grant_loan: "1"
   id: "368"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7248,7 +7248,7 @@ projects_186:
   grant_loan: "2"
   id: "178"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "24030"
   officer_responsible_email: helge.jahn@kfw.de
@@ -7286,7 +7286,7 @@ projects_187:
   grant_loan: "1"
   id: "369"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7324,7 +7324,7 @@ projects_188:
   grant_loan: "1"
   id: "179"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -7383,7 +7383,7 @@ projects_189:
   grant_loan: "1"
   id: "370"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7423,7 +7423,7 @@ projects_190:
   grant_loan: "1"
   id: "180"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -7461,7 +7461,7 @@ projects_191:
   grant_loan: "1"
   id: "421"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7499,7 +7499,7 @@ projects_192:
   grant_loan: "1"
   id: "231"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7537,7 +7537,7 @@ projects_193:
   grant_loan: "1"
   id: "41"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7575,7 +7575,7 @@ projects_194:
   grant_loan: "1"
   id: "422"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu
@@ -7613,7 +7613,7 @@ projects_195:
   grant_loan: "1"
   id: "232"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: olga.viluce@ec.europa.eu
@@ -7651,7 +7651,7 @@ projects_196:
   grant_loan: "1"
   id: "42"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7689,7 +7689,7 @@ projects_197:
   grant_loan: "1"
   id: "423"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7727,7 +7727,7 @@ projects_198:
   grant_loan: "1"
   id: "233"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7769,7 +7769,7 @@ projects_199:
   grant_loan: "1"
   id: "43"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: remy.llinares@ec.europa.eu
@@ -7807,7 +7807,7 @@ projects_200:
   grant_loan: "1"
   id: "424"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -7845,7 +7845,7 @@ projects_201:
   grant_loan: "1"
   id: "234"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7883,7 +7883,7 @@ projects_202:
   grant_loan: "1"
   id: "44"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: solinter@solidaridad.org.ni
@@ -7921,7 +7921,7 @@ projects_203:
   grant_loan: "1"
   id: "281"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -7961,7 +7961,7 @@ projects_204:
   grant_loan: "1"
   id: "91"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -7999,7 +7999,7 @@ projects_205:
   grant_loan: "1"
   id: "425"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8037,7 +8037,7 @@ projects_206:
   grant_loan: "1"
   id: "235"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8075,7 +8075,7 @@ projects_207:
   grant_loan: "1"
   id: "45"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8116,7 +8116,7 @@ projects_208:
   grant_loan: "1"
   id: "282"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8154,7 +8154,7 @@ projects_209:
   grant_loan: "1"
   id: "92"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8192,7 +8192,7 @@ projects_210:
   grant_loan: "1"
   id: "426"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8230,7 +8230,7 @@ projects_211:
   grant_loan: "1"
   id: "236"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8273,7 +8273,7 @@ projects_212:
   grant_loan: "1"
   id: "46"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -8311,7 +8311,7 @@ projects_213:
   grant_loan: "1"
   id: "283"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8349,7 +8349,7 @@ projects_214:
   grant_loan: "1"
   id: "93"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8387,7 +8387,7 @@ projects_215:
   grant_loan: "1"
   id: "427"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8427,7 +8427,7 @@ projects_216:
   grant_loan: "1"
   id: "237"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -8469,7 +8469,7 @@ projects_217:
   grant_loan: "1"
   id: "47"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8507,7 +8507,7 @@ projects_218:
   grant_loan: "1"
   id: "284"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8558,7 +8558,7 @@ projects_219:
   grant_loan: "1"
   id: "94"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8599,7 +8599,7 @@ projects_220:
   grant_loan: "1"
   id: "428"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -8646,7 +8646,7 @@ projects_221:
   grant_loan: "1"
   id: "238"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8684,7 +8684,7 @@ projects_222:
   grant_loan: "1"
   id: "48"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nicaragua@pazydesarrollo.org
@@ -8722,7 +8722,7 @@ projects_223:
   grant_loan: "1"
   id: "285"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8760,7 +8760,7 @@ projects_224:
   grant_loan: "1"
   id: "95"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -8798,7 +8798,7 @@ projects_225:
   grant_loan: "1"
   id: "429"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8836,7 +8836,7 @@ projects_226:
   grant_loan: "1"
   id: "239"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8879,7 +8879,7 @@ projects_227:
   grant_loan: "1"
   id: "49"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -8917,7 +8917,7 @@ projects_228:
   grant_loan: "1"
   id: "286"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8955,7 +8955,7 @@ projects_229:
   grant_loan: "1"
   id: "96"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -8993,7 +8993,7 @@ projects_230:
   grant_loan: "1"
   id: "430"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9031,7 +9031,7 @@ projects_231:
   grant_loan: "1"
   id: "240"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9069,7 +9069,7 @@ projects_232:
   grant_loan: "1"
   id: "50"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9107,7 +9107,7 @@ projects_233:
   grant_loan: "1"
   id: "287"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9145,7 +9145,7 @@ projects_234:
   grant_loan: "1"
   id: "97"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9183,7 +9183,7 @@ projects_235:
   grant_loan: "1"
   id: "288"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9221,7 +9221,7 @@ projects_236:
   grant_loan: "1"
   id: "98"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9259,7 +9259,7 @@ projects_237:
   grant_loan: "1"
   id: "101"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9297,7 +9297,7 @@ projects_238:
   grant_loan: "1"
   id: "289"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9335,7 +9335,7 @@ projects_239:
   grant_loan: "1"
   id: "99"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -9373,7 +9373,7 @@ projects_240:
   grant_loan: "1"
   id: "102"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9411,7 +9411,7 @@ projects_241:
   grant_loan: "1"
   id: "290"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9449,7 +9449,7 @@ projects_242:
   grant_loan: "1"
   id: "100"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9487,7 +9487,7 @@ projects_243:
   grant_loan: "1"
   id: "103"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9525,7 +9525,7 @@ projects_244:
   grant_loan: "1"
   id: "341"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: menduram@yahoo.com
@@ -9563,7 +9563,7 @@ projects_245:
   grant_loan: "1"
   id: "151"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9601,7 +9601,7 @@ projects_246:
   grant_loan: "1"
   id: "104"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9639,7 +9639,7 @@ projects_247:
   grant_loan: "1"
   id: "342"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: helge.jahn@kfw.de
@@ -9677,7 +9677,7 @@ projects_248:
   grant_loan: "1"
   id: "152"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "23040"
   officer_responsible_email: helge.jahn@kfw.de
@@ -9715,7 +9715,7 @@ projects_249:
   grant_loan: "1"
   id: "105"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9753,7 +9753,7 @@ projects_250:
   grant_loan: "1"
   id: "343"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "99810"
   officer_responsible_email: helge.jahn@kfw.de
@@ -9791,7 +9791,7 @@ projects_251:
   grant_loan: "1"
   id: "153"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: yader.baldizón@ada.gv.at
@@ -9829,7 +9829,7 @@ projects_252:
   grant_loan: "1"
   id: "106"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -9869,7 +9869,7 @@ projects_253:
   grant_loan: "1"
   id: "344"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alicia.louro-pena@ec.europa.eu
@@ -9907,7 +9907,7 @@ projects_254:
   grant_loan: "1"
   id: "154"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "11330"
   officer_responsible_email: helge.jahn@kfw.de
@@ -9945,7 +9945,7 @@ projects_255:
   grant_loan: "1"
   id: "107"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: fcardenal@fyanic.org
@@ -9983,7 +9983,7 @@ projects_256:
   grant_loan: "1"
   id: "391"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10021,7 +10021,7 @@ projects_257:
   grant_loan: "1"
   id: "345"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10059,7 +10059,7 @@ projects_258:
   grant_loan: "1"
   id: "155"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -10100,7 +10100,7 @@ projects_259:
   grant_loan: "1"
   id: "108"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10140,7 +10140,7 @@ projects_260:
   grant_loan: "1"
   id: "392"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -10178,7 +10178,7 @@ projects_261:
   grant_loan: "1"
   id: "346"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -10216,7 +10216,7 @@ projects_262:
   grant_loan: "1"
   id: "156"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "16050"
   officer_responsible_email: helge.jahn@kfw.de
@@ -10254,7 +10254,7 @@ projects_263:
   grant_loan: "1"
   id: "109"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nicaragua@medicosdelmundo.org
@@ -10292,7 +10292,7 @@ projects_264:
   grant_loan: "1"
   id: "393"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10330,7 +10330,7 @@ projects_265:
   grant_loan: "1"
   id: "347"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "99810"
   officer_responsible_email: helge.jahn@kfw.de
@@ -10368,7 +10368,7 @@ projects_266:
   grant_loan: "1"
   id: "157"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -10406,7 +10406,7 @@ projects_267:
   grant_loan: "1"
   id: "110"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: elena.getino@ec.europa.eu
@@ -10444,7 +10444,7 @@ projects_268:
   grant_loan: "1"
   id: "394"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -10485,7 +10485,7 @@ projects_269:
   grant_loan: "1"
   id: "348"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -10523,7 +10523,7 @@ projects_270:
   grant_loan: "1"
   id: "158"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "41000"
   officer_responsible_email: karin.loebenstein-von@gtz.de
@@ -10561,7 +10561,7 @@ projects_271:
   grant_loan: "1"
   id: "395"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10599,7 +10599,7 @@ projects_272:
   grant_loan: "1"
   id: "349"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -10637,7 +10637,7 @@ projects_273:
   grant_loan: "1"
   id: "159"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -10675,7 +10675,7 @@ projects_274:
   grant_loan: "1"
   id: "396"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -10713,7 +10713,7 @@ projects_275:
   grant_loan: "1"
   id: "350"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "16050"
   officer_responsible_email: helge.jahn@kfw.de
@@ -10759,7 +10759,7 @@ projects_276:
   grant_loan: "1"
   id: "160"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10818,7 +10818,7 @@ projects_277:
   grant_loan: "1"
   id: "397"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10856,7 +10856,7 @@ projects_278:
   grant_loan: "1"
   id: "398"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10897,7 +10897,7 @@ projects_279:
   grant_loan: "1"
   id: "401"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -10935,7 +10935,7 @@ projects_280:
   grant_loan: "1"
   id: "211"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -10973,7 +10973,7 @@ projects_281:
   grant_loan: "1"
   id: "21"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11011,7 +11011,7 @@ projects_282:
   grant_loan: "1"
   id: "399"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -11049,7 +11049,7 @@ projects_283:
   grant_loan: "1"
   id: "402"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11097,7 +11097,7 @@ projects_284:
   grant_loan: "1"
   id: "212"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -11135,7 +11135,7 @@ projects_285:
   grant_loan: "1"
   id: "22"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11173,7 +11173,7 @@ projects_286:
   grant_loan: "1"
   id: "400"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11211,7 +11211,7 @@ projects_287:
   grant_loan: "1"
   id: "403"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11249,7 +11249,7 @@ projects_288:
   grant_loan: "1"
   id: "213"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11287,7 +11287,7 @@ projects_289:
   grant_loan: "1"
   id: "23"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: intermon@cablenet.com.ni
@@ -11325,7 +11325,7 @@ projects_290:
   grant_loan: "1"
   id: "451"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: "74010"
   officer_responsible_email: ludwig.feldhaus@bgr.de
@@ -11365,7 +11365,7 @@ projects_291:
   grant_loan: "1"
   id: "404"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -11403,7 +11403,7 @@ projects_292:
   grant_loan: "1"
   id: "261"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11441,7 +11441,7 @@ projects_293:
   grant_loan: "1"
   id: "71"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -11479,7 +11479,7 @@ projects_294:
   grant_loan: "1"
   id: "214"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11517,7 +11517,7 @@ projects_295:
   grant_loan: "1"
   id: "24"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11555,7 +11555,7 @@ projects_296:
   grant_loan: "1"
   id: "452"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11593,7 +11593,7 @@ projects_297:
   grant_loan: "1"
   id: "405"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11642,7 +11642,7 @@ projects_298:
   grant_loan: "1"
   id: "262"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: susana.lucia.casablanca-mendizabal@ec.europa.eu
@@ -11680,7 +11680,7 @@ projects_299:
   grant_loan: "1"
   id: "72"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -11718,7 +11718,7 @@ projects_300:
   grant_loan: "1"
   id: "215"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: amigost@cablenet.com.ni
@@ -11756,7 +11756,7 @@ projects_301:
   grant_loan: "1"
   id: "25"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11794,7 +11794,7 @@ projects_302:
   grant_loan: "1"
   id: "453"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11834,7 +11834,7 @@ projects_303:
   grant_loan: "1"
   id: "406"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -11872,7 +11872,7 @@ projects_304:
   grant_loan: "1"
   id: "263"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: ""
@@ -11910,7 +11910,7 @@ projects_305:
   grant_loan: "1"
   id: "73"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -11948,7 +11948,7 @@ projects_306:
   grant_loan: "1"
   id: "216"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: angel.estebaranz@ec.europa.eu
@@ -11986,7 +11986,7 @@ projects_307:
   grant_loan: "1"
   id: "26"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -12024,7 +12024,7 @@ projects_308:
   grant_loan: "1"
   id: "454"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -12062,7 +12062,7 @@ projects_309:
   grant_loan: "1"
   id: "407"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12100,7 +12100,7 @@ projects_310:
   grant_loan: "1"
   id: "264"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12138,7 +12138,7 @@ projects_311:
   grant_loan: "1"
   id: "74"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -12178,7 +12178,7 @@ projects_312:
   grant_loan: "1"
   id: "217"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12216,7 +12216,7 @@ projects_313:
   grant_loan: "1"
   id: "27"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12254,7 +12254,7 @@ projects_314:
   grant_loan: "1"
   id: "455"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12292,7 +12292,7 @@ projects_315:
   grant_loan: "1"
   id: "408"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12330,7 +12330,7 @@ projects_316:
   grant_loan: "1"
   id: "265"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12368,7 +12368,7 @@ projects_317:
   grant_loan: "1"
   id: "75"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -12406,7 +12406,7 @@ projects_318:
   grant_loan: "1"
   id: "218"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12444,7 +12444,7 @@ projects_319:
   grant_loan: "1"
   id: "28"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12482,7 +12482,7 @@ projects_320:
   grant_loan: "1"
   id: "456"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: yader.baldizon@ada.gv.at
@@ -12522,7 +12522,7 @@ projects_321:
   grant_loan: "1"
   id: "409"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -12562,7 +12562,7 @@ projects_322:
   grant_loan: "1"
   id: "266"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: susana.lucia.casablanca-mendizabal@ec.europa.eu
@@ -12615,7 +12615,7 @@ projects_323:
   grant_loan: "1"
   id: "76"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12655,7 +12655,7 @@ projects_324:
   grant_loan: "1"
   id: "219"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12693,7 +12693,7 @@ projects_325:
   grant_loan: "1"
   id: "29"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12735,7 +12735,7 @@ projects_326:
   grant_loan: "1"
   id: "457"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12773,7 +12773,7 @@ projects_327:
   grant_loan: "1"
   id: "410"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12811,7 +12811,7 @@ projects_328:
   grant_loan: "1"
   id: "267"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12849,7 +12849,7 @@ projects_329:
   grant_loan: "1"
   id: "77"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -12887,7 +12887,7 @@ projects_330:
   grant_loan: "1"
   id: "220"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: amigost@cablenet.com.ni
@@ -12927,7 +12927,7 @@ projects_331:
   grant_loan: "1"
   id: "30"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -12968,7 +12968,7 @@ projects_332:
   grant_loan: "1"
   id: "458"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13006,7 +13006,7 @@ projects_333:
   grant_loan: "1"
   id: "268"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -13044,7 +13044,7 @@ projects_334:
   grant_loan: "1"
   id: "78"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -13082,7 +13082,7 @@ projects_335:
   grant_loan: "1"
   id: "459"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13120,7 +13120,7 @@ projects_336:
   grant_loan: "1"
   id: "269"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13158,7 +13158,7 @@ projects_337:
   grant_loan: "1"
   id: "79"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -13196,7 +13196,7 @@ projects_338:
   grant_loan: "1"
   id: "460"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13234,7 +13234,7 @@ projects_339:
   grant_loan: "1"
   id: "270"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -13289,7 +13289,7 @@ projects_340:
   grant_loan: "1"
   id: "80"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13327,7 +13327,7 @@ projects_341:
   grant_loan: "1"
   id: "321"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -13365,7 +13365,7 @@ projects_342:
   grant_loan: "1"
   id: "131"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: angel.estebaranz@ec.europa.eu
@@ -13403,7 +13403,7 @@ projects_343:
   grant_loan: "1"
   id: "322"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu
@@ -13441,7 +13441,7 @@ projects_344:
   grant_loan: "1"
   id: "132"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: farmamundi@cablenet.com.ni
@@ -13479,7 +13479,7 @@ projects_345:
   grant_loan: "1"
   id: "323"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13523,7 +13523,7 @@ projects_346:
   grant_loan: "1"
   id: "133"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -13568,7 +13568,7 @@ projects_347:
   grant_loan: "1"
   id: "371"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "14020"
   officer_responsible_email: helge.jahn@kfw.de
@@ -13606,7 +13606,7 @@ projects_348:
   grant_loan: "1"
   id: "181"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -13644,7 +13644,7 @@ projects_349:
   grant_loan: "1"
   id: "324"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13687,7 +13687,7 @@ projects_350:
   grant_loan: "1"
   id: "134"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13725,7 +13725,7 @@ projects_351:
   grant_loan: "1"
   id: "372"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13763,7 +13763,7 @@ projects_352:
   grant_loan: "1"
   id: "182"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: mauricio.penalba@ec.europa.eu
@@ -13801,7 +13801,7 @@ projects_353:
   grant_loan: "1"
   id: "325"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: susana.lucia.casablanca-mendizabal@ec.europa.eu
@@ -13839,7 +13839,7 @@ projects_354:
   grant_loan: "1"
   id: "135"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13877,7 +13877,7 @@ projects_355:
   grant_loan: "1"
   id: "373"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -13915,7 +13915,7 @@ projects_356:
   grant_loan: "1"
   id: "183"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "99810"
   officer_responsible_email: ricardo.gomez@gtz.de
@@ -13953,7 +13953,7 @@ projects_357:
   grant_loan: "1"
   id: "326"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -13994,7 +13994,7 @@ projects_358:
   grant_loan: "1"
   id: "136"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: elena.getino@ec.europa.eu
@@ -14069,7 +14069,7 @@ projects_359:
   grant_loan: "1"
   id: "374"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14109,7 +14109,7 @@ projects_360:
   grant_loan: "1"
   id: "184"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -14147,7 +14147,7 @@ projects_361:
   grant_loan: "1"
   id: "327"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14185,7 +14185,7 @@ projects_362:
   grant_loan: "1"
   id: "137"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14223,7 +14223,7 @@ projects_363:
   grant_loan: "1"
   id: "375"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -14261,7 +14261,7 @@ projects_364:
   grant_loan: "1"
   id: "185"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -14299,7 +14299,7 @@ projects_365:
   grant_loan: "1"
   id: "328"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -14348,7 +14348,7 @@ projects_366:
   grant_loan: "1"
   id: "138"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -14386,7 +14386,7 @@ projects_367:
   grant_loan: "1"
   id: "376"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14432,7 +14432,7 @@ projects_368:
   grant_loan: "1"
   id: "186"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: olga.viluce@ec.europa.eu
@@ -14470,7 +14470,7 @@ projects_369:
   grant_loan: "1"
   id: "329"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14508,7 +14508,7 @@ projects_370:
   grant_loan: "1"
   id: "139"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14546,7 +14546,7 @@ projects_371:
   grant_loan: "1"
   id: "377"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -14584,7 +14584,7 @@ projects_372:
   grant_loan: "1"
   id: "187"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -14622,7 +14622,7 @@ projects_373:
   grant_loan: "1"
   id: "330"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14660,7 +14660,7 @@ projects_374:
   grant_loan: "1"
   id: "140"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: silviacreni@humanidad.org.ni
@@ -14698,7 +14698,7 @@ projects_375:
   grant_loan: "1"
   id: "378"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14738,7 +14738,7 @@ projects_376:
   grant_loan: "1"
   id: "188"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: susana.fernandez-rodriguez@ec.europa.eu
@@ -14776,7 +14776,7 @@ projects_377:
   grant_loan: "1"
   id: "379"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -14814,7 +14814,7 @@ projects_378:
   grant_loan: "1"
   id: "189"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: rene.lauer@mae.etat.lu
@@ -14852,7 +14852,7 @@ projects_379:
   grant_loan: "1"
   id: "2"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marbellyz.roa@ec.europa.eu
@@ -14890,7 +14890,7 @@ projects_380:
   grant_loan: "1"
   id: "380"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14928,7 +14928,7 @@ projects_381:
   grant_loan: "1"
   id: "190"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -14969,7 +14969,7 @@ projects_382:
   grant_loan: "1"
   id: "3"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -15007,7 +15007,7 @@ projects_383:
   grant_loan: "1"
   id: "431"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15045,7 +15045,7 @@ projects_384:
   grant_loan: "1"
   id: "4"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: martha.gallardo@ec.europa.eu
@@ -15083,7 +15083,7 @@ projects_385:
   grant_loan: "1"
   id: "241"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: elena.getino@ec.europa.eu
@@ -15124,7 +15124,7 @@ projects_386:
   grant_loan: "1"
   id: "51"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15162,7 +15162,7 @@ projects_387:
   grant_loan: "1"
   id: "432"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15200,7 +15200,7 @@ projects_388:
   grant_loan: "1"
   id: "5"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -15238,7 +15238,7 @@ projects_389:
   grant_loan: "1"
   id: "242"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15283,7 +15283,7 @@ projects_390:
   grant_loan: "1"
   id: "52"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15321,7 +15321,7 @@ projects_391:
   grant_loan: "1"
   id: "433"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -15361,7 +15361,7 @@ projects_392:
   grant_loan: "1"
   id: "6"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -15401,7 +15401,7 @@ projects_393:
   grant_loan: "1"
   id: "243"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -15439,7 +15439,7 @@ projects_394:
   grant_loan: "1"
   id: "53"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15477,7 +15477,7 @@ projects_395:
   grant_loan: "1"
   id: "434"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15515,7 +15515,7 @@ projects_396:
   grant_loan: "1"
   id: "7"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15559,7 +15559,7 @@ projects_397:
   grant_loan: "1"
   id: "291"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15597,7 +15597,7 @@ projects_398:
   grant_loan: "1"
   id: "244"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15637,7 +15637,7 @@ projects_399:
   grant_loan: "1"
   id: "54"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: martha.gallardo@ec.europa.eu
@@ -15675,7 +15675,7 @@ projects_400:
   grant_loan: "1"
   id: "435"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15713,7 +15713,7 @@ projects_401:
   grant_loan: "1"
   id: "8"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: epueblos@ibw.com.ni
@@ -15751,7 +15751,7 @@ projects_402:
   grant_loan: "1"
   id: "292"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15794,7 +15794,7 @@ projects_403:
   grant_loan: "1"
   id: "245"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15832,7 +15832,7 @@ projects_404:
   grant_loan: "1"
   id: "55"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15870,7 +15870,7 @@ projects_405:
   grant_loan: "1"
   id: "436"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15908,7 +15908,7 @@ projects_406:
   grant_loan: "1"
   id: "9"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -15948,7 +15948,7 @@ projects_407:
   grant_loan: "1"
   id: "293"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -15988,7 +15988,7 @@ projects_408:
   grant_loan: "1"
   id: "246"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -16026,7 +16026,7 @@ projects_409:
   grant_loan: "1"
   id: "56"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16064,7 +16064,7 @@ projects_410:
   grant_loan: "1"
   id: "437"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16104,7 +16104,7 @@ projects_411:
   grant_loan: "1"
   id: "10"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -16142,7 +16142,7 @@ projects_412:
   grant_loan: "1"
   id: "294"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16187,7 +16187,7 @@ projects_413:
   grant_loan: "1"
   id: "247"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16225,7 +16225,7 @@ projects_414:
   grant_loan: "1"
   id: "57"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16263,7 +16263,7 @@ projects_415:
   grant_loan: "1"
   id: "438"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: nelson.lopez@ada.gv.at
@@ -16301,7 +16301,7 @@ projects_416:
   grant_loan: "1"
   id: "295"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16339,7 +16339,7 @@ projects_417:
   grant_loan: "1"
   id: "248"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-johnston@dfid.gov.uk
@@ -16377,7 +16377,7 @@ projects_418:
   grant_loan: "1"
   id: "58"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16415,7 +16415,7 @@ projects_419:
   grant_loan: "1"
   id: "439"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "2"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -16453,7 +16453,7 @@ projects_420:
   grant_loan: "1"
   id: "296"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16491,7 +16491,7 @@ projects_421:
   grant_loan: "1"
   id: "249"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: mauricio.penalba@ec.europa.eu
@@ -16529,7 +16529,7 @@ projects_422:
   grant_loan: "1"
   id: "59"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16569,7 +16569,7 @@ projects_423:
   grant_loan: "1"
   id: "440"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16607,7 +16607,7 @@ projects_424:
   grant_loan: "1"
   id: "297"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16645,7 +16645,7 @@ projects_425:
   grant_loan: "1"
   id: "250"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16683,7 +16683,7 @@ projects_426:
   grant_loan: "1"
   id: "60"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16721,7 +16721,7 @@ projects_427:
   grant_loan: "1"
   id: "298"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -16759,7 +16759,7 @@ projects_428:
   grant_loan: "1"
   id: "301"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isabel.tercero@ec.europa.eu
@@ -16797,7 +16797,7 @@ projects_429:
   grant_loan: "1"
   id: "111"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16835,7 +16835,7 @@ projects_430:
   grant_loan: "1"
   id: "299"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -16873,7 +16873,7 @@ projects_431:
   grant_loan: "1"
   id: "302"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16911,7 +16911,7 @@ projects_432:
   grant_loan: "1"
   id: "112"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -16949,7 +16949,7 @@ projects_433:
   grant_loan: "1"
   id: "300"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -16987,7 +16987,7 @@ projects_434:
   grant_loan: "1"
   id: "303"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17025,7 +17025,7 @@ projects_435:
   grant_loan: "1"
   id: "113"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17063,7 +17063,7 @@ projects_436:
   grant_loan: "1"
   id: "304"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -17101,7 +17101,7 @@ projects_437:
   grant_loan: "1"
   id: "114"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: isf@cablenet.com.ni
@@ -17139,7 +17139,7 @@ projects_438:
   grant_loan: "1"
   id: "351"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17177,7 +17177,7 @@ projects_439:
   grant_loan: "1"
   id: "161"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: rene.lauer@mae.etat.lu
@@ -17215,7 +17215,7 @@ projects_440:
   grant_loan: "1"
   id: "305"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17253,7 +17253,7 @@ projects_441:
   grant_loan: "1"
   id: "115"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17291,7 +17291,7 @@ projects_442:
   grant_loan: "1"
   id: "352"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: marie-anne.marx@mae.etat.lu
@@ -17329,7 +17329,7 @@ projects_443:
   grant_loan: "1"
   id: "162"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "3"
   oecd_number: ~
   officer_responsible_email: emma.clua@ec.europa.eu
@@ -17367,7 +17367,7 @@ projects_444:
   grant_loan: "1"
   id: "116"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17405,7 +17405,7 @@ projects_445:
   grant_loan: "1"
   id: "353"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17443,7 +17443,7 @@ projects_446:
   grant_loan: "1"
   id: "163"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: christina.hoernicke@ada.gv.at
@@ -17481,7 +17481,7 @@ projects_447:
   grant_loan: "1"
   id: "306"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17521,7 +17521,7 @@ projects_448:
   grant_loan: "1"
   id: "117"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -17559,7 +17559,7 @@ projects_449:
   grant_loan: "1"
   id: "354"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17599,7 +17599,7 @@ projects_450:
   grant_loan: "1"
   id: "164"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -17637,7 +17637,7 @@ projects_451:
   grant_loan: "1"
   id: "307"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17675,7 +17675,7 @@ projects_452:
   grant_loan: "1"
   id: "355"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "11330"
   officer_responsible_email: helge.jahn@kfw.de
@@ -17713,7 +17713,7 @@ projects_453:
   grant_loan: "1"
   id: "165"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17751,7 +17751,7 @@ projects_454:
   grant_loan: "1"
   id: "308"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17789,7 +17789,7 @@ projects_455:
   grant_loan: "1"
   id: "118"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: m-jarquin@dfid.gov.uk
@@ -17827,7 +17827,7 @@ projects_456:
   grant_loan: "1"
   id: "356"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: sandra.mejia@ec.europa.eu
@@ -17867,7 +17867,7 @@ projects_457:
   grant_loan: "1"
   id: "166"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: maria.monge@ec.europa.eu
@@ -17905,7 +17905,7 @@ projects_458:
   grant_loan: "1"
   id: "309"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17943,7 +17943,7 @@ projects_459:
   grant_loan: "1"
   id: "119"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -17981,7 +17981,7 @@ projects_460:
   grant_loan: "1"
   id: "357"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: luc.dockendorf@mae.etat.lu
@@ -18024,7 +18024,7 @@ projects_461:
   grant_loan: "1"
   id: "167"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: ""
@@ -18062,7 +18062,7 @@ projects_462:
   grant_loan: "1"
   id: "310"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: "0"
   officer_responsible_email: ""
@@ -18100,7 +18100,7 @@ projects_463:
   grant_loan: "1"
   id: "120"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: fcardenal@fyanic.org
@@ -18138,7 +18138,7 @@ projects_464:
   grant_loan: "1"
   id: "358"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: susana.fernandez-rodriguez@ec.europa.eu
@@ -18176,7 +18176,7 @@ projects_465:
   grant_loan: "1"
   id: "168"
   income_code: "10017"
-  input_state: general
+  input_state: profile_information
   national_regional: "1"
   oecd_number: ~
   officer_responsible_email: alain.peigne@ec.europa.eu

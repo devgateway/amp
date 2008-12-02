@@ -38,22 +38,32 @@
 		</li>
 		
 		<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
-					:include_blank => ll(:options, :prompt), :required => true %></li>
+					:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
 					
 		<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
-					:include_blank => ll(:options, :prompt), :required => true %></li>
+					:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
 		
 		<li class="fifty"><%= f.collection_select :type_of_aid_id, TypeOfAid.all, :id, :name, 
 					:prompt => ll(:options, :prompt), :required => true %></li>
 
 		<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
-					 :include_blank => ll(:options, :prompt), :required => true %></li>
+					 :include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
 			
 			
 		<li><%= f.text_field :website %></li>
 		<li><%= f.text_area :comments, :rows => 10 %></li>
 
 		
+	<% end %>
+	
+	<% f.field_set ll(:project, :markers) do %>	
+		<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+		<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+		<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+		
+		<li class="thirty"><%= f.select :gender_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+		<li class="thirty"><%= f.select :environment_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+		<li class="thirty" style="height: 45px"></li>
 	<% end %>
 	
 	<% f.field_set ll(:project, :officer_responsible) do %>

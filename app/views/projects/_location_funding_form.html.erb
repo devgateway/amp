@@ -1,4 +1,19 @@
+<% js_behavior :related_selects %>
+
 <% labeled_form_for @project do |f| %>
+	<% f.field_set do %>
+		<p>TODO: Instructions on how to use this</p>
+
+		<%= button_to_function lc(:add_province) do |page| 
+				page.insert_html :bottom, :geo_information, :partial => 'relevant_area'
+				page << "initDynamicSelects();"
+		end %>
+
+		<div id="geo_information">
+			<%= render :partial => 'relevant_area', :collection => (@project.provinces.blank? ? [Province.new] : @project.provinces) %>
+		</div>	
+	<% end %>
+
 	<% f.field_set lc(:cofunding_title) do %>
 		<div id="cofundings">
 			<%= f.render_associated_form(@project.cofundings, :new => 1) %>
@@ -26,8 +41,8 @@
    				<li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %></li>
    				<li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %></li>
    				
-   				<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS %></li>
-   				<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS %></li>
+   				<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+   				<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
 			<% end %>
 		<% end %>
 	<% end %>

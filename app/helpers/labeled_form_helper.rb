@@ -61,10 +61,10 @@ module LabeledFormHelper
     def select(method, choices, options = {}, html_options = {})
       label_opts = extract_label_options!(options)
       strip_options_for_select!(choices)
-      translated_choices = translate_options(choices)
+      choices = translate_options(choices) if options.delete(:translate)
       
       wrap_in_label_row(method, 
-        @template.select(@object_name, method, translated_choices, objectify_options(options), html_options), 
+        @template.select(@object_name, method, choices, objectify_options(options), html_options), 
         label_opts)
     end
     
@@ -138,9 +138,10 @@ module LabeledFormHelper
   
 protected
   def localized_caption(method)
+    underscore_class_name = !@object ? @object_name : @object.class.to_s.underscore
     method_or_association_name = method.to_s.sub(/_id$/, '')
     
-    ll(@object_name, method_or_association_name)
+    ll(underscore_class_name, method_or_association_name)
   end
 
   def wrap_in_label_row(method, content, options)

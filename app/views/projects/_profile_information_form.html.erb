@@ -1,5 +1,23 @@
 <%= error_messages_for :project %>
 
+<script language="javascript">
+	// TODO: Create datepicker css class and move this into application.js
+  $(document).ready(
+  	function(){
+
+		$.datepicker.setDefaults({
+            showOn: "button", 
+            buttonImage: "/images/datepicker.png", 
+            buttonImageOnly: true,
+            dateFormat: 'yy-mm-dd'
+        });
+
+        $('#project_end').datepicker();
+        $('#project_start').datepicker();
+	}
+  );
+</script>
+
 <% labeled_form_for @project do |f| %>
 	<% f.field_set do %>
 		<li><%= f.collection_select :donor_agency_id, @project.donor.agencies, "id", "name", 
@@ -18,26 +36,7 @@
 				:include_blank => I18n.t('options.prompt'), :required => true %></li>
     	
 		<li class="fifty"><%= f.text_field :start, :required => true, :readonly =>true %></li>
-		<li class="fifty"><%= f.text_field :end, :required => true, :readonly =>true  %></li>
-
-  <script language="javascript">
-  $(document).ready(
-  	function(){
-
-		$.datepicker.setDefaults({
-            showOn: "button", 
-            buttonImage: "/images/datepicker.png", 
-            buttonImageOnly: true,
-            dateFormat: 'yy-mm-dd'
-        });
-
-        $('#project_end').datepicker();
-        $('#project_start').datepicker();
-	}
-  );
-  </script>
-
-                                
+		<li class="fifty"><%= f.text_field :end, :required => true, :readonly =>true  %></li>                               
 	<% end %>
 	
 	<%= render :partial => 'control_buttons' %>

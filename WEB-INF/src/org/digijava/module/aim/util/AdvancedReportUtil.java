@@ -423,6 +423,18 @@ public final class AdvancedReportUtil {
 	                ampTeamReports = (AmpTeamReports) itr.next();
 	                session.delete(ampTeamReports);
 	            }
+	            // Remove reference from AmpTeamPageFilters
+	            if(ampReports.getAmpPage()!=null){
+		            queryString = "select tpf from " + AmpTeamPageFilters.class.getName()
+		                + " tpf" + " where (tpf.page=:pageId)";
+		            qry = session.createQuery(queryString);
+		            qry.setLong("pageId", ampReports.getAmpPage().getAmpPageId());
+		            itr = qry.list().iterator();
+		            while(itr.hasNext()) {
+		                AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
+		                session.delete(tpf);
+		            }
+	            }
 	
 	            if(ampReports.getAmpPage()!=null){
 	            	AmpPages ampPage = ampReports.getAmpPage();

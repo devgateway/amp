@@ -8,8 +8,16 @@ function Asynchronous(){
 
 function Asynchronous_call(url){
          var instance=this;
-         this._xmlhttp.open('POST',url,true);
-         this._xmlhttp.onreadystatechange=function(){
+         
+          this._xmlhttp.open('POST',url,true);
+       
+            if (url.indexOf("?") > 0){
+	         	this._xmlhttp.setRequestHeader("Content-length",url.substr(url.indexOf("?")+1,url.length).length);
+			 }else{
+				this._xmlhttp.setRequestHeader("Content-length",0);
+			 }
+		
+		 this._xmlhttp.onreadystatechange=function(){
             try{
             switch(instance._xmlhttp.readyState){
               case 1:

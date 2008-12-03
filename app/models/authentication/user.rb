@@ -7,7 +7,8 @@ class User < ActiveRecord::Base
   
   belongs_to                :donor
   belongs_to                :role
-  delegate                  :layout, :to => :role
+  delegate                  :layout,  :to => :role
+  delegate                  :title,   :to => :role, :prefix => true # Becomes role_title
   
   validates_format_of       :name,     :with => Authentication.name_regex,  :message => Authentication.bad_name_message, :allow_nil => true
   validates_length_of       :name,     :maximum => 100
@@ -36,6 +37,8 @@ class User < ActiveRecord::Base
   def email=(value)
     write_attribute :email, (value ? value.downcase : nil)
   end
+  
+  
 
   protected
     

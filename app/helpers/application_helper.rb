@@ -10,11 +10,12 @@ module ApplicationHelper
     relevant_keys.inject("") { |e, k| e += content_tag(:div, flash[k], :class => "flash #{k}") }
   end
   
-  # Renders a specific menu partial depending on the user's role
-  # and associated layout attribute
-  def render_user_navigation
-    nav_tmpl = logged_in? ? current_user.layout : 'default'
-    render :partial => "layouts/navigation/#{nav_tmpl}"
+  # Renders a specific header partial depending on the user's role and associated layout attribute. 
+  # This way we can customize the navigation and user info bars for individual roles
+  # If nil is given for the role name, it will use the '_default' partial
+  def render_header_content_for_role(role_name)
+    role_name ||= 'default'
+    render :partial => "layouts/header/#{role_name}"
   end
   
   ##

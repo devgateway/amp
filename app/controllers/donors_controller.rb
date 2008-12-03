@@ -28,11 +28,13 @@ class DonorsController < ApplicationController
     @donor = Donor.find(params[:id])
     
     # Manually set attributes because mass-assignment has been disabled for security reasons
-    @donor.name            = params[:donor][:name]
-    @donor.code            = params[:donor][:code]
-    @donor.currency        = params[:donor][:currency]
-    @donor.cofunding_only  = params[:donor][:cofunding_only]
-      
+    @donor.name             = params[:donor][:name]
+    @donor.code             = params[:donor][:code]
+    @donor.currency         = params[:donor][:currency]
+    @donor.cofunding_only   = params[:donor][:cofunding_only]
+    @donor.flag             = params[:donor][:flag]
+    @donor.profile_picture  = params[:donor][:profile_picture]
+     
     if @donor.save
       flash[:notice] = 'Donor was successfully updated.'
       redirect_to donors_path

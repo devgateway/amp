@@ -1,7 +1,9 @@
-<% labeled_form_for @donor do |f| %>
+<% labeled_form_for @donor, :html => { :multipart => true } do |f| %>
 	<% f.field_set do %>
 		<li class="fifty"><%= f.text_field :name %></li>
 		<li class="fifty"><%= f.text_field :code %></li>
+		<li class="fifty"><%= f.file_field :flag %></li>
+		<li class="fifty"><%= f.file_field :profile_picture %></li>
 		<li><%= f.select :currency, ExchangeRate.available_currencies.map { |c| [c, c] } %></li>
 		<li><%= f.check_box :cofunding_only %></li>
 	<% end %>

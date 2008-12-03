@@ -67,6 +67,9 @@
 	
 	function sectorSelected(sec) {
 
+		initSubgroupCombo();
+		initYearCombo();
+	
 		var selSector = sec.value;
 		setBusy(true);
 		var mapLevel = document.getElementById("mapLevelCombo").value;
@@ -77,6 +80,10 @@
 	}
 	
 	function indicatorSelected(ind) {
+	
+		initSubgroupCombo();
+		initYearCombo();
+	
 		selIndicator = ind.value;
 		var mapLevel = document.getElementById("mapLevelCombo").value;
 		var sec = document.getElementById("sectorsMapCombo").value;
@@ -117,6 +124,9 @@
 	}
 	
 	function subgroupSelected(sbgr) {
+	
+		initYearCombo();
+	
 		selSubgroup = sbgr.value;
 
 		var mapLevel = document.getElementById("mapLevelCombo").value;
@@ -246,7 +256,7 @@
 			
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="none";
+			noneOpt.text="None";
 			selectCmb.options.add(noneOpt);
 			
 			
@@ -396,6 +406,23 @@
 		return retVal;
 	}
 	
+	function initSubgroupCombo(){
+		var cmb = document.getElementById("indicatorSubgroupCombo");
+		cmb.innerHTML = null;
+		var noneOpt = document.createElement("OPTION");
+		noneOpt.value="-1";
+		noneOpt.text="None";
+		cmb.options.add(noneOpt);
+	}
+	
+	function initYearCombo(){
+		var cmb = document.getElementById("indicatorYearCombo");
+		cmb.innerHTML = null;
+		var noneOpt = document.createElement("OPTION");
+		noneOpt.value="-1";
+		noneOpt.text="None";
+		cmb.options.add(noneOpt);
+	}
 	
 		
 	//Map level functions
@@ -416,6 +443,9 @@
 		} else if (newVal==3) {
 			document.getElementById("reg_district_caption").innerHTML="District";
 		}
+		
+		initSubgroupCombo();
+		initYearCombo();
 		
 	}
 	

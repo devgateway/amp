@@ -100,6 +100,11 @@ public class GroupColumn extends Column {
     		Iterator i=srcG.iterator();
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
+				
+				if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && element instanceof TotalCommitmentsAmountColumn){ 
+					continue;
+				}
+				
 				Column splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
 				
 				if(splitted!=null) {

@@ -40,7 +40,8 @@
 		class=box-border-nopadding>
 		<tr>
 			<td align=left vAlign=top>
-			<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+			<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"
+				class=box-border-nopadding>
 				<tr bgcolor="#006699">
 					<td vAlign="center" width="100%" align="center" class="textalb"
 						height="20"><a
@@ -61,6 +62,7 @@
 									              </digi:trn></td>
 								<td><html:select property="selectedType"
 									styleClass="inp-text">
+									
 									<html:option value="-1">
 										<digi:trn key="aim:selecType">-Select Type-</digi:trn>
 									</html:option>
@@ -70,8 +72,8 @@
 							</tr>
 						</feature:display>						
 						<tr>
-							<td align="right" title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
-								<digi:trn key="aim:title">Title</digi:trn>
+							<td align="right">
+								<digi:trn key="aim:title">Title</digi:trn> 
 							</td>
 							<td>
 								<html:text property="newCompoenentName" value="<%=eaForm.getComponentTitle()%>" size="40" onkeypress="validateEnter(event)"/> 
@@ -110,7 +112,8 @@
 								key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn>
 							<%=eaForm.getFunding().getTotalCommitments()%> <%=eaForm.getCurrCode()%> ) </span> <!-- Commented added by mouhamad for burkina AMP-2709 -->
 							<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
-							<a href="javascript:addCommitments()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
+							<a href="javascript:document.addCommitments()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
+							
 							<br>
 							<div id="comm">
 								<c:if test="${aimEditActivityForm.componentId != -1}">
@@ -178,7 +181,7 @@
 												<td>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 													</a><input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
-													<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="removeCommitment('<%=divName%>')">
+													<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="document.removeCommitment('<%=divName%>')">
 												</td>
 											</tr>
 										</table>
@@ -194,7 +197,7 @@
 							<td colspan="2" class="box-border"><span class="f-names"><digi:trn
 								key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn>
 							<%=eaForm.getFunding().getTotalDisbursements()%> <%=eaForm.getCurrCode()%>) </span> <a
-								href="javascript:addDisbursement()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
+								href="javascript:document.addDisbursement()" style="color:blue"><digi:trn key="btn:add">Add</digi:trn></a><br>
 							<br>							
 							<div id="disb"><c:if test="${aimEditActivityForm.componentId != -1}">
 								<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
@@ -264,7 +267,7 @@
 														<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
 													</td>
 													<td>
-														<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="removeDisbursement('<%=divName%>')">
+														<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="document.removeDisbursement('<%=divName%>')">
 													</td>
 												</tr>
 											</table>													
@@ -284,7 +287,7 @@
 									key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn>
 								<%=eaForm.getFunding().getTotalExpenditures()%> <%=eaForm.getCurrCode()%>)</span> <field:display
 									name="Add Expenditure Button" feature="Expenditures">
-									<a href="javascript:addExpenditure()" style="color:blue"> <digi:trn
+									<a href="javascript:document.addExpenditure()" style="color:blue"> <digi:trn
 										key="btn:add">Add</digi:trn></a>
 								</field:display> &nbsp;&nbsp; <br>
 								<br>
@@ -355,7 +358,7 @@
 														</td>
 														<td>
 															<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
-															<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="removeExpenditure('<%=divName%>')">
+															<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text' onclick="document.removeExpenditure('<%=divName%>')">
 														</td>
 													</tr>
 												</table>
@@ -372,7 +375,7 @@
 								<tr>
 									<td><input type="button"
 										value="<digi:trn key='btn:save'>Save</digi:trn>"
-										class="inp-text" onclick="return addComponentsPopup()"></td>
+										class="inp-text" onclick="return document.addComponentsPopup()"></td>
 									<td><input type="reset"
 										value="<digi:trn key='btn:reset'>Reset</digi:trn>"
 										class="inp-text"></td>
@@ -420,7 +423,7 @@
 			<td><a id='date1comm_@@_4' href="javascript:pickDateById('date1comm_@@_4','comm_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='comm_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="removeCommitment('comm_@@')"></td>
+			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="document.removeCommitment('comm_@@')"></td>
 		</tr>
 	</table>
 	<br>
@@ -461,7 +464,7 @@
 			<td><a id='date1disb_@@_4' href="javascript:pickDateById('date1disb_@@_4','disb_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='disb_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="removeDisbursement('disb_@@')"></td>
+			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="document.removeDisbursement('disb_@@')"></td>
 		</tr>
 	</table>
 	<br>	
@@ -502,13 +505,15 @@
 			<td><a id='date1expn_@@_4' href="javascript:pickDateById('date1expn_@@_4','expn_@@_4')"><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a></td>
 			<td><input type='hidden' name='expn_@@_6' value=''></td>
 		    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
-			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="removeExpenditure('expn_@@')"></td>
+			<td><input type="button" value="${trnDeleteBtn}" class="inp-text" onclick="document.removeExpenditure('expn_@@')"></td>
 		</tr>
 	</table>
 	<br>	
 </div>
 
 <script language="JavaScript">
+
+
 var numComm = <%=indexC%>;
 var numExpn = <%=indexE%>;
 var numDisb = <%=indexD%>;
@@ -517,7 +522,8 @@ var tempComm = numComm;
 var tempDisb = numDisb;
 var tempExpn = numExpn;
 
-function addCommitments()
+
+document.addCommitments=function()
 {
 	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('comm');
@@ -534,7 +540,7 @@ function addCommitments()
 	tempComm++;
 }
 
-function removeCommitment(divname)
+document.removeCommitment=function(divname)
 {
 	var d = document.getElementById('comm');
 	var olddiv = document.getElementById(divname);
@@ -542,7 +548,7 @@ function removeCommitment(divname)
 	tempComm--;
 }
 
-function addDisbursement()
+document.addDisbursement=function()
 {
 	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('disb');
@@ -558,7 +564,7 @@ function addDisbursement()
 	tempDisb++;
 }
 
-function removeDisbursement(divname)
+document.removeDisbursement=function(divname)
 {
 	var d = document.getElementById('disb');
 	var olddiv = document.getElementById(divname);
@@ -566,7 +572,7 @@ function removeDisbursement(divname)
 	tempDisb--;
 }
 
-function addExpenditure()
+document.addExpenditure=function()
 {
 	//This method has been modified to clone a generic div and replace the characters '@@' with the div number.
 	var ni = document.getElementById('expn');
@@ -582,7 +588,7 @@ function addExpenditure()
 	tempExpn++;
 }
 
-function removeExpenditure(divname)
+document.removeExpenditure=function(divname)
 {
 	var d = document.getElementById('expn');
 	var olddiv = document.getElementById(divname);
@@ -592,9 +598,9 @@ function removeExpenditure(divname)
 
 
 
-function addComponentsPopup()
+document.addComponentsPopup=function()
 {
-	var flag = validate();
+	var flag = document.validate();
 	if (flag == true){
 		<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=save"/>
 		document.aimAddComponentForm.action = "<%= addComp %>";
@@ -604,7 +610,7 @@ function addComponentsPopup()
 	return flag;
 }
 
-function validate()
+document.validate=function()
 {
   var msgEnterAmount="<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>";
   var msgInvalidAmount="<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>";
@@ -701,26 +707,18 @@ function validate()
 	return true;
 }
 
-function checkAmount(val){
+document.checkAmount=function(val){
   if(val.match("[^0-9., ]")){
     return false;
   }
   return true;
 }
-function validateEnter(e) {
-	eKey = (document.all) ? e.keyCode : e.which;
-	if (eKey==13) addComponent();
-}
 
 
-function switchType(){
-/* 
-  <digi:context name="switchType" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=switchType" />
-  document.aimAddComponentForm.action = "<%= switchType%>";
-  document.aimAddComponentForm.submit();*/
-}
 
-function switchComponent(){
+
+
+document.switchComponent=function(){
 if (document.aimAddComponentForm.newCompoenentName.value!=''){
   	 document.getElementById('tblId').style.visibility="visible";                         		
      document.getElementById('tblId').style.position="relative";  
@@ -748,7 +746,7 @@ if (document.aimAddComponentForm.newCompoenentName.value!=''){
 
 
 if (document.aimAddComponentForm.newCompoenentName.value!=''){;
-	switchComponent();
+	document.switchComponent();
 }
 	
 </script>

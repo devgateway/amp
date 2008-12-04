@@ -1514,7 +1514,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       // Initally set the modality as "Project Support"
       Collection financingInstrValues = CategoryManagerUtil.
           getAmpCategoryValueCollectionByKey(CategoryConstants.
-                                             FINANCING_INSTRUMENT_KEY, null);
+                                             FINANCING_INSTRUMENT_KEY, null, request);
       if (financingInstrValues != null && financingInstrValues.size() > 0) {
         Iterator itr = financingInstrValues.iterator();
         while (itr.hasNext()) {
@@ -1553,7 +1553,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 
 
       //load the possible projection values
-      eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
+      eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
 
     }
     catch (Exception e) {

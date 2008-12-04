@@ -1,5 +1,7 @@
 package org.digijava.module.aim.helper;
 
+import java.util.Comparator;
+
 public class KeyValue {
 	String key;
 	String value;
@@ -22,4 +24,14 @@ public class KeyValue {
 		this.value = value;
 	}
 	
+	public final static Comparator<KeyValue> keyComparator		= new Comparator<KeyValue>() {
+									public int compare(KeyValue o1, KeyValue o2) {
+										return o1.key.compareTo(o2.key);
+									}
+							};
+	public final static Comparator<KeyValue> valueComparator		= new Comparator<KeyValue>() {
+								public int compare(KeyValue o1, KeyValue o2) {
+									return o1.value.compareTo(o2.value);
+								}
+						};
 }

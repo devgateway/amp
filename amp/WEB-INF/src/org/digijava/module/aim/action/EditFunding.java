@@ -97,7 +97,7 @@ public class EditFunding extends Action {
 		formBean.getFunding().setNumExp(numExp);
         formBean.getFunding().setNumDisbOrder(numDisbOrder);
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
+		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
 		formBean.getFunding().setOrganizations(DbUtil.getAllOrganisation());
 		formBean.getFunding().setEditFunding(true);
 		formBean.getFunding().setDupFunding(true);

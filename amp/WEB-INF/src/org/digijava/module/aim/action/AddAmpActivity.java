@@ -848,7 +848,13 @@ private ActionForward showStep9(ActionMapping mapping,
 	
 	
 	
-	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+	Collection<AmpCategoryValue> catValues	= null;
+	try {
+		catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false,request);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 	    	if (catValues!=null && eaForm.getReferenceDocs()==null){
 	        	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
@@ -1351,7 +1357,13 @@ private ActionForward showStep1(ActionMapping mapping,
 //			}
 	// Initially setting the implementation level as "country"
 	//get all possible refdoc names from categories
-	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+	Collection<AmpCategoryValue> catValues	= null;
+	try {
+		catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false, request);
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 
 	if (catValues!=null && eaForm.getReferenceDocs()==null){
 		List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
@@ -1403,9 +1415,14 @@ private ActionForward showStep1(ActionMapping mapping,
 	}
 
 	// Initally set the modality as "Project Support"
-	Collection financingInstrValues = CategoryManagerUtil.
-	    getAmpCategoryValueCollectionByKey(CategoryConstants.
-	                                       FINANCING_INSTRUMENT_KEY, null);
+	Collection financingInstrValues		= null;
+	try {
+		financingInstrValues = CategoryManagerUtil.
+		    getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, null, request);
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
 	Iterator iter = financingInstrValues.iterator();
 	while (iter.hasNext()) {
 	  AmpCategoryValue financingInstrVal = (AmpCategoryValue) iter.next();
@@ -1419,7 +1436,12 @@ private ActionForward showStep1(ActionMapping mapping,
 	// load all the active currencies
 	eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
 
-	eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
+	try {
+		eaForm.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
 
 	eaForm.setFundingRegionId(new Long( -1));

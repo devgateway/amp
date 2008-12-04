@@ -21,5 +21,17 @@
 			<index column="index_column" />
 			<one-to-many class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
 		</list>
+		
+		<list name="usedCategories" table="AMP_CATEGORIES_USED" lazy="true">
+			<key column="category_id"/>
+			<list-index column="categories_index"/>
+			<many-to-many column="used_category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
+		</list>
+		<list name="usedByCategories" table="AMP_CATEGORIES_USED" inverse="true" lazy="true">
+			<key column="used_category_id"/>
+			<list-index column="used_categories_index"/>
+			<many-to-many column="category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
+		</list>
+		
 	</class>
 </hibernate-mapping>

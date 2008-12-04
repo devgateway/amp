@@ -2006,7 +2006,7 @@ public class DbUtil {
      */
     public static Collection<AmpCategoryValue> getAllAssistanceTypesFromCM() {
     	return
-    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
+    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
     }
 
     public static Collection getAll(Class object) {
@@ -2136,14 +2136,6 @@ public class DbUtil {
         return modality;
     }*/
 
-    public static ArrayList<AmpCategoryValue> getAmpModality() {
-    	ArrayList<AmpCategoryValue> result	= new ArrayList<AmpCategoryValue> (
-    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, true)
-    		);
-
-    	return result;
-    }
-
     /**
      * @deprecated Use getAmpStatusFromCM instead which uses the Category Manager
      */
@@ -2173,11 +2165,15 @@ public class DbUtil {
         return status;
     }
 
-    public static ArrayList<AmpCategoryValue> getAmpStatusFromCM() {
-    	ArrayList<AmpCategoryValue> result	=
-    		new ArrayList<AmpCategoryValue> (
-    				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true)
+    public static ArrayList<AmpCategoryValue> getAmpStatusFromCM(HttpServletRequest request) {
+    	ArrayList<AmpCategoryValue> result	= null;
+		try {
+			result = new ArrayList<AmpCategoryValue> (
+    				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true, request)
     		);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     	return result;
     }
 
@@ -4377,7 +4373,7 @@ public class DbUtil {
 
     public static Collection<AmpCategoryValue> getAllFinancingInstruments() {
     	return CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
-    				CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
+    				CategoryConstants.FINANCING_INSTRUMENT_KEY);
     }
 
     public static Collection getAllDonorOrgs() {

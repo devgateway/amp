@@ -1,8 +1,10 @@
 package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 /**
@@ -10,46 +12,49 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable, Identifiable, Comparable {
+public class AmpCategoryValue implements Serializable, Identifiable, Comparable<AmpCategoryValue> {
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
 	private int index;
-        private Set activities;
-        private long fieldType;
+	private Set<AmpActivity> activities;
+	private long fieldType;
+	
+	private Set<AmpCategoryValue> usedValues;
+	private Set<AmpCategoryValue> usedByValues;
 
-        public long getFieldType() {
-            return fieldType;
-        }
+	public long getFieldType() {
+		return fieldType;
+	}
 
-        public void setFieldType(long fieldType) {
-            this.fieldType = fieldType;
-        }
-        
-        /*use for only category with category key "implementation_location" 
+	public void setFieldType(long fieldType) {
+		this.fieldType = fieldType;
+	}
+
+	/*use for only category with category key "implementation_location" 
          to show which field is used for country  */
-        
-       public boolean isCountry() {
-        boolean isCoutry = false;
-        if (fieldType == CategoryConstants.COUNTRY_TYPE) {
-            isCoutry = true;
-        }
-        return isCoutry;
 
-    }
+	public boolean isCountry() {
+		boolean isCoutry = false;
+		if (fieldType == CategoryConstants.COUNTRY_TYPE) {
+			isCoutry = true;
+		}
+		return isCoutry;
 
-       //Created because of an error with some strings with french simbols as ID.
-       public String getEncodedValue(){
-    	String value = "";
-   		for(int i=0;i<this.value.length();i++) {
-    		if(this.value.charAt(i)>='A' && this.value.charAt(i) <= 'z'){
-    			value = value + this.value.charAt(i);
-    		}
-   		}
+	}
+
+	//Created because of an error with some strings with french simbols as ID.
+	public String getEncodedValue(){
+		String value = "";
+		for(int i=0;i<this.value.length();i++) {
+			if(this.value.charAt(i)>='A' && this.value.charAt(i) <= 'z'){
+				value = value + this.value.charAt(i);
+			}
+		}
 		//value = URLEncoder.encode(this.value,"");
 		return value;
-    }
-	
+	}
+
 	public Set getActivities() {
 		return activities;
 	}
@@ -74,16 +79,16 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable 
 	public void setAmpCategoryClass(AmpCategoryClass ampCategoryClass) {
 		this.ampCategoryClass = ampCategoryClass;
 	}
-	
+
 	public int getIndex()
 	{
 		return index;
-	 }
+	}
 
 	public void setIndex(int index)
 	{
 		this.index	= index;
-	    // not used, calculated value, see getIndex() method
+		// not used, calculated value, see getIndex() method
 	}
 
 	public String toString() {
@@ -92,15 +97,31 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable 
 	public Object getIdentifier() {
 		return this.getId();
 	}
-	public int compareTo(Object o) {
+	public int compareTo(AmpCategoryValue a) {
 		// TODO Auto-generated method stub
-		AmpCategoryValue a = (AmpCategoryValue) o;
 		return this.getId().compareTo(a.getId());
 	}
-	
+
 	public boolean equals (Object o) {
 		AmpCategoryValue a = (AmpCategoryValue) o;
 		return this.getId().equals( a.getId() );
 	}
-		
+
+	public Set<AmpCategoryValue> getUsedValues() {
+		return usedValues;
+	}
+
+	public void setUsedValues(Set<AmpCategoryValue> usedValues) {
+		this.usedValues = usedValues;
+	}
+
+	public Set<AmpCategoryValue> getUsedByValues() {
+		return usedByValues;
+	}
+
+	public void setUsedByValues(Set<AmpCategoryValue> usedByValues) {
+		this.usedByValues = usedByValues;
+	}
+
+
 }

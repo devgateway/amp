@@ -222,6 +222,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
        	private String donors;
 
    private String customField1;
+   private String customField2;
         
         public AmpActivity() {
 			// TODO Auto-generated constructor stub
@@ -1631,6 +1632,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setBudgetCodeProjectID(String budgetCodeProjectID) {
 		this.budgetCodeProjectID = budgetCodeProjectID;
+	}
+
+	public void setCustomField2(String customField2) {
+		this.customField2 = customField2;
+	}
+
+	public String getCustomField2() {
+		return customField2;
 	}
 
 }

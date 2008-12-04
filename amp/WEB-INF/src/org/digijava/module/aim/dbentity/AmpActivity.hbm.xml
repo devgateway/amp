@@ -161,7 +161,7 @@
 		<property name="planMinRank" column="plan_min_rank" type="java.lang.Integer" />
 
 		<property name="customField1" column="customField1" type="java.lang.String" />
-
+		<property name="customField2" column="customField2" type="java.lang.String" />
 
 
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">

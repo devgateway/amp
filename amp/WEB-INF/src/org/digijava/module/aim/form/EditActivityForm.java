@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -31,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.ComboBoxCustomField;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -455,13 +457,33 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		keyword = null;
 		
     	List<CustomField> customFields = new ArrayList<CustomField>(); 
+    
+    	// Text Field
     	CustomField cf = new CustomField();
     	cf.setStep(1);
     	cf.setName("Field1");
     	cf.setDescription("Description");
     	cf.setAmpActivityPropertyName("customField1");
     	cf.setFM_field("Custom Field1");
+    	
+    	// Combo
+    	ComboBoxCustomField combo = new ComboBoxCustomField();
+    	combo.setStep(1);
+    	combo.setName("Field2");
+    	combo.setDescription("Description2");
+    	combo.setAmpActivityPropertyName("customField2");
+    	combo.setFM_field("Custom Field2");    	
+    	
+    	LinkedHashMap<String,String>  options = new LinkedHashMap<String,String>();
+		options.put("Option1", "1");
+		options.put("Option2", "2");
+		options.put("Option3", "3");		
+		combo.setOptions(options);
+    	
+    	// Finally we add these components
     	customFields.add(cf);
+    	customFields.add(combo);
+
     	this.setCustomFields(customFields);	
 	}
 

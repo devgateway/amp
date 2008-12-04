@@ -27,6 +27,7 @@
     <!-- Path settings -->
     <property name="doc.path" value="./doc/api"/>
     <property name="doc.src" value="./src/java"/>
+    <property name="gen-src" value="./gen-src"/>
 
 
     <!-- classpath for Struts 1.1 -->
@@ -53,6 +54,9 @@
          </fileset>
     </path>
 
+  <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+    <classpath refid="compile.classpath" />
+  </taskdef>
 
     <!-- Check timestamp on files -->
     <target name="prepare">
@@ -61,22 +65,31 @@
         <mkdir  dir="${distpath.project}"/>
     </target>
 
+  <!--compile Java source files-->
+  <target name="jaxb" description="Compile all Java source files">
+    <echo message="Compiling the schema..." />
+    <mkdir dir="${gen-src}" />
+    <xjc schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb" target="${gen-src}">
+      <produces dir="${gen-src}/" includes="**/*.java" />
+    </xjc>
+  </target>
+
 
     <!-- Copy any resource or configuration files -->
     <target name="resources">
         <copy todir="${classes}" includeEmptyDirs="no">
             <fileset dir="${src}">
-            <patternset>
-            	<exclude name="CVS/*"/>
-                <include name="**/*.conf"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.xml"/>
-                <include name="**/*.ccf"/>
-                <include name="**/*.xsl"/>
-                <include name="**/*.xsd"/>
-				<include name="**/*.jrxml"/>
-				<include name="initSQL/*.sql"/>
-            </patternset>
+            	<patternset>
+            		<exclude name="CVS/*"/>
+                	<include name="**/*.conf"/>
+                	<include name="**/*.properties"/>
+	                <include name="**/*.xml"/>
+    	            <include name="**/*.ccf"/>
+        	        <include name="**/*.xsl"/>
+            	    <include name="**/*.xsd"/>
+					<include name="**/*.jrxml"/>
+					<include name="initSQL/*.sql"/>
+    	        </patternset>
             </fileset>
         </copy>
     </target>
@@ -163,8 +176,8 @@
     </target>
 
     <!-- Normal build of application -->
-    <target name="compile" depends="prepare,resources">
-        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m">
+    <target name="compile" depends="prepare,resources,jaxb">
+        <javac srcdir="${src};${gen-src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>
@@ -209,8 +222,9 @@
       description="Prepare for clean build">
       <delete dir="${classes}"/>
       <delete dir="${doc.path}"/>
+      <delete dir="${gen-src}"/>
     </target>
-
+                                 
 
     <!-- Build Javadoc documentation -->
     <target name="javadoc"

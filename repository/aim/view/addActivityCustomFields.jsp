@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.module.aim.helper.*" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -23,20 +24,29 @@
 
 											<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 											<logic:equal name="customField" property="step" value="${aimEditActivityForm.step}">
-											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">
-											<tr>
-												<td width=200 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">&nbsp;
-													<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>
-													</a>
-												</td>
-												<td bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">
-													<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"
-													styleId="originalAppDate" styleClass="inp-text" />
-													</a>
-												</td>
-											</tr>
+											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">												
+												<tr>
+													<td width=200 bgcolor="#ffffff">
+														<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">&nbsp;
+														<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>
+														</a>
+													</td>
+													<td bgcolor="#ffffff">
+														<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">
+														<c:choose>
+															<c:when test="<%=customField instanceof ComboBoxCustomField%>">
+																<html:select name="aimEditActivityForm" property="customFields[${index}].value">
+																	<html:optionsCollection  name="aimEditActivityForm" property="customFields[${index}].options" value="value" label="key"/>
+																</html:select>											
+															</c:when>
+															<c:otherwise>
+																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"
+																styleId="originalAppDate" styleClass="inp-text" />																														
+															</c:otherwise>
+														</c:choose>
+														</a>
+													</td>
+												</tr>
 											</field:display>
 											</logic:equal>
 											</logic:iterate>

@@ -415,6 +415,20 @@ target.style.cursor = "default"
 											</td></tr>	
 											</field:display>
 											
+											
+											<field:display name="Budget Code Project ID" feature="Identification">
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
+												<a title="<digi:trn key="aim:step1:BudgetCodeProjectID">Budget Code Project ID</digi:trn>">
+												<digi:trn key="aim:step1:BudgetCodeProjectID">
+												Budget Code Project ID
+												</digi:trn>
+												</a>
+											</td>
+											<td valign="top" align="left">
+												<html:text name="aimEditActivityForm" property="identification.budgetCodeProjectID"/>
+											</td></tr>	
+											</field:display>
+											
 											<field:display name="A.C. Chapter" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofACChapter">A.C. Chapter of the project</digi:trn>">

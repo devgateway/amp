@@ -34,7 +34,6 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	@SuppressWarnings("deprecation")
-	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		
 		ServletContext ctx = null;

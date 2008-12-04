@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ page import="java.util.List"%>
 
 <%@page import="org.digijava.module.categorymanager.util.CategoryManagerUtil"%>
@@ -41,8 +42,36 @@
 	<digi:trn key="cm:warningDeleteCategoryValue">Please proceed only if you are sure that the value you are trying to delete is not used by the system anymore.  Are you sure you want to delete it ?</digi:trn>
 </c:set>
 
+<c:set var="translation8">
+	<digi:trn key="cm:warningDeleteLabelCategory">Are you sure you want to remove this label category ?</digi:trn>
+</c:set>
+
 <script type="text/javascript">
+	labelPanels					= new Array();
 	
+	function addLabelCategory() {
+		var subForm				= document.forms["cmCategoryManagerForm"];
+		subForm.action			= "/categorymanager/categoryLabelsAction.do";
+		subForm.useAction.value	= "addCategory";
+		subForm.submit();
+	}
+	function addLabelValues() {
+		var subForm				= document.forms["cmCategoryManagerForm"];
+		subForm.action			= "/categorymanager/categoryLabelsAction.do";
+		subForm.useAction.value	= "addLabelValue";
+		subForm.submit();
+	}
+	function delLabelCategory(categoryId) {
+		if ( confirm('${translation8}') ) {
+			var subForm				= document.forms["cmCategoryManagerForm"];
+			subForm.action			= "/categorymanager/categoryLabelsAction.do";
+			subForm.useAction.value	= "delCategory";
+			subForm.delUsedCategoryId.value	= categoryId;
+			//alert(subForm.delUsedCategoryId.value);
+			subForm.submit();
+		}
+		return false;
+	}
       
     function addNewValue(position) {
     	var subForm				= document.forms["cmCategoryManagerForm"];
@@ -100,6 +129,19 @@
 		undo						= document.getElementById(undoId) ;
 		undo.style.display			= "none";
 	} 
+	function showLabelOptions(panelId) {
+		
+		if ( labelPanels[panelId] == null ) {
+			labelPanels[panelId]	= new YAHOOAmp.widget.Panel(panelId, 
+				{ width : "300px",
+				  fixedcenter : true,
+				  visible : true, 
+				  constraintoviewport : true
+				 } );
+			labelPanels[panelId].render(document.forms["cmCategoryManagerForm"]);
+		}
+		labelPanels[panelId].show();
+	}
 	
 </script>
 
@@ -200,7 +242,21 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><strong><digi:trn key="cm:categoryManagerImportantNote">IMPORTANT NOTE</digi:trn></strong>: 
+					<td colspan="2">
+						<html:hidden property="useAction" value="none"/>
+						<html:hidden property="delUsedCategoryId" value="none"/>
+						<html:select name="cmCategoryManagerForm" property="usedCategoryId" style="font-size: 11px;">
+							<html:optionsCollection  name="cmCategoryManagerForm" property="availableCategories" value="key" label="value" />
+						</html:select>
+						<button type="button" onclick="return addLabelCategory()" class="buton" 
+							style="vertical-align:bottom; padding: 1px;">
+							<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
+							<digi:trn key="aim:categoryManagerAddLabel">
+									Add Label Category
+							</digi:trn>
+						</button>
+						<br />
+						<strong><digi:trn key="cm:categoryManagerImportantNote">IMPORTANT NOTE</digi:trn></strong>: 
 						<digi:trn key="cm:categoryManagerPlsUseTranslations">If you need to change the translation for a category value please use Translator View</digi:trn> !
 					</td>
 				</tr>
@@ -216,11 +272,29 @@
 			</digi:trn>:
 		
 			<html:text property="numOfAdditionalFields" size="4" value="1"/>
-			<table cellpadding="5px" cellspacing="5px">
+			<table cellpadding="5px" cellspacing="5px" border="1px">
 				<tr>
-					<td width="35%"><strong>Category Value Key</strong></td>
-					<td width="35%"><strong>Translation</strong></td>
-					<td width="30%"><strong>Actions</strong></td>
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;">Category Value Key</td>
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;">Translation</td>
+					<logic:notEmpty name="myForm" property="usedCategories">
+						<td rowspan="1" colspan="<%=myForm.getUsedCategories().size() %>" style="font-size: small; font-weight: bold; text-align: center;">
+							Labels
+						</td>
+					</logic:notEmpty>
+					<td rowspan="2" style="font-size: small; font-weight: bold; text-align: center;">Actions</td>
+				</tr>
+					<logic:notEmpty name="myForm" property="usedCategories">
+					<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg">
+						<td style="font-size: x-small; font-weight: bold; text-align: center;">
+							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryName(usedCateg.getKeyName()) %>">${usedCateg.name}</digi:trn>
+							<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return delLabelCategory(${usedCateg.id})" 
+								title="<digi:trn key='cm:categoryManagerDeleteLabelCategory'>Delete Label Category</digi:trn>">
+								<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" class="toolbar" style="height: 10px;" />
+							</a>
+						</td>
+					</logic:iterate>
+					</logic:notEmpty>
+				<tr>
 				</tr>
 			<c:forEach var="possibleVals" items="${myForm.possibleVals}" varStatus="index">
 				<bean:define id="pVal" toScope="page" name="possibleVals" type="org.digijava.module.categorymanager.util.PossibleValue" />
@@ -266,12 +340,12 @@
 				</c:if>
                
 				<tr>
-				<td>
+				<td style="text-align: center;">
                   <html:text name="possibleVals" property="value" readonly="${textReadonly}" style="${textColorStyle} ${borderStyle}" indexed="true" styleId="field${index.count}"/>
                   <html:hidden name="possibleVals" property="disable"  indexed="true" styleId="disabled${index.count}"/>
                   <html:hidden name="possibleVals" property="id" indexed="true" />
 				</td>
-				<td>
+				<td style="text-align: center;">
 					<c:choose>
 						<c:when test="${pVal.id!=null && pVal.id!=0}">
 							<digi:trn key="<%=CategoryManagerUtil.getTranslationKeyForCategoryValue(pVal.getValue(), myForm.getKeyName() ) %>">
@@ -281,26 +355,70 @@
 						<c:otherwise>&nbsp;</c:otherwise>
 					</c:choose>
 				</td>
+				<logic:notEmpty name="myForm" property="usedCategories">
+				<logic:iterate name="myForm" property="usedCategories" type="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" id="usedCateg" indexId="countCateg">
+					<td align="center">
+						<c:forEach var="valId" items="${possibleVals.labelCategories[countCateg].labelsId}">
+							<category:getoptionvalue categoryValueId="${valId}"/> <br />
+						</c:forEach>
+						<div style="display: none">
+							<div id="labelPanel${usedCateg.keyName}${index.count-1}">
+								<div class="hd">Please select labels:</div>
+								<div class="bd" align="center">
+									<logic:notEmpty name="usedCateg" property="possibleValues">
+									<table align="center">
+									<logic:iterate name="usedCateg" property="possibleValues" id="usedVal" indexId="countVal">
+										<tr> 
+											<td>
+											<html:multibox property="possibleVals[${index.count-1}].labelCategories[${countCateg}].labelsId" value="${usedVal.id}" />
+											</td>
+											<td><category:getoptionvalue categoryValueId="${usedVal.id}"/></td>
+										</tr>
+									</logic:iterate>
+									<tr>
+									<td colspan="2" align="right">
+									<button type="button" onclick="return addLabelValues()" class="buton">
+										<digi:trn key="aim:categoryManagerSubmit">
+												Submit
+										</digi:trn>
+									</button>
+									</tr>
+									</table>
+									</logic:notEmpty>
+								</div>
+							</div>
+						</div>
+						<div style="width: 100%; text-align: center">
+						<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="showLabelOptions('labelPanel${usedCateg.keyName}${index.count-1}')"
+							title="<digi:trn key='cm:categorymanagerModifyLabels'>Modify Labels</digi:trn>">
+								<img src="/TEMPLATE/ampTemplate/images/application_edit.png" style="height: 12px;" />
+						</a>
+						</div>
+					</td>
+				</logic:iterate>
+				</logic:notEmpty>
 				<td>  
 					<c:if test="${pVal.id!=null && pVal.id!=0}">                        
 						<span id="delete${index.count}" style="${deleteField}">
-							[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')">
-								<digi:trn key="aim:categoryManagerValueDelete">
-									Delete
-								</digi:trn>
-							</a>]
+							&nbsp;
+							<a style="cursor:pointer;"  onclick="return deleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
+									title="<digi:trn key='aim:categoryManagerValueDelete'>Delete</digi:trn>">
+								<img src="/TEMPLATE/ampTemplate/images/deleteIcon.gif" style="height: 14px;" />
+							</a>
 						</span>
 						<span id="undo${index.count}" style="${undeleteField}">
-							[<a style="cursor:pointer; text-decoration:underline; color:blue;"  onclick="return undeleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')">
-								<digi:trn key="aim:categoryManagerValueUndelete">
-									Undelete
-								</digi:trn>
-							</a>]
+							&nbsp;
+							<a style="cursor:pointer;"  onclick="return undeleteField('field${index.count}', 'delete${index.count}','undo${index.count}','disabled${index.count}')"
+								title="<digi:trn key='aim:categoryManagerValueUndelete'>Undelete</digi:trn>">
+								<img src="/TEMPLATE/ampTemplate/images/undel.png" style="height: 18px;" />
+							</a>
 						</span>
 						<span>
-							[<a style="cursor:pointer; text-decoration:underline; color: blue" onclick="addNewValue(${index.count})">
-				  				Add value(s) above
-				  			</a>]
+							&nbsp;
+							<a style="cursor:pointer;" onclick="addNewValue(${index.count})"
+								title="<digi:trn key='cm:categoryManagerAddValuesAbove'>Add value(s) above</digi:trn>">
+				  				<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px;" />
+				  			</a>
 						</span>
 					</c:if>
 				</td>
@@ -311,16 +429,22 @@
  
 					</div>
 					
-					[ <a style="cursor:pointer; text-decoration:underline; color: blue" onclick="addNewValue(-1)">Add value(s)</a> ]
+					<button type="button" title="<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>" onclick="addNewValue(-1)" class="buton" 
+						style="vertical-align:bottom; padding: 1px;">
+						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
+						<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>
+					</button>
+					</a>
 				</td>
 			</tr>
 		</table>
 		<br />
-		<html:button property="xx" onclick="return doSubmit()">
+		<button type="submit" onclick="return doSubmit()" style="vertical-align:bottom; padding: 1px;" class="buton">
+			<img src="/TEMPLATE/ampTemplate/images/green_check.png" style="height: 16px; vertical-align: text-bottom;"  />
 			<digi:trn key="aim:categoryManagerSubmit">
 					Submit
 			</digi:trn>
-		</html:button>
+		<button>
 	</digi:form>
 				</td>
 				</tr>

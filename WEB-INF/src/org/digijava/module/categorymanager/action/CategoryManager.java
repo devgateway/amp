@@ -4,10 +4,13 @@
 package org.digijava.module.categorymanager.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
@@ -23,9 +26,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
+import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.PossibleValue;
 import org.hibernate.Hibernate;
@@ -91,6 +96,7 @@ public class CategoryManager extends Action {
 				value.setValue("");
 				value.setId(null);
 				value.setDisable(false);
+				CategoryLabelsUtil.addUsedCategoriesToPossibleValue(myForm, value);
 				myForm.getPossibleVals().add(position, value);
 			}
 			return mapping.findForward("createOrEditCategory");
@@ -104,7 +110,7 @@ public class CategoryManager extends Action {
 			boolean advancedMode				= false;
 			if ( request.getParameter("advancedMode") != null)
 				advancedMode					= true;
-			this.populateForm(ampCategoryClass, myForm, advancedMode);
+			this.populateForm(ampCategoryClass, myForm, advancedMode, request);
 			return mapping.findForward("createOrEditCategory");
 		}
 		if (request.getParameter("delete") != null ) {
@@ -138,11 +144,15 @@ public class CategoryManager extends Action {
 		myForm.setCategories( this.loadCategories(null) );
 		/* Ordering the values alphabetically if necessary */
 		if (myForm.getCategories() != null) {
+			myForm.setAllCategoryValues( new HashSet<AmpCategoryValue>() );
 			Iterator iterator	= myForm.getCategories().iterator();
 			while(iterator.hasNext()) {
 				AmpCategoryClass ampCategoryClass	= (AmpCategoryClass) iterator.next();
+				myForm.getAllCategoryValues().addAll( ampCategoryClass.getPossibleValues() );
+				myForm.getAllCategoryValues().remove(null);
+				
 				if ( ampCategoryClass.getIsOrdered() && ampCategoryClass.getPossibleValues() != null ) {
-					TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
+					TreeSet treeSet	= new TreeSet( new CategoryManagerUtil.CategoryComparator(request) );
 					treeSet.addAll( ampCategoryClass.getPossibleValues() );
 					ampCategoryClass.setPossibleValues( new ArrayList(treeSet) );
 				}
@@ -158,7 +168,7 @@ public class CategoryManager extends Action {
 	 * @param ampCategoryClass
 	 * @param myForm
 	 */
-	private void populateForm(AmpCategoryClass ampCategoryClass, CategoryManagerForm myForm, boolean advancedMode) {
+	private void populateForm(AmpCategoryClass ampCategoryClass, CategoryManagerForm myForm, boolean advancedMode, HttpServletRequest request) {
 		if (ampCategoryClass != null) {
 			myForm.setCategoryName( ampCategoryClass.getName() );
 			myForm.setDescription( ampCategoryClass.getDescription() );
@@ -169,6 +179,12 @@ public class CategoryManager extends Action {
 			myForm.setKeyName( ampCategoryClass.getKeyName() );
 			
 			myForm.setAdvancedMode(advancedMode);
+			
+			
+			ArrayList<AmpCategoryClass> availableCategories	= new ArrayList<AmpCategoryClass>( myForm.getCategories() );
+			availableCategories.remove( ampCategoryClass );
+			myForm.setAvailableCategories( createKVList(availableCategories, request) );
+			myForm.setUsedCategories(null);
 			
 			
 			Iterator iterator					= ampCategoryClass.getPossibleValues().iterator();
@@ -189,6 +205,8 @@ public class CategoryManager extends Action {
 			
 			//myForm.setPossibleValues( possibleValues );
 			myForm.setPossibleVals(possibleVals);
+			
+			CategoryLabelsUtil.populateFormWithLabels(ampCategoryClass, myForm);
 		}
 		else{
 			if ( myForm.getPossibleValues() != null && myForm.getPossibleValues().length > 0 ) {
@@ -234,6 +252,11 @@ public class CategoryManager extends Action {
 			}
 			
 			returnCollection	= qry.list();
+			
+			Iterator<AmpCategoryClass> iter	= returnCollection.iterator();
+			while ( iter.hasNext() ) {
+				iter.next().getUsedCategories().size();
+			}
 			
 		} catch (Exception ex) {
 			logger.error("Unable to get Categories: " + ex.getMessage());
@@ -403,6 +426,8 @@ public class CategoryManager extends Action {
 			
 			this.reindexAmpCategoryValueList( dbCategory.getPossibleValues() );
 			
+			CategoryLabelsUtil.populateCategoryWithLabels(myForm, dbCategory);
+			
 			String dupValue		= this.checkDuplicateValues(dbCategory.getPossibleValues()); 
 			
 			if ( dupValue != null ) {
@@ -466,6 +491,20 @@ public class CategoryManager extends Action {
 				return value;
 		}
 		return null;
+	}
+	
+	public static Set<KeyValue> createKVList(Collection<AmpCategoryClass> categories, HttpServletRequest request) {
+		TreeSet<KeyValue> kvCategories	= new TreeSet<KeyValue>( KeyValue.valueComparator );
+		Iterator<AmpCategoryClass> iter		= categories.iterator();
+		while (iter.hasNext()) {
+			AmpCategoryClass cat 	= (AmpCategoryClass) iter.next();
+			String translatedName	= CategoryManagerUtil.translate( 
+							CategoryManagerUtil.getTranslationKeyForCategoryName(cat.getKeyName()), request, cat.getName()   );
+			
+			KeyValue kv				= new KeyValue(cat.getId().toString(), translatedName);
+			kvCategories.add(kv);
+		}
+		return kvCategories;
 	}
 	
 }

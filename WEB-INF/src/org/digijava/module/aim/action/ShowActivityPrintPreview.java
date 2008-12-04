@@ -1054,7 +1054,7 @@ public class ShowActivityPrintPreview
             		
             		
             		//get all possible refdoc names from categories
-                  	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+                  	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false, request);
 
                 	if (catValues!=null && eaForm.getReferenceDocs()==null){
                     	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();

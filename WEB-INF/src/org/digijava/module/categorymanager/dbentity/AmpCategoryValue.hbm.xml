@@ -23,5 +23,13 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity"
 				column="amp_activity_id" />
 		</set>
+		<set name="usedValues" table="AMP_CATEGORY_VALUES_USED" lazy="false">
+			<key column="value_id"/>
+			<many-to-many column="used_value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+		</set>
+		<set name="usedByValues" table="AMP_CATEGORY_VALUES_USED" inverse="true" lazy="true">
+			<key column="used_value_id"/>
+			<many-to-many column="value_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" />
+		</set>
 	</class>
 </hibernate-mapping>

@@ -2,12 +2,17 @@ package org.digijava.module.categorymanager.form;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.PossibleValue;
 
 /**
@@ -16,7 +21,8 @@ import org.digijava.module.categorymanager.util.PossibleValue;
  *
  */
 public class CategoryManagerForm extends ActionForm {
-	private Collection 	categories;
+	
+	private Collection<AmpCategoryClass> 	categories	= null;
 	
 	/**
 	 * Begin - The properties below are used for adding a new category
@@ -30,21 +36,29 @@ public class CategoryManagerForm extends ActionForm {
 	private boolean isMultiselect		= false;
 	private boolean isOrdered			= false;
 	private boolean advancedMode		= false;
-    private List<PossibleValue> possibleVals	= new ArrayList<PossibleValue>();
+    private List<PossibleValue> possibleVals		= new ArrayList<PossibleValue>();
+    
+    private Set<KeyValue> availableCategories			= null;
+    private List<AmpCategoryClass> usedCategories		= null;
+    private Long usedCategoryId							= null;
+    private Long delUsedCategoryId						= null;
+    private String useAction							= null;
     
     private int numOfAdditionalFields	= 0;
 	/**
 	 * End - The properties below are used for adding a new category
 	 */
 	private Long editedCategoryId	= null;
+	
+	private Set<AmpCategoryValue> allCategoryValues		= null;
         
-        public List<PossibleValue> getPossibleVals() {
-            return possibleVals;
-        }
+	public List<PossibleValue> getPossibleVals() {
+		return possibleVals;
+	}
 
-        public void setPossibleVals(List<PossibleValue> possibleVals) {
-            this.possibleVals = possibleVals;
-        }
+	public void setPossibleVals(List<PossibleValue> possibleVals) {
+		this.possibleVals = possibleVals;
+	}
 	
 	public Integer getNumOfPossibleValues() {
 		return numOfPossibleValues;
@@ -89,10 +103,10 @@ public class CategoryManagerForm extends ActionForm {
 	public void setPossibleValues(String[] possibleValues) {
 		this.possibleValues = possibleValues;
 	}
-	public Collection getCategories() {
+	public Collection<AmpCategoryClass> getCategories() {
 		return categories;
 	}
-	public void setCategories(Collection categories) {
+	public void setCategories(Collection<AmpCategoryClass> categories) {
 		this.categories = categories;
 	}
 	public Long getEditedCategoryId() {
@@ -145,6 +159,54 @@ public class CategoryManagerForm extends ActionForm {
 
 	public void setAdvancedMode(boolean advancedMode) {
 		this.advancedMode = advancedMode;
+	}
+
+	public List<AmpCategoryClass> getUsedCategories() {
+		return usedCategories;
+	}
+
+	public void setUsedCategories(List<AmpCategoryClass> usedCategories) {
+		this.usedCategories = usedCategories;
+	}
+
+	public Long getUsedCategoryId() {
+		return usedCategoryId;
+	}
+
+	public void setUsedCategoryId(Long usedCategoryId) {
+		this.usedCategoryId = usedCategoryId;
+	}
+
+	public String getUseAction() {
+		return useAction;
+	}
+
+	public void setUseAction(String useAction) {
+		this.useAction = useAction;
+	}
+
+	public Set<KeyValue> getAvailableCategories() {
+		return availableCategories;
+	}
+
+	public void setAvailableCategories(Set<KeyValue> availableCategories) {
+		this.availableCategories = availableCategories;
+	}
+
+	public Long getDelUsedCategoryId() {
+		return delUsedCategoryId;
+	}
+
+	public void setDelUsedCategoryId(Long delUsedCategoryId) {
+		this.delUsedCategoryId = delUsedCategoryId;
+	}
+
+	public Set<AmpCategoryValue> getAllCategoryValues() {
+		return allCategoryValues;
+	}
+
+	public void setAllCategoryValues(Set<AmpCategoryValue> allCategoryValues) {
+		this.allCategoryValues = allCategoryValues;
 	}
 	
 }

@@ -46,7 +46,14 @@ public class ViewReferences extends TilesAction {
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
 		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
-		Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+		Collection<AmpCategoryValue> catValues		= null;
+		try {
+			catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,
+													false, request);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
 		ReferenceForm formBean = (ReferenceForm) form;
 

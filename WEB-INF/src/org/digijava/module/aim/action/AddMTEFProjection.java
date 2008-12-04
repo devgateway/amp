@@ -36,7 +36,12 @@ public class AddMTEFProjection extends Action{
 		event = formBean.getFunding().getEvent();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
-		formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
+		try {
+			formBean.getFunding().setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false, request));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		long index = formBean.getTransIndexId();
 		String subEvent = event.substring(0,3);
 		

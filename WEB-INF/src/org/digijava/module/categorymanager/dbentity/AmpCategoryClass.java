@@ -11,7 +11,7 @@ import java.util.Set;
  * @author Alex Gartner
  *
  */
-public class AmpCategoryClass implements Serializable {
+public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryClass> {
 	private Long id;
 	private String name;
 	private String description;
@@ -19,6 +19,9 @@ public class AmpCategoryClass implements Serializable {
 	private boolean isMultiselect	= false;
 	private boolean isOrdered		= false;
 	private List<AmpCategoryValue> possibleValues;
+	
+	private List<AmpCategoryClass> usedCategories;
+	private List<AmpCategoryClass> usedByCategories;
 	
 	public String getDescription() {
 		return description;
@@ -69,6 +72,26 @@ public class AmpCategoryClass implements Serializable {
 	public void setKeyName(String key) {
 		this.keyName = key;
 	}
+	public List<AmpCategoryClass> getUsedCategories() {
+		return usedCategories;
+	}
+	public void setUsedCategories(List<AmpCategoryClass> usedCategories) {
+		this.usedCategories = usedCategories;
+	}
+	public List<AmpCategoryClass> getUsedByCategories() {
+		return usedByCategories;
+	}
+	public void setUsedByCategories(List<AmpCategoryClass> usedByCategories) {
+		this.usedByCategories = usedByCategories;
+	}
+	public int compareTo(AmpCategoryClass o) {
+		return keyName.compareTo( o.getKeyName() );
+	}
+	
+	@Override 
+	public boolean equals(Object o) {
+		return compareTo( (AmpCategoryClass)o ) == 0;
+	} 
 		
 	
 }

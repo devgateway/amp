@@ -97,6 +97,22 @@ public class CategoryManagerUtil {
 				ret	= defaultValue;
 		return ret;
 	}
+	
+	public static AmpCategoryValue getAmpCategoryValueFromCollectionById( Long ampCategoryValueId, Collection<AmpCategoryValue> col ) {
+		if ( ampCategoryValueId == null || col == null) {
+			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
+			return null;
+		}
+		Iterator<AmpCategoryValue> iterator	= col.iterator();
+		
+		while ( iterator.hasNext() ) {
+			AmpCategoryValue val		= iterator.next();
+			if ( ampCategoryValueId.equals(val.getId()) )
+				return val;
+		}
+		return null;
+	}
+	
 	/**
 	 *
 	 * @param categoryId
@@ -104,7 +120,7 @@ public class CategoryManagerUtil {
 	 * @return The AmpCategoryValue object witch belongs to the AmpCategoryClass with id=categoryId
 	 * or null if the object is not in the set.
 	 */
-	public static AmpCategoryValue getAmpCategoryValueFromList(Long categoryId, Set values) {
+	public static AmpCategoryValue getAmpCategoryValueFromList(Long categoryId, Collection values) {
 		if ( categoryId == null || values == null) {
 			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
 			return null;
@@ -268,8 +284,7 @@ public class CategoryManagerUtil {
 	}
 	
 	public static AmpCategoryValue getAmpCategoryValueFromDB(HardCodedCategoryValue hcValue) throws Exception {
-		Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
-				hcValue.getCategoryKey(), null);
+		Collection<AmpCategoryValue> c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(hcValue.getCategoryKey());
 		if (c != null) {
 			Iterator<AmpCategoryValue> tempItr = c.iterator();
 			while (tempItr.hasNext()) {
@@ -369,9 +384,12 @@ public class CategoryManagerUtil {
 	 * @param categoryName
 	 * @param ordered overrides the property in AmpCategoryClass and decides whether the values should be ordered alphabetically.
 	 * If null the ordered property of the AmpCategoryClass object is checked.
+	 * @param request TODO
 	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with name=categoryName
+	 * @throws Exception in case request is null and the values need to be ordered alphabetically
 	 */
-	public static Collection getAmpCategoryValueCollection(String categoryName, Boolean ordered) {
+	@Deprecated
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollection(String categoryName, Boolean ordered, HttpServletRequest request) throws Exception {
 		boolean shouldOrderAlphabetically;
 		
 		AmpCategoryClass ampCategoryClass = null; 
@@ -389,25 +407,36 @@ public class CategoryManagerUtil {
 		else
 			shouldOrderAlphabetically	= ordered.booleanValue();
 
-		List ampCategoryValues			= ampCategoryClass.getPossibleValues();
+		List<AmpCategoryValue> ampCategoryValues			= ampCategoryClass.getPossibleValues();
 
 		if ( !shouldOrderAlphabetically )
 				return ampCategoryValues;
+		
+		if ( shouldOrderAlphabetically && request == null )
+			throw new Exception("Cannot return an ordered value of AmpCategoryValue objects if request parameter is null");
 
-		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
+		TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator(request) );
 		treeSet.addAll(ampCategoryValues);
 
 
 		return treeSet;
 	}
 	/**
-	 * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered). The function
-	 *  is called with ordered = null.
+	 * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered, HttpServletRequest). 
+	 * The function is called with ordered = false, request = nu=ll.
 	 * @param categoryKey
 	 * @return 
 	 */
-	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey) {
-		return getAmpCategoryValueCollectionByKey(categoryKey, null);
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey){
+		try {
+			return getAmpCategoryValueCollectionByKey(categoryKey, false, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			/**
+			 * It should actually never get here
+			 */
+			return null;
+		}
 	}
 	/**
 	 *
@@ -415,14 +444,14 @@ public class CategoryManagerUtil {
 	 * @param ordered overrides the property in AmpCategoryClass and decides whether the values should be ordered alphabetically.
 	 * If null the ordered property of the AmpCategoryClass object is checked.
 	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with key=categoryKey
+	 * @throws Exception in case request is null and the values need to be ordered alphabetically
 	 */
-	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered) {
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered, HttpServletRequest request) throws Exception {
 		boolean shouldOrderAlphabetically;
 		AmpCategoryClass ampCategoryClass = null;
 		try {
 			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
 		} catch (NoCategoryClassException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (ampCategoryClass == null)
@@ -437,8 +466,11 @@ public class CategoryManagerUtil {
 
 		if ( !shouldOrderAlphabetically )
 				return ampCategoryValues;
+		
+		if ( shouldOrderAlphabetically && request == null )
+			throw new Exception("Cannot return an ordered value of AmpCategoryValue objects if request parameter is null");
 
-		TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil().new CategoryComparator() );
+		TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil.CategoryComparator(request) );
 		treeSet.addAll(ampCategoryValues);
 
 
@@ -450,32 +482,39 @@ public class CategoryManagerUtil {
 	 * @param ordered must be true if the AmpCategoryValues should be ordered alphabetically.
 	 * If false the ordered property of the AmpCategoryClass object is checked.
 	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with id=categoryId
+	 * @throws Exception in case request is null and the values need to be ordered alphabetically
 	 */
-	public static Collection getAmpCategoryValueCollection(Long categoryId, Boolean ordered) {
+	public static Collection getAmpCategoryValueCollection(Long categoryId, Boolean ordered, HttpServletRequest request) throws Exception {
 		boolean shouldOrderAlphabetically;
+		
+		AmpCategoryClass ampCategoryClass;
 		try {
-			AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass(categoryId);
-			if (ampCategoryClass == null)
-				return null;
-			if (ordered == null) {
-				shouldOrderAlphabetically	= ampCategoryClass.getIsOrdered();
-			}
-			else
-				shouldOrderAlphabetically	= ordered.booleanValue();
-		
-			List ampCategoryValues		= ampCategoryClass.getPossibleValues();
-		
-			if ( !shouldOrderAlphabetically )
-					return ampCategoryValues;
-		
-			TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
-			treeSet.addAll(ampCategoryValues);
-			return treeSet;
+			ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass(categoryId);
 		}
 		catch(Exception E) {
 			E.printStackTrace();
 			return null;
 		}
+		if (ampCategoryClass == null)
+			return null;
+		if (ordered == null) {
+			shouldOrderAlphabetically	= ampCategoryClass.getIsOrdered();
+		}
+		else
+			shouldOrderAlphabetically	= ordered.booleanValue();
+	
+		List ampCategoryValues		= ampCategoryClass.getPossibleValues();
+	
+		if ( !shouldOrderAlphabetically )
+				return ampCategoryValues;
+		
+		if ( shouldOrderAlphabetically && request == null )
+			throw new Exception("Cannot return an ordered value of AmpCategoryValue objects if request parameter is null");
+	
+		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil.CategoryComparator(request) );
+		treeSet.addAll(ampCategoryValues);
+		return treeSet;
+		
 	}
 	/**
 	 * returns a string containing only ascii characters
@@ -497,6 +536,17 @@ public class CategoryManagerUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static String getTranslationKeyForCategoryName(String classKeyName) {
+			String translationKey		= "cm:category_" + classKeyName + "_name";
+			return translationKey;
+		
+	}
+	public static String getTranslationKeyForCategoryDescription(String classKeyName) {
+		String translationKey		= "cm:category_" + classKeyName + "_description";
+		return translationKey;
+	
 	}
 	/**
 	 *
@@ -556,41 +606,6 @@ public class CategoryManagerUtil {
 		else{
 			throw new NoCategoryClassException("No AmpCategoryClass found with key '" + key + "'");
 		}
-	}
-	/**
-	 *
-	 * @param key The AmpCategoryClass key
-	 * @param ordered must be true if the AmpCategoryValues should be ordered alphabetically.
-	 * If false the ordered property of the AmpCategoryClass object is checked.
-	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with the specified key
-	 */
-	public static Collection getAmpCategoryByKey(String key, Boolean ordered) {
-		boolean shouldOrderAlphabetically;
-		AmpCategoryClass ampCategoryClass = null;
-		try {
-			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(key);
-		} catch (NoCategoryClassException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (ampCategoryClass == null)
-			return null;
-		if (ordered == null) {
-			shouldOrderAlphabetically	= ampCategoryClass.getIsOrdered();
-		}
-		else
-			shouldOrderAlphabetically	= ordered.booleanValue();
-
-		List ampCategoryValues		= ampCategoryClass.getPossibleValues();
-
-		if ( !shouldOrderAlphabetically )
-				return ampCategoryValues;
-
-		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
-		treeSet.addAll(ampCategoryValues);
-
-
-		return treeSet;
 	}
 
 	public static String getStringValueOfAmpCategoryValue(AmpCategoryValue ampCategoryValue) {
@@ -657,14 +672,23 @@ public class CategoryManagerUtil {
 	 * @author Alex Gartner
 	 * A comparator for AmpCategoryValue objects which is needed when ordering them alphabetically
 	 */
-	public class CategoryComparator implements Comparator {
-		public int compare(Object value1, Object value2) {
-			AmpCategoryValue catValue1	= (AmpCategoryValue) value1;
-			AmpCategoryValue catValue2	= (AmpCategoryValue) value2;
-			return catValue1.getValue().compareTo( catValue2.getValue() );
+	public static class CategoryComparator implements Comparator<AmpCategoryValue> {
+		private HttpServletRequest request;
+		public CategoryComparator(HttpServletRequest request) {
+			this.request	= request;
+		}
+		
+		public int compare(AmpCategoryValue catValue1, AmpCategoryValue catValue2) {
+			if ( request == null )
+				return catValue1.getValue().compareTo( catValue2.getValue() );
+			
+			String transValue1		= CategoryManagerUtil.translateAmpCategoryValue(catValue1, request);
+			String transValue2		= CategoryManagerUtil.translateAmpCategoryValue(catValue2, request);
+			
+			return transValue1.compareTo( transValue2 );
 
 		}
-		public boolean equals(Object value1, Object value2) {
+		public boolean equals(AmpCategoryValue value1, AmpCategoryValue value2) {
 			if ( this.compare(value1, value2) == 0 )
 					return true;
 			return false;

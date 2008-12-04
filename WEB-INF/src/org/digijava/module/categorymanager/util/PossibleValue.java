@@ -2,6 +2,8 @@
 
 package org.digijava.module.categorymanager.util;
 
+import java.util.List;
+
 /**
  *
  * @author medea
@@ -10,6 +12,7 @@ public class PossibleValue {
 	private Long id;
 	private String value;
 	private boolean disable;
+	private List<LabelCategory> labelCategories;
 
 	
 	public Long getId() {
@@ -35,6 +38,14 @@ public class PossibleValue {
 	public void setValue(String value) {
 		this.value = value;
 	}
-   
+
+	public List<LabelCategory> getLabelCategories() {
+		return labelCategories;
+	}
+
+	public void setLabelCategories(List<LabelCategory> labelCategories) {
+		this.labelCategories = labelCategories;
+	}
+	
 
 }

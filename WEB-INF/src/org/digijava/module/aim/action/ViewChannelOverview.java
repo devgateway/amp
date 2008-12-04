@@ -108,8 +108,13 @@ public class ViewChannelOverview extends TilesAction {
 				id = formBean.getId();
 			}
 
-			Collection<AmpCategoryValue> implLocationLevels	=
-				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
+			Collection<AmpCategoryValue> implLocationLevels	= null;
+			try {
+				implLocationLevels = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, null, request);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 			if ( implLocationLevels != null){
 				formBean.setNumImplLocationLevels( implLocationLevels.size() );

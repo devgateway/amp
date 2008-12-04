@@ -342,7 +342,7 @@
     <servlet-name>Print</servlet-name>
     <display-name>Print</display-name>
     <description>Default configuration created for servlet.</description>
-    <servlet-class>com.tonbeller.jpivot.print.PrintServlet</servlet-class>
+    <servlet-class>org.digijava.module.mondrian.serverlet.Exporter</servlet-class>
   </servlet>
   
   <resource-ref>

@@ -460,6 +460,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
     	cf.setName("Field1");
     	cf.setDescription("Description");
     	cf.setAmpActivityPropertyName("customField1");
+    	cf.setFM_field("Custom Field1");
     	customFields.add(cf);
     	this.setCustomFields(customFields);	
 	}

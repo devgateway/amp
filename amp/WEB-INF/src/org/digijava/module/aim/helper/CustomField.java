@@ -6,6 +6,7 @@ public class CustomField {
 	private String description;
 	private String value;
 	private String ampActivityPropertyName;
+	private String FM_field;
 
 	public void setStep(int step) {
 		this.step = step;
@@ -45,6 +46,14 @@ public class CustomField {
 
 	public String getAmpActivityPropertyName() {
 		return ampActivityPropertyName;
+	}
+
+	public void setFM_field(String fM_field) {
+		FM_field = fM_field;
+	}
+
+	public String getFM_field() {
+		return FM_field;
 	}
 
 }

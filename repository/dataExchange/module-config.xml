@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>dataExchange</name>
+	<security login-required="true" default="READ">
+		<action login-required="false" pattern="/exportWizard"/>  
+		<action login-required="false" pattern="/export"/>  
+	</security>
+	<!-- highlights classes Begin-->
+	<hibernate-classes required="false">
+<!--		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivity</hibernate-class> -->
+	</hibernate-classes>
+	<!-- highlights classes End-->
+</module-config>

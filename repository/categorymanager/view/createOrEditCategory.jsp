@@ -434,7 +434,6 @@
 						<img src="/TEMPLATE/ampTemplate/images/green_plus.png" style="height: 16px; vertical-align: text-bottom;"  />
 						<digi:trn key='cm:categoryManagerAddValues'>Add value(s)</digi:trn>
 					</button>
-					</a>
 				</td>
 			</tr>
 		</table>

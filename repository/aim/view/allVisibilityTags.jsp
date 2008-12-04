@@ -25,6 +25,7 @@
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Custom Fields" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -114,7 +115,8 @@
 <feature:display name="Contracting" module="Contracting"></feature:display> 
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
 <feature:display name="Create Message Form" module="Messages"></feature:display> 
-<feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display> 
+<feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
+<feature:display name="Step1" module="Custom Fields"></feature:display>
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 

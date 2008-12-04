@@ -23,6 +23,7 @@
 
 											<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 											<logic:equal name="customField" property="step" value="${aimEditActivityForm.step}">
+											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:customfield:${customField.name}:description">${customField.description}</digi:trn>">&nbsp;
@@ -36,6 +37,7 @@
 													</a>
 												</td>
 											</tr>
+											</field:display>
 											</logic:equal>
 											</logic:iterate>
 										</table>

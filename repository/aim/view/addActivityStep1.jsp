@@ -338,10 +338,10 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 
-
-									<jsp:include page="addActivityCustomFields.jsp"/>
-
-									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
+									<feature:display name="Step1" module="Custom Fields">
+										<jsp:include page="addActivityCustomFields.jsp"/>
+										<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
+									</feature:display>
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>

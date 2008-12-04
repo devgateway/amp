@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page name="exportWizard" title="Export Manager"/>
+	</secondary-pages>
+	<module>
+	</module>
+</config>

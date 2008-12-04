@@ -265,9 +265,9 @@
  <tr>
   <td>Chart Height</td>
   <td>
-   <textField type="posint" modelReference="chartHeight" size="5" title="enter height in pixels - default 300"/>
+   <textField type="posint" modelReference="chartHeight" size="5" title="enter height in pixels - default 800"/>
    &#160;&#160;&#160;Chart Width
-   <textField type="posint" modelReference="chartWidth" size="5" title="enter width in pixels - default 500"/>
+   <textField type="posint" modelReference="chartWidth" size="5" title="enter width in pixels - default 800"/>
   </td>
  </tr>
  

@@ -115,7 +115,10 @@ xmlns:x="urn:schemas-microsoft-com:office:excel" >
                         <xsl:value-of select ="$chartwidth"/>
                     </xsl:attribute>
                     <xsl:attribute name="src">
+                    	<xsl:value-of select ="concat(concat('url(',$chartimage),')')"/>
+                    	<!-- 
                         <xsl:value-of select ="$chartimage"/>
+                         -->
                     </xsl:attribute>
                     </img>
                     </p>

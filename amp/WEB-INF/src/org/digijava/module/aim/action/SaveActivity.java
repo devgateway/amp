@@ -355,6 +355,12 @@ public class SaveActivity extends Action {
 		else
 			activity.setGovAgreementNumber(eaForm.getIdentification().getGovAgreementNumber());
 		
+		if (eaForm.getIdentification().getBudgetCodeProjectID() == null
+				|| eaForm.getIdentification().getBudgetCodeProjectID().trim().length() == 0)
+			activity.setBudgetCodeProjectID(new String(" "));
+		else
+			activity.setBudgetCodeProjectID(eaForm.getIdentification().getBudgetCodeProjectID());
+		
 		if (eaForm.getIdentification().getCrisNumber() == null
 				|| eaForm.getIdentification().getCrisNumber().trim().length() == 0)
 			activity.setCrisNumber(new String(" "));

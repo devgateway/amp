@@ -652,7 +652,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           eaForm.getIdentification().setBudgetCheckbox(activity.getBudget().toString());
           eaForm.getIdentification().setHumanitarianAid(activity.getHumanitarianAid());
           eaForm.getIdentification().setGovAgreementNumber(activity.getGovAgreementNumber());
-          
+          eaForm.getIdentification().setBudgetCodeProjectID(activity.getBudgetCodeProjectID());
 
           /*
            * Tanzania adds

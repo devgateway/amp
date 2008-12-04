@@ -530,6 +530,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         oldActivity.setActivityCreator(activity.getActivityCreator());
         oldActivity.setDraft(activity.getDraft());
         oldActivity.setGovAgreementNumber(activity.getGovAgreementNumber());
+        oldActivity.setBudgetCodeProjectID(activity.getBudgetCodeProjectID());
 
         oldActivity.setCrisNumber(activity.getCrisNumber());
       }

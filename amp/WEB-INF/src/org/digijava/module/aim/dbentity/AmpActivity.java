@@ -31,6 +31,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	
     private Boolean budget;
     private String govAgreementNumber;
+    private String budgetCodeProjectID;
 
     @PermissibleProperty(type={Permissible.PermissibleProperty.PROPERTY_TYPE_ID})
     private Long ampActivityId ;
@@ -1622,6 +1623,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public String getCustomField1() {
 		return customField1;
+	}
+
+	public String getBudgetCodeProjectID() {
+		return budgetCodeProjectID;
+	}
+
+	public void setBudgetCodeProjectID(String budgetCodeProjectID) {
+		this.budgetCodeProjectID = budgetCodeProjectID;
 	}
 
 }

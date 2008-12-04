@@ -11,6 +11,7 @@
 		<property name="ampId" column="amp_id" type="java.lang.String" />
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="govAgreementNumber" column="gov_agreement_number" type="java.lang.String" />
+		<property name="budgetCodeProjectID" column="budget_code_project_id" type="java.lang.String" />
 		<property name="description" column="description" type="text" />
 		<property name="lessonsLearned" column="lessons_learned" type="text" />
 		<property name="objective" column="objectives" type="text" />

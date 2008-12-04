@@ -3197,6 +3197,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Long accessionInstrument = new Long(0);
 		private Long projectCategory = new Long(0);
 		private String govAgreementNumber;
+		private String budgetCodeProjectID;
 		private Long acChapter = new Long(0);
 		private String budgetCheckbox;
 		private Boolean governmentApprovalProcedures;
@@ -3393,6 +3394,14 @@ public class EditActivityForm extends ActionForm implements Serializable {
 
 		public void setAcChapter(Long acChapter) {
 			this.acChapter = acChapter;
+		}
+
+		public String getBudgetCodeProjectID() {
+			return budgetCodeProjectID;
+		}
+
+		public void setBudgetCodeProjectID(String budgetCodeProjectID) {
+			this.budgetCodeProjectID = budgetCodeProjectID;
 		}
 
 	}

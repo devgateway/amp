@@ -271,7 +271,7 @@ public class ShowCalendarEvent extends Action {
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            if(ceform.getSelectedStartMonth() != null){
+            if(!ceform.getSelectedStartMonth().equals("")){
 	            Set recEvent =new HashSet();
 	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
 	            recurrEvent.setCalendar(calendar);

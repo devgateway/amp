@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
@@ -14,7 +15,8 @@
 <digi:instance property="calendarViewForm"/>
     <DIV id="tabs">
     	<UL>
-        	<c:if test="${calendarViewForm.view == 'yearly'}">
+    		<field:display name="Yearly View" feature="Calendar">
+        			<c:if test="${calendarViewForm.view == 'yearly'}">
                       <LI>
                       	<a name="node">
                         	<div>
@@ -33,7 +35,9 @@
                             	</a>
                             </span>
                          </LI>
-					</c:if>							
+					</c:if>
+				</field:display>
+				<field:display name="Monthly View" feature="Calendar">							
                     <c:if test="${calendarViewForm.view == 'monthly'}">
                     	<LI>
                         	<a name="node">
@@ -54,6 +58,8 @@
                             </span>
                         </LI>
 					</c:if>
+				</field:display>
+				<field:display name="Weekly View" feature="Calendar">
 					<c:if test="${calendarViewForm.view == 'weekly'}">
                     	<LI>
                         	<a name="node">
@@ -74,6 +80,8 @@
                             </span>
                        </LI>
 					</c:if>
+				</field:display>
+				<field:display name="Daily View" feature="Calendar">
                    <c:if test="${calendarViewForm.view == 'daily'}">
                     	<LI>
                         	<a name="node">
@@ -93,7 +101,8 @@
 								</a>
                             </span>
                         </LI>
-					</c:if>	
+					</c:if>
+				</field:display>	
 		</UL>						
 	</DIV>
     	

@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 <jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
@@ -430,34 +431,40 @@ function recurEvent(){
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
 			                    			<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
 			                    		</td>
-			                    		<td rowspan="2" style="text-align: center;">
-			                    			<digi:trn key="calendar:orgs">Organizations</digi:trn>
-			                    		</td>
-			                    		<td rowspan="2" align="left" valign="top">
-			                    			 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
-			                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
-													<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<html:option value="${organization.ampOrgId}" style="font-family: Tahoma;font-size:11px;">${organization.name}</html:option>
-													</logic:iterate>
-												</logic:notEmpty>
-			                                 </html:select>
-			                    		</td>
-			                    		<td rowspan="2" valign="top">
-			                    			<table cellSpacing="1" cellPadding="1">
-												<tr>
-													<td>
-													<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="myStyleClass"><digi:trn key="btn:addOrganizations" >Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">
-															<digi:trn key="btn:remove">Remove</digi:trn>
-														</html:button>
-													</td> 
-												</tr>
-											</table>	
-			                    		</td>
+			                    		<field:display name="Donors" feature="Calendar">
+			                    			<td rowspan="2" style="text-align: center;">
+				                    			<digi:trn key="cal:organizations">Organizations</digi:trn>
+				                    		</td>
+				                    		<td rowspan="2" align="left" valign="top">
+				                    			 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
+				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
+														<logic:iterate name="calendarEventForm" property="organizations" id="organization" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<html:option value="${organization.ampOrgId}" style="font-family: Tahoma;font-size:11px;">${organization.name}</html:option>
+														</logic:iterate>
+													</logic:notEmpty>
+				                                 </html:select>
+				                    		</td>
+				                    		<td rowspan="2" valign="top">
+				                    			<table cellSpacing="1" cellPadding="1">
+				                    				<field:display name="Add Donor Button" feature="Calendar">
+				                    					<tr>
+															<td>
+																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="myStyleClass"><digi:trn key="btn:addOrganizations" >Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
+															</td>
+														</tr>
+				                    				</field:display>
+													<field:display name="Remove Donor Button" feature="Calendar">
+														<tr>
+															<td>
+																<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">
+																	<digi:trn key="btn:remove">Remove</digi:trn>
+																</html:button>
+															</td> 
+														</tr>
+													</field:display>													
+												</table>	
+				                    		</td>
+			                    		</field:display>			                    		
 			                    	</tr>
 			                    	
 			                    	<tr>
@@ -475,18 +482,20 @@ function recurEvent(){
 			                    		</td>			                    		
 			                    	</tr>
 			                    	<tr style="height:25px">
-			                    		<td valign="top" align="right" nowrap="nowrap" rowspan="1">
-			                    			<digi:trn key="calendar:eventsType">Event type</digi:trn>
-			                    		</td>
-			                    		<td align="left" valign="top" rowspan="1">
-			                    			 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
-			                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
-			                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
-			                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
-			                                        </c:forEach>
-			                                 	</c:if>
-			                                 </html:select>
-			                    		</td>
+			                    		<field:display name="Event Type" feature="Calendar">
+			                    			<td valign="top" align="right" nowrap="nowrap" rowspan="1">
+				                    			<digi:trn key="calendar:eventsType">Event type</digi:trn>
+				                    		</td>
+				                    		<td align="left" valign="top" rowspan="1">
+				                    			 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
+				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
+				                                    	<c:forEach var="evType" items="${calendarEventForm.eventTypesList}">
+				                                        	<html:option value="${evType.id}" style="color:${evType.color};font-weight:Bold;">${evType.name}</html:option>
+				                                        </c:forEach>
+				                                 	</c:if>
+				                                 </html:select>
+				                    		</td>
+			                    		</field:display>			                    		
 			                    		<td rowspan="4" style="text-align: center" align="right" nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description">Description</digi:trn>
 			                    		</td>
@@ -820,12 +829,18 @@ function recurEvent(){
 			                                        </td>
 			                    	</tr>
 			                    	<tr>
-			                          <td colspan="5" style="text-align:center;">                            
-			                            <input type="submit" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
-			                            &nbsp;
-			                            <input type="submit" style="width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
-			                            &nbsp;                            
-			                            <input type="button" style="width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                          <td colspan="5" style="text-align:center;">
+			                          	<field:display name="Preview Event button" feature="Calendar">
+			                          		<input type="submit" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
+			                            	&nbsp;
+			                          	</field:display>                           
+			                            <field:display name="Save and Send button" feature="Calendar">
+			                            	<input type="submit" style="width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
+			                            	&nbsp;
+			                            </field:display>
+			                            <field:display name="Recurring Event Button" feature="Calendar">
+			                            	<input type="button" style="width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
+			                            </field:display>
 			                          </td>
 			                        </tr>
 			                    </table>

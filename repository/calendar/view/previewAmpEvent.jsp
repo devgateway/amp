@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
 <digi:instance property="calendarEventForm"/>
 
@@ -36,7 +37,7 @@ function deleteEvent(){
   <html:hidden styleId="hdnMethod" name="calendarEventForm" property="method"/>
   <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 
-  <table>
+  <table width="520">
   	 <tr>
 		<td width=14>&nbsp;</td>
 		<td align=left vAlign=top width=750>
@@ -58,7 +59,7 @@ function deleteEvent(){
 		</td>
 	</tr>	
 	<tr>
-		<td height=16 vAlign=center width=571>
+		<td height="16" vAlign="middle" width="520">
 			<span class=subtitle-blue>	<digi:trn key="calendar:previewEvent">Preview  Event</digi:trn> </span>
 		</td>
 	</tr>
@@ -82,7 +83,7 @@ function deleteEvent(){
 			        <div style="padding: 20px; background-color: #F5F5F5;">
 			          <table>
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 			                <digi:trn key="calendar:evntTitle">Event title</digi:trn>
 			              </td>
 			              <td style="font-family: Tahoma;font-size: 12px;">
@@ -92,7 +93,7 @@ function deleteEvent(){
 			            </tr>
 			           <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 			                <digi:trn key="calendar:Description">Description</digi:trn>
 			              </td>
 			              <td>
@@ -101,7 +102,7 @@ function deleteEvent(){
 			            </tr>
 			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 			                <digi:trn key="calendar:cType">Calendar type</digi:trn>
 			              </td>
 			              <td style="font-family: Tahoma;font-size: 12px;">
@@ -118,29 +119,33 @@ function deleteEvent(){
 			              </td>
 			             </tr>
 			             <tr height="3px"><td colspan="2"></td></tr>
+			            <field:display name="Event Type" feature="Calendar">
+			            	<tr>
+				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
+				                <digi:trn key="calendar:eventsType">Event type</digi:trn>
+				              </td>
+				              <td style="font-family: Tahoma;font-size: 12px;">
+				                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
+				                ${calendarEventForm.selectedEventTypeName}
+				              </td>
+				            </tr>
+				            <tr height="3px"><td colspan="2"></td></tr>
+			            </field:display>			            
+			            <field:display name="Donors" feature="Calendar">
+			            	<tr>
+				              <td style="text-align: right;font-family: Tahoma;font-size: 12px; font-weight:bold;"nowrap="nowrap">
+				                <digi:trn key="cal:organizations">Organizations</digi:trn>
+				              </td>
+				              <td>
+				                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
+				                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" style="font-family: Tahoma;font-size:11px;"/>
+				                </html:select>
+				              </td>
+				            </tr>
+				            <tr height="3px"><td colspan="2"></td></tr>
+			            </field:display>			            
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
-			                <digi:trn key="calendar:eventsType">Event type</digi:trn>
-			              </td>
-			              <td style="font-family: Tahoma;font-size: 12px;">
-			                <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
-			                ${calendarEventForm.selectedEventTypeName}
-			              </td>
-			            </tr>
-			            <tr height="3px"><td colspan="2"></td></tr>
-			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
-			                <digi:trn key="calendar:orgs">Organizations</digi:trn>
-			              </td>
-			              <td>
-			                <html:select name="calendarEventForm" property="selOrganizations" multiple="multiple" size="5" styleId="organizationList" style="width: 220px; height: 70px;">
-			                    <html:optionsCollection name="calendarEventForm" property="organizations" value="ampOrgId" label="acronymAndName" style="font-family: Tahoma;font-size:11px;"/>
-			                </html:select>
-			              </td>
-			            </tr>
-			            <tr height="3px"><td colspan="2"></td></tr>
-			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 			                <digi:trn key="calendar:StDate">Start date</digi:trn>
 			              </td>
 			              <td style="font-family: Tahoma;font-size: 12px;">
@@ -151,7 +156,7 @@ function deleteEvent(){
 			            </tr>
 			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;"nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 			                <digi:trn key="calendar:EndDate">End Date</digi:trn>
 			              </td>
 			              <td style="font-family: Tahoma;font-size: 12px;">
@@ -162,7 +167,7 @@ function deleteEvent(){
 			            </tr>
 			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 			                <digi:trn key="calendar:Attendee">Attendee</digi:trn>
 			              </td>
 			              <td>
@@ -175,7 +180,7 @@ function deleteEvent(){
 			            </tr>
 			            <tr height="3px"><td colspan="2"></td></tr>
 			            <tr>
-			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;" nowrap="nowrap">
+			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;" nowrap="nowrap">
 			                <digi:trn key="calendar:PublicEvent">Public Event</digi:trn>
 			              </td>
 			              <td style="font-family: Tahoma;font-size: 12px;">

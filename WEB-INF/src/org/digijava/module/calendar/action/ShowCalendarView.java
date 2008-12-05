@@ -139,7 +139,7 @@ public class ShowCalendarView extends Action {
         calendarViewForm.setDateNavigator(navigator);
         // FILTER
         EventsFilter filter = calendarViewForm.getFilter();
-        if (showPublicEvents== null || showPublicEvents) {
+        if (showPublicEvents!=null && showPublicEvents) {
             filter.setShowPublicEvents(true);
         } else {
             filter.setShowPublicEvents(false);
@@ -190,7 +190,7 @@ public class ShowCalendarView extends Action {
             filter.setSelectedDonors(selectedDonors);
 
             // showPublicEvents
-           // filter.setShowPublicEvents(false);
+            filter.setShowPublicEvents(false);
             
         }
         // events

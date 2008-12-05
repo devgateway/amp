@@ -21,7 +21,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author Irakli Kbiashvili
  *
  */
-public class ActivityItem {
+public class ActivityItem implements Comparable<ActivityItem>{
 
 	public static final String TAG_NAME = "activity";
 
@@ -60,6 +60,18 @@ public class ActivityItem {
 	private List<LabelValueBean> donors;
 
 	private ActivityUtil.ActivityAmounts amounts;
+    // percent of specific program assigned
+    private Long percent;
+    // used only for program percent applying
+    private AmpActivity act;
+
+    public AmpActivity getAct() {
+        return act;
+    }
+
+    public void setAct(AmpActivity act) {
+        this.act = act;
+    }
 
 
 	/**
@@ -70,6 +82,20 @@ public class ActivityItem {
 
 	}
 
+    /**
+	 * Constructs Helper bean from db entity and the percent of specific program
+	 * @param act AmpActivity bean
+     * @param percent Long percent of specific program
+	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
+     * @see ActivityItem#ActivityItem(AmpActivity)
+	 */
+
+    public ActivityItem(AmpActivity act,Long percent) {
+        this.act=act;
+        this.percent=percent;
+
+	}
+
 	/**
 	 * Constructs Helper bean from db entity.
 	 * See next constructor, which is used in this one.
@@ -77,11 +103,11 @@ public class ActivityItem {
 	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
 	 */
 	public ActivityItem(AmpActivity entity) throws Exception{
-		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD");
+		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD",null);
 	}
 
-    public ActivityItem(AmpActivity entity,String curenncyCode) throws Exception{
-        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode);
+    public ActivityItem(AmpActivity entity,String curenncyCode,Long percent) throws Exception{
+        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode,percent);
 	}
 
 	/**
@@ -90,7 +116,7 @@ public class ActivityItem {
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode) throws Exception {
+	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode,Long percent) throws Exception {
 		if (entity != null) {
 			AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
 //			statusValue.setValue("fake status");
@@ -101,7 +127,7 @@ public class ActivityItem {
 			name = name.replaceAll("&","&amp;");
 			name = name.replaceAll("\"","&quot;");
 			try {
-				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode);
+				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode,percent);
 				proposedAmount=amounts.proposedAmout();
 				actualAmount=amounts.actualAmount();
 				plannedAmount=amounts.plannedAmount();
@@ -260,5 +286,18 @@ public class ActivityItem {
 	public void setAmounts(ActivityUtil.ActivityAmounts amounts) {
 		this.amounts = amounts;
 	}
+      public Long getPercent() {
+        return percent;
+    }
+
+    public void setPercent(Long percent) {
+        this.percent = percent;
+    }
+
+    public int compareTo(ActivityItem o) {
+        String myName=(this.name==null)?"":this.name;
+		String hisName=(o.getName()==null)?"":o.getName();
+		return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
+    }
 
 }

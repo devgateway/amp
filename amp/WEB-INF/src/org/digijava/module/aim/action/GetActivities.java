@@ -97,7 +97,7 @@ public class GetActivities extends Action {
 			}
 
 			logger.debug("retriving activities");
-			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorIds(), fromYear,toYear, null, tm, pageStart,rowCount, false);
+			Collection<ActivityItem> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorIds(), fromYear,toYear, null, tm, pageStart,rowCount);
 
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
             AmpCurrency curr=ampAppSettings.getCurrency();
@@ -142,7 +142,7 @@ public class GetActivities extends Action {
 	 * @return
 	 * @throws AimException
 	 */
-	private Collection<AmpActivity> getActivities(Long ampThemeId,
+	private Collection<ActivityItem> getActivities(Long ampThemeId,
 			String statusCode,
 			String donorOrgId,
 			Date fromDate,
@@ -150,14 +150,13 @@ public class GetActivities extends Action {
 			Long locationId,
 			TeamMember teamMember,
 			Integer pageStart,
-			Integer rowCount,
-			boolean recurse) throws AimException, DgException{
+			Integer rowCount) throws AimException, DgException{
 
 
-		Collection<AmpActivity> result=null;
+		Collection<ActivityItem> result=null;
 
 		//search actvities in db, with pagination.
-		result = ActivityUtil.searchActivities(ampThemeId,
+            result = ActivityUtil.searchActivitieProgPercents(ampThemeId,
 				statusCode,
 				donorOrgId,
 				fromDate,
@@ -167,32 +166,12 @@ public class GetActivities extends Action {
 				pageStart,
 				rowCount);
 
-		if (recurse){
-			Collection<AmpTheme> children = ProgramUtil.getSubThemes(ampThemeId);
-			if (children!= null && children.size() > 0){
-				for (AmpTheme prog : children) {
-//					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
-//							prog.getAmpThemeId(), statusCode, donorOrgId,
-//							fromDate, toDate, locationId, teamMember);
-//					if (subActivities!= null && subActivities.size()>0){
-//						result.addAll(subActivities);
-//					}
-					Collection<AmpActivity> childsActivities=getActivities(prog.getAmpThemeId(), statusCode, donorOrgId, fromDate, toDate, locationId, teamMember, pageStart, rowCount, recurse);
-					if (childsActivities!=null && childsActivities.size()>0){
-						if(result==null){
-							result=childsActivities;
-						}else{
-							result.addAll(childsActivities);
-						}
-					}
-				}
-			}
-		}
+
 
 		//Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
-		List<AmpActivity> sortedActivities = null;
+		List<ActivityItem> sortedActivities = null;
 		if (result!=null){
-			sortedActivities= new ArrayList<AmpActivity>(result);
+			sortedActivities= new ArrayList<ActivityItem>(result);
 			Collections.sort(sortedActivities);
 		}
 
@@ -308,7 +287,7 @@ public class GetActivities extends Action {
 	 * @see AmpActivity
 	 * @see ActivityItem
 	 */
-	private String activities2XML(Collection<AmpActivity> acts,int maxPages, String currencyCode) throws Exception {
+	private String activities2XML(Collection<ActivityItem> acts,int maxPages, String currencyCode) throws Exception {
         double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
@@ -316,10 +295,10 @@ public class GetActivities extends Action {
 		result += "<" + ROOT_TAG;
 		String temp = "";
 		if (acts != null && acts.size() > 0) {
-			for (AmpActivity activity : acts) {
+			for(ActivityItem activity : acts) {
 //                activity.
-                //create helper bean from activity
-				ActivityItem item = new ActivityItem(activity,currencyCode);
+                //create helper bean from activity and program percent
+				ActivityItem item = new ActivityItem(activity.getAct(),currencyCode,activity.getPercent());
 				//get already calculated amounts from helper
 				ActivityUtil.ActivityAmounts amounts = item.getAmounts();
 				//calculate totals

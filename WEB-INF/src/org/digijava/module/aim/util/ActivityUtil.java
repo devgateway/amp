@@ -71,6 +71,7 @@ import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -1183,6 +1184,56 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           query.setMaxResults(rowCount);
       }
       
+      result = query.list();
+    }
+    catch (Exception ex) {
+      throw new DgException("Cannot search activities for NPD",ex);
+    }
+
+    return result;
+  }
+
+  /**
+   * <p>Searches activities which are assigened to specific program and returns collection of {@link ActivityItem} objects.
+   * Each object is created using {@link ActivityItem#ActivityItem(AmpActivity,Long)} constructor.</p>
+   * <p>Please note that this method is too slow if there are too many activities, because hibernate should load them all. Please use pagination.</p>
+   * @param ampThemeId filter by program
+   * @param statusCode filter by status if not null
+   * @param donorOrgId filter by donor org if not null
+   * @param fromDate filter by date if not null
+   * @param toDate filter by date if not null
+   * @param locationId filter by location if not null
+   * @param teamMember filter by team if not null
+   * @param pageStart if null then 0 is assumed.
+   * @param rowCount number of activities to return
+   * @return list of activities.
+   * @see ActivityItem
+   * @throws DgException
+   */
+  public static Collection<ActivityItem> searchActivitieProgPercents(Long ampThemeId,
+      String statusCode,
+      String donorOrgId,
+      Date fromDate,
+      Date toDate,
+      Long locationId,
+      TeamMember teamMember,Integer pageStart,Integer rowCount) throws DgException{
+       Collection<ActivityItem> result = null;
+    try {
+      Session session = PersistenceManager.getRequestDBSession();
+
+      String oql = "select  new  org.digijava.module.aim.helper.ActivityItem(act,prog.programPercentage) from " + AmpActivityProgram.class.getName() + " prog ";
+      oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+      oql += " order by act.name";
+
+      Query query = session.createQuery(oql);
+
+      setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+
+      if (pageStart!=null && rowCount!=null){
+          query.setFirstResult(pageStart);
+          query.setMaxResults(rowCount);
+      }
+
       result = query.list();
     }
     catch (Exception ex) {
@@ -3157,7 +3208,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
   }
 
   public static ActivityAmounts getActivityAmmountIn(AmpActivity act,
-      String tocode) throws Exception {
+      String tocode,Long percent) throws Exception {
     double tempProposed = 0;
     double tempActual = 0;
     double tempPlanned = 0;
@@ -3174,7 +3225,8 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         if (currencyCode == null || currencyCode.trim().equals("")) {
           currencyCode = "USD";
         } //end of AMP-1403
-        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue(),currencyCode);
+        //apply program percent
+        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue()*percent/100,currencyCode);
         result.setProposedAmout(tempProposed);
       }
       else {
@@ -3188,8 +3240,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 
                   org.digijava.module.aim.logic.FundingCalculationsHelper calculations = new org.digijava.module.aim.logic.FundingCalculationsHelper();
                   calculations.doCalculations(fundDetails, tocode);
-                  result.AddActual(calculations.getTotActualComm().doubleValue());
-                  result.AddPalenned(calculations.getTotPlannedComm().doubleValue());
+                  //apply program percent
+                  result.AddActual(calculations.getTotActualComm().doubleValue()*percent/100);
+                  result.AddPalenned(calculations.getTotPlannedComm().doubleValue()*percent/100);
               }
           }
         }

@@ -150,7 +150,6 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 						transformer.transform(source, result);
 						sw.flush();
 
-						//if thisis XML, then we are done, so output xml file.
 						if (type == XML) {
 							String host = request.getServerName();
 							OutputStream outstr = response.getOutputStream();
@@ -187,26 +186,46 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							dataitem.setBorderTop(HSSFCellStyle.BORDER_THIN);
 							dataitem.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 							dataitem.setVerticalAlignment(HSSFCellStyle.ALIGN_RIGHT);
-							
+							boolean addrow = false;
+							int nrowspan=0;
 							int lastrow=0;
+							int lasti=0;
 							NodeList rowslist = document.getElementsByTagName("row");
 							for (int i = 0; i < rowslist.getLength(); i++) {
 								HSSFRow row = sheet.createRow((short)(i));
 								for (int j = 0; j < rowslist.item(i).getChildNodes().getLength(); j++) {
+									HSSFCell cell=null;
 									for (int k = 0; k < rowslist.item(i).getChildNodes().item(j).getChildNodes().getLength(); k++) {
-										HSSFCell cell = row.createCell((short)j);
+										if (addrow &&  i >lasti && i <=((nrowspan-1) +lasti)){
+											cell = row.createCell((short)(j+1));
+										}else{
+											cell = row.createCell((short)j);
+										}
 										str = new HSSFRichTextString(rowslist.item(i).getChildNodes().item(j).getChildNodes().item(k).getAttributes().item(0).getNodeValue());
 										String style = rowslist.item(i).getChildNodes().item(j).getAttributes().getNamedItem("style").getNodeValue();
+										String rowspan = rowslist.item(i).getChildNodes().item(j).getAttributes().getNamedItem("rowspan").getNodeValue();
+										String colspan = rowslist.item(i).getChildNodes().item(j).getAttributes().getNamedItem("colspan").getNodeValue();
+										if (Integer.parseInt(rowspan)>1){
+											addrow = true;
+											nrowspan=Integer.parseInt(rowspan);
+											lasti = i;
+										}
 										cell.setCellValue (str);
 										cell.setCellStyle(rowheading);
 										for (int l = 0; l < rowslist.item(i).getChildNodes().getLength(); l++) {
+											HSSFCell celldata=null;
 											if (rowslist.item(i).getChildNodes().item(l).getNodeName().equalsIgnoreCase("cell")){
-												HSSFCell celldata = row.createCell((short)(l));
+												if (addrow &&  i >lasti && i <=((nrowspan-1) +lasti)){
+													celldata = row.createCell((short)(l+1));
+												}else{
+													celldata = row.createCell((short)(l));	
+												}
 												str = new HSSFRichTextString(rowslist.item(i).getChildNodes().item(l).getAttributes().item(3).getNodeValue());
 												HSSFDataFormat nformat = wb.createDataFormat();
 												celldata.setCellValue(str);
 												celldata.setCellType(HSSFCell.CELL_TYPE_STRING);
 												celldata.setCellStyle(dataitem);
+												sheet.autoSizeColumn((short)l);
 											}
 										}
 										sheet.autoSizeColumn((short)j);
@@ -237,7 +256,7 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 								wb.write(fos);
 								fos.close();
 							}
-							logger.info(sw.toString());
+							//logger.info(sw.toString());
 							wb.write(outstr);
 							
 							/*

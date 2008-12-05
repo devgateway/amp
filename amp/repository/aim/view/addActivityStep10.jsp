@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
+<%@ page import="org.digijava.module.categorymanager.util.CategoryConstants" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -25,6 +25,8 @@
 	var baseValueDateNotEntered="<digi:trn key='aim:baseValueDateNotEntered'>Base value date not entered</digi:trn>";
 	var targetValueNotEntered="<digi:trn key='aim:targetValueNotEntered'>Target value not entered</digi:trn>";
 	var targetValueDateNotEntered="<digi:trn key='aim:targetValueDateNotEntered'>Target value date not entered</digi:trn>";
+	var currValueNotEntered="<digi:trn key='aim:currValueNotEntered'>Current value not entered</digi:trn>";
+	var currValueDateNotEntered="<digi:trn key='aim:currValueDateNotEntered'>Current value date not entered</digi:trn>";
 	var invalidRevisedTargetValue="<digi:trn key='aim:invalidRevisedTargetValue'>Invalid Revised target value or Revised target value not entered</digi:trn>";
 	var revisedTargetValueDateNotEntered="<digi:trn key='aim:revisedTargetValueDateNotEntered'>Revised target value date not entered</digi:trn>";
 	var deleteThisIndicator="<digi:trn key='aim:deleteThisIndicator'>Are you sure you want to delete this Indicator?</digi:trn>";
@@ -70,7 +72,7 @@
 
 			if (isEmpty(document.getElementsByName('indicator.revTargetVal')[0].value) == true) {
 				alert(invalidRevisedTargetValue);
-				document.getElementsByName('indicator.currentVal')[0].focus();
+				document.getElementsByName('indicator.revTargetVal')[0].focus();
 				return false;
 			}
 
@@ -79,6 +81,17 @@
 				document.getElementsByName('indicator.revTargetValDate')[0].focus();
 				return false;
 			}
+		}
+		if (isEmpty(document.getElementsByName('indicator.currentVal')[0].value) == true) {
+			alert(currValueNotEntered);
+			document.getElementsByName('indicator.currentVal')[0].focus();
+			return false;
+		}
+
+		if (isEmpty(document.getElementsByName('indicator.currentValDate')[0].value) == true) {
+			alert(currValueDateNotEntered);
+			document.getElementsByName('indicator.currentValDate')[0].focus();
+			return false;
 		}
 		return true;
 	}
@@ -105,6 +118,13 @@
 			alert(targetValueNotEntered);
 			txt.focus();
 			return false;
+		} else if (txt==null) {//check for target value only
+			txt=document.getElementById("txtTargetVal");
+			if (txt!=null && !containsValidNumericValue(txt)) {
+				alert(targetValueNotEntered);
+				txt.focus();
+				return false;
+			}
 		}
 
         txt=document.getElementById("txtRevisedTargetValDate");
@@ -112,8 +132,29 @@
 			alert(targetValueDateNotEntered);
 			txt.focus();
 			return false;
+		} else if (txt==null) {//check for target date value only
+			txt=document.getElementById("txtTargetValDate");
+			if (txt!=null && isEmpty(txt.value)) {
+				alert(targetValueDateNotEntered);
+				txt.focus();
+				return false;
+			}
 		}
 
+        txt=document.getElementById("txtCurrVal");
+		if (txt!=null && isEmpty(txt.value)) {
+			alert(currValueNotEntered);
+			txt.focus();
+			return false;
+		}
+
+        txt=document.getElementById("txtCurrValDate");
+		if (txt!=null && isEmpty(txt.value)) {
+			alert(currValueDateNotEntered);
+			txt.focus();
+			return false;
+		}
+		
 		return true;
 
 	}
@@ -121,9 +162,9 @@
 	function setValues(val) {
 		var valid;
 		if(document.aimEditActivityForm.teamLead.value) {
-			valid = validateEntryByMember();
+			valid = validateEntryByLeader();			
 		} else {
-			valid = validateEntryByLeader();
+			valid = validateEntryByMember();
 		}
 		if (valid == true) {
 			document.getElementsByName("indicator.indicatorId")[0].value = val;
@@ -386,7 +427,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											</tr>
 											</logic:empty>
 											<logic:notEmpty name="aimEditActivityForm" property="indicator.indicatorsME">
-											<logic:iterate name="aimEditActivityForm" property="indicator.indicatorsME" id="indicator"type="org.digijava.module.aim.helper.ActivityIndicator">
+											<logic:iterate name="aimEditActivityForm" property="indicator.indicatorsME" id="indicator" type="org.digijava.module.aim.helper.ActivityIndicator">
 											<tr>
 												<td bgcolor="#f4f4f2" align="left" colspan="5">&nbsp;&nbsp;
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -440,7 +481,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<digi:trn key="aim:logframeCategory">Logframe Category</digi:trn>
 																</td>
 																<td>
-																	<category:showoptions name="aimEditActivityForm" property="indicator.logframeCategory" keyName="logframe" styleClass="inp-text" />
+																	<category:showoptions name="aimEditActivityForm" property="indicator.logframeCategory" keyName="<%= org.digijava.module.categorymanager.util.CategoryConstants.LOGFRAME_KEY %>" styleClass="inp-text" />
 																</td>
 															</tr>
 														</field:display>
@@ -496,7 +537,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<c:if test="${indicator.targetValDate == null}">
 
 																<td>
-																<html:text property="indicator.targetVal" size="10" maxlength="10"/>
+																<html:text property="indicator.targetVal" size="10" maxlength="10" styleId="txtTargetVal"/>
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -530,6 +571,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<font color="red">*</font>
 																</td>
 																<td align="left">
 																	<input type="text" name="indicator.targetValDate"
@@ -617,17 +659,14 @@ ${fn:replace(message,quote,escapedQuote)}
 															</logic:iterate>
 														</logic:notEmpty>
 
-
-															<tr>
-																<field:display name="Current Value" feature="Activity">
+															<field:display name="Current Value" feature="Activity">
+															<tr>																
 																<td><b>
 																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
-
+																	<font color="red">*</font>
 																</b></td>
 																<td>
-																	<input type="text" name="indicator.currentVal"
-																	value="<bean:write name="indicator" property="actualVal" />"
-																	class="inp-text" size="10">
+																	<html:text property="indicator.currentVal" size="10" maxlength="10" styleId="txtCurrVal"/>																	
 
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
@@ -635,12 +674,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																<field:display name="Date Current Value" feature="Activity">
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
-
+																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="indicator.currValDate"
+																	<input type="text" name="indicator.currentValDate"
 																	value="<bean:write name="indicator" property="currentValDate" />"
-																	class="inp-text" size="10" readonly="readonly" id="txtCurrValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="true" id="txtCurrValDate">&nbsp;&nbsp;
 
 																	<a id="clear4" href="javascript:clearDate(document.getElementById('txtCurrValDate'), 'clear4')">
 																	 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -648,9 +687,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<a id="date4" href='javascript:pickDateWithClear("date4",document.getElementById("txtCurrValDate"),"clear4")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
-																</td>
-																</field:display>
+																</td>																
 															</tr>
+															</field:display>
 															<field:display name="Comments Current Value" feature="Activity">
 															<tr>
 																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>

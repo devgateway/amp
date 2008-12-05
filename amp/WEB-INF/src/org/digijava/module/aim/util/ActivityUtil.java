@@ -764,72 +764,80 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
           ActivityIndicator actInd = (ActivityIndicator) itr.next();
           
           AmpIndicatorRiskRatings risk=null;
-          
-          
+                    
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
           //if actInd.getRisk()==0 , than no Risk is selected
           if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
         	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
           }          
 
+          AmpCategoryValue categoryValue = (AmpCategoryValue) session.get(AmpCategoryValue.class, actInd.getIndicatorsCategory().getId()); 
+          
           //try to find connection of current activity with current indicator
           IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
           //if no connection found then create new one. Else clear old values for the connection.
           boolean newIndicator = false;
-          if (indConn==null){
+          if (indConn == null){
         	  indConn=new IndicatorActivity();
               indConn.setActivity(activity);
               indConn.setIndicator(ind);
               indConn.setValues(new HashSet<AmpIndicatorValue>());
               newIndicator = true;
-          }else{
-        	  if (indConn.getValues()!=null && indConn.getValues().size()>0){
-        		 /* for (AmpIndicatorValue value : indConn.getValues()) {
-					session.delete(value);
-				}*/
+          } else {
+        	  if ((indConn.getValues() != null) && (indConn.getValues().size() > 0)) {
+        		  for (AmpIndicatorValue value : indConn.getValues()) {
+        			  session.delete(value);
+        		  }
         		  indConn.getValues().clear();
         	  }
           }
 
           //create each type of value and assign to connection
-          if (actInd.getActualVal()!=null){
-        	  AmpIndicatorValue indValActual=new AmpIndicatorValue();
+          AmpIndicatorValue indValActual = null;
+          if (actInd.getCurrentVal()!=null){
+        	  indValActual = new AmpIndicatorValue();
         	  indValActual.setValueType(AmpIndicatorValue.ACTUAL);
-        	  indValActual.setValue(new Double(actInd.getActualVal()));
+        	  indValActual.setValue(new Double(actInd.getCurrentVal()));
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
         	  indValActual.setRisk(risk);
+        	  indValActual.setLogFrame(categoryValue);
         	  indValActual.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValActual);
           }
+          AmpIndicatorValue indValTarget = null;
           if (actInd.getTargetVal()!=null){
-        	  AmpIndicatorValue indValTarget=new AmpIndicatorValue();
+        	  indValTarget = new AmpIndicatorValue();
         	  indValTarget.setValueType(AmpIndicatorValue.TARGET);
         	  indValTarget.setValue(new Double(actInd.getTargetVal()));
         	  indValTarget.setComment(actInd.getTargetValComments());
         	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
         	  indValTarget.setRisk(risk);
+        	  indValTarget.setLogFrame(categoryValue);
         	  indValTarget.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValTarget);
           }
+          AmpIndicatorValue indValBase = null;
           if (actInd.getBaseVal()!=null){
-        	  AmpIndicatorValue indValBase=new AmpIndicatorValue();
-
+        	  indValBase = new AmpIndicatorValue();
         	  indValBase.setValueType(AmpIndicatorValue.BASE);
         	  indValBase.setValue(new Double(actInd.getBaseVal()));
         	  indValBase.setComment(actInd.getBaseValComments());
         	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
         	  indValBase.setRisk(risk);
+        	  indValBase.setLogFrame(categoryValue);
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
           }
+          AmpIndicatorValue indValRevised = null;
           if (actInd.getRevisedTargetVal()!=null){
-        	  AmpIndicatorValue indValRevised=new AmpIndicatorValue();
+        	  indValRevised = new AmpIndicatorValue();
         	  indValRevised.setValueType(AmpIndicatorValue.REVISED);
         	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
         	  indValRevised.setComment(actInd.getRevisedTargetValComments());
         	  indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
         	  indValRevised.setRisk(risk);
+        	  indValRevised.setLogFrame(categoryValue);
         	  indValRevised.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValRevised);
           }
@@ -839,7 +847,7 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
         	  IndicatorUtil.saveConnectionToActivity(indConn, session);
           } else {
         	  // Save the activity in order to save the indicators collection and its changes (values).
-        	  // This is for AMP-4317, you can't save the collection because is in the Activity.
+        	  // This is for AMP-4317, you can't save the collection because is in the Activity.        	  
         	  session.saveOrUpdate(activity);
           }
         }
@@ -1492,9 +1500,9 @@ public static Long saveActivity(RecoverySaveParameters rsp) throws Exception {
 		Session session = PersistenceManager.getRequestDBSession();
 		try {
 			session.flush();
-			result = (AmpActivity) session.load(AmpActivity.class, id);
+			result = (AmpActivity) session.get(AmpActivity.class, id);
 			session.evict(result);
-			result = (AmpActivity) session.load(AmpActivity.class, id);
+			result = (AmpActivity) session.get(AmpActivity.class, id);
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivity with id=" + id + " not found");
 		} catch (Exception e) {

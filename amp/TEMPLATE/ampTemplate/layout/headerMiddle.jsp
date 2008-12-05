@@ -420,24 +420,64 @@ function adminHelp(){
                           </li>
                           </feature:display>
 						  <feature:display name="Calendar" module="Calendar">
+						  	<!-- On which view calendar link should redirect. depends on FM -->
+							  <c:set var="linkYearly">
+							  	<field:display name="Yearly View" feature="Calendar">
+							  		/calendar/showCalendarView.do
+							  	</field:display>
+							  </c:set>
+							  <c:set var="linkMonthly">
+							  	<field:display name="Monthly View" feature="Calendar">
+							  		/calendar/showCalendarView.do?view=monthly
+							  	</field:display>
+							  </c:set>
+							  <c:set var="linkWeekly">
+							  	<field:display name="Weekly View" feature="Calendar">
+							  		/calendar/showCalendarView.do?view=weekly
+							  	</field:display>
+							  </c:set>
+							  <c:set var="linkDaily">
+							  	<field:display name="Daily View" feature="Calendar">
+							  		/calendar/showCalendarView.do?view=daily
+							  	</field:display>
+							  </c:set>
+							  
+							  <c:set var="link">
+							  	<c:choose>
+							  		<c:when test="${not empty linkYearly}">${linkYearly}</c:when>
+							  		<c:when test="${not empty linkMonthly}">${linkMonthly}</c:when>
+							  		<c:when test="${not empty linkWeekly}">${linkWeekly}</c:when>
+							  		<c:when test="${not empty linkDaily}">${linkDaily}</c:when>
+							  	</c:choose>
+							  </c:set>
+							  
                           <li class="yuiampmenuitem" style="float:left;">
-                              <a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          	<c:if test="${not empty link}">
+                          		<a class="yuiampmenuitemlabel"  href="${link}" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
-                              <a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
+                          	</c:if>
+                          	<c:if test="${empty link}">
+                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                                 <digi:trn key="aim:calendar">Calendar</digi:trn>
+                              </a>
+                          	</c:if>
+                          	<field:display name="Create Event" feature="Calendar">
+                          		<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
                               <div id="calendaroptions" class="yuiampmenu" style="opacity:0.9;">
-                                  <div class="bd">                    
+                                  <div class="bd">
                                       <ul>
                                         <li class="yuiampmenuitem">
                                             <a class="yuiampmenuitemlabel" href="/calendar/showCalendarEvent.do~selectedCalendarTypeId=0~method=new">
-                                            <digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
+                                            	<digi:trn key="aim:calendarAddEvent">Add Event</digi:trn>
                                             </a>
                                         </li>
                                       </ul>
                                   </div>
-                              </div>                    
+                              </div>
+                          	</field:display>
                           </li>
                           </feature:display>
 						<%	

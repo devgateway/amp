@@ -302,7 +302,7 @@ color:Black;
 				                                        	<table width="100%">
 				                                            	<c:forEach var="hour" begin="0" end="23">
 				                                              		<tr style="height:40px;">
-				                                                		<td align="left" style="border-top:2px solid #e8eef7;color:White;background-color:#376091;vertical-align:top;width:70px;padding:6px;font-size:12px;font-family: Tahome">
+				                                                		<td align="left" style="border-top:2px solid #e8eef7;color:White;background-color:#376091;vertical-align:top;width:70px;padding:6px;font-size:12px;font-family: Tahoma">
 				                                                  			<c:if test="${hour < 12}">
 				                                                    			<c:if test="${hour < 10}">
 				                                                      				<c:set var="hoursToDisplay" value="0${hour}:00"/>

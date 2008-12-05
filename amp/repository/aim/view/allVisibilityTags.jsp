@@ -720,4 +720,22 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Workspace of Creator" feature="Identification"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
+
+<field:display name="Yearly View" feature="Calendar"></field:display>
+<field:display name="Monthly View" feature="Calendar"></field:display>
+<field:display name="Weekly View" feature="Calendar"></field:display>
+<field:display name="Daily View" feature="Calendar"></field:display>
+<field:display name="Filter" feature="Calendar"></field:display>
+<field:display name="Donor Filter" feature="Calendar"></field:display>
+<field:display name="Event Type Filter" feature="Calendar"></field:display>
+<field:display name="Run Filter Button" feature="Calendar"></field:display>
+<field:display name="Reset Filter Button" feature="Calendar"></field:display>
+<field:display name="Create Event" feature="Calendar"></field:display>
+<field:display name="Event Type" feature="Calendar"></field:display>
+<field:display name="Donors" feature="Calendar"></field:display>
+<field:display name="Add Donor Button" feature="Calendar"></field:display>
+<field:display name="Remove Donor Button" feature="Calendar"></field:display>
+<field:display name="Save and Send button" feature="Calendar"></field:display>
+<field:display name="Preview Event button" feature="Calendar"></field:display>
+<field:display name="Recurring Event Button" feature="Calendar"></field:display>
 		

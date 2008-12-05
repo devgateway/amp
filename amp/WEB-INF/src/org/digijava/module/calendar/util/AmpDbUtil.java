@@ -410,24 +410,43 @@ public class AmpDbUtil {
                 	  //creator of the event should see this event
                 	  if(ampCal.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
                     		retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                	  }                	  
-                     
-                      
-                	  if(showPublicEvents){
-                		//everyone in amp should see public events (AMP-3775)
-                		retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                		continue;
-                	  }else{
+                	  } 
+//                	  if(showPublicEvents){
+//                		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+//                		  continue;  		
+//                	  }else{
+//                		//If the event is not public
+//                		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+//                        	for (Object attendee : ampCal.getAttendees()) {
+//                          		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+//                          		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+//                          			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+//                          			continue;
+//                          		}
+//                          	}
+//                		}
+//                	  }
+                	  
+                	  /**
+                	   * if showPublicEvents=true, then public and private events should show up on the page. (AMP-4860)
+                	   * In this case , everyone should see public events, but if event is private, 
+                	   * then it should show up only if it's attendee is current user.
+                	   */
+                	  if(showPublicEvents && !ampCal.isPrivateEvent()){
+                		  retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+            			  continue;
+                	  }
+                	  if(!showPublicEvents || (showPublicEvents && ampCal.isPrivateEvent())){
                 		//If the event is not public
-                		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
-                        	for (Object attendee : ampCal.getAttendees()) {
-                          		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
-                          		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
-                          			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
-                          			continue;
-                          		}
-                          	}
-                		}
+                  		if(ampCal.getAttendees()!=null && ampCal.getAttendees().size()>0){
+                          	for (Object attendee : ampCal.getAttendees()) {
+                            		AmpCalendarAttendee att=(AmpCalendarAttendee)attendee;
+                            		if(att.getMember()!=null && att.getMember().getAmpTeamMemId().equals(curMember.getAmpTeamMemId())){
+                            			retEvents.put(ampCal.getCalendarPK().getCalendar().getId(), ampCal);
+                            			continue;
+                            		}
+                            	}
+                  		}
                 	  }
                      
 //                      if (calTeam != null && calTeam.getAmpTeamId().equals(curMemTeam.getAmpTeamId())) {
@@ -458,14 +477,8 @@ public class AmpDbUtil {
       }
   }
 
-  public static List getAmpCalendarEvents(GregorianCalendar startDate,
-                                          GregorianCalendar endDate,
-                                          String[] selectedEventTypeIds,
-                                          String[] selectedDonorIds,
-                                          Long userId,
-                                          boolean showPublicEvents,
-                                          String instanceId, String siteId) throws
-      CalendarException {
+  public static List getAmpCalendarEvents(GregorianCalendar startDate,GregorianCalendar endDate,String[] selectedEventTypeIds,String[] selectedDonorIds,
+                                          Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
       try {
           Session session = PersistenceManager.getRequestDBSession();
           
@@ -478,9 +491,12 @@ public class AmpDbUtil {
           				append("(:startDate <= c.endDate and c.endDate <= :endDate) or ").
           				append("(c.startDate <= :startDate and :endDate <= c.endDate))");
 
-          if(showPublicEvents){
-        	  queryString.append(" and ac.privateEvent=false");
-          }else{
+//          if(showPublicEvents){
+//        	  queryString.append(" and ac.privateEvent=false");
+//          }else{
+//        	  queryString.append(" and ac.privateEvent=true");
+//          }
+          if(!showPublicEvents){
         	  queryString.append(" and ac.privateEvent=true");
           }
 

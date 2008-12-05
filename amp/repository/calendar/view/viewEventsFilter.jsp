@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
 <digi:instance property="calendarViewForm"/>
 
@@ -37,63 +38,70 @@ function changeState() {
 <html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
-<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
-  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family:Tahoma;">
-  <digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
-  </div>
-  <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-family:Tahoma;">
-    <c:if test="${!empty calendarViewForm.filter.eventTypes}">
-      <table cellpadding="0" cellspacing="0">
-        <c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}">
-          <tr>
-            <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
-              <div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
-              </div>
-            </td>
-            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;" nowrap="nowrap">
-             <div style="white-space: nowrap;">${eventType.name}</div> 
-            </td>
-            <td>
-              <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/>
-            </td>
-          </tr>
-        </c:forEach>
-      </table>
-    </c:if>
-  </div>
-</div>
-<div style="width:200px;height:5px;font-family:Tahoma;">
-&nbsp;
-</div>
-<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
-  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
-  <digi:trn key="calendar:bodydonors">Donors</digi:trn>
-  </div>
-  <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-weight:bold;font-family:Tahoma;white-space: nowrap">
-    <c:if test="${!empty calendarViewForm.filter.donors}">
-      <table cellpadding="0" cellspacing="0">
-        <tr>
-          <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
-            <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" />
-          </td>
-          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;white-space: nowrap;">
-            <digi:trn key="calendar:donorsNone">None</digi:trn>
-          </td>
-        </tr>
-        <c:forEach var="donor" items="${calendarViewForm.filter.donors}">
-          <tr>
-            <td style="background-color: #CCECFF;width:29px;padding:2px;text-align:center;font-weight:bold;">
-              <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
-            </td>
-            <td style="padding:3px;width:115px;text-align:left;font-weight:bold;white-space: nowrap" title="${donor.label}" nowrap="nowrap">
-              <div style="white-space: nowrap;">${donor.label}</div> 
-            </td>
-          </tr>
-        </c:forEach>
-      </table>
-    </c:if>
-  </div>
-</div>
+<field:display name="Filter" feature="Calendar">
+	<field:display name="Event Type Filter" feature="Calendar">
+		<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
+		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family:Tahoma;">
+		  	<digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
+		  </div>
+		  <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-family:Tahoma;">
+		    <c:if test="${!empty calendarViewForm.filter.eventTypes}">
+		      <table cellpadding="0" cellspacing="0">
+		        <c:forEach var="eventType" items="${calendarViewForm.filter.eventTypes}">
+		          <tr>
+		            <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
+		              <div style="height: 15px; width: 24px; background-color: ${eventType.color}; border: solid 1px Black;">
+		              </div>
+		            </td>
+		            <td style="padding:5px;width:115px;text-align:left;font-weight:bold;" nowrap="nowrap">
+		             <div style="white-space: nowrap;">${eventType.name}</div> 
+		            </td>
+		            <td>
+		              <html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/>
+		            </td>
+		          </tr>
+		        </c:forEach>
+		      </table>
+		    </c:if>
+		  </div>
+		</div>
+	</field:display>	
+	<div style="width:200px;height:5px;font-family:Tahoma;">
+	&nbsp;
+	</div>
+	<field:display name="Donor Filter" feature="Calendar">
+		<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
+		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
+		  <digi:trn key="calendar:bodydonors">Donors</digi:trn>
+		  </div>
+		  <div style="overflow:auto;width:200px;height:92px;font-size:12px;font-weight:bold;font-family:Tahoma;white-space: nowrap">
+		    <c:if test="${!empty calendarViewForm.filter.donors}">
+		      <table cellpadding="0" cellspacing="0">
+		        <tr>
+		          <td style="background-color: #CCECFF;width:29px;padding:4px;text-align:center;">
+		            <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" />
+		          </td>
+		          <td style="padding:5px;width:115px;text-align:left;font-weight:bold;white-space: nowrap;">
+		            <digi:trn key="calendar:donorsNone">None</digi:trn>
+		          </td>
+		        </tr>
+		        <c:forEach var="donor" items="${calendarViewForm.filter.donors}">
+		          <tr>
+		            <td style="background-color: #CCECFF;width:29px;padding:2px;text-align:center;font-weight:bold;">
+		              <html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/>
+		            </td>
+		            <td style="padding:3px;width:115px;text-align:left;font-weight:bold;white-space: nowrap" title="${donor.label}" nowrap="nowrap">
+		              <div style="white-space: nowrap;">${donor.label}</div> 
+		            </td>
+		          </tr>
+		        </c:forEach>
+		      </table>
+		    </c:if>
+		  </div>
+		</div>
+	</field:display>
+</field:display>
+
 <div style="padding:5px;width:190px;height:28px;">
   <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
   <digi:trn key="calendar:showPublicEvents">
@@ -101,7 +109,11 @@ function changeState() {
   </digi:trn>
 </div>
 <div style="padding:5px;width:200px;height:28px;">
-    <input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
+	<field:display name="Run Filter Button" feature="Calendar">
+		<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
+	</field:display>
     &nbsp;
-    <input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
+    <field:display name="Reset Filter Button" feature="Calendar">
+    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
+    </field:display>
 </div>

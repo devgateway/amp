@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.Documents;
@@ -185,11 +186,10 @@ public class AddAmpActivity extends Action {
       eaForm.setAllCompsType(ampComponentTypes);
       
       
-       if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0&&eaForm.getIndicator().getIndicatorsME()==null){
-              List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());
-              eaForm.getIndicator().setIndicatorsME(indicators);
-             
-    }
+       if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0 && eaForm.getIndicator().getIndicatorsME()==null){
+              List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());                                        
+              eaForm.getIndicator().setIndicatorsME(indicators);            
+       }
 
     //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();

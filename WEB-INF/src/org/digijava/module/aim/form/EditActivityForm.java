@@ -4869,7 +4869,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return funding.fundingMTEFProjections.get(index);
 	}
 
-	public class IndicatorME {
+	public class IndicatorME implements Serializable {
 		private Long logframeCategory;
 		private Collection indicatorsME;
 		private ActivityIndicator indicatorValues;

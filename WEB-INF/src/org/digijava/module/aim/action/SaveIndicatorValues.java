@@ -32,9 +32,7 @@ public class SaveIndicatorValues extends Action
 			Iterator itr = eaForm.getIndicator().getIndicatorsME().iterator();
 			while (itr.hasNext()) {
 				ActivityIndicator temp = (ActivityIndicator) itr.next();
-				if (temp.equals(actInd)) {
-					
-				
+				if (temp.equals(actInd)) {				
 						temp.setBaseVal(eaForm.getIndicator().getBaseVal());
 						temp.setBaseValDate(eaForm.getIndicator().getBaseValDate());
 						temp.setBaseValComments(eaForm.getIndicator().getBaseValComments());
@@ -47,32 +45,31 @@ public class SaveIndicatorValues extends Action
 							temp.setRevisedTargetValDate(eaForm.getIndicator().getRevTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getIndicator().getRevTargetValComments());
 						} else {
-                                eaForm.getIndicator().setRevTargetVal(eaForm.getIndicator().getTargetVal());
+                            eaForm.getIndicator().setRevTargetVal(eaForm.getIndicator().getTargetVal());
 							temp.setRevisedTargetVal(eaForm.getIndicator().getTargetVal());
 							temp.setRevisedTargetValDate(eaForm.getIndicator().getTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getIndicator().getTargetValComments());
 						}
 
 						if (eaForm.getIndicator().getCurrentValDate() != null) {
-							logger.debug("Setting currValComments :" + eaForm.getIndicator().getCurrentValComments());
 							if( eaForm.getIndicator().getCurrentVal() != null) {
 								temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
-							}
-					     if(eaForm.getIndicator().getCurrentValDate() != null){
-							temp.setCurrentValDate(eaForm.getIndicator().getCurrValDate());
-                          }
+								temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
+							}					     
+							temp.setCurrentValDate(eaForm.getIndicator().getCurrentValDate());
+							temp.setActualValDate(eaForm.getIndicator().getCurrentValDate());	                          
 							temp.setCurrentValComments(eaForm.getIndicator().getCurrentValComments());
-							temp.setActualValComments(eaForm.getIndicator().getCurrentValComments());
-							
+							temp.setActualValComments(eaForm.getIndicator().getCurrentValComments());							
 						}
-						if(eaForm.getIndicator().getCurrentVal() != null){
-						temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
-						
-						}else{
+						if( eaForm.getIndicator().getCurrentVal() != null) {
+							temp.setCurrentVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
+							temp.setActualVal(Float.parseFloat(eaForm.getIndicator().getCurrentVal()));
+						} else{
+							temp.setCurrentVal(null);
 							temp.setActualVal(null);
 						}
-						temp.setRisk(eaForm.getIndicator().getIndicatorRisk());
-						AmpCategoryValue acv=CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getIndicator().getLogframeCategory());
+						temp.setRisk(eaForm.getIndicator().getIndicatorRisk());						
+						AmpCategoryValue acv = CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getIndicator().getLogframeCategory());
 						temp.setIndicatorsCategory(acv);
 						break;
 					

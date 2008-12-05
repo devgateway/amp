@@ -146,14 +146,14 @@ a.itr:hover {
             <td noWrap width=100% vAlign="top">
               <table width="100%" cellspacing=0 cellSpacing=0 border=0>
                 <tr>
-                  <td noWrap width=600 vAlign="top">
+                  <td noWrap width=700 vAlign="top">
                     <table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
                       <tr bgColor=#ffffff>
                         <td vAlign="top" width="100%">
                           <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left" border="0">
                             <tr>
                               <td>
-                                <table style="font-family:verdana;font-size:11px;" border="0">
+                                <table style="font-family:verdana;font-size:11px;" border="0" width="100%">
                                   <tr>
                                     <td>
                                       <b><digi:trn key="aim:indsector">Sector</digi:trn>:</b>
@@ -190,7 +190,7 @@ a.itr:hover {
                                     <td colspan="10" width="100%" align="center">
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
                                         <tr bgColor="#d7eafd">
-                                          <td style="width:50%;">
+                                          <td width="80%">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='0'}">
                                               <b><digi:trn key="aim:indicator">Indicator Name
                                                 </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
@@ -202,7 +202,7 @@ a.itr:hover {
                                               </a>
                                             </c:if>
                                           </td>
-                                          <td style="width:10%;" align="center">
+                                          <td width="18%" align="center">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='1'}">
                                               <b><digi:trn key="aim:indsector">Sector
                                                 </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
@@ -214,25 +214,25 @@ a.itr:hover {
                                               </a>
                                             </c:if>
                                           </td>
-                                          <td>
+                                          <td width="2%">
                                           &nbsp;
                                           </td>
                                         </tr>
                                         <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
                                           <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
                                             <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
-                                              <td id="">
+                                              <td width="80%" nowrap="nowrap">
 	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
                                                 ${indItr.name}</a>
                                                </td>
-                                               <td nowrap="nowrap">
+                                               <td width="18%">
 	                                                <c:if test="${!empty indItr.sectorNames}">
 	                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
 	                                            	   ${indsectname}<br>
 	                                            	</c:forEach>
 	                                            	</c:if>
 	                                          </td>
-                                              <td style="width:10%;">
+                                              <td align="right" width="2%">
                                               <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams}" property="indicatorId">
 																${indItr.id}

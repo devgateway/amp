@@ -96,11 +96,32 @@ public class AmpUserUtil {
 		User user = UserUtils.getUser(userId);
 		return getAmpUserExtension(user);
 	}
+    /**
+	 * Retrieves user extension .
+	 * @param user 
+	 * @return db entity
+	 * @throws AimException
+	 */
 
 	public static AmpUserExtension getAmpUserExtension(User user)
 			throws AimException {
-		AmpUserExtensionPK key = new AmpUserExtensionPK(user);
-		return getAmpUserExtension(key);
+         AmpUserExtension result = null;
+        Session session = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select ext from " + AmpUserExtension.class.getName() + " ext"
+                    + " where ext is not null and ext=:ext";
+            qry = session.createQuery(queryString);
+            qry.setLong("ext", user.getId());
+			result =(AmpUserExtension) qry.uniqueResult();
+
+		}
+		 catch (Exception e) {
+			throw new AimException("Cannot retrive AmpUserExtension", e);
+		}
+		return result;
+		
 	}
 
 	/**
@@ -109,10 +130,11 @@ public class AmpUserUtil {
 	 * @return db entity
 	 * @throws AimException
 	 */
+    @Deprecated
 	public static AmpUserExtension getAmpUserExtension(AmpUserExtensionPK key)
 			throws AimException {
-		AmpUserExtension result = null;
-		try {
+        AmpUserExtension result = null;
+        try {
 			Session session = PersistenceManager.getRequestDBSession();
 			result = (AmpUserExtension) session.load(AmpUserExtension.class,
 					key);

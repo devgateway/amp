@@ -1,5 +1,7 @@
 package org.digijava.module.calendar.dbentity;
 
+import java.util.Date;
+
 public class RecurrCalEvent {
 
 	private Long id;
@@ -8,8 +10,8 @@ public class RecurrCalEvent {
     private Long recurrPeriod;
     private String typeofOccurrence;
     private String occurrWeekDays;
-    private String recurrStartDate;
-    private String recurrEndDate;
+    private Date recurrStartDate;
+    private Date recurrEndDate;
     
     
     public String getSelectedStartMonth() {
@@ -49,19 +51,19 @@ public class RecurrCalEvent {
 		this.calendar = calendar;
 	}
 
-    public String getRecurrEndDate() {
+    public Date getRecurrEndDate() {
         return recurrEndDate;
     }
 
-    public void setRecurrEndDate(String recurrEndDate) {
+    public void setRecurrEndDate(Date recurrEndDate) {
         this.recurrEndDate = recurrEndDate;
     }
 
-    public String getRecurrStartDate() {
+    public Date getRecurrStartDate() {
         return recurrStartDate;
     }
 
-    public void setRecurrStartDate(String recurrStartDate) {
+    public void setRecurrStartDate(Date recurrStartDate) {
         this.recurrStartDate = recurrStartDate;
     }
 }

@@ -26,13 +26,24 @@ function eventType(){
 		var Weekly = document.getElementById("Weekly").checked;
 		var Monthly = document.getElementById("Monthly").checked;
 		var Yearly = document.getElementById("Yearly").checked;
-        
+        var recStartDate = document.getElementById("recurrSelectedStartDate").value;
+        var recEndDate = document.getElementById("recurrSelectedEndDate").value;
+        document.getElementById("recurrStrDate").value = recStartDate;
+        document.getElementById("recurrEndDate").value = recEndDate;
 
+        var occStartDate = document.getElementById("selectedStartDate").value;
+        var occEndDate = document.getElementById("selectedEndDate").value;
+    
+        var start = parseInt(occStartDate.slice(0,occStartDate.indexOf("/")));
+        var end = parseInt(occEndDate.slice(0,occEndDate.indexOf("/")));
+
+        var occurance_duration = end-start;
+  
     if(!Dailly && !Weekly && !Monthly && !Yearly){
 		alert("please choose");
 		return false;
 	}
-
+    
     if(Yearly){
     	var rec = document.getElementById("recurrYearly").value;
         var month = document.getElementById("selectedStartYearlyMonth").value;
@@ -53,10 +64,16 @@ function eventType(){
 
 	if(Dailly){
         var rec = document.getElementById("recurrDailly").value;
-        
+        if(rec < occurance_duration){
+         alert("The duration of appointment should be shorter than how often it recurs. Modify the duration of appointment or change the recurrence");
+
+            return false;
+
+        }else{
 
         document.getElementById("hidden").value = rec;
         document.getElementById("type").value = 'Dailly';
+        }
     }
 
 	if(Weekly){
@@ -195,9 +212,21 @@ function eventType(){
 					 						<td>Every</td>
 							 	 			<td>
 								 	 			<select id="selectedStartYearlyMonth" name="selectedStartMonth">
-														<logic:iterate id="month" property="months" name="calendarEventForm">
-																<option value="${month}">${month}</option>
-														</logic:iterate>		
+
+
+			                                                     	  <c:forEach var="month" begin="1" end="12">
+
+                                                                     <%--<logic:iterate id="month"  property="months" name="calendarEventForm">--%>
+                                                                            <c:if test="${month < 10}"><c:set var="hour" value="0${month}"/></c:if>
+                                                                           <option value="${month}">${month}</option>
+
+                                                                        <%--</logic:iterate>--%>
+
+			                                        </c:forEach>
+
+
+
+
 												</select>
 						 	 		    	</td>
 							 	 			<td><input type="text"  size="7px" name="recurrPeriod" id="recurrYearly" value=""/></td>
@@ -213,7 +242,7 @@ function eventType(){
 		</td>
 	</tr>
 
-<!--
+
 <tr>
 		<td>
 			<table bgcolor="#F5F5F5" border="0" cellPadding=2 cellSpacing=2 width="340px" style="border-style:solid;border-color:#1C5180;border-width: 1px">
@@ -258,14 +287,14 @@ function eventType(){
 		                                     <table cellpadding="0" cellspacing="0">
 		                                         <tr>
 		                                                <td nowrap="nowrap">
-		                                                  <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
+		                                                  <html:text styleId="recurrSelectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
 		                                                </td>
 		                                                <td>&nbsp;</td>
 		                                                <td>
-		                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
+		                                                  <a id="clear1" href="javascript:clearDate(document.getElementById('recurrSelectedStartDate'), 'clear1')">
 		                                                    <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 		                                                  </a>
-		                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
+		                                                  <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("recurrSelectedStartDate"),"clear1")'>
 		                                                    <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 		                                                  </a>
 		                                               </td>
@@ -282,13 +311,13 @@ function eventType(){
                                      <table cellpadding="0" cellspacing="0">
                                            <tr>
                                              <td nowrap="nowrap">
-        	                                       <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
+        	                                       <html:text styleId="recurrSelectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
                                              </td>
                                              <td>
             	                                 &nbsp;
                                              </td>
                                              <td>
-                                               <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
+                                               <a id="clear2" href="javascript:clearDate(document.getElementById('recurrSelectedEndDate'),'clear2')">
                                                  <digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
                                                </a>
                                              </td>
@@ -296,7 +325,7 @@ function eventType(){
                 	                             &nbsp;
                                              </td>
                                              <td>
-                                               <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
+                                               <a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("recurrSelectedEndDate"),"clear2")'>
                                                  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                                                </a>
                                              </td>
@@ -307,7 +336,7 @@ function eventType(){
 				 	 	</tr>
 			 	</table>
 		</td>	
-	</tr>  -->
+	</tr>
 	<tr>
 		<td align="center">
 			<input type="button" onclick="eventType();" value="Save An CLose"/>

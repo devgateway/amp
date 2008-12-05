@@ -481,15 +481,20 @@ public class AmpDbUtil {
                                           Long userId,boolean showPublicEvents,String instanceId, String siteId) throws CalendarException {
       try {
           Session session = PersistenceManager.getRequestDBSession();
-          
+
           StringBuffer queryString = new StringBuffer();
           queryString.append("select ac from ").append(AmpCalendar.class.getName());
-          queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" c ");
+          queryString.append(" ac left join ac.organisations org, ").append(Calendar.class.getName()).append(" r ");
+          queryString.append(" inner join r.recurrCalEvent recc, ").append(Calendar.class.getName()).append(" c ");
 
           queryString.append("where c.id=ac.calendarPK.calendar.id and ").
           				append ("((:startDate <= c.startDate and c.startDate <= :endDate) or ").
           				append("(:startDate <= c.endDate and c.endDate <= :endDate) or ").
-          				append("(c.startDate <= :startDate and :endDate <= c.endDate))");
+          				append("(c.startDate <= :startDate and :endDate <= c.endDate) or ").
+                        append("(recc.recurrStartDate <= :startDate and :endDate <= recc.recurrEndDate) or ").
+                        append("(:startDate <= recc.recurrStartDate and recc.recurrStartDate <= :endDate) or ").
+                        append("(:startDate <= recc.recurrEndDate and recc.recurrEndDate <= :endDate))");
+       
 
 //          if(showPublicEvents){
 //        	  queryString.append(" and ac.privateEvent=false");

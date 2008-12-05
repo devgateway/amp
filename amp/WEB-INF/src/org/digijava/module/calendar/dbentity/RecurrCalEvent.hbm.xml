@@ -13,8 +13,8 @@
 		<property name="selectedStartMonth" column="SELECTED_MONTH" type="java.lang.String" />
 		<property name="occurrWeekDays" column="OCCURR_WEEKDAYS" type="java.lang.String" />
 		<property name="recurrPeriod" column="RECURR_PERIOD" type="java.lang.Long" />
-        <property name="recurrStartDate" column="RECURR_START_DATE" type="java.lang.String" />
-        <property name="recurrEndDate" column="RECURR_END_DATE" type="java.lang.String" />
+        <property name="recurrStartDate" column="RECURR_START_DATE" type="java.util.Date" />
+        <property name="recurrEndDate" column="RECURR_END_DATE" type="java.util.Date" />
 
 
     </class>

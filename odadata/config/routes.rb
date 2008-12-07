@@ -8,23 +8,23 @@ ActionController::Routing::Routes.draw do |map|
     static.downloads  "/downloads",       :action => "downloads"
   end
   
-  map.resources :implementing_agencies,   :formatted => :none
-  map.resources :contracted_agencies,     :formatted => :none
-  
-  map.resources :glossaries,              :formatted => :none
-  map.resources :exchange_rates,          :formatted => :none
+  map.resources :implementing_agencies   
+  map.resources :contracted_agencies     
+                                          
+  map.resources :glossaries              
+  map.resources :exchange_rates          
   map.resource  :session
   map.resources :projects,                :member => { :update_status => :get }
                                           
-  map.resources :users,                   :formatted => :none
-  map.resources :agencies,                :formatted => :none
+  map.resources :users                   
+  map.resources :agencies                
   map.resources :country_strategies,      :collection => { :add_sector => :get }
   
   map.resources :donors, :formatted => :none do |d|
-    d.resources :users,                   :formatted => :none
-    d.resources :agencies,                :formatted => :none
-    d.resources :country_strategies,      :formatted => :none
-    d.resource  :details,                 :formatted => :none, :controller => 'donor_details'
+    d.resources :users                   
+    d.resources :agencies                
+    d.resources :country_strategies      
+    d.resource  :details,                 :controller => 'donor_details'
   end
   
   map.resources :settings, :collection => {
@@ -32,7 +32,7 @@ ActionController::Routing::Routes.draw do |map|
     :toggle_data_input => :post
   }
   
-  map.resource :consistency,              :only => [:index, :show], :formatted => :none
+  map.resource :consistency,              :only => [:index, :show]
   
   # Easily accessible starting points for focal points and admins, respectively:
   map.admin     '/admin',                 :controller => 'projects'

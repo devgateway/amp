@@ -1,34 +1,35 @@
-var ddmenuitem = 0;
-var ddmenuimage = 0;
+function hasC(e,c) {
+	return (e.className && e.className.indexOf(c)>-1);
+};
 
-function mainMenu_open()
-{  
-	if($(this).get(0) != ddmenuimage)
-	{
-		mainMenu_close();
-		ddmenuitem = $(this).parent().find('ul').css('visibility', 'visible');
-		ddmenuimage = $(this).get(0);
+function addC(e,c) {
+	if (!hasC(e,c)){
+		if (e.className) e.className += " " + c;
+		else e.className = c;
 	}
-	else
-	{
-		mainMenu_close();
+};
+
+function remC(e,c) {
+	if (hasC(e,c)) {
+		var r = new RegExp("(^|\\s)" + c + "(\\s|$)");
+		e.className = e.className.replace(r, "$2");
 	}
-	return false;
-}
+};
 
-function mainMenu_close()
+function tm(el) 
 {
-	if(ddmenuimage)
-		ddmenuimage = 0;
-	if(ddmenuitem) 
-    	ddmenuitem.css('visibility', 'hidden');
+    var p=el.parentNode;
+    var d=document;
+    function cl() {remC(p,'selected');d.onclick=null;}
+    function sh() {d.onclick=cl;}
+    if(hasC(p,'selected')) cl();
+    else{
+        addC(p,'selected');
+        setTimeout(sh, 0);
+        try {
+            var u=(p.getElementsByTagName("UL")[1]), c=u.childNodes, w=u.clientWidth, e=u, x=0;  
+        }
+        catch (ig){}
+    }
+    return false;
 }
-
-$(document).ready(
-function()
-{
-	$('#mainMenu > li img').bind('click', mainMenu_open)
-//	$('#mainMenu > li ul').
-});
-
-document.onclick = mainMenu_close;

@@ -15,8 +15,9 @@
 	</head>
 	
 	<body id="body" class="<%= current_user.andand.layout || 'public' %>">
-		<div id="generalContainer" style="border-left:1px solid #CECECE;border-right:1px solid #CECECE;">
-			<div id="header" style="width:900px;">
+    	<div align="center">
+		<div id="generalContainer">
+			<div id="header">
 				<%= render_header_content_for_role(current_user.andand.role_title) %>
 			</div>
 			
@@ -38,5 +39,6 @@
 			<%= render :partial => 'layouts/footer' %>
 			<!-- END footer section -->
 		</div>
+        </div>
 	</body>
 </html>

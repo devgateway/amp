@@ -10,7 +10,7 @@
 	<div style="float:right;height:inherit;width:370px; text-align:right; vertical-align:middle;padding-right:10px;">
 		<p style="color:#1c4683;font-weight:bold;"><%= current_user.name %></p>
 		<p style="color:#1c4683;font-weight:bold;">
-			<%= image_tag current_donor.flag.url(:avatar), :align => "midddle", :hspace => 8, :style => "float: left" %>
+			<%= image_tag current_donor.flag.url(:avatar), :align => "middle", :hspace => 8, :style => "float: left" %>
 			<%= current_donor.name %>
 		</p>
 	</div>
@@ -20,17 +20,16 @@
 <!-- END Flash Objects -->
 
 
-<div style="float:left;width:900px;">
 <!-- START Navigation-->
 	<ul id="mainMenu">
 		<li>
-			<div><%= link_to ll(:navigation, :focal_point, :bluebook), bluebook_root_path, 
-						:popup => ['Contents', 'height=600,width=800,scrollbars=yes' ] %></div>
+			<%= link_to ll(:navigation, :focal_point, :bluebook), bluebook_root_path, 
+						:popup => ['Contents', 'height=600,width=800,scrollbars=yes' ] %>
 		</li>
 
 		<li>
-			<span><%= ll(:navigation, :focal_point, :projects) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor"><%= ll(:navigation, :focal_point, :projects) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
 				<li><%= link_to ll(:navigation, :focal_point, :new_project), new_project_path %></li>
 				<li><%= link_to ll(:navigation, :focal_point, :draft_projects), projects_path(:status => Project::DRAFT) %></li>
@@ -40,13 +39,13 @@
 		</li>
 
 		<li>
-			<div><%= link_to ll(:navigation, :focal_point, :design_own), 
-						:controller => "reports", :action => "custom" %></div>
+			<%= link_to ll(:navigation, :focal_point, :design_own), 
+						:controller => "reports", :action => "custom" %>
 		</li>
 
 		<li>
-			<span>Reports on</span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor">Reports on</a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
 				<li><%= link_to 'Drafts', { :controller => "reports", :action => "project_list", :query => "draft", :value => current_donor.id }, :popup => ['_blank', 'scrollbars=yes' ] %></li>
 				<li><%= link_to 'Published', { :controller => "reports", :action => "project_list", :query => "donor", :value => current_donor.id }, :popup => ['_blank', 'scrollbars=yes' ] %></li>
@@ -54,8 +53,8 @@
 		</li>
 
 		<li>
-			<span><%= ll(:navigation, :focal_point, :donor_info) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor"><%= ll(:navigation, :focal_point, :donor_info) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
 				<li><%= link_to ll(:navigation, :focal_point, :donor_details), edit_donor_details_path(current_donor) %></li>
 				<li><%= link_to ll(:navigation, :focal_point, :strategy), country_strategies_path %></li>
@@ -66,8 +65,8 @@
 		</li>
 
 		<li>
-			<span><%= ll(:navigation, :focal_point, :manuals) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor"><%= ll(:navigation, :focal_point, :manuals) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
 				<li><a href="/manuals/odanic_data_entry.pdf"><%= ll(:navigation, :focal_point, :data_input_manual) %></a></li>
 				<li><a href="/manuals/odanic_data_entry_glossary.pdf" onclick="window.open(this.href,'ODAnic Glossary','height=500,width=800,scrollbars=yes,resizable=yes');return false;"><%= ll(:navigation, :focal_point, :data_input_glossary) %></a></li>
@@ -77,23 +76,22 @@
 		</li>
 
 		<li>
-			<div><a href="http://odadata.updatelog.com" target="_blank"><%= ll(:navigation, :focal_point, :contact) %></a></div>
+			<a href="http://odadata.updatelog.com" target="_blank"><%= ll(:navigation, :focal_point, :contact) %></a>
 		</li>
 
 		<li>
-			<span><%= ll(:navigation, :language) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor"><%= ll(:navigation, :language) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 	        <ul>
 				<%= render :partial => "layouts/header/language_select" %>
 	        </ul>
 		</li>
 
 		<li>
-			<div><a href="/logout"><%= ll(:navigation, :logout) %></a></div>
+			<a href="/logout"><%= ll(:navigation, :logout) %></a>
 		</li>
 	</ul>
 <!-- END Navigation -->
-</div>
 
 <!-- START News section -->
 <div style="text-align:center;padding:2px;">

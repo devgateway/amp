@@ -42,7 +42,7 @@ Lighter row:
 /* For PUBLIC using bluescale */
 
 /* Data Tables (usually lists), always preceded by the title as a <H2> tag */
-.public #content H2+TABLE {
+.public #content TABLE {
 	text-align: center;
 	width: 100%;
 	border: 0px;
@@ -50,16 +50,17 @@ Lighter row:
 } 
 
 /* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
-.public #content H2+TABLE TH {
+.public #content TABLE TH {
 	color: #fff;
 	background-color:#687eab;
 	text-align:left;
 	padding:2px 2px 2px 2px;
 	border-bottom:2px solid white;
+	font-size:13px;
 } 
 
 /* For the data cells of the table */
-.public #content H2+TABLE TD {
+.public #content TABLE TD {
 	font-size:11px;
   	background-color:#dbe2f1;
 	border-spacing: 1px;
@@ -81,7 +82,7 @@ Lighter row:
 /* Start FOCAL_POINT style */
 /* For FOCAL_POINT using grayscale */
 /* Data Tables (usually lists), always preceded by the title as a <H2> tag */
-.focal_point #content H2+TABLE {
+.focal_point #content TABLE {
 	font-size:11px;
 	text-align: center;
 	width: 100%;
@@ -89,7 +90,7 @@ Lighter row:
 	border-spacing: 1px;
 } 
 
-.focal_point #content H2+TABLE TH {
+.focal_point #content TABLE TH {
 	color: #fff;
 	background-color:#687eab;
 	text-align:left;
@@ -98,7 +99,7 @@ Lighter row:
 } 
 
 /* For the data cells of the table */
-.focal_point #content H2+TABLE TD {
+.focal_point #content TABLE TD {
 	font-size:11px;
   	background-color:#dbe2f1;
 	border-spacing: 1px;
@@ -119,7 +120,7 @@ Lighter row:
 /* Start ADMIN style */
 /* For ADMIN using greenscale */
 /* Data Tables (usually lists), always preceded by the title as a <H2> tag */
-.admin #content H2+TABLE {
+.admin #content TABLE {
 	font-size:11px;
 	width: 100%;
 	border: 0px;
@@ -127,7 +128,7 @@ Lighter row:
 } 
 
 /* Data Table headers (usually lists), always preceded by the title as a <H2> tag */
-.admin #content H2+TABLE TH {
+.admin #content TABLE TH {
 	text-align:left;
 	padding:2px 2px 2px 2px;
 	color: #fff;
@@ -135,7 +136,7 @@ Lighter row:
 } 
 
 /* For the data cells of the table */
-.admin #content H2+TABLE TD {
+.admin #content TABLE TD {
 	background-color:#cccccc;
 	border-spacing: 1px;
 	text-align:left;
@@ -162,7 +163,7 @@ div#output_options {
 	margin-right: 15px;
 }
 div#filter_criteria {
-	width: 522px;
+	width: 518px;
 	margin-right: 15px;
 }
 div#other_criteria {
@@ -173,7 +174,7 @@ div#donor_province {
 	margin-right: 5px;
 }
 div#mdg_sector {
-	width: 317px;
+	width: 313px;
 }
 
 .container h2 {
@@ -310,24 +311,31 @@ A IMG { border: 0; }
 #leftColumn {
 	width:160px;
 	float:left;
+	text-align:center;
 }
 
 #centerColumn {
-	width:580px;	
-	margin: 0 160px;
+	width:560px;	
+	float:left;
 }
 
 #rightColumn {
 	width:160px;	
-	float:right;
+	float:left;
+	text-align:center;
 }
 
 
 #generalContainer {
 	width:900px;
-	margin:0 auto;
-	background-color:#fff;
+	background-color:#fff;	
+	border-left:1px solid #CECECE;
+	border-right:1px solid #CECECE;
 }
+#header {
+	width:900px;
+ }
+
 
 #content {
 	text-align:left;
@@ -448,110 +456,96 @@ ul.fatlist.flexible li {
 /* START TOP MENU STYLES */
 /* This CSS is used for the Menu (the left frame and the top frame) */
 /* This has to be changed and cleaned up */
-#mainMenu
-{
- 	height:23px;
- 	background-color:#376091;
-	margin:0;
+#mainMenu {
+	list-style-type: none;
+	background-color: #376091;
+	height: 22px;
+	position: relative;
 	padding:0;
+	margin:0;
+	float:left;
+	width:900px;
 }
 
-#mainMenu li
-{
+#mainMenu li {
+    font-family:Arial,sans-serif;
+    font-size:10px;
+	height: 22px;
+	line-height: 22px;
 	float: left;
-    list-style: none;
-    font: 12px Tahoma, Arial
+	position: relative;
+	border-right:1px solid white;
 }
 
-#mainMenu li a
-{
+#mainMenu li a {
+    white-space: nowrap;
+    text-transform:uppercase;
 	display: block;
-    background: #376091;
-    padding: 5px 12px;
-    text-decoration: none;
-    border-right: 1px solid white;
-    color: #EAFFED;
-    white-space: nowrap;
-    text-transform:uppercase;
-    font-family:Arial,sans-serif;
-    font-size:10px;
+	float: left;
+	color: #FFFFFF;
+	text-decoration: none;
+	padding: 0 10px;
 }
 
-#mainMenu li img
-{
-    background: #376091;
-    text-decoration: none;
-    color: #EAFFED;
-    border-right: 1px solid white;
-	cursor:pointer;
-    padding: 10px 5px 9px 5px;
+#mainMenu li a:hover {
+	background-color: #222e5d;
 }
-/*    padding: 10px 5px 9px 5px;
-    padding: 5px 2px 5px 12px;
-*/
-#mainMenu li span
-{
-    background: #376091;
-    text-decoration: none;
-    padding: 5px 2px 5px 12px;
-    color: #EAFFED;
-    white-space: nowrap;
-    text-transform:uppercase;
-    font-family:Arial,sans-serif;
-    font-size:10px;
+#mainMenu li.selected a {
+	background-color: #222e5d;
+}
+
+#mainMenu li a.arrow {
+	padding: 0;
+	height:22px;
+}
+#mainMenu li a.no_cursor {
 	cursor:default;
 }
 
-#mainMenu li img:hover
-{
-	background: #222e5d
+#mainMenu li ul {
+	margin:0;
+	padding:0;
+	_min-width: 180px;
+	width:180px;
+	list-style-type: none;
+	position: absolute;
+	background: #376091;
+	height: auto;
+	top: 22px;
+	left: -1px;
+	border: 1px solid #3B5998;
+	border-top: 0;
+	display: none;
+	padding: 5px 0;
+	overflow: hidden;
 }
-
-#mainMenu li ul li a img 
-{
-	background:none;
+#mainMenu li.selected ul {
+	display: block;
 }
-
-#mainMenu li ul li a img:hover
-{
-	background:none;
+#mainMenu li ul li {
+	width: auto;
+	float: left;
+	width: 123px;
+	font-weight: normal;
 }
-
-#mainMenu li span:hover
-{
-	background: #222e5d
-}
-
-#mainMenu li a:hover
-{
-	background: #222e5d
-}
-    
-#mainMenu li ul
-{
-	margin: 0;
-    padding: 0;
-    position: absolute;
-    visibility: hidden;
-    border-top: 1px solid white}
-
-#mainMenu li ul li
-{	
-	text-align:left;	
+#mainMenu li ul li a, #mainMenu li.selected ul li a {
+	width:180px;
+	display: block;
+	padding: 0 9px;
+	color: #fff;
+	background: #376091;
 	float: none;
-    display: inline
+	text-align:left;
+}
+#mainMenu li ul li a:hover, #mainMenu li.selected ul li a:hover {
+	background-color: #222e5d;
+	color: #FFFFFF;
 }
 
-#mainMenu li ul li a
-{
-    background: #376091;
-	min-width:180px;
+#mainMenu li a img {
+	border: 0;
 }
 
-#mainMenu li ul li a:hover
-{
-	background: #222e5d
-}
 /* End TOP MENU STYLES */
 
 

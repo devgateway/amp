@@ -10,22 +10,20 @@
 <!-- END Flash Objects -->
 
 
-<div style="float:left;width:900px;">
 <!-- START Navigation-->
 	<ul id="mainMenu">
 		<li>
-			<div><a href="/"><%= ll(:navigation, :default, :home) %></a></div>
+			<a href="/"><%= ll(:navigation, :default, :home) %></a>
 		</li>
 
 		<li>
-			<div><%= link_to ll(:navigation, :default, :bluebook), bluebook_root_path, 
+			<%= link_to ll(:navigation, :default, :bluebook), bluebook_root_path, 
 						:popup => ['Contents', 'height=600,width=800,scrollbars=yes'] %>
-			</div>
 		</li>
 
 		<li>
-	        <span><%= ll(:navigation, :default, :search_by) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+	        <a href="#" class="no_cursor"><%= ll(:navigation, :default, :search_by) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
 				<li><a href="/reports/donors"><%= ll(:terms, :donor) %></a></li>
 				<li><a href="/reports/sectors"><%= ll(:terms, :sector) %></a></li>
@@ -35,20 +33,20 @@
 		</li>
 
 		<li>
-			<div><%= link_to ll(:navigation, :default, :design_own), :controller => "reports", :action => "custom" %></div>
+			<%= link_to ll(:navigation, :default, :design_own), :controller => "reports", :action => "custom" %>
 		</li>
 
 		<li>
-			<div><%= link_to ll(:navigation, :default, :links), links_path %></div>
+			<%= link_to ll(:navigation, :default, :links), links_path %>
 		</li>
 
 		<li>
-			<div><%= link_to ll(:navigation, :default, :downloads), downloads_path %></div>
+			<%= link_to ll(:navigation, :default, :downloads), downloads_path %>
 		</li>
 
 		<li>
-			<span><%= ll(:navigation, :default, :resources) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor"><%= ll(:navigation, :default, :resources) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 			<ul>
 				<li><a href="/manuals/odanic_manual_10_<%= I18n.locale %>.pdf" onclick="window.open(this.href,'_blank','height=500,width=800,scrollbars=yes,resizable=yes');return false;"><%= ll(:navigation, :default, :odadata_manual) %></a></li>
 				<li><a href="/manuals/odanic_glossary_10_<%= I18n.locale %>.pdf" onclick="window.open(this.href,'_blank','height=500,width=800,scrollbars=yes,resizable=yes');return false;"><%= ll(:navigation, :default, :glossary) %></a></li>
@@ -57,11 +55,11 @@
 			</ul>
 		</li>
 		<li>
-			<div><a href="mailto:support@odadata.eu"><%= ll(:navigation, :default, :contact) %></a></div>
+			<a href="mailto:support@odadata.eu"><%= ll(:navigation, :default, :contact) %></a>
 		</li>
 		<li>
-			<span><%= ll(:navigation, :language) %></span>
-	        <img src="/images/menuarrow.gif" width="7" height="4" border="0" align="absmiddle"/>
+			<a href="#" class="no_cursor"><%= ll(:navigation, :language) %></a>
+	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
 	        <ul>
 				<%= render :partial => "layouts/header/language_select" %>
 	        </ul>
@@ -69,7 +67,6 @@
 
 	</ul>
 <!-- END Navigation -->
-</div>
 
 <!-- START News section -->
 <div style="text-align:center;padding:2px;">

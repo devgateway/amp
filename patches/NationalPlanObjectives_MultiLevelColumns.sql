@@ -3,7 +3,7 @@ drop view  if exists  `v_nationalojectives`;
 drop view  if exists  `v_nationalobjectives`;
 CREATE OR REPLACE VIEW `v_nationalobjectives_all_level_helper` AS
   select `a`.`amp_activity_id` AS `amp_activity_id`,
-         `a`.`program_percentage` AS `program_percentage`,
+		 `a`.`program_percentage` AS `program_percentage`,
          `a`.`amp_program_id` AS `amp_program_id`,
          `b`.`name` AS `n1`,
          `b`.`level` AS `l1`,

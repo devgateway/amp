@@ -5,7 +5,7 @@
 
 <jp:mondrianQuery 
 	id="query01" 
-	dataSource="localDS"  
+	dataSource="ampDS"  
 	catalogUri="/WEB-INF/queries/AMP.xml">
 SELECT {[Measures].[Raw Actual Commitments]} ON COLUMNS,
 {[Donor]} ON ROWS 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="WEB-INF/src"/>
+	<classpathentry kind="src" path="WEB-INF/amp-test"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/activation.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils.jar"/>
@@ -88,5 +89,61 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxen-1.1-beta-7.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/avalon-framework-cvs-20020806.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/batik.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.6.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-dbcp-1.2.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-digester-1.5.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-fileupload-1.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-math-1.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-pool-1.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/commons-vfs.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-properties.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-resgen.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/eigenbase-xom.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/flexjson.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/fop.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/groovy-all-1.0-jsr-03.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jai_codec.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jai_core.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jakarta-regexp-1.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-3.1.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/javacup.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jaxen-full.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jpivot.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jsf-api.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.2.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/mondrian.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java-5.0.6-bin.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/olap4j.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/saaj-api.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/saaj-ri.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/saxpath.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-api-1.5.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/slf4j-log4j12-1.5.2.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/tbutils-wcf.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-ejb.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-jca.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-jdbc.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-jms.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-servlet.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-struts.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-mockrunner-tag.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/unittest-nekohtml-1.9.6.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/wcf.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/xalan.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/xmlunit.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-client.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-common-client.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-serialization.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jbosssx-client.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-remoting.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jnp-client.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jta-1.1.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

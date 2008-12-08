@@ -379,7 +379,7 @@ function toggleSettings(){
 																<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 																	<%
 																		String statusName = "All";
-																																Collection ampCategoryValues = CategoryManagerUtil.getAmpCategoryByKey(org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY, null);
+																																Collection ampCategoryValues = CategoryManagerUtil.loadAmpCategoryClassByKey(org.digijava.module.categorymanager.util.CategoryConstants.ACTIVITY_STATUS_KEY).getPossibleValues();
 																																if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
 																																	Iterator iterator = ampCategoryValues.iterator();
 																																	while (iterator.hasNext()) {
@@ -429,7 +429,7 @@ function toggleSettings(){
 															<strong><digi:trn key="rep:pop:Groups">Groups:</digi:trn></strong>&nbsp;<%=groupsAux%>&nbsp;|
 															<%
 																String indName = "All";
-																												Collection ampCategoryValues = CategoryManagerUtil.getAmpCategoryByKey(org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
+																												Collection ampCategoryValues = CategoryManagerUtil.loadAmpCategoryClassByKey(org.digijava.module.categorymanager.util.CategoryConstants.FINANCING_INSTRUMENT_KEY).getPossibleValues();
 																												if (ampCategoryValues != null && ampCategoryValues.size() > 0) {
 																													Iterator iteratorInd = ampCategoryValues.iterator();
 																													while (iteratorInd.hasNext()) {

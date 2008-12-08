@@ -79,7 +79,7 @@
 			<ul class="checkbox_container">
 				<h3><%= ll(:terms, :dac_sector) %></h3>
 				<li class="all"><%= check_box "crs_sectors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
-			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 35 } %>
+			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 40 } %>
 			</ul>
 		</div>
 	</div>

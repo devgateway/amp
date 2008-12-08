@@ -37,7 +37,6 @@
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
 		          <td vAlign=top><br>
-						<BR><BR><BR>
 						<c:set var="translation">
 							<digi:trn key="aim:clicktouseamp">Click here to Use AMP now</digi:trn>
 						</c:set>

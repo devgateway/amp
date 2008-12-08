@@ -67,13 +67,13 @@ class Project < ActiveRecord::Base
   
   ##
   # State machine for step by step data input
-  aasm_initial_state  :general
+  aasm_initial_state  :profile_information
   aasm_column         :input_state
   
   aasm_state :profile_information
   aasm_state :sector_agencies
   aasm_state :goals
-  aasm_state :location_funding# Cofundings, historic and current
+  aasm_state :location_funding # Cofundings, historic and current
   aasm_state :funding_forecast
   aasm_state :completed
   

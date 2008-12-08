@@ -37,30 +37,13 @@
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
 		          <td vAlign=top><br>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewFactsAboutMOFED">Click here to view Facts about MOFED</digi:trn>
-						</c:set>
-						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:factsAboutMOFED">						
-						Facts about MOFED
-						</digi:trn>
-						</digi:link>
 						<BR><BR><BR>
 						<c:set var="translation">
-							<digi:trn key="aim:clickToGetStarted">Click here to Get Started</digi:trn>
+							<digi:trn key="aim:clicktouseamp">Click here to Use AMP now</digi:trn>
 						</c:set>
 						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:gettingStarted">						
-						Getting Started
-						</digi:trn>						
-						</digi:link>
-						<BR><BR><BR>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToUseAmpEthiopia">Click here to Use AMP Ethiopia now</digi:trn>
-						</c:set>
-						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:useAMPEthiopiaNow">
-						Use AMP Ethiopia now
+						<digi:trn key="aim:useampsitenow">
+						Use AMP now
 						</digi:trn>
 						</digi:link>
 						<BR><BR><BR>						

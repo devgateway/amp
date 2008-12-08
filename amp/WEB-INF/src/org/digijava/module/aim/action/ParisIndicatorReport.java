@@ -343,7 +343,10 @@ public class ParisIndicatorReport extends Action {
 
     private String clacTargetValue(AmpAhsurveyIndicatorCalcFormula fl, List donorCol, boolean lastColumn) {
         if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
-            ParisIndicator donor = (ParisIndicator) donorCol.get(0);
+            if(donorCol.size() == 0) {
+            	return null;
+            }
+        	ParisIndicator donor = (ParisIndicator) donorCol.get(0);
             ArrayList answ1 = donor.getAnswers();
             double ans1[] = (double[]) answ1.get(0);
             if (ans1 != null) {

@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 
+<logic:messagesPresent property="reportMeta">
+
 <bean:define id="reportObject" name="reportMeta" scope="session" toScope="page" />
 
 <c:set var="failureMessage">
@@ -69,3 +71,5 @@
 	<div class="ft" align="center">
 	</div>
 </div>
+
+</logic:messagesPresent>

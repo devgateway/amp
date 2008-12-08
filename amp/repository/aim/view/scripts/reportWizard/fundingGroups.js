@@ -3,15 +3,41 @@ YAHOO.namespace("YAHOO.amp.reportwizard");
 YAHOO.amp.reportwizard.colIdToName		= new Array();
 YAHOO.amp.reportwizard.fundingGroups	= new Array();
 YAHOO.amp.reportwizard.fundingGroups["donor"]			= new Array(
-				'A.C. Chapter', 'Primary Sector Sub-Sector', 'Implementation Level', 'Accession Instrument', 
-				'Executing Agency', 'Donor', 'Donor Group', 
-				'Donor Agency', 'Primary Sector', 'Status', 'Region', 
-				'Type Of Assistance', 'Financing Instrument', 'On/Off Budget',
-				'National Planning Objectives', 'Primary Program', 'Componente', 
-				'Secondary Program', 'Donor Type', 'Credit/Donation', 'Beneficiary Agency', 
-				'Implementing Agency', 'Component Name',
-				'Secondary Sector', 'Secondary Sector Sub-Sector',
-				'Responsible Organization', 'Activity Created By', 'Project Category'
+				 'A.C. Chapter'
+				,'Primary Sector Sub-Sector'
+				,'Implementation Level'
+				,'Accession Instrument'
+				,'Executing Agency'
+				,'Donor'
+				,'Donor Group'
+				,'Donor Agency'
+				,'Primary Sector'
+				,'Status', 'Region'
+				,'Type Of Assistance'
+				,'Financing Instrument'
+				,'On/Off Budget'
+				,'National Planning Objectives'
+				,'National Planning Objectives Level 1'
+				,'National Planning Objectives Level 2'
+				,'National Planning Objectives Level 3'
+				,'National Planning Objectives Level 4'
+				,'National Planning Objectives Level 5'
+				,'National Planning Objectives Level 6'
+				,'National Planning Objectives Level 7'
+				,'National Planning Objectives Level 8'
+				,'Primary Program'
+				,'Componente', 
+				'Secondary Program'
+				,'Donor Type'
+				,'Credit/Donation'
+				,'Beneficiary Agency'
+				,'Implementing Agency'
+				,'Component Name'
+				,'Secondary Sector'
+				,'Secondary Sector Sub-Sector'
+				,'Responsible Organization'
+				,'Activity Created By'
+				,'Project Category'
 			);
 YAHOO.amp.reportwizard.fundingGroups["regional"]		= new Array(
 				'Status',

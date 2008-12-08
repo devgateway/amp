@@ -543,7 +543,20 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="NPD Clasification" feature="Identification"></field:display> 
 <field:display name="NPD Program Description" feature="Program"></field:display> 
 <field:display name="Name" feature="Admin - Component Type"></field:display> 
+
+
 <field:display name="National Plan Objective" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 1" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 2" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 3" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 4" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 5" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 6" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 7" feature="NPD Programs"></field:display> 
+<field:display name="National Planning Objectives Level 8" feature="NPD Programs"></field:display> 
+
+
+
 <field:display name="National Plan Objective" feature="Program"></field:display> 
 <field:display name="National Planning Objectives" feature="NPD Programs"></field:display> 
 <field:display name="Objective Comments" feature="Identification"></field:display> 

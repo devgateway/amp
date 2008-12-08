@@ -1,10 +1,10 @@
 <table class="admin">
 	<tr>
 		<td width=20% valign=top>
-			<img src="/images/006_<%= @pid %>_image.jpg" width="200" height="133" alt="Image">
+			<%= image_tag @donor.profile_picture.url(:regular) %>
 			<br><br><br>
 			<center>
-			<img src="/images/005_<%= @pid %>_Flag.jpg" width="80" height="54" alt="Flag"><br><br>
+			<%= image_tag @donor.flag.url(:regular) %><br><br>
 			<font size="3"><b><%= @donor.name %></b></font>
 			</center>
 		</td>

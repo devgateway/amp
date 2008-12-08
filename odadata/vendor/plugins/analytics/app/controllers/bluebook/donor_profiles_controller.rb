@@ -59,14 +59,5 @@ class Bluebook::DonorProfilesController < BluebookController
     # Top three regions
     @top_three = @donor.province_payments.published.all.find(:all,
       :limit => 3, :order => "payments DESC", :conditions => ["year = ?", Time.now.year - 1])
-     
-    @pid = case @donor.non_localized_name 
-      when "EUROPEAN COMMISSION"
-        "EC"
-      when "UNITED KINGDOM"
-        "UK"
-      else
-        @donor.non_localized_name
-    end
   end
 end

@@ -1,6 +1,7 @@
 drop view if exists v_nationalobjectives_parent;
 drop view  if exists  `v_nationalojectives`;
 drop view  if exists  `v_nationalobjectives`;
+
 CREATE OR REPLACE VIEW `v_nationalobjectives_all_level_helper` AS
   select `a`.`amp_activity_id` AS `amp_activity_id`,
 		 `a`.`program_percentage` AS `program_percentage`,

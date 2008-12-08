@@ -5,14 +5,15 @@ package org.dgfoundation.amp;
 
 import java.sql.SQLException;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
+import javax.naming.NamingException;
 
-import org.dgfoundation.amp.importers.ImporterWorker;
+import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  * @author mihai
@@ -20,15 +21,18 @@ import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
  * the amp database without jboss/tomcat running.
  */
 public class StandaloneAMPStartup {
-
+	private static Logger logger = Logger.getLogger(StandaloneAMPStartup.class);
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		ResourceStreamHandlerFactory.installIfNeeded();
 		try {
-			DigiConfigManager
-					.initialize("repository");
+			
+			StandaloneJndiAMPInitializer.initAMPUnifiedJndiAlias();
+			
+			DigiConfigManager.initialize("repository");
 			PersistenceManager.initialize(false);
 			
 			
@@ -40,18 +44,21 @@ public class StandaloneAMPStartup {
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error(e);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				logger.error(e);
 			}
-			//we import stuff using csv importer
-			//ImporterWorker iw=new ImporterWorker("/home/mihai/workspace/amp-testing/importers/");
-			//iw.start();
-			
 			
 		} catch (DgException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e);
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.error(e);
 		}
 
 	}

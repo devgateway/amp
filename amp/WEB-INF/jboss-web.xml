@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <jboss-web>
 <context-root>/</context-root>
 <virtual-host>localhost</virtual-host>
@@ -8,9 +10,15 @@
  </loader-repository>
  </class-loading>
 
- <resource-ref>
- 	<res-ref-name>java:localDS</res-ref-name>
+<resource-ref>
+	<!-- NEVER CHANGE THIS!! THE UNIFIED JNDI DATASOURCE ALIAS, VALID ONLY INSIDE THIS WAR -->
+	<!-- USE THIS NAME FOR LOOKUPS: java:comp/env/ampDS -->
+ 	<res-ref-name>ampDS</res-ref-name>
+ 	
 	<res-type>javax.sql.DataSource</res-type>
-	<jndi-name>java:localDS</jndi-name>
+	
+	<!-- THIS IS THE RELATED JNDI DATASOURCE NAME. SET THIS TO THE REAL C3P0/JBOSS DATASOURCE -->
+	<jndi-name>localDS</jndi-name>
+
 </resource-ref>
 </jboss-web>

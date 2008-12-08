@@ -52,11 +52,13 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.metadata.ClassMetadata;
 
 public class PersistenceManager {
 
 	private static SessionFactory sf;
+	private static Configuration cfg;
 	private static Logger logger = I18NHelper.getKernelLogger(
 			PersistenceManager.class);
 
@@ -88,7 +90,7 @@ public class PersistenceManager {
 	}
 
 	public static synchronized void initialize(boolean precache, String target) {
-
+		
 		sessionInstMap = Collections.synchronizedMap(new HashMap());
 		DigiConfig config = null;
 		HashMap modulesConfig = null;
@@ -125,6 +127,7 @@ public class PersistenceManager {
 			HibernateClassLoader.buildHibernateSessionFactory();
 
 			sf = HibernateClassLoader.getSessionFactory();
+			cfg = HibernateClassLoader.getConfiguration();
 
 			if (precache) {
 				precache();
@@ -283,7 +286,16 @@ public class PersistenceManager {
 			" is already filled, skiping precache");
 		}
 	}
-
+	
+	/**
+	 * Gets the Hibernate configuration used to build the immutable SessionFactory. 
+	 * Invoke this after initialize()
+	 * @return the Hibernate Configuration object
+	 */
+	public static synchronized Configuration getHibernateConfiguration() {
+		return cfg;
+	}
+	
 	/**
 	 * Opens a Database connection and returns a Session on that connection
 	 * @return The Hibernate Session

@@ -189,26 +189,7 @@
     </target>
 	
     <target name="runTest" depends="compileTest">
-		<delete file="${classes}/hibernate.properties"/>
-        <delete file="${classes}/quartz.properties"/>
-		<delete file="${repository}/digi.xml"/>
-		<delete file="${webinf}/jboss-web.xml"/>
-		<delete file="${webinf}/web.xml"/>
-		<delete file="${webinf}/queries/cj.jsp"/>
-		<delete file="${webinf}/queries/by_time.jsp"/>
-		<delete file="${webinf}/queries/by_donors.jsp"/>
-		<delete file="${webinf}/queries/sectorWeighted.jsp"/>
-		<delete dir="${jackrabbit}"/>
-		<copy file="${deployConfigs}/localNoDatasource/hibernate.properties" todir="${classes}"/>
-        <copy file="${deployConfigs}/localNoDatasource/quartz.properties" todir="${classes}"/>
-		<copy file="${deployConfigs}/localNoDatasource/digi.xml" todir="${repository}"/>
-		<copy file="${deployConfigs}/localNoDatasource/jboss-web.xml" todir="${webinf}"/>
-		<copy file="${deployConfigs}/localNoDatasource/web.xml" todir="${webinf}"/>
-		<copy file="${deployConfigs}/localNoDatasource/repository.xml" todir="${jackrabbit}"/>
-		<copy file="${deployConfigs}/localNoDatasource/cj.jsp" todir="${webinf}/queries/"/>
-		<copy file="${deployConfigs}/localNoDatasource/by_time.jsp" todir="${webinf}/queries/"/>
-	    <copy file="${deployConfigs}/localNoDatasource/by_donors.jsp" todir="${webinf}/queries/"/>    	
-    	<mkdir dir="test-reports"/>
+		<mkdir dir="test-reports"/>
     	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
     	  <classpath refid="run.classpath"/>
     	 	<formatter type="xml"/>
@@ -289,28 +270,13 @@
     </target>
 
 	<target name="deployForServer" description="deploys the project for use with a given database">
-		<delete file="${classes}/hibernate.properties"/>
-        <delete file="${classes}/quartz.properties"/>
 		<delete file="${repository}/digi.xml"/>
 		<delete file="${webinf}/jboss-web.xml"/>
-		<delete file="${webinf}/web.xml"/>
-		<delete file="${webinf}/queries/cj.jsp"/>
-		<delete file="${webinf}/queries/by_time.jsp"/>
-		<delete file="${webinf}/queries/by_donors.jsp"/>
-		<delete file="${webinf}/queries/sectorWeighted.jsp"/>
 		<delete dir="${jackrabbit}"/>
-		<copy file="${deployConfigs}/${serverName}/hibernate.properties" todir="${classes}"/>
-        <copy file="${deployConfigs}/${serverName}/quartz.properties" todir="${classes}"/>
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/>
-		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>
-		<copy file="${deployConfigs}/${serverName}/web.xml" todir="${webinf}"/>
-		<copy file="${deployConfigs}/${serverName}/repository.xml" todir="${jackrabbit}"/>
-		<copy file="${deployConfigs}/${serverName}/cj.jsp" todir="${webinf}/queries/"/>
-		<copy file="${deployConfigs}/${serverName}/by_time.jsp" todir="${webinf}/queries/"/>
-	    <copy file="${deployConfigs}/${serverName}/by_donors.jsp" todir="${webinf}/queries/"/>
-		<copy file="${deployConfigs}/${serverName}/sectorWeighted.jsp" todir="${webinf}/queries/"/>
-		
-
+		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/>		
+		<copy file="${webinf}/repository.xml" todir="${jackrabbit}"/>
+	
 	</target>
 
     <target name="junit" depends="compileTest">

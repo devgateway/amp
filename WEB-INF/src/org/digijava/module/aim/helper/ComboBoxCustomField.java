@@ -3,7 +3,7 @@ package org.digijava.module.aim.helper;
 
 import java.util.LinkedHashMap;
 
-public class ComboBoxCustomField extends CustomField {
+public class ComboBoxCustomField extends CustomField<String> {
 	private LinkedHashMap<String,String> options;
 
 	public ComboBoxCustomField() {
@@ -16,7 +16,4 @@ public class ComboBoxCustomField extends CustomField {
 	public LinkedHashMap<String,String> getOptions() {
 		return options;
 	}
-
-
-	
 }

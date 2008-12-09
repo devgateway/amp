@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -1479,7 +1480,7 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
         while(itcf.hasNext()){
         	CustomField cf = itcf.next();
         	try{
-        		String value = BeanUtils.getProperty(activity, cf.getAmpActivityPropertyName());
+        		Object value = PropertyUtils.getSimpleProperty(activity, cf.getAmpActivityPropertyName());
         		cf.setValue(value);
         	}catch(Exception e){
         		logger.error("Error getting property [" + cf.getAmpActivityPropertyName() + "] from bean ", e);

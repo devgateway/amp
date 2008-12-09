@@ -21,7 +21,6 @@
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-
 											<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
 											<logic:equal name="customField" property="step" value="${aimEditActivityForm.step}">
 											<field:display name="${customField.FM_field}" feature="Step${aimEditActivityForm.step}">												
@@ -38,6 +37,9 @@
 																<html:select name="aimEditActivityForm" property="customFields[${index}].value">
 																	<html:optionsCollection  name="aimEditActivityForm" property="customFields[${index}].options" value="value" label="key"/>
 																</html:select>											
+															</c:when>
+															<c:when test="<%=customField instanceof CategoryCustomField%>">
+																<category:showoptions name="aimEditActivityForm" property="customFields[${index}].value" categoryName="${customField.categoryName}" styleClass="inp-text" />								
 															</c:when>
 															<c:otherwise>
 																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"

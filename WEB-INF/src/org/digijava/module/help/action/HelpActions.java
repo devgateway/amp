@@ -99,7 +99,44 @@ public class HelpActions extends DispatchAction {
 		return result;
 	}
 
-	public ActionForward vewSearchKey(ActionMapping mapping,
+
+    public ActionForward getbody(ActionMapping mapping,
+		ActionForm form, HttpServletRequest request,
+		HttpServletResponse response)throws Exception{
+	String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+	HelpForm helpForm = (HelpForm) form;
+	OutputStreamWriter os = null;	
+    PrintWriter out = null;
+    String loadStatus = request.getParameter("body");
+
+	try {
+		if(loadStatus != null){
+			os = new OutputStreamWriter(response.getOutputStream());
+			out = new PrintWriter(os, true);
+			String id = loadStatus.toLowerCase();
+			HelpTopic key = HelpUtil.getHelpTopic(new Long(id));
+			String bodyKey =  key.getBodyEditKey();
+			List editor = HelpUtil.getEditor(bodyKey, lang);
+
+			if(!editor.isEmpty()){
+				Iterator iter = editor.iterator();
+				while (iter.hasNext()) {
+					Editor help = (Editor) iter.next();
+					out.println(help.getBody());
+				}
+			}
+		}
+		out.flush();
+		out.close();
+
+	} catch (Exception e) {
+		 e.printStackTrace();
+   }
+	return null;
+}
+
+
+    public ActionForward vewSearchKey(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		  	OutputStreamWriter os = null;	

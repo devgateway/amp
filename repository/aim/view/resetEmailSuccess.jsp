@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="globalsettings" %>
 
 <digi:instance property="aimUserEmailForm" />
 
@@ -37,13 +38,16 @@
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
 		          <td vAlign=top><br>
+                        <c:set var="cn">
+                            <globalsettings:value name="Default Country" />
+                        </c:set>
 						<c:set var="translation">
-							<digi:trn key="aim:clicktouseamp">Click here to Use AMP now</digi:trn>
+							<digi:trn key="aim:clickToUseAmp${cn}">Click here to Use AMP <digi:trn key="aim:cn:${cn}"/> now</digi:trn>
 						</c:set>
 						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:useampsitenow">
-						Use AMP now
-						</digi:trn>
+						<digi:trn key="aim:useAMP${cn}Now">
+						Use AMP <digi:trn key="aim:cn:${cn}"/> now
+                                                </digi:trn>&nbsp;
 						</digi:link>
 						<BR><BR><BR>						
       	     	</td>

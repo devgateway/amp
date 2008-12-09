@@ -216,7 +216,7 @@ public class DateNavigator {
 
     public DateNavigator(GregorianCalendar baseDate, int type, String view) throws
         CalendarException {
-        if(view.equals(CalendarOptions.CALENDAR_VIEW_YEARLY)) {
+        if(view.equals(CalendarOptions.CALENDAR_VIEW_YEARLY) || view.equals(CalendarOptions.CALENDAR_VIEW_NONE)) {
             // rollers
             setRollerTimestamps(baseDate, type, baseDate.YEAR);
             // items

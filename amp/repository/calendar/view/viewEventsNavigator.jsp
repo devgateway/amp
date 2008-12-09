@@ -167,7 +167,7 @@ function selectCalendarType(view, type) {
                 </a>
             </td>
             <td align="center" style="font-size:12px;font-family: Tahoma;">
-                <c:if test="${calendarViewForm.view == 'yearly'}">
+                <c:if test="${calendarViewForm.view == 'yearly' || calendarViewForm.view == 'none'}">
                   <%-- ${calendarViewForm.baseDateBreakDown.year - 1}--%>
                   &nbsp;
                   <b>${calendarViewForm.baseDateBreakDown.year}</b>
@@ -207,7 +207,7 @@ function selectCalendarType(view, type) {
                       <span style="color:LightGrey;">
                     </c:if>
                     <c:choose>
-                      <c:when test="${calendarViewForm.view == 'yearly'}">
+                      <c:when test="${calendarViewForm.view == 'yearly' || calendarViewForm.view == 'none'}">
                         <digi:trn key="aim:cal${item.month}">
                         ${item.month}
                         </digi:trn>

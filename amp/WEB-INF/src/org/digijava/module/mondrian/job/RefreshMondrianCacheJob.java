@@ -17,7 +17,6 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.autopatcher.core.AutopatcherService;
 import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -34,6 +33,7 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	@SuppressWarnings("deprecation")
+	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		
 		ServletContext ctx = null;

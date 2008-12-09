@@ -32,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.CategoryCustomField;
 import org.digijava.module.aim.helper.ComboBoxCustomField;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.CustomField;
@@ -480,9 +481,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		options.put("Option3", "3");		
 		combo.setOptions(options);
     	
+		// Category Field
+		CategoryCustomField ccf = new CategoryCustomField();
+		ccf.setStep(1);
+		ccf.setName("Field3");
+		ccf.setDescription("Description3");
+		ccf.setAmpActivityPropertyName("customField3");
+		ccf.setFM_field("Custom Field3");   		
+		ccf.setCategoryName("MTEF Projection");
+		
+		
     	// Finally we add these components
     	customFields.add(cf);
     	customFields.add(combo);
+    	customFields.add(ccf);
 
     	this.setCustomFields(customFields);	
 	}

@@ -162,6 +162,7 @@
 
 		<property name="customField1" column="customField1" type="java.lang.String" />
 		<property name="customField2" column="customField2" type="java.lang.String" />
+		<property name="customField3" column="customField3" type="java.lang.Long" />
 
 
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">

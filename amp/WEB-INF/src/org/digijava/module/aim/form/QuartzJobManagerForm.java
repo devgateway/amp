@@ -20,6 +20,7 @@ public class QuartzJobManagerForm extends ActionForm {
     private String endDateTime;
     private int triggerType;
     private int selectedDay;
+    private int selectedMonthDay;
     private String exeTime;
     private QuartzJobForm job;
     private Collection<QuartzJobForm> jobs;
@@ -39,6 +40,7 @@ public class QuartzJobManagerForm extends ActionForm {
         exeTime=null;
         jobs=null;
         action=null;
+        selectedMonthDay=1;
     }
 
     public Collection<QuartzJobForm> getJobs() {
@@ -83,6 +85,13 @@ public class QuartzJobManagerForm extends ActionForm {
 
     public Collection<AmpQuartzJobClass> getJcCol() {
         return jcCol;
+    }
+    public int getSelectedMonthDay() {
+        return selectedMonthDay;
+    }
+
+    public void setSelectedMonthDay(int selectedMonthDay) {
+        this.selectedMonthDay = selectedMonthDay;
     }
 
     public void setJobs(Collection<QuartzJobForm> jobs) {

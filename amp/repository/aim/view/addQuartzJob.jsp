@@ -72,13 +72,15 @@ function saveJob(){
   }
 }
 function typeChanged(value){
-  var cmb=document.getElementById("cmbWeekDays");
-  if(cmb!=null){
-    if(value==4){
-      cmb.disabled=false;
-    }else{
-      cmb.disabled=true;
-    }
+ var mdays=document.getElementById("monthDays");
+ var cmb=document.getElementById("cmbWeekDays");
+  switch(value){
+      case 4:
+           cmb.disabled=false;mdays.disabled=true; break;
+      case 5:
+          cmb.disabled=true;mdays.disabled=false; break;
+      default:
+          cmb.disabled=true;mdays.disabled=true; break;
   }
 }
 </script>
@@ -206,10 +208,11 @@ function typeChanged(value){
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(2);" />Hourly
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" />Daily
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" />Weekly
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="5" onclick="typeChanged(5);" />Monthly
                 </td>
               </tr>
               <tr>
-                <td colspan="2">
+                  <td colspan="2">
                   <digi:trn key="aim:job:jobDayOfWeek">Select Day of week</digi:trn>
                   <html:select name="quartzJobManagerForm" property="selectedDay" value="selectedDay" styleId="cmbWeekDays" style="font-family:Verdana;font-size:10px;" disabled="true">
                     <html:option value="1">1</html:option>
@@ -219,10 +222,24 @@ function typeChanged(value){
                     <html:option value="5">5</html:option>
                     <html:option value="6">6</html:option>
                     <html:option value="7">7</html:option>
-                  </html:select>
-                  <digi:trn key="aim:job:time">Time</digi:trn>
-                  <html:text name="quartzJobManagerForm" property="exeTime" styleId="txtTime" style="font-family:Verdana;font-size:10px;" />
-                </td>
+                    </html:select>
+                  </td>
+              </tr>
+              <tr>
+                 <td colspan="2">
+                   <digi:trn key="aim:job:jobDayOfMonth">Select Day of month</digi:trn>
+                   <html:select name="quartzJobManagerForm" property="selectedMonthDay" styleId="monthDays" style="font-family:Verdana;font-size:10px;" disabled="true">
+                          <c:forEach var="i" begin="1" end="31">
+                              <html:option value="${i}">${i}</html:option>
+                          </c:forEach>
+                      </html:select>
+                  </td>
+              </tr>
+              <tr>
+                  <td colspan="2">
+                      <digi:trn key="aim:job:time">Time</digi:trn>
+                      <html:text name="quartzJobManagerForm" property="exeTime" styleId="txtTime" style="font-family:Verdana;font-size:10px;" />
+                  </td>
               </tr>
             </table>
             </td>

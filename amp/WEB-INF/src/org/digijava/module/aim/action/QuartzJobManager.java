@@ -28,7 +28,12 @@ public class QuartzJobManager extends Action {
         if ("saveJob".equals(qmform.getAction())) {
             QuartzJobForm job=new QuartzJobForm();
             job.setClassFullname(qmform.getClassFullname());
-            job.setDayOfWeek(qmform.getSelectedDay());
+            if (qmform.getTriggerType() == 4) {
+                job.setDayOfWeek(qmform.getSelectedDay());
+            }
+            else{
+                job.setDayOfMonth(qmform.getSelectedMonthDay());
+            }
             job.setStartDateTime(qmform.getStartDateTime());
             job.setExeTime(qmform.getExeTime());
             job.setName(qmform.getName());
@@ -83,7 +88,7 @@ public class QuartzJobManager extends Action {
             qmform.setAction(null);
             return null;
         }
-
+       
         qmform.setJcCol(QuartzJobClassUtils.getAllJobClasses());
         qmform.setJobs(QuartzJobUtils.getAllJobs());
         qmform.setAction(null);

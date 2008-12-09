@@ -15,6 +15,15 @@ public class QuartzJobForm {
     private String exeTime;
     private boolean paused;
     private int dayOfWeek;
+    private int dayOfMonth;
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
 
     public QuartzJobForm() {
     }

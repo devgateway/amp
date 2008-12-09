@@ -35,6 +35,11 @@
         }
         return true;
     }
+   function runJobNow(name){
+        if(setNameAndAction(name,"runJobNow")){
+            quartzJobManagerForm.submit();
+        }
+    }
 
     function deleteJob(name){
         if(setNameAndAction(name,"deleteJob")){
@@ -206,10 +211,14 @@
                                             <c:if test="${job.paused}">
                                                 [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
                                                 [<a href="javaScript:resumeJob('${job.name}');"><digi:trn key="aim:job:lnkResume">Resume</digi:trn></a>]
+                                                [<digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn>]
+                                                [<digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn>]
                                             </c:if>
                                             <c:if test="${!job.paused}">
                                                 [<a href="javaScript:pauseJob('${job.name}');"><digi:trn key="aim:job:lnkPause">Pause</digi:trn></a>]
                                                 [<digi:trn key="aim:job:lnkResume">Resume</digi:trn>]
+                                                [<a href="javaScript:runJobNow('${job.name}');"><digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn></a>]
+                                                [<a href="javaScript:editJob('${job.name}');">[<digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn>]</a>]
                                             </c:if>
                                             [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
                                         </td>

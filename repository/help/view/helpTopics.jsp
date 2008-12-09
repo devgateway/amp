@@ -63,12 +63,13 @@
                           </li>
                         </ul>
              		 <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
-                      <!--  
+                      
                         <div class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
                         <bean:define id="topic" name="helpForm" property="topicTree" type="java.util.Collection"/>
                         	<%= HelpUtil.renderTopicsTree(topic,request) %>
              		</div>
-             		-->
+
+ <!--
   <div id="treeboxbox_tree" class="yui-content" style="height:700px;overflow: auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;"></div>
   <div id="log"></div>
 
@@ -155,5 +156,5 @@ function GetXmlHttpObject()	{
 }
 </script>
  		
- 		
+ -->		
              		

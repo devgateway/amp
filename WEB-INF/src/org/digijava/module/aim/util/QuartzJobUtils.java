@@ -111,7 +111,9 @@ public class QuartzJobUtils {
                         case 4:
                             trg = TriggerUtils.makeWeeklyTrigger(job.getDayOfWeek(), h, m);
                             break;
-
+                        case 5:
+                            trg=TriggerUtils.makeMonthlyTrigger(job.getDayOfMonth(), h, m);
+                            break;
                         default:
                             trg = TriggerUtils.makeDailyTrigger(h, m);
                             break;

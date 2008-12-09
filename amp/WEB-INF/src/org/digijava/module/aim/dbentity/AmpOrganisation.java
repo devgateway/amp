@@ -48,6 +48,17 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private AmpRegion regionId;
 	
 	private Set survey;	// Collection of AmpAhsurvey dbentity objects 
+	
+	private transient Set surveyByPointOfDeliveryDonor;
+	
+	public Set getSurveyByPointOfDeliveryDonor() {
+		return surveyByPointOfDeliveryDonor;
+	}
+
+	public void setSurveyByPointOfDeliveryDonor(Set surveyByPointOfDeliveryDonor) {
+		this.surveyByPointOfDeliveryDonor = surveyByPointOfDeliveryDonor;
+	}
+
 	private Set calendar;
 	
 	private String segmentCode;

@@ -5468,7 +5468,7 @@ public class DbUtil {
         try {
             //logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
+            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
             //String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
             surveyDonors.addAll(session.createQuery(qry).list());
             //logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
@@ -5538,7 +5538,7 @@ public class DbUtil {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))
                             continue;
                     }
-                    surveySet.addAll(dnOrg.getSurvey());
+                    surveySet.addAll(dnOrg.getSurveyByPointOfDeliveryDonor());
                     //logger.debug("dnOrg.getAmpOrgId() : " + dnOrg.getAmpOrgId() + "  dnOrg.getAcronym() : " +dnOrg.getAcronym());
                     //logger.debug("----------------------------------------------------------------------------------------------");
                     // Filtering by org-group here
@@ -5619,6 +5619,7 @@ public class DbUtil {
                             ////System.out.println(svy.getAmpActivityId().getName());
 
                             AmpOrganisation pdOrg=svy.getPointOfDeliveryDonor();
+                            AmpOrganisation dnOrgOriginalOrganization = svy.getAmpDonorOrgId();
                             if (pdOrg!=null && pdOrg.getOrgGrpId() != null && pdOrg.getOrgGrpId().getOrgGrpName() != null) {
                                 pi.setDonor(pdOrg.getOrgGrpId().getOrgGrpName());
                             } else {
@@ -5643,8 +5644,10 @@ public class DbUtil {
                                         while (itr3.hasNext()) {
                                             AmpFunding fund = (AmpFunding) itr3.next();
                                             // Only those donors are considered who have funding for the activity/project
-                                            if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
-                                                // Filtering by financing-instrument here
+                                            //System.out.println(dnOrgOriginalOrganization.getAmpOrgId()+" - "+fund.getAmpDonorOrgId().getAmpOrgId());
+                                            if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId()) || 
+                                            		0 == dnOrgOriginalOrganization.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
+                                            	// Filtering by financing-instrument here
                                                 if (null != financingInstr) {
                                                     if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
                                                         continue;

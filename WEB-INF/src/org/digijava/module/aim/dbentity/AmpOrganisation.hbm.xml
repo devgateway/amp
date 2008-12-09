@@ -66,6 +66,12 @@
 			<key column="amp_org_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />
 		</set>
+		
+		<set name="surveyByPointOfDeliveryDonor" table="AMP_AHSURVEY" inverse="true" lazy="true" cascade="none">
+			<cache usage="read-write" />
+			<key column="point_of_delivery_donor" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey" />
+		</set>
 
 		<set name="calendar" table="AMP_CALENDAR_EVENT_ORGANISATIONS" lazy="true">
 			<key column="amp_org_id"/>

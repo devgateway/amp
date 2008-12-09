@@ -9,6 +9,6 @@
     	<action path="/dataExchange/exportWizard" forward="/showLayout.do?layout=exportWizard" />
 		<action path="/dataExchange/export" scope="session" type="org.digijava.module.dataExchange.action.ExportAction" name="deExportForm" validate="false" parameter="method">
 			<forward name="default" path="/showLayout.do?layout=exportWizard"/>
-		</action>
+		</action> 
 	</action-mappings>
 </struts-config>

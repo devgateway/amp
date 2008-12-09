@@ -23,7 +23,7 @@
 						<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 					</digi:link>&nbsp;&gt;&nbsp;
 					<digi:trn key="calendar:Calendar">Calendar</digi:trn>
-					&nbsp;&gt;&nbsp;
+					<c:if test="${calendarViewForm.view!='none'}">&nbsp;&gt;&nbsp;</c:if>					
 					<c:if test="${calendarViewForm.view=='yearly'}"><digi:trn key="calendar:yearlyView">Yearly View</digi:trn></c:if>
 					<c:if test="${calendarViewForm.view=='monthly'}"><digi:trn key="calendar:monthlyView">Monthly View</digi:trn></c:if>
 					<c:if test="${calendarViewForm.view=='weekly'}"><digi:trn key="calendar:weeklyView">Weekly View</digi:trn></c:if>

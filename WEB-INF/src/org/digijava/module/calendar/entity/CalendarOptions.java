@@ -6,6 +6,7 @@ public class CalendarOptions {
     public static final String CALENDAR_VIEW_WEEKLY = "weekly";
     public static final String CALENDAR_VIEW_DAYLY = "daily";
     public static final String CALENDAR_VIEW_CUSTOM = "custom";
+    public static final String CALENDAR_VIEW_NONE = "none"; //if all view are turned off from FM,then view="none"
 
     public static final String defaultView = CALENDAR_VIEW_YEARLY;
 

@@ -253,13 +253,11 @@ function adminHelp(){
                                   </div>
                               </div>                    
                           </li>
-                          </module:display>
-            
+                          </module:display>            
                         </ul>            
                   </div>
               </div>
-            </div> 
-            
+            </div>
 		</logic:equal>
 </logic:present>
 
@@ -351,16 +349,14 @@ function adminHelp(){
                                             </a>
                                             <div id="workspaceSubmenu" class="yuiampmenu">
                                           	<div class="bd">                    
-                                                      <ul>
-                                                      
+                                                      <ul>                                                      
                                                         <logic:iterate id="item"  name="USER_WORKSPACES" scope="session" type="org.digijava.module.aim.dbentity.AmpTeamMember">
                                             		    <bean:define id="team" name="item" property="ampTeam" type="org.digijava.module.aim.dbentity.AmpTeam"></bean:define>
                                             		    <logic:equal name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
                                             		       <li class="yuiampmenuitem yuiampmenuitem-checked " style="_width:100%;">
                                                             	 <a class="yuiampmenuitemlabel" href="#"><bean:write name="team" property="name"/></a>
                                                           </li>
-                                                        </logic:equal>
-                                            		    
+                                                        </logic:equal>                                            		    
                                             		     <logic:notEqual name="currentMember" property="teamId" scope="session" value="${team.ampTeamId}">
                                             		   	   <li class="yuiampmenuitem" style="width: 100%;">
                                                             	<a class="yuiampmenuitemlabel" href='/selectTeam.do?id=<bean:write name="item" property="ampTeamMemId"/>'><bean:write name="team" property="name"/></a>
@@ -458,7 +454,7 @@ function adminHelp(){
                               </a>
                           	</c:if>
                           	<c:if test="${empty link}">
-                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
+                          		<a class="yuiampmenuitemlabel"  href="/calendar/showCalendarView.do?view=none" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
                           	</c:if>

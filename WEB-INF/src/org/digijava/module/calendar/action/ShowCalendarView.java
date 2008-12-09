@@ -78,7 +78,7 @@ public class ShowCalendarView extends Action {
             !view.equals(CalendarOptions.CALENDAR_VIEW_MONTHLY) &&
             !view.equals(CalendarOptions.CALENDAR_VIEW_WEEKLY) &&
             !view.equals(CalendarOptions.CALENDAR_VIEW_DAYLY) &&
-            !view.equals(CalendarOptions.CALENDAR_VIEW_CUSTOM)) {
+            !view.equals(CalendarOptions.CALENDAR_VIEW_CUSTOM) && !view.equals(CalendarOptions.CALENDAR_VIEW_NONE)) {
             view = CalendarOptions.defaultView;
         }
         calendarViewForm.setView(view);

@@ -23,10 +23,17 @@
 package org.digijava.kernel.startup;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.security.Policy;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -34,6 +41,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.config.moduleconfig.ModuleConfig;
+import org.digijava.kernel.exception.IncompatibleEnvironmentException;
 import org.digijava.kernel.mail.scheduler.MailSpoolManager;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.security.DigiPolicy;
@@ -45,6 +53,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
+import org.hibernate.engine.SessionFactoryImplementor;
 
 /**
  * Parses digi.xml configuration file,
@@ -61,6 +70,17 @@ public class ConfigLoaderListener
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
 
+    public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
+    		int indexOf = completeProductVersion.indexOf(versionPrefix);
+    		String bugFixingVersionString="";
+    		for(int i=indexOf+versionPrefix.length()+1;i<completeProductVersion.length();i++) {
+    			char c=completeProductVersion.charAt(i);
+    			if(c<'0' || c>'9') break;
+    			bugFixingVersionString+=c;
+    		}
+    	return Integer.parseInt(bugFixingVersionString);
+    }
+    
     public void contextInitialized(ServletContextEvent sce) {
         //ResourceStreamHandlerFactory.installIfNeeded();
 
@@ -87,6 +107,8 @@ public class ConfigLoaderListener
             DigiCacheManager.getInstance();
             PersistenceManager.initialize(true);
 
+            checkDatabaseCompatibility( sce.getServletContext().getRealPath("/compat.properties"));
+            
             SiteCache.getInstance();
             DigiPolicy policy = new DigiPolicy();
             policy.install();
@@ -118,6 +140,37 @@ public class ConfigLoaderListener
 
     }
 
+    private void checkDatabaseCompatibility(String propertiesFileName) throws FileNotFoundException, IOException, SQLException, IncompatibleEnvironmentException {
+    	SessionFactoryImplementor sfi=(SessionFactoryImplementor) PersistenceManager.getSessionFactory();
+		Connection connection = sfi.getConnectionProvider().getConnection();
+		DatabaseMetaData metaData = connection.getMetaData();
+		Properties compat=new Properties();
+		File compatFile=new File(propertiesFileName);
+		compat.load(new FileInputStream(compatFile));
+		
+		int dbMajorVersion=Integer.parseInt((String)compat.get("database.version.major"));
+		int dbMinorVersion=Integer.parseInt((String)compat.get("database.version.minor"));
+		int dbBugfixingVersion=Integer.parseInt((String)compat.get("database.version.bugfixing"));
+		
+		int jdbcMajorVersion=Integer.parseInt((String)compat.get("jdbc.version.major"));
+		int jdbcMinorVersion=Integer.parseInt((String)compat.get("jdbc.version.minor"));
+		int jdbcBugfixingVersion=Integer.parseInt((String)compat.get("jdbc.version.bugfixing"));
+		
+		
+		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
+				metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
+				dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
+			throw new IncompatibleEnvironmentException("Database version is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
+	
+		if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
+				metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
+				jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
+			throw new IncompatibleEnvironmentException("JDBC driver version is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
+	
+		
+		logger.info("Database compatibility OK.");
+    }
+    
     private Map getModuleContextInitializers() throws ClassNotFoundException,
         InstantiationException, IllegalAccessException, InstantiationException,
         ClassCastException {

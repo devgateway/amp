@@ -3,6 +3,7 @@
 
     <!-- Local system paths -->
     <property file="digijava.properties"/>
+	 <property file="compat.properties"/>
     <!-- NOTE: If "dist" target is used, a local
              "dist" directory will be utilized or created -->
     <property name="distpath.project" value="./dist"/>
@@ -54,13 +55,25 @@
          </fileset>
     </path>
 
+	<target name="get-jvm">
+	    <condition property="jvm.ok">
+	          <equals arg1="${ant.java.version}" arg2="${jvm.version}"/>
+	    </condition>
+	</target>
+
+	  <target name="check-jvm" depends="get-jvm" unless="jvm.ok">
+	    <fail message="Wrong JVM - ${ant.java.version}. JVM version has to be ${jvm.version}. Please change your JDK accordingly and rebuild."/>
+	  </target>
+	
+	
   <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
     <classpath refid="compile.classpath" />
   </taskdef>
 
     <!-- Check timestamp on files -->
-    <target name="prepare">
+    <target name="prepare" depends="check-jvm">
         <tstamp/>
+	    <echo message="JVM OK - ${ant.java.version}"/>
         <mkdir  dir="${classes}"/>
         <mkdir  dir="${distpath.project}"/>
     </target>

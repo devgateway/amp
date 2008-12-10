@@ -16,6 +16,15 @@ public class QuartzJobForm {
     private boolean paused;
     private int dayOfWeek;
     private int dayOfMonth;
+    private boolean manualJob;
+
+    public boolean isManualJob() {
+        return manualJob;
+    }
+
+    public void setManualJob(boolean manualJob) {
+        this.manualJob = manualJob;
+    }
 
     public int getDayOfMonth() {
         return dayOfMonth;

@@ -26,12 +26,13 @@ public class QuartzJobManagerForm extends ActionForm {
     private Collection<QuartzJobForm> jobs;
     private Collection<AmpQuartzJobClass> jcCol;
     private String action;
+    private Boolean editAction;
 
     public QuartzJobManagerForm() {
 
     }
 
-    public void reset(ActionMapping mapping, HttpServletRequest request){
+    public void reset(){
         name=null;
         startDateTime=null;
         endDateTime=null;
@@ -41,6 +42,7 @@ public class QuartzJobManagerForm extends ActionForm {
         jobs=null;
         action=null;
         selectedMonthDay=1;
+        editAction=false;
     }
 
     public Collection<QuartzJobForm> getJobs() {
@@ -89,7 +91,13 @@ public class QuartzJobManagerForm extends ActionForm {
     public int getSelectedMonthDay() {
         return selectedMonthDay;
     }
+     public Boolean getEditAction() {
+        return editAction;
+    }
 
+    public void setEditAction(Boolean editAction) {
+        this.editAction = editAction;
+    }
     public void setSelectedMonthDay(int selectedMonthDay) {
         this.selectedMonthDay = selectedMonthDay;
     }

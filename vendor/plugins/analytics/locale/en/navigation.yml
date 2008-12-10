@@ -1,0 +1,27 @@
+en:
+  navigation:
+    bluebook:
+      toc: Table of Contents
+      foreword: Foreword
+      donor_profiles: EU Donor Profiles
+      eu_at_a_glance:
+        title: EU at a Glance
+        building_europe: 50 Years Building Europe
+        member_states: Member States of the EU
+        institutions: Institutions of the EU
+        consensus: The European Consensus on Development
+        eu_aid: EU Aid to Developing Countries
+        code_of_conduct: EU Code of Conduct
+      eu_cooperation:
+        title: EU Cooperation
+        process: EU Coordination and Harmonisation Process    
+        achievements: EU Cooperation Achievements in {{year}}
+        forecasts_for: EU Cooperation Forecasts for {{year}}
+        trend: EU Cooperation Trend from {{from}} to {{to}}
+        by_sector_in: EU Cooperation by DAC Sector in {{year}}
+        by_region_in: EU Cooperation by Region in {{year}}
+        by_toa_in: EU Cooperation by Type of Aid in {{year}}, Forecasts for {{forecasts}}
+      note:
+        title: Note to Reader
+        explanatory_note: Explanatory Note to the Donor Profiles
+      

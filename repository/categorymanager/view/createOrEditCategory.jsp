@@ -241,6 +241,7 @@
 						<html:text property="keyName" readonly="${keyTextReadonly}" style="${keyTextColorStyle}" />
 					</td>
 				</tr>
+				<logic:notEmpty name="cmCategoryManagerForm" property="editedCategoryId">
 				<tr>
 					<td colspan="2">
 						<html:hidden property="useAction" value="none"/>
@@ -260,6 +261,7 @@
 						<digi:trn key="cm:categoryManagerPlsUseTranslations">If you need to change the translation for a category value please use Translator View</digi:trn> !
 					</td>
 				</tr>
+				</logic:notEmpty>
 				<tr>
 				<td id="possibleValuesTd" colspan="2">
 					<div id="possibleValuesDiv">

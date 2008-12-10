@@ -21,7 +21,7 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 	private List<AmpCategoryValue> possibleValues;
 	
 	private List<AmpCategoryClass> usedCategories;
-	private List<AmpCategoryClass> usedByCategories;
+	private Set<AmpCategoryClass> usedByCategories;
 	
 	public String getDescription() {
 		return description;
@@ -78,10 +78,11 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 	public void setUsedCategories(List<AmpCategoryClass> usedCategories) {
 		this.usedCategories = usedCategories;
 	}
-	public List<AmpCategoryClass> getUsedByCategories() {
+	
+	public Set<AmpCategoryClass> getUsedByCategories() {
 		return usedByCategories;
 	}
-	public void setUsedByCategories(List<AmpCategoryClass> usedByCategories) {
+	public void setUsedByCategories(Set<AmpCategoryClass> usedByCategories) {
 		this.usedByCategories = usedByCategories;
 	}
 	public int compareTo(AmpCategoryClass o) {

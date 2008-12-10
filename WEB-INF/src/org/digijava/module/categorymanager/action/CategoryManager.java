@@ -82,8 +82,13 @@ public class CategoryManager extends Action {
 			}
 			myForm.setEditedCategoryId(null);
 			myForm.setPossibleVals(possibleVals);
+			myForm.setAdvancedMode(true);
 			return mapping.findForward("createOrEditCategory");
 		}
+		/**
+		 * If the user wants add a new value to existing category we need to show the appropriate text boxes 
+		 * and prepare the ActionForm
+		 */
 		if (request.getParameter("addValue") != null) {
 			int position 	= myForm.getPossibleVals().size();
 			if ( request.getParameter("position") != null )
@@ -363,8 +368,6 @@ public class CategoryManager extends Action {
 			//String[] possibleValues		= myForm.getPossibleValues();
 			List <PossibleValue> possibleVals=myForm.getPossibleVals();
 			
-			boolean addToPossibleValues	= false;
-            
 			/**
 			 * Eliminate empty values from the new values
 			 */

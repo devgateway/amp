@@ -1,20 +1,23 @@
-<style type="text/css" media="screen">
-	.ui-tabs-hide { display: none; }
-</style>
 
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function(){
-		$("ul#tabs").tabs();
+		$("#tabs").tabs();
 	});
+
+    $(window).scroll(function()
+    {
+      $('#command_box').animate({top:$(window).scrollTop()+"px" },{queue: false, duration: 350});
+    });
 </script>
 
 <% labeled_form_for @project do |form| %>
-	<ul id="tabs">
-		<li><a href="#profile_information"><%= ll(:project, :stages, :profile_information) %></a></li>
-		<li><a href="#sector_agencies"><%= ll(:project, :stages, :sector_agencies) %></a></li>
-		<li><a href="#goals"><%= ll(:project, :stages, :goals) %></span></a></li>
-		<li><a href="#location_funding"><%= ll(:project, :stages, :location_funding) %></a></li>
-		<li><a href="#funding_forecast"><%= ll(:project, :stages, :funding_forecast) %></a></li>
+<div id="tabs" style="float:left;width:750px;">
+	<ul id="tabs" class="ui-tabs-nav">
+		<li class="ui-tabs-nav-li"><a href="#profile_information"><span><%= ll(:project, :stages, :profile_information) %></span></a></li>
+		<li class="ui-tabs-nav-li"><a href="#sector_agencies"><span><%= ll(:project, :stages, :sector_agencies) %></a></span></li>
+		<li class="ui-tabs-nav-li"><a href="#goals"><span><%= ll(:project, :stages, :goals) %></span></a></li>
+		<li class="ui-tabs-nav-li"><a href="#location_funding"><span><%= ll(:project, :stages, :location_funding) %></a></span></li>
+		<li class="ui-tabs-nav-li"><a href="#funding_forecast"><span><%= ll(:project, :stages, :funding_forecast) %></a></span></li>
 	</ul>
 	
 	<div id="profile_information" class="stage">
@@ -46,6 +49,11 @@
 		<%= error_messages_for :project, :attributes => [] %>
 		<%= render :partial => "funding_forecast_form", :locals => { :f => form } %>
 	</div>
-	
+    
+</div>
+<div id="command_box">
 	<%= form.submit %>
+</div>
+
 <% end %>
+

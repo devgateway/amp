@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@page import="java.util.*"%>
 <%@page import="org.digijava.module.calendar.form.CalendarViewForm" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
@@ -55,22 +56,22 @@ color:Black;
 					              <a href="#"  onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);"><digi:trn key="aim:last">Last</digi:trn></a>
 				          		</c:if>
 	        				</td>
-	        				<field:display name="Yearly View" feature="Calendar">
+	        				<feature:display name="Yearly View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'yearly'}">
 			        				<td align="center" width="20%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
 							           ${calendarViewForm.baseDateBreakDown.year}
 			        				</td>
 		        				</c:if>
-	        				</field:display>
-	        				<field:display name="Monthly View" feature="Calendar">
+	        				</feature:display>
+	        				<feature:display name="Monthly View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'monthly'}">
 		        					<td align="center" width="20%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
 							        	<digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>,&nbsp;
 							            ${calendarViewForm.baseDateBreakDown.year}
 			        				</td>
 		        				</c:if>
-	        				</field:display>
-	        				<field:display name="Weekly View" feature="Calendar">
+	        				</feature:display>
+	        				<feature:display name="Weekly View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'weekly'}">
 		        					<td align="center" width="30%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
 		        						<digi:trn key="aim:calendar:startmonthNameShort:${calendarViewForm.startDateBreakDown.monthNameShort}">${calendarViewForm.startDateBreakDown.monthNameShort}</digi:trn>
@@ -81,8 +82,8 @@ color:Black;
 						                ${calendarViewForm.endDateBreakDown.year}
 		        					</td>
 		        				</c:if>
-	        				</field:display>
-	        				<field:display name="Daily View" feature="Calendar">
+	        				</feature:display>
+	        				<feature:display name="Daily View" module="Calendar">
 	        					<c:if test="${calendarViewForm.view == 'daily'}">
 		        					<td align="center" width="20%" nowrap="nowrap" style="font-size:12px;font-weight:bold;font-family: Tahoma;">
 		        						<digi:trn key="aim:calendar:dailymonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
@@ -90,7 +91,7 @@ color:Black;
 					                	${calendarViewForm.baseDateBreakDown.year}
 		        					</td>
 		        				</c:if>
-	        				</field:display>
+	        				</feature:display>
 	        				<%-- 
 	        					<c:if test="${calendarViewForm.view == 'custom'}">
 	        					<td align="center" width="30%" nowrap="nowrap">
@@ -123,7 +124,7 @@ color:Black;
 				    	<table cellpadding="0" cellspacing="0" align="center" style="width:100%">
 				        	<c:if test="${calendarViewForm.view != 'custom'}">
 				        		<!-- Monthly view start -->
-				        		<field:display name="Monthly View" feature="Calendar">
+				        		<feature:display name="Monthly View" module="Calendar">
 				        			<c:if test="${calendarViewForm.view == 'monthly'}">
 				            		<tr align="center" vAlign="middle">
 				                		<td width="100%">
@@ -302,10 +303,10 @@ color:Black;
 				    					</td>
 				              		</tr>
 								</c:if>
-				        		</field:display>				            	
+				        		</feature:display>				            	
 				                <!-- Monthly view End -->
 				                <!-- Daily View Start -->
-				                <field:display name="Daily View" feature="Calendar">
+				                <feature:display name="Daily View" module="Calendar">
 				                	<c:if test="${calendarViewForm.view == 'daily'}">
 				                	<tr>
 				                    	<td style="padding:15px;text-align:center;">
@@ -434,10 +435,10 @@ color:Black;
 				                           </td>
 				                         </tr>
 				                       </c:if>
-				                </field:display>			                
+				                </feature:display>			                
 								<!-- Daily View End -->
 				            	</c:if>
-				            	<field:display name="Yearly View" feature="Calendar">
+				            	<feature:display name="Yearly View" module="Calendar">
 				            		<!-- yearly view Start -->
 				            		<c:if test="${calendarViewForm.view == 'yearly'}">
 									<tr style="width: 100%">
@@ -586,10 +587,10 @@ color:Black;
 					  					</tr>	
 									</c:if>
 								<!-- yearly view End   -->
-				            	</field:display>								
+				            	</feature:display>								
 								
 								
-								<field:display name="Weekly View" feature="Calendar">
+								<feature:display name="Weekly View" module="Calendar">
 									<!-- Weekly view Start -->
 									<c:if test="${calendarViewForm.view == 'weekly'}">
 									<tr>
@@ -706,7 +707,7 @@ color:Black;
 				  					</tr>
 				  				</c:if>
 				  				<!-- Weekly view End -->
-								</field:display>								
+								</feature:display>								
 							</tr>
 				         </table>
 					</td>

@@ -84,8 +84,7 @@ cursor:pointer;
                <a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false">
                <digi:trn key="aim:publicReports">Public Reports</digi:trn>
                </a>
-			</li>
-            
+			</li>            
             <li style="float:left;">
                 <span class="yuiampmenuitemlabel" href="#" style="float:left;cursor:pointer;position:relative;top:0px;_top:1px">
                 <digi:trn key="aim:deflanguage">Language</digi:trn>
@@ -415,27 +414,27 @@ function adminHelp(){
                               </a>
                           </li>
                           </feature:display>
-						  <feature:display name="Calendar" module="Calendar">
+						  <module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
 						  	<!-- On which view calendar link should redirect. depends on FM -->
 							  <c:set var="linkYearly">
-							  	<field:display name="Yearly View" feature="Calendar">
+							  	<feature:display name="Yearly View" module="Calendar">
 							  		/calendar/showCalendarView.do
-							  	</field:display>
+							  	</feature:display>
 							  </c:set>
 							  <c:set var="linkMonthly">
-							  	<field:display name="Monthly View" feature="Calendar">
+							  	<feature:display name="Monthly View" module="Calendar">
 							  		/calendar/showCalendarView.do?view=monthly
-							  	</field:display>
+							  	</feature:display>
 							  </c:set>
 							  <c:set var="linkWeekly">
-							  	<field:display name="Weekly View" feature="Calendar">
+							  	<feature:display name="Weekly View" module="Calendar">
 							  		/calendar/showCalendarView.do?view=weekly
-							  	</field:display>
+							  	</feature:display>
 							  </c:set>
 							  <c:set var="linkDaily">
-							  	<field:display name="Daily View" feature="Calendar">
+							  	<feature:display name="Daily View" module="Calendar">
 							  		/calendar/showCalendarView.do?view=daily
-							  	</field:display>
+							  	</feature:display>
 							  </c:set>
 							  
 							  <c:set var="link">
@@ -458,7 +457,7 @@ function adminHelp(){
                                  <digi:trn key="aim:calendar">Calendar</digi:trn>
                               </a>
                           	</c:if>
-                          	<field:display name="Create Event" feature="Calendar">
+                          	<feature:display name="Create Event" module="Calendar">
                           		<a onclick="arrowClicked = true" style="text-decoration:none;border-right:1px solid white;padding: 5px 3px 6px 3px;_padding-bottom:5px;cursor:pointer;display:block;float:left;">
                                  <img src="css/menubaritem_submenuindicator_disabled.png" style="border:0px;padding:0px 0px 0px 0px;"/><br />
                               </a>
@@ -473,9 +472,9 @@ function adminHelp(){
                                       </ul>
                                   </div>
                               </div>
-                          	</field:display>
+                          	</feature:display>
                           </li>
-                          </feature:display>
+                          </module:display>
 						<%	
 							boolean showDashboard = false;
 						  	if(FeaturesUtil.isVisibleFeature("NPD Dashboard", request.getSession().getServletContext())) {

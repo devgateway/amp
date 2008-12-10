@@ -1,16 +1,16 @@
 <!-- START Flash Objects -->
 
-<div style="height:100px;">
-	<div style="float:left;height:inherit;width:500px;text-align:left;">
-		<img src="/images/ODAnicLogo.gif" alt="ODAnic" width="236" height="80" border="0" style="float:left" />
-        <p style="color:#1c4683;font-weight:bold;">Official Development Assistance <br/> to Nicaragua Database</p>
+<div style="height:90px;padding:10px 0px 0px 10px;background-color:#27415f">
+	<div style="float:left;width:500px;text-align:left;background-color:#27415f">
+		<img src="/images/ODAnicLogoWhiteBlue.gif" alt="ODAnic" border="0" style="float:left" vspace="1" />
+        <p style="color:#fff;font-weight:bold;">Official Development Assistance <br/> to Nicaragua Database</p>
 	</div>
     
 	<!-- START User Info Bar -->
-	<div style="float:right;height:inherit;width:370px; text-align:right;padding-right:10px;">
-		<p style="color:#1c4683;font-weight:bold;">
+	<div style="float:right;text-align:right;padding-right:10px;">
+		<p style="color:#fff;font-weight:bold;">
 			<%= current_user.name %><br>
-			<%= image_tag current_donor.flag.url(:avatar), :align => "absmiddle", :hspace => 8 %>
+			<%= image_tag current_donor.flag.url(:avatar), :align => "absmiddle", :hspace => 8, :style => "border:1px solid white" %>
 			<%= current_donor.name %>
 		</p>
 	</div>

@@ -42,13 +42,19 @@ public class QuartzJobManager extends Action {
                 job.setEndDateTime(qmform.getEndDateTime());
             }
             job.setTriggerType(qmform.getTriggerType());
-
-            QuartzJobUtils.addJob(job);
+            if(qmform.getEditAction()!=null&&qmform.getEditAction()){
+                QuartzJobUtils.reScheduleJob(job);
+            }
+            else{
+                QuartzJobUtils.addJob(job);
+            }
+            qmform.reset();
         } else if ("addJob".equals(qmform.getAction())) {
-            qmform.reset(mapping, request);
+            qmform.reset();
             return mapping.findForward("addJob");
 
         } else if ("editJob".equals(qmform.getAction())) {
+            qmform.setEditAction(true);
             for (QuartzJobForm exJob : qmform.getJobs()) {
                 if (exJob.getName().equals(qmform.getName())) {
                     if (exJob.getEndDateTime() != null) {
@@ -60,10 +66,16 @@ public class QuartzJobManager extends Action {
                     qmform.setName(exJob.getName());
                     qmform.setClassFullname(exJob.getClassFullname());
                     qmform.setJob(exJob);
+                    qmform.setSelectedMonthDay(exJob.getDayOfMonth());
+                    qmform.setSelectedDay(exJob.getDayOfWeek());
+                    if (exJob.getExeTime() != null) {
+                        qmform.setExeTime(exJob.getExeTime());
+                        qmform.setTriggerType(exJob.getTriggerType());
+                    }
                     break;
                 }
             }
-            return mapping.findForward("forward");
+            return mapping.findForward("addJob");
 
         } else if ("deleteJob".equals(qmform.getAction())) {
             QuartzJobUtils.deleteJob(qmform.getName());
@@ -87,6 +99,11 @@ public class QuartzJobManager extends Action {
             outputStream.close();
             qmform.setAction(null);
             return null;
+        }
+        else{
+            if("runJobNow".equals(qmform.getAction())){
+                 QuartzJobUtils.runJob(qmform.getName());
+            }
         }
        
         qmform.setJcCol(QuartzJobClassUtils.getAllJobClasses());

@@ -3,12 +3,15 @@ package org.digijava.module.aim.util;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import java.util.Date;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
 import org.quartz.TriggerUtils;
 import org.digijava.module.aim.helper.QuartzJobForm;
+import org.quartz.CronTrigger;
+import org.quartz.SimpleTrigger;
 
 public class QuartzJobUtils {
 
@@ -27,11 +30,66 @@ public class QuartzJobUtils {
                         if (exTrg != null) {
 
                             QuartzJobForm job = new QuartzJobForm();
-
+                            boolean manualTrg=false;
                             job.setName(exTrg.getJobName());
                             job.setGroupName(exTrg.getJobGroup());
                             job.setTriggerGroupName(exTrg.getGroup());
                             job.setTriggerName(exTrg.getName());
+                            if (exTrg.getStartTime().equals(exTrg.getFinalFireTime())&&exTrg.getGroup().equals(sched.DEFAULT_MANUAL_TRIGGERS)) {
+                                manualTrg=true;
+                            }
+                            job.setManualJob(manualTrg);
+                            if (exTrg instanceof CronTrigger) {
+                                CronTrigger cTrg = (CronTrigger) exTrg;
+                                String expString = cTrg.getCronExpression();
+                                //parse cron expression to recreate date
+                                String[] dates = expString.split(" ");
+                                if (!dates[3].equals("?")) {
+                                    // the month day is selected
+                                    job.setTriggerType(5);
+                                    job.setExeTime(dates[2] + ":" + dates[1] + ":" + dates[0]);
+                                    job.setDayOfMonth(Integer.parseInt(dates[3]));
+                                } else {
+                                    if (!dates[5].equals("?")&&!dates[5].equals("*")) {
+                                         // week day is selected
+                                        job.setTriggerType(4);
+                                        job.setDayOfWeek(Integer.parseInt(dates[5]));
+                                        job.setExeTime(dates[2] + ":" + dates[1] + ":" + dates[0]);
+                                    } else {
+                                        if (!dates[2].equals("*")) {
+                                            // dayly is selected
+                                            job.setTriggerType(3);
+                                            job.setExeTime(dates[2] + ":" + dates[1] + ":" + dates[0]);
+                                        } 
+                                    }
+                                }
+                            }
+                            else{
+                                if(exTrg instanceof SimpleTrigger){
+                                    SimpleTrigger sTrg=(SimpleTrigger)exTrg;
+                                    long dif=sTrg.getRepeatInterval()/1000;
+                                    Long hours=dif/(60*60);
+                                    if(hours>0){
+                                        job.setExeTime(hours.toString());
+                                        job.setTriggerType(2);
+                                    }
+                                   else {
+                                        Long minutes = dif / 60 ;
+                                        if (minutes > 0) {
+                                            job.setTriggerType(1);
+                                            job.setExeTime(minutes.toString());
+                                        }
+                                        else{
+                                            Long seconds=dif;
+                                            job.setTriggerType(0);
+                                            job.setExeTime(seconds.toString());
+                                        }
+                                    }
+
+                                }
+                            }
+                            JobDetail jd=sched.getJobDetail(exTrg.getJobName(), exTrg.getJobGroup());
+                            job.setClassFullname(jd.getJobClass().getName());
                             if (exTrg.getEndTime() != null)
                                 job.setEndDateTime(sdf.format(exTrg.getEndTime()));
                             if (exTrg.getFinalFireTime() != null)
@@ -166,6 +224,30 @@ public class QuartzJobUtils {
         }
     }
 
+   public static void runJob(String name){
+        QuartzJobForm job=getJobByName(name);
+        runJob(job);
+    }
+    public static void runJob(QuartzJobForm job){
+        Scheduler sched=getScheduler();
+        try{
+            sched.triggerJob(job.getName(), job.getGroupName());
+        }catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+
+    public static void reScheduleJob(QuartzJobForm job){
+        try{
+            deleteJob(job); // delete previous job
+            addJob(job); // add new job
+        }catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
+    }
+
+   
     public static void resumeJob(String name){
         QuartzJobForm job=getJobByName(name);
         resumeJob(job);

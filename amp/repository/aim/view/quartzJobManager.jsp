@@ -178,7 +178,17 @@
                                     </tr>
                                 </c:if>
                                 <c:forEach var="job" items="${quartzJobManagerForm.jobs}">
-                                    <tr>
+                                    <c:choose>
+                                        <c:when test="${job.manualJob&&job.startDateTime==job.finalFireDateTime}">
+                                            <c:set var="manualJobName">
+                                            ${job.name}
+                                            </c:set>
+                                            <c:set var="manualJobStartDate">
+                                            ${job.startDateTime}
+                                            </c:set>
+                                        </c:when>
+                                        <c:otherwise>
+                                             <tr>
                                         <td style="border-left:solid 1px #000000;white-space:nowrap;">
                                             &nbsp;${job.name}
                                         </td>
@@ -211,18 +221,18 @@
                                             <c:if test="${job.paused}">
                                                 [<digi:trn key="aim:job:lnkPause">Pause</digi:trn>]
                                                 [<a href="javaScript:resumeJob('${job.name}');"><digi:trn key="aim:job:lnkResume">Resume</digi:trn></a>]
-                                                [<digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn>]
                                                 [<digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn>]
                                             </c:if>
                                             <c:if test="${!job.paused}">
                                                 [<a href="javaScript:pauseJob('${job.name}');"><digi:trn key="aim:job:lnkPause">Pause</digi:trn></a>]
                                                 [<digi:trn key="aim:job:lnkResume">Resume</digi:trn>]
-                                                [<a href="javaScript:runJobNow('${job.name}');"><digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn></a>]
-                                                [<a href="javaScript:editJob('${job.name}');">[<digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn>]</a>]
+                                                [<a href="javaScript:editJob('${job.name}');"><digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn></a>]
                                             </c:if>
-                                            [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
+                                             [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
                                         </td>
                                     </tr>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:forEach>
                             </table>
                         </td>
@@ -283,6 +293,15 @@
                  </td>
                  </tr>
                  </table>
+                 <c:if test="${not empty manualJobName}">
+                     <table>
+                         <tr style="color:red">
+                             <td>
+                                 &nbsp;${manualJobName} job was run manually at ${manualJobStartDate}
+                             </td>
+                         </tr>
+                     </table>
+                 </c:if>
                 <table style="text-align:right;width:100%;">
                     <tr>
                         <td style="height:70px;white-space:nowrap;">

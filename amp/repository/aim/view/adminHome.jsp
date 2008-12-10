@@ -231,7 +231,7 @@
                                     <c:set var="trn">
                                         <digi:trn key="aim:viewSettings">Click here to view Job Manager</digi:trn>
                                     </c:set>
-                                    <digi:link module="aim" href="/quartzJobManager.do" title="${trn}">
+                                    <digi:link module="aim" href="/quartzJobManager.do?action=all" title="${trn}">
                                         <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                                     </digi:link>
                                 </td>

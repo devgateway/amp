@@ -19,6 +19,10 @@ function setAction(action){
   }
   return true;
 }
+function cancel(){
+  setAction("all");
+  document.quartzJobManagerForm.submit();
+}
 
 function saveJob(){
   var txt=null;
@@ -87,6 +91,7 @@ function typeChanged(value){
 
 <digi:form action="/quartzJobManager.do" method="post">
   <html:hidden name="quartzJobManagerForm" property="action" styleId="hdnAction" />
+  <html:hidden name="quartzJobManagerForm" property="editAction" />
   <table>
     <tr>
       <td>
@@ -104,7 +109,7 @@ function typeChanged(value){
                 <digi:link module="aim" href="/admin.do" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
                 </digi:link>&nbsp;&gt;&nbsp;
-                <digi:link href="/quartzJobManager.do" styleClass="comment" title="${translation}" >
+                <digi:link href="/quartzJobManager.do?action=all" styleClass="comment" title="${translation}" >
                   <digi:trn key="aim:jobManager">Job Manager</digi:trn>
                 </digi:link>
                 &nbsp;&gt;&nbsp;
@@ -134,16 +139,16 @@ function typeChanged(value){
                     </c:if>
                   </td>
                   <td>
-                    <c:if test="${!empty quartzJobManagerForm.jcCol}">
-                      <html:select name="quartzJobManagerForm" property="classFullname" value="classFullname" styleId="cmbJc" style="font-family:Verdana;font-size:10px;width:250px;">
-                        <c:forEach var="jc" items="${quartzJobManagerForm.jcCol}">
-                            <html:option value="${jc.classFullname}"><digi:trn key="aim:job:${jc.name}">${jc.name}</digi:trn></html:option>
-                        </c:forEach>
-                      </html:select>
-                    </c:if>
-                    <c:if test="${empty quartzJobManagerForm.jcCol}">
-                      <html:text name="quartzJobManagerForm" property="classFullname" styleId="txtClassFullname" style="font-family:Verdana;font-size:10px;width:250px;" />
-                    </c:if>
+                      <c:if test="${!empty quartzJobManagerForm.jcCol}">
+                              <html:select name="quartzJobManagerForm" property="classFullname"  styleId="cmbJc" style="font-family:Verdana;font-size:10px;width:250px;">
+                                  <c:forEach var="jc" items="${quartzJobManagerForm.jcCol}">
+                                      <html:option value="${jc.classFullname}"><digi:trn key="aim:job:${jc.name}">${jc.name}</digi:trn></html:option>
+                                  </c:forEach>
+                              </html:select>
+                          </c:if>
+                          <c:if test="${empty quartzJobManagerForm.jcCol}">
+                              <html:text name="quartzJobManagerForm" property="classFullname" styleId="txtClassFullname" style="font-family:Verdana;font-size:10px;width:250px;" />
+                          </c:if>
                   </td>
                 </tr>
                 <tr>
@@ -204,8 +209,8 @@ function typeChanged(value){
               <tr>
                 <td colspan="2">
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="0" onclick="typeChanged(0);" />Secondly
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(1);" />Minutely
-                  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(2);" />Hourly
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="1" onclick="typeChanged(1);" />Minutely
+                  <html:radio name="quartzJobManagerForm" property="triggerType" value="2" onclick="typeChanged(2);" />Hourly
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="3" onclick="typeChanged(3);" />Daily
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="4" onclick="typeChanged(4);" />Weekly
                   <html:radio name="quartzJobManagerForm" property="triggerType" value="5" onclick="typeChanged(5);" />Monthly
@@ -214,7 +219,7 @@ function typeChanged(value){
               <tr>
                   <td colspan="2">
                   <digi:trn key="aim:job:jobDayOfWeek">Select Day of week</digi:trn>
-                  <html:select name="quartzJobManagerForm" property="selectedDay" value="selectedDay" styleId="cmbWeekDays" style="font-family:Verdana;font-size:10px;" disabled="true">
+                  <html:select name="quartzJobManagerForm" property="selectedDay"  styleId="cmbWeekDays" style="font-family:Verdana;font-size:10px;" disabled="true">
                     <html:option value="1">1</html:option>
                     <html:option value="2">2</html:option>
                     <html:option value="3">3</html:option>
@@ -250,6 +255,10 @@ function typeChanged(value){
                 <digi:trn key="aim:job:btnSave">Save</digi:trn>
               </c:set>
               <input type="button" value="${trn}" onclick="saveJob()"/>
+              <c:set var="trnCan">
+                <digi:trn key="aim:job:btnCancel">Cancel</digi:trn>
+              </c:set>
+              <input type="button" value="${trnCan}" onclick="cancel()"/>
             </td>
           </tr>
         </table>
@@ -257,3 +266,25 @@ function typeChanged(value){
     </tr>
   </table>
 </digi:form>
+<script type="text/javascript">
+    window.onload = onLoad;
+    function onLoad(){
+        var val=1;
+        var elements= document.getElementsByName("triggerType");
+        for(var i=0;i<elements.length;i++){
+            if(elements[i].checked){
+                val=elements[i].value;
+                break;
+            }
+        }
+        if(val==5){
+             var mdays=document.getElementById("monthDays");
+             mdays.disabled=false;
+        }
+        if(val==4){
+            var cmb=document.getElementById("cmbWeekDays");
+            cmb.disabled=false;
+        }
+    }
+
+</script>

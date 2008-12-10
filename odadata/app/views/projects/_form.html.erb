@@ -1,7 +1,20 @@
 
 <script type="text/javascript" charset="utf-8">
+	function highlightTabsWithErrors(element) {
+		tabs = element.children('li');
+		tabs.each(function() {
+			divId = $(this).children('a').attr('href');
+			correspondingDiv = $(divId);
+			
+			if (correspondingDiv.find('.fieldWithErrors').length > 0) {
+				$(this).addClass('tab_with_errors');
+			}
+		});
+	}
+	
 	$(document).ready(function(){
-		$("#tabs").tabs();
+		$("ul#tabs").tabs();
+		highlightTabsWithErrors($("ul#tabs"));
 	});
 
     $(window).scroll(function()

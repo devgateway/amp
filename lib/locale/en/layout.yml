@@ -1,0 +1,63 @@
+en:
+  layout:
+    title: ODAnic {{page_title}}
+    
+  navigation:
+    logout: Log out
+    language: Language
+    language_es: Spanish
+    language_en: English
+    
+    default:
+      home: Home
+      bluebook: EU Blue Book
+      search_by: Search projects by
+      links: Links
+      downloads: Downloads
+      resources: Resources
+      odadata_manual: ODAnic Manual
+      glossary: ODAnic Glossary
+      dac_manual: DAC-CRS Manual
+      exchange_rates: Used Exchange Rates
+      design_own: Design own report
+      contact: Contact
+      
+    focal_point:
+      donor_info: Donor Info
+      donor_details: Donor Details
+      accounts: Login Accounts
+      projects: Projects
+      new_project: Add New
+      draft_projects: Draft
+      published_projects: Published
+      deleted_projects: Recycle Bin
+      bluebook: EU Blue Book
+      design_own: Design own report
+      strategy: Country Strategy
+      financial_consistency: Financial Consistency
+      exchange_rates: Used Exchange Rates
+      manuals: Manuals
+      data_input_manual: Data Input Manual
+      data_input_glossary: Data Input Glossary
+      dac_crs_manual: DAC-CRS Manual
+      country_manual: ODAnic Manual
+      contact: Contact
+      
+    admin:
+      gen_conf: General Configuration
+      op_cl_data_input: Op./Cl. Data Input
+      glossary: Glossary
+      donor_admin: Donor Administration
+      exchange_rates: Exchange Rates
+      agencies: Agencies / Counterparts
+      impl_agencies: Implementing Agencies
+      contr_agencies: Contracted Agencies
+      gov_counterpart: Government Counterpart
+      
+  actions:
+      print: Print
+      close_window: Close Window
+      back: Back
+      edit: Edit
+      delete: Delete
+      show: Show

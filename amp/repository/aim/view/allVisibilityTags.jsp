@@ -105,8 +105,7 @@
 <feature:display name="Approval Tab" module="Messaging System"></feature:display> 
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display> 
 <feature:display name="Budget" module="Project ID and Planning"></feature:display> 
-<feature:display name="Budget" module="Project Id And Planning"></feature:display> 
-<feature:display name="Calendar" module="Calendar"></feature:display> 
+<feature:display name="Budget" module="Project Id And Planning"></feature:display>
 <feature:display name="Channel Overview" module="Channel Overview"></feature:display> 
 <feature:display name="Component Report" module="Report Types"></feature:display> 
 <feature:display name="Components" module="Components"></feature:display> 
@@ -197,6 +196,18 @@
 <feature:display name="orgprof_chart_place6" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place7" module="Org Profile"></feature:display>
 <feature:display name="orgprof_chart_place8" module="Org Profile"></feature:display>
+
+<feature:display name="Yearly View" module="Calendar"></feature:display>
+<feature:display name="Monthly View" module="Calendar"></feature:display>
+<feature:display name="Weekly View" module="Calendar"></feature:display>
+<feature:display name="Daily View" module="Calendar"></feature:display>
+<feature:display name="Filter" module="Calendar"></feature:display>
+<feature:display name="Create Event" module="Calendar"></feature:display>
+<feature:display name="Event Type" module="Calendar"></feature:display>
+<feature:display name="Donors" module="Calendar"></feature:display>
+<feature:display name="Save and Send button" module="Calendar"></feature:display>
+<feature:display name="Preview Event button" module="Calendar"></feature:display>
+<feature:display name="Recurring Event Button" module="Calendar"></feature:display>
 
 <%
 pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
@@ -734,21 +745,12 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display>
 
-<field:display name="Yearly View" feature="Calendar"></field:display>
-<field:display name="Monthly View" feature="Calendar"></field:display>
-<field:display name="Weekly View" feature="Calendar"></field:display>
-<field:display name="Daily View" feature="Calendar"></field:display>
-<field:display name="Filter" feature="Calendar"></field:display>
-<field:display name="Donor Filter" feature="Calendar"></field:display>
-<field:display name="Event Type Filter" feature="Calendar"></field:display>
-<field:display name="Run Filter Button" feature="Calendar"></field:display>
-<field:display name="Reset Filter Button" feature="Calendar"></field:display>
-<field:display name="Create Event" feature="Calendar"></field:display>
-<field:display name="Event Type" feature="Calendar"></field:display>
-<field:display name="Donors" feature="Calendar"></field:display>
-<field:display name="Add Donor Button" feature="Calendar"></field:display>
-<field:display name="Remove Donor Button" feature="Calendar"></field:display>
-<field:display name="Save and Send button" feature="Calendar"></field:display>
-<field:display name="Preview Event button" feature="Calendar"></field:display>
-<field:display name="Recurring Event Button" feature="Calendar"></field:display>
+
+<field:display name="Donor Filter" feature="Filter"></field:display>
+<field:display name="Event Type Filter" feature="Filter"></field:display>
+<field:display name="Run Filter Button" feature="Filter"></field:display>
+<field:display name="Reset Filter Button" feature="Filter"></field:display>
+<field:display name="Add Donor Button" feature="Donors"></field:display>
+<field:display name="Remove Donor Button" feature="Donors"></field:display>
+
 		

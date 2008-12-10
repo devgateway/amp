@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 <digi:instance property="calendarViewForm"/>
 
@@ -38,8 +39,8 @@ function changeState() {
 <html:hidden name="calendarViewForm" property="resetFilter" value="${calendarViewForm.resetFilter}"/>
 <html:hidden name="calendarViewForm" property="filter.showPublicEvents" value="${filter.showPublicEvents}"/>
 
-<field:display name="Filter" feature="Calendar">
-	<field:display name="Event Type Filter" feature="Calendar">
+<feature:display name="Filter" module="Calendar">
+	<field:display name="Event Type Filter" feature="Filter">
 		<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;vertical-align: top;">
 		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family:Tahoma;">
 		  	<digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
@@ -69,7 +70,7 @@ function changeState() {
 	<div style="width:200px;height:5px;font-family:Tahoma;">
 	&nbsp;
 	</div>
-	<field:display name="Donor Filter" feature="Calendar">
+	<field:display name="Donor Filter" feature="Filter">
 		<div style="width:200px;height:120px;border:1px solid #CCECFF;font-family:Tahoma;white-space: nowrap;">
 		  <div style="padding:5px;font-size:12px;color:White;background-color: #376091;font-family: Tahoma;">
 		  <digi:trn key="calendar:bodydonors">Donors</digi:trn>
@@ -100,20 +101,21 @@ function changeState() {
 		  </div>
 		</div>
 	</field:display>
-</field:display>
+	<div style="padding:5px;width:190px;height:28px;">
+	  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
+	  <digi:trn key="calendar:showPublicEvents">
+	  &nbsp;Public events
+	  </digi:trn>
+	</div>
+	<div style="padding:5px;width:200px;height:28px;">
+		<field:display name="Run Filter Button" feature="Filter">
+			<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
+		</field:display>
+	    &nbsp;
+	    <field:display name="Reset Filter Button" feature="Filter">
+	    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
+	    </field:display>
+	</div>
+</feature:display>
 
-<div style="padding:5px;width:190px;height:28px;">
-  <html:checkbox styleId="showPublicEvents" name="calendarViewForm" property="filter.showPublicEvents" onchange="changeState()"/>
-  <digi:trn key="calendar:showPublicEvents">
-  &nbsp;Public events
-  </digi:trn>
-</div>
-<div style="padding:5px;width:200px;height:28px;">
-	<field:display name="Run Filter Button" feature="Calendar">
-		<input type="submit" value="<digi:trn key="calendar:runFilter">Run Filter</digi:trn>" style="width:88px;" />
-	</field:display>
-    &nbsp;
-    <field:display name="Reset Filter Button" feature="Calendar">
-    	<input type="reset" value="<digi:trn key="aim:btnreset">Reset</digi:trn>" style="width:88px;" />
-    </field:display>
-</div>
+

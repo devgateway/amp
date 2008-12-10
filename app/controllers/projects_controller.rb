@@ -32,8 +32,8 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.build(params[:project])
     
     if @project.save
-      @project.next!
-      redirect_to :action => 'edit', :id => @project
+      flash[:notice] = "Successfully added project <i>#{@project.title}</i>. Please do not forget to publish once you verified the input."
+      redirect_to projects_path
     else
       render :action => 'new'
     end
@@ -46,23 +46,10 @@ class ProjectsController < ApplicationController
   def update  
     @project = current_donor.projects.find(params[:id])
     
-    if params[:previous]
-      @project.previous!
-    elsif params[:next]
-      if @project.update_attributes(params[:project])
-        @project.next!
-      else
-        render :action => 'edit'
-        return
-      end
-    end
-    
-    if @project.completed?
-      @project.next!
-      flash[:notice] = "Successfully added project <i>#{@project.title}</i>. Please do not forget to publish once you verified the input."
-      redirect_to projects_path
+    if @project.update_attributes(params[:project])
+      redirect_to projects_path(:status => @project.data_status)
     else
-      redirect_to edit_project_path(@project)
+      render :action => 'edit'
     end
   end
   

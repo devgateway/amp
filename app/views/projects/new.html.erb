@@ -1,7 +1,3 @@
 <% header lc(:title) %>
 
-<%= render :partial => "#{@project.aasm_current_state}_form" %>
-
-<center>
-	<p><b><%= link_to ll(:actions, :back), projects_path %></b>&nbsp;</p>
-</center>
+<%= render :partial => "form" %>

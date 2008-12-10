@@ -1,76 +1,71 @@
 <% js_behavior :related_selects %>
 
-<%= error_messages_for :project %>
-<% labeled_form_for @project do |f| %>
-	<% f.field_set do %>
-		<li>
-			<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
-			<%= f.collection_select :dac_sector_id, sectors, :id, :name_with_code, 
-					{ :prompt => ll(:options, :prompt) }, { :class => "dynamic_select parent large" } %>
-			
-			<select name="project[crs_sector_id]" class="dynamic_select child large">
-				<%= option_groups_from_collection_for_select(sectors, :crs_sectors, :name_with_code, 
-						:id, :name_with_code, @project.crs_sector_id) %>
-			</select>
-		</li>
+<% f.field_set do %>
+	<li>
+		<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
+		<%= f.collection_select :dac_sector_id, sectors, :id, :name_with_code, 
+				{ :prompt => ll(:options, :prompt) }, { :class => "dynamic_select parent large" } %>
 		
-		<li>
-			<%= f.label :implementing_agencies %>
-			<div id="implementing_agencies">
-				<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
-			</div>
-			
-			<%= button_to_function lc(:add_implementing_agency) do |page|  
-					page.insert_html :bottom, :implementing_agencies, 
-						:partial => 'implementing_agency', :object => ImplementingAgency.new
-				end %>
-		</li>
+		<select name="project[crs_sector_id]" class="dynamic_select child large">
+			<%= option_groups_from_collection_for_select(sectors, :crs_sectors, :name_with_code, 
+					:id, :name_with_code, @project.crs_sector_id) %>
+		</select>
+	</li>
+	
+	<li>
+		<%= f.label :implementing_agencies %>
+		<div id="implementing_agencies">
+			<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
+		</div>
 		
-		<li>
-			<%= f.label :contracted_agencies %>
-			<div id="contracted_agencies">
-				<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
-			</div>
-			
-			<%= button_to_function lc(:add_contracted_agency) do |page| 
-				page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
+		<%= button_to_function lc(:add_implementing_agency) do |page|  
+				page.insert_html :bottom, :implementing_agencies, 
+					:partial => 'implementing_agency', :object => ImplementingAgency.new
 			end %>
-		</li>
+	</li>
+	
+	<li>
+		<%= f.label :contracted_agencies %>
+		<div id="contracted_agencies">
+			<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
+		</div>
 		
-		<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
-					:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
-					
-		<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
-					:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
-		
-		<li class="fifty"><%= f.collection_select :type_of_aid_id, TypeOfAid.all, :id, :name, 
-					:prompt => ll(:options, :prompt), :required => true %></li>
+		<%= button_to_function lc(:add_contracted_agency) do |page| 
+			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
+		end %>
+	</li>
+	
+	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
+				:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
+				
+	<li class="fifty"><%= f.select :type_of_implementation, Project::IMPLEMENTATION_TYPES,
+				:include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
+	
+	<li class="fifty"><%= f.collection_select :type_of_aid_id, TypeOfAid.all, :id, :name, 
+				:prompt => ll(:options, :prompt), :required => true %></li>
 
-		<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
-					 :include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
-			
-			
-		<li><%= f.text_field :website %></li>
-		<li><%= f.text_area :comments, :rows => 10 %></li>
+	<li class="fifty"><%= f.select :grant_loan, Project::GRANT_LOAN_OPTIONS,
+				 :include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
+		
+		
+	<li><%= f.text_field :website %></li>
+	<li><%= f.text_area :comments, :rows => 10 %></li>
 
-		
-	<% end %>
 	
-	<% f.field_set ll(:project, :markers) do %>	
-		<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-		<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-		<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-		
-		<li class="thirty"><%= f.select :gender_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-		<li class="thirty"><%= f.select :environment_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
-		<li class="thirty" style="height: 45px"></li>
-	<% end %>
+<% end %>
+
+<% f.field_set ll(:project, :markers) do %>	
+	<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS, :translate => true %></li>
 	
-	<% f.field_set ll(:project, :officer_responsible) do %>
-		<li><%= f.text_field :officer_responsible_name, :required => true %></li>
-		<li><%= f.text_field :officer_responsible_phone %></li>
-		<li><%= f.text_field :officer_responsible_email %></li>
-	<% end %>
-	
-	<%= render :partial => 'control_buttons' %>
+	<li class="thirty"><%= f.select :gender_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty"><%= f.select :environment_policy_marker, Project::MARKER_OPTIONS, :translate => true %></li>
+	<li class="thirty" style="height: 45px"></li>
+<% end %>
+
+<% f.field_set ll(:project, :officer_responsible) do %>
+	<li><%= f.text_field :officer_responsible_name, :required => true %></li>
+	<li><%= f.text_field :officer_responsible_phone %></li>
+	<li><%= f.text_field :officer_responsible_email %></li>
 <% end %>

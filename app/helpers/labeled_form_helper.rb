@@ -1,4 +1,4 @@
-module LabeledFormHelper  
+module LabeledFormHelper    
   # tell all of these methods to use my custom FormBuilder
   [:form_for, :form_remote_for, :remote_form_for].each do |meth|
     src = <<-END_SRC
@@ -138,10 +138,10 @@ module LabeledFormHelper
   
 protected
   def localized_caption(method)
-    underscore_class_name = !@object ? @object_name : @object.class.to_s.underscore
+    underscore_class_name = @object ? @object.class.name.underscore : @object_name
     method_or_association_name = method.to_s.sub(/_id$/, '')
     
-    ll(underscore_class_name, method_or_association_name)
+    I18n.translate("#{underscore_class_name}.#{method_or_association_name}", :scope => [:activerecord, :attributes])
   end
 
   def wrap_in_label_row(method, content, options)

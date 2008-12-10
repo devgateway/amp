@@ -1,5 +1,4 @@
 class Project < ActiveRecord::Base
-  include AASM # Acts as State Machine for the input state handling
   include ActionView::Helpers::TextHelper
   
   ##
@@ -64,38 +63,7 @@ class Project < ActiveRecord::Base
   
   has_many                :accessible_fundings
   has_many                :accessible_forecasts
-  
-  ##
-  # State machine for step by step data input
-  aasm_initial_state  :profile_information
-  aasm_column         :input_state
-  
-  aasm_state :profile_information
-  aasm_state :sector_agencies
-  aasm_state :goals
-  aasm_state :location_funding # Cofundings, historic and current
-  aasm_state :funding_forecast
-  aasm_state :completed
-  
-  aasm_event :next do
-    transitions :from => :profile_information,  :to => :sector_agencies
-    transitions :from => :sector_agencies,      :to => :goals
-    transitions :from => :goals,                :to => :location_funding
-    transitions :from => :location_funding,     :to => :funding_forecast
-    transitions :from => :funding_forecast,     :to => :completed
-    transitions :from => :completed,            :to => :profile_information # start from the beginning
-  end
-  
-  aasm_event :previous do 
-    transitions :to => :profile_information,    :from => :sector_agencies
-    transitions :to => :sector_agencies,        :from => :goals
-    transitions :to => :goals,                  :from => :location_funding
-    transitions :to => :location_funding,       :from => :funding_forecast
-    transitions :to => :funding_forecast,       :from => :completed
-    transitions :to => :completed,              :from => :profile_information # start from the beginning
-  end
 
-  
   ##
   # Custom finders
   # TODO: This is a hack to order by the translated donor name
@@ -124,20 +92,12 @@ class Project < ActiveRecord::Base
                             :message => "has invalid code: {{value}}"
   
   # STATE: general
-  validates_presence_of     :donor_project_number, :title, :description, :prj_status, 
-                            :if => :profile_information?
-  validates_uniqueness_of   :donor_project_number, :scope => :donor_id, 
-                            :if => :profile_information?
+  validates_presence_of     :donor_project_number, :title, :description, :prj_status
+  validates_uniqueness_of   :donor_project_number, :scope => :donor_id
   
   # STATE: categorization
   validates_presence_of     :national_regional, :type_of_implementation, :type_of_aid, :grant_loan, 
-                            :officer_responsible_name, :dac_sector_id, :crs_sector_id,
-                            :if => :sector_agencies?
-  
-  #:nation_regional, :type_of_implementation, :type_of_aid, :grant_loan, :prj_status, :dac_sector_id
-  #validates_multiparameter_assignments :message => " is not entered correctly."
-  #validates_associated :finances
-  
+                            :officer_responsible_name, :dac_sector_id, :crs_sector_id
   
   ##
   # Accessors    

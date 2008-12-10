@@ -271,7 +271,7 @@ public class ShowCalendarEvent extends Action {
             calendarItems.add(calendarItem);
             calendar.setCalendarItem(calendarItems);
 
-            if(!ceform.getTypeofOccurrence().equals("")){
+            if(!ceform.getTypeofOccurrence().equals("") && ceform.getTypeofOccurrence() != null){
 	            Set recEvent =new HashSet();
 	            RecurrCalEvent recurrEvent = new RecurrCalEvent();
 	            recurrEvent.setCalendar(calendar);

@@ -27,11 +27,10 @@
 			<list-index column="categories_index"/>
 			<many-to-many column="used_category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
 		</list>
-		<list name="usedByCategories" table="AMP_CATEGORIES_USED" inverse="true" lazy="true">
+		<set name="usedByCategories" table="AMP_CATEGORIES_USED" inverse="true" lazy="true">
 			<key column="used_category_id"/>
-			<list-index column="used_categories_index"/>
 			<many-to-many column="category_id" class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" />
-		</list>
+		</set>
 		
 	</class>
 </hibernate-mapping>

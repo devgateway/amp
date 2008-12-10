@@ -1,16 +1,12 @@
-<% labeled_form_for @project do |f| %>
-	<% Time.now.year.upto(Time.now.year+Project::FORECAST_RANGE) do |y| %>
-		<% f.field_set lc(:forecasts_title, :year => y) do %>
-			<% f.fields_for_associated @project.funding_forecasts.find_or_initialize_by_year(y) do |fa| -%>
-				<%= fa.hidden_field :year, y %>
-				<li class="fifty"><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
-				<li class="fifty"><%= fa.text_field :payments, :value => fa.object.payments %></li>
-			
-				<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
-				<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
-			<% end %>
+<% Time.now.year.upto(Time.now.year+Project::FORECAST_RANGE) do |y| %>
+	<% f.field_set lc(:forecasts_title, :year => y) do %>
+		<% f.fields_for_associated @project.funding_forecasts.find_or_initialize_by_year(y) do |fa| -%>
+			<%= fa.hidden_field :year, y %>
+			<li class="fifty"><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
+			<li class="fifty"><%= fa.text_field :payments, :value => fa.object.payments %></li>
+		
+			<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+			<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
 		<% end %>
 	<% end %>
-	
-	<%= render :partial => "control_buttons" %>
 <% end %>

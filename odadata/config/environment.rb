@@ -42,6 +42,9 @@ Rails::Initializer.run do |config|
     :session_key => '_odanic_session',
     :secret      => 'f10a3fe93e37a5f408382a00be1cba5a7b9fce00389a17b23a8831fccfcfc30c746833bb6be5f32586a2d2481ba99ee66e82164bc8e027bc7a96074ac3ca2132'
   }
+  
+  # Store sessions in the database because the default cookie store cannot handle sessions >4K
+  # config.action_controller.session_store = :active_record_store
 
   # Use SQL instead of Active Record's schema dumper when creating the test database.
   # This is necessary if your schema can't be completely dumped by the schema dumper,

@@ -1,16 +1,11 @@
-<% labeled_form_for @project do |f| %>
-	
-		<fieldset class="mdg">
-			<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
-				<h3><%= ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></h3>
-			
-				<ol>
-					<% mdg.targets.ordered.each do |t| %>
-						<li class="checkbox"><%= f.habtm_check_box :target_ids, { :label => t.name, :label_class => 'fluid' }, t.id %></li>
-					<% end %>
-				</ol>
+<fieldset class="mdg">
+	<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
+		<h3><%= ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></h3>
+		
+		<ol>
+			<% mdg.targets.ordered.each do |t| %>
+				<li class="checkbox"><%= f.habtm_check_box :target_ids, { :label => t.name, :label_class => 'fluid' }, t.id %></li>
 			<% end %>
-		</fieldset>
-	
-	<%= render :partial => "control_buttons" %>
-<% end %>
+		</ol>
+	<% end %>
+</fieldset>

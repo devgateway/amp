@@ -144,5 +144,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jboss-remoting.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jnp-client.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jboss/jta-1.1.jar"/>
+	<classpathentry kind="var" path="JBOSS-LIB/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

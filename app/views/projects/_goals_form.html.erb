@@ -1,6 +1,6 @@
 <fieldset class="mdg">
 	<% Mdg.ordered.all(:include => :targets).each do |mdg| %>
-		<h3><%= ll(:mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></h3>
+		<h3><%= ll(:activerecord, :attributes, :mdg, :verbose_caption, :number => mdg.id, :name => mdg.name) %></h3>
 		
 		<ol>
 			<% mdg.targets.ordered.each do |t| %>

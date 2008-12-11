@@ -109,7 +109,11 @@ class Project < ActiveRecord::Base
   # Accessors    
   def historic_funding_attributes=(attribs)
     ActiveSupport::Deprecation.warn("This way of accessing attributes is deprecated, but Rails currently lacks an alternative!")
-    HistoricFunding.find_or_initialize_by_project_id(self.id).update_attributes(attribs)
+    if new_record?
+      build_historic_funding(attribs)
+    else
+      historic_funding.update_attributes(attribs)
+    end
   end    
       
       

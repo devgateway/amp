@@ -106,6 +106,29 @@ en:
     step_back: Go back one step
     step_forward: Continue with next step
     
+    add_implementing_agency: Add another Implementing Agency
+    add_contracted_agency: Add another Contracted Agency
+    add_province: Add another province
+    zero_provinces_warning: Please select at least one province!
+    add_cofunding_donor: Add another Donor
+    cofunding_title: Co-Funding Donors and Amounts
+    historic_funding: Historic Funding (up to the end of {{year}})
+    funding_title: Finances {{year}}
+    forecasts_title: Funding Forecast {{year}}
+    geo_usage: |
+      Please select the focal regions of this project.<br />
+      If you do not select any, it will be considered a national project.
+    
+    fields_missing: Some required fields are missing! Please check the highlighted tabs.
+    successfully_created: Successfully added project <i>{{project}}</i>. Please do not forget to publish once you verified the input.
+    
+    stages:
+      profile_information: Profile Information
+      sector_agencies: Sector / Agencies
+      goals: MDGs
+      location_funding: Location / Funding
+      funding_forecast: Funding Forecasts
+      
     index:
       title: List <i>{{status}}</i> Projects
       empty: Please add your projects.
@@ -122,18 +145,11 @@ en:
       
     new:
       title: Add New Project
+      submit: Save
       
     edit:
       title: Edit Project "{{project}}"
-      add_implementing_agency: Add another Implementing Agency
-      add_contracted_agency: Add another Contracted Agency
-      add_province: Add another province
-      zero_provinces_warning: Please select at least one province!
-      add_cofunding_donor: Add another Donor
-      cofunding_title: Co-Funding Donors and Amounts
-      historic_funding: Historic Funding (up to the end of {{year}})
-      funding_title: Finances {{year}}
-      forecasts_title: Funding Forecast {{year}}
+      submit: Save
       
   country_strategies:
     index:

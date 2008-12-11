@@ -87,7 +87,6 @@ es:
         donor: Donante de co-financiamiento
         amount: Cantidad de financiamiento
         currency: Moneda
-        # TODO: This was just a guess ;-)
         in: en 
         
       historic_funding:

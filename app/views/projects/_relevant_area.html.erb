@@ -1,5 +1,5 @@
 <li class="geo_information fifty">
-	<%= select_tag "project[province_ids][]", '<option value="">National</option>' +
+	<%= select_tag "project[province_ids][]", %{<option value="">#{t('options.national')}</option>} +
 		options_from_collection_for_select(Province.ordered, :id, :name, (relevant_area.id rescue nil)), 
 		:class => "dynamic_select parent large"
 	 %><br />
@@ -13,7 +13,7 @@
 		if ($('.geo_information').length > 1) {
 			$(this).parents('.geo_information').remove();
 		} else {
-			alert("#{lc(:zero_provinces_warning)}");
+			alert("#{t('projects.zero_provinces_warning')}");
 		}
 		END_JS
 	%>

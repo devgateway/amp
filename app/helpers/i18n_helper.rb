@@ -11,8 +11,8 @@ module I18nHelper
     end
   end
   
-  def lc(*args)
-    scope = params[:controller].split('/') << params[:action]
+  def lc(*args)      
+    scope = params[:controller].split('/') << normalize_action(params[:action])
     ll(*(scope + args))
   end
   
@@ -32,6 +32,17 @@ module I18nHelper
       option[to_translate] = ll(:options, key)
       
       option
+    end
+  end
+  
+protected
+  # This returns the get instead of the post actions in case an error occurs in the forms
+  # so that we don't need to have translation twice.
+  def normalize_action(action)
+    case action
+    when 'create' then 'new'
+    when 'update' then 'edit'
+    else action
     end
   end
 end

@@ -5,6 +5,7 @@ es:
       please_wait: "¡Por favor espere hasta el próximo ciclo o ponerse en contaco con el Punto Focal Maestro!"
       redirect: Usted va a ser redirigido en pocos segundos.
   
+  
   users:
     index:
       title: Cuentas de Ingreso
@@ -106,6 +107,29 @@ es:
     step_back: Dar un paso anterior
     step_forward: Dar un paso adelante
     
+    add_implementing_agency: Añadir otra agencia implementadora
+    add_contracted_agency: Añadir otra agencia contratada
+    add_province: Añadir otra provincia
+    zero_provinces_warning: "¡Por favor seleccione por lo menos una provincia!"
+    add_cofunding_donor: Añadir otro Donante
+    cofunding_title: Donantes co-financiandores y montos
+    historic_funding: Financiamiento Histórico (hasta el final de {{year}})
+    funding_title: Finanzas {{year}}
+    forecasts_title: Proyección de Financiamiento {{year}}
+    geo_usage: |
+      Please select the focal regions of this project.<br />
+      If you don't select any, it will be considered a national project.
+      
+    fields_missing: Some required fields are missing! Please check the highlighted tabs.
+    successfully_created: Successfully added project <i>{{project}}</i>. Please do not forget to publish once you verified the input.
+      
+    stages:
+      profile_information: Profile Information
+      sector_agencies: Sector / Agencies
+      goals: MDGs
+      location_funding: Location / Funding
+      funding_forecast: Funding Forecasts
+      
     index:
       title: Listar Proyectos que son <i>{{status}}</i>
       empty: Por favor agrega sus proyectos.
@@ -122,18 +146,11 @@ es:
       
     new:
       title: Añadir Nuevo Proyecto
+      submit: Save
       
     edit:
       title: Editar Proyecto "{{project}}"
-      add_implementing_agency: Añadir otra agencia implementadora
-      add_contracted_agency: Añadir otra agencia contratada
-      add_province: Añadir otra provincia
-      zero_provinces_warning: "¡Por favor seleccione por lo menos una provincia!"
-      add_cofunding_donor: Añadir otro Donante
-      cofunding_title: Donantes co-financiandores y montos
-      historic_funding: Financiamiento Histórico (hasta el final de {{year}})
-      funding_title: Finanzas {{year}}
-      forecasts_title: Proyección de Financiamiento {{year}}
+      submit: Save
       
   country_strategies:
     index:

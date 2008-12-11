@@ -2,6 +2,8 @@
 
 class Funding < ActiveRecord::Base
   belongs_to :project
+  
+  before_create :set_currency
     
   named_scope :ordered, :order => "project_id ASC, year ASC" 
     
@@ -72,7 +74,7 @@ class Funding < ActiveRecord::Base
     
 protected
   # Hook to set currency for newly created objects
-  def after_initialize
+  def set_currency
     self.currency ||= self.project.donor.currency
   end
 end

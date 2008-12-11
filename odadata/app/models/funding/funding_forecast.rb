@@ -1,6 +1,5 @@
 class FundingForecast < ActiveRecord::Base
   belongs_to :project
-  before_create :set_currency
   
   named_scope :ordered, :order => "project_id ASC, year ASC" 
   
@@ -43,7 +42,8 @@ class FundingForecast < ActiveRecord::Base
     :year => lambda { |f| f.year }, :validations => false
     
 protected
-  def set_currency
+  # Hook to set currency for newly created objects
+  def after_initialize
     self.currency ||= self.project.donor.currency
   end
 end

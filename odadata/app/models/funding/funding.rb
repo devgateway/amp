@@ -2,8 +2,7 @@
 
 class Funding < ActiveRecord::Base
   belongs_to :project
-  before_create :set_currency
-  
+    
   named_scope :ordered, :order => "project_id ASC, year ASC" 
     
   # Returns total payments for a requested year
@@ -13,7 +12,7 @@ class Funding < ActiveRecord::Base
     quarters = ((year != Time.now.year) || (Time.now.quarter > 1)) ?
       (2..5) : (2..Time.now.quarter)
       
-    quarters.inject(0) { |sum, q| self.send("payments_q#{q-1}") + sum }.to_currency(currency, year)
+    quarters.inject(0) { |sum, q| self.send("payments_q#{q-1}") + sum }.to_currency(self.currency, self.year)
   end
   
   def has_data?
@@ -65,14 +64,15 @@ class Funding < ActiveRecord::Base
   end
    
   # Formatted output for all currency fields
-  # TODO: This turned out to be unnecessary and should be replaced by the existing composed_of
+  # TODO: This turned out to be unnecessary and should be replaced by the existing attribute_decorator
   # along the next data model refactoring. http://opensoul.org/2006/11/16/making-code-composed_of-code-more-useful
   currency_columns :payments_q1, :payments_q2, :payments_q3, :payments_q4, :commitments,
     :currency => lambda { |f| f.currency }, 
     :year => lambda { |f| f.year }, :validations => false
     
 protected
-  def set_currency
+  # Hook to set currency for newly created objects
+  def after_initialize
     self.currency ||= self.project.donor.currency
   end
 end

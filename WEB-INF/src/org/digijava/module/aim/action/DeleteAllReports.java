@@ -57,7 +57,7 @@ public class DeleteAllReports extends Action {
 						logger.info("NOPE!! team Lead!");
 					}
 				}
-				 logger.info(repForm.getReportId());
+				
 				 String a = request.getParameter("rid");
 				 logger.info(" this is rid...."+request.getParameter("rid")+" thisisa...."+a);
 				 Long id = new Long(a);

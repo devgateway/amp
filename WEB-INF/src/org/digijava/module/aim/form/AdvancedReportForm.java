@@ -1596,6 +1596,74 @@ private int yrDiff;
 	public void setBlankReportName(Boolean blankReportName) {
 		this.blankReportName = blankReportName;
 	}
+
+	private String statementPositionOptions;
+	private String logoPositionOptions;
+	private String statementOptions;
+	private String dateOptions;
+	private String logoOptions;
+	
+	
+	/**
+	 * @return the statementPositionOptions
+	 */
+	public String getStatementPositionOptions() {
+		return this.statementPositionOptions;
+	}
+	/**
+	 * @param statementPositionOptions the statementPositionOptions to set
+	 */
+	public void setStatementPositionOptions(String statementPositionOptions) {
+		this.statementPositionOptions = statementPositionOptions;
+	}
+	/**
+	 * @return the logoPositionOptions
+	 */
+	public String getLogoPositionOptions() {
+		return this.logoPositionOptions;
+	}
+	/**
+	 * @param logoPositionOptions the logoPositionOptions to set
+	 */
+	public void setLogoPositionOptions(String logoPositionOptions) {
+		this.logoPositionOptions = logoPositionOptions;
+	}
+	/**
+	 * @return the statementOptions
+	 */
+	public String getStatementOptions() {
+		return this.statementOptions;
+	}
+	/**
+	 * @param statementOptions the statementOptions to set
+	 */
+	public void setStatementOptions(String statementOptions) {
+		this.statementOptions = statementOptions;
+	}
+	/**
+	 * @return the dateOptions
+	 */
+	public String getDateOptions() {
+		return this.dateOptions;
+	}
+	/**
+	 * @param dateOptions the dateOptions to set
+	 */
+	public void setDateOptions(String dateOptions) {
+		this.dateOptions = dateOptions;
+	}
+	/**
+	 * @return the logoOptions
+	 */
+	public String getLogoOptions() {
+		return this.logoOptions;
+	}
+	/**
+	 * @param logoOptions the logoOptions to set
+	 */
+	public void setLogoOptions(String logoOptions) {
+		this.logoOptions = logoOptions;
+	}
 	
 	
 } //		End of Class

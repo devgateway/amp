@@ -521,6 +521,41 @@ public class FeaturesUtil {
 		return col;
 	}
 
+
+	public static String getCurrentCountryName() {
+		Session session = null;
+		String qryStr = null;
+		String countryName = null;
+		Query qry = null;
+
+		try {
+			String defaultCountry = getGlobalSettingValue("Default Country");
+			session = PersistenceManager.getSession();
+			qryStr = "select c.countryId, c.countryName from " + Country.class.getName() +
+			" c where c.iso = '"+defaultCountry+"'";
+			qry = session.createQuery(qryStr);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				Object obj[] = (Object[]) itr.next();
+				countryName = (String) obj[1];
+			}
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return countryName;
+	}
+
 	public static Collection<Country> getAllDgCountries() {
 		Session session = null;
 		Collection<Country> col = new ArrayList();

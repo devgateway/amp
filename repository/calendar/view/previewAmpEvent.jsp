@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 
 <digi:instance property="calendarEventForm"/>
 
@@ -119,7 +120,7 @@ function deleteEvent(){
 			              </td>
 			             </tr>
 			             <tr height="3px"><td colspan="2"></td></tr>
-			            <field:display name="Event Type" feature="Calendar">
+			            <feature:display name="Event Type" module="Calendar">
 			            	<tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 				                <digi:trn key="calendar:eventsType">Event type</digi:trn>
@@ -130,8 +131,8 @@ function deleteEvent(){
 				              </td>
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>
-			            </field:display>			            
-			            <field:display name="Donors" feature="Calendar">
+			            </feature:display>			            
+			            <feature:display name="Donors" module="Calendar">
 			            	<tr>
 				              <td style="text-align: right;font-family: Tahoma;font-size: 12px; font-weight:bold;"nowrap="nowrap">
 				                <digi:trn key="cal:organizations">Organizations</digi:trn>
@@ -143,7 +144,7 @@ function deleteEvent(){
 				              </td>
 				            </tr>
 				            <tr height="3px"><td colspan="2"></td></tr>
-			            </field:display>			            
+			            </feature:display>			            
 			            <tr>
 			              <td style="text-align: right;font-family: Tahoma;font-size: 12px;font-weight:bold;"nowrap="nowrap">
 			                <digi:trn key="calendar:StDate">Start date</digi:trn>

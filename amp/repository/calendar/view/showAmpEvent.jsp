@@ -447,14 +447,14 @@ function recurEvent(){
 				                    		</td>
 				                    		<td rowspan="2" valign="top">
 				                    			<table cellSpacing="1" cellPadding="1">
-				                    				<field:display name="Add Donor Button" feature="Calendar">
+				                    				<field:display name="Add Donor Button" feature="Donors">
 				                    					<tr>
 															<td>
 																<aim:addOrganizationButton refreshParentDocument="false" collection="organizations" form="${calendarEventForm}"  callBackFunction="submitForm();" styleClass="myStyleClass"><digi:trn key="btn:addOrganizations" >Add Organizations</digi:trn></aim:addOrganizationButton> 	 	                                                                                                                    
 															</td>
 														</tr>
 				                    				</field:display>
-													<field:display name="Remove Donor Button" feature="Calendar">
+													<field:display name="Remove Donor Button" feature="Donors">
 														<tr>
 															<td>
 																<html:button  property="submitButton" onclick="return removeSelOrgs()" styleClass="myStyleClass">

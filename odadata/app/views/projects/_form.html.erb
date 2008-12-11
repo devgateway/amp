@@ -26,22 +26,24 @@
 <% labeled_form_for @project do |form| %>
 <div id="tab_container" style="float:left;width:750px;">
 	<ul id="tabs" class="ui-tabs-nav">
-		<li class="ui-tabs-nav-li"><a href="#profile_information"><span><%= ll(:project, :stages, :profile_information) %></span></a></li>
-		<li class="ui-tabs-nav-li"><a href="#sector_agencies"><span><%= ll(:project, :stages, :sector_agencies) %></a></span></li>
-		<li class="ui-tabs-nav-li"><a href="#goals"><span><%= ll(:project, :stages, :goals) %></span></a></li>
-		<li class="ui-tabs-nav-li"><a href="#location_funding"><span><%= ll(:project, :stages, :location_funding) %></a></span></li>
-		<li class="ui-tabs-nav-li"><a href="#funding_forecast"><span><%= ll(:project, :stages, :funding_forecast) %></a></span></li>
+		<% I18n.with_options :scope => [:projects, :stages] do |loc| %>
+			<li class="ui-tabs-nav-li"><a href="#profile_information"><span><%= loc.t('profile_information') %></span></a></li>
+			<li class="ui-tabs-nav-li"><a href="#sector_agencies"><span><%= loc.t('sector_agencies') %></a></span></li>
+			<li class="ui-tabs-nav-li"><a href="#goals"><span><%= loc.t('goals') %></span></a></li>
+			<li class="ui-tabs-nav-li"><a href="#location_funding"><span><%= loc.t('location_funding') %></a></span></li>
+			<li class="ui-tabs-nav-li"><a href="#funding_forecast"><span><%= loc.t('funding_forecast') %></a></span></li>
+		<% end %>
 	</ul>
 	
 	<div id="profile_information" class="stage">
-		<%= error_messages_for :project, 
+		<%# error_messages_for :project, 
 				:attributes => [:donor_project_number, :title, :description, :prj_status] %>
 		
 		<%= render :partial => "profile_information_form", :locals => { :f => form } %>
 	</div>
 	
 	<div id="sector_agencies" class="stage">
-		<%= error_messages_for :project, 
+		<%# error_messages_for :project, 
 				:attributes => [:national_regional, :type_of_implementation, :type_of_aid, :grant_loan, 
 								:officer_responsible_name, :dac_sector_id, :crs_sector_id] %>
 		
@@ -49,17 +51,17 @@
 	</div>
 	
 	<div id="goals" class="stage">
-		<%= error_messages_for :project, :attributes => [] %>
+		<%# error_messages_for :project, :attributes => [] %>
 		<%= render :partial => "goals_form", :locals => { :f => form } %>
 	</div>
 	
 	<div id="location_funding" class="stage">
-		<%= error_messages_for :project, :attributes => [] %>
+		<%# error_messages_for :project, :attributes => [] %>
 		<%= render :partial => "location_funding_form", :locals => { :f => form } %>
 	</div>
 	
 	<div id="funding_forecast" class="stage">
-		<%= error_messages_for :project, :attributes => [] %>
+		<%# error_messages_for :project, :attributes => [] %>
 		<%= render :partial => "funding_forecast_form", :locals => { :f => form } %>
 	</div>
     

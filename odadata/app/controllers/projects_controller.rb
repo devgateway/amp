@@ -32,9 +32,10 @@ class ProjectsController < ApplicationController
     @project = current_donor.projects.build(params[:project])
     
     if @project.save
-      flash[:notice] = "Successfully added project <i>#{@project.title}</i>. Please do not forget to publish once you verified the input."
+      flash[:notice] = I18n.t('projects.successfully_created', :project => @project.donor_project_number).to_s
       redirect_to projects_path
     else
+      flash[:error] = I18n.t('projects.fields_missing').to_s
       render :action => 'new'
     end
   end
@@ -49,6 +50,7 @@ class ProjectsController < ApplicationController
     if @project.update_attributes(params[:project])
       redirect_to projects_path(:status => @project.data_status)
     else
+      flash[:error] = I18n.t('projects.fields_missing').to_s
       render :action => 'edit'
     end
   end

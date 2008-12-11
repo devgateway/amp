@@ -23,11 +23,13 @@ class String
   
   # Converts self to a HTML anchor attribute
   def to_link(options = {})
+    ActiveSupport::Deprecation.warn("Use autolink helper instead!")
     link_to(self, self.to_url, options)
   end
   
   # Appends http:// to the string if neccessary
   def to_url
+    ActiveSupport::Deprecation.warn("Use autolink helper instead!")
     if self.include?("@")
       "mailto:" + self
     elsif self =~ /^(http:\/)?\//
@@ -54,7 +56,7 @@ module Enumerable
   def group_by
     inject({}) do |groups, element|
       res = yield(element)
-      res.to_a.each do |key|
+      [res].flatten.each do |key|
         (groups[key] ||= []) << element
       end
       

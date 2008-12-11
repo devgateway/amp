@@ -18,7 +18,7 @@
 			<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
 		</div>
 		
-		<%= button_to_function lc(:add_implementing_agency) do |page|  
+		<%= button_to_function t('projects.add_implementing_agency') do |page|  
 				page.insert_html :bottom, :implementing_agencies, 
 					:partial => 'implementing_agency', :object => ImplementingAgency.new
 			end %>
@@ -30,7 +30,7 @@
 			<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
 		</div>
 		
-		<%= button_to_function lc(:add_contracted_agency) do |page| 
+		<%= button_to_function t('projects.add_contracted_agency') do |page| 
 			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
 		end %>
 	</li>
@@ -54,7 +54,7 @@
 	
 <% end %>
 
-<% f.field_set ll(:project, :markers) do %>	
+<% f.field_set Project.human_attribute_name('markers') do %>	
 	<li class="thirty"><%= f.select :biodiversity_marker, Project::MARKER_OPTIONS, :translate => true %></li>
 	<li class="thirty"><%= f.select :climate_change_marker, Project::MARKER_OPTIONS, :translate => true %></li>
 	<li class="thirty"><%= f.select :desertification_marker, Project::MARKER_OPTIONS, :translate => true %></li>
@@ -64,7 +64,7 @@
 	<li class="thirty" style="height: 45px"></li>
 <% end %>
 
-<% f.field_set ll(:project, :officer_responsible) do %>
+<% f.field_set Project.human_attribute_name('officer_responsible') do %>
 	<li><%= f.text_field :officer_responsible_name, :required => true %></li>
 	<li><%= f.text_field :officer_responsible_phone %></li>
 	<li><%= f.text_field :officer_responsible_email %></li>

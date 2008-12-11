@@ -1,6 +1,8 @@
 class HistoricFunding < ActiveRecord::Base
   belongs_to :project
   
+  before_create :set_currency
+  
   def has_data?
     [:payments, :commitments].any? { |c| self.send(c).to_i > 0 }
   end
@@ -12,7 +14,7 @@ class HistoricFunding < ActiveRecord::Base
     
 protected
   # Hook to set currency for newly created objects
-  def after_initialize
+  def set_currency
     self.currency ||= self.project.donor.currency
   end
 end

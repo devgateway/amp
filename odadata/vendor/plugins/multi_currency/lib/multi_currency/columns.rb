@@ -17,7 +17,7 @@ module MultiCurrency
             currency = options[:currency].respond_to?(:call) ? options[:currency].call(self) : options[:currency]
             year = options[:year].respond_to?(:call) ? options[:year].call(self) : options[:year]
             
-            ConvertibleCurrency.new(read_attribute(col), currency, year)
+            ConvertibleCurrency.new(read_attribute(col), (currency || Prefs.default_currency), year)
           end
           
           # Attribute setter with currency parsing

@@ -1,9 +1,9 @@
 <% js_behavior :related_selects %>
 
 <% f.field_set do %>
-	<p>TODO: Instructions on how to use this</p>
+	<p><%=t 'projects.geo_usage' %></p>
 
-	<%= button_to_function lc(:add_province) do |page| 
+	<%= button_to_function t('projects.add_province') do |page| 
 			page.insert_html :bottom, :geo_information, :partial => 'relevant_area'
 			page << "initDynamicSelects();"
 	end %>
@@ -13,15 +13,15 @@
 	</div>	
 <% end %>
 
-<% f.field_set lc(:cofunding_title) do %>
+<% f.field_set t('projects.cofunding_title') do %>
 	<div id="cofundings">
 		<%= f.render_associated_form(@project.cofundings, :new => 1) %>
 	</div>
 	
-	<%= f.add_associated_link(lc(:add_cofunding_donor), @project.cofundings.build) %>
+	<%= f.add_associated_link(t('projects.add_cofunding_donor'), @project.cofundings.build) %>
 <% end %>
 	
-<% f.field_set lc(:historic_funding, :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
+<% f.field_set t('projects.historic_funding', :year => Project::FIRST_YEAR_OF_RELEVANCE-1) do %>
 	<% funding = HistoricFunding.find_or_initialize_by_project_id(@project.id) %>
 	<% f.fields_for "project[historic_funding_attributes]", funding do |fh| %>
 		<li class="fifty"><%= fh.text_field :commitments, :value => fh.object.commitments %></li>
@@ -30,7 +30,7 @@
 <% end %>
 
 <% Project::FIRST_YEAR_OF_RELEVANCE.upto(Time.now.year) do |y| %>
-	<% f.field_set lc(:funding_title, :year => y) do %>
+	<% f.field_set t('projects.funding_title', :year => y) do %>
 		<% f.fields_for_associated @project.fundings.find_or_initialize_by_year(y) do |fa| -%>
 			<%= fa.hidden_field :year, y %>
 			<li><%= fa.text_field :commitments, :value => fa.object.commitments %></li>

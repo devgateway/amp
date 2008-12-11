@@ -2,9 +2,9 @@
 	<li class="fifty"><%= f.collection_select :donor_id, Donor.ordered, :id, :name, {:prompt => true} %></li>
 	<li class="fifty">
 		<%= f.text_field :amount, :size => 20, :value => f.object.amount.to_s(false) %>
-		<%= f.label :currency, ll(:cofunding, :in), :class => "fluid" %>
+		<%= f.label :currency, Cofunding.human_attribute_name('in'), :class => "fluid" %>
 		<%= f.select :currency, ExchangeRate.available_currencies_for_select, :label => false %>
 	</li>
 	
-	<%= f.remove_link "remove" %>
+	<%= f.remove_link t('actions.delete') %>
 </div>

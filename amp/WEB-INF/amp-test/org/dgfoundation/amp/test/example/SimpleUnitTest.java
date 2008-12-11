@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.harvest.DBUtil;
-import org.dgfoundation.amp.test.helper.Configuration;
+import org.dgfoundation.amp.test.util.Configuration;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Activity;

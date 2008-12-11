@@ -639,15 +639,17 @@ public class HelpActions extends DispatchAction {
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
         Unmarshaller m = jc.createUnmarshaller();
         Helps help_in;
-                             System.out.println("inputStream"+inputStream);
+                             System.out.println("inputStream:"+inputStream);
 
             help_in = (Helps) m.unmarshal(inputStream);
-			if (help_in.getHelp() != null) {
+            System.out.println("help_in:"+help_in);
+            if (help_in.getHelp() != null) {
 				Iterator it = help_in.getHelp().iterator();
 				while(it.hasNext())
 				{
 					HelpType element  = (HelpType) it.next();
-					HelpUtil.updateNewEditHelpData(element,storeMap);
+                    System.out.println("element:"+element);
+                    HelpUtil.updateNewEditHelpData(element,storeMap);
 				}
 			}
 			helpForm.getTopicTree().clear();

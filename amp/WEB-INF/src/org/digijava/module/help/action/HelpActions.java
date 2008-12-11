@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.TreeSet;
 import java.util.Vector;
-import java.util.logging.Logger;
+
 
 
 import javax.jcr.Session;
@@ -72,7 +72,7 @@ import org.apache.lucene.store.Directory;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-
+import org.apache.log4j.Logger;
 import sun.misc.Regexp;
 
 
@@ -81,6 +81,7 @@ import sun.misc.Regexp;
 
 
 public class HelpActions extends DispatchAction {
+    private static Logger logger = Logger.getLogger("HelpActions");
 	
 //	@Override
 //	protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
@@ -628,15 +629,19 @@ public class HelpActions extends DispatchAction {
 			
 		FormFile myFile = helpForm.getFileUploaded();
         byte[] fileData    = myFile.getFileData();
+
+
+
+        System.out.println("fileData"+fileData);
         InputStream inputStream= new ByteArrayInputStream(fileData);
         
-        
+
         JAXBContext jc = JAXBContext.newInstance("org.digijava.module.help.jaxb");
         Unmarshaller m = jc.createUnmarshaller();
         Helps help_in;
-    
-        
-			help_in = (Helps) m.unmarshal(inputStream);
+                             System.out.println("inputStream"+inputStream);
+
+            help_in = (Helps) m.unmarshal(inputStream);
 			if (help_in.getHelp() != null) {
 				Iterator it = help_in.getHelp().iterator();
 				while(it.hasNext())

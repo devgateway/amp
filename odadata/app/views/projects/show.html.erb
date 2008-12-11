@@ -14,7 +14,7 @@
 	<dd><%= @project.donor_agency.name %></dd>
 	
 	<dt><%= @project.class.human_attribute_name('country_strategy') %></dt>
-	<dd><%= @project.country_strategy.andand.title || t('options.country_strategy_unavailable') %></dd>
+	<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>
 	
 	<dt><%= lc(:project_information) %></dt>
 	<dd>
@@ -55,6 +55,68 @@
 		</dl>
 		
 		<table>
+			<tr><th colspan="4"><% lc(:historic) %></th></tr>
+			<tr>
+				<th><%= HistoricFunding.human_attribute_name('payments') %></th>
+				<th><%= HistoricFunding.human_attribute_name('commitments') %></th>
+			</tr>
+			<tr>
+				<td><%= @project.historic_funding.payments %></td>
+				<td><%= @project.historic_funding.commitments %></td>
+			</tr>
+			
+			<tr><th colspan="4"><% lc(:totals) %></th></tr>
+			<tr>
+				<th><%= Funding.human_attribute_name('payments') %></th>
+				<th><%= Funding.human_attribute_name('commitments') %></th>
+			</tr>
+			<tr>
+				<td><%= @project.fundings.total_payments %></td>
+				<td><%= @project.fundings.total_commitments %></td>
+			</tr>
+			
+			<% @project.fundings.ordered.select(&:has_data?).each do |f| %>
+				<tr><th colspan="4"><% lc(:funding, :year => f.year) %></th></tr>
+				<tr>
+					<th><%= Funding.human_attribute_name('commitments') %></th>
+					<th><%= Funding.human_attribute_name('payments') %></th>
+					<th><%= Funding.human_attribute_name('on_budget') %></th>
+					<th><%= Funding.human_attribute_name('on_treasury') %></th>
+				</tr>
+				<tr>
+					<td class="currency right"><%= f.commitments %></td>
+					<td class="currency right"><%= f.payments %></td>
+					<td class="currency"><%= option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %>
+					<td class="currency"><%= option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %>
+				</tr>
+				
+				<tr>
+					<th><%= Funding.human_attribute_name('payments_q1') %></th>
+					<th><%= Funding.human_attribute_name('payments_q2') %></th>
+					<th><%= Funding.human_attribute_name('payments_q3') %></th>
+					<th><%= Funding.human_attribute_name('payments_q4') %></th>
+				</tr>
+				<tr>
+					<td class="currency right"><%= f.payments_q1 %></td>
+					<td class="currency right"><%= f.payments_q2 %></td>
+					<td class="currency right"><%= f.payments_q3 %></td>
+					<td class="currency right"><%= f.payments_q4 %></td>
+				</tr>
+			<% end %>
+			
+			<% @project.funding_forecasts.ordered.select(&:has_data?).each do |f| %>
+				<tr><th colspan="4"><% lc(:funding_forecast, :year => f.year) %></th></tr>
+				<tr>
+					<th><%= FundingForecast.human_attribute_name('payments') %></th>
+					<th><%= FundingForecast.human_attribute_name('commitments') %></th>
+					<th><%= FundingForecast.human_attribute_name('on_budget') %></th>
+					<th><%= FundingForecast.human_attribute_name('on_treasury') %></th>
+				</tr>
+				<tr>
+					<td><%= f.payments %></td>
+					<td><%= f.commitments %></td>
+				</tr>
+			<% end %>
 		</table>
 	</dd>
 	

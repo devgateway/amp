@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/aim" prefix="aim" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ page import="org.digijava.module.aim.uicomponents.form.selectOrganizationComponentForm" %>
 <jsp:include page="/repository/calendar/view/scripts/calendarEventScript.jsp"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="script/jquery.js"/>"></script>
@@ -431,7 +432,7 @@ function recurEvent(){
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
 			                    			<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
 			                    		</td>
-			                    		<field:display name="Donors" feature="Calendar">
+			                    		<feature:display name="Donors" module="Calendar">
 			                    			<td rowspan="2" style="text-align: center;">
 				                    			<digi:trn key="cal:organizations">Organizations</digi:trn>
 				                    		</td>
@@ -464,7 +465,7 @@ function recurEvent(){
 													</field:display>													
 												</table>	
 				                    		</td>
-			                    		</field:display>			                    		
+			                    		</feature:display>			                    		
 			                    	</tr>
 			                    	
 			                    	<tr>
@@ -482,7 +483,7 @@ function recurEvent(){
 			                    		</td>			                    		
 			                    	</tr>
 			                    	<tr style="height:25px">
-			                    		<field:display name="Event Type" feature="Calendar">
+			                    		<feature:display name="Event Type" module="Calendar">
 			                    			<td valign="top" align="right" nowrap="nowrap" rowspan="1">
 				                    			<digi:trn key="calendar:eventsType">Event type</digi:trn>
 				                    		</td>
@@ -495,7 +496,7 @@ function recurEvent(){
 				                                 	</c:if>
 				                                 </html:select>
 				                    		</td>
-			                    		</field:display>			                    		
+			                    		</feature:display>			                    		
 			                    		<td rowspan="4" style="text-align: center" align="right" nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description">Description</digi:trn>
 			                    		</td>
@@ -830,17 +831,17 @@ function recurEvent(){
 			                    	</tr>
 			                    	<tr>
 			                          <td colspan="5" style="text-align:center;">
-			                          	<field:display name="Preview Event button" feature="Calendar">
+			                          	<feature:display name="Preview Event button" module="Calendar">
 			                          		<input type="submit" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 			                            	&nbsp;
-			                          	</field:display>                           
-			                            <field:display name="Save and Send button" feature="Calendar">
+			                          	</feature:display>                           
+			                            <feature:display name="Save and Send button" module="Calendar">
 			                            	<input type="submit" style="width: 110px" onclick="return sendEvent();" value="<digi:trn key="calendar:sendSaveBtn">Save and Send</digi:trn>" />
 			                            	&nbsp;
-			                            </field:display>
-			                            <field:display name="Recurring Event Button" feature="Calendar">
+			                            </feature:display>
+			                            <feature:display name="Recurring Event Button" module="Calendar">
 			                            	<input type="button" style="width: 110px" onclick="showRecEvent();" value="<digi:trn key="calendar:recurrinEventBtn">Recurring Event</digi:trn>">
-			                            </field:display>
+			                            </feature:display>
 			                          </td>
 			                        </tr>
 			                    </table>

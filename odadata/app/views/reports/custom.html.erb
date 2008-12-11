@@ -39,8 +39,9 @@
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><%= lc(:fields) %></h3>
+			<h3><span style="float:left"><%= lc(:fields) %></span><span class="link" onclick="toggleAll('query_options')" id="query_options_toggle" selected="false">Select All</span></h3>
 			<input type="hidden" value="1" name="query_options[factsheet_link]" />
+            
 			<%= render :partial => "reports/query_options/query_option", :collection => Report.query_options %>
 		</ul>
 	</div>
@@ -50,19 +51,19 @@
 		
 		<div id="donor_province" class="container">
 			<ul class="checkbox_container">
-				<h3><%= ll(:terms, :donor) %></h3>
+				<h3><span style="float:left"><%= ll(:terms, :donor) %></span><span class="link" onclick="toggleAll('donors')" id="donors_toggle" selected="false">Select All</span></h3>
 				<li class="all"><%= check_box "donors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/donor", :collection => Donor.main.ordered.all %>
 			</ul>
 			
 			<ul class="checkbox_container">
-				<h3><%= ll(:terms, :region) %></h3>
+				<h3><span style="float:left"><%= ll(:terms, :region) %></span><span class="link" onclick="toggleAll('provinces')" id="provinces_toggle" selected="false">Select All</span></h3>
 				<li class="all"><%= check_box "provinces", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/province", :collection => Province.ordered.all %>
 			</ul>		
 			
 			<ul class="checkbox_container">
-				<h3><%= ll(:terms, :markers) %></h3>
+				<h3><span style="float:left"><%= ll(:terms, :markers) %></span><span class="link" onclick="toggleAll('donors')" id="donors_toggle" selected="false">Select All</span></h3>
 				<li class="all"><%= check_box "markers", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 				<%= render :partial => "reports/query_options/marker", :collection => translate_options(Project::AVAILABLE_MARKERS) %>
 				<li class="annotation"><%= lc(:markers_annotation) %></li>
@@ -71,13 +72,13 @@
 	
 		<div id="mdg_sector" class="container">
 			<ul class="checkbox_container">
-				<h3><%= ll(:terms, :mdg) %></h3>
+				<h3><span style="float:left"><%= ll(:terms, :mdg) %></span><span class="link" onclick="toggleAll('targets')" id="targets_toggle" selected="false">Select All</span></h3>
 				<li class="all"><%= check_box "targets", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/mdg", :collection => Mdg.ordered.all %>
 			</ul>
 			
 			<ul class="checkbox_container">
-				<h3><%= ll(:terms, :dac_sector) %></h3>
+				<h3><span style="float:left"><%= ll(:terms, :dac_sector) %></span><span class="link" onclick="toggleAll('crs_sectors')" id="crs_sectors_toggle" selected="false">Select All</span></h3>
 				<li class="all"><%= check_box "crs_sectors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			  <%= render :partial => "reports/query_options/sector", :collection => DacSector.ordered.all, :locals => { :shorten_to => 40 } %>
 			</ul>
@@ -88,37 +89,37 @@
 		<h2><%= lc(:other) %></h2>
 		
 		<ul class="checkbox_container">
-			<h3><%= ll(:reports, :grant_loan) %></h3>
+			<h3><span style="float:left"><%= ll(:reports, :grant_loan) %></span><span class="link" onclick="toggleAll('grant_loan')" id="grant_loan_toggle" selected="false">Select All</span></h3>
 			<li class="all"><%= check_box "grant_loan", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/grant_loan", :collection => translate_options(Project::GRANT_LOAN_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><%= ll(:reports, :of_budget) %></h3>
+			<h3><span style="float:left"><%= ll(:reports, :of_budget) %></span><span class="link" onclick="toggleAll('on_off_budget')" id="on_off_budget_toggle" selected="false">Select All</span></h3>
 			<li class="all"><%= check_box "on_off_budget", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/on_off_budget", :collection => translate_options(Project::ON_OFF_BUDGET_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><%= ll(:reports, :of_treasury) %></h3>
+			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :of_treasury) %></span><span class="link" onclick="toggleAll('on_off_treasury')" id="on_off_treasury_toggle" selected="false">Select All</span></h3>
 			<li class="all"><%= check_box "on_off_budget", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>	
 			<%= render :partial => "reports/query_options/on_off_treasury", :collection => translate_options(Project::ON_OFF_TREASURY_OPTIONS) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><%= ll(:reports, :toa) %></h3>
+			<h3><span style="float:left"><%= ll(:reports, :toa) %></span><span class="link" onclick="toggleAll('type_of_aid_id')" id="type_of_aid_id_toggle" selected="false">Select All</span></h3>
 			<li class="all"><%= check_box "type_of_aid_id", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
       		<%= render :partial => "reports/query_options/type_of_aid", :collection => TypeOfAid.all %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><%= ll(:reports, :cod) %></h3>
+			<h3 style="height:30px"><span style="float:left"><%= ll(:reports, :cod) %></span><span class="link" onclick="toggleAll('type_of_implementation')" id="type_of_implementation_toggle" selected="false">Select All</span></h3>
 			<li class="all"><%= check_box "type_of_implementation", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
 			<%= render :partial => "reports/query_options/type_of_implementation", :collection => translate_options(Project::IMPLEMENTATION_TYPES) %>
 		</ul>
 		
 		<ul class="checkbox_container">
-			<h3><%= ll(:reports, :status) %></h3>
+			<h3><span style="float:left"><%= ll(:reports, :status) %></span><span class="link" onclick="toggleAll('prj_status')" id="prj_status_toggle" selected="false">Select All</span></h3>
 			<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
 		</ul>
 		

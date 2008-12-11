@@ -1,142 +1,153 @@
-<%= currency_selector %>
+<% header lc(:title, :project => @project.donor_project_number) %>
 
-<% cache (:currency => params[:currency], :lang => I18n.locale) do %>
-<center>
-	<% odatab_for @project, :html => { :class => "admin" } do |r| %>
-		<%= r.title_row ll(:reports, :project_details) %>
-
-		<% r.labeled_row :donor, :glossary => true do %>
-			<%= @project.donor.name %>
-		<% end %>
-
-		<% r.labeled_row :donor_agency, :glossary => true do %>
-			<%= @project.donor_agency.name %>
-		<% end %>
-
-		<%= r.text_field :donor_project_number %>
-		
-		<%= r.text_field :oecd_number %>
-		
-		<%= r.text_field :recipient_country_budget_nr %>
-		
-		<%= r.text_field :title %>
-
-		<%= r.text_field :description %>
-
-		<% r.labeled_row :country_strategy, :glossary => true do %>
-			<% if @project.country_strategy.blank? %> 
-				Not linked to any country strategy
-			<% else %>       
-				<%= link_to(@project.country_strategy.strategy_number, {:controller => "country_strategy", :action => "show", :id => @project.country_strategy.id}) %>
-			<% end %>
-		<% end %>
-		
-		<%= r.option_field :prj_status, Project::STATUS_OPTIONS %>
-		
-		<% r.labeled_row :start do %>
-			<%= @project.start.strftime("%d-%b-%Y") %>
-		<% end %>
-
-		<% r.labeled_row :end do %>
-			<%= @project.end.strftime("%d-%b-%Y") %>
-		<% end %>		
-
-		<%= r.text_field :recipient_code %>
-
-		<%= r.text_field :region_code %>
-
-		<%= r.text_field :income_code %>
-
-		<%= r.option_field :nation_regional, Project::NATIONAL_REGIONAL_OPTIONS %>
-
-		<%= r.option_field :type_of_implementation, Project::IMPLEMENTATION_TYPES %>
-
-		<% r.labeled_row :dac_sector do %>
-			<%= @project.dac_sector.name_with_code rescue "n/a" %>
-		<% end %>
-		
-		<% r.labeled_row :dac_crs_sector do %>
-			<%= @project.crs_sector.name_with_code rescue "n/a" %>
-		<% end %>
-		
-		<%= r.option_field :type_of_aid, Project::TYPE_OF_AID_OPTIONS %>
-
-		<%= r.option_field :grant_loan, Project::GRANT_LOAN_OPTIONS %>
-
-		<% r.labeled_row :financial_information do %>
-			<%= render :partial => 'financial_information' %>
-		<% end %>
-
-		<% if @project.has_cofundings %>
-			<% r.labeled_row :cofunding do %>
-				<%= format_as_html_table(@project.cofundings.map {|m| [m.donor.name, m.amount]}, :per_row => 4, :lower_class => "currency right") %>
-			<% end %>
-		<% end %>
-		
-		<% r.labeled_row :government_counterpart, :glossary => true do %>
-			<% if @project.government_counterpart.blank? %>
-				&nbsp;
-			<% else %>
-				<%= @project.government_counterpart.name %>
-			<% end %>
-		<% end %>
-
-		<% r.labeled_row :implementing_agency, :label => :impl_agencies, :glossary => true do %>
-			<% @implementing_agencies.each do |s| %>
-				<%= s.name %><br>
-			<% end %>
-		<% end %>
-		
-		<% r.labeled_row :contracted_agency, :label => :contr_agencies, :glossary => true do %>
-			<% @project.contracted_agencies.each do |s| %>
-				<%= s.name %><br>
-			<% end %>
-		<% end %>
-		
-		<% r.labeled_row :markers, :glossary => true do %>
-			<%= render :partial => 'marker_information' %>
-		<% end %>
-
-		<% r.labeled_row :mdg, :label => :mdg_goals, :glossary => true do %>
-			<%= format_as_html_table(@project.mdgs.map {|m| [m.name, m.description]}, :per_row => 3) %>
-		<% end %>
-		
-		<tr>
-			<td class="sub_title">
-				<%= glossary_icon_for(:focal_region, "Focal Regions") %>
-				<%= ll(:reports, :focal_regions) %>
-				<% unless @project.geo_level2s.empty? %>
-					<a onclick="window.open(this.href,'_blank','height=700,width=800,scrollbars=yes,resizable=yes');return false;" href="/project/show_map/<%= @project.id %>" style="display: block; color: #fff; text-align: center">&gt; Show Map &lt;</a>
-				<% end %>
-			</td>
-			<td>
-				<%= render :partial => "focal_regions" %>
-			</td>
-		</tr>
-		
-		<% r.labeled_row :officer_responsible, :glossary => true do %>
-			<%= @project.officer_responsible.formatted_address %>
-		<% end %>
-		
-		<% r.labeled_row :internet_link, :glossary => true do %>
-			<%= @project.website.to_link(:target => "_blank") %>
-		<% end %>
-		
-		<%= r.text_field :comments, :glossary => "comment" %>
-
-		<% r.labeled_row :last_updated, :label => :last_update, :glossary => true do %>
-			<%= @project.updated_at.strftime("%d-%b-%Y") %>
-		<% end %>
-	<% end %>
+<dl>
+	<dt><%= @project.class.human_attribute_name('title') %></dt>
+	<dd><%= @project.title %></dd>
 	
-<% end #caching %>
+	<dt><%= @project.class.human_attribute_name('description') %></dt>
+	<dd><%= @project.description %></dd>
 	
-	<% if user_is_logged_in? && !params[:report] %>
-		<p><b><%= link_to 'Edit', :action => 'edit', :id => params[:id] %></b>
-		<b> | <%= link_to 'List', :action => "list", :id => params[:id] %></b>
-		<% if @next_draft %>
-		<b> | <%= link_to "Edit next draft (#{@next_draft.donor_project_number})", :action => "edit", :id => @next_draft.id %></b>
+	<dt><%= @project.class.human_attribute_name('donor') %></dt>
+	<dd><%= @project.donor.name %></dd>
+	
+	<dt><%= @project.class.human_attribute_name('donor_agency') %></dt>
+	<dd><%= @project.donor_agency.name %></dd>
+	
+	<dt><%= @project.class.human_attribute_name('country_strategy') %></dt>
+	<dd><%= @project.country_strategy.andand.title || t('options.country_strategy_unavailable') %></dd>
+	
+	<dt><%= lc(:project_information) %></dt>
+	<dd>
+		<dl>
+			<dt><%= @project.class.human_attribute_name('prj_status') %></dt>
+			<dd><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
+			
+			<dt><%= @project.class.human_attribute_name('start') %></dt>
+			<dd><%= @project.start %></dd>
+			
+			<dt><%= @project.class.human_attribute_name('end') %></dt>
+			<dd><%= @project.end %></dd>
+			
+			<%# recipient/region/income code here?! %>
+			
+			<dt><%= @project.class.human_attribute_name('national_regional') %></dt>
+			<dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %></dd>
+			
+			<dt><%= @project.class.human_attribute_name('type_of_implementation') %></dt>
+			<dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %></dd>
+			
+			<dt><%= @project.class.human_attribute_name('dac_sector') %></dt>
+			<dd><%= @project.dac_sector.name_with_code %></dd>
+			
+			<dt><%= @project.class.human_attribute_name('crs_sector') %></dt>
+			<dd><%= @project.crs_sector.name_with_code %></dd>
+		</dl>
+	</dd>
+	
+	<dt><%= lc(:funding_information) %></dt>
+	<dd>
+		<dl>
+			<dt><%= @project.class.human_attribute_name('type_of_aid') %></dt>
+			<dd><%= @project.type_of_aid.name %></dd>
+			
+			<dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
+			<dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
+		</dl>
+		
+		<table>
+		</table>
+	</dd>
+	
+	<%# Gov Counterpart?! %>
+	
+	<dt><%= @project.class.human_attribute_name('implementing_agencies') %></dt>
+	<dd>
+		<ul>
+			<% @project.implementing_agencies.each do |agency| %>
+				<li><%= agency.name %></li>
+			<% end %>
+		</ul>
+	</dd>
+	
+	<dt><%= @project.class.human_attribute_name('contracted_agencies') %></dt>
+	<dd>
+		<ul>
+			<% @project.contracted_agencies.each do |agency| %>
+				<li><%= agency.name %></li>
+			<% end %>
+		</ul>
+	</dd>
+		
+	<dt><%= ll(:markers) %></dt>
+	<dd>
+		<table>
+			<tr>
+				<th><%= @project.class.human_attribute_name('gender_policy_marker') %></th>
+				<th><%= @project.class.human_attribute_name('environment_policy_marker') %></th>
+			</tr>
+			<tr>
+				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.gender_policy_marker) %></td>
+				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.environment_policy_marker) %></td>
+			</tr>
+		</table>
+		
+		<table>
+			<tr>
+				<th><%= @project.class.human_attribute_name('biodiversity_marker') %></th>
+				<th><%= @project.class.human_attribute_name('climate_change_marker') %></th>
+				<th><%= @project.class.human_attribute_name('desertification_marker') %></th>
+			</tr>
+			<tr>
+				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.biodiversity_marker) %></td>
+				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.climate_change_marker) %></td>
+				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.desertification_marker) %></td>
+			</tr>
+		</table>
+	</dd>
+	
+	<dt><%= ll(:mdgs) %></dt>
+	<dd>
+		<ul>
+			<% @project.mdgs.each do |mdg| %>
+				<li><%= mdg.name %></li>
+			<% end %>
+		</ul>
+	</dd>
+	
+	<dt><%= ll(:focal_regions) %></dt>
+	<% geo_list = @project.districts.group_by(&:province) %>
+	<dd>
+		<% if geo_list.empty? %>
+			<%= ll(:options, :national) %>
+		<% else %>
+			<table> 
+				<tr>
+					<% geo_list.keys.each do |p| %>
+						<th><%= p.name %></th>
+					<% end %>
+				</tr>
+				
+				<tr>
+					<% geo_list.each do |province, districts| %>
+						<td>
+							<ul>
+								<% districts.each do |d| %>
+									<li><% d.name %></li>
+								<% end %>
+							</ul>
+						</td>
+					<% end %>
+				</tr>
+			<table>
 		<% end %>
-		</p>
-	<% end %>
-</center>
+	</dd>
+	
+	<dt><%= @project.class.human_attribute_name('officer_responsible') %></dt>
+	<dd><%= @project.officer_responsible %></dd>
+	
+	<dt><%= @project.class.human_attribute_name('website') %></dt>
+	<dd><%= auto_link(@project.website) %></dd>
+	
+	<dt><%= @project.class.human_attribute_name('comments') %></dt>
+	<dd><%= @project.comments %></dd>
+</dl>

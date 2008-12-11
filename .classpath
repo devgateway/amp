@@ -118,7 +118,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jsf-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/logdigger-0.2.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mondrian.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java-5.0.6-bin.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/olap4j.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj-api.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/saaj-ri.jar"/>

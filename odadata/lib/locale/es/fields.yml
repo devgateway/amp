@@ -2,6 +2,7 @@ es:
   activerecord:
     attributes:
       project:
+        donor: Donante
         donor_agency: Agencia Donante
         donor_project_number: Número Donante de Proyecto
         oecd_number: Número OCDE
@@ -22,9 +23,9 @@ es:
         website: Sitio web
         comments: Comentarios
         officer_responsible: Oficial Responsable
-        officer_responsible_name: Oficial Responsable - Nombre
-        officer_responsible_phone: Oficial Responsable - Teléfono
-        officer_responsible_email: Oficial Responsable - Correo Electrónico
+        officer_responsible_name: Nombre
+        officer_responsible_phone: Teléfono
+        officer_responsible_email: Correo Electrónico
         biodiversity_marker: Biodiversidad
         climate_change_marker: Cambio Climático
         desertification_marker: Desertificación

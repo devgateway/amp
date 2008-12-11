@@ -1,5 +1,6 @@
 class Project < ActiveRecord::Base
   include ActionView::Helpers::TextHelper
+  extend AttributeDecorator
   
   ##
   # Constants
@@ -64,6 +65,11 @@ class Project < ActiveRecord::Base
   has_many                :accessible_fundings
   has_many                :accessible_forecasts
 
+  ##
+  # Decorated attributes
+  attribute_decorator :officer_responsible, :class => Address, 
+    :decorates => [:officer_responsible_name, :officer_responsible_phone, :officer_responsible_email]
+  
   ##
   # Custom finders
   # TODO: This is a hack to order by the translated donor name

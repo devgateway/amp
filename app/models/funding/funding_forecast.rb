@@ -2,6 +2,13 @@ class FundingForecast < ActiveRecord::Base
   belongs_to :project
   before_create :set_currency
   
+  named_scope :ordered, :order => "project_id ASC, year ASC" 
+  
+  def has_data?
+    [:payments, :commitments].any? { |c| self.send(c).to_i > 0 }
+  end
+  
+  
   class << self
     def annual_payments
       res = {}

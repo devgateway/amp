@@ -3,6 +3,8 @@
 class Funding < ActiveRecord::Base
   belongs_to :project
   before_create :set_currency
+  
+  named_scope :ordered, :order => "project_id ASC, year ASC" 
     
   # Returns total payments for a requested year
   # For the current year it sums up only the payments of
@@ -12,6 +14,10 @@ class Funding < ActiveRecord::Base
       (2..5) : (2..Time.now.quarter)
       
     quarters.inject(0) { |sum, q| self.send("payments_q#{q-1}") + sum }.to_currency(currency, year)
+  end
+  
+  def has_data?
+    [:payments_q1, :payments_q2, :payments_q3, :payments_q4, :commitments].any? { |c| self.send(c).to_i > 0 }
   end
   
   class << self

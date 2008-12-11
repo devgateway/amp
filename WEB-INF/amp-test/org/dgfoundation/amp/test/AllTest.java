@@ -3,6 +3,7 @@ package org.dgfoundation.amp.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
 import org.dgfoundation.amp.test.example.MockStrutTest;
 import org.dgfoundation.amp.test.example.MockTagLibTest;
 import org.dgfoundation.amp.test.example.SimpleUnitTest;
@@ -14,6 +15,7 @@ public class AllTest {
 		TestSuite suite = new TestSuite();
 
 		suite.addTest(AllReportTest.suite());
+		suite.addTest(AllCategoryManagerTest.suite());
 		return suite;
 	}
 

@@ -6,8 +6,14 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -15,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -34,20 +41,28 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Cell;
 import com.lowagie.text.Document;
 import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfCell;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
+import com.lowagie.text.pdf.PdfTextArray;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
@@ -68,7 +83,9 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	private AmpReports r=null;
 	private PdfPTable contenTable;
 	private HttpServletResponse response;
-	public PDFExportAction(HttpSession session,String locale,Site site,GroupReportData rd,AmpARFilter arf,AmpReports r ,HttpServletResponse response) {
+	private HttpServletRequest request;
+
+	public PDFExportAction(HttpSession session,String locale,Site site,GroupReportData rd,AmpARFilter arf,AmpReports r ,HttpServletResponse response,HttpServletRequest request) {
 	    this.session=session;
 	    this.locale=locale;
 	    this.site=site;
@@ -76,6 +93,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    this.rd=rd;
 	    this.r=r;
 	    this.response=response;
+	    this.request=request;
         }
 	public PDFExportAction() {
 	 super();
@@ -123,25 +141,28 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				if(pageSize.equals("A3")) page=PageSize.A3;
 					if(pageSize.equals("A4")) page=PageSize.A4;
 			}
+			AdvancedReportForm reportForm = (AdvancedReportForm) form;
 
-			response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_"));
-	   
-	        
-				Document document = new Document(page.rotate(),5, 5, 5, 50);
-				PDFExporter.headingCells=null;
-		
-				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());
-		
-				writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response));
-		
-				//noteFromSession=AmpReports.getNote(request.getSession());
-		
+			request.setAttribute("statementPositionOptions", reportForm.getStatementPositionOptions());
+			request.setAttribute("logoPositionOptions", reportForm.getLogoPositionOptions());
+			request.setAttribute("statementOptions", reportForm.getStatementOptions());
+			request.setAttribute("logoOptions", reportForm.getLogoOptions());
+			request.setAttribute("dateOptions", reportForm.getDateOptions());
+	        //	        			
+				Document document = new Document(page.rotate(),5, 5, 15, 50);				
+				PDFExporter.headingCells=null;								
+                //
+                response.setContentType("application/pdf");
+				response.setHeader("Content-Disposition","attachment; filename="+r.getName().replaceAll(" ","_"));	   	       
+                //
+				PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());										                                
+                //
+                writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response,request));
+				//noteFromSession=AmpReports.getNote(request.getSession());                
 				String sortBy=(String) session.getAttribute("sortBy");
 		
 				if(sortBy!=null) rd.setSorterColumn(sortBy); 
-		
-		
+				
 				PDFExporter.widths=new float[rd.getTotalDepth()];		
 				for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
 					PDFExporter.widths[k]=0.120f;
@@ -166,7 +187,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
                 return null;
 		}else{
 			session.setAttribute("sessionExpired", true);
-			response.setContentType("text/html");
+			response.setContentType("text/html");	
     		OutputStreamWriter outputStream = new OutputStreamWriter(response.getOutputStream());
     		PrintWriter out = new PrintWriter(outputStream, true);
     		String url = FeaturesUtil.getGlobalSettingValue("Site Domain");
@@ -195,13 +216,68 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			
 			table.setWidthPercentage(100);
 			
-        		
 		  	String translatedCurrency="";
 			String translatedCurrentFilter="";
 			String translatedAmount="";
 			String translatedReportDescription="Description:";
+			String siteId=site.getSiteId();
+			// HEADER/FOOTER logo/statement				
+			if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
+				// do nothing 
+			} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
+				if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
+					Image logo = null;
+					int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
+					String urlPrefix = this.request.getRequestURL().substring(0, end); 
+					try {
+						logo = Image.getInstance(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
+					} catch (BadElementException e) {
+						e.printStackTrace();
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					PdfPCell pdfc;	
+					pdfc = new PdfPCell(logo);
+					pdfc.setPaddingBottom(10);
+					pdfc.setPaddingTop(10);
+					pdfc.setPaddingLeft(10);
+					pdfc.setColspan(rd.getTotalDepth());
+					table.addCell(pdfc);
+				} else if (this.request.getAttribute("logoPositionOptions").equals("1")) {//footer
+					// see endPage function
+				}				
+			}
+            if (this.request.getAttribute("statementOptions").equals("0")) {//disabled
+				// do nothing 
+			} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
+				String stmt = "";
+				try {
+					stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+				} catch (WorkerException e){
+				    logger.error("Error translating ", e);}
+				stmt += " " + FeaturesUtil.getCurrentCountryName();
+				if (this.request.getAttribute("dateOptions").equals("0")) {//disabled
+					// no date
+				} else if (this.request.getAttribute("dateOptions").equals("1")) {//enable		
+					stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+				}				 	                	                
+				if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header		
+					PdfPCell pdfc;
+					Font font = new Font(Font.COURIER, 8, Font.COURIER);		
+					pdfc = new PdfPCell(new Paragraph(stmt, font));
+					pdfc.setPaddingBottom(10);
+					pdfc.setPaddingTop(10);
+					pdfc.setColspan(rd.getTotalDepth());
+					table.addCell(pdfc);
+				} else if (this.request.getAttribute("statementPositionOptions").equals("1")) {//footer
+					// see endPage function
+				}				
+			}
+			//
 			try{	
-			    String siteId=site.getSiteId();
+			    
 			    translatedCurrentFilter=TranslatorWorker.translate("rep:pop:SelectedFilters",locale,siteId);
 			    translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 			    
@@ -224,16 +300,14 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			}catch (WorkerException e){
 			    logger.error("Error translating ", e);}
 		    	
-			
-			Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);
-			
-			PdfPCell pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
+			PdfPCell pdfc;
+			Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);				
+			pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
 			pdfc.setPaddingBottom(10);
 			pdfc.setPaddingTop(10);
 			pdfc.setColspan(rd.getTotalDepth());
-			table.addCell(pdfc);
-			
-			
+			table.addCell(pdfc);		
+						
 			
 			if(!"".equalsIgnoreCase(r.getReportDescription())){
 	        		pdfc = new PdfPCell(new Paragraph(translatedReportDescription+" "+r.getReportDescription()));
@@ -259,7 +333,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			
 			Iterator<String> keys=props.keySet().iterator();
 			StringBuffer strFilters=new StringBuffer();
-			String siteId=site.getSiteId();
+			
 	        	try {
 	        	    while (keys.hasNext()) {
 	        		String key = keys.next();
@@ -313,9 +387,61 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     	    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
     	    r.setSiteId(siteId);
     	    r.setLocale(locale);
-    	    
-    	    
     	    BaseFont font = BaseFont.createFont(BaseFont.COURIER,BaseFont.CP1250,false);
+    	    // HEADER/FOOTER logo/statement				
+    	    if (this.request.getAttribute("logoOptions").equals("0")) {//disabled
+				// do nothing 
+			} else if (this.request.getAttribute("logoOptions").equals("1")) {//enabled																		 	                	                
+				if (this.request.getAttribute("logoPositionOptions").equals("0")) {//header						
+					// see startPage function
+				} else if (this.request.getAttribute("logoPositionOptions").equals("1")) {//footer
+					Image logo = null;
+					int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
+					String urlPrefix = this.request.getRequestURL().substring(0, end);
+					byte[] b = new byte[900];
+					this.session.getServletContext().getResourceAsStream("/TEMPLATE/ampTemplate/images/AMPLogo.png").read(b);
+					try {
+						logo = Image.getInstance(b);
+						logo.setAbsolutePosition(10, 20);
+					} catch (BadElementException e) {
+						e.printStackTrace();
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					float textBase = document.bottom() - 20;
+					cb.beginText();
+		    	    cb.setFontAndSize(font, 8);
+		    	    cb.addImage(logo);
+		    	    cb.endText();
+				}				
+			}
+            if (this.request.getAttribute("statementOptions").equals("0")) {//disabled
+				// do nothing 
+			} else if (this.request.getAttribute("statementOptions").equals("1")) {//enabled										
+				String stmt = "";
+				try {
+					stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+				} catch (WorkerException e){
+				    logger.error("Error translating ", e);}
+				stmt += " " + FeaturesUtil.getCurrentCountryName();
+				if (this.request.getAttribute("dateOptions").equals("0")) {//disabled
+					// no date
+				} else if (this.request.getAttribute("dateOptions").equals("1")) {//enable		
+					stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+				}				 	                	                
+				if (this.request.getAttribute("statementPositionOptions").equals("0")) {//header		
+					// see startpage function
+				} else if (this.request.getAttribute("statementPositionOptions").equals("1")) {//footer
+					float textBase = document.bottom() - 20;
+					cb.beginText();
+		    	    cb.setFontAndSize(font, 8);
+		    	    cb.setTextMatrix(document.left(), textBase);
+		    	    cb.showText(stmt);
+		    	    cb.endText();		    	    
+				}				
+			}    	   
     	    StringBuffer text =new StringBuffer();
     		
 //    	    if (r.getFormatedUpdatedDate() != null) {

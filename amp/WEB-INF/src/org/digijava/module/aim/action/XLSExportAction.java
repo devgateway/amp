@@ -6,8 +6,12 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,8 +19,12 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFFooter;
+import org.apache.poi.hssf.usermodel.HSSFPatriarch;
+import org.apache.poi.hssf.usermodel.HSSFPicture;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -39,8 +47,12 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
+
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Image;
 
 /**
  * 
@@ -66,6 +78,8 @@ public class XLSExportAction extends Action {
 	        response.setHeader("Content-Disposition",
 	                "inline; filename=data.xls");
 
+	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
+	        //
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
 //			for translation purposes
@@ -100,7 +114,7 @@ public class XLSExportAction extends Action {
 		IntWrapper colId=new IntWrapper();
 		
 		HSSFRow row = sheet.createRow(rowId.intValue());
-		
+		HSSFPatriarch patriarch = sheet.createDrawingPatriarch();	    
 	    
 		HSSFFooter footer = sheet.getFooter();
 		footer.setRight( "Page " + HSSFFooter.page() + " of " + HSSFFooter.numPages() );
@@ -111,16 +125,41 @@ public class XLSExportAction extends Action {
 		grdx.setMetadata(r);
 			
 		
-		//show title+desc
-			rowId.inc();
-			colId.reset();
-			row=sheet.createRow(rowId.shortValue());
-			HSSFCell cell=row.createCell(colId.shortValue());
-			
+		//show title+desc+logo+statement
+		grdx.makeColSpan(rd.getTotalDepth(),false);	
+		rowId.inc();
+		colId.reset();
+		row=sheet.createRow(rowId.shortValue());
+		HSSFCell cell=row.createCell(colId.shortValue());		
+		if (reportForm.getStatementOptions().equals("0")) {//disabled
+			// do nothing 
+		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
+			String stmt = "";
+			try {
+				stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+			} catch (WorkerException e){
+			    e.printStackTrace();}
+			stmt += " " + FeaturesUtil.getCurrentCountryName();
+			if (reportForm.getDateOptions().equals("0")) {//disabled
+				// no date
+			} else if (reportForm.getDateOptions().equals("1")) {//enable		
+				stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+			}				 	                	                
+			if (reportForm.getStatementPositionOptions().equals("0")) {//header		
+				cell.setCellValue(stmt);  
+			} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
+				// 
+			}				
+		}
+		grdx.makeColSpan(rd.getTotalDepth(),false);	
+		rowId.inc();
+		colId.reset();
+		row=sheet.createRow(rowId.shortValue());
+		cell=row.createCell(colId.shortValue());
+		
 			String translatedNotes="";
 			String translatedReportName="Report Name:";
-			String translatedReportDescription="Description:";
-			
+			String translatedReportDescription="Description:";			
 			try{	
 				if (FeaturesUtil.getGlobalSettingValue("Amounts in Thousands").equalsIgnoreCase("true")){
 			    	translatedNotes=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);
@@ -148,12 +187,10 @@ public class XLSExportAction extends Action {
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			
 			grdx.makeColSpan(rd.getTotalDepth(),false);
-			
-			
+						
 			rowId.inc();
 			colId.reset();
-			
-			
+						
 			row=sheet.createRow(rowId.shortValue());
 			cell=row.createCell(colId.shortValue());
 			cell.setCellValue(/*translatedReportName+" "+*/r.getName());
@@ -181,11 +218,33 @@ public class XLSExportAction extends Action {
 				rowId.inc();
 				colId.reset();
 			}
-			
-	
-		
 		grdx.generate();
 		sheet.autoSizeColumn((short)0);
+		
+		rowId.inc();
+		colId.reset();
+		row=sheet.createRow(rowId.shortValue());
+		cell=row.createCell(colId.shortValue());
+		if (reportForm.getStatementOptions().equals("0")) {//disabled
+			// do nothing 
+		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
+			String stmt = "";
+			try {
+				stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
+			} catch (WorkerException e){
+			    e.printStackTrace();}
+			stmt += " " + FeaturesUtil.getCurrentCountryName();
+			if (reportForm.getDateOptions().equals("0")) {//disabled
+				// no date
+			} else if (reportForm.getDateOptions().equals("1")) {//enable		
+				stmt += " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
+			}				 	                	                
+			if (reportForm.getStatementPositionOptions().equals("0")) {//header		
+				//
+			} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
+				cell.setCellValue(stmt);  
+			}				
+		}
 	    wb.write(response.getOutputStream());
 	    
 		}else{

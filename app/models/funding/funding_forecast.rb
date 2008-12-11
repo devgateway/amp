@@ -1,5 +1,6 @@
 class FundingForecast < ActiveRecord::Base
   belongs_to :project
+  before_create :set_currency
   
   class << self
     def annual_payments
@@ -31,6 +32,11 @@ class FundingForecast < ActiveRecord::Base
   
   # Formatted output for all currency fields
   currency_columns :payments, :commitments,
-    :currency => lambda { |f| f.project.donor.currency }, 
+    :currency => lambda { |f| f.currency }, 
     :year => lambda { |f| f.year }, :validations => false
+    
+protected
+  def set_currency
+    self.currency ||= self.project.donor.currency
+  end
 end

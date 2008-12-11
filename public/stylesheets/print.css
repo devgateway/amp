@@ -1,7 +1,15 @@
 #header * {
 	display: none;
 }
-
+#footer * {
+	display: none;
+}
+#content  {
+	width:100%;
+}
+#generalContainer {
+	width:100%;
+}
 #content select {
 	display: none;
 }

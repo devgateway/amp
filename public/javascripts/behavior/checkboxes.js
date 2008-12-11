@@ -13,3 +13,20 @@ $(document).ready(function() {
 			}
 		});
 });
+
+
+function toggleAll(checkboxName)
+{
+	if($("#" + checkboxName + "_toggle").attr("selected") == 'true'){
+		$("input[name^='" + checkboxName + "'][type='checkbox']").attr("checked", false);
+		$("#" + checkboxName + "_toggle").attr("selected", false);
+		$("#" + checkboxName + "_toggle").html("Select All")
+	}
+	else
+	{
+		$("input[name^='" + checkboxName + "'][type='checkbox']").attr("checked", true);
+		$("#" + checkboxName + "_toggle").attr("selected", true);
+		$("#" + checkboxName + "_toggle").html("Deselect All")
+	}
+	$("#" + checkboxName + "_all").attr("checked", false);
+}

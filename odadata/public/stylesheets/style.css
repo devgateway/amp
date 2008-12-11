@@ -194,7 +194,14 @@ div#mdg_sector {
 	border-bottom: 1px solid #777;
 	background-color: #687EAB;
 	color: #000;
+	height:20px;
 }
+.checkbox_container .link {
+	float:right;
+	font-size:9px;
+	cursor:pointer;
+}
+
 
 ul.checkbox_container {
 	margin-top: 10px;
@@ -794,3 +801,62 @@ form fieldset h3 {
 	padding:0 20px 0 0;
 }
 
+
+/* Start Project Factsheet Styles */
+.main_details {
+	width:700px;
+    float:left;
+}
+.main_details DD
+{
+	width:500px;
+
+}
+.main_details DT {
+	width:180px;
+}
+
+DL {
+	width:840px;
+    margin:0;
+}
+
+DT {
+	font-weight: bold;
+	float:left;
+    clear:left;
+    width:200px;
+    margin:0;
+    padding:4px 0 4px 0;
+    border-top:1px solid #333;
+}
+
+DD {
+    border-top:1px solid #333;
+	float:left;
+    width:638px;
+    margin:0;
+    padding:4px 0 4px 0;
+}
+
+DL DD DL {
+	width:638px;
+    margin:0;
+}
+
+DL DD DL DT {
+	font-weight: bold;
+	float:left;
+    clear:left;
+    width:200px;
+    border:0;
+    border-bottom:1px solid #999;
+}
+
+DL DD DL DD {
+	float:left;
+    width:436px;
+    border:0;
+    border-bottom:1px solid #999;
+}
+/* End Project Factsheet Styles */

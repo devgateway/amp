@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.test.util;
 
+import java.lang.reflect.Method;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,8 +12,6 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.action.Login;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -55,5 +55,30 @@ public class TestUtil {
 		session.setAttribute("currentMember",finalTeamMember);
 		
 	}
-
+	/**
+	 * This will invoke the first method with name mehtodName from class objectClass.
+	 * If there are 2 methods with the same name in does NOT check the methods signature.
+	 * @param objectClass
+	 * @param classInstance
+	 * @param methodName
+	 * @param params
+	 * @return
+	 */
+	public static Object runPrivateMethod (Class objectClass, Object classInstance, String methodName, Object [] params) {
+		Method[] methods	= objectClass.getDeclaredMethods();
+		
+		for ( int i=0; i<methods.length; i++ ){
+			if ( methods[i].getName().equals(methodName) ) {
+				try {
+					methods[i].setAccessible(true);
+					return methods[i].invoke(classInstance, params);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} 
+				break;
+			}
+		}
+		return null;
+	}
 }
+

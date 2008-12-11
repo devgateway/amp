@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.test.helper;
+package org.dgfoundation.amp.test.util;
 
 import java.io.IOException;
 import java.util.Properties;

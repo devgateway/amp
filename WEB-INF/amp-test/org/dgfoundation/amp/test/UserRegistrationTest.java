@@ -3,8 +3,8 @@ package org.dgfoundation.amp.test;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.test.helper.Configuration;
-import org.dgfoundation.amp.test.helper.TestUtil;
+import org.dgfoundation.amp.test.util.Configuration;
+import org.dgfoundation.amp.test.util.TestUtil;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;

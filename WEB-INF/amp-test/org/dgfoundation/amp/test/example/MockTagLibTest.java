@@ -7,7 +7,7 @@ import java.util.Map;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.dgfoundation.amp.test.helper.Configuration;
+import org.dgfoundation.amp.test.util.Configuration;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.Site;

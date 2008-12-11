@@ -210,6 +210,14 @@
     	</junit>
     </target>
 
+	<target name="runTestByTarget" depends="compileTest">
+			<mkdir dir="test-reports"/>
+	    	<junit  printsummary="yes" haltonfailure="yes" showoutput="yes">
+	    	  <classpath refid="run.classpath"/>
+	    	 	<formatter type="xml"/>
+	    		 <test   name="org.dgfoundation.amp.test.${test-class}" haltonfailure="no"  todir="test-reports"/>
+	    	</junit>
+	    </target>
 
     <!-- Remove classes directory for clean build -->
     <target name="clean"

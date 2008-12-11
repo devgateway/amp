@@ -3,18 +3,17 @@ package org.dgfoundation.amp.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.dgfoundation.amp.test.example.MockStrutTest;
+import org.dgfoundation.amp.test.example.MockTagLibTest;
 import org.dgfoundation.amp.test.example.SimpleUnitTest;
-import org.dgfoundation.amp.test.example.TestTest;
+import org.dgfoundation.amp.test.reports.AllReportTest;
 
 public class AllTest {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		//suite.addTestSuite(MockTagLibTest.class);
-		//suite.addTestSuite(MockStrutTest.class);
-		suite.addTestSuite(SimpleUnitTest.class);
-		//suite.addTestSuite(UserRegistrationTest.class);
-		suite.addTestSuite(TestTest.class);
+
+		suite.addTest(AllReportTest.suite());
 		return suite;
 	}
 

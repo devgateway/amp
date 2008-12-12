@@ -40,38 +40,38 @@ public class WidgetTest extends TestCase {
 		assertTrue(Arrays.equals(fiscalYears2, generatedYears2));
 	}
 	
-	public void testFundingDates(){
-		//Configuration.initConfig();
-		Date fromDate=generateDate(2008, 7, 1);
-		Date toDate=generateDate(2009, 7, 1);
-		//these two records should be between 2008/09 fiscal year
-		AmpFundingDetail afd1=new AmpFundingDetail(new Integer(0),new Integer(1),generateDate(2008,9,1),null,null);
-		AmpFundingDetail afd2=new AmpFundingDetail(new Integer(0),new Integer(1),generateDate(2008,10,6),null,null);
-		//this should be in 2007/2008 fiscal year
-		AmpFundingDetail afd3=new AmpFundingDetail(new Integer(0),new Integer(1),generateDate(2008,2,1),null,null);
-		Long firstFundDetailId,secondFundDetailId,thirdFundDetailId;
-		//save them in db
-		try {
-			firstFundDetailId=saveFundingDetail(afd1);
-			secondFundDetailId=saveFundingDetail(afd2);
-			thirdFundDetailId=saveFundingDetail(afd3);
-			Double[] allFundingWrapper={new Double(0)};			
-			//check 2008/2009 years' data
-			assertTrue(ChartWidgetUtil.getDonorSectorFunding(null,fromDate,toDate,allFundingWrapper).size()==2);
-			//check 2007/2008 years' data
-			fromDate=generateDate(2008, 1, 2);
-			toDate=generateDate(2008, 7, 1);			
-			assertTrue(ChartWidgetUtil.getDonorSectorFunding(null,fromDate,toDate,allFundingWrapper).size()==1);
-			//remove that funding details from db
-			removeFundingDetail(firstFundDetailId);
-			removeFundingDetail(secondFundDetailId);
-			removeFundingDetail(thirdFundDetailId);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+//	public void testFundingDates(){
+//		//Configuration.initConfig();
+//		Date fromDate=generateDate(2008, 7, 1);
+//		Date toDate=generateDate(2009, 7, 1);
+//		//these two records should be between 2008/09 fiscal year
+//		AmpFundingDetail afd1=new AmpFundingDetail(new Integer(0),new Integer(1),generateDate(2008,9,1),null,null);
+//		AmpFundingDetail afd2=new AmpFundingDetail(new Integer(0),new Integer(1),generateDate(2008,10,6),null,null);
+//		//this should be in 2007/2008 fiscal year
+//		AmpFundingDetail afd3=new AmpFundingDetail(new Integer(0),new Integer(1),generateDate(2008,2,1),null,null);
+//		Long firstFundDetailId,secondFundDetailId,thirdFundDetailId;
+//		//save them in db
+//		try {
+//			firstFundDetailId=saveFundingDetail(afd1);
+//			secondFundDetailId=saveFundingDetail(afd2);
+//			thirdFundDetailId=saveFundingDetail(afd3);
+//			Double[] allFundingWrapper={new Double(0)};			
+//			//check 2008/2009 years' data
+//			assertTrue(ChartWidgetUtil.getDonorSectorFunding(null,fromDate,toDate,allFundingWrapper).size()==2);
+//			//check 2007/2008 years' data
+//			fromDate=generateDate(2008, 1, 2);
+//			toDate=generateDate(2008, 7, 1);			
+//			assertTrue(ChartWidgetUtil.getDonorSectorFunding(null,fromDate,toDate,allFundingWrapper).size()==1);
+//			//remove that funding details from db
+//			removeFundingDetail(firstFundDetailId);
+//			removeFundingDetail(secondFundDetailId);
+//			removeFundingDetail(thirdFundDetailId);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
 	private String[] generateYearsArray(int fromYear,int toYear){
 		if(fromYear>toYear){
@@ -94,61 +94,61 @@ public class WidgetTest extends TestCase {
 		return cal.getTime();
 	}
 	
-	private Long saveFundingDetail(AmpFundingDetail afd) throws AimException {
-		Session session= null;
-		Transaction tx=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			tx=session.beginTransaction();
-			session.saveOrUpdate(afd);
-			tx.commit();
-		}catch(Exception ex) {
-			if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception e ) {					
-					throw new AimException("Can't rollback", e);
-				}			
-			}
-			throw new AimException("update failed",ex);
-		}
-		return afd.getAmpFundDetailId();
-	}
-	
-	private AmpFundingDetail getFundingDetail(Long id) throws AimException{
-		Session session=null;
-		String queryString =null;
-		Query query=null;
-		AmpFundingDetail returnValue=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			queryString= "select a from " + AmpFundingDetail.class.getName()+ " a where a.id="+id;
-			query=session.createQuery(queryString);
-			returnValue=(AmpFundingDetail)query.uniqueResult();
-		}catch(Exception ex) {				
-			ex.printStackTrace();
-		}
-		return returnValue;
-	}
-	
-	private void removeFundingDetail(Long id) throws Exception{
-		Session session=null;
-		Transaction trans=null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			trans=session.beginTransaction();
-			AmpFundingDetail afd=getFundingDetail(id);
-			session.delete(afd);
-			trans.commit();
-		} catch (Exception ex) {
-			if(trans!=null) {
-				try {
-					trans.rollback();					
-				}catch(Exception e ) {					
-					throw new AimException("Can't rollback", e);
-				}			
-			}
-			throw new AimException("delete failed",ex);
-		}
-	}	
+//	private Long saveFundingDetail(AmpFundingDetail afd) throws AimException {
+//		Session session= null;
+//		Transaction tx=null;
+//		try {
+//			session=PersistenceManager.getRequestDBSession();
+//			tx=session.beginTransaction();
+//			session.saveOrUpdate(afd);
+//			tx.commit();
+//		}catch(Exception ex) {
+//			if(tx!=null) {
+//				try {
+//					tx.rollback();					
+//				}catch(Exception e ) {					
+//					throw new AimException("Can't rollback", e);
+//				}			
+//			}
+//			throw new AimException("update failed",ex);
+//		}
+//		return afd.getAmpFundDetailId();
+//	}
+//	
+//	private AmpFundingDetail getFundingDetail(Long id) throws AimException{
+//		Session session=null;
+//		String queryString =null;
+//		Query query=null;
+//		AmpFundingDetail returnValue=null;
+//		try {
+//			session=PersistenceManager.getRequestDBSession();
+//			queryString= "select a from " + AmpFundingDetail.class.getName()+ " a where a.id="+id;
+//			query=session.createQuery(queryString);
+//			returnValue=(AmpFundingDetail)query.uniqueResult();
+//		}catch(Exception ex) {				
+//			ex.printStackTrace();
+//		}
+//		return returnValue;
+//	}
+//	
+//	private void removeFundingDetail(Long id) throws Exception{
+//		Session session=null;
+//		Transaction trans=null;
+//		try {
+//			session=PersistenceManager.getRequestDBSession();
+//			trans=session.beginTransaction();
+//			AmpFundingDetail afd=getFundingDetail(id);
+//			session.delete(afd);
+//			trans.commit();
+//		} catch (Exception ex) {
+//			if(trans!=null) {
+//				try {
+//					trans.rollback();					
+//				}catch(Exception e ) {					
+//					throw new AimException("Can't rollback", e);
+//				}			
+//			}
+//			throw new AimException("delete failed",ex);
+//		}
+//	}	
 }

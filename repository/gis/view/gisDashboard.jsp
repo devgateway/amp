@@ -132,10 +132,15 @@
                 <digi:trn key="gis:selectMalLevel">Select Map Level</digi:trn>:
             </td>
 		<td>
+		<%--
 		<select id="mapLevelCombo" onchange="mapLevelChanged(this.value)">
 			<option value="2">Region view</option>
 			<option value="3">District view</option>
 		</select>
+		--%>
+		<input title="Region view" type="Radio" value="2" name="mapLevelRadio" checked onchange="mapLevelChanged(this.value)">Region view &nbsp;
+		<input title="District view" type="Radio" value="3" name="mapLevelRadio" onchange="mapLevelChanged(this.value)">District view
+		
 		<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>
 	</tr>

@@ -72,7 +72,8 @@
 	
 		var selSector = sec.value;
 		setBusy(true);
-		var mapLevel = document.getElementById("mapLevelCombo").value;
+		var mapLevel = getRadioValue("mapLevelRadio");
+		
 		var indYear = document.getElementById("indicatorYearCombo").value;
 		var uniqueStr = (new Date()).getTime();
 		document.getElementById("testMap").src = "../../gis/getFoundingDetails.do?action=getDataForIndicator&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&indicatorId=-1" + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight;
@@ -85,7 +86,7 @@
 		initYearCombo();
 	
 		selIndicator = ind.value;
-		var mapLevel = document.getElementById("mapLevelCombo").value;
+		var mapLevel = getRadioValue("mapLevelRadio");
 		var sec = document.getElementById("sectorsMapCombo").value;
 		var uniqueStr = (new Date()).getTime();
 		xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getAvailIndicatorSubgroups&mapCode=TZA&mapLevel=" + mapLevel + "&sectorId=" + sec + "&indicatorId=" + selIndicator + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
@@ -129,7 +130,7 @@
 	
 		selSubgroup = sbgr.value;
 
-		var mapLevel = document.getElementById("mapLevelCombo").value;
+		var mapLevel = getRadioValue("mapLevelRadio");
 		var sec = document.getElementById("sectorsMapCombo").value;
 		var selIndicator = document.getElementById("indicatorsCombo").value;
 		var uniqueStr = (new Date()).getTime();
@@ -178,7 +179,7 @@
 	
 	function getImageMap() {
 		if (!imageMapLoaded) {
-			var mapLevel = document.getElementById("mapLevelCombo").value;
+			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getImageMap&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
@@ -202,7 +203,7 @@
 	
 	function getDataForSector(sec) {
 			selSector = sec.value;
-			var mapLevel = document.getElementById("mapLevelCombo").value;
+			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getSectorDataXML&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + sec.value + "&uniqueStr=" + uniqueStr + "&width=" + canvasWidth + "&height=" + canvasHeight, true);
@@ -237,7 +238,7 @@
 	}
 
 	function getSectorIndicators(sec) {
-			var mapLevel = document.getElementById("mapLevelCombo").value;
+			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorNamesXML&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&sectorId=" + selSector + "&uniqueStr=" + uniqueStr, true);
@@ -275,7 +276,7 @@
 	}
 	
 	function getIndicatorsValues() {
-			var mapLevel = document.getElementById("mapLevelCombo").value;
+			var mapLevel = getRadioValue("mapLevelRadio");
 			var indYear = document.getElementById("indicatorYearCombo").value;
 			var uniqueStr = (new Date()).getTime();
 			xmlhttp.open("GET", "../../gis/getFoundingDetails.do?action=getIndicatorValues&mapCode=TZA&mapLevel=" + mapLevel + "&indYear=" + indYear + "&uniqueStr=" + uniqueStr, true);
@@ -482,7 +483,7 @@
 	//Year functions
 	function yearSelected(year) {
 		setBusy(true);
-		var mapLevel = document.getElementById("mapLevelCombo").value;
+		var mapLevel = getRadioValue("mapLevelRadio");
 		var ind = document.getElementById("indicatorsCombo").value;
 		var subgroupId = document.getElementById("indicatorSubgroupCombo").value;
 		
@@ -711,4 +712,18 @@
 			document.getElementById("ctrlContainer").style.display="none";
 			obj.className="navHiden";
 		}
+	}
+	
+	function getRadioValue(radioName) {
+		var retVal = null;
+		var radioGroup = document.getElementsByName(radioName);
+		var iterIndex = 0;
+		for (iterIndex = 0; iterIndex < radioGroup.length; iterIndex ++) {
+			if (radioGroup[iterIndex].checked) {
+				retVal = radioGroup[iterIndex].value;
+				break;
+			}
+		}
+		
+		return retVal;
 	}

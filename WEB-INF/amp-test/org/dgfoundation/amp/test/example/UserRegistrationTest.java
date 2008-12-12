@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.test;
+package org.dgfoundation.amp.test.example;
 
 import javax.servlet.ServletContext;
 

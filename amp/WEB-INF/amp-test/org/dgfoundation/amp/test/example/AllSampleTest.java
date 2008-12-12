@@ -3,7 +3,6 @@ package org.dgfoundation.amp.test.example;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.dgfoundation.amp.test.UserRegistrationTest;
 
 public class AllSampleTest {
 	public static Test suite() {

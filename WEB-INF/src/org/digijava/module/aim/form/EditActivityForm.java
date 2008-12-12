@@ -36,6 +36,7 @@ import org.digijava.module.aim.helper.CategoryCustomField;
 import org.digijava.module.aim.helper.ComboBoxCustomField;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.CustomField;
+import org.digijava.module.aim.helper.DateCustomField;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -490,11 +491,18 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		ccf.setFM_field("Custom Field3");   		
 		ccf.setCategoryName("MTEF Projection");
 		
+		DateCustomField dcf = new DateCustomField();
+		dcf.setStep(1);
+		dcf.setName("Field4");
+		dcf.setDescription("Description4");
+		dcf.setAmpActivityPropertyName("customField4");
+		dcf.setFM_field("Custom Field4");
 		
     	// Finally we add these components
     	customFields.add(cf);
     	customFields.add(combo);
     	customFields.add(ccf);
+    	customFields.add(dcf);
 
     	this.setCustomFields(customFields);	
 	}

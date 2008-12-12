@@ -29,3 +29,11 @@ TD {
 THEAD TH {
 	border-bottom:2px solid black;!important
 }
+
+H3 {
+	color:#003366;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:14px;
+	font-style:normal;
+	font-weight:bold;
+}

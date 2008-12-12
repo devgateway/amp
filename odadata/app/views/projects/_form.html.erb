@@ -19,7 +19,7 @@
 
     $(window).scroll(function()
     {
-      $('#command_box').animate({top:$(window).scrollTop()+"px" },{queue: false, duration: 350});
+      $('#command_box').animate({top:$(window).scrollTop()+27+"px" },{queue: false, duration: 350});
     });
 </script>
 
@@ -67,8 +67,32 @@
     
 </div>
 <div id="command_box">
+	<input type="button" value="Previous" id="previous_button" />
+	<input type="button" value="Next" id="next_button"/>
+    <br/>
+    <br/>
 	<%= form.submit %>
 </div>
+<script language="javascript" type="application/javascript">
+$("#previous_button").click(function () { 
+    var $tabs = $('ul#tabs');
+    var selected = $tabs.data('selected.tabs');
+    previousTab = selected-1;
+    if(previousTab < 0) previousTab = 4;
+	$tabs.tabs('select', previousTab); 
+    return false;
+    });
 
+$("#next_button").click(function () { 
+    var $tabs = $('ul#tabs');
+    var selected = $tabs.data('selected.tabs');
+    nextTab = selected+1;
+    if(nextTab > 4) nextTab = 0;
+	$tabs.tabs('select', nextTab); 
+    return false;
+    });
+
+    
+</script>
 <% end %>
 

@@ -349,6 +349,7 @@ A IMG { border: 0; }
 	width: 892px;
 	padding-left: 4px;
 	padding-right: 4px;
+	clear:left;
 }
 
 #content.fluid {
@@ -513,12 +514,11 @@ ul.fatlist.flexible li {
 #mainMenu li ul {
 	margin:0;
 	padding:0;
-	_min-width: 180px;
-	width:180px;
 	list-style-type: none;
 	position: absolute;
 	background: #376091;
 	height: auto;
+	min-width:180px;
 	top: 22px;
 	left: -1px;
 	border: 1px solid #3B5998;
@@ -531,13 +531,13 @@ ul.fatlist.flexible li {
 	display: block;
 }
 #mainMenu li ul li {
-	width: auto;
+	width:100%;
 	float: left;
-	width: 123px;
 	font-weight: normal;
+	clear:both;
+	border-right:0;
 }
 #mainMenu li ul li a, #mainMenu li.selected ul li a {
-	width:180px;
 	display: block;
 	padding: 0 9px;
 	color: #fff;
@@ -782,13 +782,13 @@ form fieldset h3 {
 
 #content #command_box {
 	position:relative;
-    top:0px;
+    top:27px;
     height:90px;
     z-index: 10;
-    background:#ffc;
+    background:#F8F8F8;
     padding:5px;
     border:1px solid #CCCCCC;
-    text-align:left;
+    text-align:center;
     float:right;
     font-weight:bold;
     width:120px;
@@ -805,7 +805,7 @@ form fieldset h3 {
 /* Start Project Factsheet Styles */
 .main_details {
 	width:700px;
-    float:left;
+	float:left;
 }
 .main_details DD
 {
@@ -813,12 +813,13 @@ form fieldset h3 {
 
 }
 .main_details DT {
-	width:180px;
+	width:200px;
 }
 
 DL {
 	width:840px;
     margin:0;
+	margin-bottom: 20px;
 }
 
 DT {
@@ -838,25 +839,20 @@ DD {
     margin:0;
     padding:4px 0 4px 0;
 }
-
-DL DD DL {
-	width:638px;
-    margin:0;
+H3 {
+	color:#003366;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:14px;
+	font-style:normal;
+	font-weight:bold;
 }
 
-DL DD DL DT {
-	font-weight: bold;
-	float:left;
-    clear:left;
-    width:200px;
-    border:0;
-    border-bottom:1px solid #999;
-}
 
-DL DD DL DD {
-	float:left;
-    width:436px;
-    border:0;
-    border-bottom:1px solid #999;
-}
 /* End Project Factsheet Styles */
+
+#command_box INPUT {
+    padding: 2px;
+    font: 13px "Trebuchet MS", sans-serif;
+    border: 1px solid #aaa;
+    color: #777;
+}

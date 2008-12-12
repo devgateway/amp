@@ -1,5 +1,3 @@
-<% js_behavior :related_selects %>
-
 <% f.field_set do %>
 	<p><%=t 'projects.geo_usage' %></p>
 
@@ -40,8 +38,8 @@
 			<li class="fifty"><%= fa.text_field :payments_q3, :value => fa.object.payments_q3 %></li>
 			<li class="fifty"><%= fa.text_field :payments_q4, :value => fa.object.payments_q4 %></li>
 			
-			<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
-			<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
+			<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+			<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
 		<% end %>
 	<% end %>
 <% end %>

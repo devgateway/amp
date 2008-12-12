@@ -1,5 +1,3 @@
-<% js_behavior :related_selects %>
-
 <% f.field_set do %>
 	<li>
 		<% sectors = DacSector.ordered.all(:include => [:crs_sectors]) %>
@@ -14,25 +12,25 @@
 	
 	<li>
 		<%= f.label :implementing_agencies %>
-		<div id="implementing_agencies">
-			<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
-		</div>
-		
-		<%= button_to_function t('projects.add_implementing_agency') do |page|  
+		<%= button_to_function t('projects.add_implementing_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page|  
 				page.insert_html :bottom, :implementing_agencies, 
 					:partial => 'implementing_agency', :object => ImplementingAgency.new
 			end %>
+			
+		<div id="implementing_agencies">
+			<%= render :partial => 'implementing_agency', :collection => @project.implementing_agencies.ordered %>
+		</div>
 	</li>
 	
 	<li>
 		<%= f.label :contracted_agencies %>
+		<%= button_to_function t('projects.add_contracted_agency'), :style => "float: right; margin-top: -20px; width: 230px" do |page| 
+			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
+		end %>
+		
 		<div id="contracted_agencies">
 			<%= render :partial => 'contracted_agency', :collection => @project.contracted_agencies.ordered %>
 		</div>
-		
-		<%= button_to_function t('projects.add_contracted_agency') do |page| 
-			page.insert_html :bottom, :contracted_agencies, :partial => 'contracted_agency', :object => ContractedAgency.new
-		end %>
 	</li>
 	
 	<li class="fifty"><%= f.select :national_regional, Project::NATIONAL_REGIONAL_OPTIONS,
@@ -48,8 +46,8 @@
 				 :include_blank => ll(:options, :prompt), :translate => true, :required => true %></li>
 		
 		
-	<li><%= f.text_field :website %></li>
-	<li><%= f.text_area :comments, :rows => 10 %></li>
+	<li><%= f.text_field :website, :class => "large" %></li>
+	<li><%= f.text_area :comments, :rows => 10, :class => "large" %></li>
 
 	
 <% end %>
@@ -65,7 +63,7 @@
 <% end %>
 
 <% f.field_set Project.human_attribute_name('officer_responsible') do %>
-	<li><%= f.text_field :officer_responsible_name, :required => true %></li>
-	<li><%= f.text_field :officer_responsible_phone %></li>
-	<li><%= f.text_field :officer_responsible_email %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_name, :required => true %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_phone %></li>
+	<li class="thirty"><%= f.text_field :officer_responsible_email %></li>
 <% end %>

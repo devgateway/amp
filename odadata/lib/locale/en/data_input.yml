@@ -150,6 +150,15 @@ en:
       
     show:
       title: Project Fact Sheet for <i>{{project}}</i>
+      project_information: Project Information
+      funding_information: Funding Information
+      markers: Markers
+      mdgs: MDGs
+      focal_regions: Focal Regions
+      historic: Historic Funding
+      totals: Funding Totals
+      funding: Funding {{year}}
+      funding_forecast: Funding Forecast {{year}}
       
     new:
       title: Add New Project

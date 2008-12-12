@@ -4,7 +4,6 @@
 		<%= f.text_field :amount, :size => 20, :value => f.object.amount.to_s(false) %>
 		<%= f.label :currency, Cofunding.human_attribute_name('in'), :class => "fluid" %>
 		<%= f.select :currency, ExchangeRate.available_currencies_for_select, :label => false %>
+		<%= f.remove_link t('actions.delete') %>
 	</li>
-	
-	<%= f.remove_link t('actions.delete') %>
 </div>

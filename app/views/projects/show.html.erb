@@ -67,7 +67,8 @@ Image
     </dt>
     <dd style="width:99%">
         <table>
-            <tr><th colspan="4"><% lc(:historic) %></th></tr>
+					<% if @project.historic_funding %>
+                    	<tr><th colspan="4"><%= lc(:historic) %></th></tr>
             <tr>
                 <th><%= HistoricFunding.human_attribute_name('payments') %></th>
                 <th><%= HistoricFunding.human_attribute_name('commitments') %></th>
@@ -76,8 +77,9 @@ Image
                 <td><%= @project.historic_funding.payments %></td>
                 <td><%= @project.historic_funding.commitments %></td>
             </tr>
+					<% end %>
             
-            <tr><th colspan="4"><% lc(:totals) %></th></tr>
+                    <tr><th colspan="4"><%= lc(:totals) %></th></tr>
             <tr>
                 <th><%= Funding.human_attribute_name('payments') %></th>
                 <th><%= Funding.human_attribute_name('commitments') %></th>
@@ -88,7 +90,7 @@ Image
             </tr>
             
             <% @project.fundings.ordered.select(&:has_data?).each do |f| %>
-                <tr><th colspan="4"><% lc(:funding, :year => f.year) %></th></tr>
+                        <tr><th colspan="4"><%= lc(:funding, :year => f.year) %></th></tr>
                 <tr>
                     <th><%= Funding.human_attribute_name('commitments') %></th>
                     <th><%= Funding.human_attribute_name('payments') %></th>
@@ -117,7 +119,7 @@ Image
             <% end %>
             
             <% @project.funding_forecasts.ordered.select(&:has_data?).each do |f| %>
-                <tr><th colspan="4"><% lc(:funding_forecast, :year => f.year) %></th></tr>
+                        <tr><th colspan="4"><%= lc(:funding_forecast, :year => f.year) %></th></tr>
                 <tr>
                     <th><%= FundingForecast.human_attribute_name('payments') %></th>
                     <th><%= FundingForecast.human_attribute_name('commitments') %></th>
@@ -173,14 +175,14 @@ Image
 			</tr>
 		</table>
 	
-<h3 style="clear:both;padding-top:30px;"><%= ll(:mdgs) %></h3>
+<h3 style="clear:both;padding-top:30px;"><%= lc(:mdgs) %></h3>
 		<ul>
 			<% @project.mdgs.each do |mdg| %>
 				<li><%= mdg.name %></li>
 			<% end %>
 		</ul>
 	
-<h3 style="clear:both;padding-top:30px;"><%= ll(:focal_regions) %></h3>
+<h3 style="clear:both;padding-top:30px;"><%= lc(:focal_regions) %></h3>
 	<% geo_list = @project.districts.group_by(&:province) %>
 
 		<% if geo_list.empty? %>

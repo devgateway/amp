@@ -41,6 +41,16 @@
 															<c:when test="<%=customField instanceof CategoryCustomField%>">
 																<category:showoptions name="aimEditActivityForm" property="customFields[${index}].value" categoryName="${customField.categoryName}" styleClass="inp-text" />								
 															</c:when>
+															<c:when test="<%=customField instanceof DateCustomField%>">																
+																<html:text name="aimEditActivityForm" property="customFields[${index}].strDate" size="10"
+																styleId="customField${index}_input_text" styleClass="inp-text" readonly="true" />																
+																<a id="customField_clear${index}" href="javascript:clearDate(document.aimEditActivityForm.customField${index}_input_text, 'customField_clear${index}')">
+																 	<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																</a>
+																<a id="customField_date${index}" href='javascript:pickDateWithClear("customField_date${index}",customField${index}_input_text,"customField_clear${index}")'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a>
+															</c:when>
 															<c:otherwise>
 																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"
 																styleId="originalAppDate" styleClass="inp-text" />																														

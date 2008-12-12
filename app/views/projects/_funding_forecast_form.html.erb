@@ -5,8 +5,8 @@
 			<li class="fifty"><%= fa.text_field :commitments, :value => fa.object.commitments %></li>
 			<li class="fifty"><%= fa.text_field :payments, :value => fa.object.payments %></li>
 		
-			<li class="thirty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
-			<li class="thirty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
+			<li class="fifty noborder"><%= fa.select :on_budget, Project::ON_OFF_BUDGET_OPTIONS, :translate => true %></li>
+			<li class="fifty noborder"><%= fa.select :on_treasury, Project::ON_OFF_TREASURY_OPTIONS, :translate => true %></li>
 		<% end %>
 	<% end %>
 <% end %>

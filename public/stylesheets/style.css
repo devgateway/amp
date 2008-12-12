@@ -526,6 +526,7 @@ ul.fatlist.flexible li {
 	display: none;
 	padding: 5px 0;
 	overflow: hidden;
+	z-index: 100;
 }
 #mainMenu li.selected ul {
 	display: block;

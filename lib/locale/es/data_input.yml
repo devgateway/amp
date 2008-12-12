@@ -122,18 +122,18 @@ es:
     funding_title: Finanzas {{year}}
     forecasts_title: Proyección de Financiamiento {{year}}
     geo_usage: |
-      Please select the focal regions of this project.<br />
-      If you don't select any, it will be considered a national project.
+      Por favor seleccione las regiones focales de este proyecto..<br />
+      Si no seleccione por lo menos uno, el proyecto se considera un proyecto nacional.
       
-    fields_missing: Some required fields are missing! Please check the highlighted tabs.
-    successfully_created: Successfully added project <i>{{project}}</i>. Please do not forget to publish once you verified the input.
+    fields_missing: Faltan algunos campos requeridos. Por favor revise las pestañas destacadas.
+    successfully_created: El proyecto <i>{{project}}</i> ha sido añadido con éxito. Por favor no se olvide de publicarlo antes de verificar los datos.
       
     stages:
-      profile_information: Profile Information
-      sector_agencies: Sector / Agencies
-      goals: MDGs
-      location_funding: Location / Funding
-      funding_forecast: Funding Forecasts
+      profile_information: Información de Perfil
+      sector_agencies: Sector / Agencias
+      goals: ODM
+      location_funding: Ubicación / Financiamiento
+      funding_forecast: Proyección de Financiamiento
       
     index:
       title: Listar Proyectos que son <i>{{status}}</i>
@@ -150,15 +150,24 @@ es:
       draft: Borrador
       
     show:
-      title: Project Fact Sheet for <i>{{project}}</i>
+      title: Ficha Descriptiva para <i>{{project}}</i>
+      project_information: Información de Proyecto
+      funding_information: Información de Financiamiento
+      markers: Marcas
+      mdgs: ODM
+      focal_regions: Regiones Focales
+      historic: Financiamiento Histórico
+      totals: Total de Financiamiento
+      funding: Financiamiento {{year}}
+      funding_forecast: Proyección de Financiamiento {{year}}
       
     new:
       title: Añadir Nuevo Proyecto
-      submit: Save
+      submit: Guardar
       
     edit:
       title: Editar Proyecto "{{project}}"
-      submit: Save
+      submit: Guardar
       
   country_strategies:
     index:

@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyWorker;
 import org.digijava.kernel.entity.Message;
@@ -20,6 +23,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -30,10 +34,12 @@ import org.digijava.module.aim.dbentity.IndicatorSector;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -565,32 +571,39 @@ public class ChartWidgetUtil {
 		Date fromDate = null;
 		Date toDate = null;
 		if (year!=null){
-			fromDate=getStartOfYear(year.intValue());
-			toDate = getStartOfYear(year.intValue()+1);
-		}
-                Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
+			/**
+			 * we should get default calendar and from/to dates should be taken according to it.
+			 * So for example, if some calendar's startMonth is 1st of July, we should take an interval from 
+			 * year's(parameter that is passed to function) 1st of July to the next year's 1st of July 
+			 */
+			Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
+			AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+			fromDate=getStartOfYear(year.intValue(),calendar.getStartMonthNum()-1,calendar.getStartDayNum());
+			toDate = getStartOfYear(year.intValue()+1,calendar.getStartMonthNum()-1,calendar.getStartDayNum());
+		}		
+        Double[] allFundingWrapper={new Double(0)};// to hold whole funding value
 		Collection<DonorSectorFundingHelper> fundings=getDonorSectorFunding(donors, fromDate, toDate,allFundingWrapper);
 		if (fundings!=null){
-                         double otherFunfing=0;
+            double otherFunfing=0;
 			for (DonorSectorFundingHelper funding : fundings) {
-                             Double percent = funding.getFounding() / allFundingWrapper[0];
-                            // the sectors which percent is less then 5% should be group in "Other"
-                            if (percent > 0.05) {
-                                ds.setValue(funding.getSector().getName(), Math.round(funding.getFounding()));
-                            } else {
-                                otherFunfing += funding.getFounding();
-                            }
+				Double percent = funding.getFounding() / allFundingWrapper[0];
+                // the sectors which percent is less then 5% should be group in "Other"
+                if (percent > 0.05) {
+                	ds.setValue(funding.getSector().getName(), Math.round(funding.getFounding()));
+                } else {
+                	otherFunfing += funding.getFounding();
+                }
 			}
-                        if(otherFunfing!=0){
-                            ds.setValue("Other Sectors",Math.round(otherFunfing));
-                        }		
+            if(otherFunfing!=0){
+            	ds.setValue("Other Sectors",Math.round(otherFunfing));
+            }		
 		}
 		return ds;
 	}
         
-	public static Date getStartOfYear(int year){
+	public static Date getStartOfYear(int year, int month,int day){
 		GregorianCalendar cal = new GregorianCalendar();
-		cal.set(year, 0, 1, 0, 0, 0);
+		cal.set(year, month, day, 0, 0, 0);
 		return cal.getTime();
 	}
 	
@@ -742,15 +755,11 @@ public class ChartWidgetUtil {
                 else{
                     total=cal.getTotActualDisb();
                 }
-                ds.setValue(region.getName(), total.doubleValue()/MILLION);
-                
+                ds.setValue(region.getName(), total.doubleValue()/MILLION);                
             }
-
-
         } catch (Exception e) {
             logger.error(e);
-            throw new DgException(
-                    "Cannot load sector fundings by donors from db", e);
+            throw new DgException("Cannot load sector fundings by donors from db", e);
         }
         return ds;
 
@@ -813,12 +822,9 @@ public class ChartWidgetUtil {
             if(others>0){
                   ds.setValue("Others", others / MILLION);
             }
-
-
         } catch (Exception e) {
             logger.error(e);
-            throw new DgException(
-                    "Cannot load sector fundings by donors from db", e);
+            throw new DgException("Cannot load sector fundings by donors from db", e);
         }
         return ds;
 
@@ -1087,6 +1093,37 @@ public class ChartWidgetUtil {
 		}
     	
     }
-
+    
+    public static List<LabelValueBean> getYears(){
+    	//get default calendar
+    	Long defaultCalendarId=new Long(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR));
+		AmpFiscalCalendar defaultCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(defaultCalendarId);
+		//get current year
+		Calendar cal=Calendar.getInstance();
+		Integer toYear=new Integer(cal.get(java.util.Calendar.YEAR));
+		// get startYear from Global Settings
+		Integer fromYear=new Integer(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.YEAR_RANGE_START)) ;
+		if(fromYear>toYear){
+			fromYear=toYear;
+		}
+    	return getYears(fromYear.intValue(),toYear.intValue(),defaultCalendar.getIsFiscal());
+    }
+    
+    public static List<LabelValueBean> getYears(int fromYear,int toYear,boolean isCalendarFiscal){
+    	List<LabelValueBean> years=new ArrayList<LabelValueBean>();
+    	for (int year=fromYear;year<=toYear;year++) {
+    		String label=null;
+    		if(isCalendarFiscal){
+    			String nextYear=new Integer(year+1).toString();
+    			label="FY";
+    			label+=" "+year+"/"+nextYear.substring(2);
+    		}else{
+    			label=""+year;
+    		}
+    		LabelValueBean lvb=new LabelValueBean(label,new Integer(year).toString());
+    		years.add(lvb);
+		}
+    	return years;
+    }
 	
 }

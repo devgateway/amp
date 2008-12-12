@@ -120,22 +120,17 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
+							<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewFiscalCalendarManager">Click here to view Fiscal Calendar Manager</digi:trn>
 						</c:set>
 						<digi:link href="/fiscalCalendarManager.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:fiscalCalendarManager">
-						Fiscal Calendar Manager
-						</digi:trn>
+							<digi:trn key="aim:fiscalCalendarManager">Fiscal Calendar Manager</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddFiscalCalForm" property="action" value="create" >
 							<digi:trn key="aim:addFiscalCalendar">Add Fiscal Calendar</digi:trn>
@@ -164,9 +159,7 @@
 						<td noWrap width=600 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">&nbsp;
-										
-									</td>
+									<td vAlign="top" width="100%">&nbsp;</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
@@ -190,54 +183,69 @@
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
-                                                                        <font color="red"><b>*</b></font>
-																		<digi:trn key="aim:fiscalCalendarName">Name</digi:trn>	</td>
+                                                                        	<font color="red"><b>*</b></font>
+																			<digi:trn key="aim:fiscalCalendarName">Name</digi:trn>	
+																		</td>
 																	    <td width="30%" >
-																	          <html:text property="fiscalCalName" size="40" />																	    </td>
+																	          <html:text property="fiscalCalName" size="40" />																	    
+																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
                                                                           <font color="red"><b>*</b></font>
 																	        <digi:trn key="aim:fiscalCalendarStMnt">Start Month</digi:trn>																		</td>
 																		<td width="30%">
-																           <html:text property="startMonthNum" size="3" />																		</td>
+																           <html:text property="startMonthNum" size="3" />
+																        </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
 																			<font color="red"><b>*</b></font>
 																	        <digi:trn key="aim:fiscalCalendarStDay">Start Day</digi:trn>																		</td>
 																		<td width="30%">
-																	          <html:text property="startDayNum" size="3" />																		</td>
+																	          <html:text property="startDayNum" size="3" />
+																	    </td>
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
 																			<font color="red"><b>*</b></font>
 																	        <digi:trn key="aim:fiscalCalendarYrOffset">Year Offset</digi:trn>																		</td>
 																		<td width="30%">
-																	          <html:text property="yearOffset" size="3" />																		</td>
+																	          <html:text property="yearOffset" size="3" />
+																	    </td>
 																	</tr>
 																	<tr>
 																	  <td align="right"><digi:trn key="aim:fiscalCalendarType">Base Calendar</digi:trn></td>
 																	  <td>
-																	  
-																	  
-																      <html:select property="baseCalendar" >
-																      	<c:forEach items="${aimAddFiscalCalForm.baseCalendarList}" var="baseCalendar">
-																      		
-																      		<html:option value="${baseCalendar.value}">
-																      			<digi:trn key="${baseCalendar.trnName}">
-																      					<c:out value="${baseCalendar.name}"/>
-																      			</digi:trn>
-																      		</html:option>
-																      	</c:forEach>
-																      </html:select>
+																	      <html:select property="baseCalendar" >
+																	      	<c:forEach items="${aimAddFiscalCalForm.baseCalendarList}" var="baseCalendar">
+																	      		<html:option value="${baseCalendar.value}">
+																	      			<digi:trn key="${baseCalendar.trnName}">
+																	      					<c:out value="${baseCalendar.name}"/>
+																	      			</digi:trn>
+																	      		</html:option>
+																	      	</c:forEach>
+																	      </html:select>
                                                                       </td>
+																  </tr>
+																  <tr>
+																  	<td width="30%" align="right">
+																  		<digi:trn key="aim:isFiscalCalendar">Is Fiscal</digi:trn>
+																  	</td>
+																  	<td width="30%" align="left">
+																  		<html:select property="isFiscal" >
+																  			<html:option value="1"><digi:trn key="aim:fiscalCalendar:yes">Yes</digi:trn></html:option>
+																  			<html:option value="0"><digi:trn key="aim:fiscalCalendar:no">No</digi:trn></html:option>
+																	    </html:select>
+																  	</td>
 																  </tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:fiscalCalendarDescription">Description</digi:trn>																		</td>
+																	        <digi:trn key="aim:fiscalCalendarDescription">Description</digi:trn>
+																	    </td>
 																	    <td width="30%">
-																           <html:textarea property="description" cols="30" rows="3" />																		</td>
+																           <html:textarea property="description" cols="30" rows="3" />
+																        </td>
 																	</tr>
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">
@@ -246,24 +254,29 @@
 																					<td width="45%" align="right">
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
 																							<digi:trn key="btn:save">Save</digi:trn>
-																						</html:button>																					</td>
+																						</html:button>
+																					</td>
 																					<td width="8%" align="left">
 																						<html:reset  styleClass="dr-menu" property="submitButton" >
 																							<digi:trn key="btn:reset">Reset</digi:trn>
-																						</html:reset>																					</td>
+																						</html:reset>
+																					</td>
 																					<td width="45%" align="left">
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="move()">
 																							<digi:trn key="btn:cancel">Cancel</digi:trn>
-																						</html:button>																					</td>
+																						</html:button>
+																					</td>
 																				</tr>
-																			</table>																		</td>
+																			</table>
+																		</td>
 																	</tr>
 																	<logic:equal name="aimAddFiscalCalForm" property="flag" value="delete" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
 																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
 																					<digi:trn key="btn:deleteThisCalendar">Delete this Calendar</digi:trn>
-																				</html:button>																			</td>
+																				</html:button>
+																			</td>
 																		</tr>
 																	</logic:equal>
 																	<logic:equal name="aimAddFiscalCalForm" property="flag" value="orgReferences" >
@@ -272,7 +285,8 @@
 																				<b><digi:trn key="aim:cannotDeleteFisCalMsg1"><font color="#FF0000">
 																						Can not delete this calendar since some organization references it !</font>
 																					</digi:trn>
-																				</b>																			</td>
+																				</b>
+																			</td>
 																		</tr>
 																	</logic:equal>
 																</table>

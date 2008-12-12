@@ -22,42 +22,35 @@ public class FiscalCalendarManager extends Action {
 
 		  private static Logger logger = Logger.getLogger(FiscalCalendarManager.class);
 
-		  public ActionForward execute(ActionMapping mapping,
-								ActionForm form,
-								HttpServletRequest request,
-								HttpServletResponse response) throws java.lang.Exception {
+		  public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws java.lang.Exception {
 
 					 HttpSession session = request.getSession();
 					 if (session.getAttribute("ampAdmin") == null) {
-								return mapping.findForward("index");
+						return mapping.findForward("index");
 					 } else {
-								String str = (String)session.getAttribute("ampAdmin");
-								if (str.equals("no")) {
-										  return mapping.findForward("index");
-								}
-					 }					 
+						String str = (String)session.getAttribute("ampAdmin");
+						if (str.equals("no")) {
+						  return mapping.findForward("index");
+						}
+					 }
 
 					 final int NUM_RECORDS = 10;
-
-					 Collection fisCal = new ArrayList();
+					 Collection<AmpFiscalCalendar> fisCal = new ArrayList<AmpFiscalCalendar>();
 					 FiscalCalendarForm fcForm = (FiscalCalendarForm) form;
 					 int page = 0;
 					 
-					 logger.debug("In fiscal calendar manager action");
-					 
+					 logger.debug("In fiscal calendar manager action");					 
 					 if (request.getParameter("page") == null) {
-								page = 1;
+						page = 1;
 					 } else {
-								/*
-								 * check whether the page is a valid integer
-								 */
-								page = Integer.parseInt(request.getParameter("page"));
+						/* check whether the page is a valid integer */
+						page = Integer.parseInt(request.getParameter("page"));
 					 }
 
-					 Collection ampFisCal = (Collection)session.getAttribute("ampFisCal");
+					 Collection<AmpFiscalCalendar> ampFisCal = (Collection<AmpFiscalCalendar>)session.getAttribute("ampFisCal");
 					 if (ampFisCal == null) {
-								ampFisCal = DbUtil.getAllFisCalenders();
-								session.setAttribute("ampFisCal",ampFisCal);
+						ampFisCal = DbUtil.getAllFisCalenders();
+						session.setAttribute("ampFisCal",ampFisCal);
 					 }
 					 
 					 int numPages = ampFisCal.size() / NUM_RECORDS;
@@ -65,38 +58,36 @@ public class FiscalCalendarManager extends Action {
 
 					 /*
 					  * check whether the numPages is less than the page . if yes return error.
-					  */
-					 
+					  */					 
 					 int stIndex = ((page - 1) * NUM_RECORDS) + 1;
 					 int edIndex = page * NUM_RECORDS;
 					 if (edIndex > ampFisCal.size()) {
-								edIndex = ampFisCal.size();
+						edIndex = ampFisCal.size();
 					 }
 
-					 Vector vect = new Vector();
+					 Vector<AmpFiscalCalendar> vect = new Vector<AmpFiscalCalendar>();
 					 vect.addAll(ampFisCal);
 					 
 					 final String[] MONTHS = { "January","February","March","April","May","June","July",
 					 						   "August","September","October","November","December"};
-					 Vector month = new Vector();
+					 Vector<String> month = new Vector<String>();
 					 Calendar c = Calendar.getInstance();
 					 int mon;
 					 
 					 for (int i = (stIndex-1); i < edIndex; i++) {
-								fisCal.add(vect.get(i));
-								mon = ((AmpFiscalCalendar)vect.get(i)).getStartMonthNum().intValue();
-								c.set(Calendar.MONTH, mon - 1);
-								month.add(MONTHS[c.get(Calendar.MONTH)]);
+						fisCal.add(vect.get(i));
+						mon = (vect.get(i)).getStartMonthNum().intValue();
+						c.set(Calendar.MONTH, mon - 1);
+						month.add(MONTHS[c.get(Calendar.MONTH)]);
 					 }
 					 
-					 Collection pages = null;
-					 
+					 Collection<Integer> pages = null;					 
 					 if (numPages > 1) {
-								pages = new ArrayList();
-								for (int i = 0;i < numPages;i ++) {
-										  Integer pageNum = new Integer(i+1);
-										  pages.add(pageNum);
-								}
+						pages = new ArrayList<Integer>();
+						for (int i = 0;i < numPages;i ++) {
+						  Integer pageNum = new Integer(i+1);
+						  pages.add(pageNum);
+						}
 					 }
 					 
 					 fcForm.setFiscalCal(fisCal);

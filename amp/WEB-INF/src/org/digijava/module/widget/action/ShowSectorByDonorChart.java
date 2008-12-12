@@ -39,19 +39,17 @@ public class ShowSectorByDonorChart extends Action {
         if(cForm.getSelectedDonor()!=null && cForm.getSelectedDonor().longValue()!=-1){
         	donorIDs = new Long[1];
         	donorIDs[0] = cForm.getSelectedDonor();
-        }
-        
+        }        
         
         //generate chart
         JFreeChart chart = ChartWidgetUtil.getSectorByDonorChart(donorIDs, year, opt);
         ChartRenderingInfo info = new ChartRenderingInfo();
         
         //write image in response
-		ChartUtilities.writeChartAsPNG(response.getOutputStream(), 
-				chart, 
-				opt.getWidth().intValue(),
-				opt.getHeight().intValue(), info);
+		ChartUtilities.writeChartAsPNG(response.getOutputStream(),chart,opt.getWidth().intValue(),opt.getHeight().intValue(), info);
 		
+		//fill years' drop-down
+		cForm.setYears(ChartWidgetUtil.getYears());
 		return null;
 	}
 	

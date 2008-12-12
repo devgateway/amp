@@ -11,7 +11,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 
 public class AddFiscalCalendarForm extends ActionForm {
-
+	
+	private static final long serialVersionUID = 1L;	
 	private Long fiscalCalId = null;
 	private String fiscalCalName = null;
 	private String description = null;
@@ -21,7 +22,7 @@ public class AddFiscalCalendarForm extends ActionForm {
 	private String flag = null;
 	private String action = null;
 	private String baseCalendar = null;
-	
+	private String isFiscal=null;
 	
 	
 	public Collection<BaseCalendar> getBaseCalendarList() {
@@ -131,6 +132,16 @@ public class AddFiscalCalendarForm extends ActionForm {
 
 	public void setBaseCalendar(String baseCalendar) {
 		this.baseCalendar = baseCalendar;
+	}
+
+
+	public String getIsFiscal() {
+		return isFiscal;
+	}
+
+
+	public void setIsFiscal(String isFiscal) {
+		this.isFiscal = isFiscal;
 	}
 
 

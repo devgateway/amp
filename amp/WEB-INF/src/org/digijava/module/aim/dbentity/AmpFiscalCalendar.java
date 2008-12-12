@@ -16,6 +16,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 	private String name ;
 	private String description ;
 	private String baseCal ;
+	private Boolean isFiscal; //This indicates whether calendar is fiscal or not.
 	
 	/**
 	 * @return
@@ -123,6 +124,15 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 		
 		return false;
 	}
+
+	public Boolean getIsFiscal() {
+		return isFiscal;
+	}
+
+	public void setIsFiscal(Boolean isFiscal) {
+		this.isFiscal = isFiscal;
+	}
+
 }
 	
 	

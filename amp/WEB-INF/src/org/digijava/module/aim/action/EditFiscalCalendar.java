@@ -11,7 +11,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.AddFiscalCalendarForm;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.DbUtil;
@@ -22,19 +24,16 @@ public class EditFiscalCalendar extends Action {
 
 		  private static Logger logger = Logger.getLogger(EditFiscalCalendar.class);
 
-		  public ActionForward execute(ActionMapping mapping,
-								ActionForm form,
-								HttpServletRequest request,
-								HttpServletResponse response) throws java.lang.Exception {
+		  public ActionForward execute(ActionMapping mapping,ActionForm form,HttpServletRequest request,HttpServletResponse response) throws java.lang.Exception {
 
 					 HttpSession session = request.getSession();
 					 if (session.getAttribute("ampAdmin") == null) {
-								return mapping.findForward("index");
+						return mapping.findForward("index");
 					 } else {
-								String str = (String)session.getAttribute("ampAdmin");
-								if (str.equals("no")) {
-										  return mapping.findForward("index");
-								}
+						String str = (String)session.getAttribute("ampAdmin");
+						if (str.equals("no")) {
+						  return mapping.findForward("index");
+						}
 					 }
 					 
 					 logger.debug("In edit fiscal calendar");
@@ -59,11 +58,15 @@ public class EditFiscalCalendar extends Action {
 							ampFisCal.setYearOffset(new Integer(editForm.getYearOffset()));
 							ampFisCal.setName(editForm.getFiscalCalName());
 							ampFisCal.setBaseCal(editForm.getBaseCalendar());
-							if (editForm.getDescription() == null
-												 || editForm.getDescription().trim().equals("")) {
-									  ampFisCal.setDescription(new String(" "));
+							if(editForm.getIsFiscal().equals("1")){
+								ampFisCal.setIsFiscal(true);
+							}else{
+								ampFisCal.setIsFiscal(false);
+							}
+							if (editForm.getDescription() == null || editForm.getDescription().trim().equals("")) {
+								ampFisCal.setDescription(new String(" "));
 							} else {
-									  ampFisCal.setDescription(editForm.getDescription());
+								 ampFisCal.setDescription(editForm.getDescription());
 							}
 
 							DbUtil.add(ampFisCal);
@@ -83,7 +86,7 @@ public class EditFiscalCalendar extends Action {
 							editForm.setFlag("delete");
 							
 							if (editForm.getFiscalCalName() == null) {
-							 	
+								
 								logger.debug("Inside IF [EDIT]");
 								if (ampFisCal.getName() != null)
 									editForm.setFiscalCalName(ampFisCal.getName());
@@ -105,6 +108,11 @@ public class EditFiscalCalendar extends Action {
 								}else{
 									editForm.setBaseCalendar(BaseCalendar.BASE_GREGORIAN.getValue());
 								}
+								if(ampFisCal.getIsFiscal()!=null && ampFisCal.getIsFiscal()){
+									editForm.setIsFiscal("1");
+								}else{
+									editForm.setIsFiscal("0");
+								}
 								return mapping.findForward("forward");
 							 }
 							 else {
@@ -118,11 +126,16 @@ public class EditFiscalCalendar extends Action {
 								ampFisCal.setName(editForm.getFiscalCalName());
 								ampFisCal.setBaseCal(editForm.getBaseCalendar());
 								
-								if (editForm.getDescription() == null
-													 || editForm.getDescription().trim().equals("")) {
-										  ampFisCal.setDescription(new String(" "));
+								if (editForm.getDescription() == null || editForm.getDescription().trim().equals("")) {
+									ampFisCal.setDescription(new String(" "));
 								} else {
-										  ampFisCal.setDescription(editForm.getDescription());
+									ampFisCal.setDescription(editForm.getDescription());
+								}
+								
+								if(editForm.getIsFiscal().equals("1")){
+									ampFisCal.setIsFiscal(true);
+								}else{
+									ampFisCal.setIsFiscal(false);
 								}
 
 								DbUtil.update(ampFisCal);
@@ -131,8 +144,8 @@ public class EditFiscalCalendar extends Action {
 							 }
 					    } else if ("delete".equals(action)){
 					    	
-					    	Iterator itr1 = DbUtil.getFiscalCalOrgs(editForm.getFiscalCalId()).iterator();
-					    	Iterator itr2 = DbUtil.getFiscalCalSettings(editForm.getFiscalCalId()).iterator();
+					    	Iterator<AmpOrganisation> itr1 = DbUtil.getFiscalCalOrgs(editForm.getFiscalCalId()).iterator();
+					    	Iterator<AmpApplicationSettings> itr2 = DbUtil.getFiscalCalSettings(editForm.getFiscalCalId()).iterator();
 					    	
 					    	if (itr1.hasNext() || itr2.hasNext()) {
 					    		editForm.setFlag("orgReferences");
@@ -142,6 +155,7 @@ public class EditFiscalCalendar extends Action {
 								editForm.setStartDayNum(Integer.parseInt(request.getParameter("startDayNum")));
 								editForm.setStartMonthNum(Integer.parseInt(request.getParameter("startMonthNum")));
 								editForm.setYearOffset(Integer.parseInt(request.getParameter("yearOffset")));
+								editForm.setIsFiscal(request.getParameter("isFiscal"));
 								return mapping.findForward("forward");
 							} else {
 								if (session.getAttribute("ampFisCal") != null) {

@@ -57,14 +57,8 @@
 		<li>
 			<a href="mailto:support@odadata.eu"><%= ll(:navigation, :default, :contact) %></a>
 		</li>
-		<li>
-			<a href="#" class="no_cursor"><%= ll(:navigation, :language) %></a>
-	        <a href="#" class="arrow" onclick="return tm(this)"><img src="/images/menuarrow.gif" width="17" height="22" border="0" align="absmiddle"/></a>
-	        <ul>
-				<%= render :partial => "layouts/header/language_select" %>
-	        </ul>
-		</li>
-
+		
+		<%= render :partial => "layouts/header/language_select" %>
 	</ul>
 <!-- END Navigation -->
 

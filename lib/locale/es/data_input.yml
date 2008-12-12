@@ -43,6 +43,11 @@ es:
       title: Editar donante
       submit: Actualizar donante
       
+  donor_details:
+    edit: 
+      title: Editar donante
+      submit: Actualizar donante
+      
   exchange_rates:
     index:
       title: Tasas de cambio
@@ -143,6 +148,9 @@ es:
       choose_action: 'Escoge:'
       publish: Publica
       draft: Borrador
+      
+    show:
+      title: Project Fact Sheet for <i>{{project}}</i>
       
     new:
       title: Añadir Nuevo Proyecto

@@ -42,6 +42,11 @@ en:
       title: Edit Donor
       submit: Update Donor
       
+  donor_details:
+    edit: 
+      title: Edit Donor Contact Details
+      submit: Save
+      
   exchange_rates:
     index:
       title: Exchange Rates
@@ -142,6 +147,9 @@ en:
       choose_action: 'Choose:'
       publish: Publish
       draft: Draft
+      
+    show:
+      title: Project Fact Sheet for <i>{{project}}</i>
       
     new:
       title: Add New Project

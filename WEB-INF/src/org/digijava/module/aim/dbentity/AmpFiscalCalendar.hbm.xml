@@ -15,5 +15,6 @@
 		<property name="name" column="name" type="java.lang.String" />
 		<property name="description" column="description" type="text" />
 		<property name="baseCal" column="base_cal" type="java.lang.String" />
+		<property name="isFiscal" column="is_fiscal" type="java.lang.Boolean" />
 	</class>
 </hibernate-mapping>

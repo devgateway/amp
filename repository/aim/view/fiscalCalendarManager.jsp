@@ -51,9 +51,7 @@
 						<td noWrap width=600 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">&nbsp;
-										
-									</td>
+									<td vAlign="top" width="100%">&nbsp;</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
@@ -68,13 +66,11 @@
                                                               </b>
 														  </td><!-- end header -->
 														</tr>
-													<!-- Page Logic -->
-
+														<!-- Page Logic -->
 														<logic:empty name="aimFiscalCalendarForm" property="fiscalCal">
 														<tr>
 															<td colspan="5">
-                                                   		<b><digi:trn key="aim:nofiscalCalendar">No fiscal calendar present</digi:trn>
-                                                       </b>
+                                                   				<b><digi:trn key="aim:nofiscalCalendar">No fiscal calendar present</digi:trn></b>
 															</td>
 														</tr>
 														</logic:empty>
@@ -84,62 +80,56 @@
 																<table width="533" border=0 cellspacing="4"	 bgColor=#f4f4f2>
 																	<tr>
 																	  <td width="144"><b>
-																			<digi:trn key="aim:nameFiscalCalendar">Name
-																			</digi:trn></b>
+																			<digi:trn key="aim:nameFiscalCalendar">Name</digi:trn></b>
 																	  </td>
-                                                                        <td nowrap="nowrap" ><b>
-                                                                        
-                                                                        	<digi:trn key="aim:BaseCalendarFiscalCalendar">Base Calendar
-																			</digi:trn></b>
-																	  </td>
-																		<td width="117"><b>
-																			<digi:trn key="aim:startMonthFiscalCalendar">Start Month
-																			</digi:trn></b>
+                                                                        <td nowrap="nowrap" >
+                                                                        	<b><digi:trn key="aim:BaseCalendarFiscalCalendar">Base Calendar</digi:trn></b>
+																	  	</td>
+																	  	<td width="70" nowrap="nowrap" align="center">
+																	  		<b><digi:trn key="aim:isFiscalCalendar">Is Fiscal</digi:trn></b>
+																	  	</td>
+																		<td width="117">
+																			<b><digi:trn key="aim:startMonthFiscalCalendar">Start Month</digi:trn></b>
 																		</td>
-																		<td width="105"><b>
-																			<digi:trn key="aim:startDayFiscalCalendar">Start Day</digi:trn></b>
+																		<td width="105">
+																			<b><digi:trn key="aim:startDayFiscalCalendar">Start Day</digi:trn></b>
 																		</td>
-																		<td width="245"><b>
-																			<digi:trn key="aim:offsetFromCurrentYear">
-																			Offset (From current year)
-																			</digi:trn></b>
+																		<td width="245">
+																			<b><digi:trn key="aim:offsetFromCurrentYear">Offset (From current year)</digi:trn></b>
 																		</td>
 																	</tr>
-
                                                                 <c:set value="0" var="monthIndex"/>
 																<logic:iterate name="aimFiscalCalendarForm" property="fiscalCal" id="fiscalCal">
 																	<tr>
-																		<td height=5 width="593" colspan="4">
+																		<td height="5" width="593" colspan="4">
                                                               			</td>
 																	</tr>
 																	<tr>
 																	  <td height=20 width="144">
-																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																		  <c:set target="${urlParams}" property="fiscalCalId">
+																	  	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																		<c:set target="${urlParams}" property="fiscalCalId">
 																			<bean:write name="fiscalCal" property="ampFiscalCalId" />
-																		  </c:set>
-																		  <c:set target="${urlParams}" property="action" value="edit" />
+																		</c:set>
+																		<c:set target="${urlParams}" property="action" value="edit" />
 																		<c:set var="translation">
 																			<digi:trn key="aim:clickToEditFiscalCalendar">Click here to Edit Fiscal Calendar</digi:trn>
 																		</c:set>
-																		  <digi:link href="/editFiscalCalendar.do" name="urlParams" title="${translation}" >
-
+																		<digi:link href="/editFiscalCalendar.do" name="urlParams" title="${translation}" >
 																			<bean:write name="fiscalCal" property="name"/>
-																		  </digi:link>
+																		</digi:link>
 																	  </td>
-                                                                          <td nowrap="nowrap">
-                                                                        	<bean:write name="fiscalCal" property="baseCal"/>
+                                                                      <td nowrap="nowrap">
+                                                                      	<bean:write name="fiscalCal" property="baseCal"/>
+																	  </td>
+																	  <td width="105" align="center">
+																	  	<c:if test="${fiscalCal.isFiscal==true}"><digi:trn key="aim:fiscalCalendar:yes">Yes</digi:trn></c:if>
+																	  	<c:if test="${fiscalCal.isFiscal==false}"><digi:trn key="aim:fiscalCalendar:no">No</digi:trn></c:if>
 																	  </td>
 																		<td width="117">
-                                                                  			
-                                                                                        <c:set var="startMonth">
-                                                                                        <digi:trn key="calendar:${aimFiscalCalendarForm.month[monthIndex]}">
-                                                                                        ${aimFiscalCalendarForm.month[monthIndex]}
-                                                                                        </digi:trn>
-                                                                          </c:set>
-
-
-                                                                  			<c:out value="${startMonth}" />
+																			<c:set var="startMonth">
+                                                                            	<digi:trn key="calendar:${aimFiscalCalendarForm.month[monthIndex]}">${aimFiscalCalendarForm.month[monthIndex]}</digi:trn>
+                                                                          	</c:set>
+                                                                          	<c:out value="${startMonth}" />
 		                                                                  	<c:set value="${monthIndex + 1}" var="monthIndex"/>
                                                               			</td>
 																		<td width="105">

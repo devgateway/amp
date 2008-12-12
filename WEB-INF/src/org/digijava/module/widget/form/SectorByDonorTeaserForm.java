@@ -3,6 +3,7 @@ package org.digijava.module.widget.form;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
@@ -23,6 +24,8 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	private Boolean showTitle;
 	private Boolean showPercentage;
 	private Boolean showAmount;
+	//This property hold values that will be shown on years' drop-down
+	private Collection<LabelValueBean> years;
 	
 	public Collection<AmpOrganisation> getDonors() {
 		return donors;
@@ -83,5 +86,11 @@ public class SectorByDonorTeaserForm extends ActionForm {
 	}
 	public void setShowAmount(Boolean showAmount) {
 		this.showAmount = showAmount;
+	}
+	public Collection<LabelValueBean> getYears() {
+		return years;
+	}
+	public void setYears(Collection<LabelValueBean> years) {
+		this.years = years;
 	}
 }

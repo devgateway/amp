@@ -96,17 +96,7 @@
 		</td>
 		<td>
 			<html:select name="gisSectorByDonorTeaserForm" property="selectedYear" onchange="yearChanged()">
-				<html:option value="1998">1998</html:option>
-				<html:option value="1999">1999</html:option>
-				<html:option value="2000">2000</html:option>
-				<html:option value="2001">2001</html:option>
-				<html:option value="2002">2002</html:option>
-				<html:option value="2003">2003</html:option>
-				<html:option value="2004">2004</html:option>
-				<html:option value="2005">2005</html:option>
-				<html:option value="2006">2006</html:option>
-				<html:option value="2007">2007</html:option>
-				<html:option value="2008">2008</html:option>
+				<html:optionsCollection name="gisSectorByDonorTeaserForm" property="years" label="label" value="value"/>
 			</html:select>
 		</td>
 		<td nowrap="nowrap">

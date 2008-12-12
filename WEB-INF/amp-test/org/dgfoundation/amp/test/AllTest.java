@@ -4,10 +4,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
-import org.dgfoundation.amp.test.example.MockStrutTest;
-import org.dgfoundation.amp.test.example.MockTagLibTest;
-import org.dgfoundation.amp.test.example.SimpleUnitTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;
+import org.dgfoundation.amp.test.widget.AllWidgetTest;
 
 public class AllTest {
 
@@ -16,6 +14,7 @@ public class AllTest {
 
 		suite.addTest(AllReportTest.suite());
 		suite.addTest(AllCategoryManagerTest.suite());
+		suite.addTest(AllWidgetTest.suite());
 		return suite;
 	}
 

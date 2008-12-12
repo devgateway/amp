@@ -1405,7 +1405,7 @@ public class DbUtil {
         return organisation;
     }
 
-    public static Collection getAllFisCalenders() {
+    public static Collection<AmpFiscalCalendar> getAllFisCalenders() {
         Session session = null;
         Query qry = null;
         Collection fisCals = new ArrayList();
@@ -2210,10 +2210,10 @@ public class DbUtil {
         return level;
     }
 
-    public static Collection getFiscalCalOrgs(Long fiscalCalId) {
+    public static Collection<AmpOrganisation> getFiscalCalOrgs(Long fiscalCalId) {
 
         Session sess = null;
-        Collection col = null;
+        Collection<AmpOrganisation> col = null;
         Query qry = null;
 
         try {
@@ -2223,12 +2223,11 @@ public class DbUtil {
                 + " o where (o.ampFiscalCalId=:ampFisCalId)";
             qry = sess.createQuery(queryString);
             qry.setParameter("ampFisCalId", fiscalCalId, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
-            col = new ArrayList();
+            Iterator<AmpOrganisation> itr = qry.list().iterator();
+            col = new ArrayList<AmpOrganisation>();
             while (itr.hasNext()) {
                 col.add(itr.next());
             }
-
         } catch (Exception e) {
             logger.error("Exception from getFiscalCalOrgs()", e);
         }
@@ -2236,10 +2235,10 @@ public class DbUtil {
 
     }
 
-    public static Collection getFiscalCalSettings(Long fiscalCalId) {
+    public static Collection<AmpApplicationSettings> getFiscalCalSettings(Long fiscalCalId) {
 
         Session sess = null;
-        Collection col = null;
+        Collection<AmpApplicationSettings> col = null;
         Query qry = null;
 
         try {
@@ -2249,17 +2248,15 @@ public class DbUtil {
                 + " o where (o.fiscalCalendar=:ampFisCalId)";
             qry = sess.createQuery(queryString);
             qry.setParameter("ampFisCalId", fiscalCalId, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
+            Iterator<AmpApplicationSettings> itr = qry.list().iterator();
             col = new ArrayList();
             while (itr.hasNext()) {
                 col.add(itr.next());
             }
-
         } catch (Exception e) {
             logger.error("Exception from getFiscalCalSettings()", e);
         }
         return col;
-
     }
 
     public static AmpFiscalCalendar getFiscalCalByName(String name) {

@@ -1,0 +1,1 @@
+Dir[File.dirname(__FILE__) + '/caches/*.rb'].each { |c| require c }

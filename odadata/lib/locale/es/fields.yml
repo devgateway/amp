@@ -14,6 +14,7 @@ es:
         start: Fecha de inicio
         end: Fecha de finalización
         dac_sector: Sector CAD/CRS
+        crs_sector: Sector CRS
         implementing_agencies: Agencias Implementadoras
         contracted_agencies: Agencias Contratadas
         national_regional: Nacional / Regional

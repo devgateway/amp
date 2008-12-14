@@ -4,13 +4,16 @@ class CreateGeoInfo < ActiveRecord::Migration
       t.string :name
       t.string :code
     end
-
+    
     create_table :districts do |t|
       t.string  :name
       t.string  :code
       
       t.references :province
     end
+    
+    execute "SELECT AddGeometryColumn('','provinces','the_geom','-1','MULTIPOLYGON',2);"
+    execute "SELECT AddGeometryColumn('','districts','the_geom','-1','MULTIPOLYGON',2);"
     
     create_table :geo_relevances do |t|
       t.references :project, :province, :district

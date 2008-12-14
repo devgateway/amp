@@ -1,5 +1,0 @@
-<% if @project.geo_level2s.empty? %>
-	<b>National</b>
-<% else %>
-	<%= format_as_html_table(@project.geo_list.sort {|a,b| a[0] <=> b[0]}.map {|k,v| [k, format_as_html_list(v)]}, :per_row => 3, :class => "simple_list") %>
-<% end %>

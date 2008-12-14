@@ -1,3 +1,5 @@
+require 'tile_cache'
+
 class OdamapController < ApplicationController
   
   def index
@@ -6,9 +8,10 @@ class OdamapController < ApplicationController
   
   # Proxy for WxS requests
   def wxs
-    map = OdaMap::CachedRequest.new(params)
+    wms = TileCache::Services::WMS.new(params)
+    map = wms.get_map
     
-    render :text => map.data, :content_type => map.content_type
+    render :text => map.data, :content_type => map.layer.format, :layout => false
   end
   
   def query
@@ -16,12 +19,12 @@ class OdamapController < ApplicationController
     
     begin
       res_l1, res_l2 = map.query_by_lon_lat(params[:lon].to_f, params[:lat].to_f)
-      l1 = GeoLevel1.find_by_name(res_l2.getValue(2))
-      l2 = l1.geo_level2s.find_by_name(res_l2.getValue(3))
+      l1 = Province.find_by_name(res_l2.getValue(2), :select => 'id, name')
+      l2 = l1.districts.find_by_name(res_l2.getValue(3), :select => 'id, name')
     rescue
       nil
     end
-        
+      
     render :json => {
       :level1 => l1,
       :level2 => l2,

@@ -13,7 +13,7 @@
 </tr>
 <tr>
 	<td colspan=2 style="vertical-align: top">
-		<img src="/maps/project_<%= @project.id %>.png" />
+		<%= image_tag(map_project_path, :format => 'png') %>
 		<p style="padding: 0; margin: 0">* <%= ll(:reports, :map_legend) %></p>
 	</td>
 	<td style="vertical-align: top">

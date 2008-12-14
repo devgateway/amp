@@ -14,7 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :glossaries              
   map.resources :exchange_rates          
   map.resource  :session
-  map.resources :projects,                :member => { :update_status => :get }
+  map.resources :projects,                :member => { :update_status => :get, :map => :get }
                                           
   map.resources :users                   
   map.resources :agencies                

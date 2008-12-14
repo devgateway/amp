@@ -19,6 +19,7 @@ Rails::Initializer.run do |config|
   config.gem "rubyist-aasm", :source => 'http://gems.github.com', :lib => "aasm"
   config.gem "andand"
   config.gem "RedCloth"
+  config.gem "ruby-tilecache", :lib => 'tile_cache'
 
   # Add additional load paths for your own custom dirs
   config.load_paths += Dir["#{RAILS_ROOT}/app/models/*[^.rb]"]

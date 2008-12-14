@@ -6,7 +6,7 @@
 	  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
 	  <title>ODAnic - Official Development Assistance to Nicaragua Database</title>
 		<link rel="stylesheet" href="/openlayers/theme/default/style.css" type="text/css" />
-		<script type="text/javascript" src="/openlayers/OpenLayers.js"></script>
+		<script type="text/javascript" src="/open_layers/OpenLayers.js"></script>
 		
 	  	<%= stylesheet_link_tag('scaffold', 'odadata', 'odamap', :media => :all, :cache => false) %>
 		<%= javascript_include_tag('jquery', 'jquery_color', 'jquery_dimensions', 'odamap', 'behavior/checkboxes') %>
@@ -34,17 +34,15 @@
 			function init_map() {
 				var options = {
 					controls: [new OpenLayers.Control.MouseDefaults()],
-					maxExtent: new OpenLayers.Bounds(-87.850911, 10.707543, -82.431468, 15.025909),
-					maxResolution: 0.010986328125,
-					minResolution: 0.001373291015625,
-					resolutions: [0.00137, 0.0023975, 0.004195625, 0.007342344, 0.012849102],
-					tileSize: new OpenLayers.Size(400, 400)
+					maxExtent: new OpenLayers.Bounds(-87.6903, 10.7075, -82.5921, 15.0259),
+					maxResolution: 0.01991484375,
+					numZoomLevels: 5
 				}
 				
 						
 				map = new OpenLayers.Map( 'map', options );
 				layer = new OpenLayers.Layer.WMS( "Nicaragua",
-				        "/odamap/wxs", {layers: 'NIC2,NIC1'},
+				        "/odamap/wxs", {layers: 'basic'},
 						{singleTile: false, transitionEffect: 'resize'});		
             	
 				//map.addControl( new OpenLayers.Control.LayerSwitcher() );

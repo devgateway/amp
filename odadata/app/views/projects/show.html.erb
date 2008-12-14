@@ -1,213 +1,216 @@
-
 <div class="project_factsheet">
-<a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a>
-<h3><%= lc(:title, :project => @project.donor_project_number) %></h2>
-<dl class="main_details">
-	<dt><%= @project.class.human_attribute_name('title') %></dt>
-	<dd><%= @project.title %></dd>
-	
-	<dt><%= @project.class.human_attribute_name('description') %></dt>
-	<dd><%= @project.description %></dd>
-	
-	<dt><%= @project.class.human_attribute_name('donor') %></dt>
-	<dd><%= @project.donor.name %></dd>
-	
-	<dt><%= @project.class.human_attribute_name('donor_agency') %></dt>
-	<dd><%= @project.donor_agency.name %></dd>
-	
-	<dt><%= @project.class.human_attribute_name('country_strategy') %></dt>
-	<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>
-</dl>
-
-<div class="image_placeholder">
-Image
-</div>
-
-<h3><%= lc(:project_information) %></h3>
-<dl>
-    <dt><%= @project.class.human_attribute_name('prj_status') %></dt>
-    <dd><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
-    
-    <dt><%= @project.class.human_attribute_name('start') %></dt>
-    <dd><%= @project.start %></dd>
-    
-    <dt><%= @project.class.human_attribute_name('end') %></dt>
-    <dd><%= @project.end %></dd>
-    
-    <%# recipient/region/income code here?! %>
-    
-    <dt><%= @project.class.human_attribute_name('national_regional') %></dt>
-    <dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
-    
-    <dt><%= @project.class.human_attribute_name('type_of_implementation') %></dt>
-    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
-    
-    <dt><%= @project.class.human_attribute_name('dac_sector') %></dt>
-    <dd><%= @project.dac_sector.name_with_code %>&nbsp;</dd>
-    
-    <dt><%= @project.class.human_attribute_name('crs_sector') %></dt>
-    <dd><%= @project.crs_sector.name_with_code %>&nbsp;</dd>
-	<dt><%= @project.class.human_attribute_name('officer_responsible') %></dt>
-	<dd><%= @project.officer_responsible %>&nbsp;</dd>
-	
-	<dt><%= @project.class.human_attribute_name('website') %></dt>
-	<dd><%= auto_link(@project.website) %>&nbsp;</dd>
-	
-	<dt><%= @project.class.human_attribute_name('comments') %></dt>
-	<dd><%= @project.comments %>&nbsp;</dd>
-</dl>
-<h3><%= lc(:funding_information) %></h3>
-<dl>
-    <dt><%= @project.class.human_attribute_name('type_of_aid') %></dt>
-    <dd><%= @project.type_of_aid.name %></dd>
-    
-    <dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
-    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
-</dl>
-<dl>
-    <dt style="width:1%">&nbsp;
-    </dt>
-    <dd style="width:99%">
-        <table>
-		<% if @project.historic_funding %>
-                    	<tr><th colspan="4"><%= lc(:historic) %></th></tr>
-            <tr>
-                <th><%= HistoricFunding.human_attribute_name('payments') %></th>
-                <th><%= HistoricFunding.human_attribute_name('commitments') %></th>
-            </tr>
-            <tr>
-                <td><%= @project.historic_funding.payments %></td>
-                <td><%= @project.historic_funding.commitments %></td>
-            </tr>
-		<% end %>
-            
-                    <tr><th colspan="4"><%= lc(:totals) %></th></tr>
-            <tr>
-                <th><%= Funding.human_attribute_name('payments') %></th>
-                <th><%= Funding.human_attribute_name('commitments') %></th>
-            </tr>
-            <tr>
-                <td><%= @project.fundings.total_payments %></td>
-                <td><%= @project.fundings.total_commitments %></td>
-            </tr>
-            
-            <% @project.fundings.ordered.select(&:has_data?).each do |f| %>
-                <tr><th colspan="4"><%= lc(:funding, :year => f.year) %></th></tr>
-                <tr>
-                    <th><%= Funding.human_attribute_name('commitments') %></th>
-                    <th><%= Funding.human_attribute_name('payments') %></th>
-                    <th><%= Funding.human_attribute_name('on_budget') %></th>
-                    <th><%= Funding.human_attribute_name('on_treasury') %></th>
-                </tr>
-                <tr>
-                    <td class="currency right"><%= f.commitments %></td>
-                    <td class="currency right"><%= f.payments %></td>
-                    <td class="currency"><%= option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %>
-                    <td class="currency"><%= option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %>
-                </tr>
-                
-                <tr>
-                    <th><%= Funding.human_attribute_name('payments_q1') %></th>
-                    <th><%= Funding.human_attribute_name('payments_q2') %></th>
-                    <th><%= Funding.human_attribute_name('payments_q3') %></th>
-                    <th><%= Funding.human_attribute_name('payments_q4') %></th>
-                </tr>
-                <tr>
-                    <td class="currency right"><%= f.payments_q1 %></td>
-                    <td class="currency right"><%= f.payments_q2 %></td>
-                    <td class="currency right"><%= f.payments_q3 %></td>
-                    <td class="currency right"><%= f.payments_q4 %></td>
-                </tr>
-            <% end %>
-            
-            <% @project.funding_forecasts.ordered.select(&:has_data?).each do |f| %>
-                <tr><th colspan="4"><%= lc(:funding_forecast, :year => f.year) %></th></tr>
-                <tr>
-                    <th><%= FundingForecast.human_attribute_name('payments') %></th>
-                    <th><%= FundingForecast.human_attribute_name('commitments') %></th>
-                    <th><%= FundingForecast.human_attribute_name('on_budget') %></th>
-                    <th><%= FundingForecast.human_attribute_name('on_treasury') %></th>
-                </tr>
-                <tr>
-                    <td><%= f.payments %></td>
-                    <td><%= f.commitments %></td>
-                </tr>
-            <% end %>
-        </table>
-    </dd>
-</dl>
-	
-	<%# Gov Counterpart?! %>
-<h3><%= @project.class.human_attribute_name('implementing_agencies') %></h3>
-    <ul>
-        <% @project.implementing_agencies.each do |agency| %>
-            <li><%= agency.name %></li>
-        <% end %>
-    </ul>
-	
-<h3><%= @project.class.human_attribute_name('contracted_agencies') %></h3>
-    <ul>
-        <% @project.contracted_agencies.each do |agency| %>
-            <li><%= agency.name %></li>
-        <% end %>
-    </ul>
+	<a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a>
+	<h3><%= lc(:title, :project => @project.donor_project_number) %></h3>
 		
-<h3><%= lc(:markers) %></h3>
-		<table>
-			<tr>
-				<th><%= @project.class.human_attribute_name('gender_policy_marker') %></th>
-				<th><%= @project.class.human_attribute_name('environment_policy_marker') %></th>
-			</tr>
-			<tr>
-				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.gender_policy_marker) %></td>
-				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.environment_policy_marker) %></td>
-			</tr>
-		</table>
+	<dl class="main_details">
+		<dt><%= @project.class.human_attribute_name('title') %></dt>
+		<dd><%= @project.title %></dd>
 		
-		<table>
-			<tr>
-				<th><%= @project.class.human_attribute_name('biodiversity_marker') %></th>
-				<th><%= @project.class.human_attribute_name('climate_change_marker') %></th>
-				<th><%= @project.class.human_attribute_name('desertification_marker') %></th>
-			</tr>
-			<tr>
-				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.biodiversity_marker) %></td>
-				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.climate_change_marker) %></td>
-				<td><%= option_text_by_id(Project::MARKER_OPTIONS, @project.desertification_marker) %></td>
-			</tr>
-		</table>
+		<dt><%= @project.class.human_attribute_name('description') %></dt>
+		<dd><%= @project.description %></dd>
+		
+		<dt><%= @project.class.human_attribute_name('donor') %></dt>
+		<dd><%= @project.donor.name %></dd>
+		
+		<dt><%= @project.class.human_attribute_name('donor_agency') %></dt>
+		<dd><%= @project.donor_agency.name %></dd>
+		
+		<dt><%= @project.class.human_attribute_name('country_strategy') %></dt>
+		<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>
+	</dl>
 	
-<h3><%= lc(:mdgs) %></h3>
-		<ul>
-			<% @project.mdgs.each do |mdg| %>
-				<li><%= mdg.name %></li>
-			<% end %>
-		</ul>
+	<div class="map_image">
+		<%= link_to image_tag(map_project_path(@project), :size => "220x220"), { :action => 'show_map', :id => @project }, 
+		  	:popup => ['', 'height=700,width=915,scrollbars=yes,resizable=yes'], :class => 'map' %>
+	</div>
 	
-<h3><%= lc(:focal_regions) %></h3>
-	<% geo_list = @project.districts.group_by(&:province) %>
+	<h3><%= lc(:project_information) %></h3>
+	<dl>
+	    <dt><%= @project.class.human_attribute_name('prj_status') %></dt>
+	    <dd><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
+	    
+	    <dt><%= @project.class.human_attribute_name('start') %></dt>
+	    <dd><%= @project.start %></dd>
+	    
+	    <dt><%= @project.class.human_attribute_name('end') %></dt>
+	    <dd><%= @project.end %></dd>
+	    
+	    <%# recipient/region/income code here?! %>
+	    
+	    <dt><%= @project.class.human_attribute_name('national_regional') %></dt>
+	    <dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
+	    
+	    <dt><%= @project.class.human_attribute_name('type_of_implementation') %></dt>
+	    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
+	    
+	    <dt><%= @project.class.human_attribute_name('dac_sector') %></dt>
+	    <dd><%= @project.dac_sector.name_with_code %>&nbsp;</dd>
+	    
+	    <dt><%= @project.class.human_attribute_name('crs_sector') %></dt>
+	    <dd><%= @project.crs_sector.name_with_code %>&nbsp;</dd>
+		<dt><%= @project.class.human_attribute_name('officer_responsible') %></dt>
+		<dd><%= @project.officer_responsible %>&nbsp;</dd>
+		
+		<dt><%= @project.class.human_attribute_name('website') %></dt>
+		<dd><%= auto_link(@project.website) %>&nbsp;</dd>
+		
+		<dt><%= @project.class.human_attribute_name('comments') %></dt>
+		<dd><%= @project.comments %>&nbsp;</dd>
+	</dl>
 
-		<% if geo_list.empty? %>
-			<%= ll(:options, :national) %>
-		<% else %>
-			<table> 
-				<tr>
-					<% geo_list.keys.each do |p| %>
-						<th><%= p.name %></th>
-					<% end %>
-				</tr>
+	<h3><%= lc(:funding_information) %></h3>
+	<dl>
+	    <dt><%= @project.class.human_attribute_name('type_of_aid') %></dt>
+	    <dd><%= @project.type_of_aid.name %></dd>
+	    
+	    <dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
+	    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
+	</dl>
+	
+	<dl>
+		<dt><%= lc(:totals) %></dt>
+		<dd>
+			<dl>
+				<dt class="first"><%= Funding.human_attribute_name('payments') %></dt>
+				<dd class="first"><%= @project.fundings.total_payments %></dd>
 				
-				<tr>
-					<% geo_list.each do |province, districts| %>
-						<td>
-							<ul>
-								<% districts.each do |d| %>
-									<li><% d.name %></li>
-								<% end %>
-							</ul>
-						</td>
-					<% end %>
-				</tr>
-			<table>
+		        <dt><%= Funding.human_attribute_name('commitments') %></dt>
+		        <dd><%= @project.fundings.total_commitments %></dd>
+			</dl>
+		</dd>
+		
+		<% if @project.historic_funding %>
+	    	<dt><%= lc(:historic) %></dt>
+	    	<dd>
+				<dl>
+	            	<dt class="first"><%= HistoricFunding.human_attribute_name('payments') %></dt>
+					<dd class="first"><%= @project.historic_funding.payments %></dd>
+					
+	                <dt><%= HistoricFunding.human_attribute_name('commitments') %></dt>
+	           	    <dd><%= @project.historic_funding.commitments %></dd>
+				</dl>
+			</dd>
 		<% end %>
+		    
+	    <% @project.fundings.ordered.select(&:has_data?).each do |f| %>
+	    	<dt><%= lc(:funding, :year => f.year) %></dt>
+	        <dd>
+				<dl>
+	            	<dt class="first"><%= Funding.human_attribute_name('commitments') %></dt>
+					<dd class="first"><%= f.commitments %></dd>
+					
+	            	<dt><%= Funding.human_attribute_name('payments') %></dt>
+					<dd><%= f.payments %></dd>
+					
+	            	<dt><%= Funding.human_attribute_name('on_budget') %></dt>
+					<dd><%= option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
+					
+	            	<dt><%= Funding.human_attribute_name('on_treasury') %></dt>
+					<dd><%= option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
+					
+					<dt><%= Funding.human_attribute_name('payments_q1') %></dt>
+					<dd><%= f.payments_q1 %></dd>
+					
+		            <dt><%= Funding.human_attribute_name('payments_q2') %></dt>
+					<dd><%= f.payments_q2 %></dd>
+		
+		            <dt><%= Funding.human_attribute_name('payments_q3') %></dt>
+					<dd><%= f.payments_q3 %></dd>
+		
+		            <dt><%= Funding.human_attribute_name('payments_q4') %></dt>
+					<dd><%= f.payments_q4 %></dd>
+	        	</dl>
+			</dd>
+	    <% end %>
+	
+		<% @project.funding_forecasts.ordered.select(&:has_data?).each do |f| %>
+	    	<dt><%= lc(:funding_forecast, :year => f.year) %></dt>
+	        <dd>
+				<dl>
+					<dt class="first"><%= FundingForecast.human_attribute_name('payments') %></dt>
+					<dd class="first"><%= f.payments %></dd>
+		            
+	            	<dt><%= FundingForecast.human_attribute_name('commitments') %></dt>
+					<dd><%= f.commitments %></dd>
+					
+	            	<dt><%= FundingForecast.human_attribute_name('on_budget') %></dt>
+					<dd><%= option_text_by_id(Project::ON_OFF_BUDGET_OPTIONS, f.on_budget) %></dd>
+	
+	            	<dt><%= FundingForecast.human_attribute_name('on_treasury') %></dt>
+					<dd><%= option_text_by_id(Project::ON_OFF_TREASURY_OPTIONS, f.on_treasury) %></dd>
+	        	</dl>
+			</dd>
+	    <% end %>
+	</dl>
+		
+	<h3>Classification</h3>
+		<dl>		
+			<dt><%= @project.class.human_attribute_name('implementing_agencies') %></dt>
+			<dd>
+				<ul>
+			        <% @project.implementing_agencies.each do |agency| %>
+			            <li><%= agency.name %></li>
+			        <% end %>
+			    </ul>
+			</dd>
+
+			<dt><%= @project.class.human_attribute_name('contracted_agencies') %></dt>
+			<dd>
+				<ul>
+			        <% @project.contracted_agencies.each do |agency| %>
+			            <li><%= agency.name %></li>
+			        <% end %>
+			    </ul>
+			</dd>
+	
+			<dt><%= lc(:mdgs) %></dt>
+			<dd>
+				<ul>
+					<% @project.mdgs.each do |mdg| %>
+						<li><%= mdg.name %></li>
+					<% end %>
+				</ul>
+			</dd>
+			
+			<dt><%= lc(:markers) %></dt>
+			<dd>
+				<dl>
+					<dt class="first"><%= @project.class.human_attribute_name('gender_policy_marker') %></dt>
+					<dd class="first"><%= option_text_by_id(Project::MARKER_OPTIONS, @project.gender_policy_marker) %></dd>
+	
+					<dt><%= @project.class.human_attribute_name('environment_policy_marker') %></dt>
+					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.environment_policy_marker) %></dd>
+	
+					<dt><%= @project.class.human_attribute_name('biodiversity_marker') %></dt>
+					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.biodiversity_marker) %></dd>
+	
+					<dt><%= @project.class.human_attribute_name('climate_change_marker') %></dt>
+					<dd><%= option_text_by_id(Project::MARKER_OPTIONS, @project.climate_change_marker) %></dd>
+				</dl>
+			</dd>
+					
+			<% geo_list = @project.districts.group_by(&:province) %>
+			<dt><%= lc(:focal_regions) %></dt>
+			<dd>
+				<% if geo_list.empty? %>
+					<%= ll(:options, :national) %>
+				<% else %>
+					<dl>
+						<% first = true # lame hack %>
+						<% geo_list.each do |province, districts| %>
+							<dt<%= ' class="first"' if first %>><%= province.name %></dt>
+							<dd<%= ' class="first"' if first %>>
+								<ul>
+									<% districts.each do |d| %>
+										<li><%= d.name %></li>
+									<% end %>
+								</ul>
+							</dd>
+							
+							<% first = false %>
+						<% end %>
+					</dl>
+				<% end %>
+			</dd>
+		</dl>
 </div>

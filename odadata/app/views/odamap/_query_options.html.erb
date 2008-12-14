@@ -16,7 +16,7 @@
 		<div>
 			<ul class="checkbox_container">
 				<li class="all"><%= check_box "donors", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
-				<%= render :partial => "reports/query_options/donor", :collection => Donor.main.all(:order => 'name ASC') %>
+				<%= render :partial => "reports/query_options/donor", :collection => Donor.main.ordered.all %>
 			</ul>
 			<span class="next"><a onclick="$(this).parent().parent().next('h3').click(); return false;" href="#"><%= ll(:odamap, :next_step) %>...</a></span>
 		</div>
@@ -36,7 +36,7 @@
 		<div>
 			<ul class="checkbox_container">
 				<li class="all"><%= check_box "type_of_aid", "all", :checked => 'checked' %><%= ll(:options, :all) %></a>
-		  		<%= render :partial => "reports/query_options/type_of_aid", :collection => translate_options(Project::TYPE_OF_AID_OPTIONS) %>
+		  		<%= render :partial => "reports/query_options/type_of_aid", :collection => TypeOfAid.all %>
 			</ul>
 			<span class="next"><a onclick="$(this).parent().parent().next('h3').click(); return false;" href="#"><%= ll(:odamap, :next_step) %>...</a></span>
 		</div>
@@ -45,7 +45,7 @@
 		<h3 class="last"><%= ll(:reports, :status) %></h3>
 		<div>
 			<ul class="checkbox_container">
-				<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS.with_preselected(0, 1)) %>
+				<%= render :partial => "reports/query_options/status", :collection => translate_options(Project::STATUS_OPTIONS) %>
 			</ul>
 		</div>
 	</div>

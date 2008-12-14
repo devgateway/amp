@@ -83,15 +83,20 @@ public class XmlTransformerHelper {
   }
 
   public static String marshal(Activities activities) throws AmpHarvesterException {
-    String retValue = null;
+      String retValue = new String(marshalToByte(activities));
+    return retValue;    
+  }
+  
+  public static byte[] marshalToByte(Activities activities) throws AmpHarvesterException {
+    byte [] retValue=null;
     try {
       JAXBContext context = JAXBContext.newInstance(INSTANCE);
       Marshaller marshaller = context.createMarshaller();
 
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       marshaller.marshal(activities, outputStream);
-
-      retValue = new String(outputStream.toByteArray());
+      
+      retValue = outputStream.toByteArray();
 
     } catch (Exception ex) {
       throw new AmpHarvesterException(AmpHarvesterException.UNKNOWN_XML_VALIDATION, ex);

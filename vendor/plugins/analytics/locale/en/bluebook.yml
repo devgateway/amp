@@ -13,12 +13,16 @@ en:
                 member_states: Member States of the European Union
                 institutions: Institutions of the European Union
                 consensus: The European Consensus on Development / Development Policy
+                consensus_short: The European Consensus on Development
                 eu_aid: European Union Aid to Developing Countries
+                eu_aid_short: EU Aid to Developing Countries
                 code_of_conduct: The EU Code of Conduct on Complementarity and Division of Labour in Development Policy
+                code_of_conduct_short: EU Code of Conduct
             eu_cooperation:
                 title: EU Cooperation
                 policy: EU Cooperation in Nicaragua - Policy Orientations   
                 process: The EU Coordination, Harmonisation and Alignment Process in Nicaragua 
+                process_short: EU Coordination and Harmonisation Process 
                 facts: EU Cooperation in Nicaragua - Facts and Figures
                 achievement_in: EU Cooperation Achievements in {{year}}
                 forecasts_for: EU Cooperation Forecasts for {{year}}

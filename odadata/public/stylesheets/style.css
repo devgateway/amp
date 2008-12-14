@@ -881,3 +881,98 @@ form fieldset h3 {
 
 /* End Project Factsheet Styles */
 
+/* Start Bluebook Styles */
+table.bluebook {
+	width: 894px;
+	font-family: Arial, Helvetica, sans-serif !important;
+	border-collapse:collapse;
+	border-spacing:0;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+table.bluebook td.eu_sub_title {
+	background-color:#687EAB;
+	border-bottom:2px solid #FFFFFF;
+	color:#FFFFFF;
+	font-size:12px;
+	font-weight:bold;
+	padding:4px;
+	text-align:center;
+	vertical-align:top;
+}
+
+table.bluebook td.eu_title {
+	background-color:#003F7D;
+	border-bottom:2px solid #FFFFFF;
+	color:#FFFFFF;
+	font-size:12px;
+	font-weight:bold;
+	padding:4px;
+	text-align:center;
+	vertical-align:top;
+}
+table.bluebook td.sub_title
+{
+	background-color: #687EAB;
+	color: #fff;
+	padding: 4px;
+	text-align: left;
+	border-bottom: 2px #fff solid;
+	font-size: 12px;
+	vertical-align: top;
+}
+
+table.bluebook th {
+	text-align: left;
+	background-color: #687eab;
+	color: #fff;
+	padding: 4px;
+	text-align: left;
+	border: 1px #fff solid;
+	font-size: 11px;
+}
+
+table.bluebook p
+{
+	background-color: #DBE2F1;
+	color: #000;
+	font-size: 11px;
+	margin: 0;
+	padding: 0;
+}
+
+table.bluebook td.head
+{
+	background-color: #002F7D;
+	color: #fff;
+	padding: 4px;
+	text-align: left;
+	border-bottom: 2px #fff solid;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+table.bluebook td.title
+{
+	background-color: #003F7D;
+	color: #fff;
+	padding: 4px;
+	text-align: left;
+	border-bottom: 2px #fff solid;
+	font-size: 12px;
+	font-weight: bold;
+	font-style:normal;
+	font-family:Arial,Helvetica,sans-serif;
+}
+
+table.bluebook td {
+	text-align: left;
+	background-color: #DBE2F1;
+	color: #000;
+	padding: 4px;
+	border: 1px #fff solid;
+	font-size: 11px;
+}
+
+/* END Bluebook Styles */

@@ -1,5 +1,7 @@
+
+<div class="project_factsheet">
 <a class="prt" href="#" onclick="window.print();"><%= ll(:actions, :print) %></a>
-<h2><%= lc(:title, :project => @project.donor_project_number) %></h2>
+<h3><%= lc(:title, :project => @project.donor_project_number) %></h2>
 <dl class="main_details">
 	<dt><%= @project.class.human_attribute_name('title') %></dt>
 	<dd><%= @project.title %></dd>
@@ -17,11 +19,11 @@
 	<dd><%= @project.country_strategy.andand.strategy_number || t('options.country_strategy_unavailable') %></dd>
 </dl>
 
-<div style="float:left;height:90px;width:120px;border:1px solid black;margin:0px 6px 0px 6px;">
+<div class="image_placeholder">
 Image
 </div>
 
-<h3 style="clear:both;padding-top:30px;"><%= lc(:project_information) %></h3>
+<h3><%= lc(:project_information) %></h3>
 <dl>
     <dt><%= @project.class.human_attribute_name('prj_status') %></dt>
     <dd><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
@@ -35,26 +37,26 @@ Image
     <%# recipient/region/income code here?! %>
     
     <dt><%= @project.class.human_attribute_name('national_regional') %></dt>
-    <dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %></dd>
+    <dd><%= option_text_by_id(Project::NATIONAL_REGIONAL_OPTIONS, @project.national_regional) %>&nbsp;</dd>
     
     <dt><%= @project.class.human_attribute_name('type_of_implementation') %></dt>
-    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %></dd>
+    <dd><%= option_text_by_id(Project::IMPLEMENTATION_TYPES, @project.type_of_implementation) %>&nbsp;</dd>
     
     <dt><%= @project.class.human_attribute_name('dac_sector') %></dt>
-    <dd><%= @project.dac_sector.name_with_code %></dd>
+    <dd><%= @project.dac_sector.name_with_code %>&nbsp;</dd>
     
     <dt><%= @project.class.human_attribute_name('crs_sector') %></dt>
-    <dd><%= @project.crs_sector.name_with_code %></dd>
+    <dd><%= @project.crs_sector.name_with_code %>&nbsp;</dd>
 	<dt><%= @project.class.human_attribute_name('officer_responsible') %></dt>
-	<dd><%= @project.officer_responsible %></dd>
+	<dd><%= @project.officer_responsible %>&nbsp;</dd>
 	
 	<dt><%= @project.class.human_attribute_name('website') %></dt>
-	<dd><%= auto_link(@project.website) %></dd>
+	<dd><%= auto_link(@project.website) %>&nbsp;</dd>
 	
 	<dt><%= @project.class.human_attribute_name('comments') %></dt>
-	<dd><%= @project.comments %></dd>
+	<dd><%= @project.comments %>&nbsp;</dd>
 </dl>
-<h3 style="clear:both;padding-top:30px;"><%= lc(:funding_information) %></h3>
+<h3><%= lc(:funding_information) %></h3>
 <dl>
     <dt><%= @project.class.human_attribute_name('type_of_aid') %></dt>
     <dd><%= @project.type_of_aid.name %></dd>
@@ -67,7 +69,7 @@ Image
     </dt>
     <dd style="width:99%">
         <table>
-					<% if @project.historic_funding %>
+		<% if @project.historic_funding %>
                     	<tr><th colspan="4"><%= lc(:historic) %></th></tr>
             <tr>
                 <th><%= HistoricFunding.human_attribute_name('payments') %></th>
@@ -77,7 +79,7 @@ Image
                 <td><%= @project.historic_funding.payments %></td>
                 <td><%= @project.historic_funding.commitments %></td>
             </tr>
-					<% end %>
+		<% end %>
             
                     <tr><th colspan="4"><%= lc(:totals) %></th></tr>
             <tr>
@@ -90,7 +92,7 @@ Image
             </tr>
             
             <% @project.fundings.ordered.select(&:has_data?).each do |f| %>
-                        <tr><th colspan="4"><%= lc(:funding, :year => f.year) %></th></tr>
+                <tr><th colspan="4"><%= lc(:funding, :year => f.year) %></th></tr>
                 <tr>
                     <th><%= Funding.human_attribute_name('commitments') %></th>
                     <th><%= Funding.human_attribute_name('payments') %></th>
@@ -119,7 +121,7 @@ Image
             <% end %>
             
             <% @project.funding_forecasts.ordered.select(&:has_data?).each do |f| %>
-                        <tr><th colspan="4"><%= lc(:funding_forecast, :year => f.year) %></th></tr>
+                <tr><th colspan="4"><%= lc(:funding_forecast, :year => f.year) %></th></tr>
                 <tr>
                     <th><%= FundingForecast.human_attribute_name('payments') %></th>
                     <th><%= FundingForecast.human_attribute_name('commitments') %></th>
@@ -136,21 +138,21 @@ Image
 </dl>
 	
 	<%# Gov Counterpart?! %>
-<h3 style="clear:both;padding-top:30px;"><%= @project.class.human_attribute_name('implementing_agencies') %></h3>
+<h3><%= @project.class.human_attribute_name('implementing_agencies') %></h3>
     <ul>
         <% @project.implementing_agencies.each do |agency| %>
             <li><%= agency.name %></li>
         <% end %>
     </ul>
 	
-<h3 style="clear:both;padding-top:30px;"><%= @project.class.human_attribute_name('contracted_agencies') %></h3>
+<h3><%= @project.class.human_attribute_name('contracted_agencies') %></h3>
     <ul>
         <% @project.contracted_agencies.each do |agency| %>
             <li><%= agency.name %></li>
         <% end %>
     </ul>
 		
-<h3 style="clear:both;padding-top:30px;"><%= ll(:markers) %></h3>
+<h3><%= lc(:markers) %></h3>
 		<table>
 			<tr>
 				<th><%= @project.class.human_attribute_name('gender_policy_marker') %></th>
@@ -175,14 +177,14 @@ Image
 			</tr>
 		</table>
 	
-<h3 style="clear:both;padding-top:30px;"><%= lc(:mdgs) %></h3>
+<h3><%= lc(:mdgs) %></h3>
 		<ul>
 			<% @project.mdgs.each do |mdg| %>
 				<li><%= mdg.name %></li>
 			<% end %>
 		</ul>
 	
-<h3 style="clear:both;padding-top:30px;"><%= lc(:focal_regions) %></h3>
+<h3><%= lc(:focal_regions) %></h3>
 	<% geo_list = @project.districts.group_by(&:province) %>
 
 		<% if geo_list.empty? %>
@@ -208,6 +210,4 @@ Image
 				</tr>
 			<table>
 		<% end %>
-
-
-<br><br>
+</div>

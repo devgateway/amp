@@ -795,6 +795,13 @@ form fieldset h3 {
     width:120px;
 	overflow:auto;
 }
+#content #command_box INPUT {
+    padding: 2px;
+    font: 13px "Trebuchet MS", sans-serif;
+    border: 1px solid #aaa;
+    color: #777;
+}
+
 
 .tab_with_errors a {
     background: url(/images/tab_with_errors.png) no-repeat;
@@ -804,56 +811,73 @@ form fieldset h3 {
 
 
 /* Start Project Factsheet Styles */
-.main_details {
+.project_factsheet {
+	padding: 0px 20px 30px 20px;
+}
+
+.project_factsheet .main_details {
 	width:700px;
 	float:left;
 }
-.main_details DD
+.project_factsheet .main_details DD
 {
 	width:500px;
-
 }
-.main_details DT {
+.project_factsheet .main_details DT {
 	width:200px;
 }
 
-DL {
+.project_factsheet DL {
 	width:840px;
     margin:0;
-	margin-bottom: 20px;
+    clear:left;
+	float:left;
 }
 
-DT {
+.project_factsheet DT {
 	font-weight: bold;
 	float:left;
     clear:left;
     width:200px;
     margin:0;
     padding:4px 0 4px 0;
-    border-top:1px solid #333;
+    border-bottom:1px solid #999;
 }
 
-DD {
-    border-top:1px solid #333;
+.project_factsheet DD {
+    border-bottom:1px solid #999;
 	float:left;
     width:638px;
     margin:0;
     padding:4px 0 4px 0;
 }
-H3 {
+
+.project_factsheet H3 {
 	color:#003366;
 	font-family:Arial,Helvetica,sans-serif;
-	font-size:14px;
 	font-style:normal;
 	font-weight:bold;
+	font-size:18px;
+    clear:left;
+	padding-top:20px;
+    border-bottom:1px solid #333;
+	margin-bottom:5px;
+	margin-top:0px;
+	line-height:normal;
+	width:	838px;
 }
 
+.project_factsheet .prt {
+	float:right;
+}
+
+.project_factsheet .image_placeholder {
+	float:left;
+	height:90px;
+	width:120px;
+	border:1px solid black;
+	margin:0px 6px 0px 6px;
+}
 
 /* End Project Factsheet Styles */
 
-#command_box INPUT {
-    padding: 2px;
-    font: 13px "Trebuchet MS", sans-serif;
-    border: 1px solid #aaa;
-    color: #777;
-}

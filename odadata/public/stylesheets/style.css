@@ -784,7 +784,7 @@ form fieldset h3 {
 #content #command_box {
 	position:relative;
     top:27px;
-    height:90px;
+    height:100px;
     z-index: 10;
     background:#F8F8F8;
     padding:5px;
@@ -800,6 +800,7 @@ form fieldset h3 {
     font: 13px "Trebuchet MS", sans-serif;
     border: 1px solid #aaa;
     color: #777;
+	width:100px;
 }
 
 

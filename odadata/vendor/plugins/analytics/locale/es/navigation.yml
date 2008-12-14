@@ -14,7 +14,7 @@ es:
         code_of_conduct: Código de Conducta de UE
       eu_cooperation:
         title: Cooperación UE
-        process: Proceso de Coordinación y Armonicazión de la UE
+        process: Proceso de Coordinación y Armonización de la UE
         achievements: Logros de la Cooperacion UE en {{year}}
         forecasts_for: Proyecciones de la Cooperación UE para {{year}}
         trend: Tendencia de la Cooperación UE de {{from}} para {{to}}

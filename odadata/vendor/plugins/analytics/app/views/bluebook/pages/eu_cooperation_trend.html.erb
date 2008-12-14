@@ -1,7 +1,7 @@
 <table class="bluebook">
 	<tr>
 		<td>
-			<b><%= ll(:bluebook, :contents, :eu_cooperation, :trend) %> <%= Time.now.year-1 %>-<%= Time.now.year %></b>
+			<b><%= ll(:bluebook, :pages, :contents, :eu_cooperation, :trend, :from => Time.now.year-1, :to =>  Time.now.year) %></b>
 			<br>
 			<%= ll(:bluebook, :chart_subtitles, :trend) %>
 			<div id="column_graph">

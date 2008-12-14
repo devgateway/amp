@@ -884,7 +884,6 @@ form fieldset h3 {
 /* Start Bluebook Styles */
 table.bluebook {
 	width: 894px;
-	font-family: Arial, Helvetica, sans-serif !important;
 	border-collapse:collapse;
 	border-spacing:0;
 	margin-top:20px;

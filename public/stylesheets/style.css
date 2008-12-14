@@ -813,11 +813,12 @@ form fieldset h3 {
 
 /* Start Project Factsheet Styles */
 .project_factsheet {
-	padding: 0px 20px 30px 20px;
+	margin: 0px 20px 30px 20px;
+	float:left;
 }
 
 .project_factsheet .main_details {
-	width:620px;
+	width:610px;
 	float:left;
 }
 
@@ -832,8 +833,8 @@ form fieldset h3 {
 
 .project_factsheet DL {
 	width:840px;
-  margin:0;
-  clear:left;
+	margin:0;
+	clear:left;
 	float:left;
 }
 
@@ -844,11 +845,19 @@ form fieldset h3 {
   width:200px;
   margin:0;
   padding:4px 0 4px 0;
-  border-bottom:1px solid #999;
+  border-top:1px solid #999;
+}
+
+.project_factsheet DT.first {
+	border-top: none;
+}
+
+.project_factsheet DD.first {
+	border-top: none;
 }
 
 .project_factsheet DD {
-    border-bottom:1px solid #999;
+    border-top:1px solid #999;
 	float:left;
     width:638px;
     margin:0;
@@ -883,22 +892,22 @@ form fieldset h3 {
 }
 
 /* These are indented subsections */
-dl dl dd {
+.project_factsheet dl dl dd {
 	width: 438px;
 }
 
-dl dl .first {
+.project_factsheet dl dl .first {
 	border-top: none;
 }
 
 /* List styles */
-dl ul {
+.project_factsheet dl ul {
 	padding-left: 0;
 	list-style-type: none;
 }
 
 /* This will currently work with Mozilla browsers only but looks quite nice */
-dl ul li:before {
+.project_factsheet dl ul li:before {
 	content: "\00BB \0020";
 }
 

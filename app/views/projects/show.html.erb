@@ -3,8 +3,8 @@
 	<h3><%= lc(:title, :project => @project.donor_project_number) %></h3>
 		
 	<dl class="main_details">
-		<dt><%= @project.class.human_attribute_name('title') %></dt>
-		<dd><%= @project.title %></dd>
+		<dt class="first"><%= @project.class.human_attribute_name('title') %></dt>
+		<dd class="first"><%= @project.title %></dd>
 		
 		<dt><%= @project.class.human_attribute_name('description') %></dt>
 		<dd><%= @project.description %></dd>
@@ -26,8 +26,8 @@
 	
 	<h3><%= lc(:project_information) %></h3>
 	<dl>
-	    <dt><%= @project.class.human_attribute_name('prj_status') %></dt>
-	    <dd><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
+	    <dt class="first"><%= @project.class.human_attribute_name('prj_status') %></dt>
+	    <dd class="first"><%= option_text_by_id(Project::STATUS_OPTIONS, @project.prj_status) %></dd>
 	    
 	    <dt><%= @project.class.human_attribute_name('start') %></dt>
 	    <dd><%= @project.start %></dd>
@@ -60,16 +60,16 @@
 
 	<h3><%= lc(:funding_information) %></h3>
 	<dl>
-	    <dt><%= @project.class.human_attribute_name('type_of_aid') %></dt>
-	    <dd><%= @project.type_of_aid.name %></dd>
+	    <dt class="first"><%= @project.class.human_attribute_name('type_of_aid') %></dt>
+	    <dd class="first"><%= @project.type_of_aid.name %></dd>
 	    
 	    <dt><%= @project.class.human_attribute_name('grant_loan') %></dt>
 	    <dd><%= option_text_by_id(Project::GRANT_LOAN_OPTIONS, @project.grant_loan) %></dd>
 	</dl>
 	
 	<dl>
-		<dt><%= lc(:totals) %></dt>
-		<dd>
+		<dt class="first"><%= lc(:totals) %></dt>
+		<dd class="first">
 			<dl>
 				<dt class="first"><%= Funding.human_attribute_name('payments') %></dt>
 				<dd class="first"><%= @project.fundings.total_payments %></dd>
@@ -145,8 +145,8 @@
 		
 	<h3>Classification</h3>
 		<dl>		
-			<dt><%= @project.class.human_attribute_name('implementing_agencies') %></dt>
-			<dd>
+			<dt class="first"><%= @project.class.human_attribute_name('implementing_agencies') %></dt>
+			<dd class="first">
 				<ul>
 			        <% @project.implementing_agencies.each do |agency| %>
 			            <li><%= agency.name %></li>

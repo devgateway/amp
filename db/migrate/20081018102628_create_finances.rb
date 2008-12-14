@@ -17,11 +17,14 @@ class CreateFinances < ActiveRecord::Migration
       t.references :project
       
       t.integer :year
+      t.string  :currency
+      
       t.integer :payments_q1
       t.integer :payments_q2
       t.integer :payments_q3
       t.integer :payments_q4
       t.integer :commitments
+      
       t.boolean :on_budget,     :default => false
       t.boolean :on_treasury,   :default => false
     end
@@ -30,14 +33,19 @@ class CreateFinances < ActiveRecord::Migration
       t.references :project
       
       t.integer :year
+      t.string  :currency
+      
       t.integer :payments
       t.integer :commitments
+      
       t.boolean :on_budget,     :default => false
       t.boolean :on_treasury,   :default => false
     end
     
     create_table :historic_fundings do |t|
       t.references :project
+      
+      t.string  :currency
       
       t.integer :payments
       t.integer :commitments

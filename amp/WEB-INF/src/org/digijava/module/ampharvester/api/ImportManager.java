@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.ampharvester.jaxb10.Activities;
 import org.digijava.module.ampharvester.jaxb10.ActivityType;
@@ -57,21 +58,28 @@ public class ImportManager {
   public ImportManager(byte[] data) throws AmpHarvesterException {
     xmlActivities = (Activities)XmlTransformerHelper.geterateJAXB(data);
   }
-
+  
+  public ImportManager(Activities xmlActivities) throws AmpHarvesterException {
+      this.xmlActivities=xmlActivities;
+    }
+  
+  
   public StringBuffer startImportHttp(String ampTeamId, AmpTeam ampTeam) throws DgException {
     Set<String> errorSet = new HashSet();
     Transaction tx = null;
-    Session session = null;
+    Session session=null;
+    
     try {
 
       for (Object elem : xmlActivities.getActivity()) {
-        session = PersistenceManager.getSession();
+	session = PersistenceManager.getSession();
 
         ActivityType activityType = (ActivityType)elem;
-        String ampId = activityType.getAmpId();
+        String ampId = ampTeamId;
         try {
           tx = session.beginTransaction();
-          AmpActivity ampActivity = DbUtil.getAmpActivityById(ampId, session);
+          AmpActivity ampActivity = null;
+          //DbUtil.getAmpActivityById(ampId, session);
           if (ampActivity == null) {
             ampActivity = getAmpActivityNew(activityType, ampTeamId, session, ampTeam);
             ampActivity.setAmpId(ampId);
@@ -112,6 +120,8 @@ public class ImportManager {
   private AmpActivity getAmpActivityNew(ActivityType xmlActivity, String ampTeamId, Session session, AmpTeam ampTeam) throws AmpHarvesterException, DgException,
       HibernateException {
     AmpActivity retValue = initializeActivity(null, xmlActivity, ampTeam);
+    retValue.setName(retValue.getName()+" "+ampTeamId);
+    retValue.setBudget(false);
 
     session.save(retValue);
 
@@ -182,6 +192,7 @@ public class ImportManager {
       AmpActivitySector aas = new AmpActivitySector();
       aas.setActivityId(retValue);
       aas.setSectorId(ampSector);
+      aas.setClassificationConfig(SectorUtil.getClassificationConfigById(new Long(1)));
       if (cvt.getPercent() >= 0) {
         aas.setSectorPercentage(Float.valueOf(cvt.getPercent()));
       }

@@ -228,7 +228,8 @@ public class ExportManager {
 
           if (lt.getCountryName().equalsIgnoreCase(ampRegion.getCountry().getCountryName()) &&
               lt.getRegion().equalsIgnoreCase(ampRegion.getName())) {
-            FundingDetailType fdt = new FundingDetailTypeImpl();
+            FundingDetailTypeImpl fdt = new FundingDetailTypeImpl();
+            fdt.setPerspectiveType(0);
             if (ampRegionalFunding.getAdjustmentType() == null ){
               throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.AdjustmentType ");
             }
@@ -341,7 +342,8 @@ public class ExportManager {
       for (Iterator iterFD = ampFunding.getFundingDetails().iterator(); iterFD.hasNext(); ) {
         AmpFundingDetail ampFundingDetail = (AmpFundingDetail)iterFD.next();
 
-        FundingDetailType fdt = new FundingDetailTypeImpl();
+        FundingDetailTypeImpl fdt = new FundingDetailTypeImpl();
+        fdt.setPerspectiveType(0);
         if (ampFundingDetail.getAdjustmentType() == null){
           throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.AdjustmentType");
         }
@@ -399,7 +401,8 @@ public class ExportManager {
         for (Iterator iterCF = componentFundingCol.iterator(); iterCF.hasNext(); ) {
           AmpComponentFunding ampComponentFunding = (AmpComponentFunding)iterCF.next();
 
-          FundingDetailType fdt = new FundingDetailTypeImpl();
+          FundingDetailTypeImpl fdt = new FundingDetailTypeImpl();
+          fdt.setPerspectiveType(0);
           if (ampComponentFunding.getAdjustmentType() == null){
             throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Component["+componentType.getCode()+"] ComponentFunding.AdjustmentType");
           }

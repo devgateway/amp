@@ -54,6 +54,6 @@ public class AmpActivitySector {
 	}
 	
 	public String toString() {
-		return sectorId.getName();
+		return sectorId!=null?sectorId.getName():"";
 	}
 }

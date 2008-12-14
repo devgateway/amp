@@ -113,7 +113,7 @@ public class StandaloneJndiAMPInitializer {
 
 	/**
 	 * Fetches the real JNDI datasource name out of WEB-INF/jboss-web.xml This
-	 * is used to create an ampDS alias when JBoss is not running
+	 * is used to create an ampDS alias when JBoss is not managing the Naming Context directly
 	 * 
 	 * @return the real JNDI datasource name
 	 * @throws SAXException

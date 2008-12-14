@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   include I18nHelper
   
   helper :all
-  after_filter :compress_output
   around_filter :output_currency
   before_filter :set_locale
   layout :smart_layout

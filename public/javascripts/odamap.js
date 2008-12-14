@@ -1,3 +1,113 @@
+jQuery.fn.inspect = function(output) {
+  jQuery.inspect($(this), output);
+  return this;
+}
+ 
+jQuery.inspect = function(obj, output) {  
+  output = (output ? output : 'alert')
+  var text = "";
+  var _build = null;
+  var _dump = null;
+ 
+  switch (output) {
+    case 'console':
+      _build = jQuery.inspect._buildText;
+      _dump = jQuery.inspect._console;
+      break;
+    case 'window':
+      _build = jQuery.inspect._buildHTML;
+      _dump = jQuery.inspect._window;
+      break;
+    default:
+     _build = jQuery.inspect._buildText;
+      _dump = jQuery.inspect._alert;
+  }
+ 
+  switch (typeof obj) {
+    case 'string':
+      text = "String: " + obj;
+      break;
+    case 'number':
+      text = "Number: " + obj;
+      break;
+    case 'boolean':
+      text = "Boolean: " + obj;
+      break;
+    case 'undefined':
+      alert('Object is undefined');
+      return true;
+    default:
+      text = jQuery.inspect._parseObject(obj, _build);
+  }
+ 
+  _dump(text);
+}
+ 
+jQuery.inspect._parseObject = function(obj, _dumpTo) {
+  var text = ""
+  for (field in obj) {
+    try {
+      text += _dumpTo(field, obj[field]);
+   }
+    catch (err) {
+      // do nothing
+   }
+  }
+ 
+  return text;
+}
+ 
+jQuery.inspect._buildText = function(key, value) {
+  return key + ":" + value + "\n";
+}
+ 
+jQuery.inspect._buildHTML = function(key, value) {
+  return "<tr><td>" + key + "</td><td>" + value + "</td></tr>\n";
+}
+ 
+jQuery.inspect._console = function(text) {
+  console.log(text);
+}
+ 
+jQuery.inspect._alert = function(text) {
+  alert(text);
+}
+ 
+jQuery.inspect._window = function(text) {
+  text = "<html><head>" + jQuery.inspect._windowSettings.styles + "</head><body><table>" + text + "</table></body></html>";
+  dump_window = window.open('', '', jQuery.inspect._windowSettings.config);
+  dump_window.document.write(text);
+  dump_window.document.close();
+  dump_window.focus();
+}
+ 
+jQuery.inspect._windowSettings = jQuery.extend({
+  width: 800,
+  height: 600
+});
+ 
+jQuery.inspect._windowSettings.styles = "\
+<style> \
+  * { \
+   margin: 0; \
+  } \
+  html, body { \
+   height: 100%; \
+   text-align: center; \
+   margin-bottom: 1px; \
+   font-family: verdana,helvetica,sans-serif; \
+  } \
+  table { \
+    width: " + (jQuery.inspect._windowSettings.width - 20) + "px; \
+    border: 1px solid black; \
+} \
+td { \
+vertical-align: top; \
+} \
+</style>";
+ 
+jQuery.inspect._windowSettings.config = "width=" + jQuery.inspect._windowSettings.width + ",height=" + jQuery.inspect._windowSettings.height + ",scrollbars=yes,location=no,menubar=no,toolbar=no";
+
 // General JS extensions
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
@@ -37,7 +147,7 @@ function Region(loc_obj, loc_geom) {
 	this.name = loc_obj.name;
 	this.municipalities = new Array();
 	this.dom_id = "region_" + this.id;
-
+  
 	// Generate HTML elements
 	var inputname = "geo_level1s[" + this.id + "]";
 	var input = $('<input type="hidden" value="1" />').attr("name", inputname);
@@ -49,7 +159,7 @@ function Region(loc_obj, loc_geom) {
 	        .attr("id", this.dom_id)
 	        .text(this.name)
 	        .append(this.muc_list);
-
+  
     // Generate vector overlay
     //this.feature = new OpenLayers.Format.WKT().read(loc_geom);
 }
@@ -85,7 +195,7 @@ function Municipality(loc_obj, loc_geom) {
 
     // Generate HTML element
     var inputname = "geo_level2s[" + this.id + "]";
-	var input = $('<input type="hidden" value="1" />').attr("name", inputname);
+	  var input = $('<input type="hidden" value="1" />').attr("name", inputname);
 
     this.dom_id = "municipality_" + this.id;
     this.dom_element = $("<li></li>").text(this.name).append(input);
@@ -111,6 +221,8 @@ function update_locations(loc) {
 	    return;
 	}
 	
+	var province = loc.level1.province;
+	var district = loc.level2.district;
 	var parent = false;
 	var muc_found = false;
     
@@ -119,7 +231,7 @@ function update_locations(loc) {
     
 	// Check whether Region has been added already
 	$.each(locations.regions, function(i, region) {
-		if((region.id == loc.level1.id)) {
+		if((region.id == province.id)) {
 		    // Remove if only regions are shown
 		    if (map.getResolution() > 0.004) {
 		 	    locations.remove_region(i);
@@ -130,7 +242,7 @@ function update_locations(loc) {
 
 	// Location has not been added, yet
 	if (parent == false) {
-	    parent = new Region(loc.level1, loc.level1_geom); 
+	    parent = new Region(province, loc.level1_geom); 
 	    locations.add_region(parent);
 	}
 
@@ -138,7 +250,7 @@ function update_locations(loc) {
 	if (map.getResolution() <= 0.004) {
 	    // Check whether Municipio has been added already
     	$.each(parent.municipalities, function(i, municipio) {
-    		if((municipio.id == loc.level2.id)) {
+    		if((municipio.id == district.id)) {
     		    // Remove Municipality if found, and region if no Municipalities are left
     		 	parent.remove_municipality(i);
     		 	if (parent.municipalities.length == 0) {
@@ -157,7 +269,7 @@ function update_locations(loc) {
 
     	// Add if it has not been found
     	if (muc_found == false) {
-    	    var muc = new Municipality(loc.level2, loc.level2_geom);
+    	    var muc = new Municipality(district, loc.level2_geom);
     	    parent.add_municipality(muc);
     	}    	
     }

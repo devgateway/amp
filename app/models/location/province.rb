@@ -1,7 +1,7 @@
 class Province < ActiveRecord::Base
   CAPTION = "Region"
   
-  has_many                :districts, :dependent => :delete_all
+  has_many                :districts, :dependent => :delete_all, :order => 'name ASC'
   has_many                :geo_relevances, :dependent => :delete_all
   has_many                :projects, :through => :geo_relevances, :uniq => true
   

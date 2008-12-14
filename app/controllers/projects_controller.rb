@@ -65,10 +65,16 @@ class ProjectsController < ApplicationController
 
    def show_map
      @project = Project.find(params[:id])
-     OdaMap::ProjectInfo.new(@project).save
 
      render :layout => 'report_window'
    end
+   
+  def map
+    @project = Project.find(params[:id])
+    map_file = OdaMap::ProjectInfo.new(@project).save
+    
+    send_file map_file, :content_type => 'image/png', :disposition => 'inline'
+  end
        
   # ================================================
   # = Actions for changing the status of a project =

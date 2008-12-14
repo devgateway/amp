@@ -11,9 +11,10 @@ en:
         description: Description
         country_strategy: Related Country Strategy
         prj_status: Project Status
-        start: Start date
-        end: End date
+        start: Start Date
+        end: End Date
         dac_sector: DAC / CRS Sector
+        crs_sector: CRS Sector
         implementing_agencies: Implementing Agencies
         contracted_agencies: Contracted Agencies
         national_regional: National / Regional

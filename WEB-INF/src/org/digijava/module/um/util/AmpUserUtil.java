@@ -58,7 +58,7 @@ public class AmpUserUtil {
             String queryString = "select u from " + User.class.getName() + " u"
                     + " where u.emailVerified=:emailVerified order by u.email";
             qry = session.createQuery(queryString);
-            qry.setBoolean("emailVerified", true);
+            qry.setBoolean("emailVerified", false);
             users = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get user");

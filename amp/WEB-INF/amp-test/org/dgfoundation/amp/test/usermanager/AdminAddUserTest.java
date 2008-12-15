@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.test.usermanager;
 
 
+import java.util.Collection;
 import java.util.Random;
 
 import javax.servlet.ServletContext;
@@ -8,17 +9,14 @@ import javax.servlet.ServletContext;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.test.util.Configuration;
 import org.dgfoundation.amp.test.util.TestUtil;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.action.RegisterUser;
 import org.digijava.module.um.form.AddUserForm;
-import org.digijava.module.um.util.DbUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
-import junit.framework.Assert;
 
 public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 
@@ -42,8 +40,6 @@ public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 	}
 	public void testAddWorkSpace() throws Exception {
 		MockHttpServletRequest request = getActionMockObjectFactory().getMockRequest();
-		MockHttpServletResponse response = getActionMockObjectFactory().getMockResponse();
-
 		TestUtil.setLocaleEn(request);
 		TestUtil.setSiteDomain(request);
 		addUserForm.setAddWorkspace(true);
@@ -54,9 +50,30 @@ public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 		verifyNoActionErrors();
 
 	}
+	public void testRolesAvailable() throws Exception {	
+		addRoles();
+		assertFalse("There are not Roles!!", addUserForm.getAmpRoles().isEmpty());
+	}
+	public void testWorkspacesAvailable() throws Exception {	
+		addWorkspaces();
+		assertFalse("There are not Workspaces!!", addUserForm.getWorkspaces().isEmpty());
+	}
+	
 	
 	protected void tearDown() throws Exception {
 		super.tearDown();
+	}
+	private void addWorkspaces(){
+		MockHttpServletRequest request = getActionMockObjectFactory().getMockRequest();
+			
+		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) request.getSession().getAttribute("ampWorkspaces");
+		if (ampWorkspaces == null) {
+			ampWorkspaces = TeamUtil.getAllTeams();
+		}
+		addUserForm.setWorkspaces(ampWorkspaces);
+	}
+	private void addRoles(){
+		addUserForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 	}
 
 	private void fillForm() {

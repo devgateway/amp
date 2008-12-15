@@ -2,6 +2,8 @@ package org.dgfoundation.amp.test.util;
 
 import java.lang.reflect.Method;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,8 +16,12 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.quartz.ee.servlet.QuartzInitializerListener;
+
+import com.mockrunner.mock.web.MockServletContext;
 
 /**
  * A Helper class for test cases
@@ -107,4 +113,23 @@ public class TestUtil {
 		}
 		return null;
 	}
+
+	/**
+	 * Set AMP attributes to the servlet context
+	 * 
+	 * @param ctx
+	 * @throws Exception
+	 */
+	public static void initializeContext(ServletContext ctx) throws Exception {
+		ServletContextEvent event = new ServletContextEvent(ctx);
+		new QuartzInitializerListener().contextInitialized(event);
+		new AMPStartupListener().contextInitialized(event);
+	}
+
+	public static void destroyContext(ServletContext ctx) throws Exception {
+		ServletContextEvent event = new ServletContextEvent(ctx);
+		new QuartzInitializerListener().contextDestroyed(event);
+		new AMPStartupListener().contextDestroyed(event);
+	}
+
 }

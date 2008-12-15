@@ -48,12 +48,14 @@ import org.digijava.kernel.security.DigiPolicy;
 import org.digijava.kernel.service.ServiceContext;
 import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.service.WebappServiceContext;
+import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.util.AccessLogger;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
 import org.hibernate.engine.SessionFactoryImplementor;
+import org.digijava.module.translation.util.HashKeyPatch;
 
 /**
  * Parses digi.xml configuration file,
@@ -69,6 +71,8 @@ public class ConfigLoaderListener
 
     private static String MODULE_LISTENERS = ConfigLoaderListener.class.
         getName() + ".moduleContextListeners";
+    
+    private static TrnAccesTimeSaver trnTimeStampSaver = null;
 
     public static int parseBugFixingVersion(String completeProductVersion, String versionPrefix) {
     		int indexOf = completeProductVersion.indexOf(versionPrefix);
@@ -80,7 +84,8 @@ public class ConfigLoaderListener
     		}
     	return Integer.parseInt(bugFixingVersionString);
     }
-    
+   
+
     public void contextInitialized(ServletContextEvent sce) {
         //ResourceStreamHandlerFactory.installIfNeeded();
 
@@ -132,6 +137,13 @@ public class ConfigLoaderListener
 
             ViewConfigFactory.initialize(sce.getServletContext());
 
+            // patches translations to hash code keys if this is not already done. 
+            HashKeyPatch.patchTranslationsIfNecessary();
+            
+            //TODO it will be better to get thread priority from digi.xml
+            trnTimeStampSaver = new TrnAccesTimeSaver();
+            //Starts low priority thread which saves last access times for translations.
+            trnTimeStampSaver.startup();
         }
         catch (Exception ex) {
             logger.debug("Unable to initialize", ex);
@@ -157,15 +169,15 @@ public class ConfigLoaderListener
 		int jdbcBugfixingVersion=Integer.parseInt((String)compat.get("jdbc.version.bugfixing"));
 		
 		
-		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
-				metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
-				dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
-			throw new IncompatibleEnvironmentException("Database version is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
-	
-		if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
-				metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
-				jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
-			throw new IncompatibleEnvironmentException("JDBC driver version is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
+//		if(metaData.getDatabaseMajorVersion()!=dbMajorVersion || 
+//				metaData.getDatabaseMinorVersion()!=dbMinorVersion || 
+//				dbBugfixingVersion>parseBugFixingVersion(metaData.getDatabaseProductVersion(), metaData.getDatabaseMajorVersion()+"."+metaData.getDatabaseMinorVersion())) 
+//			throw new IncompatibleEnvironmentException("Database version is incompatible. Database version needs to be "+dbMajorVersion+"."+dbMinorVersion+" and bugfixing version at least "+dbBugfixingVersion);
+//	
+//		if(metaData.getDriverMajorVersion()!=jdbcMajorVersion || 
+//				metaData.getDriverMinorVersion()!=jdbcMinorVersion || 
+//				jdbcBugfixingVersion>parseBugFixingVersion(metaData.getDriverVersion(), metaData.getDriverMajorVersion()+"."+metaData.getDriverMinorVersion())) 
+//			throw new IncompatibleEnvironmentException("JDBC driver version is incompatible. JDBC version needs to be "+jdbcMajorVersion+"."+jdbcMinorVersion+" and bugfixing version at least "+jdbcBugfixingVersion);
 	
 		
 		logger.info("Database compatibility OK.");
@@ -204,6 +216,9 @@ public class ConfigLoaderListener
      * see ServletContextListener form more details.
      */
     public void contextDestroyed(ServletContextEvent sce) {
+    	if (trnTimeStampSaver!=null){
+    		trnTimeStampSaver.shutdown();
+    	}
         ServiceManager.getInstance().shutdown(1);
         try {
             Map listeners = (Map) sce.getServletContext().getAttribute(

@@ -35,7 +35,8 @@ import java.io.Serializable;
 
 public class RefLink implements Serializable {
 
-    String path;
+	private static final long serialVersionUID = 1L;
+	String path;
 
     public RefLink() {
     }

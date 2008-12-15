@@ -37,6 +37,7 @@ import org.apache.struts.action.ActionMapping;
 
 public final class TranslatorForm extends ActionForm {
 
+	private static final long serialVersionUID = 1L;
 	public String strData = "";
 	public String strKey = "";
 	public String strMode = "";

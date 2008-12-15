@@ -30,7 +30,9 @@ import org.apache.log4j.Logger;
 public class DropdownTag
     extends TagSupport {
 
-    private static Logger logger = Logger.getLogger(DropdownTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(DropdownTag.class);
 
     protected String name;
     protected String property;

@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
@@ -43,10 +44,10 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.translation.security.TranslateSecurityManager;
-import org.digijava.kernel.util.DigiConfigManager;
 
 /**
  * Custom tag that retrieves internationalized message
@@ -61,7 +62,9 @@ import org.digijava.kernel.util.DigiConfigManager;
 public class TrnTag
     extends BodyTagSupport {
 
-    private static final Logger logger = Logger.getLogger(TrnTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger logger = Logger.getLogger(TrnTag.class);
 
     private static final int NUMBER_OF_PARAMETERS = 5;
 
@@ -74,6 +77,7 @@ public class TrnTag
     private String type = null;
     private String siteId = null;
     private String locale = null;
+    private String keyWords = null;
 
     private String[] args;
 
@@ -329,7 +333,7 @@ public class TrnTag
                      actualType);
 
         try {
-            translate(getKey(), site, langCode, actualType);
+            translate(getKey(), site, langCode, actualType, keyWords);
         }
         catch (WorkerException ex1) {
             logger.error("Error in trn tag", ex1);
@@ -339,11 +343,11 @@ public class TrnTag
         return EVAL_PAGE;
     }
 
-    private void translate(String key, Site site, String langCode, int trnType) throws WorkerException {
-        HashSet checked = new HashSet();
-        String value = TranslatorWorker.getInstance(key).
-            translateFromTree(key, site.getId().longValue(),
-                              langCode, null, trnType);
+    private void translate(String key, Site site, String langCode, int trnType, String keyWords) throws WorkerException {
+        HashSet<String> checked = new HashSet<String>();
+        String genKey = getGeneratedKey();
+        String value = TranslatorWorker.getInstance(genKey).
+            translateFromTree(genKey, site.getId().longValue(),langCode, null, trnType,keyWords);
         if (value != null) {
             writeData(value, getMessageEdit());
             return;
@@ -352,9 +356,9 @@ public class TrnTag
 
         Locale defLang = SiteUtils.getDefaultLanguages(site);
         if (!defLang.getCode().equals(langCode)) {
-            value = TranslatorWorker.getInstance(key).
-                translateFromTree(key, site.getId().longValue(),
-                                  defLang.getCode(), null, trnType);
+            value = TranslatorWorker.getInstance(genKey).
+                translateFromTree(genKey, site.getId().longValue(),
+                                  defLang.getCode(), null, trnType,keyWords);
             if (value != null) {
                 writeData(value, getMessageTranslate());
                 return;
@@ -362,7 +366,7 @@ public class TrnTag
             checked.add(defLang.getCode());
         }
 
-        /** @todo implement more wise solution here */
+        /** @TODO implement more wise solution here */
         String defaultTrn = getBodyText();
         if (defaultTrn == null) {
             defaultTrn = getDefaultTranslation();
@@ -370,35 +374,35 @@ public class TrnTag
                 "Returning message from tag body");
         }
 
-        value = TranslatorWorker.getInstance(key).
-            translateFromTree(key, site.getId().longValue(),
-                              "en", defaultTrn, trnType);
+        value = TranslatorWorker.getInstance(genKey).
+            translateFromTree(genKey, site.getId().longValue(),
+                              "en", defaultTrn, trnType,keyWords);
         if (value != null) {
             writeData(value, getMessageTranslate());
             return;
         }
         checked.add("en");
 
-        Set otherLangs = SiteUtils.getUserLanguages(site);
+        Set<Locale> otherLangs = SiteUtils.getUserLanguages(site);
         otherLangs.removeAll(checked);
         if (otherLangs.size() != 0) {
             String[] langs = new String[otherLangs.size()];
             int i =0;
-            Iterator iter = otherLangs.iterator();
+            Iterator<Locale> iter = otherLangs.iterator();
             while (iter.hasNext()) {
-                Locale item = (Locale) iter.next();
+                Locale item =  iter.next();
                 langs[i] = item.getCode();
                 i ++;
             }
-            value = TranslatorWorker.getInstance(key).
-                translateFromTree(key, site.getId().longValue(),
-                                  langs, null, null, trnType);
+            value = TranslatorWorker.getInstance(genKey).
+                translateFromTree(genKey, site.getId().longValue(),
+                                  langs, null, null, trnType,keyWords);
             if (value != null) {
                 writeData(value, getMessageTranslate());
                 return;
             }
         }
-        writeData("key:" + key + getMessageCreate());
+        writeData("key:" + genKey + getMessageCreate());
     }
 
     /**
@@ -464,18 +468,18 @@ public class TrnTag
 
             return msg;
         }
-        Map translationParams = (Map) RequestUtils.getDigiContextAttribute( (
+        Map<String,String> translationParams =  RequestUtils.getDigiContextAttributeEx( (
             HttpServletRequest) pageContext.getRequest(),
             Constants.TRANSLATION_PARAMETERS);
 
         if (translationParams != null) {
-            translationParams = new HashMap(translationParams);
+            translationParams = new HashMap<String,String>(translationParams);
         }
 
         for (int i = 0; i < args.length; i++) {
             if (args[i] != null) {
                 if (translationParams == null) {
-                    translationParams = new HashMap();
+                    translationParams = new HashMap<String,String>();
                 }
                 translationParams.put(Integer.toString(i), args[i]);
             }
@@ -506,10 +510,10 @@ public class TrnTag
         String translatorTag = "";
 
         if (showLinks) {
-            if (this.getKey().trim().startsWith("cn") ||
-                this.getKey().trim().startsWith("ln")) {
-                return translatorTag;
-            }
+            if (this.getKey() != null
+					&& (this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln"))) {
+				return translatorTag;
+			}
 
             String actualType = getActualEditType();
 
@@ -580,47 +584,59 @@ public class TrnTag
             siteParam = "&siteId=" + siteId;
         }
         return "<a href=\"" + getHref() +
-            "/translation/showTranslate.do?key=" + getKey() + siteParam +
+            "/translation/showTranslate.do?key=" + getGeneratedKey() + siteParam +
             "&back_url=" + backUrl + "&type=" + trnType + "\">&lt;" + operType +
             suffix + "&gt;</a>";
 
     }
 
     /**
-     * Release any acquired resources.
-     */
-    public void release() {
-
-        super.release();
-
-    }
+	 * Release any acquired resources.
+	 */
+	public void release() {
+		super.release();
+	}
 
     private String getActualEditType() {
-        if (siteId != null) {
-            return LOCAL_TRANSLATION;
-        }
-        else if (LOCAL_TRANSLATION.equals(type)) {
-            return LOCAL_TRANSLATION;
+		if (siteId != null) {
+			return LOCAL_TRANSLATION;
+		} else if (LOCAL_TRANSLATION.equals(type)) {
+			return LOCAL_TRANSLATION;
 
-        }
-        return GROUP_TRANSLATION;
-    }
+		}
+		return GROUP_TRANSLATION;
+	}
 
     private int getActualTypeCode() {
-        if (siteId != null) {
-            return TranslatorWorker.TRNTYPE_LOCAL;
-        }
-        else if (LOCAL_TRANSLATION.equals(type)) {
-            return TranslatorWorker.TRNTYPE_LOCAL;
+		if (siteId != null) {
+			return TranslatorWorker.TRNTYPE_LOCAL;
+		} else if (LOCAL_TRANSLATION.equals(type)) {
+			return TranslatorWorker.TRNTYPE_LOCAL;
 
-        }
-        else if (GROUP_TRANSLATION.equals(type)) {
-            return TranslatorWorker.TRNTYPE_GROUP;
-        }
-        else {
-            return TranslatorWorker.TRNTYPE_GLOBAL;
-        }
+		} else if (GROUP_TRANSLATION.equals(type)) {
+			return TranslatorWorker.TRNTYPE_GROUP;
+		} else {
+			return TranslatorWorker.TRNTYPE_GLOBAL;
+		}
 
-}
+	}
+
+	/**
+	 * Returns system generated key.
+	 * Now this is hash code of the tag body - texts specified in the tag.
+	 * @return
+	 */
+	public String getGeneratedKey() {
+		return TranslatorWorker.generateTrnKey(getDefaultTranslation());
+	}
+
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
+	}
+
+	public String getKeyWords() {
+		return keyWords;
+	}
+
 
 }

@@ -22,17 +22,14 @@
 
 package org.digijava.module.translation.action;
 
+import java.net.URLDecoder;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.module.translation.form.TranslationForm;
 import org.digijava.kernel.util.DgUtil;
-import java.util.StringTokenizer;
-import java.net.URLDecoder;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.util.RequestUtils;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -52,7 +49,7 @@ public class SwitchLanguage
                                  javax.servlet.http.HttpServletResponse
                                  response) throws java.lang.Exception {
 
-        TranslationForm formBean = (TranslationForm) form;
+        //TranslationForm formBean = (TranslationForm) form;
         String localeKey = null;
         String referrerUrl = request.getParameter("rfr");
         localeKey = request.getParameter("code");

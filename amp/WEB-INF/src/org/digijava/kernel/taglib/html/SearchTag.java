@@ -40,7 +40,8 @@ import javax.servlet.jsp.tagext.BodyContent;
 public class SearchTag
     extends BodyTagSupport {
 
-    private String module;
+	private static final long serialVersionUID = 1L;
+	private String module;
     private String instance;
     private String name;
 

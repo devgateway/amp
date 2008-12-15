@@ -22,14 +22,11 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
-import org.apache.struts.util.ResponseUtils;
 
-import org.digijava.kernel.taglib.util.RefLink;
-import org.digijava.kernel.taglib.util.RefLinkManager;
-import org.digijava.kernel.util.DgUtil;
+import org.apache.struts.util.ResponseUtils;
 import org.digijava.kernel.taglib.util.TagUtil;
+import org.digijava.kernel.util.DgUtil;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -43,7 +40,9 @@ import org.digijava.kernel.taglib.util.TagUtil;
 public class RefTag
     extends org.apache.struts.taglib.html.BaseHandlerTag {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * The body content of this tag (if any).
      */
     protected String text = null;

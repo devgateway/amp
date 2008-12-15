@@ -72,6 +72,32 @@ public class RequestUtils {
     }
 
     /**
+     * Get attribute from request/tiles context. Same as above, but with generics. 
+     * At first, method searches
+     * attribute by key <code>attribute</code> in the tiles context (if it
+     * exists for the current request). If search is unsuccessful, then it
+     * searches this attribute in the request scope
+     * @param <E>
+     * @param request
+     * @param attribute
+     * @param clazz
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	public static <E> E getDigiContextAttributeEx(HttpServletRequest request, String attribute) {
+        ComponentContext context = ComponentContext.getContext(request);
+        E contextObject = null;
+
+        if (context != null) {
+            contextObject = (E)context.getAttribute(attribute);
+        }
+        if (contextObject == null) {
+            contextObject = (E)request.getAttribute(attribute);
+        }
+        return contextObject;
+    }
+
+    /**
      * Sets attribute into request/tiles context. At first, method checks, does
      * tiles contexst exist or not for the current request. If yes, it puts
      * attribute there. If no, then attribute will be placed in request
@@ -295,7 +321,7 @@ public class RequestUtils {
         // Skip spaces
         for(; forwardParam.charAt(i) == ' ' && i < forwardParam.length() ; i++);
         int start = i;
-        boolean waitForDigit = true;
+//        boolean waitForDigit = true;
         int[] digitsLength = new int[4];
         int partIndex = 0;
         // initialize
@@ -386,7 +412,7 @@ public class RequestUtils {
         }
         else {
 
-            subject = user.getSubject();
+            subject = UserUtils.getUserSubject(user);
             if (subject == null) {
                 subject = new Subject();
                 logger.warn("User, found in request, does not contain subject information");

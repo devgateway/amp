@@ -285,7 +285,7 @@ public class DbUtil {
 	public static Message getMessage(String key, String langCode, Long siteId) throws
 	DgException {
 		try {
-			return TranslatorWorker.getInstance(key).get(key, langCode,
+			return TranslatorWorker.getInstance(key).getByKey(key, langCode,
 					siteId.toString());
 		} catch (WorkerException ex) {
 			throw new DgException(ex);

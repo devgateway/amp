@@ -27,14 +27,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.apache.struts.tiles.ComponentContext;
-import org.digijava.kernel.Constants;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.taglib.util.TagUtil;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionMapping;
-import java.util.Iterator;
-import java.util.Enumeration;
+import org.digijava.kernel.taglib.util.TagUtil;
 
 /**
  * <p>Title: </p>
@@ -48,7 +43,9 @@ import java.util.Enumeration;
 public class InstanceTag
     extends TagSupport {
 
-  public static final String PAGE_MODULE_INSTANCE = "page_moduleInstance";
+	private static final long serialVersionUID = 1L;
+
+	public static final String PAGE_MODULE_INSTANCE = "page_moduleInstance";
 
   /**
    * Property key
@@ -85,7 +82,7 @@ public class InstanceTag
 
 
     HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-    ComponentContext context = ComponentContext.getContext(request);
+//    ComponentContext context = ComponentContext.getContext(request);
 
     String property = getProperty();
 

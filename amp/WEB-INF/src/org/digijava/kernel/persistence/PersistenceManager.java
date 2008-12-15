@@ -42,6 +42,7 @@ import org.digijava.kernel.config.HibernateClass;
 import org.digijava.kernel.config.HibernateClasses;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
@@ -250,8 +251,8 @@ public class PersistenceManager {
 							className);
 					return;
 				}
-				List<Message> messages = session.createQuery(precacheHql).list();
-				Iterator rowIter = messages.iterator();
+				List rows = session.createQuery(precacheHql).list();
+				Iterator rowIter = rows.iterator();
 				while (rowIter.hasNext()) {
 					Object item = rowIter.next();
 					Serializable id = meta.getIdentifier(item, EntityMode.POJO);
@@ -260,11 +261,12 @@ public class PersistenceManager {
                         logger.error(errMsg);
                         throw new DgException(errMsg);
 					}
+					//Separate case for translations: we need to process translation keys.
 					if (Message.class.getName().equals(className) && !config.isCaseSensitiveTranslatioKeys()){
                     	Message msgId = (Message) id;
                     	Message msg = (Message) item;
-                    	msgId.setKey(msgId.getKey().toLowerCase());
-                    	msg.setKey(msg.getKey().toLowerCase());
+                    	TranslatorWorker.getInstance().processKeyCase(msg);
+                    	TranslatorWorker.getInstance().processKeyCase(msgId);
                     }
 					region.put(id, item);
 				}

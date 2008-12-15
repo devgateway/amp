@@ -22,16 +22,14 @@
 
 package org.digijava.module.translation.action;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.Constants;
-import org.digijava.module.translation.form.ModeSwitchForm;
-import org.digijava.kernel.security.DgSecurityManager;
-import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.apache.log4j.Logger;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.module.translation.form.ModeSwitchForm;
 
 public class SwitchMode
     extends Action {

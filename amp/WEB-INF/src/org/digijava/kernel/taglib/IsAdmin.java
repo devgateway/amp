@@ -24,26 +24,20 @@ package org.digijava.kernel.taglib;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import javax.security.auth.Subject;
-import java.security.Principal;
-
-import org.apache.log4j.*;
-
-import java.util.Iterator;
-import java.util.Set;
+import org.apache.log4j.Logger;
 /**
  * Custom tag that retrieves an internationalized messages string
  *
  * @author inadareishvili@worldbank.org
- * @version $Id: IsAdmin.java,v 1.1 2008-07-16 09:19:31 ktha Exp $
+ * @version $Id: IsAdmin.java,v 1.2 2008-12-15 15:49:38 kobia Exp $
  */
 
 public class IsAdmin extends BodyTagSupport {
 
+	private static final long serialVersionUID = 1L;
 	private Logger log =
 		Logger.getLogger("org.developmentgateway.core.taglib.AuthorizeTag");
 	/**
@@ -61,7 +55,7 @@ public class IsAdmin extends BodyTagSupport {
 				(HttpServletRequest) pageContext.getRequest();
 
 
-			boolean showData = false;
+//			boolean showData = false;
 
 
 				if (request.getParameter("user") == null) {

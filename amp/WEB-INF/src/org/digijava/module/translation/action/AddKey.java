@@ -23,17 +23,17 @@
 package org.digijava.module.translation.action;
 
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
-import org.digijava.kernel.exception.*;
 
 public class AddKey
     extends Action {
@@ -68,12 +68,12 @@ public class AddKey
             if (formBean.getKey() != null)  {
                 if (DbUtil.getMessage(msg.getKey(), msg.getLocale(), new Long(msg.getSiteId())) == null) {
                     saved = true;
-                    DbUtil.saveMessage(msg);
+                    TranslatorWorker.getInstance(msg.getKey()).save(msg);
                 }
             }
             if (!saved) {
 
-                errors.add(errors.GLOBAL_ERROR,
+                errors.add(ActionErrors.GLOBAL_ERROR,
                            new ActionError("error.translation.addKey"));
                 saveErrors(request, errors);
 

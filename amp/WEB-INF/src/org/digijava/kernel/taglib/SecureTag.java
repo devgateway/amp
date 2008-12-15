@@ -49,7 +49,9 @@ import org.digijava.kernel.util.RequestUtils;
 public class SecureTag
     extends BodyTagSupport {
 
-    private static Logger logger = Logger.getLogger(SecureTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(SecureTag.class);
 
     private Boolean globalAdmin = null;
     private String actions;

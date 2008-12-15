@@ -25,16 +25,10 @@ package org.digijava.kernel.taglib.html;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import org.digijava.kernel.taglib.util.RefLink;
-import org.digijava.kernel.taglib.util.RefLinkManager;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.taglib.util.TagUtil;
-import javax.servlet.jsp.JspWriter;
-import java.io.IOException;
-import org.digijava.kernel.util.I18NHelper;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.taglib.util.TagUtil;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
 
 /**
  *
@@ -60,8 +54,10 @@ import org.digijava.kernel.entity.Locale;
 public class ImgTag
     extends org.apache.struts.taglib.html.ImgTag {
 
-    // log4J class initialize String
-    private static Logger logger = I18NHelper.getKernelLogger(ImgTag.class);
+	private static final long serialVersionUID = 1L;
+
+	// log4J class initialize String
+//    private static Logger logger = I18NHelper.getKernelLogger(ImgTag.class);
 
     private String cache = "false";
     private boolean skipBody = false;

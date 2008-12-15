@@ -68,7 +68,7 @@ public class SiteCache implements Runnable {
         private Site site;
         private Site rootSite;
         private List instances;
-        private Collection userLanguages;
+        private Collection<Locale> userLanguages;
         private Collection translationLanguages;
         private Locale defaultLanguage;
         private Boolean sendAlertsToAdmin;
@@ -408,7 +408,7 @@ public class SiteCache implements Runnable {
         }
     }
 
-    public Collection getUserLanguages(Site site) {
+    public Collection<Locale> getUserLanguages(Site site) {
         CachedSite cachedSite = (CachedSite) getSites().get(site.getId());
         if (cachedSite != null) {
             return cachedSite.getUserLanguages();

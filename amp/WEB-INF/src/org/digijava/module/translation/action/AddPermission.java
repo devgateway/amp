@@ -26,8 +26,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.form.TranslationPermissionsForm;
 
 public class AddPermission
@@ -40,7 +38,7 @@ public class AddPermission
 				 response) throws java.lang.Exception {
 
 	TranslationPermissionsForm formBean = (TranslationPermissionsForm) form;
-	Site currentSite = RequestUtils.getSite(request);
+//	Site currentSite = RequestUtils.getSite(request);
 	TranslationPermissionsForm.PermissionInfo pi = new TranslationPermissionsForm.
 	      PermissionInfo();
 

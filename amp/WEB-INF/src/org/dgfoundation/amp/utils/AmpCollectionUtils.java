@@ -66,7 +66,7 @@ public class AmpCollectionUtils {
 	
 	/**
 	 * Returns array of keys of all elements.
-	 * This on does not use Map to get keys. 
+	 * This one does not use Map to get keys. 
 	 * @param <K> key or ID type of the element
 	 * @param <E> element type
 	 * @param col collection of E elements

@@ -10,6 +10,8 @@
 		</composite-id>
 		<property name="message" type="text" column="MESSAGE_UTF8" />
 		<property name="created" type="java.sql.Timestamp" column="CREATED" />
+		<property name="lastAccessed" type="java.sql.Timestamp" column="LAST_ACCESSED" />
+		<property name="keyWords" type="java.lang.String" column="KEY_WORDS" />
 	</class>
 </hibernate-mapping>
 

@@ -23,19 +23,18 @@
 package org.digijava.kernel.taglib.html;
 
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.admin.exception.AdminException;
-import org.digijava.module.admin.util.DbUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.exception.DgException;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -49,7 +48,9 @@ import org.digijava.kernel.exception.DgException;
 public class SiteTag
     extends TagSupport {
 
-    private static Logger logger = Logger.getLogger(SiteTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(SiteTag.class);
 
     String property;
     String siteId;

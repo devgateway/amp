@@ -80,7 +80,7 @@ public class RefLinkManager {
         }
 
         synchronized (instance) {
-            instance.checkedOut++;
+            RefLinkManager.checkedOut++;
         }
 
         return instance;

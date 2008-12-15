@@ -22,9 +22,12 @@
 
 package org.digijava.module.um.action;
 
+import java.util.HashMap;
+
 import javax.mail.Address;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -42,12 +45,9 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.form.UserEmailForm;
 import org.digijava.module.um.util.DbUtil;
 import org.digijava.module.um.util.UmUtil;
-import java.util.HashMap;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -141,9 +141,8 @@ public class UserEmail
         Locale currentLocale = RequestUtils.getNavigationLanguage(request);
 
         // get SiteName
-        worker = TranslatorWorker.getInstance("param:SiteName");
-        message = worker.get("param:SiteName",
-                             currentLocale.getCode(), site.getId().toString());
+        worker = TranslatorWorker.getInstance(site.getName());
+        message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getSiteId());
         if (message == null) {
             siteName = site.getName();
         }

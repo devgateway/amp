@@ -40,7 +40,9 @@ import org.digijava.kernel.taglib.util.TagUtil;
 public class ContextTag
     extends TagSupport {
 
-    /**
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Name of the property to be accessed on the specified context.
      */
     private String property = "context/module/moduleinstance";

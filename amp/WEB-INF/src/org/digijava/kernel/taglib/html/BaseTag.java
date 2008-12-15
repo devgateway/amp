@@ -23,16 +23,15 @@
 package org.digijava.kernel.taglib.html;
 
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+
+import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
 import org.digijava.kernel.Constants;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.DgUtil;
-import java.util.StringTokenizer;
-import org.apache.log4j.Logger;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -46,7 +45,8 @@ import org.apache.log4j.Logger;
 public class BaseTag
     extends org.apache.struts.taglib.html.BaseTag {
 
-    private static Logger logger = Logger.getLogger(BaseTag.class);
+	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(BaseTag.class);
 
     /**
      * Process the start of this tag.

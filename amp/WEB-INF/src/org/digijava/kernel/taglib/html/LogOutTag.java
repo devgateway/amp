@@ -49,7 +49,9 @@ import org.digijava.kernel.util.RequestUtils;
 public class LogOutTag
     extends org.apache.struts.taglib.html.LinkTag {
 
-    private String returnUrl;
+	private static final long serialVersionUID = 1L;
+
+	private String returnUrl;
 
     private static Logger logger = Logger.getLogger(LogOutTag.class);
 

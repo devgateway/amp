@@ -183,17 +183,17 @@ public final class TableWidgetUtil {
 		}
 	}
 	
-	public static String getTranslation(String key, HttpServletRequest request, String defaultValue){
-		String result = defaultValue;
-		try {
-			Locale local = RequestUtils.getNavigationLanguage(request);
-			Message message = TranslatorWorker.getInstance(key).get(key, local.getCode(), "amp");
-			result = message.getMessage();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+//	public static String getTranslation(String key, HttpServletRequest request, String defaultValue){
+//		String result = defaultValue;
+//		try {
+//			Locale local = RequestUtils.getNavigationLanguage(request);
+//			Message message = TranslatorWorker.getInstance(key).getByKey(key, local.getCode(), "amp");
+//			result = message.getMessage();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return result;
+//	}
 	
 	/**
 	 * Returns provider of filter items. Which provider is returned depends on col.filterItemProvider property.

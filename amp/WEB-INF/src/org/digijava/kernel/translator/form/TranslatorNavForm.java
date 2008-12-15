@@ -37,6 +37,8 @@ import org.apache.struts.action.ActionMapping;
  */
 
 public final class TranslatorNavForm extends ActionForm {
+	private static final long serialVersionUID = 1L;
+
 	private Collection navigation = null;
 
 	private String strSelectedData = null;

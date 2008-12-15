@@ -34,7 +34,6 @@ import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
-import org.digijava.module.translation.entity.AdvancedTrnItem;
 import org.digijava.module.translation.util.TranslationManager;
 
 /**

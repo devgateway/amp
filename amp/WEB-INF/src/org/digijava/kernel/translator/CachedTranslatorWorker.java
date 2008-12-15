@@ -27,41 +27,37 @@ import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.cache.AbstractCache;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-public class CachedTranslatorWorker
-    extends TranslatorWorker {
-    private static Logger logger =
-        Logger.getLogger(CachedTranslatorWorker.class);
+public class CachedTranslatorWorker extends TranslatorWorker {
+    private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
 
     private AbstractCache messageCache;
 
     CachedTranslatorWorker() {
         super();
-        messageCache = DigiCacheManager.getInstance().getCache(
-            "org.digijava.kernel.entity.Message.id_cache");
+        messageCache = DigiCacheManager.getInstance().getCache("org.digijava.kernel.entity.Message.id_cache");
     }
 
     /**
-     * Read translation from database and put to translation cache
+     * Read translation from database and put to translation cache.
+     * This is one should not update access times.
      * @param key translation key
      * @param locale locale
      * @param siteId owner site
      * @throws WorkerException if process was not completed successfully
      */
-    public void refresh(String key, String locale, String siteId) throws
-        WorkerException {
+    public void refresh(String key, String locale, String siteId) throws WorkerException {
         Session session = null;
 
         try {
@@ -90,7 +86,6 @@ public class CachedTranslatorWorker
         finally {
             try {
                 if (session != null) {
-
                     PersistenceManager.releaseSession(session);
                 }
             }
@@ -99,8 +94,7 @@ public class CachedTranslatorWorker
 
     }
 
-    public Message get(String key, String locale, String siteId) throws
-        WorkerException {
+    public Message getByKey(String key, String locale, String siteId) throws WorkerException {
 
         Message message = new Message();
 
@@ -115,12 +109,14 @@ public class CachedTranslatorWorker
             return null;
         }
         else {
-            return (Message) obj;
+        	Message foundMessage = (Message)obj;
+        	updateTimeStamp(foundMessage);
+            return foundMessage;
         }
     }
 
     public void save(Message message) throws WorkerException {
-        saveDb(message); //message will be processed there 
+        saveDb(message); //message key and body will be processed there 
         
         messageCache.put(message, message);
         fireRefreshAlert(message);
@@ -133,7 +129,7 @@ public class CachedTranslatorWorker
      * @throws WorkerException
      */
     public void update(Message message) throws WorkerException {
-        updateDb(message);//message will be processed there
+        updateDb(message);//message key and body will be processed there
 
         messageCache.put(message, message);
         fireRefreshAlert(message);
@@ -145,21 +141,22 @@ public class CachedTranslatorWorker
      * @throws WorkerException
      */
     public void delete(Message message) throws WorkerException {
-        deleteDb(message);//message will be processed there
+        deleteDb(message);//message key and body will be processed there
         messageCache.evict(message);
         fireRefreshAlert(message);
     }
 
-    protected void setTimestamps(String key, Timestamp timestamp) throws
-        WorkerException {
+	protected void setTimestamps(String key, Timestamp timestamp) throws WorkerException {
         if (key == null)
             return;
 
         Session ses = null;
         Transaction tx = null;
+        
+        @SuppressWarnings("unchecked")
         List messages;
-        String queryString = "from " + Message.class.getName() +
-            " msg where msg.key=:msgKey";
+        
+        String queryString = "from " + Message.class.getName() + " msg where msg.key=:msgKey";
 
         try {
 
@@ -169,6 +166,8 @@ public class CachedTranslatorWorker
             q.setString("msgKey", processKeyCase(key.trim()));
             
             messages = q.list();
+            
+            @SuppressWarnings("unchecked")
             Iterator it = messages.iterator();
 
             while (it.hasNext()) {

@@ -23,13 +23,11 @@
 package org.digijava.kernel.taglib;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.taglib.tiles.PutListTag;
 import org.apache.struts.taglib.tiles.PutTag;
 import org.apache.struts.tiles.AttributeDefinition;
 import org.apache.struts.tiles.UntyppedAttribute;
-import org.digijava.kernel.request.RequestProcessor;
 
 /**
  * @author wb231862
@@ -39,6 +37,8 @@ import org.digijava.kernel.request.RequestProcessor;
  */
 public class DefinitionTag extends org.apache.struts.taglib.tiles.DefinitionTag
 {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Process nested &lg;put&gt; tag.

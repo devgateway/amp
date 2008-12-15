@@ -42,7 +42,9 @@ import org.digijava.kernel.util.SiteUtils;
 public class LinkTag
     extends org.apache.struts.taglib.html.LinkTag {
 
-    private static Logger logger = Logger.getLogger(LinkTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(LinkTag.class);
 
     private String context = "context/module/moduleinstance";
     private String site;
@@ -100,7 +102,7 @@ public class LinkTag
      */
     public int doStartTag() throws JspException {
 
-        String contextPath = null;
+//        String contextPath = null;
         String action = null;
         HttpServletRequest request = (HttpServletRequest) pageContext.
             getRequest();

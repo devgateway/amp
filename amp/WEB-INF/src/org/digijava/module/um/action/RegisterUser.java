@@ -135,19 +135,15 @@ public class RegisterUser extends Action {
 				return (mapping.getInputForward());
 			} else {
 				DbUtil.registerUser(user);
-				//create User Registration Trigger
-                String link=RequestUtils.getFullModuleUrl(request);
-                String id=ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
-                String description = "Welcome to AMP!"+ '\n'+'\n'+"AMP Administrator has created your user profile." +'\n'+ "Your login information:" +
-                                     '\n'+'\n'+'\t'+'\t'+ "Username: " + user.getEmail() +
-                                     '\n'+'\t'+'\t'+"password: " + userRegisterForm.getPassword()+
-                                     '\n'+'\n'+"Please change your password when you first login to AMP in order to keep it private.";
-                if(userRegisterForm.isSendEmail()){  
+                if(userRegisterForm.isSendEmail()){
+                    String description = "Welcome to AMP!"+ '\n'+'\n'+"AMP Administrator has created your user profile." +'\n'+ "Your login information:" +
+                    '\n'+'\n'+'\t'+'\t'+ "Username: " + user.getEmail() +
+                    '\n'+'\t'+'\t'+"password: " + userRegisterForm.getPassword()+
+                    '\n'+'\n'+"Please change your password when you first login to AMP in order to keep it private.";
+                	
                     DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
                 }	
                   
-				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);
-
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];

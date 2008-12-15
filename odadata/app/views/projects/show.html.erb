@@ -68,8 +68,8 @@
 	</dl>
 	
 	<dl>
-		<dt class="first"><%= lc(:totals) %></dt>
-		<dd class="first">
+		<dt><%= lc(:totals) %></dt>
+		<dd>
 			<dl>
 				<dt class="first"><%= Funding.human_attribute_name('payments') %></dt>
 				<dd class="first"><%= @project.fundings.total_payments %></dd>

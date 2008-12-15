@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.test.PI;
+package org.dgfoundation.amp.test.parisindicator;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

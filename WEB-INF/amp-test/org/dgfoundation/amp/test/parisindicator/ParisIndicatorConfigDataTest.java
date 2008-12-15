@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.test.PI;
+package org.dgfoundation.amp.test.parisindicator;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

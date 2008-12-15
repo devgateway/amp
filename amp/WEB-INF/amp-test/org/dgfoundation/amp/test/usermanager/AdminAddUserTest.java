@@ -4,11 +4,16 @@ package org.dgfoundation.amp.test.usermanager;
 import java.util.Collection;
 import java.util.Random;
 
+import java.util.Iterator;
+
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.test.util.Configuration;
 import org.dgfoundation.amp.test.util.TestUtil;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -17,6 +22,7 @@ import org.digijava.module.um.form.AddUserForm;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
+import org.digijava.module.um.util.DbUtil;
 
 public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 
@@ -76,7 +82,9 @@ public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 		addUserForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 	}
 
+	@SuppressWarnings("unchecked")
 	private void fillForm() {
+		boolean ok = false;
 		Random id = new Random();
 		String userEmail = "test" + id.nextInt()+"@utest.org";
 		addUserForm.setEmail(userEmail);
@@ -89,8 +97,27 @@ public class AdminAddUserTest extends BasicActionTestCaseAdapter {
 		addUserForm.setSelectedCountryResidence("us");
 		addUserForm.setSelectedLanguage("en");
 		addUserForm.setSendEmail(false);
-		addUserForm.setSelectedOrgType(4L);
-		addUserForm.setSelectedOrgGroup(32L);
-		addUserForm.setSelectedOrganizationId(21L);
+		
+		// these nested "for" statements ensure the fields will be filled with 
+		// a valid selectedOrgType, selectedOrgGroup and, selectedOrganizationId,
+		addUserForm.setOrgTypeColl(DbUtil.getAllOrgTypes());
+		for(Iterator it = addUserForm.getOrgTypeColl().iterator(); it.hasNext();){
+			AmpOrgType orgType = (AmpOrgType)it.next();
+			addUserForm.setSelectedOrgType(orgType.getAmpOrgTypeId());
+			addUserForm.setOrgGroupColl(DbUtil.getOrgGroupByType(addUserForm.getSelectedOrgType()));
+			for(Iterator it2 = addUserForm.getOrgGroupColl().iterator(); it2.hasNext();){
+				AmpOrgGroup orgGroup = (AmpOrgGroup)it2.next();
+				addUserForm.setSelectedOrgGroup(orgGroup.getAmpOrgGrpId());
+			    addUserForm.setOrgColl(DbUtil.getOrgByGroup(addUserForm.getSelectedOrgGroup()));
+				if(addUserForm.getOrgColl().iterator().hasNext()){
+					AmpOrganisation org = (AmpOrganisation)addUserForm.getOrgColl().iterator().next();
+					addUserForm.setSelectedOrganizationId(org.getAmpOrgId());
+			    	ok = true;
+			    	break;
+				}
+			}
+			if(ok==true)
+				break;
+		}
 	}
 }

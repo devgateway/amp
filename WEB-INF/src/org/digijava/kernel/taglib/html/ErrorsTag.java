@@ -22,27 +22,24 @@
 
 package org.digijava.kernel.taglib.html;
 
-import javax.servlet.jsp.tagext.BodyContent;
-import org.digijava.kernel.entity.Locale;
-import javax.servlet.jsp.JspException;
+import java.util.Iterator;
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
-import org.apache.log4j.Logger;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionError;
-import java.util.*;
-
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.*;
-import org.digijava.module.translation.util.DbUtil;
-import org.apache.struts.Globals;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 
 /**
  * Custom tag that retrieves internationalized message
@@ -60,7 +57,9 @@ import org.apache.struts.Globals;
 
 public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 
-    private static Logger logger = Logger.getLogger(ErrorsTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(ErrorsTag.class);
     
     private static ResourceBundle bundleApplication = ResourceBundle.getBundle("java.resources.application");
 
@@ -156,14 +155,14 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
      * @return
      * @throws JspException
      */
-    public void doErrors() throws JspException {
+	public void doErrors() throws JspException {
 
         HttpServletRequest request = (HttpServletRequest) pageContext.
             getRequest();
 
         ActionErrors errors = null;
         ActionErrors newErrors = null;
-        Message message;
+//        Message message;
         String newKey = null;
 
         try {
@@ -178,6 +177,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
             Locale currentLocale = RequestUtils.getNavigationLanguage(request);
             Site site = RequestUtils.getSite(request);
 
+            @SuppressWarnings("unchecked")
             Iterator iter = (property == null) ? errors.get() : errors.get(property);
             newErrors = new ActionErrors();
             while (iter.hasNext()) {
@@ -195,7 +195,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 	                msg.setSiteId(site.getId().toString());
 	                msg.setLocale(currentLocale.getCode().trim());
 	                //msg.setLocale("en");
-	                if (TranslatorWorker.getInstance(msg.getKey()).get(msg.getKey(), msg.getLocale(), site.getId().toString()) == null) {
+	                if (TranslatorWorker.getInstance(msg.getKey()).getByKey(msg.getKey(), msg.getLocale(), site.getId().toString()) == null) {
 		                if (item.getKey() != null)  {                   
 	               			TranslatorWorker.getInstance(msg.getKey()).save(msg);
 		                }

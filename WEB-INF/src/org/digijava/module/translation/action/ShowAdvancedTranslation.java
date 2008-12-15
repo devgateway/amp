@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+
 import javax.security.auth.Subject;
 
 import org.apache.struts.action.ActionForm;
@@ -46,7 +47,6 @@ import org.digijava.module.translation.form.AdvancedTranslationForm;
 import org.digijava.module.translation.security.TranslateSecurityManager;
 import org.digijava.module.translation.util.DbUtil;
 import org.digijava.module.translation.util.TranslationManager;
-import java.util.*;
 
 public class ShowAdvancedTranslation
     extends PaginationAction {

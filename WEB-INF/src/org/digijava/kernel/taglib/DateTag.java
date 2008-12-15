@@ -47,7 +47,9 @@ import org.digijava.kernel.util.RequestUtils;
 public class DateTag
     extends TagSupport {
 
-    private static Logger logger = Logger.getLogger(DateTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(DateTag.class);
 
     private String format;
     private String formatKey;

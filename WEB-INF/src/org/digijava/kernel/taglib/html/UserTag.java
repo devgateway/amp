@@ -23,18 +23,17 @@
 package org.digijava.kernel.taglib.html;
 
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.admin.exception.AdminException;
-import org.digijava.module.admin.util.DbUtil;
-import org.digijava.kernel.user.UserInfo;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.user.UserInfo;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 
 /**
@@ -49,7 +48,8 @@ import org.digijava.kernel.util.RequestUtils;
 public class UserTag
     extends TagSupport {
 
-    final static String PROPERTY_NAME = "name";
+	private static final long serialVersionUID = 1L;
+	final static String PROPERTY_NAME = "name";
     final static String PROPERTY_URL = "url";
     final static String PROPERTY_FIRSTNAMES = "firstnames";
     final static String PROPERTY_LASTNAME = "lastname";

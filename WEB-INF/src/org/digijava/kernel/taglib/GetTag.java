@@ -22,23 +22,24 @@
 
 package org.digijava.kernel.taglib;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
-import java.io.IOException;
-import org.apache.log4j.Logger;
 import org.digijava.kernel.util.RequestUtils;
 
 public class GetTag extends BodyTagSupport {
 
-    private static Logger logger = Logger.getLogger(GetTag.class);
+	private static final long serialVersionUID = 1L;
+
 
 	private String locale;
 	private String key;
@@ -86,7 +87,7 @@ public class GetTag extends BodyTagSupport {
 
 			try {
 				Message msg =
-					new TranslatorWorker().get(getKey(), getLocale(), siteId);
+					new TranslatorWorker().getByKey(getKey(), getLocale(), siteId);
 
 
 				if (msg != null) {

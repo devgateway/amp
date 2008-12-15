@@ -397,7 +397,7 @@ public class TranslationManager {
         TranslatorWorker trnWorker = TranslatorWorker.getInstance(oneKey);
 
         Message srcMsg = null;
-        srcMsg = trnWorker.get(oneKey, srcLocale,
+        srcMsg = trnWorker.getByKey(oneKey, srcLocale,
                                String.valueOf(siteId));
         if (srcMsg != null) {
             if (siteId != 0) {
@@ -409,13 +409,13 @@ public class TranslationManager {
         }
         else {
             if (rootSiteId != null) {
-                srcMsg = trnWorker.get(oneKey, srcLocale,
+                srcMsg = trnWorker.getByKey(oneKey, srcLocale,
                                        rootSiteId.toString());
                 if (srcMsg != null) {
                     item.trnType = AdvancedTrnItem.GROUP_TRN;
                 }
                 else {
-                    srcMsg = trnWorker.get(oneKey, srcLocale, "0");
+                    srcMsg = trnWorker.getByKey(oneKey, srcLocale, "0");
                     if (srcMsg != null) {
                         item.trnType = AdvancedTrnItem.GLOBAL_TRN;
                     }

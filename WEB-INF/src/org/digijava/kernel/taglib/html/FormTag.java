@@ -30,7 +30,6 @@ import javax.servlet.jsp.PageContext;
 import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.ResponseUtils;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.taglib.util.TagUtil;
 import org.digijava.kernel.util.DgUtil;
@@ -50,7 +49,8 @@ import org.digijava.kernel.util.SiteUtils;
 public class FormTag
     extends org.apache.struts.taglib.html.FormTag {
 
-    private String oldAction;
+	private static final long serialVersionUID = 1L;
+	private String oldAction;
     private String site;
     private String referrer;
     private String moduleName;
@@ -169,13 +169,13 @@ public class FormTag
 
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
         HttpServletResponse response = (HttpServletResponse) this.pageContext.getResponse();
-        SiteDomain siteDomain = (SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
+//        SiteDomain siteDomain = (SiteDomain) request.getAttribute(org.digijava.kernel.Constants.CURRENT_SITE);
 
         StringBuffer context = new StringBuffer();
 
         if( getSite() != null ) {
 
-            SiteDomain domain = null;
+//            SiteDomain domain = null;
             String siteURL = null;
 
             if( !SiteConfigUtils.getLogonSiteId().equalsIgnoreCase(getSite()) ) {

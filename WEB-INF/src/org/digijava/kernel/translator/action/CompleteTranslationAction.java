@@ -871,7 +871,7 @@ public class CompleteTranslationAction extends DispatchAction
 				null);
 		}
         TranslatorWorker translatorWorker = TranslatorWorker.getInstance(key);
-		Message msg = translatorWorker.get(key, locale.toString(), siteId);
+		Message msg = translatorWorker.getByKey(key, locale.toString(), siteId);
 
 		if (msg != null) {
 			msg.setMessage(strMessage);

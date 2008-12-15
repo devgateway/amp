@@ -22,21 +22,17 @@
 
 package org.digijava.kernel.taglib.html;
 
-import java.io.IOException;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.log4j.Logger;
-import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.taglib.html.BaseInputTag;
+import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.ResponseUtils;
-import org.digijava.kernel.util.DgUtil;
 
 public class HtmlEditorTag
     extends BaseInputTag {
-    private static Logger logger = Logger.getLogger(HtmlEditorTag.class);
+	private static final long serialVersionUID = 1L;
+
+//	private static Logger logger = Logger.getLogger(HtmlEditorTag.class);
 
     protected String name = Constants.BEAN_KEY;
     private Integer height = null;

@@ -37,6 +37,7 @@ import org.digijava.kernel.entity.Message;
 
 public class TranslatorBean implements java.io.Serializable{
 
+	private static final long serialVersionUID = 1L;
 	Message srcMsg = new Message();
 	Message tragetMsg = null;
 	boolean needsUpdate = false;

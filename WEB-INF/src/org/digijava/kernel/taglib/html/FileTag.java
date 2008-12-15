@@ -51,7 +51,9 @@ import org.digijava.kernel.util.DgUtil;
 public class FileTag
     extends org.apache.struts.taglib.html.ImgTag {
 
-    private static Logger logger = Logger.getLogger(FileTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = Logger.getLogger(FileTag.class);
 
     private String cache = "false";
 

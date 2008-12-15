@@ -26,8 +26,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.translation.form.TranslationPermissionsForm;
 
 public class DeletePermission
@@ -40,7 +38,7 @@ public class DeletePermission
 				 response) throws java.lang.Exception {
 
 	TranslationPermissionsForm formBean = (TranslationPermissionsForm) form;
-	Site currentSite = RequestUtils.getSite(request);
+//	Site currentSite = RequestUtils.getSite(request);
 
 	int index = Integer.parseInt(request.getParameter("index"));
 	formBean.getPermissions().remove(index);

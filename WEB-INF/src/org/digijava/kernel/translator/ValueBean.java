@@ -24,6 +24,7 @@ package org.digijava.kernel.translator;
 
 import java.io.Serializable;
 public class ValueBean implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String keyId;
 	private String source;
 	private String target;

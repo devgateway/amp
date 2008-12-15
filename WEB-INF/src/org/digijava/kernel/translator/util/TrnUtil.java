@@ -30,24 +30,26 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.utils.AmpCollectionUtils.KeyResolver;
+import org.digijava.kernel.Constants;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.SiteUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.SiteCache;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.Constants;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Set;
-import org.digijava.kernel.util.RequestUtils;
 
 public class TrnUtil {
 
@@ -419,15 +421,15 @@ public class TrnUtil {
                 try {
                   Message trnMess = null;
                   if (site != null) {
-                    trnMess = trnWork.get(siteKey, locale.getCode(),
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(),
                                           String.valueOf(site.getId()));
                     if (trnMess == null && groupTranslation && site.getParentId() != null) {
                       Site root = SiteCache.getInstance().getRootSite(site);
-                      trnMess = trnWork.get(siteKey, locale.getCode(),
+                      trnMess = trnWork.getByBody(defTrans, locale.getCode(),
                                             String.valueOf(root.getId()));
                     }
                   } else {
-                    trnMess = trnWork.get(siteKey, locale.getCode(), "0");
+                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), "0");
                   }
                     if (trnMess == null) {
                         trnString = defTrans;
@@ -526,6 +528,17 @@ public class TrnUtil {
             String code = monthNames[i].substring(0, 3).toLowerCase();
             defaultMonths.put("month:" + code, new TrnMonth(code, monthNames[i]));
         }
+    }
+
+    /**
+     * Resolvs ony string key of Message.
+     * @author Irakli Kobiashvili
+     *
+     */
+    public static class MessageShortKeyResolver implements KeyResolver<String, Message>{
+		public String resolveKey(Message element) {
+			return element.getKey();
+		}
     }
 
 }

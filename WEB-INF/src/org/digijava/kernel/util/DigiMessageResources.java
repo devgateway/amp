@@ -152,7 +152,7 @@ public class DigiMessageResources extends PropertyMessageResources {
 
         String siteId = site.getId().toString();
 
-        Message trnMess = worker.get(key, locale, siteId);
+        Message trnMess = worker.getByKey(key, locale, siteId);
         if (trnMess != null) {
             log.debug("local translation exists");
             return trnMess;
@@ -160,14 +160,14 @@ public class DigiMessageResources extends PropertyMessageResources {
 
         String rootSiteId = SiteCache.getInstance().getRootSite(site).getId().toString();
         if (!rootSiteId.equals(siteId)) {
-            trnMess = worker.get(key, locale, rootSiteId);
+            trnMess = worker.getByKey(key, locale, rootSiteId);
             if (trnMess != null) {
                 log.debug("group translation exists");
                 return trnMess;
             }
         }
 
-        trnMess = worker.get(key, locale, "0");
+        trnMess = worker.getByKey(key, locale, "0");
         if (trnMess != null) {
             log.debug("global translation exists");
             return trnMess;

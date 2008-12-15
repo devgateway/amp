@@ -2,6 +2,13 @@ package org.digijava.module.widget.helper;
 
 import org.digijava.module.aim.dbentity.AmpSector;
 
+/**
+ * Helper for sector funding calculations.
+ * It allso supports adding amount to already exisiting funding by method {@link #addFunding(double)}
+ * So this should represent sector funding in one particular currency.
+ * @author Irakli Kobiashvili
+ *
+ */
 public class DonorSectorFundingHelper {
 	private AmpSector sector;
 	private double founding;
@@ -10,6 +17,11 @@ public class DonorSectorFundingHelper {
 		this.sector = sector;
 	}
 
+	/**
+	 * Adds amount to funding of this sector.
+	 * Amount should always be in one currency.
+	 * @param amount
+	 */
 	public void addFunding(double amount){
 		this.founding+=amount;
 	}

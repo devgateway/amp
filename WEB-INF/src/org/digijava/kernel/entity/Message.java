@@ -24,9 +24,7 @@ package org.digijava.kernel.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * @author shamanth.murthy
  *
@@ -43,7 +41,9 @@ public class Message implements Serializable{
 	private String message;
 	private String locale;
 	private Timestamp created;
+	private Timestamp lastAccessed;
 	private String siteId;
+	private String keyWords;
     private int hashCode;
     private boolean hasHashCode;
 
@@ -191,5 +191,17 @@ public class Message implements Serializable{
             return false;
         }
     }
+	public void setLastAccessed(Timestamp lastAccessed) {
+		this.lastAccessed = lastAccessed;
+	}
+	public Timestamp getLastAccessed() {
+		return lastAccessed;
+	}
+	public void setKeyWords(String keyWords) {
+		this.keyWords = keyWords;
+	}
+	public String getKeyWords() {
+		return keyWords;
+	}
 
 }

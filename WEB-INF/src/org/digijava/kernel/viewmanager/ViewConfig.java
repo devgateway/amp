@@ -22,11 +22,9 @@
 
 package org.digijava.kernel.viewmanager;
 
-import org.digijava.kernel.entity.ModuleInstance;
-import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import org.w3c.dom.Document;
 
 /**

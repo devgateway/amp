@@ -25,7 +25,6 @@ package org.digijava.module.translation.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,7 +37,7 @@ import org.digijava.module.translation.form.ModeSwitchForm;
 public class RenderModeSwitch
     extends TilesAction {
 
-    private static Logger logger = Logger.getLogger(RenderModeSwitch.class);
+    //private static Logger logger = Logger.getLogger(RenderModeSwitch.class);
 
     public ActionForward execute(ComponentContext context,
                                  ActionMapping mapping, ActionForm form,

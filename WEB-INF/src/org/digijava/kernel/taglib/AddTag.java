@@ -30,4 +30,6 @@ package org.digijava.kernel.taglib;
  */
 public class AddTag extends org.apache.struts.taglib.tiles.AddTag {
 
+	private static final long serialVersionUID = 1L;
+	//TODO check what was idea for this and remove if we do not need this.
 }

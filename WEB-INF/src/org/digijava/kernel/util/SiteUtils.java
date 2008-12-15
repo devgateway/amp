@@ -226,11 +226,11 @@ public class SiteUtils {
      * @param site Site
      * @return user languages for the given site
      */
-    public static Set getUserLanguages(Site site) {
+    public static Set<Locale> getUserLanguages(Site site) {
         if (site == null)
             return null;
-        Collection langs = SiteCache.getInstance().getUserLanguages(site);
-        return langs == null ? null : new HashSet(langs);
+        Collection<Locale> langs = SiteCache.getInstance().getUserLanguages(site);
+        return langs == null ? null : new HashSet<Locale>(langs);
     }
 
     /**

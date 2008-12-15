@@ -23,6 +23,7 @@
 package org.digijava.kernel.taglib;
 
 import java.io.IOException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -36,15 +37,12 @@ import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.siteconfig.PutItem;
+import org.digijava.kernel.taglib.util.RefLinkManager;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.kernel.util.SiteConfigUtils;
-import org.digijava.kernel.taglib.util.RefLinkManager;
-import org.apache.struts.taglib.tiles.PutTag;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.viewmanager.ViewConfig;
 import org.digijava.kernel.viewmanager.ViewConfigFactory;
-import org.digijava.kernel.util.RequestUtils;
-import javax.servlet.jsp.PageContext;
 
 /**
  * Digi insert tag
@@ -55,7 +53,9 @@ import javax.servlet.jsp.PageContext;
 public class InsertTag
     extends org.apache.struts.taglib.tiles.InsertTag {
 
-    private static Logger logger = I18NHelper.getKernelLogger(InsertTag.class);
+	private static final long serialVersionUID = 1L;
+
+	private static Logger logger = I18NHelper.getKernelLogger(InsertTag.class);
 
     private static final String COMP_ID_KEY = "org.digijava.kernel.taglib.insert.component_key";
 

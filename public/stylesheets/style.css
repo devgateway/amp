@@ -784,7 +784,7 @@ form fieldset h3 {
 #content #command_box {
 	position:relative;
     top:27px;
-    height:100px;
+    height:120px;
     z-index: 10;
     background:#F8F8F8;
     padding:5px;
@@ -795,6 +795,11 @@ form fieldset h3 {
     width:120px;
 	overflow:auto;
 }
+
+#content>#command_box {
+    height:100px;
+}
+
 #content #command_box INPUT {
     padding: 2px;
     font: 13px "Trebuchet MS", sans-serif;
@@ -892,6 +897,9 @@ form fieldset h3 {
 }
 
 /* These are indented subsections */
+.project_factsheet dl dl {
+	width: 640px;
+}
 .project_factsheet dl dl dd {
 	width: 438px;
 }

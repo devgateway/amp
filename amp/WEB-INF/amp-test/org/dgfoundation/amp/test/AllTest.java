@@ -5,6 +5,7 @@ import junit.framework.TestSuite;
 
 import org.dgfoundation.amp.test.PI.AllParisIndicatorsManagerTest;
 import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
+import org.dgfoundation.amp.test.orgProfile.AllOrgProfileTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;
 import org.dgfoundation.amp.test.widget.AllWidgetTest;
 /**
@@ -21,6 +22,7 @@ public class AllTest {
 		suite.addTest(AllCategoryManagerTest.suite());
 		suite.addTest(AllWidgetTest.suite());
 		suite.addTest(AllParisIndicatorsManagerTest.suite());
+        suite.addTest(AllOrgProfileTest.suite());
 		return suite;
 	}
 

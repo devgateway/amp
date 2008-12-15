@@ -30,16 +30,23 @@ public class QuartzJobUtils {
                         if (exTrg != null) {
 
                             QuartzJobForm job = new QuartzJobForm();
+                            /**
+                             * variable to determine whether trigger is manual or not,
+                             * we use this variable in quartzJobManager.jsp to
+                             * paint in red manaully run trigger...
+                             */
                             boolean manualTrg=false;
                             job.setName(exTrg.getJobName());
                             job.setGroupName(exTrg.getJobGroup());
                             job.setTriggerGroupName(exTrg.getGroup());
                             job.setTriggerName(exTrg.getName());
+                            //checking whether trigger was run manually
                             if (exTrg.getStartTime().equals(exTrg.getFinalFireTime())&&exTrg.getGroup().equals(sched.DEFAULT_MANUAL_TRIGGERS)) {
                                 manualTrg=true;
                             }
                             job.setManualJob(manualTrg);
                             if (exTrg instanceof CronTrigger) {
+                                 //daily,weekly and monthly triggers are CronTriggers
                                 CronTrigger cTrg = (CronTrigger) exTrg;
                                 String expString = cTrg.getCronExpression();
                                 //parse cron expression to recreate date
@@ -66,6 +73,7 @@ public class QuartzJobUtils {
                             }
                             else{
                                 if(exTrg instanceof SimpleTrigger){
+                                    //hour ,minute and secondr triggers are SimpleTrigger
                                     SimpleTrigger sTrg=(SimpleTrigger)exTrg;
                                     long dif=sTrg.getRepeatInterval()/1000;
                                     Long hours=dif/(60*60);
@@ -89,6 +97,10 @@ public class QuartzJobUtils {
                                 }
                             }
                             JobDetail jd=sched.getJobDetail(exTrg.getJobName(), exTrg.getJobGroup());
+                            // delete manual job trigger from db
+                            if(manualTrg&&sched.getTriggerState(exTrg.getName(), exTrg.getGroup()) == Trigger.STATE_COMPLETE){
+                                sched.unscheduleJob(exTrg.getName(), exTrg.getGroup());
+                            }
                             job.setClassFullname(jd.getJobClass().getName());
                             if (exTrg.getEndTime() != null)
                                 job.setEndDateTime(sdf.format(exTrg.getEndTime()));
@@ -223,11 +235,24 @@ public class QuartzJobUtils {
             throw new RuntimeException(ex);
         }
     }
+    /**
+     * Creates a new trigger now for the given job.
+     * Used to run job manually
+     * @param name name of the job
+     * @see runJob(QuartzJobForm)
+     */
 
    public static void runJob(String name){
         QuartzJobForm job=getJobByName(name);
         runJob(job);
     }
+   /**
+    * Creates a new trigger now for the given job
+    * Used to run job manually.
+    * @param job
+    * @see runJob(String)
+    * @see QuartzJobForm
+    */
     public static void runJob(QuartzJobForm job){
         Scheduler sched=getScheduler();
         try{

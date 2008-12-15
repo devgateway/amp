@@ -8,6 +8,7 @@ import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
 import org.dgfoundation.amp.test.orgProfile.AllOrgProfileTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;
 import org.dgfoundation.amp.test.widget.AllWidgetTest;
+import org.digijava.module.aim.helper.AllHelperTest;
 /**
  * This suite include all test suite modules 
  * @author Sebas
@@ -23,6 +24,7 @@ public class AllTest {
 		suite.addTest(AllWidgetTest.suite());
 		suite.addTest(AllParisIndicatorsManagerTest.suite());
         suite.addTest(AllOrgProfileTest.suite());
+        suite.addTest(AllHelperTest.suite());
 		return suite;
 	}
 

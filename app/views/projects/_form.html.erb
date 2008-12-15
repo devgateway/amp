@@ -29,10 +29,10 @@
 	<ul id="tabs" class="ui-tabs-nav">
 		<% I18n.with_options :scope => [:projects, :stages] do |loc| %>
 			<li class="ui-tabs-nav-li"><a href="#profile_information"><span><%= loc.t('profile_information') %></span></a></li>
-			<li class="ui-tabs-nav-li"><a href="#sector_agencies"><span><%= loc.t('sector_agencies') %></a></span></li>
+			<li class="ui-tabs-nav-li"><a href="#sector_agencies"><span><%= loc.t('sector_agencies') %></span></a></li>
 			<li class="ui-tabs-nav-li"><a href="#goals"><span><%= loc.t('goals') %></span></a></li>
-			<li class="ui-tabs-nav-li"><a href="#location_funding"><span><%= loc.t('location_funding') %></a></span></li>
-			<li class="ui-tabs-nav-li"><a href="#funding_forecast"><span><%= loc.t('funding_forecast') %></a></span></li>
+			<li class="ui-tabs-nav-li"><a href="#location_funding"><span><%= loc.t('location_funding') %></span></a></li>
+			<li class="ui-tabs-nav-li"><a href="#funding_forecast"><span><%= loc.t('funding_forecast') %></span></a></li>
 		<% end %>
 	</ul>
 	
@@ -74,7 +74,7 @@
     <br/>
 	<%= form.submit %>
 </div>
-<script language="javascript" type="application/javascript">
+<script language="javascript" >
 $("#previous_button").click(function () { 
     var $tabs = $('ul#tabs');
     var selected = $tabs.data('selected.tabs');

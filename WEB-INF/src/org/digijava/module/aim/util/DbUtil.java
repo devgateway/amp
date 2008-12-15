@@ -1430,12 +1430,12 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from " + AmpFiscalCalendar.class.getName()
-                + " where (f.startMonthNum=:start) and (f.startDayNum=:start) and (f.yearOffset=:offset)";
+            String queryString = "from " + AmpFiscalCalendar.class.getName()
+                + " where startMonthNum=:start and startDayNum=:start and yearOffset=:offset";
             qry = session.createQuery(queryString);
             qry.setParameter("start", new Integer(1), Hibernate.INTEGER);
             qry.setParameter("offset", new Integer(0), Hibernate.INTEGER);
-            if (null != qry.list())
+            if (qry.list().size()!=0)
                 fid = ( (AmpFiscalCalendar) qry.list().get(0)).getAmpFiscalCalId();
         } catch (Exception ex) {
             logger.error("Unable to get base fiscal calendar" + ex);

@@ -228,6 +228,7 @@
                                                 [<digi:trn key="aim:job:lnkResume">Resume</digi:trn>]
                                                 [<a href="javaScript:editJob('${job.name}');"><digi:trn key="aim:job:lnkEditjob">Edit job</digi:trn></a>]
                                             </c:if>
+                                              [<a href="javaScript:runJobNow('${job.name}');"><digi:trn key="aim:job:lnkRunNow">Run Now</digi:trn></a>]
                                              [<a href="javaScript:deleteJob('${job.name}');"><digi:trn key="aim:job:lnkDelete">Delete</digi:trn></a>]
                                         </td>
                                     </tr>

@@ -7,7 +7,11 @@ import org.dgfoundation.amp.test.PI.AllParisIndicatorsManagerTest;
 import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;
 import org.dgfoundation.amp.test.widget.AllWidgetTest;
-
+/**
+ * This suite include all test suite modules 
+ * @author Sebas
+ *
+ */
 public class AllTest {
 
 	public static Test suite() {

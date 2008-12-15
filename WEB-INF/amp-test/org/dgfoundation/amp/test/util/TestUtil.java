@@ -75,6 +75,7 @@ public class TestUtil {
 		TeamMember finalTeamMember = new TeamMember();
 		finalTeamMember.setMemberId(teamember.getAmpTeamMemId());
 		finalTeamMember.setTeamId(teamember.getAmpTeam().getAmpTeamId());
+		finalTeamMember.setEmail(teamember.getUser().getEmail());
 		session.setAttribute("currentMember", finalTeamMember);
 
 	}

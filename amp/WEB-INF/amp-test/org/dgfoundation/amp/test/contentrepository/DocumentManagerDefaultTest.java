@@ -63,6 +63,8 @@ public class DocumentManagerDefaultTest extends BasicActionTestCaseAdapter {
 		session = getActionMockObjectFactory().getMockSession();
 		request = getActionMockObjectFactory().getMockRequest();
 		//
+		TestUtil.setLocaleEn(request);
+		TestUtil.setSiteDomain(request);
 		TestUtil.setCurrentMemberFirstATLTeam(session);
 		//		
 		log("Exiting setUp method");

@@ -26,9 +26,19 @@
 		border-bottom: 1px solid white;
 		cursor:pointer;
 	}
+	
+	#content{
+		height: 100%;
+	}
+	#demo{
+		height: 100%;
+	}
+	#div1{
+		height: 95,5%;
+	}
 </style>
 
-<div id="content" class="yui-skin-sam" style="width:100%;">
+<div id="content" class="yui-skin-sam" style="width:100%;height:100%">
   <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
     <ul class="yui-nav">
         <li class="selected">
@@ -41,7 +51,7 @@
             </div>
         </li>
     </ul>
-    <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
+    <div id="div1" class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">
 
 
 <div id="ctrlContainer" style="display:none">
@@ -63,7 +73,7 @@
 
 
 	
-<table>
+<table cellpadding="5" cellspacing="1">
 	<tr>
 		<td colspan="2">
 			<!-- onscroll="mapScroll(this)"-->
@@ -90,9 +100,7 @@
 			</MAP>
 			--%>
 		</td>
-	</tr>
-	
-		
+	</tr>	
 	<%--
 	<tr>
 		<td colspan="2">
@@ -100,11 +108,6 @@
 		</td>
 	</tr>
 	--%>
-	
-	
-	
-	
-	
 	<tr>
 		<td colspan="2">
 			<span>

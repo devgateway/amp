@@ -4,6 +4,18 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
+<style>
+	#content{
+		height: 100%;
+	}
+	#demo{
+		height: 100%;
+	}
+	#div1{
+		height: 96%;
+	}
+</style>
+
 <%
 String countryName = "";
 String ISO = null;
@@ -57,14 +69,63 @@ else {
 							<TD  width="10">&nbsp;</td>
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding="5" cellSpacing="0" vAlign="top" align="left" border="0">
-									<TR>
-										<TD vAlign="top" align="left" width="60%" >
+									<tr>
+										<TD vAlign="top" align="left" width="60%" height="100%" rowspan="3">
 											<digi:insert attribute="body" />
 										</TD>
+									</tr>
+									<tr> 
 										<td valign="top">
-											<digi:insert attribute="pieChart"/>											
+											<digi:insert attribute="pieChart"/>
 										</td>										
-									</TR>
+									</tr>
+									<tr>
+										<td height="100%">
+											<div id="content" class="yui-skin-sam" style="width:100%;padding: 0px">
+	                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
+	                                            <ul class="yui-nav">
+	                                              <li class="selected">
+	                                               <div class="nohover">
+	                                               		<a style="cursor:default">
+	                                                		<div>
+	                                                  			<digi:trn key="gis:resourcesatglance">Resources at a glance</digi:trn>
+	                                                		</div>
+	                                                	</a>
+	                                            	</div>
+	                                              </li>
+	                                            </ul>
+	                                            <div class="yui-content" style="font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">                                        
+													<table cellpadding="5" cellspacing="0">
+														<tr valign="top">
+															<td>
+																<digi:insert attribute="widget7">
+																	<digi:put name="widget-teaser-param">atGlanceTable_Place1</digi:put>
+																</digi:insert>
+															</td>
+															<td rowspan="2">
+																<digi:insert attribute="widget8">
+																	<digi:put name="widget-teaser-param">atGlanceTable_Place3</digi:put>
+																</digi:insert>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<digi:insert attribute="widget9">
+																	<digi:put name="widget-teaser-param">atGalnceTable_Place2</digi:put>
+																</digi:insert>
+															</td>
+														</tr>
+		                                                <tr>
+															<td>
+															  <digi:trn key="widget:SourceOECD">Source: OECD </digi:trn>
+															</td>
+														</tr>
+													</table>	
+	                                            </div>
+	                                          </div>
+	                                        </div> 											
+										</td>
+									</tr>									
 									<tr>
 										<td valign="top">
                                         <div id="content" class="yui-skin-sam" style="width:100%;">
@@ -87,13 +148,11 @@ else {
 														<digi:insert attribute="widget1">
 															<digi:put name="widget-teaser-param">chart_place1</digi:put>
 														</digi:insert>
-													
 													</td>
 													<td>
 														<digi:insert attribute="widget2">
 															<digi:put name="widget-teaser-param">chart_place2</digi:put>
 														</digi:insert>
-													
 													</td>
 													<td>
 														<digi:insert attribute="widget3">
@@ -129,61 +188,18 @@ else {
 														<digi:img src="images/legend1.jpg"/>
 													</td>
 												</tr>
-                                                                                                <tr>
-                                                                                                    <td colspan="3">
-                                                                                                        <digi:trn key="widget:SourceOfficialgovernmentsources">Source: Official government sources </digi:trn>
-                                                                                                    </td>
-                                                                                                </tr>
+                                                <tr>
+                                                	<td colspan="3">
+                                                    	<digi:trn key="widget:SourceOfficialgovernmentsources">Source: Official government sources </digi:trn>
+                                                    </td>
+                                                </tr>
 											</table>
                                             </div>
                                           </div>
-                                        </div> 
+                                        </div>
 										</td>
 										<td valign="top">
-                                        <div id="content" class="yui-skin-sam" style="width:100%;">
-                                          <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-                                            <ul class="yui-nav">
-                                              <li class="selected">
-                                               <div class="nohover">
-                                                <a style="cursor:default">
-                                                <div>
-                                                  <digi:trn key="gis:resourcesatglance">Resources at a glance</digi:trn>
-                                                </div>
-                                                </a>
-                                            </div>
-                                              </li>
-                                            </ul>
-                                            <div class="yui-content" style="height:auto;font-size:11px;font-family:Verdana,Arial,Helvetica,sans-serif;">                                        
-												<table cellpadding="5">
-												<tr valign="top">
-													<td>
-														<digi:insert attribute="widget7">
-															<digi:put name="widget-teaser-param">atGlanceTable_Place1</digi:put>
-														</digi:insert>
-													</td>
-													<td rowspan="2">
-														<digi:insert attribute="widget8">
-															<digi:put name="widget-teaser-param">atGlanceTable_Place3</digi:put>
-														</digi:insert>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<digi:insert attribute="widget9">
-															<digi:put name="widget-teaser-param">atGalnceTable_Place2</digi:put>
-														</digi:insert>
-													</td>
-												</tr>
-                                                                                                <tr>
-													<td>
-													  <digi:trn key="widget:SourceOECD">Source: OECD </digi:trn>
-													</td>
-												</tr>
-											</table>
-
-                                            </div>
-                                          </div>
-                                        </div> 
+                                        	&nbsp;
 										</td>
 									</tr>
 									<tr>

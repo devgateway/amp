@@ -5,6 +5,7 @@ import junit.framework.TestSuite;
 
 import org.dgfoundation.amp.test.categorymanager.AllCategoryManagerTest;
 import org.dgfoundation.amp.test.customfields.AllCustomFieldsTest;
+import org.dgfoundation.amp.test.jobs.AllJobsTest;
 import org.dgfoundation.amp.test.orgProfile.AllOrgProfileTest;
 import org.dgfoundation.amp.test.parisindicator.AllParisIndicatorsManagerTest;
 import org.dgfoundation.amp.test.reports.AllReportTest;

@@ -3,6 +3,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>	
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
@@ -19,43 +20,103 @@
 <c:set var="reportStatement">
 	<digi:trn key="aim:report:reportstatement">This Report was created by AMP</digi:trn>
 </c:set>
+<%
+String locale = org.digijava.kernel.util.RequestUtils.getNavigationLanguage(request).getCode();
+String countryName = FeaturesUtil.getCurrentCountryName();
+String currentDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL, new java.util.Locale(locale)).format(new java.util.Date());
+%>
+<c:set var="enable">
+	<digi:trn key="aim:report:enable">Enable</digi:trn>
+</c:set>
+<c:set var="disable">
+	<digi:trn key="aim:report:disable">Disable</digi:trn>
+</c:set>
+<c:set var="hheader">
+	<digi:trn key="aim:report:header">Header</digi:trn>
+</c:set>
+<c:set var="footer">
+	<digi:trn key="aim:report:footer">Footer</digi:trn>
+</c:set>
+<c:set var="displayampstatement">
+	<digi:trn key="aim:report:displayampstatement">Displays the AMP statement</digi:trn>
+</c:set>
+<c:set var="displayofficialamplogo">
+	<digi:trn key="aim:report:displayofficialamplogo">Displays the Official AMP Logo</digi:trn>
+</c:set>
+<c:set var="logostatementpaneltitle">
+	<digi:trn key="aim:report:logostatementpaneltitle">Logo/Statement Panel</digi:trn>
+</c:set>
+<c:set var="statement">
+	<digi:trn key="aim:report:statement">Statement</digi:trn>
+</c:set>
+<c:set var="logo">
+	<digi:trn key="aim:report:logo">Logo</digi:trn>
+</c:set>
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");	
-	YAHOO.amp.panel		= new YAHOO.widget.Panel("aPanel0", {
-			width:"400px", 			
-			fixedcenter: true, 
-			constraintoviewport: true, 
-			underlay:"shadow", 
-			modal: true,
-			close:true, 
-			visible:false, 
-			draggable:true} );			
-	YAHOO.amp.panel.setHeader("Logo/Statement Panel");
-	YAHOO.amp.panel.setBody("Empty");
-	YAHOO.amp.panel.setFooter("");
-	YAHOO.amp.panel.render(document.body);
-
+	YAHOO.amp.panel = new Array(3);
+	YAHOO.amp.panel[0]		= new YAHOO.widget.Panel("aPanel0", {
+		width:"400px", 			
+		fixedcenter: true, 
+		constraintoviewport: true, 
+		underlay:"shadow", 
+		modal: true,
+		close:true, 
+		visible:false, 
+		draggable:true} );			
+	YAHOO.amp.panel[0].setHeader("${logostatementpaneltitle}");
+	YAHOO.amp.panel[0].setBody("Empty");
+	YAHOO.amp.panel[0].setFooter("");
+	YAHOO.amp.panel[0].render(document.body);
+	//
+	YAHOO.amp.panel[1]		= new YAHOO.widget.Panel("aPanel1", {
+		width:"450px", 			
+		fixedcenter: true, 
+		constraintoviewport: true, 
+		underlay:"shadow", 
+		modal: true,
+		close:true, 
+		visible:false, 
+		draggable:true} );			
+	YAHOO.amp.panel[1].setHeader("${statement}");
+	YAHOO.amp.panel[1].setBody("Empty");
+	YAHOO.amp.panel[1].setFooter("");
+	YAHOO.amp.panel[1].render(document.body);
+	//
+	YAHOO.amp.panel[2]		= new YAHOO.widget.Panel("aPanel2", {
+		width:"300px", 			
+		fixedcenter: true, 
+		constraintoviewport: true, 
+		underlay:"shadow", 
+		modal: true,
+		close:true, 
+		visible:false, 
+		draggable:true} );			
+	YAHOO.amp.panel[2].setHeader("${logo}");
+	YAHOO.amp.panel[2].setBody("Empty");
+	YAHOO.amp.panel[2].setFooter("");
+	YAHOO.amp.panel[2].render(document.body);
 </script>
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
 
 	function showMyPanel(panelNum, elementId) {
-		setPanelBody(elementId);
-		showPanel();
+		setPanelBody(panelNum, elementId);
+		showPanel(panelNum);
 	}
-	function setPanelBody(elementId){
+	function setPanelBody(panelNum, elementId){
 		var element				= document.getElementById(elementId);
 		element.style.display	= "inline";
 		element.parentNode.removeChild(element);
-		YAHOO.amp.panel.setBody(element);
+		YAHOO.amp.panel[panelNum].setBody(element);
 	}
-	function showPanel () {
-		YAHOO.amp.panel.show();
+	function showPanel (panelNum) {
+		YAHOO.amp.panel[panelNum].show();
 	}
-	function hidePanel () {
-		YAHOO.amp.panel.hide();
+	function hidePanel (panelNum) {
+		YAHOO.amp.panel[panelNum].hide();
 	}
 </script>
 <style>
@@ -151,6 +212,54 @@ function openPrinter(){
 </script>
 
 
+<div id="statementPopup" style="display: none">
+	<table cellpadding="5" cellspacing="5" border="0" width="100%">
+		<tr>
+			<td align="center"> 
+				${reportStatement}&nbsp;<%=countryName%>&nbsp;<%=currentDate%>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<html:reset styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 
+					onclick="javascript:hidePanel(1);">
+					<digi:trn key="rep:pop:CloseLogoStatement">Close</digi:trn>
+				</html:reset>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="logoPopup" style="display: none">
+	<table cellpadding="5" cellspacing="5" border="0" width="100%">
+		<tr>
+			<td align="center"> 
+				<digi:img hspace="2" vspace="2" src="module/aim/images/dgf_logo.jpg" border="0" />						
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<html:reset styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 
+					onclick="javascript:hidePanel(2);">
+					<digi:trn key="rep:pop:CloseLogoStatement">Close</digi:trn>
+				</html:reset>
+			</td>
+		</tr>
+	</table>
+</div>
+
 <div id="logoStatement" style="display: none">
 	<div align="center">
 			<digi:form action="<%=viewParamPDF%>" method="post">			
@@ -159,61 +268,61 @@ function openPrinter(){
 				<table cellpadding="5" cellspacing="5" border="0" width="100%">
 					<tr>
 						<td> 
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" alt="Statement Options" />
+							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(1, 'statementPopup');" title="${displayampstatement}"  />
 							<digi:trn key="rep:pop:StatementOptions">Statement Options</digi:trn>
 						</td>
 						<td>
 							<html:select property="statementOptions">
-								<html:option value="0">Disable</html:option>
-								<html:option value="1">Enable</html:option>
+								<html:option value="0">${disable}</html:option>
+								<html:option value="1">${enable}</html:option>
 							</html:select>
 						</td>
 					</tr>
 					<tr>
 						<td> 
-							&nbsp;
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:StatementPositionOptions">Statement Position Options</digi:trn>														
 						</td>
 						<td>
 							<html:select property="statementPositionOptions">
-								<html:option value="0">Header</html:option>
-								<html:option value="1">Footer</html:option>
+								<html:option value="0">${hheader}</html:option>
+								<html:option value="1">${footer}</html:option>
 							</html:select>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" alt="Logo Options" />
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
+							<digi:trn key="rep:pop:DateOptions">Date Options</digi:trn>
+						</td>
+						<td>
+							<html:select property="dateOptions">
+								<html:option value="0">${disable}</html:option>
+								<html:option value="1">${enable}</html:option>
+							</html:select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" onclick="javascript:showMyPanel(2, 'logoPopup');" title="${displayofficialamplogo}" />
 							<digi:trn key="rep:pop:LogoOptions">Logo Options</digi:trn>
 						</td>
 						<td>
 							<html:select property="logoOptions">
-								<html:option value="0">Disable</html:option>
-								<html:option value="1">Enable</html:option>
+								<html:option value="0">${disable}</html:option>
+								<html:option value="1">${enable}</html:option>
 							</html:select>
 						</td>
 					</tr>
 					<tr>
 						<td> 
-							&nbsp;
+							<digi:img hspace="2" vspace="2" width="12px" height="12px" src="module/aim/images/spacer.gif" border="0" />
 							<digi:trn key="rep:pop:LogoPositionOptions">Logo Position Options</digi:trn>														
 						</td>
 						<td>
 							<html:select property="logoPositionOptions">
-								<html:option value="0">Header</html:option>
-								<html:option value="1">Footer</html:option>
-							</html:select>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<digi:img hspace="2" vspace="2" src="module/aim/images/help.gif" border="0" alt="Date Options" />
-							<digi:trn key="rep:pop:DateOptions">Date Options</digi:trn>
-						</td>
-						<td>
-							<html:select property="dateOptions">
-								<html:option value="0">Disable</html:option>
-								<html:option value="1">Enable</html:option>
+								<html:option value="0">${hheader}</html:option>
+								<html:option value="1">${footer}</html:option>
 							</html:select>
 						</td>
 					</tr>
@@ -226,11 +335,11 @@ function openPrinter(){
 					<tr>
 						<td align="center" colspan="2">
 							<html:submit styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 
-								onclick="javascript:hidePanel();">
+								onclick="javascript:hidePanel(0);">
 								<digi:trn key="rep:pop:ApplyLogoStatement">Apply</digi:trn>
 							</html:submit>
 							<html:reset styleClass="dr-menu buton" style="padding-bottom: 2px; padding-top: 2px;" 
-								onclick="javascript:hidePanel();">
+								onclick="javascript:hidePanel(0);">
 								<digi:trn key="rep:pop:CancelLogoStatement">Cancel</digi:trn>
 							</html:reset>
 						</td>

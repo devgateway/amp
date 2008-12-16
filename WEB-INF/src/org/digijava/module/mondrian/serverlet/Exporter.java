@@ -1,5 +1,7 @@
 package org.digijava.module.mondrian.serverlet;
-
+/**
+ * @author Diego DImunzio
+ */
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -7,18 +9,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -26,20 +25,17 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.fop.apps.Driver;
 import org.apache.fop.apps.FOPException;
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFPicture;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.digijava.module.aim.helper.FormatHelper;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -162,77 +158,97 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 							FileOutputStream fos = new FileOutputStream(filename);
 							HSSFSheet sheet = wb.getSheet("data");
 							HSSFRichTextString str = null;
+							ExporterHelper helper = new ExporterHelper(wb);
 							
-							HSSFFont frowheading = wb.createFont();
-							frowheading.setFontName("Arial Unicode MS");
-							frowheading.setFontHeightInPoints((short)8);
-							frowheading.setBoldweight(frowheading.BOLDWEIGHT_BOLD);
-							HSSFCellStyle rowheading = wb.createCellStyle();
-							rowheading.setFont(frowheading);
-							rowheading.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-							rowheading.setBorderRight(HSSFCellStyle.BORDER_THIN);
-							rowheading.setBorderTop(HSSFCellStyle.BORDER_THIN);
-							rowheading.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-							rowheading.setVerticalAlignment(HSSFCellStyle.ALIGN_CENTER);
-							
-							HSSFFont fdataitem = wb.createFont();
-							fdataitem.setFontName("Arial Unicode MS");
-							fdataitem.setFontHeightInPoints((short)8);
-							fdataitem.setBoldweight(frowheading.BOLDWEIGHT_NORMAL);
-							HSSFCellStyle dataitem = wb.createCellStyle();
-							dataitem.setFont(fdataitem);
-							dataitem.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-							dataitem.setBorderRight(HSSFCellStyle.BORDER_THIN);
-							dataitem.setBorderTop(HSSFCellStyle.BORDER_THIN);
-							dataitem.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-							dataitem.setVerticalAlignment(HSSFCellStyle.ALIGN_RIGHT);
-							boolean addrow = false;
-							int nrowspan=0;
-							int lastrow=0;
-							int lasti=0;
 							NodeList rowslist = document.getElementsByTagName("row");
 							for (int i = 0; i < rowslist.getLength(); i++) {
-								HSSFRow row = sheet.createRow((short)(i));
-								for (int j = 0; j < rowslist.item(i).getChildNodes().getLength(); j++) {
-									HSSFCell cell=null;
-									for (int k = 0; k < rowslist.item(i).getChildNodes().item(j).getChildNodes().getLength(); k++) {
-										if (addrow &&  i >lasti && i <=((nrowspan-1) +lasti)){
-											cell = row.createCell((short)(j+1));
-										}else{
-											cell = row.createCell((short)j);
-										}
-										str = new HSSFRichTextString(rowslist.item(i).getChildNodes().item(j).getChildNodes().item(k).getAttributes().item(0).getNodeValue());
-										String style = rowslist.item(i).getChildNodes().item(j).getAttributes().getNamedItem("style").getNodeValue();
-										String rowspan = rowslist.item(i).getChildNodes().item(j).getAttributes().getNamedItem("rowspan").getNodeValue();
-										String colspan = rowslist.item(i).getChildNodes().item(j).getAttributes().getNamedItem("colspan").getNodeValue();
-										if (Integer.parseInt(rowspan)>1){
-											addrow = true;
-											nrowspan=Integer.parseInt(rowspan);
-											lasti = i;
-										}
-										cell.setCellValue (str);
-										cell.setCellStyle(rowheading);
-										for (int l = 0; l < rowslist.item(i).getChildNodes().getLength(); l++) {
-											HSSFCell celldata=null;
-											if (rowslist.item(i).getChildNodes().item(l).getNodeName().equalsIgnoreCase("cell")){
-												if (addrow &&  i >lasti && i <=((nrowspan-1) +lasti)){
-													celldata = row.createCell((short)(l+1));
-												}else{
-													celldata = row.createCell((short)(l));	
+								HSSFRow row = wb.getSheet("data").createRow((short) (i));
+								NodeList rownode = rowslist.item(i).getChildNodes();
+								
+								for (int j = 0; j < rownode.getLength(); j++) {
+									Node currentnode = rownode.item(j);
+									int rowspan=0;
+									int colspan =0;
+									if (currentnode.getNodeName().equalsIgnoreCase("corner")){
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										if (colspan >1){
+											helper.addMerge(i, j, rowspan-1, colspan-1);
+											for (int k = i; k < rowspan; k++) {
+												for (int k2 = 0; k2 < rowslist.item(k).getChildNodes().getLength(); k2++) {
+													Element element = (Element)rowslist.item(k).getChildNodes().item(k2);
+													Attr offset = document.createAttribute("offset");
+													offset.setNodeValue(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+													element.setAttributeNode(offset);
 												}
-												str = new HSSFRichTextString(rowslist.item(i).getChildNodes().item(l).getAttributes().item(3).getNodeValue());
-												HSSFDataFormat nformat = wb.createDataFormat();
-												celldata.setCellValue(str);
-												celldata.setCellType(HSSFCell.CELL_TYPE_STRING);
-												celldata.setCellStyle(dataitem);
-												sheet.autoSizeColumn((short)l);
 											}
 										}
+									}else if (currentnode.getNodeName().equalsIgnoreCase("column-heading")){
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										if (colspan >1){
+											helper.addMerge(i, j, rowspan-1, colspan-1);
+										}
+										int colid =j;
+										if(currentnode.getAttributes().getNamedItem("offset")!=null){
+											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
+										}
+										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
+										helper.addCaption(text, colid, row);
+										
+									}else if (currentnode.getNodeName().equalsIgnoreCase("row-heading")){
+										int colid =j;
+										rowspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("rowspan").getNodeValue());
+										colspan = Integer.parseInt(currentnode.getAttributes().getNamedItem("colspan").getNodeValue());
+										if (rowspan >1){
+											helper.addMerge(i, j, (rowspan+i)-1, j);
+											for (int k = i+1; k < rowspan+i; k++) {
+												for (int k2 = 0; k2 < rowslist.item(k).getChildNodes().getLength(); k2++) {
+													Element element = (Element)rowslist.item(k).getChildNodes().item(k2);
+													Integer offsetint = k2+1;
+													if (element.getAttribute("offset")==null || element.getAttribute("offset")==""){
+														Attr offset = document.createAttribute("offset");
+														offset.setNodeValue(offsetint.toString());
+														element.setAttributeNode(offset);
+													}else{
+														int oldcolid = Integer.parseInt(element.getAttribute("offset"));
+														Integer newcolid = oldcolid + 1;
+														element.setAttribute("offset", newcolid.toString());
+													}
+												}
+											}
+										}
+										if(currentnode.getAttributes().getNamedItem("offset")!=null){
+											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue());
+										}
+										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
+										helper.addCaption(text, colid, row);
+										
+									}else if (currentnode.getNodeName().equalsIgnoreCase("heading-heading")){
+										int colid =j;
+										if(currentnode.getAttributes().getNamedItem("offset")!=null){
+											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue())+j;
+										}
+										String text = currentnode.getFirstChild().getAttributes().getNamedItem("caption").getNodeValue();
+										helper.addCaption(text, colid, row);
+										
+									}else if (currentnode.getNodeName().equalsIgnoreCase("cell")){
+										int colid =j;
+										if(currentnode.getAttributes().getNamedItem("offset")!=null){
+											colid = Integer.parseInt(currentnode.getAttributes().getNamedItem("offset").getNodeValue());
+										}
+										if(currentnode.getAttributes().getNamedItem("rawvalue")!=null){
+											helper.addCell(currentnode.getAttributes().getNamedItem("rawvalue").getNodeValue(), colid, row);
+										}else{
+											helper.addCell("0", colid, row);
+										}
+									}
+									
+									
 										sheet.autoSizeColumn((short)j);
 									}
 								}
-								lastrow = i;
-							}
+							
 							//insert the chart into the excel file 
 							
 							if (chart != null && chart.isVisible()) {
@@ -244,15 +260,14 @@ public class Exporter extends com.tonbeller.jpivot.print.PrintServlet {
 								while ((b = fis.read()) != -1)
 									img_bytes.write(b);
 								fis.close();
-								lastrow = lastrow+4;
-								HSSFClientAnchor anchor = new HSSFClientAnchor();
-								anchor.setRow1(lastrow);
+								HSSFClientAnchor anchor =  new HSSFClientAnchor();
+								anchor.setCol1((short)0);
+								anchor.setRow1(30);
 								int index = wb.addPicture(img_bytes.toByteArray(),HSSFWorkbook.PICTURE_TYPE_PNG);
 								HSSFPatriarch patriarch = sheet.createDrawingPatriarch();
 								HSSFPicture pic = patriarch.createPicture(anchor, index);
 								pic.resize();
-								
-								anchor.setAnchorType(2);
+							
 								wb.write(fos);
 								fos.close();
 							}

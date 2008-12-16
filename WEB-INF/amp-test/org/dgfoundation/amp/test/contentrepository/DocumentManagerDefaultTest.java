@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts.upload.FormFile;
 import org.dgfoundation.amp.test.util.Configuration;
 import org.dgfoundation.amp.test.util.TestUtil;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.contentrepository.action.DocumentManager;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 

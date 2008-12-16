@@ -429,13 +429,16 @@ function recurEvent(){
 			                    			<font color="red" size="3px">*</font>
 			                    			<digi:trn key="calendar:evntTitle">Event title</digi:trn>			                                
 			                    		</td>
+			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
 			                    			<html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle" style="width: 220px" styleClass="inp-text"/>
 			                    		</td>
-			                    		<feature:display name="Donors" module="Calendar">
+			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>
+			                    		<feature:display name="Donors" module="Calendar">			                    			
 			                    			<td rowspan="2" style="text-align: center;">
 				                    			<digi:trn key="cal:organizations">Organizations</digi:trn>
 				                    		</td>
+				                    		<td width="2px">&nbsp;</td>
 				                    		<td rowspan="2" align="left" valign="top">
 				                    			 <html:select multiple="multiple" property="selOrganizations" size="4" style="width: 220px;">
 				                                   	<logic:notEmpty name="calendarEventForm" property="organizations">
@@ -444,7 +447,7 @@ function recurEvent(){
 														</logic:iterate>
 													</logic:notEmpty>
 				                                 </html:select>
-				                    		</td>
+				                    		</td>				                    		
 				                    		<td rowspan="2" valign="top">
 				                    			<table cellSpacing="1" cellPadding="1">
 				                    				<field:display name="Add Donor Button" feature="Donors">
@@ -467,11 +470,11 @@ function recurEvent(){
 				                    		</td>
 			                    		</feature:display>			                    		
 			                    	</tr>
-			                    	
 			                    	<tr>
 			                    		<td align="right" nowrap="nowrap" style="text-align: right;">
 			                    			<digi:trn key="calendar:cType">Calendar type</digi:trn>
 			                    		</td>
+			                    		<td width="2px">&nbsp;</td>
 			                    		<td align="left">
 			                    			 <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
 			                                 <html:select name="calendarEventForm" property="selectedCalendarTypeId" style="width: 220px;" onchange="this.form.submit()" styleClass="inp-text">
@@ -482,11 +485,13 @@ function recurEvent(){
 			                                 </html:select>
 			                    		</td>			                    		
 			                    	</tr>
+			                    	
 			                    	<tr style="height:25px">
 			                    		<feature:display name="Event Type" module="Calendar">
 			                    			<td valign="top" align="right" nowrap="nowrap" rowspan="1">
 				                    			<digi:trn key="calendar:eventsType">Event type</digi:trn>
 				                    		</td>
+				                    		<td width="2px">&nbsp;</td>
 				                    		<td align="left" valign="top" rowspan="1">
 				                    			 <html:select name="calendarEventForm" style="width: 220px;" property="selectedEventTypeId" styleClass="inp-text">
 				                                    <c:if test="${!empty calendarEventForm.eventTypesList}">
@@ -496,19 +501,22 @@ function recurEvent(){
 				                                 	</c:if>
 				                                 </html:select>
 				                    		</td>
-			                    		</feature:display>			                    		
+			                    		</feature:display>
+			                    		<td width="30px"><div style="width: 30px;">&nbsp;</div> </td>			                    		
 			                    		<td rowspan="4" style="text-align: center" align="right" nowrap="nowrap">
 			                    			<digi:trn key="calendar:Description">Description</digi:trn>
 			                    		</td>
+			                    		<td width="2px">&nbsp;</td>
 			                    		<td style="width: 220px" align="left" rowspan="4">
 			                    			<html:textarea name="calendarEventForm" styleId="descMax" property="description" style="width: 100%" rows="4"/>
 			                    		</td>
 			                    		<td>&nbsp;</td>			                    		
-			                    	</tr>
+			                    	</tr>			                    	
 			                    	<tr style="height: 25px;">
 			                    		<td nowrap="nowrap" align="right" style="text-align: right;vertical-align: top;" >
 			                    			<digi:trn key="calendar:StDate">Start date</digi:trn>
 			                    		</td>
+			                    		<td width="2px" valign="top">&nbsp;</td>
 			                    		<td align="left" style="width: 220px;vertical-align: top;">
 			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                          	<html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
@@ -630,11 +638,12 @@ function recurEvent(){
 			                                          </c:if>
 			                    		</td>			                    		
 			                    		<td>&nbsp;</td>
-			                    	</tr>
+			                    	</tr>			                    	
 			                    	<tr height="25px;">
 			                    		<td  nowrap="nowrap" align="right" style="text-align: right">
 			                    			<digi:trn key="calendar:EndDate">End Date</digi:trn>
 			                    		</td>
+			                    		<td width="2px" valign="top">&nbsp;</td>
 			                    		<td>
 			                    			<c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 			                                            <table cellpadding="0" cellspacing="0">
@@ -755,8 +764,9 @@ function recurEvent(){
 			                    		</td>			                    		
 			                    		<td>&nbsp;</td>
 			                    	</tr>
+			                    	
 			                    	<tr height="25px;">
-			                    		<td>&nbsp;</td>
+			                    		<td colspan="2">&nbsp;</td>
 			                    		<td style="vertical-align: top">
 			                    			<html:hidden name="calendarEventForm" property="privateEvent"/>
 			                                          <input type="checkbox" name="privateEventCheckbox" onchange="javascript:makePublic();" 
@@ -769,20 +779,18 @@ function recurEvent(){
 			                    		<td>&nbsp;</td>			                    		
 			                    	</tr>
 			                    	<tr height="25px;">
-			                    		<td colspan="5"> &nbsp;</td>
+			                    		<td colspan="8"> &nbsp;</td>
 			                    	</tr>
 			                    	<tr>
-			                    		<td>&nbsp;</td>
+			                    		<td colspan="2">&nbsp;</td>
 			                    		<td>
 			                    			<font color="red" size="3px">*</font>
 			                    			<digi:trn key="calendar:Attendee">Attendee</digi:trn>			                                            
 			                    		</td>
-			                    		<td> &nbsp;</td>
-			                    		<td>&nbsp;</td>
-			                    		<td>&nbsp;</td>
-			                    	</tr>
+			                    		<td colspan="3"> &nbsp;</td>
+			                    	</tr>			                    	
 			                    	<tr>
-			                    		<td>&nbsp;</td>
+			                    		<td colspan="2">&nbsp;</td>
 			                    		 <td style="width: 220px">
 			                                          <select multiple="multiple" size="13" id="whoIsReceiver" class="inp-text" style="width: 220px; height: 150px;">
 			                                            <c:if test="${empty calendarEventForm.teamMapValues}">
@@ -801,10 +809,10 @@ function recurEvent(){
 			                                            </c:if>
 			                                          </select>
 			                                        </td>
-			                                        <td>
-					                                	<input type="button" onclick="MyaddUserOrTeam();" style="width:80px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
+			                                        <td colspan="3" style="text-align: center;">
+					                                	<input type="button" onclick="MyaddUserOrTeam();" style="width:110px;font-family:tahoma;font-size:11px;" value="<digi:trn key="message:addUsBtn">Add >></digi:trn>">
 					                                  	<br><br>
-					                       			  	<input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
+					                       			  	<input type="button" style="width:110px;font-family:tahoma;font-size:11px;" onclick="MyremoveUserOrTeam()" value="<<<digi:trn key="message:rmbtn">Remove</digi:trn>" >											
 			                                        </td>
 			                                        <td>
 			                                        	<table width="100%" height="100%">
@@ -823,14 +831,15 @@ function recurEvent(){
 			                                        			</td>
 			                                        		</tr>
 			                                        	</table>
-			                                        </td>
+			                                        </td>			                                        
 			                                        <td style="vertical-align: top;" nowrap="nowrap">
 			                                        	<input type="button" style="width:110px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:btnAddGuest">Add</digi:trn>">
 			                                            <img src="../ampTemplate/images/help.gif" onmouseover="stm([calendarHelp,separateEmails],Style[15])" onmouseout="htm()"/>
 			                                        </td>
 			                    	</tr>
+			                    	<tr height="5px"><td colspan="8">&nbsp;</td></tr>			                    	
 			                    	<tr>
-			                          <td colspan="5" style="text-align:center;">
+			                          <td colspan="8" style="text-align:center;">
 			                          	<feature:display name="Preview Event button" module="Calendar">
 			                          		<input type="submit" style="width: 110px" onclick="return previewEvent();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
 			                            	&nbsp;

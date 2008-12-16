@@ -34,7 +34,7 @@ public class UserVerifiedDateJob implements StatefulJob {
         if(userList!=null){
             for (User user : userList) {
                 if (user.getCreationDate()!= null) {
-                    String dt = sdf.format(user.getCreationDate());
+                     String dt = sdf.format(user.getCreationDate());
                     if (dt.equals(exDt)) {
                         AmpUserUtil.deleteUser(user.getId());//TODO Why delete user? is this safe
                     }

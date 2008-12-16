@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<fields>
+	<step number="1">
+		<text name="Field1" description="Description1" property="customField1" field="Custom Field1"/>
+		<combo name="Field2" description="Description2" property="customField2" field="Custom Field2">
+			<option value="1">Option1</option>
+			<option value="2">Option2</option>
+			<option value="3">Option3</option>
+			<option value="4">Option4</option>
+		</combo>
+		<category name="Field3" description="Description3" property="customField3" field="Custom Field3" category="MTEF Projection"/>		
+		<date name="Field4" description="Description4" property="customField4" field="Custom Field4"/>
+	</step>
+</fields>

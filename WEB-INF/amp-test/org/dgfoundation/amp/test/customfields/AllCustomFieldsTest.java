@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper;
+package org.dgfoundation.amp.test.customfields;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -7,7 +7,7 @@ import junit.framework.TestSuite;
  * @author Mauricio
  *
  */
-public class AllHelperTest {
+public class AllCustomFieldsTest {
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
 		suite.addTestSuite(XMLCustomFieldParserTest.class);

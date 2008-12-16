@@ -17,7 +17,7 @@ public class XMLCustomFieldParser extends DefaultHandler{
 	private boolean isOption;
 	private String optionValue;
 	private String optionText;	
-   
+	
    public void startElement (String uri, String name,
 		      String qName, Attributes atts){
 	   if ("text".equals(name)){
@@ -30,6 +30,8 @@ public class XMLCustomFieldParser extends DefaultHandler{
 	   }else if("category".equals(name)){
 		   cf = new  CategoryCustomField();
 		   processAtrributes(atts);
+		   CategoryCustomField ccf = (CategoryCustomField) cf;
+		   ccf.setCategoryName(atts.getValue("category"));
 	   }else if("date".equals(name)){
 		   cf = new  DateCustomField();
 		   processAtrributes(atts);

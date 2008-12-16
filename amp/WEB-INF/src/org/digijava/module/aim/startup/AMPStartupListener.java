@@ -25,6 +25,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -182,6 +183,8 @@ public class AMPStartupListener extends HttpServlet implements
 
 			initializeQuartz(sce);
 
+			CustomFieldsUtil.parseXMLFile(sce.getServletContext().getResourceAsStream("/WEB-INF/custom-fields.xml"));
+			
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			e.printStackTrace(System.out);

@@ -35,7 +35,7 @@
 														<c:choose>
 															<c:when test="<%=customField instanceof ComboBoxCustomField%>">
 																<html:select name="aimEditActivityForm" property="customFields[${index}].value">
-																	<html:optionsCollection  name="aimEditActivityForm" property="customFields[${index}].options" value="value" label="key"/>
+																	<html:optionsCollection  name="aimEditActivityForm" property="customFields[${index}].options" value="key" label="value"/>
 																</html:select>											
 															</c:when>
 															<c:when test="<%=customField instanceof CategoryCustomField%>">

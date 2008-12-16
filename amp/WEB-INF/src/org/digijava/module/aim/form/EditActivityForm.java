@@ -32,16 +32,14 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.CategoryCustomField;
-import org.digijava.module.aim.helper.ComboBoxCustomField;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.CustomField;
-import org.digijava.module.aim.helper.DateCustomField;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.util.CustomFieldsUtil;
 import org.digijava.module.aim.util.Step;
 import org.digijava.module.contentrepository.helper.DocumentData;
 
@@ -458,53 +456,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		fundingRegionId = new Long(-1);
 		keyword = null;
 		
-    	List<CustomField> customFields = new ArrayList<CustomField>(); 
-    
-    	// Text Field
-    	CustomField cf = new CustomField();
-    	cf.setStep(1);
-    	cf.setName("Field1");
-    	cf.setDescription("Description");
-    	cf.setAmpActivityPropertyName("customField1");
-    	cf.setFM_field("Custom Field1");
-    	
-    	// Combo
-    	ComboBoxCustomField combo = new ComboBoxCustomField();
-    	combo.setStep(1);
-    	combo.setName("Field2");
-    	combo.setDescription("Description2");
-    	combo.setAmpActivityPropertyName("customField2");
-    	combo.setFM_field("Custom Field2");    	
-    	
-    	LinkedHashMap<String,String>  options = new LinkedHashMap<String,String>();
-		options.put("Option1", "1");
-		options.put("Option2", "2");
-		options.put("Option3", "3");		
-		combo.setOptions(options);
-    	
-		// Category Field
-		CategoryCustomField ccf = new CategoryCustomField();
-		ccf.setStep(1);
-		ccf.setName("Field3");
-		ccf.setDescription("Description3");
-		ccf.setAmpActivityPropertyName("customField3");
-		ccf.setFM_field("Custom Field3");   		
-		ccf.setCategoryName("MTEF Projection");
-		
-		DateCustomField dcf = new DateCustomField();
-		dcf.setStep(1);
-		dcf.setName("Field4");
-		dcf.setDescription("Description4");
-		dcf.setAmpActivityPropertyName("customField4");
-		dcf.setFM_field("Custom Field4");
-		
-    	// Finally we add these components
-    	customFields.add(cf);
-    	customFields.add(combo);
-    	customFields.add(ccf);
-    	customFields.add(dcf);
-
-    	this.setCustomFields(customFields);	
+    	customFields = CustomFieldsUtil.getCustomFields();
 	}
 
 

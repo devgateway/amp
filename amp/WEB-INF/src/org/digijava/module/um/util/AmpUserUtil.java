@@ -9,8 +9,12 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.UserPreferencesPK;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
@@ -47,6 +51,11 @@ public class AmpUserUtil {
 		}
 		return users;
 	}
+    /**
+     * Returns Collection of users who have not activated their accounts
+     * or were not activated by admin (i.e. admin has not removed ban status )
+     * @return Collection of users
+     */
 
     public static Collection<User> getAllNotVerifiedUsers() {
         Session session = null;
@@ -56,9 +65,11 @@ public class AmpUserUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select u from " + User.class.getName() + " u"
-                    + " where u.emailVerified=:emailVerified order by u.email";
+                    + " where u.emailVerified=:emailVerified and u.banned=:banned and u.active=:active order by u.email";
             qry = session.createQuery(queryString);
             qry.setBoolean("emailVerified", false);
+            qry.setBoolean("active", false);
+            qry.setBoolean("banned", true);
             users = qry.list();
         } catch (Exception e) {
             logger.error("Unable to get user");
@@ -68,7 +79,11 @@ public class AmpUserUtil {
         return users;
 	}
 
-
+    /**
+     * Delete user who has not activated his/her accounts
+     *
+     * @param userId the id of the user
+     */
     public static void deleteUser(Long userId) {
         Session session = null;
         Transaction tx=null;
@@ -77,6 +92,28 @@ public class AmpUserUtil {
             session = PersistenceManager.getRequestDBSession();
             tx=session.beginTransaction();
             User user=(User)session.load(User.class,userId);
+            AmpUserExtension userExt=AmpUserUtil.getAmpUserExtension(user);
+            if(userExt!=null){
+                 /*
+                 * During registration phase user
+                 * specify organization type, group and organization
+                 * So we should delete this information before deleting user
+                 */
+
+                session.delete(userExt);
+            }
+            Site rootSite=SiteUtils.getSite("amp");
+            UserPreferencesPK key = new UserPreferencesPK(user, rootSite);
+            UserLangPreferences userLang=(UserLangPreferences)session.load(UserLangPreferences.class,key);
+            /*
+             * During registration phase user
+             * specifies user navigation language
+             * So we should delete this information before deleting user
+             */
+
+            session.delete(userLang);
+
+            // deleting user
             session.delete(user);
             tx.commit();
         } catch (Exception e) {

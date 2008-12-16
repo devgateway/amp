@@ -74,9 +74,9 @@ public class ShowSectorByDonorChart extends Action {
 		}else{
 			opt.setShowLabels(form.getShowLabel());
 		}
-		//HEIGHT
+		//HEIGHT		
 		if (form.getImageHeight() == null){
-        	opt.setHeight(new Integer(660));
+        	opt.setHeight(new Integer(350));
         }else{
         	opt.setHeight(form.getImageHeight());
         }

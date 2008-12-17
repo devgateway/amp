@@ -79,12 +79,10 @@
     </target>
 
   <!--compile Java source files-->
-  <target name="jaxb" description="Compile all Java source files">
+   <target name="jaxb" description="Compile all Java source files">
     <echo message="Compiling the schema..." />
     <mkdir dir="${gen-src}" />
-    <xjc schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb" target="${gen-src}">
-      <produces dir="${gen-src}/" includes="**/*.java" />
-    </xjc>
+    <xjc destdir="${gen-src}" schema="./doc/IDML2.0.xsd" package="org.digijava.module.dataExchange.jaxb"/>
   </target>
 
 

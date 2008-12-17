@@ -1,1 +1,0 @@
-Dir[File.dirname(__FILE__) + '/layers/*.rb'].each { |c| require c }

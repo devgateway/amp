@@ -12,7 +12,7 @@
 		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberName="All Activities">
 			<Table name="cached_amp_activity" />
 			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
-			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true" />
+			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true"/>
 		</Hierarchy>
 	</Dimension>
 	<Dimension name="Donor Dates" type="TimeDimension">
@@ -23,11 +23,40 @@
 			<Level name="Month" column="month" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric" />
 		</Hierarchy>
 	</Dimension>
+	<Dimension name="Regions">
+		<Hierarchy hasAll="true" allMemberName="All Regions" primaryKey="region_id">
+			<Table name="cached_v_regions" />
+			<Level name="Region" column="region" table="cached_v_regions" />
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Primary Program">
+		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_program_id">
+			<Table name="cached_v_primary_program" />
+			<Level name="name" column="name" table="cached_v_primary_program" />
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Secundary Program">
+		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_program_id">
+			<Table name="cached_v_secunday_program" />
+			<Level name="name" column="name" table="cached_v_secunday_program" />
+		</Hierarchy>
+	</Dimension>
+	<Dimension name="Status">
+		<Hierarchy hasAll="true" allMemberName="All Status" primaryKey="amp_status_id">
+			<Table name="cached_v_status" />
+			<Level name="name" column="name" table="cached_v_status" />
+		</Hierarchy>
+	</Dimension>
+	
 	<Cube name="Sectors">
 		<Table name="cached_v_sectors" />
 		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id"/>
+		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="amp_activity_id"/>
+		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
+		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
 		<Measure name="Raw Sector Percentage" aggregator="sum" column="sector_percentage" visible="false" />
 		<CalculatedMember name="Sector Percentage" dimension="Measures">
 			<Formula>IIf([Measures].[Raw Sector Percentage] &gt; 0 AND [Measures].[Raw Sector Percentage] &lt; 100,[Measures].[Raw Sector Percentage],null)</Formula>
@@ -57,8 +86,12 @@
 		</Dimension>
 		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
 		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id" />
-	
+		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_fund_detail_id"/>
+		<DimensionUsage name="Regions" source="Regions" foreignKey="amp_activity_id" />
+		<DimensionUsage name="Primary Program" source="Primary Program" foreignKey="amp_activity_id"/>
+		<DimensionUsage name="Secundary Program" source="Secundary Program" foreignKey="amp_activity_id"/>
+		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id"/>
+		
 		<Measure name="Raw Actual Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="mysql">
@@ -117,6 +150,10 @@
 		<VirtualCubeDimension name="Primary Sector" foreignKey="amp_activity_id" />
 		<VirtualCubeDimension name="Activity" foreignKey="amp_activity_id" />
 		<VirtualCubeDimension name="Donor Dates" foreignKey="amp_fund_detail_id" />
+		<VirtualCubeDimension name="Regions" foreignKey="amp_activity_id" />
+		<VirtualCubeDimension name="Primary Program"  foreignKey="amp_activity_id"/>
+		<VirtualCubeDimension name="Secundary Program" foreignKey="amp_activity_id"/>
+		<VirtualCubeDimension name="Status" foreignKey="amp_activity_id"/>
 		<VirtualCubeDimension name="Financing Instrument" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Terms of Assistance" cubeName="Donor Funding" />
 		<VirtualCubeDimension name="Donor" cubeName="Donor Funding" />

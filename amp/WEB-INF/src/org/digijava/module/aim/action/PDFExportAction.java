@@ -396,8 +396,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 					// see startPage function
 				} else if (this.request.getAttribute("logoPositionOptions").equals("1")) {//footer
 					Image logo = null;
-					int end = this.request.getRequestURL().length() - "/aim/pdfExport.do".length();
-					String urlPrefix = this.request.getRequestURL().substring(0, end);
 					byte[] b = new byte[900];
 					this.session.getServletContext().getResourceAsStream("/TEMPLATE/ampTemplate/images/AMPLogo.png").read(b);
 					try {
@@ -410,7 +408,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					float textBase = document.bottom() - 20;
 					cb.beginText();
 		    	    cb.setFontAndSize(font, 8);
 		    	    cb.addImage(logo);
@@ -437,7 +434,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 					float textBase = document.bottom() - 20;
 					cb.beginText();
 		    	    cb.setFontAndSize(font, 8);
-		    	    cb.setTextMatrix(document.left(), textBase);
+		    	    cb.setTextMatrix(document.left() + 50, textBase);
 		    	    cb.showText(stmt);
 		    	    cb.endText();		    	    
 				}				

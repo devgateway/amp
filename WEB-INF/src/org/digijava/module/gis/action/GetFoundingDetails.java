@@ -171,8 +171,13 @@ public class GetFoundingDetails extends Action {
 
                 Long secId = new Long(secIdStr);
 
-                List secFundings = DbUtil.getSectorFoundings(secId);
+                List secFundings = null;
 
+                if (secId.longValue() > 0l) {
+                    secFundings = DbUtil.getSectorFoundings(secId);
+                } else {
+                    secFundings = new ArrayList();
+                }
                 Iterator it = secFundings.iterator();
 
                 Map locationIdObjectMap = new HashMap();
@@ -289,8 +294,14 @@ public class GetFoundingDetails extends Action {
                     selIndicator = IndicatorUtil.getIndicator(indId);
                 }
                 //Get segments with funding for dashed paint map
-                List secFundings = DbUtil.getSectorFoundings(secId);
-                Iterator it = secFundings.iterator();
+                List secFundings = null;
+
+                if (secId.longValue() > 0l) {
+                    secFundings = DbUtil.getSectorFoundings(secId);
+                } else {
+                    secFundings = new ArrayList();
+                }
+
 
                 Object [] fundingList = getFundingsByLocations(secFundings, Integer.parseInt(mapLevel));
                 Map fundingLocationMap = (Map) fundingList[0];

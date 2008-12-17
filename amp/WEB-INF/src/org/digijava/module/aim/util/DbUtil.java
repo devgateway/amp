@@ -2390,6 +2390,13 @@ public class DbUtil {
         }
         return organizations;
     }
+    /**
+     * Returns list of 5 (or less) largest projects
+     * TODO review this method
+     * @param filter
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
     
     public static List<Project> getOrganisationLargestProjects(FilterHelper filter) throws DgException {
         Session session = null;
@@ -2410,26 +2417,28 @@ public class DbUtil {
         Long orgID = filter.getOrgId();
         try {
             session = PersistenceManager.getRequestDBSession();
+            /* pick all activities of the organization in the selected year ordered
+             by their amounts in USD
+             alas that "Limit" does not work in the query...  */
             queryString = " select act from " + AmpActivity.class.getName() + " act  ";
 
             queryString += " inner join act.funding f " +
                     " inner join f.fundingDetails fd ";
             queryString += "  where f.ampDonorOrgId=:orgID and " +
                     " fd.transactionType = 0 and  fd.adjustmentType = 1";
-            queryString += " and year(fd.transactionDate)=:year   and act.team is not null group by act order by sum(fd.transactionAmountInUSD) ";
+            queryString += " and year(fd.transactionDate)=:year   and act.team is not null group by act order by sum(fd.transactionAmountInUSD)";
 
             Query query = session.createQuery(queryString);
             query.setLong("year", year);
             query.setLong("orgID", orgID);
-            List result;
-            if(query.list().size()>5){
-                result=query.list().subList(0, 4);//pick 5 largest projects
+            List result=query.list();
+            if(result.size()>5){
+                result=result.subList(0, 4);//pick 5 largest projects
             }
-            else{
-               result = query.list();
-            }
+           
             
             Iterator<AmpActivity> activityIter = result.iterator();
+            // converting funding to selected currency amount and creating projects
             while (activityIter.hasNext()) {
                 AmpActivity activity = activityIter.next();
                 queryString = "select fd from " + AmpFundingDetail.class.getName() + " fd  inner join fd.ampFundingId f ";

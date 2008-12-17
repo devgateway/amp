@@ -39,14 +39,14 @@ public class ParisIndicatorConfigDataTest extends TestCase {
 			SQLException {
 		
 		Collection<AmpAhsurveyIndicator> ahSurveyIndicators = DbUtil.getAllAhSurveyIndicators();
-		assertFalse("ERROR: The table 'amp_ahsurvey_indicator' can´t be empty.", ahSurveyIndicators.size() == 0);
+		assertFalse("ERROR: The table 'amp_ahsurvey_indicator' cant be empty.", ahSurveyIndicators.size() == 0);
 
 		String queryString = "from " + AmpAhsurveyQuestion.class.getName();
 		Query qry = session.createQuery(queryString);
-		assertFalse("ERROR: The table 'amp_ahsurvey_question' can´t be empty.", qry.list().size() == 0);
+		assertFalse("ERROR: The table 'amp_ahsurvey_question' cant be empty.", qry.list().size() == 0);
 		
 		queryString = "from " + AmpAhsurveyQuestionType.class.getName();
 		qry = session.createQuery(queryString);
-		assertFalse("ERROR: The table 'amp_ahsurvey_question_type' can´t be empty.", qry.list().size() == 0);
+		assertFalse("ERROR: The table 'amp_ahsurvey_question_type' cant be empty.", qry.list().size() == 0);
 	}
 }

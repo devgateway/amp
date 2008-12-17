@@ -11,19 +11,11 @@
 	<tr style="font-weight: bold">
 		<td>National</td>
 		<td><%= @national.size %></td>
-		<% if @national.many? %>
-			<td>
-				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15"), 
-						:controller => "reports", :action => "project_list", :query => "location", :value => 0) %>
-			</td>
-		<% end %>
 		<td>
-   		<% if @national.length == 1 %>
-			<%= link_to(image_tag("/images/details.gif", :size => "14x15"), 
-						project_path(projects.first, :report => "with_currency_selector"), 
-						:popup => ['_blank', 'height=600,width=800']) %>
-		<% end %>
-        </td>
+			<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15"), 
+					:controller => "reports", :action => "project_list", :query => "location", :value => 0) %>
+		</td>
+		<td></td>
 	</tr>
 		
 	<% @provinces.each do |province| %>
@@ -31,19 +23,10 @@
 		<tr>
 			<td><%= province.name %></td>
 			<td><%= projects.size %></td>
-			<% if projects.many? %>
-				<td>
-					<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15"), 
-							:controller => "reports", :action => "project_list", :query => "location", :value => province.id) %>
-				</td>
-			<% else %>
-				<td>
-					<%= link_to(image_tag("/images/details.gif", :size => "14x15"),
-							project_path(projects.first, :report => "with_currency_selector"), 
-							:popup => ['Project Details', 'height=600,width=800']) %>
-				</td>
-			<% end %>
-			
+			<td>
+				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15"), 
+						:controller => "reports", :action => "project_list", :query => "location", :value => province.id) %>
+			</td>
 			<td><%= reports_link_to lc(:show_municipalities), :id => province.id %>
 		</tr>
 	<% end %>

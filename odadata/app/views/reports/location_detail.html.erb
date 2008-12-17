@@ -13,15 +13,9 @@
 			<td><%= district.name %></td>
 			<td><%= projects.size %></td>
 			<td>
-				<% if projects.many? %>
-					<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
 						{ :controller => "reports", :action => "project_list", :query => "sub_location", :value => district.id }, 
 						"Projects in #{district.name}") %>
-				<% else %>
-					<%= link_to(image_tag("/images/details.gif", :size => "14x15", :border => 0), 
-						project_path(projects.first, :report => true), 
-						:popup => ['Project Details', 'height=600,width=800']) %>
-				<% end %>
 			</td>
 		</tr>
 	<% end %>

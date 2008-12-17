@@ -14,15 +14,9 @@
 			<td><%= sector.name_with_code %></td>
 			<td><%= projects.size %></td>
 			<td>
-				<% if projects.many? %>
-					<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
-						:controller => "reports", :action => "project_list", :query => "sector", 
-						:value => sector.id) %>
-				<% else %>
-					<%= link_to(image_tag("/images/details.gif", :size => "14x15", :border => 0), 
-						project_path(projects.first, :report => true), 
-						:popup => ['Project Details', 'height=600,width=800']) %>
-				<% end %>
+				<%= reports_link_to(image_tag("/images/list.gif", :size => "14x15", :border => 0), 
+					:controller => "reports", :action => "project_list", :query => "sector", 
+					:value => sector.id) %>
 			</td>
 		</tr>
 	<% end %>

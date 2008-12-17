@@ -76,7 +76,7 @@ public class GisUtil {
                                int canvasWidth, int canvasHeight,
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
-                               boolean fill) {
+                               boolean fill, boolean showGrid) {
         List hilightList = null;
         if (segmentNo > 0) {
             hilightList = new ArrayList();
@@ -84,8 +84,15 @@ public class GisUtil {
                                                 new ColorRGB(249, 237, 213));
             hilightList.add(hData);
         }
-        addDataToImage(g2d, mapData, hilightList,  canvasWidth, canvasHeight,
-                       mapLeftX, mapRightX, mapTopY, mapLowY, fill);
+
+        addDataToImage(g2d, mapData, hilightList,
+                               null, canvasWidth,
+                               canvasHeight,
+                               mapLeftX,
+                               mapRightX, mapTopY,
+                               mapLowY,
+                               fill, showGrid);
+
     }
 
     public void addCaptionsToImage(Graphics2D g2d, List mapData,
@@ -170,13 +177,33 @@ public class GisUtil {
                                fill);
     }
 
+    public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
+                                   List dashedPaintList,
+                                   int canvasWidth, int canvasHeight,
+                                   float mapLeftX,
+                                   float mapRightX, float mapTopY, float mapLowY,
+                               boolean fill) {
+        addDataToImage(g2d,
+                       mapData,
+                       hDataList,
+                       dashedPaintList,
+                       canvasWidth,
+                       canvasHeight,
+                       mapLeftX,
+                       mapRightX,
+                       mapTopY,
+                       mapLowY,
+                       fill,
+                       true);
+
+    }
 
     public void addDataToImage(Graphics2D g2d, List mapData, List hDataList,
                                List dashedPaintList,
                                int canvasWidth, int canvasHeight,
                                float mapLeftX,
                                float mapRightX, float mapTopY, float mapLowY,
-                               boolean fill) {
+                               boolean fill, boolean makeGrid) {
 
         BufferedImage txtImage = new BufferedImage(3, 3, BufferedImage.TYPE_INT_ARGB);
         Graphics txtGraph = txtImage.getGraphics();
@@ -328,7 +355,7 @@ public class GisUtil {
             }
 
             //make grid
-
+            if (makeGrid) {
                 g2d.setColor(new Color(57, 57, 128, 80));
                 for (float paralels = -90; paralels <= 90; paralels += 10) {
                     g2d.drawLine(border,
@@ -357,7 +384,7 @@ public class GisUtil {
                              border,
                              xOffset,
                              canvasHeight - border);
-
+            }
 
             //make border
 

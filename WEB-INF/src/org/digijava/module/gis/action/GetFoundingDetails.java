@@ -132,7 +132,7 @@ public class GetFoundingDetails extends Action {
                                        -1,
                                        canvasWidth, canvasHeight,
                                        rect.getLeft(), rect.getRight(),
-                                       rect.getTop(), rect.getBottom(), fill);
+                                       rect.getTop(), rect.getBottom(), fill, false);
 
                 if (request.getParameter("noCapt") == null) {
 
@@ -260,10 +260,10 @@ public class GetFoundingDetails extends Action {
 
                 gisUtil.addDataToImage(g2d,
                                        map.getSegments(),
-                                       hilightData,
+                                       hilightData, null,
                                        canvasWidth, canvasHeight,
                                        rect.getLeft(), rect.getRight(),
-                                       rect.getTop(), rect.getBottom(), true);
+                                       rect.getTop(), rect.getBottom(), true, false);
 
                 gisUtil.addCaptionsToImage(g2d,
                                            map.getSegments(),
@@ -402,7 +402,7 @@ public class GetFoundingDetails extends Action {
                                        hilightDashData,
                                        canvasWidth, canvasHeight,
                                        rect.getLeft(), rect.getRight(),
-                                       rect.getTop(), rect.getBottom(), true);
+                                       rect.getTop(), rect.getBottom(), true, false);
 
                 gisUtil.addCaptionsToImage(g2d,
                                            map.getSegments(),

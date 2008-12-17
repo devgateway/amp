@@ -154,7 +154,7 @@
             </td>
 		<td>
 		<select id="sectorsMapCombo" onChange="sectorSelected(this)">
-			<option value="-1">All</option>
+			<option value="-1">Select sector</option>
 			<logic:iterate name="gisDashboardForm" property="sectorCollection" id="sec">
 				<option value="<bean:write name="sec" property="ampSectorId"/>"><bean:write name="sec" property="name"/></option>
 			</logic:iterate>
@@ -168,7 +168,7 @@
             </td>
 		<td>
 		<select id="indicatorsCombo" onchange="indicatorSelected(this)">
-			<option value=-1>None</option>
+			<option value=-1>Select indicator</option>
 		</select>
 		</td>
 	</tr>
@@ -178,7 +178,7 @@
         </td>
 		<td>
 		<select id="indicatorSubgroupCombo" onChange="subgroupSelected(this)">
-			<option value="-1">None</option>
+			<option value="-1">Select subgroup</option>
 		</select>
 		</td>
 	</tr>
@@ -188,7 +188,7 @@
         </td>
 		<td>
 		<select id="indicatorYearCombo" onChange="yearSelected(this)">
-			<option value="-1">None</option>
+			<option value="-1">Select year</option>
 		</select>
 
 		</td>
@@ -225,7 +225,7 @@
 		</tr>
 		
 		<tr>
-			<td nowrap bgcolor="#D9DAC9" colspan="2">For this region</td>
+			<td nowrap bgcolor="#D9DAC9" colspan="2" id="reg_district_caption_for">For this region</td>
 		</tr>
 		<tr>
 			<td nowrap width="50%">Commitment</td>

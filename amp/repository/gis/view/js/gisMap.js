@@ -67,6 +67,7 @@
 	
 	function sectorSelected(sec) {
 
+		initIndicatorCombo();
 		initSubgroupCombo();
 		initYearCombo();
 	
@@ -108,7 +109,7 @@
 			selectCmb.innerHTML = null;
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="None";
+			noneOpt.text="Select subgroup";
 			selectCmb.options.add(noneOpt);			
 			
 			
@@ -155,7 +156,7 @@
 			selectCmb.innerHTML = null;
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="None";
+			noneOpt.text="Select year";
 			selectCmb.options.add(noneOpt);			
 			
 			
@@ -257,7 +258,7 @@
 			
 			var noneOpt = document.createElement("OPTION");
 			noneOpt.value="-1";
-			noneOpt.text="None";
+			noneOpt.text="Select indicator";
 			selectCmb.options.add(noneOpt);
 			
 			
@@ -412,7 +413,7 @@
 		cmb.innerHTML = null;
 		var noneOpt = document.createElement("OPTION");
 		noneOpt.value="-1";
-		noneOpt.text="None";
+		noneOpt.text="Select subgroup";
 		cmb.options.add(noneOpt);
 	}
 	
@@ -421,7 +422,16 @@
 		cmb.innerHTML = null;
 		var noneOpt = document.createElement("OPTION");
 		noneOpt.value="-1";
-		noneOpt.text="None";
+		noneOpt.text="Select year";
+		cmb.options.add(noneOpt);
+	}
+	
+	function initIndicatorCombo(){
+		var cmb = document.getElementById("indicatorsCombo");
+		cmb.innerHTML = null;
+		var noneOpt = document.createElement("OPTION");
+		noneOpt.value="-1";
+		noneOpt.text="Select indicator";
 		cmb.options.add(noneOpt);
 	}
 	
@@ -441,8 +451,10 @@
 		
 		if (newVal==2) {
 			document.getElementById("reg_district_caption").innerHTML="Region";
+			document.getElementById("reg_district_caption_for").innerHTML="For this region";
 		} else if (newVal==3) {
 			document.getElementById("reg_district_caption").innerHTML="District";
+			document.getElementById("reg_district_caption_for").innerHTML="For this district";
 		}
 		
 		initSubgroupCombo();

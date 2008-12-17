@@ -113,7 +113,7 @@ public class MapLoader extends Action {
 
             gisUtil.addDataToImage(g2d, mapDataSegments, -1, canvasWidth,
                                    canvasHeight, mapLeftX, mapRightX, mapTopY,
-                                   mapLowY, false);
+                                   mapLowY, false, false);
 
             g2d.dispose();
 

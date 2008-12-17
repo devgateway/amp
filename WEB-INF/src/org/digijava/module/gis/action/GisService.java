@@ -134,7 +134,7 @@ public class GisService extends Action {
 
             gisUtil.addDataToImage(g2d, mapDataSegments, -1, canvasWidth,
                                    canvasHeight, mapLeft, mapRight, mapTop,
-                                   mapBottom, true);
+                                   mapBottom, true, false);
 
 
 
@@ -156,7 +156,7 @@ public class GisService extends Action {
                 }
                 gisUtil.addDataToImage(g2d, mapDataSegments, (int)hsId, canvasWidth,
                                    canvasHeight, mapLeft, mapRight, mapTop,
-                                   mapBottom, true);
+                                   mapBottom, true, false);
 
             }
 

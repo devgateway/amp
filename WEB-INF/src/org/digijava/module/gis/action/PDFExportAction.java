@@ -1268,7 +1268,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
                                hilightDashData,
                                canvasWidth, canvasHeight,
                                rect.getLeft(), rect.getRight(),
-                               rect.getTop(), rect.getBottom(), true);
+                               rect.getTop(), rect.getBottom(), true, false);
 
         gisUtil.addCaptionsToImage(g2d,
                                    map.getSegments(),
@@ -1317,7 +1317,7 @@ public class PDFExportAction extends Action implements PdfPageEvent {
 
 		gisUtil.addDataToImage(g2d, map.getSegments(), -1, canvasWidth,
 				canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(),
-				rect.getBottom(), true);
+				rect.getBottom(), true, false);
 
 		gisUtil.addCaptionsToImage(g2d, map.getSegments(), canvasWidth,
 				canvasHeight, rect.getLeft(), rect.getRight(), rect.getTop(),

@@ -119,7 +119,7 @@ public class GetActivityMap extends Action {
                                            -1,
                                            canvasWidth, canvasHeight,
                                            rect.getLeft(), rect.getRight(),
-                                           rect.getTop(), rect.getBottom(), true);
+                                           rect.getTop(), rect.getBottom(), true, false);
 
                     gisUtil.addDataToImage(g2d,
                                             detailedMapSegments,

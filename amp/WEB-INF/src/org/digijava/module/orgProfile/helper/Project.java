@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package org.digijava.module.orgProfile.helper;
 
@@ -9,7 +5,7 @@ import java.util.Set;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 
 /**
- *
+ * Project helper bean.
  * @author medea
  */
 public class Project {

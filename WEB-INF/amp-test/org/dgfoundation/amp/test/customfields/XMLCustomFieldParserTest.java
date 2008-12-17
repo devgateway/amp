@@ -34,6 +34,7 @@ public class XMLCustomFieldParserTest extends TestCase {
 	}
 	
 	
+	/*
     public void testMultipleFields() throws SAXException, IOException{
     	XMLReader xr = new org.apache.xerces.parsers.SAXParser();
     	XMLCustomFieldParser handler = new XMLCustomFieldParser();
@@ -46,6 +47,7 @@ public class XMLCustomFieldParserTest extends TestCase {
 
     	assertEquals(4, cf.size());
     }
+    */
    
 
     public void testTextCustomField() throws SAXException, IOException{    	

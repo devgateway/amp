@@ -148,11 +148,11 @@ public class ChartWidgetUtil {
 	}
     
       /**
-     * Generates chart object from specified indicator and options.
+     * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
-     * @param indicatorCon
      * @param opt
-     * @return
+     * @param filter
+     * @return chart
      * @throws DgException
      */
     public static JFreeChart getTypeOfAidChart(ChartOption opt, FilterHelper filter) throws DgException{
@@ -170,12 +170,12 @@ public class ChartWidgetUtil {
 	}
     
     
-      /**
-     * Generates chart object from specified indicator and options.
+     /**
+     * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
-     * @param indicatorCon
      * @param opt
-     * @return
+     * @param filter
+     * @return chart
      * @throws DgException
      */
     public static JFreeChart getPledgesCommDisbChart(ChartOption opt, FilterHelper filter) throws DgException{
@@ -196,12 +196,12 @@ public class ChartWidgetUtil {
 	      return chart;
 	}
     
-      /**
-     * Generates chart object from specified indicator and options.
+    /**
+     * Generates chart object from specified filters and options.
      * This chart then can be rendered as image or pdf or file.
-     * @param indicatorCon
      * @param opt
-     * @return
+     * @param filter
+     * @return chart
      * @throws DgException
      */
     public static JFreeChart getODAProfileChart(ChartOption opt, FilterHelper filter) throws DgException{
@@ -217,6 +217,13 @@ public class ChartWidgetUtil {
          
 		return chart;
 	}
+      /**
+     * Generates category dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
     
     
     private static CategoryDataset getTypeOfAidDataset(FilterHelper filter) throws DgException {
@@ -247,6 +254,13 @@ public class ChartWidgetUtil {
         
         return result;
     }
+      /**
+     * Generates category dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
     
      private static CategoryDataset getODAProfileDataset(FilterHelper filter) throws DgException {
         DefaultCategoryDataset result = new DefaultCategoryDataset();
@@ -276,6 +290,14 @@ public class ChartWidgetUtil {
         
         return result;
     }
+
+     /**
+     * Generates category dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
     
     
     private static CategoryDataset getPledgesCommDisbDataset(FilterHelper filter) throws DgException {
@@ -519,6 +541,16 @@ public class ChartWidgetUtil {
 		plot.setIgnoreZeroValues(true);
 		return result;
 	}
+
+      /**
+     * Generates chart object from specified filters and options.
+     * This chart then can be rendered as image or pdf or file.
+     * Each Pie slice contains funding information for the sector.
+     * @param opt
+     * @param filter
+     * @return chart
+     * @throws DgException
+     */
         
         
     public static JFreeChart getSectorByDonorChart(ChartOption opt, FilterHelper filter) throws DgException, WorkerException {
@@ -544,6 +576,15 @@ public class ChartWidgetUtil {
 
         return chart;
     }
+      /**
+     * Generates chart object from specified filters and options.
+     * This chart then can be rendered as image or pdf or file.
+     * Each Pie slice contains funding information for the region.
+     * @param opt
+     * @param filter
+     * @return chart
+     * @throws DgException
+     */
        
        public static JFreeChart getRegionByDonorChart(ChartOption opt,FilterHelper filter) throws DgException, WorkerException {
      	JFreeChart chart = null;
@@ -693,8 +734,15 @@ public class ChartWidgetUtil {
 		}
 		return fundings;
 	}
+
+     /**
+     * Generates Pie dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
         
-       
 	public static DefaultPieDataset getDonorRegionalDataSet(FilterHelper filter) throws DgException {
             Long year = filter.getYear();
             if (year == null || year == -1) {
@@ -711,6 +759,11 @@ public class ChartWidgetUtil {
             Long orgID=filter.getOrgId();
             int transactionType=filter.getTransactionType();
             DefaultPieDataset ds = new DefaultPieDataset();
+         /*
+         * We are selecting regions which are funded
+         * In selected year by the selected organization
+         *
+         */
         String oql = "select distinct reg  from ";
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
@@ -729,7 +782,13 @@ public class ChartWidgetUtil {
             regions = query.list();
             Iterator<AmpRegion> regionIter = regions.iterator();
             while (regionIter.hasNext()) {
+                //calculating funding for each region
                 AmpRegion region = regionIter.next();
+
+                /* query that creates new  AmpFundingDetail objects
+                which amounts are calculated by multiplication
+                of the region percent and amount value*/
+
                 oql = "select new AmpFundingDetail(fd.transactionType,fd.adjustmentType,fd.transactionAmount,fd.transactionDate,fd.ampCurrencyId,loc.locationPercentage,fd.fixedExchangeRate) ";
                 oql += " from ";
                 oql += AmpFundingDetail.class.getName() +
@@ -746,9 +805,18 @@ public class ChartWidgetUtil {
                 query.setLong("orgID", orgID);
                 query.setLong("transactionType", transactionType);
                 List<AmpFundingDetail> fundingDets = query.list();
+
+                /*Newly created objects and   selected currency
+                 are passed doCalculations  method*/
+
                 FundingCalculationsHelper cal = new FundingCalculationsHelper();
                 cal.doCalculations(fundingDets, currCode);
                 DecimalWraper total =null;
+                
+                /*Depending on what is selected in the filter
+                we should return either actual commitments
+                or actual Disbursement */
+
                 if(transactionType==0){
                     total=cal.getTotActualComm();
                 }
@@ -764,9 +832,23 @@ public class ChartWidgetUtil {
         return ds;
 
     }
-     
+
+    /**
+     * Generates Pie dataset using  filters .
+     * This chart then can be rendered as image or pdf or file.
+     * The sectors which have funding less than 5% from total funding
+     * are group to "Others"
+     * @param filter
+     * @return CategoryDataset
+     * @throws DgException
+     */
+
     @SuppressWarnings("empty-statement")
 	public static DefaultPieDataset getDonorSectorDataSet(FilterHelper filter) throws DgException {
+
+        /* if user doesn't select year, currency we are
+        taking this information from global settings value*/
+
         Long year = filter.getYear();
         if (year == null || year == -1) {
             year = Long.parseLong(FeaturesUtil.getGlobalSettingValue("Current Fiscal Year"));
@@ -782,6 +864,14 @@ public class ChartWidgetUtil {
         Long orgID = filter.getOrgId();
         int transactionType=filter.getTransactionType();
         DefaultPieDataset ds = new DefaultPieDataset();
+        /*
+         * We are selecting sectors which are funded
+         * In selected year by the selected organization
+         * We are interesting only primary sectors
+         * From the activities which belonging to team
+         *
+         */
+
         String oql = "select distinct sec  from ";
         oql += AmpFundingDetail.class.getName() +
                 " as fd inner join fd.ampFundingId f ";
@@ -804,11 +894,13 @@ public class ChartWidgetUtil {
             query.setLong("orgID", orgID);
             query.setLong("transactionType", transactionType);
             sectors = query.list();
+            // calculate funding for all sectors
             DecimalWraper totAllSeqtors= getSectorFunding(year,orgID,transactionType,null,currCode);;
             Iterator<AmpSector> sectorIter = sectors.iterator();
             double others=0;
             while (sectorIter.hasNext()) {
                 AmpSector sector = sectorIter.next();
+                // calculate funding for each sector
                 DecimalWraper total=getSectorFunding(year,orgID,transactionType,sector.getAmpSectorId(),currCode);
                 double percent=total.doubleValue()/totAllSeqtors.doubleValue();
                 // the sectors which percent is less then 5% should be group in "Others"
@@ -829,6 +921,24 @@ public class ChartWidgetUtil {
         return ds;
 
     }
+    /**
+     * Returns funding amount of the selected organization.
+     * The method is creating new {@link AmpFundingDetail} objects
+     * which amounts are calculated by multiplication
+     * of the sector percent and amount value.
+     * Newly created objects are passed  to {@link  FundingCalculationsHelper#doCalculations(java.util.Collection, java.lang.String) }
+     * method, which is calculating total using selected currency
+     *
+     * @param year
+     * @param orgId
+     * @param transactionType
+     * @param sectorId
+     * @param currCode
+     * @return Funding amount
+     * @throws org.digijava.kernel.exception.DgException
+     * @see AmpFundingDetail
+     * @see FundingCalculationsHelper
+     */
 
     public static DecimalWraper getSectorFunding(Long year, Long orgId, int transactionType, Long sectorId,String currCode) throws DgException {
         Session session = PersistenceManager.getRequestDBSession();
@@ -859,6 +969,11 @@ public class ChartWidgetUtil {
         FundingCalculationsHelper cal = new FundingCalculationsHelper();
         cal.doCalculations(fundingDets, currCode);
         DecimalWraper total = null;
+
+        /*Depending on what is selected in the filter
+        we should return either actual commitments
+        or actual Disbursement */
+
         if (transactionType == 0) {
             total = cal.getTotActualComm();
         } else {
@@ -867,6 +982,16 @@ public class ChartWidgetUtil {
         return total;
 
     }
+    /**
+     * Returns funding amount
+     * @param orgID
+     * @param year
+     * @param financingInstrumentId
+     * @param currCode
+     * @param transactionType
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
         
         
       
@@ -896,8 +1021,15 @@ public class ChartWidgetUtil {
             query.setLong("transactionType", transactionType);
             query.setLong("financingInstrumentId", financingInstrumentId);
             fundingDets = query.list();
+
+             /*the objects retuned by query  and   selected currency
+               are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
+
+            /*Depending on what is selected in the filter
+            we should return either actual commitments
+            or actual Disbursement */
             
             if (transactionType == 0) {
                 total = cal.getTotActualComm();
@@ -915,9 +1047,19 @@ public class ChartWidgetUtil {
 
         return total;
     }
-        
+    /**
+     * Returns funding amount
+     * @param orgID
+     * @param year
+     * @param assistanceTypeId
+     * @param currCode
+     * @param transactionType
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
         
        
+
 	public static DecimalWraper getFunding(Long orgID, Long year, Long assistanceTypeId, String currCode,int transactionType) throws DgException {
         DecimalWraper total = null;
         String oql = "select fd ";
@@ -944,8 +1086,13 @@ public class ChartWidgetUtil {
             query.setLong("assistanceTypeId", assistanceTypeId);
             query.setLong("transactionType", transactionType);
             fundingDets = query.list();
+            /*the objects retuned by query  and   selected currency
+            are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
+             /*Depending on what is selected in the filter
+            we should return either actual commitments
+            or actual Disbursement */
             if (transactionType == 0) {
                 total = cal.getTotActualComm();
             } else {
@@ -961,9 +1108,18 @@ public class ChartWidgetUtil {
 
         return total;
     }
-        
+    /**
+     * Returns pledge amount in selected currency
+     * for selected organization and year
+     * @param orgID
+     * @param year
+     * @param currCode
+     * @return
+     * @throws org.digijava.kernel.exception.DgException
+     */
         
        
+
     public static double getPledgesFunding(Long orgID, Long year, String currCode) throws DgException {
        double totalPlannedPldges = 0;
         String oql = "select fd ";
@@ -986,6 +1142,7 @@ public class ChartWidgetUtil {
            Iterator<AmpPledge> fundDetIter=fundingDets.iterator();
            while(fundDetIter.hasNext()){
                AmpPledge pledge=fundDetIter.next();
+               //converting amounts
                java.sql.Date dt = new java.sql.Date(pledge.getDate().getTime());
                double frmExRt = Util.getExchange(pledge.getCurrency().getCurrencyCode(), dt);
                double toExRt = Util.getExchange(currCode, dt);
@@ -1005,8 +1162,18 @@ public class ChartWidgetUtil {
         return totalPlannedPldges;
     }
         
-          
+      /**
+       * Returns actual or planned amount in selected currency
+       * for selected organization and year
+       * @param orgID
+       * @param year
+       * @param currCode
+       * @param isComm
+       * @return
+       * @throws org.digijava.kernel.exception.DgException
+       */
        
+
     public static DecimalWraper getFunding(Long orgID, Long year, String currCode, boolean isComm) throws DgException {
         String oql = "select fd ";
         oql += " from ";
@@ -1030,6 +1197,8 @@ public class ChartWidgetUtil {
             query.setLong("year", year);
             query.setLong("orgID", orgID);
             fundingDets = query.list();
+             /*the objects retuned by query  and   selected currency
+            are passed doCalculations  method*/
             FundingCalculationsHelper cal = new FundingCalculationsHelper();
             cal.doCalculations(fundingDets, currCode);
             if(isComm){

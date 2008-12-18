@@ -25,22 +25,22 @@
             </td>
           </tr>
   		<tr>
-         
+
 		    <div id="title">
 	            <c:if test="${not empty helpForm.searched}">
 		           <div id="demo" class="yui-navset" style="font-family:Arial, Helvetica, sans-serif;">
-		            	<ul class="yui-nav">&nbsp; 
+		            	<ul class="yui-nav">&nbsp;
 		            	     <li class="selected" style="width:100%">
 	                          	<a title='<digi:trn key="aim:PortfolioOfReports">Search Results</digi:trn>'>
 	                          		<div style="border-left-width:1px">
-	                          	      <digi:trn key="help:searchedTpcre">Search Results</digi:trn>
+	                          	      <digi:trn key="aim:PortfolioOfReports">Search Results</digi:trn>
 	                                </div>
 	                            </a>
 	                         </li>
 	                    </ul>
 		            </div>
 	           </c:if>
-          </div> 
+          </div>
       </tr>
           <tr>
              <td>
@@ -53,21 +53,23 @@
 		                			</b></font><br>${sarched.value}
 		                	</div>
 	          		     </c:if>
-	          		   </c:forEach>    	   
-			
-		            <div id="searchedBody">     
+	          		   </c:forEach>
+
+		            <div id="searchedBody">
 	                      	<c:if test="${!helpForm.flag && empty helpForm.searched}"><b>
 	                       		<digi:edit key="help:topic:default">no topic selected</digi:edit></b>
 	                        </c:if>
-	                      	<c:if test="${helpForm.flag}">
-	                          <c:if test="${helpForm.topicKey!=''}"><b><digi:trn key="${helpForm.titleTrnKey}" ></digi:trn></b></c:if>
+
+                              <c:if test="${helpForm.flag}">
+	                          <c:if test="${helpForm.topicKey!=''}"><b><digi:trn >${helpForm.titleTrnKey}</digi:trn></b></c:if>
 	                      	</c:if>
 	                     	<c:if test="${helpForm.flag}">
 	                      		<c:if test="${helpForm.topicKey!=''}">
-	                        		<digi:edit key="${helpForm.bodyEditKey}">no text preview</digi:edit>
+	                        		<digi:edit key="${helpForm.bodyEditKey}"/>
 	                    		</c:if>
-	                      </c:if>
-                     </div>  
+                                 <c:if test="${helpForm.topicKey == ''}">no text preview</c:if>
+                          </c:if>
+                     </div>
          		</td>
        	   </tr>
         </table>

@@ -46,6 +46,7 @@ import org.digijava.module.help.form.HelpForm;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.helper.HelpTopicsTreeItem;
 import org.digijava.module.translation.util.DbUtil;
+import org.digijava.kernel.entity.Locale;
 
 import com.sun.mail.handlers.message_rfc822;
 
@@ -533,8 +534,9 @@ public class HelpUtil {
 	 public static String getTrn(String key, String defResult, HttpServletRequest request){
 		 //CategoryManagerUtil cat = new CategoryManagerUtil();
 		 //return CategoryManagerUtil.translate(key, request, defResult);
-		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
-		Long	siteId	= RequestUtils.getSite(request).getId();
+		String	lange	= RequestUtils.getNavigationLanguage(request).getCode();
+        //Locale  lange    = RequestUtils.getNavigationLanguage(request);
+        Long	siteId	= RequestUtils.getSite(request).getId();
 		
 		Message m = null;
                 if(key==null){
@@ -542,8 +544,9 @@ public class HelpUtil {
                 }
 		
 		try {
-			m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
-		} catch (DgException e) {
+            m = TranslatorWorker.getInstance("").getByBody(defResult, lange, siteId.toString());
+            //m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
+		} catch (WorkerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

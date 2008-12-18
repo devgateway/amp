@@ -263,8 +263,11 @@ public class HelpActions extends DispatchAction {
 		if(helpTopic != null){
 			helpForm.setBodyEditKey(helpTopic.getBodyEditKey());
 			helpForm.setTitleTrnKey(helpTopic.getTitleTrnKey());
-			
-			helpForm.setHelpErrors(null);
+            int title = helpTopic.getTitleTrnKey().indexOf("e:");
+            String tit = helpTopic.getTitleTrnKey().substring(title+2);
+            helpForm.setTitleTrnKey(tit);
+
+            helpForm.setHelpErrors(null);
 			helpForm.setSearched(null);
 			helpForm.setFlag(true);
 			LuceneUtil.addUpdatehelp(true);

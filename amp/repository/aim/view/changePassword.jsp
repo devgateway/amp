@@ -111,17 +111,9 @@
 		<td bgcolor="#dbe5f1" vAlign=top>
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
-		          <td vAlign=top><br/>
-						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-						<c:set var="translation">
-						<digi:trn key="aim:clickToUseAmp">Click here to Use AMP now</digi:trn>
-						</c:set>
-						<digi:link href="/index.do" title="${translation}" >
-						<digi:trn key="aim:useAMPSiteNow">
-						Use AMP Ethiopia now
-						</digi:trn>
-						</digi:link>
-						<BR/><BR/><BR/>
+		        <td vAlign=top><br/>
+		          	<jsp:include page="countriesLnk.jsp" flush="true" />		          
+					<BR/><BR/><BR/>
       	     	</td>
         		</tr>
         		<tr>

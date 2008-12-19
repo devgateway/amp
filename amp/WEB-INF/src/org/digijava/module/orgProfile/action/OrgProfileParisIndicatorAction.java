@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package org.digijava.module.orgProfile.action;
 
@@ -46,7 +43,10 @@ public class OrgProfileParisIndicatorAction extends Action  {
                     AmpAhsurveyIndicator piIndicator=iter.next();
                     ParisIndicatorHelper piHelper=new ParisIndicatorHelper(piIndicator,filter);
                     indicatorHelpers.add(piHelper);
-                    
+
+                    /* we should add indicator 5aii and indicator 5bii,
+                        these indicators don't exist in db so we add them manually*/
+
                     if(piIndicator.getIndicatorCode().equals("5a")){
                         AmpAhsurveyIndicator ind5aii=new AmpAhsurveyIndicator();
                         ind5aii.setIndicatorCode("5aii");

@@ -53,20 +53,9 @@
 		<td bgColor=#f7f7f4 class=r-dotted-lg vAlign=top>
 	      <table align=center border=0 cellPadding=3 cellSpacing=0 width="90%">
       		 <tr>
-		          <td class=r-dotted-lg-buttom vAlign=top><br>
-						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-                                                 <c:set var="cn">
-                                                    <globalsettings:value name="Default Country" />
-                                                </c:set>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToUseAmp${cn}">Click here to Use AMP <digi:trn key="aim:cn:${cn}"/> now</digi:trn>
-						</c:set>
-						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:useAMP${cn}Now">
-						Use AMP <digi:trn key="aim:cn:${cn}"/> now
-                                                </digi:trn>&nbsp;
-						</digi:link>
-						<BR><BR><BR>
+		        <td class=r-dotted-lg-buttom vAlign=top><br/>
+		          	<jsp:include page="countriesLnk.jsp" flush="true" />
+					<BR/><BR/><BR/>
       	     	</td>
         		</tr>
         		<tr>

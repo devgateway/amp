@@ -108,6 +108,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpSiteFlag</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpExternalMapping</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpGlobalSettings</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpLuceneIndexStamp</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpProgramType</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.EUActivity</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.EUActivityContribution</hibernate-class>

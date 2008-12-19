@@ -5,8 +5,8 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 	
-    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-burkina.local:8080/login</logon-site>
-    <site-domain id="dgDomain" host="http://amp-burkina.local:8080">http://amp-burkina.local:8080/</site-domain>
+    <logon-site id="dglogin" host="ampmonte">http://ampmonte:8080/login</logon-site>
+    <site-domain id="dgDomain" host="http://ampmonte:8080">http://ampmonte:8080/</site-domain>
 
 <!-- 
 

@@ -358,14 +358,15 @@ public class HelpUtil {
             System.out.println("bodyeditkey:"+help.getBodyEditKey());
             System.out.println("body:"+Body);
             Iterator iter = Body.iterator();
-			while (iter.hasNext()) {
+			if(Body != null){
+            while (iter.hasNext()) {
 				Editor item = (Editor) iter.next();
 				helpsearch.setBody(item.getBody());
 				helpsearch.setLastModDate(item.getLastModDate());
 			}
-
-			helpTopics.add(helpsearch);	
-		}
+            	helpTopics.add(helpsearch);	
+           }
+        }
 		
 		
 	} catch (Exception e) {

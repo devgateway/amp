@@ -157,8 +157,8 @@ function help(){
 		openURLinWindow("<%=rev%>",1024,768);
 	}
 function adminHelp(){
-		 <digi:context name="rev" property="/help/admin/help.do~blankPage=true" />
-		openURLinWindow("<%=rev%>",1024,768);
+		 <digi:context name="admin" property="/help/admin/help.do~blankPage=true" />
+		openURLinWindow("<%=admin%>",1024,768);
 }
 </script>
 			 <div class="yuiamp-skin-amp" style="clear:both;">
@@ -218,7 +218,7 @@ function adminHelp(){
 										<feature:display name="Admin Help" module="HELP">
                                         <li>
                                         <a class="yuiampmenuitemlabel" href="#" onClick="adminHelp();" >
-                                        <digi:trn key="aim:AMPAdminHelp">AMP Admin Help</digi:trn>
+                                        <digi:trn>AMP Admin Help</digi:trn>
                                         </a>
                                         </li>
 										</feature:display>
@@ -610,7 +610,7 @@ function adminHelp(){
 										<feature:display name="User Help" module="HELP">
                                         <li>
                                          <a class="yuiampmenuitemlabel" href="#" onClick="help();">
-                                        	<digi:trn key="aim:AMPHelp">AMP Help</digi:trn>
+                                        	<digi:trn>AMP Help</digi:trn>
                                         </a>
                                         </li>
 										</feature:display>

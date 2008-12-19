@@ -485,10 +485,10 @@ public class LuceneUtil {
         HelpSearchData item = new HelpSearchData();
 		DateFormat formatter ; 
 	    Date date ; 
-	    
+	     System.out.println("Udate:"+update);
 	  try{
             Long lastLucModDay = IndexReader.lastModified("lucene-index");
-
+        System.out.println("lastLucModDay:"+lastLucModDay);
  	    formatter  = new SimpleDateFormat();
             String leastUpDate = formatter.format(lastLucModDay);
 	    date = (Date)formatter.parse(leastUpDate);

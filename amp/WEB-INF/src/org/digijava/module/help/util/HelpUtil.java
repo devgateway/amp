@@ -331,7 +331,7 @@ public class HelpUtil {
 	
 	Session session = null;
 	Query query = null;
-	
+	  System.out.println("GetAllHelpData");
 	Collection helpTopics = new ArrayList();
 	
 	try {
@@ -355,7 +355,9 @@ public class HelpUtil {
 			helpsearch.setTitleTrnKey(help.getTitleTrnKey());
 			helpsearch.setTopicKey(help.getTopicKey());
 			List<Editor> Body = getbody(help.getBodyEditKey());
-			Iterator iter = Body.iterator();
+            System.out.println("bodyeditkey:"+help.getBodyEditKey());
+            System.out.println("body:"+Body);
+            Iterator iter = Body.iterator();
 			while (iter.hasNext()) {
 				Editor item = (Editor) iter.next();
 				helpsearch.setBody(item.getBody());
@@ -390,7 +392,7 @@ public class HelpUtil {
 		} catch (Exception e) {
 			logger.error("Unable to load help data");
 		}
-    
+        logger.debug("getBodyResult:"+result);
     	return result;
     }
 

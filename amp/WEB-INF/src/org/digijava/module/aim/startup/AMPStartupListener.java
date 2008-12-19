@@ -167,9 +167,9 @@ public class AMPStartupListener extends HttpServlet implements
 			ampContext.setAttribute(Constants.GLOBAL_SETTINGS, globalSettings);
 
 			// Lucene indexation
-			Directory idx = LuceneUtil.createIndex();
+			LuceneUtil.checkIndex();
 			LuceneUtil.createHelp();
-			ampContext.setAttribute(Constants.LUCENE_INDEX, idx);
+			//ampContext.setAttribute(Constants.LUCENE_INDEX, idx); //deprecated
 
 			PermissionUtil.getAvailableGates(ampContext);
 

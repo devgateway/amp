@@ -685,7 +685,7 @@ public class AmpARFilter extends PropertyListable {
 				Directory idx = (Directory) ampContext
 						.getAttribute(Constants.LUCENE_INDEX);
 
-				Hits hits = LuceneUtil.search(idx, "all", indexText);
+				Hits hits = LuceneUtil.search(LuceneUtil.activityIndexDirectory, "all", indexText);
 				logger.info("New lucene search !");
 				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {

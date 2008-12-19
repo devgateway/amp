@@ -18,7 +18,12 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 
-
+/**
+ * Test class for lucene
+ * 
+ * @author alexandru
+ * @deprecated
+ */
 public class LuceneIndex extends Action {
 
 	  private static Logger logger = Logger.getLogger(LuceneIndex.class);
@@ -35,18 +40,15 @@ public class LuceneIndex extends Action {
 		  logger.info("lucene:" + request.getParameter("action"));
 		  if (request.getParameter("action") != null)
 		  if ("create".compareTo(request.getParameter("action"))== 0){
-			  Directory idx = LuceneUtil.createIndex();
-			  ampContext.setAttribute(Constants.LUCENE_INDEX, idx);
+			  LuceneUtil.checkIndex();
 		  }
 		  else{
-			  Directory idx = (Directory) ampContext.getAttribute(Constants.LUCENE_INDEX);
 			  if ("view".compareTo(request.getParameter("action")) == 0){
 				  logger.info("VIEW!");
 				  String field = request.getParameter("field");
 				  String search = request.getParameter("search");
 
-				  Hits hits = LuceneUtil.search(idx, field, search);
-				  
+				  Hits hits = LuceneUtil.search(LuceneUtil.activityIndexDirectory, field, search);
 				  for(int i = 0; i < hits.length(); i++) {
 					   Document doc = hits.doc(i);
 					   AmpActivity act = ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
@@ -60,7 +62,7 @@ public class LuceneIndex extends Action {
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
-					  LuceneUtil.deleteActivity(idx, field, search);
+					  LuceneUtil.deleteActivity(LuceneUtil.activityIndexDirectory, field, search);
 				  }
 		  }
 		  return mapping.findForward("forward");

@@ -226,6 +226,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
    private Long customField3;
    private Date customField4;
    private String customField5;
+   private Boolean customField6;
         
         public AmpActivity() {
 			// TODO Auto-generated constructor stub
@@ -1667,6 +1668,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public String getCustomField5() {
 		return customField5;
+	}
+
+	public void setCustomField6(Boolean customField6) {
+		this.customField6 = customField6;
+	}
+
+	public Boolean getCustomField6() {
+		return customField6;
 	}
 
 }

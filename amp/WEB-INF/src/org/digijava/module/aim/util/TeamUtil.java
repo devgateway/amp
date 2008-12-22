@@ -2334,6 +2334,33 @@ public class TeamUtil {
         }
         return teams;
     }
+    /**
+     * Returns Collection of the computation or non computation {@link AmpTeam} objects
+     * @param computation boolean
+     * @return Collection of AmpTeam
+     */
+
+     public static List<AmpTeam> getAllTeams(boolean computation) {
+        Session session = null;
+        Query qry = null;
+        List<AmpTeam> teams = new ArrayList();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select t from " + AmpTeam.class.getName()
+                + " t where t.computation=:computation";
+            if(!computation){
+                queryString+= " or t.computation is null ";
+            }
+            queryString+= " order by name";
+            qry = session.createQuery(queryString);
+            qry.setBoolean("computation", computation);
+            teams = qry.list();
+        } catch(Exception e) {
+            logger.debug("cannot get All  teams"+e.getMessage());
+        }
+        return teams;
+    }
 
     public static Set getAmpLevel0Teams(Long ampTeamId) {
         Session session = null;

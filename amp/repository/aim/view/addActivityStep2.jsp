@@ -849,6 +849,19 @@ function remProgram(programType) {
 			                            	</tr>
 										</feature:display>
 
+										<feature:display name="Step2" module="Custom Fields">
+				                            <tr>
+				                              <td>
+				                              &nbsp;
+				                              </td>
+				                            </tr>			                            
+			                            	<tr>
+			                            		<td>
+ 													<jsp:include page="addActivityCustomFields.jsp"/>
+			                            		</td>
+			                            	</tr>
+										</feature:display>
+
 			                            <!--
 			                            <tr>
 			                              <td bgColor=#f4f4f2 align="center">

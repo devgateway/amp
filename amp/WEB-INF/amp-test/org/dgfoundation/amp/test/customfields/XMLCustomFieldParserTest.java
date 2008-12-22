@@ -12,6 +12,7 @@ import org.digijava.module.aim.helper.CategoryCustomField;
 import org.digijava.module.aim.helper.ComboBoxCustomField;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateCustomField;
+import org.digijava.module.aim.helper.RadioOptionCustomField;
 import org.digijava.module.aim.helper.XMLCustomFieldParser;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -179,5 +180,54 @@ public class XMLCustomFieldParserTest extends TestCase {
     	assertEquals(dcf.getDescription(), "Description4");
     	assertEquals(dcf.getAmpActivityPropertyName(), "field4");
     	assertEquals(dcf.getFM_field(), "Custom Field4");
+    }   
+    
+    public void testRadioCustomField() throws SAXException, IOException{    	
+
+    	sb.append("<?xml version=\"1.0\"?>");
+    	sb.append("<fields>");
+    	sb.append("	<step number=\"1\">");
+    	sb.append("  <radio name=\"Field2\" description=\"Description2\" property=\"field2\" field=\"Custom Field2\">");
+    	sb.append("   <option value=\"1\">Option1</option>");
+    	sb.append("   <option value=\"2\">Option2</option>");
+    	sb.append("   <option value=\"3\">Option3</option>");
+    	sb.append("  </radio>");
+    	sb.append("	</step>");
+    	sb.append("</fields>");
+    	
+    	StringReader sr = new StringReader(sb.toString());
+    	
+    	xr.parse(new InputSource(sr));
+    	
+    	List<CustomField> customFields = handler.getCustomFields();
+    	
+    	assertEquals(1, customFields.size());
+    	
+    	CustomField cf = customFields.get(0);
+    	
+    	assertEquals(cf.getStep(), 1);
+    	
+    	assertTrue(cf instanceof RadioOptionCustomField);
+    	
+    	RadioOptionCustomField radio = (RadioOptionCustomField) cf;
+    	
+    	assertEquals(1,radio.getStep());
+    	assertEquals("Field2", radio.getName());
+    	assertEquals("Description2", radio.getDescription());
+    	assertEquals("field2",radio.getAmpActivityPropertyName());
+    	assertEquals("Custom Field2", radio.getFM_field());
+    	
+    	
+    	assertEquals(3, radio.getOptions().size());
+    	
+    	LinkedHashMap<String, String> options = radio.getOptions();
+    	
+    	assertTrue(options.containsKey("1"));
+    	assertTrue(options.containsKey("2"));
+    	assertTrue(options.containsKey("3"));
+    	
+    	assertEquals("Option1", options.get("1"));
+    	assertEquals("Option2", options.get("2"));
+    	assertEquals("Option3", options.get("3"));
     }    
 }

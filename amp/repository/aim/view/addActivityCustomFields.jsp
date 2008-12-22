@@ -51,6 +51,12 @@
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</c:when>
+															<c:when test="<%=customField instanceof RadioOptionCustomField%>">
+																<logic:iterate name="aimEditActivityForm" property="customFields[${index}].options" id="option">
+																	<digi:trn key="aim:customfield:${customField.name}:option:${option.key}"><c:out value="${option.value}"/></digi:trn>
+																	<html:radio name="aimEditActivityForm" property="customFields[${index}].value" value="${option.key}"/> &nbsp;&nbsp;
+																</logic:iterate>
+															</c:when>
 															<c:otherwise>
 																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"
 																styleId="originalAppDate" styleClass="inp-text" />																														

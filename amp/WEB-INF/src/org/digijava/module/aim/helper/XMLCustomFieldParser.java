@@ -35,9 +35,13 @@ public class XMLCustomFieldParser extends DefaultHandler{
 	   }else if("date".equals(name)){
 		   cf = new  DateCustomField();
 		   processAtrributes(atts);
+	   }else if("radio".equals(name)){
+		   cf = new  RadioOptionCustomField();
+		   options = new LinkedHashMap<String,String>();
+		   processAtrributes(atts);
 	   }else if("step".equals(name)){
 		   step = Integer.parseInt(atts.getValue("number"));
-	   }else if("option".equals(name) && cf instanceof  ComboBoxCustomField){
+	   }else if("option".equals(name) && (cf instanceof  ComboBoxCustomField || cf instanceof RadioOptionCustomField) ){
 			   isOption = true;
 			   optionValue = atts.getValue("value");
 	   }
@@ -65,16 +69,19 @@ public class XMLCustomFieldParser extends DefaultHandler{
 	
 	public void endElement (String uri, String name, String qName)	{
 		
-		if(cf instanceof  ComboBoxCustomField){
+		if(cf instanceof  ComboBoxCustomField || cf instanceof RadioOptionCustomField){
 			if("combo".equals(name)){ 
 				((ComboBoxCustomField)cf).setOptions(options);
+				options = null;
+			}else if("radio".equals(name)){				
+				((RadioOptionCustomField)cf).setOptions(options);
 				options = null;
 			}else if("option".equals(name)){				
 				options.put(optionValue, optionText);
 				isOption = false;
 			}
 		}
-	    if ("text".equals(name) || "combo".equals(name) ||  "category".equals(name) ||  "date".equals(name)){
+	    if ("text".equals(name) || "combo".equals(name) ||  "category".equals(name) ||  "date".equals(name) || "radio".equals(name) ){
 		   if(cf != null) 
 			   customFields.add(cf);
 		   cf = null;

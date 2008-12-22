@@ -1913,6 +1913,14 @@
 															</logic:equal>
 														</logic:iterate>
 													</c:when>
+													<c:when test="<%=customField instanceof CheckCustomField%>">
+														<c:if test="${customField.value == true}" >
+															<c:out value="${customField.labelTrue}"/>
+														</c:if>
+														<c:if test="${customField.value == false}" >
+															<c:out value="${customField.labelFalse}"/>
+														</c:if>
+													</c:when>
 													<c:otherwise>		
 														<c:out value="${customField.value}"/>																												
 													</c:otherwise>

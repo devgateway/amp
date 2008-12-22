@@ -15,7 +15,7 @@
 			<option value="2">Radio Option2</option>
 			<option value="3">Radio Option3</option>
 		</radio>
-		<check name="Field6" description="Description6" property="customField6" field="Custom Field6"/>
+		<check name="Field6" description="Description6" property="customField6" field="Custom Field6" label_true="Yes" label_false="No"/>
 	</step>
 
 	<step number="2" name="Custom Fields 2">

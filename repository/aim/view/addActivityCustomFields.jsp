@@ -59,6 +59,7 @@
 															</c:when>
 															<c:when test="<%=customField instanceof CheckCustomField%>">
 																<html:checkbox name="aimEditActivityForm" property="customFields[${index}].value"/>
+																<c:out value="${customField.labelTrue}"/>
 															</c:when>
 															<c:otherwise>
 																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"

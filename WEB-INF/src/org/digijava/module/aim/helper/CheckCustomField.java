@@ -2,5 +2,19 @@ package org.digijava.module.aim.helper;
 
 public class CheckCustomField extends CustomField<Boolean>{
 
+	private String labelTrue;
+	private String labelFalse;
+	public void setLabelTrue(String labelTrue) {
+		this.labelTrue = labelTrue;
+	}
+	public String getLabelTrue() {
+		return labelTrue;
+	}
+	public void setLabelFalse(String labelFalse) {
+		this.labelFalse = labelFalse;
+	}
+	public String getLabelFalse() {
+		return labelFalse;
+	}
 
 }

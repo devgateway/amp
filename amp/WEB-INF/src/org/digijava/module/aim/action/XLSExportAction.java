@@ -6,10 +6,13 @@
  */
 package org.digijava.module.aim.action;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -17,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hslf.model.Picture;
+import org.apache.poi.hssf.model.Workbook;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
@@ -24,11 +29,11 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFFooter;
 import org.apache.poi.hssf.usermodel.HSSFPatriarch;
 import org.apache.poi.hssf.usermodel.HSSFPicture;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.util.IOUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -53,6 +58,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Image;
+import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -131,9 +137,39 @@ public class XLSExportAction extends Action {
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
 		HSSFCell cell=row.createCell(colId.shortValue());		
-		if (reportForm.getStatementOptions().equals("0")) {//disabled
+		if (reportForm.getLogoOptions().equals("0")) {//disabled
+			// do nothing 
+		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
+			if (reportForm.getLogoPositionOptions().equals("0")) {//header
+				int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
+				String urlPrefix = request.getRequestURL().substring(0, end);
+				//								
+				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
+			    byte[] bytes = IOUtils.toByteArray(is);
+			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
+			    is.close();
+			    // ajout de l'image sur l'ancre ( lig, col )  
+			    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+			    ancreImg.setCol1(colId.shortValue());
+			    ancreImg.setRow1(rowId.shortValue());
+			    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
+			    // redim de l'image
+			    Img.resize();
+			} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
+				// see endPage function
+			}				
+		}
+        if (reportForm.getStatementOptions().equals("0")) {//disabled
 			// do nothing 
 		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
+			if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("0"))) { 
+				// creation d'une nouvelle cellule pour le statement	
+				grdx.makeColSpan(rd.getTotalDepth(),false);	
+				rowId.inc();
+				colId.reset();
+				row=sheet.createRow(rowId.shortValue());
+				cell=row.createCell(colId.shortValue());						
+			}
 			String stmt = "";
 			try {
 				stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);
@@ -225,9 +261,39 @@ public class XLSExportAction extends Action {
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
 		cell=row.createCell(colId.shortValue());
+		if (reportForm.getLogoOptions().equals("0")) {//disabled
+			// do nothing 
+		} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
+			if (reportForm.getLogoPositionOptions().equals("0")) {//header
+				// see startPage
+			} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
+				int end = request.getRequestURL().length() - "/aim/xlsExport.do".length();
+				String urlPrefix = request.getRequestURL().substring(0, end);
+				//								
+				InputStream is = new URL(urlPrefix + "/TEMPLATE/ampTemplate/images/AMPLogo.png").openStream();
+			    byte[] bytes = IOUtils.toByteArray(is);
+			    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
+			    is.close();
+			    // ajout de l'image sur l'ancre ( lig, col )  
+			    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
+			    ancreImg.setCol1(colId.shortValue());
+			    ancreImg.setRow1(rowId.shortValue());
+			    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
+			    // redim de l'image
+			    Img.resize();
+			}				
+		}
 		if (reportForm.getStatementOptions().equals("0")) {//disabled
 			// do nothing 
 		} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
+			if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("1"))) { 
+				// creation d'une nouvelle cellule pour le statement	
+				grdx.makeColSpan(rd.getTotalDepth(),false);	
+				rowId.inc();
+				colId.reset();
+				row=sheet.createRow(rowId.shortValue());
+				cell=row.createCell(colId.shortValue());						
+			}
 			String stmt = "";
 			try {
 				stmt = TranslatorWorker.translate("aim:report:reportstatement", locale,siteId);

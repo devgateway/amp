@@ -1895,19 +1895,26 @@
 											<td bgcolor="#ffffff">
 												<c:choose>
 													<c:when test="<%=customField instanceof ComboBoxCustomField%>">
-														<c:set var="idx" value="${aimEditActivityForm.customFields[index].value}"/>	
-														<c:out value="${aimEditActivityForm.customFields[index].options[idx]}"/>									
+														<c:set var="idx" value="${customField.value}"/>	
+														<c:out value="${customField.options[idx]}"/>									
 													</c:when>
 													<c:when test="<%=customField instanceof CategoryCustomField%>">
-														<c:if test="${aimEditActivityForm.customFields[index].value > 0}" >
-															<category:getoptionvalue categoryValueId="${aimEditActivityForm.customFields[index].value}"/>
+														<c:if test="${customField.value > 0}" >
+															<category:getoptionvalue categoryValueId="${customField.value}"/>
 														</c:if>								
 													</c:when>
 													<c:when test="<%=customField instanceof DateCustomField%>">																
-														<c:out value="${aimEditActivityForm.customFields[index].strDate}"/>	
+														<c:out value="${customField.strDate}"/>	
+													</c:when>
+													<c:when test="<%=customField instanceof RadioOptionCustomField%>">
+														<logic:iterate name="customField" property="options" id="option" >
+															<logic:equal name="option" property="key"  value="${customField.value}">
+																<c:out value="${option.value}"/> 
+															</logic:equal>
+														</logic:iterate>
 													</c:when>
 													<c:otherwise>		
-														<c:out value="${aimEditActivityForm.customFields[index].value}"/>																												
+														<c:out value="${customField.value}"/>																												
 													</c:otherwise>
 												</c:choose>
 											</td>

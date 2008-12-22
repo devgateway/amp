@@ -41,7 +41,10 @@ public class XMLCustomFieldParser extends DefaultHandler{
 		   processAtrributes(atts);
 	   }else if("check".equals(name)){
 		   cf = new  CheckCustomField();
+		   CheckCustomField ccf = (CheckCustomField) cf;
 		   processAtrributes(atts);
+		   ccf.setLabelTrue(atts.getValue("label_true"));
+		   ccf.setLabelFalse(atts.getValue("label_false"));
 	   }else if("step".equals(name)){
 		   step = Integer.parseInt(atts.getValue("number"));
 	   }else if("option".equals(name) && (cf instanceof  ComboBoxCustomField || cf instanceof RadioOptionCustomField) ){

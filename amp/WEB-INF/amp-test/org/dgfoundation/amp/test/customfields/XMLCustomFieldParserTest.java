@@ -237,7 +237,7 @@ public class XMLCustomFieldParserTest extends TestCase {
     	sb.append("<?xml version=\"1.0\"?>");
     	sb.append("<fields>");
     	sb.append("	<step number=\"1\">");
-    	sb.append("		<check name=\"Field1\" description=\"Description1\" property=\"field1\" field=\"Custom Field1\"/>");
+    	sb.append("		<check name=\"Field1\" description=\"Description1\" property=\"field1\" field=\"Custom Field1\" label_true=\"Yes\" label_false=\"No\" />");
     	sb.append("	</step>");
     	sb.append("</fields>");
     	
@@ -249,14 +249,17 @@ public class XMLCustomFieldParserTest extends TestCase {
     	
     	assertEquals(1, customFields.size());
     	
-    	CustomField cf = customFields.get(0);
+    	assertTrue(customFields.get(0) instanceof CheckCustomField);
     	
-    	assertTrue(cf instanceof CheckCustomField);
+    	CheckCustomField ccf = (CheckCustomField) customFields.get(0);
     	
-    	assertEquals(cf.getStep(), 1);
-    	assertEquals(cf.getName(), "Field1");
-    	assertEquals(cf.getDescription(), "Description1");
-    	assertEquals(cf.getAmpActivityPropertyName(), "field1");
-    	assertEquals(cf.getFM_field(), "Custom Field1");
+    	
+    	assertEquals(1, ccf.getStep());
+    	assertEquals("Field1", ccf.getName());
+    	assertEquals("Description1", ccf.getDescription());
+    	assertEquals("field1", ccf.getAmpActivityPropertyName());
+    	assertEquals("Custom Field1", ccf.getFM_field());
+    	assertEquals("Yes", ccf.getLabelTrue());
+    	assertEquals("No", ccf.getLabelFalse());
     }    
 }

@@ -447,7 +447,7 @@ var isAlreadySubmitted = false;
 
 			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
-			<table width="100%" cellpadding=0 cellspacing=0 border="1">
+			<table width="100%" cellpadding=0 cellspacing=0 border="0">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
@@ -527,17 +527,15 @@ var isAlreadySubmitted = false;
 															<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 															</a>
-														</td>
-														<td>
-															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-												 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-															</a>
-														</td>
+														</td>														
 													</tr>
-												</table>
-												
+												</table>												
 											</td>
-											
+											<td width="10px">
+													<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
+										 				<digi:img src="../ampTemplate/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+													</a>
+												</td>
 											
 										<tr>
 											<td bgcolor="#ffff00">&nbsp;
@@ -548,7 +546,7 @@ var isAlreadySubmitted = false;
 													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
 												</b>
 											</td>
-											<td colspan="3"  bgcolor="#ffff00">
+											<td colspan="2"  bgcolor="#ffff00">
 												<b>
 													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn>
 												</b>
@@ -573,7 +571,7 @@ var isAlreadySubmitted = false;
 														/>
 												
 											</td>
-											<td colspan="4">
+											<td colspan="3">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
 													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt"
 													disabled="false" styleId="<%=exchRatefldId%>"/>

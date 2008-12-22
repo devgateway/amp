@@ -36,12 +36,14 @@ import org.digijava.module.um.util.AmpUserUtil;
 	    	
 	    	RepairDbUtil.repairBannedUsersAreStillInATeam();
 	    	
-	    	if ( request.getParameter("showBanned")!=null && request.getParameter("showBanned").equals("true") ) {
-	    		vwForm.setShowBanned(true);
-	    		vwForm.setType(-1);
-	    	}
-	    	if (request.getParameter("showBanned")==null ||( request.getParameter("showBanned")!=null && request.getParameter("showBanned").equals("false")) ) {
-	    		vwForm.setShowBanned(false);
+	    	if ( request.getParameter("showBanned")!=null ){
+	    		if(request.getParameter("showBanned").equals("true") ) {
+		    		vwForm.setShowBanned(true);
+		    		vwForm.setType(-1);
+	    		}
+	    		else{
+	    			vwForm.setShowBanned(false);	
+	    		}
 	    	}
 	        
 	    	vwForm.setPagesToShow(10);

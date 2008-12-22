@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.module.aim.helper.*" %>
 <%@ page import = "org.digijava.module.aim.helper.ChartGenerator" %>
 <%@ page import = "java.io.PrintWriter, java.util.*" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -1874,13 +1875,47 @@
 										    Data Team Leader</digi:trn>
 											</b>
 										</td>
-<td bgcolor="#ffffff">
+										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>										</td>
+											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>										
+										</td>
 									</tr>
 									</field:display>
 									</logic:notEmpty>
+
+									<logic:iterate name="aimEditActivityForm" property="customFields" id="customField" indexId="index">
+									<field:display name="${customField.FM_field}" feature="Step${customField.step}">												
+										<tr>
+											<td width="30%" align="right" valign="top" nowrap="nowrap" >
+												<b>													
+													<digi:trn key="aim:customfield:${customField.name}">${customField.name}</digi:trn>
+												</b>														
+											</td>
+											<td bgcolor="#ffffff">
+												<c:choose>
+													<c:when test="<%=customField instanceof ComboBoxCustomField%>">
+														<c:set var="idx" value="${aimEditActivityForm.customFields[index].value}"/>	
+														<c:out value="${aimEditActivityForm.customFields[index].options[idx]}"/>									
+													</c:when>
+													<c:when test="<%=customField instanceof CategoryCustomField%>">
+														<c:if test="${aimEditActivityForm.customFields[index].value > 0}" >
+															<category:getoptionvalue categoryValueId="${aimEditActivityForm.customFields[index].value}"/>
+														</c:if>								
+													</c:when>
+													<c:when test="<%=customField instanceof DateCustomField%>">																
+														<c:out value="${aimEditActivityForm.customFields[index].strDate}"/>	
+													</c:when>
+													<c:otherwise>		
+														<c:out value="${aimEditActivityForm.customFields[index].value}"/>																												
+													</c:otherwise>
+												</c:choose>
+											</td>
+										</tr>
+									</field:display>
+									</logic:iterate>
+
+
     	</table>
         
 </c:if>

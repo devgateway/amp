@@ -60,7 +60,11 @@ public class ViewSelectActivityTabs extends Action {
 		for (Enumeration enumeration = request.getParameterNames(); enumeration
 				.hasMoreElements();) {
 			paramName = (String) enumeration.nextElement();
-			urlParams += paramName + "=" + request.getParameter(paramName);
+			if(urlParams.equals("&"))
+				urlParams += paramName + "=" + request.getParameter(paramName);
+			else
+				urlParams += "&" + paramName + "=" + request.getParameter(paramName);
+			
 		}
 		synchronized (ampContext) {
 			//

@@ -135,7 +135,8 @@
 				/repository/widget/struts-config.xml,
 				/repository/orgProfile/struts-config.xml,
 				/repository/mondrian/struts-config.xml,
-				/repository/dataExchange/struts-config.xml
+				/repository/dataExchange/struts-config.xml,
+				/repository/search/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

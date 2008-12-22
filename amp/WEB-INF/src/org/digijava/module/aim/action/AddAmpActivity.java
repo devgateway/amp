@@ -111,6 +111,9 @@ public class AddAmpActivity extends Action {
     	ampContext = getServlet().getServletContext();
 
 
+    //Always reset returnSearch session variable 
+  	session.removeAttribute("returnSearch");
+    	
     TeamMember teamMember = new TeamMember();
     
     request.setAttribute(GatePermConst.ACTION_MODE, GatePermConst.Actions.EDIT);

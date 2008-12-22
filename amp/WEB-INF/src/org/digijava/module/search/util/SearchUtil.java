@@ -1,0 +1,298 @@
+package org.digijava.module.search.util;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.ValueFormatException;
+import javax.jcr.query.QueryManager;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.store.Directory;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.action.DocumentManager;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
+import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.util.DocumentManagerRights;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.search.helper.Resource;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.MatchMode;
+
+public class SearchUtil {
+
+	private static Logger logger = Logger.getLogger(SearchUtil.class);
+
+	public static final int QUERY_ALL = -1;
+	public static final int ACTIVITIES = 0;
+	public static final int REPORTS = 1;
+	public static final int TABS = 2;
+	public static final int RESOURCES = 3;
+
+	public static Collection<LoggerIdentifiable> getReports(TeamMember tm,
+			String string) {
+		// TODO: Unify this with getTabs()
+		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
+		List<AmpReports> col = new ArrayList<AmpReports>();
+
+		Session session = null;
+		try {
+
+			session = PersistenceManager.getRequestDBSession();
+			AmpTeam team = (AmpTeam) session
+					.load(AmpTeam.class, tm.getTeamId());
+
+			AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(tm
+					.getMemberId());
+			String queryString = null;
+			Query qry = null;
+
+			if (team.getAccessType().equalsIgnoreCase(
+					Constants.ACCESS_TYPE_MNGMT)) {
+				queryString = "select DISTINCT r from "
+						+ AmpReports.class.getName()
+						+ " r where r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+						+ AmpTeamReports.class.getName()
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
+				qry = session.createQuery(queryString);
+
+				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
+				qry.setParameter("teamid", tm.getTeamId());
+				qry.setParameter("keyword", "%" + string + "%");
+				col = qry.list();
+			} else {
+				queryString = "select distinct r from "
+						+ AmpReports.class.getName()
+						+ "  r left join r.members m where "
+						+ " r.drilldownTab=false AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND "
+						+ " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
+						+ " or r.id in (select r2.id from "
+						+ AmpTeamReports.class.getName()
+						+ " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
+				qry = session.createQuery(queryString);
+				qry.setLong("ampTeamMemId", tm.getMemberId());
+				qry.setLong("teamId", tm.getTeamId());
+				qry.setParameter("keyword", "%" + string + "%");
+				col = qry.list();
+
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception from getReports()", e);
+			throw new RuntimeException(e);
+		}
+
+		resultList.addAll(col);
+
+		return resultList;
+
+	}
+
+	public static Collection<LoggerIdentifiable> getTabs(TeamMember tm,
+			String string) {
+		ArrayList<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
+
+		List<AmpReports> col = new ArrayList<AmpReports>();
+
+		Session session = null;
+		try {
+
+			session = PersistenceManager.getRequestDBSession();
+			AmpTeam team = (AmpTeam) session
+					.load(AmpTeam.class, tm.getTeamId());
+
+			AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(tm
+					.getMemberId());
+			String queryString = null;
+			Query qry = null;
+
+			if (team.getAccessType().equalsIgnoreCase(
+					Constants.ACCESS_TYPE_MNGMT)) {
+				queryString = "select DISTINCT r from "
+						+ AmpReports.class.getName()
+						+ " r where r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND (r.ownerId.ampTeamMemId = :memberid or r.ampReportId IN (select r2.report from "
+						+ AmpTeamReports.class.getName()
+						+ " r2 where r2.team.ampTeamId = :teamid and r2.teamView = true)) order by r.name";
+				qry = session.createQuery(queryString);
+
+				qry.setParameter("memberid", ampteammember.getAmpTeamMemId());
+				qry.setParameter("teamid", tm.getTeamId());
+				qry.setParameter("keyword", "%" + string + "%");
+				col = qry.list();
+			} else {
+				queryString = "select distinct r from "
+						+ AmpReports.class.getName()
+						+ "  r left join r.members m where "
+						+ " r.drilldownTab=true AND (lower(r.name) LIKE lower(:keyword) OR r.reportDescription LIKE :keyword) AND "
+						+ " ((m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"
+						+ " or r.id in (select r2.id from "
+						+ AmpTeamReports.class.getName()
+						+ " tr inner join  tr.report r2 where tr.team=:teamId and tr.teamView = true))";
+				qry = session.createQuery(queryString);
+				qry.setLong("ampTeamMemId", tm.getMemberId());
+				qry.setLong("teamId", tm.getTeamId());
+				qry.setParameter("keyword", "%" + string + "%");
+				col = qry.list();
+
+			}
+
+		} catch (Exception e) {
+			logger.error("Exception from getTabs()", e);
+			throw new RuntimeException(e);
+		}
+
+		resultList.addAll(col);
+		return resultList;
+
+	}
+
+	public static Collection<LoggerIdentifiable> getActivities(String keyword,
+			ServletContext ampContext) {
+
+		Directory idx = (Directory) ampContext
+				.getAttribute(Constants.LUCENE_INDEX);
+		Hits hits = LuceneUtil.search(LuceneUtil.activityIndexDirectory, "all", keyword);
+//		Hits hits = LuceneUtil.search(idx, "all", keyword);
+
+		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
+
+		if (hits != null) {
+			for (int i = 0; i < hits.length(); i++) {
+				Document doc;
+				try {
+					doc = hits.doc(i);
+					AmpActivity act = ActivityUtil.getAmpActivity(Long
+							.parseLong(doc.get("id")));
+					resultList.add(act);
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return resultList;
+	}
+
+	public static Collection<LoggerIdentifiable> getResources(String keyword,
+			HttpServletRequest request, TeamMember tm) {
+
+		javax.jcr.Session jcrWriteSession = DocumentManagerUtil
+				.getWriteSession(request);
+
+		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
+
+		try {
+			Node folderNode = jcrWriteSession.getRootNode();
+			try {
+				javax.jcr.query.QueryManager qm = folderNode.getSession()
+						.getWorkspace().getQueryManager();
+				javax.jcr.query.Query q = qm.createQuery(
+						"SELECT * FROM nt:base WHERE jcr:path LIKE '/team/"
+								+ tm.getTeamId() + "/%' ",
+						javax.jcr.query.Query.SQL);
+
+				javax.jcr.query.QueryResult result = q.execute();
+				NodeIterator it = result.getNodes();
+				while (it.hasNext()) {
+					Node n = it.nextNode();
+					NodeWrapper nw = new NodeWrapper(n);
+
+					if (keywordMatches(nw, keyword)) {
+						Resource resource = new Resource();
+						resource.setName(nw.getTitle());
+						resource.setUuid(nw.getUuid());
+						resource.setWebLink(nw.getWebLink());
+						resultList.add(resource);
+					}
+				}
+				q = qm.createQuery(
+						"SELECT * FROM nt:base WHERE jcr:path LIKE '/private/"
+								+ tm.getTeamId() + "/" + tm.getEmail() + "/%' "
+								+ "", javax.jcr.query.Query.SQL);
+
+				result = q.execute();
+				it = result.getNodes();
+				while (it.hasNext()) {
+					Node n = it.nextNode();
+					NodeWrapper nw = new NodeWrapper(n);
+					if (keywordMatches(nw, keyword)) {
+						Resource resource = new Resource();
+						resource.setName(nw.getTitle());
+						resource.setUuid(nw.getUuid());
+						resource.setWebLink(nw.getWebLink());
+						resultList.add(resource);
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return resultList;
+	}
+
+	private static boolean keywordMatches(NodeWrapper n, String keyword) {
+		String title = n.getTitle();
+		String description = n.getDescription();
+		String link = n.getWebLink();
+		String name = n.getName();
+
+		if (title.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+			return true;
+		}
+
+		if (description.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+			return true;
+		}
+
+		if (link != null) // it's a link
+		{
+			if (link.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+				return true;
+			}
+		} else // It's a doc
+		{
+			if (name.toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+}

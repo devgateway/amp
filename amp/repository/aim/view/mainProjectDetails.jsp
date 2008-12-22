@@ -331,23 +331,29 @@ html>body #mainEmpty {
 					<field:display name="Logframe Preview Button" feature="Logframe">
 						<div id="gen" title='<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>'>
 						<a href="#" onclick="javascript:previewLogframe(document.getElementById('tempActivity').value); return false;">
-						<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn></a>&nbsp;|</div>&nbsp;
+						<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn></a></div>&nbsp;
 					</field:display>
 				</feature:display>
 			</module:display>
 			<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Project Fiche" module="Previews">
 					<field:display name="Project Fiche Button" feature="Project Fiche">
+						&nbsp;|
 						<div id="gen" title='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'>
 						<a href="#" onclick="javascript:projectFiche(document.getElementById('tempActivity').value); return false;">
 						<digi:trn key="aim:projectFiche">Project Fiche</digi:trn></a></div>
 					</field:display>
 				</feature:display>
-			</module:display></strong>
+			</module:display>
+            <logic:present name="returnSearch" scope="session">
+            &nbsp;|
+            <a href="/search/search.do"><digi:trn key="search:backtosearch">Return to search results</digi:trn></a>
+            </logic:present>
+            </strong>
 		</td>
 	</tr>
-	<tr><td>
-		&nbsp;
+	<tr><td>&nbsp;
+		
 	</td></tr>
    <TR>
 		<TD>

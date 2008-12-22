@@ -592,6 +592,11 @@ function adminHelp(){
 		                                        </li>
                                             </digi:secure>
                                         </logic:notEmpty>                                        
+                                        <li>
+                                        <a class="yuiampmenuitemlabel" href="/search/search.do?reset=true">
+                                        <digi:trn key="aim:search">Search</digi:trn>
+                                        </a>
+                                        </li>
                                       </ul>
                                   </div>
                               </div>                    

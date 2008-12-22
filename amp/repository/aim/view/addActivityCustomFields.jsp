@@ -57,6 +57,9 @@
 																	<html:radio name="aimEditActivityForm" property="customFields[${index}].value" value="${option.key}"/> &nbsp;&nbsp;
 																</logic:iterate>
 															</c:when>
+															<c:when test="<%=customField instanceof CheckCustomField%>">
+																<html:checkbox name="aimEditActivityForm" property="customFields[${index}].value"/>
+															</c:when>
 															<c:otherwise>
 																<html:text name="aimEditActivityForm" property="customFields[${index}].value" size="40"
 																styleId="originalAppDate" styleClass="inp-text" />																														

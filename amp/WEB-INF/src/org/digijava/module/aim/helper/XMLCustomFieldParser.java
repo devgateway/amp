@@ -39,6 +39,9 @@ public class XMLCustomFieldParser extends DefaultHandler{
 		   cf = new  RadioOptionCustomField();
 		   options = new LinkedHashMap<String,String>();
 		   processAtrributes(atts);
+	   }else if("check".equals(name)){
+		   cf = new  CheckCustomField();
+		   processAtrributes(atts);
 	   }else if("step".equals(name)){
 		   step = Integer.parseInt(atts.getValue("number"));
 	   }else if("option".equals(name) && (cf instanceof  ComboBoxCustomField || cf instanceof RadioOptionCustomField) ){
@@ -81,7 +84,7 @@ public class XMLCustomFieldParser extends DefaultHandler{
 				isOption = false;
 			}
 		}
-	    if ("text".equals(name) || "combo".equals(name) ||  "category".equals(name) ||  "date".equals(name) || "radio".equals(name) ){
+	    if ("text".equals(name) || "combo".equals(name) ||  "category".equals(name) ||  "date".equals(name) || "radio".equals(name) || "check".equals(name) ){
 		   if(cf != null) 
 			   customFields.add(cf);
 		   cf = null;

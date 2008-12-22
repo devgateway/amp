@@ -165,6 +165,7 @@
 		<property name="customField3" column="customField3" type="java.lang.Long" />
 		<property name="customField4" column="customField4" type="java.util.Date" />
 		<property name="customField5" column="customField5" type="java.lang.String" />
+		<property name="customField6" column="customField6" type="java.lang.Boolean" />
 
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">
 			<cache usage="read-write" />

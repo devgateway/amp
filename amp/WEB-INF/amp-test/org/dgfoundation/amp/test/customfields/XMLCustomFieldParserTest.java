@@ -9,6 +9,7 @@ import java.util.List;
 
 
 import org.digijava.module.aim.helper.CategoryCustomField;
+import org.digijava.module.aim.helper.CheckCustomField;
 import org.digijava.module.aim.helper.ComboBoxCustomField;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateCustomField;
@@ -229,5 +230,33 @@ public class XMLCustomFieldParserTest extends TestCase {
     	assertEquals("Option1", options.get("1"));
     	assertEquals("Option2", options.get("2"));
     	assertEquals("Option3", options.get("3"));
+    } 
+    
+    public void testCheckCustomField() throws SAXException, IOException{    	
+
+    	sb.append("<?xml version=\"1.0\"?>");
+    	sb.append("<fields>");
+    	sb.append("	<step number=\"1\">");
+    	sb.append("		<check name=\"Field1\" description=\"Description1\" property=\"field1\" field=\"Custom Field1\"/>");
+    	sb.append("	</step>");
+    	sb.append("</fields>");
+    	
+    	StringReader sr = new StringReader(sb.toString());
+    	
+    	xr.parse(new InputSource(sr));
+    	
+    	List<CustomField> customFields = handler.getCustomFields();
+    	
+    	assertEquals(1, customFields.size());
+    	
+    	CustomField cf = customFields.get(0);
+    	
+    	assertTrue(cf instanceof CheckCustomField);
+    	
+    	assertEquals(cf.getStep(), 1);
+    	assertEquals(cf.getName(), "Field1");
+    	assertEquals(cf.getDescription(), "Description1");
+    	assertEquals(cf.getAmpActivityPropertyName(), "field1");
+    	assertEquals(cf.getFM_field(), "Custom Field1");
     }    
 }

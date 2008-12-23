@@ -40,7 +40,7 @@ public class LuceneIndex extends Action {
 		  logger.info("lucene:" + request.getParameter("action"));
 		  if (request.getParameter("action") != null)
 		  if ("create".compareTo(request.getParameter("action"))== 0){
-			  LuceneUtil.checkIndex();
+			  LuceneUtil.checkIndex(request.getSession().getServletContext());
 		  }
 		  else{
 			  if ("view".compareTo(request.getParameter("action")) == 0){
@@ -62,7 +62,7 @@ public class LuceneIndex extends Action {
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
-					  LuceneUtil.deleteActivity(LuceneUtil.activityIndexDirectory, field, search);
+					  LuceneUtil.deleteActivity(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.activityIndexDirectory, field, search);
 				  }
 		  }
 		  return mapping.findForward("forward");

@@ -209,11 +209,14 @@ public class selectOrganizationComponent extends Action {
 			}
 
 		} else {
-			//organizationResult = eaForm.getOrganizations();
-			if(eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
-				organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim());
-			}else{
-				organizationResult = DbUtil.searchForOrganisation(alpha,"");
+			if (!eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
+				if (eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length()!=0){
+					organizationResult = DbUtil.searchForOrganisation(alpha, eaForm.getKeyword().trim(), eaForm.getAmpOrgTypeId());
+				} else{
+					organizationResult = DbUtil.searchForOrganisation(alpha, "", eaForm.getAmpOrgTypeId());
+				}
+			} else {
+				organizationResult = DbUtil.searchForOrganisation(alpha, "");
 			}
 			
 			eaForm.setCurrentAlpha(alpha);

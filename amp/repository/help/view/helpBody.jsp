@@ -67,7 +67,7 @@
 	                      		<c:if test="${helpForm.topicKey!=''}">
 	                        		<digi:edit key="${helpForm.bodyEditKey}"/>
 	                    		</c:if>
-                                 <c:if test="${helpForm.topicKey == ''}">no text preview</c:if>
+                                 <c:if test="${helpForm.topicKey == ''}"><digi:trn>no text preview</digi:trn></c:if>
                           </c:if>
                      </div>
          		</td>

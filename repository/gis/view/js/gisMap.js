@@ -149,7 +149,7 @@
 	
 	function availYearsReady () {
 		if (xmlhttp.readyState == 4) {
-			var availYearList = xmlhttp.responseXML.getElementsByTagName('year');
+			var availYearList = xmlhttp.responseXML.getElementsByTagName('interval');
 			var yearIndex = 0;
 			
 			var selectCmb = document.getElementById("indicatorYearCombo");
@@ -163,8 +163,8 @@
 			for (yearIndex = 0; yearIndex < availYearList.length; yearIndex ++) {
 				var yearData = availYearList[yearIndex];
 				var opt = document.createElement("OPTION");
-				opt.value=yearData.attributes.getNamedItem("value").value;
-				opt.text=yearData.attributes.getNamedItem("value").value;
+				opt.value = yearData.attributes.getNamedItem("start-value").value + "-" + yearData.attributes.getNamedItem("end-value").value;
+				opt.text = yearData.attributes.getNamedItem("start-caption").value + " - " + yearData.attributes.getNamedItem("end-caption").value;
 				selectCmb.options.add(opt);				
 			}
 

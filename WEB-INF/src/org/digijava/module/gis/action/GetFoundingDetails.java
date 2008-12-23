@@ -39,6 +39,8 @@ import org.digijava.module.gis.util.FundingData;
 import org.digijava.module.gis.util.GisUtil;
 import org.digijava.module.gis.util.HilightData;
 import org.digijava.module.gis.util.SegmentData;
+import java.util.Date;
+import org.digijava.module.gis.util.DateInterval;
 
 /**
  * <p>Title: </p>
@@ -75,12 +77,6 @@ public class GetFoundingDetails extends Action {
 
 
             String indYear = request.getParameter("indYear");
-            Integer indicatorYear = null;
-            if (indYear == null) {
-                indicatorYear = new Integer(-1);
-            } else {
-                indicatorYear = new Integer(indYear);
-            }
 
 
             String subgroupIdStr = request.getParameter("subgroupId");
@@ -321,9 +317,19 @@ public class GetFoundingDetails extends Action {
                         new ColorRGB(0, 0, 0), map);
 
                 List inds = null;
-                if (indicatorYear.intValue()>0) {
+                if (indYear != null && !indYear.equals("-1")) {
+
+                    String startDateStr = indYear.substring(0, indYear.indexOf("-"));
+                    String endDateStr = indYear.substring(indYear.indexOf("-")+1);
+
+                    DateInterval datInt = new DateInterval(new Date(new Long(startDateStr).longValue()), new Date(new Long(endDateStr).longValue()));
+
                     inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId,
-                            indicatorYear, subgroupId, Integer.parseInt(mapLevel));
+                            datInt, subgroupId, Integer.parseInt(mapLevel));
+
+                    /*
+                    inds = DbUtil.getIndicatorValuesForSectorIndicator(secId, indId,
+                            indicatorYear, subgroupId, Integer.parseInt(mapLevel));*/
                 } else {
                     inds = new ArrayList();
                 }
@@ -490,9 +496,41 @@ public class GetFoundingDetails extends Action {
                 String indIdStr = request.getParameter("indicatorId");
                 Long indId = new Long(indIdStr);
 
-                List availYears = DbUtil.getAvailYearsForSectorIndicator(secId, indId, Integer.parseInt(mapLevel), subgroupId);
+                //List availYears = DbUtil.getAvailYearsForSectorIndicator(secId, indId, Integer.parseInt(mapLevel), subgroupId);
+
+                List availRanges = DbUtil.getAvailDateIntervalsForSectorIndicator(secId, indId, Integer.parseInt(mapLevel), subgroupId);
+
+                List availRangeObjects = new ArrayList();
+                if (availRanges != null && !availRanges.isEmpty()) {
+                    Iterator rngIt = availRanges.iterator();
+                    while (rngIt.hasNext()) {
+                        Object[] obj = (Object[]) rngIt.next();
+                        Date startDat = (Date) obj[0];
+                        Date endDat = (Date) obj[1];
+                        DateInterval dateInterval = new DateInterval(startDat, endDat);
+                        availRangeObjects.add(dateInterval);
+                    }
+                }
+
 
                 XMLDocument availYearsXmlDoc = new XMLDocument();
+
+                XML root = new XML("availIntervals");
+                availYearsXmlDoc.addElement(root);
+
+                Iterator yearIt = availRangeObjects.iterator();
+
+                while (yearIt.hasNext()) {
+                    DateInterval year = (DateInterval) yearIt.next();
+                    XML yearNode = new XML("interval");
+                    yearNode.addAttribute("start-value", year.getStartTime());
+                    yearNode.addAttribute("start-caption", year.getFormatedStartTime());
+                    yearNode.addAttribute("end-value", year.getEndTime());
+                    yearNode.addAttribute("end-caption", year.getFormatedEndTime());
+                    root.addElement(yearNode);
+                }
+
+                /*
                 XML root = new XML("availYears");
 
                 availYearsXmlDoc.addElement(root);
@@ -504,7 +542,7 @@ public class GetFoundingDetails extends Action {
                     XML yearNode = new XML("year");
                     yearNode.addAttribute("value",year);
                     root.addElement(yearNode);
-                }
+                }*/
 
                 sos.print(availYearsXmlDoc.toString());
             } else if (action.equalsIgnoreCase("getIndicatorNamesXML")) {

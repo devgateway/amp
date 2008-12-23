@@ -239,6 +239,54 @@ public class DbUtil {
    }
 
    public static List getIndicatorValuesForSectorIndicator(Long sectorId,
+              Long indicatorId, DateInterval interval, Long subgroupId, int areaLevel) {
+          List retVal = null;
+          Session session = null;
+          try {
+              session = PersistenceManager.getRequestDBSession();
+
+              StringBuffer queryString = new StringBuffer();
+
+              if (areaLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append("select indVal.value, indConn.location.ampRegion.regionCode from ");
+              } else if (areaLevel==GisMap.MAP_LEVEL_DISTRICT) {
+                  queryString.append("select indVal.value, indConn.location.ampZone.zoneCode from ");
+              }
+              queryString.append(AmpIndicatorValue.class.getName());
+              queryString.append(" indVal, ");
+              queryString.append(IndicatorSector.class.getName());
+              queryString.append(" indConn where indConn.sector.ampSectorId=:sectorId");
+              queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
+              queryString.append(" and indConn.id=indVal.indicatorConnection.id");
+
+              queryString.append(" and indVal.subgroup.ampIndicatorSubgroupId=:subgroupId");
+
+              if (interval != null) {
+                  queryString.append(" and indVal.dataIntervalStart=:intervalStart");
+                  queryString.append(" and indVal.dataIntervalEnd=:intervalEnd");
+              }
+
+              Query q = session.createQuery(queryString.toString());
+
+              q.setParameter("sectorId", sectorId, Hibernate.LONG);
+              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+
+              if (interval != null) {
+                  q.setParameter("intervalStart", interval.getStart(), Hibernate.DATE);
+                  q.setParameter("intervalEnd", interval.getEnd(), Hibernate.DATE);
+              }
+
+
+              retVal = q.list();
+          } catch (Exception ex) {
+              logger.debug("Unable to get indicators from DB", ex);
+          }
+          return retVal;
+   }
+
+
+   public static List getIndicatorValuesForSectorIndicator(Long sectorId,
            Long indicatorId, Long subgroupId) {
 
        return getIndicatorValuesForSectorIndicator(sectorId, indicatorId, new Integer(-1), subgroupId, GisMap.MAP_LEVEL_REGION);
@@ -378,6 +426,26 @@ public class DbUtil {
        return retVal;
    }
 
+   public static List getAvailIndicatorDateRanges() {
+       List retVal = null;
+       Session session = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String query = "select distinct indval.dataIntervalStart, indval.dataIntervalEnd from " +
+                    AmpIndicatorValue.class.getName() +
+                    " indval where indval.dataIntervalStart is not null and indval.dataIntervalEnd is not null " +
+                    "order by indval.valueDate desc";
+            Query q = session.createQuery(query);
+             retVal = q.list();
+
+        } catch (Exception ex) {
+            logger.debug("Unable to get indicators from DB", ex);
+        }
+
+       return retVal;
+   }
+
+
    public static List getAvailYearsForSectorIndicator(Long sectorId,
               Long indicatorId, int mapLevel, Long subgroupId) {
           List retVal = null;
@@ -413,6 +481,43 @@ public class DbUtil {
           }
           return retVal;
    }
+
+   public static List getAvailDateIntervalsForSectorIndicator(Long sectorId,
+              Long indicatorId, int mapLevel, Long subgroupId) {
+          List retVal = null;
+          Session session = null;
+          try {
+              session = PersistenceManager.getRequestDBSession();
+
+              StringBuffer queryString = new StringBuffer("select distinct indVal.dataIntervalStart, indVal.dataIntervalEnd from ");
+              queryString.append(AmpIndicatorValue.class.getName());
+              queryString.append(" indVal, ");
+              queryString.append(IndicatorSector.class.getName());
+              queryString.append(" indConn where indConn.sector.ampSectorId=:sectorId");
+
+              if (mapLevel==GisMap.MAP_LEVEL_REGION) {
+                  queryString.append(" and indConn.location.ampRegion is not null and indConn.location.ampZone is null");
+              } else if (mapLevel==GisMap.MAP_LEVEL_DISTRICT) {
+                  queryString.append(" and indConn.location.ampRegion is not null and indConn.location.ampZone is not null");
+              }
+              queryString.append(" and indVal.subgroup.ampIndicatorSubgroupId=:subgroupId ");
+              queryString.append(" and indConn.indicator.indicatorId=:indicatorId ");
+              queryString.append(" and indConn.id=indVal.indicatorConnection.id order by indVal.dataIntervalStart desc");
+
+
+              Query q = session.createQuery(queryString.toString());
+
+              q.setParameter("sectorId", sectorId, Hibernate.LONG);
+              q.setParameter("indicatorId", indicatorId, Hibernate.LONG);
+              q.setParameter("subgroupId", subgroupId, Hibernate.LONG);
+
+              retVal = q.list();
+          } catch (Exception ex) {
+              logger.debug("Unable to get indicator years from DB", ex);
+          }
+          return retVal;
+   }
+
 
    public static List getAvailSubgroupsForSectorIndicator(Long sectorId,
               Long indicatorId, int mapLevel) {
